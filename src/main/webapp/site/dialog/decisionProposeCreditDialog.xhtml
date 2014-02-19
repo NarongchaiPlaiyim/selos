@@ -12,13 +12,13 @@
             <tr>
                 <td class="title" style="width: 20%">
                     <p:outputLabel for="dlgRadioApprove"
-                                   value="#{msg.get('app.decision.header')}"/>
+                                   value="#{msg.get('app.decision.header')} :"/>
                 </td>
                 <td class="left" colspan="3" style="width: 80%">
                     <p:selectOneRadio id="dlgRadioApprove" value="#{decision.selectedApproveCredit.uwDecision}"
                                       required="#{not empty param[saveAppProposeCreditButton.clientId]}">
-                        <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionType[0]}"/>
-                        <f:selectItem itemLabel="#{msg.get('app.button.notApprove')}" itemValue="#{decision.decisionType[1]}"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.notApprove')}" itemValue="#{decision.decisionREJECTED}"/>
                     </p:selectOneRadio>
                 </td>
             </tr>
@@ -29,8 +29,8 @@
                 <td class="left" colspan="3">
                     <p:selectOneRadio id="dlgRequestType" value="#{decision.selectedApproveCredit.requestType}"
                                       required="#{not empty param[saveAppProposeCreditButton.clientId]}">
-                        <f:selectItem itemLabel="#{msg.get('app.button.new')}" itemValue="#{decision.requestTypes[0].value}"/>
-                        <f:selectItem itemLabel="#{msg.get('app.button.change')}" itemValue="#{decision.requestTypes[1].value}"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.new')}" itemValue="#{decision.requestTypeNEW.value}"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.change')}" itemValue="#{decision.requestTypeCHANGE.value}"/>
                         <p:ajax event="change"
                                 listener="#{decision.onChangeRequestType()}"
                                 process="@this"
@@ -46,8 +46,8 @@
                 <td class="title" colspan="3">
                     <p:selectOneRadio id="dlgRadioRefinance" value="#{decision.selectedApproveCredit.refinance}"
                                       required="#{not empty param[saveAppProposeCreditButton.clientId]}">
-                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
-                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="#{decision.yesValue}"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="#{decision.noValue}"/>
                     </p:selectOneRadio>
                 </td>
             </tr>
@@ -181,38 +181,25 @@
                     <div class="separate"><!-- --></div>
                 </td>
             </tr>
+
             <tr>
                 <td class="left" colspan="2">
-                    <table border="0">
-                        <tr>
-                            <td style="border-style: none !important;">
-                                <p:selectBooleanCheckbox id="dlgCheckBoxReducePricing"
-                                                         value="#{decision.selectedApproveCredit.reducePriceFlag}"
-                                                         disabled="#{decision.modeEditCredit}">
-                                </p:selectBooleanCheckbox>
-                            </td>
-                            <td style="border-style: none !important; padding-left: 5px;">
-                                <p:outputLabel for="dlgCheckBoxReducePricing"
-                                               value="#{msg.get('app.credit.facility.propose.dlg.label.reducePricing')}"/>
-                            </td>
-                        </tr>
-                    </table>
+                    <p:selectBooleanCheckbox id="dlgCheckBoxReducePricing"
+                                             value="#{decision.selectedApproveCredit.reducePriceFlag}"
+                                             disabled="#{decision.modeEditCredit}">
+                    </p:selectBooleanCheckbox>
+                    <p:spacer width="5" height="0"/>
+                    <p:outputLabel for="dlgCheckBoxReducePricing"
+                                   value="#{msg.get('app.credit.facility.propose.dlg.label.reducePricing')}"/>
                 </td>
                 <td class="left" colspan="2">
-                    <table border="0" style="width: 100%">
-                        <tr>
-                            <td style="border-style: none !important;">
-                                <p:selectBooleanCheckbox id="dlgCheckBoxReduceFront"
-                                                         value="#{decision.selectedApproveCredit.reduceFrontEndFee}"
-                                                         disabled="#{decision.modeEditCredit}">
-                                </p:selectBooleanCheckbox>
-                            </td>
-                            <td style="border-style: none !important; padding-left: 5px;">
-                                <p:outputLabel for="dlgCheckBoxReduceFront"
-                                               value="#{msg.get('app.credit.facility.propose.dlg.label.reduceFront')}"/>
-                            </td>
-                        </tr>
-                    </table>
+                    <p:selectBooleanCheckbox id="dlgCheckBoxReduceFront"
+                                             value="#{decision.selectedApproveCredit.reduceFrontEndFee}"
+                                             disabled="#{decision.modeEditCredit}">
+                    </p:selectBooleanCheckbox>
+                    <p:spacer width="5" height="0"/>
+                    <p:outputLabel for="dlgCheckBoxReduceFront"
+                                   value="#{msg.get('app.credit.facility.propose.dlg.label.reduceFront')}"/>
                 </td>
             </tr>
             <tr>

@@ -795,12 +795,8 @@ public class Decision implements Serializable {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", success);
     }
 
-    public void onCallRetrieveAppraisalReportInfo() {
-        log.debug("onCallRetrieveAppraisalReportInfo()");
-    }
-
     public void onAddSubCollateral() {
-        log.debug("onAddSubCollateral()");
+        log.debug("onAddSubCollateral() : {}", rowIndexCollHead);
         selectedApproveSubColl = new NewCollateralSubView();
         modeEditSubColl = false;
     }
@@ -920,6 +916,11 @@ public class Decision implements Serializable {
         selectedApproveSubColl.getRelatedWithList().add(relatedWith);
     }
 
+    public void onDeleteRelatedWith(int rowIndex) {
+        log.debug("onDeleteRelatedWith(rowIndex: {})", rowIndex);
+        selectedApproveSubColl.getRelatedWithList().remove(rowIndex);
+    }
+
     public NewCollateralSubView getIdNewSubCollateralDetail(long newSubCollateralId) {
         NewCollateralSubView newSubCollateralReturn = new NewCollateralSubView();
         for (NewCollateralView newCollateralView : Util.safetyList(decisionView.getApproveCollateralList())) {
@@ -934,11 +935,6 @@ public class Decision implements Serializable {
             }
         }
         return newSubCollateralReturn;
-    }
-
-    public void onDeleteRelatedWith(int rowIndex) {
-        log.debug("onDeleteRelatedWith(rowIndex: {})", rowIndex);
-        selectedApproveSubColl.getRelatedWithList().remove(rowIndex);
     }
 
     // ---------- Propose Guarantor Dialog ---------- //
@@ -985,42 +981,31 @@ public class Decision implements Serializable {
         if (modeEditGuarantor) {
             log.debug("===> Edit - Guarantor: {}", selectedApproveGuarantor);
             NewGuarantorDetailView guarantorDetailEdit = decisionView.getApproveGuarantorList().get(rowIndexGuarantor);
+            guarantorDetailEdit.setUwDecision(selectedApproveGuarantor.getUwDecision());
             guarantorDetailEdit.setGuarantorName(getByIdFromGuarantorList(selectedApproveGuarantor.getGuarantorName().getId()));
             guarantorDetailEdit.setTcgLgNo(selectedApproveGuarantor.getTcgLgNo());
 
-            // needed to select credit type items
-            if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
-                guarantorDetailEdit.getProposeCreditDetailViewList().clear();
-                // seq usage
-                for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
-                    log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
-                    guarantorDetailEdit.getProposeCreditDetailViewList().add(creditTypeItem);
-                    log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
-
-                    sumGuaranteeAmtPerCrdType = sumGuaranteeAmtPerCrdType.add(creditTypeItem.getGuaranteeAmount());
-                }
+//            if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
+//
+//                List<ProposeCreditDetailView> newCreditTypeItems = new ArrayList<ProposeCreditDetailView>();
+//                for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
+//                    newCreditTypeItems.add(creditTypeItem);
+//                    sumGuaranteeAmtPerCrdType = sumGuaranteeAmtPerCrdType.add(creditTypeItem.getGuaranteeAmount());
+//
+//                    log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
+//                    log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
+//                }
+//                guarantorDetailEdit.setProposeCreditDetailViewList(newCreditTypeItems);
                 guarantorDetailEdit.setTotalLimitGuaranteeAmount(sumGuaranteeAmtPerCrdType);
-
-                for (ProposeCreditDetailView creditOfList : guarantorCreditTypeList) {
-                    boolean isSelect = false;
-                    for (ProposeCreditDetailView creditSelected : selectedGuarantorCrdTypeItems) {
-                        if (creditOfList.getSeq() == creditSelected.getSeq()) {
-                            isSelect = true;
-                            break;
-                        }
-                    }
-
-                }
-
                 success = true;
-                log.debug("Success: Edit Guarantor from ApproveGuarantorList");
-            } else {
-                messageHeader = "Error Message";
-                message = "Non selected Credit Type!";
-                messageErr = true;
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                log.error("Failed: Can not edit Guarantor from ApproveGuarantorList because non selected credit type!");
-            }
+//            } else {
+//                log.error("Failed: Can not edit Guarantor from ApproveGuarantorList because non selected credit type!");
+//                messageHeader = "Error Message";
+//                message = "Non selected Credit Type!";
+//                messageErr = true;
+//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//            }
+
         } else {
             // Add New
             log.debug("===> Add New - Guarantor: {}", selectedApproveGuarantor);
@@ -1029,17 +1014,20 @@ public class Decision implements Serializable {
             guarantorDetailAdd.setGuarantorName(getByIdFromGuarantorList(selectedApproveGuarantor.getGuarantorName().getId()));
             guarantorDetailAdd.setTcgLgNo(selectedApproveGuarantor.getTcgLgNo());
 
-            // needed to select credit type items
-            if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
-                for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
-                    guarantorDetailAdd.getProposeCreditDetailViewList().add(creditTypeItem);
+//            if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
+//
+//                if (guarantorDetailAdd.getProposeCreditDetailViewList() == null) {
+//                    guarantorDetailAdd.setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
+//                }
+//
+//                for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
+//                    guarantorDetailAdd.getProposeCreditDetailViewList().add(creditTypeItem);
+//                    sumGuaranteeAmtPerCrdType = sumGuaranteeAmtPerCrdType.add(creditTypeItem.getGuaranteeAmount());
+//
+//                    log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
+//                    log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
+//                }
 
-                    log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
-//                    hashSeqCredit.put(creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()) + 1);
-                    log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
-
-                    sumGuaranteeAmtPerCrdType = sumGuaranteeAmtPerCrdType.add(creditTypeItem.getGuaranteeAmount());
-                }
                 guarantorDetailAdd.setTotalLimitGuaranteeAmount(sumGuaranteeAmtPerCrdType);
 
                 if (decisionView.getApproveGuarantorList() != null) {
@@ -1051,23 +1039,24 @@ public class Decision implements Serializable {
                 }
 
                 success = true;
-                log.debug("Success: Add new Guarantor to ApproveGuarantorList.");
-            } else {
-                messageHeader = "Error Message";
-                message = "Non selected Credit Type!";
-                messageErr = true;
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                log.error("Failed: Can not add new Guarantor to ApproveGuarantorList because non selected credit type!");
-            }
+//            } else {
+//                log.error("Failed: Can not add new Guarantor to ApproveGuarantorList because non selected credit type!");
+//                messageHeader = "Error Message";
+//                message = "Non selected Credit Type!";
+//                messageErr = true;
+//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//            }
+
         }
 
         decisionView.setApproveTotalGuaranteeAmt(creditFacProposeControl.calTotalGuaranteeAmount(decisionView.getApproveGuarantorList()));
+        log.debug("success: {}", success);
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", success);
     }
 
     public void onDeleteApproveGuarantor() {
         log.debug("onDeleteAppProposeGuarantor() rowIndexGuarantor: {}", rowIndexGuarantor);
-        // update usage sequence number of credit
+
         if (selectedApproveGuarantor.getProposeCreditDetailViewList() != null && selectedApproveGuarantor.getProposeCreditDetailViewList().size() > 0) {
             for (int i = 0; i < selectedApproveGuarantor.getProposeCreditDetailViewList().size(); i++) {
                 ProposeCreditDetailView guarantorCredit = selectedApproveGuarantor.getProposeCreditDetailViewList().get(i);
@@ -1169,25 +1158,52 @@ public class Decision implements Serializable {
             return new CustomerInfoView();
         }
 
+        CustomerInfoView returnCusInfoView = new CustomerInfoView();
         for (CustomerInfoView customerInfoView : Util.safetyList(guarantorList)) {
             if (customerInfoView.getId() == id) {
-                return customerInfoView;
+                returnCusInfoView.setId(customerInfoView.getId());
+                returnCusInfoView.setFirstNameTh(customerInfoView.getFirstNameTh());
+                returnCusInfoView.setFirstNameEn(customerInfoView.getFirstNameEn());
+                returnCusInfoView.setLastNameTh(customerInfoView.getLastNameTh());
+                returnCusInfoView.setLastNameEn(customerInfoView.getLastNameEn());
+                returnCusInfoView.setTitleTh(customerInfoView.getTitleTh());
+                returnCusInfoView.setTitleEn(customerInfoView.getTitleEn());
             }
         }
-        return new CustomerInfoView();
+        return returnCusInfoView;
     }
 
-    // ----------------------------------------------- Enum Select Items ----------------------------------------------- //
-    public CreditCustomerType[] getCreditCustomerTypes() {
-        return new CreditCustomerType[]{CreditCustomerType.NORMAL, CreditCustomerType.PRIME};
+    // ----------------------------------------------- Enum Items ----------------------------------------------- //
+    public CreditCustomerType getCreditCusTypeNORMAL() {
+        return CreditCustomerType.NORMAL;
     }
 
-    public RequestTypes[] getRequestTypes() {
-        return new RequestTypes[]{RequestTypes.NEW, RequestTypes.CHANGE};
+    public CreditCustomerType getCreditCusTypePRIME() {
+        return CreditCustomerType.PRIME;
     }
 
-    public DecisionType[] getDecisionType() {
-        return new DecisionType[]{DecisionType.APPROVED, DecisionType.REJECTED};
+    public RequestTypes getRequestTypeNEW() {
+        return RequestTypes.NEW;
+    }
+
+    public RequestTypes getRequestTypeCHANGE() {
+        return RequestTypes.CHANGE;
+    }
+
+    public DecisionType getDecisionAPPROVED() {
+        return DecisionType.APPROVED;
+    }
+
+    public DecisionType getDecisionREJECTED() {
+        return DecisionType.REJECTED;
+    }
+
+    public int getYesValue() {
+        return RadioValue.YES.value();
+    }
+
+    public int getNoValue() {
+        return RadioValue.NO.value();
     }
 
     // ----------------------------------------------- Getter/Setter ----------------------------------------------- //
