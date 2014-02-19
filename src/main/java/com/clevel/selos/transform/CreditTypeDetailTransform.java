@@ -92,9 +92,9 @@ public class CreditTypeDetailTransform extends Transform {
     public List<CreditTypeDetailView> transformToView(List<CreditTypeDetail> creditTypeDetailList) {
         List<CreditTypeDetailView> creditTypeDetailViewList = new ArrayList<CreditTypeDetailView>();
         CreditTypeDetailView creditTypeDetailView;
-
+        
         for(CreditTypeDetail creditTypeDetail :creditTypeDetailList){
-            creditTypeDetailView = new CreditTypeDetailView();
+        	creditTypeDetailView = new CreditTypeDetailView();
             creditTypeDetailView.setCreateDate(creditTypeDetail.getCreateDate());
             creditTypeDetailView.setCreateBy(creditTypeDetail.getCreateBy());
             creditTypeDetailView.setModifyDate(creditTypeDetail.getModifyDate());
@@ -111,9 +111,10 @@ public class CreditTypeDetailTransform extends Transform {
             creditTypeDetailView.setLimit(creditTypeDetail.getLimit());
             creditTypeDetailView.setProductProgram(creditTypeDetail.getProductProgram());
             creditTypeDetailView.setUseCount(creditTypeDetail.getUseCount());
-            creditTypeDetailViewList.add(creditTypeDetailView);
+        	creditTypeDetailViewList.add(creditTypeDetailView);  
         }
-
         return creditTypeDetailViewList;
     }
+    
+  
 }

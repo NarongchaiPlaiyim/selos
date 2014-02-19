@@ -68,8 +68,9 @@ public class AppraisalRequest implements Serializable {
     private String messageHeader;
     private String message;
 
-    private User user;
+    //private User user;
     private long workCaseId;
+    private long workCasePreScreenId;
     private long stepId;
     private AppraisalView appraisalView;
 
@@ -115,21 +116,21 @@ public class AppraisalRequest implements Serializable {
         log.debug("preRender ::: setSession ");
 //        workCaseId = 4;
 //        user = (User)session.getAttribute("user");
-        if(!Util.isNull(session.getAttribute("workCaseId")) && !Util.isNull(session.getAttribute("stepId")) && !Util.isNull(session.getAttribute("user"))){
-            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-            log.debug("-- workCaseId[{}]", workCaseId);
-            user = (User)session.getAttribute("user");
-            log.debug("-- User.id[{}]", user.getId());
+        if((!Util.isNull(session.getAttribute("workCaseId")) || !Util.isNull(session.getAttribute("workCasePreScreenId"))) && !Util.isNull(session.getAttribute("stepId"))){
             stepId = Long.valueOf(""+session.getAttribute("stepId"));
             log.debug("-- stepId[{}]", stepId);
-            try{
-                String page = Util.getCurrentPage();
-                if(stepId != StepValue.PRESCREEN_MAKER.value() && stepId != StepValue.FULLAPP_BDM_SSO_ABDM.value()){
-                    FacesUtil.redirect("/site/inbox.jsf");
-                    return;
+
+            if(stepId != StepValue.PRESCREEN_MAKER.value() && stepId != StepValue.FULLAPP_BDM_SSO_ABDM.value()){
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
+            } else {
+                if(stepId == StepValue.PRESCREEN_MAKER.value()){
+                    workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
+                    log.debug("-- workCasePreScreenId : [{}]", workCasePreScreenId);
+                }else if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){
+                    workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+                    log.debug("-- workCaseId[{}]", workCaseId);
                 }
-            }catch (Exception ex){
-                log.debug("Exception :: {}",ex);
             }
         } else {
             log.debug("preRender ::: workCaseId is null.");
@@ -143,7 +144,7 @@ public class AppraisalRequest implements Serializable {
         log.info("-- onCreation.");
         preRender();
         init();
-        appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, user);
+        appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, workCasePreScreenId);
         if(!Util.isNull(appraisalView)){
             appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
             if(Util.isZero(appraisalDetailViewList.size())){
@@ -209,7 +210,7 @@ public class AppraisalRequest implements Serializable {
                 try{
                     appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
                     appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
-                    appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, user);
+                    appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, workCasePreScreenId);
 
                     messageHeader = msg.get("app.appraisal.request.message.header.save.success");
                     message = msg.get("app.appraisal.request.message.body.save.success");

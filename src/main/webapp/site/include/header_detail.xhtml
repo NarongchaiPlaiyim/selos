@@ -48,7 +48,19 @@
             <p:commandButton id="btnRequestAppraisal" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
                              update=":frmMain:msgBoxBaseMessagePanel"
                              action="#{baseController.onRequestAppraisal()}"
-                             rendered="#{baseController.manageButton.requestAppraisalButton}" />
+                             rendered="#{baseController.manageButton.requestAppraisalButton}">
+                <p:confirmDialog header="Confirmation" message="Are you want to Request Appraisa?" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmRequestAppraisal" global="false" showEffect="fade"
+                                 rendered="#{baseController.manageButton.requestAppraisalButton}">
+                    <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{baseController.onRequestAppraisal()}"
+                                     process="@this" oncomplete="confirmRequestAppraisal.hide()"/>
+                    <p:commandButton value="No" type="button" onclick="confirmRequestAppraisal.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+            </p:commandButton>
             <!--Check Criteria-->
             <p:commandButton id="btnCheckCriteria" value="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkCriteria')}"
                              rendered="#{baseController.manageButton.checkCriteriaButton}"
@@ -80,8 +92,7 @@
                 </p:confirmDialog>
             <!--Submit Case-->
             <p:commandButton id="btnSubmitCase" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
-                             rendered="#{baseController.manageButton.submitCAButton}"
-                    >
+                             rendered="#{baseController.manageButton.submitCAButton}">
 
             </p:commandButton>
             <!--Close Sale-->

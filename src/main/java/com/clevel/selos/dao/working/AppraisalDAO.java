@@ -37,7 +37,14 @@ public class AppraisalDAO extends GenericDAO<Appraisal, Long> {
         log.info("-- findAppraisalByWorkCaseId : {}", workCaseId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
-        criteria.addOrder(Order.asc("id"));
+        Appraisal appraisal = (Appraisal) criteria.uniqueResult();
+        return appraisal;
+    }
+
+    public Appraisal findByWorkCasePreScreenId(long workCasePreScreenId){
+        log.debug("-- findAppraisalByWorkCasePreScreenId : {}", workCasePreScreenId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
         Appraisal appraisal = (Appraisal) criteria.uniqueResult();
         return appraisal;
     }
