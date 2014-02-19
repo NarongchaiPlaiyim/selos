@@ -166,8 +166,7 @@ public class AppraisalResult implements Serializable {
         log.info("-- preRender.");
         HttpSession session = FacesUtil.getSession(true);
         log.debug("preRender ::: setSession ");
-//        workCaseId = 4;
-//        user = (User)session.getAttribute("user");
+        log.debug("preRender ::: workCaseId : {}, workCasePreScreenId : {}", session.getAttribute("workCaseId"), session.getAttribute("workCasePreScreenId"));
 
         if((!Util.isNull(session.getAttribute("workCaseId")) || !Util.isNull(session.getAttribute("workCasePreScreenId"))) && !Util.isNull(session.getAttribute("stepId"))){
             stepId = Long.valueOf(""+session.getAttribute("stepId"));
@@ -177,9 +176,9 @@ public class AppraisalResult implements Serializable {
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
             } else {
-                if(!Util.isNull(session.getAttribute("workCaseId"))){
+                if(!Util.isNull(session.getAttribute("workCaseId")) && Long.valueOf(""+session.getAttribute("workCaseId")) != 0){
                     workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-                }else if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
+                }else if(!Util.isNull(session.getAttribute("workCasePreScreenId")) && Long.valueOf(""+session.getAttribute("workCasePreScreenId")) != 0){
                     workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
                 }else{
                     log.error("error while loading page, can not find workCaseId/workCasePreScreenId in session.");
