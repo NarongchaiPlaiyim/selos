@@ -20,7 +20,8 @@ public class NewCollateral implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COLL_ID")
     private long id;
 
-    @Column(name = "propose_type", length = 1, columnDefinition = "int default 0")
+    //@Column(name = "propose_type", length = 1, columnDefinition = "int default 0")
+    @Column(name = "propose_type")
     @Enumerated(EnumType.ORDINAL)
     private ProposeType proposeType;
 

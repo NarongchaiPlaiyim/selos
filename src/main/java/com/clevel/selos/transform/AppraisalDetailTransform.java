@@ -116,6 +116,7 @@ public class AppraisalDetailTransform extends Transform {
                 newCollateral.setNewCreditFacility(newCreditFacility);
                 newCollateral.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
                 newCollateral.setProposeType(ProposeType.P);
+                log.debug("transformToModel ::: newCollateral : {}", newCollateral);
 
                 newCollateralHeadListForNewCollateralHead = new ArrayList<NewCollateralHead>();
                 newCollateralHeadForNewCollateralHead = new NewCollateralHead();
