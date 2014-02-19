@@ -285,7 +285,7 @@
                     <p:selectOneMenu id="dlgSplitProdProgram" value="#{existingSplitLine.productProgram.id}" required="#{not empty param[saveCreditBtn.clientId]}"
                                      size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{creditFacExisting.productProgramList}"
+                        <f:selectItems value="#{creditFacExisting.productProgramViewList}"
                                        var="productProgram"
                                        itemLabel="#{productProgram.name}"
                                        itemValue="#{productProgram.id}"/>

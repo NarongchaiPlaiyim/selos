@@ -122,14 +122,17 @@ public class CreditFacExistingControl extends BusinessControl {
         existingCreditFacilityDAO.persist(existingCreditFacility);
         log.info("persist :: existingCreditFacility..." + existingCreditFacility.getId());
 
-        if (existingCreditFacilityView.getExistingConditionDetailViewList().size() > 0) {
-            List<ExistingConditionDetail> existingConditionDetailList = existingConditionDetailDAO.findByExistingCreditFacility(existingCreditFacility);
+        List<ExistingConditionDetail> existingConditionDetailList = existingConditionDetailDAO.findByExistingCreditFacility(existingCreditFacility);
+        if(existingConditionDetailList!=null && existingConditionDetailList.size()>0){
             existingConditionDetailDAO.delete(existingConditionDetailList);
         }
-        log.info("getExistingConditionDetailViewList size = ... " + existingCreditFacilityView.getExistingConditionDetailViewList().size());
-        List<ExistingConditionDetail> existingConditionDetailList = existingConditionDetailTransform.transformsToModel(existingCreditFacilityView.getExistingConditionDetailViewList(), existingCreditFacility, user);
-        existingConditionDetailDAO.persist(existingConditionDetailList);
-        log.info("persist :: existingConditionDetailList ...");
+
+        if(existingCreditFacilityView.getExistingConditionDetailViewList()!=null && existingCreditFacilityView.getExistingConditionDetailViewList().size() > 0) {
+            log.info("getExistingConditionDetailViewList size = ... " + existingCreditFacilityView.getExistingConditionDetailViewList().size());
+            List<ExistingConditionDetail> existingConditionDetailListAdd = existingConditionDetailTransform.transformsToModel(existingCreditFacilityView.getExistingConditionDetailViewList(), existingCreditFacility, user);
+            existingConditionDetailDAO.persist(existingConditionDetailListAdd);
+            log.info("persist :: existingConditionDetailList ...");
+        }
 
         log.info("persist borrower getBorrowerComExistingCredit size ..." + existingCreditFacilityView.getBorrowerComExistingCredit().size());
 
@@ -168,19 +171,19 @@ public class CreditFacExistingControl extends BusinessControl {
         }
 
 
-        List<ExistingCreditDetail> borrowerComExistingCreditListDel = existingCreditDetailDAO.findByExistingCreditFacility(existingCreditFacility,1,1);
+        List<ExistingCreditDetail> borrowerComExistingCreditListDel = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,1,CreditCategory.COMMERCIAL);
         if(borrowerComExistingCreditListDel!=null && borrowerComExistingCreditListDel.size()>0){
             for (int i=0 ;i<borrowerComExistingCreditListDel.size();i++) {
                 log.info(" Round borrowerComExistingCreditListDel  is " + i );
                 ExistingCreditDetail existingCreditDetail =  borrowerComExistingCreditListDel.get(i);
 
                 List<ExistingCreditTierDetail>  existingCreditTierDetailListDel = existingCreditTierDetailDAO.findByExistingCreditDetail(existingCreditDetail);
-                if(existingCreditTierDetailListDel.size()>0){
+                if(existingCreditTierDetailListDel!=null && existingCreditTierDetailListDel.size()>0){
                     existingCreditTierDetailDAO.delete(existingCreditTierDetailListDel);
                 }
 
                 List<ExistingSplitLineDetail>  existingSplitLineDetailListDel = existingSplitLineDetailDAO.findByExistingCreditDetail(existingCreditDetail);
-                if(existingSplitLineDetailListDel.size()>0){
+                if(existingSplitLineDetailListDel!=null && existingSplitLineDetailListDel.size()>0){
                     existingSplitLineDetailDAO.delete(existingSplitLineDetailListDel);
                 }
             }
@@ -258,18 +261,18 @@ public class CreditFacExistingControl extends BusinessControl {
 
 
         List<ExistingCreditDetail> relatedComExistingCreditListDel = existingCreditDetailDAO.findByExistingCreditFacility(existingCreditFacility,2,1);
-        if(relatedComExistingCreditListDel.size()>0){
+        if(relatedComExistingCreditListDel!=null && relatedComExistingCreditListDel.size()>0){
             for (int i=0 ;i<relatedComExistingCreditListDel.size();i++) {
                 log.info(" Round relatedComExistingCreditListDel  is " + i );
                 ExistingCreditDetail existingCreditDetail =  relatedComExistingCreditListDel.get(i);
 
                 List<ExistingCreditTierDetail>  existingCreditTierDetailListDel = existingCreditTierDetailDAO.findByExistingCreditDetail(existingCreditDetail);
-                if(existingCreditTierDetailListDel.size()>0){
+                if(existingCreditTierDetailListDel!=null && existingCreditTierDetailListDel.size()>0){
                     existingCreditTierDetailDAO.delete(existingCreditTierDetailListDel);
                 }
 
                 List<ExistingSplitLineDetail>  existingSplitLineDetailListDel = existingSplitLineDetailDAO.findByExistingCreditDetail(existingCreditDetail);
-                if(existingSplitLineDetailListDel.size()>0){
+                if(existingSplitLineDetailListDel!=null && existingSplitLineDetailListDel.size()>0){
                     existingSplitLineDetailDAO.delete(existingSplitLineDetailListDel);
                 }
                 existingCreditDetailDAO.delete(relatedComExistingCreditListDel);

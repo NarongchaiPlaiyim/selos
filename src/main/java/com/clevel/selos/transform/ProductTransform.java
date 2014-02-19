@@ -9,6 +9,8 @@ import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.view.*;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductTransform extends Transform{
 
@@ -28,7 +30,7 @@ public class ProductTransform extends Transform{
 
     public ProductProgramView transformToView(ProductProgram productProgram){
         ProductProgramView productProgramView = new ProductProgramView();
-        if(productProgram !=null){
+        if(productProgram != null){
             productProgramView.setId(productProgram.getId());
             productProgramView.setName(productProgram.getName());
             productProgramView.setDescription(productProgram.getDescription());
@@ -129,6 +131,21 @@ public class ProductTransform extends Transform{
             } catch (Exception ex){
                 log.info("cannot find ProductProgram for {}", productProgramView);
             }
+        }
+        return null;
+    }
+
+    public List<ProductProgramView> transformToView(List<ProductProgram> productProgramList) {
+        try {
+            log.debug("begin transformToView(productProgramList size : {})", productProgramList.size());
+            List<ProductProgramView> productProgramViewList = new ArrayList<ProductProgramView>();
+            for(ProductProgram productProgram : productProgramList) {
+                ProductProgramView productProgramView = transformToView(productProgram);
+                productProgramViewList.add(productProgramView);
+            }
+            return productProgramViewList;
+        } catch (Exception ex) {
+            log.error("",ex);
         }
         return null;
     }

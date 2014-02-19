@@ -156,24 +156,37 @@
                         				value="#{msg.get('app.mortgageDetail.detail.creditType')}" />						
                         		</td>
                         		<td colspan="3">
-                        			<p:dataTable styleClass="full_table" rowIndexVar="rowIdx">
+                        			<p:dataTable value="#{mortgageDetail.credits}" var="credit" 
+                        				styleClass="full_table" rowIndexVar="rowIdx">
                         				<p:column style="width:30px">
                         					#{rowIdx+1}
                         				</p:column>
                         				<p:column
                         					headerText="#{msg.get('app.mortgageDetail.detail.creditType.table.account')}">
+                        					<h:panelGroup rendered="#{credit.hasAccountInfo}">
+                        					#{credit.accountName} <br />
+                        					#{msg.get('app.creditType.account.accountNo')} #{credit.accountNo} <br/>
+                        					#{msg.get('app.creditType.account.accountStatus')} #{credit.accountStatus}
+                        					</h:panelGroup>
+                        					<h:outputText value="-" rendered="#{not credit.hasAccountInfo}" />
                         				</p:column>
                         				<p:column style="width:100px"
                         					headerText="#{msg.get('app.mortgageDetail.detail.creditType.table.type')}">
+                        					#{credit.type}
                         				</p:column>
                         				<p:column style="width:200px"
                         					headerText="#{msg.get('app.mortgageDetail.detail.creditType.table.productProgram')}">
+                        					#{credit.productProgram}
                         				</p:column>
                         				<p:column style="width:175px"
                         					headerText="#{msg.get('app.mortgageDetail.detail.creditType.table.creditFacility')}">
+                        					#{credit.creditFacility}
                         				</p:column>
                         				<p:column style="width:120px" styleClass="right"
                         					headerText="#{msg.get('app.mortgageDetail.detail.creditType.table.limit')}">
+                        					<h:outputText value="#{credit.limit}">
+                        						<f:convertNumber pattern="#,##0.00"/>
+                        					</h:outputText>
                         				</p:column>
                         			</p:dataTable>
                         		</td>
@@ -186,38 +199,47 @@
                         	</tr>
                         	<tr>
                         		<td colspan="100%">
-                        			<p:dataTable styleClass="full_table" rowIndexVar="rowIdx">
+                        			<p:dataTable value="#{mortgageDetail.collSubs}" var="coll" 
+                        				styleClass="full_table" rowIndexVar="rowIdx">
                         				<p:column style="width:30px">
                         					#{rowIdx+1}
                         				</p:column>
                         				
                         				<p:column style="width:150px" styleClass="center"
                         					headerText="#{msg.get('app.mortgageDetail.detail.collateral.table.JB')}">
+                        					#{coll.jobNo}
                         				</p:column>
                         				<p:column style="width:150px" styleClass="center"
                         					headerText="#{msg.get('app.mortgageDetail.detail.collateral.table.HC')}">
+                        					#{coll.hcNo}
                         				</p:column>
                         				<p:column style="width:150px" styleClass="center"
                         					headerText="#{msg.get('app.mortgageDetail.detail.collateral.table.SUB')}">
+                        					#{coll.subNo}
                         				</p:column>
                         				<p:column style="width:100px"
                         					headerText="#{msg.get('app.mortgageDetail.detail.collateral.table.UW')}">
+                        					<h:outputText value="#{coll.owner}" escape="false" />
                         				</p:column>
                         				<p:column style="width:100px"
                         					headerText="#{msg.get('app.mortgageDetail.detail.collateral.table.type')}">
+                        					#{coll.collateralType}
                         				</p:column>
                         				<p:column style="width:50px"
                         					headerText="#{msg.get('app.mortgageDetail.detail.collateral.table.id')}">
+                        					#{coll.titleDeed}
                         				</p:column>
                         				<p:column 
                         					headerText="#{msg.get('app.mortgageDetail.detail.collateral.table.detail')}">
+                        					#{coll.mortgageDetail}
                         				</p:column>
                         				<p:column style="width:100px"
                         					headerText="#{msg.get('app.mortgageDetail.detail.collateral.table.related')}">
+                        					<h:outputText value="#{coll.relatedWith}" escape="false" />
                         				</p:column>
                         				<p:column style="width:100px" styleClass="right"
                         					headerText="#{msg.get('app.mortgageDetail.detail.collateral.table.appraisalValue')}">
-                        					<h:outputText value="0">
+                        					<h:outputText value="#{coll.appraisalValue}">
                         						<f:convertNumber pattern="#,##0.00"/>
                         					</h:outputText>
                         				</p:column>

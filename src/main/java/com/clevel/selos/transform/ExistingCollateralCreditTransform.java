@@ -42,10 +42,10 @@ public class ExistingCollateralCreditTransform extends Transform {
             existingCollateralCredit.setModifyBy(user);
             for(int i=0;i<existingCreditDetailList.size();i++){
                 ExistingCreditDetail  existingCreditDetail = existingCreditDetailList.get(i);
-                log.debug ("existingCreditDetail id is {} detail seq  is {}",existingCreditDetail.getId(),existingCreditDetail.getSeq());
-                log.debug ("  collateral choose seq  is {}",existingCreditTypeDetailView.getSeq());
+                log.debug ("existingCreditDetail id is {} detail seq  is {}",existingCreditDetail.getId(),existingCreditDetail.getNo());
+                log.debug ("  collateral choose seq  is {}",existingCreditTypeDetailView.getNo());
 
-                if( existingCreditTypeDetailView.getSeq() == existingCreditDetail.getSeq()){
+                if( existingCreditTypeDetailView.getNo() == existingCreditDetail.getNo()){
                     existingCollateralCredit.setExistingCreditDetail(existingCreditDetail);
                     log.debug ("existingCollateralCredit id is {}",existingCollateralCredit.getExistingCreditDetail().getId());
                 }
