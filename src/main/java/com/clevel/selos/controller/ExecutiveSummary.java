@@ -108,6 +108,14 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            if(workCaseId == 0){
+                try{
+                    FacesUtil.redirect("/site/inbox.jsf");
+                }catch (Exception ex){
+                    log.error("Exception :: {}",ex);
+                }
+                return;
+            }
         }else{
             log.debug("onCreation ::: workCaseId is null.");
             try{
@@ -115,6 +123,7 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
             }catch (Exception ex){
                 log.error("Exception :: {}",ex);
             }
+            return;
         }
 
         reasonList = new ArrayList<Reason>();

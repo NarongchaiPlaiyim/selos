@@ -126,24 +126,50 @@ public class BizInfoSummary implements Serializable {
 
     }
 
+    public void preRender(){
+        log.debug("preRender");
+        HttpSession session = FacesUtil.getSession(true);
+
+        if(session.getAttribute("workCaseId") != null){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        }else{
+            log.debug("onCreation ::: workCaseId is null.");
+            try{
+                FacesUtil.redirect("/site/inbox.jsf");
+            }catch (Exception ex){
+                log.error("Exception :: {}",ex);
+            }
+        }
+    }
+
     @PostConstruct
     public void onCreation() {
         log.info("onCreation bizInfoSum");
         disableOwnerName = false;
         disableExpiryDate = true;
 
+        log.debug("onCreation");
+
         HttpSession session = FacesUtil.getSession(true);
 
-        if(!Util.isNull(session.getAttribute("workCaseId"))){
+        if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            if(workCaseId == 0){
+                try{
+                    FacesUtil.redirect("/site/inbox.jsf");
+                }catch (Exception ex){
+                    log.error("Exception :: {}",ex);
+                }
+                return;
+            }
         }else{
-            log.info("onCreation ::: workCaseId is null.");
+            log.debug("onCreation ::: workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
-                return;
             }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+                log.error("Exception :: {}",ex);
             }
+            return;
         }
 
         log.debug("info WorkCaseId is: {}", workCaseId);
@@ -171,9 +197,8 @@ public class BizInfoSummary implements Serializable {
 
 
         if(Util.isNull(bizInfoSummaryView)) {
-            fromDB = false;
             log.info("bizInfoSummaryView == null ");
-
+            fromDB = false;
             bizInfoSummaryView = new BizInfoSummaryView();
 
             province = new Province();
@@ -204,6 +229,7 @@ public class BizInfoSummary implements Serializable {
 
 
         } else {
+            log.info("bizInfoSummaryView != null ");
             fromDB = true;
             getBusinessInfoListDB();
             onChangeProvinceEdit();
@@ -264,6 +290,7 @@ public class BizInfoSummary implements Serializable {
     }*/
 
     public void onChangeProvince() {
+        log.info("onChangeProvince :::: Province  : {} ", bizInfoSummaryView.getProvince());
         if(bizInfoSummaryView.getProvince() != null && bizInfoSummaryView.getProvince().getCode() != 0){
             Province province = provinceDAO.findById(bizInfoSummaryView.getProvince().getCode());
             districtList = districtDAO.getListByProvince(province);
@@ -276,6 +303,7 @@ public class BizInfoSummary implements Serializable {
     }
 
     public void onChangeDistrict() {
+        log.debug("onChangeDistrict :::: District : {}", bizInfoSummaryView.getDistrict());
         if(bizInfoSummaryView.getDistrict() != null && bizInfoSummaryView.getDistrict().getId() != 0){
             District district = districtDAO.findById(bizInfoSummaryView.getDistrict().getId());
             subDistrictList = subDistrictDAO.getListByDistrict(district);
@@ -286,6 +314,7 @@ public class BizInfoSummary implements Serializable {
     }
 
     public void onChangeProvinceEdit(){
+        log.info("onChangeProvinceEdit :::: Province  : {} ", bizInfoSummaryView.getProvince());
         if(bizInfoSummaryView.getProvince() != null && bizInfoSummaryView.getProvince().getCode() != 0){
             Province province = provinceDAO.findById(bizInfoSummaryView.getProvince().getCode());
             districtList = districtDAO.getListByProvince(province);
@@ -296,6 +325,7 @@ public class BizInfoSummary implements Serializable {
     }
 
     public void onChangeDistrictEdit(){
+        log.debug("onChangeDistrictEdit :::: District : {}", bizInfoSummaryView.getDistrict());
         if(bizInfoSummaryView.getDistrict() != null && bizInfoSummaryView.getDistrict().getId() != 0){
             District district = districtDAO.findById(bizInfoSummaryView.getDistrict().getId());
             subDistrictList = subDistrictDAO.getListByDistrict(district);
