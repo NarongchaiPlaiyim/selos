@@ -242,6 +242,8 @@ public class BizInfoSummaryTransform extends Transform {
     }
 
     public BizInfoSummaryView transformToView(BizInfoSummary bizInfoSummary) {
+        log.debug("find transformToView begin");
+        log.debug("bizInfoSummary : {}", bizInfoSummary);
         BizInfoSummaryView bizInfoSummaryView;
 
         bizInfoSummaryView = new BizInfoSummaryView();
@@ -258,24 +260,22 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummaryView.setAddressBuilding(bizInfoSummary.getAddressBuilding());
         bizInfoSummaryView.setAddressStreet(bizInfoSummary.getAddressStreet());
 
-        if(bizInfoSummary.getProvince() != null){
+        log.debug("Province : {}",bizInfoSummary.getProvince());
+        if(bizInfoSummary.getProvince() != null && bizInfoSummary.getProvince().getCode() != 0){
             bizInfoSummaryView.setProvince(bizInfoSummary.getProvince());
         } else {
             bizInfoSummaryView.setProvince(new Province());
         }
 
-        log.debug("find bizInfoSummary.getDistrict");
-
-        if(bizInfoSummary.getDistrict() != null){
-            log.debug( "bizInfoSummary.getDistrict is {}",bizInfoSummary.getDistrict().getId()) ;
+        log.debug("District : {}",bizInfoSummary.getDistrict());
+        if(bizInfoSummary.getDistrict() != null && bizInfoSummary.getDistrict().getId() != 0){
             bizInfoSummaryView.setDistrict(bizInfoSummary.getDistrict());
         } else {
             bizInfoSummaryView.setDistrict(new District());
         }
-        log.debug("find bizInfoSummary.setSubDistrict");
 
-        if(bizInfoSummary.getSubDistrict() != null){
-            log.debug( "bizInfoSummary.setSubDistrict is {}",bizInfoSummary.getSubDistrict().getCode());
+        log.debug("Sub District : {}",bizInfoSummary.getSubDistrict());
+        if(bizInfoSummary.getSubDistrict() != null && bizInfoSummary.getSubDistrict().getCode() != 0){
             bizInfoSummaryView.setSubDistrict(bizInfoSummary.getSubDistrict());
         } else {
             bizInfoSummaryView.setSubDistrict(new SubDistrict());

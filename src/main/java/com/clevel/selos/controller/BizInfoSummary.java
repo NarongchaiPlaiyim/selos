@@ -206,8 +206,8 @@ public class BizInfoSummary implements Serializable {
         } else {
             fromDB = true;
             getBusinessInfoListDB();
-            onChangeProvince();
-            onChangeDistrict();
+            onChangeProvinceEdit();
+            onChangeDistrictEdit();
             onChangeRental();
             bizInfoSummaryView.setCirculationAmount(bankStatementAvg);
             onCalSummaryTable();
@@ -227,10 +227,14 @@ public class BizInfoSummary implements Serializable {
         }
     }
 
-    public void onChangeProvince() {
-        Province proSelect = bizInfoSummaryView.getProvince();
-        log.info("onChangeProvince :::: Province  : {} ", proSelect);
-        districtList = districtDAO.getListByProvince(proSelect);
+/*    public void onChangeProvince() {
+        log.info("onChangeProvince :::: Province  : {} ", bizInfoSummaryView.getProvince());
+        if(bizInfoSummaryView.getProvince() != null){
+            Province proSelect = bizInfoSummaryView.getProvince();
+            districtList = districtDAO.getListByProvince(proSelect);
+        } else {
+            bizInfoSummaryView.setDistrict(new District());
+        }
 
         if(!fromDB){
             bizInfoSummaryView.setDistrict(new District());
@@ -240,21 +244,67 @@ public class BizInfoSummary implements Serializable {
     }
 
     public void onChangeDistrict() {
-        District districtSelect = bizInfoSummaryView.getDistrict();
-        log.debug("onChangeDistrict :::: district : {}", districtSelect);
-        subDistrictList = subDistrictDAO.getListByDistrict(districtSelect);
-//        fromDB = false;
+        log.debug("onChangeDistrict :::: District : {}", bizInfoSummaryView.getDistrict());
+        if(bizInfoSummaryView.getProvince() != null){
+            if(bizInfoSummaryView.getDistrict() != null){
+                District districtSelect = bizInfoSummaryView.getDistrict();
+                subDistrictList = subDistrictDAO.getListByDistrict(districtSelect);
+            } else {
+                bizInfoSummaryView.setSubDistrict(new SubDistrict());
+            }
+        } else {
+            bizInfoSummaryView.setDistrict(new District());
+            subDistrictList = new ArrayList<SubDistrict>();
+        }
 
         if(!fromDB){
             bizInfoSummaryView.setSubDistrict(new SubDistrict());
         }
-        fromDB = false;
-
         log.info("onChangeDistrict :::: subDistrictList.size ::: {}", subDistrictList.size());
+    }*/
+
+    public void onChangeProvince() {
+        if(bizInfoSummaryView.getProvince() != null && bizInfoSummaryView.getProvince().getCode() != 0){
+            Province province = provinceDAO.findById(bizInfoSummaryView.getProvince().getCode());
+            districtList = districtDAO.getListByProvince(province);
+            bizInfoSummaryView.setDistrict(new District());
+            subDistrictList = new ArrayList<SubDistrict>();
+        }else{
+            districtList = new ArrayList<District>();
+            subDistrictList = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeDistrict() {
+        if(bizInfoSummaryView.getDistrict() != null && bizInfoSummaryView.getDistrict().getId() != 0){
+            District district = districtDAO.findById(bizInfoSummaryView.getDistrict().getId());
+            subDistrictList = subDistrictDAO.getListByDistrict(district);
+        }else{
+            onChangeProvince();
+            subDistrictList = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeProvinceEdit(){
+        if(bizInfoSummaryView.getProvince() != null && bizInfoSummaryView.getProvince().getCode() != 0){
+            Province province = provinceDAO.findById(bizInfoSummaryView.getProvince().getCode());
+            districtList = districtDAO.getListByProvince(province);
+        }else{
+            districtList = new ArrayList<District>();
+            subDistrictList = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeDistrictEdit(){
+        if(bizInfoSummaryView.getDistrict() != null && bizInfoSummaryView.getDistrict().getId() != 0){
+            District district = districtDAO.findById(bizInfoSummaryView.getDistrict().getId());
+            subDistrictList = subDistrictDAO.getListByDistrict(district);
+        }else{
+            subDistrictList = new ArrayList<SubDistrict>();
+        }
     }
 
     public void getBusinessInfoListDB() {
-
         long bizInfoSummaryViewId;
         bizInfoSummaryViewId = bizInfoSummaryView.getId();
         bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryViewId);
