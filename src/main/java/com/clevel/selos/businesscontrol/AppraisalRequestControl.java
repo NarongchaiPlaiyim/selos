@@ -2,6 +2,8 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ProposeType;
+import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -93,7 +95,8 @@ public class AppraisalRequestControl extends BusinessControl {
                 log.debug("getAppraisalRequest ::: newCollateralList : {}", newCollateralList);
                 List<NewCollateral> newCollateralListForAdd = new ArrayList<NewCollateral>();
                 for(NewCollateral newCollateral : newCollateralList){
-                    newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
+                    log.debug("getAppraisalRequest ::: getCollateralHead newCollateral.getId : {}", newCollateral.getId());
+                    newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByCollateralProposeTypeRequestAppraisalType(newCollateral.getId(), ProposeType.P, RequestAppraisalValue.NOT_REQUEST));
                     newCollateralListForAdd.add(newCollateral);
                 }
                 appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralListForAdd);
@@ -162,7 +165,7 @@ public class AppraisalRequestControl extends BusinessControl {
             for(NewCollateral newCollateral : newCollateralList){
                 newCollateralHeadList = safetyList(newCollateralHeadDAO.findByNewCollateralId(newCollateral.getId()));
                 for(NewCollateralHead newCollateralHead : newCollateralHeadList){
-                    newCollateralHead.setAppraisalRequest(0);
+                    newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
                 }
                 newCollateralHeadDAO.persist(newCollateralHeadList);
             }
@@ -176,16 +179,6 @@ public class AppraisalRequestControl extends BusinessControl {
             log.debug("onSaveAppraisalRequest ::: before persist newCollateralList : {}", newCollateralList);
             newCollateralDAO.persist(newCollateralList);
             log.debug("onSaveAppraisalRequest ::: after persist newCollateralList : {}", newCollateralList);
-
-            /*for(NewCollateral newCollateral : newCollateralList){
-                newCollateralDAO.persist(newCollateral);
-                newCollateralHeadList = safetyList(newCollateral.getNewCollateralHeadList());
-                for(NewCollateralHead newCollateralHead : newCollateralHeadList){
-                    newCollateralHead.setNewCollateral(newCollateral);
-                    newCollateralHeadDAO.persist(newCollateralHead);
-                }
-            }*/
-
             log.info("-- onSaveAppraisalRequest end");
         }
     }

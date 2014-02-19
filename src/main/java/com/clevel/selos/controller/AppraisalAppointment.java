@@ -162,8 +162,9 @@ public class AppraisalAppointment implements Serializable {
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
             } else {
+                //TODO Check step for appraisal appointment
                 if(stepId == StepValue.PRESCREEN_MAKER.value()){
-                    workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePrescreenId"));
+                    workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
                     log.debug("-- workCasePreScreenId : [{}]", workCasePreScreenId);
                 }else if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){
                     workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
@@ -193,10 +194,6 @@ public class AppraisalAppointment implements Serializable {
                 appraisalContactDetailView = new AppraisalContactDetailView();
             }
 
-//                contactRecordDetailViewList = appraisalView.getContactRecordDetailViewList();
-//                for(ContactRecordDetailView view : contactRecordDetailViewList){
-//                    log.debug("-- ContactRecordDetailView.id[{}]", view.getId());
-//                }
             updateContractFlag(appraisalContactDetailView);
         } else {
             appraisalView = new AppraisalView();
