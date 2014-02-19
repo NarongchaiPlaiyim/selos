@@ -645,7 +645,13 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getCountry() != null && add2.getCountry() != null){
-            if(!add1.getCountry().getCode().equals(add2.getCountry().getCode())){
+            if(add1.getCountry().getCode() != null && add2.getCountry().getCode() != null){
+                if(!add1.getCountry().getCode().equals(add2.getCountry().getCode())){
+                    return currentAddress;
+                }
+            } else if(add1.getCountry().getCode() != null && add2.getCountry().getCode() == null){
+                return currentAddress;
+            } else if(add2.getCountry().getCode() != null && add1.getCountry().getCode() == null){
                 return currentAddress;
             }
         } else if(add1.getCountry() != null && add2.getCountry() == null){
@@ -655,6 +661,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         currentAddress = 1;
+
         return currentAddress;
     }
 

@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
@@ -673,7 +674,7 @@ public class CreditFacProposeControl extends BusinessControl {
             weightAR = bizInfoSummaryView.getSumWeightAR();
             weightAP = bizInfoSummaryView.getSumWeightAP();
             weightINV = bizInfoSummaryView.getSumWeightINV();
-    //      Sum(weight cost of goods sold * businessProportion)
+            //      Sum(weight cost of goods sold * businessProportion)
             if (bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0) {
                 log.debug("onGetBizInfoSummaryByWorkCase :: bizInfoSummaryView.getBizInfoDetailViewList() : {}", bizInfoSummaryView.getBizInfoDetailViewList());
                 for (BizInfoDetailView bidv : bizInfoSummaryView.getBizInfoDetailViewList()) {
@@ -800,6 +801,7 @@ public class CreditFacProposeControl extends BusinessControl {
         if (Util.safetyList(newCreditFacilityView.getNewFeeDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newFeeDetailViewList : {}", newCreditFacilityView.getNewFeeDetailViewList());
             List<NewFeeDetail> newFeeDetailList = newFeeDetailTransform.transformToModel(newCreditFacilityView.getNewFeeDetailViewList(), newCreditFacility, currentUser);
+            newCreditFacility.setNewFeeDetailList(newFeeDetailList);
             newFeeCreditDAO.persist(newFeeDetailList);
             log.debug("saveCreditFacility ::: persist newFeeDetailList : {}", newFeeDetailList);
         }
@@ -809,6 +811,7 @@ public class CreditFacProposeControl extends BusinessControl {
             log.debug("saveCreditFacility ::: newConditionDetailViewList : {}", newCreditFacilityView.getNewConditionDetailViewList());
             List<NewConditionDetail> newConditionDetailList = newConditionDetailTransform.transformToModel(newCreditFacilityView.getNewConditionDetailViewList(), newCreditFacility, currentUser);
             log.debug("saveCreditFacility ::: before persist newConditionDetailList : {}", newConditionDetailList);
+            newCreditFacility.setNewConditionDetailList(newConditionDetailList);
             newConditionDetailDAO.persist(newConditionDetailList);
             log.debug("saveCreditFacility ::: after persist newConditionDetailList : {}", newConditionDetailList);
         }
@@ -817,6 +820,7 @@ public class CreditFacProposeControl extends BusinessControl {
         if (Util.safetyList(newCreditFacilityView.getNewCreditDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCreditDetailViewList : {}", newCreditFacilityView.getNewCreditDetailViewList());
             List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, currentUser, workCase);
+            newCreditFacility.setNewCreditDetailList(newCreditDetailList);
             newCreditDetailDAO.persist(newCreditDetailList);
             log.debug("saveCreditFacility ::: persist newCreditDetailList : {}", newCreditDetailList);
         }
@@ -825,11 +829,14 @@ public class CreditFacProposeControl extends BusinessControl {
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newGuarantorDetailViewList : {}", newCreditFacilityView.getNewGuarantorDetailViewList());
             List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser);
+            newCreditFacility.setNewGuarantorDetailList(newGuarantorDetailList);
             newGuarantorDetailDAO.persist(newGuarantorDetailList);
             log.debug("saveCreditFacility ::: persist newGuarantorDetailList : {}", newGuarantorDetailList);
         }
 
         //--- Save to NewCollateral
+        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase);
+        newSubCollMortgageDAO.delete(newCollateralSubMortgages);
         //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
         List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase);
         newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
@@ -848,9 +855,19 @@ public class CreditFacProposeControl extends BusinessControl {
     // Call COMSInterface
     public AppraisalDataResult toCallComsInterface(final String jobId) {
         log.debug("onCallRetrieveAppraisalReportInfo begin jobId is  :: {}", jobId);
-        AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(getCurrentUserID(), jobId);
-        if (appraisalDataResult != null) {
-            log.debug("-- appraisalDataResult.getActionResult() ::: {}", appraisalDataResult.getActionResult());
+        AppraisalDataResult appraisalDataResult  = null;
+        try {
+            appraisalDataResult = comsInterface.getAppraisalData(getCurrentUserID(), jobId);
+
+            if (appraisalDataResult != null) {
+                log.debug("-- appraisalDataResult.getActionResult() ::: {}", appraisalDataResult.getActionResult());
+            }
+
+        } catch (COMSInterfaceException e) {
+            log.error("Exception while get COMS Appraisal data!", e);
+            throw e;
+        } catch (Exception e) {
+            log.error("Exception while get CSI data!", e);
         }
         return appraisalDataResult;
     }

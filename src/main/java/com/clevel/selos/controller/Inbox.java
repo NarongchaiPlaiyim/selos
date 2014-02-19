@@ -74,6 +74,10 @@ public class Inbox implements Serializable {
             } else {
                 renderedPool = false;
             }
+            HttpSession httpSession = FacesUtil.getSession(true);
+            httpSession.setAttribute("workCaseId", null);
+            httpSession.setAttribute("workCasePreScreenId", null);
+            httpSession.setAttribute("stepId", null);
             log.debug("onCreation ::: inboxViewList : {}", inboxViewList);
         } catch (Exception e) {
             log.error("Exception while getInbox : ", e);

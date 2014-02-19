@@ -440,14 +440,27 @@
     <ui:param name="action" value="onDeleteCollateralDetailView"/>
     <ui:param name="update" value=":frmMain"/>
 </ui:include>
-
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                     header="#{appraisalResult.messageHeader}" message="#{appraisalResult.message}" >
+    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
+                     header="#{appraisalResult.messageHeader}" >
+        <f:facet name="message">
+            <h:outputText value="#{appraisalResult.message}" escape="false"/>
+        </f:facet>
         <p:commandButton value="OK"
                          process="@this"
-                         update="frmMain"
+                         update=":frmMain"
                          oncomplete="msgBoxSystemMessageDlg.hide()"/>
+    </p:confirmDialog>
+</p:panel>
+<p:panel id="msgBoxRedirectPanel" styleClass="panel">
+    <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
+                     header="#{appraisalResult.messageHeader}" >
+        <f:facet name="message">
+            <h:outputText value="#{appraisalResult.message}" escape="false"/>
+        </f:facet>
+        <p:commandButton value="OK"
+                         process="@this"
+                         action="#{baseController.onGoToInbox}"/>
     </p:confirmDialog>
 </p:panel>
 

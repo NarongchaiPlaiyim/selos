@@ -1,6 +1,10 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.AppraisalResultControl;
+import com.clevel.selos.exception.COMSInterfaceException;
+import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.ncb.NCBInterfaceImpl;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSInputModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
@@ -12,6 +16,10 @@ import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSInputModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
 import com.clevel.selos.integration.ncb.ncrs.service.NCRSService;
+import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.view.NewCollateralView;
+import com.clevel.selos.transform.business.CollateralBizTransform;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.faces.bean.ManagedBean;
@@ -29,6 +37,9 @@ public class TestNCRS implements Serializable {
     Logger log;
 
     @Inject
+    private AppraisalResultControl appraisalResultControl;
+
+    @Inject
     NCRSService ncrsService;
 
     @Inject
@@ -36,6 +47,10 @@ public class TestNCRS implements Serializable {
 
     @Inject
     NCBInterfaceImpl ncbInterface;
+
+    @Inject
+    private COMSInterface comsInterface;
+
 
 
     //    @Inject
@@ -65,6 +80,14 @@ public class TestNCRS implements Serializable {
     private String confirmConsent = "Y";
     private String language = "2060002";
     private String historicalBalanceReport = "Y";
+
+
+    //CALL-COM_S
+    private String jobId;
+    private String userIdForComS = "10001";
+    @Inject
+    private CollateralBizTransform collateralBizTransform;
+    private NewCollateralView newCollateralView;
 
     @Inject
     public TestNCRS() {
@@ -238,6 +261,41 @@ public class TestNCRS implements Serializable {
         } catch (Exception e) {
             log.info("NCCRS Exception : {}", e.getMessage());
         }
+    }
+
+    public void onClickCallComS(){
+        try{                                                                           //10001
+            AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(userIdForComS, jobId);
+            if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())){
+                newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
+                result = newCollateralView.toString();
+            } else {
+                result = "FAILED";
+            }
+        } catch (COMSInterfaceException e) {
+            log.error("-- COMSInterfaceException : {}", e.getMessage());
+            result = e.getMessage();
+        } catch (Exception e) {
+            log.error("-- Exception : {}", e.getMessage());
+            result = e.getMessage();
+        }
+    }
+
+
+    public String getUserIdForComS() {
+        return userIdForComS;
+    }
+
+    public void setUserIdForComS(String userIdForComS) {
+        this.userIdForComS = userIdForComS;
+    }
+
+    public String getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
     }
 
     public String getUserId() {

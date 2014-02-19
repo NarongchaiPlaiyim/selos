@@ -2,6 +2,8 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ProposeType;
+import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalContactDetailView;
@@ -27,6 +29,8 @@ public class AppraisalAppointmentControl extends BusinessControl {
     private Logger log;
     @Inject
     private WorkCaseDAO workCaseDAO;
+    @Inject
+    private WorkCasePrescreenDAO workCasePrescreenDAO;
     @Inject
     private AppraisalDAO appraisalDAO;
     @Inject
@@ -62,6 +66,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
     private List<NewCollateral> newCollateralList;
     private List<NewCollateralHead> newCollateralHeadList;
     private WorkCase workCase;
+    private WorkCasePrescreen workCasePrescreen;
     private NewCreditFacility newCreditFacility;
 
     @Inject
@@ -69,13 +74,24 @@ public class AppraisalAppointmentControl extends BusinessControl {
 
     }
 	
-	public AppraisalView getAppraisalAppointment(final long workCaseId, final User user){
-        log.info("-- getAppraisalAppointment WorkCaseId : {}, User.id[{}]", workCaseId, user.getId());
-        appraisal  = appraisalDAO.findByWorkCaseId(workCaseId);
+	public AppraisalView getAppraisalAppointment(final long workCaseId, final long workCasePreScreenId){
+        log.info("-- getAppraisalAppointment WorkCaseId : {}, WorkCasePreScreenId [{}], User.id[{}]", workCaseId, workCasePreScreenId, getCurrentUserID());
+        if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
+            appraisal  = appraisalDAO.findByWorkCaseId(workCaseId);
+            log.debug("getAppraisalAppointment by workCaseId - appraisal: {}", appraisal);
+            newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+            log.debug("getAppraisalAppointment by workCaseId - creditFacility : {}", newCreditFacility);
+        }else if(!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
+            appraisal  = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+            log.debug("getAppraisalAppointment by workCasePreScreenId : {}", appraisal);
+            newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+            log.debug("getAppraisalAppointment by workCaseId - creditFacility : {}", newCreditFacility);
+        }
+
         if(!Util.isNull(appraisal)){
             appraisalContactDetailList = Util.safetyList(appraisalContactDetailDAO.findByAppraisalId(appraisal.getId()));
             appraisal.setAppraisalContactDetailList(appraisalContactDetailList);
-            appraisalView = appraisalTransform.transformToView(appraisal, user);
+            appraisalView = appraisalTransform.transformToView(appraisal, getCurrentUser());
 
             //TODO : wrk_contact_record waiting for .....................
 //            contactRecordDetailList = Util.safetyList(contactRecordDetailDAO.findByWorkCaseId(workCaseId));
@@ -83,12 +99,11 @@ public class AppraisalAppointmentControl extends BusinessControl {
 //                contactRecordDetailViewList = contactRecordDetailTransform.transformToView(contactRecordDetailList);
 //                appraisalView.setContactRecordDetailViewList(Util.safetyList(contactRecordDetailViewList));
 //            }
-
-            newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
             if(!Util.isNull(newCreditFacility)){
                 newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
                 for(NewCollateral newCollateral : newCollateralList){
-                    newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
+                    //newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
+                    newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByCollateralProposeTypeRequestAppraisalType(newCollateral.getId(), ProposeType.P, RequestAppraisalValue.NOT_REQUEST));
                 }
                 appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralList);
                 appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
@@ -104,10 +119,18 @@ public class AppraisalAppointmentControl extends BusinessControl {
         }
     }
 
-    public void onSaveAppraisalAppointment(final AppraisalView appraisalView,final long workCaseId, final User user){
+    public void onSaveAppraisalAppointment(final AppraisalView appraisalView,final long workCaseId, final long workCasePreScreenId){
         log.info("-- onSaveAppraisalAppointment");
+        if(Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
+            workCase = workCaseDAO.findById(workCaseId);
+            workCasePrescreen = null;
+        } else if (Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
+            workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            workCase = null;
+        }
         workCase = workCaseDAO.findById(workCaseId);
-        appraisal = appraisalTransform.transformToModel(appraisalView, workCase, user);
+
+        appraisal = appraisalTransform.transformToModel(appraisalView, workCase, workCasePrescreen, getCurrentUser());
 
         if(!Util.isZero(appraisal.getId())){
             log.debug("-- Appraisal id is {}", appraisal.getId());
@@ -139,7 +162,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
             }
 
             newCollateralList.clear();
-            newCollateralList = Util.safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, user));
+            newCollateralList = Util.safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, getCurrentUser()));
             for(NewCollateral newCollateral : newCollateralList){
                 newCollateralDAO.persist(newCollateral);
                 newCollateralHeadList = Util.safetyList(newCollateral.getNewCollateralHeadList());
