@@ -835,6 +835,8 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         //--- Save to NewCollateral
+        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase);
+        newSubCollMortgageDAO.delete(newCollateralSubMortgages);
         //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
         List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase);
         newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);

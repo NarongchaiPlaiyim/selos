@@ -9,7 +9,6 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 
 public class NewCollateralSubOwnerDAO extends GenericDAO<NewCollateralSubOwner, Long> {
@@ -21,8 +20,7 @@ public class NewCollateralSubOwnerDAO extends GenericDAO<NewCollateralSubOwner, 
     NewCreditFacilityDAO newCreditFacilityDAO;
 
     @Inject
-    public NewCollateralSubOwnerDAO() {
-    }
+    public NewCollateralSubOwnerDAO() {}
 
     @SuppressWarnings("unchecked")
     public List<NewCollateralSubOwner> getListNewCollateralSubCustomer(NewCollateralSub newCollateralSub) {
