@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
@@ -673,7 +674,7 @@ public class CreditFacProposeControl extends BusinessControl {
             weightAR = bizInfoSummaryView.getSumWeightAR();
             weightAP = bizInfoSummaryView.getSumWeightAP();
             weightINV = bizInfoSummaryView.getSumWeightINV();
-    //      Sum(weight cost of goods sold * businessProportion)
+            //      Sum(weight cost of goods sold * businessProportion)
             if (bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0) {
                 log.debug("onGetBizInfoSummaryByWorkCase :: bizInfoSummaryView.getBizInfoDetailViewList() : {}", bizInfoSummaryView.getBizInfoDetailViewList());
                 for (BizInfoDetailView bidv : bizInfoSummaryView.getBizInfoDetailViewList()) {
@@ -852,9 +853,19 @@ public class CreditFacProposeControl extends BusinessControl {
     // Call COMSInterface
     public AppraisalDataResult toCallComsInterface(final String jobId) {
         log.debug("onCallRetrieveAppraisalReportInfo begin jobId is  :: {}", jobId);
-        AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(getCurrentUserID(), jobId);
-        if (appraisalDataResult != null) {
-            log.debug("-- appraisalDataResult.getActionResult() ::: {}", appraisalDataResult.getActionResult());
+        AppraisalDataResult appraisalDataResult  = null;
+        try {
+            appraisalDataResult = comsInterface.getAppraisalData(getCurrentUserID(), jobId);
+
+            if (appraisalDataResult != null) {
+                log.debug("-- appraisalDataResult.getActionResult() ::: {}", appraisalDataResult.getActionResult());
+            }
+
+        } catch (COMSInterfaceException e) {
+            log.error("Exception while get COMS Appraisal data!", e);
+            throw e;
+        } catch (Exception e) {
+            log.error("Exception while get CSI data!", e);
         }
         return appraisalDataResult;
     }
