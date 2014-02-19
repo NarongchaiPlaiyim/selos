@@ -141,11 +141,6 @@ public class CustomerInfoIndividual implements Serializable {
     private String message;
     private String severity;
 
-//    private int addressFlagForm2;
-//    private int addressFlagForm3;
-//    private int addressFlagForm5;
-//    private int addressFlagForm6;
-
     //session
     private long workCaseId;
 
@@ -285,17 +280,34 @@ public class CustomerInfoIndividual implements Serializable {
     public CustomerInfoIndividual(){
     }
 
-    @PostConstruct
-    public void onCreation() {
+    public void preRender(){
+        log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         }else{
-            log.info("preRender ::: workCaseId is null.");
+            log.debug("onCreation ::: workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
-                return;
+            }catch (Exception ex){
+                log.error("Exception :: {}",ex);
+            }
+        }
+    }
+
+    @PostConstruct
+    public void onCreation() {
+        log.debug("onCreation");
+
+        HttpSession session = FacesUtil.getSession(true);
+
+        if(session.getAttribute("workCaseId") != null){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        }else{
+            log.debug("onCreation ::: workCaseId is null.");
+            try{
+                FacesUtil.redirect("/site/inbox.jsf");
             }catch (Exception ex){
                 log.error("Exception :: {}",ex);
             }
