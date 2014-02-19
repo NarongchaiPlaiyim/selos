@@ -36,7 +36,8 @@ public class NewGuarantorDetailView implements Serializable {
         this.tcgLgNo = "";
         this.totalLimitGuaranteeAmount = BigDecimal.ZERO;
         this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
-        this.proposeType= ProposeType.P;
+        this.proposeType = ProposeType.P;
+        this.uwDecision = DecisionType.NO_DECISION;
     }
 
     public long getId() {

@@ -2,13 +2,17 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.working.*;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+
 import java.util.List;
 
 public class NewCollateralSubDAO extends GenericDAO<NewCollateralSub, Long> {
@@ -86,7 +90,18 @@ public class NewCollateralSubDAO extends GenericDAO<NewCollateralSub, Long> {
         log.info("getList. (result size: {})", newCollateralSubDetails.size());
 
         return newCollateralSubDetails;
-
     }
-
+    
+    @SuppressWarnings("unchecked")
+    public List<NewCollateralSub> findForMortgageSummary(long workCaseId) {
+    	Criteria criteria = createCriteria();
+    	criteria.createAlias("newCollateralHead", "head");
+    	criteria.createAlias("head.newCollateral", "main");
+    	
+    	criteria.add(Restrictions.eq("main.workCase.id", workCaseId));
+    	criteria.add(Restrictions.eq("main.proposeType", ProposeType.A));
+    	criteria.add(Restrictions.eq("main.uwDecision", DecisionType.APPROVED));
+    	criteria.addOrder(Order.asc("id"));
+    	return criteria.list();
+    }
 }

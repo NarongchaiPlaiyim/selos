@@ -2,7 +2,15 @@ package com.clevel.selos.model.db.working;
 
 import java.io.Serializable;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "wrk_mortgage_coll_owner")
@@ -21,7 +29,10 @@ public class MortgageInfoCollOwner implements Serializable {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
-
+    
+    @Column(name="is_poa",columnDefinition="int default 0")
+    private boolean poa;
+    
 	public long getId() {
 		return id;
 	}
@@ -46,5 +57,10 @@ public class MortgageInfoCollOwner implements Serializable {
 		this.customer = customer;
 	}
 
-    
+    public boolean isPoa() {
+		return poa;
+	}
+    public void setPoa(boolean poa) {
+		this.poa = poa;
+	}
 }

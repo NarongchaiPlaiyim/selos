@@ -271,6 +271,8 @@ public class ExSummaryControl extends BusinessControl {
             } else {
                 exSumCharacteristicView.setCustomer("-");
             }
+        } else {
+            exSumCharacteristicView.setCustomer("-");
         }
 
         exSumCharacteristicView.setIncome(exSummary.getIncome());

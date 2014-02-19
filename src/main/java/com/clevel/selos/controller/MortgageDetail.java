@@ -37,7 +37,9 @@ import com.clevel.selos.model.view.CustomerAttorneyView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.MortgageInfoAttorneySelectView;
 import com.clevel.selos.model.view.MortgageInfoCollOwnerView;
+import com.clevel.selos.model.view.MortgageInfoCollSubView;
 import com.clevel.selos.model.view.MortgageInfoView;
+import com.clevel.selos.model.view.NewCreditDetailSimpleView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
@@ -87,6 +89,9 @@ public class MortgageDetail implements Serializable {
 	
 	private MortgageInfoView mortgageInfoView;
 	private List<MortgageInfoCollOwnerView> collOwners;
+	private List<MortgageInfoCollSubView> collSubs;
+	private List<NewCreditDetailSimpleView> credits;
+	
 	private AttorneySelectDataModel attorneySelectDataModel;
 	private MortgageInfoAttorneySelectView selectedAttorney;
 	private CustomerAttorneyView attorneyView;
@@ -229,6 +234,12 @@ public class MortgageDetail implements Serializable {
 		else
 			return false;
 	}
+	public List<MortgageInfoCollSubView> getCollSubs() {
+		return collSubs;
+	}
+	public List<NewCreditDetailSimpleView> getCredits() {
+		return credits;
+	}
 	/*
 	 * Action
 	 */
@@ -359,9 +370,12 @@ public class MortgageDetail implements Serializable {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
 		
-		//TODO Load mortage info by using workcase and mortgageId
+		//TODO Load mortgage info by using workcase and mortgageId
 		mortgageInfoView = mortgageDetailControl.getMortgageInfo(mortgageId);
-		collOwners = mortgageDetailControl.getCollOwners(workCaseId, mortgageInfoView.getId());
+		collOwners = mortgageDetailControl.getCollOwners(mortgageInfoView.getId());
+		collSubs = mortgageDetailControl.getMortgageInfoCollSubList(mortgageInfoView.getId());
+		credits = mortgageDetailControl.getMortgageInfoCreditList(mortgageInfoView.getId());
+		
 		currentAttorneyView = mortgageDetailControl.getCustomerAttorneyView(mortgageInfoView.getCustomerAttorneyId());
 		if (currentAttorneyView.getCustomerId() > 0) {
 			for (MortgageInfoAttorneySelectView view : attorneySelectViews) {

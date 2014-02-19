@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.working;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -52,7 +53,7 @@ public class MortgageInfo implements Serializable {
     @JoinColumn(name = "mortgage_type_id")
     private MortgageType mortgageType;
 
-    @Column(name = "mortgage_order")
+    @Column(name = "mortgage_order",columnDefinition="int default 0")
     private int mortgageOrder;
    
     @Column(name = "attorney_required",columnDefinition="int default 0")
@@ -66,8 +67,11 @@ public class MortgageInfo implements Serializable {
     @OneToOne
     @JoinColumn(name = "customer_attorney_id", nullable = true)
     private CustomerAttorney customerAttorney;
-
-    @ManyToOne
+    
+    @Column(name="mortgage_amount")
+    private BigDecimal mortgageAmount;
+    
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="workcase_id")
     private WorkCase workCase;
     
@@ -199,4 +203,10 @@ public class MortgageInfo implements Serializable {
 		this.workCase = workCase;
 	}
     
+	public BigDecimal getMortgageAmount() {
+		return mortgageAmount;
+	}
+	public void setMortgageAmount(BigDecimal mortgageAmount) {
+		this.mortgageAmount = mortgageAmount;
+	}
 }

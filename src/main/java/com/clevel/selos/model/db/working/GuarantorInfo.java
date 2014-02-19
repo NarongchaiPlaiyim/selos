@@ -1,23 +1,129 @@
 package com.clevel.selos.model.db.working;
 
 import javax.persistence.*;
+
+import com.clevel.selos.model.db.master.MortgageType;
+import com.clevel.selos.model.db.master.User;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
 @Table(name = "wrk_guarantor_info")
-public class GuarantorInfo {
+public class GuarantorInfo implements Serializable  {
+    private static final long serialVersionUID = -8123946645456450962L;
 
-    @Id
+	@Id
     @SequenceGenerator(name = "SEQ_WRK_GUARANTOR_INFO_REQ", sequenceName = "SEQ_WRK_GUARANTOR_INFO_REQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_GUARANTOR_INFO_REQ")
     private long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "guarantor_signing_date")
     private Date guarantorSigningDate;
 
-    @OneToOne
-    @JoinColumn(name = "guarantor_id")
-    private Customer guarantor;
+    @ManyToOne
+    @JoinColumn(name="mortgage_type_id")
+    private MortgageType guarantorType;
+    
+    @Column(name="guarantor_amount")
+    private BigDecimal guarantorAmount;
+    
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="workcase_id")
+    private WorkCase workCase;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_date")
+    private Date createDate;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modify_date")
+    private Date modifyDate;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "create_user_id")
+    private User createBy;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "modify_user_id")
+    private User modifyBy;
+    
+    public GuarantorInfo() {
+    	
+    }
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public Date getGuarantorSigningDate() {
+		return guarantorSigningDate;
+	}
+
+	public void setGuarantorSigningDate(Date guarantorSigningDate) {
+		this.guarantorSigningDate = guarantorSigningDate;
+	}
+
+	public MortgageType getGuarantorType() {
+		return guarantorType;
+	}
+
+	public void setGuarantorType(MortgageType guarantorType) {
+		this.guarantorType = guarantorType;
+	}
+
+	public BigDecimal getGuarantorAmount() {
+		return guarantorAmount;
+	}
+
+	public void setGuarantorAmount(BigDecimal guarantorAmount) {
+		this.guarantorAmount = guarantorAmount;
+	}
+
+	public WorkCase getWorkCase() {
+		return workCase;
+	}
+
+	public void setWorkCase(WorkCase workCase) {
+		this.workCase = workCase;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Date getModifyDate() {
+		return modifyDate;
+	}
+
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
+	}
+
+	public User getCreateBy() {
+		return createBy;
+	}
+
+	public void setCreateBy(User createBy) {
+		this.createBy = createBy;
+	}
+
+	public User getModifyBy() {
+		return modifyBy;
+	}
+
+	public void setModifyBy(User modifyBy) {
+		this.modifyBy = modifyBy;
+	}
+    
 }

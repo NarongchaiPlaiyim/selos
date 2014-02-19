@@ -255,15 +255,15 @@ public class PrescreenMaker implements Serializable {
 
             if(!checkPage){
                 try{
-                    if(stepId == StepValue.PRESCREEN_MAKER.value() && page.equals("prescreen.jsf")){
+                    if(stepId == StepValue.PRESCREEN_INITIAL.value() && page.equals("prescreen.jsf")){
                         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                         ec.redirect(ec.getRequestContextPath() + "/site/prescreenInitial.jsf");
                         return;
-                    }else if(stepId == 1003 && page.equals("prescreen.jsf")){
+                    }else if(stepId == StepValue.PRESCREEN_MAKER.value() && page.equals("prescreen.jsf")){
                         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                         ec.redirect(ec.getRequestContextPath() + "/site/prescreenMaker.jsf");
                         return;
-                    }else if(stepId == 1002 && page.equals("prescreen.jsf")){
+                    }else if(stepId == StepValue.PRESCREEN_CHECKER.value() && page.equals("prescreen.jsf")){
                         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                         ec.redirect(ec.getRequestContextPath() + "/site/prescreenChecker.jsf");
                         return;

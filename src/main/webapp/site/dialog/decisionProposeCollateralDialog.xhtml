@@ -13,7 +13,7 @@
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.jobID')}"/>
                 </td>
                 <td class="left" style="width: 80%" colspan="3">
-                    <h:outputText value="#{decision.selectedAppProposeCollateral.jobID}"/>
+                    <h:outputText value="#{decision.selectedApproveCollateral.jobID}"/>
                 </td>
             </tr>
             <tr>
@@ -21,7 +21,7 @@
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.appraisalDate')}"/>
                 </td>
                 <td class="left" colspan="3">
-                    <h:outputText value="#{decision.selectedAppProposeCollateral.appraisalDate}">
+                    <h:outputText value="#{decision.selectedApproveCollateral.appraisalDate}">
                         <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                     </h:outputText>
                 </td>
@@ -31,7 +31,7 @@
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecision')}"/>
                 </td>
                 <td class="left" colspan="3">
-                    <h:outputText value="#{decision.selectedAppProposeCollateral.aadDecision}"/>
+                    <h:outputText value="#{decision.selectedApproveCollateral.aadDecision}"/>
                 </td>
             </tr>
             <tr>
@@ -39,13 +39,13 @@
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReason')}"/>
                 </td>
                 <td class="left" style="width: 30%;">
-                    <h:outputText value="#{decision.selectedAppProposeCollateral.aadDecisionReason}"/>
+                    <h:outputText value="#{decision.selectedApproveCollateral.aadDecisionReason}"/>
                 </td>
                 <td class="title" style="width: 20%;">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReasonDetail')}"/>
                 </td>
                 <td class="left" style="width: 30%">
-                    <h:outputText value="#{decision.selectedAppProposeCollateral.aadDecisionReasonDetail}"/>
+                    <h:outputText value="#{decision.selectedApproveCollateral.aadDecisionReasonDetail}"/>
                 </td>
             </tr>
             <tr>
@@ -53,13 +53,13 @@
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.usage')}"/>
                 </td>
                 <td class="left">
-                    <h:outputText value="#{decision.selectedAppProposeCollateral.usage}"/>
+                    <h:outputText value="#{decision.selectedApproveCollateral.usage}"/>
                 </td>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.typeOfUsage')}"/>
                 </td>
                 <td class="left">
-                    <h:outputText value="#{decision.selectedAppProposeCollateral.typeOfUsage}"/>
+                    <h:outputText value="#{decision.selectedApproveCollateral.typeOfUsage}"/>
                 </td>
             </tr>
             <tr>
@@ -73,7 +73,7 @@
                             <td>#{msg.get('app.decision.label.approved')}</td>
                             <td>
                                 <p:selectOneRadio id="dlgCollateralRadioApprove"
-                                                  value="#{decision.selectedAppProposeCollateral.uwDecision}"
+                                                  value="#{decision.selectedApproveCollateral.uwDecision}"
                                                   required="#{not empty param[saveCollateralButton.clientId]}">
                                     <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                     <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
@@ -88,7 +88,7 @@
                     <p:outputLabel value="#{msg.get('app.decision.label.UWRemark')}"/>
                 </td>
                 <td class="left" colspan="3">
-                    <p:inputTextarea value="#{decision.selectedAppProposeCollateral.uwRemark}"
+                    <p:inputTextarea value="#{decision.selectedApproveCollateral.uwRemark}"
                                      rows="3" cols="100"/>
                 </td>
             </tr>
@@ -97,13 +97,13 @@
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageCondition')}"/>
                 </td>
                 <td class="left">
-                    <h:outputText value="#{decision.selectedAppProposeCollateral.mortgageCondition}"/>
+                    <h:outputText value="#{decision.selectedApproveCollateral.mortgageCondition}"/>
                 </td>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageConditionDetail')}"/>
                 </td>
                 <td class="left">
-                    <h:outputText value="#{decision.selectedAppProposeCollateral.mortgageConditionDetail}"/>
+                    <h:outputText value="#{decision.selectedApproveCollateral.mortgageConditionDetail}"/>
                 </td>
             </tr>
             <tr>
@@ -174,7 +174,7 @@
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.BDMComments')}"/>
                 </td>
                 <td class="left" colspan="3">
-                    <p:inputTextarea value="#{decision.selectedAppProposeCollateral.bdmComments}"
+                    <p:inputTextarea value="#{decision.selectedApproveCollateral.bdmComments}"
                                      cols="100" rows="3"/>
                 </td>
             </tr>
@@ -186,7 +186,7 @@
             </tr>
 
             <!-- Collateral Head -->
-            <ui:repeat value="#{decision.selectedAppProposeCollateral.newCollateralHeadViewList}"
+            <ui:repeat value="#{decision.selectedApproveCollateral.newCollateralHeadViewList}"
                        var="collHeadDetail" varStatus="i">
                 <tr>
                     <td class="title">
@@ -312,8 +312,8 @@
                     <td class="left">
                         <p:selectOneRadio id="dlgInsuranceComp"
                                           value="#{collHeadDetail.insuranceCompany}">
-                            <f:selectItem itemLabel="#{msg.get('app.button.partner')}" itemValue="2"/>
-                            <f:selectItem itemLabel="#{msg.get('app.button.nonPartner')}" itemValue="1"/>
+                            <f:selectItem itemLabel="#{msg.get('app.button.partner')}" itemValue="#{decision.yesValue}"/>
+                            <f:selectItem itemLabel="#{msg.get('app.button.nonPartner')}" itemValue="#{decision.noValue}"/>
                         </p:selectOneRadio>
                     </td>
                 </tr>
@@ -430,7 +430,7 @@
                                     <f:setPropertyActionListener value="#{i.index}"
                                                                  target="#{decision.rowIndexCollHead}"/>
                                     <f:setPropertyActionListener value="#{subCollateralDetail}"
-                                                                 target="#{decision.selectedAppSubCollateral}"/>
+                                                                 target="#{decision.selectedApproveSubColl}"/>
                                     <f:setPropertyActionListener value="#{rowIndex}"
                                                                  target="#{decision.rowIndexSubColl}"/>
                                 </p:commandButton>

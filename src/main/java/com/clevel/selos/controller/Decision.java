@@ -7,13 +7,9 @@ import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.DecisionDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.CreditCustomerType;
-import com.clevel.selos.model.RadioValue;
-import com.clevel.selos.model.RequestTypes;
-import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
-import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -60,15 +56,15 @@ public class Decision implements Serializable {
 
     //Business logic
     @Inject
-    DecisionControl decisionControl;
+    private DecisionControl decisionControl;
     @Inject
-    CreditFacProposeControl creditFacProposeControl;
+    private CreditFacProposeControl creditFacProposeControl;
     @Inject
-    BasicInfoControl basicInfoControl;
+    private BasicInfoControl basicInfoControl;
     @Inject
-    TCGInfoControl tcgInfoControl;
+    private TCGInfoControl tcgInfoControl;
     @Inject
-    CustomerInfoControl customerInfoControl;
+    private CustomerInfoControl customerInfoControl;
     @Inject
     private ExSummaryControl exSummaryControl;
     @Inject
@@ -77,6 +73,7 @@ public class Decision implements Serializable {
     private DisbursementTypeControl disbursementTypeControl;
     @Inject
     private ProductControl productControl;
+
     //DAO
     @Inject
     DecisionDAO decisionDAO;
@@ -110,7 +107,6 @@ public class Decision implements Serializable {
     PotentialCollateralDAO potentialCollateralDAO;
     @Inject
     MortgageTypeDAO mortgageTypeDAO;
-
     @Inject
     LoanPurposeDAO loanPurposeDAO;
 
@@ -124,42 +120,42 @@ public class Decision implements Serializable {
     @Inject
     LoanPurposeTransform loanPurposeTransform;
 
-    //Session
+    
     private long workCaseId;
-
-    //User Role
+    
+    // User Role
     private boolean roleBDM;
     private boolean roleZM_RGM;
-    private boolean roleUW;
+    private boolean roleUW;    
+
+    // Mode
+    enum ModeForButton {
+        ADD, EDIT
+    }
+    private ModeForButton modeForButton;
+    private boolean modeEditCredit;
+    private boolean modeEditCollateral;
+    private boolean modeEditSubColl;
+    private boolean modeEditGuarantor;
+
+    // Dialog Messages
+    private String messageHeader;
+    private String message;
+    private boolean messageErr;
 
     //Main Model View
     private DecisionView decisionView;
     private FollowUpConditionView followUpConditionView;
     private ApprovalHistory approvalHistory;
 
-    private BasicInfoView basicInfoView;
     private SpecialProgram specialProgramBasicInfo;
     private TCGView tcgView;
     private int applyTCG;
 
     private List<ProposeCreditDetailView> sharedProposeCreditTypeList;
-    // View Selected for Add/Edit/Delete
-    private NewCreditDetailView selectedAppProposeCredit;
-    private NewCollateralView selectedAppProposeCollateral;
-    private NewCollateralSubView selectedAppSubCollateral;
-    private NewGuarantorDetailView selectedAppProposeGuarantor;
-
     private List<ProductProgram> productProgramList;
     private List<CreditType> creditTypeList;
     private ProductGroup productGroup;
-
-    // Retrieve Price/Fee
-    private int creditCustomerType;
-    private CreditRequestType creditRequestType;
-    private Country country;
-
-    private List<CreditRequestType> creditRequestTypeList;
-    private List<Country> countryList;
 
     private NewCreditDetailView newCreditDetailView;
     private NewCreditDetailView proposeCreditDetailSelected;
@@ -169,8 +165,6 @@ public class Decision implements Serializable {
     private boolean modeEdit;
     private int seq;
     private HashMap<Integer, Integer> hashSeqCredit;
-//    private BigDecimal suggestPrice;
-//    private BigDecimal standardPrice;
     private boolean modeEditReduceFront;
     private BigDecimal reducePrice;
     private boolean reducePricePanelRendered;
@@ -190,24 +184,35 @@ public class Decision implements Serializable {
     private NewGuarantorDetailView newGuarantorDetailView;
     private NewGuarantorDetailView newGuarantorDetailViewItem;
 
-    // Propose/Approve Credit
+    // Retrieve Price/Fee
+    private CreditCustomerType creditCustomerType;
+    private CreditRequestType creditRequestType;
+    private Country country;
+    private List<CreditRequestType> creditRequestTypeList;
+    private List<Country> countryList;
+
+    // Approve Credit
+    private NewCreditDetailView selectedApproveCredit;
+    private int rowIndexCredit;
     private BaseRate standardBasePriceDlg;
     private BigDecimal standardInterestDlg;
     private BaseRate suggestBasePriceDlg;
     private BigDecimal suggestInterestDlg;
-
     private boolean modeEditReducePricing;
     private boolean modeEditReduceFrontEndFee;
     private boolean cannotEditStandard;
-
     private List<PrdGroupToPrdProgram> prdGroupToPrdProgramList;
     private List<PrdProgramToCreditTypeView> prdProgramToCreditTypeViewList;
     private List<BaseRate> baseRateList;
     private List<LoanPurposeView> loanPurposeViewList;
     private List<DisbursementTypeView> disbursementTypeViewList;
-    private int rowIndexCredit;
 
-    // Propose/Approve - Collateral
+    // Approve Collateral
+    private NewCollateralView selectedApproveCollateral;
+    private NewCollateralSubView selectedApproveSubColl;
+    private int rowIndexCollateral;
+    private int rowIndexCollHead;
+    private int rowIndexSubColl;
     private List<PotentialCollateral> potentialCollateralList;
     private List<CollateralType> collateralTypeList;
     private List<SubCollateralType> subCollateralTypeList;
@@ -217,35 +222,20 @@ public class Decision implements Serializable {
     private List<ProposeCreditDetailView> collateralCreditTypeList;
     private List<ProposeCreditDetailView> selectedCollateralCrdTypeItems;
     private List<NewCreditDetailView> collCrdTypePrev;
-    private int rowIndexCollateral;
-    private int rowIndexCollHead;
-    private int rowIndexSubColl;
 
-    // Propose/Approve - Guarantor
+    // Approve Guarantor
+    private NewGuarantorDetailView selectedApproveGuarantor;
+    private int rowIndexGuarantor;
     private List<CustomerInfoView> guarantorList;
     private List<ProposeCreditDetailView> guarantorCreditTypeList;
     private List<ProposeCreditDetailView> selectedGuarantorCrdTypeItems;
-    private List<ProposeCreditDetailView> guarantorCrdTypeItemsTmp;
-    private int rowIndexGuarantor;
 
     // FollowUp Condition
     private int rowIndexFollowUpCondition;
 
-    //Message Dialog
-    private String messageHeader;
-    private String message;
-    private boolean messageErr;
-
-    // Mode
-    enum ModeForButton {
-        ADD, EDIT
-    }
-
-    private ModeForButton modeForButton;
-    private boolean modeEditCredit;
-    private boolean modeEditCollateral;
-    private boolean modeEditSubColl;
-    private boolean modeEditGuarantor;
+    // List one time query on init
+    private List<PrdGroupToPrdProgram> _prdGroupToPrdProgramAll;
+    private List<PrdGroupToPrdProgram> _prdGroupToPrdProgramPropose;
 
     private NewCreditFacilityView newCreditFacilityView;
 
@@ -289,19 +279,28 @@ public class Decision implements Serializable {
         decisionView = decisionTransform.getDecisionView(decisionDAO.findByWorkCaseId(workCaseId));
         if (decisionView == null || decisionView.getId() == 0) {
             decisionView = new DecisionView();
-            newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
-//            log.info("newCreditFacilityView :: {}", newCreditFacilityView.getId());
-//            log.info("newCreditFacilityView :: getNewCreditDetailViewList :: {}", newCreditFacilityView.getNewCreditDetailViewList().size());
-//            log.info("newCreditFacilityView :: getNewConditionDetailViewList :: {}", newCreditFacilityView.getNewConditionDetailViewList().size());
-//            log.info("newCreditFacilityView :: getNewGuarantorDetailViewList :: {}", newCreditFacilityView.getNewGuarantorDetailViewList().size());
+        }
 
-            if (newCreditFacilityView != null) {
-                setDataFromNewCreditFacility();
-            }
+        // New Credit Facility
+        newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
+        if (newCreditFacilityView != null) {
+            Cloner cloner = new Cloner();
+
+            decisionView.setProposeCreditList(newCreditFacilityView.getNewCreditDetailViewList());
+            decisionView.setProposeGuarantorList(newCreditFacilityView.getNewGuarantorDetailViewList());
+            decisionView.setProposeCollateralList(newCreditFacilityView.getNewCollateralViewList());
+            decisionView.setProposeFeeInfoList(newCreditFacilityView.getNewFeeDetailViewList());
+            decisionView.setProposeTotalCreditLimit(newCreditFacilityView.getTotalPropose());
+            decisionView.setProposeTotalGuaranteeAmt(newCreditFacilityView.getTotalGuaranteeAmount());
+
+            // clone Credit info
+            decisionView.setApproveCreditList(cloner.deepClone(newCreditFacilityView.getNewCreditDetailViewList()));
+            decisionView.setApproveCollateralList(cloner.deepClone(newCreditFacilityView.getNewCollateralViewList()));
+            decisionView.setApproveGuarantorList(cloner.deepClone(newCreditFacilityView.getNewGuarantorDetailViewList()));
         }
 
 
-        basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+        BasicInfoView basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
         if (basicInfoView != null) {
             productGroup = basicInfoView.getProductGroup();
             specialProgramBasicInfo = basicInfoView.getSpecialProgram();
@@ -310,19 +309,6 @@ public class Decision implements Serializable {
         tcgView = tcgInfoControl.getTcgView(workCaseId);
         if (tcgView != null) {
             applyTCG = tcgView.getTCG();
-        }
-
-        guarantorList = customerInfoControl.getGuarantorByWorkCase(workCaseId);
-
-        log.info("guarantorList size :: {}", guarantorList.size());
-        if (guarantorList == null) {
-            guarantorList = new ArrayList<CustomerInfoView>();
-        }
-
-        collateralOwnerUwAllList = customerInfoControl.getCollateralOwnerUWByWorkCase(workCaseId);
-        log.info("collateralOwnerUwAllList size :: {}", collateralOwnerUwAllList.size());
-        if (collateralOwnerUwAllList == null) {
-            collateralOwnerUwAllList = new ArrayList<CustomerInfoView>();
         }
 
 //        if (collateralOwnerUW == null) {
@@ -334,14 +320,6 @@ public class Decision implements Serializable {
             cannotEditStandard = true;
         }
 
-        if (creditRequestTypeList == null) {
-            creditRequestTypeList = new ArrayList<CreditRequestType>();
-        }
-
-        if (countryList == null) {
-            countryList = new ArrayList<Country>();
-        }
-
         if (newCreditDetailView == null) {
             newCreditDetailView = new NewCreditDetailView();
             seq = 0;
@@ -349,14 +327,6 @@ public class Decision implements Serializable {
 
         if (productProgramList == null) {
             productProgramList = new ArrayList<ProductProgram>();
-        }
-
-        if (creditTypeList == null) {
-            creditTypeList = new ArrayList<CreditType>();
-        }
-
-        if (disbursementTypeViewList == null) {
-            disbursementTypeViewList = new ArrayList<DisbursementTypeView>();
         }
 
         if (newGuarantorDetailView == null) {
@@ -375,85 +345,105 @@ public class Decision implements Serializable {
             subCollateralTypeList = new ArrayList<SubCollateralType>();
         }
 
-        if (collateralTypeList == null) {
-            collateralTypeList = new ArrayList<CollateralType>();
-        }
+        // ========== Retrieve Pricing/Fee ========== //
+        creditCustomerType = CreditCustomerType.NOT_SELECTED;
 
-//        if(headCollateralTypeList == null){
+        creditRequestType = new CreditRequestType();
+        creditRequestTypeList = creditRequestTypeDAO.findAll();
+        if (creditRequestTypeList == null)
+            creditRequestTypeList = new ArrayList<CreditRequestType>();
+
+        country = new Country();
+        countryList = countryDAO.findAll();
+        if (countryList == null)
+            countryList = new ArrayList<Country>();
+        // ================================================== //
+
+
+        // ========== Approve Credit Dialog ========== //
+        selectedApproveCredit = new NewCreditDetailView();
+
+        standardBasePriceDlg = new BaseRate();
+        standardInterestDlg = BigDecimal.ZERO;
+        suggestBasePriceDlg = new BaseRate();
+        suggestInterestDlg = BigDecimal.ZERO;
+
+        _prdGroupToPrdProgramAll = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramProposeAll();
+        _prdGroupToPrdProgramPropose = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramPropose(productGroup);
+
+        if (prdGroupToPrdProgramList == null)
+            prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
+
+        creditTypeList = creditTypeDAO.findAll();
+        if (creditTypeList == null)
+            creditTypeList = new ArrayList<CreditType>();
+
+        loanPurposeViewList = loanPurposeControl.getLoanPurposeViewList();
+        if (loanPurposeViewList == null)
+            loanPurposeViewList = new ArrayList<LoanPurposeView>();
+
+        disbursementTypeViewList = disbursementTypeControl.getDisbursementTypeViewList();
+        if (disbursementTypeViewList == null)
+            disbursementTypeViewList = new ArrayList<DisbursementTypeView>();
+
+        baseRateList = baseRateDAO.findAll();
+        if (baseRateList == null)
+            baseRateList = new ArrayList<BaseRate>();
+        // ================================================== //
+
+
+        // ========== Approve Collateral Dialog ========== //
+        selectedApproveCollateral = new NewCollateralView();
+        
+        potentialCollateralList = potentialCollateralDAO.findAll();
+        if (potentialCollateralList == null)
+            potentialCollateralList = new ArrayList<PotentialCollateral>();
+
+        collateralTypeList = collateralTypeDAO.findAll();
+
+        if (collateralTypeList == null)
+            collateralTypeList = new ArrayList<CollateralType>();
+
+        //headCollateralTypeList  = collateralTypeDAO.findAll();
+        //if(headCollateralTypeList == null){
 //            headCollateralTypeList = new ArrayList<CollateralType>();
 //        }
+        // ================================================== //
 
-        if (potentialCollateralList == null) {
-            potentialCollateralList = new ArrayList<PotentialCollateral>();
-        }
 
-        if (prdGroupToPrdProgramList == null) {
-            prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
-        }
+        // ========== Sub Collateral Dialog ========== //
+        selectedApproveSubColl = new NewCollateralSubView();
 
-        if (baseRateList == null) {
-            baseRateList = new ArrayList<BaseRate>();
-        }
+        collateralOwnerUwAllList = customerInfoControl.getCollateralOwnerUWByWorkCase(workCaseId);
+        if (collateralOwnerUwAllList == null)
+            collateralOwnerUwAllList = new ArrayList<CustomerInfoView>();
 
-        if (loanPurposeViewList == null) {
-            loanPurposeViewList = new ArrayList<LoanPurposeView>();
-        }
-
-        if (mortgageTypeList == null) {
-            mortgageTypeList = new ArrayList<MortgageType>();
-        }
-
-        modeEditReducePricing = false;
-        creditRequestTypeList = creditRequestTypeDAO.findAll();
-        countryList = countryDAO.findAll();
         mortgageTypeList = mortgageTypeDAO.findAll();
-        loanPurposeViewList = loanPurposeControl.getLoanPurposeViewList();
-        disbursementTypeViewList = disbursementTypeControl.getDisbursementTypeViewList();
-        collateralTypeList = collateralTypeDAO.findAll();
-//        headCollateralTypeList  = collateralTypeDAO.findAll();
-        potentialCollateralList = potentialCollateralDAO.findAll();
-        baseRateList = baseRateDAO.findAll();
+        if (mortgageTypeList == null)
+            mortgageTypeList = new ArrayList<MortgageType>();
 
-        selectedAppProposeCredit = new NewCreditDetailView();
-        selectedAppProposeCollateral = new NewCollateralView();
-        selectedAppSubCollateral = new NewCollateralSubView();
-        selectedAppProposeGuarantor = new NewGuarantorDetailView();
+        relatedWithAllList = new ArrayList<NewCollateralSubView>();
+
+        // ================================================== //
+
+
+        // ========== Approve Guarantor Dialog ========== //
+        selectedApproveGuarantor = new NewGuarantorDetailView();
+        
+        guarantorList = customerInfoControl.getGuarantorByWorkCase(workCaseId);
+        if (guarantorList == null)
+            guarantorList = new ArrayList<CustomerInfoView>();
+        // ================================================== //
 
         // Initial sequence number credit
         seq = 1;
         hashSeqCredit = new HashMap<Integer, Integer>();
-
-        // Retrieve Pricing/Fee
-        creditCustomerType = RadioValue.NOT_SELECTED.value();
-        creditRequestType = new CreditRequestType();
-        country = new Country();
 
         followUpConditionView = new FollowUpConditionView();
         approvalHistory = new ApprovalHistory();
         approvalHistory.setAction("Approve CA");
         approvalHistory.setApprover(decisionControl.getApprover());
 
-        // Initial Standard & Suggest BaseRate to Approved Credit Dialog
-        standardBasePriceDlg = new BaseRate();
-        standardInterestDlg = BigDecimal.ZERO;
-        suggestBasePriceDlg = new BaseRate();
-        suggestInterestDlg = BigDecimal.ZERO;
-    }
-
-    public void setDataFromNewCreditFacility() {
-        Cloner cloner = new Cloner();
-
-        decisionView.setProposeCreditList(newCreditFacilityView.getNewCreditDetailViewList());
-        decisionView.setProposeGuarantorList(newCreditFacilityView.getNewGuarantorDetailViewList());
-        decisionView.setProposeCollateralList(newCreditFacilityView.getNewCollateralViewList());
-        decisionView.setProposeFeeInfoList(newCreditFacilityView.getNewFeeDetailViewList());
-        decisionView.setProposeTotalCreditLimit(newCreditFacilityView.getTotalPropose());
-        decisionView.setProposeTotalGuaranteeAmt(newCreditFacilityView.getTotalGuaranteeAmount());
-
-        // Approved Credit
-        decisionView.setApproveCreditList(cloner.deepClone(newCreditFacilityView.getNewCreditDetailViewList()));
-        decisionView.setApproveCollateralList(cloner.deepClone(newCreditFacilityView.getNewCollateralViewList()));
-        decisionView.setApproveGuarantorList(cloner.deepClone(newCreditFacilityView.getNewGuarantorDetailViewList()));
     }
 
     public void onRetrievePricingFee() {
@@ -498,57 +488,39 @@ public class Decision implements Serializable {
         }*/
     }
 
-    // ---------- Propose Credit Dialog ---------- //
-    public void onAddAppProposeCredit() {
-        log.debug("onAddAppProposeCredit()");
-        if (CreditCustomerType.NOT_SELECTED.value() == creditCustomerType) {
-            messageHeader = "Warning !!!!";
-            message = "Credit Customer Type is required";
-            messageErr = true;
-            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", false);
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        } else {
-            selectedAppProposeCredit = new NewCreditDetailView();
+    // ==================== Approve Credit - Actions ==================== //
+    public void onAddApproveCredit() {
+        log.debug("onAddApproveCredit()");
+        selectedApproveCredit = new NewCreditDetailView();
 
-            if (baseRateList != null && !baseRateList.isEmpty()) {
-//                selectedAppProposeCredit.setStandardBasePrice(baseRateList.get(0)); // todo: change standard to tier
-//                selectedAppProposeCredit.setSuggestBasePrice(baseRateList.get(0)); //todo: change suggest to tier
-            }
-
-            if (loanPurposeViewList != null && !loanPurposeViewList.isEmpty()) {
-                selectedAppProposeCredit.setLoanPurposeView(loanPurposeViewList.get(0));
-            }
-
-            if (disbursementTypeViewList != null && !disbursementTypeViewList.isEmpty()) {
-                selectedAppProposeCredit.setDisbursementTypeView(disbursementTypeViewList.get(0));
-            }
-
-            onChangeRequestType();
-            onChangeSuggestValue();
-
-            modeEditCredit = false;
-            modeForButton = ModeForButton.ADD;
-//            RequestContext.getCurrentInstance().execute("proposeCreditDlg.show()");
-            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+        if (baseRateList != null && !baseRateList.isEmpty()) {
+            standardBasePriceDlg = baseRateList.get(0);
+            suggestBasePriceDlg = baseRateList.get(0);
         }
+
+        onChangeRequestType();
+
+        modeEditCredit = false;
+        modeForButton = ModeForButton.ADD;
+//            RequestContext.getCurrentInstance().execute("proposeCreditDlg.show()");
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
     }
 
-    public void onEditAppProposeCredit() {
-        log.debug("onEditAppProposeCredit() selectedAppProposeCredit: {}", selectedAppProposeCredit);
-        ProductProgramView productProgramView = selectedAppProposeCredit.getProductProgramView();
+    public void onEditApproveCredit() {
+        log.debug("onEditApproveCredit() selectedApproveCredit: {}", selectedApproveCredit);
+        ProductProgramView productProgramView = selectedApproveCredit.getProductProgramView();
 
-        //prdProgramToCreditTypeViewList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgramView);
         prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(productProgramView);
 
         modeEditCredit = true;
         modeForButton = ModeForButton.EDIT;
     }
 
-    public void onDeleteAppProposeCredit() {
-        log.debug("onDeleteAppProposeCredit() rowIndexCredit: {}", rowIndexCredit);
-//        int numberOfUsed = hashSeqCredit.get(selectedAppProposeCredit.getSeq());
+    public void onDeleteApproveCredit() {
+        log.debug("onDeleteApproveCredit() rowIndexCredit: {}", rowIndexCredit);
+//        int numberOfUsed = hashSeqCredit.get(selectedApproveCredit.getSeq());
 
-//        log.debug("seq: {}, number of used = {}", selectedAppProposeCredit.getSeq(), numberOfUsed);
+//        log.debug("seq: {}, number of used = {}", selectedApproveCredit.getSeq(), numberOfUsed);
 //        if (numberOfUsed == 0) {
             decisionView.getApproveCreditList().remove(rowIndexCredit);
 
@@ -563,72 +535,71 @@ public class Decision implements Serializable {
 //            messageErr = true;
 //            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 //        }
-
     }
 
-    public void onSaveAppProposeCredit() {
-        log.debug("onSaveAppProposeCredit()");
+    public void onSaveApproveCredit() {
+        log.debug("onSaveApproveCredit()");
         boolean success = false;
 
-        if (selectedAppProposeCredit.getProductProgramView().getId() != 0
-                && selectedAppProposeCredit.getCreditTypeView().getId() != 0
-                && selectedAppProposeCredit.getLoanPurposeView().getId() != 0
-                && selectedAppProposeCredit.getDisbursementTypeView().getId() != 0) {
+        if (selectedApproveCredit.getProductProgramView().getId() != 0
+                && selectedApproveCredit.getCreditTypeView().getId() != 0
+                && selectedApproveCredit.getLoanPurposeView().getId() != 0
+                && selectedApproveCredit.getDisbursementTypeView().getId() != 0) {
 
-            ProductProgram productProgram = productProgramDAO.findById(selectedAppProposeCredit.getProductProgramView().getId());
-            CreditType creditType = creditTypeDAO.findById(selectedAppProposeCredit.getCreditTypeView().getId());
-            LoanPurpose loanPurpose = loanPurposeDAO.findById(selectedAppProposeCredit.getLoanPurposeView().getId());
-            DisbursementType disbursement = disbursementDAO.findById(selectedAppProposeCredit.getDisbursementTypeView().getId());
+            ProductProgramView productProgramView = getProductProgramById(selectedApproveCredit.getProductProgramView().getId());
+            CreditTypeView creditTypeView = getCreditTypeById(selectedApproveCredit.getCreditTypeView().getId());
+            LoanPurposeView loanPurposeView = getLoanPurposeById(selectedApproveCredit.getLoanPurposeView().getId());
+            DisbursementTypeView disbursementTypeView = getDisbursementTypeById(selectedApproveCredit.getDisbursementTypeView().getId());
 
             if (modeEditCredit) {
                 NewCreditDetailView creditDetailEdit = decisionView.getApproveCreditList().get(rowIndexCredit);
-                creditDetailEdit.setProductProgramView(productTransform.transformToView(productProgram));
-                creditDetailEdit.setCreditTypeView(productTransform.transformToView(creditType));
-                creditDetailEdit.setRequestType(selectedAppProposeCredit.getRequestType());
-                creditDetailEdit.setRefinance(selectedAppProposeCredit.getRefinance());
-                creditDetailEdit.setProductCode(selectedAppProposeCredit.getProductCode());
-                creditDetailEdit.setProjectCode(selectedAppProposeCredit.getProjectCode());
-                creditDetailEdit.setLimit(selectedAppProposeCredit.getLimit());
-                creditDetailEdit.setPCEPercent(selectedAppProposeCredit.getPCEPercent());
-                creditDetailEdit.setPCEAmount(selectedAppProposeCredit.getPCEAmount());
-                creditDetailEdit.setReducePriceFlag(selectedAppProposeCredit.isReducePriceFlag());
-                creditDetailEdit.setReduceFrontEndFee(selectedAppProposeCredit.isReduceFrontEndFee());
-//                creditDetailEdit.setStandardBasePrice(selectedAppProposeCredit.getStandardBasePrice()); // todo: change standard to tier
-//                creditDetailEdit.setStandardInterest(selectedAppProposeCredit.getStandardInterest()); // todo: change standard to tier
-//                creditDetailEdit.setSuggestBasePrice(selectedAppProposeCredit.getSuggestBasePrice()); //todo: change suggest to tier
-//                creditDetailEdit.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest()); //todo: change suggest to tier
-                creditDetailEdit.setFrontEndFee(selectedAppProposeCredit.getFrontEndFee());
-                creditDetailEdit.setLoanPurposeView(loanPurposeTransform.transformToView(loanPurpose));
-                creditDetailEdit.setRemark(selectedAppProposeCredit.getRemark());
-                creditDetailEdit.setDisbursementTypeView(disbursementTypeTransform.transformToView(disbursement));
-                creditDetailEdit.setHoldLimitAmount(selectedAppProposeCredit.getHoldLimitAmount());
-                creditDetailEdit.setNewCreditTierDetailViewList(selectedAppProposeCredit.getNewCreditTierDetailViewList());
+                creditDetailEdit.setProductProgramView(productProgramView);
+                creditDetailEdit.setCreditTypeView(creditTypeView);
+                creditDetailEdit.setRequestType(selectedApproveCredit.getRequestType());
+                creditDetailEdit.setRefinance(selectedApproveCredit.getRefinance());
+                creditDetailEdit.setProductCode(selectedApproveCredit.getProductCode());
+                creditDetailEdit.setProjectCode(selectedApproveCredit.getProjectCode());
+                creditDetailEdit.setLimit(selectedApproveCredit.getLimit());
+                creditDetailEdit.setPCEPercent(selectedApproveCredit.getPCEPercent());
+                creditDetailEdit.setPCEAmount(selectedApproveCredit.getPCEAmount());
+                creditDetailEdit.setReducePriceFlag(selectedApproveCredit.isReducePriceFlag());
+                creditDetailEdit.setReduceFrontEndFee(selectedApproveCredit.isReduceFrontEndFee());
+//                creditDetailEdit.setStandardBasePrice(selectedApproveCredit.getStandardBasePrice()); // todo: change standard to tier
+//                creditDetailEdit.setStandardInterest(selectedApproveCredit.getStandardInterest()); // todo: change standard to tier
+//                creditDetailEdit.setSuggestBasePrice(selectedApproveCredit.getSuggestBasePrice()); //todo: change suggest to tier
+//                creditDetailEdit.setSuggestInterest(selectedApproveCredit.getSuggestInterest()); //todo: change suggest to tier
+                creditDetailEdit.setFrontEndFee(selectedApproveCredit.getFrontEndFee());
+                creditDetailEdit.setLoanPurposeView(loanPurposeView);
+                creditDetailEdit.setRemark(selectedApproveCredit.getRemark());
+                creditDetailEdit.setDisbursementTypeView(disbursementTypeView);
+                creditDetailEdit.setHoldLimitAmount(selectedApproveCredit.getHoldLimitAmount());
+                creditDetailEdit.setNewCreditTierDetailViewList(selectedApproveCredit.getNewCreditTierDetailViewList());
 
                 success = true;
             } else {
                 // Add New
                 NewCreditDetailView creditDetailAdd = new NewCreditDetailView();
-                creditDetailAdd.setProductProgramView(productTransform.transformToView(productProgram));
-                creditDetailAdd.setCreditTypeView(productTransform.transformToView(creditType));
-                creditDetailAdd.setRequestType(selectedAppProposeCredit.getRequestType());
-                creditDetailAdd.setRefinance(selectedAppProposeCredit.getRefinance());
-                creditDetailAdd.setProductCode(selectedAppProposeCredit.getProductCode());
-                creditDetailAdd.setProjectCode(selectedAppProposeCredit.getProjectCode());
-                creditDetailAdd.setLimit(selectedAppProposeCredit.getLimit());
-                creditDetailAdd.setPCEPercent(selectedAppProposeCredit.getPCEPercent());
-                creditDetailAdd.setPCEAmount(selectedAppProposeCredit.getPCEAmount());
-                creditDetailAdd.setReducePriceFlag(selectedAppProposeCredit.isReducePriceFlag());
-                creditDetailAdd.setReduceFrontEndFee(selectedAppProposeCredit.isReduceFrontEndFee());
-//                creditDetailAdd.setStandardBasePrice(selectedAppProposeCredit.getStandardBasePrice()); // todo: change standard to tier
-//                creditDetailAdd.setStandardInterest(selectedAppProposeCredit.getStandardInterest()); // todo: change standard to tier
-//                creditDetailAdd.setSuggestBasePrice(selectedAppProposeCredit.getSuggestBasePrice()); //todo: change suggest to tier
-//                creditDetailAdd.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest()); //todo: change suggest to tier
-                creditDetailAdd.setFrontEndFee(selectedAppProposeCredit.getFrontEndFee());
-                creditDetailAdd.setLoanPurposeView(loanPurposeTransform.transformToView(loanPurpose));
-                creditDetailAdd.setRemark(selectedAppProposeCredit.getRemark());
-                creditDetailAdd.setDisbursementTypeView(disbursementTypeTransform.transformToView(disbursement));
-                creditDetailAdd.setHoldLimitAmount(selectedAppProposeCredit.getHoldLimitAmount());
-                creditDetailAdd.setNewCreditTierDetailViewList(selectedAppProposeCredit.getNewCreditTierDetailViewList());
+                creditDetailAdd.setProductProgramView(productProgramView);
+                creditDetailAdd.setCreditTypeView(creditTypeView);
+                creditDetailAdd.setRequestType(selectedApproveCredit.getRequestType());
+                creditDetailAdd.setRefinance(selectedApproveCredit.getRefinance());
+                creditDetailAdd.setProductCode(selectedApproveCredit.getProductCode());
+                creditDetailAdd.setProjectCode(selectedApproveCredit.getProjectCode());
+                creditDetailAdd.setLimit(selectedApproveCredit.getLimit());
+                creditDetailAdd.setPCEPercent(selectedApproveCredit.getPCEPercent());
+                creditDetailAdd.setPCEAmount(selectedApproveCredit.getPCEAmount());
+                creditDetailAdd.setReducePriceFlag(selectedApproveCredit.isReducePriceFlag());
+                creditDetailAdd.setReduceFrontEndFee(selectedApproveCredit.isReduceFrontEndFee());
+//                creditDetailAdd.setStandardBasePrice(selectedApproveCredit.getStandardBasePrice()); // todo: change standard to tier
+//                creditDetailAdd.setStandardInterest(selectedApproveCredit.getStandardInterest()); // todo: change standard to tier
+//                creditDetailAdd.setSuggestBasePrice(selectedApproveCredit.getSuggestBasePrice()); //todo: change suggest to tier
+//                creditDetailAdd.setSuggestInterest(selectedApproveCredit.getSuggestInterest()); //todo: change suggest to tier
+                creditDetailAdd.setFrontEndFee(selectedApproveCredit.getFrontEndFee());
+                creditDetailAdd.setLoanPurposeView(loanPurposeView);
+                creditDetailAdd.setRemark(selectedApproveCredit.getRemark());
+                creditDetailAdd.setDisbursementTypeView(disbursementTypeView);
+                creditDetailAdd.setHoldLimitAmount(selectedApproveCredit.getHoldLimitAmount());
+                creditDetailAdd.setNewCreditTierDetailViewList(selectedApproveCredit.getNewCreditTierDetailViewList());
                 creditDetailAdd.setSeq(seq);
 
                 if (decisionView.getApproveCreditList() != null) {
@@ -657,36 +628,37 @@ public class Decision implements Serializable {
     }
 
     public void onChangeRequestType() {
-        log.debug("onChangeRequestType() requestType = {}", selectedAppProposeCredit.getRequestType());
+        log.debug("onChangeRequestType() requestType = {}", selectedApproveCredit.getRequestType());
         prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
         prdProgramToCreditTypeViewList = new ArrayList<PrdProgramToCreditTypeView>();
 
-        if (RequestTypes.CHANGE.value() == selectedAppProposeCredit.getRequestType()) {   //change
-            prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramProposeAll();
-            selectedAppProposeCredit.setProductProgramView(new ProductProgramView());
+        if (RequestTypes.CHANGE.value() == selectedApproveCredit.getRequestType()) {   //change
+            prdGroupToPrdProgramList = _prdGroupToPrdProgramAll;
+            selectedApproveCredit.setProductProgramView(new ProductProgramView());
             cannotEditStandard = false;
-        } else if (RequestTypes.NEW.value() == selectedAppProposeCredit.getRequestType()) {  //new
+        }
+        else if (RequestTypes.NEW.value() == selectedApproveCredit.getRequestType()) {  //new
             if (productGroup != null) {
-                prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramPropose(productGroup);
-                selectedAppProposeCredit.setCreditTypeView(new CreditTypeView());
+                prdGroupToPrdProgramList = _prdGroupToPrdProgramPropose;
+                selectedApproveCredit.setCreditTypeView(new CreditTypeView());
             }
             cannotEditStandard = true;
         }
     }
 
     public void onChangeProductProgram() {
-        log.debug("onChangeProductProgram() productProgram.id = {}", selectedAppProposeCredit.getProductProgramView().getId());
-        selectedAppProposeCredit.setProductCode("");
-        selectedAppProposeCredit.setProjectCode("");
+        log.debug("onChangeProductProgram() productProgram.id = {}", selectedApproveCredit.getProductProgramView().getId());
+        selectedApproveCredit.setProductCode("");
+        selectedApproveCredit.setProjectCode("");
 
-        //ProductProgram productProgram = productProgramDAO.findById(selectedAppProposeCredit.getProductProgram().getId());
-        prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(selectedAppProposeCredit.getProductProgramView());;
-        selectedAppProposeCredit.setCreditTypeView(new CreditTypeView());
+        //ProductProgram productProgram = productProgramDAO.findById(selectedApproveCredit.getProductProgram().getId());
+        prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(selectedApproveCredit.getProductProgramView());;
+        selectedApproveCredit.setCreditTypeView(new CreditTypeView());
     }
 
     public void onChangeCreditType() {
-        log.debug("onChangeCreditType() creditType.id: {}", selectedAppProposeCredit.getCreditTypeView().getId());
-        if ((selectedAppProposeCredit.getProductProgramView().getId() != 0) && (selectedAppProposeCredit.getCreditTypeView().getId() != 0)) {
+        log.debug("onChangeCreditType() creditType.id: {}", selectedApproveCredit.getCreditTypeView().getId());
+        if ((selectedApproveCredit.getProductProgramView().getId() != 0) && (selectedApproveCredit.getCreditTypeView().getId() != 0)) {
             ProductFormulaView productFormulaView = productControl.getProductFormulaView(newCreditDetailView.getCreditTypeView().getId(),
                     newCreditDetailView.getProductProgramView().getId(),
                     newCreditFacilityView.getCreditCustomerType(), specialProgramBasicInfo.getId(), applyTCG);
@@ -705,14 +677,14 @@ public class Decision implements Serializable {
 
     public void onChangeSuggestValue() {
         /*log.info("onChangeSuggestValue(standardBaseRate.id: {}, standardInterest: {}, suggestBaseRate.id: {}, suggestInterest: {})", //todo: change suggest to tier
-                selectedAppProposeCredit.getStandardBasePrice().getId(), selectedAppProposeCredit.getStandardInterest(),
-                selectedAppProposeCredit.getSuggestBasePrice().getId(), selectedAppProposeCredit.getSuggestInterest());
+                selectedApproveCredit.getStandardBasePrice().getId(), selectedApproveCredit.getStandardInterest(),
+                selectedApproveCredit.getSuggestBasePrice().getId(), selectedApproveCredit.getSuggestInterest());
 
         Object[] values = creditFacProposeControl.findFinalPriceRate(
-                selectedAppProposeCredit.getStandardBasePrice().getId(),
-                selectedAppProposeCredit.getStandardInterest(),
-                selectedAppProposeCredit.getSuggestBasePrice().getId(),
-                selectedAppProposeCredit.getSuggestInterest()
+                selectedApproveCredit.getStandardBasePrice().getId(),
+                selectedApproveCredit.getStandardInterest(),
+                selectedApproveCredit.getSuggestBasePrice().getId(),
+                selectedApproveCredit.getSuggestInterest()
         );
 
         finalBaseRate = (BaseRate) values[0];
@@ -726,8 +698,8 @@ public class Decision implements Serializable {
 
     public void onAddTierInfo() {
 //        log.debug("onAddTierInfo(standardBaseRate.id: {}, standardInterest: {}, suggestBaseRate.id: {}, suggestInterest: {}, finalBaseRate.id: {}, finalInterest: {})",
-//                standardBaseRate.getId(), selectedAppProposeCredit.getStandardInterest(),
-//                suggestBaseRate.getId(), selectedAppProposeCredit.getSuggestInterest(),
+//                standardBaseRate.getId(), selectedApproveCredit.getStandardInterest(),
+//                suggestBaseRate.getId(), selectedApproveCredit.getSuggestInterest(),
 //                finalBaseRate.getId(), finalInterest);
 
 //        NewCreditTierDetailView newCreditTierDetail = new NewCreditTierDetailView();
@@ -740,25 +712,25 @@ public class Decision implements Serializable {
 //        newCreditTierDetail.setSuggestPriceLabel(suggestPriceLabel);
 //        newCreditTierDetail.setCanEdit(true);
 //
-//        if (selectedAppProposeCredit.getNewCreditTierDetailViewList() != null) {
-//            selectedAppProposeCredit.getNewCreditTierDetailViewList().add(newCreditTierDetail);
+//        if (selectedApproveCredit.getNewCreditTierDetailViewList() != null) {
+//            selectedApproveCredit.getNewCreditTierDetailViewList().add(newCreditTierDetail);
 //        } else {
 //            List<NewCreditTierDetailView> newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
 //            newCreditTierDetailViewList.add(newCreditTierDetail);
-//            selectedAppProposeCredit.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
+//            selectedApproveCredit.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
 //        }
     }
 
     public void onDeleteTierInfo(int rowIndex) {
-        selectedAppProposeCredit.getNewCreditTierDetailViewList().remove(rowIndex);
+        selectedApproveCredit.getNewCreditTierDetailViewList().remove(rowIndex);
     }
 
-    // ---------- Propose Collateral Dialog ---------- //
+    // ==================== Approve Collateral - Actions ==================== //
     public void onEditAppProposeCollateral() {
-        log.debug("onEditAppProposeCollateral() rowIndexCollateral: {}, selectedAppProposeCollateral: {}", rowIndexCollateral, selectedAppProposeCollateral);
-        if (selectedAppProposeCollateral.getProposeCreditDetailViewList() != null && selectedAppProposeCollateral.getProposeCreditDetailViewList().size() > 0) {
+        log.debug("onEditAppProposeCollateral() rowIndexCollateral: {}, selectedApproveCollateral: {}", rowIndexCollateral, selectedApproveCollateral);
+        if (selectedApproveCollateral.getProposeCreditDetailViewList() != null && selectedApproveCollateral.getProposeCreditDetailViewList().size() > 0) {
             // set selected credit type items (check/uncheck)
-            selectedCollateralCrdTypeItems = selectedAppProposeCollateral.getProposeCreditDetailViewList();
+            selectedCollateralCrdTypeItems = selectedApproveCollateral.getProposeCreditDetailViewList();
             // update Guarantee Amount before render dialog
             Cloner cloner = new Cloner();
             collateralCreditTypeList = cloner.deepClone(sharedProposeCreditTypeList);
@@ -770,9 +742,9 @@ public class Decision implements Serializable {
 
     public void onDeleteAppProposeCollateral() {
         log.debug("onDeleteAppProposeCollateral() rowIndexCollateral: {}", rowIndexCollateral);
-        if (selectedAppProposeCollateral.getProposeCreditDetailViewList() != null && selectedAppProposeCollateral.getProposeCreditDetailViewList().size() > 0) {
-            for (int i = 0; i < selectedAppProposeCollateral.getProposeCreditDetailViewList().size(); i++) {
-                ProposeCreditDetailView collCredit = selectedAppProposeCollateral.getProposeCreditDetailViewList().get(i);
+        if (selectedApproveCollateral.getProposeCreditDetailViewList() != null && selectedApproveCollateral.getProposeCreditDetailViewList().size() > 0) {
+            for (int i = 0; i < selectedApproveCollateral.getProposeCreditDetailViewList().size(); i++) {
+                ProposeCreditDetailView collCredit = selectedApproveCollateral.getProposeCreditDetailViewList().get(i);
 //                if (hashSeqCredit.get(collCredit.getSeq()) > 0) {
 //                    log.debug("coll seq: {} = {} - 1", collCredit.getSeq(), hashSeqCredit.get(collCredit.getSeq()));
 //                    hashSeqCredit.put(collCredit.getSeq(), hashSeqCredit.get(collCredit.getSeq()) - 1);
@@ -787,21 +759,21 @@ public class Decision implements Serializable {
         log.debug("onSaveProposeCollInfo()");
         boolean success = false;
 
-        log.debug("===> Edit - Collateral: {}", selectedAppProposeCollateral);
+        log.debug("===> Edit - Collateral: {}", selectedApproveCollateral);
         NewCollateralView collateralInfoEdit = decisionView.getApproveCollateralList().get(rowIndexCollateral);
-        collateralInfoEdit.setJobID(selectedAppProposeCollateral.getJobID());
-        collateralInfoEdit.setAppraisalDate(selectedAppProposeCollateral.getAppraisalDate());
-        collateralInfoEdit.setAadDecision(selectedAppProposeCollateral.getAadDecision());
-        collateralInfoEdit.setAadDecisionReason(selectedAppProposeCollateral.getAadDecisionReason());
-        collateralInfoEdit.setAadDecisionReasonDetail(selectedAppProposeCollateral.getAadDecisionReasonDetail());
-        collateralInfoEdit.setUsage(selectedAppProposeCollateral.getUsage());
-        collateralInfoEdit.setTypeOfUsage(selectedAppProposeCollateral.getTypeOfUsage());
-        collateralInfoEdit.setUwDecision(selectedAppProposeCollateral.getUwDecision());
-        collateralInfoEdit.setUwRemark(selectedAppProposeCollateral.getUwRemark());
-        collateralInfoEdit.setMortgageCondition(selectedAppProposeCollateral.getMortgageCondition());
-        collateralInfoEdit.setMortgageConditionDetail(selectedAppProposeCollateral.getMortgageConditionDetail());
-        collateralInfoEdit.setBdmComments(selectedAppProposeCollateral.getBdmComments());
-        collateralInfoEdit.setNewCollateralHeadViewList(selectedAppProposeCollateral.getNewCollateralHeadViewList());
+        collateralInfoEdit.setJobID(selectedApproveCollateral.getJobID());
+        collateralInfoEdit.setAppraisalDate(selectedApproveCollateral.getAppraisalDate());
+        collateralInfoEdit.setAadDecision(selectedApproveCollateral.getAadDecision());
+        collateralInfoEdit.setAadDecisionReason(selectedApproveCollateral.getAadDecisionReason());
+        collateralInfoEdit.setAadDecisionReasonDetail(selectedApproveCollateral.getAadDecisionReasonDetail());
+        collateralInfoEdit.setUsage(selectedApproveCollateral.getUsage());
+        collateralInfoEdit.setTypeOfUsage(selectedApproveCollateral.getTypeOfUsage());
+        collateralInfoEdit.setUwDecision(selectedApproveCollateral.getUwDecision());
+        collateralInfoEdit.setUwRemark(selectedApproveCollateral.getUwRemark());
+        collateralInfoEdit.setMortgageCondition(selectedApproveCollateral.getMortgageCondition());
+        collateralInfoEdit.setMortgageConditionDetail(selectedApproveCollateral.getMortgageConditionDetail());
+        collateralInfoEdit.setBdmComments(selectedApproveCollateral.getBdmComments());
+        collateralInfoEdit.setNewCollateralHeadViewList(selectedApproveCollateral.getNewCollateralHeadViewList());
 
         if (selectedCollateralCrdTypeItems != null && selectedCollateralCrdTypeItems.size() > 0) {
             collateralInfoEdit.getProposeCreditDetailViewList().clear();
@@ -823,13 +795,9 @@ public class Decision implements Serializable {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", success);
     }
 
-    public void onCallRetrieveAppraisalReportInfo() {
-        log.debug("onCallRetrieveAppraisalReportInfo()");
-    }
-
     public void onAddSubCollateral() {
-        log.debug("onAddSubCollateral()");
-        selectedAppSubCollateral = new NewCollateralSubView();
+        log.debug("onAddSubCollateral() : {}", rowIndexCollHead);
+        selectedApproveSubColl = new NewCollateralSubView();
         modeEditSubColl = false;
     }
 
@@ -851,43 +819,43 @@ public class Decision implements Serializable {
         boolean success = false;
 
         if (modeEditSubColl) {
-            log.debug("===> Edit - SubCollateral: {}", selectedAppSubCollateral);
-            NewCollateralSubView subCollEdit = selectedAppProposeCollateral.getNewCollateralHeadViewList().get(rowIndexCollHead)
+            log.debug("===> Edit - SubCollateral: {}", selectedApproveSubColl);
+            NewCollateralSubView subCollEdit = selectedApproveCollateral.getNewCollateralHeadViewList().get(rowIndexCollHead)
                     .getNewCollateralSubViewList().get(rowIndexSubColl);
-            SubCollateralType subCollateralType = subCollateralTypeDAO.findById(selectedAppSubCollateral.getSubCollateralType().getId());
+            SubCollateralType subCollateralType = subCollateralTypeDAO.findById(selectedApproveSubColl.getSubCollateralType().getId());
             subCollEdit.setSubCollateralType(subCollateralType);
-            subCollEdit.setTitleDeed(selectedAppSubCollateral.getTitleDeed());
-            subCollEdit.setAddress(selectedAppSubCollateral.getAddress());
-            subCollEdit.setLandOffice(selectedAppSubCollateral.getLandOffice());
-            subCollEdit.setCollateralOwnerAAD(selectedAppSubCollateral.getCollateralOwnerAAD());
-            subCollEdit.setCollateralOwnerUWList(selectedAppSubCollateral.getCollateralOwnerUWList());
-            subCollEdit.setMortgageList(selectedAppSubCollateral.getMortgageList());
-            subCollEdit.setRelatedWithList(selectedAppSubCollateral.getRelatedWithList());
-            subCollEdit.setAppraisalValue(selectedAppSubCollateral.getAppraisalValue());
-            subCollEdit.setMortgageValue(selectedAppSubCollateral.getMortgageValue());
+            subCollEdit.setTitleDeed(selectedApproveSubColl.getTitleDeed());
+            subCollEdit.setAddress(selectedApproveSubColl.getAddress());
+            subCollEdit.setLandOffice(selectedApproveSubColl.getLandOffice());
+            subCollEdit.setCollateralOwnerAAD(selectedApproveSubColl.getCollateralOwnerAAD());
+            subCollEdit.setCollateralOwnerUWList(selectedApproveSubColl.getCollateralOwnerUWList());
+            subCollEdit.setMortgageList(selectedApproveSubColl.getMortgageList());
+            subCollEdit.setRelatedWithList(selectedApproveSubColl.getRelatedWithList());
+            subCollEdit.setAppraisalValue(selectedApproveSubColl.getAppraisalValue());
+            subCollEdit.setMortgageValue(selectedApproveSubColl.getMortgageValue());
 
             success = true;
         } else {
             //Add New
-            log.debug("===> Add New - SubCollateral: {}", selectedAppSubCollateral);
+            log.debug("===> Add New - SubCollateral: {}", selectedApproveSubColl);
             NewCollateralSubView subCollAdd = new NewCollateralSubView();
-            SubCollateralType subCollateralType = subCollateralTypeDAO.findById(selectedAppSubCollateral.getSubCollateralType().getId());
+            SubCollateralType subCollateralType = subCollateralTypeDAO.findById(selectedApproveSubColl.getSubCollateralType().getId());
             subCollAdd.setSubCollateralType(subCollateralType);
-            subCollAdd.setTitleDeed(selectedAppSubCollateral.getTitleDeed());
-            subCollAdd.setAddress(selectedAppSubCollateral.getAddress());
-            subCollAdd.setLandOffice(selectedAppSubCollateral.getLandOffice());
-            subCollAdd.setCollateralOwnerAAD(selectedAppSubCollateral.getCollateralOwnerAAD());
-            subCollAdd.setCollateralOwnerUWList(selectedAppSubCollateral.getCollateralOwnerUWList());
-            subCollAdd.setMortgageList(selectedAppSubCollateral.getMortgageList());
-            subCollAdd.setRelatedWithList(selectedAppSubCollateral.getRelatedWithList());
-            subCollAdd.setAppraisalValue(selectedAppSubCollateral.getAppraisalValue());
-            subCollAdd.setMortgageValue(selectedAppSubCollateral.getMortgageValue());
+            subCollAdd.setTitleDeed(selectedApproveSubColl.getTitleDeed());
+            subCollAdd.setAddress(selectedApproveSubColl.getAddress());
+            subCollAdd.setLandOffice(selectedApproveSubColl.getLandOffice());
+            subCollAdd.setCollateralOwnerAAD(selectedApproveSubColl.getCollateralOwnerAAD());
+            subCollAdd.setCollateralOwnerUWList(selectedApproveSubColl.getCollateralOwnerUWList());
+            subCollAdd.setMortgageList(selectedApproveSubColl.getMortgageList());
+            subCollAdd.setRelatedWithList(selectedApproveSubColl.getRelatedWithList());
+            subCollAdd.setAppraisalValue(selectedApproveSubColl.getAppraisalValue());
+            subCollAdd.setMortgageValue(selectedApproveSubColl.getMortgageValue());
 
-            if (selectedAppProposeCollateral.getNewCollateralHeadViewList().get(rowIndexCollHead).getNewCollateralSubViewList() == null) {
-                selectedAppProposeCollateral.getNewCollateralHeadViewList().get(rowIndexCollHead).setNewCollateralSubViewList(new ArrayList<NewCollateralSubView>());
+            if (selectedApproveCollateral.getNewCollateralHeadViewList().get(rowIndexCollHead).getNewCollateralSubViewList() == null) {
+                selectedApproveCollateral.getNewCollateralHeadViewList().get(rowIndexCollHead).setNewCollateralSubViewList(new ArrayList<NewCollateralSubView>());
             }
 
-            selectedAppProposeCollateral.getNewCollateralHeadViewList().get(rowIndexCollHead)
+            selectedApproveCollateral.getNewCollateralHeadViewList().get(rowIndexCollHead)
                     .getNewCollateralSubViewList().add(subCollAdd);
 
             success = true;
@@ -897,55 +865,60 @@ public class Decision implements Serializable {
     }
 
     public void onAddCollateralOwnerUW() {
-        log.debug("onAddCollateralOwnerUW() collateralOwnerUW.id: {}", selectedAppSubCollateral.getCollateralOwnerUW().getId());
-        if (selectedAppSubCollateral.getCollateralOwnerUW().getId() == 0) {
+        log.debug("onAddCollateralOwnerUW() collateralOwnerUW.id: {}", selectedApproveSubColl.getCollateralOwnerUW().getId());
+        if (selectedApproveSubColl.getCollateralOwnerUW().getId() == 0) {
             log.error("Can not add CollateralOwnerUw because id = 0!");
             return;
         }
 
-        CustomerInfoView collateralOwnerAdd = customerInfoControl.getCustomerById(selectedAppSubCollateral.getCollateralOwnerUW());
-        if (selectedAppSubCollateral.getCollateralOwnerUWList() == null) {
-            selectedAppSubCollateral.setCollateralOwnerUWList(new ArrayList<CustomerInfoView>());
+        CustomerInfoView collateralOwnerAdd = customerInfoControl.getCustomerById(selectedApproveSubColl.getCollateralOwnerUW());
+        if (selectedApproveSubColl.getCollateralOwnerUWList() == null) {
+            selectedApproveSubColl.setCollateralOwnerUWList(new ArrayList<CustomerInfoView>());
         }
-        selectedAppSubCollateral.getCollateralOwnerUWList().add(collateralOwnerAdd);
+        selectedApproveSubColl.getCollateralOwnerUWList().add(collateralOwnerAdd);
     }
 
     public void onDeleteCollateralOwnerUW(int rowIndex) {
         log.debug("onDeleteCollateralOwnerUW(rowIndex: {})", rowIndex);
-        selectedAppSubCollateral.getCollateralOwnerUWList().remove(rowIndex);
+        selectedApproveSubColl.getCollateralOwnerUWList().remove(rowIndex);
     }
 
     public void onAddMortgageType() {
-        log.debug("onAddMortgageType() mortgageType.id: {}", selectedAppSubCollateral.getMortgageType().getId());
-        if (selectedAppSubCollateral.getMortgageType().getId() == 0) {
+        log.debug("onAddMortgageType() mortgageType.id: {}", selectedApproveSubColl.getMortgageType().getId());
+        if (selectedApproveSubColl.getMortgageType().getId() == 0) {
             log.error("Can not add MortgageType because id = 0!");
             return;
         }
 
-        MortgageType mortgageType = mortgageTypeDAO.findById(selectedAppSubCollateral.getMortgageType().getId());
-        if (selectedAppSubCollateral.getMortgageList() == null) {
-            selectedAppSubCollateral.setMortgageList(new ArrayList<MortgageType>());
+        MortgageType mortgageType = mortgageTypeDAO.findById(selectedApproveSubColl.getMortgageType().getId());
+        if (selectedApproveSubColl.getMortgageList() == null) {
+            selectedApproveSubColl.setMortgageList(new ArrayList<MortgageType>());
         }
-        selectedAppSubCollateral.getMortgageList().add(mortgageType);
+        selectedApproveSubColl.getMortgageList().add(mortgageType);
     }
 
     public void onDeleteMortgageType(int rowIndex) {
         log.debug("onDeleteMortgageType(rowIndex: {})", rowIndex);
-        selectedAppSubCollateral.getMortgageList().remove(rowIndex);
+        selectedApproveSubColl.getMortgageList().remove(rowIndex);
     }
 
     public void onAddRelatedWith() {
-        log.debug("onAddRelatedWith() selectedAppSubCollateral.relatedWithId = {}", selectedAppSubCollateral.getRelatedWithId());
-        if (selectedAppSubCollateral.getRelatedWithId() == 0) {
+        log.debug("onAddRelatedWith() selectedApproveSubColl.relatedWithId = {}", selectedApproveSubColl.getRelatedWithId());
+        if (selectedApproveSubColl.getRelatedWithId() == 0) {
             log.error("Can not add RelatedWith because id = 0!");
             return;
         }
 
-        NewCollateralSubView relatedWith = getIdNewSubCollateralDetail(selectedAppSubCollateral.getRelatedWithId());
-        if (selectedAppSubCollateral.getRelatedWithList() != null) {
-            selectedAppSubCollateral.setRelatedWithList(new ArrayList<NewCollateralSubView>());
+        NewCollateralSubView relatedWith = getIdNewSubCollateralDetail(selectedApproveSubColl.getRelatedWithId());
+        if (selectedApproveSubColl.getRelatedWithList() != null) {
+            selectedApproveSubColl.setRelatedWithList(new ArrayList<NewCollateralSubView>());
         }
-        selectedAppSubCollateral.getRelatedWithList().add(relatedWith);
+        selectedApproveSubColl.getRelatedWithList().add(relatedWith);
+    }
+
+    public void onDeleteRelatedWith(int rowIndex) {
+        log.debug("onDeleteRelatedWith(rowIndex: {})", rowIndex);
+        selectedApproveSubColl.getRelatedWithList().remove(rowIndex);
     }
 
     public NewCollateralSubView getIdNewSubCollateralDetail(long newSubCollateralId) {
@@ -964,15 +937,10 @@ public class Decision implements Serializable {
         return newSubCollateralReturn;
     }
 
-    public void onDeleteRelatedWith(int rowIndex) {
-        log.debug("onDeleteRelatedWith(rowIndex: {})", rowIndex);
-        selectedAppSubCollateral.getRelatedWithList().remove(rowIndex);
-    }
-
     // ---------- Propose Guarantor Dialog ---------- //
-    public void onAddAppProposeGuarantor() {
+    public void onAddApproveGuarantor() {
         log.debug("onAddAppProposeGuarantor()");
-        selectedAppProposeGuarantor = new NewGuarantorDetailView();
+        selectedApproveGuarantor = new NewGuarantorDetailView();
         selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
         Cloner cloner = new Cloner();
         guarantorCreditTypeList = cloner.deepClone(sharedProposeCreditTypeList);
@@ -981,16 +949,16 @@ public class Decision implements Serializable {
         modeForButton = ModeForButton.ADD;
     }
 
-    public void onEditAppProposeGuarantor() {
-        log.debug("onEditAppProposeGuarantor() selectedAppProposeGuarantor: {}", selectedAppProposeGuarantor);
-        if (selectedAppProposeGuarantor.getProposeCreditDetailViewList() != null && selectedAppProposeGuarantor.getProposeCreditDetailViewList().size() > 0) {
+    public void onEditApproveGuarantor() {
+        log.debug("onEditAppProposeGuarantor() selectedApproveGuarantor: {}", selectedApproveGuarantor);
+        if (selectedApproveGuarantor.getProposeCreditDetailViewList() != null && selectedApproveGuarantor.getProposeCreditDetailViewList().size() > 0) {
             // set selected credit type items (check/uncheck)
-            selectedGuarantorCrdTypeItems = selectedAppProposeGuarantor.getProposeCreditDetailViewList();
+            selectedGuarantorCrdTypeItems = selectedApproveGuarantor.getProposeCreditDetailViewList();
             // update Guarantee Amount before render dialog
             Cloner cloner = new Cloner();
             guarantorCreditTypeList = cloner.deepClone(sharedProposeCreditTypeList);
             for (ProposeCreditDetailView creditTypeFromAll : guarantorCreditTypeList) {
-                for (ProposeCreditDetailView creditTypeFromSelected : selectedAppProposeGuarantor.getProposeCreditDetailViewList()) {
+                for (ProposeCreditDetailView creditTypeFromSelected : selectedApproveGuarantor.getProposeCreditDetailViewList()) {
                     if (creditTypeFromAll.getSeq() == creditTypeFromSelected.getSeq()) {
                         creditTypeFromAll.setGuaranteeAmount(creditTypeFromSelected.getGuaranteeAmount());
                     }
@@ -1002,8 +970,8 @@ public class Decision implements Serializable {
         modeForButton = ModeForButton.EDIT;
     }
 
-    public void onSaveGuarantorInfo() {
-        log.debug("onSaveGuarantorInfo()");
+    public void onSaveApproveGuarantor() {
+        log.debug("onSaveApproveGuarantor()");
         log.debug("selectedGuarantorCrdTypeItems.size() = {}", selectedGuarantorCrdTypeItems.size());
         log.debug("selectedGuarantorCrdTypeItems: {}", selectedGuarantorCrdTypeItems);
 
@@ -1011,63 +979,55 @@ public class Decision implements Serializable {
         BigDecimal sumGuaranteeAmtPerCrdType = BigDecimal.ZERO;
 
         if (modeEditGuarantor) {
-            log.debug("===> Edit - Guarantor: {}", selectedAppProposeGuarantor);
+            log.debug("===> Edit - Guarantor: {}", selectedApproveGuarantor);
             NewGuarantorDetailView guarantorDetailEdit = decisionView.getApproveGuarantorList().get(rowIndexGuarantor);
-            guarantorDetailEdit.setGuarantorName(getByIdFromGuarantorList(selectedAppProposeGuarantor.getGuarantorName().getId()));
-            guarantorDetailEdit.setTcgLgNo(selectedAppProposeGuarantor.getTcgLgNo());
+            guarantorDetailEdit.setUwDecision(selectedApproveGuarantor.getUwDecision());
+            guarantorDetailEdit.setGuarantorName(getByIdFromGuarantorList(selectedApproveGuarantor.getGuarantorName().getId()));
+            guarantorDetailEdit.setTcgLgNo(selectedApproveGuarantor.getTcgLgNo());
 
-            // needed to select credit type items
-            if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
-                guarantorDetailEdit.getProposeCreditDetailViewList().clear();
-                // seq usage
-                for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
-                    log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
-                    guarantorDetailEdit.getProposeCreditDetailViewList().add(creditTypeItem);
-                    log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
-
-                    sumGuaranteeAmtPerCrdType = sumGuaranteeAmtPerCrdType.add(creditTypeItem.getGuaranteeAmount());
-                }
+//            if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
+//
+//                List<ProposeCreditDetailView> newCreditTypeItems = new ArrayList<ProposeCreditDetailView>();
+//                for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
+//                    newCreditTypeItems.add(creditTypeItem);
+//                    sumGuaranteeAmtPerCrdType = sumGuaranteeAmtPerCrdType.add(creditTypeItem.getGuaranteeAmount());
+//
+//                    log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
+//                    log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
+//                }
+//                guarantorDetailEdit.setProposeCreditDetailViewList(newCreditTypeItems);
                 guarantorDetailEdit.setTotalLimitGuaranteeAmount(sumGuaranteeAmtPerCrdType);
-
-                for (ProposeCreditDetailView creditOfList : guarantorCreditTypeList) {
-                    boolean isSelect = false;
-                    for (ProposeCreditDetailView creditSelected : selectedGuarantorCrdTypeItems) {
-                        if (creditOfList.getSeq() == creditSelected.getSeq()) {
-                            isSelect = true;
-                            break;
-                        }
-                    }
-
-                }
-
                 success = true;
-                log.debug("Success: Edit Guarantor from ApproveGuarantorList");
-            } else {
-                messageHeader = "Error Message";
-                message = "Non selected Credit Type!";
-                messageErr = true;
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                log.error("Failed: Can not edit Guarantor from ApproveGuarantorList because non selected credit type!");
-            }
+//            } else {
+//                log.error("Failed: Can not edit Guarantor from ApproveGuarantorList because non selected credit type!");
+//                messageHeader = "Error Message";
+//                message = "Non selected Credit Type!";
+//                messageErr = true;
+//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//            }
+
         } else {
             // Add New
-            log.debug("===> Add New - Guarantor: {}", selectedAppProposeGuarantor);
+            log.debug("===> Add New - Guarantor: {}", selectedApproveGuarantor);
             NewGuarantorDetailView guarantorDetailAdd = new NewGuarantorDetailView();
-            //guarantorDetailAdd.setApproved(selectedAppProposeGuarantor.getApproved());
-            guarantorDetailAdd.setGuarantorName(getByIdFromGuarantorList(selectedAppProposeGuarantor.getGuarantorName().getId()));
-            guarantorDetailAdd.setTcgLgNo(selectedAppProposeGuarantor.getTcgLgNo());
+            guarantorDetailAdd.setUwDecision(selectedApproveGuarantor.getUwDecision());
+            guarantorDetailAdd.setGuarantorName(getByIdFromGuarantorList(selectedApproveGuarantor.getGuarantorName().getId()));
+            guarantorDetailAdd.setTcgLgNo(selectedApproveGuarantor.getTcgLgNo());
 
-            // needed to select credit type items
-            if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
-                for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
-                    guarantorDetailAdd.getProposeCreditDetailViewList().add(creditTypeItem);
+//            if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
+//
+//                if (guarantorDetailAdd.getProposeCreditDetailViewList() == null) {
+//                    guarantorDetailAdd.setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
+//                }
+//
+//                for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
+//                    guarantorDetailAdd.getProposeCreditDetailViewList().add(creditTypeItem);
+//                    sumGuaranteeAmtPerCrdType = sumGuaranteeAmtPerCrdType.add(creditTypeItem.getGuaranteeAmount());
+//
+//                    log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
+//                    log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
+//                }
 
-                    log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
-//                    hashSeqCredit.put(creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()) + 1);
-                    log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
-
-                    sumGuaranteeAmtPerCrdType = sumGuaranteeAmtPerCrdType.add(creditTypeItem.getGuaranteeAmount());
-                }
                 guarantorDetailAdd.setTotalLimitGuaranteeAmount(sumGuaranteeAmtPerCrdType);
 
                 if (decisionView.getApproveGuarantorList() != null) {
@@ -1079,25 +1039,27 @@ public class Decision implements Serializable {
                 }
 
                 success = true;
-                log.debug("Success: Add new Guarantor to ApproveGuarantorList.");
-            } else {
-                messageHeader = "Error Message";
-                message = "Non selected Credit Type!";
-                messageErr = true;
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                log.error("Failed: Can not add new Guarantor to ApproveGuarantorList because non selected credit type!");
-            }
+//            } else {
+//                log.error("Failed: Can not add new Guarantor to ApproveGuarantorList because non selected credit type!");
+//                messageHeader = "Error Message";
+//                message = "Non selected Credit Type!";
+//                messageErr = true;
+//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//            }
+
         }
 
         decisionView.setApproveTotalGuaranteeAmt(creditFacProposeControl.calTotalGuaranteeAmount(decisionView.getApproveGuarantorList()));
+        log.debug("success: {}", success);
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", success);
     }
 
-    public void onDeleteAppProposeGuarantor() {
+    public void onDeleteApproveGuarantor() {
         log.debug("onDeleteAppProposeGuarantor() rowIndexGuarantor: {}", rowIndexGuarantor);
-        if (selectedAppProposeGuarantor.getProposeCreditDetailViewList() != null && selectedAppProposeGuarantor.getProposeCreditDetailViewList().size() > 0) {
-            for (int i = 0; i < selectedAppProposeGuarantor.getProposeCreditDetailViewList().size(); i++) {
-                ProposeCreditDetailView guarantorCredit = selectedAppProposeGuarantor.getProposeCreditDetailViewList().get(i);
+
+        if (selectedApproveGuarantor.getProposeCreditDetailViewList() != null && selectedApproveGuarantor.getProposeCreditDetailViewList().size() > 0) {
+            for (int i = 0; i < selectedApproveGuarantor.getProposeCreditDetailViewList().size(); i++) {
+                ProposeCreditDetailView guarantorCredit = selectedApproveGuarantor.getProposeCreditDetailViewList().get(i);
 //                if (hashSeqCredit.get(guarantorCredit.getSeq()) > 0) {
 //                    log.debug("guarantor seq: {} = {} - 1", guarantorCredit.getSeq(), hashSeqCredit.get(guarantorCredit.getSeq()));
 //                    hashSeqCredit.put(guarantorCredit.getSeq(), hashSeqCredit.get(guarantorCredit.getSeq()) - 1);
@@ -1105,6 +1067,7 @@ public class Decision implements Serializable {
 //                }
             }
         }
+
         decisionView.getApproveGuarantorList().remove(rowIndexGuarantor);
         decisionView.setApproveTotalGuaranteeAmt(creditFacProposeControl.calTotalGuaranteeAmount(decisionView.getApproveGuarantorList()));
     }
@@ -1137,26 +1100,113 @@ public class Decision implements Serializable {
         log.debug("onCancel()");
     }
 
-    private void generateSeqFromCreditList(List<NewCreditDetailView> newCreditDetailViewList) {
-        int seq = 0;
-        for (NewCreditDetailView newCreditDetailView : Util.safetyList(newCreditDetailViewList)) {
-            newCreditDetailView.setSeq(seq);
-            seq++;
+    // ----------------------------------------------- Private Methods ----------------------------------------------- //
+    private ProductProgramView getProductProgramById(int id) {
+        if (productProgramList == null || productProgramList.isEmpty() || id == 0) {
+            return new ProductProgramView();
         }
+
+        for (ProductProgram productProgram : productProgramList) {
+            if (productProgram.getId() == id) {
+                return productTransform.transformToView(productProgram);
+            }
+        }
+        return new ProductProgramView();
+    }
+
+    private CreditTypeView getCreditTypeById(int id) {
+        if (creditTypeList == null || creditTypeList.isEmpty() || id == 0) {
+            return new CreditTypeView();
+        }
+
+        for (CreditType creditType : creditTypeList) {
+            if (creditType.getId() == id) {
+                return productTransform.transformToView(creditType);
+            }
+        }
+        return new CreditTypeView();
+    }
+
+    private LoanPurposeView getLoanPurposeById(int id) {
+        if (loanPurposeViewList == null || loanPurposeViewList.isEmpty() || id == 0) {
+            return new LoanPurposeView();
+        }
+
+        for (LoanPurposeView loanPurposeView : loanPurposeViewList) {
+            if (loanPurposeView.getId() == id) {
+                return loanPurposeView;
+            }
+        }
+        return new LoanPurposeView();
+    }
+
+    private DisbursementTypeView getDisbursementTypeById(int id) {
+        if (disbursementTypeViewList == null || disbursementTypeViewList.isEmpty() || id == 0) {
+            return new DisbursementTypeView();
+        }
+
+        for (DisbursementTypeView disbursementTypeView : disbursementTypeViewList) {
+            if (disbursementTypeView.getId() == id) {
+                return disbursementTypeView;
+            }
+        }
+        return new DisbursementTypeView();
     }
 
     private CustomerInfoView getByIdFromGuarantorList(long id) {
-        CustomerInfoView returnGuarantor = new CustomerInfoView();
-        for (CustomerInfoView guarantor : Util.safetyList(guarantorList)) {
-            if (guarantor.getId() == id) {
-                returnGuarantor = guarantor;
-                break;
+        if (guarantorList == null || guarantorList.isEmpty() || id == 0) {
+            return new CustomerInfoView();
+        }
+
+        CustomerInfoView returnCusInfoView = new CustomerInfoView();
+        for (CustomerInfoView customerInfoView : Util.safetyList(guarantorList)) {
+            if (customerInfoView.getId() == id) {
+                returnCusInfoView.setId(customerInfoView.getId());
+                returnCusInfoView.setFirstNameTh(customerInfoView.getFirstNameTh());
+                returnCusInfoView.setFirstNameEn(customerInfoView.getFirstNameEn());
+                returnCusInfoView.setLastNameTh(customerInfoView.getLastNameTh());
+                returnCusInfoView.setLastNameEn(customerInfoView.getLastNameEn());
+                returnCusInfoView.setTitleTh(customerInfoView.getTitleTh());
+                returnCusInfoView.setTitleEn(customerInfoView.getTitleEn());
             }
         }
-        return returnGuarantor;
+        return returnCusInfoView;
     }
 
-    // ----------------------------------------------- Getter/Setter -----------------------------------------------//
+    // ----------------------------------------------- Enum Items ----------------------------------------------- //
+    public CreditCustomerType getCreditCusTypeNORMAL() {
+        return CreditCustomerType.NORMAL;
+    }
+
+    public CreditCustomerType getCreditCusTypePRIME() {
+        return CreditCustomerType.PRIME;
+    }
+
+    public RequestTypes getRequestTypeNEW() {
+        return RequestTypes.NEW;
+    }
+
+    public RequestTypes getRequestTypeCHANGE() {
+        return RequestTypes.CHANGE;
+    }
+
+    public DecisionType getDecisionAPPROVED() {
+        return DecisionType.APPROVED;
+    }
+
+    public DecisionType getDecisionREJECTED() {
+        return DecisionType.REJECTED;
+    }
+
+    public int getYesValue() {
+        return RadioValue.YES.value();
+    }
+
+    public int getNoValue() {
+        return RadioValue.NO.value();
+    }
+
+    // ----------------------------------------------- Getter/Setter ----------------------------------------------- //
     public DecisionView getDecisionView() {
         return decisionView;
     }
@@ -1181,28 +1231,28 @@ public class Decision implements Serializable {
         this.approvalHistory = approvalHistory;
     }
 
-    public NewCreditDetailView getSelectedAppProposeCredit() {
-        return selectedAppProposeCredit;
+    public NewCreditDetailView getSelectedApproveCredit() {
+        return selectedApproveCredit;
     }
 
-    public void setSelectedAppProposeCredit(NewCreditDetailView selectedAppProposeCredit) {
-        this.selectedAppProposeCredit = selectedAppProposeCredit;
+    public void setSelectedApproveCredit(NewCreditDetailView selectedApproveCredit) {
+        this.selectedApproveCredit = selectedApproveCredit;
     }
 
-    public NewCollateralView getSelectedAppProposeCollateral() {
-        return selectedAppProposeCollateral;
+    public NewCollateralView getSelectedApproveCollateral() {
+        return selectedApproveCollateral;
     }
 
-    public void setSelectedAppProposeCollateral(NewCollateralView selectedAppProposeCollateral) {
-        this.selectedAppProposeCollateral = selectedAppProposeCollateral;
+    public void setSelectedApproveCollateral(NewCollateralView selectedApproveCollateral) {
+        this.selectedApproveCollateral = selectedApproveCollateral;
     }
 
-    public NewGuarantorDetailView getSelectedAppProposeGuarantor() {
-        return selectedAppProposeGuarantor;
+    public NewGuarantorDetailView getSelectedApproveGuarantor() {
+        return selectedApproveGuarantor;
     }
 
-    public void setSelectedAppProposeGuarantor(NewGuarantorDetailView selectedAppProposeGuarantor) {
-        this.selectedAppProposeGuarantor = selectedAppProposeGuarantor;
+    public void setSelectedApproveGuarantor(NewGuarantorDetailView selectedApproveGuarantor) {
+        this.selectedApproveGuarantor = selectedApproveGuarantor;
     }
 
     public List<CreditRequestType> getCreditRequestTypeList() {
@@ -1261,11 +1311,11 @@ public class Decision implements Serializable {
         this.guarantorList = guarantorList;
     }
 
-    public int getCreditCustomerType() {
+    public CreditCustomerType getCreditCustomerType() {
         return creditCustomerType;
     }
 
-    public void setCreditCustomerType(int creditCustomerType) {
+    public void setCreditCustomerType(CreditCustomerType creditCustomerType) {
         this.creditCustomerType = creditCustomerType;
     }
 
@@ -1413,12 +1463,12 @@ public class Decision implements Serializable {
         this.rowIndexSubColl = rowIndexSubColl;
     }
 
-    public NewCollateralSubView getSelectedAppSubCollateral() {
-        return selectedAppSubCollateral;
+    public NewCollateralSubView getSelectedApproveSubColl() {
+        return selectedApproveSubColl;
     }
 
-    public void setSelectedAppSubCollateral(NewCollateralSubView selectedAppSubCollateral) {
-        this.selectedAppSubCollateral = selectedAppSubCollateral;
+    public void setSelectedApproveSubColl(NewCollateralSubView selectedApproveSubColl) {
+        this.selectedApproveSubColl = selectedApproveSubColl;
     }
 
     public List<LoanPurposeView> getLoanPurposeViewList() {
@@ -1523,14 +1573,6 @@ public class Decision implements Serializable {
 
     public void setProductProgramList(List<ProductProgram> productProgramList) {
         this.productProgramList = productProgramList;
-    }
-
-    public List<CreditType> getCreditTypeList() {
-        return creditTypeList;
-    }
-
-    public void setCreditTypeList(List<CreditType> creditTypeList) {
-        this.creditTypeList = creditTypeList;
     }
 
     public boolean isRoleBDM() {

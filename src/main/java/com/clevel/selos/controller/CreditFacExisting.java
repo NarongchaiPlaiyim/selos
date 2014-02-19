@@ -19,6 +19,7 @@ import com.clevel.selos.transform.BankAccountStatusTransform;
 import com.clevel.selos.transform.ProductTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -127,6 +128,8 @@ public class CreditFacExisting implements Serializable {
 
     private String currentDateDDMMYY;
 
+    private boolean canSaveCreditDetail;
+
     @Inject
     private CreditTypeDAO creditTypeDAO;
     @Inject
@@ -172,10 +175,10 @@ public class CreditFacExisting implements Serializable {
         log.info("info WorkCase : {}", session.getAttribute("workCaseId"));
 
         if( session.getAttribute("workCaseId") == null && session.getAttribute("workCaseId").equals("")){
-            session.setAttribute("workCaseId", 10002);
+            FacesUtil.redirect("/site/inbox.jsf");
         }
 
-        session.setAttribute("stepId", 1006);
+       /* session.setAttribute("stepId", 1006);*/
         user = (User) session.getAttribute("user");
         log.info("preRender ::: 1 ");
 
@@ -306,7 +309,7 @@ public class CreditFacExisting implements Serializable {
                 }
 
                 for (int l=0;l<hashRelated.size();l++){
-                    log.info("hashRelated.get(j) in use   :  "+ l + " is   " +hashRelated.get(l).toString());
+                    log.info("hashRelated.get(j) in use   :  "+ l + " is   " +hashRelated.get(l+1).toString());
                 }
 
                 log.info("preRender ::: getId " + existingCreditFacilityView.getId());
@@ -423,13 +426,12 @@ public class CreditFacExisting implements Serializable {
 
     public void onChangeCreditType(){
         int id = existingCreditDetailView.getExistCreditTypeView().getId();
-        showSplitLine = false;
-        if(id == 9){
-            showSplitLine = true;
-        }
         if ((existingCreditDetailView.getExistProductProgramView().getId() != 0) && (existingCreditDetailView.getExistCreditTypeView().getId() != 0)) {
+            canSaveCreditDetail = false;
             ProductProgram productProgram = productProgramDAO.findById(existingCreditDetailView.getExistProductProgramView().getId());
             CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
+
+            showSplitLine = Util.isTrue(creditType.getCanSplit());
 
             if(productProgram != null && creditType != null){
                 PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType,productProgram);
@@ -440,6 +442,25 @@ public class CreditFacExisting implements Serializable {
                     existingCreditDetailView.setProductCode(productFormula.getProductCode());
                     existingCreditDetailView.setProjectCode(productFormula.getProjectCode());
                 }
+            }
+
+            if(Util.isTrue(creditType.getCanSplit())){
+                BigDecimal totalLimit = existingCreditDetailView.getLimit();
+                BigDecimal splitLimit = BigDecimal.ZERO;
+                if(existingSplitLineDetailViewList!=null && existingSplitLineDetailViewList.size()>0){
+                    for(ExistingSplitLineDetailView existingSplitLineDetailViewTmp : existingSplitLineDetailViewList){
+                        if(existingSplitLineDetailViewTmp.getLimit()!=null){
+                            splitLimit = splitLimit.add(existingSplitLineDetailViewTmp.getLimit());
+                        }
+                    }
+                    if(totalLimit.compareTo(splitLimit)==0){
+                        canSaveCreditDetail = true;
+                    }
+                } else {
+                    canSaveCreditDetail = true;
+                }
+            } else {
+                canSaveCreditDetail = true;
             }
         }
     }
@@ -477,6 +498,7 @@ public class CreditFacExisting implements Serializable {
            // log.info("onEditCommercialCredit is " + selectCreditDetail.toString());
         }
         modeForButton = ModeForButton.EDIT;
+        canSaveCreditDetail = false;
 
         existingCreditDetailView = new ExistingCreditDetailView();
         existingCreditDetailView.setAccountName(selectCreditDetail.getAccountName());
@@ -499,6 +521,26 @@ public class CreditFacExisting implements Serializable {
         existingCreditDetailView.setExistingSplitLineDetailViewList(selectCreditDetail.getExistingSplitLineDetailViewList());
         existingCreditTierDetailViewList = selectCreditDetail.getExistingCreditTierDetailViewList();
         existingCreditDetailView.setExistingCreditTierDetailViewList(selectCreditDetail.getExistingCreditTierDetailViewList());
+
+        CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
+        if(Util.isTrue(creditType.getCanSplit())){
+            BigDecimal totalLimit = existingCreditDetailView.getLimit();
+            BigDecimal splitLimit = BigDecimal.ZERO;
+            if(existingSplitLineDetailViewList!=null && existingSplitLineDetailViewList.size()>0){
+                for(ExistingSplitLineDetailView existingSplitLineDetailViewTmp : existingSplitLineDetailViewList){
+                    if(existingSplitLineDetailViewTmp.getLimit()!=null){
+                        splitLimit = splitLimit.add(existingSplitLineDetailViewTmp.getLimit());
+                    }
+                }
+                if(totalLimit.compareTo(splitLimit)==0){
+                    canSaveCreditDetail = true;
+                }
+            } else {
+                canSaveCreditDetail = true;
+            }
+        } else {
+            canSaveCreditDetail = true;
+        }
 
         log.info("onEditCommercialCredit end ::: mode : {}", modeForButton);
     }
@@ -538,7 +580,7 @@ public class CreditFacExisting implements Serializable {
             log.info("del 1");
 
             for (int l=0;l<hashRelated.size();l++){
-                log.info("hashRelated.get(j) in use   :  "+ l + " is   " +hashRelated.get(l).toString());
+                log.info("hashRelated.get(j) in use   :  "+ l + " is   " +hashRelated.get(l+1).toString());
             }
 
             used = Integer.parseInt(hashRelated.get(existingCreditDetailViewDel.getNo()).toString());
@@ -605,6 +647,29 @@ public class CreditFacExisting implements Serializable {
         }
     }
 
+    public void checkTotalLimit(){
+        canSaveCreditDetail = false;
+        CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
+        if(Util.isTrue(creditType.getCanSplit())){
+            BigDecimal totalLimit = existingCreditDetailView.getLimit();
+            BigDecimal splitLimit = BigDecimal.ZERO;
+            if(existingSplitLineDetailViewList!=null && existingSplitLineDetailViewList.size()>0){
+                for(ExistingSplitLineDetailView existingSplitLineDetailViewTmp : existingSplitLineDetailViewList){
+                    if(existingSplitLineDetailViewTmp.getLimit()!=null){
+                        splitLimit = splitLimit.add(existingSplitLineDetailViewTmp.getLimit());
+                    }
+                }
+                if(totalLimit.compareTo(splitLimit)==0){
+                    canSaveCreditDetail = true;
+                }
+            } else {
+                canSaveCreditDetail = true;
+            }
+        } else {
+            canSaveCreditDetail = true;
+        }
+    }
+
     public void onSaveCreditDetail() {
         log.info("onSaveCreditDetail ::: mode : {}", modeForButton);
         log.info("onSaveCreditDetail ::: rowIndex : {}", rowIndex);
@@ -620,26 +685,29 @@ public class CreditFacExisting implements Serializable {
         if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
             log.info("add to list begin");
             //ProductProgram  productProgram = productProgramDAO.findById(existingCreditDetailView.getExistProductProgramView().getId());
-            //CreditType creditType = creditTypeDAO.findById( existingCreditDetailView.getExistCreditTypeView().getId());
+            CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
             //AccountStatus accountStatus = accountStatusDAO.findById( existingCreditDetailView.getExistAccountStatus().getId());
             BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findById( existingCreditDetailView.getExistAccountStatus().getId());
 
-
-
             BankAccountStatusView bankAccountStatusV = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
             existingCreditDetailView.setExistProductProgramView(productTransform.transformToView(productProgramDAO.findById(existingCreditDetailView.getExistProductProgramView().getId())));
-            existingCreditDetailView.setExistCreditTypeView(productTransform.transformToView(creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId())));
+            existingCreditDetailView.setExistCreditTypeView(productTransform.transformToView(creditType));
             existingCreditDetailView.setExistAccountStatus(bankAccountStatus);
 
-            for(int i=0;i<existingSplitLineDetailViewList.size();i++){
-                productProgram = productProgramDAO.findById(existingSplitLineDetailViewList.get(i).getProductProgram().getId());
-                existingSplitLineDetailViewList.get(i).setProductProgram(productProgram);
+            if(Util.isTrue(creditType.getCanSplit())){
+                for(int i=0;i<existingSplitLineDetailViewList.size();i++){
+                    productProgram = productProgramDAO.findById(existingSplitLineDetailViewList.get(i).getProductProgram().getId());
+                    existingSplitLineDetailViewList.get(i).setProductProgram(productProgram);
+                }
+                existingCreditDetailView.setExistingSplitLineDetailViewList(existingSplitLineDetailViewList);
+            } else {
+                existingCreditDetailView.setExistingSplitLineDetailViewList(new ArrayList<ExistingSplitLineDetailView>());
             }
+
             for(int i=0;i<existingCreditTierDetailViewList.size();i++){
                 BaseRate baseRate = baseRateDAO.findById(existingCreditTierDetailViewList.get(i).getFinalBasePrice().getId());
                 existingCreditTierDetailViewList.get(i).setFinalBasePrice(baseRate);
             }
-            existingCreditDetailView.setExistingSplitLineDetailViewList(existingSplitLineDetailViewList);
             existingCreditDetailView.setExistingCreditTierDetailViewList(existingCreditTierDetailViewList);
 
             int index = 0;
@@ -696,14 +764,13 @@ public class CreditFacExisting implements Serializable {
             }
 
             //ProductProgram  productProgram = productProgramDAO.findById(existingCreditDetailView.getExistProductProgram().getId());
-            //CreditType creditType = creditTypeDAO.findById( existingCreditDetailView.getExistCreditType().getId());
             //AccountStatus accountStatus = accountStatusDAO.findById( existingCreditDetailView.getExistAccountStatus().getId());
-            BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findById( existingCreditDetailView.getExistAccountStatus().getId());
-
+            BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findById(existingCreditDetailView.getExistAccountStatus().getId());
             BankAccountStatusView bankAccountStatusV = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
+            CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
 
-            existingCreditDetailViewRow.setExistProductProgramView(existingCreditDetailView.getExistProductProgramView());
-            existingCreditDetailViewRow.setExistCreditTypeView(existingCreditDetailView.getExistCreditTypeView());
+            existingCreditDetailViewRow.setExistProductProgramView(productTransform.transformToView(productProgramDAO.findById(existingCreditDetailView.getExistProductProgramView().getId())));
+            existingCreditDetailViewRow.setExistCreditTypeView(productTransform.transformToView(creditType));
             existingCreditDetailViewRow.setAccountStatus(bankAccountStatusV);
             existingCreditDetailViewRow.setAccountName(existingCreditDetailView.getAccountName());
             existingCreditDetailViewRow.setAccountNumber(existingCreditDetailView.getAccountNumber());
@@ -717,18 +784,29 @@ public class CreditFacExisting implements Serializable {
             existingCreditDetailViewRow.setPcePercent(existingCreditDetailView.getPcePercent());
             existingCreditDetailViewRow.setPceLimit(existingCreditDetailView.getPceLimit());
 
-            for(int i=0;i<existingSplitLineDetailViewList.size();i++){
-                productProgram = productProgramDAO.findById(existingSplitLineDetailViewList.get(i).getProductProgram().getId());
-                existingSplitLineDetailViewList.get(i).setProductProgram(productProgram);
+            if(Util.isTrue(creditType.getCanSplit())){
+                for(int i=0;i<existingSplitLineDetailViewList.size();i++){
+                    productProgram = productProgramDAO.findById(existingSplitLineDetailViewList.get(i).getProductProgram().getId());
+                    existingSplitLineDetailViewList.get(i).setProductProgram(productProgram);
+                }
+                existingCreditDetailViewRow.setExistingSplitLineDetailViewList(existingSplitLineDetailViewList);
+            } else {
+                existingCreditDetailViewRow.setExistingSplitLineDetailViewList(new ArrayList<ExistingSplitLineDetailView>());
             }
 
             for(int i=0;i<existingCreditTierDetailViewList.size();i++){
                 BaseRate baseRate = baseRateDAO.findById(existingCreditTierDetailViewList.get(i).getFinalBasePrice().getId());
                 existingCreditTierDetailViewList.get(i).setFinalBasePrice(baseRate);
             }
-
-            existingCreditDetailViewRow.setExistingSplitLineDetailViewList(existingSplitLineDetailViewList);
             existingCreditDetailViewRow.setExistingCreditTierDetailViewList(existingCreditTierDetailViewList);
+
+            if(typeOfList.equals("borrower")){
+                existingCreditFacilityView.getBorrowerComExistingCredit().remove(rowIndex);
+                existingCreditFacilityView.getBorrowerComExistingCredit().add(rowIndex,existingCreditDetailViewRow);
+            }else if(typeOfList.equals("related")){
+                existingCreditFacilityView.getRelatedComExistingCredit().remove(rowIndex);
+                existingCreditFacilityView.getRelatedComExistingCredit().add(rowIndex,existingCreditDetailViewRow);
+            }
 
             log.info("update list end");
         }else {
@@ -773,7 +851,8 @@ public class CreditFacExisting implements Serializable {
         existingSplitLineDetailView.setProductProgram(productProgram);
         existingSplitLineDetailView.setNo(existingSplitLineDetailViewList.size()+1);
         existingSplitLineDetailViewList.add(existingSplitLineDetailView);
-        log.info("onAddCreditDetail ::: end");
+
+        canSaveCreditDetail = false;
     }
 
     public void onDeleteExistingSplitLineDetailView(int rowOnTable) {
@@ -781,6 +860,22 @@ public class CreditFacExisting implements Serializable {
             log.info("existingSplitLineDetailViewList ::: rowOnTable " + rowOnTable);
             existingSplitLineDetailViewList.remove(rowOnTable);
             onSetRowNoSplitLineDetail(existingSplitLineDetailViewList);
+
+            BigDecimal totalLimit = existingCreditDetailView.getLimit();
+            BigDecimal splitLimit = BigDecimal.ZERO;
+            if(existingSplitLineDetailViewList!=null && existingSplitLineDetailViewList.size()>0){
+                for(ExistingSplitLineDetailView existingSplitLineDetailViewTmp : existingSplitLineDetailViewList){
+                    if(existingSplitLineDetailViewTmp.getLimit()!=null){
+                        splitLimit = splitLimit.add(existingSplitLineDetailViewTmp.getLimit());
+                    }
+                }
+                if(totalLimit.compareTo(splitLimit)==0){
+                    canSaveCreditDetail = true;
+                }
+            } else {
+                canSaveCreditDetail = true;
+            }
+            log.info("onAddCreditDetail ::: end");
         }
     }
 
@@ -1215,7 +1310,7 @@ public class CreditFacExisting implements Serializable {
 
             }else if(typeOfListCollateral.equals("related")){
                 for (int l=0;l<hashRelated.size();l++){
-                    log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l).toString());
+                    log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l+1).toString());
                 }
                 ExistingCollateralDetailView relatedCollateralDetailViewRow = relatedExistingCollateralDetailViewList.get(rowIndex);
 
@@ -1255,7 +1350,7 @@ public class CreditFacExisting implements Serializable {
                     }
                 }
                 for (int l=0;l<hashRelated.size();l++){
-                    log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l).toString());
+                    log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l+1).toString());
                 }
                 onSetRowNoCreditTypeDetail(relatedCollateralDetailViewRow.getExistingCreditTypeDetailViewList());
                 existingCreditFacilityView.getRelatedCollateralList().remove(rowIndex);
@@ -1336,7 +1431,7 @@ public class CreditFacExisting implements Serializable {
         }else if(typeOfListCollateral.equals("related")){
             ExistingCollateralDetailView relatedCollateralDetailViewDel = selectCollateralDetail;
             for (int l=0;l<hashRelated.size();l++){
-                log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l).toString());
+                log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l+1).toString());
             }
             log.info("getCreditFacilityList().size() " + relatedCollateralDetailViewDel.getExistingCreditTypeDetailViewList().size());
 
@@ -1350,7 +1445,7 @@ public class CreditFacExisting implements Serializable {
             relatedExistingCollateralDetailViewList.remove(selectCollateralDetail);
             onSetRowNoCollateralDetail(relatedExistingCollateralDetailViewList);
             for (int l=0;l<hashRelated.size();l++){
-                log.info("after hashRelated seq :  "+ l + " use is   " +hashRelated.get(l).toString());
+                log.info("after hashRelated seq :  "+ l + " use is   " +hashRelated.get(l+1).toString());
             }
         }
         calTotalCollateral();
@@ -1429,7 +1524,7 @@ public class CreditFacExisting implements Serializable {
             ExistingGuarantorDetailView existingGuarantorDetailViewAdd = new ExistingGuarantorDetailView();
 
             existingGuarantorDetailViewAdd.setNo(borrowerExistingGuarantorDetailViewList.size()+1);
-            existingGuarantorDetailViewAdd.setGuarantorName(existingGuarantorDetailView.getGuarantorName());
+            existingGuarantorDetailViewAdd.setGuarantorName(customerInfoControl.getCustomerById(existingGuarantorDetailView.getGuarantorName()));
             existingGuarantorDetailViewAdd.setTcgLgNo(existingGuarantorDetailView.getTcgLgNo());
 
             existingGuarantorDetailViewAdd.setExistingCreditTypeDetailViewList(new ArrayList<ExistingCreditTypeDetailView>());
@@ -2039,5 +2134,13 @@ public class CreditFacExisting implements Serializable {
     public String getCurrentDateDDMMYY() {
         log.debug("current date : {}", getCurrentDate());
         return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public boolean isCanSaveCreditDetail() {
+        return canSaveCreditDetail;
+    }
+
+    public void setCanSaveCreditDetail(boolean canSaveCreditDetail) {
+        this.canSaveCreditDetail = canSaveCreditDetail;
     }
 }

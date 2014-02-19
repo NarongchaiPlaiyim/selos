@@ -7,6 +7,7 @@ import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.Appraisal;
 import com.clevel.selos.model.db.working.AppraisalContactDetail;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.AppraisalContactDetailView;
 import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.model.view.AppraisalView;
@@ -24,14 +25,14 @@ public class AppraisalTransform extends Transform {
     Logger log;
     @Inject
     private AppraisalDAO appraisalDAO;
-    private AppraisalView appraisalView;
-    private Appraisal appraisal;
+    //private AppraisalView appraisalView;
+    //private Appraisal appraisal;
 
     @Inject
     private AppraisalContactDetailDAO appraisalContactDetailDAO;
-    private List<AppraisalContactDetail> appraisalContactDetailList;
-    private AppraisalContactDetail appraisalContactDetail;
-    private AppraisalContactDetailView appraisalContactDetailView;
+    //private List<AppraisalContactDetail> appraisalContactDetailList;
+    //private AppraisalContactDetail appraisalContactDetail;
+    //private AppraisalContactDetailView appraisalContactDetailView;
     @Inject
     private AppraisalContactDetailTransform appraisalContactDetailTransform;
     @Inject
@@ -39,18 +40,18 @@ public class AppraisalTransform extends Transform {
 
     }
 
-    public Appraisal transformToModel(final AppraisalView appraisalView, final WorkCase workCase, final User user){
+    public Appraisal transformToModel(final AppraisalView appraisalView, final WorkCase workCase, final WorkCasePrescreen workCasePrescreen, final User user){
         log.debug("-- transform AppraisalView to Appraisal");
-
-        long id = appraisalView.getId();
-        if(!Util.isZero(id)){
-            appraisal = appraisalDAO.findById(id);
+        Appraisal appraisal = new Appraisal();
+        if(!Util.isZero(appraisalView.getId())){
+            appraisal = appraisalDAO.findById(appraisalView.getId());
         }else{
-            appraisal = new Appraisal();
             appraisal.setWorkCase(workCase);
+            appraisal.setWorkCasePrescreen(workCasePrescreen);
             appraisal.setCreateBy(user);
             appraisal.setCreateDate(DateTime.now().toDate());
         }
+
         appraisal.setAppraisalType(appraisalView.getAppraisalType());
 
         if(checkNullObject(appraisalView.getAppraisalDivision()) && checkId0(appraisalView.getAppraisalDivision().getId())){
@@ -89,7 +90,7 @@ public class AppraisalTransform extends Transform {
         appraisal.setModifyDate(DateTime.now().toDate());
         appraisal.setModifyBy(user);
 
-        appraisalContactDetailList = safetyList(appraisalContactDetailTransform.transformToModel(appraisalView.getAppraisalContactDetailView(), id, user));
+        List<AppraisalContactDetail> appraisalContactDetailList = safetyList(appraisalContactDetailTransform.transformToModel(appraisalView.getAppraisalContactDetailView(), appraisal, user));
         appraisal.setAppraisalContactDetailList(appraisalContactDetailList);
 
         return appraisal;
@@ -97,7 +98,7 @@ public class AppraisalTransform extends Transform {
 
     public AppraisalView transformToView(final Appraisal appraisal, final User user){
         log.debug("-- transform Appraisal to AppraisalView");
-        appraisalView = new AppraisalView();
+        AppraisalView appraisalView = new AppraisalView();
 
         appraisalView.setId(appraisal.getId());
         appraisalView.setAppointmentCusName(appraisal.getAppointmentCusName());
@@ -140,8 +141,7 @@ public class AppraisalTransform extends Transform {
         appraisalView.setModifyBy(appraisal.getModifyBy());
         appraisalView.setModifyDate(appraisal.getModifyDate());
 
-        appraisalContactDetailList = safetyList(appraisal.getAppraisalContactDetailList());
-        appraisalContactDetailView = appraisalContactDetailTransform.transformToView(appraisalContactDetailList, appraisal, user);
+        AppraisalContactDetailView appraisalContactDetailView = appraisalContactDetailTransform.transformToView(safetyList(appraisal.getAppraisalContactDetailList()), appraisal, user);
         appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
 
         return appraisalView;

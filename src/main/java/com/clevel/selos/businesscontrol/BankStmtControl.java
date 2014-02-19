@@ -207,17 +207,12 @@ public class BankStmtControl extends BusinessControl {
 
     /**
      * Formula: <br/>
-     * if(creditAmountUW[(Net)-UW] is blank) -> timesOfAvgCredit(BDM/UW) both values will be blank <br/>
-     * else -> timesOfAvgCredit = [ creditAmount(BDM/UW) / avgIncomeNet(BDM/UW) ]
+     * timesOfAvgCredit = [ creditAmount(BDM/UW) / avgIncomeNet(BDM/UW) ]
      * @param creditAmount(BDM/UW)
      * @param avgIncomeNet(BDM/UW)
-     * @param creditAmountUW
      * @return timesOfAvgCredit(BDM/UW)
      */
-    public BigDecimal calTimesOfAvgCredit(BigDecimal creditAmount, BigDecimal avgIncomeNet, BigDecimal creditAmountUW) {
-        if (creditAmountUW == null)
-            return null;
-
+    public BigDecimal calTimesOfAvgCredit(BigDecimal creditAmount, BigDecimal avgIncomeNet) {
         return Util.divide(creditAmount, avgIncomeNet);
     }
 
@@ -809,8 +804,8 @@ public class BankStmtControl extends BusinessControl {
 
         // ---------- timesOfAvgCredit(BDM/UW) ---------- //
         for (BankStmtDetailView detailView : bankStmtDetailViewList) {
-            detailView.setTimesOfAvgCreditBDM(calTimesOfAvgCredit(detailView.getCreditAmountBDM(), avgIncomeNetBDM, detailView.getCreditAmountUW()));
-            detailView.setTimesOfAvgCreditUW(calTimesOfAvgCredit(detailView.getCreditAmountUW(), avgIncomeNetUW, detailView.getCreditAmountUW()));
+            detailView.setTimesOfAvgCreditBDM(calTimesOfAvgCredit(detailView.getCreditAmountBDM(), avgIncomeNetBDM));
+            detailView.setTimesOfAvgCreditUW(calTimesOfAvgCredit(detailView.getCreditAmountUW(), avgIncomeNetUW));
         }
 
         // ========== Calculate from The last Six months ==========

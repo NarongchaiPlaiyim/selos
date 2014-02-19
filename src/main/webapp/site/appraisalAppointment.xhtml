@@ -12,6 +12,13 @@
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
     <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
+    <style type="text/css">
+        .ui-selectoneradio{
+            border-spacing: 0!important;
+            border-style: none!important;
+            border-color: white;
+        }
+    </style>
 </h:head>
 <h:body>
 <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
@@ -219,7 +226,7 @@
                                     <p:outputLabel value="#{appraisalDetailViewItem.purposeReviewAppraisalLabel}"/>
                                 </p:column>
                                 <p:column styleClass="left">
-                                    <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailViewItem.characteristic}" disabled="false">
+                                    <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailViewItem.characteristic}" disabled="true">
                                         <f:selectItem id="characteristicRadio0" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
                                         <f:selectItem id="characteristicRadio1" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
                                     </p:selectOneRadio>
@@ -547,15 +554,27 @@
     <!--<ui:param name="action" value="onDeleteContactRecordDetailView"/>-->
     <!--<ui:param name="update" value=":frmMain:contactRecordDetailViewTable"/>-->
 <!--</ui:include>-->
-
-
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                     header="#{appraisalAppointment.messageHeader}" message="#{appraisalAppointment.message}" >
+    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
+                     header="#{appraisalAppointment.messageHeader}" >
+        <f:facet name="message">
+            <h:outputText value="#{appraisalAppointment.message}" escape="false"/>
+        </f:facet>
         <p:commandButton value="OK"
                          process="@this"
-                         update="frmMain"
+                         update=":frmMain"
                          oncomplete="msgBoxSystemMessageDlg.hide()"/>
+    </p:confirmDialog>
+</p:panel>
+<p:panel id="msgBoxRedirectPanel" styleClass="panel">
+    <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
+                     header="#{appraisalAppointment.messageHeader}" >
+        <f:facet name="message">
+            <h:outputText value="#{appraisalAppointment.message}" escape="false"/>
+        </f:facet>
+        <p:commandButton value="OK"
+                         process="@this"
+                         action="#{baseController.onGoToInbox}"/>
     </p:confirmDialog>
 </p:panel>
 

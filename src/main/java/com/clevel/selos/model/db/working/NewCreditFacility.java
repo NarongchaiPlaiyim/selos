@@ -20,9 +20,13 @@ public class NewCreditFacility implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_NEW_WRK_CREDIT_FAC_ID")
     private long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
+
+    @OneToOne
+    @JoinColumn(name = "workcase_prescreen_id")
+    private WorkCasePrescreen workCasePrescreen;
 
     @Column(name = "wc_need")
     private BigDecimal wcNeed;
@@ -666,6 +670,14 @@ public class NewCreditFacility implements Serializable {
 
     public void setWorkCase(WorkCase workCase) {
         this.workCase = workCase;
+    }
+
+    public WorkCasePrescreen getWorkCasePrescreen() {
+        return workCasePrescreen;
+    }
+
+    public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
+        this.workCasePrescreen = workCasePrescreen;
     }
 
     public List<NewFeeDetail> getNewFeeDetailList() {

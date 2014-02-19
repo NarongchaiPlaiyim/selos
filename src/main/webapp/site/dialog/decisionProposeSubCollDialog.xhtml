@@ -15,7 +15,7 @@
                 </td>
                 <td class="left" style="width: 65%">
                     <p:selectOneMenu id="dlgSubCollateralType"
-                                     value="#{decision.selectedAppSubCollateral.subCollateralType.id}"
+                                     value="#{decision.selectedApproveSubColl.subCollateralType.id}"
                                      required="#{not empty param[saveSubCollButton.clientId]}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -32,7 +32,7 @@
                                    value="#{msg.get('app.credit.facility.propose.dlg.subcoll.titleDeed')}"/>
                 </td>
                 <td class="left">
-                    <p:inputText id="dlgSubCollTitleDeed" value="#{decision.selectedAppSubCollateral.titleDeed}"
+                    <p:inputText id="dlgSubCollTitleDeed" value="#{decision.selectedApproveSubColl.titleDeed}"
                                  required="#{not empty param[saveSubCollButton.clientId]}"/>
                 </td>
             </tr>
@@ -42,7 +42,7 @@
                                    value="#{msg.get('app.credit.facility.propose.dlg.subcoll.address')}"/>
                 </td>
                 <td class="left">
-                    <p:inputText id="dlgSubCollAddress" value="#{decision.selectedAppSubCollateral.address}"
+                    <p:inputText id="dlgSubCollAddress" value="#{decision.selectedApproveSubColl.address}"
                                  required="#{not empty param[saveSubCollButton.clientId]}"/>
                 </td>
             </tr>
@@ -52,7 +52,7 @@
                                    value="#{msg.get('app.credit.facility.propose.dlg.subcoll.landOffice')}"/>
                 </td>
                 <td class="left">
-                    <p:inputText id="dlgSubCollLandOffice" value="#{decision.selectedAppSubCollateral.landOffice}"
+                    <p:inputText id="dlgSubCollLandOffice" value="#{decision.selectedApproveSubColl.landOffice}"
                                  required="#{not empty param[saveSubCollButton.clientId]}"/>
                 </td>
             </tr>
@@ -62,7 +62,7 @@
                                    value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.AAD')}"/>
                 </td>
                 <td class="left">
-                    <p:inputText id="dlgSubCollOwnerAAD" value="#{decision.selectedAppSubCollateral.collateralOwnerAAD}"
+                    <p:inputText id="dlgSubCollOwnerAAD" value="#{decision.selectedApproveSubColl.collateralOwnerAAD}"
                                  required="#{not empty param[saveSubCollButton.clientId]}"/>
                 </td>
             </tr>
@@ -76,7 +76,7 @@
                         <tr>
                             <td>
                                 <p:selectOneMenu id="dlgSubCollOwnerUW"
-                                                 value="#{decision.selectedAppSubCollateral.collateralOwnerUW.id}"
+                                                 value="#{decision.selectedApproveSubColl.collateralOwnerUW.id}"
                                                  style="min-width: 200px; width: 200px; max-width: 200px; margin-left: -2px;">
                                     <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                     <f:selectItems value="#{decision.collateralOwnerUwAllList}"
@@ -103,7 +103,7 @@
                 <td class="title"></td>
                 <td class="left">
                     <p:dataTable id="CollOwnerUWTb"
-                                 value="#{decision.selectedAppSubCollateral.collateralOwnerUWList}"
+                                 value="#{decision.selectedApproveSubColl.collateralOwnerUWList}"
                                  var="collateralOwnerUWItem"
                                  rowKey="#{collateralOwnerUWItem.id}"
                                  rowIndexVar="rowIndex"
@@ -148,7 +148,7 @@
                         <tr>
                             <td>
                                 <p:selectOneMenu id="dlgSubCollMortgageType"
-                                                 value="#{decision.selectedAppSubCollateral.mortgageType.id}"
+                                                 value="#{decision.selectedApproveSubColl.mortgageType.id}"
                                                  style="min-width: 200px; width: 200px; max-width: 200px; margin-left: -2px;">
                                     <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                     <f:selectItems value="#{decision.mortgageTypeList}"
@@ -175,7 +175,7 @@
                 <td class="title"></td>
                 <td class="left">
                     <p:dataTable id="MortgageTb"
-                                 value="#{decision.selectedAppSubCollateral.mortgageList}"
+                                 value="#{decision.selectedApproveSubColl.mortgageList}"
                                  var="mortgageItem"
                                  rowKey="#{mortgageItem.id}"
                                  rowIndexVar="rowIndex"
@@ -220,7 +220,7 @@
                         <tr>
                             <td>
                                 <p:selectOneMenu id="dlgSubCollRelatedWith"
-                                                 value="#{decision.selectedAppSubCollateral.relatedWithId}"
+                                                 value="#{decision.selectedApproveSubColl.relatedWithId}"
                                                  style="min-width: 200px; width: 200px; max-width: 200px; margin-left: -2px;">
                                     <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                     <f:selectItems value="#{decision.relatedWithAllList}"
@@ -247,7 +247,7 @@
                 <td class="title"></td>
                 <td class="left">
                     <p:dataTable id="RelatedWithTb"
-                                 value="#{decision.selectedAppSubCollateral.relatedWithList}"
+                                 value="#{decision.selectedApproveSubColl.relatedWithList}"
                                  var="relatedWith"
                                  rowKey="#{relatedWith.id}"
                                  rowIndexVar="rowIndex"
@@ -290,7 +290,7 @@
                 </td>
                 <td class="left">
                     <p:inputText id="dlgSubCollAppraisalVal"
-                                 value="#{decision.selectedAppSubCollateral.appraisalValue}"
+                                 value="#{decision.selectedApproveSubColl.appraisalValue}"
                                  maxlength="18"
                                  onclick="this.select()"
                                  onkeydown="return onKeyDownNegMoney(event);"
@@ -311,7 +311,7 @@
                 </td>
                 <td class="left">
                     <p:inputText id="dlgSubCollMortgageVal"
-                                 value="#{decision.selectedAppSubCollateral.mortgageValue}"
+                                 value="#{decision.selectedApproveSubColl.mortgageValue}"
                                  maxlength="18"
                                  onclick="this.select()"
                                  onkeydown="return onKeyDownNegMoney(event);"
