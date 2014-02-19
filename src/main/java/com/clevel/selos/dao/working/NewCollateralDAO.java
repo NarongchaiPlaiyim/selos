@@ -4,6 +4,7 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.ProposeType;
+import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.working.NewCollateral;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 
@@ -44,6 +45,18 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
         List<NewCollateral> newCollateralList = (List<NewCollateral>) criteria.list();
         log.info("-- List<NewCollateral> ::: size : {}", newCollateralList.size());
         return newCollateralList;
+    }
+
+    public List<NewCollateral> findNewCollateralByType(NewCreditFacility newCreditFacility, ProposeType proposeType, RequestAppraisalValue requestAppraisalValue){
+        log.debug("findNewCollateralByType ::: newCreditFacility : {}", newCreditFacility);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
+        criteria.add(Restrictions.eq("proposeType", proposeType));
+        criteria.add(Restrictions.ne("appraisalRequest", requestAppraisalValue.value()));
+        criteria.addOrder(Order.asc("id"));
+        List<NewCollateral> newCollateralDetailList = (List<NewCollateral>) criteria.list();
+        log.info("findNewCollateralByType ::: newCollateralDetailList.size : {}", newCollateralDetailList.size());
+        return newCollateralDetailList;
     }
 
     public List<NewCollateral> findNewCollateralByTypeP(NewCreditFacility newCreditFacility) {
