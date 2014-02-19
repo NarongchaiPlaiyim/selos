@@ -1,6 +1,8 @@
 package com.clevel.selos.controller;
 
 
+import com.clevel.selos.businesscontrol.InsuranceInfoControl;
+import com.clevel.selos.businesscontrol.PreDisbursementControl;
 import com.clevel.selos.businesscontrol.TCGInfoControl;
 import com.clevel.selos.dao.master.PotentialCollateralDAO;
 import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
@@ -53,6 +55,10 @@ public class PreDisbursement implements Serializable {
     
     private BasicInfoView basicInfoView;
     
+    
+    @Inject
+    private PreDisbursementControl preDisbursementControl;
+        
     private PreDisbursementView preDisbursementView = new PreDisbursementView();
     
 //    @Inject
@@ -70,11 +76,18 @@ public class PreDisbursement implements Serializable {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 			user = (User) session.getAttribute("user");
+			//preDisbursementView = this.preDisbursementControl.getPreDisbursementView(workCaseId);
 		}
 
     }
 
-
+    public void onRadioChange(){
+    	if (this.preDisbursementView.getApprovedType() == 0){
+    		this.preDisbursementView.setApprovedType(1);
+    	}else{
+    		this.preDisbursementView.setApprovedType(0);
+    	}
+    }
     
 
     public void onSaveTcgInfo() {
