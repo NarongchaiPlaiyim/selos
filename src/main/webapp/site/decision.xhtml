@@ -1718,15 +1718,17 @@
                                                                     #{msg.get('app.decision.tb.td.label.requestType')}
                                                                 </td>
                                                                 <td class="left" style="border-style: none !important;">
-                                                                    #{proposeCredit.requestType == 2 ? msg.get('app.label.new') :
-                                                                    proposeCredit.requestType == 1 ? msg.get('app.label.change') : ''}
+                                                                    #{proposeCredit.requestType == decision.requestTypeNEW.value ? msg.get('app.label.new')
+                                                                    : proposeCredit.requestType == decision.requestTypeCHANGE.value ? msg.get('app.label.change')
+                                                                    : ''}
                                                                 </td>
                                                                 <td class="title" style="border-style: none !important;">
                                                                     #{msg.get('app.decision.tb.td.label.refinance')}
                                                                 </td>
                                                                 <td class="left" style="border-style: none !important;">
-                                                                    #{proposeCredit.refinance == 2 ? msg.get('app.label.yes') :
-                                                                    proposeCredit.refinance == 1 ? msg.get('app.label.no') : ''}
+                                                                    #{proposeCredit.refinance == decision.yesValue ? msg.get('app.label.yes')
+                                                                    : proposeCredit.refinance == decision.noValue ? msg.get('app.label.no')
+                                                                    : ''}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -1734,7 +1736,7 @@
                                                                     #{msg.get('app.decision.tb.td.label.purpose')}
                                                                 </td>
                                                                 <td class="left" colspan="3" style="border-style: none !important;">
-                                                                    #{proposeCredit.loanPurposeView.description}
+                                                                    #{not empty proposeCredit.loanPurposeView ? proposeCredit.loanPurposeView.description : ''}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -1749,7 +1751,7 @@
                                                                     #{msg.get('app.decision.tb.td.label.disbursement')}
                                                                 </td>
                                                                 <td class="left" style="border-style: none !important;">
-                                                                    #{proposeCredit.disbursementTypeView.disbursement}
+                                                                    #{not empty proposeCredit.disbursementTypeView ? proposeCredit.disbursementTypeView.disbursement : ''}
                                                                 </td>
                                                                 <td class="title" style="border-style: none !important;">
                                                                     #{msg.get('app.decision.tb.td.label.holdAmount')}
@@ -1769,7 +1771,7 @@
 
                                             <h:panelGroup rendered="#{empty decision.decisionView.proposeCreditList}">
                                                 <tr>
-                                                    <td colspan="11">No records found.</td>
+                                                    <td colspan="11">#{msg.get('app.label.noRecordsFound')}</td>
                                                 </tr>
                                             </h:panelGroup>
 

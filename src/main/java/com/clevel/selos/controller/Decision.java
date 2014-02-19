@@ -1072,7 +1072,7 @@ public class Decision implements Serializable {
         decisionView.setApproveTotalGuaranteeAmt(creditFacProposeControl.calTotalGuaranteeAmount(decisionView.getApproveGuarantorList()));
     }
 
-    // ---------- FollowUp Condition & (Save/Cancel) Decision ---------- //
+    // ---------- FollowUp Condition - Action ---------- //
     public void onAddFollowUpCondition() {
         log.debug("onAddFollowUpCondition()");
         if (decisionView.getFollowUpConditionList() != null) {
@@ -1132,25 +1132,28 @@ public class Decision implements Serializable {
             return new LoanPurposeView();
         }
 
+        LoanPurposeView returnLoanPurpose = new LoanPurposeView();
         for (LoanPurposeView loanPurposeView : loanPurposeViewList) {
             if (loanPurposeView.getId() == id) {
-                return loanPurposeView;
+                returnLoanPurpose.setId(loanPurposeView.getId());
+                returnLoanPurpose.setDescription(loanPurposeView.getDescription());
             }
         }
-        return new LoanPurposeView();
+        return returnLoanPurpose;
     }
 
     private DisbursementTypeView getDisbursementTypeById(int id) {
         if (disbursementTypeViewList == null || disbursementTypeViewList.isEmpty() || id == 0) {
             return new DisbursementTypeView();
         }
-
+        DisbursementTypeView returnDisbursementType = new DisbursementTypeView();
         for (DisbursementTypeView disbursementTypeView : disbursementTypeViewList) {
             if (disbursementTypeView.getId() == id) {
-                return disbursementTypeView;
+                returnDisbursementType.setId(disbursementTypeView.getId());
+                returnDisbursementType.setDisbursement(disbursementTypeView.getDisbursement());
             }
         }
-        return new DisbursementTypeView();
+        return returnDisbursementType;
     }
 
     private CustomerInfoView getByIdFromGuarantorList(long id) {
