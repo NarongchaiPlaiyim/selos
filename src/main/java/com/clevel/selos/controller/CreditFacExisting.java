@@ -19,6 +19,7 @@ import com.clevel.selos.transform.BankAccountStatusTransform;
 import com.clevel.selos.transform.ProductTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -423,13 +424,11 @@ public class CreditFacExisting implements Serializable {
 
     public void onChangeCreditType(){
         int id = existingCreditDetailView.getExistCreditTypeView().getId();
-        showSplitLine = false;
-        if(id == 9){
-            showSplitLine = true;
-        }
         if ((existingCreditDetailView.getExistProductProgramView().getId() != 0) && (existingCreditDetailView.getExistCreditTypeView().getId() != 0)) {
             ProductProgram productProgram = productProgramDAO.findById(existingCreditDetailView.getExistProductProgramView().getId());
             CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
+
+            showSplitLine = Util.isTrue(creditType.getCanSplit());
 
             if(productProgram != null && creditType != null){
                 PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType,productProgram);
