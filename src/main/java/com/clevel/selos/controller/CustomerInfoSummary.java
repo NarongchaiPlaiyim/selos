@@ -72,22 +72,25 @@ public class CustomerInfoSummary implements Serializable {
     public CustomerInfoSummary(){
     }
 
-    @PostConstruct
-    public void onCreation() {
+    public void preRender(){
+        log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         }else{
-            log.info("preRender ::: workCaseId is null.");
+            log.debug("onCreation ::: workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
-                return;
             }catch (Exception ex){
                 log.error("Exception :: {}",ex);
             }
         }
+    }
 
+    @PostConstruct
+    public void onCreation() {
+        log.debug("onCreation");
         customerEntityList = customerEntityDAO.findAll();
         customerInfoSummaryView = new CustomerInfoSummaryView();
 

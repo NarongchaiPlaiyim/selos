@@ -83,9 +83,9 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
     public ExecutiveSummary() {
     }
 
-    @PostConstruct
-    public void onCreation() {
-        log.info("onCreation.");
+
+    public void preRender(){
+        log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCaseId") != null){
@@ -94,12 +94,15 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
             log.debug("onCreation ::: workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
-                return;
             }catch (Exception ex){
                 log.error("Exception :: {}",ex);
             }
         }
+    }
 
+    @PostConstruct
+    public void onCreation() {
+        log.info("onCreation.");
         reasonList = new ArrayList<Reason>();
         authorizationDOAList = authorizationDOADAO.findAll();
 
