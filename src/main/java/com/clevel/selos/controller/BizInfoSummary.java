@@ -55,17 +55,12 @@ public class BizInfoSummary implements Serializable {
     private List<SubDistrict> subDistrictList;
     private List<Country> countryList;
     private List<ReferredExperience> referredExperienceList;
-    private Province province;
-    private District district;
-    private SubDistrict subDistrict;
-    private Country country;
     private boolean fromDB;
     private boolean readonlyInterview;
     //private User user;
     private Date currentDate;
     private String currentDateDDMMYY;
 
-    private ReferredExperience referredExperience;
     private String sumIncomeAmountDis;
     private String incomeAmountDis;
     private BigDecimal sumIncomeAmount;
@@ -186,22 +181,7 @@ public class BizInfoSummary implements Serializable {
             fromDB = false;
             bizInfoSummaryView = new BizInfoSummaryView();
 
-            province = new Province();
-            district = new District();
-            subDistrict = new SubDistrict();
-            country = new Country();
-            country.setId(211);
-            referredExperience = new ReferredExperience();
-
-            district.setProvince(province);
-            subDistrict.setDistrict(district);
-            subDistrict.setProvince(province);
-            bizInfoSummaryView.setProvince(province);
-            bizInfoSummaryView.setDistrict(district);
-            bizInfoSummaryView.setSubDistrict(subDistrict);
-            bizInfoSummaryView.setReferredExperience(referredExperience);
-            bizInfoSummaryView.setCountry(country);
-
+            bizInfoSummaryView.getCountry().setId(211);
             bizInfoSummaryView.setSumIncomeAmount(BigDecimal.ZERO);
             bizInfoSummaryView.setSumIncomePercent(BigDecimal.ZERO);
             bizInfoSummaryView.setSumWeightAR(BigDecimal.ZERO);

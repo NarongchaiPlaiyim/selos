@@ -338,8 +338,6 @@ public class BizInfoSummaryTransform extends Transform {
 
         bizInfoSummaryView.setNoOfEmployee(bizInfoSummary.getNoOfEmployee());
 
-        bizInfoSummaryView.setSubDistrict(bizInfoSummary.getSubDistrict());
-
         bizInfoSummaryView.setSumIncomeAmount(bizInfoSummary.getSumIncomeAmount());
         bizInfoSummaryView.setSumIncomePercent(bizInfoSummary.getSumIncomePercent());
         bizInfoSummaryView.setSumWeightAR(bizInfoSummary.getSumWeightAR());
