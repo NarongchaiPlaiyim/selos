@@ -12,21 +12,14 @@ import java.util.Date;
 
 public class ApprovalHistoryView implements Serializable {
     private long id;
-    private String action;
-    private UserView actionBy;
-    private String comment;
-    private Date approveDate;
+    private StepView stepView;
+    private UserView userView;
+    private Date submitDate;
+    private String comments;
     private DecisionType uwDecision;
+    private int isSubmit;
 
     public ApprovalHistoryView() {
-        reset();
-    }
-
-    public void reset() {
-        this.action = "";
-        this.approveDate = DateTime.now().toDate();
-        this.comment = "";
-        this.uwDecision = DecisionType.NO_DECISION;
     }
 
     public long getId() {
@@ -37,36 +30,36 @@ public class ApprovalHistoryView implements Serializable {
         this.id = id;
     }
 
-    public String getAction() {
-        return action;
+    public StepView getStepView() {
+        return stepView;
     }
 
-    public void setAction(String action) {
-        this.action = action;
+    public void setStepView(StepView stepView) {
+        this.stepView = stepView;
     }
 
-    public UserView getActionBy() {
-        return actionBy;
+    public UserView getUserView() {
+        return userView;
     }
 
-    public void setActionBy(UserView actionBy) {
-        this.actionBy = actionBy;
+    public void setUserView(UserView userView) {
+        this.userView = userView;
     }
 
-    public String getComment() {
-        return comment;
+    public Date getSubmitDate() {
+        return submitDate;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setSubmitDate(Date submitDate) {
+        this.submitDate = submitDate;
     }
 
-    public Date getApproveDate() {
-        return approveDate;
+    public String getComments() {
+        return comments;
     }
 
-    public void setApproveDate(Date approveDate) {
-        this.approveDate = approveDate;
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 
     public DecisionType getUwDecision() {
@@ -77,15 +70,24 @@ public class ApprovalHistoryView implements Serializable {
         this.uwDecision = uwDecision;
     }
 
+    public int getSubmit() {
+        return isSubmit;
+    }
+
+    public void setSubmit(int submit) {
+        isSubmit = submit;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("action", action)
-                .append("actionBy", actionBy)
-                .append("comment", comment)
-                .append("approveDate", approveDate)
+                .append("stepView", stepView)
+                .append("userView", userView)
+                .append("submitDate", submitDate)
+                .append("comments", comments)
                 .append("uwDecision", uwDecision)
+                .append("isSubmit", isSubmit)
                 .toString();
     }
 }

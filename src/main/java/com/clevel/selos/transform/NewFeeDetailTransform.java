@@ -19,7 +19,6 @@ public class NewFeeDetailTransform extends Transform {
 
     @Inject
     public NewFeeDetailTransform() {
-
     }
 
     public List<NewFeeDetail> transformToModel(List<NewFeeDetailView> newFeeDetailViewList, NewCreditFacility creditFacilityPropose, User user) {
