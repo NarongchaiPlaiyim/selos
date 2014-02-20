@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 
 import com.clevel.selos.dao.master.BankBranchDAO;
+import com.clevel.selos.dao.master.MortgageTypeDAO;
 import com.clevel.selos.dao.master.UserZoneDAO;
 import com.clevel.selos.dao.working.AgreementInfoDAO;
 import com.clevel.selos.dao.working.GuarantorInfoDAO;
@@ -25,10 +26,12 @@ import com.clevel.selos.dao.working.MortgageInfoCreditDAO;
 import com.clevel.selos.dao.working.MortgageInfoDAO;
 import com.clevel.selos.dao.working.MortgageSummaryDAO;
 import com.clevel.selos.dao.working.NewCollateralSubDAO;
+import com.clevel.selos.dao.working.NewGuarantorDetailDAO;
 import com.clevel.selos.dao.working.PledgeInfoDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.AttorneyRelationType;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.BankBranch;
 import com.clevel.selos.model.db.master.MortgageType;
@@ -49,6 +52,7 @@ import com.clevel.selos.model.db.working.NewCollateralSub;
 import com.clevel.selos.model.db.working.NewCollateralSubMortgage;
 import com.clevel.selos.model.db.working.NewCollateralSubOwner;
 import com.clevel.selos.model.db.working.NewCollateralSubRelated;
+import com.clevel.selos.model.db.working.NewGuarantorDetail;
 import com.clevel.selos.model.db.working.PledgeInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.GuarantorInfoView;
@@ -234,6 +238,7 @@ public class MortgageSummaryControl extends BusinessControl {
 
     	_processMortgageGroup(collateralMap,mortgageGroup,joinMortgageList,referredGroup,
     			user,workCase);
+    	_processGuarantorData(user,workCase);
     	
     	//Loading mortgage summary
     	MortgageSummary mortgage = null;
@@ -569,6 +574,57 @@ public class MortgageSummaryControl extends BusinessControl {
     		mortgageInfoCollSubDAO.deleteByMortgageInfoId(id);
     		mortgageInfoCollOwnerDAO.deleteByMortgageInfoId(id);
     		mortgageInfoCreditDAO.deleteByMortgageInfoId(id);
+    		mortgageInfoDAO.delete(info);
     	}
+    }
+    @Inject private MortgageTypeDAO mortgageTypeDAO;
+    @Inject private NewGuarantorDetailDAO newGuarantorDetailDAO;
+    private void _processGuarantorData(User user,WorkCase workCase) {
+    	List<MortgageType> mortgageTypes = mortgageTypeDAO.findMortgageTypeForGuarantor();
+    	MortgageType type1 = null;
+    	MortgageType type2 = null;
+    	if (mortgageTypes != null && !mortgageTypes.isEmpty()) {
+    		type1 = mortgageTypes.get(0);
+    		if (mortgageTypes.size() > 1)
+    			type2 = mortgageTypes.get(1);
+    	}
+    	List<NewGuarantorDetail> newGuarantors = newGuarantorDetailDAO.findGuarantorByProposeType(workCase.getId(), ProposeType.A);
+    	List<GuarantorInfo> guarantorInfos = guarantorInfoDAO.findAllByWorkCaseId(workCase.getId());
+    	
+    	HashMap<Long,GuarantorInfo> guarantorMap = new HashMap<Long, GuarantorInfo>();
+    	for (GuarantorInfo info : guarantorInfos) {
+    		guarantorMap.put(info.getNewGuarantorDetail().getId(), info);
+    	}
+    	
+    	for (NewGuarantorDetail newGuarantor : newGuarantors) {
+    		MortgageType type = null;
+    		BigDecimal amount = newGuarantor.getTotalLimitGuaranteeAmount();
+    		if (amount != null && amount.compareTo(BigDecimal.ZERO) > 0) {
+    			type = type1;
+    		} else {
+    			type = type2;
+    		}
+    		
+    		GuarantorInfo guarantorInfo = guarantorMap.get(newGuarantor.getId());
+    		if (guarantorInfo == null) {
+    			guarantorInfo = guarantorInfoTransform.createGuaratorInfo(user, workCase);
+    			guarantorInfo.setNewGuarantorDetail(newGuarantor);
+    			guarantorInfo.setGuarantorType(type);
+    			guarantorInfoDAO.save(guarantorInfo);
+    		} else {
+    			guarantorMap.remove(newGuarantor.getId());
+    			
+    			guarantorInfo.setModifyBy(user);
+    			guarantorInfo.setModifyDate(new Date());
+    			guarantorInfo.setGuarantorType(type);
+    			guarantorInfoDAO.persist(guarantorInfo);
+    		}
+    	}
+    	
+    	//Clean up
+    	for (Object key : guarantorMap.keySet()) {
+    		guarantorInfoDAO.delete(guarantorMap.get(key));
+    	}
+    	
     }
 }
