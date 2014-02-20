@@ -111,12 +111,16 @@
                                                     <tr>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList)  : '1'}">
+                                                                fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList) :
+                                                                not empty borrowerCredit.existingSplitLineDetailViewList and fn:length(borrowerCredit.existingSplitLineDetailViewList) gt 0 ?
+                                                                fn:length(borrowerCredit.existingSplitLineDetailViewList)+1 : '1'}">
                                                             #{borrowerCredit.no}
                                                         </td>
                                                         <td class="left  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList) : '1'}">
+                                                                fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList) :
+                                                                not empty borrowerCredit.existingSplitLineDetailViewList and fn:length(borrowerCredit.existingSplitLineDetailViewList) gt 0 ?
+                                                                fn:length(borrowerCredit.existingSplitLineDetailViewList)+1 : '1'}">
                                                             #{borrowerCredit.accountName} <br/>
                                                             Acc No.: #{borrowerCredit.accountNumber} Suf. #{borrowerCredit.accountSuf}<br/>
                                                             Acc Status: #{borrowerCredit.existAccountStatus.description}
@@ -179,7 +183,9 @@
                                                         </td>
                                                         <td class=" top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList)  : '1'}">
+                                                                        fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList) :
+                                                                        not empty borrowerCredit.existingSplitLineDetailViewList and fn:length(borrowerCredit.existingSplitLineDetailViewList) gt 0 ?
+                                                                        fn:length(borrowerCredit.existingSplitLineDetailViewList)+1 : '1'}">
                                                             <p:commandButton icon="ui-icon-pencil" rendered="#{borrowerCredit.existingCreditFrom==1}"
                                                                              action="#{creditFacExisting.onEditCommercialCredit()}"
                                                                              process="@this"
@@ -695,12 +701,16 @@
                                                                 <tr>
                                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                         rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList)  : '1'}">
+                                                                            fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList) :
+                                                                            not empty relatedCredit.existingSplitLineDetailViewList and fn:length(relatedCredit.existingSplitLineDetailViewList) gt 0 ?
+                                                                            fn:length(relatedCredit.existingSplitLineDetailViewList)+1 : '1'}">
                                                                         #{relatedCredit.no}
                                                                     </td>
                                                                     <td class="left  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                         rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList) : '1'}">
+                                                                            fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList) :
+                                                                            not empty relatedCredit.existingSplitLineDetailViewList and fn:length(relatedCredit.existingSplitLineDetailViewList) gt 0 ?
+                                                                            fn:length(relatedCredit.existingSplitLineDetailViewList)+1 : '1'}">
                                                                         #{relatedCredit.accountName} <br/>
                                                                         Acc No.: #{relatedCredit.accountNumber} Suff. #{relatedCredit.accountSuf}<br/>
                                                                         Acc Status: #{relatedCredit.existAccountStatus.description}
@@ -763,7 +773,9 @@
                                                                     </td>
                                                                     <td class=" top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                         rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList)  : '1'}">
+                                                                            fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList) :
+                                                                            not empty relatedCredit.existingSplitLineDetailViewList and fn:length(relatedCredit.existingSplitLineDetailViewList) gt 0 ?
+                                                                            fn:length(relatedCredit.existingSplitLineDetailViewList)+1 : '1'}">
                                                                         <p:commandButton icon="ui-icon-pencil" rendered="#{relatedCredit.existingCreditFrom==1}"
                                                                                          action="#{creditFacExisting.onEditCommercialCredit()}"
                                                                                          process="@this"
@@ -772,7 +784,7 @@
                                                                             <f:setPropertyActionListener value="related"  target="#{creditFacExisting.typeOfList}" />
                                                                             <f:setPropertyActionListener value="#{relatedCredit}"
                                                                                                          target="#{creditFacExisting.selectCreditDetail}"/>
-                                                                            <f:setPropertyActionListener value="#{rowIndex}"
+                                                                            <f:setPropertyActionListener value="#{i.index}"
                                                                                                          target="#{creditFacExisting.rowIndex}"/>
                                                                         </p:commandButton>
 

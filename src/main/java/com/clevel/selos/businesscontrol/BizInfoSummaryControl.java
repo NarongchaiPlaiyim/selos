@@ -164,8 +164,9 @@ public class BizInfoSummaryControl extends BusinessControl {
         } else {
             bizInfoSummary.setCirculationAmount(BigDecimal.ZERO);
         }
-        //todo:cal new
-
+        BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryTransform.transformToView(bizInfoSummary);
+        BizInfoSummaryView bizSumView = calSummaryTable(bizInfoSummaryView);
+        bizInfoSummary = bizInfoSummaryTransform.transformToModel(bizSumView);
 
         //for set sum income amount
         BigDecimal income;
@@ -213,5 +214,70 @@ public class BizInfoSummaryControl extends BusinessControl {
             }
             bizInfoDetailDAO.persist(bizInfoDetailList);
         }
+    }
+
+    public BizInfoSummaryView calSummaryTable(BizInfoSummaryView bizInfoSummaryView){
+        log.info("calSummaryTable begin");
+        BigDecimal sumIncomeAmount = BigDecimal.ZERO ;
+        BigDecimal productCostPercent = BigDecimal.ZERO ;
+        BigDecimal operatingExpenseAmount = BigDecimal.ZERO ;
+        BigDecimal profitMarginAmount;
+        BigDecimal profitMarginPercent;
+        BigDecimal operatingExpensePercent;
+        BigDecimal earningsBeforeTaxAmount;
+        BigDecimal earningsBeforeTaxPercent;
+        BigDecimal reduceInterestAmount;
+        BigDecimal reduceTaxAmount;
+        BigDecimal reduceInterestPercent;
+        BigDecimal reduceTaxPercent;
+        BigDecimal netMarginAmount;
+        BigDecimal netMarginPercent;
+        BigDecimal hundred = new BigDecimal(100);
+
+        if(!Util.isNull(bizInfoSummaryView.getCirculationAmount())){
+            sumIncomeAmount = bizInfoSummaryView.getCirculationAmount();
+        }
+
+        if(!Util.isNull(bizInfoSummaryView.getProductionCostsPercentage())){
+            productCostPercent = bizInfoSummaryView.getProductionCostsPercentage();
+        }
+
+        if(!Util.isNull(bizInfoSummaryView.getOperatingExpenseAmount())){
+            operatingExpenseAmount = bizInfoSummaryView.getOperatingExpenseAmount();
+        }
+
+        profitMarginPercent = Util.subtract(hundred,productCostPercent);
+        profitMarginAmount = Util.divide(Util.multiply(sumIncomeAmount,profitMarginPercent),hundred);
+
+        bizInfoSummaryView.setProductionCostsAmount(Util.divide(Util.multiply(sumIncomeAmount,productCostPercent),100));
+        bizInfoSummaryView.setProfitMarginPercentage(profitMarginPercent);
+        bizInfoSummaryView.setProfitMarginAmount(profitMarginAmount);
+
+        operatingExpensePercent = Util.divide(Util.multiply(operatingExpenseAmount,hundred),sumIncomeAmount);
+        bizInfoSummaryView.setOperatingExpensePercentage(operatingExpensePercent);
+
+        earningsBeforeTaxAmount = Util.subtract(profitMarginAmount,operatingExpenseAmount);
+        earningsBeforeTaxPercent = Util.subtract(profitMarginPercent,operatingExpensePercent);
+
+        bizInfoSummaryView.setEarningsBeforeTaxAmount(earningsBeforeTaxAmount);
+        bizInfoSummaryView.setEarningsBeforeTaxPercentage(earningsBeforeTaxPercent);
+
+        reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount();
+        reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount();
+
+        reduceInterestPercent = Util.divide(Util.multiply(reduceInterestAmount,hundred),sumIncomeAmount);
+        reduceTaxPercent = Util.divide(Util.multiply(reduceTaxAmount,hundred),sumIncomeAmount);
+
+        bizInfoSummaryView.setReduceInterestPercentage(reduceInterestPercent);
+        bizInfoSummaryView.setReduceTaxPercentage(reduceTaxPercent);
+
+        netMarginAmount = Util.subtract(Util.subtract(earningsBeforeTaxAmount,reduceInterestAmount),reduceTaxAmount);
+        netMarginPercent = Util.subtract(Util.subtract(earningsBeforeTaxPercent,reduceInterestPercent),reduceTaxPercent);
+
+        bizInfoSummaryView.setNetMarginAmount(netMarginAmount);
+        bizInfoSummaryView.setNetMarginPercentage(netMarginPercent);
+
+        log.info("calSummaryTable end - bizInfoSummaryView : {}",bizInfoSummaryView);
+        return bizInfoSummaryView;
     }
 }
