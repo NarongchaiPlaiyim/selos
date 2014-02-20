@@ -219,16 +219,15 @@ public class BizInfoSummaryControl extends BusinessControl {
     public BizInfoSummaryView calSummaryTable(BizInfoSummaryView bizInfoSummaryView){
         log.info("calSummaryTable begin");
         BigDecimal sumIncomeAmount = BigDecimal.ZERO ;
-        BigDecimal productCostAmount;
         BigDecimal productCostPercent = BigDecimal.ZERO ;
+        BigDecimal operatingExpenseAmount = BigDecimal.ZERO ;
         BigDecimal profitMarginAmount;
         BigDecimal profitMarginPercent;
-        BigDecimal operatingExpenseAmount = BigDecimal.ZERO ;
         BigDecimal operatingExpensePercent;
         BigDecimal earningsBeforeTaxAmount;
         BigDecimal earningsBeforeTaxPercent;
-        BigDecimal reduceInterestAmount = BigDecimal.ZERO ;
-        BigDecimal reduceTaxAmount = BigDecimal.ZERO ;
+        BigDecimal reduceInterestAmount;
+        BigDecimal reduceTaxAmount;
         BigDecimal reduceInterestPercent;
         BigDecimal reduceTaxPercent;
         BigDecimal netMarginAmount;
@@ -243,23 +242,18 @@ public class BizInfoSummaryControl extends BusinessControl {
             productCostPercent = bizInfoSummaryView.getProductionCostsPercentage();
         }
 
-        productCostAmount = Util.divide(Util.multiply(sumIncomeAmount,productCostPercent),100);
-        bizInfoSummaryView.setProductionCostsAmount(productCostAmount);
-        profitMarginPercent = Util.subtract(hundred,productCostPercent);
-        profitMarginAmount = Util.divide(Util.multiply(sumIncomeAmount,profitMarginPercent),hundred);
-        bizInfoSummaryView.setProfitMarginPercentage(profitMarginPercent);
-        bizInfoSummaryView.setProfitMarginAmount(profitMarginAmount);
-
         if(!Util.isNull(bizInfoSummaryView.getOperatingExpenseAmount())){
             operatingExpenseAmount = bizInfoSummaryView.getOperatingExpenseAmount();
         }
 
-        if(operatingExpenseAmount.compareTo(profitMarginAmount) > 0){
-            bizInfoSummaryView.setOperatingExpenseAmount(BigDecimal.ZERO);
-            operatingExpenseAmount = BigDecimal.ZERO;
-        }
+        profitMarginPercent = Util.subtract(hundred,productCostPercent);
+        profitMarginAmount = Util.divide(Util.multiply(sumIncomeAmount,profitMarginPercent),hundred);
 
-        operatingExpensePercent = Util.multiply(Util.divide(operatingExpenseAmount,sumIncomeAmount),hundred);
+        bizInfoSummaryView.setProductionCostsAmount(Util.divide(Util.multiply(sumIncomeAmount,productCostPercent),100));
+        bizInfoSummaryView.setProfitMarginPercentage(profitMarginPercent);
+        bizInfoSummaryView.setProfitMarginAmount(profitMarginAmount);
+
+        operatingExpensePercent = Util.divide(Util.multiply(operatingExpenseAmount,hundred),sumIncomeAmount);
         bizInfoSummaryView.setOperatingExpensePercentage(operatingExpensePercent);
 
         earningsBeforeTaxAmount = Util.subtract(profitMarginAmount,operatingExpenseAmount);
@@ -268,34 +262,11 @@ public class BizInfoSummaryControl extends BusinessControl {
         bizInfoSummaryView.setEarningsBeforeTaxAmount(earningsBeforeTaxAmount);
         bizInfoSummaryView.setEarningsBeforeTaxPercentage(earningsBeforeTaxPercent);
 
-        if(!Util.isNull(bizInfoSummaryView.getReduceInterestAmount())){
-            reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount();
-        }
-
-        if(!Util.isNull(bizInfoSummaryView.getReduceTaxAmount())){
-            reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount();
-        }
-
-        if(reduceInterestAmount.compareTo(earningsBeforeTaxAmount) > 0){
-            bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            reduceInterestAmount = BigDecimal.ZERO;
-        }
-
-        if( reduceTaxAmount.compareTo(earningsBeforeTaxAmount) > 0){
-            bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
-            reduceTaxAmount = BigDecimal.ZERO;
-        }
-
-        if( ((Util.add(reduceInterestAmount,reduceTaxAmount)).compareTo(earningsBeforeTaxAmount) > 0)){
-            bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
-            bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-        }
-
         reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount();
         reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount();
 
-        reduceInterestPercent = Util.multiply(Util.divide(reduceInterestAmount,sumIncomeAmount),hundred);
-        reduceTaxPercent = Util.multiply(Util.divide(reduceTaxAmount,sumIncomeAmount),hundred);
+        reduceInterestPercent = Util.divide(Util.multiply(reduceInterestAmount,hundred),sumIncomeAmount);
+        reduceTaxPercent = Util.divide(Util.multiply(reduceTaxAmount,hundred),sumIncomeAmount);
 
         bizInfoSummaryView.setReduceInterestPercentage(reduceInterestPercent);
         bizInfoSummaryView.setReduceTaxPercentage(reduceTaxPercent);

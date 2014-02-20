@@ -360,6 +360,7 @@ public class BizInfoSummary implements Serializable {
 
         if(operatingExpenseAmount.compareTo(profitMarginAmount) > 0){
             bizInfoSummaryView.setOperatingExpenseAmount(BigDecimal.ZERO);
+            onCalSummaryTable();
             messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
             message = msg.get("app.bizInfoSummary.message.validate.overOperatingExpense.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -367,6 +368,7 @@ public class BizInfoSummary implements Serializable {
 
         if(reduceInterestAmount.compareTo(earningsBeforeTaxAmount) > 0){
             bizInfoSummaryView.setReduceInterestAmount(BigDecimal.ZERO);
+            onCalSummaryTable();
             messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
             message = msg.get("app.bizInfoSummary.message.validate.overInterest.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -374,14 +376,16 @@ public class BizInfoSummary implements Serializable {
 
         if(reduceTaxAmount.compareTo(earningsBeforeTaxAmount) > 0){
             bizInfoSummaryView.setReduceTaxAmount(BigDecimal.ZERO);
+            onCalSummaryTable();
             messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
             message = msg.get("app.bizInfoSummary.message.validate.overTax.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
-        if( ((Util.add(reduceInterestAmount,reduceTaxAmount)).compareTo(earningsBeforeTaxAmount) > 0)){
+        if((Util.add(reduceInterestAmount,reduceTaxAmount)).compareTo(earningsBeforeTaxAmount) > 0){
             bizInfoSummaryView.setReduceTaxAmount(BigDecimal.ZERO);
             bizInfoSummaryView.setReduceInterestAmount(BigDecimal.ZERO);
+            onCalSummaryTable();
             messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
             message = msg.get("app.bizInfoSummary.message.validate.overInterestAndTax.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
