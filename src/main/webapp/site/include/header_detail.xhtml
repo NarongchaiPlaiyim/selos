@@ -46,8 +46,7 @@
                              action="#{prescreenMaker.onCheckPreScreen}" disabled="true"/>
             <!--Request Appraisal-->
             <p:commandButton id="btnRequestAppraisal" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
-                             update=":frmMain:msgBoxBaseMessagePanel"
-                             action="#{baseController.onRequestAppraisal()}"
+                             onclick="confirmRequestAppraisal.show()" type="button"
                              rendered="#{baseController.manageButton.requestAppraisalButton}">
                 <p:confirmDialog header="Confirmation" message="Are you want to Request Appraisa?" styleClass="left"
                                  icon="ui-icon-alert"
@@ -110,40 +109,41 @@
                     <p:commandButton value="No" type="button" onclick="confirmCloseSaleCA.hide()"
                                      styleClass="ui-confirmdialog-no"/>
                 </p:confirmDialog>
-            <!--&lt;!&ndash; Appraisal flow : Cancel Appraisal Request &ndash;&gt;
-            <p:commandButton id="btnCancelAppraisal" value="Cancel Appraisal Request" styleClass="blueButton" title="">
+            <!-- Appraisal flow : Cancel Appraisal Request -->
+            <p:commandButton id="btnCancelAppraisal" value="Cancel Appraisal Request" styleClass="blueButton" title=""
+                             rendered="#{baseController.manageButton.cancelAppraisalButton}">
                 <p:confirmDialog header="Confirmation" message="Are you sure to Cancel Appraisal Request?" styleClass="left"
                                  icon="ui-icon-alert"
                                  widgetVar="confirmCancelAppraisalRequest" global="false" showEffect="fade"
-                                 rendered="#{baseController.manageButton.closeSaleButton}">
-                    <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+                                 rendered="#{baseController.manageButton.cancelAppraisalButton}">
+                    <!--<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
                                      update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"
                                      actionListener="#{prescreenMaker.onCloseSale()}"
                                      process="@this" oncomplete="confirmCloseSaleCA.hide()"/>
                     <p:commandButton value="No" type="button" onclick="confirmCloseSaleCA.hide()"
-                                     styleClass="ui-confirmdialog-no"/>
+                                     styleClass="ui-confirmdialog-no"/>-->
                 </p:confirmDialog>
             </p:commandButton>
-            &lt;!&ndash; Appraisal flow : Request for Appraisal ( Send to AAD Admin )&ndash;&gt;
-            <p:commandButton id="btnSubmitRequestAppraisal" value="Request for Appraisal" styleClass="blueButton" title="">
+            <!-- Appraisal flow : Return to BDM -->
+            <p:commandButton id="btnReturnAppraisalBDM" value="Return to BDM" styleClass="blueButton" title=""
+                             rendered="#{baseController.manageButton.returnBDMButton}">
 
             </p:commandButton>
-            &lt;!&ndash; Appraisal flow : Return to BDM &ndash;&gt;
-            <p:commandButton id="btnReturnAppraisalBDM" value="Return to BDM" styleClass="blueButton" title="">
+            <!-- Appraisal flow : Submit to AAD Committee-->
+            <p:commandButton id="btnSubmitAADCommittee" value="Submit to AAD Committee" styleClass="blueButton" title=""
+                             rendered="#{baseController.manageButton.submitAADCommitteeButton}" >
 
             </p:commandButton>
-            &lt;!&ndash; Appraisal flow : Submit to AAD Committee&ndash;&gt;
-            <p:commandButton id="btnSubmitAADCommittee" value="Submit to AAD Committee" styleClass="blueButton" title="" >
+            <!-- Appraisal flow : Return to AAD Admin-->
+            <p:commandButton id="btnSubmitAADAdmin" value="Return to AAD Admin" styleClass="blueButton" title=""
+                             rendered="#{baseController.manageButton.returnAADAdminButton}">
 
             </p:commandButton>
-            &lt;!&ndash; Appraisal flow : Return to AAD Admin&ndash;&gt;
-            <p:commandButton id="btnSubmitAADAdmin" value="Return to AAD Admin" styleClass="blueButton" title="">
+            <!-- Appraisal flow : Submit to UW2-->
+            <p:commandButton id="btnSubmitUW2" value="Submit" styleClass="blueButton" title=""
+                             rendered="#{baseController.manageButton.submitRequestAppraisalButton}">
 
             </p:commandButton>
-            &lt;!&ndash; Appraisal flow : Submit to UW2&ndash;&gt;
-            <p:commandButton id="btnSubmitUW2" value="Submit" styleClass="blueButton" title="">
-
-            </p:commandButton>-->
         </div>
         <div class="clear"></div>
         <div id="header_information">

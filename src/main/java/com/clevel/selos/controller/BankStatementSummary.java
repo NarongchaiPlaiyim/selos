@@ -273,7 +273,7 @@ public class BankStatementSummary implements Serializable {
             // update related parts
             dbrControl.updateValueOfDBR(workCaseId);
             exSummaryControl.calForBankStmtSummary(workCaseId);
-            bizInfoSummaryControl.calGrdTotalIncomeByBankStatement(workCaseId);
+            bizInfoSummaryControl.calByBankStatement(workCaseId);
 
             messageHeader = "Save Bank Statement Summary Success.";
             message = "Save Bank Statement Summary data success.";
@@ -312,7 +312,7 @@ public class BankStatementSummary implements Serializable {
             // update related parts
             dbrControl.updateValueOfDBR(workCaseId);
             exSummaryControl.calForBankStmtSummary(workCaseId);
-            bizInfoSummaryControl.calGrdTotalIncomeByBankStatement(workCaseId);
+            bizInfoSummaryControl.calByBankStatement(workCaseId);
 
             messageHeader = "Delete Bank Statement Success.";
             message = "Delete Bank Statement success.";
