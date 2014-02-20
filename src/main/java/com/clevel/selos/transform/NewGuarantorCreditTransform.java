@@ -58,10 +58,9 @@ public class NewGuarantorCreditTransform extends Transform {
                     }
                 }
 
+                newGuarantorCredit.setNewGuarantorDetail(newGuarantorDetail);
+                newGuarantorCreditList.add(newGuarantorCredit);
             }
-
-            newGuarantorCredit.setNewGuarantorDetail(newGuarantorDetail);
-            newGuarantorCreditList.add(newGuarantorCredit);
         }
 
         return newGuarantorCreditList;

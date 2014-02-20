@@ -80,6 +80,22 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.submitZM(workCaseId, queueName, zmUserId, ActionCode.SUBMIT_TO_ZM.getVal());
     }
 
+    public void requestAppraisalBDM(long workCasePreScreenId, long workCaseId) throws Exception{
+        //update request appraisal flag
+        if(workCasePreScreenId != 0){
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            workCasePrescreen.setRequestAppraisal(1);
+            workCasePrescreenDAO.persist(workCasePrescreen);
+        } else if(workCaseId != 0) {
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setRequestAppraisal(1);
+            workCaseDAO.persist(workCase);
+        } else {
+            log.error("exception while Request Appraisal (BDM), can not find workcase or workcaseprescreen.");
+            throw new Exception("exception while Request Appraisal, can not find case.");
+        }
+    }
+
     public void requestAppraisal(long workCasePreScreenId, long workCaseId) throws Exception{
         try{
             WorkCaseAppraisal workCaseAppraisal = createWorkCaseAppraisal(workCasePreScreenId, workCaseId);

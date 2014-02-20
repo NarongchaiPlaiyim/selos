@@ -34,10 +34,7 @@ public class NewCollateralCreditTransform extends Transform {
 
         for (ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViewList) {
             log.debug("Start... transformToModelForCollateral : proposeCreditDetailView : {}", proposeCreditDetailView);
-
             newCollateralRelCredit = new NewCollateralCredit();
-
-            //newCollateralRelCredit = newCollateralRelationDAO.findById(Long.parseLong(Integer.toString(proposeCreditDetailView.getId())));
             newCollateralRelCredit.setModifyDate(DateTime.now().toDate());
             newCollateralRelCredit.setModifyBy(user);
             newCollateralRelCredit.setCreateDate(DateTime.now().toDate());
