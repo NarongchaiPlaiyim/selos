@@ -8,512 +8,511 @@
         xmlns:clv="http://clevel.com/ui">
 
 <h:head>
-    <title>Appointment</title>
+    <title>#{msg.get("app.name")} - Appraisal Review Request &amp; Appointment</title>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
     <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
     <style type="text/css">
-        .ui-selectoneradio{
-            border-spacing: 0!important;
+        .radio_table {
+            border-width: 0!important;
             border-style: none!important;
-            border-color: white;
+            border-color: transparent!important;
+        }
+        .radio_table td {
+            border-width: 0!important;
+            border-style: none!important;
+            border-color: transparent!important;
         }
     </style>
 </h:head>
 <h:body>
-<p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
-<h:form id="frmMain">
-    <div id="main_container">
-        <!-- Start Header Logo -->
-        <ui:include src="include/header_logo.xhtml" />
-        <!-- End Header Logo -->
-        <!-- Start Header Detail -->
-        <ui:include src="include/header_detail.xhtml" />
-        <!-- End Header Detail -->
-        <!-- Start Menu -->
-        <ui:include src="include/menubar.xhtml" />
-        <!-- End Menu -->
-        <div id="content_container">
-            <div id="content_name"><p:outputLabel value="#{msg.get('app.appraisalRequest.header')}"/></div>
-            <div id="content">
-                <table id="table_content" border="0" style="width: 100%;" class="content_table_form">
-                    <tr>
-                        <td colspan="5" class="right" style="padding-right: 1%;">
-                            Last update by <p:outputLabel value="#{appraisalAppointment.appraisalView.modifyBy.userName}"/> , <p:outputLabel value="#{appraisalAppointment.appraisalView.modifyDate}"/>
-                            <a style="cursor: pointer;" href="#">[View Track Change]</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="4"><div class="separate"><!-- --></div></td>
-                    </tr>
-
-                    <tr>
-                        <td style="width: 150px; min-width: 150px; max-width: 150px;"/>
-                        <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
-                        <td style="width: 150px; min-width: 150px; max-width: 150px;"/>
-                        <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
-                    </tr>
-
-                    <tr>
-                        <td colspan="4" class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDetail')}" style="font-size: 15px"/> </td>
-                    </tr>
-                    <tr>
-                        <td class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalType')}"/></td>
-                        <td colspan="3">
-                            <p:selectOneRadio id="bizPermissionRadio" value="#{appraisalAppointment.appraisalView.appraisalType}" >
-                                <f:selectItem itemLabel="Internal" itemValue="0" />
-                                <f:selectItem itemLabel="External" itemValue="1" />
-                            </p:selectOneRadio>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalCompany')}"/>
-                        </td>
-                        <td>
-                            <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalAppointment.appraisalView.appraisalCompany.id}"
-                                             required="#{not empty param[saveButton.clientId]}">
-                                <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                <f:selectItems value="#{appraisalAppointment.appraisalCompanyList}"
-                                               var="appraisalCompany"
-                                               itemLabel="#{appraisalCompany.name}"
-                                               itemValue="#{appraisalCompany.id}"/>
-                            </p:selectOneMenu>
-                        </td>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDivision')}"/>
-                        </td>
-                        <td>
-                            <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalAppointment.appraisalView.appraisalDivision.id}"  required="#{not empty param[saveButton.clientId]}">
-                                <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                <f:selectItems value="#{appraisalAppointment.appraisalDivisionList}"
-                                               var="appraisalDivision"
-                                               itemLabel="#{appraisalDivision.name}"
-                                               itemValue="#{appraisalDivision.id}"/>
-                            </p:selectOneMenu>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalName')}"/>
-                        </td>
-                        <td>
-                            <p:inputText value="#{appraisalAppointment.appraisalView.appraisalName}" required="#{not empty param[saveButton.clientId]}" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.receivedTaskDate')}"/>
-                        </td>
-                        <td>
-                            <clv:BECalendar id="receivedTaskDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
-                                            value="#{appraisalAppointment.appraisalView.receivedTaskDate}"
-                                            pattern="dd/MM/yyyy"
-                                            defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
-                                            mindate="#{appraisalAppointment.currentDateDDMMYY}"
-                                            yearRange="1950:2100">
-                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                            </clv:BECalendar>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.locationOfProperty')}"/>
-                        </td>
-                        <td>
-                            <p:selectOneMenu styleClass="largest" id="locationOfPropertyId" size="1" value="#{appraisalAppointment.appraisalView.locationOfProperty.id}"  required="#{not empty param[saveButton.clientId]}">
-                                <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                <f:selectItems value="#{appraisalAppointment.locationPropertyList}"
-                                               var="locationProperty"
-                                               itemLabel="#{locationProperty.name}"
-                                               itemValue="#{locationProperty.id}"/>
-                            </p:selectOneMenu>
-                        </td>
-                        <td class="title" style="min-width: 200px;width: 200px;max-width: 200px;">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.provinceOfProperty')}"/>
-                        </td>
-                        <td>
-                            <p:selectOneMenu styleClass="largest" id="provinceOfPropertyId" size="1" value="#{appraisalAppointment.appraisalView.provinceOfProperty.code}"  required="#{not empty param[saveButton.clientId]}">
-                                <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                <f:selectItems value="#{appraisalAppointment.provinceList}"
-                                               var="province"
-                                               itemLabel="#{province.name}"
-                                               itemValue="#{province.code}"/>
-                            </p:selectOneMenu>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDate')}"/>
-                        </td>
-                        <td>
-                            <clv:BECalendar id="appraisalDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
-                                            value="#{appraisalAppointment.appraisalView.appraisalDate}"
-                                            pattern="dd/MM/yyyy"
-                                            defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
-                                            mindate="#{appraisalAppointment.currentDateDDMMYY}"
-                                            yearRange="1950:2100">
-                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                                <p:ajax event="dateSelect" process=":frmMain" listener="#{appraisalAppointment.onChangeAppraisalDate()}" update=":frmMain:dueDate,:frmMain:appointmentDate" />
-                            </clv:BECalendar>
-                        </td>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.dueDate')}"/>
-                        </td>
-                        <td>
-                            <clv:BECalendar id="dueDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
-                                            value="#{appraisalAppointment.appraisalView.dueDate}"
-                                            pattern="dd/MM/yyyy"
-                                            defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
-                                            mindate="#{appraisalAppointment.currentDateDDMMYY}"
-                                            yearRange="1950:2100">
-                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                            </clv:BECalendar>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.AADAdminRemark')}"/>
-                        </td>
-                        <td colspan="3">
-                            <p:inputTextarea cols="69" rows="4" value="#{appraisalAppointment.appraisalView.AADAdminRemark}" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="6"><p:spacer width="5px"/> </td>
-                    </tr>
-                    <tr>
-                        <td colspan="6"><div class="separate"><!-- --></div></td>
-                    </tr>
-                    <tr>
-                        <td colspan="6"><p:spacer width="5px"/> </td>
-                    </tr>
-                    <tr>
-                        <td colspan="6" class="title"><p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.header')}" style="font-size: 15px"/> </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="6">
-                            <p:dataTable tableStyleClass="center"
-                                         id="appraisalDetailViewTable"
-                                         var="appraisalDetailViewItem"
-                                         value="#{appraisalAppointment.appraisalDetailViewList}"
-                                         paginator="false"
-                                         rowIndexVar="rowIndex" >
-                                <p:columnGroup type="header">
-                                    <p:row>
-                                        <p:column style="min-width: 50px;width: 50px;max-width: 50px" rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.no')}"/>
-                                        <p:column style="min-width: 150px;width: 150px;max-width: 150px" rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.titleDeed')}" />
-                                        <p:column style="min-width: 450px;width: 450px;max-width: 450px" rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.purpose')}"/>
-                                        <p:column style="min-width: 400px;width: 400px;max-width: 400px" colspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.docDetail')}"/>
-                                        <p:column style="min-width: 80px;width: 80px;max-width: 80px" rowspan="2" headerText=""/>
-                                    </p:row>
-                                    <p:row>
-                                        <p:column style="min-width: 200px;width: 200px;max-width: 200px"
-                                                  headerText="#{msg.get('app.appraisal.appraisalDetail.table.characteristic')}"/>
-                                        <p:column style="min-width: 200px;width: 200px;max-width: 200px"
-                                                  headerText="#{msg.get('app.appraisal.appraisalDetail.table.numberOfDocuments')}"/>
-                                    </p:row>
-                                </p:columnGroup>
-                                <p:column  styleClass="center" >
-                                    <p:outputLabel value="#{rowIndex+1}"/>
-                                </p:column>
-                                <p:column styleClass="left" >
-                                    <p:outputLabel value="#{appraisalDetailViewItem.titleDeed}" />
-                                </p:column>
-                                <p:column styleClass="left">
-                                    <p:outputLabel value="#{appraisalDetailViewItem.purposeReviewAppraisalLabel}"/>
-                                </p:column>
-                                <p:column styleClass="left">
-                                    <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailViewItem.characteristic}" disabled="true">
-                                        <f:selectItem id="characteristicRadio0" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
-                                        <f:selectItem id="characteristicRadio1" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
+    <f:event type="preRenderView" listener="#{appraisalAppointment.preRender()}" />
+    <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+        <h:form id="frmMain">
+        <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="include/header_logo.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="include/header_detail.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="include/menubar.xhtml" />
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name"><p:outputLabel value="#{msg.get('app.appraisalRequest.header')}"/></div>
+                <div id="content">
+                    <div id="content_info">
+                        <div id="content_trackchange">[ View Track Change ]</div>
+                        <div id="content_lastupdate">Last update by <h:outputText value="#{appraisalAppointment.appraisalView.modifyBy.userName}"/>, <h:outputText value="#{appraisalAppointment.appraisalView.modifyDate}"><f:convertDateTime pattern="dd MMMM yyyy HH:mm:ss" locale="th_TH" /></h:outputText></div>
+                    </div>
+                    <div id="content_form">
+                        <table class="content_table_form">
+                            <tr>
+                                <td colspan="4" class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDetail')}" style="font-size: 15px"/> </td>
+                            </tr>
+                            <tr>
+                                <td class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalType')}"/></td>
+                                <td colspan="3">
+                                    <p:selectOneRadio id="bizPermissionRadio" value="#{appraisalAppointment.appraisalView.appraisalType}" >
+                                        <f:selectItem itemLabel="Internal" itemValue="0" />
+                                        <f:selectItem itemLabel="External" itemValue="1" />
                                     </p:selectOneRadio>
-                                </p:column>
-                                <p:column styleClass="right">
-                                    <p:outputLabel value="#{appraisalDetailViewItem.numberOfDocuments}"/>
-                                </p:column>
-                                <p:column styleClass="center" >
-                                    <p:column headerText="" styleClass="center">
-                                        <p:commandButton icon="ui-icon-pencil"
-                                                         process="@this"
-                                                         action="#{appraisalAppointment.onEditAppraisalDetailView()}"
-                                                         update=":appraisalDetailDlgForm"
-                                                         oncomplete="appraisalDetailViewDlg.show();">
-                                            <f:setPropertyActionListener value="#{appraisalDetailViewItem}"
-                                                                         target="#{appraisalAppointment.appraisalDetailViewSelected}"/>
-                                            <f:setPropertyActionListener value="#{rowIndex}"
-                                                                         target="#{appraisalAppointment.rowIndex}"/>
-                                        </p:commandButton>
-                                        <p:commandButton title="Remove" process="@this"
-                                                         icon="ui-icon-trash"
-                                                         oncomplete="confirmDeleteAppraisalDetailViewDlg.show()" >
-                                            <f:setPropertyActionListener value="#{appraisalDetailViewItem}"
-                                                                         target="#{appraisalAppointment.appraisalDetailViewSelected}"/>
-                                            <f:setPropertyActionListener value="#{rowIndex}"
-                                                                         target="#{appraisalAppointment.rowIndex}"/>
-                                        </p:commandButton>
-                                    </p:column>
-                                </p:column>
-                            </p:dataTable>
-                        </td>
-                    </tr>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalCompany')}"/>
+                                </td>
+                                <td>
+                                    <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalAppointment.appraisalView.appraisalCompany.id}"
+                                                     required="#{not empty param[saveButton.clientId]}">
+                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                        <f:selectItems value="#{appraisalAppointment.appraisalCompanyList}"
+                                                       var="appraisalCompany"
+                                                       itemLabel="#{appraisalCompany.name}"
+                                                       itemValue="#{appraisalCompany.id}"/>
+                                    </p:selectOneMenu>
+                                </td>
+                                <td class="title">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDivision')}"/>
+                                </td>
+                                <td>
+                                    <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalAppointment.appraisalView.appraisalDivision.id}"  required="#{not empty param[saveButton.clientId]}">
+                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                        <f:selectItems value="#{appraisalAppointment.appraisalDivisionList}"
+                                                       var="appraisalDivision"
+                                                       itemLabel="#{appraisalDivision.name}"
+                                                       itemValue="#{appraisalDivision.id}"/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalName')}"/>
+                                </td>
+                                <td>
+                                    <p:inputText value="#{appraisalAppointment.appraisalView.appraisalName}" required="#{not empty param[saveButton.clientId]}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.label.receivedTaskDate')}"/>
+                                </td>
+                                <td>
+                                    <clv:BECalendar id="receivedTaskDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
+                                                    value="#{appraisalAppointment.appraisalView.receivedTaskDate}"
+                                                    pattern="dd/MM/yyyy"
+                                                    defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
+                                                    mindate="#{appraisalAppointment.currentDateDDMMYY}"
+                                                    yearRange="1950:2100">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                    </clv:BECalendar>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.label.locationOfProperty')}"/>
+                                </td>
+                                <td>
+                                    <p:selectOneMenu styleClass="largest" id="locationOfPropertyId" size="1" value="#{appraisalAppointment.appraisalView.locationOfProperty.id}"  required="#{not empty param[saveButton.clientId]}">
+                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                        <f:selectItems value="#{appraisalAppointment.locationPropertyList}"
+                                                       var="locationProperty"
+                                                       itemLabel="#{locationProperty.name}"
+                                                       itemValue="#{locationProperty.id}"/>
+                                    </p:selectOneMenu>
+                                </td>
+                                <td class="title" style="min-width: 200px;width: 200px;max-width: 200px;">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.label.provinceOfProperty')}"/>
+                                </td>
+                                <td>
+                                    <p:selectOneMenu styleClass="largest" id="provinceOfPropertyId" size="1" value="#{appraisalAppointment.appraisalView.provinceOfProperty.code}"  required="#{not empty param[saveButton.clientId]}">
+                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                        <f:selectItems value="#{appraisalAppointment.provinceList}"
+                                                       var="province"
+                                                       itemLabel="#{province.name}"
+                                                       itemValue="#{province.code}"/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDate')}"/>
+                                </td>
+                                <td>
+                                    <clv:BECalendar id="appraisalDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
+                                                    value="#{appraisalAppointment.appraisalView.appraisalDate}"
+                                                    pattern="dd/MM/yyyy"
+                                                    defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
+                                                    mindate="#{appraisalAppointment.currentDateDDMMYY}"
+                                                    yearRange="1950:2100">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                        <p:ajax event="dateSelect" process=":frmMain" listener="#{appraisalAppointment.onChangeAppraisalDate()}" update=":frmMain:dueDate,:frmMain:appointmentDate" />
+                                    </clv:BECalendar>
+                                </td>
+                                <td class="title">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.label.dueDate')}"/>
+                                </td>
+                                <td>
+                                    <clv:BECalendar id="dueDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
+                                                    value="#{appraisalAppointment.appraisalView.dueDate}"
+                                                    pattern="dd/MM/yyyy"
+                                                    defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
+                                                    mindate="#{appraisalAppointment.currentDateDDMMYY}"
+                                                    yearRange="1950:2100">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                    </clv:BECalendar>
 
-                    <tr>
-                        <td colspan="6"><p:spacer/></td>
-                    </tr>
-                    <tr>
-                        <td colspan="6" class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.contactHeader')}" style="font-size: 15px"/> </td>
-                    </tr>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.label.AADAdminRemark')}"/>
+                                </td>
+                                <td colspan="3">
+                                    <p:inputTextarea cols="69" rows="4" value="#{appraisalAppointment.appraisalView.AADAdminRemark}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6"><p:spacer width="5px"/> </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6"><div class="separate"><!-- --></div></td>
+                            </tr>
+                            <tr>
+                                <td colspan="6"><p:spacer width="5px"/> </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" class="title"><p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.header')}" style="font-size: 15px"/> </td>
+                            </tr>
 
-                    <tr>
-                        <td colspan="6" style="width:100%">
-                            <table class="table_content" border="0" style="padding: 0%" >
-                                <tr>
-                                    <th style="width: 50px;" />
-                                    <th style="width: 250px;" >
-                                        <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.table.customerName')}"/>
-                                    </th>
-                                    <th style="width: 250px;" >
-                                        <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.table.contactNo')}"/>
-                                    </th>
-                                </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <p:dataTable tableStyleClass="center"
+                                                 id="appraisalDetailViewTable"
+                                                 var="appraisalDetailViewItem"
+                                                 value="#{appraisalAppointment.appraisalDetailViewList}"
+                                                 paginator="false"
+                                                 rowIndexVar="rowIndex" >
+                                        <p:columnGroup type="header">
+                                            <p:row>
+                                                <p:column style="min-width: 50px;width: 50px;max-width: 50px" rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.no')}"/>
+                                                <p:column style="min-width: 150px;width: 150px;max-width: 150px" rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.titleDeed')}" />
+                                                <p:column style="min-width: 450px;width: 450px;max-width: 450px" rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.purpose')}"/>
+                                                <p:column style="min-width: 400px;width: 400px;max-width: 400px" colspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.docDetail')}"/>
+                                                <p:column style="min-width: 80px;width: 80px;max-width: 80px" rowspan="2" headerText=""/>
+                                            </p:row>
+                                            <p:row>
+                                                <p:column style="min-width: 200px;width: 200px;max-width: 200px"
+                                                          headerText="#{msg.get('app.appraisal.appraisalDetail.table.characteristic')}"/>
+                                                <p:column style="min-width: 200px;width: 200px;max-width: 200px"
+                                                          headerText="#{msg.get('app.appraisal.appraisalDetail.table.numberOfDocuments')}"/>
+                                            </p:row>
+                                        </p:columnGroup>
+                                        <p:column  styleClass="center" >
+                                            <p:outputLabel value="#{rowIndex+1}"/>
+                                        </p:column>
+                                        <p:column styleClass="left" >
+                                            <p:outputLabel value="#{appraisalDetailViewItem.titleDeed}" />
+                                        </p:column>
+                                        <p:column styleClass="left">
+                                            <p:outputLabel value="#{appraisalDetailViewItem.purposeReviewAppraisalLabel}"/>
+                                        </p:column>
+                                        <p:column styleClass="left">
+                                            <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailViewItem.characteristic}" disabled="true" styleClass="radio_table">
+                                                <f:selectItem id="characteristicRadio0" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
+                                                <f:selectItem id="characteristicRadio1" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
+                                            </p:selectOneRadio>
+                                        </p:column>
+                                        <p:column styleClass="right">
+                                            <p:outputLabel value="#{appraisalDetailViewItem.numberOfDocuments}"/>
+                                        </p:column>
+                                        <p:column styleClass="center" >
+                                            <p:column headerText="" styleClass="center">
+                                                <p:commandButton icon="ui-icon-pencil"
+                                                                 process="@this"
+                                                                 action="#{appraisalAppointment.onEditAppraisalDetailView()}"
+                                                                 update=":appraisalDetailDlgForm"
+                                                                 oncomplete="appraisalDetailViewDlg.show();">
+                                                    <f:setPropertyActionListener value="#{appraisalDetailViewItem}"
+                                                                                 target="#{appraisalAppointment.appraisalDetailViewSelected}"/>
+                                                    <f:setPropertyActionListener value="#{rowIndex}"
+                                                                                 target="#{appraisalAppointment.rowIndex}"/>
+                                                </p:commandButton>
+                                                <p:commandButton title="Remove" process="@this"
+                                                                 icon="ui-icon-trash"
+                                                                 oncomplete="confirmDeleteAppraisalDetailViewDlg.show()" >
+                                                    <f:setPropertyActionListener value="#{appraisalDetailViewItem}"
+                                                                                 target="#{appraisalAppointment.appraisalDetailViewSelected}"/>
+                                                    <f:setPropertyActionListener value="#{rowIndex}"
+                                                                                 target="#{appraisalAppointment.rowIndex}"/>
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:column>
+                                    </p:dataTable>
+                                </td>
+                            </tr>
 
-                                <tr id="contactId">
-                                    <td class="center">
-                                        <p:outputLabel value="1"/>
-                                    </td>
-                                    <td class="center">
-                                        <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.customerName1}" readonly="true" />
-                                    </td>
-                                    <td class="center">
-                                        <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.contactNo1}"
-                                                     mask="099-999-9999"  readonly="true" />
-                                    </td>
-                                </tr>
-                                <h:panelGroup rendered="#{appraisalAppointment.contactFlag2}">
-                                    <tr>
-                                        <td class="center">
-                                            <p:outputLabel value="2"/>
-                                        </td>
-                                        <td class="center">
-                                            <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.customerName2}" readonly="true"/>
-                                        </td>
-                                        <td class="center">
-                                            <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.contactNo2}"
-                                                         mask="099-999-9999" readonly="true" />
-                                        </td>
-                                    </tr>
-                                </h:panelGroup>
-                                <h:panelGroup rendered="#{appraisalAppointment.contactFlag3}">
-                                    <tr>
-                                        <td class="center">
-                                            <p:outputLabel value="3"/>
-                                        </td>
-                                        <td class="center">
-                                            <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.customerName3}" readonly="true"/>
-                                        </td>
-                                        <td class="center">
-                                            <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.contactNo3}"
-                                                         mask="099-999-9999" readonly="true" />
-                                        </td>
-                                    </tr>
-                                </h:panelGroup>
-                            </table>
-                        </td>
-                    </tr>
+                            <tr>
+                                <td colspan="6"><p:spacer/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.contactHeader')}" style="font-size: 15px"/> </td>
+                            </tr>
 
-                    <tr>
-                        <td colspan="6"><p:spacer/></td>
-                    </tr>
-                    <tr>
-                        <td colspan="6"><div class="separate"><!-- --></div></td>
-                    </tr>
-                    <tr>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.appointmentDate')}"/>
-                        </td>
-                        <td>
-                            <clv:BECalendar id="appointmentDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
-                                            value="#{appraisalAppointment.appraisalView.appointmentDate}"
-                                            pattern="dd/MM/yyyy"
-                                            defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
-                                            mindate="#{appraisalAppointment.currentDateDDMMYY}"
-                                            yearRange="1950:2100">
-                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                            </clv:BECalendar>
-                        </td>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.appointmentCusName')}"/>
-                        </td>
-                        <td >
-                            <p:inputText value="#{appraisalAppointment.appraisalView.appointmentCusName}"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.cancelAppointment')}"/>
-                        </td>
-                        <td>
-                            <p:selectOneMenu value="#{appraisalAppointment.appraisalView.cancelAppointment}">
-                                <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                <f:selectItem itemLabel="#{msg.get('app.appraisal.label.cancelAppointment.select.postpone')}" itemValue="0"/>
-                                <f:selectItem itemLabel="#{msg.get('app.appraisal.label.cancelAppointment.select.abort')}"    itemValue="1" />
-                            </p:selectOneMenu>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.appointmentRemark')}"/>
-                        </td>
-                        <td colspan="3">
-                            <p:inputTextarea cols="69" rows="4" value="#{appraisalAppointment.appraisalView.appointmentRemark}" />
-                        </td>
-                    </tr>
-                    <!--<tr>-->
-                        <!--<td class="left">-->
+                            <tr>
+                                <td colspan="6" style="width:100%">
+                                    <table class="table_content" border="0" style="padding: 0%" >
+                                        <tr>
+                                            <th style="width: 50px;" />
+                                            <th style="width: 250px;" >
+                                                <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.table.customerName')}"/>
+                                            </th>
+                                            <th style="width: 250px;" >
+                                                <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.table.contactNo')}"/>
+                                            </th>
+                                        </tr>
+
+                                        <tr id="contactId">
+                                            <td class="center">
+                                                <p:outputLabel value="1"/>
+                                            </td>
+                                            <td class="center">
+                                                <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.customerName1}" readonly="true" />
+                                            </td>
+                                            <td class="center">
+                                                <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.contactNo1}"
+                                                               mask="099-999-9999"  readonly="true" />
+                                            </td>
+                                        </tr>
+                                        <h:panelGroup rendered="#{appraisalAppointment.contactFlag2}">
+                                            <tr>
+                                                <td class="center">
+                                                    <p:outputLabel value="2"/>
+                                                </td>
+                                                <td class="center">
+                                                    <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.customerName2}" readonly="true"/>
+                                                </td>
+                                                <td class="center">
+                                                    <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.contactNo2}"
+                                                                   mask="099-999-9999" readonly="true" />
+                                                </td>
+                                            </tr>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{appraisalAppointment.contactFlag3}">
+                                            <tr>
+                                                <td class="center">
+                                                    <p:outputLabel value="3"/>
+                                                </td>
+                                                <td class="center">
+                                                    <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.customerName3}" readonly="true"/>
+                                                </td>
+                                                <td class="center">
+                                                    <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.contactNo3}"
+                                                                   mask="099-999-9999" readonly="true" />
+                                                </td>
+                                            </tr>
+                                        </h:panelGroup>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="6"><p:spacer/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="6"><div class="separate"><!-- --></div></td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.label.appointmentDate')}"/>
+                                </td>
+                                <td>
+                                    <clv:BECalendar id="appointmentDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
+                                                    value="#{appraisalAppointment.appraisalView.appointmentDate}"
+                                                    pattern="dd/MM/yyyy"
+                                                    defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
+                                                    mindate="#{appraisalAppointment.currentDateDDMMYY}"
+                                                    yearRange="1950:2100">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                    </clv:BECalendar>
+                                </td>
+                                <td class="title">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.label.appointmentCusName')}"/>
+                                </td>
+                                <td >
+                                    <p:inputText value="#{appraisalAppointment.appraisalView.appointmentCusName}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.label.cancelAppointment')}"/>
+                                </td>
+                                <td>
+                                    <p:selectOneMenu value="#{appraisalAppointment.appraisalView.cancelAppointment}">
+                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                        <f:selectItem itemLabel="#{msg.get('app.appraisal.label.cancelAppointment.select.postpone')}" itemValue="0"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.appraisal.label.cancelAppointment.select.abort')}"    itemValue="1" />
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.label.appointmentRemark')}"/>
+                                </td>
+                                <td colspan="3">
+                                    <p:inputTextarea cols="69" rows="4" value="#{appraisalAppointment.appraisalView.appointmentRemark}" />
+                                </td>
+                            </tr>
+                            <!--<tr>-->
+                            <!--<td class="left">-->
                             <!--<p:spacer width="50" height="20"></p:spacer>-->
                             <!--<p:commandButton id="btnAddContactRecordDetail"-->
-                                             <!--value="#{msg.get('app.button.add')}"-->
-                                             <!--styleClass="smaller"-->
-                                             <!--style="width: 150px"-->
-                                             <!--process="@this"-->
-                                             <!--actionListener="#{appraisalAppointment.onAddContactRecordDetailView()}"-->
-                                             <!--update=":contactRecordViewDlgForm"-->
-                                             <!--oncomplete="contactRecordDetailViewDlg.show()"/>-->
-                        <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                        <!--<td colspan="6">-->
+                            <!--value="#{msg.get('app.button.add')}"-->
+                            <!--styleClass="smaller"-->
+                            <!--style="width: 150px"-->
+                            <!--process="@this"-->
+                            <!--actionListener="#{appraisalAppointment.onAddContactRecordDetailView()}"-->
+                            <!--update=":contactRecordViewDlgForm"-->
+                            <!--oncomplete="contactRecordDetailViewDlg.show()"/>-->
+                            <!--</td>-->
+                            <!--</tr>-->
+                            <!--<tr>-->
+                            <!--<td colspan="6">-->
                             <!--<p:dataTable tableStyleClass="center"-->
-                                         <!--id="contactRecordDetailViewTable"-->
-                                         <!--var="contactRecordDetailView"-->
-                                         <!--value="#{appraisalAppointment.contactRecordDetailViewList}"-->
-                                         <!--paginator="false"-->
-                                         <!--rowKey="#{contactRecordDetailView.id}"-->
-                                         <!--rowIndexVar="rowIndex" >-->
-                                <!--<p:columnGroup type="header">-->
-                                    <!--<p:row>-->
-                                        <!--<p:column colspan="7"-->
-                                                  <!--headerText="#{msg.get('app.contactRecordDetail.table.header')}" />-->
-                                    <!--</p:row>-->
-                                    <!--<p:row>-->
-                                        <!--<p:column style="min-width:50px;width:50px;max-width:50px;"-->
-                                                <!--headerText=""/>-->
-                                        <!--<p:column style="min-width:200px;width:200px;max-width:200px;"-->
-                                                <!--headerText="#{msg.get('app.contactRecordDetail.table.callingDate')}"/>-->
-                                        <!--<p:column style="min-width:150px;width:150px;max-width:150px;"-->
-                                                <!--headerText="#{msg.get('app.contactRecordDetail.table.callingResult')}"/>-->
-                                        <!--<p:column  style="min-width:200px;width:200px;max-width:200px;"-->
-                                                <!--headerText="#{msg.get('app.contactRecordDetail.table.nextCallingDate')}"/>-->
-                                        <!--<p:column  style="min-width:150px;width:150px;max-width:150px;"-->
-                                                <!--headerText="#{msg.get('app.contactRecordDetail.table.reason')}" />-->
-                                        <!--<p:column style="min-width:270px;width:270px;max-width:270px;"-->
-                                                <!--headerText="#{msg.get('app.contactRecordDetail.table.remark')}"/>-->
-                                        <!--<p:column style="min-width:80px;width:80px;max-width:80px;"-->
-                                                <!--headerText=""/>-->
-                                    <!--</p:row>-->
-                                <!--</p:columnGroup>-->
+                            <!--id="contactRecordDetailViewTable"-->
+                            <!--var="contactRecordDetailView"-->
+                            <!--value="#{appraisalAppointment.contactRecordDetailViewList}"-->
+                            <!--paginator="false"-->
+                            <!--rowKey="#{contactRecordDetailView.id}"-->
+                            <!--rowIndexVar="rowIndex" >-->
+                            <!--<p:columnGroup type="header">-->
+                            <!--<p:row>-->
+                            <!--<p:column colspan="7"-->
+                            <!--headerText="#{msg.get('app.contactRecordDetail.table.header')}" />-->
+                            <!--</p:row>-->
+                            <!--<p:row>-->
+                            <!--<p:column style="min-width:50px;width:50px;max-width:50px;"-->
+                            <!--headerText=""/>-->
+                            <!--<p:column style="min-width:200px;width:200px;max-width:200px;"-->
+                            <!--headerText="#{msg.get('app.contactRecordDetail.table.callingDate')}"/>-->
+                            <!--<p:column style="min-width:150px;width:150px;max-width:150px;"-->
+                            <!--headerText="#{msg.get('app.contactRecordDetail.table.callingResult')}"/>-->
+                            <!--<p:column  style="min-width:200px;width:200px;max-width:200px;"-->
+                            <!--headerText="#{msg.get('app.contactRecordDetail.table.nextCallingDate')}"/>-->
+                            <!--<p:column  style="min-width:150px;width:150px;max-width:150px;"-->
+                            <!--headerText="#{msg.get('app.contactRecordDetail.table.reason')}" />-->
+                            <!--<p:column style="min-width:270px;width:270px;max-width:270px;"-->
+                            <!--headerText="#{msg.get('app.contactRecordDetail.table.remark')}"/>-->
+                            <!--<p:column style="min-width:80px;width:80px;max-width:80px;"-->
+                            <!--headerText=""/>-->
+                            <!--</p:row>-->
+                            <!--</p:columnGroup>-->
 
-                                <!--<p:column headerText="" styleClass="center" >-->
-                                    <!--<p:outputLabel value="#{contactRecordDetailView.no}"/>-->
-                                <!--</p:column>-->
-                                <!--<p:column  styleClass="left" >-->
-                                    <!--<p:outputLabel value="#{contactRecordDetailView.callingDate}" >-->
-                                        <!--<f:convertDateTime pattern="dd/MM/yyyy HH:mm"  />-->
-                                    <!--</p:outputLabel>-->
-                                <!--</p:column>-->
-                                <!--<p:column styleClass="left" >-->
-                                    <!--<p:outputLabel value="#{contactRecordDetailView.callingResultStr}"/>-->
-                                <!--</p:column>-->
-                                <!--<p:column styleClass="left"  >-->
-                                    <!--<p:outputLabel value="#{contactRecordDetailView.nextCallingDate}">-->
-                                        <!--<f:convertDateTime pattern="dd/MM/yyyy HH:mm"  />-->
-                                    <!--</p:outputLabel>-->
-                                <!--</p:column>-->
-                                <!--<p:column styleClass="left">-->
-                                    <!--<p:outputLabel value="#{contactRecordDetailView.reasonStr}"/>-->
-                                <!--</p:column>-->
-                                <!--<p:column  styleClass="left">-->
-                                    <!--<p:outputLabel value="#{contactRecordDetailView.remark}"/>-->
-                                <!--</p:column>-->
-                                <!--<p:column headerText="" styleClass="center">-->
-                                    <!--<p:commandButton icon="ui-icon-pencil"-->
-                                                     <!--action="#{appraisalAppointment.onEditContactRecordDetailView()}"-->
-                                                     <!--update=":contactRecordViewDlgForm"-->
-                                                     <!--process=":frmMain:contactRecordDetailViewTable"-->
-                                                     <!--oncomplete="contactRecordDetailViewDlg.show();">-->
-                                        <!--<f:setPropertyActionListener value="#{contactRecordDetailView}"-->
-                                                                     <!--target="#{appraisalAppointment.selectContactRecordDetail}"/>-->
-                                        <!--<f:setPropertyActionListener value="#{rowIndex}"-->
-                                                                     <!--target="#{appraisalAppointment.rowIndex}"/>-->
-                                    <!--</p:commandButton>-->
-                                    <!--<p:commandButton title="Remove" process="@this"-->
-                                                     <!--icon="ui-icon-trash"-->
-                                                     <!--oncomplete="confirmDeleteContactRecordDetailViewDlg.show()" >-->
-                                        <!--<f:setPropertyActionListener value="#{contactRecordDetailView}"-->
-                                                                     <!--target="#{appraisalAppointment.selectContactRecordDetail}"/>-->
-                                        <!--<f:setPropertyActionListener value="#{rowIndex}"-->
-                                                                     <!--target="#{appraisalAppointment.rowIndex}"/>-->
-                                    <!--</p:commandButton>-->
-                                <!--</p:column>-->
+                            <!--<p:column headerText="" styleClass="center" >-->
+                            <!--<p:outputLabel value="#{contactRecordDetailView.no}"/>-->
+                            <!--</p:column>-->
+                            <!--<p:column  styleClass="left" >-->
+                            <!--<p:outputLabel value="#{contactRecordDetailView.callingDate}" >-->
+                            <!--<f:convertDateTime pattern="dd/MM/yyyy HH:mm"  />-->
+                            <!--</p:outputLabel>-->
+                            <!--</p:column>-->
+                            <!--<p:column styleClass="left" >-->
+                            <!--<p:outputLabel value="#{contactRecordDetailView.callingResultStr}"/>-->
+                            <!--</p:column>-->
+                            <!--<p:column styleClass="left"  >-->
+                            <!--<p:outputLabel value="#{contactRecordDetailView.nextCallingDate}">-->
+                            <!--<f:convertDateTime pattern="dd/MM/yyyy HH:mm"  />-->
+                            <!--</p:outputLabel>-->
+                            <!--</p:column>-->
+                            <!--<p:column styleClass="left">-->
+                            <!--<p:outputLabel value="#{contactRecordDetailView.reasonStr}"/>-->
+                            <!--</p:column>-->
+                            <!--<p:column  styleClass="left">-->
+                            <!--<p:outputLabel value="#{contactRecordDetailView.remark}"/>-->
+                            <!--</p:column>-->
+                            <!--<p:column headerText="" styleClass="center">-->
+                            <!--<p:commandButton icon="ui-icon-pencil"-->
+                            <!--action="#{appraisalAppointment.onEditContactRecordDetailView()}"-->
+                            <!--update=":contactRecordViewDlgForm"-->
+                            <!--process=":frmMain:contactRecordDetailViewTable"-->
+                            <!--oncomplete="contactRecordDetailViewDlg.show();">-->
+                            <!--<f:setPropertyActionListener value="#{contactRecordDetailView}"-->
+                            <!--target="#{appraisalAppointment.selectContactRecordDetail}"/>-->
+                            <!--<f:setPropertyActionListener value="#{rowIndex}"-->
+                            <!--target="#{appraisalAppointment.rowIndex}"/>-->
+                            <!--</p:commandButton>-->
+                            <!--<p:commandButton title="Remove" process="@this"-->
+                            <!--icon="ui-icon-trash"-->
+                            <!--oncomplete="confirmDeleteContactRecordDetailViewDlg.show()" >-->
+                            <!--<f:setPropertyActionListener value="#{contactRecordDetailView}"-->
+                            <!--target="#{appraisalAppointment.selectContactRecordDetail}"/>-->
+                            <!--<f:setPropertyActionListener value="#{rowIndex}"-->
+                            <!--target="#{appraisalAppointment.rowIndex}"/>-->
+                            <!--</p:commandButton>-->
+                            <!--</p:column>-->
                             <!--</p:dataTable>-->
-                        <!--</td>-->
-                    <!--</tr>-->
-                    <tr>
-                        <td colspan="6"><p:spacer width="5px" /></td>
-                    </tr>
-                    <tr>
-                        <td colspan="6"><div class="separate"><!-- --></div></td>
-                    </tr>
-                    <tr>
-                        <td colspan="6" class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.locationAppraisal')}" style="font-size: 15px"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="width: 150px;" class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.zoneLocation')}"/>
-                        </td>
-                        <td>
-                            <p:inputText value="#{appraisalAppointment.appraisalView.zoneLocation}" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="6"><p:spacer width="5px" /></td>
-                    </tr>
-                    <tr>
-                        <td colspan="6"><div class="separate"><!-- --></div></td>
-                    </tr>
-                    <tr>
-                        <td class="center" colspan="6">
-                            <p:commandButton id="btnSave"
-                                     value="#{msg.get('app.saveButton')}"
-                                     binding="#{saveButton}"
-                                     styleClass="medium"
-                                     process=":frmMain"
-                                     action="#{appraisalAppointment.onSaveAppraisalAppointment()}"
-                                     update=":frmMain, :msgBoxSystemMessagePanel"/>
+                            <!--</td>-->
+                            <!--</tr>-->
+                            <tr>
+                                <td colspan="6"><p:spacer width="5px" /></td>
+                            </tr>
+                            <tr>
+                                <td colspan="6"><div class="separate"><!-- --></div></td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" class="title">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.label.locationAppraisal')}" style="font-size: 15px"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 150px;" class="title">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.label.zoneLocation')}"/>
+                                </td>
+                                <td>
+                                    <p:inputText value="#{appraisalAppointment.appraisalView.zoneLocation}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6"><p:spacer width="5px" /></td>
+                            </tr>
+                            <tr>
+                                <td colspan="6"><div class="separate"><!-- --></div></td>
+                            </tr>
+                            <tr>
+                                <td class="center" colspan="6">
+                                    <p:commandButton id="btnSave"
+                                                     value="#{msg.get('app.saveButton')}"
+                                                     binding="#{saveButton}"
+                                                     styleClass="medium"
+                                                     process=":frmMain"
+                                                     action="#{appraisalAppointment.onSaveAppraisalAppointment()}"
+                                                     update=":frmMain, :msgBoxSystemMessagePanel"/>
 
-                            <p:commandButton value="#{msg.get('app.cancelButton')}"
-                                     id="btnCancel"
-                                     styleClass="medium"
-                                     process=":frmMain"
-                                     action="#{appraisalAppointment.onCancelAppraisalAppointment()}"
-                                     update=":frmMain"/>
-                        </td>
-                    </tr>
-                </table>
+                                    <p:commandButton value="#{msg.get('app.cancelButton')}"
+                                                     id="btnCancel"
+                                                     styleClass="medium"
+                                                     process=":frmMain"
+                                                     action="#{appraisalAppointment.onCancelAppraisalAppointment()}"
+                                                     update=":frmMain"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="bottom_line"><!-- --></div>
             </div>
-            <div class="bottom_line"><!-- --></div>
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="include/footer.xhtml" />
+            <!-- End Footer -->
         </div>
-        <div class="clear"></div>
-        <!-- Start Footer -->
-        <ui:include src="include/footer.xhtml" />
-        <!-- End Footer -->
-    </div>
-</h:form>
+    </h:form>
+    <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+        LOADING<br />
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </p:panel>
 <p:dialog id="appraisalDetailDialog" header="Appraisal Detail Information" widgetVar="appraisalDetailViewDlg" resizable="false"
           modal="true" width="420" height="220" >
@@ -588,11 +587,6 @@
                          oncomplete="msgBoxNoRequestMessageDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>
-
-<p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
-    LOADING<br />
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
 
 </h:body>
 </f:view>

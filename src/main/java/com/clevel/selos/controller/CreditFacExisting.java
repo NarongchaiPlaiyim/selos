@@ -570,8 +570,8 @@ public class CreditFacExisting implements Serializable {
                  existingCreditFacilityView.getBorrowerComExistingCredit().remove(existingCreditDetailViewDel);
              }else{
                  log.info("use > 0 ");
-                 messageHeader = "Error";
-                 message = "This credit is already selected in collateral !!!";
+                 messageHeader = msg.get("app.header.error");
+                 message = msg.get("app.credit.facility.message.err.credit.inused");
                  RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
              }
             onSetRowNoCreditDetail(existingCreditFacilityView.getBorrowerComExistingCredit());
@@ -591,8 +591,8 @@ public class CreditFacExisting implements Serializable {
                 existingCreditFacilityView.getRelatedComExistingCredit().remove(existingCreditDetailViewDel);
             }else{
                 log.info("use > 0 ");
-                messageHeader = "เกิดข้อผิดพลาด";
-                message = "มีการใช้งาน Credit Type Record นี้แล้ว";
+                messageHeader = msg.get("app.header.error");
+                message = msg.get("app.credit.facility.message.err.credit.inused");
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
             onSetRowNoCreditDetail(existingCreditFacilityView.getRelatedComExistingCredit());
@@ -1669,7 +1669,7 @@ public class CreditFacExisting implements Serializable {
 
     public void onSaveCreditFacExisting() {
 
-        log.info("onSaveCreditFacPropose ::: ModeForDB  {}");
+        log.info("onSaveCreditFacExisting ::: ModeForDB  {}");
         onSetInUsed();
         log.info("check seq  ::: inused ");
         for(int i = 0; i < existingCreditFacilityView.getBorrowerComExistingCredit().size(); i++) {
@@ -1683,18 +1683,18 @@ public class CreditFacExisting implements Serializable {
         try {
             creditFacExistingControl.onSaveExistingCreditFacility(existingCreditFacilityView ,workCaseId,user);
             messageHeader = msg.get("app.header.save.success");
-            message = msg.get("app.propose.response.save.success");
+            message = msg.get("app.credit.facility.message.save.success");
             //onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.propose.response.save.failed");
+            messageHeader = msg.get("app.credit.facility.message.save.failed");
 
             if (ex.getCause() != null) {
-                message = msg.get("app.propose.response.save.failed") + " cause : " + ex.getCause().toString();
+                message = msg.get("app.credit.facility.message.save.failed") + " cause : " + ex.getCause().toString();
             } else {
-                message = msg.get("app.propose.response.save.failed") + ex.getMessage();
+                message = msg.get("app.credit.facility.message.save.failed") + ex.getMessage();
             }
 
             //messageErr = true;
@@ -1709,7 +1709,16 @@ public class CreditFacExisting implements Serializable {
         if(customerInfoViews != null){
             customerInfoViewList = generateCustomerInfoList(customerInfoViews);
         }
+
+        clearExistingCreditFacilityView();
+
+        ExistingCreditFacilityView existingCreditFacilityViewTmp = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
         existingCreditFacilityView = existingCreditControl.refreshExistingCredit(customerInfoViewList);
+
+        if(existingCreditFacilityViewTmp!=null && existingCreditFacilityViewTmp.getId()!=0){
+            existingCreditFacilityView.setId(existingCreditFacilityViewTmp.getId());
+        }
+
         if(existingCreditFacilityView.getBorrowerComExistingCredit()!=null && existingCreditFacilityView.getBorrowerComExistingCredit().size()>0){
             for(ExistingCreditDetailView existingCreditDetailView1 : existingCreditFacilityView.getBorrowerComExistingCredit()) {
                 hashBorrower.put(existingCreditDetailView1.getNo(),0);
@@ -1721,6 +1730,10 @@ public class CreditFacExisting implements Serializable {
                 hashBorrower.put(existingCreditDetailView2.getNo(),0);
             }
         }
+
+        messageHeader = msg.get("app.header.information");
+        message = msg.get("app.credit.facility.message.success.refresh");
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
     public List<CustomerInfoView> generateCustomerInfoList(List<CustomerInfoView> customerInfoViews){
@@ -1738,6 +1751,54 @@ public class CreditFacExisting implements Serializable {
             }
         }
         return customerInfoList;
+    }
+
+    public void clearExistingCreditFacilityView(){
+        existingCreditDetailView = new ExistingCreditDetailView();
+        existProductProgramView = new ProductProgramView();
+        existCreditTypeView = new CreditTypeView();
+
+        existingCreditDetailView.setExistAccountStatus(new BankAccountStatus());
+        existingCreditDetailView.setExistProductProgramView(existProductProgramView);
+        existingCreditDetailView.setExistCreditTypeView(existCreditTypeView);
+        existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
+
+        existingSplitLineDetailView = new ExistingSplitLineDetailView();
+        productProgram = new ProductProgram();
+        existingSplitLineDetailView.setProductProgram(productProgram);
+
+        existingCollateralDetailView = new ExistingCollateralDetailView();
+        existingCollateralDetailView.setCollateralType(new CollateralType());
+        existingCollateralDetailView.setPotentialCollateral(new PotentialCollateral());
+        existingCollateralDetailView.setRelation(new Relation());
+        existingCollateralDetailView.setMortgageType(new MortgageType());
+        existingCollateralDetailView.setExistingCreditTypeDetailViewList(new ArrayList<ExistingCreditTypeDetailView>());
+
+        existingCreditTierDetailView = new ExistingCreditTierDetailView();
+        existingGuarantorDetailView = new ExistingGuarantorDetailView();
+        existingGuarantorDetailView.setGuarantorName(new CustomerInfoView());
+
+        existingCreditFacilityView =  new ExistingCreditFacilityView();
+        existingConditionDetailViewList = new ArrayList<ExistingConditionDetailView>();
+        existingCreditDetailViewList = new ArrayList<ExistingCreditDetailView>();
+        borrowerExistingCreditDetailViewList = new ArrayList<ExistingCreditDetailView>();
+        relatedExistingCreditDetailViewList = new ArrayList<ExistingCreditDetailView>();
+        borrowerExistingCollateralDetailViewList = new ArrayList<ExistingCollateralDetailView>() ;
+        relatedExistingCollateralDetailViewList  = new ArrayList<ExistingCollateralDetailView>() ;
+        collateralCreditDetailViewList = new ArrayList<ExistingCreditDetailView>();
+        borrowerExistingGuarantorDetailViewList = new ArrayList<ExistingGuarantorDetailView>();
+        existingGuarantorDetailView.setExistingCreditTypeDetailViewList(new ArrayList<ExistingCreditTypeDetailView>());
+
+        existingCreditFacilityView.setBorrowerComExistingCredit(borrowerExistingCreditDetailViewList);
+        existingCreditFacilityView.setBorrowerRetailExistingCredit(new ArrayList<ExistingCreditDetailView>());
+        existingCreditFacilityView.setBorrowerAppInRLOSCredit(new ArrayList<ExistingCreditDetailView>());
+        existingCreditFacilityView.setExistingConditionDetailViewList(existingConditionDetailViewList);
+        existingCreditFacilityView.setRelatedComExistingCredit(relatedExistingCreditDetailViewList);
+        existingCreditFacilityView.setRelatedRetailExistingCredit(new ArrayList<ExistingCreditDetailView>());
+        existingCreditFacilityView.setRelatedAppInRLOSCredit(new ArrayList<ExistingCreditDetailView>());
+        existingCreditFacilityView.setBorrowerCollateralList(borrowerExistingCollateralDetailViewList);
+        existingCreditFacilityView.setRelatedCollateralList(relatedExistingCollateralDetailViewList);
+        existingCreditFacilityView.setBorrowerGuarantorList(borrowerExistingGuarantorDetailViewList);
     }
 
 

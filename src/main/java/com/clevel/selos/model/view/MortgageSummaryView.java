@@ -89,4 +89,8 @@ public class MortgageSummaryView implements Serializable {
 	public void setUpdLocation(int updLocation) {
 		this.updLocation = updLocation;
 	}
+	
+	public boolean requiredCalculate() {
+		return id <= 0 || agreementId <=0;
+	}
 }

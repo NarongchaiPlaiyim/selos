@@ -257,7 +257,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             modeForDB = ModeForDB.ADD_DB;
             hashSeqCredit = new HashMap<String, String>();
 
-//            try {
+            try {
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
                 log.debug("onCreation ::: newCreditFacilityView : {}", newCreditFacilityView);
                 if (newCreditFacilityView != null) {
@@ -274,9 +274,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     }*/
                 }
 
-//            } catch (Exception ex) {
-//                log.error("Exception while loading [Credit Facility] page :: ", ex);
-//            }
+            } catch (Exception ex) {
+                log.error("Exception while loading [Credit Facility] page :: ", ex);
+            }
 
             log.debug("onCreation :: modeForDB :: {}", modeForDB);
 
@@ -533,12 +533,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 newCreditFacilityView.getNewCreditDetailViewList().get(a).setNewCreditTierDetailViewList(newCreditTierDetailViewList);
             }
         }
-//        for (NewCreditDetailView proposeCreditDetail : newCreditFacilityView.getNewCreditDetailViewList()) {
-//            if(proposeCreditDetail.getRequestType() == 2) { // 1 = change , 2 = new ( if 2 can't Retrieve Pricing Fee
-//                proposeCreditDetail.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
-//                log.info("proposeCreditDetail :: {}", proposeCreditDetail.getNewCreditTierDetailViewList());
-//            }
-//        }
+
     }
 
     public void calculateInstallment(NewCreditDetailView creditDetailView) {
@@ -781,7 +776,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             }
 
             complete = true;
-            hashSeqCredit.put(seq, 0);
+//            hashSeqCredit.put(seq, 0);
             seq++;
             log.info("seq++ of credit after add complete proposeCredit :: {}", seq);
 
@@ -832,27 +827,27 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onDeleteCreditInfo() {
         log.info("delete :: rowIndex :: {}", rowIndex);
-        int used;
-        for (int i = 0; i < hashSeqCredit.size(); i++) {
-            log.info("hashSeqCredit.get(i) in use   :  " + i + " is   " + hashSeqCredit.get(i).toString());
-        }
-        log.info("onDeleteCreditInfo ::: seq is : {} " + newCreditDetailSelected.getSeq());
-        log.info("onDeleteCreditInfo ::: use is : {} " + Integer.parseInt(hashSeqCredit.get(newCreditDetailSelected.getSeq()).toString()));
-
-        used = Integer.parseInt(hashSeqCredit.get(newCreditDetailSelected.getSeq()).toString());
-
-        log.info("before del use is  " + used);
-
-        if (used == 0) {
-            log.info("used ::: {} ", used);
+//        int used;
+//        for (int i = 0; i < hashSeqCredit.size(); i++) {
+//            log.info("hashSeqCredit.get(i) in use   :  " + i + " is   " + hashSeqCredit.get(i).toString());
+//        }
+//        log.info("onDeleteCreditInfo ::: seq is : {} " + newCreditDetailSelected.getSeq());
+//        log.info("onDeleteCreditInfo ::: use is : {} " + Integer.parseInt(hashSeqCredit.get(newCreditDetailSelected.getSeq()).toString()));
+//
+//        used = Integer.parseInt(hashSeqCredit.get(newCreditDetailSelected.getSeq()).toString());
+//
+//        log.info("before del use is  " + used);
+//
+//        if (used == 0) {
+//            log.info("used ::: {} ", used);
             newCreditFacilityView.getNewCreditDetailViewList().remove(rowIndex);
-        } else {
-            log.info("used::: {}", used);
-            messageHeader = msg.get("app.propose.exception");
-            message = msg.get("app.propose.error.delete.credit");
-            messageErr = true;
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        }
+//        } else {
+//            log.info("used::: {}", used);
+//            messageHeader = msg.get("app.propose.exception");
+//            message = msg.get("app.propose.error.delete.credit");
+//            messageErr = true;
+//            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//        }
 
     }
 
@@ -1251,15 +1246,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     // for sub collateral Owner  <List>
     public void onAddCollateralOwnerUW() {
-        log.debug("newCollateralSubView.getCollateralOwnerUWList() {}", newCollateralSubView.getCollateralOwnerUWList().size());
-//        if (newCollateralSubView.getCollateralOwnerUWList().size() > 0) {
-//            for (CustomerInfoView collateralUW : newCollateralSubView.getCollateralOwnerUWList()) {
-//                if (collateralUW.getId() == newCollateralSubView.getCollateralOwnerUW().getId()) {
-//                    messageHeader = msg.get("app.propose.exception");
-//                    message = msg.get("app.propose.desc.add.collateralUW");
-//                    messageErr = true;
-//                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-//                } else {
         log.debug("onAddCollateralOwnerUW() collateralOwnerUW.id: {}", newCollateralSubView.getCollateralOwnerUW().getId());
 
         if (newCollateralSubView.getCollateralOwnerUW() != null) {
@@ -1271,9 +1257,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             CustomerInfoView collateralOwnerAdd = customerInfoControl.getCustomerById(newCollateralSubView.getCollateralOwnerUW());
             newCollateralSubView.getCollateralOwnerUWList().add(collateralOwnerAdd);
         }
-//                }
-//            }
-//        }
 
     }
 
@@ -1285,13 +1268,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     // for sub MortgageType <List>
     public void onAddMortgageType() {
         log.debug("onAddMortgageType() mortgageType.id: {}", newCollateralSubView.getMortgageType().getId());
-//        for (MortgageType mortgage : newCollateralSubView.getMortgageList()) {
-//            if (mortgage.getId() == newCollateralSubView.getMortgageType().getId()) {
-//                messageHeader = msg.get("app.propose.exception");
-//                message = msg.get("app.propose.desc.add.mortgage");
-//                messageErr = true;
-//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-//            } else {
+
         if (newCollateralSubView.getMortgageType() != null) {
             if (newCollateralSubView.getMortgageType().getId() == 0) {
                 log.error("Can not add MortgageType because id = 0!");
@@ -1301,8 +1278,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             log.debug("onAddMortgageType :: {} ", newCollateralSubView.getMortgageType());
             newCollateralSubView.getMortgageList().add(mortgageType);
         }
-//            }
-//        }
     }
 
     public void onDeleteMortgageType(int row) {
@@ -1443,7 +1418,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 for (int i = 0; i < proposeCreditDetailListTemp.size(); i++) {
                     if (proposeCreditDetailListTemp.get(i).isNoFlag() == true) {
                         newCollateralView.getProposeCreditDetailViewList().add(proposeCreditDetailListTemp.get(i));
-//                        seqTemp = proposeCreditDetailListTemp.get(i).getSeq();
+                        seqTemp = proposeCreditDetailListTemp.get(i).getSeq();
                         checkPlus = true;
 
 //                        for (ProposeCreditDetailView proposeCreditCollateral : newGuarantorDetailViewItem.getProposeCreditDetailViewList()) {
@@ -1535,12 +1510,12 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.debug("onSaveCreditFacPropose ::: ModeForDB  {}", modeForDB);
 //        onSetInUsedProposeCreditDetail();
         try {
-            if ((newCreditFacilityView.getInvestedCountry().getId() != 0)
-                    && (newCreditFacilityView.getLoanRequestType().getId() != 0)
-                    && (newCreditFacilityView.getNewCreditDetailViewList().size() > 0)
-                    && (newCreditFacilityView.getNewCollateralViewList().size() > 0)
-                    && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0)
-                    && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
+//            if ((newCreditFacilityView.getInvestedCountry().getId() != 0)
+//                    && (newCreditFacilityView.getLoanRequestType().getId() != 0)
+//                    && (newCreditFacilityView.getNewCreditDetailViewList().size() > 0)
+//                    && (newCreditFacilityView.getNewCollateralViewList().size() > 0)
+//                    && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0)
+//                    && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
                 //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
                 creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
                 creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
@@ -1550,11 +1525,11 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
-            } else {
-                messageHeader = msg.get("app.propose.response.cannot.save");
-                message = msg.get("app.propose.response.desc.cannot.save");
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            }
+//            } else {
+//                messageHeader = msg.get("app.propose.response.cannot.save");
+//                message = msg.get("app.propose.response.desc.cannot.save");
+//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//            }
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.propose.response.save.failed");

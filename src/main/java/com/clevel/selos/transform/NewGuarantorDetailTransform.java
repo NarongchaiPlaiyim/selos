@@ -93,29 +93,28 @@ public class NewGuarantorDetailTransform extends Transform {
             newGuarantorDetailView.setTotalLimitGuaranteeAmount(newGuarantorDetail.getTotalLimitGuaranteeAmount());
 
 //            List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorRelationDAO.getListGuarantorRelationByNewGuarantor(newGuarantorDetail);
-            List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorRelationDAO.getListGuarantorCreditByNewCreditFacility(newGuarantorDetail.getNewCreditFacility());
-            log.info("newGuarantorCreditList :: {}", newGuarantorCreditList.size());
-            if (newGuarantorCreditList != null) {
-                List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
-                List<ExistingCreditDetail> existingCreditDetailList = new ArrayList<ExistingCreditDetail>();
-
-                for (NewGuarantorCredit newGuarantorCredit : newGuarantorCreditList) {
-                    if (newGuarantorCredit.getExistingCreditDetail() != null) {
-                        log.info("newGuarantorCredit.getExistingCreditDetail :: {}", newGuarantorCredit.getExistingCreditDetail().getId());
-                        existingCreditDetailList.add(newGuarantorCredit.getExistingCreditDetail());
-                    } else if (newGuarantorCredit.getNewCreditDetail() != null) {
-                        log.info("newGuarantorCredit.getNewCreditDetail :: {}", newGuarantorCredit.getNewCreditDetail().getId());
-                        newGuarantorCredit.getNewCreditDetail().setGuaranteeAmount(newGuarantorCredit.getGuaranteeAmount());
-                        newCreditDetailList.add(newGuarantorCredit.getNewCreditDetail());
-                        log.info("newGuarantorCredit.getGuaranteeAmount() ::: {}", newGuarantorCredit.getGuaranteeAmount());
-                    }
-                }
-                log.info("newCreditDetailList Guarantor:: {}", newCreditDetailList.size());
-                log.info("getExistingCreditDetail Guarantor:: {}", existingCreditDetailList.size());
-                List<ProposeCreditDetailView> proposeCreditDetailViewList = proposeCreditDetailTransform(newCreditDetailList, existingCreditDetailList);
-                newGuarantorDetailView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
-
-            }
+//            log.info("newGuarantorCreditList :: {}", newGuarantorCreditList.size());
+//            if (newGuarantorCreditList != null) {
+//                List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
+//                List<ExistingCreditDetail> existingCreditDetailList = new ArrayList<ExistingCreditDetail>();
+//
+//                for (NewGuarantorCredit newGuarantorCredit : newGuarantorCreditList) {
+//                    if (newGuarantorCredit.getExistingCreditDetail() != null) {
+//                        log.info("newGuarantorCredit.getExistingCreditDetail :: {}", newGuarantorCredit.getExistingCreditDetail().getId());
+//                        existingCreditDetailList.add(newGuarantorCredit.getExistingCreditDetail());
+//                    } else if (newGuarantorCredit.getNewCreditDetail() != null) {
+//                        log.info("newGuarantorCredit.getNewCreditDetail :: {}", newGuarantorCredit.getNewCreditDetail().getId());
+//                        newGuarantorCredit.getNewCreditDetail().setGuaranteeAmount(newGuarantorCredit.getGuaranteeAmount());
+//                        newCreditDetailList.add(newGuarantorCredit.getNewCreditDetail());
+//                        log.info("newGuarantorCredit.getGuaranteeAmount() ::: {}", newGuarantorCredit.getGuaranteeAmount());
+//                    }
+//                }
+//                log.info("newCreditDetailList Guarantor:: {}", newCreditDetailList.size());
+//                log.info("getExistingCreditDetail Guarantor:: {}", existingCreditDetailList.size());
+//                List<ProposeCreditDetailView> proposeCreditDetailViewList = proposeCreditDetailTransform(newCreditDetailList, existingCreditDetailList);
+//                newGuarantorDetailView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
+//
+//            }
 
             newGuarantorDetailViews.add(newGuarantorDetailView);
         }

@@ -13,8 +13,14 @@ public class ManageButton implements Serializable {
     private boolean closeSaleButton;
     private boolean returnToMakerButton;
     private boolean requestAppraisalButton;
+    private boolean cancelAppraisalButton;
+    private boolean submitRequestAppraisalButton;
     private boolean submitCAButton;
     private boolean viewRelatedCA;
+    private boolean submitAADCommitteeButton;
+    private boolean returnBDMButton;
+    private boolean returnAADAdminButton;
+    private boolean submitAppraisalButton;
 
     public boolean isCheckNCBButton() {
         return checkNCBButton;
@@ -110,5 +116,53 @@ public class ManageButton implements Serializable {
 
     public void setSubmitCAButton(boolean submitCAButton) {
         this.submitCAButton = submitCAButton;
+    }
+
+    public boolean isCancelAppraisalButton() {
+        return cancelAppraisalButton;
+    }
+
+    public void setCancelAppraisalButton(boolean cancelAppraisalButton) {
+        this.cancelAppraisalButton = cancelAppraisalButton;
+    }
+
+    public boolean isSubmitRequestAppraisalButton() {
+        return submitRequestAppraisalButton;
+    }
+
+    public void setSubmitRequestAppraisalButton(boolean submitRequestAppraisalButton) {
+        this.submitRequestAppraisalButton = submitRequestAppraisalButton;
+    }
+
+    public boolean isSubmitAADCommitteeButton() {
+        return submitAADCommitteeButton;
+    }
+
+    public void setSubmitAADCommitteeButton(boolean submitAADCommitteeButton) {
+        this.submitAADCommitteeButton = submitAADCommitteeButton;
+    }
+
+    public boolean isReturnBDMButton() {
+        return returnBDMButton;
+    }
+
+    public void setReturnBDMButton(boolean returnBDMButton) {
+        this.returnBDMButton = returnBDMButton;
+    }
+
+    public boolean isReturnAADAdminButton() {
+        return returnAADAdminButton;
+    }
+
+    public void setReturnAADAdminButton(boolean returnAADAdminButton) {
+        this.returnAADAdminButton = returnAADAdminButton;
+    }
+
+    public boolean isSubmitAppraisalButton() {
+        return submitAppraisalButton;
+    }
+
+    public void setSubmitAppraisalButton(boolean submitAppraisalButton) {
+        this.submitAppraisalButton = submitAppraisalButton;
     }
 }
