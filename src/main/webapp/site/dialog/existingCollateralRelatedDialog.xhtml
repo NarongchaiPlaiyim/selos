@@ -12,7 +12,7 @@
                 <tr>
                     <td class="title" style="width:145px;">#{msg.get('app.credit.facility.existing.tb.label.collateralType.potential')}</td>
                     <td>
-                        <p:selectOneMenu id="potentialCollateral" value="#{creditFacExisting.existingCollateralDetailView.potentialCollateral.id}"
+                        <p:selectOneMenu id="potentialCollateral" value="#{creditFacExisting.existingCollateralDetailView.potentialCollateral.id}" required="#{not empty param[saveRelatedCollateral.clientId]}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{creditFacExisting.potentialCollateralList}"
@@ -25,7 +25,7 @@
                 <tr>
                     <td class="title" style="width:145px;">#{msg.get('app.credit.facility.existing.tb.label.collateralType.collateralType')}</td>
                     <td>
-                        <p:selectOneMenu id="collateralType" value="#{creditFacExisting.existingCollateralDetailView.collateralType.id}"
+                        <p:selectOneMenu id="collateralType" value="#{creditFacExisting.existingCollateralDetailView.collateralType.id}" required="#{not empty param[saveRelatedCollateral.clientId]}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{creditFacExisting.collateralTypeList}"
@@ -44,7 +44,7 @@
                 <tr>
                     <td class="title" style="width:145px;">#{msg.get('app.credit.facility.existing.tb.label.collateralType.relationship')}</td>
                     <td>
-                        <p:selectOneMenu id="relation" value="#{creditFacExisting.existingCollateralDetailView.relation.id}"
+                        <p:selectOneMenu id="relation" value="#{creditFacExisting.existingCollateralDetailView.relation.id}" required="#{not empty param[saveRelatedCollateral.clientId]}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{creditFacExisting.relationList}"
@@ -131,7 +131,7 @@
                 <tr>
                     <td class="title" style="width:145px;">ประเภท :</td>
                     <td>
-                        <p:selectOneMenu id="mortgageType" value="#{creditFacExisting.existingCollateralDetailView.mortgageType.id}" required="#{not empty param[saveBorrowerCollateral.clientId]}"
+                        <p:selectOneMenu id="mortgageType" value="#{creditFacExisting.existingCollateralDetailView.mortgageType.id}" required="#{not empty param[saveRelatedCollateral.clientId]}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{creditFacExisting.mortgageTypeList}"
