@@ -19,7 +19,7 @@
 </h:head>
 
 <h:body>
-<!--<f:event type="preRenderView" listener="#{custInfoSummary.preRender()}" />-->
+    <f:event type="preRenderView" listener="#{custInfoSummary.preRender()}" />
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
             <div id="main_container">
@@ -168,7 +168,7 @@
                                                   style="min-width: 130px; max-width: 130px; width: 130px;"/>
                                 </p:column>
 
-                                <p:column styleClass="left">
+                                <p:column styleClass="center">
                                     <h:outputText value="#{item.relation.description}"
                                                   style="min-width: 110px; max-width: 110px; width: 110px;"/>
                                 </p:column>
@@ -333,7 +333,7 @@
                                                   style="min-width: 130px; max-width: 130px; width: 130px;"/>
                                 </p:column>
 
-                                <p:column styleClass="left">
+                                <p:column styleClass="center">
                                     <h:outputText value="#{item2.relation.description}"
                                                   style="min-width: 110px; max-width: 110px; width: 110px;"/>
                                 </p:column>
@@ -504,7 +504,7 @@
                                                   style="min-width: 130px; max-width: 130px; width: 130px;"/>
                                 </p:column>
 
-                                <p:column styleClass="left">
+                                <p:column styleClass="center">
                                     <h:outputText value="#{item3.relation.description}"
                                                   style="min-width: 110px; max-width: 110px; width: 110px;"/>
                                 </p:column>

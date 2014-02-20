@@ -11,4 +11,8 @@ public enum RequestTypes {
     public int value() {
         return this.value;
     }
+
+    public int getValue() {
+        return this.value;
+    }
 }

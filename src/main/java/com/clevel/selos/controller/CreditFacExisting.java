@@ -128,6 +128,8 @@ public class CreditFacExisting implements Serializable {
 
     private String currentDateDDMMYY;
 
+    private boolean canSaveCreditDetail;
+
     @Inject
     private CreditTypeDAO creditTypeDAO;
     @Inject
@@ -307,7 +309,7 @@ public class CreditFacExisting implements Serializable {
                 }
 
                 for (int l=0;l<hashRelated.size();l++){
-                    log.info("hashRelated.get(j) in use   :  "+ l + " is   " +hashRelated.get(l).toString());
+                    log.info("hashRelated.get(j) in use   :  "+ l + " is   " +hashRelated.get(l+1).toString());
                 }
 
                 log.info("preRender ::: getId " + existingCreditFacilityView.getId());
@@ -425,6 +427,7 @@ public class CreditFacExisting implements Serializable {
     public void onChangeCreditType(){
         int id = existingCreditDetailView.getExistCreditTypeView().getId();
         if ((existingCreditDetailView.getExistProductProgramView().getId() != 0) && (existingCreditDetailView.getExistCreditTypeView().getId() != 0)) {
+            canSaveCreditDetail = false;
             ProductProgram productProgram = productProgramDAO.findById(existingCreditDetailView.getExistProductProgramView().getId());
             CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
 
@@ -439,6 +442,25 @@ public class CreditFacExisting implements Serializable {
                     existingCreditDetailView.setProductCode(productFormula.getProductCode());
                     existingCreditDetailView.setProjectCode(productFormula.getProjectCode());
                 }
+            }
+
+            if(Util.isTrue(creditType.getCanSplit())){
+                BigDecimal totalLimit = existingCreditDetailView.getLimit();
+                BigDecimal splitLimit = BigDecimal.ZERO;
+                if(existingSplitLineDetailViewList!=null && existingSplitLineDetailViewList.size()>0){
+                    for(ExistingSplitLineDetailView existingSplitLineDetailViewTmp : existingSplitLineDetailViewList){
+                        if(existingSplitLineDetailViewTmp.getLimit()!=null){
+                            splitLimit = splitLimit.add(existingSplitLineDetailViewTmp.getLimit());
+                        }
+                    }
+                    if(totalLimit.compareTo(splitLimit)==0){
+                        canSaveCreditDetail = true;
+                    }
+                } else {
+                    canSaveCreditDetail = true;
+                }
+            } else {
+                canSaveCreditDetail = true;
             }
         }
     }
@@ -476,6 +498,7 @@ public class CreditFacExisting implements Serializable {
            // log.info("onEditCommercialCredit is " + selectCreditDetail.toString());
         }
         modeForButton = ModeForButton.EDIT;
+        canSaveCreditDetail = false;
 
         existingCreditDetailView = new ExistingCreditDetailView();
         existingCreditDetailView.setAccountName(selectCreditDetail.getAccountName());
@@ -498,6 +521,26 @@ public class CreditFacExisting implements Serializable {
         existingCreditDetailView.setExistingSplitLineDetailViewList(selectCreditDetail.getExistingSplitLineDetailViewList());
         existingCreditTierDetailViewList = selectCreditDetail.getExistingCreditTierDetailViewList();
         existingCreditDetailView.setExistingCreditTierDetailViewList(selectCreditDetail.getExistingCreditTierDetailViewList());
+
+        CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
+        if(Util.isTrue(creditType.getCanSplit())){
+            BigDecimal totalLimit = existingCreditDetailView.getLimit();
+            BigDecimal splitLimit = BigDecimal.ZERO;
+            if(existingSplitLineDetailViewList!=null && existingSplitLineDetailViewList.size()>0){
+                for(ExistingSplitLineDetailView existingSplitLineDetailViewTmp : existingSplitLineDetailViewList){
+                    if(existingSplitLineDetailViewTmp.getLimit()!=null){
+                        splitLimit = splitLimit.add(existingSplitLineDetailViewTmp.getLimit());
+                    }
+                }
+                if(totalLimit.compareTo(splitLimit)==0){
+                    canSaveCreditDetail = true;
+                }
+            } else {
+                canSaveCreditDetail = true;
+            }
+        } else {
+            canSaveCreditDetail = true;
+        }
 
         log.info("onEditCommercialCredit end ::: mode : {}", modeForButton);
     }
@@ -537,7 +580,7 @@ public class CreditFacExisting implements Serializable {
             log.info("del 1");
 
             for (int l=0;l<hashRelated.size();l++){
-                log.info("hashRelated.get(j) in use   :  "+ l + " is   " +hashRelated.get(l).toString());
+                log.info("hashRelated.get(j) in use   :  "+ l + " is   " +hashRelated.get(l+1).toString());
             }
 
             used = Integer.parseInt(hashRelated.get(existingCreditDetailViewDel.getNo()).toString());
@@ -601,6 +644,29 @@ public class CreditFacExisting implements Serializable {
         for(int i=0;i<existingCreditTypeDetailViewSetRow.size();i++){
             existingCreditTypeDetailViewTemp = existingCreditTypeDetailViewSetRow.get(i);
             existingCreditTypeDetailViewTemp.setNo(i+1);
+        }
+    }
+
+    public void checkTotalLimit(){
+        canSaveCreditDetail = false;
+        CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
+        if(Util.isTrue(creditType.getCanSplit())){
+            BigDecimal totalLimit = existingCreditDetailView.getLimit();
+            BigDecimal splitLimit = BigDecimal.ZERO;
+            if(existingSplitLineDetailViewList!=null && existingSplitLineDetailViewList.size()>0){
+                for(ExistingSplitLineDetailView existingSplitLineDetailViewTmp : existingSplitLineDetailViewList){
+                    if(existingSplitLineDetailViewTmp.getLimit()!=null){
+                        splitLimit = splitLimit.add(existingSplitLineDetailViewTmp.getLimit());
+                    }
+                }
+                if(totalLimit.compareTo(splitLimit)==0){
+                    canSaveCreditDetail = true;
+                }
+            } else {
+                canSaveCreditDetail = true;
+            }
+        } else {
+            canSaveCreditDetail = true;
         }
     }
 
@@ -785,7 +851,8 @@ public class CreditFacExisting implements Serializable {
         existingSplitLineDetailView.setProductProgram(productProgram);
         existingSplitLineDetailView.setNo(existingSplitLineDetailViewList.size()+1);
         existingSplitLineDetailViewList.add(existingSplitLineDetailView);
-        log.info("onAddCreditDetail ::: end");
+
+        canSaveCreditDetail = false;
     }
 
     public void onDeleteExistingSplitLineDetailView(int rowOnTable) {
@@ -793,6 +860,22 @@ public class CreditFacExisting implements Serializable {
             log.info("existingSplitLineDetailViewList ::: rowOnTable " + rowOnTable);
             existingSplitLineDetailViewList.remove(rowOnTable);
             onSetRowNoSplitLineDetail(existingSplitLineDetailViewList);
+
+            BigDecimal totalLimit = existingCreditDetailView.getLimit();
+            BigDecimal splitLimit = BigDecimal.ZERO;
+            if(existingSplitLineDetailViewList!=null && existingSplitLineDetailViewList.size()>0){
+                for(ExistingSplitLineDetailView existingSplitLineDetailViewTmp : existingSplitLineDetailViewList){
+                    if(existingSplitLineDetailViewTmp.getLimit()!=null){
+                        splitLimit = splitLimit.add(existingSplitLineDetailViewTmp.getLimit());
+                    }
+                }
+                if(totalLimit.compareTo(splitLimit)==0){
+                    canSaveCreditDetail = true;
+                }
+            } else {
+                canSaveCreditDetail = true;
+            }
+            log.info("onAddCreditDetail ::: end");
         }
     }
 
@@ -1227,7 +1310,7 @@ public class CreditFacExisting implements Serializable {
 
             }else if(typeOfListCollateral.equals("related")){
                 for (int l=0;l<hashRelated.size();l++){
-                    log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l).toString());
+                    log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l+1).toString());
                 }
                 ExistingCollateralDetailView relatedCollateralDetailViewRow = relatedExistingCollateralDetailViewList.get(rowIndex);
 
@@ -1267,7 +1350,7 @@ public class CreditFacExisting implements Serializable {
                     }
                 }
                 for (int l=0;l<hashRelated.size();l++){
-                    log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l).toString());
+                    log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l+1).toString());
                 }
                 onSetRowNoCreditTypeDetail(relatedCollateralDetailViewRow.getExistingCreditTypeDetailViewList());
                 existingCreditFacilityView.getRelatedCollateralList().remove(rowIndex);
@@ -1348,7 +1431,7 @@ public class CreditFacExisting implements Serializable {
         }else if(typeOfListCollateral.equals("related")){
             ExistingCollateralDetailView relatedCollateralDetailViewDel = selectCollateralDetail;
             for (int l=0;l<hashRelated.size();l++){
-                log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l).toString());
+                log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l+1).toString());
             }
             log.info("getCreditFacilityList().size() " + relatedCollateralDetailViewDel.getExistingCreditTypeDetailViewList().size());
 
@@ -1362,7 +1445,7 @@ public class CreditFacExisting implements Serializable {
             relatedExistingCollateralDetailViewList.remove(selectCollateralDetail);
             onSetRowNoCollateralDetail(relatedExistingCollateralDetailViewList);
             for (int l=0;l<hashRelated.size();l++){
-                log.info("after hashRelated seq :  "+ l + " use is   " +hashRelated.get(l).toString());
+                log.info("after hashRelated seq :  "+ l + " use is   " +hashRelated.get(l+1).toString());
             }
         }
         calTotalCollateral();
@@ -1441,7 +1524,7 @@ public class CreditFacExisting implements Serializable {
             ExistingGuarantorDetailView existingGuarantorDetailViewAdd = new ExistingGuarantorDetailView();
 
             existingGuarantorDetailViewAdd.setNo(borrowerExistingGuarantorDetailViewList.size()+1);
-            existingGuarantorDetailViewAdd.setGuarantorName(existingGuarantorDetailView.getGuarantorName());
+            existingGuarantorDetailViewAdd.setGuarantorName(customerInfoControl.getCustomerById(existingGuarantorDetailView.getGuarantorName()));
             existingGuarantorDetailViewAdd.setTcgLgNo(existingGuarantorDetailView.getTcgLgNo());
 
             existingGuarantorDetailViewAdd.setExistingCreditTypeDetailViewList(new ArrayList<ExistingCreditTypeDetailView>());
@@ -2051,5 +2134,13 @@ public class CreditFacExisting implements Serializable {
     public String getCurrentDateDDMMYY() {
         log.debug("current date : {}", getCurrentDate());
         return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public boolean isCanSaveCreditDetail() {
+        return canSaveCreditDetail;
+    }
+
+    public void setCanSaveCreditDetail(boolean canSaveCreditDetail) {
+        this.canSaveCreditDetail = canSaveCreditDetail;
     }
 }

@@ -1319,7 +1319,7 @@
                                                 </p:column>
 
                                                 <p:column headerText="" style="vertical-align: top;">
-                                                    <p:panel rendered="#{not empty borrowerCredit.existingCreditTypeDetailViewList and fn:length(borrowerCredit.existingCreditTypeDetailViewList) gt 0}" styleClass="panel">
+                                                    <p:panel rendered="#{not empty borrowerCollateral.existingCreditTypeDetailViewList and fn:length(borrowerCollateral.existingCreditTypeDetailViewList) gt 0}" styleClass="panel">
                                                         <ui:repeat value="#{borrowerCollateral.existingCreditTypeDetailViewList}" var="creditFacility">
                                                             <p:outputLabel value="#{creditFacility.accountName}"/><br/>
                                                             <p:outputLabel value="#{creditFacility.accountNumber}"/> Suff <p:outputLabel value="#{creditFacility.accountSuf}"/><br/>
@@ -1590,17 +1590,17 @@
                                                         <p:column headerText="" style="width: 50px"/>
                                                     </p:row>
                                                 </p:columnGroup>
-                                                <p:column headerText="">
+                                                <p:column headerText="" style="vertical-align: top;">
                                                     <p:outputLabel value="#{existingGuarantor.no}"></p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="">
+                                                <p:column headerText="" style="vertical-align: top;">
                                                     <p:outputLabel value="#{existingGuarantor.guarantorName.firstNameTh}"></p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="">
+                                                <p:column headerText="" style="vertical-align: top;">
                                                     <p:outputLabel value="#{existingGuarantor.tcgLgNo}"></p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="">
-                                                    <p:panel rendered="#{not empty relatedCollateral.existingCreditTypeDetailViewList and fn:length(relatedCollateral.existingCreditTypeDetailViewList) gt 0}" styleClass="panel">
+                                                <p:column headerText="" style="vertical-align: top;">
+                                                    <p:panel rendered="#{not empty existingGuarantor.existingCreditTypeDetailViewList and fn:length(existingGuarantor.existingCreditTypeDetailViewList) gt 0}" styleClass="panel">
                                                         <ui:repeat value="#{existingGuarantor.existingCreditTypeDetailViewList}" var="creditFacility">
                                                             <p:outputLabel value="#{creditFacility.accountName}"/><br/>
                                                             <p:outputLabel value="#{creditFacility.accountNumber}"/> Suff <p:outputLabel value="#{creditFacility.accountSuf}"/><br/>
@@ -1608,13 +1608,13 @@
                                                         </ui:repeat>
                                                     </p:panel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align:right">
+                                                <p:column headerText="" style="text-align:right; vertical-align: top;">
                                                     <p:outputLabel value="#{existingGuarantor.totalLimitGuaranteeAmount}">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                          maxIntegerDigits="14"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="">
+                                                <p:column headerText="" style="vertical-align: top;">
                                                     <p:commandButton icon="ui-icon-pencil"
                                                                      action="#{creditFacExisting.onEditExistingGuarantor()}"
                                                                      process="@this"
