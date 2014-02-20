@@ -17,4 +17,9 @@ public class MortgageInfoCreditDAO extends GenericDAO<MortgageInfoCredit, Long>{
         criteria.add(Restrictions.eq("mortgageInfo.id", mortgageInfoId));
         return criteria.list();
 	}
+	
+	public void deleteByMortgageInfoId(long mortgageInfoId) {
+		String hql = "delete from MortgageInfoCredit where mortgageInfo.id=:id";
+		getSession().createQuery(hql).setLong("id", mortgageInfoId).executeUpdate();
+	}
 }

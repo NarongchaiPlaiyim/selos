@@ -137,8 +137,7 @@
                                                                            var="province"
                                                                            itemLabel="#{province.name}"
                                                                            itemValue="#{province.code}"/>
-                                                            <p:ajax listener="#{bizInfoSummary.onChangeProvince}"
-                                                                    update=":frmMain:districtCode,:frmMain:subDistrictCode,:frmMain:provinceCode"/>
+                                                            <p:ajax process="@form" update=":frmMain" listener="#{bizInfoSummary.onChangeProvince}"/>
                                                         </p:selectOneMenu>
                                                     </td>
                                                     <td>
@@ -150,19 +149,19 @@
                                                                            var="district"
                                                                            itemLabel="#{district.name}"
                                                                            itemValue="#{district.id}"/>
-                                                            <p:ajax listener="#{bizInfoSummary.onChangeDistrict()}" update=":frmMain:subDistrictCode,:frmMain:districtCode"/>
+                                                            <p:ajax process="@form" update=":frmMain" listener="#{bizInfoSummary.onChangeDistrict()}" />
                                                         </p:selectOneMenu>
                                                     </td>
                                                     <td>
-                                                        <p:selectOneMenu  id="subDistrictCode" size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
-                                                                          value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.code}"
+                                                        <p:selectOneMenu id="subDistrictCode" size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
+                                                                         value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.code}"
                                                                           required="#{not empty param[addBizInfoSummary.clientId]}">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.subDistrictList}"
-                                                                           var="subDistrict"
-                                                                           itemLabel="#{subDistrict.name}"
-                                                                           itemValue="#{subDistrict.code}"/>
-                                                            <p:ajax event="change" update=":frmMain:subDistrictCode"/>
+                                                                           var="subDis"
+                                                                           itemLabel="#{subDis.name}"
+                                                                           itemValue="#{subDis.code}"/>
+                                                            <p:ajax event="change" process="@form" update=":frmMain"/>
                                                         </p:selectOneMenu>
                                                     </td>
                                                 </tr>

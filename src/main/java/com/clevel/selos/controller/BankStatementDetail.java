@@ -314,7 +314,7 @@ public class BankStatementDetail implements Serializable {
             // update related parts
             dbrControl.updateValueOfDBR(workCaseId);
             exSummaryControl.calForBankStmtSummary(workCaseId);
-            bizInfoSummaryControl.calGrdTotalIncomeByBankStatement(workCaseId);
+            bizInfoSummaryControl.calByBankStatement(workCaseId);
 
             messageHeader = "Save Bank Statement Detail Success.";
             message = "Save Bank Statement Detail data success.";

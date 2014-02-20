@@ -3,7 +3,9 @@ package com.clevel.selos.model.db.working;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -24,7 +27,6 @@ import com.clevel.selos.model.AttorneyRelationType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.MortgageLandOffice;
 import com.clevel.selos.model.db.master.MortgageOSCompany;
-import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.User;
 
 @Entity
@@ -49,10 +51,6 @@ public class MortgageInfo implements Serializable {
     @JoinColumn(name = "mortgage_land_office_id")
     private MortgageLandOffice mortgageLandOffice;
 
-    @ManyToOne
-    @JoinColumn(name = "mortgage_type_id")
-    private MortgageType mortgageType;
-
     @Column(name = "mortgage_order",columnDefinition="int default 0")
     private int mortgageOrder;
    
@@ -70,6 +68,15 @@ public class MortgageInfo implements Serializable {
     
     @Column(name="mortgage_amount")
     private BigDecimal mortgageAmount;
+    
+    @OneToMany(mappedBy = "mortgageInfo", cascade = CascadeType.ALL)
+    private List<MortgageInfoMortgage> mortgageTypeList;
+    
+    //Using for checking update or create new
+    //Normal (Main + Join group) -> Store main new collateral sub Id
+    //Referred -> Store refer value    
+    @Column(name="mortgage_reference_key")
+    private String mortgageRefKey;
     
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="workcase_id")
@@ -121,14 +128,6 @@ public class MortgageInfo implements Serializable {
 
 	public void setMortgageLandOffice(MortgageLandOffice mortgageLandOffice) {
 		this.mortgageLandOffice = mortgageLandOffice;
-	}
-
-	public MortgageType getMortgageType() {
-		return mortgageType;
-	}
-
-	public void setMortgageType(MortgageType mortgageType) {
-		this.mortgageType = mortgageType;
 	}
 
 	public int getMortgageOrder() {
@@ -208,5 +207,19 @@ public class MortgageInfo implements Serializable {
 	}
 	public void setMortgageAmount(BigDecimal mortgageAmount) {
 		this.mortgageAmount = mortgageAmount;
+	}
+	
+	public List<MortgageInfoMortgage> getMortgageTypeList() {
+		return mortgageTypeList;
+	}
+	public void setMortgageTypeList(List<MortgageInfoMortgage> mortgageTypeList) {
+		this.mortgageTypeList = mortgageTypeList;
+	}
+	
+	public String getMortgageRefKey() {
+		return mortgageRefKey;
+	}
+	public void setMortgageRefKey(String mortgageRefKey) {
+		this.mortgageRefKey = mortgageRefKey;
 	}
 }

@@ -143,7 +143,11 @@ public class PledgeDetail implements Serializable {
 			if (stepId <= 0) {
 				redirectPage = "/site/inbox.jsf";
 			} else {
-				return;
+				if (pledgeId <= 0) {
+					redirectPage = "/site/mortgageSummary.jsf";
+				} else {
+					return;
+				}
 			}
 		}
 		try {

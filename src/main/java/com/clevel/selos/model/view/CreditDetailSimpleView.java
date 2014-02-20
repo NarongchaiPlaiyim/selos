@@ -3,19 +3,20 @@ package com.clevel.selos.model.view;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class NewCreditDetailSimpleView implements Serializable {
+public class CreditDetailSimpleView implements Serializable {
 	private static final long serialVersionUID = 4706149760694897718L;
 	private long id;
 	private String accountName;
 	private String accountNo;
 	private String accountStatus;
-	private String type;
+	
 	private String productProgram;
 	private String creditFacility;
 	private BigDecimal limit;
 	private boolean hasAccountInfo;
+	private boolean newCredit;
 	
-	public NewCreditDetailSimpleView() {
+	public CreditDetailSimpleView() {
 		
 	}
 
@@ -51,14 +52,6 @@ public class NewCreditDetailSimpleView implements Serializable {
 		this.accountStatus = accountStatus;
 	}
 
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
 	public String getProductProgram() {
 		return productProgram;
 	}
@@ -89,6 +82,12 @@ public class NewCreditDetailSimpleView implements Serializable {
 
 	public void setHasAccountInfo(boolean hasAccountInfo) {
 		this.hasAccountInfo = hasAccountInfo;
+	}
+	public boolean isNewCredit() {
+		return newCredit;
+	}
+	public void setNewCredit(boolean newCredit) {
+		this.newCredit = newCredit;
 	}
 	
 }

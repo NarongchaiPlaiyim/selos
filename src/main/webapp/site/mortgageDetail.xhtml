@@ -84,11 +84,11 @@
                         				value="#{msg.get('app.mortgageDetail.detail.signingDate')}" />	
                         		</td>
                         		<td colspan="3">
-                        			<p:calendar id='mortgage_signingdate'
+                        			<clv:BECalendar id='mortgage_signingdate'
                         					value="#{mortgageDetail.mortgageInfoView.signingDate}"
                         					pattern="dd/MM/yyyy" showOn="button"
                                        		mindate="#{mortgageDetail.minDate}"
-                                       		autocomplete="false"
+                                       		autocomplete="false" locale="th_TH"
                                        		/>
                         		</td>
                         	</tr>
@@ -158,12 +158,13 @@
                         		<td colspan="3">
                         			<p:dataTable value="#{mortgageDetail.credits}" var="credit" 
                         				styleClass="full_table" rowIndexVar="rowIdx">
-                        				<p:column style="width:30px">
+                        				<p:column style="width:30px" styleClass="center">
                         					#{rowIdx+1}
                         				</p:column>
                         				<p:column
-                        					headerText="#{msg.get('app.mortgageDetail.detail.creditType.table.account')}">
-                        					<h:panelGroup rendered="#{credit.hasAccountInfo}">
+                        					headerText="#{msg.get('app.mortgageDetail.detail.creditType.table.account')}"
+                        					style="line-height: 1.5em;">
+                        					<h:panelGroup layout="block" rendered="#{credit.hasAccountInfo}"  style="padding : 5px 0;">
                         					#{credit.accountName} <br />
                         					#{msg.get('app.creditType.account.accountNo')} #{credit.accountNo} <br/>
                         					#{msg.get('app.creditType.account.accountStatus')} #{credit.accountStatus}
@@ -172,7 +173,12 @@
                         				</p:column>
                         				<p:column style="width:100px"
                         					headerText="#{msg.get('app.mortgageDetail.detail.creditType.table.type')}">
-                        					#{credit.type}
+                        					<h:outputText value="#{msg.get('app.collateral.creditType.radio.new')}"
+                        						rendered="#{credit.newCredit}" 
+                        						/>
+                        					<h:outputText value="#{msg.get('app.collateral.creditType.radio.exist')}"
+                        						rendered="#{not credit.newCredit}" 
+                        						/>
                         				</p:column>
                         				<p:column style="width:200px"
                         					headerText="#{msg.get('app.mortgageDetail.detail.creditType.table.productProgram')}">
@@ -461,10 +467,11 @@
                         								value="#{msg.get('app.mortgageDetail.powerattorney.dateOfBirth')}" />
 	                        					</td>
 	                        					<td style="width:350px">
-	                        						<p:calendar id='att_dateofbirth'
+	                        						<clv:BECalendar id='att_dateofbirth' navigator="true" 
+	                        							yearRange="#{mortgageDetail.ageYearRange}"
 	                        							value="#{mortgageDetail.attorneyView.birthDate}"
 			                        					pattern="dd/MM/yyyy" showOn="button"
-			                                       		autocomplete="false"
+			                                       		autocomplete="false" locale="th_TH"
 			                                       		disabled="#{not (mortgageDetail.attorneyDetailEditable and mortgageDetail.attorneyView.canUpdateGeneralData)}"
 			                                       		/>
 				                        		</td>

@@ -84,10 +84,10 @@
                         				value="#{msg.get('app.mortgageSummary.agreement.loanDate')}" />	
                         		</td>
                         		<td>
-                        			<p:calendar id='loan_contractdate' value="#{mortgageSummary.mortgageSummaryView.loanContractDate}"
+                        			<clv:BECalendar id='loan_contractdate' value="#{mortgageSummary.mortgageSummaryView.loanContractDate}"
                         					pattern="dd/MM/yyyy" showOn="button"
                                        		mindate="#{mortgageSummary.minDate}"
-                                       		autocomplete="false"
+                                       		autocomplete="false" locale="th_TH"
                                        		required="true" requiredMessage="#{msg.get('app.mortgageSummary.loanDate.validate')}"
                                        		/>
                         		</td>
@@ -167,7 +167,7 @@
                         					headerText="#{msg.get('app.mortgageSummary.mortgageSummary.signingDate')}"
                         					>
                         					<h:outputText value="#{mortgage.signingDate}">
-                        						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
+                        						<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                         					</h:outputText>
                         				</p:column>
                         				<p:column 
@@ -206,7 +206,7 @@
                         				rowIndexVar="rowIdx"
                         				>
                         				<p:column style="width:20px" styleClass="center">
-                        					#{rowIdx}
+                        					#{rowIdx+1}
                         				</p:column>
                         				<p:column style="width:200px"
                         					headerText="#{msg.get('app.mortgageSummary.pledgeSummary.accountNumber')}"
@@ -229,7 +229,7 @@
                         					headerText="#{msg.get('app.mortgageSummary.pledgeSummary.signingDate')}"
                         					>
                         					<h:outputText value="#{pledge.signingDate}">
-                        						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
+                        						<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                         					</h:outputText>
                         				</p:column>
                         				<p:column style="width:30px" styleClass="center">
@@ -263,7 +263,7 @@
                         				rowIndexVar="rowIdx"
                         				>
                         				<p:column style="width:20px" styleClass="center">
-                        					#{rowIdx}
+                        					#{rowIdx+1}
                         				</p:column>
                         				<p:column style="width:270px"
                         					headerText="#{msg.get('app.mortgageSummary.guarantorSummary.guarantorName')}"
@@ -286,7 +286,7 @@
                         					headerText="#{msg.get('app.mortgageSummary.guarantorSummary.signingDate')}"
                         					>
                         					<h:outputText value="#{guarantor.signingDate}">
-                        						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
+                        						<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                         					</h:outputText>
                         				</p:column>
                         				<p:column style="width:30px" styleClass="center">

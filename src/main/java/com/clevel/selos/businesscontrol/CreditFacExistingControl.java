@@ -275,8 +275,8 @@ public class CreditFacExistingControl extends BusinessControl {
                 if(existingSplitLineDetailListDel!=null && existingSplitLineDetailListDel.size()>0){
                     existingSplitLineDetailDAO.delete(existingSplitLineDetailListDel);
                 }
-                existingCreditDetailDAO.delete(relatedComExistingCreditListDel);
             }
+            existingCreditDetailDAO.delete(relatedComExistingCreditListDel);
         }
 
         if(existingCreditFacilityView.getRelatedComExistingCredit()!=null && existingCreditFacilityView.getRelatedComExistingCredit().size()>0){

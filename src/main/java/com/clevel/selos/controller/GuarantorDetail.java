@@ -20,11 +20,11 @@ import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.GuarantorDetailControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
-import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.BasicInfoView;
-import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.GuarantorInfoFullView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
@@ -38,28 +38,31 @@ public class GuarantorDetail implements Serializable {
 	
 	@Inject
 	private BasicInfoControl basicInfoControl;
-
+	@Inject
+	private GuarantorDetailControl guarantorDetailControl;
+	
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
 	private long guarantorId = -1;
 	private String fromPage;
-	private User user;
 	private BasicInfoView basicInfoView;
 	
 	//Property
+	private GuarantorInfoFullView guarantorInfoView;
 
     public GuarantorDetail(){
     	
     }
     public Date getLastUpdateDateTime() {
-		//TODO 
-		return new Date();
+    	return guarantorInfoView.getModifyDate();
 	}
 	public String getLastUpdateBy() {
-		//TODO
-		return user.getDisplayName();
+		if (guarantorInfoView.getModifyBy() != null)
+			return guarantorInfoView.getModifyBy().getDisplayName();
+		else
+			return "";
 	}
 	public ApproveType getApproveType() {
 		if (basicInfoView == null)
@@ -72,7 +75,9 @@ public class GuarantorDetail implements Serializable {
 		return dFmt.format(new Date());
 	}
 	
-	
+	public GuarantorInfoFullView getGuarantorInfoView() {
+		return guarantorInfoView;
+	}
 	
 	/*
 	 * Action
@@ -84,7 +89,6 @@ public class GuarantorDetail implements Serializable {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
-			user = (User) session.getAttribute("user");
 		}
 		Map<String,Object> params =  FacesUtil.getParamMapFromFlash("guarantorParams");
 		fromPage = (String)params.get("fromPage");
@@ -103,9 +107,14 @@ public class GuarantorDetail implements Serializable {
 			if (stepId <= 0) {
 				redirectPage = "/site/inbox.jsf";
 			} else {
-				return;
+				if (guarantorId <= 0) {
+					redirectPage = "/site/mortgageSummary.jsf";
+				} else {
+					return;
+				}
 			}
 		}
+		
 		try {
 			if (redirectPage == null) {
 				redirectPage = "/site/inbox.jsf";
@@ -133,7 +142,9 @@ public class GuarantorDetail implements Serializable {
         map.put("customerId", id);
 		return "customerInfoIndividual?faces-redirect=true";
 	}
+	
 	public void onSaveGuarantorDetail() {
+		guarantorDetailControl.saveGuarantorDetail(guarantorInfoView);
 		
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
@@ -147,7 +158,7 @@ public class GuarantorDetail implements Serializable {
 		if (workCaseId > 0) {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
-		//TODO Load guarantor info by using workcase and guarantorId
 		
+		guarantorInfoView = guarantorDetailControl.getGuarantorInfoFull(guarantorId);
 	}
 }
