@@ -67,10 +67,34 @@ public class UserDAO extends GenericDAO<User,String> {
         return userList;
     }
 
-    public List<User> findUserZoneListByRole(User user){
+    public List<User> findUserZoneList(User user){
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.ne("id", user.getId()));
         criteria.add(Restrictions.eq("role.id", RoleValue.ZM.id()));
+        criteria.add(Restrictions.eq("team", user.getTeam()));
+        criteria.addOrder(Order.asc("userName"));
+
+        List<User> userList = criteria.list();
+
+        return userList;
+    }
+
+    public List<User> findUserRegionList(User user){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.ne("id", user.getId()));
+        criteria.add(Restrictions.eq("role.id", RoleValue.RGM.id()));
+        criteria.add(Restrictions.eq("team", user.getTeam()));
+        criteria.addOrder(Order.asc("userName"));
+
+        List<User> userList = criteria.list();
+
+        return userList;
+    }
+
+    public List<User> findUserHeadList(User user){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.ne("id", user.getId()));
+        criteria.add(Restrictions.eq("role.id", RoleValue.GH.id()));
         criteria.add(Restrictions.eq("team", user.getTeam()));
         criteria.addOrder(Order.asc("userName"));
 

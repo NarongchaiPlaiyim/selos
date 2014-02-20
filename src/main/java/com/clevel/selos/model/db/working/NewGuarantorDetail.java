@@ -33,7 +33,7 @@ public class NewGuarantorDetail implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "customer_id")
-    private Customer  guarantorName;
+    private Customer guarantorName;
 
     @Column(name = "tcg_lg_no")
     private String tcgLgNo;
