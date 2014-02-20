@@ -64,6 +64,7 @@ public class NewGuarantorDetail implements Serializable {
     @OneToMany(mappedBy = "newGuarantorDetail", cascade = CascadeType.ALL)
     private List<NewGuarantorCredit> newGuarantorCreditList;
 
+
     public long getId() {
         return id;
     }
