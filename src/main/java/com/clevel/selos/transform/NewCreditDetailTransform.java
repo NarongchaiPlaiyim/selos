@@ -11,7 +11,7 @@ import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.NewCreditTierDetail;
 import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.view.NewCreditDetailSimpleView;
+import com.clevel.selos.model.view.CreditDetailSimpleView;
 import com.clevel.selos.model.view.NewCreditDetailView;
 import com.clevel.selos.model.view.NewCreditTierDetailView;
 import com.clevel.selos.util.Util;
@@ -176,22 +176,4 @@ public class NewCreditDetailTransform extends Transform {
         log.info("priceToShow :: {}",priceToShow);
        return priceToShow;
    }
-   
-   public NewCreditDetailSimpleView transformToSimpleView(NewCreditDetail model) {
-	   NewCreditDetailSimpleView view = new NewCreditDetailSimpleView();
-	   view.setId(model.getId());
-	   
-	   view.setAccountName(model.getAccountName());
-	   view.setAccountNo(model.getAccountNumber());
-	   view.setAccountStatus(model.getAccountSuf());
-	   //TODO Check about type of credit table
-	   view.setType(null);
-	   view.setProductProgram(model.getProductProgram().getName());
-	   view.setCreditFacility(model.getCreditType().getName());
-	   view.setLimit(model.getLimit());
-	   boolean hasAccountInfo = !(Util.isEmpty(model.getAccountName()) || Util.isEmpty(model.getAccountNumber()) );
-	   view.setHasAccountInfo(hasAccountInfo);
-	   return view;
-   }
-
 }

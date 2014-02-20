@@ -123,7 +123,7 @@ public class MortgageSummary implements Serializable {
 		branches = mortgageSummaryControl.listBankBranches();
 		zones = mortgageSummaryControl.listUserZones();
 		
-		_loadInitData();
+		_loadInitData(false);
 	}
 	
 	public void preRender() {
@@ -166,7 +166,9 @@ public class MortgageSummary implements Serializable {
 	}
 	
 	public void onSaveMortgageSummary() {
+		mortgageSummaryControl.saveMortgageSummary(mortgageSummaryView, workCaseId);
 		
+		_loadInitData(true);
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
 	public String clickMorgageDetail(long id) {
@@ -193,15 +195,18 @@ public class MortgageSummary implements Serializable {
 	/*
 	 * Private method
 	 */
-	private void _loadInitData() {
+	private void _loadInitData(boolean ignoreRecalculate) {
 		preRenderCheck = false;
 		if (workCaseId > 0) {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
-		
-		mortgageSummaryControl.calculateMortgageSummary(workCaseId);
-		
 		mortgageSummaryView = mortgageSummaryControl.getMortgageSummaryView(workCaseId);
+		if (!ignoreRecalculate) {
+			if ("true".equals(FacesUtil.getParameter("force")) || mortgageSummaryView.requiredCalculate()) {
+				mortgageSummaryView = mortgageSummaryControl.calculateMortgageSummary(workCaseId);
+			}
+		}
+		
 		mortgageInfos = mortgageSummaryControl.getMortgageInfoList(workCaseId);
 		pledgeInfos = mortgageSummaryControl.getPledgeInfoList(workCaseId);
 		guarantorInfos = mortgageSummaryControl.getGuarantorInfoList(workCaseId);
