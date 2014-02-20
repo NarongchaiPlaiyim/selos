@@ -3667,21 +3667,24 @@
 
                                     <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
-                                    <p:column styleClass="left top">#{approvalHistory.action}</p:column>
-
                                     <p:column styleClass="left top">
-                                        <h:outputText value="#{approvalHistory.approver.userName}"
-                                                      rendered="#{not empty approvalHistory.approver}"/>
+                                        <h:outputText value="#{approvalHistory.action}"
+                                                      rendered="#{not empty approvalHistory.action}"/>
                                     </p:column>
 
                                     <p:column styleClass="left top">
-                                        <h:outputText value="#{approvalHistory.approver.role.description}"
-                                                      rendered="#{not empty approvalHistory.approver and not empty approvalHistory.approver.role}"/>
+                                        <h:outputText value="#{approvalHistory.actionBy.userName}"
+                                                      rendered="#{not empty approvalHistory.actionBy}"/>
                                     </p:column>
 
                                     <p:column styleClass="left top">
-                                        <h:outputText value="#{approvalHistory.approver.title.name}"
-                                                      rendered="#{not empty approvalHistory.approver and not empty approvalHistory.approver.title}"/>
+                                        <h:outputText value="#{approvalHistory.actionBy.roleDescription}"
+                                                      rendered="#{not empty approvalHistory.actionBy}"/>
+                                    </p:column>
+
+                                    <p:column styleClass="left top">
+                                        <h:outputText value="#{approvalHistory.actionBy.titleName}"
+                                                      rendered="#{not empty approvalHistory.actionBy}"/>
                                     </p:column>
 
                                     <p:column styleClass="center top">
@@ -3691,7 +3694,7 @@
                                     </p:column>
 
                                     <p:column styleClass="left top">
-                                        #{approvalHistory.comment}
+                                        <h:outputText value="#{approvalHistory.comment}"/>
                                         <h:outputText value="-" rendered="#{empty approvalHistory.comment}"/>
                                     </p:column>
 
@@ -3703,17 +3706,20 @@
                         </tr>
 
                         <h:panelGroup rendered="#{decision.roleUW}">
+                            <!-- UW - (Comment , Approve) -->
                             <tr>
                                 <td class="center" colspan="2">
-                                    <!-- UW - (Comment , Approve) -->
                                     <div class="ui-datatable ui-widget">
                                         <div class="ui-datatable-tablewrapper">
                                             <table style="margin: 0 auto; width: 500px !important;">
                                                 <thead>
                                                     <tr>
                                                         <th class="ui-state-default">
-                                                            <!--#{decision.approvalHistory.approver.userName} - #{decision.approvalHistory.action}-->
-                                                            UW#1 - Approve CA
+                                                            <h:outputText value="#{decision.approvalHistoryView.actionBy.userName}"
+                                                                          rendered="#{not empty decision.approvalHistoryView and not empty decision.approvalHistoryView.actionBy}"/>
+                                                            <h:outputText value=" - "/>
+                                                            <h:outputText value="#{decision.approvalHistoryView.action}"
+                                                                          rendered="#{not empty decision.approvalHistoryView and not empty decision.approvalHistoryView.action}"/>
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -3729,7 +3735,7 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td class="center" style="border-style: none !important;">
-                                                                        <p:inputTextarea value="#{decision.approvalHistory.comment}"
+                                                                        <p:inputTextarea value="#{decision.approvalHistoryView.comment}"
                                                                                          rows="5"
                                                                                          style="font-size: 12px !important; width: 450px"/>
                                                                     </td>
@@ -3739,10 +3745,10 @@
                                                     </tr>
                                                     <tr>
                                                         <td class="center">
-                                                            <p:selectOneRadio value="#{decision.approvalHistory.approveDecision}"
+                                                            <p:selectOneRadio value="#{decision.approvalHistoryView.uwDecision}"
                                                                               styleClass="ovr-border">
-                                                                <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="2"/>
-                                                                <f:selectItem itemLabel="#{msg.get('app.button.reject')}" itemValue="1"/>
+                                                                <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
+                                                                <f:selectItem itemLabel="#{msg.get('app.button.reject')}" itemValue="#{decision.decisionREJECTED}"/>
                                                             </p:selectOneRadio>
                                                         </td>
                                                     </tr>
@@ -3754,9 +3760,8 @@
                                                                         #{msg.get('app.decision.tb.td.label.approvalName')}
                                                                     </td>
                                                                     <td class="left" style="border-style: none !important;">
-                                                                        <!--#{decision.approvalHistory.approver.title.name}-->
-                                                                        <!--#{decision.approvalHistory.approver.userName}-->
-                                                                        Mr.UW#1
+                                                                        <h:outputText value="#{decision.approvalHistoryView.actionBy.userName}"
+                                                                                      rendered="#{not empty decision.approvalHistoryView and not empty decision.approvalHistoryView.actionBy}"/>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -3764,8 +3769,8 @@
                                                                         #{msg.get('app.decision.tb.td.label.position')}
                                                                     </td>
                                                                     <td class="left" style="border-style: none !important;">
-                                                                        <!-- todo: getPosition of Approver -->
-                                                                        Example Position
+                                                                        <h:outputText value="#{decision.approvalHistoryView.actionBy.titleName}"
+                                                                                      rendered="#{not empty decision.approvalHistoryView and not empty decision.approvalHistoryView.actionBy}"/>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -3773,7 +3778,7 @@
                                                                         #{msg.get('app.decision.tb.td.label.date')}
                                                                     </td>
                                                                     <td class="left" style="border-style:none !important;">
-                                                                        <h:outputText value="#{decision.approvalHistory.approveDate}">
+                                                                        <h:outputText value="#{decision.approvalHistoryView.approveDate}">
                                                                             <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
                                                                         </h:outputText>
                                                                     </td>

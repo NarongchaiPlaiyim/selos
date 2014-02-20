@@ -51,13 +51,9 @@ public class BizInfoSummaryControl extends BusinessControl {
     @Inject
     BizInfoSummaryTransform bizInfoSummaryTransform;
 
-    private long workCaseId;
-
     @Inject
     public BizInfoSummaryControl(){
-
     }
-
 
     public void onSaveBizSummaryToDB(BizInfoSummaryView bizInfoSummaryView, long workCaseId) {
         log.info("onSaveBizSummaryToDB begin :: bizInfoSummaryView : {} workCaseId : {} ",bizInfoSummaryView ,workCaseId);
@@ -91,8 +87,6 @@ public class BizInfoSummaryControl extends BusinessControl {
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
-        //log.info("workCase after findById " + workCase);
-
         bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
 
         if (bizInfoSummary != null) {
@@ -106,73 +100,12 @@ public class BizInfoSummaryControl extends BusinessControl {
     public List<BizInfoDetailView> onGetBizInfoDetailViewByBizInfoSummary(long bizInfoSummaryID) {
         log.info("onGetBizInfoDetailViewByBizInfoSummary :: bizInfoSummaryID : {} ",bizInfoSummaryID);
 
-        List<BizInfoDetail> bizInfoDetailList;
-        List<BizInfoDetailView> bizInfoDetailViewList;
-        BizInfoDetailView bizInfoDetailViewTemp;
-        BizInfoDetail bizInfoDetailTemp;
-        BigDecimal Income = BigDecimal.ZERO;
-        BigDecimal twenty = BigDecimal.valueOf(12);
-        BigDecimal calSumIncomeNet = BigDecimal.ZERO;
-        BigDecimal sumIncomeNet = BigDecimal.ZERO;
-        BigDecimal inComeTotalNet = BigDecimal.ZERO;
-        BigDecimal oneHundred = BigDecimal.valueOf(100);
-        BigDecimal incomePercentD = BigDecimal.ZERO;
-        long stepId = 0;
-
-        BankStmtSummaryView bankStmtSummaryView;
-
-        HttpSession session = FacesUtil.getSession(true);
-        if(!Util.isNull(session.getAttribute("workCaseId"))){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-        }
-
-        bankStmtSummaryView = bankStmtControl.getBankStmtSummaryByWorkCaseId(workCaseId);
-
-        log.debug("info WorkCaseId is: {}", workCaseId);
-
-        bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
-
         BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findById(bizInfoSummaryID);
 
+        List<BizInfoDetail> bizInfoDetailList = bizInfoDetailDAO.findByBizInfoSummaryId(bizInfoSummary);
 
-        if(session.getAttribute("stepId") != null){
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-        }
+        List<BizInfoDetailView> bizInfoDetailViewList = bizInfoDetailTransform.transformToViewList(bizInfoDetailList);
 
-        if(!Util.isNull(bankStmtSummaryView)){
-            if(stepId >= StepValue.CREDIT_DECISION_UW1.value()){
-                Income = bankStmtSummaryView.getGrdTotalIncomeNetUW();
-            } else {
-                Income = bankStmtSummaryView.getGrdTotalIncomeNetBDM();
-            }
-
-            log.debug("Income : {} " + Income);
-        }
-
-        log.info("workCase after findById " + bizInfoSummary);
-
-        bizInfoDetailList = bizInfoDetailDAO.findByBizInfoSummaryId(bizInfoSummary);
-
-        if (!Util.isZero(bizInfoDetailList.size())) {
-            for(BizInfoDetail bizInfoDetail : bizInfoDetailList){
-                bizInfoDetailViewTemp = bizInfoDetailTransform.transformToView(bizInfoDetail);
-                if(!Util.isNull(Income)){
-                    calSumIncomeNet = Util.multiply(Income,twenty);
-                    incomePercentD = bizInfoDetailViewTemp.getPercentBiz();
-                    inComeTotalNet = Util.divide(Util.multiply(calSumIncomeNet,incomePercentD),oneHundred);
-                    bizInfoDetailViewTemp.setIncomeAmount(inComeTotalNet.setScale(2,RoundingMode.HALF_UP));
-                } else {
-                    bizInfoDetailViewTemp.setIncomeAmount(BigDecimal.ZERO);
-                }
-
-                bizInfoDetailViewList.add(bizInfoDetailViewTemp);
-                log.info("getIncomeAmount : {}",bizInfoDetailViewTemp.getIncomeAmount());
-            }
-
-            log.info("IncomeAmount :",sumIncomeNet);
-        } else {
-            //bizInfoSummaryView = null;
-        }
         return bizInfoDetailViewList;
     }
 
@@ -206,9 +139,17 @@ public class BizInfoSummaryControl extends BusinessControl {
         return bankStmtSummaryView;
     }
 
-    public void calGrdTotalIncomeByBankStatement(long workCaseId){
+    public void calByBankStatement(long workCaseId){
         log.info("calGrdTotalIncomeByBankStatement :: workCaseId : {}",workCaseId);
-        BankStatementSummary bankStatementSummary = bankStmtSummaryDAO.findByWorkCaseId(workCaseId);
+        long stepId = 0;
+
+        HttpSession session = FacesUtil.getSession(true);
+
+        if(session.getAttribute("stepId") != null){
+            stepId = Long.parseLong(session.getAttribute("stepId").toString());
+            log.debug("stepId : {}",stepId);
+        }
+
         BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findByWorkCaseId(workCaseId);
         if(bizInfoSummary == null){
             bizInfoSummary = new BizInfoSummary();
@@ -216,13 +157,61 @@ public class BizInfoSummaryControl extends BusinessControl {
             bizInfoSummary.setWorkCase(workCase);
         }
 
+        //for set circulation , cal grd total income gross
+        BankStatementSummary bankStatementSummary = bankStmtSummaryDAO.findByWorkCaseId(workCaseId);
         if (bankStatementSummary != null && bankStatementSummary.getGrdTotalIncomeGross() != null){
             bizInfoSummary.setCirculationAmount(bankStatementSummary.getGrdTotalIncomeGross());
         } else {
             bizInfoSummary.setCirculationAmount(BigDecimal.ZERO);
         }
+        //todo:cal new
+
+
+        //for set sum income amount
+        BigDecimal income;
+        BigDecimal twelve = BigDecimal.valueOf(12);
+        BigDecimal oneHundred = BigDecimal.valueOf(100);
+        BigDecimal calSumIncomeNet;
+        BigDecimal sumIncomeNet;
+
+        if(!Util.isNull(bankStatementSummary)){
+            if(stepId >= StepValue.CREDIT_DECISION_UW1.value()){
+                if (!Util.isNull(bankStatementSummary.getGrdTotalIncomeNetUW())){
+                    income = bankStatementSummary.getGrdTotalIncomeNetUW();
+                } else {
+                    income = BigDecimal.ZERO;
+                }
+            } else {
+                if (!Util.isNull(bankStatementSummary.getGrdTotalIncomeNetBDM())){
+                    income = bankStatementSummary.getGrdTotalIncomeNetBDM();
+                } else {
+                    income = BigDecimal.ZERO;
+                }
+            }
+
+            log.debug("income : {} " + income);
+
+            if(!Util.isNull(income)){
+                calSumIncomeNet = Util.multiply(income,twelve);
+                sumIncomeNet = calSumIncomeNet.setScale(2,RoundingMode.HALF_UP);
+            } else {
+                sumIncomeNet = BigDecimal.ZERO;
+            }
+        } else {
+            sumIncomeNet = BigDecimal.ZERO;
+        }
+
+        bizInfoSummary.setSumIncomeAmount(sumIncomeNet);
 
         bizInfoSummaryDAO.persist(bizInfoSummary);
-    }
 
+        //for cal each detail
+        if(bizInfoSummary.getId() != 0){
+            List<BizInfoDetail> bizInfoDetailList = onGetBizInfoDetailByBizInfoSummary(bizInfoSummary.getId());
+            for(BizInfoDetail bd : bizInfoDetailList){
+                bd.setIncomeAmount(Util.divide(Util.multiply(sumIncomeNet,bd.getPercentBiz()),oneHundred));
+            }
+            bizInfoDetailDAO.persist(bizInfoDetailList);
+        }
+    }
 }
