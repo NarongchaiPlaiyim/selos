@@ -1,15 +1,20 @@
 package com.clevel.selos.model;
 
 public enum AttorneyRelationType {
-    NA(0), BORROWER(1), OTHERS(2);
+    NA("app.mortgageDetail.appointee.relationship.radio.na"), 
+    BORROWER("app.mortgageDetail.appointee.relationship.radio.borrower"), 
+    OTHERS("app.mortgageDetail.appointee.relationship.radio.other");
 
-    private int value;
-
-    private AttorneyRelationType(int value){
-        this.value = value;
+    private final String msgKey;
+    private AttorneyRelationType(String msgKey){
+        this.msgKey = msgKey;
     }
-
-    public int value(){
-        return value;
+    public String getMsgKey() {
+		return msgKey;
+	}
+    public static final AttorneyRelationType[] displayList() {
+    	return new AttorneyRelationType[] {
+    			BORROWER, OTHERS
+    	};
     }
 }

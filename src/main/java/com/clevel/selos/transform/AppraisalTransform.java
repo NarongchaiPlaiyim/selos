@@ -1,10 +1,15 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.working.AppraisalContactDetailDAO;
 import com.clevel.selos.dao.working.AppraisalDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.Appraisal;
+import com.clevel.selos.model.db.working.AppraisalContactDetail;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
+import com.clevel.selos.model.view.AppraisalContactDetailView;
+import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
@@ -12,6 +17,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.Date;
+import java.util.List;
 
 public class AppraisalTransform extends Transform {
     @Inject
@@ -19,25 +25,33 @@ public class AppraisalTransform extends Transform {
     Logger log;
     @Inject
     private AppraisalDAO appraisalDAO;
-    private AppraisalView appraisalView;
-    private Appraisal appraisal;
+    //private AppraisalView appraisalView;
+    //private Appraisal appraisal;
 
+    @Inject
+    private AppraisalContactDetailDAO appraisalContactDetailDAO;
+    //private List<AppraisalContactDetail> appraisalContactDetailList;
+    //private AppraisalContactDetail appraisalContactDetail;
+    //private AppraisalContactDetailView appraisalContactDetailView;
+    @Inject
+    private AppraisalContactDetailTransform appraisalContactDetailTransform;
     @Inject
     public AppraisalTransform() {
 
     }
 
-    public Appraisal transformToModel(final AppraisalView appraisalView, final WorkCase workCase, final User user){
+    public Appraisal transformToModel(final AppraisalView appraisalView, final WorkCase workCase, final WorkCasePrescreen workCasePrescreen, final User user){
         log.debug("-- transform AppraisalView to Appraisal");
-        appraisal = new Appraisal();
-        long id = appraisalView.getId();
-        if(id != 0){
-            appraisal = appraisalDAO.findById(id);
+        Appraisal appraisal = new Appraisal();
+        if(!Util.isZero(appraisalView.getId())){
+            appraisal = appraisalDAO.findById(appraisalView.getId());
         }else{
             appraisal.setWorkCase(workCase);
+            appraisal.setWorkCasePrescreen(workCasePrescreen);
             appraisal.setCreateBy(user);
             appraisal.setCreateDate(DateTime.now().toDate());
         }
+
         appraisal.setAppraisalType(appraisalView.getAppraisalType());
 
         if(checkNullObject(appraisalView.getAppraisalDivision()) && checkId0(appraisalView.getAppraisalDivision().getId())){
@@ -75,12 +89,16 @@ public class AppraisalTransform extends Transform {
         appraisal.setZoneLocation(appraisalView.getZoneLocation());
         appraisal.setModifyDate(DateTime.now().toDate());
         appraisal.setModifyBy(user);
+
+        List<AppraisalContactDetail> appraisalContactDetailList = safetyList(appraisalContactDetailTransform.transformToModel(appraisalView.getAppraisalContactDetailView(), appraisal, user));
+        appraisal.setAppraisalContactDetailList(appraisalContactDetailList);
+
         return appraisal;
     }
 
-    public AppraisalView transformToView(Appraisal appraisal){
+    public AppraisalView transformToView(final Appraisal appraisal, final User user){
         log.debug("-- transform Appraisal to AppraisalView");
-        appraisalView = new AppraisalView();
+        AppraisalView appraisalView = new AppraisalView();
 
         appraisalView.setId(appraisal.getId());
         appraisalView.setAppointmentCusName(appraisal.getAppointmentCusName());
@@ -89,22 +107,22 @@ public class AppraisalTransform extends Transform {
         appraisalView.setAppointmentTime(appraisal.getAppointmentTime());
 
         if(checkNullObject(appraisal.getAppraisalDivision()) && checkId0(appraisal.getAppraisalDivision().getId())){
-            appraisalView.setAppraisalDivision(appraisalView.getAppraisalDivision());
+            appraisalView.setAppraisalDivision(appraisal.getAppraisalDivision());
         } else {
             appraisalView.setAppraisalDivision(new AppraisalDivision());
         }
         if(checkNullObject(appraisal.getAppraisalCompany()) && checkId0(appraisal.getAppraisalCompany().getId())){
-            appraisalView.setAppraisalCompany(appraisalView.getAppraisalCompany());
+            appraisalView.setAppraisalCompany(appraisal.getAppraisalCompany());
         } else {
             appraisalView.setAppraisalCompany(new AppraisalCompany());
         }
         if(checkNullObject(appraisal.getLocationOfProperty()) && checkId0(appraisal.getLocationOfProperty().getId())){
-            appraisalView.setLocationOfProperty(appraisalView.getLocationOfProperty());
+            appraisalView.setLocationOfProperty(appraisal.getLocationOfProperty());
         } else {
             appraisalView.setLocationOfProperty(new LocationProperty());
         }
         if(checkNullObject(appraisal.getProvinceOfProperty()) && checkId0(appraisal.getProvinceOfProperty().getCode())){
-            appraisalView.setProvinceOfProperty(appraisalView.getProvinceOfProperty());
+            appraisalView.setProvinceOfProperty(appraisal.getProvinceOfProperty());
         } else {
             appraisalView.setProvinceOfProperty(new Province());
         }
@@ -122,6 +140,10 @@ public class AppraisalTransform extends Transform {
         appraisalView.setCreateDate(appraisal.getCreateDate());
         appraisalView.setModifyBy(appraisal.getModifyBy());
         appraisalView.setModifyDate(appraisal.getModifyDate());
+
+        AppraisalContactDetailView appraisalContactDetailView = appraisalContactDetailTransform.transformToView(safetyList(appraisal.getAppraisalContactDetailList()), appraisal, user);
+        appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
+
         return appraisalView;
     }
 
@@ -131,5 +153,9 @@ public class AppraisalTransform extends Transform {
 
     private boolean checkId0(int id){
         return !Util.isZero(id);
+    }
+
+    private <T> List<T> safetyList(List<T> list) {
+        return Util.safetyList(list);
     }
 }

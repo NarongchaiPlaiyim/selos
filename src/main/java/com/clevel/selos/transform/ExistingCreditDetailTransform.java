@@ -1,5 +1,6 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.db.master.BankAccountStatus;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
@@ -14,11 +15,14 @@ import java.util.List;
 public class ExistingCreditDetailTransform extends Transform {
 
     @Inject
+    ProductTransform productTransform;
+
+    @Inject
     public ExistingCreditDetailTransform() {
     }
 
     public List<ExistingCreditDetail> transformsToModel(List<ExistingCreditDetailView> existingCreditDetailViewList, ExistingCreditFacility existingCreditFacility, User user){
-        log.info(" transformsToModel ");
+        log.debug("transformsToModel");
         List<ExistingCreditDetail> existingCreditDetailList = new ArrayList<ExistingCreditDetail>();
         ExistingCreditDetail existingCreditDetail;
 
@@ -36,10 +40,10 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetail.setNo(existingCreditDetailView.getNo());
             existingCreditDetail.setBorrowerType(existingCreditDetailView.getBorrowerType());
             existingCreditDetail.setExistingCreditFrom(existingCreditDetailView.getExistingCreditFrom());
-
-            log.info(" existingCreditDetailView seq is " + existingCreditDetailView.getSeq());
+            existingCreditDetail.setCreditCategory(existingCreditDetailView.getCreditCategory().value());
+            log.debug(" existingCreditDetailView seq is {}",existingCreditDetailView.getSeq());
             existingCreditDetail.setSeq(existingCreditDetailView.getSeq());
-            log.info(" existingCreditDetail seq is " + existingCreditDetail.getSeq());
+            log.debug(" existingCreditDetail seq is {}",existingCreditDetail.getSeq());
 
             existingCreditDetail.setInUsed(existingCreditDetailView.getInUsed());
             existingCreditDetail.setCreateDate(existingCreditDetailView.getCreateDate());
@@ -50,8 +54,8 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetail.setAccountName(existingCreditDetailView.getAccountName());
             existingCreditDetail.setAccountSuf(existingCreditDetailView.getAccountSuf());
             existingCreditDetail.setExistAccountStatus(existingCreditDetailView.getExistAccountStatus());
-            existingCreditDetail.setExistProductProgram(existingCreditDetailView.getExistProductProgram());
-            existingCreditDetail.setExistCreditType(existingCreditDetailView.getExistCreditType());
+            existingCreditDetail.setExistProductProgram(productTransform.transformToModel(existingCreditDetailView.getExistProductProgramView()));
+            existingCreditDetail.setExistCreditType(productTransform.transformToModel(existingCreditDetailView.getExistCreditTypeView()));
             existingCreditDetail.setProductProgram(existingCreditDetailView.getProductProgram());
             existingCreditDetail.setCreditType(existingCreditDetailView.getCreditType());
             existingCreditDetail.setProductProgram(existingCreditDetailView.getProductProgram());
@@ -92,8 +96,8 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetailView.setAccountName(existingCreditDetail.getAccountName());
             existingCreditDetailView.setAccountSuf(existingCreditDetail.getAccountSuf());
             existingCreditDetailView.setExistAccountStatus(existingCreditDetail.getExistAccountStatus());
-            existingCreditDetailView.setExistProductProgram(existingCreditDetail.getExistProductProgram());
-            existingCreditDetailView.setExistCreditType(existingCreditDetail.getExistCreditType());
+            existingCreditDetailView.setExistProductProgramView(productTransform.transformToView(existingCreditDetail.getExistProductProgram()));
+            existingCreditDetailView.setExistCreditTypeView(productTransform.transformToView(existingCreditDetail.getExistCreditType()));
             existingCreditDetailView.setProductProgram(existingCreditDetail.getProductProgram());
             existingCreditDetailView.setCreditType(existingCreditDetail.getCreditType());
             existingCreditDetailView.setProductProgram(existingCreditDetail.getProductProgram());
@@ -105,6 +109,14 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetailView.setProductCode(existingCreditDetail.getProductCode());
             existingCreditDetailView.setProjectCode(existingCreditDetail.getProjectCode());
             existingCreditDetailView.setTenor(existingCreditDetail.getTenor());
+            if(existingCreditDetail.getCreditCategory()==CreditCategory.COMMERCIAL.value()){
+                existingCreditDetailView.setCreditCategory(CreditCategory.COMMERCIAL);
+            } else if(existingCreditDetail.getCreditCategory()==CreditCategory.RETAIL.value()){
+                existingCreditDetailView.setCreditCategory(CreditCategory.RETAIL);
+            } else if(existingCreditDetail.getCreditCategory()==CreditCategory.RLOS_APP_IN.value()){
+                existingCreditDetailView.setCreditCategory(CreditCategory.RLOS_APP_IN);
+            }
+
 
             /*existingCreditDetailView.setPurpose(existingCreditDetail.getPurpose());
             existingCreditDetailView.setReduceFrontEndFee(existingCreditDetail.getReduceFrontEndFee());

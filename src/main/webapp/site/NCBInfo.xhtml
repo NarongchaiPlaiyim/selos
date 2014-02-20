@@ -4,14 +4,12 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui"
-        >
+        xmlns:p="http://primefaces.org/ui" >
 
 <h:head>
     <title>SE-LOS : NCB Record Detail</title>
     <h:outputStylesheet name="css/style.css"/>
-    <script type="text/javascript" language="javascript"
-            src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+    <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
     <h:outputScript library="js" name="custom.js"/>
     <style>
         .ui-datatable td, .ui-datatable th, .ui-datatable span {
@@ -63,14 +61,15 @@
                                   style="width:200px;">
                         <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                     </p:inputText>
-                   <!-- <clv:BECalendar value="#{ncbInfo.ncbInfoView.checkingDate}"
-                                    id="checkingDate"
-                                    pattern="dd/MM/yyyy"
-                                    locale="th_TH"
+                   <!-- <clv:BECalendar id="checkingDate"
                                     showButtonPanel="false"
-                                    navigator="true"
-                                    readonly="true"
-                                    style="width:200px;"/>-->
+                                    yearRange="1950:2100"
+                                    defaultdate="#{ncbInfo.currentDateDDMMYY}"
+                                    mindate="#{ncbInfo.currentDateDDMMYY}"
+                                    pattern="dd/MM/yyyy"
+                                    value="#{ncbInfo.ncbInfoView.checkingDate}"
+                                    locale="th_TH" >
+                    </clv:BECalendar>-->
                 </td>
             </tr>
             <tr>
@@ -302,7 +301,7 @@
                     <p:selectOneMenu id="dlgSattlementStatus"
                                      style="min-width:200px;width: 200px;max-width:200px;"
                                      size="1"
-                                     value="#{ncbInfo.ncbDetailView.tdrCondition.id}"
+                                     value="#{ncbInfo.ncbInfoView.tdrCondition.id}"
                                      disabled="true">
                         <f:selectItem itemLabel="" itemValue="0"/>
                         <f:selectItems value="#{ncbInfo.tdrConditionList}"
@@ -355,183 +354,99 @@
                 <!-- <div class="div_highlighter">-->
                 <p:dataTable id="resultNcbDetail" var="item" value="#{ncbInfo.ncbDetailViewList}"
                              rowKey="#{item.ncbDetailView}" rowIndexVar="rowIndex">
-                    <p:columnGroup type="header">
-                        <p:row>
-                            <p:column style="min-width: 30px; width: 30px; max-width: 30px;">
-                                <f:facet
-                                        name="header">#{msg.get('app.ncbDetail.table.label.no')}</f:facet>
-                            </p:column>
-                            <p:column style="min-width: 130px; width: 130px; max-width: 130px;">
-                                <f:facet
-                                        name="header">#{msg.get('app.ncbDetail.table.label.loanAccountType')}</f:facet>
-                            </p:column>
-                            <p:column style="min-width: 35px; width: 35px; max-width: 35px;">
-                                <f:facet
-                                        name="header">#{msg.get('app.ncbDetail.table.label.isTMBAccount')}</f:facet>
-                            </p:column>
-                            <p:column style="min-width: 130px; width: 130px; max-width: 130px;">
-                                <f:facet
-                                        name="header">#{msg.get('app.ncbDetail.table.label.loanAccountStatus')}</f:facet>
-                            </p:column>
-                            <p:column style="min-width:80px; width:80px; max-width: 80px;">
-                                <f:facet name="header">
-                                    #{msg.get('app.ncbDetail.table.label.InfoAsOfDate')}
-                                </f:facet>
-                            </p:column>
-                            <p:column style="min-width:80px; width:80px; max-width: 80px;">
-                                <f:facet
-                                        name="header">#{msg.get('app.ncbDetail.table.label.accountOpenDate')}</f:facet>
-                            </p:column>
-                            <p:column style="min-width:80px;width:80px;max-width: 80px;">
-                                <f:facet
-                                        name="header">#{msg.get('app.ncbDetail.table.label.limit')}</f:facet>
-                            </p:column>
-                            <p:column style="min-width:120px;width:120px;max-width: 120px;">
-                                <f:facet
-                                        name="header">#{msg.get('app.ncbDetail.table.label.outstanding')}</f:facet>
-                            </p:column>
-                            <p:column style="min-width:120px;width:120px;max-width: 120px;">
-                                <f:facet
-                                        name="header">#{msg.get('app.ncbDetail.table.label.installment')}</f:facet>
-                            </p:column>
-                            <p:column style="min-width:140px;width:140px;max-width: 140px;">
-                                <f:facet
-                                        name="header">#{msg.get('app.ncbDetail.table.label.dateOfDebtRestructuring')}</f:facet>
-                            </p:column>
-                            <p:column style="min-width:180px; width:180px; max-width: 180px;">
-                                <f:facet
-                                        name="header">#{msg.get('app.ncbDetail.table.label.typeOfCurrentPayment')}</f:facet>
-                            </p:column>
-                            <p:column style="min-width:180px; width:180px; max-width: 180px;">
-                                <f:facet
-                                        name="header">#{msg.get('app.ncbDetail.table.label.typeOfHistoryPayment')}</f:facet>
-                            </p:column>
-                            <p:column style="min-width:150px; width:150px; max-width: 150px;">
-                                <f:facet
-                                        name="header">#{msg.get('app.ncbDetail.table.label.noOfOutstandingPaymentIn12months')}</f:facet>
-                            </p:column>
-                            <p:column style="min-width:100px; width:100px; max-width: 100px;">
-                                <f:facet
-                                        name="header">#{msg.get('app.ncbDetail.table.label.noOfOverLimit')}</f:facet>
-                            </p:column>
-                            <p:column style="min-width:150px; width:150px; max-width: 150px;">
-                                <f:facet
-                                        name="header">#{msg.get('app.ncbDetail.table.label.refinanceFlag')}</f:facet>
-                            </p:column>
-                            <p:column style="min-width:80px; width:80px; max-width: 80px;">
-                                <f:facet
-                                        name="header">#{msg.get('app.ncbDetail.table.label.wcFlag')}</f:facet>
-                            </p:column>
-                            <p:column style="min-width:30px; width:30px; max-width: 30px;">
-                                <f:facet
-                                        name="header"></f:facet>
-                            </p:column>
-
-                        </p:row>
-                    </p:columnGroup>
-
-
-                    <p:subTable var="item1" value="#{ncbInfo.ncbDetailView}">
-                        <f:facet name="header">
-                        </f:facet>
-                        <p:column styleClass="center">
-                            <h:outputText value="#{rowIndex+1}"/>
-                        </p:column>
-
-                        <p:column styleClass="left">
-                            <h:outputText value="#{item.accountType.name}"/>
-                        </p:column>
-
-                        <p:column styleClass="center">
-                            <h:selectBooleanCheckbox value="#{item.TMB}" disabled="true"/>
-                        </p:column>
-
-                        <p:column styleClass="left">
-                            <h:outputText value="#{item.accountStatus.name}"/>
-                        </p:column>
-
-                        <p:column styleClass="center">
+                    <p:column headerText="#{msg.get('app.ncbDetail.table.label.no')}" style="min-width: 30px; width: 30px; max-width: 30px;">
+                        <div class="center"><h:outputText value="#{rowIndex+1}"/></div>
+                    </p:column>
+                    <p:column headerText="#{msg.get('app.ncbDetail.table.label.loanAccountType')}" style="min-width: 130px; width: 130px; max-width: 130px;">
+                        <div class="center"><h:outputText value="#{item.accountType.name}"/></div>
+                    </p:column>
+                    <p:column headerText="#{msg.get('app.ncbDetail.table.label.isTMBAccount')}" style="min-width: 35px; width: 35px; max-width: 35px;">
+                        <div class="center"><h:selectBooleanCheckbox value="#{item.tmbCheck}" disabled="true"/></div>
+                    </p:column>
+                    <p:column headerText="#{msg.get('app.ncbDetail.table.label.loanAccountStatus')}" style="min-width: 130px; width: 130px; max-width: 130px;">
+                        <div class="center"><h:outputText value="#{item.accountStatus.name}"/></div>
+                    </p:column>
+                    <p:column headerText="#{msg.get('app.ncbDetail.table.label.InfoAsOfDate')}" style="min-width:80px; width:80px; max-width: 80px;">
+                        <div class="center">
                             <h:outputText value="#{item.dateOfInfo}">
                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                             </h:outputText>
-                        </p:column>
-
-                        <p:column styleClass="center">
+                        </div>
+                    </p:column>
+                    <p:column headerText="#{msg.get('app.ncbDetail.table.label.accountOpenDate')}" style="min-width:80px; width:80px; max-width: 80px;">
+                        <div class="center">
                             <h:outputText value="#{item.accountOpenDate}">
                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                             </h:outputText>
-                        </p:column>
-
-                        <p:column styleClass="right">
+                        </div>
+                    </p:column>
+                    <p:column headerText="#{msg.get('app.ncbDetail.table.label.limit')}" style="min-width:100px; width:100px; max-width: 100px;">
+                        <div class="right">
                             <h:outputText value="#{item.limit}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                             </h:outputText>
-                        </p:column>
-
-                        <p:column styleClass="right">
+                        </div>
+                    </p:column>
+                    <p:column headerText="#{msg.get('app.ncbDetail.table.label.outstanding')}" style="min-width:120px;width:120px;max-width: 120px;">
+                        <div class="right">
                             <h:outputText value="#{item.outstanding}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                             </h:outputText>
-                        </p:column>
-
-                        <p:column styleClass="right">
+                        </div>
+                    </p:column>
+                    <p:column headerText="#{msg.get('app.ncbDetail.table.label.installment')}" style="min-width:120px; width:120px; max-width: 120px;">
+                        <div class="right">
                             <h:outputText value="#{item.installment}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                             </h:outputText>
-                        </p:column>
-
-                        <p:column styleClass="center">
+                        </div>
+                    </p:column>
+                    <p:column headerText="#{msg.get('app.ncbDetail.table.label.dateOfDebtRestructuring')}" style="min-width:140px; width:140px; max-width: 140px;">
+                        <div class="center">
                             <h:outputText value="#{item.dateOfDebtRestructuring}">
                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                             </h:outputText>
-                        </p:column>
-
-                        <p:column styleClass="left">
-                            <h:outputText value="#{item.currentPayment.name}"/>
-                        </p:column>
-
-                        <p:column styleClass="left">
-                            <h:outputText value="#{item.historyPayment.name}"/>
-                        </p:column>
-
-                        <p:column styleClass="center">
-                            <h:outputText value="#{item.noOfOutstandingPaymentIn12months}"/>
-                        </p:column>
-
-                        <p:column styleClass="center">
-                            <h:outputText value="#{item.noOfOverLimit}"/>
-                        </p:column>
-
-                        <p:column styleClass="center">
-                            <h:selectBooleanCheckbox value="#{item.refinance}"/>
-                        </p:column>
-
-                        <p:column styleClass="center">
-                            <h:selectBooleanCheckbox value="#{item.wc}"/>
-                        </p:column>
-
-                        <p:column style="width:60px;">
-                            <p:commandButton icon="ui-icon-pencil"
-                                             action="#{ncbInfo.onEditNcbDetail()}"
-                                             process=":frmMain"
-                                             update=":ncbDlgForm"
-                                             oncomplete="ncbDlg.show();"
-                                             rendered="#{item.canToEdit}">
-                                <f:setPropertyActionListener value="#{item}"
-                                                             target="#{ncbInfo.selectNcbRecordItem}"/>
-                                <f:setPropertyActionListener value="#{rowIndex}"
-                                                             target="#{ncbInfo.rowIndex}"/>
-                            </p:commandButton>
-                            <p:commandButton title="Remove"
-                                             icon="ui-icon-trash"
-                                             oncomplete="confirmDeleteNcbRecordDlg.show()"
-                                             rendered="#{item.canToEdit}">
-                                <f:setPropertyActionListener value="#{item}"
-                                                             target="#{ncbInfo.selectNcbRecordItem}"/>
-                            </p:commandButton>
-                        </p:column>
-
-                    </p:subTable>
+                        </div>
+                    </p:column>
+                    <p:column headerText="#{msg.get('app.ncbDetail.table.label.typeOfCurrentPayment')}" style="min-width:180px; width:180px; max-width: 180px;">
+                        <div class="center"><h:outputText value="#{item.currentPayment.name}"/></div>
+                    </p:column>
+                    <p:column headerText="#{msg.get('app.ncbDetail.table.label.typeOfHistoryPayment')}" style="min-width:180px; width:180px; max-width: 180px;">
+                        <div class="center"><h:outputText value="#{item.historyPayment.name}"/></div>
+                    </p:column>
+                    <p:column headerText="#{msg.get('app.ncbDetail.table.label.noOfOutstandingPaymentIn12months')}" style="min-width:110px; width:110px; max-width: 110px;">
+                        <div class="center"><h:outputText value="#{item.noOfOutstandingPaymentIn12months}"/></div>
+                    </p:column>
+                    <p:column headerText="#{msg.get('app.ncbDetail.table.label.noOfOverLimit')}" style="min-width:60px; width:60px; max-width: 60px;">
+                        <div class="center"><h:outputText value="#{item.noOfOverLimit}"/></div>
+                    </p:column>
+                    <p:column headerText="#{msg.get('app.ncbDetail.table.label.refinanceFlag')}" style="min-width:80px; width:80px; max-width: 80px;">
+                        <div class="center"><h:selectBooleanCheckbox value="#{item.refinanceCheck}" disabled="true"/></div>
+                    </p:column>
+                    <p:column headerText="#{msg.get('app.ncbDetail.table.label.wcFlag')}" style="min-width:50px; width:50px; max-width: 50px;">
+                        <div class="center"><h:selectBooleanCheckbox value="#{item.wcCheck}" disabled="true"/></div>
+                    </p:column>
+                    <p:column style="min-width:30px; width:60px; max-width: 60px;">
+                        <p:commandButton icon="ui-icon-pencil"
+                                         action="#{ncbInfo.onEditNcbDetail()}"
+                                         process=":frmMain"
+                                         update=":ncbDlgForm"
+                                         oncomplete="ncbDlg.show();"
+                                         rendered="#{item.canToEdit}">
+                            <f:setPropertyActionListener value="#{item}"
+                                                         target="#{ncbInfo.selectNcbRecordItem}"/>
+                            <f:setPropertyActionListener value="#{rowIndex}"
+                                                         target="#{ncbInfo.rowIndex}"/>
+                            <p:resetInput target=":ncbDlgForm" />
+                        </p:commandButton>
+                        <p:commandButton title="Remove"
+                                         icon="ui-icon-trash"
+                                         oncomplete="confirmDeleteNcbRecordDlg.show()"
+                                         rendered="#{item.canToEdit}">
+                            <f:setPropertyActionListener value="#{item}"
+                                                         target="#{ncbInfo.selectNcbRecordItem}"/>
+                        </p:commandButton>
+                    </p:column>
                 </p:dataTable>
                 <!--</div>-->
             </td>
@@ -571,11 +486,18 @@
 <h:inputHidden id="pagename" value="mnuprescreen"/>
 <h:inputHidden id="subpagename" value="submnuprescreen"/>
 </div>
+
+<p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnCancel">
+    LOADING<br/>
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
+
 </h:form>
 </p:panel>
 
 <p:dialog id="ncbDialog" header="NCB Record Information" widgetVar="ncbDlg"
-          modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="500">
+          closeOnEscape="false" modal="true"
+          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="500">
     <ui:include src="dialog/NCBDetailDialog.xhtml"/>
 </p:dialog>
 
@@ -588,10 +510,7 @@
     <ui:param name="update" value=":frmMain"/>
 </ui:include>
 
-<p:blockUI block="pnl_maincontainer" trigger=":frmMain:btnSave,:frmMain:btnCancel">
-    LOADING<br/>
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
+
 
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"

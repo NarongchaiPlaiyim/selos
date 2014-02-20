@@ -26,7 +26,7 @@ import java.util.List;
 @ManagedBean(name ="baInfo")
 public class BaInfo implements Serializable {
 
-    @Inject
+    /*@Inject
     @SELOS
     Logger log;
 
@@ -370,5 +370,5 @@ public class BaInfo implements Serializable {
 
     public void setApplyBaInfoList(List<ApplyBaInfoView> applyBaInfoList) {
         this.applyBaInfoList = applyBaInfoList;
-    }
+    }*/
 }

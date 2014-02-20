@@ -11,17 +11,22 @@ import java.util.Date;
 
 public class NewCreditTierDetailView implements Serializable {
     private long id;
+
     private int no;
-    private BigDecimal finalInterest;
+
     private BaseRate finalBasePrice;
-    private String finalPriceRate;
-    private BigDecimal installment;
+    private BigDecimal finalInterest;
+    private String finalPriceLabel;
+
     private BaseRate standardBasePrice;
-    private String standardPrice;
     private BigDecimal standardInterest;
+    private String standardPriceLabel;
+
     private BaseRate suggestBasePrice;
-    private String suggestPrice;
     private BigDecimal suggestInterest;
+    private String suggestPriceLabel;
+
+    private BigDecimal installment;
     private int tenor;
     private boolean canEdit;
     private Date createDate;
@@ -34,15 +39,19 @@ public class NewCreditTierDetailView implements Serializable {
     }
 
     public void reset() {
-        this.finalPriceRate = "";
         this.tenor = 0;
         this.installment = BigDecimal.ZERO;
-        this.standardBasePrice =  new BaseRate();
-        this.standardPrice = "";
-        this.suggestBasePrice = new BaseRate();
-        this.suggestPrice = "";
+
+        this.standardPriceLabel = "";
+        this.suggestPriceLabel = "";
+        this.finalPriceLabel = "";
+
         this.standardInterest = BigDecimal.ZERO;
         this.suggestInterest = BigDecimal.ZERO;
+        this.finalInterest = BigDecimal.ZERO;
+
+        this.standardBasePrice =  new BaseRate();
+        this.suggestBasePrice = new BaseRate();
         this.finalBasePrice = new BaseRate();
     }
 
@@ -62,12 +71,52 @@ public class NewCreditTierDetailView implements Serializable {
         this.no = no;
     }
 
-    public String getFinalPriceRate() {
-        return finalPriceRate;
+    public BaseRate getFinalBasePrice() {
+        return finalBasePrice;
     }
 
-    public void setFinalPriceRate(String finalPriceRate) {
-        this.finalPriceRate = finalPriceRate;
+    public void setFinalBasePrice(BaseRate finalBasePrice) {
+        this.finalBasePrice = finalBasePrice;
+    }
+
+    public BigDecimal getFinalInterest() {
+        return finalInterest;
+    }
+
+    public void setFinalInterest(BigDecimal finalInterest) {
+        this.finalInterest = finalInterest;
+    }
+
+    public BaseRate getStandardBasePrice() {
+        return standardBasePrice;
+    }
+
+    public void setStandardBasePrice(BaseRate standardBasePrice) {
+        this.standardBasePrice = standardBasePrice;
+    }
+
+    public BigDecimal getStandardInterest() {
+        return standardInterest;
+    }
+
+    public void setStandardInterest(BigDecimal standardInterest) {
+        this.standardInterest = standardInterest;
+    }
+
+    public BaseRate getSuggestBasePrice() {
+        return suggestBasePrice;
+    }
+
+    public void setSuggestBasePrice(BaseRate suggestBasePrice) {
+        this.suggestBasePrice = suggestBasePrice;
+    }
+
+    public BigDecimal getSuggestInterest() {
+        return suggestInterest;
+    }
+
+    public void setSuggestInterest(BigDecimal suggestInterest) {
+        this.suggestInterest = suggestInterest;
     }
 
     public BigDecimal getInstallment() {
@@ -84,6 +133,14 @@ public class NewCreditTierDetailView implements Serializable {
 
     public void setTenor(int tenor) {
         this.tenor = tenor;
+    }
+
+    public boolean isCanEdit() {
+        return canEdit;
+    }
+
+    public void setCanEdit(boolean canEdit) {
+        this.canEdit = canEdit;
     }
 
     public Date getCreateDate() {
@@ -118,99 +175,51 @@ public class NewCreditTierDetailView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public boolean isCanEdit() {
-        return canEdit;
+    public String getFinalPriceLabel() {
+        return finalPriceLabel;
     }
 
-    public void setCanEdit(boolean canEdit) {
-        this.canEdit = canEdit;
+    public void setFinalPriceLabel(String finalPriceLabel) {
+        this.finalPriceLabel = finalPriceLabel;
     }
 
-    public BigDecimal getFinalInterest() {
-        return finalInterest;
+    public String getStandardPriceLabel() {
+        return standardPriceLabel;
     }
 
-    public void setFinalInterest(BigDecimal finalInterest) {
-        this.finalInterest = finalInterest;
+    public void setStandardPriceLabel(String standardPriceLabel) {
+        this.standardPriceLabel = standardPriceLabel;
     }
 
-
-    public String getStandardPrice() {
-        return standardPrice;
+    public String getSuggestPriceLabel() {
+        return suggestPriceLabel;
     }
 
-    public void setStandardPrice(String standardPrice) {
-        this.standardPrice = standardPrice;
-    }
-
-    public BigDecimal getStandardInterest() {
-        return standardInterest;
-    }
-
-    public void setStandardInterest(BigDecimal standardInterest) {
-        this.standardInterest = standardInterest;
-    }
-
-    public String getSuggestPrice() {
-        return suggestPrice;
-    }
-
-    public void setSuggestPrice(String suggestPrice) {
-        this.suggestPrice = suggestPrice;
-    }
-
-    public BigDecimal getSuggestInterest() {
-        return suggestInterest;
-    }
-
-    public void setSuggestInterest(BigDecimal suggestInterest) {
-        this.suggestInterest = suggestInterest;
-    }
-
-    public BaseRate getFinalBasePrice() {
-        return finalBasePrice;
-    }
-
-    public void setFinalBasePrice(BaseRate finalBasePrice) {
-        this.finalBasePrice = finalBasePrice;
-    }
-
-    public BaseRate getStandardBasePrice() {
-        return standardBasePrice;
-    }
-
-    public void setStandardBasePrice(BaseRate standardBasePrice) {
-        this.standardBasePrice = standardBasePrice;
-    }
-
-    public BaseRate getSuggestBasePrice() {
-        return suggestBasePrice;
-    }
-
-    public void setSuggestBasePrice(BaseRate suggestBasePrice) {
-        this.suggestBasePrice = suggestBasePrice;
+    public void setSuggestPriceLabel(String suggestPriceLabel) {
+        this.suggestPriceLabel = suggestPriceLabel;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("no", no)
-                .append("finalInterest", finalInterest)
-                .append("finalBasePrice", finalBasePrice)
-                .append("finalPriceRate", finalPriceRate)
-                .append("installment", installment)
-                .append("standardBasePrice", standardBasePrice)
-                .append("standardPrice", standardPrice)
-                .append("standardInterest", standardInterest)
-                .append("suggestBasePrice", suggestBasePrice)
-                .append("suggestPrice", suggestPrice)
-                .append("suggestInterest", suggestInterest)
-                .append("tenor", tenor)
-                .append("canEdit", canEdit)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("no", no).
+                append("finalBasePrice", finalBasePrice).
+                append("finalInterest", finalInterest).
+                append("finalPriceLabel", finalPriceLabel).
+                append("standardBasePrice", standardBasePrice).
+                append("standardInterest", standardInterest).
+                append("standardPriceLabel", standardPriceLabel).
+                append("suggestBasePrice", suggestBasePrice).
+                append("suggestInterest", suggestInterest).
+                append("suggestPriceLabel", suggestPriceLabel).
+                append("installment", installment).
+                append("tenor", tenor).
+                append("canEdit", canEdit).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                toString();
     }
 }

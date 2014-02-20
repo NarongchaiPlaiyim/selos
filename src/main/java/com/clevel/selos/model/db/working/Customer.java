@@ -78,13 +78,13 @@ public class Customer implements Serializable {
     @Column(name = "csi_checked", nullable = false, columnDefinition = "int default 0")
     private int csiFlag;
 
-    @OneToOne(mappedBy = "customer")
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private Individual individual;
 
-    @OneToOne(mappedBy="customer")
+    @OneToOne(mappedBy="customer", cascade = CascadeType.ALL)
     private Juristic juristic;
 
-    @OneToMany(mappedBy="customer")
+    @OneToMany(mappedBy="customer", cascade = CascadeType.ALL)
     private List<Address> addressesList;
 
     @OneToOne
@@ -99,10 +99,10 @@ public class Customer implements Serializable {
     @JoinColumn(name="reference_id")
     private Reference reference;
 
-    @OneToOne(mappedBy="customer")
+    @OneToOne(mappedBy="customer", cascade = CascadeType.ALL)
     private NCB ncb;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<CustomerCSI> customerCSIList;
 
     @Column(name="is_spouse", nullable=false, columnDefinition="int default 0")

@@ -7,8 +7,8 @@
         xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-        <title>Appraisal Request</title>
-        <h:outputStylesheet name="css/style.css" />
+    <title>#{msg.get("app.name")} - Appraisal Request</title>
+    <h:outputStylesheet name="css/style.css" />
     <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
     <h:outputScript library="js" name="custom.js" />
     <style type="text/css">
@@ -40,7 +40,7 @@
                 <div id="content_container">
                     <div id="content_name"><p:outputLabel value="#{msg.get('app.appraisalRequest.header')}" style="font-size: 18px"/></div>
                     <div id="content">
-                        <table id="table_content" style="width: 100%;" class="content_table_form">
+                        <table id="table_content" border="0" style="width: 100%;" class="content_table_form">
                             <tr>
                                 <td colspan="6" class="right" style="padding-right: 1%;">
                                     Last update by <p:outputLabel value="#{appraisalRequest.appraisalView.modifyBy.userName}"/> , <p:outputLabel value="#{appraisalRequest.appraisalView.modifyDate}"/>
@@ -50,6 +50,7 @@
                             <tr>
                                 <td colspan="6"><div class="separate"><!-- --></div></td>
                             </tr>
+
                             <tr>
                                 <td class="left" colspan="6">
                                     <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.header')}" styleClass="title" style="font-size: 15px"/>
@@ -64,14 +65,21 @@
                                                      oncomplete="appraisalDetailViewDlg.show()"/>
                                 </td>
                             </tr>
+
+                            <tr>
+                                <td style="width: 150px; min-width: 150px; max-width: 150px;"/>
+                                <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
+                                <td style="width: 150px; min-width: 150px; max-width: 150px;"/>
+                                <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
+                            </tr>
+
                             <tr>
                                 <td colspan="6">
                                     <p:dataTable tableStyleClass="center"
                                                  id="appraisalDetailViewTable"
-                                                 var="appraisalDetailView"
+                                                 var="appraisalDetailViewItem"
                                                  value="#{appraisalRequest.appraisalDetailViewList}"
                                                  paginator="false"
-                                                 rowKey="#{appraisalDetailView.id}"
                                                  rowIndexVar="rowIndex" >
                                         <p:columnGroup type="header">
                                             <p:row>
@@ -89,41 +97,40 @@
                                             </p:row>
                                         </p:columnGroup>
                                         <p:column  styleClass="center" >
-                                            <p:outputLabel value="#{appraisalDetailView.no}"/>
+                                            <p:outputLabel value="#{rowIndex+1}"/>
                                         </p:column>
                                         <p:column styleClass="left" >
-                                            <p:outputLabel value="#{appraisalDetailView.titleDeed}" />
+                                            <p:outputLabel value="#{appraisalDetailViewItem.titleDeed}" />
                                         </p:column>
                                         <p:column styleClass="left">
-                                            <p:outputLabel value="#{appraisalDetailView.purposeReviewAppraisalLabel}"/> <p:spacer width="5px"/>
-                                            <p:outputLabel value="#{appraisalDetailView.purposeNewAppraisalLabel}"/>    <p:spacer width="5px"/>
-                                            <p:outputLabel value="#{appraisalDetailView.purposeReviewBuildingLabel}"/>
+                                            <p:outputLabel value="#{appraisalDetailViewItem.purposeReviewAppraisalLabel}"/>
                                         </p:column>
                                         <p:column styleClass="left">
-                                            <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailView.characteristic}" disabled="true">
-                                                <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
-                                                <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
+                                            <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailViewItem.characteristic}" disabled="false">
+                                                <f:selectItem id="characteristicRadio0" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
+                                                <f:selectItem id="characteristicRadio1" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
                                             </p:selectOneRadio>
                                         </p:column>
                                         <p:column styleClass="right">
-                                            <p:outputLabel value="#{appraisalDetailView.numberOfDocuments}"/>
+                                            <p:outputLabel value="#{appraisalDetailViewItem.numberOfDocuments}"/>
                                         </p:column>
                                         <p:column styleClass="center" >
                                             <p:commandButton icon="ui-icon-pencil"
+                                                             process="@this"
                                                              action="#{appraisalRequest.onEditAppraisalDetailView()}"
                                                              update=":appraisalDetailDlgForm"
-                                                             process=":frmMain:appraisalDetailViewTable"
                                                              oncomplete="appraisalDetailViewDlg.show();">
-                                                <f:setPropertyActionListener value="#{appraisalDetailView}"
-                                                                             target="#{appraisalRequest.selectAppraisalDetailView}"/>
+                                                <f:setPropertyActionListener value="#{appraisalDetailViewItem}"
+                                                                             target="#{appraisalRequest.appraisalDetailViewSelected}"/>
                                                 <f:setPropertyActionListener value="#{rowIndex}"
                                                                              target="#{appraisalRequest.rowIndex}"/>
                                             </p:commandButton>
+
                                             <p:commandButton title="Remove" process="@this"
                                                              icon="ui-icon-trash"
                                                              oncomplete="confirmDeleteAppraisalDetailViewDlg.show()" >
-                                                <f:setPropertyActionListener value="#{appraisalDetailView}"
-                                                                             target="#{appraisalRequest.selectAppraisalDetailView}"/>
+                                                <f:setPropertyActionListener value="#{appraisalDetailViewItem}"
+                                                                             target="#{appraisalRequest.appraisalDetailViewSelected}"/>
                                                 <f:setPropertyActionListener value="#{rowIndex}"
                                                                              target="#{appraisalRequest.rowIndex}"/>
                                             </p:commandButton>
@@ -142,57 +149,53 @@
                                     <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.header')}" styleClass="title" style="font-size: 15px"/>
                                 </td>
                             </tr>
+
                             <tr>
-                                <td colspan="6" style="width:100%">
-                                    <table>
+                                <td >
+                                    <table class="table_content" border="0" style="padding: 0%" >
                                         <tr>
-                                            <td style="width: 30px;"/>
-                                            <td style="width: 30px;"/>
-                                            <td style="width: 30px;"/>
-                                        </tr>
-                                        <tr>
-                                            <td/>
-                                            <td class="center">
+                                            <th style="width: 50px;" />
+                                            <th style="width: 250px;" >
                                                 <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.table.customerName')}"/>
-                                            </td>
-                                            <td class="center">
+                                            </th>
+                                            <th style="width: 250px;" >
                                                 <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.table.contactNo')}"/>
-                                            </td>
+                                            </th>
                                         </tr>
                                         <tr id="contactId">
-                                            <td>
-                                                <p:outputLabel value="#{appraisalRequest.appraisalContactDetailView.no1}"/>
+                                            <td class="center">
+                                                <p:outputLabel value="1"/>
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName1}"
                                                              style = "#{appraisalRequest.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " />
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo1}"
                                                              mask="099-999-9999"
                                                              style = "#{appraisalRequest.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>
-                                                <p:outputLabel value="#{appraisalRequest.appraisalContactDetailView.no2}"/>
+                                            <td class="center">
+                                                <p:outputLabel value="2"/>
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName2}"/>
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo2}"
                                                              mask="099-999-9999" />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>
-                                                <p:outputLabel value="#{appraisalRequest.appraisalContactDetailView.no3}"/>
+                                            <td class="center">
+                                                <p:outputLabel value="3"/>
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName3}"/>
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo3}"
                                                              mask="099-999-9999" />
                                             </td>
@@ -200,6 +203,7 @@
                                     </table>
                                 </td>
                             </tr>
+
                             <tr>
                                 <td colspan="6"><p:spacer/></td>
                             </tr>
@@ -216,7 +220,7 @@
                                     <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.zoneLocation')}"/>
                                 </td>
                                 <td>
-                                    <p:inputText value="#{appraisalRequest.appraisalView.zoneLocation}" />
+                                    <p:inputText value="#{appraisalRequest.appraisalView.zoneLocation}" readonly="true" />
                                 </td>
                             </tr>
                             <tr>
@@ -232,9 +236,9 @@
                                     <p:commandButton id="btnSave"
                                                      value="#{msg.get('app.saveButton')}"
                                                      styleClass="medium"
-                                                     process=":frmMain"
+                                                     process="@form"
                                                      action="#{appraisalRequest.onSaveAppraisalRequest()}"
-                                                     update=":msgBoxSystemMessagePanel"/>
+                                                     update=":frmMain, :msgBoxSystemMessagePanel"/>
 
                                     <p:commandButton value="#{msg.get('app.cancelButton')}"
                                                      id="btnCancel"
@@ -280,12 +284,26 @@
     </ui:include>
     
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                         header="#{appraisalRequest.messageHeader}" message="#{appraisalRequest.message}" >
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
+                         header="#{appraisalRequest.messageHeader}" >
+            <f:facet name="message">
+                <h:outputText value="#{appraisalRequest.message}" escape="false"/>
+            </f:facet>
             <p:commandButton value="OK"
                              process="@this"
                              update=":frmMain"
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
+    <p:panel id="msgBoxRedirectPanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
+                         header="#{appraisalRequest.messageHeader}" >
+            <f:facet name="message">
+                <h:outputText value="#{appraisalRequest.message}" escape="false"/>
+            </f:facet>
+            <p:commandButton value="OK"
+                             process="@this"
+                             action="#{baseController.onGoToInbox}"/>
         </p:confirmDialog>
     </p:panel>
     <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">

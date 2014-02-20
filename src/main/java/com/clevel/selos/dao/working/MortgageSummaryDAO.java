@@ -10,20 +10,19 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 
 public class MortgageSummaryDAO extends GenericDAO<MortgageSummary, Long> {
+    private static final long serialVersionUID = -9047195995937366233L;
+	
     @Inject
     @SELOS
     Logger log;
-    @Inject
+    
     public MortgageSummaryDAO() {
     }
 
     public MortgageSummary findByWorkCaseId(long workCaseId) {
-        log.info("findByWorkCaseId : {}", workCaseId);
-
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         MortgageSummary mortgageSummary = (MortgageSummary) criteria.uniqueResult();
-
         return mortgageSummary;
     }
 }

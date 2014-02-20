@@ -6,12 +6,13 @@ import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class NewCollateralHeadView {
+public class NewCollateralHeadView implements Serializable {
     private long id;
     private int no;
     private String titleDeed;
@@ -20,7 +21,7 @@ public class NewCollateralHeadView {
     private CollateralType headCollType;
     private CollateralType collTypePercentLTV;
     private PotentialCollateral potentialCollateral ;
-
+    private String collID;
     private BigDecimal existingCredit;
     private int insuranceCompany;
 
@@ -167,6 +168,14 @@ public class NewCollateralHeadView {
         this.collTypePercentLTV = collTypePercentLTV;
     }
 
+    public String getCollID() {
+        return collID;
+    }
+
+    public void setCollID(String collID) {
+        this.collID = collID;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -178,6 +187,7 @@ public class NewCollateralHeadView {
                 .append("headCollType", headCollType)
                 .append("collTypePercentLTV", collTypePercentLTV)
                 .append("potentialCollateral", potentialCollateral)
+                .append("collID", collID)
                 .append("existingCredit", existingCredit)
                 .append("insuranceCompany", insuranceCompany)
                 .append("createDate", createDate)

@@ -44,7 +44,7 @@
                                                  styleClass="largest"
                                                  process="@this"
                                                  actionListener="#{prescreenResult.onRetrieveInterfaceInfo}"
-                                                 update="frmMain:interfaceInfoPanel">
+                                                 update="frmMain:interfaceInfoPanel, :msgBoxSystemMessagePanel">
 
                             </p:commandButton><p:spacer width="10" height="5"/><h:outputText styleClass="require-field" value="#{msg.get('app.prescreen.result.warning')}" rendered="#{prescreenResult.prescreenView.modifyFlag == 1}"/></td>
                         </tr>
@@ -109,11 +109,13 @@
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" styleClass="center"
                                               style="width: 150px;">
-                                        <h:outputText value="#{creditItem.productProgram}"/>
+                                        <!--<h:outputText value="#{creditItem.existProductProgram.name}"/>-->
+                                        <h:outputText value="#{creditItem.existProductProgramView.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.creditType')}" styleClass="center"
                                               style="width: 120px;">
-                                        <h:outputText value="#{creditItem.creditType}"/>
+                                        <!--<h:outputText value="#{creditItem.existCreditType.name}"/>-->
+                                        <h:outputText value="#{creditItem.existCreditTypeView.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.limit')}" styleClass="right" style="width: 130px;">
                                         <h:outputText value="#{creditItem.limit}">
@@ -191,10 +193,10 @@
                                             value="#{creditItem.accountStatus.code}"/> - <h:outputText value="#{creditItem.accountStatus.description}"/>
                                     </p:column>
                                     <p:column styleClass="center" style="width: 150px;">
-                                        <h:outputText value="#{creditItem.productProgram}"/>
+                                        <h:outputText value="#{creditItem.existProductProgramView.name}"/>
                                     </p:column>
                                     <p:column styleClass="center" style="width: 120px;">
-                                        <h:outputText value="#{creditItem.creditType}"/>
+                                        <h:outputText value="#{creditItem.existCreditTypeView.name}"/>
                                     </p:column>
                                     <p:column styleClass="right" style="width: 130px;">
                                         <h:outputText value="#{creditItem.limit}">
@@ -280,11 +282,11 @@
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" styleClass="center"
                                               style="width: 150px;">
-                                        <h:outputText value="#{creditItem.productProgram}"/>
+                                        <h:outputText value="#{creditItem.existProductProgramView.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.creditType')}" styleClass="center"
                                               style="width: 120px;">
-                                        <h:outputText value="#{creditItem.creditType}"/>
+                                        <h:outputText value="#{creditItem.existCreditTypeView.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.limit')}" styleClass="right" style="width: 130px;">
                                         <h:outputText value="#{creditItem.limit}">
@@ -363,11 +365,11 @@
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" styleClass="center"
                                               style="width: 150px;">
-                                        <h:outputText value="#{creditItem.productProgram}"/>
+                                        <h:outputText value="#{creditItem.existProductProgramView.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.creditType')}" styleClass="center"
                                               style="width: 120px;">
-                                        <h:outputText value="#{creditItem.creditType}"/>
+                                        <h:outputText value="#{creditItem.existCreditTypeView.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.limit')}" styleClass="right" style="width: 130px;">
                                         <h:outputText value="#{creditItem.limit}">
@@ -468,9 +470,9 @@
 </p:panel>
 <p:panel id="msgBoxRedirectPanel" styleClass="panel">
     <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
-                     header="#{prescreenResult.messageHeader}">
+                     header="#{prescreenMaker.messageHeader}">
         <f:facet name="message">
-            <h:outputText value="#{prescreenResult.message}" escape="false"/>
+            <h:outputText value="#{prescreenMaker.message}" escape="false"/>
         </f:facet>
         <p:commandButton value="OK"
                          action="#{baseController.onGoToInbox}"

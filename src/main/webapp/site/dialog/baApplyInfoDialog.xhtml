@@ -1,59 +1,110 @@
-<ui:composition
-        xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui"
-        xmlns:clv="http://clevel.com/ui">
-    <h:form id="baApplyInfoDlgForm">
-        <table class="content_form">
-            <tr>
-                <td class="title" style="width: 250px;"><p:outputLabel  for="customername" value="#{msg.get('app.baInfo.dialog.applyBa.cusName')}"></p:outputLabel></td>
-                <td><p:inputText id="customername" value="#{baInfo.applyBaInfoView.cusName}"/></td>
-            </tr>
-            <tr>
-                <td class="title" style="width: 250px;"><p:outputLabel  for="contactnumber" value="#{msg.get('app.baInfo.dialog.applyBa.contactNumber')}"></p:outputLabel></td>
-                <td><p:inputMask id="contactnumber" value="#{baInfo.applyBaInfoView.contactNumber}" mask="99-9-999-9999"/></td>
-            </tr>
-            <tr>
-                <td class="title" style="width: 250px;"><p:outputLabel  for="relationship" value="#{msg.get('app.baInfo.dialog.applyBa.relationship')}"></p:outputLabel></td>
-                <td><p:inputText id="relationship" value="#{baInfo.applyBaInfoView.relationship}"/> </td>
-            </tr>
-            <tr>
-                <td class="title" style="width: 250px;"><p:outputLabel  for="resulthealthcheck" value="#{msg.get('app.baInfo.dialog.applyBa.resultHealthCheck')}"></p:outputLabel></td>
-                <td>
-                    <p:selectOneMenu id="resulthealthcheck" value="#{baInfo.applyBaInfoView.resultHealtcheck}">
-                        <f:selectItems value="#{baInfo.getHealCheckList()}" />
-                    </p:selectOneMenu>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:clv="http://clevel.com/ui">
+<h:form id="baApplyInfoDlgForm">
+	<p:panel styleClass="panel-dialog" rendered="#{not empty baInfo.bapaInfoCustomerView}">
+		<p:messages />
+		<table class="content_form">
+			<tr>
+				<td class="title" style="width:150px">
+					<p:outputLabel
+						for="customername"
+						value="#{msg.get('app.baInfo.ba.dialog.cusName')}" />
+				</td>
+				<td>
+					<p:inputText id="customername" readonly="true"
+						value="#{baInfo.bapaInfoCustomerView.customerName}"
+						styleClass="readonly" />
+				</td>
+			</tr>
+			<tr>
+				<td class="title">
+					<p:outputLabel
+						for="contactnumber"
+						value="#{msg.get('app.baInfo.ba.dialog.contactNumber')}" />
+				</td>
+				<td>
+					<p:inputText id="contactnumber" readonly="true"
+						value="#{baInfo.bapaInfoCustomerView.customerContractNo}"
+						styleClass="readonly" />
+						
+				</td>
+			</tr>
+			<tr>
+				<td class="title">
+					<p:outputLabel
+						for="relationship"
+						value="#{msg.get('app.baInfo.ba.dialog.relationship')}" />
+				</td>
+				<td>
+					<p:inputText id="relationship" readonly="true"
+						value="#{baInfo.bapaInfoCustomerView.relationship}"
+						styleClass="readonly"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="title">
+					<p:outputLabel
+						for="healthcheck"
+						value="#{msg.get('app.baInfo.ba.dialog.resultHealthcheck')}" />
+				</td>
+				<td>
+					<p:selectOneMenu id='healthcheck' style="width:160px"
+						value="#{baInfo.bapaInfoCustomerView.updBAResultHC}"
+						>
+						<p:ajax update="checkdate"/>
+						<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+						<f:selectItems value="#{baInfo.baResultHCs}" var="hc"
+							itemLabel="#{hc.name}" itemDescription="#{hc.description}"
+							itemValue="#{hc.id}"
+							/>
+					</p:selectOneMenu>
+				</td>
+			</tr>
+			<tr>
+				<td class="title">
+					<p:outputLabel
+						for="checkdate"
+						value="#{msg.get('app.baInfo.ba.dialog.checkDate')}" />
+				</td>
+				<td>
+					<p:calendar id='checkdate'
+						value="#{baInfo.bapaInfoCustomerView.checkDate}"
+						pattern="dd/MM/yyyy" showOn="button"
+						disabled="#{not baInfo.enableCheckDate}"		
+						autocomplete="false"
+						/>
+				</td>
+			</tr>
+			 <tr>
+                <td colspan="2">
+                    <p:spacer></p:spacer>
                 </td>
             </tr>
-            <tr>
-                <td class="title" style="width: 250px;"><p:outputLabel  for="checkdate" value="#{msg.get('app.baInfo.dialog.applyBa.checkDate')}"></p:outputLabel></td>
-                <td>
-                    <p:calendar size="10" id="checkdate" showOn="button" navigator="true"
-                                value="#{baInfo.applyBaInfoView.checkDate}"
-                                pattern="dd/MM/yyyy"
-                                locale="th_TH"
-                                timeZone="Asia/Bangkok"
-                                yearRange="2440:3000">
-                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                    </p:calendar>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="100%" style="text-align: center"><p:commandButton value="#{msg.get('app.button.ok')}"
-                                     actionListener="#{baInfo.onSubmitApplyBaDialog()}"
-                                     update=":baInformationForm,:baApplyInfoDlgForm"
-                                     process="@form"
-                                     styleClass="smaller"
-                                     oncomplete="handleApplyBaDialogRequest(xhr, status, args)"/>
-                    <p:commandButton value="#{msg.get('app.button.cancel')}"
-                                     onclick="applyBaInfoDialog.hide()"
-                                     styleClass="smaller"/>
-                </td>
-            </tr>
-
-        </table>
-    </h:form>
+			<tr>
+				<td colspan="2" class="center">
+					 <p:commandButton
+                         id="saveBtn"
+                         value="#{msg.get('app.button.ok')}"
+                         actionListener="#{baInfo.onApplyBAInformation()}"
+                         update=":frmMain:bainfo_tbl,:baApplyInfoDlgForm"
+                         oncomplete="handleDialogRequest(xhr, status, args,'p_baApplyInfoDlg')"
+                         styleClass="small"
+                         />
+					<p:commandButton
+                    	type='button' styleClass="small" 
+                    	value="#{msg.get('app.button.cancel')}" onclick="p_baApplyInfoDlg.hide()"/>
+				</td>
+			</tr>
+			
+		</table>
+	</p:panel>
+	<p:blockUI block="baApplyInfoDlgForm" trigger="saveBtn">
+	    LOADING<br />
+	    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+	</p:blockUI>
+</h:form>
 
 </ui:composition>

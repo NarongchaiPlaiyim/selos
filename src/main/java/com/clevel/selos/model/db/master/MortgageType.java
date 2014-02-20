@@ -12,7 +12,9 @@ import java.io.Serializable;
 @Entity
 @Table(name = "mst_mortgage_type")
 public class MortgageType implements Serializable {
-    @Id
+    private static final long serialVersionUID = -1706683093964045342L;
+
+	@Id
     @Column(name = "id")
     private int id;
 
@@ -24,6 +26,21 @@ public class MortgageType implements Serializable {
 
     @Column(name = "active")
     private int active;
+    
+    @Column(name="mortgage_flag",columnDefinition="int default 0")
+    private boolean mortgageFlag;
+    
+    @Column(name="pledge_flag",columnDefinition="int default 0")
+    private boolean pledgeFlag;
+    
+    @Column(name="guarantor_flag",columnDefinition="int default 0")
+    private boolean guarantorFlag;
+    
+    @Column(name="tcg_flag",columnDefinition="int default 0")
+    private boolean tcgFlag;
+    
+    @Column(name="referred_flag",columnDefinition="int default 0")
+    private boolean referredFlag;
 
     public MortgageType() {
     }
@@ -59,7 +76,47 @@ public class MortgageType implements Serializable {
     public void setActive(int active) {
         this.active = active;
     }
+    
+    public boolean isMortgageFlag() {
+		return mortgageFlag;
+	}
 
+	public void setMortgageFlag(boolean mortgageFlag) {
+		this.mortgageFlag = mortgageFlag;
+	}
+
+	public boolean isPledgeFlag() {
+		return pledgeFlag;
+	}
+
+	public void setPledgeFlag(boolean pledgeFlag) {
+		this.pledgeFlag = pledgeFlag;
+	}
+
+	public boolean isGuarantorFlag() {
+		return guarantorFlag;
+	}
+
+	public void setGuarantorFlag(boolean guarantorFlag) {
+		this.guarantorFlag = guarantorFlag;
+	}
+
+	public boolean isTcgFlag() {
+		return tcgFlag;
+	}
+
+	public void setTcgFlag(boolean tcgFlag) {
+		this.tcgFlag = tcgFlag;
+	}
+
+	public boolean isReferredFlag() {
+		return referredFlag;
+	}
+
+	public void setReferredFlag(boolean referredFlag) {
+		this.referredFlag = referredFlag;
+	}
+    
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -67,6 +124,11 @@ public class MortgageType implements Serializable {
                 .append("mortgage", mortgage)
                 .append("redeem", redeem)
                 .append("active", active)
+                .append("mortgageFlag", mortgageFlag)
+                .append("pledgeFlag", pledgeFlag)
+                .append("guarantorFlag", guarantorFlag)
+                .append("tcgFlag", tcgFlag)
+                .append("referredFlag", referredFlag)
                 .toString();
     }
 

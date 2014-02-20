@@ -4,8 +4,9 @@ import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
 import com.clevel.selos.dao.working.NCBDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.NCB;
@@ -18,12 +19,12 @@ import com.clevel.selos.transform.NCBTransform;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.Restrictions;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,33 +52,69 @@ public class NCBInfoControl extends BusinessControl {
     private LoanAccountTypeTransform loanAccountTypeTransform;
 
     @Inject
-    public NCBInfoControl() {
-
-    }
+    public NCBInfoControl() {}
 
     private final BigDecimal plusMRR = BigDecimal.valueOf(6);
 
 
-    public void onSaveNCBToDB(NCBInfoView NCBInfoView, List<NCBDetailView> NCBDetailViewList) {
+    public void onSaveNCBToDB(NCBInfoView ncbInfoView, List<NCBDetailView> ncbDetailViewList) {
         log.info("onSaveNCBToDB begin");
 
-        NCB ncb = ncbTransform.transformToModel(NCBInfoView);
-        ncbDAO.persist(ncb);
-        log.info("persist ncb");
-
+        if(ncbInfoView.getId() == 0){
+            ncbInfoView.setCreateBy(getCurrentUser());
+            ncbInfoView.setCreateDate(DateTime.now().toDate());
+        } else {
+            ncbInfoView.setModifyBy(getCurrentUser());
+            ncbInfoView.setModifyDate(DateTime.now().toDate());
+        }
+        NCB ncb = ncbTransform.transformToModel(ncbInfoView);
+        //ncbDAO.persist(ncb);
         List<NCBDetail> NCBDetailListToDelete = ncbDetailDAO.findNCBDetailByNcbId(ncb.getId());
         log.info("NCBDetailListToDelete :: {}", NCBDetailListToDelete.size());
         ncbDetailDAO.delete(NCBDetailListToDelete);
         log.info("delete NCBDetailListToDelete");
 
-        List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(NCBDetailViewList, ncb);
+        log.debug("ncbDetailViewList : {}", ncbDetailViewList);
+        List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList, ncb);
+        calculateLoanCredit(ncb, ncbDetailList);
+        ncbDAO.persist(ncb);
+        log.info("persist ncb");
         ncbDetailDAO.persist(ncbDetailList);
+        //TODO Call function
 
+    }
+
+    public NCB calculateLoanCredit(NCB ncb, List<NCBDetail> ncbDetailList){
+        BigDecimal loanCredit = new BigDecimal(0);
+        BigDecimal loanCreditWC = new BigDecimal(0);
+        BigDecimal loanCreditTMB = new BigDecimal(0);
+        BigDecimal loanCreditWCTMB = new BigDecimal(0);
+
+        for(NCBDetail item : ncbDetailList){
+            if(item.getAccountType() != null && item.getAccountType().getWcFlag() == 1){
+                loanCredit = loanCredit.add(item.getLimit());
+            }
+            if(item.getWcFlag() == RadioValue.YES.value()){
+                loanCreditWC = loanCreditWC.add(item.getOutstanding());
+            }
+            if(item.getAccountTMBFlag() == RadioValue.YES.value()){
+                loanCreditTMB = loanCreditTMB.add(item.getOutstanding());
+            }
+            if(item.getAccountTMBFlag() == RadioValue.YES.value() && item.getWcFlag() == RadioValue.YES.value()){
+                loanCreditWCTMB = loanCreditWCTMB.add(item.getLimit());
+            }
+        }
+        ncb.setLoanCreditNCB(loanCredit);
+        ncb.setLoanCreditTMB(loanCreditTMB);
+        ncb.setLoanCreditWC(loanCreditWC);
+        ncb.setLoanCreditWCTMB(loanCreditWCTMB);
+
+        return ncb;
     }
 
 
     public NCBInfoView getNCBInfoView(long customerId) {
-        log.info("getNcbInfoView :: customer id  :: {}", customerId);
+        log.info("getNCBInfoView :: customer id  :: {}", customerId);
         NCBInfoView ncbInfoView = null;
 
         try {
@@ -191,5 +228,21 @@ public class NCBInfoControl extends BusinessControl {
             }
         }
         return ncbInfoViewList;
+    }
+
+    public List<NCB> getNCBByWorkCaseId(long workCaseId){
+        log.debug("getNCBByWorkCaseId ::: workCaseId : {}", workCaseId);
+        List<NCB> ncbList = new ArrayList<NCB>();
+        List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
+        if (customerList != null && customerList.size() > 0) {
+            log.debug("getNCBByWorkCaseId ::: customerList.size : {}", customerList.size());
+            for(Customer cus : customerList){
+                if(cus.getNcb() != null){
+                    log.debug("getNCBByWorkCaseId ::: ncb : {}", cus.getNcb());
+                    ncbList.add(cus.getNcb());
+                }
+            }
+        }
+        return ncbList;
     }
 }

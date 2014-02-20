@@ -1,10 +1,13 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +21,7 @@ public class NewCollateralView implements Serializable {
     private String  aadDecisionReasonDetail;
     private String  usage;
     private String  typeOfUsage;
-    private String  uwDecision;
+    private DecisionType uwDecision;
     private String  uwRemark;
     private String  mortgageCondition;
     private String  mortgageConditionDetail;
@@ -27,11 +30,12 @@ public class NewCollateralView implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
-    private int isApproved;
+    private BigDecimal premiumAmount;
+    private ProposeType proposeType;
+    private boolean coms;
 
     private List<NewCollateralHeadView> newCollateralHeadViewList;
-    private List<NewCreditDetailView> newCreditDetailViewList;
-
+    private List<ProposeCreditDetailView> proposeCreditDetailViewList;
     //Added by Chai
     private String jobIDSearch;
 
@@ -47,14 +51,15 @@ public class NewCollateralView implements Serializable {
         this.aadDecisionReasonDetail = "";
         this.usage = "";
         this.typeOfUsage = "";
-        this.uwDecision = "";
+        this.uwDecision = DecisionType.NO_DECISION;
         this.uwRemark = "";
         this.mortgageCondition = "";
         this.mortgageConditionDetail = "";
         this.bdmComments= "";
-
+        this.proposeType= ProposeType.P;
         this.newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
-        this.newCreditDetailViewList = new ArrayList<NewCreditDetailView>();
+        this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
+        this.coms = false;
     }
 
     public long getId() {
@@ -121,11 +126,11 @@ public class NewCollateralView implements Serializable {
         this.typeOfUsage = typeOfUsage;
     }
 
-    public String getUwDecision() {
+    public DecisionType getUwDecision() {
         return uwDecision;
     }
 
-    public void setUwDecision(String uwDecision) {
+    public void setUwDecision(DecisionType uwDecision) {
         this.uwDecision = uwDecision;
     }
 
@@ -193,14 +198,6 @@ public class NewCollateralView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public int getApproved() {
-        return isApproved;
-    }
-
-    public void setApproved(int approved) {
-        isApproved = approved;
-    }
-
     public List<NewCollateralHeadView> getNewCollateralHeadViewList() {
         return newCollateralHeadViewList;
     }
@@ -209,12 +206,12 @@ public class NewCollateralView implements Serializable {
         this.newCollateralHeadViewList = newCollateralHeadViewList;
     }
 
-    public List<NewCreditDetailView> getNewCreditDetailViewList() {
-        return newCreditDetailViewList;
+    public List<ProposeCreditDetailView> getProposeCreditDetailViewList() {
+        return proposeCreditDetailViewList;
     }
 
-    public void setNewCreditDetailViewList(List<NewCreditDetailView> newCreditDetailViewList) {
-        this.newCreditDetailViewList = newCreditDetailViewList;
+    public void setProposeCreditDetailViewList(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
+        this.proposeCreditDetailViewList = proposeCreditDetailViewList;
     }
 
     public String getJobIDSearch() {
@@ -223,6 +220,29 @@ public class NewCollateralView implements Serializable {
 
     public void setJobIDSearch(String jobIDSearch) {
         this.jobIDSearch = jobIDSearch;
+    }
+    public BigDecimal getPremiumAmount() {
+        return premiumAmount;
+    }
+
+    public void setPremiumAmount(BigDecimal premiumAmount) {
+        this.premiumAmount = premiumAmount;
+    }
+
+    public ProposeType getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(ProposeType proposeType) {
+        this.proposeType = proposeType;
+    }
+
+    public boolean isComs() {
+        return coms;
+    }
+
+    public void setComs(boolean coms) {
+        this.coms = coms;
     }
 
     @Override
@@ -245,10 +265,14 @@ public class NewCollateralView implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
-                .append("isApproved", isApproved)
+                .append("premiumAmount", premiumAmount)
+                .append("proposeType", proposeType)
+                .append("coms", coms)
                 .append("newCollateralHeadViewList", newCollateralHeadViewList)
-                .append("newCreditDetailViewList", newCreditDetailViewList)
+                .append("proposeCreditDetailViewList", proposeCreditDetailViewList)
                 .append("jobIDSearch", jobIDSearch)
                 .toString();
     }
+
+
 }

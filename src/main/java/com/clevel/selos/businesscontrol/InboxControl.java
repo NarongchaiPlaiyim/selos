@@ -66,11 +66,9 @@ public class InboxControl extends BusinessControl {
         List<InboxView> inboxViewList = new ArrayList<InboxView>();
 
         //For WebSphere//
-        List<CaseDTO> caseDTOList = bpmInterface.getInboxList();
+//        List<CaseDTO> caseDTOList = bpmInterface.getInboxList();
 
-        /*List<CaseDTO> caseDTOList = new ArrayList<CaseDTO>();
-
-
+        List<CaseDTO> caseDTOList = new ArrayList<CaseDTO>();
         List<WorkCasePrescreen> workCasePrescreenList = getWorkCasePreScreen();
 
         for (WorkCasePrescreen workCasePrescreen : workCasePrescreenList) {
@@ -103,10 +101,26 @@ public class InboxControl extends BusinessControl {
             caseDTO.setCaseData(caseData);
 
             caseDTOList.add(caseDTO);
-        }*/
+        }
 
         log.info("CaseDTO : caseDTOList : {}", caseDTOList);
         inboxViewList = inboxBizTransform.transformToView(caseDTOList);
+
+        return inboxViewList;
+    }
+
+    public List<InboxView> getInboxPoolFromBPM(UserDetail userDetail){
+        List<InboxView> inboxViewList = new ArrayList<InboxView>();
+        List<CaseDTO> caseDTOPoolList = new ArrayList<CaseDTO>();
+
+        if(userDetail.getRole().equals("ROLE_UW")){
+            caseDTOPoolList = bpmInterface.getInboxPoolList("UW1_Pool_Q");
+
+        }else if(userDetail.getRole().equals("ROLE_AAD")){
+            caseDTOPoolList = bpmInterface.getInboxPoolList("AAD_Admin_Q");
+        }
+
+        inboxViewList = inboxBizTransform.transformToView(caseDTOPoolList);
 
         return inboxViewList;
     }

@@ -10,6 +10,7 @@ public class LoanAccountTypeView implements Serializable {
     private int id;
     private String name;
     private int calculateType;
+    private int wcFlag;
 
     public LoanAccountTypeView() {
         reset();
@@ -19,6 +20,7 @@ public class LoanAccountTypeView implements Serializable {
         this.id = 0;
         this.name = "";
         this.calculateType = 0;
+        this.wcFlag = 0;
     }
 
 
@@ -44,6 +46,14 @@ public class LoanAccountTypeView implements Serializable {
 
     public void setCalculateType(int calculateType) {
         this.calculateType = calculateType;
+    }
+
+    public int getWcFlag() {
+        return wcFlag;
+    }
+
+    public void setWcFlag(int wcFlag) {
+        this.wcFlag = wcFlag;
     }
 
     @Override

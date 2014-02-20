@@ -7,8 +7,10 @@ import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.ExSumReasonView;
 import com.clevel.selos.model.view.ExSummaryView;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -24,6 +26,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -47,27 +50,28 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
     Message exceptionMsg;
 
     private Long workCaseId;
-    enum ModeForDB {ADD_DB, EDIT_DB, CANCEL_DB}
-    private ModeForDB modeForDB;
+
     private String messageHeader;
     private String message;
-    private boolean messageErr;
+    private String severity;
+
+    private boolean isRoleUW;
 
     private ExSummaryView exSummaryView;
 
     private ExSumReasonView selectDeviate;
 
     @Inject
-    UserDAO userDAO;
+    private UserDAO userDAO;
     @Inject
-    CustomerDAO customerDAO;
+    private CustomerDAO customerDAO;
     @Inject
-    ReasonDAO reasonDAO;
+    private ReasonDAO reasonDAO;
     @Inject
-    AuthorizationDOADAO authorizationDOADAO;
+    private AuthorizationDOADAO authorizationDOADAO;
 
     @Inject
-    ExSummaryControl exSummaryControl;
+    private ExSummaryControl exSummaryControl;
 
     //*** Drop down List ***//
     private List<AuthorizationDOA> authorizationDOAList;
@@ -79,24 +83,50 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
     public ExecutiveSummary() {
     }
 
-    @PostConstruct
-    public void onCreation() {
-        log.info("onCreation.");
+
+    public void preRender(){
+        log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         }else{
-            log.info("preRender ::: workCaseId is null.");
+            log.debug("onCreation ::: workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
-                return;
             }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+                log.error("Exception :: {}",ex);
             }
         }
+    }
 
-        reasonList = reasonDAO.getRejectList();
+    @PostConstruct
+    public void onCreation() {
+        log.debug("onCreation");
+
+        HttpSession session = FacesUtil.getSession(true);
+
+        if(session.getAttribute("workCaseId") != null){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            if(workCaseId == 0){
+                try{
+                    FacesUtil.redirect("/site/inbox.jsf");
+                }catch (Exception ex){
+                    log.error("Exception :: {}",ex);
+                }
+                return;
+            }
+        }else{
+            log.debug("onCreation ::: workCaseId is null.");
+            try{
+                FacesUtil.redirect("/site/inbox.jsf");
+            }catch (Exception ex){
+                log.error("Exception :: {}",ex);
+            }
+            return;
+        }
+
+        reasonList = new ArrayList<Reason>();
         authorizationDOAList = authorizationDOADAO.findAll();
 
         reason = new ExSumReasonView();
@@ -107,55 +137,68 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
             exSummaryView = new ExSummaryView();
         }
 
-        /*ExSumCharacteristicView ec = new ExSumCharacteristicView();
-        ec.reset();
-        exSummaryView.setExSumCharacteristicView(ec);
+        exSummaryView.setUwCode("6500000000");
 
-        ExSumBusinessInfoView eb = new ExSumBusinessInfoView();
-        eb.reset();
-        exSummaryView.setExSumBusinessInfoView(eb);
+        //for reasonList
+        if(exSummaryView.getDecision() == 2){ //1 approve , 2 deviate , 3 reject
+            reasonList = reasonDAO.getDeviateList();
+        } else if(exSummaryView.getDecision() == 3){
+            reasonList = reasonDAO.getRejectList();
+        } else {
+            reasonList = new ArrayList<Reason>();
+        }
 
-        ExSumAccountMovementView ea = new ExSumAccountMovementView();
-        ea.reset();
-        exSummaryView.setExSumAccMovementView(ea);
-
-        ExSumCollateralView ecc = new ExSumCollateralView();
-        ecc.reset();
-        exSummaryView.setExSumCollateralView(ecc);*/
+        User user = getCurrentUser();
+        if(user != null && user.getRole() != null && user.getRole().getId() == RoleValue.UW.id()){
+            isRoleUW = true;
+        } else {
+            isRoleUW = false;
+        }
     }
 
     public void onSaveExecutiveSummary() {
-        log.info("onSaveExecutiveSummary ::: ModeForDB  {}", modeForDB);
+        log.debug("onSaveExecutiveSummary :::");
+        if(exSummaryView.getDecision() == 2 || exSummaryView.getDecision() == 3){ //1 approve , 2 deviate , 3 reject
+            if(exSummaryView.getDeviateCode() == null || exSummaryView.getDeviateCode().size() < 1){
+                messageHeader = msg.get("app.header.information");
+                message = "Save Ex Summary Failed. "+
+                        "<br/><br/> Cause : Reason is null.";
+                severity = "info";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                return;
+            }
+        }
 
         try {
             exSummaryControl.saveExSummary(exSummaryView, workCaseId);
 
-            messageHeader = msg.get("app.header.save.success");
-//            message = msg.get("Save Ex Summary data success.");
+            messageHeader = msg.get("app.header.information");
             message = "Save Ex Summary data success.";
+            severity = "info";
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.header.save.failed");
-
+            messageHeader = msg.get("app.header.error");
             if (ex.getCause() != null) {
-//                message = msg.get("")+ ex.getCause().toString();
                 message = "Save Ex Summary data failed. Cause : " + ex.getCause().toString();
             } else {
-//                message = msg.get("") + ex.getMessage();
                 message = "Save Ex Summary data failed. Cause : " + ex.getMessage();
             }
-            messageErr = true;
+            severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
 
-    public void onCancelExecutiveSummary() {
-        modeForDB = ModeForDB.CANCEL_DB;
-        log.info("onCancelExecutiveSummary ::: ");
-
-        onCreation();
+    public void onChangeDeviate(){
+        exSummaryView.setDeviateCode(new ArrayList<ExSumReasonView>());
+        if(exSummaryView.getDecision() == 2){ //1 approve , 2 deviate , 3 reject
+            reasonList = reasonDAO.getDeviateList();
+        } else if(exSummaryView.getDecision() == 3){
+            reasonList = reasonDAO.getRejectList();
+        } else {
+            reasonList = new ArrayList<Reason>();
+        }
     }
 
     public void onAddReason() {
@@ -172,14 +215,6 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
 
     public void onDeleteDeviate(){
         exSummaryView.getDeviateCode().remove(selectDeviate);
-    }
-
-    public boolean isMessageErr() {
-        return messageErr;
-    }
-
-    public void setMessageErr(boolean messageErr) {
-        this.messageErr = messageErr;
     }
 
     public String getMessage() {
@@ -236,6 +271,22 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
 
     public void setSelectDeviate(ExSumReasonView selectDeviate) {
         this.selectDeviate = selectDeviate;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
+    }
+
+    public boolean isRoleUW() {
+        return isRoleUW;
+    }
+
+    public void setRoleUW(boolean roleUW) {
+        isRoleUW = roleUW;
     }
 }
 

@@ -7,320 +7,340 @@
         xmlns:p="http://primefaces.org/ui"
         xmlns:clv="http://clevel.com/ui">
 
-    <h:head>
-        <title>#{msg.get('app.dbr.title')}</title>
-        <h:outputStylesheet name="css/style.css" />
-        <h:outputScript library="js" name="custom.js" />
-        <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
-    </h:head>
-    <h:body>
-        <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
-            <h:form id="frmMain">
-                <div id="main_container">
-                    <!-- Start Header Logo -->
-                    <ui:include src="include/header_logo.xhtml"/>
-                    <!-- End Header Logo -->
-                    <!-- Start Header Detail -->
-                    <ui:include src="include/header_detail.xhtml"/>
-                    <!-- End Header Detail -->
-                    <!-- Start Menu -->
-                    <ui:include src="include/menubar.xhtml"/>
-                    <!-- End Menu -->
-                    <div id="content_container">
-                        <div id="content_name">#{msg.get('app.pledgeDetail.head')}</div>
-                        <div id="content">
-                            <div id="content_info">
-                                <div id="content_trackchange">[ View Track Change ]</div>
-                                <div id="content_lastupdate">Last update by <p:outputLabel
-                                        value="#{pledgeDetail.pledgeDetailView.modifyBy}"/>,
-                                    <p:outputLabel value="#{pledgeDetail.pledgeDetailView.modifyDate}">
-                                        <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy" type="date"/>
-                                    </p:outputLabel></div>
-                            </div>
-                            <div id="content_form">
-                                <!-- start content -->
-                                <table class="content_table_form">
-                                    <tr>
-                                        <td class="title" style="min-width: 180px; max-width: 180px; width: 180px;">
-                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.head.approvedType')}" />
-                                        </td>
-                                        <td>
-                                            <p:selectOneRadio value="#{pledgeDetail.pledgeDetailView.approveType}">
-                                                <f:selectItem itemLabel="#{msg.get('app.pledgeDetail.content.radio.new')}" itemValue="1"/>
-                                                <f:selectItem itemLabel="#{msg.get('app.pledgeDetail.content.radio.newChange')}" itemValue="2"/>
-                                            </p:selectOneRadio>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3">
-                                            <div class="separate"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" class="title">
-                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.head.pledgeInfoDetail')}"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title">
-                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.pledgeSingningDate')}"/>
-                                        </td>
-                                        <td>
-                                            <clv:BECalendar id="expectSumitDate" showOn="button" showButtonPanel="true" navigator="true"
-                                                            value="#{pledgeDetail.pledgeDetailView.pledgeSignDate}"
-                                                            yearRange="1950:2100"
-                                                            mindate="#{pledgeDetail.currentDateDDMMYY}"
-                                                            defaultdate="#{pledgeDetail.currentDateDDMMYY}"
-                                                            pattern="dd/MM/yyyy"
-                                                            locale="th_TH" >
-                                            </clv:BECalendar>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title">
-                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.pledgeType')}" />
-                                        </td>
-                                        <td>
-                                            <p:outputLabel value="#{pledgeDetail.pledgeDetailView.pledgeType}" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title">
-                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.pledgeAmount')}"/>
-                                        </td>
-                                        <td>
-                                            <p:outputLabel value="#{pledgeDetail.pledgeDetailView.pledgeAmount}">
-                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                            </p:outputLabel>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title">
-                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.creditType')}"/>
-                                        </td>
-                                        <td>
-                                            <p:dataTable value="" var="creditType" rowIndexVar="rowIndex">
-                                                <p:column headerText="" style="min-width: 30px; max-width: 30px; width: 30px;"  styleClass="left top">
-                                                    <p:outputLabel value="#{rowIndex+1}"/>
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.account')}" style="min-width: 400px; max-width: 400px; width: 400px;">
-                                                    <h:panelGroup rendered="true">  <!--If Value = null -->
-                                                       -
-                                                    </h:panelGroup>
-                                                    <h:panelGroup rendered="false"> <!--If Value =! null -->
-                                                        <table style="margin:-1px 0 -1px -10px;" >
-                                                            <tr >
-                                                                <td colspan="2" style="border-style: none !important;">
-                                                                    <h:outputText value="Mr.A Example" />
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="border-style: none !important;">
-                                                                    <p:outputLabel value="#{msg.get('app.pledgeDetail.content.table.td.accNo')}"/>
-                                                                    <h:outputText value="012-3-45678-9"/>
-                                                                </td>
-                                                                <td style="border-style: none !important;">
-                                                                    <p:outputLabel value="#{msg.get('app.pledgeDetail.content.table.td.suf')}"/>
-                                                                    <h:outputText value="001"/>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="border-style: none !important;">
-                                                                    <p:outputLabel value="#{msg.get('app.pledgeDetail.content.table.td.accStatus')}"/>
-                                                                    <h:outputText value="01=Normal"/>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </h:panelGroup>
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.type')}" style="min-width: 80px; max-width: 80px; width: 80px;" styleClass="center top">
-                                                    <h:outputText value="Type"/>
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.productProgram')}" style="min-width: 150px; max-width: 150px; width: 150px;" styleClass="left top">
+<h:head>
+    <title>#{msg.get('app.pledgeDetail.title')}</title>
+    <h:outputStylesheet name="css/style.css" />
+    <h:outputScript library="js" name="custom.js" />
+</h:head>
 
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.creditFacility')}" style="min-width: 150px; max-width: 150px; width: 150px;" styleClass="left top">
-
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.limit')}" style="min-width: 150px; max-width: 150px; width: 150px;" styleClass="right top">
-
-                                                </p:column>
-                                            </p:dataTable>
-                                        </td>
-                                    </tr>
-                                    <tr><td><br/></td></tr>
-                                    <tr>
-                                        <td colspan="3">
-                                            <div class="separate"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3" class="title">
-                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.head.pledgeA/C')}" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title">
-                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.accountNumber')}"/>
-                                        </td>
-                                        <td >
-                                            <p:inputMask id="accountNumber" value="#{pledgeDetail.pledgeACView.acAccountNumber}" mask="999-9-99999-9"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title">
-                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.numberOfDep')}"/>
-                                        </td>
-                                        <td>
-                                            <p:inputText id="numberOfDep"  value="#{pledgeDetail.pledgeACView.acNumberofDep}">
-                                                <f:convertNumber type="number" minIntegerDigits="2" maxFractionDigits="0" />
-                                                <p:ajax event="change" update=":frmMain:numberOfDep" />
-                                            </p:inputText>
-                                            <p:spacer width="10" />
-                                            <p:commandButton value="#{msg.get('app.button.add')}" title="#{msg.get('app.button.add')}"
-                                                             styleClass="smaller"
-                                                             update=":frmMain:pledgeAcDT"
-                                                             action="#{pledgeDetail.onAddPledgeAC()}">
-                                            </p:commandButton>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td/>
-                                        <td colspan="2">
-                                            <p:dataTable id="pledgeAcDT" value="#{pledgeDetail.pledgeDetailView.pledgeACViews}" var="pledgeAC"  rowIndexVar="rowIndex">
-                                                <p:column headerText="" style="min-width: 30px; max-width: 30px" styleClass="left">
-                                                    <p:outputLabel value="#{rowIndex+1}"/>
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.dep')}" style="min-width: 150px; max-width: 150px" styleClass="right">
-                                                    <p:outputLabel value="#{pledgeAC.acNumberofDep}" >
-
-                                                    </p:outputLabel>
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.holdAmount')}" style="min-width: 200px; max-width: 200px" styleClass="right">
-                                                    <p:outputLabel value="#{pledgeAC.acHoldAmount}" >
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                                                    </p:outputLabel>
-                                                </p:column>
-                                                <p:column  styleClass="center">
-                                                    <p:commandButton title="#{msg.get('app.button.edit')}"
-                                                                     icon="ui-icon-pencil"
-                                                                     update=":frmMain:numberOfDep :frmMain:accountNumber"
-                                                                     action="#{pledgeDetail.onEditPledgeAC()}">
-                                                        <f:setPropertyActionListener value="#{rowIndex}" target="#{pledgeDetail.rowIndex}"/>
-                                                    </p:commandButton>
-                                                    <p:commandButton title="#{msg.get('app.button.delete')}"
-                                                                     icon="ui-icon-trash"
-                                                                     oncomplete="confirmDeletePledgeDetailDlg.show()">
-                                                        <f:setPropertyActionListener value="#{rowIndex}" target="#{pledgeDetail.rowIndex}"/>
-                                                    </p:commandButton>
-                                                </p:column>
-                                                <p:columnGroup type="footer">
-                                                    <p:row>
-                                                        <p:column style="border-right: none !important;"  styleClass="summary_column"/>
-
-                                                        <p:column  footerText="#{msg.get('app.pledgeDetail.content.table.total.holdAmount')}" style="border-left: none !important;text-align:right" styleClass="summary_column"/>
-                                                        <p:column style="text-align:right" styleClass="summary_column">
-                                                            <f:facet name="footer">
-                                                                <p:outputLabel value="#{pledgeDetail.getTotalHoldAmount()}">
-                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                     maxIntegerDigits="14"/>
-                                                                </p:outputLabel>
-                                                            </f:facet>
-                                                        </p:column >
-                                                        <p:column styleClass="summary_column" />
-                                                    </p:row>
-                                                </p:columnGroup>
-                                            </p:dataTable>
-                                        </td>
-                                    </tr>
-                                    <tr><td><br/></td></tr>
-                                    <tr>
-                                        <td colspan="3">
-                                            <div class="separate"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" class="title">
-                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.collateralDepositsDetail')}" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>
-                                            <p:dataTable value="" var="item" rowIndexVar="rowIndex">
-                                                <p:column style="min-width: 30px; max-width: 30px" >
-                                                    <p:outputLabel value="#{rowIndex+1}"/>
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.customerName')}" style="min-width: 200px; max-width: 200px">
-
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.citizen')}" style="min-width: 200px; max-width: 200px">
-
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.customerId')}" style="min-width: 150px; max-width: 150px">
-
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.relationship')}" style="min-width: 200px; max-width: 200px">
-
-                                                </p:column>
-                                            </p:dataTable>
-                                        </td>
-                                    </tr>
-                                    <tr><td><br/></td></tr>
-                                    <tr>
-                                        <td colspan="3">
-                                            <div class="separate" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <div class="center">
-                                                <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
-                                                                 styleClass="medium"
-
-                                                                 onclick="onOneClick('frmMain:btnSave', true);"
-                                                                 oncomplete="onOneClick('frmMain:btnSave', false);"
-                                                                 update=":pnl_maincontainer :msgBoxSystemMessagePanel">
-                                                </p:commandButton>
-                                                <p:spacer  width="10"/>
-                                                <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
-                                                                 styleClass="medium"></p:commandButton>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
+<h:body>
+    <f:event type="preRenderView" listener="#{pledgeDetail.preRender()}" />
+    
+    <p:panel id="pnl_maincontainer" styleClass="panel">
+        <h:form id="frmMain">
+            <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="include/header_logo.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="include/header_detail.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="include/menubar.xhtml" />
+           
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">#{msg.get('app.pledgeDetail.subtitle')}</div>
+                <div id="content">
+                    <div id="content_info">
+                        <div id="content_trackchange">
+                        	[
+                        	<h:outputLink value="#">
+                        		<h:outputText value="#{msg.get('app.viewTrackChange')}" />
+                        	</h:outputLink>
+                        	]
                         </div>
-                        <div id="bottom_line"/>
+                        <div id="content_lastupdate">
+                        	<h:outputText value="#{msg.get('app.lastUpdateBy')} "/>
+                        	<h:outputText value="#{pledgeDetail.lastUpdateBy}"/>, 
+                        	<h:outputText value="#{pledgeDetail.lastUpdateDateTime}">
+                        		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="th_TH"/>
+                        	</h:outputText>
+                        </div>
                     </div>
-                        <div class="clear"/>
-                    <!-- Start Footer -->
-                    <ui:include src="include/footer.xhtml"/>
+                    <div id="content_form">
+                        <!-- start content -->
+                        <table class="content_table_form">
+	                        <tr>
+                               <td colspan="100%">
+                                    <table>
+                                        <tr>
+                                            <td class="title" style="width:200px;">
+                                                <p:outputLabel value="#{msg.get('app.approveType')}" styleClass="center"/>
+                                            </td>
+                                            <td style="width:200px;">
+                                                <p:selectOneRadio disabled="true" value="#{pledgeDetail.approveType}">
+                                                	<f:selectItems value="#{enumGeneralControl.approveTypes}" var="approveType"
+                                                		itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}" 
+                                                		/>
+                                                </p:selectOneRadio>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                              <td colspan="100%"><div class="separate"><!-- --></div></td>
+                        	</tr>
+                        	<tr><td colspan="100%"></td></tr>
+                        	<tr>
+                        		<td colspan="100%">
+                        			<h2><h:outputText value="#{msg.get('app.pledgeDetail.detail.title')}" /></h2>
+	                            </td>
+                        	</tr>
+                        	<tr>
+                        		<td class="title" style="width: 180px">
+                        			<p:outputLabel  for="pleadge_signingdate"
+                        				value="#{msg.get('app.pledgeDetail.detail.signingDate')}" />	
+                        		</td>
+                        		<td>
+                        			<p:calendar id='pleadge_signingdate' 
+                        					pattern="dd/MM/yyyy" showOn="button"
+                                       		mindate="#{pledgeDetail.minDate}"
+                                       		autocomplete="false"
+                                       		/>
+                        		</td>
+                        	</tr>
+                        	<tr>
+                        		<td class="title" >
+                        			<p:outputLabel
+                        				value="#{msg.get('app.pledgeDetail.detail.pledgeType')}" />			
+                        		</td>
+                        		<td>
+                        			<h:outputText value="PLEDGE TYPE" />
+                        		</td>                     		
+                        	</tr>
+                        	<tr>
+                        		<td class="title" >
+                        			<p:outputLabel
+                        				value="#{msg.get('app.pledgeDetail.detail.pledgeAmount')}" />						
+                        		</td>
+                        		<td>
+                        			<h:outputText value="0" >
+                        				<f:convertNumber pattern="#,##0.00"/>
+                        			</h:outputText>
+                        		</td>
+                        	</tr>
+                        	<tr>
+                        		<td class="title" >
+                        			<p:outputLabel
+                        				value="#{msg.get('app.pledgeDetail.detail.creditType')}" />						
+                        		</td>
+                        		<td>
+                        			<p:dataTable styleClass="full_table" rowIndexVar="rowIdx">
+                        				<p:column style="width:30px">
+                        					#{rowIdx+1}
+                        				</p:column>
+                        				<p:column
+                        					headerText="#{msg.get('app.pledgeDetail.detail.creditType.table.account')}">
+                        				</p:column>
+                        				<p:column style="width:100px"
+                        					headerText="#{msg.get('app.pledgeDetail.detail.creditType.table.type')}">
+                        				</p:column>
+                        				<p:column style="width:200px"
+                        					headerText="#{msg.get('app.pledgeDetail.detail.creditType.table.productProgram')}">
+                        				</p:column>
+                        				<p:column style="width:175px"
+                        					headerText="#{msg.get('app.pledgeDetail.detail.creditType.table.creditFacility')}">
+                        				</p:column>
+                        				<p:column style="width:120px" styleClass="right"
+                        					headerText="#{msg.get('app.pledgeDetail.detail.creditType.table.limit')}">
+                        				</p:column>
+                        			</p:dataTable>
+                        		</td>
+                        	</tr>
+                        	<tr><td colspan="100%"><p:spacer height="1em"/></td></tr>
+                        	<tr>
+                              <td colspan="100%"><div class="separate"><!-- --></div></td>
+                        	</tr>
+                        	<tr>
+                        		<td colspan="100%">
+                        			<h2><h:outputText value="#{msg.get('app.pledgeDetail.pledgeAC.title')}" /></h2>
+	                            </td>
+                        	</tr>
+                        	<tr>
+                        		<td class="title" >
+                        			<p:outputLabel
+                        				value="#{msg.get('app.pledgeDetail.pledgeAC.accountNumber')}" />						
+                        		</td>
+                        		<td>
+                        			<p:inputText 
+                        				styleClass="readonly large" readonly="true" 
+                        				/>
+                        		</td>
+                        	</tr>
+                        	<tr>
+                        		<td class="title" >
+                        			<p:outputLabel
+                        				value="#{msg.get('app.pledgeDetail.pledgeAC.numberOfDep')}" />						
+                        		</td>
+                        		<td>
+                        			<p:inputText id='number_of_pledge' value="#{pledgeDetail.numberOfPledgeAC}" 
+                        				styleClass="readonly large" readonly="true" 
+                        				/>
+                        			<p:spacer width="10"/>
+                        			<p:commandButton id='addBtn' value="#{msg.get('app.button.add')}"
+				                                styleClass="medium"
+				                                process="@this"
+			                                  	action="#{pledgeDetail.onOpenAddPledgeACDepDialog()}"
+				                                oncomplete="p_pledgeACDepDlg.show()"
+				                                update=":pledgeACDepDlg"
+				                                >
+										<p:resetInput target=":pledgeACDepDlg" />
+				                   	</p:commandButton>
+                        		</td>
+                        	</tr>
+                        	<tr>
+                        		<td></td>
+                        		<td>
+                        			<p:dataTable id='pledgeac_tbl' rowIndexVar="rowIdx" value="#{pledgeDetail.pledgeACDepList}"
+                        				var="pledgeAC">
+                        				<p:column style="width:30px" styleClass="center">
+                        					#{rowIdx+1}
+                        				</p:column>
+                        				<p:column style="width:100px" styleClass="right"
+                        					headerText="#{msg.get('app.pledgeDetail.pledgeAC.table.dep')}"
+                        					>
+                        					#{pledgeAC.dep}
+                        				</p:column>
+                        				<p:column style="width:250px" styleClass="right"
+                        					headerText="#{msg.get('app.pledgeDetail.pledgeAC.table.holdAmount')}"
+                        					>
+                        					<h:outputText value="#{pledgeAC.holdAmount}" converter="javax.faces.BigDecimal">
+                        						<f:convertNumber pattern="#,##0.00"/>
+                        					</h:outputText>
+                        				</p:column>
+                        				<p:column style="width:50px" styleClass="center">
+	                        				<p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
+                           						process="@this"
+                           						onstart="p_blockUI.show()"
+                           						oncomplete="p_blockUI.hide();p_pledgeACDepDlg.show();"
+                           						action="#{pledgeDetail.onOpenUpdatePledgeACDepDialog()}"
+                           						update=":pledgeACDepDlg"
+                           						style="margin-right:0px !important"
+                           						rendered="#{pledgeAC.updatable}"
+                           						>
+                           						<p:resetInput target=":pledgeACDepDlg" />
+                           						<f:setPropertyActionListener target="#{pledgeDetail.pledgeACDepView}" value="#{pledgeAC}" />
+                           					</p:commandButton>
+                                            
+                                            <p:commandButton icon="ui-icon-trash"  title="#{msg.get('app.button.delete')}"
+                                            	process="@this"
+                                            	oncomplete="p_delPledgeACDepDlg.show();"
+                           						style="margin-right:0px !important"
+                           						rendered="#{pledgeAC.deletable}"
+                                            	>
+                                            	<f:setPropertyActionListener target="#{pledgeDetail.deletedRowId}" value="#{rowIdx}" />
+                                            </p:commandButton>
+                        				</p:column>
+                        				
+                        				<p:columnGroup type="footer">
+                        					<p:row rendered="#{not empty pledgeDetail.pledgeACDepList}">
+	                        					<p:column colspan="2" styleClass="total_summary" style="text-align:left"
+	                        						footerText="#{msg.get('app.pledgeDetail.pledgeAC.table.total')}"
+	                        						/>
+	                        					<p:column styleClass="total_summary" style="text-align:right">
+	                        						<f:facet name="footer">
+		                        						<h:outputText value="#{pledgeDetail.totalHoldAmount}">
+		                        							<f:convertNumber pattern="#,##0.00"/>
+		                        						</h:outputText>
+		                        					</f:facet>
+	                        					</p:column>
+	                        					<p:column styleClass="total_summary"></p:column>
+	                        				</p:row>
+                        				</p:columnGroup>
+                        			</p:dataTable>
+                        		</td>
+                        	</tr>
+                        	<tr><td colspan="100%"><p:spacer height="1em"/></td></tr>
+                        	<tr>
+                              <td colspan="100%"><div class="separate"><!-- --></div></td>
+                        	</tr>
+                        	<tr>
+                        		<td colspan="100%">
+                        			<h2><h:outputText value="#{msg.get('app.pledgeDetail.collateral.title')}" /></h2>
+	                            </td>
+                        	</tr>
+                        	<tr>
+                        		<td></td>
+                        		<td>
+	                        		<p:dataTable rowIndexVar="rowIdx">
+	                        				<p:column style="width:30px" styleClass="center">
+	                        					#{rowIdx+1}
+	                        				</p:column>
+	                        				<p:column style="width:200px" 
+	                        					headerText="#{msg.get('app.pledgeDetail.collateral.table.customerName')}"
+	                        					>
+	                        					
+	                        				</p:column>
+	                        				<p:column style="width:200px"
+	                        					headerText="#{msg.get('app.pledgeDetail.collateral.table.citizen')}"
+	                        					>
+	                        				</p:column>
+	                        				<p:column style="width:150px"
+	                        					headerText="#{msg.get('app.pledgeDetail.collateral.table.customerId')}"
+	                        					>
+	                        				</p:column>
+	                        				<p:column style="width:250px"
+	                        					headerText="#{msg.get('app.pledgeDetail.collateral.table.relationship')}"
+	                        					>
+	                        				</p:column>
+	                        			</p:dataTable>
+                        		</td>
+                        	</tr>
+                     
+                        	<tr><td colspan="100%"><p:spacer height="1em"/></td></tr>
+                        	
+	                        <tr>
+	                            <td colspan="100%"><p:separator/></td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="100%"><p:spacer width="5px"/></td>
+	                        </tr>
+	                        <tr>
+	                             <td colspan="100%" class="center">
+	                                 <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
+	                                 	styleClass="medium"
+	                                 	oncomplete="p_savePledgeDetailDlg.show()"
+	                                 	 />
+	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
+										styleClass="medium"
+										/>
+	                             </td>
+	                        </tr>
+                        </table>
+                    </div>
                 </div>
-                    <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
-                        LOADING<br/>
-                        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-                    </p:blockUI>
-            </h:form>
-        </p:panel>
-
-        <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-            <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                             header="#{pledgeDetail.messageHeader}" message="#{pledgeDetail.message}">
-                <p:commandButton value="OK"
-                                 process="@this"
-                                 update="frmMain"
-                                 oncomplete="msgBoxSystemMessageDlg.hide()"/>
-            </p:confirmDialog>
-        </p:panel>
-        <ui:include src="dialog/confirmDeleteDlg.xhtml">
-            <ui:param name="id" value="confirmDeletePledgeDetailDialog"/>
-            <ui:param name="name" value="confirmDeletePledgeDetailDlg"/>
-            <ui:param name="formId" value="frmConfirmDeletePledgeDetail"/>
-            <ui:param name="controller" value="#{pledgeDetail}"/>
-            <ui:param name="action" value="onDeletePledgeAC"/>
-            <ui:param name="update" value=":frmMain:pledgeAcDT"/>
-        </ui:include>
-    </h:body>
+                <div id="bottom_line"><!-- --></div>
+            </div>
+           
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="include/footer.xhtml" />
+            <!-- End Footer -->
+            </div>
+           	
+           	<p:blockUI widgetVar="p_blockUI" block=":frmMain" trigger='saveBtn,cancelBtn,addBtn'>
+           		LOADING<br />
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+             </p:blockUI>
+        </h:form>
+    </p:panel>
+    
+    <p:dialog id='pledgeACDepDlg' widgetVar="p_pledgeACDepDlg"
+		header="#{msg.get('app.pledgeDetail.pledgeAC.dialog.title')}" 
+		onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()' resizable="false"
+		modal='true' closeOnEscape="true" closable="true"
+		dynamic="true">
+		<ui:include src="dialog/pledgeACDepDialog.xhtml" />
+	</p:dialog>
+    
+	 <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="delPledgeACDepDlg"/>
+        <ui:param name="name" value="p_delPledgeACDepDlg"/>
+        <ui:param name="formId" value="delPledgeACDepFrm"/>
+        <ui:param name="controller" value="#{pledgeDetail}"/>
+        <ui:param name="action" value="onDeletePledgeACDep"/>
+        <ui:param name="update" value=":frmMain:pledgeac_tbl,:frmMain:number_of_pledge"/>
+    </ui:include>
+    <ui:include src="dialog/confirmEditDlg.xhtml">
+		<ui:param name="id" value="savePledgeDetailDlg"/>
+		<ui:param name="name" value="p_savePledgeDetailDlg"/>
+		<ui:param name="formId" value="savePledgeDetailFrm"/>
+		<ui:param name="controller" value="#{pledgeDetail}"/>
+		<ui:param name="action" value="onSavePledgeDetail"/>
+		<ui:param name="update" value=":frmMain"/>
+	</ui:include>
+</h:body>
 </f:view>
 </html>

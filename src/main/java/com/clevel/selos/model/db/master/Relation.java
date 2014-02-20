@@ -1,17 +1,20 @@
 package com.clevel.selos.model.db.master;
 
-import com.clevel.selos.model.db.relation.RelationCustomer;
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table(name = "mst_relation")
 public class Relation implements Serializable {
-    @Id
+    private static final long serialVersionUID = 6735999015637205594L;
+	@Id
     @Column(name = "id")
     private int id;
     @Column(name = "description", length = 100)
@@ -20,10 +23,9 @@ public class Relation implements Serializable {
     private int priority;
     @Column(name = "active")
     private int active;
-    @OneToMany(mappedBy = "relation")
-    private List<RelationCustomer> relationCustomerList;
-
-
+    @Column(name="canbe_poa",columnDefinition="int default 0")
+    private boolean canBePOA;
+   
     public Relation() {
     }
 
@@ -58,14 +60,14 @@ public class Relation implements Serializable {
     public void setActive(int active) {
         this.active = active;
     }
+    
+    public boolean isCanBePOA() {
+		return canBePOA;
+	}
+    public void setCanBePOA(boolean canBePOA) {
+		this.canBePOA = canBePOA;
+	}
 
-    public List<RelationCustomer> getRelationCustomerList() {
-        return relationCustomerList;
-    }
-
-    public void setRelationCustomerList(List<RelationCustomer> relationCustomerList) {
-        this.relationCustomerList = relationCustomerList;
-    }
 
     @Override
     public String toString() {
@@ -73,6 +75,8 @@ public class Relation implements Serializable {
                 append("id", id).
                 append("description", description).
                 append("active", active).
+                append("priority",priority).
+                append("canBePOA",canBePOA).
                 toString();
     }
 }

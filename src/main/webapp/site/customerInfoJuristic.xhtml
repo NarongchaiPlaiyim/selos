@@ -10,7 +10,6 @@
 <h:head>
     <title>SE-LOS : Customer Info. Detail - Juristic</title>
     <h:outputStylesheet name="css/style.css" />
-    <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
     <h:outputScript library="js" name="custom.js"/>
     <h:outputScript library="js" name="jquery.ui.datepicker.min.js"/>
     <style>
@@ -21,7 +20,7 @@
 </h:head>
 
 <h:body>
-    <!--<f:event type="preRenderView" listener="#{custInfoSumJuris.preRender()}" />-->
+    <f:event type="preRenderView" listener="#{custInfoSumJuris.preRender()}" />
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
             <div id="main_container">
@@ -112,7 +111,7 @@
                                 </td>
                                 <td>
                                     <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
-                                                     value="#{custInfoSumJuris.customerInfoView.relation.id}"
+                                                     value="#{custInfoSumJuris.relationId}"
                                                      required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRelation}"
                                                      disabled="#{custInfoSumJuris.editBorrower || not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -147,7 +146,7 @@
                                 </td>
                                 <td>
                                     <p:selectOneMenu size="1" style="width: 350px; max-width: 350px; min-width: 350px;"
-                                                     value="#{custInfoSumJuris.customerInfoView.reference.id}" id="reference"
+                                                     value="#{custInfoSumJuris.referenceId}" id="reference"
                                                      required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqReference}"
                                                      disabled="#{custInfoSumJuris.editBorrower || not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -545,7 +544,7 @@
                                                           style="min-width: 60px; max-width: 60px;"/>
                                         </p:column>
 
-                                        <p:column styleClass="left">
+                                        <p:column styleClass="center">
                                             <h:outputText value="#{item.relation.description}"
                                                           style="min-width: 130px; max-width: 130px;"/>
                                         </p:column>

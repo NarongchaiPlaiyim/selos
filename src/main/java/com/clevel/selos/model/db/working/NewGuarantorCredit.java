@@ -19,9 +19,13 @@ public class NewGuarantorCredit implements Serializable {
     @JoinColumn(name = "new_guarantor_id")
     private NewGuarantorDetail newGuarantorDetail;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "new_credit_detail_id")
     private NewCreditDetail newCreditDetail;
+
+    @OneToOne
+    @JoinColumn(name = "existing_credit_detail_id")
+    private ExistingCreditDetail existingCreditDetail;
 
     @Column(name = "guarantee_amount")
     private BigDecimal guaranteeAmount;
@@ -104,5 +108,13 @@ public class NewGuarantorCredit implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public ExistingCreditDetail getExistingCreditDetail() {
+        return existingCreditDetail;
+    }
+
+    public void setExistingCreditDetail(ExistingCreditDetail existingCreditDetail) {
+        this.existingCreditDetail = existingCreditDetail;
     }
 }

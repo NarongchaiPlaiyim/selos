@@ -8,11 +8,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 @Entity
 @Table(name="wrk_contact_record")
-public class ContactRecordDetail {
-    @Id
+public class ContactRecordDetail implements Serializable {
+    private static final long serialVersionUID = 7815166861573458864L;
+
+	@Id
     @SequenceGenerator(name="SEQ_WRK_CONTACT_REC_ID", sequenceName="SEQ_WRK_CONTACT_REC_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_CONTACT_REC_ID")
     private long id;
@@ -38,11 +41,14 @@ public class ContactRecordDetail {
     @Column(name="remark")
     private String remark;
 
-    @Column(name="step")
+    @ManyToOne
+    @JoinColumn(name="step_id")
     private Step step;
 
-    @Column(name="status")
+    @ManyToOne
+    @JoinColumn(name="status_id")
     private Status status;
+
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")

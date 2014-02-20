@@ -80,6 +80,8 @@ public class CustomerBizTransform extends BusinessTransform {
                     }
                     customerInfoView.setFirstNameTh(individualModel.getFirstname());
                     customerInfoView.setLastNameTh(individualModel.getLastname());
+                    customerInfoView.setFirstNameEn(individualModel.getFirstnameEN()); //add en name
+                    customerInfoView.setLastNameEn(individualModel.getLastnameEN());
                     customerInfoView.setTmbCustomerId(individualModel.getTmbCusID());
                     customerInfoView.setDocumentType(documentTypeDAO.findOneByCriteria(Restrictions.eq("documentTypeCode", individualModel.getDocumentType())));
                     customerInfoView.setCustomerEntity(customerEntityDAO.findById(1));
@@ -87,7 +89,7 @@ public class CustomerBizTransform extends BusinessTransform {
                         customerInfoView.setDocumentType(new DocumentType());
                     }
                     log.debug("CustomerBizTransform ::: documentExpiredDate : {}", individualModel.getDocumentExpiredDate());
-                    if (!individualModel.getDocumentExpiredDate().equalsIgnoreCase("00/00/0000")) {
+                    if (!"00/00/0000".equalsIgnoreCase(individualModel.getDocumentExpiredDate())) {
                         customerInfoView.setDocumentExpiredDate(DateTimeUtil.parseToDate(individualModel.getDocumentExpiredDate()));
                         log.debug("CustomerBizTransform ::: documentExpiredDate parseDate : {}", DateTimeUtil.parseToDate(individualModel.getDocumentExpiredDate()));
                     } else {
@@ -95,7 +97,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     }
 
                     log.debug("CustomerBizTransform ::: getDateOfBirth : {}", individualModel.getDateOfBirth());
-                    if (!individualModel.getDateOfBirth().equalsIgnoreCase("00/00/0000")) {
+                    if (!"00/00/0000".equalsIgnoreCase(individualModel.getDateOfBirth())) {
                         customerInfoView.setDateOfBirth(DateTimeUtil.parseToDate(individualModel.getDateOfBirth()));
                         log.debug("CustomerBizTransform ::: getDateOfBirth parseDate : {}", DateTimeUtil.parseToDate(individualModel.getDateOfBirth()));
                     } else {
@@ -147,7 +149,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     spouse.setCitizenId(individualModel.getSpouse().getCitizenID());
                     //spouse.setDateOfBirth(Util.convertStringToDateBuddhist(individualModel.getSpouse().getDateOfBirth()));
                     log.debug("CustomerBizTransform ::: spouse DateOfBirth : {}", individualModel.getSpouse().getDateOfBirth());
-                    if (!individualModel.getSpouse().getDateOfBirth().equalsIgnoreCase("00/00/0000")) {
+                    if (!"00/00/0000".equalsIgnoreCase(individualModel.getSpouse().getDateOfBirth())) {
                         spouse.setDateOfBirth(DateTimeUtil.parseToDate(individualModel.getSpouse().getDateOfBirth()));
                         log.debug("CustomerBizTransform ::: spouse DateOfBirth parse date : {}", DateTimeUtil.parseToDate(individualModel.getSpouse().getDateOfBirth()));
                     } else {
@@ -186,7 +188,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     if (individualModel.getTelephoneNumber2() != null) {
                         //If Telephone type 2 = M : If no value in Mobile (1) , move telephoneNumber2 to Mobile (1),else move telephoneNumber2 to Mobile (2)
                         if (individualModel.getTelephoneNumber2().getTelephoneType() != null && individualModel.getTelephoneNumber2().getTelephoneType().equals("M")) {
-                            if (mobileNumber1 == "" || mobileNumber1 == null) {
+                            if (mobileNumber1 == null || "".equalsIgnoreCase(mobileNumber1)) {
                                 mobileNumber1 = individualModel.getTelephoneNumber2().getTelephoneNumber();
                             } else {
                                 mobileNumber2 = individualModel.getTelephoneNumber2().getTelephoneNumber();            //****************
@@ -194,7 +196,7 @@ public class CustomerBizTransform extends BusinessTransform {
                         }
                         //If Telephone type 2 = B if no value in Working Address- Contact Number , move telephoneNumber2 to Working Address- Contact Number move extension2 to Working Address - Ext Number
                         if (individualModel.getTelephoneNumber2().getTelephoneType() != null && individualModel.getTelephoneNumber2().getTelephoneType().equals("B")) {
-                            if (workPhoneNumber == "" || workPhoneNumber == null) {
+                            if (workPhoneNumber == null || "".equalsIgnoreCase(workPhoneNumber)) {
                                 workPhoneNumber = individualModel.getTelephoneNumber2().getTelephoneNumber();
                                 workPhoneExtension = individualModel.getTelephoneNumber2().getExtension();
                             }
@@ -208,7 +210,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     if (individualModel.getTelephoneNumber3() != null) {
                         //If Telephone type 3 = M : If no value in Mobile (1) , move telephoneNumber3 to Mobile (1),else move telephoneNumber3 to Mobile (2)
                         if (individualModel.getTelephoneNumber3().getTelephoneType() != null && individualModel.getTelephoneNumber3().getTelephoneType().equals("M")) {
-                            if (mobileNumber1 == "" || mobileNumber1 == null) {
+                            if (mobileNumber1 == null || "".equalsIgnoreCase(mobileNumber1)) {
                                 mobileNumber1 = individualModel.getTelephoneNumber3().getTelephoneNumber();
                             } else {
                                 mobileNumber2 = individualModel.getTelephoneNumber3().getTelephoneNumber();            //****************
@@ -217,7 +219,7 @@ public class CustomerBizTransform extends BusinessTransform {
 
                         //If Telephone type 3 = B if no value in Working Address- Contact Number , move telephoneNumber3 to Working Address- Contact Number move extension3 to Working Address - Ext Number
                         if (individualModel.getTelephoneNumber3().getTelephoneType() != null && individualModel.getTelephoneNumber3().getTelephoneType().equals("B")) {
-                            if (workPhoneNumber == "" || workPhoneNumber == null) {
+                            if (workPhoneNumber == null || "".equalsIgnoreCase(workPhoneNumber)) {
                                 workPhoneNumber = individualModel.getTelephoneNumber3().getTelephoneNumber();
                                 workPhoneExtension = individualModel.getTelephoneNumber3().getExtension();
                             }
@@ -231,7 +233,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     if (individualModel.getTelephoneNumber4() != null) {
                         //If Telephone type 4 = M : If no value in Mobile (1) , move telephoneNumber4 to Mobile (1),else move telephoneNumber4 to Mobile (2)
                         if (individualModel.getTelephoneNumber4().getTelephoneType() != null && individualModel.getTelephoneNumber4().getTelephoneType().equals("M")) {
-                            if (mobileNumber1 == "" || mobileNumber1 == null) {
+                            if (mobileNumber1 == null || "".equalsIgnoreCase(mobileNumber1)) {
                                 mobileNumber1 = individualModel.getTelephoneNumber4().getTelephoneNumber();
                             } else {
                                 mobileNumber2 = individualModel.getTelephoneNumber4().getTelephoneNumber();            //****************
@@ -239,7 +241,7 @@ public class CustomerBizTransform extends BusinessTransform {
                         }
                         //If Telephone type 4 = B if no value in Working Address- Contact Number , move telephoneNumber4 to Working Address- Contact Number move extension4 to Working Address - Ext Number
                         if (individualModel.getTelephoneNumber4().getTelephoneType() != null && individualModel.getTelephoneNumber4().getTelephoneType().equals("B")) {
-                            if (workPhoneNumber == "" || workPhoneNumber == null) {
+                            if (workPhoneNumber == null || "".equalsIgnoreCase(workPhoneNumber)) {
                                 workPhoneNumber = individualModel.getTelephoneNumber4().getTelephoneNumber();
                                 workPhoneExtension = individualModel.getTelephoneNumber4().getExtension();
                             }
@@ -393,7 +395,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     customerInfoView.setCustomerEntity(customerEntityDAO.findById(2));
 
                     log.debug("CustomerBizTransform ::: registrationDate : {}", corporateModel.getRegistrationDate());
-                    if (!corporateModel.getRegistrationDate().equalsIgnoreCase("00/00/0000")) {
+                    if (!"00/00/0000".equalsIgnoreCase(corporateModel.getRegistrationDate())) {
                         customerInfoView.setDateOfRegister(DateTimeUtil.parseToDate(corporateModel.getRegistrationDate()));
                         log.debug("CustomerBizTransform ::: registrationDate parse date : {}", DateTimeUtil.parseToDate(corporateModel.getRegistrationDate()));
                     } else {

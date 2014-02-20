@@ -867,7 +867,8 @@
                                 <p:selectOneMenu id="dlgQualityLevelA"
                                                  value="#{qualitative.qualitativeView.qualityLevel.id}"
                                                  styleClass="largest"
-                                                 size="1">
+                                                 size="1"
+                                                 required="#{(qualitative.requiredReason) and (not empty param[addQualitativeButton.clientId])}">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                     <f:selectItems value="#{qualitative.qualityLevelList}"
                                                    var="qualityItemsA"

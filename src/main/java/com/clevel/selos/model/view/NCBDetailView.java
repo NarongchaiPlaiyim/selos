@@ -15,7 +15,6 @@ public class NCBDetailView implements Serializable {
     private long id;
     private int isTMBAccount;   // NCBBizTransform use
     private int refinanceFlag;
-    private boolean monthsPaymentFlag;    // check render
     private int wcFlag;
     private Date dateOfInfo;
     private Date accountOpenDate;
@@ -27,15 +26,17 @@ public class NCBDetailView implements Serializable {
     private int noOfOverLimit;
     private AccountType accountType;
     private AccountStatus accountStatus;
-    private TDRCondition tdrCondition;
+    //private TDRCondition tdrCondition;
     private SettlementStatus currentPayment;
     private SettlementStatus historyPayment;
-    private int noOfmonthsPayment;
     private boolean canToEdit;
     private boolean monthFlagPage;
-    private boolean TMB;
-    private boolean refinance;
-    private boolean wc;
+
+    //TO SHOW CHECKBOX IN DATA TABLE
+    private boolean tmbCheck;
+    private boolean refinanceCheck;
+    private boolean wcCheck;
+
     private long customerId;
 
     private String accountName;
@@ -55,13 +56,11 @@ public class NCBDetailView implements Serializable {
         this.dateOfDebtRestructuring = new Date();
         this.noOfOutstandingPaymentIn12months = BigDecimal.ZERO;
         this.noOfOverLimit = 0;
-        this.monthsPaymentFlag = false;
         this.accountType = new AccountType();
         this.accountStatus = new AccountStatus();
-        this.tdrCondition = new TDRCondition();
+        //this.tdrCondition = new TDRCondition();
         this.currentPayment = new SettlementStatus();
         this.historyPayment = new SettlementStatus();
-        this.noOfmonthsPayment = 0;
         this.canToEdit = false;
         this.monthFlagPage = false;
         this.loanAccountTypeView = new LoanAccountTypeView();
@@ -76,12 +75,28 @@ public class NCBDetailView implements Serializable {
         this.id = id;
     }
 
-    public int getNoOfmonthsPayment() {
-        return noOfmonthsPayment;
+    public int getTMBAccount() {
+        return isTMBAccount;
     }
 
-    public void setNoOfmonthsPayment(int noOfmonthsPayment) {
-        this.noOfmonthsPayment = noOfmonthsPayment;
+    public void setTMBAccount(int TMBAccount) {
+        isTMBAccount = TMBAccount;
+    }
+
+    public int getRefinanceFlag() {
+        return refinanceFlag;
+    }
+
+    public void setRefinanceFlag(int refinanceFlag) {
+        this.refinanceFlag = refinanceFlag;
+    }
+
+    public int getWcFlag() {
+        return wcFlag;
+    }
+
+    public void setWcFlag(int wcFlag) {
+        this.wcFlag = wcFlag;
     }
 
     public Date getDateOfInfo() {
@@ -92,31 +107,12 @@ public class NCBDetailView implements Serializable {
         this.dateOfInfo = dateOfInfo;
     }
 
-    public int getTMBAccount() {
-        if (TMB == true) {
-            this.isTMBAccount = 2;
-        } else if (TMB == false) {
-            this.isTMBAccount = 1;
-        }
-        return isTMBAccount;
+    public Date getAccountOpenDate() {
+        return accountOpenDate;
     }
 
-    public void setTMBAccount(int TMBAccount) {
-        isTMBAccount = TMBAccount;
-    }
-
-    public boolean isTMB() {
-
-        if (isTMBAccount == 2) {
-            this.TMB = true;
-        } else {
-            this.TMB = false;
-        }
-        return TMB;
-    }
-
-    public void setTMB(boolean TMB) {
-        this.TMB = TMB;
+    public void setAccountOpenDate(Date accountOpenDate) {
+        this.accountOpenDate = accountOpenDate;
     }
 
     public BigDecimal getLimit() {
@@ -141,14 +137,6 @@ public class NCBDetailView implements Serializable {
 
     public void setInstallment(BigDecimal installment) {
         this.installment = installment;
-    }
-
-    public Date getAccountOpenDate() {
-        return accountOpenDate;
-    }
-
-    public void setAccountOpenDate(Date accountOpenDate) {
-        this.accountOpenDate = accountOpenDate;
     }
 
     public Date getDateOfDebtRestructuring() {
@@ -191,14 +179,13 @@ public class NCBDetailView implements Serializable {
         this.accountStatus = accountStatus;
     }
 
-
-    public TDRCondition getTdrCondition() {
+    /*public TDRCondition getTdrCondition() {
         return tdrCondition;
     }
 
     public void setTdrCondition(TDRCondition tdrCondition) {
         this.tdrCondition = tdrCondition;
-    }
+    }*/
 
     public SettlementStatus getCurrentPayment() {
         return currentPayment;
@@ -216,73 +203,6 @@ public class NCBDetailView implements Serializable {
         this.historyPayment = historyPayment;
     }
 
-    public boolean isRefinance() {
-        if (refinanceFlag == 2) {
-            this.refinance = true;
-        } else {
-            this.refinance = false;
-        }
-        return refinance;
-    }
-
-    public void setRefinance(boolean refinance) {
-        this.refinance = refinance;
-    }
-
-    public boolean isWc() {
-        if (wcFlag == 2) {
-            this.wc = true;
-        } else {
-            this.wc = false;
-        }
-        return wc;
-    }
-
-    public void setWc(boolean wc) {
-        this.wc = wc;
-    }
-
-
-    public int getRefinanceFlag() {
-        if (refinance == true) {
-            refinanceFlag = 2;
-        } else if (refinance == false) {
-            refinanceFlag = 1;
-        }
-        return refinanceFlag;
-    }
-
-    public void setRefinanceFlag(int refinanceFlag) {
-        this.refinanceFlag = refinanceFlag;
-    }
-
-
-    public int getWcFlag() {
-        if (wc == true) {
-            wcFlag = 2;
-        } else if (wc == false) {
-            wcFlag = 1;
-        }
-        return wcFlag;
-    }
-
-    public void setWcFlag(int wcFlag) {
-        this.wcFlag = wcFlag;
-    }
-
-    public boolean isMonthsPaymentFlag() {
-        if (this.noOfmonthsPayment != 0) {
-            this.monthsPaymentFlag = true;
-        } else {
-            this.monthsPaymentFlag = false;
-        }
-        return monthsPaymentFlag;
-    }
-
-    public void setMonthsPaymentFlag(boolean monthsPaymentFlag) {
-        this.monthsPaymentFlag = monthsPaymentFlag;
-    }
-
     public boolean isCanToEdit() {
         return canToEdit;
     }
@@ -292,17 +212,43 @@ public class NCBDetailView implements Serializable {
     }
 
     public boolean isMonthFlagPage() {
-        if (accountType.getMonthFlag() == 1) {       // test before this the future 1 > true 0 > false
-            monthFlagPage = false;
-        } else {
-            monthFlagPage = true;
-        }
-
         return monthFlagPage;
     }
 
     public void setMonthFlagPage(boolean monthFlagPage) {
         this.monthFlagPage = monthFlagPage;
+    }
+
+    public boolean getTmbCheck() {
+        return tmbCheck;
+    }
+
+    public void setTmbCheck(boolean tmbCheck) {
+        this.tmbCheck = tmbCheck;
+    }
+
+    public boolean getRefinanceCheck() {
+        return refinanceCheck;
+    }
+
+    public void setRefinanceCheck(boolean refinanceCheck) {
+        this.refinanceCheck = refinanceCheck;
+    }
+
+    public boolean getWcCheck() {
+        return wcCheck;
+    }
+
+    public void setWcCheck(boolean wcCheck) {
+        this.wcCheck = wcCheck;
+    }
+
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
     }
 
     public String getAccountName() {
@@ -329,19 +275,13 @@ public class NCBDetailView implements Serializable {
         this.debtForCalculate = debtForCalculate;
     }
 
-    public long getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(long customerId) {
-        this.customerId = customerId;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("isTMBAccount", isTMBAccount)
+                .append("refinanceFlag", refinanceFlag)
+                .append("wcFlag", wcFlag)
                 .append("dateOfInfo", dateOfInfo)
                 .append("accountOpenDate", accountOpenDate)
                 .append("limit", limit)
@@ -350,15 +290,20 @@ public class NCBDetailView implements Serializable {
                 .append("dateOfDebtRestructuring", dateOfDebtRestructuring)
                 .append("noOfOutstandingPaymentIn12months", noOfOutstandingPaymentIn12months)
                 .append("noOfOverLimit", noOfOverLimit)
-                .append("refinanceFlag", refinanceFlag)
-                .append("monthsPaymentFlag", monthsPaymentFlag)
                 .append("accountType", accountType)
                 .append("accountStatus", accountStatus)
-                .append("tdrCondition", tdrCondition)
+                //.append("tdrCondition", tdrCondition)
                 .append("currentPayment", currentPayment)
                 .append("historyPayment", historyPayment)
-                .append("noOfmonthsPayment", noOfmonthsPayment)
-                .append("wcFlag", wcFlag)
+                .append("canToEdit", canToEdit)
+                .append("monthFlagPage", monthFlagPage)
+                .append("tmbCheck", tmbCheck)
+                .append("refinanceCheck", refinanceCheck)
+                .append("wcCheck", wcCheck)
+                .append("customerId", customerId)
+                .append("accountName", accountName)
+                .append("loanAccountTypeView", loanAccountTypeView)
+                .append("debtForCalculate", debtForCalculate)
                 .toString();
     }
 }

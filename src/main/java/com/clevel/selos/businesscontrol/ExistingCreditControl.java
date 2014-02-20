@@ -12,6 +12,7 @@ import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcessResult;
 import com.clevel.selos.integration.rlos.appin.model.CustomerDetail;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.CreditRelationType;
 import com.clevel.selos.model.db.master.Reference;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
@@ -124,41 +125,96 @@ public class ExistingCreditControl extends BusinessControl {
             log.info("retrieve interface");
             ObligationResult obligationResult = dwhInterface.getObligationData(getCurrentUserID(), tmbCusIDList);
             if (obligationResult.getActionResult().equals(ActionResult.SUCCESS)) {
+                int borrowerComId = 0;
+                int borrowerRetailId = 0;
+                int relatedComId = 0;
+                int relatedRetailId = 0;
+
+                List<ExistingCreditDetailView> borrowerComCreditDetailViews = new ArrayList<ExistingCreditDetailView>();
+                List<ExistingCreditDetailView> borrowerRetailCreditDetailViews = new ArrayList<ExistingCreditDetailView>();
+                List<ExistingCreditDetailView> relatedComCreditDetailViews = new ArrayList<ExistingCreditDetailView>();
+                List<ExistingCreditDetailView> relatedRetailCreditDetailViews = new ArrayList<ExistingCreditDetailView>();
 
                 Map<String, ExistingCreditDetailView> borrowerComCreditDetailHashMap = new HashMap<String, ExistingCreditDetailView>();
                 Map<String, ExistingCreditDetailView> borrowerRetailCreditDetailHashMap = new HashMap<String, ExistingCreditDetailView>();
-
                 Map<String, ExistingCreditDetailView> relatedComCreditDetailHashMap = new HashMap<String, ExistingCreditDetailView>();
                 Map<String, ExistingCreditDetailView> relatedRetailCreditDetailHashMap = new HashMap<String, ExistingCreditDetailView>();
 
                 BigDecimal _totalBorrowerComLimit = new BigDecimal(0);
                 BigDecimal _totalRelatedComLimit = new BigDecimal(0);
+                BigDecimal _totalBorrowerRetailLimit = new BigDecimal(0);
+                BigDecimal _totalRelatedRetailLimit = new BigDecimal(0);
+
                 List<Obligation> obligationList = obligationResult.getObligationList();
                 for (Obligation obligation : obligationList) {
                     ExistingCreditDetailView existingCreditDetailView = existingCreditTransform.getExistingCredit(obligation);
-                    if (_borrowerTMBCusID.contains(obligation.getTmbCusId())) {
-                        log.info("add obligation into borrower");
-                        String borrowerKey = existingCreditDetailView.getAccountNumber().concat(existingCreditDetailView.getAccountSuf()).concat(existingCreditDetailView.getAccountRef());
-                        existingCreditDetailView.setCreditRelationType(CreditRelationType.BORROWER);
-                        if(!borrowerComCreditDetailHashMap.containsKey(borrowerKey)){
-                            borrowerComCreditDetailHashMap.put(borrowerKey, existingCreditDetailView);
-                            _totalBorrowerComLimit = _totalBorrowerComLimit.add(existingCreditDetailView.getLimit());
-                        }
-                    } else {
-                        log.info("add obligation into relate");
-                        String relateKey = existingCreditDetailView.getAccountNumber().concat(existingCreditDetailView.getAccountSuf()).concat(existingCreditDetailView.getAccountRef());
-                        existingCreditDetailView.setCreditRelationType(CreditRelationType.RELATED);
-                        if(!relatedComCreditDetailHashMap.containsKey(relateKey)){
-                            relatedComCreditDetailHashMap.put(relateKey, existingCreditDetailView);
-                            _totalRelatedComLimit = _totalRelatedComLimit.add(existingCreditDetailView.getLimit());
+                    //get category for commercial or retail
+                    if(existingCreditDetailView.getProductSegment()!=null){
+                        if(existingCreditDetailView.getProductSegment().getCreditCategory()== CreditCategory.COMMERCIAL.value()){
+                            if (_borrowerTMBCusID.contains(obligation.getTmbCusId())) {
+                                log.info("add obligation into borrower");
+                                String borrowerKey = existingCreditDetailView.getAccountNumber().concat(existingCreditDetailView.getAccountSuf()).concat(existingCreditDetailView.getAccountRef());
+                                existingCreditDetailView.setCreditRelationType(CreditRelationType.BORROWER);
+                                if(!borrowerComCreditDetailHashMap.containsKey(borrowerKey)){
+                                    borrowerComId = borrowerComId+1;
+                                    existingCreditDetailView.setNo(borrowerComId);
+                                    existingCreditDetailView.setBorrowerType(1);
+                                    borrowerComCreditDetailHashMap.put(borrowerKey, existingCreditDetailView);
+                                    _totalBorrowerComLimit = _totalBorrowerComLimit.add(existingCreditDetailView.getLimit());
+                                    borrowerComCreditDetailViews.add(existingCreditDetailView);
+                                }
+                            } else {
+                                log.info("add obligation into relate");
+                                String relateKey = existingCreditDetailView.getAccountNumber().concat(existingCreditDetailView.getAccountSuf()).concat(existingCreditDetailView.getAccountRef());
+                                existingCreditDetailView.setCreditRelationType(CreditRelationType.RELATED);
+                                if(!relatedComCreditDetailHashMap.containsKey(relateKey)){
+                                    relatedComId = relatedComId+1;
+                                    existingCreditDetailView.setNo(relatedComId);
+                                    existingCreditDetailView.setBorrowerType(2);
+                                    relatedComCreditDetailHashMap.put(relateKey, existingCreditDetailView);
+                                    _totalRelatedComLimit = _totalRelatedComLimit.add(existingCreditDetailView.getLimit());
+                                    relatedComCreditDetailViews.add(existingCreditDetailView);
+                                }
+                            }
+                        } else {  //Retail
+                            if (_borrowerTMBCusID.contains(obligation.getTmbCusId())) {
+                                log.info("add obligation into borrower");
+                                String borrowerKey = existingCreditDetailView.getAccountNumber().concat(existingCreditDetailView.getAccountSuf()).concat(existingCreditDetailView.getAccountRef());
+                                existingCreditDetailView.setCreditRelationType(CreditRelationType.BORROWER);
+                                if(!borrowerRetailCreditDetailHashMap.containsKey(borrowerKey)){
+                                    borrowerRetailId = borrowerRetailId+1;
+                                    existingCreditDetailView.setBorrowerType(1);
+                                    existingCreditDetailView.setNo(borrowerRetailId);
+                                    borrowerRetailCreditDetailHashMap.put(borrowerKey, existingCreditDetailView);
+                                    _totalBorrowerRetailLimit = _totalBorrowerRetailLimit.add(existingCreditDetailView.getLimit());
+                                    borrowerRetailCreditDetailViews.add(existingCreditDetailView);
+                                }
+                            } else {
+                                log.info("add obligation into relate");
+                                String relateKey = existingCreditDetailView.getAccountNumber().concat(existingCreditDetailView.getAccountSuf()).concat(existingCreditDetailView.getAccountRef());
+                                existingCreditDetailView.setCreditRelationType(CreditRelationType.RELATED);
+                                if(!relatedRetailCreditDetailHashMap.containsKey(relateKey)){
+                                    relatedRetailId = relatedRetailId+1;
+                                    existingCreditDetailView.setBorrowerType(2);
+                                    existingCreditDetailView.setNo(relatedRetailId);
+                                    relatedRetailCreditDetailHashMap.put(relateKey, existingCreditDetailView);
+                                    _totalRelatedRetailLimit = _totalRelatedRetailLimit.add(existingCreditDetailView.getLimit());
+                                    relatedRetailCreditDetailViews.add(existingCreditDetailView);
+                                }
+                            }
                         }
                     }
                 }
 
-                existingCreditFacilityView.setBorrowerComExistingCredit(new ArrayList<ExistingCreditDetailView>(borrowerComCreditDetailHashMap.values()));
+                existingCreditFacilityView.setBorrowerComExistingCredit(borrowerComCreditDetailViews);
                 existingCreditFacilityView.setTotalBorrowerComLimit(_totalBorrowerComLimit);
-                existingCreditFacilityView.setRelatedComExistingCredit(new ArrayList<ExistingCreditDetailView>(relatedComCreditDetailHashMap.values()));
+                existingCreditFacilityView.setRelatedComExistingCredit(relatedComCreditDetailViews);
                 existingCreditFacilityView.setTotalRelatedComLimit(_totalRelatedComLimit);
+
+                existingCreditFacilityView.setBorrowerRetailExistingCredit(borrowerRetailCreditDetailViews);
+                existingCreditFacilityView.setTotalBorrowerRetailLimit(_totalBorrowerRetailLimit);
+                existingCreditFacilityView.setRelatedRetailExistingCredit(relatedRetailCreditDetailViews);
+                existingCreditFacilityView.setTotalRelatedRetailLimit(_totalRelatedRetailLimit);
 
             }
             ActionStatusView actionStatusView = new ActionStatusView();

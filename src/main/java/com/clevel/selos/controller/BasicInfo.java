@@ -210,20 +210,46 @@ public class BasicInfo extends MandatoryFieldsControl {
     public BasicInfo(){
     }
 
-    @PostConstruct
-    public void onCreation() {
+    public void preRender(){
+        log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         }else{
-            log.info("preRender ::: workCaseId is null.");
+            log.debug("onCreation ::: workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
-                return;
             }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+                log.error("Exception :: {}",ex);
             }
+        }
+    }
+
+    @PostConstruct
+    public void onCreation() {
+        log.debug("onCreation");
+
+        HttpSession session = FacesUtil.getSession(true);
+
+        if(session.getAttribute("workCaseId") != null){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            if(workCaseId == 0){
+                try{
+                    FacesUtil.redirect("/site/inbox.jsf");
+                }catch (Exception ex){
+                    log.error("Exception :: {}",ex);
+                }
+                return;
+            }
+        }else{
+            log.debug("onCreation ::: workCaseId is null.");
+            try{
+                FacesUtil.redirect("/site/inbox.jsf");
+            }catch (Exception ex){
+                log.error("Exception :: {}",ex);
+            }
+            return;
         }
 
 //        List<FieldsControlView> fieldsControlViewList = initialCreation(Screen.BASIC_INFO);
@@ -256,12 +282,6 @@ public class BasicInfo extends MandatoryFieldsControl {
         CustomerEntity customerEntity = basicInfoControl.getCustomerEntityByWorkCaseId(workCaseId);
 
         borrowingTypeList = borrowingTypeDAO.findByCustomerEntity(customerEntity);
-
-//        baPaymentMethodList = baPaymentMethodDAO.findAll();
-//
-//        if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
-//            basicInfoView.setBaPaymentMethod(baPaymentMethodList.get(0));
-//        }
 
         basicInfoView.setSpProgram(0);
         basicInfoView.setRefIn(0);
@@ -462,6 +482,8 @@ public class BasicInfo extends MandatoryFieldsControl {
     }
 
     public void onSelectEditAccount(){
+        customerId = 0;
+
         Cloner cloner = new Cloner();
         openAccountView = cloner.deepClone(selectAccount);
         onChangeAccountType();
@@ -838,6 +860,10 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void onAddAccount(){
         if(accountNameList.size() == 0){
+            messageHeader = "Information.";
+            message = "Please Add Account Name !!";
+            severity = "info";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg2.show()");
             return;
         }
 

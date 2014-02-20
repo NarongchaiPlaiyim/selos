@@ -21,6 +21,10 @@ public class CreditType implements Serializable {
     private String description;
     @Column(name = "brms_code")
     private String brmsCode;
+    @Column(name = "coms_int_type", length = 1)
+    private String comsIntType;
+    @Column(name = "can_split")
+    private int canSplit;
     @Column(name = "active")
     private int active;
 
@@ -59,6 +63,22 @@ public class CreditType implements Serializable {
         this.brmsCode = brmsCode;
     }
 
+    public String getComsIntType() {
+        return comsIntType;
+    }
+
+    public void setComsIntType(String comsIntType) {
+        this.comsIntType = comsIntType;
+    }
+
+    public int getCanSplit() {
+        return canSplit;
+    }
+
+    public void setCanSplit(int canSplit) {
+        this.canSplit = canSplit;
+    }
+
     public int getActive() {
         return active;
     }
@@ -74,6 +94,8 @@ public class CreditType implements Serializable {
                 .append("name", name)
                 .append("description", description)
                 .append("brmsCode", brmsCode)
+                .append("comsIntType", comsIntType)
+                .append("canSplit", canSplit)
                 .append("active", active)
                 .toString();
     }

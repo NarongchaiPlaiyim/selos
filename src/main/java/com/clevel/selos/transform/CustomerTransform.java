@@ -10,11 +10,15 @@ import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerCSIView;
+import com.clevel.selos.model.view.CustomerInfoSimpleView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.util.Util;
+
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,56 +29,54 @@ public class CustomerTransform extends Transform {
     Logger log;
 
     @Inject
-    CustomerCSITransform customerCSITransform;
+    private CustomerCSITransform customerCSITransform;
+    @Inject
+    private SBFScoreTransform sbfScoreTransform;
+    @Inject
+    private ServiceSegmentTransform serviceSegmentTransform;
 
     @Inject
-    SBFScoreTransform sbfScoreTransform;
-
+    private CustomerDAO customerDAO;
     @Inject
-    ServiceSegmentTransform serviceSegmentTransform;
-
+    private CustomerEntityDAO customerEntityDAO;
     @Inject
-    CustomerDAO customerDAO;
+    private DocumentTypeDAO documentTypeDAO;
     @Inject
-    CustomerEntityDAO customerEntityDAO;
+    private TitleDAO titleDAO;
     @Inject
-    DocumentTypeDAO documentTypeDAO;
+    private RelationDAO relationDAO;
     @Inject
-    TitleDAO titleDAO;
+    private ReferenceDAO referenceDAO;
     @Inject
-    RelationDAO relationDAO;
+    private MaritalStatusDAO maritalStatusDAO;
     @Inject
-    ReferenceDAO referenceDAO;
+    private EducationDAO educationDAO;
     @Inject
-    MaritalStatusDAO maritalStatusDAO;
+    private NationalityDAO nationalityDAO;
     @Inject
-    EducationDAO educationDAO;
+    private OccupationDAO occupationDAO;
     @Inject
-    NationalityDAO nationalityDAO;
+    private AddressTypeDAO addressTypeDAO;
     @Inject
-    OccupationDAO occupationDAO;
+    private ProvinceDAO provinceDAO;
     @Inject
-    AddressTypeDAO addressTypeDAO;
+    private DistrictDAO districtDAO;
     @Inject
-    ProvinceDAO provinceDAO;
+    private SubDistrictDAO subDistrictDAO;
     @Inject
-    DistrictDAO districtDAO;
+    private CountryDAO countryDAO;
     @Inject
-    SubDistrictDAO subDistrictDAO;
+    private AddressDAO addressDAO;
     @Inject
-    CountryDAO countryDAO;
+    private BusinessTypeDAO businessTypeDAO;
     @Inject
-    AddressDAO addressDAO;
+    private WarningCodeDAO warningCodeDAO;
     @Inject
-    BusinessTypeDAO businessTypeDAO;
+    private KYCLevelDAO kycLevelDAO;
     @Inject
-    WarningCodeDAO warningCodeDAO;
+    private RaceDAO raceDAO;
     @Inject
-    KYCLevelDAO kycLevelDAO;
-    @Inject
-    RaceDAO raceDAO;
-    @Inject
-    CustomerOblInfoDAO customerOblInfoDAO;
+    private CustomerOblInfoDAO customerOblInfoDAO;
 
     public CustomerInfoView transformToView(Customer customer){
         log.info("Start - transformToView ::: customer : {}", customer);
@@ -805,7 +807,10 @@ public class CustomerTransform extends Transform {
                 }
             }
 
-            if(customerOblInfo == null) customerOblInfo = new CustomerOblInfo();
+            log.debug("customerOblInfo :: {}",customerOblInfo);
+            if(customerOblInfo == null) {
+                customerOblInfo = new CustomerOblInfo();
+            }
 
             customerOblInfo.setServiceSegment(serviceSegmentTransform.transformToModel(customerInfoView.getServiceSegmentView()));
             customerOblInfo.setExistingSMECustomer(customerInfoView.getExistingSMECustomer());
@@ -818,13 +823,23 @@ public class CustomerTransform extends Transform {
             customerOblInfo.setNumberOfMonthsLastContractDate(customerInfoView.getNumberOfMonthsLastContractDate());
             customerOblInfo.setAdjustClass(customerInfoView.getAdjustClass());
             customerOblInfo.setRatingFinal(sbfScoreTransform.transformToModel(customerInfoView.getRatingFinal()));
-            customerOblInfo.setUnpaidFeeInsurance(customerInfoView.getUnpaidFeeInsurance());
-            customerOblInfo.setPendingClaimLG(customerInfoView.getPendingClaimLG());
+            if(customerInfoView.getUnpaidFeeInsurance() != null){
+                customerOblInfo.setUnpaidFeeInsurance(customerInfoView.getUnpaidFeeInsurance());
+            } else {
+                customerOblInfo.setUnpaidFeeInsurance(BigDecimal.ZERO);
+            }
+            if(customerInfoView.getPendingClaimLG() != null){
+                customerOblInfo.setPendingClaimLG(customerInfoView.getPendingClaimLG());
+            } else {
+                customerOblInfo.setPendingClaimLG(BigDecimal.ZERO);
+            }
+
             customerOblInfo.setCustomer(customer);
             customer.setCustomerOblInfo(customerOblInfo);
         } else {
             customer.setCustomerOblInfo(null);
         }
+        log.info("############# - transformToModel ::: customer.getCustomerOblInfo : {}", customer.getCustomerOblInfo());
         log.info("Return - transformToModel ::: customer : {}", customer);
         return customer;
     }
@@ -957,5 +972,28 @@ public class CustomerTransform extends Transform {
             }
         }
         return customerList;
+    }
+    
+    public CustomerInfoSimpleView transformToSimpleView(Customer model) {
+    	StringBuilder builder = new StringBuilder();
+    	
+    	CustomerInfoSimpleView view = new CustomerInfoSimpleView();
+    	view.setId(model.getId());
+    	if (model.getTitle() != null)
+			builder.append(model.getTitle().getTitleTh()).append(' ');
+		builder.append(model.getNameTh());
+		if (!Util.isEmpty(model.getLastNameTh()))
+			builder.append(" ").append(model.getLastNameTh());
+    	view.setCustomerName(builder.toString());
+    	if (model.getIndividual() != null)
+    		view.setCitizenId(model.getIndividual().getCitizenId());
+    	else if (model.getJuristic() != null)
+    		view.setCitizenId(model.getJuristic().getRegistrationId());
+    	
+    	view.setTmbCustomerId(model.getTmbCustomerId());
+    	if (model.getRelation() != null)
+    		view.setRelation(model.getRelation().getDescription());
+    	
+    	return view;
     }
 }

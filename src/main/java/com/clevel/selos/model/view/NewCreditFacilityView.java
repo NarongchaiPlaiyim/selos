@@ -4,6 +4,8 @@ import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.db.master.Country;
 import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -709,4 +711,76 @@ public class NewCreditFacilityView implements Serializable {
         this.totalLoanWCTMB = totalLoanWCTMB;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("WCNeed", WCNeed).
+                append("totalWcTmb", totalWcTmb).
+                append("WCNeedDiffer", WCNeedDiffer).
+                append("totalWcDebit", totalWcDebit).
+                append("case1WcLimit", case1WcLimit).
+                append("case1WcMinLimit", case1WcMinLimit).
+                append("case1Wc50CoreWc", case1Wc50CoreWc).
+                append("case1WcDebitCoreWc", case1WcDebitCoreWc).
+                append("case2WcLimit", case2WcLimit).
+                append("case2WcMinLimit", case2WcMinLimit).
+                append("case2Wc50CoreWc", case2Wc50CoreWc).
+                append("case2WcDebitCoreWc", case2WcDebitCoreWc).
+                append("case3WcLimit", case3WcLimit).
+                append("case3WcMinLimit", case3WcMinLimit).
+                append("case3Wc50CoreWc", case3Wc50CoreWc).
+                append("case3WcDebitCoreWc", case3WcDebitCoreWc).
+                append("existingSMELimit", existingSMELimit).
+                append("maximumSMELimit", maximumSMELimit).
+                append("totalPropose", totalPropose).
+                append("totalProposeLoanDBR", totalProposeLoanDBR).
+                append("totalProposeNonLoanDBR", totalProposeNonLoanDBR).
+                append("totalCommercial", totalCommercial).
+                append("totalCommercialAndOBOD", totalCommercialAndOBOD).
+                append("totalExposure", totalExposure).
+                append("totalApproveCredit", totalApproveCredit).
+                append("totalGuaranteeAmount", totalGuaranteeAmount).
+                append("contactName", contactName).
+                append("contactPhoneNo", contactPhoneNo).
+                append("interService", interService).
+                append("currentAddress", currentAddress).
+                append("registeredAddress", registeredAddress).
+                append("emailAddress", emailAddress).
+                append("importMail", importMail).
+                append("exportMail", exportMail).
+                append("depositBranchCode", depositBranchCode).
+                append("ownerBranchCode", ownerBranchCode).
+                append("intFeeDOA", intFeeDOA).
+                append("frontendFeeDOA", frontendFeeDOA).
+                append("guarantorBA", guarantorBA).
+                append("reasonForReduction", reasonForReduction).
+                append("creditCustomerType", creditCustomerType).
+                append("loanRequestType", loanRequestType).
+                append("investedCountry", investedCountry).
+                append("relatedTMBLending", relatedTMBLending).
+                append("twentyFivePercentShareRelatedTMBLending", twentyFivePercentShareRelatedTMBLending).
+                append("singleLendingLimit", singleLendingLimit).
+                append("newFeeDetailViewList", newFeeDetailViewList).
+                append("newCreditDetailViewList", newCreditDetailViewList).
+                append("newCollateralViewList", newCollateralViewList).
+                append("newGuarantorDetailViewList", newGuarantorDetailViewList).
+                append("newConditionDetailViewList", newConditionDetailViewList).
+                append("totalLoanWCTMB", totalLoanWCTMB).
+                append("totalNumberOfNewOD", totalNumberOfNewOD).
+                append("totalNumberProposeCreditFac", totalNumberProposeCreditFac).
+                append("totalNumberContingenPropose", totalNumberContingenPropose).
+                append("numberMonthsFromApprDate", numberMonthsFromApprDate).
+                append("totalNumberOfCoreAsset", totalNumberOfCoreAsset).
+                append("totalNumberOfNonCoreAsset", totalNumberOfNonCoreAsset).
+                append("totalMortgageValue", totalMortgageValue).
+                append("totalTCGGuaranteeAmount", totalTCGGuaranteeAmount).
+                append("totalIndvGuaranteeAmount", totalIndvGuaranteeAmount).
+                append("totalJurisGuaranteeAmount", totalJurisGuaranteeAmount).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                toString();
+    }
 }

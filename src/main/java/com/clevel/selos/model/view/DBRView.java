@@ -22,6 +22,7 @@ public class DBRView implements Serializable {
     private BigDecimal dbrInterest;
     private BigDecimal totalMonthDebtBorrowerStart;
     private BigDecimal totalMonthDebtBorrowerFinal;
+    private BigDecimal totalMonthDebtRelatedWc;
     private boolean isUpdateTotalDebtBorrower;
     private long workCaseId;
     private String userId;
@@ -46,7 +47,7 @@ public class DBRView implements Serializable {
         this.dbrInterest = BigDecimal.ZERO;
         this.workCaseId = 0;
         this.isUpdateTotalDebtBorrower = false;
-
+        this.totalMonthDebtRelatedWc = BigDecimal.ZERO;
     }
 
     public long getId() {
@@ -183,6 +184,14 @@ public class DBRView implements Serializable {
 
     public void setUpdateTotalDebtBorrower(boolean updateTotalDebtBorrower) {
         isUpdateTotalDebtBorrower = updateTotalDebtBorrower;
+    }
+
+    public BigDecimal getTotalMonthDebtRelatedWc() {
+        return totalMonthDebtRelatedWc;
+    }
+
+    public void setTotalMonthDebtRelatedWc(BigDecimal totalMonthDebtRelatedWc) {
+        this.totalMonthDebtRelatedWc = totalMonthDebtRelatedWc;
     }
 
     @Override

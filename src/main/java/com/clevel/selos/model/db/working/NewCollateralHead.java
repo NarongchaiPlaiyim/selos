@@ -21,6 +21,9 @@ public class NewCollateralHead implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COLL_HEAD_ID")
     private long id;
 
+    @Column(name = "coll_id")
+    private String collID;
+
     @OneToOne
     @JoinColumn(name = "collateral_type_id")
     private CollateralType  headCollType;
@@ -79,8 +82,24 @@ public class NewCollateralHead implements Serializable {
     @Column (name = "collateral_char")
     private int collateralChar;
 
-    @Column (name = "number_of_documents")
+    @Column (name = "number_of_documents", nullable=false, columnDefinition="int default 0")
     private int numberOfDocuments;
+
+    @Column (name = "purpose_review_appraisal", nullable=false, columnDefinition="int default 0")
+    private int purposeReviewAppraisal;
+
+    @Column (name = "purpose_new_appraisal", nullable=false, columnDefinition="int default 0")
+    private int purposeNewAppraisal;
+
+    @Column (name = "purpose_review_building", nullable=false, columnDefinition="int default 0")
+    private int purposeReviewBuilding;
+
+    @Column(name = "appraisal_request", nullable=false, columnDefinition="int default 0")
+    private int appraisalRequest;
+
+    @Column(name = "propose_type")
+    private String proposeType;
+
 
     /*** For Post - Insurance Premium Quote Process ***/
     @Column(name = "insurance_company_type")
@@ -93,8 +112,32 @@ public class NewCollateralHead implements Serializable {
         return id;
     }
 
+    public int getAppraisalRequest() {
+        return appraisalRequest;
+    }
+
+    public void setAppraisalRequest(int appraisalRequest) {
+        this.appraisalRequest = appraisalRequest;
+    }
+
+    public String getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(String proposeType) {
+        this.proposeType = proposeType;
+    }
+
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getCollID() {
+        return collID;
+    }
+
+    public void setCollID(String collID) {
+        this.collID = collID;
     }
 
     public CollateralType getHeadCollType() {
@@ -250,10 +293,35 @@ public class NewCollateralHead implements Serializable {
         this.existingInsuranceType = existingInsuranceType;
     }
 
+    public int getPurposeReviewAppraisal() {
+        return purposeReviewAppraisal;
+    }
+
+    public void setPurposeReviewAppraisal(int purposeReviewAppraisal) {
+        this.purposeReviewAppraisal = purposeReviewAppraisal;
+    }
+
+    public int getPurposeNewAppraisal() {
+        return purposeNewAppraisal;
+    }
+
+    public void setPurposeNewAppraisal(int purposeNewAppraisal) {
+        this.purposeNewAppraisal = purposeNewAppraisal;
+    }
+
+    public int getPurposeReviewBuilding() {
+        return purposeReviewBuilding;
+    }
+
+    public void setPurposeReviewBuilding(int purposeReviewBuilding) {
+        this.purposeReviewBuilding = purposeReviewBuilding;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
+                .append("collID", collID)
                 .append("headCollType", headCollType)
                 .append("subCollateralType", subCollateralType)
                 .append("potential", potential)
@@ -269,6 +337,15 @@ public class NewCollateralHead implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("collateralChar", collateralChar)
+                .append("numberOfDocuments", numberOfDocuments)
+                .append("purposeReviewAppraisal", purposeReviewAppraisal)
+                .append("purposeNewAppraisal", purposeNewAppraisal)
+                .append("purposeReviewBuilding", purposeReviewBuilding)
+                .append("appraisalRequest", appraisalRequest)
+                .append("proposeType", proposeType)
+                .append("insuranceComType", insuranceComType)
+                .append("existingInsuranceType", existingInsuranceType)
                 .toString();
     }
 }

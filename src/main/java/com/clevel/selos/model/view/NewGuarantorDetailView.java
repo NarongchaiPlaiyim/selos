@@ -1,5 +1,7 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -15,9 +17,10 @@ public class NewGuarantorDetailView implements Serializable {
     private CustomerInfoView guarantorName;
     private String tcgLgNo;
     private BigDecimal totalLimitGuaranteeAmount;
-    private int isApproved;
+    private ProposeType proposeType;
+    private DecisionType uwDecision;
 
-    private List<NewCreditDetailView> newCreditDetailViewList;
+    private List<ProposeCreditDetailView> proposeCreditDetailViewList;
 
     private Date createDate;
     private Date modifyDate;
@@ -32,7 +35,9 @@ public class NewGuarantorDetailView implements Serializable {
         this.guarantorName = new CustomerInfoView();
         this.tcgLgNo = "";
         this.totalLimitGuaranteeAmount = BigDecimal.ZERO;
-        this.newCreditDetailViewList = new ArrayList<NewCreditDetailView>();
+        this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
+        this.proposeType = ProposeType.P;
+        this.uwDecision = DecisionType.NO_DECISION;
     }
 
     public long getId() {
@@ -41,6 +46,22 @@ public class NewGuarantorDetailView implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public ProposeType getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(ProposeType proposeType) {
+        this.proposeType = proposeType;
+    }
+
+    public DecisionType getUwDecision() {
+        return uwDecision;
+    }
+
+    public void setUwDecision(DecisionType uwDecision) {
+        this.uwDecision = uwDecision;
     }
 
     public Date getCreateDate() {
@@ -91,14 +112,6 @@ public class NewGuarantorDetailView implements Serializable {
         this.tcgLgNo = tcgLgNo;
     }
 
-    public List<NewCreditDetailView> getNewCreditDetailViewList() {
-        return newCreditDetailViewList;
-    }
-
-    public void setNewCreditDetailViewList(List<NewCreditDetailView> newCreditDetailViewList) {
-        this.newCreditDetailViewList = newCreditDetailViewList;
-    }
-
     public BigDecimal getTotalLimitGuaranteeAmount() {
         return totalLimitGuaranteeAmount;
     }
@@ -107,12 +120,12 @@ public class NewGuarantorDetailView implements Serializable {
         this.totalLimitGuaranteeAmount = totalLimitGuaranteeAmount;
     }
 
-    public int getApproved() {
-        return isApproved;
+    public List<ProposeCreditDetailView> getProposeCreditDetailViewList() {
+        return proposeCreditDetailViewList;
     }
 
-    public void setApproved(int approved) {
-        isApproved = approved;
+    public void setProposeCreditDetailViewList(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
+        this.proposeCreditDetailViewList = proposeCreditDetailViewList;
     }
 
     @Override
@@ -122,8 +135,8 @@ public class NewGuarantorDetailView implements Serializable {
                 .append("guarantorName", guarantorName)
                 .append("tcgLgNo", tcgLgNo)
                 .append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount)
-                .append("isApproved", isApproved)
-                .append("newCreditDetailViewList", newCreditDetailViewList)
+                .append("proposeCreditDetailViewList", proposeCreditDetailViewList)
+                .append("uwDecision", uwDecision)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)

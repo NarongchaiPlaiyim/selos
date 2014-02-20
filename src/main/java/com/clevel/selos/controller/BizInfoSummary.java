@@ -1,12 +1,11 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.BizInfoDetailControl;
-import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
+import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.RoleUser;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.BankStmtSummaryView;
@@ -44,6 +43,8 @@ public class BizInfoSummary implements Serializable {
     @NormalMessage
     @Inject
     Message msg;
+    @Inject
+    BankStmtControl bankStmtControl;
 
     private BizInfoSummaryView bizInfoSummaryView;
     private BizInfoDetailView selectBizInfoDetailView;
@@ -51,20 +52,15 @@ public class BizInfoSummary implements Serializable {
     private List<BizInfoDetail> bizInfoDetailList;
     private List<Province> provinceList;
     private List<District> districtList;
-    private List<Country> countryList;
     private List<SubDistrict> subDistrictList;
+    private List<Country> countryList;
     private List<ReferredExperience> referredExperienceList;
-    private Province province;
-    private District district;
-    private SubDistrict subDistrict;
-    private Country country;
     private boolean fromDB;
     private boolean readonlyInterview;
     //private User user;
     private Date currentDate;
     private String currentDateDDMMYY;
 
-    private ReferredExperience referredExperience;
     private String sumIncomeAmountDis;
     private String incomeAmountDis;
     private BigDecimal sumIncomeAmount;
@@ -73,8 +69,6 @@ public class BizInfoSummary implements Serializable {
     private BigDecimal SumWeightAR;
     private BigDecimal SumWeightAP;
     private BigDecimal SumWeightINV;
-    double bankStatementAvg = 0;
-    private BankStmtSummaryView bankStmtSummaryView;
 
     private String messageHeader;
     private String message;
@@ -111,7 +105,10 @@ public class BizInfoSummary implements Serializable {
     BankStmtTransform bankStmtTransform;
     @Inject
     BankStatementSummaryDAO bankStmtSummaryDAO;
-
+    @Inject
+    ExSummaryControl exSummaryControl;
+    @Inject
+    CreditFacProposeControl creditFacProposeControl;
 
     @Inject
     private Util util;
@@ -122,93 +119,100 @@ public class BizInfoSummary implements Serializable {
 
     }
 
-    @PostConstruct
-    public void onCreation() {
-        log.info("onCreation bizInfoSum");
+    public void preRender(){
+        log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
-        disableOwnerName = false;
-        disableExpiryDate = true;
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        }else{
+            log.debug("onCreation ::: workCaseId is null.");
+            try{
+                FacesUtil.redirect("/site/inbox.jsf");
+            }catch (Exception ex){
+                log.error("Exception :: {}",ex);
+            }
+        }
+    }
+
+    @PostConstruct
+    public void onCreation() {
+        log.info("onCreation bizInfoSum");
+        disableOwnerName = false;
+        disableExpiryDate = true;
+
+        log.debug("onCreation");
+
+        HttpSession session = FacesUtil.getSession(true);
+
+        if(session.getAttribute("workCaseId") != null){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            if(workCaseId == 0){
+                try{
+                    FacesUtil.redirect("/site/inbox.jsf");
+                }catch (Exception ex){
+                    log.error("Exception :: {}",ex);
+                }
+                return;
+            }
+        }else{
+            log.debug("onCreation ::: workCaseId is null.");
+            try{
+                FacesUtil.redirect("/site/inbox.jsf");
+            }catch (Exception ex){
+                log.error("Exception :: {}", ex);
+            }
+            return;
         }
 
         log.debug("info WorkCaseId is: {}", workCaseId);
 
-        onSearchBizInfoSummaryByWorkCase();
+        bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
 
         provinceList = provinceDAO.getListOrderByParameter("name");
+        districtList = new ArrayList<District>();
+        subDistrictList = new ArrayList<SubDistrict>();
+
         countryList = countryDAO.findAll();
         referredExperienceList = referredExperienceDAO.findAll();
-        bankStatementAvg = 0;
 
-        log.debug("bankStmtSummaryView : {}", bankStmtSummaryView);
-        if(bankStmtSummaryView != null ){
-            if(bankStmtSummaryView.getGrdTotalIncomeNetUW() != null ){
-                bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW().doubleValue();
-            }else{
-                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM() != null ){
-                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
-                }
-            }
-        }
-        log.debug("bankStatementAvg is " + bankStatementAvg);
-
-        if(bizInfoSummaryView == null) {
-            fromDB = false;
+        if(Util.isNull(bizInfoSummaryView)) {
             log.info("bizInfoSummaryView == null ");
-
+            fromDB = false;
             bizInfoSummaryView = new BizInfoSummaryView();
 
-            province = new Province();
-            district = new District();
-            subDistrict = new SubDistrict();
-            country = new Country();
-            country.setId(211);
-            referredExperience = new ReferredExperience();
-
-            district.setProvince(province);
-            subDistrict.setDistrict(district);
-            subDistrict.setProvince(province);
-            bizInfoSummaryView.setProvince(province);
-            bizInfoSummaryView.setDistrict(district);
-            bizInfoSummaryView.setSubDistrict(subDistrict);
-            bizInfoSummaryView.setDistrict(district);
-            bizInfoSummaryView.setProvince(province);
-            bizInfoSummaryView.setReferredExperience(referredExperience);
-            bizInfoSummaryView.setCountry(country);
-
-            bizInfoSummaryView.setSumIncomeAmount(new BigDecimal(0));
-            bizInfoSummaryView.setSumIncomePercent(new BigDecimal(0));
-            bizInfoSummaryView.setSumWeightAR(new BigDecimal(0));
-            bizInfoSummaryView.setSumWeightAP(new BigDecimal(0));
-            bizInfoSummaryView.setSumWeightINV(new BigDecimal(0));
-            bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(new BigDecimal(0));
-
+            bizInfoSummaryView.getCountry().setId(211);
+            bizInfoSummaryView.setSumIncomeAmount(BigDecimal.ZERO);
+            bizInfoSummaryView.setSumIncomePercent(BigDecimal.ZERO);
+            bizInfoSummaryView.setSumWeightAR(BigDecimal.ZERO);
+            bizInfoSummaryView.setSumWeightAP(BigDecimal.ZERO);
+            bizInfoSummaryView.setSumWeightINV(BigDecimal.ZERO);
+            bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(BigDecimal.ZERO);
+            bizInfoSummaryView.setCirculationAmount(BigDecimal.ZERO);
+            bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
+            bizInfoSummaryView.setWeightIncomeFactor(BigDecimal.ZERO);
         } else {
+            log.info("bizInfoSummaryView != null ");
             fromDB = true;
             getBusinessInfoListDB();
-            onChangeProvince();
-            onChangeDistrict();
+            onChangeProvinceEdit();
+            onChangeDistrictEdit();
             onChangeRental();
+            onCalSummaryTable();
+            bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
         }
         onCheckInterview();
     }
 
-    public void onSearchBizInfoSummaryByWorkCase() {
-        log.info(" get FROM session workCaseId is " + workCaseId);
-        try{
-            bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
-            bankStmtSummaryView = bizInfoSummaryControl.getBankStmtSummary(workCaseId);
-        }catch (Exception e){
-            log.error("error onSearchBizInfoSummaryByWorkCase : ", e);
+/*    public void onChangeProvince() {
+        log.info("onChangeProvince :::: Province  : {} ", bizInfoSummaryView.getProvince());
+        if(bizInfoSummaryView.getProvince() != null){
+            Province proSelect = bizInfoSummaryView.getProvince();
+            districtList = districtDAO.getListByProvince(proSelect);
+        } else {
+            bizInfoSummaryView.setDistrict(new District());
         }
-    }
 
-    public void onChangeProvince() {
-        Province proSelect = bizInfoSummaryView.getProvince();
-        log.info("onChangeProvince :::: Province  : {} ", proSelect);
-        districtList = districtDAO.getListByProvince(proSelect);
         if(!fromDB){
             bizInfoSummaryView.setDistrict(new District());
         }
@@ -217,25 +221,79 @@ public class BizInfoSummary implements Serializable {
     }
 
     public void onChangeDistrict() {
-        District districtSelect = bizInfoSummaryView.getDistrict();
-        log.debug("onChangeDistrict :::: district : {}", districtSelect);
-        subDistrictList = subDistrictDAO.getListByDistrict(districtSelect);
+        log.debug("onChangeDistrict :::: District : {}", bizInfoSummaryView.getDistrict());
+        if(bizInfoSummaryView.getProvince() != null){
+            if(bizInfoSummaryView.getDistrict() != null){
+                District districtSelect = bizInfoSummaryView.getDistrict();
+                subDistrictList = subDistrictDAO.getListByDistrict(districtSelect);
+            } else {
+                bizInfoSummaryView.setSubDistrict(new SubDistrict());
+            }
+        } else {
+            bizInfoSummaryView.setDistrict(new District());
+            subDistrictList = new ArrayList<SubDistrict>();
+        }
+
         if(!fromDB){
             bizInfoSummaryView.setSubDistrict(new SubDistrict());
         }
-        fromDB = false;
-
         log.info("onChangeDistrict :::: subDistrictList.size ::: {}", subDistrictList.size());
+    }*/
+
+    public void onChangeProvince() {
+        log.info("onChangeProvince :::: Province  : {} ", bizInfoSummaryView.getProvince());
+        if(bizInfoSummaryView.getProvince() != null && bizInfoSummaryView.getProvince().getCode() != 0){
+            Province province = provinceDAO.findById(bizInfoSummaryView.getProvince().getCode());
+            districtList = districtDAO.getListByProvince(province);
+            bizInfoSummaryView.setDistrict(new District());
+            subDistrictList = new ArrayList<SubDistrict>();
+            bizInfoSummaryView.setSubDistrict(new SubDistrict());
+        }else{
+            districtList = new ArrayList<District>();
+            subDistrictList = new ArrayList<SubDistrict>();
+        }
     }
 
+    public void onChangeDistrict() {
+        log.debug("onChangeDistrict :::: District : {}", bizInfoSummaryView.getDistrict());
+        if(bizInfoSummaryView.getDistrict() != null && bizInfoSummaryView.getDistrict().getId() != 0){
+            District district = districtDAO.findById(bizInfoSummaryView.getDistrict().getId());
+            subDistrictList = subDistrictDAO.getListByDistrict(district);
+            bizInfoSummaryView.setSubDistrict(new SubDistrict());
+        }else{
+            onChangeProvince();
+            subDistrictList = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeProvinceEdit(){
+        log.info("onChangeProvinceEdit :::: Province  : {} ", bizInfoSummaryView.getProvince());
+        if(bizInfoSummaryView.getProvince() != null && bizInfoSummaryView.getProvince().getCode() != 0){
+            Province province = provinceDAO.findById(bizInfoSummaryView.getProvince().getCode());
+            districtList = districtDAO.getListByProvince(province);
+        }else{
+            districtList = new ArrayList<District>();
+            subDistrictList = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeDistrictEdit(){
+        log.debug("onChangeDistrictEdit :::: District : {}", bizInfoSummaryView.getDistrict());
+        if(bizInfoSummaryView.getDistrict() != null && bizInfoSummaryView.getDistrict().getId() != 0){
+            District district = districtDAO.findById(bizInfoSummaryView.getDistrict().getId());
+            subDistrictList = subDistrictDAO.getListByDistrict(district);
+        }else{
+            subDistrictList = new ArrayList<SubDistrict>();
+        }
+    }
 
     public void getBusinessInfoListDB() {
-
         long bizInfoSummaryViewId;
         bizInfoSummaryViewId = bizInfoSummaryView.getId();
         bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryViewId);
 
-        if(bizInfoDetailViewList.size()>0 && bizInfoSummaryView.getCirculationAmount().doubleValue()>0){
+        if(bizInfoDetailViewList.size() > 0
+                && bizInfoSummaryView.getCirculationAmount().compareTo(BigDecimal.ZERO) > 0){
             onCalSummaryTable();
         }
 
@@ -243,7 +301,7 @@ public class BizInfoSummary implements Serializable {
 
     private void onCheckInterview(){
         readonlyInterview = true;
-        if(bizInfoSummaryView.getCirculationAmount()!=null){
+        if(!Util.isNull(bizInfoSummaryView.getCirculationAmount())){
              if( bizInfoSummaryView.getCirculationAmount().doubleValue() > 0){
                  readonlyInterview = false;
             }
@@ -251,110 +309,67 @@ public class BizInfoSummary implements Serializable {
         log.info(" readonlyInterview is " + readonlyInterview);
 
     }
+
     public void onCalSummaryTable(){
         log.info("onCalSummaryTable begin");
-        double sumIncomeAmount = 0;
-        double productCostAmount = 0;
-        double productCostPercent = 0;
-        double profitMarginAmount = 0;
-        double profitMarginPercent = 0;
-        double operatingExpenseAmount = 0;
-        double operatingExpensePercent = 0;
-        double earningsBeforeTaxAmount = 0;
-        double earningsBeforeTaxPercent = 0;
-        double reduceInterestAmount = 0;
-        double reduceTaxAmount = 0;
-        double reduceInterestPercent = 0;
-        double reduceTaxPercent = 0;
-        double netMarginAmount = 0;
-        double netMarginPercent = 0;
+        bizInfoSummaryView = bizInfoSummaryControl.calSummaryTable(bizInfoSummaryView);
 
-        if(bizInfoSummaryView.getCirculationAmount()!= null){
-            sumIncomeAmount = bizInfoSummaryView.getCirculationAmount().doubleValue();
+        BigDecimal operatingExpenseAmount = BigDecimal.ZERO;
+        BigDecimal profitMarginAmount = BigDecimal.ZERO;
+        BigDecimal reduceInterestAmount = BigDecimal.ZERO;
+        BigDecimal earningsBeforeTaxAmount;
+        BigDecimal reduceTaxAmount = BigDecimal.ZERO;
+
+        if(bizInfoSummaryView.getOperatingExpenseAmount() != null){
+            operatingExpenseAmount = bizInfoSummaryView.getOperatingExpenseAmount();
         }
 
-        if(bizInfoSummaryView.getProductionCostsPercentage()!= null){
-            productCostPercent = bizInfoSummaryView.getProductionCostsPercentage().doubleValue();
-        }
-        
-        productCostAmount = (sumIncomeAmount * productCostPercent)/100;
-        bizInfoSummaryView.setProductionCostsAmount(new BigDecimal(productCostAmount));
-        profitMarginPercent = 100 - productCostPercent;
-        profitMarginAmount = (sumIncomeAmount * profitMarginPercent)/100;
-        bizInfoSummaryView.setProfitMarginPercentage(new BigDecimal(profitMarginPercent));
-        bizInfoSummaryView.setProfitMarginAmount(new BigDecimal(profitMarginAmount));
-
-        if(bizInfoSummaryView.getOperatingExpenseAmount()!= null){
-            operatingExpenseAmount = bizInfoSummaryView.getOperatingExpenseAmount().doubleValue();
+        if(bizInfoSummaryView.getProfitMarginAmount() != null){
+            profitMarginAmount = bizInfoSummaryView.getProfitMarginAmount();
         }
 
-        if( operatingExpenseAmount > profitMarginAmount){
-            bizInfoSummaryView.setOperatingExpenseAmount(new BigDecimal(0));
-            operatingExpenseAmount =0;
+        if(bizInfoSummaryView.getReduceInterestAmount() != null){
+            reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount();
+        }
+
+        if(bizInfoSummaryView.getReduceTaxAmount() != null){
+            reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount();
+        }
+
+        earningsBeforeTaxAmount = Util.subtract(profitMarginAmount,operatingExpenseAmount);
+
+        if(operatingExpenseAmount.compareTo(profitMarginAmount) > 0){
+            bizInfoSummaryView.setOperatingExpenseAmount(BigDecimal.ZERO);
+            onCalSummaryTable();
             messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
             message = msg.get("app.bizInfoSummary.message.validate.overOperatingExpense.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
-        operatingExpensePercent = (operatingExpenseAmount/sumIncomeAmount)*100;
-        bizInfoSummaryView.setOperatingExpensePercentage(new BigDecimal(operatingExpensePercent));
-
-        earningsBeforeTaxAmount = profitMarginAmount- operatingExpenseAmount;
-        earningsBeforeTaxPercent = profitMarginPercent - operatingExpensePercent;
-
-        bizInfoSummaryView.setEarningsBeforeTaxAmount(new BigDecimal(earningsBeforeTaxAmount));
-        bizInfoSummaryView.setEarningsBeforeTaxPercentage(new BigDecimal(earningsBeforeTaxPercent));
-
-        if(bizInfoSummaryView.getReduceInterestAmount()!= null){
-            reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount().doubleValue();
-        }
-
-        if(bizInfoSummaryView.getReduceTaxAmount()!= null){
-            reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount().doubleValue();
-        }
-
-        if( reduceInterestAmount > earningsBeforeTaxAmount){
-            bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            reduceInterestAmount = 0;
+        if(reduceInterestAmount.compareTo(earningsBeforeTaxAmount) > 0){
+            bizInfoSummaryView.setReduceInterestAmount(BigDecimal.ZERO);
+            onCalSummaryTable();
             messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
             message = msg.get("app.bizInfoSummary.message.validate.overInterest.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
-        if( reduceTaxAmount > earningsBeforeTaxAmount){
-            bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
-            reduceTaxAmount = 0;
+        if(reduceTaxAmount.compareTo(earningsBeforeTaxAmount) > 0){
+            bizInfoSummaryView.setReduceTaxAmount(BigDecimal.ZERO);
+            onCalSummaryTable();
             messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
             message = msg.get("app.bizInfoSummary.message.validate.overTax.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
-        if( (reduceInterestAmount + reduceTaxAmount) > earningsBeforeTaxAmount){
-            bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
-            bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            reduceInterestAmount = 0;
-            reduceTaxAmount = 0;
+        if((Util.add(reduceInterestAmount,reduceTaxAmount)).compareTo(earningsBeforeTaxAmount) > 0){
+            bizInfoSummaryView.setReduceTaxAmount(BigDecimal.ZERO);
+            bizInfoSummaryView.setReduceInterestAmount(BigDecimal.ZERO);
+            onCalSummaryTable();
             messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
             message = msg.get("app.bizInfoSummary.message.validate.overInterestAndTax.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
-
-        reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount().doubleValue();
-        reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount().doubleValue();
-
-        reduceInterestPercent = (reduceInterestAmount/sumIncomeAmount)*100;
-        reduceTaxPercent = (reduceTaxAmount/sumIncomeAmount)*100;
-
-        bizInfoSummaryView.setReduceInterestPercentage(new BigDecimal(reduceInterestPercent));
-        bizInfoSummaryView.setReduceTaxPercentage(new BigDecimal(reduceTaxPercent));
-
-        netMarginAmount = earningsBeforeTaxAmount- reduceInterestAmount - reduceTaxAmount ;
-        netMarginPercent = earningsBeforeTaxPercent - reduceInterestPercent - reduceTaxPercent;
-
-        bizInfoSummaryView.setNetMarginAmount(new BigDecimal(netMarginAmount));
-        bizInfoSummaryView.setNetMarginPercentage(new BigDecimal(netMarginPercent));
-        log.info("onCalSummaryTable 333");
-
         log.info("onCalSummaryTable end");
     }
 
@@ -366,16 +381,18 @@ public class BizInfoSummary implements Serializable {
     }
 
     public void onSaveBizInfoSummary() {
-
         try {
             log.info("onSaveBizInfoSummary begin");
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("bizInfoDetailViewId", -1);
-            if (redirect != null && !redirect.equals("")) {
+
+            if (!Util.isNull(redirect)&& !redirect.equals("")) {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
 
+
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
+            exSummaryControl.calForBizInfoSummary(workCaseId);
             if (redirect != null && !redirect.equals("")) {
                 if (redirect.equals("viewDetail")) {
                     log.info("view Detail ");
@@ -427,7 +444,6 @@ public class BizInfoSummary implements Serializable {
         log.info(" onViewDetail end !! {}");
     }
 
-
     public void onDeleteBizInfoToDB() {
 
         try {
@@ -451,6 +467,16 @@ public class BizInfoSummary implements Serializable {
             disableOwnerName = true;
             bizInfoSummaryView.setOwnerName("");
         }
+    }
+
+    public void onCheckAdd(){
+        redirect = "addDetail";
+        onSaveBizInfoSummary();
+    }
+
+    public void onCheckEdit(){
+        redirect = "viewDetail";
+        onSaveBizInfoSummary();
     }
 
     public List<BizInfoDetailView> getBizInfoDetailViewList() {

@@ -64,8 +64,6 @@ public class CustomerInfoControl extends BusinessControl {
     @Inject
     RMInterface rmInterface;
     @Inject
-    BRMSInterface brmsInterface;
-    @Inject
     DWHInterface dwhInterface;
 
     @Inject
@@ -81,23 +79,6 @@ public class CustomerInfoControl extends BusinessControl {
 
         List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
         List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customerList);
-
-        //update percent share for juristic
-        /*for(CustomerInfoView cV : customerInfoViewList){
-            if(cV.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
-                if(cV.getPercentShare() != null && cV.getPercentShare().compareTo(BigDecimal.ZERO) > 0){
-                    if(cV.getTotalShare() != null && cV.getTotalShare().compareTo(BigDecimal.ZERO) > 0){
-                        cV.setPercentShareSummary((cV.getPercentShare().divide(cV.getTotalShare(), RoundingMode.HALF_UP)).multiply(new BigDecimal(100)));
-                    }
-                }
-            } else {
-                if(cV.getPercentShare() != null && cV.getPercentShare().compareTo(BigDecimal.ZERO) > 0){
-                    cV.setPercentShareSummary(cV.getPercentShare());
-                } else {
-                    cV.setPercentShareSummary(BigDecimal.ZERO);
-                }
-            }
-        }*/
 
         List<CustomerInfoView> borrowerCustomerList = customerTransform.transformToBorrowerViewList(customerInfoViewList);
         customerInfoSummaryView.setBorrowerCustomerViewList(borrowerCustomerList);
@@ -132,10 +113,8 @@ public class CustomerInfoControl extends BusinessControl {
 
         Customer customer = customerTransform.transformToModel(customerInfoView, null, workCase);
 
-        if(customerInfoView.isRefreshInterface()){
-            if(customer.getCustomerOblInfo() != null){
-                customerOblInfoDAO.persist(customer.getCustomerOblInfo());
-            }
+        if(customer.getCustomerOblInfo() != null){
+            customerOblInfoDAO.persist(customer.getCustomerOblInfo());
         }
 
         customerDAO.persist(customer);
@@ -151,10 +130,8 @@ public class CustomerInfoControl extends BusinessControl {
             customerInfoView.getSpouse().setMaritalStatus(customerInfoView.getMaritalStatus());
             Customer spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), null, workCase);
 
-            if(customerInfoView.isRefreshInterface()){
-                if(spouse.getCustomerOblInfo() != null){
-                    customerOblInfoDAO.persist(spouse.getCustomerOblInfo());
-                }
+            if(spouse.getCustomerOblInfo() != null){
+                customerOblInfoDAO.persist(spouse.getCustomerOblInfo());
             }
 
             spouse.setIsSpouse(1);
@@ -172,18 +149,10 @@ public class CustomerInfoControl extends BusinessControl {
                 Customer cus = customerDAO.findById(customer.getSpouseId());
                 if(cus != null){
                     deleteCustomerIndividual(cus.getId());
-//                    if(cus.getAddressesList() != null && cus.getAddressesList().size() > 0){
-//                        addressDAO.delete(cus.getAddressesList());
-//                    }
-//                    if(cus.getIndividual() != null){
-//                        individualDAO.delete(cus.getIndividual());
-//                    }
-//                    customerDAO.delete(cus);
                 }
-//                customer.setSpouseId(0);
-//                customerDAO.persist(customer);
             }
         }
+        log.info("end - saveCustomerInfoIndividual ::: customerId : {}", customer.getId());
         return customer.getId();
     }
 
@@ -203,22 +172,6 @@ public class CustomerInfoControl extends BusinessControl {
             }
         }
 
-        //for add new - set all id = 0
-        /*if(customerInfoView.getIndividualViewList() != null && customerInfoView.getIndividualViewList().size() > 0){
-            for(CustomerInfoView cus : customerInfoView.getIndividualViewList()){
-                cus.getCurrentAddress().setId(0);
-                cus.getRegisterAddress().setId(0);
-                cus.getWorkAddress().setId(0);
-                cus.setId(0);
-                if(cus.getSpouse() != null){
-                    cus.getSpouse().getCurrentAddress().setId(0);
-                    cus.getSpouse().getRegisterAddress().setId(0);
-                    cus.getSpouse().getWorkAddress().setId(0);
-                    cus.getSpouse().setId(0);
-                }
-            }
-        }*/
-
         //calculation age for juristic
         customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfRegister()));
 
@@ -234,10 +187,8 @@ public class CustomerInfoControl extends BusinessControl {
             }
         }
 
-        if(customerInfoView.isRefreshInterface()){
-            if(customerJuristic.getCustomerOblInfo() != null){
-                customerOblInfoDAO.persist(customerJuristic.getCustomerOblInfo());
-            }
+        if(customerJuristic.getCustomerOblInfo() != null){
+            customerOblInfoDAO.persist(customerJuristic.getCustomerOblInfo());
         }
 
         customerDAO.persist(customerJuristic);
@@ -274,6 +225,7 @@ public class CustomerInfoControl extends BusinessControl {
                 saveCustomerInfoIndividual(cusIndividual,workCaseId);
             }
         }
+        log.info("saveCustomerInfoJuristic ::: customerId : {}", customerJuristic.getId());
         return customerJuristic.getId();
     }
 
@@ -462,15 +414,13 @@ public class CustomerInfoControl extends BusinessControl {
         log.info("getCustomerInfoFromRM ::: customerInfoView.getSearchBy : {}", customerInfoView.getSearchBy());
         log.info("getCustomerInfoFromRM ::: customerInfoView.getSearchId : {}", customerInfoView.getSearchId());
 
-        DocumentType masterDocumentType = new DocumentType();
+        DocumentType masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
 
         RMInterface.SearchBy searchBy = RMInterface.SearchBy.CUSTOMER_ID;
         if(customerInfoView.getSearchBy() == 1){
             searchBy = RMInterface.SearchBy.CUSTOMER_ID;
-            masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
         }else if(customerInfoView.getSearchBy() == 2){
             searchBy = RMInterface.SearchBy.TMBCUS_ID;
-            masterDocumentType = documentTypeDAO.findById(1);
         }
 
         User user = getCurrentUser();
@@ -565,7 +515,7 @@ public class CustomerInfoControl extends BusinessControl {
         //currentAddress = 0 is other address
         int currentAddress = 0;
         if(add1.getAddressNo() != null && add2.getAddressNo() != null){
-            if(!add1.getAddressNo().equalsIgnoreCase(add2.getAddressNo())){
+            if(!add1.getAddressNo().equals(add2.getAddressNo())){
                 return currentAddress;
             }
         } else if(add1.getAddressNo() != null && add2.getAddressNo() == null){
@@ -575,7 +525,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getMoo() != null && add2.getMoo() != null){
-            if(!add1.getMoo().equalsIgnoreCase(add2.getMoo())){
+            if(!add1.getMoo().equals(add2.getMoo())){
                 return currentAddress;
             }
         } else if(add1.getMoo() != null && add2.getMoo() == null){
@@ -585,7 +535,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getBuilding() != null && add2.getBuilding() != null){
-            if(!add1.getBuilding().equalsIgnoreCase(add2.getBuilding())){
+            if(!add1.getBuilding().equals(add2.getBuilding())){
                 return currentAddress;
             }
         } else if(add1.getBuilding() != null && add2.getBuilding() == null){
@@ -595,7 +545,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getRoad() != null && add2.getRoad() != null){
-            if(!add1.getRoad().equalsIgnoreCase(add2.getRoad())){
+            if(!add1.getRoad().equals(add2.getRoad())){
                 return currentAddress;
             }
         } else if(add1.getRoad() != null && add2.getRoad() == null){
@@ -605,7 +555,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getPostalCode() != null && add2.getPostalCode() != null){
-            if(!add1.getPostalCode().equalsIgnoreCase(add2.getPostalCode())){
+            if(!add1.getPostalCode().equals(add2.getPostalCode())){
                 return currentAddress;
             }
         } else if(add1.getPostalCode() != null && add2.getPostalCode() == null){
@@ -615,7 +565,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getPhoneNumber() != null && add2.getPhoneNumber() != null){
-            if(!add1.getPhoneNumber().equalsIgnoreCase(add2.getPhoneNumber())){
+            if(!add1.getPhoneNumber().equals(add2.getPhoneNumber())){
                 return currentAddress;
             }
         } else if(add1.getPhoneNumber() != null && add2.getPhoneNumber() == null){
@@ -625,7 +575,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getExtension() != null && add2.getExtension() != null){
-            if(!add1.getExtension().equalsIgnoreCase(add2.getExtension())){
+            if(!add1.getExtension().equals(add2.getExtension())){
                 return currentAddress;
             }
         } else if(add1.getExtension() != null && add2.getExtension() == null){
@@ -635,7 +585,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getContactName() != null && add2.getContactName() != null){
-            if(!add1.getContactName().equalsIgnoreCase(add2.getContactName())){
+            if(!add1.getContactName().equals(add2.getContactName())){
                 return currentAddress;
             }
         } else if(add1.getContactName() != null && add2.getContactName() == null){
@@ -645,7 +595,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getContactPhone() != null && add2.getContactPhone() != null){
-            if(!add1.getContactPhone().equalsIgnoreCase(add2.getContactPhone())){
+            if(!add1.getContactPhone().equals(add2.getContactPhone())){
                 return currentAddress;
             }
         } else if(add1.getContactPhone() != null && add2.getContactPhone() == null){
@@ -655,7 +605,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getAddress() != null && add2.getAddress() != null){
-            if(!add1.getAddress().equalsIgnoreCase(add2.getAddress())){
+            if(!add1.getAddress().equals(add2.getAddress())){
                 return currentAddress;
             }
         } else if(add1.getAddress() != null && add2.getAddress() == null){
@@ -695,7 +645,13 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getCountry() != null && add2.getCountry() != null){
-            if(add1.getCountry().getCode() != add2.getCountry().getCode()){
+            if(add1.getCountry().getCode() != null && add2.getCountry().getCode() != null){
+                if(!add1.getCountry().getCode().equals(add2.getCountry().getCode())){
+                    return currentAddress;
+                }
+            } else if(add1.getCountry().getCode() != null && add2.getCountry().getCode() == null){
+                return currentAddress;
+            } else if(add2.getCountry().getCode() != null && add1.getCountry().getCode() == null){
                 return currentAddress;
             }
         } else if(add1.getCountry() != null && add2.getCountry() == null){
@@ -705,10 +661,12 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         currentAddress = 1;
+
         return currentAddress;
     }
 
     public boolean checkExistingOpenAccountCustomer(long customerId){
+        log.info("checkExistingOpenAccountCustomer ::: customerId : {}", customerId);
         boolean isExist = false;
         if(customerId != 0){
             List<OpenAccountName> openAccountNameList = openAccountNameDAO.findByCustomerId(customerId);

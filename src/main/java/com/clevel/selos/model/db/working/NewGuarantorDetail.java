@@ -1,5 +1,7 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -21,6 +23,14 @@ public class NewGuarantorDetail implements Serializable {
     @Column(name = "no")
     private int no;
 
+    @Column(name = "propose_type", length = 1, columnDefinition = "int default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private ProposeType proposeType;
+
+    @Column(name = "uw_decision", columnDefinition = "int default 0", length = 1)
+    @Enumerated(EnumType.ORDINAL)
+    private DecisionType uwDecision;
+
     @OneToOne
     @JoinColumn(name = "customer_id")
     private Customer  guarantorName;
@@ -34,7 +44,6 @@ public class NewGuarantorDetail implements Serializable {
     @ManyToOne
     @JoinColumn(name = "new_credit_facility_id")
     private NewCreditFacility newCreditFacility;
-
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -54,6 +63,7 @@ public class NewGuarantorDetail implements Serializable {
 
     @OneToMany(mappedBy = "newGuarantorDetail", cascade = CascadeType.ALL)
     private List<NewGuarantorCredit> newGuarantorCreditList;
+
 
     public long getId() {
         return id;
@@ -143,11 +153,28 @@ public class NewGuarantorDetail implements Serializable {
         this.newGuarantorCreditList = newGuarantorCreditList;
     }
 
+    public ProposeType getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(ProposeType proposeType) {
+        this.proposeType = proposeType;
+    }
+
+    public DecisionType getUwDecision() {
+        return uwDecision;
+    }
+
+    public void setUwDecision(DecisionType uwDecision) {
+        this.uwDecision = uwDecision;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("no", no)
+                .append("proposeType", proposeType)
                 .append("guarantorName", guarantorName)
                 .append("tcgLgNo", tcgLgNo)
                 .append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount)
@@ -156,6 +183,7 @@ public class NewGuarantorDetail implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("newGuarantorCreditList", newGuarantorCreditList)
                 .toString();
     }
 }

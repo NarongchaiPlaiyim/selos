@@ -141,11 +141,6 @@ public class CustomerInfoIndividual implements Serializable {
     private String message;
     private String severity;
 
-//    private int addressFlagForm2;
-//    private int addressFlagForm3;
-//    private int addressFlagForm5;
-//    private int addressFlagForm6;
-
     //session
     private long workCaseId;
 
@@ -285,20 +280,46 @@ public class CustomerInfoIndividual implements Serializable {
     public CustomerInfoIndividual(){
     }
 
-    @PostConstruct
-    public void onCreation() {
+    public void preRender(){
+        log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         }else{
-            log.info("preRender ::: workCaseId is null.");
+            log.debug("onCreation ::: workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
-                return;
             }catch (Exception ex){
                 log.error("Exception :: {}",ex);
             }
+        }
+    }
+
+    @PostConstruct
+    public void onCreation() {
+        log.debug("onCreation");
+
+        HttpSession session = FacesUtil.getSession(true);
+
+        if(session.getAttribute("workCaseId") != null){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            if(workCaseId == 0){
+                try{
+                    FacesUtil.redirect("/site/inbox.jsf");
+                }catch (Exception ex){
+                    log.error("Exception :: {}",ex);
+                }
+                return;
+            }
+        }else{
+            log.debug("onCreation ::: workCaseId is null.");
+            try{
+                FacesUtil.redirect("/site/inbox.jsf");
+            }catch (Exception ex){
+                log.error("Exception :: {}",ex);
+            }
+            return;
         }
 
         //default value
@@ -348,7 +369,6 @@ public class CustomerInfoIndividual implements Serializable {
         isEditForm = false;
         customerInfoView = new CustomerInfoView();
         customerInfoView.reset();
-        customerInfoView.setRefreshInterface(true);
         customerInfoView.getSpouse().reset();
 
         customerInfoView.getRegisterAddress().setAddressTypeFlag(1);
@@ -1100,6 +1120,13 @@ public class CustomerInfoIndividual implements Serializable {
                                     enableSpouseDocumentType = true;
                                     enableSpouseCitizenId = true;
                                 }
+
+                                onChangeProvinceEditForm4();
+                                onChangeDistrictEditForm4();
+                                onChangeProvinceEditForm5();
+                                onChangeDistrictEditForm5();
+                                onChangeDOBSpouse();
+                                onChangeTitleThSpouse();
                             }
                         } catch (Exception ex) {
                             enableSpouseDocumentType = true;
@@ -1129,20 +1156,29 @@ public class CustomerInfoIndividual implements Serializable {
                 message = customerInfoResultView.getReason();
                 severity = "info";
             }
+
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
-            customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
-            customerInfoView.setRefreshInterface(true);
+            if(customerInfoSearch.getSearchBy() == 1){
+                customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
+            }
 
             onChangeProvinceEditForm1();
             onChangeDistrictEditForm1();
+            onChangeProvinceEditForm2();
+            onChangeDistrictEditForm2();
+            onChangeProvinceEditForm3();
+            onChangeDistrictEditForm3();
             onChangeMaritalStatus();
+            onChangeDOB();
+            onChangeTitleTh();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             enableDocumentType = true;
             enableCitizenId = true;
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
-            customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
-            customerInfoView.setRefreshInterface(true);
+            if(customerInfoSearch.getSearchBy() == 1){
+                customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
+            }
             log.error("onSearchCustomerInfo Exception : {}", ex);
             messageHeader = "Error.";
             message = ex.getMessage();
@@ -1262,13 +1298,15 @@ public class CustomerInfoIndividual implements Serializable {
                                     }
                                 }
                             }
-                            customerInfoView.getSpouse().setRefreshInterface(true);
                             customerInfoView.getSpouse().setSearchFromRM(1);
                             customerInfoView.getSpouse().setSearchBy(searchBySpouse);
                             customerInfoView.getSpouse().setSearchId(searchIdSpouse);
                             onChangeDOBSpouse();
                             onChangeProvinceEditForm4();
+                            onChangeDistrictEditForm4();
                             onChangeProvinceEditForm5();
+                            onChangeDistrictEditForm5();
+                            onChangeTitleThSpouse();
                         }
                         messageHeader = "Information.";
                         message = "Refresh interface info complete.";
@@ -1284,21 +1322,23 @@ public class CustomerInfoIndividual implements Serializable {
                     message = customerInfoResultView.getReason();
                     severity = "info";
                 }
-                customerInfoView.setRefreshInterface(true);
                 customerInfoView.setSearchFromRM(1);
                 customerInfoView.setSearchBy(searchBy);
                 customerInfoView.setSearchId(searchId);
                 onChangeDOB();
                 onChangeProvinceEditForm1();
+                onChangeDistrictEditForm1();
                 onChangeProvinceEditForm2();
+                onChangeDistrictEditForm2();
                 onChangeProvinceEditForm3();
+                onChangeDistrictEditForm3();
+                onChangeTitleTh();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.error("refreshInterfaceInfo Exception : {}", ex);
                 messageHeader = "Error.";
                 message = ex.getMessage();
                 severity = "alert";
-                customerInfoView.setRefreshInterface(true);
                 customerInfoView.setSearchFromRM(1);
                 customerInfoView.setSearchBy(searchBy);
                 customerInfoView.setSearchId(searchId);
@@ -1334,20 +1374,19 @@ public class CustomerInfoIndividual implements Serializable {
                     message = cusSpouseResultView.getReason();
                     severity = "info";
                 }
-                customerInfoView.setRefreshInterface(true);
                 customerInfoView.getSpouse().setSearchFromRM(1);
                 customerInfoView.getSpouse().setSearchBy(searchBySpouse);
                 customerInfoView.getSpouse().setSearchId(searchIdSpouse);
                 onChangeDOBSpouse();
                 onChangeProvinceEditForm4();
                 onChangeProvinceEditForm5();
+                onChangeTitleThSpouse();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.error("refreshInterfaceInfo Exception : {}", ex);
                 messageHeader = "Error.";
                 message = ex.getMessage();
                 severity = "alert";
-                customerInfoView.setRefreshInterface(true);
                 customerInfoView.getSpouse().setSearchFromRM(1);
                 customerInfoView.getSpouse().setSearchBy(searchBySpouse);
                 customerInfoView.getSpouse().setSearchId(searchIdSpouse);
@@ -1391,6 +1430,37 @@ public class CustomerInfoIndividual implements Serializable {
                         customerInfoView.getSpouse().setSearchId(customerInfoSearchSpouse.getSearchId());
                     }
 
+                    if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
+                        if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress()) == 1){
+                            customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(1);
+                        } else {
+                            customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(3);
+                        }
+                    }
+                    if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getWorkAddress() != null){
+                        if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getWorkAddress()) == 1){
+                            customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(1);
+                        } else if(customerInfoView.getSpouse().getRegisterAddress() != null){
+                            if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getRegisterAddress(),customerInfoView.getSpouse().getWorkAddress()) == 1){
+                                customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(2);
+                            } else {
+                                customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
+                            }
+                        } else {
+                            customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
+                        }
+                    }
+
+                    //if address is null
+                    if(customerInfoView.getSpouse().getRegisterAddress() == null){
+                        customerInfoView.getSpouse().setRegisterAddress(new AddressView());
+                        customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(3);
+                    }
+                    if(customerInfoView.getSpouse().getWorkAddress() == null){
+                        customerInfoView.getSpouse().setWorkAddress(new AddressView());
+                        customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
+                    }
+
                     enableDocumentType = false;
                     enableCitizenId = false;
 
@@ -1417,11 +1487,16 @@ public class CustomerInfoIndividual implements Serializable {
                 customerInfoView.setSpouse(cus);
             }
             customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearchSpouse.getDocumentType().getId());
-            customerInfoView.getSpouse().setCitizenId(customerInfoSearchSpouse.getSearchId());
+            if(customerInfoSearchSpouse.getSearchBy() == 1){
+                customerInfoView.getSpouse().setCitizenId(customerInfoSearchSpouse.getSearchId());
+            }
 
             onChangeDOBSpouse();
             onChangeProvinceEditForm4();
             onChangeDistrictEditForm4();
+            onChangeProvinceEditForm5();
+            onChangeDistrictEditForm5();
+            onChangeTitleThSpouse();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             enableDocumentType = true;
@@ -1487,9 +1562,8 @@ public class CustomerInfoIndividual implements Serializable {
                 if(customerInfoView.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                         || customerInfoView.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                     messageHeader = "Information.";
-                    message = "Save Customer Individual Data Failed. " +
-                            "<br/><br/> Cause : This customer is change relation from Guarantor to Related." +
-                            "<br/>Affect on Basic Info Page.";
+                    message = "Cannot change customer type from Guarantor to Related. " +
+                            "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
                     severity = "info";
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return;
@@ -1501,9 +1575,8 @@ public class CustomerInfoIndividual implements Serializable {
                         if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                                 || customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                             messageHeader = "Information.";
-                            message = "Save Customer Individual Data Failed. " +
-                                    "<br/><br/> Cause : This customer is change relation from Guarantor to Related." +
-                                    "<br/>Affect on Basic Info Page.";
+                            message = "Cannot change customer type from Guarantor to Related. " +
+                                    "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
                             severity = "info";
                             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                             return;
@@ -1513,19 +1586,16 @@ public class CustomerInfoIndividual implements Serializable {
             }
         }
 
-//        if(addressFlagForm2 == 1){ //dup address 1 to address 2
         if(customerInfoView.getRegisterAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2
             AddressView addressView = new AddressView(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress().getId());
             addressView.setAddressTypeFlag(1);
             customerInfoView.setRegisterAddress(addressView);
         }
 
-//        if(addressFlagForm3 == 1){
         if(customerInfoView.getWorkAddress().getAddressTypeFlag() == 1){
             AddressView addressView = new AddressView(customerInfoView.getCurrentAddress(),customerInfoView.getWorkAddress().getId());
             addressView.setAddressTypeFlag(1);
             customerInfoView.setWorkAddress(addressView);
-//        }else if(addressFlagForm3 == 2){
         }else if(customerInfoView.getWorkAddress().getAddressTypeFlag() == 2){
             AddressView addressView = new AddressView(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress().getId());
             addressView.setAddressTypeFlag(2);
@@ -1533,19 +1603,16 @@ public class CustomerInfoIndividual implements Serializable {
         }
 
         if(customerInfoView.getMaritalStatus().getSpouseFlag() == 1){
-//            if(addressFlagForm5 == 1){ //dup address 1 to address 2
             if(customerInfoView.getSpouse().getRegisterAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2
                 AddressView addressView = new AddressView(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress().getId());
                 addressView.setAddressTypeFlag(1);
                 customerInfoView.getSpouse().setRegisterAddress(addressView);
             }
 
-//            if(addressFlagForm6 == 1){
             if(customerInfoView.getSpouse().getWorkAddress().getAddressTypeFlag() == 1){
                 AddressView addressView = new AddressView(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getWorkAddress().getId());
                 addressView.setAddressTypeFlag(1);
                 customerInfoView.getSpouse().setWorkAddress(addressView);
-//            }else if(addressFlagForm6 == 2){
             }else if(customerInfoView.getSpouse().getWorkAddress().getAddressTypeFlag() == 2){
                 AddressView addressView = new AddressView(customerInfoView.getSpouse().getRegisterAddress(),customerInfoView.getSpouse().getWorkAddress().getId());
                 addressView.setAddressTypeFlag(2);
@@ -1643,9 +1710,8 @@ public class CustomerInfoIndividual implements Serializable {
                 if(customerInfoView.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                         || customerInfoView.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                     messageHeader = "Information.";
-                    message = "Save Customer Individual Data Failed. " +
-                            "<br/><br/> Cause : This customer is change relation from Guarantor to Related." +
-                            "<br/>Affect on Basic Info Page.";
+                    message = "Cannot change customer type from Guarantor to Related. " +
+                            "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
                     severity = "info";
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return "";

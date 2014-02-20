@@ -1,10 +1,13 @@
 package com.clevel.selos.model;
 
 public enum RoleValue {
-    BDM(102),
-    UW(107),
     ABDM(101),
-    ZM(103);
+    BDM(102),
+    ZM(103),
+    RGM(104),
+    UW(107),
+    AAD_ADMIN(108),
+    AAD_COMITTEE(109);
 
     int id;
 

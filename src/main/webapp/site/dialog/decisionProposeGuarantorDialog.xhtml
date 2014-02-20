@@ -4,81 +4,82 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
-
+<style >
+    .ui-chkbox.ui-chkbox-all.ui-widget {
+        padding-top: 20px;
+    }
+</style>
 <p:panel id="guarantorDlgPanel" styleClass="panel-dialog">
     <h:form id="guarantorDlgForm">
-        <table class="content_form">
+        <table class="content_form content_table_form">
             <tr>
-                <td class="title" style="min-width: 150px; width: 150px; max-width: 150px;">
-                    <p:outputLabel for="dlgGuarantorRadioApprove" value="#{msg.get('app.decision.header')}"/>
+                <td class="title" style="width: 20%">
+                    <h:outputText value="#{msg.get('app.decision.header')} :"/>
                 </td>
-                <td class="left" style="min-width: 600px; width: 600px; max-width: 600px;">
-                    <p:selectOneRadio id="dlgGuarantorRadioApprove" value="#{decision.selectedAppProposeGuarantor.approved}"
+                <td class="left" style="width: 80%">
+                    <p:selectOneRadio id="dlgGuarantorRadioApprove"
+                                      value="#{decision.selectedApproveGuarantor.uwDecision}"
                                       required="#{not empty param[saveGuarantorButton.clientId]}">
-                        <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="2"/>
-                        <f:selectItem itemLabel="#{msg.get('app.button.notApprove')}" itemValue="1"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.notApprove')}" itemValue="#{decision.decisionREJECTED}"/>
                     </p:selectOneRadio>
                 </td>
             </tr>
             <tr>
-                <td class="title" style="min-width: 150px; width: 150px; max-width: 150px;">
-                    <p:outputLabel for="dlgGuarantorName" value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.guarantorName')}"/>
+                <td class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.guarantorName')}"/>
                 </td>
-                <td class="left" style="min-width: 600px; width: 600px; max-width: 600px;">
+                <td class="left">
                     <p:selectOneMenu id="dlgGuarantorName"
-                                     value="#{decision.selectedAppProposeGuarantor.guarantorName.id}"
+                                     value="#{decision.selectedApproveGuarantor.guarantorName.id}"
                                      style="width: 200px;"
                                      required="#{not empty param[saveGuarantorButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{decision.guarantorList}"
-                                       var="guarantorList"
-                                       itemLabel="#{guarantorList.titleTh.titleTh}#{guarantorList.firstNameTh} #{guarantorList.lastNameTh}"
-                                       itemValue="#{guarantorList.id}"/>
+                                       var="guarantorDlg"
+                                       itemLabel="#{guarantorDlg.firstNameTh} #{guarantorDlg.lastNameTh}"
+                                       itemValue="#{guarantorDlg.id}"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
             <tr>
-                <td class="title" style="min-width: 150px; width: 150px; max-width: 150px;">
-                    <p:outputLabel for="dlgTcgLgNo" value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.TCGLGNo')}"/>
+                <td class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.TCGLGNo')}"/>
                 </td>
-                <td class="left" style="min-width: 600px; width: 600px; max-width: 600px;">
-                    <p:inputMask id="dlgTcgLgNo" value="#{decision.selectedAppProposeGuarantor.tcgLgNo}"
-                                 mask="99-9999"
-                                 required="#{not empty param[saveGuarantorButton.clientId]}"/>
+                <td class="left">
+                    <p:inputMask id="dlgTcgLgNo" value="#{decision.selectedApproveGuarantor.tcgLgNo}"
+                                 mask="99-9999"/>
                 </td>
-            </tr>
-            <tr>
-                <td colspan="2" style="height:28px;"></td>
             </tr>
             <tr>
                 <td class="title" colspan="2">
-                    <p:outputLabel for="dlgGuarantorCreditTypeTable" value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.creditType')}"/>
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.creditType')}"/>
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td class="left" colspan="2">
                     <p:dataTable id="dlgGuarantorCreditTypeTable"
                                  value="#{decision.guarantorCreditTypeList}"
                                  var="creditTypeItem"
                                  selection="#{decision.selectedGuarantorCrdTypeItems}"
                                  rowKey="#{creditTypeItem.seq}"
                                  rowIndexVar="rowIndex"
-                                 style="width: 100%; font-size: 12px !important;">
+                                 style="width: 100%;">
 
                         <p:columnGroup type="header">
                             <p:row>
-                                <p:column style="width:20px;" selectionMode="multiple"/>
-                                <p:column style="width:150px;"
+                                <p:column style="width: 5%" selectionMode="multiple"/>
+                                <p:column style="width: 35%"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.account')}"/>
-                                <p:column style="width:150px;"
+                                <p:column style="width: 10%"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.requestCreditType')}"/>
-                                <p:column style="width:200px;"
+                                <p:column style="width: 10%"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.productProgram')}"/>
-                                <p:column style="width:200px;"
+                                <p:column style="width: 10%"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.creditFacility')}"/>
-                                <p:column style="width:200px;"
+                                <p:column style="width: 15%"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.limit')}"/>
-                                <p:column style="width:200px;"
+                                <p:column style="width: 15%"
                                           headerText="#{msg.get('app.credit.facility.propose.label.guarantor.guaranteeAmount')}"/>
                             </p:row>
 
@@ -92,31 +93,37 @@
                             #{msg.get('app.decision.tb.td.label.suf')} #{creditTypeItem.accountSuf}
                         </p:column>
 
-                        <p:column styleClass="center">
-                            <h:outputText value="#{creditTypeItem.requestType == 1 ? msg.get('app.label.new') : msg.get('app.label.change')}"/>
+                        <p:column styleClass="left top">
+                            <h:outputText value="#{creditTypeItem.requestType == 2 ? msg.get('app.label.new') :
+                                                   creditTypeItem.requestType == 1 ? msg.get('app.label.change') : ''}"/>
                         </p:column>
 
-                        <p:column styleClass="left">
-                            <h:outputText value="#{creditTypeItem.productProgram.name}"/>
+                        <p:column styleClass="left top">
+                            #{not empty creditTypeItem.productProgramView ? creditTypeItem.productProgramView.name : ''}
                         </p:column>
 
-                        <p:column styleClass="left">
-                            <h:outputText value="#{creditTypeItem.creditType.name}"/>
+                        <p:column styleClass="left top">
+                            #{not empty creditTypeItem.creditFacilityView ? creditTypeItem.creditFacilityView.name : ''}
                         </p:column>
 
-                        <p:column styleClass="right">
+                        <p:column styleClass="right top">
                             <h:outputText value="#{creditTypeItem.limit}">
-                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                <f:convertNumber pattern="#,##0.##"
+                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                 maxIntegerDigits="14"/>
                             </h:outputText>
                         </p:column>
 
-                        <p:column styleClass="center">
+                        <p:column styleClass="center top">
                             <p:inputText value="#{creditTypeItem.guaranteeAmount}"
+                                         maxlength="18"
                                          onclick="this.select()"
                                          onkeydown="return onKeyDownMoney(event);"
                                          onkeypress="return onKeyPressMoney(event);"
                                          styleClass="right">
-                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                <f:convertNumber pattern="#,##0.##"
+                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                 maxIntegerDigits="14"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
                         </p:column>
@@ -124,26 +131,32 @@
                     </p:dataTable>
                 </td>
             </tr>
+
             <tr>
                 <td colspan="2" style="height:28px;"></td>
             </tr>
             <tr>
-                <td colspan="2" class="center">
+                <td class="center" colspan="2">
                     <p:commandButton
                             id="saveGuarantorDlg"
                             value="#{msg.get('app.credit.facility.propose.okButton')}"
                             binding="#{saveGuarantorButton}"
                             styleClass="small"
-                            action="#{decision.onSaveGuarantorInfo()}"
+                            action="#{decision.onSaveApproveGuarantor()}"
                             process=":@form"
                             update=":guarantorDlgForm,:frmMain,:msgBoxSystemMessagePanel"
                             oncomplete="handleDialogRequest(xhr, status, args, 'proposeGuarantorDlg')"/>
 
+                    <p:spacer width="10" height="0"/>
+
                     <p:commandButton
                             value="#{msg.get('app.credit.facility.propose.cancelButton')}"
                             styleClass="small"
-                            onclick="PF('proposeGuarantorDlg').hide()"/>
+                            onclick="proposeGuarantorDlg.hide()"/>
                 </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="height:10px;"></td>
             </tr>
         </table>
     </h:form>

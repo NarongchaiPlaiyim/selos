@@ -20,6 +20,15 @@ public class NewCollateralSub implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COLL_SUB_ID")
     private long id;
 
+    @Column(name = "coll_id")
+    private String collID;
+
+    @Column(name = "head_coll_id")
+    private String headCollID;
+
+    @Column(name = "line_no")
+    private int lineNo;
+
     @OneToOne
     @JoinColumn(name = "collateral_type_id")
     private CollateralType collateralTypeType;
@@ -27,6 +36,12 @@ public class NewCollateralSub implements Serializable {
     @OneToOne
     @JoinColumn(name = "sub_collateral_type_id")
     private SubCollateralType  subCollateralType;
+
+    @Column(name = "usage")
+    private String usage;
+
+    @Column(name = "type_of_usage")
+    private String typeOfUsage;
 
     @Column(name = "address")
     private String address;
@@ -86,7 +101,29 @@ public class NewCollateralSub implements Serializable {
         this.id = id;
     }
 
+    public String getCollID() {
+        return collID;
+    }
 
+    public void setCollID(String collID) {
+        this.collID = collID;
+    }
+
+    public String getHeadCollID() {
+        return headCollID;
+    }
+
+    public void setHeadCollID(String headCollID) {
+        this.headCollID = headCollID;
+    }
+
+    public int getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(int lineNo) {
+        this.lineNo = lineNo;
+    }
 
     public String getAddress() {
         return address;
@@ -224,12 +261,33 @@ public class NewCollateralSub implements Serializable {
         this.subCollateralType = subCollateralType;
     }
 
+    public String getUsage() {
+        return usage;
+    }
+
+    public void setUsage(String usage) {
+        this.usage = usage;
+    }
+
+    public String getTypeOfUsage() {
+        return typeOfUsage;
+    }
+
+    public void setTypeOfUsage(String typeOfUsage) {
+        this.typeOfUsage = typeOfUsage;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
+                .append("collID", collID)
+                .append("headCollID", headCollID)
+                .append("lineNo", lineNo)
                 .append("collateralTypeType", collateralTypeType)
                 .append("subCollateralType", subCollateralType)
+                .append("usage", usage)
+                .append("typeOfUsage", typeOfUsage)
                 .append("address", address)
                 .append("landOffice", landOffice)
                 .append("titleDeed", titleDeed)

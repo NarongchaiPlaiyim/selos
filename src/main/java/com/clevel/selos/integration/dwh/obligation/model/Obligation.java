@@ -50,6 +50,7 @@ public class Obligation implements Serializable {
     private String tmbExtProductTypeCD;
     private String tmbTypeCRD;
     private String tmbRMRef;
+    private BigDecimal tenors;
 
 
     public long getId() {
@@ -388,6 +389,14 @@ public class Obligation implements Serializable {
         this.tmbRMRef = tmbRMRef;
     }
 
+    public BigDecimal getTenors() {
+        return tenors;
+    }
+
+    public void setTenors(BigDecimal tenors) {
+        this.tenors = tenors;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -433,6 +442,7 @@ public class Obligation implements Serializable {
                 .append("tmbExtProductTypeCD", tmbExtProductTypeCD)
                 .append("tmbTypeCRD", tmbTypeCRD)
                 .append("tmbRMRef", tmbRMRef)
+                .append("tenors", tenors)
                 .toString();
     }
 }

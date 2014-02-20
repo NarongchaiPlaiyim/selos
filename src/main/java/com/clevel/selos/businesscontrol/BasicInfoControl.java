@@ -86,6 +86,7 @@ public class BasicInfoControl extends BusinessControl {
     }
 
     public CustomerEntity getCustomerEntityByWorkCaseId(long workCaseId) {
+        log.info("getCustomerEntityByWorkCaseId ::: workCaseId : {}", workCaseId);
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         CustomerEntity customerEntity = new CustomerEntity();
         if(basicInfo != null){
@@ -102,7 +103,7 @@ public class BasicInfoControl extends BusinessControl {
     }
 
     private BasicInfo initialBasicInfo(WorkCase workCase){
-        log.info("initialBasicInfo");
+        log.info("initialBasicInfo ::: workCase : {}", workCase);
         BasicInfo basicInfo = new BasicInfo();
         Date now = Calendar.getInstance().getTime();
         if(workCase != null){
@@ -117,7 +118,6 @@ public class BasicInfoControl extends BusinessControl {
 
     private BasicInfo calBasicInfo(BasicInfo basicInfo){
         log.info("start calBasicInfo for basicInfo {} :: ", basicInfo);
-
         BigDecimal totalUnpaidFeeInsurance = BigDecimal.ZERO;
         BigDecimal totalPendingClaimLG = BigDecimal.ZERO;
         Date lastReviewDate = null;
@@ -215,6 +215,7 @@ public class BasicInfoControl extends BusinessControl {
     }
 
     public void saveBasicInfo(BasicInfoView basicInfoView, long workCaseId) {
+        log.info("saveBasicInfo ::: workCaseId : {} , basicInfoView : {}", workCaseId,basicInfoView);
         User user = getCurrentUser();
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
@@ -229,14 +230,19 @@ public class BasicInfoControl extends BusinessControl {
         BAPAInfo bapaInfo = bapaInfoDAO.findByWorkCase(workCase);
         if(bapaInfo == null) {
             bapaInfo = new BAPAInfo();
+            bapaInfo.setCreateBy(user);
+            bapaInfo.setCreateDate(new Date());
         }
-        bapaInfo.setApplyBA(basicInfoView.getApplyBA());
+        
+        bapaInfo.setApplyBA(RadioValue.lookup(basicInfoView.getApplyBA()));
         if(basicInfoView.getApplyBA() == 2){ // apply ba = yes
-            bapaInfo.setBaPaymentMethod(basicInfoView.getBaPaymentMethodValue().value());
+            bapaInfo.setBaPaymentMethod(basicInfoView.getBaPaymentMethodValue());
         } else {
-            bapaInfo.setBaPaymentMethod(0);
+            bapaInfo.setBaPaymentMethod(BAPaymentMethodValue.NA);
         }
         bapaInfo.setWorkCase(workCase);
+        bapaInfo.setModifyBy(user);
+        bapaInfo.setModifyDate(new Date());
         bapaInfoDAO.persist(bapaInfo);
 
         basicInfo.setProductGroup(productGroupDAO.findById(basicInfoView.getProductGroup().getId()));
@@ -247,7 +253,7 @@ public class BasicInfoControl extends BusinessControl {
         //delete
         for (Long openAccountId : basicInfoView.getDeleteTmpList()){
             if(openAccountId != 0){
-                System.out.println("Delete Item ( openAccountId ) : "+openAccountId);
+                log.debug("Delete Item ( openAccountId ) : {}",openAccountId);
                 OpenAccount openAccount = openAccountDAO.findById(openAccountId);
 
                 List<OpenAccountName> openAccountNameList = openAccountNameDAO.findByOpenAccount(openAccount);

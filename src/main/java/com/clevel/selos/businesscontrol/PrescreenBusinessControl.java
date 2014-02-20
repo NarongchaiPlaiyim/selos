@@ -118,6 +118,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     CustomerAccountNameDAO customerAccountNameDAO;
     @Inject
     RelationCustomerDAO relationCustomerDAO;
+    @Inject
+    ProductGroupDAO productGroupDAO;
 
 
     @Inject
@@ -220,12 +222,47 @@ public class PrescreenBusinessControl extends BusinessControl {
      * @param prescreenResultView
      * @return
      */
-    public PrescreenResultView getInterfaceInfo(List<CustomerInfoView> customerInfoViewList, PrescreenResultView prescreenResultView){
+    public PrescreenResultView getInterfaceInfo(List<CustomerInfoView> customerInfoViewList, PrescreenResultView prescreenResultView) throws Exception{
         log.info("retreive interface for customer list: {}", customerInfoViewList);
 
         ExistingCreditFacilityView existingCreditFacilityView = existingCreditControl.refreshExistingCredit(customerInfoViewList);
 
-        BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, prescreenResultView.getExpectedSubmitDate());
+        //BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, prescreenResultView.getExpectedSubmitDate());
+        BankStmtSummaryView bankStmtSummaryView = new BankStmtSummaryView();
+
+        if(bankStmtSummaryView != null){
+            if(Util.safetyList(bankStmtSummaryView.getActionStatusViewList()).size() >= 1){
+                ActionStatusView actionStatusView = bankStmtSummaryView.getActionStatusViewList().get(0);
+                log.debug("getInterfaceInfo : actionStatusView : {}", actionStatusView);
+                if(actionStatusView != null && actionStatusView.getStatusCode() == ActionResult.FAILED){
+                    throw new Exception(actionStatusView.getStatusDesc());
+                }
+            }
+        } else {
+            prescreenResultView.setExistingCreditFacilityView(existingCreditFacilityView);
+            //Calculate for Group Income
+            BigDecimal groupIncome = new BigDecimal(0);
+            for(CustomerInfoView customerInfoView : customerInfoViewList){
+                if(Util.isTrue(customerInfoView.getReference().getGroupIncome())){
+                    if(customerInfoView.getApproxIncome() != null)
+                        groupIncome = groupIncome.add(customerInfoView.getApproxIncome());
+                }
+            }
+            prescreenResultView.setGroupIncome(groupIncome);
+
+            //Calculate for Group Exposure
+            BigDecimal groupExposure = new BigDecimal(0);
+            if(existingCreditFacilityView.getTotalBorrowerComLimit() != null)
+                groupExposure = groupExposure.add(existingCreditFacilityView.getTotalBorrowerComLimit());
+            if(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit() != null)
+                groupExposure = groupExposure.add(existingCreditFacilityView.getTotalBorrowerAppInRLOSLimit());
+            if(existingCreditFacilityView.getTotalRelatedComLimit() != null)
+                groupExposure = groupExposure.add(existingCreditFacilityView.getTotalRelatedComLimit());
+            if(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit() != null)
+                groupExposure = groupExposure.add(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit());
+
+            prescreenResultView.setGroupExposure(groupExposure);
+        }
 
         prescreenResultView.setExistingCreditFacilityView(existingCreditFacilityView);
         prescreenResultView.setBankStmtSummaryView(bankStmtSummaryView);
@@ -251,7 +288,6 @@ public class PrescreenBusinessControl extends BusinessControl {
             groupExposure = groupExposure.add(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit());
 
         prescreenResultView.setGroupExposure(groupExposure);
-
 
         return prescreenResultView;
     }
@@ -833,7 +869,7 @@ public class PrescreenBusinessControl extends BusinessControl {
     public void saveCustomerData(List<CustomerInfoView> customerInfoDeleteList, List<CustomerInfoView> customerInfoViewList, WorkCasePrescreen workCasePrescreen){
         //Remove all Customer before add new
         List<Customer> customerDeleteList = customerTransform.transformToModelList(customerInfoDeleteList, workCasePrescreen, null);
-        log.info("saveCustomer ::: customerDeleteList size : {}", customerDeleteList.size());
+        /*log.info("saveCustomer ::: customerDeleteList size : {}", customerDeleteList.size());
         for(Customer customer : customerDeleteList){
             addressDAO.delete(customer.getAddressesList());
 
@@ -858,7 +894,8 @@ public class PrescreenBusinessControl extends BusinessControl {
             if(customer.getCustomerOblInfo() != null){
                 customerOblInfoDAO.delete(customer.getCustomerOblInfo());
             }
-        }
+        }*/
+        customerDAO.delete(customerDeleteList);
 
         //Add all Customer from customer list
         for(CustomerInfoView customerInfoView : customerInfoViewList){
@@ -918,6 +955,7 @@ public class PrescreenBusinessControl extends BusinessControl {
             log.debug("savePreScreenInitial ::: caseBorrowerEntity : {}", customerEntity);
         }
         workCasePrescreen.setBorrowerType(customerEntity);
+        workCasePrescreen.setProductGroup(productGroupDAO.findById(prescreenView.getProductGroup().getId()));
         workCasePrescreenDAO.persist(workCasePrescreen);
 
         log.debug("savePreScreenInitial ::: saving prescreen data...");
@@ -1159,7 +1197,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     // *** Function for BPM *** //
     public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, long actionCode) throws Exception {
-        bpmExecutor.assignChecker(workCasePreScreenId, queueName, checkerId, actionCode);
+        bpmExecutor.assignChecker(workCasePreScreenId, queueName, checkerId, actionCode, "");
     }
 
     public void cancelCase(long workCasePreScreenId, String queueName, long actionCode) throws Exception {

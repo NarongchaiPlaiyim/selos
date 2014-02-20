@@ -2,6 +2,7 @@ package com.clevel.selos.transform.business;
 
 import com.clevel.selos.dao.master.CollateralTypeDAO;
 import com.clevel.selos.dao.master.SubCollateralTypeDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalData;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.coms.model.HeadCollateralData;
@@ -10,6 +11,8 @@ import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.util.Util;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -20,7 +23,9 @@ public class CollateralBizTransform extends BusinessTransform {
     CollateralTypeDAO collateralTypeDAO;
     @Inject
     SubCollateralTypeDAO subCollateralTypeDAO;
-
+    @Inject
+    @SELOS
+    private Logger log;
     private NewCollateralView newCollateralView;
 
     private List<NewCollateralHeadView> newCollateralHeadViewList;
@@ -28,16 +33,21 @@ public class CollateralBizTransform extends BusinessTransform {
 
     private List<NewCollateralSubView> newCollateralSubViewList;
     private NewCollateralSubView newCollateralSubView;
+
+    @Inject
+    private AppraisalData appraisalData;
     @Inject
     public CollateralBizTransform() {
 
     }
 
-    public NewCollateralView transformCollteral(AppraisalDataResult appraisalDataResult) {
-        newCollateralView = new NewCollateralView();
-        if(appraisalDataResult!=null){
+    public NewCollateralView transformCollateral(AppraisalDataResult appraisalDataResult) {
+        log.debug("-- transformCollateral");
+        if(!Util.isNull(appraisalDataResult)){
             AppraisalData appraisalData = appraisalDataResult.getAppraisalData();
+            newCollateralView = new NewCollateralView();
             newCollateralView.setJobID(appraisalData.getJobId());
+            log.debug("-- NewCollateralView.jobId[{}]", newCollateralView.getJobID());
             newCollateralView.setAppraisalDate(appraisalData.getAppraisalDate());
             newCollateralView.setAadDecision(appraisalData.getAadDecision());
             newCollateralView.setAadDecisionReason(appraisalData.getAadDecisionReason());
@@ -47,7 +57,7 @@ public class CollateralBizTransform extends BusinessTransform {
 
             List<HeadCollateralData> headCollateralDataList = appraisalData.getHeadCollateralDataList();
             newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
-            if(headCollateralDataList!=null && headCollateralDataList.size()>0){
+            if(!Util.isNull(headCollateralDataList) && headCollateralDataList.size()>0){
                 for(HeadCollateralData headCollateralData: headCollateralDataList){
                     newCollateralHeadView = new NewCollateralHeadView();
                     newCollateralHeadView.setTitleDeed(headCollateralData.getTitleDeed());
@@ -55,17 +65,18 @@ public class CollateralBizTransform extends BusinessTransform {
                     newCollateralHeadView.setAppraisalValue(headCollateralData.getAppraisalValue());
                     CollateralType collateralType = collateralTypeDAO.findByCollateralCode(headCollateralData.getHeadCollType());
                     newCollateralHeadView.setHeadCollType(collateralType);
-                    if(collateralType!=null && collateralType.getId()!=0){
+                    if(!Util.isNull(collateralType) && !Util.isZero(collateralType.getId())){
                         SubCollateralType subCollateralType = subCollateralTypeDAO.findByHeadAndSubColCode(collateralType,headCollateralData.getSubCollType());
+                        log.debug("-- SubCollateralType.id[{}]", subCollateralType.getId());
                     }
-                    //TODO: add field : subCollType
+                    //TODO: add field : subCollType  [HEAD]
 
                     List<SubCollateralData> subCollateralDataList = headCollateralData.getSubCollateralDataList();
                     newCollateralSubViewList = new ArrayList<NewCollateralSubView>();
-                    if(subCollateralDataList!=null && subCollateralDataList.size()>0){
+                    if(!Util.isNull(subCollateralDataList) && subCollateralDataList.size()>0){
                         for(SubCollateralData subCollateralData: subCollateralDataList){
                             newCollateralSubView = new NewCollateralSubView();
-                            if(collateralType!=null && collateralType.getId()!=0){
+                            if(!Util.isNull(collateralType) && !Util.isZero(collateralType.getId())){
                                 SubCollateralType subCollateralType = subCollateralTypeDAO.findByHeadAndSubColCode(collateralType,subCollateralData.getSubCollType());
                                 newCollateralSubView.setSubCollateralType(subCollateralType);
                             }
@@ -73,7 +84,8 @@ public class CollateralBizTransform extends BusinessTransform {
                             newCollateralSubView.setTitleDeed(subCollateralData.getTitleDeed());
                             newCollateralSubView.setCollateralOwner(subCollateralData.getCollateralOwner());
                             newCollateralSubView.setAppraisalValue(subCollateralData.getAppraisalValue());
-                            //TODO: add field : usage, typeOfUsage
+                            newCollateralSubView.setUsage(subCollateralData.getUsage());
+                            newCollateralSubView.setTypeOfUsage(subCollateralData.getTypeOfUsage());
                             newCollateralSubViewList.add(newCollateralSubView);
                         }
                     }

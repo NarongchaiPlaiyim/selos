@@ -21,10 +21,6 @@ public class ProductGroup implements Serializable {
     private String description;
     @Column(name = "brms_code", length = 5)
     private String brmsCode;
-    @Column(name = "add_existing_credit")
-    private int addExistingCredit;
-    @Column(name = "add_propose_credit")
-    private int addProposeCredit;
     @Column(name = "special_ltv")
     private int specialLTV;
     @Column(name = "active")
@@ -83,12 +79,13 @@ public class ProductGroup implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("name", name)
-                .append("description", description)
-                .append("brmsCode", brmsCode)
-                .append("active", active)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("name", name).
+                append("description", description).
+                append("brmsCode", brmsCode).
+                append("specialLTV", specialLTV).
+                append("active", active).
+                toString();
     }
 }

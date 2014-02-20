@@ -101,6 +101,7 @@ public class NewConditionDetailView implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("id", id)
                 .toString();
     }
 }

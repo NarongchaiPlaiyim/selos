@@ -1,9 +1,15 @@
 package com.clevel.selos.dao;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+
 import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
@@ -91,6 +97,23 @@ public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<
             getSession().delete(entity);
         }
     }
+    @SuppressWarnings("unchecked")
+    public List<T> findActiveAll() {
+         Criteria criteria = createCriteria();
+         criteria.add(Restrictions.eq("active", 1));
+         criteria.addOrder(Order.asc("id"));
+         List<T> list = criteria.list();
+         return list;
+     }
+    @SuppressWarnings("unchecked")
+    public void deleteById(ID id) {
+    	T ref = (T) getSession().byId(entityClass).getReference(id);
+    	getSession().delete(ref);
+    }
+    @SuppressWarnings("unchecked")
+    public T findRefById(ID id) {
+    	return (T) getSession().byId(entityClass).getReference(id);
+    }
 
     @SuppressWarnings("unchecked")
     public List<T> refresh() {
@@ -99,6 +122,17 @@ public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<
         Criteria criteria = session.createCriteria(getEntityClass());
         List<T> list = criteria.list();
         return list;
+    }
+
+    public void clearAllCache() {
+        CacheManager cacheManager = CacheManager.getInstance();
+        cacheManager.clearAll();
+    }
+
+    public void clearCache(String cacheName) {
+        CacheManager cacheManager = CacheManager.getInstance();
+        Cache cache = cacheManager.getCache(cacheName);
+        cache.removeAll();
     }
 
     public boolean isRecordExist(Criterion... criterion) {

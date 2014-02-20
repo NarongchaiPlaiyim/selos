@@ -7,14 +7,15 @@
 
 <p:panel id="subCollateralDlgPanel" styleClass="panel-dialog" style="font-size: 12px !important;">
     <h:form id="subCollateralDlgForm">
-        <table class="content_form">
+        <table class="content_form content_table_form">
             <tr>
-                <td class="title" style="min-width: 200px; width: 200px; max-width: 200px;">
-                    <p:outputLabel for="dlgSubCollateralType" value="#{msg.get('app.credit.facility.propose.dlg.subcoll.subcollTypeCaption')}"/>
+                <td class="title" style="width: 35%">
+                    <p:outputLabel for="dlgSubCollateralType"
+                                   value="#{msg.get('app.credit.facility.propose.dlg.subcoll.subcollTypeCaption')}"/>
                 </td>
-                <td class="left">
+                <td class="left" style="width: 65%">
                     <p:selectOneMenu id="dlgSubCollateralType"
-                                     value="#{decision.selectedAppSubCollateral.subCollateralType.id}"
+                                     value="#{decision.selectedApproveSubColl.subCollateralType.id}"
                                      required="#{not empty param[saveSubCollButton.clientId]}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -26,51 +27,56 @@
                 </td>
             </tr>
             <tr>
-                <td class="title" style="min-width: 200px; width: 200px; max-width: 200px;">
-                    <p:outputLabel for="dlgSubCollTitleDeed" value="#{msg.get('app.credit.facility.propose.dlg.subcoll.titleDeed')}"/>
+                <td class="title">
+                    <p:outputLabel for="dlgSubCollTitleDeed"
+                                   value="#{msg.get('app.credit.facility.propose.dlg.subcoll.titleDeed')}"/>
                 </td>
-                <td>
-                    <p:inputText id="dlgSubCollTitleDeed" value="#{decision.selectedAppSubCollateral.titleDeed}"
+                <td class="left">
+                    <p:inputText id="dlgSubCollTitleDeed" value="#{decision.selectedApproveSubColl.titleDeed}"
                                  required="#{not empty param[saveSubCollButton.clientId]}"/>
                 </td>
             </tr>
             <tr>
-                <td class="title" style="min-width: 200px; width: 200px; max-width: 200px;">
-                    <p:outputLabel for="dlgSubCollAddress" value="#{msg.get('app.credit.facility.propose.dlg.subcoll.address')}"/>
+                <td class="title">
+                    <p:outputLabel for="dlgSubCollAddress"
+                                   value="#{msg.get('app.credit.facility.propose.dlg.subcoll.address')}"/>
                 </td>
-                <td>
-                    <p:inputText id="dlgSubCollAddress" value="#{decision.selectedAppSubCollateral.address}"
+                <td class="left">
+                    <p:inputText id="dlgSubCollAddress" value="#{decision.selectedApproveSubColl.address}"
                                  required="#{not empty param[saveSubCollButton.clientId]}"/>
                 </td>
             </tr>
             <tr>
-                <td class="title" style="min-width: 200px; width: 200px; max-width: 200px;">
-                    <p:outputLabel for="dlgSubCollLandOffice" value="#{msg.get('app.credit.facility.propose.dlg.subcoll.landOffice')}"/>
+                <td class="title">
+                    <p:outputLabel for="dlgSubCollLandOffice"
+                                   value="#{msg.get('app.credit.facility.propose.dlg.subcoll.landOffice')}"/>
                 </td>
-                <td>
-                    <p:inputText id="dlgSubCollLandOffice" value="#{decision.selectedAppSubCollateral.landOffice}"
+                <td class="left">
+                    <p:inputText id="dlgSubCollLandOffice" value="#{decision.selectedApproveSubColl.landOffice}"
                                  required="#{not empty param[saveSubCollButton.clientId]}"/>
                 </td>
             </tr>
             <tr>
-                <td class="title" style="min-width: 200px; width: 200px; max-width: 200px;">
-                    <p:outputLabel for="dlgSubCollOwnerAAD" value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.AAD')}"/>
+                <td class="title">
+                    <p:outputLabel for="dlgSubCollOwnerAAD"
+                                   value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.AAD')}"/>
                 </td>
-                <td>
-                    <p:inputText id="dlgSubCollOwnerAAD" value="#{decision.selectedAppSubCollateral.collateralOwnerAAD}"
+                <td class="left">
+                    <p:inputText id="dlgSubCollOwnerAAD" value="#{decision.selectedApproveSubColl.collateralOwnerAAD}"
                                  required="#{not empty param[saveSubCollButton.clientId]}"/>
                 </td>
             </tr>
             <tr>
-                <td class="title" style="min-width: 200px; width: 200px; max-width: 200px;">
-                    <p:outputLabel for="dlgSubCollOwnerUW" value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.UW')}"/>
+                <td class="title">
+                    <p:outputLabel for="dlgSubCollOwnerUW"
+                                   value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.UW')}"/>
                 </td>
-                <td>
-                    <table border="0">
+                <td class="left">
+                    <table border="0" style="width: 100%">
                         <tr>
                             <td>
                                 <p:selectOneMenu id="dlgSubCollOwnerUW"
-                                                 value="#{decision.selectedAppSubCollateral.collateralOwnerUW.id}"
+                                                 value="#{decision.selectedApproveSubColl.collateralOwnerUW.id}"
                                                  style="min-width: 200px; width: 200px; max-width: 200px; margin-left: -2px;">
                                     <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                     <f:selectItems value="#{decision.collateralOwnerUwAllList}"
@@ -91,37 +97,36 @@
                             </td>
                         </tr>
                     </table>
-            
                 </td>
             </tr>
             <tr>
-                <td class="title" style="min-width: 200px; width: 200px; max-width: 200px;"></td>
-                <td>
+                <td class="title"></td>
+                <td class="left">
                     <p:dataTable id="CollOwnerUWTb"
-                                 value="#{decision.selectedAppSubCollateral.collateralOwnerUWList}"
+                                 value="#{decision.selectedApproveSubColl.collateralOwnerUWList}"
                                  var="collateralOwnerUWItem"
                                  rowKey="#{collateralOwnerUWItem.id}"
                                  rowIndexVar="rowIndex"
-                                 style="width: 100%; font-size: 12px !important;">
+                                 style="width: 100%;">
 
                         <p:columnGroup type="header">
                             <p:row>
-                                <p:column style="width:20px; padding: 4px 10px !important;"/>
-                                <p:column style="width:185px; padding: 4px 10px !important;"
+                                <p:column style="width: 10%; padding: 4px 10px !important;"/>
+                                <p:column style="width: 80%; padding: 4px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralName')}"/>
-                                <p:column style="width:20px; padding: 4px 10px !important;"/>
+                                <p:column style="width: 10%; padding: 4px 10px !important;"/>
                             </p:row>
                         </p:columnGroup>
             
-                        <p:column styleClass="center" style="padding: 4px 10px !important;">
+                        <p:column styleClass="center">
                             #{rowIndex + 1}
                         </p:column>
             
-                        <p:column styleClass="left" style="padding: 4px 10px !important;">
+                        <p:column styleClass="left">
                             #{collateralOwnerUWItem.firstNameTh} #{collateralOwnerUWItem.lastNameTh}
                         </p:column>
             
-                        <p:column styleClass="center" style="padding: 4px 10px !important;">
+                        <p:column styleClass="center">
                             <p:commandButton title="#{msg.get('app.button.delete')}"
                                              icon="ui-icon-trash"
                                              process="@this"
@@ -134,15 +139,16 @@
                 </td>
             </tr>
             <tr>
-                <td class="title" style="min-width: 200px; width: 200px; max-width: 200px;">
-                    <p:outputLabel for="dlgSubCollMortgageType" value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageType')}"/>
+                <td class="title">
+                    <p:outputLabel for="dlgSubCollMortgageType"
+                                   value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageType')}"/>
                 </td>
-                <td>
-                    <table border="0">
+                <td class="left">
+                    <table border="0" style="width: 100%">
                         <tr>
                             <td>
                                 <p:selectOneMenu id="dlgSubCollMortgageType"
-                                                 value="#{decision.selectedAppSubCollateral.mortgageType.id}"
+                                                 value="#{decision.selectedApproveSubColl.mortgageType.id}"
                                                  style="min-width: 200px; width: 200px; max-width: 200px; margin-left: -2px;">
                                     <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                     <f:selectItems value="#{decision.mortgageTypeList}"
@@ -166,33 +172,33 @@
                 </td>
             </tr>
             <tr>
-                <td class="title" style="min-width: 200px; width: 200px; max-width: 200px;"></td>
-                <td>
+                <td class="title"></td>
+                <td class="left">
                     <p:dataTable id="MortgageTb"
-                                 value="#{decision.selectedAppSubCollateral.mortgageList}"
+                                 value="#{decision.selectedApproveSubColl.mortgageList}"
                                  var="mortgageItem"
                                  rowKey="#{mortgageItem.id}"
                                  rowIndexVar="rowIndex"
-                                 style="width: 100%; font-size: 12px !important;">
+                                 style="width: 100%;">
 
                         <p:columnGroup type="header">
                             <p:row>
-                                <p:column style="width:20px; padding: 4px 10px !important;"/>
-                                <p:column style="width:185px; padding: 4px 10px !important;"
+                                <p:column style="width: 10%; padding: 4px 10px !important;"/>
+                                <p:column style="width: 80%; padding: 4px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageType')}"/>
-                                <p:column style="width:20px; padding: 4px 10px !important;"/>
+                                <p:column style="width: 10%; padding: 4px 10px !important;"/>
                             </p:row>
                         </p:columnGroup>
             
-                        <p:column styleClass="center" style="padding: 4px 10px !important;">
+                        <p:column styleClass="center">
                             #{rowIndex + 1}
                         </p:column>
             
-                        <p:column styleClass="left" style="padding: 4px 10px !important;">
+                        <p:column styleClass="left">
                             #{mortgageItem.mortgage}
                         </p:column>
             
-                        <p:column styleClass="center" style="padding: 4px 10px !important;">
+                        <p:column styleClass="center">
                             <p:commandButton title="#{msg.get('app.button.delete')}"
                                              icon="ui-icon-trash"
                                              process="@this"
@@ -205,15 +211,16 @@
                 </td>
             </tr>
             <tr>
-                <td class="title" style="min-width: 200px; width: 200px; max-width: 200px;">
-                    <p:outputLabel for="dlgSubCollRelatedWith" value="#{msg.get('app.credit.facility.propose.dlg.subcoll.relatedWith')}"/>
+                <td class="title">
+                    <p:outputLabel for="dlgSubCollRelatedWith"
+                                   value="#{msg.get('app.credit.facility.propose.dlg.subcoll.relatedWith')}"/>
                 </td>
-                <td>
-                    <table border="0">
+                <td class="left">
+                    <table border="0" style="width: 100%">
                         <tr>
                             <td>
                                 <p:selectOneMenu id="dlgSubCollRelatedWith"
-                                                 value="#{decision.selectedAppSubCollateral.relatedWithId}"
+                                                 value="#{decision.selectedApproveSubColl.relatedWithId}"
                                                  style="min-width: 200px; width: 200px; max-width: 200px; margin-left: -2px;">
                                     <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                     <f:selectItems value="#{decision.relatedWithAllList}"
@@ -237,33 +244,33 @@
                 </td>
             </tr>
             <tr>
-                <td class="title" style="min-width: 200px; width: 200px; max-width: 200px;"></td>
-                <td>
+                <td class="title"></td>
+                <td class="left">
                     <p:dataTable id="RelatedWithTb"
-                                 value="#{decision.selectedAppSubCollateral.relatedWithList}"
+                                 value="#{decision.selectedApproveSubColl.relatedWithList}"
                                  var="relatedWith"
                                  rowKey="#{relatedWith.id}"
                                  rowIndexVar="rowIndex"
-                                 style="width: 100%; font-size: 12px !important;">
+                                 style="width: 100%;">
 
                         <p:columnGroup type="header">
                             <p:row>
-                                <p:column style="width:20px; padding: 4px 10px !important;"/>
-                                <p:column style="width:185px; padding: 4px 10px !important;"
+                                <p:column style="width: 10%; padding: 4px 10px !important;"/>
+                                <p:column style="width: 80%; padding: 4px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.subcoll.relatedWith')}"/>
-                                <p:column style="width:20px; padding: 4px 10px !important;"/>
+                                <p:column style="width: 10%; padding: 4px 10px !important;"/>
                             </p:row>
                         </p:columnGroup>
             
-                        <p:column styleClass="center" style="padding: 4px 10px !important;">
+                        <p:column styleClass="center">
                             #{rowIndex + 1}
                         </p:column>
             
-                        <p:column styleClass="center" style="padding: 4px 10px !important;">
+                        <p:column styleClass="center">
                             #{relatedWithItem.titleDeed}
                         </p:column>
             
-                        <p:column styleClass="center" style="padding: 4px 10px !important;">
+                        <p:column styleClass="center">
                             <p:commandButton title="#{msg.get('app.button.delete')}"
                                              icon="ui-icon-trash"
                                              process="@this"
@@ -277,35 +284,43 @@
             </tr>
             
             <tr>
-                <td class="title" style="min-width: 200px; width: 200px; max-width: 200px;">
-                    <p:outputLabel for="dlgSubCollAppraisalVal" value="#{msg.get('app.credit.facility.propose.dlg.subcoll.appraisalValue')}"/>
+                <td class="title">
+                    <p:outputLabel for="dlgSubCollAppraisalVal"
+                                   value="#{msg.get('app.credit.facility.propose.dlg.subcoll.appraisalValue')}"/>
                 </td>
-                <td>
+                <td class="left">
                     <p:inputText id="dlgSubCollAppraisalVal"
-                                 value="#{decision.selectedAppSubCollateral.appraisalValue}"
+                                 value="#{decision.selectedApproveSubColl.appraisalValue}"
+                                 maxlength="18"
                                  onclick="this.select()"
-                                 onkeydown="return onKeyDownMoney(event);"
-                                 onkeypress="return onKeyPressMoney(event);"
+                                 onkeydown="return onKeyDownNegMoney(event);"
+                                 onkeypress="return onKeyPressNegMoney(event);"
                                  styleClass="right"
                                  required="#{not empty param[saveSubCollButton.clientId]}">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                        <f:convertNumber pattern="#,##0.##"
+                                         minFractionDigits="2" maxFractionDigits="2"
+                                         maxIntegerDigits="14"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
             </tr>
             <tr>
-                <td class="title" style="min-width: 200px; width: 200px; max-width: 200px;">
-                    <p:outputLabel for="dlgSubCollMortgageVal" value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageValue')}"/>
+                <td class="title">
+                    <p:outputLabel for="dlgSubCollMortgageVal"
+                                   value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageValue')}"/>
                 </td>
-                <td>
+                <td class="left">
                     <p:inputText id="dlgSubCollMortgageVal"
-                                 value="#{decision.selectedAppSubCollateral.mortgageValue}"
+                                 value="#{decision.selectedApproveSubColl.mortgageValue}"
+                                 maxlength="18"
                                  onclick="this.select()"
-                                 onkeydown="return onKeyDownMoney(event);"
-                                 onkeypress="return onKeyPressMoney(event);"
+                                 onkeydown="return onKeyDownNegMoney(event);"
+                                 onkeypress="return onKeyPressNegMoney(event);"
                                  styleClass="right"
                                  required="#{not empty param[saveSubCollButton.clientId]}">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                        <f:convertNumber pattern="#,##0.##"
+                                         minFractionDigits="2" maxFractionDigits="2"
+                                         maxIntegerDigits="14"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
@@ -314,7 +329,7 @@
                 <td colspan="2" style="height:28px;"></td>
             </tr>
             <tr>
-                <td colspan="2" class="center">
+                <td class="center" colspan="2">
                     <p:commandButton
                             id="saveSubColl"
                             value="#{msg.get('app.button.ok')}"
@@ -324,12 +339,15 @@
                             process="@form"
                             update=":subCollateralDlgForm,:collateralDlgForm"
                             oncomplete="handleDialogRequest(xhr, status, args, 'subCollateralInfoDlg')"/>
-            
+                    <p:spacer width="10" height="0"/>
                     <p:commandButton
                             value="#{msg.get('app.credit.facility.propose.cancelButton')}"
                             styleClass="small"
                             onclick="subCollateralInfoDlg.hide()"/>
                 </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="height:10px;"></td>
             </tr>
         </table>
     </h:form>

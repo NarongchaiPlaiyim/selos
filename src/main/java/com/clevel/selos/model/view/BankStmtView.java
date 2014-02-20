@@ -14,6 +14,7 @@ public class BankStmtView implements Serializable {
     private BankView bankView;
     private String branchName;
     private BankAccountTypeView bankAccountTypeView;
+    private int bankAccountTypeId;
     private int otherAccountType;
     private String accountNumber;
     private String accountName;
@@ -41,6 +42,15 @@ public class BankStmtView implements Serializable {
     private List<BankStmtDetailView> bankStmtDetailViewList;
     private List<BankStmtSrcOfCollateralProofView> srcOfCollateralProofViewList;
     private BigDecimal avgOSBalanceAmount;
+
+    // Summary Color for View
+    private String colorIncomeGross;
+    private String colorUtilPercent;
+    private String colorSwingPercent;
+    private String colorOvrLimitTime;
+    private String colorOvrLimitDays;
+    private String colorChequeReturn;
+    private String colorTrdChqRetPercent;
 
     public BankStmtView() {
         reset();
@@ -70,6 +80,14 @@ public class BankStmtView implements Serializable {
 //        this.overLimitDays = BigDecimal.ZERO;
 //        this.avgOSBalanceAmount = BigDecimal.ZERO;
         this.remark = "";
+
+        this.colorIncomeGross = "";
+        this.colorUtilPercent = "";
+        this.colorSwingPercent = "";
+        this.colorOvrLimitTime = "";
+        this.colorOvrLimitDays = "";
+        this.colorChequeReturn = "";
+        this.colorTrdChqRetPercent = "";
     }
 
     public long getId() {
@@ -118,6 +136,14 @@ public class BankStmtView implements Serializable {
 
     public void setBankAccountTypeView(BankAccountTypeView bankAccountTypeView) {
         this.bankAccountTypeView = bankAccountTypeView;
+    }
+
+    public int getBankAccountTypeId() {
+        return bankAccountTypeId;
+    }
+
+    public void setBankAccountTypeId(int bankAccountTypeId) {
+        this.bankAccountTypeId = bankAccountTypeId;
     }
 
     public int getOtherAccountType() {
@@ -320,6 +346,62 @@ public class BankStmtView implements Serializable {
         this.avgOSBalanceAmount = avgOSBalanceAmount;
     }
 
+    public String getColorIncomeGross() {
+        return colorIncomeGross;
+    }
+
+    public void setColorIncomeGross(String colorIncomeGross) {
+        this.colorIncomeGross = colorIncomeGross;
+    }
+
+    public String getColorUtilPercent() {
+        return colorUtilPercent;
+    }
+
+    public void setColorUtilPercent(String colorUtilPercent) {
+        this.colorUtilPercent = colorUtilPercent;
+    }
+
+    public String getColorSwingPercent() {
+        return colorSwingPercent;
+    }
+
+    public void setColorSwingPercent(String colorSwingPercent) {
+        this.colorSwingPercent = colorSwingPercent;
+    }
+
+    public String getColorOvrLimitTime() {
+        return colorOvrLimitTime;
+    }
+
+    public void setColorOvrLimitTime(String colorOvrLimitTime) {
+        this.colorOvrLimitTime = colorOvrLimitTime;
+    }
+
+    public String getColorOvrLimitDays() {
+        return colorOvrLimitDays;
+    }
+
+    public void setColorOvrLimitDays(String colorOvrLimitDays) {
+        this.colorOvrLimitDays = colorOvrLimitDays;
+    }
+
+    public String getColorChequeReturn() {
+        return colorChequeReturn;
+    }
+
+    public void setColorChequeReturn(String colorChequeReturn) {
+        this.colorChequeReturn = colorChequeReturn;
+    }
+
+    public String getColorTrdChqRetPercent() {
+        return colorTrdChqRetPercent;
+    }
+
+    public void setColorTrdChqRetPercent(String colorTrdChqRetPercent) {
+        this.colorTrdChqRetPercent = colorTrdChqRetPercent;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -328,6 +410,7 @@ public class BankStmtView implements Serializable {
                 .append("bankView", bankView)
                 .append("branchName", branchName)
                 .append("bankAccountTypeView", bankAccountTypeView)
+                .append("bankAccountTypeId", bankAccountTypeId)
                 .append("otherAccountType", otherAccountType)
                 .append("accountNumber", accountNumber)
                 .append("accountName", accountName)
@@ -353,6 +436,13 @@ public class BankStmtView implements Serializable {
                 .append("bankStmtDetailViewList", bankStmtDetailViewList)
                 .append("srcOfCollateralProofViewList", srcOfCollateralProofViewList)
                 .append("avgOSBalanceAmount", avgOSBalanceAmount)
+                .append("colorIncomeGross", colorIncomeGross)
+                .append("colorUtilPercent", colorUtilPercent)
+                .append("colorSwingPercent", colorSwingPercent)
+                .append("colorOvrLimitTime", colorOvrLimitTime)
+                .append("colorOvrLimitDays", colorOvrLimitDays)
+                .append("colorChequeReturn", colorChequeReturn)
+                .append("colorTrdChqRetPercent", colorTrdChqRetPercent)
                 .toString();
     }
 }

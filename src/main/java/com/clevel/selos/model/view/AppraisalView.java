@@ -16,7 +16,7 @@ public class AppraisalView implements Serializable {
     private long id;
     private String zoneLocation;
     private String bdmRemark;
-
+    private final int isRequestAppraisal = 1;
     private int appraisalType;
     private AppraisalCompany appraisalCompany;
     private AppraisalDivision appraisalDivision;
@@ -35,6 +35,7 @@ public class AppraisalView implements Serializable {
     private List<AppraisalDetailView> appraisalDetailViewList;
     private List<ContactRecordDetailView> contactRecordDetailViewList;
     private List<NewCollateralView> newCollateralViewList;
+    private AppraisalContactDetailView appraisalContactDetailView;
     private WorkCase workCase;
     private Date createDate;
     private Date modifyDate;
@@ -57,7 +58,7 @@ public class AppraisalView implements Serializable {
         workCase = new WorkCase();
         appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
         contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
-        contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
+        appraisalContactDetailView = new AppraisalContactDetailView();
     }
 
     public long getId() {
@@ -270,12 +271,25 @@ public class AppraisalView implements Serializable {
         this.newCollateralViewList = newCollateralViewList;
     }
 
+    public int getRequestAppraisal() {
+        return isRequestAppraisal;
+    }
+
+    public AppraisalContactDetailView getAppraisalContactDetailView() {
+        return appraisalContactDetailView;
+    }
+
+    public void setAppraisalContactDetailView(AppraisalContactDetailView appraisalContactDetailView) {
+        this.appraisalContactDetailView = appraisalContactDetailView;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("zoneLocation", zoneLocation)
                 .append("bdmRemark", bdmRemark)
+                .append("isRequestAppraisal", isRequestAppraisal)
                 .append("appraisalType", appraisalType)
                 .append("appraisalCompany", appraisalCompany)
                 .append("appraisalDivision", appraisalDivision)
@@ -294,6 +308,7 @@ public class AppraisalView implements Serializable {
                 .append("appraisalDetailViewList", appraisalDetailViewList)
                 .append("contactRecordDetailViewList", contactRecordDetailViewList)
                 .append("newCollateralViewList", newCollateralViewList)
+                .append("appraisalContactDetailView", appraisalContactDetailView)
                 .append("workCase", workCase)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)

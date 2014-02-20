@@ -16,6 +16,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import com.rits.cloning.Cloner;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -92,19 +93,19 @@ public class TCGInfo implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
 //        session.setAttribute("workCaseId", new Long(2));    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
 
-        if(session.getAttribute("workCaseId") != null){
+        if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-        }else{
+        } else {
             log.info("preRender ::: workCaseId is null.");
-            try{
+            try {
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
-            }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+            } catch (Exception ex) {
+                log.info("Exception :: {}", ex);
             }
         }
 
-        if(workCaseId != null){
+        if (workCaseId != null) {
             TCGView = tcgInfoControl.getTcgView(workCaseId);
 
             if (TCGView != null) {
@@ -134,25 +135,28 @@ public class TCGInfo implements Serializable {
 
 
     public void onChangePotentialCollateralType() {
-        log.info("onChangePotentialCollateralType ::: TCGDetailView.getPotentialCollateral().getId() : {}", tcgDetailView.getPotentialCollateral().getId());
+        if (tcgDetailView.getPotentialCollateral().getId() != 0) {
+            log.info("onChangePotentialCollateralType ::: TCGDetailView.getPotentialCollateral().getId() : {}", tcgDetailView.getPotentialCollateral().getId());
 
-        try {
+//        try {
             PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(tcgDetailView.getPotentialCollateral().getId());
 
-            log.info("potentialCollateralDAO.findById ::::: {}", potentialCollateral);
+            if (potentialCollateral != null) {
+                log.info("potentialCollateralDAO.findById ::::: {}", potentialCollateral);
 
-            //*** Get TCG Collateral  List from Potential Collateral    ***//
-            potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(potentialCollateral);
+                //*** Get TCG Collateral  List from Potential Collateral    ***//
+                potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(potentialCollateral);
 
-            if (potentialColToTCGColList == null) {
-                potentialColToTCGColList = new ArrayList<PotentialColToTCGCol>();
+                if (potentialColToTCGColList == null) {
+                    potentialColToTCGColList = new ArrayList<PotentialColToTCGCol>();
+                }
+
+                log.info("onChangePotentialCollateralType ::: potentialColToTCGColList size : {}", potentialColToTCGColList.size());
             }
-
-            log.info("onChangePotentialCollateralType ::: potentialColToTCGColList size : {}", potentialColToTCGColList.size());
-
-        } catch (Exception e) {
-            log.error("onChangePotentialCollateralType  error ::: {}", e.getMessage());
         }
+//        } catch (Exception e) {
+//            log.error("onChangePotentialCollateralType  error ::: {}", e.getMessage());
+//        }
 
     }
 
@@ -169,20 +173,22 @@ public class TCGInfo implements Serializable {
         log.info("onEditCollateralDetail rowIndex {} ", rowIndex);
         modeForButton = ModeForButton.EDIT;
         log.info("onEditCollateralDetail ::: selectCollateralItem  : {}", selectCollateralItem.toString());
+        Cloner cloner = new Cloner();
+        tcgDetailView = new TCGDetailView();
+        tcgDetailView = cloner.deepClone(selectCollateralItem);
+        potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(tcgDetailView.getPotentialCollateral());
+        /*if (rowIndex < TCGDetailViewList.size()) {
+            TCGDetailView detailView = cloner.deepClone(selectCollateralItem);
+            potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(detailView.getPotentialCollateral());
+            TCGCollateralType tcgCollateralTypeEdit = detailView.getTcgCollateralType();
 
-        if (rowIndex < TCGDetailViewList.size()) {
-
-            PotentialCollateral potentialCollateralEdit = selectCollateralItem.getPotentialCollateral();
-            potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(potentialCollateralEdit);
-            TCGCollateralType tcgCollateralTypeEdit = selectCollateralItem.getTcgCollateralType();
-
-            tcgDetailView.setPotentialCollateral(potentialCollateralEdit);
+            tcgDetailView.setPotentialCollateral(detailView.getPotentialCollateral());
             tcgDetailView.setTcgCollateralType(tcgCollateralTypeEdit);
-            tcgDetailView.setProposeInThisRequest(selectCollateralItem.getProposeInThisRequest());
-            tcgDetailView.setLtvValue(selectCollateralItem.getLtvValue());
-            tcgDetailView.setAppraisalAmount(selectCollateralItem.getAppraisalAmount());
+            tcgDetailView.setProposeInThisRequest(detailView.getProposeInThisRequest());
+            tcgDetailView.setLtvValue(detailView.getLtvValue());
+            tcgDetailView.setAppraisalAmount(detailView.getAppraisalAmount());
 
-        }
+        }*/
     }
 
 //    public void calculateLtvValue(){
@@ -214,7 +220,7 @@ public class TCGInfo implements Serializable {
                 tcgDetailViewSave.setPotentialCollateral(potentialCollateralSave);
                 tcgDetailViewSave.setTcgCollateralType(tcgCollateralTypeSave);
                 tcgDetailViewSave.setAppraisalAmount(tcgDetailView.getAppraisalAmount());
-                tcgDetailViewSave.setLtvValue(tcgDetailView.getLtvValue());
+                tcgDetailViewSave.setLtvValue(BigDecimal.ZERO);
                 tcgDetailViewSave.setProposeInThisRequest(tcgDetailView.getProposeInThisRequest());
                 TCGDetailViewList.add(tcgDetailViewSave);
 
@@ -225,7 +231,7 @@ public class TCGInfo implements Serializable {
                 TCGDetailViewList.get(rowIndex).setPotentialCollateral(potentialCollateralSave);
                 TCGDetailViewList.get(rowIndex).setTcgCollateralType(tcgCollateralTypeSave);
                 TCGDetailViewList.get(rowIndex).setAppraisalAmount(tcgDetailView.getAppraisalAmount());
-                TCGDetailViewList.get(rowIndex).setLtvValue(tcgDetailView.getLtvValue());
+                TCGDetailViewList.get(rowIndex).setLtvValue(BigDecimal.ZERO);
                 TCGDetailViewList.get(rowIndex).setProposeInThisRequest(tcgDetailView.getProposeInThisRequest());
 
             } else {
