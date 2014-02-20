@@ -57,15 +57,15 @@
                 <tr>
                     <td class="title" style="width:145px;">#{msg.get('app.credit.facility.existing.tb.label.collateralType.appraisalDate')}</td>
                     <td>
-                        <clv:BECalendar id="appraisalDate" showOn="button" navigator="true" locale="th_TH"
-                                        value="#{creditFacExisting.existingCollateralDetailView.appraisalDate}"
-                                        yearRange="1950:2100"
+                        <clv:BECalendar value="#{creditFacExisting.existingCollateralDetailView.appraisalDate}"
+                                        id="dateOfInfo"
+                                        showOn="button"
                                         pattern="dd/MM/yyyy"
-                                        showButtonPanel="true"
-                                        defaultdate="#{creditFacExisting.currentDateDDMMYY}"
+                                        yearRange="1950:2100"
                                         mindate="01/01/1950"
-                                        maxdate="#{creditFacExisting.currentDateDDMMYY}">
-                        </clv:BECalendar>
+                                        navigator="true"
+                                        locale="th_TH"
+                                        showButtonPanel="true"/>
                     </td>
                 </tr>
 
