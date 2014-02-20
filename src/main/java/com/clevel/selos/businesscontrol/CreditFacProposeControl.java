@@ -172,7 +172,7 @@ public class CreditFacProposeControl extends BusinessControl {
                     List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
                     if (newGuarantorDetails.size() > 0) {
                         log.debug("newGuarantorDetails:: {}", newGuarantorDetails.size());
-                        List<NewGuarantorDetailView> newGuarantorDetailViewList = newGuarantorDetailTransform.transformToView(newGuarantorDetails);
+                        List<NewGuarantorDetailView> newGuarantorDetailViewList = newGuarantorDetailTransform.transformToView(newGuarantorDetails,newCreditFacility.getWorkCase());
                         log.debug("newGuarantorDetailViewList : {}", newGuarantorDetailViewList);
                         newCreditFacilityView.setNewGuarantorDetailViewList(newGuarantorDetailViewList);
                     }
@@ -827,11 +827,9 @@ public class CreditFacProposeControl extends BusinessControl {
             log.debug("saveCreditFacility ::: persist newCreditDetailList : {}", newCreditDetailList);
         }
 
-
         //--- Need to Delete newGuarantorCreditList from newGuarantorCredit before Insert new
-        List<NewGuarantorCredit> newGuarantorCreditListDelete = newGuarantorRelationDAO.getListGuarantorRelationByNewGuarantor(workCase);
+        List<NewGuarantorCredit> newGuarantorCreditListDelete = newGuarantorRelationDAO.getListByWorkCase(workCase);
         newGuarantorRelationDAO.delete(newGuarantorCreditListDelete);
-
 
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
@@ -842,12 +840,12 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         //--- Save to NewCollateral
-        //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
-        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase);
-        newSubCollMortgageDAO.delete(newCollateralSubMortgages);
-        //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
-        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase);
-        newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
+//        //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
+//        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase);
+//        newSubCollMortgageDAO.delete(newCollateralSubMortgages);
+//        //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
+//        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase);
+//        newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
         //--- Need to delete Collateral Credit from CollateralRelCredit before Insert new
         List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditDAO.getListByWorkCase(workCase);
         newCollateralCreditDAO.delete(newCollateralCreditList);
