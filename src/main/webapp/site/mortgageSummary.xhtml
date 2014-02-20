@@ -11,7 +11,6 @@
     <title>#{msg.get('app.mortgageSummary.title')}</title>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
-    <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 </h:head>
 
 <h:body>
@@ -168,7 +167,7 @@
                         					headerText="#{msg.get('app.mortgageSummary.mortgageSummary.signingDate')}"
                         					>
                         					<h:outputText value="#{mortgage.signingDate}">
-                        						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
+                        						<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                         					</h:outputText>
                         				</p:column>
                         				<p:column 
@@ -207,7 +206,7 @@
                         				rowIndexVar="rowIdx"
                         				>
                         				<p:column style="width:20px" styleClass="center">
-                        					#{rowIdx}
+                        					#{rowIdx+1}
                         				</p:column>
                         				<p:column style="width:200px"
                         					headerText="#{msg.get('app.mortgageSummary.pledgeSummary.accountNumber')}"
@@ -230,7 +229,7 @@
                         					headerText="#{msg.get('app.mortgageSummary.pledgeSummary.signingDate')}"
                         					>
                         					<h:outputText value="#{pledge.signingDate}">
-                        						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
+                        						<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                         					</h:outputText>
                         				</p:column>
                         				<p:column style="width:30px" styleClass="center">
@@ -264,7 +263,7 @@
                         				rowIndexVar="rowIdx"
                         				>
                         				<p:column style="width:20px" styleClass="center">
-                        					#{rowIdx}
+                        					#{rowIdx+1}
                         				</p:column>
                         				<p:column style="width:270px"
                         					headerText="#{msg.get('app.mortgageSummary.guarantorSummary.guarantorName')}"
@@ -287,7 +286,7 @@
                         					headerText="#{msg.get('app.mortgageSummary.guarantorSummary.signingDate')}"
                         					>
                         					<h:outputText value="#{guarantor.signingDate}">
-                        						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
+                        						<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                         					</h:outputText>
                         				</p:column>
                         				<p:column style="width:30px" styleClass="center">

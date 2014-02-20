@@ -511,9 +511,7 @@ public class CreditFacExisting implements Serializable {
         existingCreditDetailView.setAccountSuf(selectCreditDetail.getAccountSuf());
         existingCreditDetailView.setExistAccountStatus(selectCreditDetail.getExistAccountStatus());
         existingCreditDetailView.setExistProductProgramView(selectCreditDetail.getExistProductProgramView());
-        onChangeProductProgram();
         existingCreditDetailView.setExistCreditTypeView(selectCreditDetail.getExistCreditTypeView());
-        onChangeCreditType();
         existingCreditDetailView.setLimit(selectCreditDetail.getLimit());
         existingCreditDetailView.setProductCode(selectCreditDetail.getProductCode());
         existingCreditDetailView.setProjectCode(selectCreditDetail.getProjectCode());
@@ -526,6 +524,8 @@ public class CreditFacExisting implements Serializable {
         existingCreditDetailView.setExistingSplitLineDetailViewList(selectCreditDetail.getExistingSplitLineDetailViewList());
         existingCreditTierDetailViewList = selectCreditDetail.getExistingCreditTierDetailViewList();
         existingCreditDetailView.setExistingCreditTierDetailViewList(selectCreditDetail.getExistingCreditTierDetailViewList());
+
+        onChangeProductProgram();
 
         CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
         if(Util.isTrue(creditType.getCanSplit())){
