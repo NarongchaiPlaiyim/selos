@@ -312,8 +312,8 @@
                     <td class="left">
                         <p:selectOneRadio id="dlgInsuranceComp"
                                           value="#{collHeadDetail.insuranceCompany}">
-                            <f:selectItem itemLabel="#{msg.get('app.button.partner')}" itemValue="2"/>
-                            <f:selectItem itemLabel="#{msg.get('app.button.nonPartner')}" itemValue="1"/>
+                            <f:selectItem itemLabel="#{msg.get('app.button.partner')}" itemValue="#{decision.yesValue}"/>
+                            <f:selectItem itemLabel="#{msg.get('app.button.nonPartner')}" itemValue="#{decision.noValue}"/>
                         </p:selectOneRadio>
                     </td>
                 </tr>
