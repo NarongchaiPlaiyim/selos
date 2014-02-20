@@ -21,6 +21,6 @@ public class MortgageInfoCollOwnerDAO extends GenericDAO<MortgageInfoCollOwner,L
 
 	public void deleteByMortgageInfoId(long mortgageInfoId) {
 		String hql = "delete from MortgageInfoCollOwner where mortgageInfo.id=:id";
-		getSession().createQuery(hql).setLong("id", mortgageInfoId);
+		getSession().createQuery(hql).setLong("id", mortgageInfoId).executeUpdate();
 	}
 }

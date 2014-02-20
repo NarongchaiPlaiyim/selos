@@ -1,13 +1,24 @@
 package com.clevel.selos.model.db.working;
 
-import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.User;
-
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 
 @Entity
 @Table(name = "wrk_guarantor_info")
@@ -26,9 +37,6 @@ public class GuarantorInfo implements Serializable  {
     @ManyToOne
     @JoinColumn(name="mortgage_type_id")
     private MortgageType guarantorType;
-    
-    @Column(name="guarantor_amount")
-    private BigDecimal guarantorAmount;
     
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="workcase_id")
@@ -49,6 +57,10 @@ public class GuarantorInfo implements Serializable  {
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
+    
+    @OneToOne
+    @JoinColumn(name="new_guarantor_id")
+    private NewGuarantorDetail newGuarantorDetail;
     
     public GuarantorInfo() {
     	
@@ -76,14 +88,6 @@ public class GuarantorInfo implements Serializable  {
 
 	public void setGuarantorType(MortgageType guarantorType) {
 		this.guarantorType = guarantorType;
-	}
-
-	public BigDecimal getGuarantorAmount() {
-		return guarantorAmount;
-	}
-
-	public void setGuarantorAmount(BigDecimal guarantorAmount) {
-		this.guarantorAmount = guarantorAmount;
 	}
 
 	public WorkCase getWorkCase() {
@@ -125,5 +129,12 @@ public class GuarantorInfo implements Serializable  {
 	public void setModifyBy(User modifyBy) {
 		this.modifyBy = modifyBy;
 	}
-    
+	
+	public NewGuarantorDetail getNewGuarantorDetail() {
+		return newGuarantorDetail;
+	}
+	
+	public void setNewGuarantorDetail(NewGuarantorDetail newGuarantorDetail) {
+		this.newGuarantorDetail = newGuarantorDetail;
+	}
 }
