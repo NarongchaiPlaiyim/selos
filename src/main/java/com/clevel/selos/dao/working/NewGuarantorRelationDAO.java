@@ -4,8 +4,10 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.NewGuarantorCredit;
+import com.clevel.selos.model.db.working.NewGuarantorDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -18,26 +20,35 @@ public class NewGuarantorRelationDAO extends GenericDAO<NewGuarantorCredit, Long
     @SELOS
     Logger log;
     @Inject
-    NewCreditFacilityDAO newCreditFacilityDAO;
-    @Inject
     public NewGuarantorRelationDAO() {}
+    @Inject
+    NewCreditFacilityDAO newCreditFacilityDAO;
 
-    @SuppressWarnings("unchecked")
-    public List<NewGuarantorCredit> getListGuarantorRelationByNewGuarantor(WorkCase workCase){
-        List<NewGuarantorCredit> newGuarantorCreditList = new ArrayList<NewGuarantorCredit>();
-
-        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
+    public List<NewGuarantorCredit> getListGuarantorRelationByNewGuarantor(NewGuarantorDetail newGuarantorDetail) {
+        log.info("getListGuarantorRelationByNewGuarantor. (NewGuarantorDetail: {})", newGuarantorDetail.getId());
         Criteria criteria = createCriteria();
-        log.info("newCreditFacility.getNewGuarantorDetailList() :: {}",newCreditFacility.getNewGuarantorDetailList().size());
-        if (newCreditFacility != null && newCreditFacility.getNewGuarantorDetailList() != null && newCreditFacility.getNewGuarantorDetailList().size() > 0) {
-            criteria.add(Restrictions.in("newGuarantorDetail", newCreditFacility.getNewGuarantorDetailList()));
-            log.info("getList. (result size: {})", criteria.list().size());
-            newGuarantorCreditList = criteria.list();
-        }
-        return newGuarantorCreditList;
+        criteria.add(Restrictions.eq("newGuarantorDetail", newGuarantorDetail));
+        criteria.setFetchMode("newGuarantorDetail", FetchMode.LAZY);
+        List<NewGuarantorCredit> newGuarantorCreditList = (List<NewGuarantorCredit>)criteria.list();
+        log.info("getList. (result size: {})", newGuarantorCreditList.size());
 
+        return newGuarantorCreditList;
 
     }
 
+    public List<NewGuarantorCredit> getListByWorkCase(WorkCase workCase){
+        Criteria criteria = createCriteria();
+        List<NewGuarantorCredit> newGuarantorCreditList = new ArrayList<NewGuarantorCredit>();
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
+        if(newCreditFacility != null && newCreditFacility.getNewGuarantorDetailList() != null && newCreditFacility.getNewGuarantorDetailList().size() > 0){
+            for(NewGuarantorDetail newGuarantorDetail : newCreditFacility.getNewGuarantorDetailList()){
+                criteria.add(Restrictions.eq("newGuarantorDetail", newGuarantorDetail));
+            }
+            criteria.setFetchMode("newGuarantorDetail", FetchMode.LAZY);
+            newGuarantorCreditList = criteria.list();
+        }
+
+        return newGuarantorCreditList;
+    }
 
 }
