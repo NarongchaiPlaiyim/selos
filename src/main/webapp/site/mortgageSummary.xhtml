@@ -11,6 +11,7 @@
     <title>#{msg.get('app.mortgageSummary.title')}</title>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
+    <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 </h:head>
 
 <h:body>
@@ -84,10 +85,10 @@
                         				value="#{msg.get('app.mortgageSummary.agreement.loanDate')}" />	
                         		</td>
                         		<td>
-                        			<p:calendar id='loan_contractdate' value="#{mortgageSummary.mortgageSummaryView.loanContractDate}"
+                        			<clv:BECalendar id='loan_contractdate' value="#{mortgageSummary.mortgageSummaryView.loanContractDate}"
                         					pattern="dd/MM/yyyy" showOn="button"
                                        		mindate="#{mortgageSummary.minDate}"
-                                       		autocomplete="false"
+                                       		autocomplete="false" locale="th_TH"
                                        		required="true" requiredMessage="#{msg.get('app.mortgageSummary.loanDate.validate')}"
                                        		/>
                         		</td>

@@ -2,6 +2,7 @@ package com.clevel.selos.transform;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -11,6 +12,7 @@ import com.clevel.selos.model.AttorneyRelationType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.MortgageInfo;
+import com.clevel.selos.model.db.working.MortgageInfoMortgage;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.MortgageInfoView;
 
@@ -35,8 +37,17 @@ public class MortgageInfoTransform extends Transform {
 				view.setLandOfficeId(model.getMortgageLandOffice().getId());
 				view.setLandOfficeStr(model.getMortgageLandOffice().getName());
 			}
-			if (model.getMortgageType() != null)
-				view.setMortgageType(model.getMortgageType().getMortgage());
+			if (model.getMortgageTypeList() != null) {
+				List<MortgageInfoMortgage> mortgageTypes = model.getMortgageTypeList();
+				StringBuilder builder = new StringBuilder();
+				for (MortgageInfoMortgage mortgageType : mortgageTypes) {
+					builder.append(mortgageType.getMortgageType().getMortgage());
+					builder.append(", ");
+				}
+				if (builder.length() > 0)
+					builder.setLength(builder.length() -2);
+				view.setMortgageType(builder.toString());
+			}
 			view.setMortgageOrder(model.getMortgageOrder());
 			view.setMortgageAmount(model.getMortgageAmount());
 			view.setPoa(model.getAttorneyRequired());
@@ -48,17 +59,6 @@ public class MortgageInfoTransform extends Transform {
 				view.setCustomerAttorneyId(model.getCustomerAttorney().getId());
 		}
 		return view;
-	}
-	
-	public MortgageInfo createNewModel(MortgageInfoView view,User user,WorkCase workCase) {
-		MortgageInfo model = new MortgageInfo();
-		model.setMortgageType(null);
-		model.setWorkCase(workCase);
-		model.setCreateBy(user);
-		model.setCreateDate(new Date());
-		
-		updateModelFromView(model, view, user);
-		return model;
 	}
 	
 	public void updateModelFromView(MortgageInfo model,MortgageInfoView view,User user) {

@@ -19,4 +19,8 @@ public class MortgageInfoCollOwnerDAO extends GenericDAO<MortgageInfoCollOwner,L
         return criteria.list();
 	}
 
+	public void deleteByMortgageInfoId(long mortgageInfoId) {
+		String hql = "delete from MortgageInfoCollOwner where mortgageInfo.id=:id";
+		getSession().createQuery(hql).setLong("id", mortgageInfoId);
+	}
 }
