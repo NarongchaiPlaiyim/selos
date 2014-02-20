@@ -153,8 +153,6 @@ public class BizInfoSummaryControl extends BusinessControl {
         BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findByWorkCaseId(workCaseId);
         if(bizInfoSummary == null){
             bizInfoSummary = new BizInfoSummary();
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
-            bizInfoSummary.setWorkCase(workCase);
         }
 
         //for set circulation , cal grd total income gross
@@ -190,7 +188,7 @@ public class BizInfoSummaryControl extends BusinessControl {
                 }
             }
 
-            log.debug("income : {} " + income);
+            log.debug("income : {} ", income);
 
             if(!Util.isNull(income)){
                 calSumIncomeNet = Util.multiply(income,twelve);
@@ -203,6 +201,9 @@ public class BizInfoSummaryControl extends BusinessControl {
         }
 
         bizInfoSummary.setSumIncomeAmount(sumIncomeNet);
+
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        bizInfoSummary.setWorkCase(workCase);
 
         bizInfoSummaryDAO.persist(bizInfoSummary);
 
