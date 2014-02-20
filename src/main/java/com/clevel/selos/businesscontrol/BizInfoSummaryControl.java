@@ -164,8 +164,9 @@ public class BizInfoSummaryControl extends BusinessControl {
         } else {
             bizInfoSummary.setCirculationAmount(BigDecimal.ZERO);
         }
-        //todo:cal new
-
+        BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryTransform.transformToView(bizInfoSummary);
+        BizInfoSummaryView bizSumView = calSummaryTable(bizInfoSummaryView);
+        bizInfoSummary = bizInfoSummaryTransform.transformToModel(bizSumView);
 
         //for set sum income amount
         BigDecimal income;
@@ -213,5 +214,99 @@ public class BizInfoSummaryControl extends BusinessControl {
             }
             bizInfoDetailDAO.persist(bizInfoDetailList);
         }
+    }
+
+    public BizInfoSummaryView calSummaryTable(BizInfoSummaryView bizInfoSummaryView){
+        log.info("calSummaryTable begin");
+        BigDecimal sumIncomeAmount = BigDecimal.ZERO ;
+        BigDecimal productCostAmount;
+        BigDecimal productCostPercent = BigDecimal.ZERO ;
+        BigDecimal profitMarginAmount;
+        BigDecimal profitMarginPercent;
+        BigDecimal operatingExpenseAmount = BigDecimal.ZERO ;
+        BigDecimal operatingExpensePercent;
+        BigDecimal earningsBeforeTaxAmount;
+        BigDecimal earningsBeforeTaxPercent;
+        BigDecimal reduceInterestAmount = BigDecimal.ZERO ;
+        BigDecimal reduceTaxAmount = BigDecimal.ZERO ;
+        BigDecimal reduceInterestPercent;
+        BigDecimal reduceTaxPercent;
+        BigDecimal netMarginAmount;
+        BigDecimal netMarginPercent;
+        BigDecimal hundred = new BigDecimal(100);
+
+        if(!Util.isNull(bizInfoSummaryView.getCirculationAmount())){
+            sumIncomeAmount = bizInfoSummaryView.getCirculationAmount();
+        }
+
+        if(!Util.isNull(bizInfoSummaryView.getProductionCostsPercentage())){
+            productCostPercent = bizInfoSummaryView.getProductionCostsPercentage();
+        }
+
+        productCostAmount = Util.divide(Util.multiply(sumIncomeAmount,productCostPercent),100);
+        bizInfoSummaryView.setProductionCostsAmount(productCostAmount);
+        profitMarginPercent = Util.subtract(hundred,productCostPercent);
+        profitMarginAmount = Util.divide(Util.multiply(sumIncomeAmount,profitMarginPercent),hundred);
+        bizInfoSummaryView.setProfitMarginPercentage(profitMarginPercent);
+        bizInfoSummaryView.setProfitMarginAmount(profitMarginAmount);
+
+        if(!Util.isNull(bizInfoSummaryView.getOperatingExpenseAmount())){
+            operatingExpenseAmount = bizInfoSummaryView.getOperatingExpenseAmount();
+        }
+
+        if(operatingExpenseAmount.compareTo(profitMarginAmount) > 0){
+            bizInfoSummaryView.setOperatingExpenseAmount(BigDecimal.ZERO);
+            operatingExpenseAmount = BigDecimal.ZERO;
+        }
+
+        operatingExpensePercent = Util.multiply(Util.divide(operatingExpenseAmount,sumIncomeAmount),hundred);
+        bizInfoSummaryView.setOperatingExpensePercentage(operatingExpensePercent);
+
+        earningsBeforeTaxAmount = Util.subtract(profitMarginAmount,operatingExpenseAmount);
+        earningsBeforeTaxPercent = Util.subtract(profitMarginPercent,operatingExpensePercent);
+
+        bizInfoSummaryView.setEarningsBeforeTaxAmount(earningsBeforeTaxAmount);
+        bizInfoSummaryView.setEarningsBeforeTaxPercentage(earningsBeforeTaxPercent);
+
+        if(!Util.isNull(bizInfoSummaryView.getReduceInterestAmount())){
+            reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount();
+        }
+
+        if(!Util.isNull(bizInfoSummaryView.getReduceTaxAmount())){
+            reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount();
+        }
+
+        if(reduceInterestAmount.compareTo(earningsBeforeTaxAmount) > 0){
+            bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
+            reduceInterestAmount = BigDecimal.ZERO;
+        }
+
+        if( reduceTaxAmount.compareTo(earningsBeforeTaxAmount) > 0){
+            bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
+            reduceTaxAmount = BigDecimal.ZERO;
+        }
+
+        if( ((Util.add(reduceInterestAmount,reduceTaxAmount)).compareTo(earningsBeforeTaxAmount) > 0)){
+            bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
+            bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
+        }
+
+        reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount();
+        reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount();
+
+        reduceInterestPercent = Util.multiply(Util.divide(reduceInterestAmount,sumIncomeAmount),hundred);
+        reduceTaxPercent = Util.multiply(Util.divide(reduceTaxAmount,sumIncomeAmount),hundred);
+
+        bizInfoSummaryView.setReduceInterestPercentage(reduceInterestPercent);
+        bizInfoSummaryView.setReduceTaxPercentage(reduceTaxPercent);
+
+        netMarginAmount = Util.subtract(Util.subtract(earningsBeforeTaxAmount,reduceInterestAmount),reduceTaxAmount);
+        netMarginPercent = Util.subtract(Util.subtract(earningsBeforeTaxPercent,reduceInterestPercent),reduceTaxPercent);
+
+        bizInfoSummaryView.setNetMarginAmount(netMarginAmount);
+        bizInfoSummaryView.setNetMarginPercentage(netMarginPercent);
+
+        log.info("calSummaryTable end - bizInfoSummaryView : {}",bizInfoSummaryView);
+        return bizInfoSummaryView;
     }
 }

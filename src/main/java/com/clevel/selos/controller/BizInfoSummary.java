@@ -332,109 +332,60 @@ public class BizInfoSummary implements Serializable {
 
     public void onCalSummaryTable(){
         log.info("onCalSummaryTable begin");
-        BigDecimal sumIncomeAmount = BigDecimal.ZERO ;
-        BigDecimal productCostAmount = BigDecimal.ZERO ;
-        BigDecimal productCostPercent = BigDecimal.ZERO ;
-        BigDecimal profitMarginAmount = BigDecimal.ZERO ;
-        BigDecimal profitMarginPercent = BigDecimal.ZERO ;
-        BigDecimal operatingExpenseAmount = BigDecimal.ZERO ;
-        BigDecimal operatingExpensePercent = BigDecimal.ZERO ;
-        BigDecimal earningsBeforeTaxAmount = BigDecimal.ZERO ;
-        BigDecimal earningsBeforeTaxPercent = BigDecimal.ZERO ;
-        BigDecimal reduceInterestAmount = BigDecimal.ZERO ;
-        BigDecimal reduceTaxAmount = BigDecimal.ZERO ;
-        BigDecimal reduceInterestPercent = BigDecimal.ZERO ;
-        BigDecimal reduceTaxPercent = BigDecimal.ZERO ;
-        BigDecimal netMarginAmount = BigDecimal.ZERO ;
-        BigDecimal netMarginPercent = BigDecimal.ZERO ;
-        BigDecimal hundred = new BigDecimal(100);
+        bizInfoSummaryView = bizInfoSummaryControl.calSummaryTable(bizInfoSummaryView);
 
-        if(!Util.isNull(bizInfoSummaryView.getCirculationAmount())){
-            sumIncomeAmount = bizInfoSummaryView.getCirculationAmount();
-        }
+        BigDecimal operatingExpenseAmount = BigDecimal.ZERO;
+        BigDecimal profitMarginAmount = BigDecimal.ZERO;
+        BigDecimal reduceInterestAmount = BigDecimal.ZERO;
+        BigDecimal earningsBeforeTaxAmount;
+        BigDecimal reduceTaxAmount = BigDecimal.ZERO;
 
-        if(!Util.isNull(bizInfoSummaryView.getProductionCostsPercentage())){
-            productCostPercent = bizInfoSummaryView.getProductionCostsPercentage();
-        }
-
-        productCostAmount = Util.divide(Util.multiply(sumIncomeAmount,productCostPercent),100);
-        bizInfoSummaryView.setProductionCostsAmount(productCostAmount);
-        profitMarginPercent = Util.subtract(hundred,productCostPercent);
-        profitMarginAmount = Util.divide(Util.multiply(sumIncomeAmount,profitMarginPercent),hundred);
-        bizInfoSummaryView.setProfitMarginPercentage(profitMarginPercent);
-        bizInfoSummaryView.setProfitMarginAmount(profitMarginAmount);
-
-        if(!Util.isNull(bizInfoSummaryView.getOperatingExpenseAmount())){
+        if(bizInfoSummaryView.getOperatingExpenseAmount() != null){
             operatingExpenseAmount = bizInfoSummaryView.getOperatingExpenseAmount();
         }
 
+        if(bizInfoSummaryView.getProfitMarginAmount() != null){
+            profitMarginAmount = bizInfoSummaryView.getProfitMarginAmount();
+        }
+
+        if(bizInfoSummaryView.getReduceInterestAmount() != null){
+            reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount();
+        }
+
+        if(bizInfoSummaryView.getReduceTaxAmount() != null){
+            reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount();
+        }
+
+        earningsBeforeTaxAmount = Util.subtract(profitMarginAmount,operatingExpenseAmount);
+
         if(operatingExpenseAmount.compareTo(profitMarginAmount) > 0){
             bizInfoSummaryView.setOperatingExpenseAmount(BigDecimal.ZERO);
-            operatingExpenseAmount = BigDecimal.ZERO;
             messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
             message = msg.get("app.bizInfoSummary.message.validate.overOperatingExpense.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
-        operatingExpensePercent = Util.multiply(Util.divide(operatingExpenseAmount,sumIncomeAmount),hundred);
-        bizInfoSummaryView.setOperatingExpensePercentage(operatingExpensePercent);
-
-        earningsBeforeTaxAmount = Util.subtract(profitMarginAmount,operatingExpenseAmount);
-        earningsBeforeTaxPercent = Util.subtract(profitMarginPercent,operatingExpensePercent);
-
-        bizInfoSummaryView.setEarningsBeforeTaxAmount(earningsBeforeTaxAmount);
-        bizInfoSummaryView.setEarningsBeforeTaxPercentage(earningsBeforeTaxPercent);
-
-        if(!Util.isNull(bizInfoSummaryView.getReduceInterestAmount())){
-            reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount();
-        }
-
-        if(!Util.isNull(bizInfoSummaryView.getReduceTaxAmount())){
-            reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount();
-        }
-
         if(reduceInterestAmount.compareTo(earningsBeforeTaxAmount) > 0){
-            bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            reduceInterestAmount = BigDecimal.ZERO;
+            bizInfoSummaryView.setReduceInterestAmount(BigDecimal.ZERO);
             messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
             message = msg.get("app.bizInfoSummary.message.validate.overInterest.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
-        if( reduceTaxAmount.compareTo(earningsBeforeTaxAmount) > 0){
-            bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
-            reduceTaxAmount = BigDecimal.ZERO;
+        if(reduceTaxAmount.compareTo(earningsBeforeTaxAmount) > 0){
+            bizInfoSummaryView.setReduceTaxAmount(BigDecimal.ZERO);
             messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
             message = msg.get("app.bizInfoSummary.message.validate.overTax.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
         if( ((Util.add(reduceInterestAmount,reduceTaxAmount)).compareTo(earningsBeforeTaxAmount) > 0)){
-            bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
-            bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            reduceInterestAmount = BigDecimal.ZERO;
-            reduceTaxAmount = BigDecimal.ZERO;
+            bizInfoSummaryView.setReduceTaxAmount(BigDecimal.ZERO);
+            bizInfoSummaryView.setReduceInterestAmount(BigDecimal.ZERO);
             messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
             message = msg.get("app.bizInfoSummary.message.validate.overInterestAndTax.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
-
-        reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount();
-        reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount();
-
-        reduceInterestPercent = Util.multiply(Util.divide(reduceInterestAmount,sumIncomeAmount),hundred);
-        reduceTaxPercent = Util.multiply(Util.divide(reduceTaxAmount,sumIncomeAmount),hundred);
-
-        bizInfoSummaryView.setReduceInterestPercentage(reduceInterestPercent);
-        bizInfoSummaryView.setReduceTaxPercentage(reduceTaxPercent);
-
-        netMarginAmount = Util.subtract(Util.subtract(earningsBeforeTaxAmount,reduceInterestAmount),reduceTaxAmount);
-        netMarginPercent = Util.subtract(Util.subtract(earningsBeforeTaxPercent,reduceInterestPercent),reduceTaxPercent);
-
-        bizInfoSummaryView.setNetMarginAmount(netMarginAmount);
-        bizInfoSummaryView.setNetMarginPercentage(netMarginPercent);
-        log.info("onCalSummaryTable 333");
-
         log.info("onCalSummaryTable end");
     }
 
