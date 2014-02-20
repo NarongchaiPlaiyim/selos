@@ -1542,13 +1542,13 @@ public class CreditFacExisting implements Serializable {
                 log.info("hashBorrower.get(j) in use   :  "+ l + " is   " +hashBorrower.get(l+1).toString());
             }
             borrowerExistingGuarantorDetailViewList.add(existingGuarantorDetailViewAdd);
+            existingCreditFacilityView.setBorrowerGuarantorList(borrowerExistingGuarantorDetailViewList);
             onSetRowNoCreditTypeDetail(existingGuarantorDetailViewAdd.getExistingCreditTypeDetailViewList());
-
         }else if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)){
             ExistingGuarantorDetailView existingGuarantorDetailViewOnRow = borrowerExistingGuarantorDetailViewList.get(rowIndex);
             existingGuarantorDetailViewOnRow.setExistingCreditTypeDetailViewList(new ArrayList<ExistingCreditTypeDetailView>());
-            existingGuarantorDetailViewOnRow.setGuarantorName(existingGuarantorDetailView.getGuarantorName());
             existingGuarantorDetailViewOnRow.setTcgLgNo(existingGuarantorDetailView.getTcgLgNo());
+            existingGuarantorDetailViewOnRow.setGuarantorName(customerInfoControl.getCustomerById(existingGuarantorDetailView.getGuarantorName()));
 
             List<ExistingCreditTypeDetailView> existingCreditTypeDetailViewList;
             existingCreditTypeDetailViewList = existingGuarantorDetailView.getExistingCreditTypeDetailViewList();
@@ -1595,6 +1595,7 @@ public class CreditFacExisting implements Serializable {
                 log.info("hashBorrower.get(l) in use   :  "+ l + " is   " +hashBorrower.get(l+1).toString());
             }
             //existingCreditFacilityView.getBorrowerGuarantorList().get(rowIndex).setExistingCreditTypeDetailViewList(existingCollateralDetailView.getExistingCreditTypeDetailViewList());
+            existingCreditFacilityView.setBorrowerGuarantorList(borrowerExistingGuarantorDetailViewList);
             onSetRowNoCreditTypeDetail(existingGuarantorDetailViewOnRow.getExistingCreditTypeDetailViewList());
 
 
