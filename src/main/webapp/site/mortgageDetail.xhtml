@@ -11,7 +11,6 @@
     <title>#{msg.get('app.mortgageDetail.title')}</title>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
-    <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 </h:head>
 
 <h:body>
@@ -159,12 +158,13 @@
                         		<td colspan="3">
                         			<p:dataTable value="#{mortgageDetail.credits}" var="credit" 
                         				styleClass="full_table" rowIndexVar="rowIdx">
-                        				<p:column style="width:30px">
+                        				<p:column style="width:30px" styleClass="center">
                         					#{rowIdx+1}
                         				</p:column>
                         				<p:column
-                        					headerText="#{msg.get('app.mortgageDetail.detail.creditType.table.account')}">
-                        					<h:panelGroup rendered="#{credit.hasAccountInfo}">
+                        					headerText="#{msg.get('app.mortgageDetail.detail.creditType.table.account')}"
+                        					style="line-height: 1.5em;">
+                        					<h:panelGroup layout="block" rendered="#{credit.hasAccountInfo}"  style="padding : 5px 0;">
                         					#{credit.accountName} <br />
                         					#{msg.get('app.creditType.account.accountNo')} #{credit.accountNo} <br/>
                         					#{msg.get('app.creditType.account.accountStatus')} #{credit.accountStatus}

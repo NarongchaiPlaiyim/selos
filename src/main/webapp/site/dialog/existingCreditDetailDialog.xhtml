@@ -110,7 +110,7 @@
             <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.pcePercent')}"/>
         </td>
         <td>
-            <p:inputText id="pcePercent" value="#{creditFacExisting.existingCreditDetailView.pcePercent}" style="text-align:right">
+            <p:inputText id="pcePercent" value="#{creditFacExisting.existingCreditDetailView.pcePercent}" style="text-align:right" maxlength="3">
                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                 <f:validateDoubleRange maximum="100"/>
                 <p:ajax event="blur" update=":existingCreditDlgForm:pcePercent"/>
@@ -184,10 +184,10 @@
                     <p:outputLabel value="#{creditTier.no}"/>
                 </p:column>
                 <p:column styleClass="center">
-                    <p:inputText  id="tierInstallment" style="text-align:right;"
+                    <p:inputText  id="tierInstallment" style="text-align:right;" maxlength="14"
                                   value="#{creditTier.installment}"
                                   onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)" >
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="18"/>
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                         <p:ajax event="blur" update=":existingCreditDlgForm:resultTier:tierInstallment"/>
                     </p:inputText>
                 </p:column>
@@ -208,11 +208,11 @@
                             <p:column>
                                 <p:inputText value="#{creditTier.finalInterest}"
                                              id="tierFinalInterest"
-                                             onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)"
+                                             onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)" maxlength="14"
                                              style="text-align:right;width:50px;">
                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                     maxIntegerDigits="18"/>
-                                    <p:ajax event="blur" update=":existingCreditDlgForm:resultTier:tierFinalInterest"/>
+                                                     maxIntegerDigits="14"/>
+                                    <p:ajax event="blur" update="@this"/>
                                 </p:inputText>
                             </p:column>
                         </p:row>
@@ -220,10 +220,8 @@
                 </p:column>
                 <p:column styleClass="center">
                     <p:inputText id="tierTenor"
-                                 onkeydown="return onKeyDownNumber(event)" onkeypress="return onKeyPressNumber(event)"
+                                 onkeydown="return onKeyDownNumber(event)" onkeypress="return onKeyPressNumber(event)" maxlength="5"
                                  value="#{creditTier.tenor}" style="text-align:right;" >
-                        <f:convertNumber pattern="#,##0" integerOnly="true" maxIntegerDigits="14"/>
-                        <p:ajax event="blur" update=":existingCreditDlgForm:resultTier:tierTenor"/>
                     </p:inputText>
                 </p:column>
                 <p:column styleClass="center">
@@ -293,9 +291,9 @@
                 </p:column>
                 <p:column styleClass="center">
                     <p:inputText id="splitLimit"
-                                 onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)"
+                                 onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)" maxlength="14"
                                  value="#{existingSplitLine.limit}" style="text-align:right;" >
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                         <p:ajax event="blur" listener="#{creditFacExisting.checkTotalLimit()}" update=":existingCreditDlgForm:spiltResult:splitLimit, :existingCreditDlgForm:saveCreditBtn"/>
                     </p:inputText>
                 </p:column>

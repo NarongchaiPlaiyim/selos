@@ -13,6 +13,7 @@
         <script type="text/javascript" language="javascript"
                 src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
         <h:outputScript library="js" name="custom.js" />
+        <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
     </h:head>
     <h:body>
         <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
@@ -53,7 +54,7 @@
                                                         styleClass="smaller"
                                                         process="@this"
                                                         actionListener="#{creditFacExisting.onRefreshExistingCredit()}"
-                                                        update="frmMain">
+                                                        update=":frmMain, :msgBoxSystemMessagePanel">
                                                     </p:commandButton>
                                                 </td>
 
@@ -111,12 +112,16 @@
                                                     <tr>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList)  : '1'}">
+                                                                fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList) :
+                                                                not empty borrowerCredit.existingSplitLineDetailViewList and fn:length(borrowerCredit.existingSplitLineDetailViewList) gt 0 ?
+                                                                fn:length(borrowerCredit.existingSplitLineDetailViewList)+1 : '1'}">
                                                             #{borrowerCredit.no}
                                                         </td>
                                                         <td class="left  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList) : '1'}">
+                                                                fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList) :
+                                                                not empty borrowerCredit.existingSplitLineDetailViewList and fn:length(borrowerCredit.existingSplitLineDetailViewList) gt 0 ?
+                                                                fn:length(borrowerCredit.existingSplitLineDetailViewList)+1 : '1'}">
                                                             #{borrowerCredit.accountName} <br/>
                                                             Acc No.: #{borrowerCredit.accountNumber} Suf. #{borrowerCredit.accountSuf}<br/>
                                                             Acc Status: #{borrowerCredit.existAccountStatus.description}
@@ -179,7 +184,9 @@
                                                         </td>
                                                         <td class=" top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList)  : '1'}">
+                                                                        fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList) :
+                                                                        not empty borrowerCredit.existingSplitLineDetailViewList and fn:length(borrowerCredit.existingSplitLineDetailViewList) gt 0 ?
+                                                                        fn:length(borrowerCredit.existingSplitLineDetailViewList)+1 : '1'}">
                                                             <p:commandButton icon="ui-icon-pencil" rendered="#{borrowerCredit.existingCreditFrom==1}"
                                                                              action="#{creditFacExisting.onEditCommercialCredit()}"
                                                                              process="@this"
@@ -502,7 +509,7 @@
                                                 <p:column headerText="">
                                                     <p:outputLabel value="#{borrowerRLOSCredit.accountName}"/><br/>
                                                     <p:outputLabel value="Acc No.: #{borrowerRLOSCredit.accountNumber}"/> Suff. <p:outputLabel value="#{borrowerRLOSCredit.accountSuf}"/><br/>
-                                                    <p:outputLabel value="Acc Status: #{borrowerRLOSCredit.accountStatus}" />
+                                                    <p:outputLabel value="Acc Status: #{borrowerRLOSCredit.accountStatus.description}" />
                                                 </p:column>
 
                                                 <p:column headerText="">
@@ -695,12 +702,16 @@
                                                                 <tr>
                                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                         rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList)  : '1'}">
+                                                                            fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList) :
+                                                                            not empty relatedCredit.existingSplitLineDetailViewList and fn:length(relatedCredit.existingSplitLineDetailViewList) gt 0 ?
+                                                                            fn:length(relatedCredit.existingSplitLineDetailViewList)+1 : '1'}">
                                                                         #{relatedCredit.no}
                                                                     </td>
                                                                     <td class="left  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                         rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList) : '1'}">
+                                                                            fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList) :
+                                                                            not empty relatedCredit.existingSplitLineDetailViewList and fn:length(relatedCredit.existingSplitLineDetailViewList) gt 0 ?
+                                                                            fn:length(relatedCredit.existingSplitLineDetailViewList)+1 : '1'}">
                                                                         #{relatedCredit.accountName} <br/>
                                                                         Acc No.: #{relatedCredit.accountNumber} Suff. #{relatedCredit.accountSuf}<br/>
                                                                         Acc Status: #{relatedCredit.existAccountStatus.description}
@@ -763,7 +774,9 @@
                                                                     </td>
                                                                     <td class=" top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                         rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList)  : '1'}">
+                                                                            fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList) :
+                                                                            not empty relatedCredit.existingSplitLineDetailViewList and fn:length(relatedCredit.existingSplitLineDetailViewList) gt 0 ?
+                                                                            fn:length(relatedCredit.existingSplitLineDetailViewList)+1 : '1'}">
                                                                         <p:commandButton icon="ui-icon-pencil" rendered="#{relatedCredit.existingCreditFrom==1}"
                                                                                          action="#{creditFacExisting.onEditCommercialCredit()}"
                                                                                          process="@this"
@@ -772,7 +785,7 @@
                                                                             <f:setPropertyActionListener value="related"  target="#{creditFacExisting.typeOfList}" />
                                                                             <f:setPropertyActionListener value="#{relatedCredit}"
                                                                                                          target="#{creditFacExisting.selectCreditDetail}"/>
-                                                                            <f:setPropertyActionListener value="#{rowIndex}"
+                                                                            <f:setPropertyActionListener value="#{i.index}"
                                                                                                          target="#{creditFacExisting.rowIndex}"/>
                                                                         </p:commandButton>
 
@@ -913,7 +926,7 @@
                                                 <p:column headerText="">
                                                     <p:outputLabel value="#{relatedRetailCredit.accountName}"/><br/>
                                                     <p:outputLabel value="Acc No.: #{relatedRetailCredit.accountNumber}"/> Suff. <p:outputLabel value="#{relatedRetailCredit.accountSuf}"/><br/>
-                                                    <p:outputLabel value="Acc Status: #{relatedRetailCredit.accountStatus}" />
+                                                    <p:outputLabel value="Acc Status: #{relatedRetailCredit.accountStatus.description}" />
                                                 </p:column>
 
                                                 <p:column headerText="">
@@ -1010,7 +1023,7 @@
                                                 <p:column headerText="">
                                                     <p:outputLabel value="#{relatedRLOSCredit.accountName}"/><br/>
                                                     <p:outputLabel value="Acc No.: #{relatedRLOSCredit.accountNumber}"/> Suff. <p:outputLabel value="#{relatedRLOSCredit.accountSuf}"/><br/>
-                                                    <p:outputLabel value="Acc Status: #{relatedRLOSCredit.accountStatus}" />
+                                                    <p:outputLabel value="Acc Status: #{relatedRLOSCredit.accountStatus.description}" />
                                                 </p:column>
 
                                                 <p:column headerText="">
@@ -1697,7 +1710,7 @@
             <ui:param name="formId" value="frmConfirmDeleteConditionDetail"/>
             <ui:param name="controller" value="#{creditFacExisting}"/>
             <ui:param name="action" value="onDeleteConditionDetail"/>
-            <ui:param name="update" value=":frmMain"/>
+            <ui:param name="update" value=":frmMain, :msgBoxSystemMessagePanel"/>
         </ui:include>
         <ui:include src="dialog/confirmDeleteDlg.xhtml">
             <ui:param name="id" value="confirmDeleteExistingCreditDetailDialog"/>
@@ -1705,7 +1718,7 @@
             <ui:param name="formId" value="frmConfirmDeleteExistingCreditDetail"/>
             <ui:param name="controller" value="#{creditFacExisting}"/>
             <ui:param name="action" value="onDeleteCommercialCredit"/>
-            <ui:param name="update" value=":frmMain"/>
+            <ui:param name="update" value=":frmMain, :msgBoxSystemMessagePanel"/>
         </ui:include>
 
         <ui:include src="dialog/confirmDeleteDlg.xhtml">
@@ -1714,7 +1727,7 @@
             <ui:param name="formId" value="frmConfirmDeleteExistingCollateral"/>
             <ui:param name="controller" value="#{creditFacExisting}"/>
             <ui:param name="action" value="onDeleteExistingCollateral"/>
-            <ui:param name="update" value=":frmMain"/>
+            <ui:param name="update" value=":frmMain, :msgBoxSystemMessagePanel"/>
         </ui:include>
 
         <ui:include src="dialog/confirmDeleteDlg.xhtml">
@@ -1723,27 +1736,27 @@
             <ui:param name="formId" value="frmConfirmDeleteExistingGuarantor"/>
             <ui:param name="controller" value="#{creditFacExisting}"/>
             <ui:param name="action" value="onDeleteExistingGuarantor"/>
-            <ui:param name="update" value=":frmMain"/>
+            <ui:param name="update" value=":frmMain, :msgBoxSystemMessagePanel"/>
         </ui:include>
 
-        <p:dialog id="existingCreditDialog" header="existing Credit Information" widgetVar="existingCreditDlg" height="550"
+        <p:dialog id="existingCreditDialog" header="existing Credit Information" widgetVar="existingCreditDlg" height="550" closable="false"
                   modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" >
             <ui:include src="dialog/existingCreditDetailDialog.xhtml"/>
         </p:dialog>
-        <p:dialog id="conditionDialog" header="Condition Information" widgetVar="conditionDlg">
+        <p:dialog id="conditionDialog" header="Condition Information" widgetVar="conditionDlg" closable="false">
             <ui:include src="dialog/existingConditionDetailDialog.xhtml"/>
         </p:dialog>
-        <p:dialog id="existingCollateraBorrowerlDialog" header="Existing Collateral Borrower Information" widgetVar="existingCollateralBorrowerDlg"
+        <p:dialog id="existingCollateraBorrowerlDialog" header="Existing Collateral Borrower Information" widgetVar="existingCollateralBorrowerDlg" closable="false"
                   modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" >
             <ui:include src="dialog/existingCollateralBorrowerDialog.xhtml" />
         </p:dialog>
 
-        <p:dialog id="existingCollateraRelatedlDialog" header="Existing Collateral Related Information" widgetVar="existingCollateralRelatedDlg"
+        <p:dialog id="existingCollateraRelatedlDialog" header="Existing Collateral Related Information" widgetVar="existingCollateralRelatedDlg" closable="false"
                   modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" >
             <ui:include src="dialog/existingCollateralRelatedDialog.xhtml" />
         </p:dialog>
 
-        <p:dialog id="existingGuarantorDialog" header="existing Collateral Information" widgetVar="existingGuarantorDlg"
+        <p:dialog id="existingGuarantorDialog" header="existing Collateral Information" widgetVar="existingGuarantorDlg" closable="false"
                   modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" >
             <ui:include src="dialog/existingGuarantorDetailDialog.xhtml" />
         </p:dialog>

@@ -7,6 +7,7 @@ import com.clevel.selos.model.db.working.NewGuarantorCredit;
 import com.clevel.selos.model.db.working.NewGuarantorDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -27,13 +28,14 @@ public class NewGuarantorRelationDAO extends GenericDAO<NewGuarantorCredit, Long
         log.info("getListGuarantorRelationByNewGuarantor. (NewGuarantorDetail: {})", newGuarantorDetail.getId());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newGuarantorDetail", newGuarantorDetail));
+        criteria.setFetchMode("newGuarantorDetail", FetchMode.LAZY);
         List<NewGuarantorCredit> newGuarantorCreditList = (List<NewGuarantorCredit>)criteria.list();
         log.info("getList. (result size: {})", newGuarantorCreditList.size());
 
         return newGuarantorCreditList;
 
-
     }
+
     public List<NewGuarantorCredit> getListByWorkCase(WorkCase workCase){
         Criteria criteria = createCriteria();
         List<NewGuarantorCredit> newGuarantorCreditList = new ArrayList<NewGuarantorCredit>();
@@ -42,12 +44,11 @@ public class NewGuarantorRelationDAO extends GenericDAO<NewGuarantorCredit, Long
             for(NewGuarantorDetail newGuarantorDetail : newCreditFacility.getNewGuarantorDetailList()){
                 criteria.add(Restrictions.eq("newGuarantorDetail", newGuarantorDetail));
             }
+            criteria.setFetchMode("newGuarantorDetail", FetchMode.LAZY);
             newGuarantorCreditList = criteria.list();
         }
 
         return newGuarantorCreditList;
     }
-
-
 
 }
