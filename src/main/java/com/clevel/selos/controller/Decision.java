@@ -145,8 +145,6 @@ public class Decision implements Serializable {
 
     //Main Model View
     private DecisionView decisionView;
-    private FollowUpConditionView followUpConditionView;
-    private ApprovalHistory approvalHistory;
 
     private SpecialProgram specialProgramBasicInfo;
     private TCGView tcgView;
@@ -230,10 +228,14 @@ public class Decision implements Serializable {
     private List<ProposeCreditDetailView> guarantorCreditTypeList;
     private List<ProposeCreditDetailView> selectedGuarantorCrdTypeItems;
 
-    // FollowUp Condition
+    // Follow Up Condition
+    private FollowUpConditionView followUpConditionView;
     private int rowIndexFollowUpCondition;
 
-    // List one time query on init
+    // Approval History
+    private ApprovalHistoryView approvalHistoryView;
+
+    // List One Time Query on init
     private List<PrdGroupToPrdProgram> _prdGroupToPrdProgramAll;
     private List<PrdGroupToPrdProgram> _prdGroupToPrdProgramPropose;
 
@@ -435,15 +437,13 @@ public class Decision implements Serializable {
             guarantorList = new ArrayList<CustomerInfoView>();
         // ================================================== //
 
+        followUpConditionView = new FollowUpConditionView();
+
+        approvalHistoryView = decisionControl.getCurrentUserApprove();
+
         // Initial sequence number credit
         seq = 1;
         hashSeqCredit = new HashMap<Integer, Integer>();
-
-        followUpConditionView = new FollowUpConditionView();
-        approvalHistory = new ApprovalHistory();
-        approvalHistory.setAction("Approve CA");
-        approvalHistory.setApprover(decisionControl.getApprover());
-
     }
 
     public void onRetrievePricingFee() {
@@ -1093,6 +1093,7 @@ public class Decision implements Serializable {
 
     public void onSave() {
         log.debug("onSave()");
+        decisionControl.saveDecision(workCaseId);
         exSummaryControl.calForDecision(workCaseId);
     }
 
@@ -1226,12 +1227,12 @@ public class Decision implements Serializable {
         this.followUpConditionView = followUpConditionView;
     }
 
-    public ApprovalHistory getApprovalHistory() {
-        return approvalHistory;
+    public ApprovalHistoryView getApprovalHistoryView() {
+        return approvalHistoryView;
     }
 
-    public void setApprovalHistory(ApprovalHistory approvalHistory) {
-        this.approvalHistory = approvalHistory;
+    public void setApprovalHistoryView(ApprovalHistoryView approvalHistoryView) {
+        this.approvalHistoryView = approvalHistoryView;
     }
 
     public NewCreditDetailView getSelectedApproveCredit() {

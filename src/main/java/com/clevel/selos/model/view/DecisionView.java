@@ -85,7 +85,7 @@ public class DecisionView implements Serializable {
     private BigDecimal guarantorBA;
     private String reasonForReduction;
 
-    private List<ApprovalHistory> approvalHistoryList;
+    private List<ApprovalHistoryView> approvalHistoryList;
 
     public DecisionView() {
     }
@@ -578,11 +578,11 @@ public class DecisionView implements Serializable {
         this.reasonForReduction = reasonForReduction;
     }
 
-    public List<ApprovalHistory> getApprovalHistoryList() {
+    public List<ApprovalHistoryView> getApprovalHistoryList() {
         return approvalHistoryList;
     }
 
-    public void setApprovalHistoryList(List<ApprovalHistory> approvalHistoryList) {
+    public void setApprovalHistoryList(List<ApprovalHistoryView> approvalHistoryList) {
         this.approvalHistoryList = approvalHistoryList;
     }
 
