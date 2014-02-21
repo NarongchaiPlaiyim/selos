@@ -172,7 +172,7 @@ public class CreditFacProposeControl extends BusinessControl {
                     List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
                     if (newGuarantorDetails.size() > 0) {
                         log.debug("newGuarantorDetails:: {}", newGuarantorDetails.size());
-                        List<NewGuarantorDetailView> newGuarantorDetailViewList = newGuarantorDetailTransform.transformToView(newGuarantorDetails);
+                        List<NewGuarantorDetailView> newGuarantorDetailViewList = newGuarantorDetailTransform.transformToView(newGuarantorDetails,newCreditFacility.getWorkCase());
                         log.debug("newGuarantorDetailViewList : {}", newGuarantorDetailViewList);
                         newCreditFacilityView.setNewGuarantorDetailViewList(newGuarantorDetailViewList);
                     }
