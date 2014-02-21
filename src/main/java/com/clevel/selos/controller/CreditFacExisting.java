@@ -23,6 +23,7 @@ import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
+import com.rits.cloning.Cloner;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -502,33 +503,27 @@ public class CreditFacExisting implements Serializable {
         if(selectCreditDetail != null){
            // log.info("onEditCommercialCredit is " + selectCreditDetail.toString());
         }
+
+        ExistingCreditDetailView existingCreditDetailViewTmp = new ExistingCreditDetailView();
+        if(typeOfList.equals("borrower")){
+            existingCreditDetailViewTmp = existingCreditFacilityView.getBorrowerComExistingCredit().get(rowIndex);
+        } else if(typeOfList.equals("related")){
+            existingCreditDetailViewTmp = existingCreditFacilityView.getRelatedComExistingCredit().get(rowIndex);
+        }
         modeForButton = ModeForButton.EDIT;
         canSaveCreditDetail = false;
 
         existingCreditDetailView = new ExistingCreditDetailView();
-        existingCreditDetailView.setAccountName(selectCreditDetail.getAccountName());
-        existingCreditDetailView.setAccountNumber(selectCreditDetail.getAccountNumber());
-        existingCreditDetailView.setAccountSuf(selectCreditDetail.getAccountSuf());
-        existingCreditDetailView.setExistAccountStatus(selectCreditDetail.getExistAccountStatus());
-        existingCreditDetailView.setExistProductProgramView(selectCreditDetail.getExistProductProgramView());
-        existingCreditDetailView.setExistCreditTypeView(selectCreditDetail.getExistCreditTypeView());
-        existingCreditDetailView.setLimit(selectCreditDetail.getLimit());
-        existingCreditDetailView.setProductCode(selectCreditDetail.getProductCode());
-        existingCreditDetailView.setProjectCode(selectCreditDetail.getProjectCode());
-        existingCreditDetailView.setOutstanding(selectCreditDetail.getOutstanding());
-
-        existingCreditDetailView.setPcePercent(selectCreditDetail.getPcePercent());
-        existingCreditDetailView.setPceLimit(selectCreditDetail.getPceLimit());
-
-        existingSplitLineDetailViewList= selectCreditDetail.getExistingSplitLineDetailViewList();
-        existingCreditDetailView.setExistingSplitLineDetailViewList(selectCreditDetail.getExistingSplitLineDetailViewList());
-        existingCreditTierDetailViewList = selectCreditDetail.getExistingCreditTierDetailViewList();
-        existingCreditDetailView.setExistingCreditTierDetailViewList(selectCreditDetail.getExistingCreditTierDetailViewList());
+        Cloner cloner = new Cloner();
+        existingCreditDetailView = cloner.deepClone(existingCreditDetailViewTmp);
+        existingSplitLineDetailViewList= existingCreditDetailView.getExistingSplitLineDetailViewList();
+        existingCreditTierDetailViewList = existingCreditDetailView.getExistingCreditTierDetailViewList();
 
         onChangeProductProgram();
 
         CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
         if(Util.isTrue(creditType.getCanSplit())){
+            showSplitLine = false;
             BigDecimal totalLimit = existingCreditDetailView.getLimit();
             BigDecimal splitLimit = BigDecimal.ZERO;
             if(existingSplitLineDetailViewList!=null && existingSplitLineDetailViewList.size()>0){
@@ -545,6 +540,7 @@ public class CreditFacExisting implements Serializable {
             }
         } else {
             canSaveCreditDetail = true;
+            showSplitLine = false;
         }
 
         log.info("onEditCommercialCredit end ::: mode : {}", modeForButton);
@@ -1120,8 +1116,10 @@ public class CreditFacExisting implements Serializable {
         }
         log.info("onEditExistingCollateral 1 ");
 
-        existingCollateralDetailView = new ExistingCollateralDetailView();
         collateralCreditDetailViewList = new ArrayList<ExistingCreditDetailView>();
+
+        Cloner cloner = new Cloner();
+        existingCollateralDetailView = cloner.deepClone(selectCollateralDetail);
         existingCollateralDetailView.setCollateralType(selectCollateralDetail.getCollateralType());
         existingCollateralDetailView.setPotentialCollateral(selectCollateralDetail.getPotentialCollateral());
         existingCollateralDetailView.setRelation(selectCollateralDetail.getRelation());
@@ -1255,7 +1253,7 @@ public class CreditFacExisting implements Serializable {
                     if (existingCreditTypeDetail.isNoFlag()) {
                         existingCollateralDetailViewAdd.getExistingCreditTypeDetailViewList().add(existingCreditTypeDetail);
                         seqRelatedTemp = existingCreditTypeDetail.getNo();
-                        hashRelated.put(seqRelatedTemp, Integer.parseInt(hashRelated.get(seqRelatedTemp).toString()) + 1);
+                        hashRelated.put(seqRelatedTemp, 1);
                     }
                 }
                 existingCreditFacilityView.getRelatedCollateralList().add(existingCollateralDetailViewAdd);
@@ -1271,6 +1269,10 @@ public class CreditFacExisting implements Serializable {
                 ExistingCollateralDetailView borrowerCollateralDetailViewRow = borrowerExistingCollateralDetailViewList.get(rowIndex);
 
                 borrowerCollateralDetailViewRow.setExistingCreditTypeDetailViewList(new ArrayList<ExistingCreditTypeDetailView>());
+                borrowerCollateralDetailViewRow.setCollateralType(collateralType);
+                borrowerCollateralDetailViewRow.setPotentialCollateral(potentialCollateral);
+                borrowerCollateralDetailViewRow.setRelation(relation);
+                borrowerCollateralDetailViewRow.setMortgageType(mortgageType);
                 borrowerCollateralDetailViewRow.setOwner(existingCollateralDetailView.getOwner());
                 borrowerCollateralDetailViewRow.setAccountNumber(existingCollateralDetailView.getAccountNumber());
                 borrowerCollateralDetailViewRow.setCollateralLocation(existingCollateralDetailView.getCollateralLocation());
@@ -1327,6 +1329,10 @@ public class CreditFacExisting implements Serializable {
                 ExistingCollateralDetailView relatedCollateralDetailViewRow = relatedExistingCollateralDetailViewList.get(rowIndex);
 
                 relatedCollateralDetailViewRow.setExistingCreditTypeDetailViewList(new ArrayList<ExistingCreditTypeDetailView>());
+                relatedCollateralDetailViewRow.setCollateralType(collateralType);
+                relatedCollateralDetailViewRow.setPotentialCollateral(potentialCollateral);
+                relatedCollateralDetailViewRow.setRelation(relation);
+                relatedCollateralDetailViewRow.setMortgageType(mortgageType);
                 relatedCollateralDetailViewRow.setOwner(existingCollateralDetailView.getOwner());
                 relatedCollateralDetailViewRow.setAccountNumber(existingCollateralDetailView.getAccountNumber());
                 relatedCollateralDetailViewRow.setCollateralLocation(existingCollateralDetailView.getCollateralLocation());
@@ -1353,12 +1359,12 @@ public class CreditFacExisting implements Serializable {
                                 hashRelated.put(seqRelatedTemp, Integer.parseInt(hashRelated.get(seqRelatedTemp).toString()) + 1);
                             }
                         }*/
-                            hashRelated.put(seqRelatedTemp, Integer.parseInt(hashRelated.get(seqRelatedTemp).toString()) + 1);
+                            hashRelated.put(seqRelatedTemp, 1);
                             relatedCollateralDetailViewRow.getExistingCreditTypeDetailViewList().add(existingCreditTypeDetailViewList.get(i));
 
                         } else if (existingCreditTypeDetailViewList.get(i).isNoFlag() == false) {
-                            if (Integer.parseInt(hashRelated.get(i).toString()) > 0) {
-                                hashRelated.put(seqRelatedTemp, Integer.parseInt(hashRelated.get(i).toString()) - 1);
+                            if (Integer.parseInt(hashRelated.get(seqRelatedTemp).toString()) > 0) {
+                                hashRelated.put(seqRelatedTemp, 0);
                             }
                         }
                     }
@@ -1487,6 +1493,9 @@ public class CreditFacExisting implements Serializable {
 
         modeForButton = ModeForButton.EDIT;
         existingGuarantorDetailView = new ExistingGuarantorDetailView();
+
+        Cloner cloner = new Cloner();
+        existingGuarantorDetailView = cloner.deepClone(selectGuarantorDetail);
 
         existingGuarantorDetailView.setTcgLgNo(selectGuarantorDetail.getTcgLgNo());
         existingGuarantorDetailView.setGuarantorName(selectGuarantorDetail.getGuarantorName());

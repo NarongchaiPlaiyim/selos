@@ -439,7 +439,7 @@ public class Decision implements Serializable {
 
         followUpConditionView = new FollowUpConditionView();
 
-        approvalHistoryView = decisionControl.getCurrentUserApprove();
+        approvalHistoryView = new ApprovalHistoryView();
 
         // Initial sequence number credit
         seq = 1;

@@ -44,6 +44,8 @@ public class BaseController implements Serializable {
     private int qualitativeType;
     private List<User> abdmUserList;
     private List<User> zmUserList;
+    private List<User> rmUserList;
+    private List<User> ghUserList;
 
     private User user;
     //private User abdm;
@@ -202,6 +204,8 @@ public class BaseController implements Serializable {
         zmEndorseUserId = "";
         zmEndorseRemark = "";
         zmUserList = fullApplicationControl.getZMUserList();
+        rmUserList = fullApplicationControl.getRMUserList();
+        ghUserList = fullApplicationControl.getHeadUserList();
         log.debug("onOpenSubmitZM ::: zmUserList size : {}", zmUserList.size());
     }
 
@@ -407,5 +411,21 @@ public class BaseController implements Serializable {
 
     public void setRequestAppraisal(int requestAppraisal) {
         this.requestAppraisal = requestAppraisal;
+    }
+
+    public List<User> getRmUserList() {
+        return rmUserList;
+    }
+
+    public void setRmUserList(List<User> rmUserList) {
+        this.rmUserList = rmUserList;
+    }
+
+    public List<User> getGhUserList() {
+        return ghUserList;
+    }
+
+    public void setGhUserList(List<User> ghUserList) {
+        this.ghUserList = ghUserList;
     }
 }
