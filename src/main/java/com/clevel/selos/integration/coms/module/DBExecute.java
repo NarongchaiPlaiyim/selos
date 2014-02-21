@@ -562,6 +562,7 @@ public class DBExecute implements Serializable {
                         .concat(condoDistrict).concat(SPACE)
                         .concat(city).concat(SPACE)
                         .concat(provName);
+                log.debug("-- address result : {}", address);
             }
             log.debug("address result : {}", address);
             rs.close();
