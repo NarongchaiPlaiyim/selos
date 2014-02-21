@@ -158,17 +158,9 @@ public class AppraisalAppointment implements Serializable {
             stepId = Long.valueOf(""+session.getAttribute("stepId"));
             log.debug("-- stepId[{}]", stepId);
 
-            if(stepId != StepValue.PRESCREEN_MAKER.value() && stepId != StepValue.FULLAPP_BDM_SSO_ABDM.value()){
+            if(stepId != StepValue.REQUEST_APPRAISAL.value()){
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
-            } else {
-                if(stepId == StepValue.PRESCREEN_MAKER.value()){
-                    workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePrescreenId"));
-                    log.debug("-- workCasePreScreenId : [{}]", workCasePreScreenId);
-                }else if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){
-                    workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-                    log.debug("-- workCaseId[{}]", workCaseId);
-                }
             }
         } else {
             log.debug("preRender ::: workCaseId is null.");
@@ -180,31 +172,39 @@ public class AppraisalAppointment implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("-- onCreation.");
-        preRender();
-        init();
-        appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId, workCasePreScreenId);
-        if(!Util.isNull(appraisalView)){
-            appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
-            if(Util.isZero(appraisalDetailViewList.size())){
-                appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
-            }
-            appraisalContactDetailView = appraisalView.getAppraisalContactDetailView();
-            if(Util.isNull(appraisalContactDetailView)){
-                appraisalContactDetailView = new AppraisalContactDetailView();
-            }
+        //preRender();
+        HttpSession session = FacesUtil.getSession(true);
+        boolean canRender = false;
+        if(!Util.isNull(session.getAttribute("workCaseId")) && Long.valueOf(""+session.getAttribute("workCaseId")) != 0){
+            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+            canRender = true;
+        }else if(!Util.isNull(session.getAttribute("workCasePreScreenId")) && Long.valueOf(""+session.getAttribute("workCasePreScreenId")) != 0){
+            workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
+            canRender = true;
+        }
 
-//                contactRecordDetailViewList = appraisalView.getContactRecordDetailViewList();
-//                for(ContactRecordDetailView view : contactRecordDetailViewList){
-//                    log.debug("-- ContactRecordDetailView.id[{}]", view.getId());
-//                }
-            updateContractFlag(appraisalContactDetailView);
-        } else {
-            appraisalView = new AppraisalView();
-            log.debug("-- AppraisalView[New] created");
-            appraisalContactDetailView = new AppraisalContactDetailView();
-            log.debug("-- AppraisalContactDetailView[New] created");
-            appraisalContactDetailView = new AppraisalContactDetailView();
-            log.debug("-- AppraisalContactDetailView[New] created");
+        if(canRender){
+            init();
+            appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId, workCasePreScreenId);
+            if(!Util.isNull(appraisalView)){
+                appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
+                if(Util.isZero(appraisalDetailViewList.size())){
+                    appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+                }
+                appraisalContactDetailView = appraisalView.getAppraisalContactDetailView();
+                if(Util.isNull(appraisalContactDetailView)){
+                    appraisalContactDetailView = new AppraisalContactDetailView();
+                }
+
+                updateContractFlag(appraisalContactDetailView);
+            } else {
+                appraisalView = new AppraisalView();
+                log.debug("-- AppraisalView[New] created");
+                appraisalContactDetailView = new AppraisalContactDetailView();
+                log.debug("-- AppraisalContactDetailView[New] created");
+                appraisalContactDetailView = new AppraisalContactDetailView();
+                log.debug("-- AppraisalContactDetailView[New] created");
+            }
         }
     }
 

@@ -62,14 +62,35 @@ public class FullApplicationControl extends BusinessControl {
 
     public List<User> getZMUserList(){
         User currentUser = getCurrentUser();
-        Role zmRole = roleDAO.findById(RoleValue.ZM.id());
 
-        List<User> zmUserList = userDAO.findUserListByRole(currentUser, zmRole);
+        List<User> zmUserList = userDAO.findUserZoneList(currentUser);
         if(zmUserList == null){
             zmUserList = new ArrayList<User>();
         }
 
         return zmUserList;
+    }
+
+    public List<User> getRMUserList(){
+        User currentUser = getCurrentUser();
+
+        List<User> rmUserList = userDAO.findUserRegionList(currentUser);
+        if(rmUserList == null){
+            rmUserList = new ArrayList<User>();
+        }
+
+        return rmUserList;
+    }
+
+    public List<User> getHeadUserList(){
+        User currentUser = getCurrentUser();
+
+        List<User> ghUserList = userDAO.findUserHeadList(currentUser);
+        if(ghUserList == null){
+            ghUserList = new ArrayList<User>();
+        }
+
+        return ghUserList;
     }
 
     public void assignToABDM(String abdmUserId, String queueName, long workCaseId) throws Exception {
@@ -78,6 +99,22 @@ public class FullApplicationControl extends BusinessControl {
 
     public void submitToZM(String zmUserId, String queueName, long workCaseId) throws Exception {
         bpmExecutor.submitZM(workCaseId, queueName, zmUserId, ActionCode.SUBMIT_TO_ZM.getVal());
+    }
+
+    public void requestAppraisalBDM(long workCasePreScreenId, long workCaseId) throws Exception{
+        //update request appraisal flag
+        if(workCasePreScreenId != 0){
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            workCasePrescreen.setRequestAppraisal(1);
+            workCasePrescreenDAO.persist(workCasePrescreen);
+        } else if(workCaseId != 0) {
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setRequestAppraisal(1);
+            workCaseDAO.persist(workCase);
+        } else {
+            log.error("exception while Request Appraisal (BDM), can not find workcase or workcaseprescreen.");
+            throw new Exception("exception while Request Appraisal, can not find case.");
+        }
     }
 
     public void requestAppraisal(long workCasePreScreenId, long workCaseId) throws Exception{

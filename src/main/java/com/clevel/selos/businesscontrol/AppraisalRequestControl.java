@@ -2,6 +2,8 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ProposeType;
+import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -93,7 +95,8 @@ public class AppraisalRequestControl extends BusinessControl {
                 log.debug("getAppraisalRequest ::: newCollateralList : {}", newCollateralList);
                 List<NewCollateral> newCollateralListForAdd = new ArrayList<NewCollateral>();
                 for(NewCollateral newCollateral : newCollateralList){
-                    newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
+                    log.debug("getAppraisalRequest ::: getCollateralHead newCollateral.getId : {}", newCollateral.getId());
+                    newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByCollateralProposeTypeRequestAppraisalType(newCollateral.getId(), ProposeType.P, RequestAppraisalValue.NOT_REQUEST));
                     newCollateralListForAdd.add(newCollateral);
                 }
                 appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralListForAdd);
@@ -116,11 +119,14 @@ public class AppraisalRequestControl extends BusinessControl {
         if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
             workCase = workCaseDAO.findById(workCaseId);
             workCasePrescreen = null;
+            newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
         }else if(!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
             workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             workCase = null;
+            newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
         }
 
+        log.debug("onSaveAppraisalRequest ::: newCreditFacility : {}");
         log.debug("onSaveAppraisalRequest ::: workCase : {}, workCasePrescreen : {}", workCase, workCasePrescreen);
 
         if(!Util.isNull(workCase) || !Util.isNull(workCasePrescreen)){
@@ -134,13 +140,6 @@ public class AppraisalRequestControl extends BusinessControl {
             log.debug("onSaveAppraisalRequest ::: before persist appraisal : {}", appraisal);
             appraisalDAO.persist(appraisal);
             log.debug("onSaveAppraisalRequest ::: after persist appraisal : {}", appraisal);
-
-            if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
-                newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-            }else if(!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
-                newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
-            }
-            log.debug("onSaveAppraisalRequest ::: newCreditFacility : {}");
 
             //check newCreditFacility is exist? else create new one
             if(Util.isNull(newCreditFacility)){
@@ -159,14 +158,16 @@ public class AppraisalRequestControl extends BusinessControl {
                 newCollateralList = new ArrayList<NewCollateral>();
             }
             //set flag 0 for all collateral
+            log.debug("onSaveAppraisalRequest ::: newCollateralList from database : {}", newCollateralList);
             for(NewCollateral newCollateral : newCollateralList){
                 newCollateralHeadList = safetyList(newCollateralHeadDAO.findByNewCollateralId(newCollateral.getId()));
                 for(NewCollateralHead newCollateralHead : newCollateralHeadList){
-                    newCollateralHead.setAppraisalRequest(0);
+                    newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
                 }
                 newCollateralHeadDAO.persist(newCollateralHeadList);
             }
 
+            //transform collateral head from view
             newCollateralList.clear();
             newCollateralList = safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, currentUser));
             log.debug("onSaveAppraisalRequest ::: before persist newCreditfacility : {}", newCreditFacility);
@@ -176,16 +177,6 @@ public class AppraisalRequestControl extends BusinessControl {
             log.debug("onSaveAppraisalRequest ::: before persist newCollateralList : {}", newCollateralList);
             newCollateralDAO.persist(newCollateralList);
             log.debug("onSaveAppraisalRequest ::: after persist newCollateralList : {}", newCollateralList);
-
-            /*for(NewCollateral newCollateral : newCollateralList){
-                newCollateralDAO.persist(newCollateral);
-                newCollateralHeadList = safetyList(newCollateral.getNewCollateralHeadList());
-                for(NewCollateralHead newCollateralHead : newCollateralHeadList){
-                    newCollateralHead.setNewCollateral(newCollateral);
-                    newCollateralHeadDAO.persist(newCollateralHead);
-                }
-            }*/
-
             log.info("-- onSaveAppraisalRequest end");
         }
     }

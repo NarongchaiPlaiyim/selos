@@ -2,7 +2,15 @@ package com.clevel.selos.model.db.working;
 
 import java.io.Serializable;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "wrk_mortgage_credit")
@@ -19,9 +27,9 @@ public class MortgageInfoCredit implements Serializable {
     @JoinColumn(name = "mortgage_info_id")
     private MortgageInfo mortgageInfo;
 
-    @OneToOne
-    @JoinColumn(name = "new_credit_detail_id")
-    private NewCreditDetail newCreditDetail;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "new_collateral_credit_id")
+    private NewCollateralCredit newCollateralCredit;
 
     public MortgageInfoCredit() {
     	
@@ -43,12 +51,12 @@ public class MortgageInfoCredit implements Serializable {
 		this.mortgageInfo = mortgageInfo;
 	}
 
-	public NewCreditDetail getNewCreditDetail() {
-		return newCreditDetail;
+	public NewCollateralCredit getNewCollateralCredit() {
+		return newCollateralCredit;
 	}
-
-	public void setNewCreditDetail(NewCreditDetail newCreditDetail) {
-		this.newCreditDetail = newCreditDetail;
+	
+	public void setNewCollateralCredit(NewCollateralCredit newCollateralCredit) {
+		this.newCollateralCredit = newCollateralCredit;
 	}
-    
+	
 }

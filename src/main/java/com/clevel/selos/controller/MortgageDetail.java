@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -39,7 +40,7 @@ import com.clevel.selos.model.view.MortgageInfoAttorneySelectView;
 import com.clevel.selos.model.view.MortgageInfoCollOwnerView;
 import com.clevel.selos.model.view.MortgageInfoCollSubView;
 import com.clevel.selos.model.view.MortgageInfoView;
-import com.clevel.selos.model.view.NewCreditDetailSimpleView;
+import com.clevel.selos.model.view.CreditDetailSimpleView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
@@ -90,7 +91,7 @@ public class MortgageDetail implements Serializable {
 	private MortgageInfoView mortgageInfoView;
 	private List<MortgageInfoCollOwnerView> collOwners;
 	private List<MortgageInfoCollSubView> collSubs;
-	private List<NewCreditDetailSimpleView> credits;
+	private List<CreditDetailSimpleView> credits;
 	
 	private AttorneySelectDataModel attorneySelectDataModel;
 	private MortgageInfoAttorneySelectView selectedAttorney;
@@ -237,8 +238,12 @@ public class MortgageDetail implements Serializable {
 	public List<MortgageInfoCollSubView> getCollSubs() {
 		return collSubs;
 	}
-	public List<NewCreditDetailSimpleView> getCredits() {
+	public List<CreditDetailSimpleView> getCredits() {
 		return credits;
+	}
+	public String getAgeYearRange() {
+		Calendar calendar = Calendar.getInstance(new Locale("th","TH"));
+		return "1900:"+calendar.get(Calendar.YEAR);
 	}
 	/*
 	 * Action
@@ -275,7 +280,11 @@ public class MortgageDetail implements Serializable {
 			if (stepId <= 0) {
 				redirectPage = "/site/inbox.jsf";
 			} else {
-				return;
+				if (mortgageId <= 0) {
+					redirectPage = "/site/mortgageSummary.jsf";
+				} else {
+					return;
+				}
 			}
 		}
 		try {

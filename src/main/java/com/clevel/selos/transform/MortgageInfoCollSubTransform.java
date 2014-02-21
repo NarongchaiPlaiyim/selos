@@ -63,8 +63,7 @@ public class MortgageInfoCollSubTransform extends Transform {
 		builder.setLength(0);
 		
 		view.setTitleDeed(subModel.getTitleDeed());
-		//TODO Mortgage Detail
-		view.setMortgageDetail("");
+		view.setMortgageDetail(subModel.getAddress());
 		
 		List<NewCollateralSubRelated> relateds = subModel.getNewCollateralSubRelatedList();
 		if (relateds != null && !relateds.isEmpty()) {

@@ -275,8 +275,8 @@ public class CreditFacExistingControl extends BusinessControl {
                 if(existingSplitLineDetailListDel!=null && existingSplitLineDetailListDel.size()>0){
                     existingSplitLineDetailDAO.delete(existingSplitLineDetailListDel);
                 }
-                existingCreditDetailDAO.delete(relatedComExistingCreditListDel);
             }
+            existingCreditDetailDAO.delete(relatedComExistingCreditListDel);
         }
 
         if(existingCreditFacilityView.getRelatedComExistingCredit()!=null && existingCreditFacilityView.getRelatedComExistingCredit().size()>0){
@@ -403,7 +403,7 @@ public class CreditFacExistingControl extends BusinessControl {
     }
 
     public ExistingCreditFacilityView onFindExistingCreditFacility(Long workCaseId) {
-        log.info("onSaveExistingCreditFacility begin");
+        log.info("onFindExistingCreditFacility begin");
 
         log.info("workCaseId {} ", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);

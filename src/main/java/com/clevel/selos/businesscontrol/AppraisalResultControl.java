@@ -121,10 +121,15 @@ public class AppraisalResultControl extends BusinessControl {
         newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByTypeA(newCreditFacility));
 
         if(newCollateralList.size() > 0){
+            log.debug("onSaveAppraisalResult ::: clearCollateralData");
             clearDB(newCollateralList);
+            log.debug("onSaveAppraisalResult ::: newCollateralList for delete : {}", newCollateralList);
             newCollateralDAO.delete(newCollateralList);
+
             newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
+            log.debug("onSaveAppraisalResult ::: saveCollateralData : newCollateralViewList : {}", newCollateralViewList);
             insertToDB(newCollateralViewList, currentUser);
+            log.debug("onSaveAppraisalResult ::: newCollateralList for save : {}", newCollateralList);
             updateWRKNewColl(newCollateralViewList, currentUser);
         } else {
             newCollateralDAO.delete(newCollateralList);
