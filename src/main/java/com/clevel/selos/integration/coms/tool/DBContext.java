@@ -50,10 +50,9 @@ public class DBContext implements Serializable {
         log.debug("DB URL: {}, User: {}, Password: HIDDEN", jdbcURL, user);
 
         try {
-            //Edited by Chai
-//            if (Util.isTrue(encryptionEnable)) {
-//                password = encryptionService.decrypt(Base64.decodeBase64(password));
-//            }
+            if (Util.isTrue(encryptionEnable)) {
+                password = encryptionService.decrypt(Base64.decodeBase64(password));
+            }
             conn = DriverManager.getConnection(jdbcURL, user, password);
         } catch (Exception e) {
             log.error("Exception while connect to database!", e);
