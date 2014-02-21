@@ -32,7 +32,7 @@ public class NewGuarantorRelationDAO extends GenericDAO<NewGuarantorCredit, Long
         List<NewGuarantorCredit> newGuarantorCreditList = (List<NewGuarantorCredit>)criteria.list();
         log.info("getList. (result size: {})", newGuarantorCreditList.size());
 
-        return newGuarantorCreditList;
+        return criteria.list();
 
     }
 
