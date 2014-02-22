@@ -441,6 +441,9 @@
                         <f:selectItems value="#{creditFacPropose.creditRequestTypeList}" var="creditRequest"
                                        itemLabel="#{creditRequest.name}"
                                        itemValue="#{creditRequest.id}"/>
+                        <p:ajax event="change"
+                                process="@this"
+                                update="@this"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -464,6 +467,9 @@
                         <f:selectItems value="#{creditFacPropose.countryList}" var="country"
                                        itemLabel="#{country.name}"
                                        itemValue="#{country.id}"/>
+                        <p:ajax event="change"
+                                process="@this"
+                                update="@this"/>
                     </p:selectOneMenu>
                 </td>
             </tr>

@@ -22,6 +22,9 @@
                            var="subCollateralTypeItem"
                            itemLabel="#{subCollateralTypeItem.description}"
                            itemValue="#{subCollateralTypeItem.id}"/>
+            <p:ajax event="change"
+                    process="@this"
+                    update="@this"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -84,6 +87,9 @@
                                        var="collateralOwnerUWItem"
                                        itemLabel="#{collateralOwnerUWItem.firstNameTh} #{collateralOwnerUWItem.lastNameTh}"
                                        itemValue="#{collateralOwnerUWItem.id}"/>
+                        <p:ajax event="change"
+                                process="@this"
+                                update="@this"/>
                     </p:selectOneMenu>
                 </td>
                 <td>
@@ -159,6 +165,9 @@
                                        var="mortgageTypeItem"
                                        itemLabel="#{mortgageTypeItem.mortgage}"
                                        itemValue="#{mortgageTypeItem.id}"/>
+                        <p:ajax event="change"
+                                process="@this"
+                                update="@this"/>
                     </p:selectOneMenu>
                 </td>
                 <td>
@@ -233,6 +242,9 @@
                                        var="relatedWithItem"
                                        itemLabel="#{relatedWithItem.titleDeed}"
                                        itemValue="#{relatedWithItem.id}"/>
+                        <p:ajax event="change"
+                                process="@this"
+                                update="@this"/>
                     </p:selectOneMenu>
                 </td>
                 <td>
