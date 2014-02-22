@@ -11,13 +11,14 @@ import com.sun.xml.internal.xsom.impl.scd.Iterators.Map;
 public class PreDisbursementView implements Serializable {
     private int approvedType = 0;
     
-    private boolean selectedTest = false;
-    private static String[] GROUP_NAMES = new String[] { "1", "2a", "2b" };
+    private boolean selectedTest2_1 = false;
+    private boolean selectedTest2_2 = false;
     
     private String remark;
     
     private Date submission_date;
     private Date return_date;
+       
    
     private HashMap<String, List<PreDisbursementDetailView>> preDisBursementDetailViewMap;
 
@@ -73,11 +74,39 @@ public class PreDisbursementView implements Serializable {
 		this.preDisBursementDetailViewMap = preDisBursementDetailViewMap;
 	}
 
-	public boolean isSelectedTest() {
-		return selectedTest;
+	public boolean isSelectedTest2_1() {
+		List<PreDisbursementDetailView> preDisbursementDetailViewList = this.preDisBursementDetailViewMap.get("2.1");
+		for (PreDisbursementDetailView preDisbursementDetailView : preDisbursementDetailViewList){
+			if (preDisbursementDetailView.getValue() > 0)
+				return true;
+		}
+		return selectedTest2_1;
 	}
 
-	public void setSelectedTest(boolean selectedTest) {
-		this.selectedTest = selectedTest;
+	public void setSelectedTest2_1(boolean selectedTest2_1) {
+		List<PreDisbursementDetailView> preDisbursementDetailViewList = this.preDisBursementDetailViewMap.get("2.1");
+		for (PreDisbursementDetailView preDisbursementDetailView : preDisbursementDetailViewList){
+			preDisbursementDetailView.setSubmission_date(null);
+			preDisbursementDetailView.setValue(0);
+		}
+		this.selectedTest2_1 = selectedTest2_1;
+	}
+
+	public boolean isSelectedTest2_2() {
+		List<PreDisbursementDetailView> preDisbursementDetailViewList = this.preDisBursementDetailViewMap.get("2.2");
+		for (PreDisbursementDetailView preDisbursementDetailView : preDisbursementDetailViewList){
+			if (preDisbursementDetailView.getValue() > 0)
+				return true;
+		}
+		return selectedTest2_2;
+	}
+
+	public void setSelectedTest2_2(boolean selectedTest2_2) {
+		List<PreDisbursementDetailView> preDisbursementDetailViewList = this.preDisBursementDetailViewMap.get("2.2");
+		for (PreDisbursementDetailView preDisbursementDetailView : preDisbursementDetailViewList){
+			preDisbursementDetailView.setSubmission_date(null);
+			preDisbursementDetailView.setValue(0);
+		}
+		this.selectedTest2_2 = selectedTest2_2;
 	}
 }

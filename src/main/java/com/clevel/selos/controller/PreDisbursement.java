@@ -76,32 +76,16 @@ public class PreDisbursement implements Serializable {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 			user = (User) session.getAttribute("user");
-			//preDisbursementView = this.preDisbursementControl.getPreDisbursementView(workCaseId);
+			preDisbursementView = this.preDisbursementControl.getPreDisbursementView(workCaseId);
 		}
 
     }
+  
 
-    public void onRadioChange(){
-    	if (this.preDisbursementView.getApprovedType() == 0){
-    		this.preDisbursementView.setApprovedType(1);
-    	}else{
-    		this.preDisbursementView.setApprovedType(0);
-    	}
-    }
-    
+    public void onSavePreDisbursement() {
+        this.preDisbursementControl.savePreDisbursement(preDisbursementView, workCaseId, user);
+        this.onCreation();
 
-    public void onSaveTcgInfo() {
-        //log.info("onSaveTcgInfo ::: ModeForDB  {}", modeForDB);
-        
-
-    }
-
-
-    public void onCancelTcgInfo() {
-        //modeForDB = ModeForDB.CANCEL_DB;
-        log.info("onCancelTcgInfo ::: ");
-
-        onCreation();
     }
    
     public ApproveType getApproveType() {

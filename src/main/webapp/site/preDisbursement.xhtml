@@ -28,10 +28,10 @@
 					<ui:include src="include/header_logo.xhtml" />
 					<!-- End Header Logo -->
 					<!-- Start Header Detail -->
-					<ui:include src="include/header_detail.xhtml" />
+					<!-- ui:include src="include/header_detail.xhtml" /-->
 					<!-- End Header Detail -->
 					<!-- Start Menu -->
-					<ui:include src="include/menubar.xhtml" />
+					<!-- ui:include src="include/menubar.xhtml" /-->
 					<!-- End Menu -->
 					<div id="content_container">
 
@@ -107,112 +107,28 @@
 															value="#{msg.get('app.preDisbursement.checklist.label.basicCondition')}" />
 													</td>
 												</tr>
+												<ui:repeat
+													value="#{preDisbursement.preDisbursementView.preDisBursementDetailViewMap.get('1')}"
+													var="preDisBursementDetailView" varStatus="rowSectionIndex">
 
-												<tr>
-													<td></td>
-													<td class="left"><h:outputText
-															value="#{msg.get('app.preDisbursement.checklist.label.basicCond.1')}" />
-													</td>
-													<td class="center"><h:outputText
-															value="#{'dd/MM/yyyy'}" /></td>
-													<td class="center"><p:selectOneRadio
-															styleClass="center"
-															value="#{preDisbursement.preDisbursementView.approvedType}">
-															<f:selectItem itemLabel="" itemValue="0" />
-															<f:selectItem itemLabel="" itemValue="1" />
-														</p:selectOneRadio></td>
+													<tr>
+														<td></td>
+														<td class="left"><h:outputText
+																value="#{preDisBursementDetailView.description}" /></td>
+														<td class="center"><h:outputText
+																value="#{preDisBursementDetailView.submission_date}">
+																<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH" />
+															</h:outputText></td>
+														<td style="width: 80px;" class="center"><p:selectOneRadio
+																styleClass="nolabel_radio"
+																value="#{preDisBursementDetailView.value}">
+																<f:selectItem itemLabel="" itemValue="1" />
+																<f:selectItem itemLabel="" itemValue="2" />
+															</p:selectOneRadio></td>
 
-												</tr>
+													</tr>
 
-												<tr>
-													<td></td>
-													<td class="left"><h:outputText
-															value="#{msg.get('app.preDisbursement.checklist.label.basicCond.2')}" />
-													</td>
-													<td class="center"><h:outputText
-															value="#{'dd/MM/yyyy'}" /></td>
-													<td class="center"><p:selectOneRadio
-															styleClass="center"
-															value="#{preDisbursement.preDisbursementView.approvedType}">
-															<f:selectItem itemLabel="" itemValue="0" />
-															<f:selectItem itemLabel="" itemValue="1" />
-														</p:selectOneRadio></td>
-												</tr>
-
-												<tr>
-													<td></td>
-													<td class="left"><h:outputText
-															value="#{msg.get('app.preDisbursement.checklist.label.basicCond.3')}" />
-													</td>
-													<td class="center"><h:outputText
-															value="#{'dd/MM/yyyy'}" /></td>
-													<td class="center"><p:selectOneRadio
-															styleClass="center"
-															value="#{preDisbursement.preDisbursementView.approvedType}">
-															<f:selectItem itemLabel="" itemValue="0" />
-															<f:selectItem itemLabel="" itemValue="1" />
-														</p:selectOneRadio></td>
-												</tr>
-
-												<tr>
-													<td></td>
-													<td class="left"><h:outputText
-															value="#{msg.get('app.preDisbursement.checklist.label.basicCond.4')}" />
-													</td>
-													<td class="center"><h:outputText
-															value="#{'dd/MM/yyyy'}" /></td>
-													<td class="center"><p:selectOneRadio
-															styleClass="center"
-															value="#{preDisbursement.preDisbursementView.approvedType}">
-															<f:selectItem itemLabel="" itemValue="0" />
-															<f:selectItem itemLabel="" itemValue="1" />
-														</p:selectOneRadio></td>
-												</tr>
-
-												<tr>
-													<td></td>
-													<td class="left"><h:outputText
-															value="#{msg.get('app.preDisbursement.checklist.label.basicCond.5')}" />
-													</td>
-													<td class="center"><h:outputText
-															value="#{'dd/MM/yyyy'}" /></td>
-													<td class="center"><p:selectOneRadio
-															styleClass="center"
-															value="#{preDisbursement.preDisbursementView.approvedType}">
-															<f:selectItem itemLabel="" itemValue="0" />
-															<f:selectItem itemLabel="" itemValue="1" />
-														</p:selectOneRadio></td>
-												</tr>
-
-												<tr>
-													<td></td>
-													<td class="left"><h:outputText
-															value="#{msg.get('app.preDisbursement.checklist.label.basicCond.6')}" />
-													</td>
-													<td class="center"><h:outputText
-															value="#{'dd/MM/yyyy'}" /></td>
-													<td class="center"><p:selectOneRadio
-															styleClass="center"
-															value="#{preDisbursement.preDisbursementView.approvedType}">
-															<f:selectItem itemLabel="" itemValue="0" />
-															<f:selectItem itemLabel="" itemValue="1" />
-														</p:selectOneRadio></td>
-												</tr>
-
-												<tr>
-													<td></td>
-													<td class="left"><h:outputText
-															value="#{msg.get('app.preDisbursement.checklist.label.basicCond.7')}" />
-													</td>
-													<td class="center"><h:outputText
-															value="#{'dd/MM/yyyy'}" /></td>
-													<td class="center"><p:selectOneRadio
-															styleClass="center"
-															value="#{preDisbursement.preDisbursementView.approvedType}">
-															<f:selectItem itemLabel="" itemValue="0" />
-															<f:selectItem itemLabel="" itemValue="1" />
-														</p:selectOneRadio></td>
-												</tr>
+												</ui:repeat>
 
 
 												<tr style="background-color: #e6e6e6">
@@ -225,95 +141,71 @@
 
 												<tr style="background-color: #e6e6e6">
 													<td class="center"><h:selectBooleanCheckbox
-															value="#{preDisbursement.preDisbursementView.selectedTest}" />
+															value="#{preDisbursement.preDisbursementView.selectedTest2_1}">
+																<p:ajax event="change" update="frmMain" />
+															</h:selectBooleanCheckbox>
 													</td>
 													<td colspan="4" class="left title"><h:outputText
 															value="#{msg.get('app.preDisbursement.checklist.label.smartbizCond.1')}" />
 													</td>
 												</tr>
 
-												<tr>
-													<td></td>
-													<td class="left"><h:outputText
-															value="#{msg.get('app.preDisbursement.checklist.label.smartbizCond.1a')}" />
-													</td>
-													<td class="center"><h:outputText
-															value="#{'dd/MM/yyyy'}" /></td>
-													<td class="center"><p:selectOneRadio
-															styleClass="center"
-															value="#{preDisbursement.preDisbursementView.approvedType}">
-															<f:selectItem itemLabel="" itemValue="0" />
-															<f:selectItem itemLabel="" itemValue="1" />
-														</p:selectOneRadio></td>
-												</tr>
+												<ui:repeat
+													value="#{preDisbursement.preDisbursementView.preDisBursementDetailViewMap.get('2.1')}"
+													var="preDisBursementDetailView" varStatus="rowSectionIndex">
 
-												<tr>
-													<td></td>
-													<td class="left"><h:outputText
-															value="#{msg.get('app.preDisbursement.checklist.label.smartbizCond.1b')}" />
-													</td>
-													<td class="center"><h:outputText
-															value="#{'dd/MM/yyyy'}" /></td>
-													<td class="center"><p:selectOneRadio
-															styleClass="center"
-															value="#{preDisbursement.preDisbursementView.approvedType}">
-															<f:selectItem itemLabel="" itemValue="0" />
-															<f:selectItem itemLabel="" itemValue="1" />
-														</p:selectOneRadio></td>
-												</tr>
+													<tr>
+														<td></td>
+														<td class="left"><h:outputText
+																value="#{preDisBursementDetailView.description}" /></td>
+														<td class="center"><h:outputText
+																value="#{preDisBursementDetailView.submission_date}">
+																<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH" />
+															</h:outputText></td>
+														<td class="center"><p:selectOneRadio disabled="#{!preDisbursement.preDisbursementView.selectedTest2_1}"
+																styleClass="nolabel_radio"
+																value="#{preDisBursementDetailView.value}">
+																<f:selectItem itemLabel="" itemValue="1" />
+																<f:selectItem itemLabel="" itemValue="2" />
+															</p:selectOneRadio></td>
+
+													</tr>
+
+												</ui:repeat>
 
 												<tr style="background-color: #e6e6e6">
 													<td class="center"><h:selectBooleanCheckbox
-															value="#{preDisbursement.preDisbursementView.selectedTest}" />
+															value="#{preDisbursement.preDisbursementView.selectedTest2_2}">
+																<p:ajax event="change" update="frmMain" />
+															</h:selectBooleanCheckbox>
 													</td>
 													<td colspan="4" class="left title"><h:outputText
 															value="#{msg.get('app.preDisbursement.checklist.label.smartbizCond.2')}" />
 													</td>
 												</tr>
 
-												<tr>
-													<td></td>
-													<td class="left"><h:outputText
-															value="#{msg.get('app.preDisbursement.checklist.label.smartbizCond.2a')}" />
-													</td>
-													<td class="center"><h:outputText
-															value="#{'dd/MM/yyyy'}" /></td>
-													<td class="center"><p:selectOneRadio
-															styleClass="center"
-															value="#{preDisbursement.preDisbursementView.approvedType}">
-															<f:selectItem itemLabel="" itemValue="0" />
-															<f:selectItem itemLabel="" itemValue="1" />
-														</p:selectOneRadio></td>
-												</tr>
-												<tr>
-													<td></td>
-													<td class="left"><h:outputText
-															value="#{msg.get('app.preDisbursement.checklist.label.smartbizCond.2b')}" />
-													</td>
-													<td class="center"><h:outputText
-															value="#{'dd/MM/yyyy'}" /></td>
-													<td class="center"><p:selectOneRadio
-															styleClass="center"
-															value="#{preDisbursement.preDisbursementView.approvedType}">
-															<f:selectItem itemLabel="" itemValue="0" />
-															<f:selectItem itemLabel="" itemValue="1" />
-														</p:selectOneRadio></td>
-												</tr>
-												<tr>
-													<td></td>
-													<td class="left"><h:outputText
-															value="#{msg.get('app.preDisbursement.checklist.label.smartbizCond.2c')}" />
-													</td>
-													<td class="center"><h:outputText
-															value="#{'dd/MM/yyyy'}" /></td>
-													<td class="center"><p:selectOneRadio
-															styleClass="center"
-															value="#{preDisbursement.preDisbursementView.approvedType}">
-															<f:selectItem itemLabel="" itemValue="0" />
-															<f:selectItem itemLabel="" itemValue="1" />
-														</p:selectOneRadio></td>
-												</tr>
+												<ui:repeat
+													value="#{preDisbursement.preDisbursementView.preDisBursementDetailViewMap.get('2.2')}"
+													var="preDisBursementDetailView" varStatus="rowSectionIndex">
 
+													<tr>
+														<td></td>
+														<td class="left"><h:outputText
+																value="#{preDisBursementDetailView.description}" /></td>
+														<td class="center"><h:outputText
+																value="#{preDisBursementDetailView.submission_date}">
+																<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH" />
+															</h:outputText></td>
+														<td class="center"><p:selectOneRadio disabled="#{!preDisbursement.preDisbursementView.selectedTest2_2}"
+																styleClass="nolabel_radio"
+																value="#{preDisBursementDetailView.value}">
+																<f:selectItem itemLabel="" itemValue="1" />
+																<f:selectItem itemLabel="" itemValue="2" />
+															</p:selectOneRadio></td>
+
+													</tr>
+
+												</ui:repeat>
 
 											</table>
 
@@ -345,9 +237,14 @@
 
 									<tr>
 										<td class="center" colspan="2" style="margin-top: 20px;">
-											<p:commandButton value="#{msg.get('app.button.ok')}"
-												styleClass="small" /> <p:commandButton
-												value="#{msg.get('app.button.cancel')}" styleClass="small" />
+											<p:commandButton id="btnOK"
+												value="#{msg.get('app.button.ok')}" styleClass="small"
+												process="@form" update=":frmMain"
+												oncomplete="confirmEditPreDisbursementDlg.show()"
+												binding="#{okBtn}" /> <p:commandButton id="btnCancel"
+												value="#{msg.get('app.button.cancel')}" styleClass="small"
+												process="@form" update=":frmMain"
+												actionListener="#{preDisbursement.onCreation()}" />
 										</td>
 									</tr>
 
@@ -369,7 +266,14 @@
 			</h:form>
 
 		</p:panel>
-
+		<ui:include src="dialog/confirmEditDlg.xhtml">
+			<ui:param name="id" value="confirmEditPreDisbursementDialog" />
+			<ui:param name="name" value="confirmEditPreDisbursementDlg" />
+			<ui:param name="formId" value="frmConfirmEditPreDisbursement" />
+			<ui:param name="controller" value="#{preDisbursement}" />
+			<ui:param name="action" value="onSavePreDisbursement" />
+			<ui:param name="update" value=":frmMain" />
+		</ui:include>
 	</h:body>
 </f:view>
 </html>
