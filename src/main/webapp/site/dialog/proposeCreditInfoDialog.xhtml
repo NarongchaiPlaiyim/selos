@@ -202,16 +202,14 @@
                 <td class="left">
                     <p:inputText value="#{creditFacPropose.reducePrice}"
                                  id="reducePrice"
-                                 maxlength="6"
+                                 maxlength="18"
                                  onclick="this.select()"
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);"
                                  disabled="#{creditFacPropose.modeEditReducePricing}"
                                  style="width:200px;text-align: right" >
-                        <f:convertNumber pattern="##0.##"
-                                         minFractionDigits="2"
-                                         maxFractionDigits="2"
-                                         maxIntegerDigits="3"/>
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                         type="number"/>
                         <p:ajax event="blur"
                                 process="@this"
                                 listener="#{creditFacPropose.onRequestReducePrice()}"
