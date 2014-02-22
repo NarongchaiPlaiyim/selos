@@ -15,7 +15,7 @@ public class DecisionView implements Serializable {
     private Date modifyDate;
 
     // Existing
-    private List<NewConditionDetailView> extConditionComCreditList;
+    private List<ExistingConditionDetailView> extConditionComCreditList;
     private List<ExistingCreditDetailView> extBorrowerComCreditList;
     private List<ExistingCreditDetailView> extBorrowerRetailCreditList;
     private List<ExistingCreditDetailView> extBorrowerAppInRLOSList;
@@ -130,11 +130,11 @@ public class DecisionView implements Serializable {
         this.modifyDate = modifyDate;
     }
 
-    public List<NewConditionDetailView> getExtConditionComCreditList() {
+    public List<ExistingConditionDetailView> getExtConditionComCreditList() {
         return extConditionComCreditList;
     }
 
-    public void setExtConditionComCreditList(List<NewConditionDetailView> extConditionComCreditList) {
+    public void setExtConditionComCreditList(List<ExistingConditionDetailView> extConditionComCreditList) {
         this.extConditionComCreditList = extConditionComCreditList;
     }
 

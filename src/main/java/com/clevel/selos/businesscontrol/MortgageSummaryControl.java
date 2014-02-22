@@ -365,7 +365,12 @@ public class MortgageSummaryControl extends BusinessControl {
     		HashMap<Long, NewCollateralSub> collateralMap,
     		HashMap<Long,ArrayList<NewCollateralSub>> mortgageGroup,
     		HashMap<Long,ArrayList<Long>> joinMortgageList,
-    		HashSet<Long> mainCollSet) {
+    		HashSet<Long> mainCollSet,
+    		HashSet<Long> checkRecursive) {
+    	if (checkRecursive.contains(mainCollSubId))
+    		return;
+    	checkRecursive.add(mainCollSubId);
+    	
     	if (!collateralMap.containsKey(mainCollSubId)) //Invalid main id
     		return;
     	
@@ -379,7 +384,8 @@ public class MortgageSummaryControl extends BusinessControl {
     		return;
     	
     	for (Long checkMainCollSubId : mainCollSubIdList) {
-    		_findMainCollateralSub(checkMainCollSubId, collateralMap, mortgageGroup, joinMortgageList, mainCollSet);
+    		HashSet<Long> toCheck = new HashSet<Long>(checkRecursive);
+    		_findMainCollateralSub(checkMainCollSubId, collateralMap, mortgageGroup, joinMortgageList, mainCollSet,toCheck);
     	}
     }
     
@@ -540,7 +546,7 @@ public class MortgageSummaryControl extends BusinessControl {
 			HashSet<Long> mainCollSet = new HashSet<Long>();
 			ArrayList<Long> mainCollSubIdList = joinMortgageList.get(joinCollSubId);
 			for (Long mainCollSubId : mainCollSubIdList) {
-				_findMainCollateralSub(mainCollSubId, collateralMap, mortgageGroup, joinMortgageList, mainCollSet);
+				_findMainCollateralSub(mainCollSubId, collateralMap, mortgageGroup, joinMortgageList, mainCollSet,new HashSet<Long>());
 			}
 			
 			if (mainCollSet.isEmpty()) //Invalid join

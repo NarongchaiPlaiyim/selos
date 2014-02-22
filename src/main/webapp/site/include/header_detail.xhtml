@@ -91,6 +91,9 @@
                 </p:confirmDialog>
             <!--Submit Case-->
             <p:commandButton id="btnSubmitCase" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
+                             actionListener="#{baseController.onOpenSubmitZM()}"
+                             oncomplete="submitZMDlg.show()"
+                             update=":frmMain:submitZMPanel"
                              rendered="#{baseController.manageButton.submitCAButton}">
 
             </p:commandButton>
@@ -297,7 +300,7 @@
     <p:panel id="submitZMPanel" styleClass="panel">
         <p:dialog id="submitZMDialog" widgetVar="submitZMDlg" header="Submit to Zone Manager"
                   onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-                  modal="true" width="400" height="160">
+                  modal="true" width="550" height="360">
             <ui:include src="/site/dialog/submitCaseDialog.xhtml"/>
         </p:dialog>
     </p:panel>

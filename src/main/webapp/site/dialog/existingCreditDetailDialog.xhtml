@@ -110,7 +110,7 @@
             <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.pcePercent')}"/>
         </td>
         <td>
-            <p:inputText id="pcePercent" value="#{creditFacExisting.existingCreditDetailView.pcePercent}" style="text-align:right" maxlength="3">
+            <p:inputText id="pcePercent" value="#{creditFacExisting.existingCreditDetailView.pcePercent}" style="text-align:right" maxlength="6">
                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                 <f:validateDoubleRange maximum="100"/>
                 <p:ajax event="blur" update=":existingCreditDlgForm:pcePercent"/>
