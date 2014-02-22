@@ -75,16 +75,20 @@
 										<td class="title"><h:outputText
 												value="#{msg.get('app.tcgApprovalInfo.submitDate')}" /></td>
 										<td class="left"
-											style="min-width: 300px; max-width: 400px; width: 400px;"><p:calendar
-												value="#{tcgApprovalInfo.submitDate}" showOn="button" /></td>
+											style="min-width: 300px; max-width: 400px; width: 400px;">
+											<p:calendar disabled="#{tcgApprovalInfo.isEnableSubmit}"
+												value="#{tcgApprovalInfo.tcgInfoView.tcgSubmitDate}"
+												showOn="button" />
+										</td>
 										<td></td>
 										<td></td>
 									</tr>
 									<tr>
 										<td class="title">#{msg.get('app.tcgApprovalInfo.approveResult')}</td>
 										<td><p:selectOneRadio
-												value="#{tcgApprovalInfo.approveResult}" layout="grid"
-												columns="2">
+												disabled="#{tcgApprovalInfo.isEnableApprove}"
+												value="#{tcgApprovalInfo.tcgInfoView.approvedResult}"
+												layout="grid" columns="2">
 												<f:selectItem itemLabel="#{'Approved'}" itemValue="1" />
 												<f:selectItem itemLabel="#{'Not Approved'}" itemValue="2" />
 											</p:selectOneRadio></td>
@@ -92,7 +96,9 @@
 												value="#{msg.get('app.tcgApprovalInfo.approveDate')}" /></td>
 										<td class="left">
 										<td class="left"><p:calendar
-												value="#{tcgApprovalInfo.approveDate}" showOn="button" /></td>
+												disabled="#{tcgApprovalInfo.isEnableApprove}"
+												value="#{tcgApprovalInfo.tcgInfoView.approveDate}"
+												showOn="button" /></td>
 										</td>
 									</tr>
 									<tr>
@@ -104,9 +110,13 @@
 										<td colspan="100%" style="height: 20px;"></td>
 									</tr>
 									<tr>
-										<td colspan="5" class="center"><p:commandButton
-												value="#{msg.get('app.tcg.button.save')}" id="btnSave" /> <p:commandButton
-												value="#{msg.get('app.tcg.button.Cancel')}" id="btnCancel" />
+										<td colspan="5" class="center">
+											<p:commandButton id="btnSave" value="#{msg.get('app.button.save')}" styleClass="small"
+                                                	process="@form" update=":frmMain"
+                                                	oncomplete="confirmEditTCGInfoDlg.show()" binding="#{saveBtn}" />
+                                                <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}" styleClass="small"
+                                                	process="@form" update=":frmMain"
+                                         			actionListener="#{insuranceInfo.onCreation()}" />
 										</td>
 									</tr>
 
@@ -132,6 +142,15 @@
 				</p:blockUI>
 			</h:form>
 		</p:panel>
+		
+<ui:include src="dialog/confirmEditDlg.xhtml">
+        <ui:param name="id" value="confirmEditTCGInfoDialog"/>
+        <ui:param name="name" value="confirmEditTCGInfoDlg"/>
+        <ui:param name="formId" value="frmConfirmEditTCGInfo"/>
+        <ui:param name="controller" value="#{tcgApprovalInfo}"/>
+        <ui:param name="action" value="onSaveTcgInfo"/>
+        <ui:param name="update" value=":frmMain"/>
+</ui:include>
 
 	</h:body>
 </f:view>

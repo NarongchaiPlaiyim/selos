@@ -3,6 +3,14 @@ package com.clevel.selos.model.view;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.clevel.selos.model.db.master.User;
+
 
 public class TCGInfoView implements Serializable{
 	private static final long serialVersionUID = 1227047620433296147L;
@@ -12,6 +20,10 @@ public class TCGInfoView implements Serializable{
     private Date tcgSubmitDate;
     private int approvedResult;
     private Date approveDate;
+    private Date createDate;
+    private Date modifyDate;
+    private User createBy;
+    private User modifyBy;
     
     public TCGInfoView() {
     	
@@ -51,6 +63,30 @@ public class TCGInfoView implements Serializable{
 	}
 	public void setApproveDate(Date approveDate) {
 		this.approveDate = approveDate;
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+	public Date getModifyDate() {
+		return modifyDate;
+	}
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
+	}
+	public User getCreateBy() {
+		return createBy;
+	}
+	public void setCreateBy(User createBy) {
+		this.createBy = createBy;
+	}
+	public User getModifyBy() {
+		return modifyBy;
+	}
+	public void setModifyBy(User modifyBy) {
+		this.modifyBy = modifyBy;
 	}
 	
 }
