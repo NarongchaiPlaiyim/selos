@@ -42,14 +42,15 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.appraisalDate')}"/>
     </td>
     <td class="left" colspan="3">
-        <clv:BECalendar id="expectSumitDate" showOn="both" showButtonPanel="true" navigator="true"
-                        yearRange="1950:2100"
+        <clv:BECalendar value="#{creditFacPropose.newCollateralView.appraisalDate}"
+                        id="expectSumitDate"
+                        showOn="button"
                         pattern="dd/MM/yyyy"
-                        value="#{creditFacPropose.newCollateralView.appraisalDate}"
+                        yearRange="1950:2100"
+                        mindate="01/01/1950"
+                        navigator="true"
                         locale="th_TH"
-                        readonlyInput="true"
-                        styleClass="calendar_right">
-        </clv:BECalendar>
+                        showButtonPanel="true"/>
     </td>
 </tr>
 

@@ -1269,6 +1269,10 @@ public class CreditFacExisting implements Serializable {
                 ExistingCollateralDetailView borrowerCollateralDetailViewRow = borrowerExistingCollateralDetailViewList.get(rowIndex);
 
                 borrowerCollateralDetailViewRow.setExistingCreditTypeDetailViewList(new ArrayList<ExistingCreditTypeDetailView>());
+                borrowerCollateralDetailViewRow.setCollateralType(collateralType);
+                borrowerCollateralDetailViewRow.setPotentialCollateral(potentialCollateral);
+                borrowerCollateralDetailViewRow.setRelation(relation);
+                borrowerCollateralDetailViewRow.setMortgageType(mortgageType);
                 borrowerCollateralDetailViewRow.setOwner(existingCollateralDetailView.getOwner());
                 borrowerCollateralDetailViewRow.setAccountNumber(existingCollateralDetailView.getAccountNumber());
                 borrowerCollateralDetailViewRow.setCollateralLocation(existingCollateralDetailView.getCollateralLocation());
@@ -1325,6 +1329,10 @@ public class CreditFacExisting implements Serializable {
                 ExistingCollateralDetailView relatedCollateralDetailViewRow = relatedExistingCollateralDetailViewList.get(rowIndex);
 
                 relatedCollateralDetailViewRow.setExistingCreditTypeDetailViewList(new ArrayList<ExistingCreditTypeDetailView>());
+                relatedCollateralDetailViewRow.setCollateralType(collateralType);
+                relatedCollateralDetailViewRow.setPotentialCollateral(potentialCollateral);
+                relatedCollateralDetailViewRow.setRelation(relation);
+                relatedCollateralDetailViewRow.setMortgageType(mortgageType);
                 relatedCollateralDetailViewRow.setOwner(existingCollateralDetailView.getOwner());
                 relatedCollateralDetailViewRow.setAccountNumber(existingCollateralDetailView.getAccountNumber());
                 relatedCollateralDetailViewRow.setCollateralLocation(existingCollateralDetailView.getCollateralLocation());

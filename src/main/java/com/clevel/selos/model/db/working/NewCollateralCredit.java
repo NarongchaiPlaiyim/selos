@@ -22,7 +22,7 @@ public class NewCollateralCredit implements Serializable {
     @JoinColumn(name = "new_credit_detail_id")
     private NewCreditDetail newCreditDetail;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "existing_credit_detail_id")
     private ExistingCreditDetail existingCreditDetail;
 

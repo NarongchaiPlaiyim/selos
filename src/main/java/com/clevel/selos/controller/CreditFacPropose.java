@@ -796,8 +796,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         if (newCreditFacilityView.getNewCreditDetailViewList() != null && newCreditFacilityView.getNewCreditDetailViewList().size() > 0) {
             for (NewCreditDetailView nc : newCreditFacilityView.getNewCreditDetailViewList()) {
                 log.debug("newCreditDetail : {} ", nc);
-                log.debug("before tier : {}", nc.getNewCreditTierDetailViewList());
-                log.debug("tier size : {}", nc.getNewCreditTierDetailViewList().size());
+//                log.debug("before tier : {}", nc.getNewCreditTierDetailViewList());
+//                log.debug("tier size : {}", nc.getNewCreditTierDetailViewList().size());
                 if (nc.getNewCreditTierDetailViewList() != null && nc.getNewCreditTierDetailViewList().size() == 0) {
                     log.debug("set null");
                     nc.setNewCreditTierDetailViewList(null);

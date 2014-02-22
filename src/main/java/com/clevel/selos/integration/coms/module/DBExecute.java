@@ -12,6 +12,7 @@ import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -455,18 +456,18 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
-                String deedNo = rs.getString("deedNo");
-                String coordinateNo = rs.getString("coordinateNo");
-                String landNo = rs.getString("landNo");
-                String surveyNo = rs.getString("surveyNo");
-                String bookNo = rs.getString("bookNo");
-                String pageNo = rs.getString("pageNo");
-                String condoDistrict = rs.getString("condoDistrict");
-                String cityId = rs.getString("cityId");
-                String city = rs.getString("city");
-                String provinceId = rs.getString("provinceId");
-                String provId = rs.getString("provId");
-                String provName = rs.getString("provName");
+                String deedNo = Util.getStringNotNull(rs.getString("deedNo"));
+                String coordinateNo = Util.getStringNotNull(rs.getString("coordinateNo"));
+                String landNo = Util.getStringNotNull(rs.getString("landNo"));
+                String surveyNo = Util.getStringNotNull(rs.getString("surveyNo"));
+                String bookNo = Util.getStringNotNull(rs.getString("bookNo"));
+                String pageNo = Util.getStringNotNull(rs.getString("pageNo"));
+                String condoDistrict = Util.getStringNotNull(rs.getString("condoDistrict"));
+                String cityId = Util.getStringNotNull(rs.getString("cityId"));
+                String city = Util.getStringNotNull(rs.getString("city"));
+                String provinceId = Util.getStringNotNull(rs.getString("provinceId"));
+                String provId = Util.getStringNotNull(rs.getString("provId"));
+                String provName = Util.getStringNotNull(rs.getString("provName"));
 
                 address = deedNo.concat(COMMA)
                             .concat(coordinateNo).concat(COMMA)
@@ -543,16 +544,16 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
-                String deedNo = rs.getString("deedNo");
-                String landNo = rs.getString("landNo");
-                String bookNo = rs.getString("bookNo");
-                String pageNo = rs.getString("pageNo");
-                String condoDistrict = rs.getString("condoDistrict");
-                String cityId = rs.getString("cityId");
-                String city = rs.getString("city");
-                String provinceId = rs.getString("provinceId");
-                String provId = rs.getString("provId");
-                String provName = rs.getString("provName");
+                String deedNo = Util.getStringNotNull(rs.getString("deedNo"));
+                String landNo = Util.getStringNotNull(rs.getString("landNo"));
+                String bookNo = Util.getStringNotNull(rs.getString("bookNo"));
+                String pageNo = Util.getStringNotNull(rs.getString("pageNo"));
+                String condoDistrict = Util.getStringNotNull(rs.getString("condoDistrict"));
+                String cityId = Util.getStringNotNull(rs.getString("cityId"));
+                String city = Util.getStringNotNull(rs.getString("city"));
+                String provinceId = Util.getStringNotNull(rs.getString("provinceId"));
+                String provId = Util.getStringNotNull(rs.getString("provId"));
+                String provName = Util.getStringNotNull(rs.getString("provName"));
 
                 address = deedNo.concat(COMMA)
                         .concat(landNo).concat(COMMA)
@@ -561,6 +562,7 @@ public class DBExecute implements Serializable {
                         .concat(condoDistrict).concat(SPACE)
                         .concat(city).concat(SPACE)
                         .concat(provName);
+                log.debug("-- address result : {}", address);
             }
             log.debug("address result : {}", address);
             rs.close();
@@ -633,19 +635,19 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
-                String deedNo = rs.getString("deedNo");
-                String bookNo = rs.getString("bookNo");
-                String pageNo = rs.getString("pageNo");
-                String landNo = rs.getString("landNo");
-                String airialPhotoNo = rs.getString("airialPhotoNo");
-                String coordinateNo = rs.getString("coordinateNo");
-                String sheetNo = rs.getString("sheetNo");
-                String condoDistrict = rs.getString("condoDistrict");
-                String cityId = rs.getString("cityId");
-                String city = rs.getString("city");
-                String provinceId = rs.getString("provinceId");
-                String provId = rs.getString("provId");
-                String provName = rs.getString("provName");
+                String deedNo = Util.getStringNotNull(rs.getString("deedNo"));
+                String bookNo = Util.getStringNotNull(rs.getString("bookNo"));
+                String pageNo = Util.getStringNotNull(rs.getString("pageNo"));
+                String landNo = Util.getStringNotNull(rs.getString("landNo"));
+                String airialPhotoNo = Util.getStringNotNull(rs.getString("airialPhotoNo"));
+                String coordinateNo = Util.getStringNotNull(rs.getString("coordinateNo"));
+                String sheetNo = Util.getStringNotNull(rs.getString("sheetNo"));
+                String condoDistrict = Util.getStringNotNull(rs.getString("condoDistrict"));
+                String cityId = Util.getStringNotNull(rs.getString("cityId"));
+                String city = Util.getStringNotNull(rs.getString("city"));
+                String provinceId = Util.getStringNotNull(rs.getString("provinceId"));
+                String provId = Util.getStringNotNull(rs.getString("provId"));
+                String provName = Util.getStringNotNull(rs.getString("provName"));
 
                 address = deedNo.concat(COMMA)
                         .concat(bookNo).concat(COMMA)
@@ -727,18 +729,18 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
-                String deedNo = rs.getString("deedNo");
-                String bookNo = rs.getString("bookNo");
-                String pageNo = rs.getString("pageNo");
-                String landNo = rs.getString("landNo");
-                String surveyNo = rs.getString("surveyNo");
-                String coordinateNo = rs.getString("coordinateNo");
-                String condoDistrict = rs.getString("condoDistrict");
-                String cityId = rs.getString("cityId");
-                String city = rs.getString("city");
-                String provinceId = rs.getString("provinceId");
-                String provId = rs.getString("provId");
-                String provName = rs.getString("provName");
+                String deedNo = Util.getStringNotNull(rs.getString("deedNo"));
+                String bookNo = Util.getStringNotNull(rs.getString("bookNo"));
+                String pageNo = Util.getStringNotNull(rs.getString("pageNo"));
+                String landNo = Util.getStringNotNull(rs.getString("landNo"));
+                String surveyNo = Util.getStringNotNull(rs.getString("surveyNo"));
+                String coordinateNo = Util.getStringNotNull(rs.getString("coordinateNo"));
+                String condoDistrict = Util.getStringNotNull(rs.getString("condoDistrict"));
+                String cityId = Util.getStringNotNull(rs.getString("cityId"));
+                String city = Util.getStringNotNull(rs.getString("city"));
+                String provinceId = Util.getStringNotNull(rs.getString("provinceId"));
+                String provId = Util.getStringNotNull(rs.getString("provId"));
+                String provName = Util.getStringNotNull(rs.getString("provName"));
 
                 address = deedNo.concat(COMMA)
                         .concat(bookNo).concat(COMMA)
@@ -817,17 +819,17 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
-                String addNo = rs.getString("addNo");
-                String addMoo = rs.getString("addMoo");
-                String addRoad = rs.getString("addRoad");
-                String addBann = rs.getString("addBann");
-                String addSoi = rs.getString("addSoi");
-                String addDistrict = rs.getString("addDistrict");
-                String cityId = rs.getString("cityId");
-                String city = rs.getString("city");
-                String provinceId = rs.getString("provinceId");
-                String provId = rs.getString("provId");
-                String provName = rs.getString("provName");
+                String addNo = Util.getStringNotNull(rs.getString("addNo"));
+                String addMoo = Util.getStringNotNull(rs.getString("addMoo"));
+                String addRoad = Util.getStringNotNull(rs.getString("addRoad"));
+                String addBann = Util.getStringNotNull(rs.getString("addBann"));
+                String addSoi = Util.getStringNotNull(rs.getString("addSoi"));
+                String addDistrict = Util.getStringNotNull(rs.getString("addDistrict"));
+                String cityId = Util.getStringNotNull(rs.getString("cityId"));
+                String city = Util.getStringNotNull(rs.getString("city"));
+                String provinceId = Util.getStringNotNull(rs.getString("provinceId"));
+                String provId = Util.getStringNotNull(rs.getString("provId"));
+                String provName = Util.getStringNotNull(rs.getString("provName"));
 
                 address = addNo.concat(SPACE)
                         .concat(addMoo).concat(SPACE)
@@ -913,19 +915,19 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
-                String roomNo = rs.getString("roomNo");
-                String floorNo = rs.getString("floorNo");
-                String landNo = rs.getString("landNo");
-                String buildingName = rs.getString("buildingName");
-                String condoNo = rs.getString("condoNo");
-                String noOfFloor = rs.getString("noOfFloor");
-                String deedNo = rs.getString("deedNo");
-                String condoDistrict = rs.getString("condoDistrict");
-                String cityId = rs.getString("cityId");
-                String city = rs.getString("city");
-                String provinceId = rs.getString("provinceId");
-                String provId = rs.getString("provId");
-                String provName = rs.getString("provName");
+                String roomNo = Util.getStringNotNull(rs.getString("roomNo"));
+                String floorNo = Util.getStringNotNull(rs.getString("floorNo"));
+                String landNo = Util.getStringNotNull(rs.getString("landNo"));
+                String buildingName = Util.getStringNotNull(rs.getString("buildingName"));
+                String condoNo = Util.getStringNotNull(rs.getString("condoNo"));
+                String noOfFloor = Util.getStringNotNull(rs.getString("noOfFloor"));
+                String deedNo = Util.getStringNotNull(rs.getString("deedNo"));
+                String condoDistrict = Util.getStringNotNull(rs.getString("condoDistrict"));
+                String cityId = Util.getStringNotNull(rs.getString("cityId"));
+                String city = Util.getStringNotNull(rs.getString("city"));
+                String provinceId = Util.getStringNotNull(rs.getString("provinceId"));
+                String provId = Util.getStringNotNull(rs.getString("provId"));
+                String provName = Util.getStringNotNull(rs.getString("provName"));
                 BigDecimal areaMeter = rs.getBigDecimal("areaMeter");
                 BigDecimal balconyMeter = rs.getBigDecimal("balconyMeter");
 
@@ -1013,17 +1015,17 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
-                String addNo = rs.getString("addNo");
-                String addMoo = rs.getString("addMoo");
-                String addBann = rs.getString("addBann");
-                String addSoi = rs.getString("addSoi");
-                String addRoad = rs.getString("addRoad");
-                String addDistrict = rs.getString("addDistrict");
-                String cityId = rs.getString("cityId");
-                String city = rs.getString("city");
-                String provinceId = rs.getString("provinceId");
-                String provId = rs.getString("provId");
-                String provName = rs.getString("provName");
+                String addNo = Util.getStringNotNull(rs.getString("addNo"));
+                String addMoo = Util.getStringNotNull(rs.getString("addMoo"));
+                String addBann = Util.getStringNotNull(rs.getString("addBann"));
+                String addSoi = Util.getStringNotNull(rs.getString("addSoi"));
+                String addRoad = Util.getStringNotNull(rs.getString("addRoad"));
+                String addDistrict = Util.getStringNotNull(rs.getString("addDistrict"));
+                String cityId = Util.getStringNotNull(rs.getString("cityId"));
+                String city = Util.getStringNotNull(rs.getString("city"));
+                String provinceId = Util.getStringNotNull(rs.getString("provinceId"));
+                String provId = Util.getStringNotNull(rs.getString("provId"));
+                String provName = Util.getStringNotNull(rs.getString("provName"));
 
                 address = addNo.concat(SPACE)
                         .concat(addMoo).concat(SPACE)
@@ -1101,17 +1103,17 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
-                String addNo = rs.getString("addNo");
-                String addMoo = rs.getString("addMoo");
-                String addBann = rs.getString("addBann");
-                String addSoi = rs.getString("addSoi");
-                String addRoad = rs.getString("addRoad");
-                String addDistrict = rs.getString("addDistrict");
-                String cityId = rs.getString("cityId");
-                String city = rs.getString("city");
-                String provinceId = rs.getString("provinceId");
-                String provId = rs.getString("provId");
-                String provName = rs.getString("provName");
+                String addNo = Util.getStringNotNull(rs.getString("addNo"));
+                String addMoo = Util.getStringNotNull(rs.getString("addMoo"));
+                String addBann = Util.getStringNotNull(rs.getString("addBann"));
+                String addSoi = Util.getStringNotNull(rs.getString("addSoi"));
+                String addRoad = Util.getStringNotNull(rs.getString("addRoad"));
+                String addDistrict = Util.getStringNotNull(rs.getString("addDistrict"));
+                String cityId = Util.getStringNotNull(rs.getString("cityId"));
+                String city = Util.getStringNotNull(rs.getString("city"));
+                String provinceId = Util.getStringNotNull(rs.getString("provinceId"));
+                String provId = Util.getStringNotNull(rs.getString("provId"));
+                String provName = Util.getStringNotNull(rs.getString("provName"));
 
                 address = addNo.concat(SPACE)
                         .concat(addMoo).concat(SPACE)
@@ -1173,8 +1175,8 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
-                String nameThai = rs.getString("nameThai");
-                String provName = rs.getString("provName");
+                String nameThai = Util.getStringNotNull(rs.getString("nameThai"));
+                String provName = Util.getStringNotNull(rs.getString("provName"));
 
                 address = nameThai.concat(SPACE)
                         .concat(provName);
@@ -1294,17 +1296,17 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
-                String addNo = rs.getString("addNo");
-                String addMoo = rs.getString("addMoo");
-                String addBann = rs.getString("addBann");
-                String addSoi = rs.getString("addSoi");
-                String addRoad = rs.getString("addRoad");
-                String addDistrict = rs.getString("addDistrict");
-                String cityId = rs.getString("cityId");
-                String city = rs.getString("city");
-                String provinceId = rs.getString("provinceId");
-                String provId = rs.getString("provId");
-                String provName = rs.getString("provName");
+                String addNo = Util.getStringNotNull(rs.getString("addNo"));
+                String addMoo = Util.getStringNotNull(rs.getString("addMoo"));
+                String addBann = Util.getStringNotNull(rs.getString("addBann"));
+                String addSoi = Util.getStringNotNull(rs.getString("addSoi"));
+                String addRoad = Util.getStringNotNull(rs.getString("addRoad"));
+                String addDistrict = Util.getStringNotNull(rs.getString("addDistrict"));
+                String cityId = Util.getStringNotNull(rs.getString("cityId"));
+                String city = Util.getStringNotNull(rs.getString("city"));
+                String provinceId = Util.getStringNotNull(rs.getString("provinceId"));
+                String provId = Util.getStringNotNull(rs.getString("provId"));
+                String provName = Util.getStringNotNull(rs.getString("provName"));
 
                 address = addNo.concat(SPACE)
                         .concat(addMoo).concat(SPACE)
@@ -1382,17 +1384,17 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
-                String addNo = rs.getString("addNo");
-                String addMoo = rs.getString("addMoo");
-                String addBann = rs.getString("addBann");
-                String addSoi = rs.getString("addSoi");
-                String addRoad = rs.getString("addRoad");
-                String addDistrict = rs.getString("addDistrict");
-                String cityId = rs.getString("cityId");
-                String city = rs.getString("city");
-                String provinceId = rs.getString("provinceId");
-                String provId = rs.getString("provId");
-                String provName = rs.getString("provName");
+                String addNo = Util.getStringNotNull(rs.getString("addNo"));
+                String addMoo = Util.getStringNotNull(rs.getString("addMoo"));
+                String addBann = Util.getStringNotNull(rs.getString("addBann"));
+                String addSoi = Util.getStringNotNull(rs.getString("addSoi"));
+                String addRoad = Util.getStringNotNull(rs.getString("addRoad"));
+                String addDistrict = Util.getStringNotNull(rs.getString("addDistrict"));
+                String cityId = Util.getStringNotNull(rs.getString("cityId"));
+                String city = Util.getStringNotNull(rs.getString("city"));
+                String provinceId = Util.getStringNotNull(rs.getString("provinceId"));
+                String provId = Util.getStringNotNull(rs.getString("provId"));
+                String provName = Util.getStringNotNull(rs.getString("provName"));
 
                 address = addNo.concat(SPACE)
                         .concat(addMoo).concat(SPACE)

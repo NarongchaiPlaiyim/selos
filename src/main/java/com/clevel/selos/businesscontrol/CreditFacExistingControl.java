@@ -134,8 +134,6 @@ public class CreditFacExistingControl extends BusinessControl {
             log.info("persist :: existingConditionDetailList ...");
         }
 
-        log.info("persist borrower getBorrowerComExistingCredit size ..." + existingCreditFacilityView.getBorrowerComExistingCredit().size());
-
         List<ExistingCollateralDetail> borrowerCollateralDetailListDel = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,1);
         if(borrowerCollateralDetailListDel!=null && borrowerCollateralDetailListDel.size()>0){
             for (int i=0 ;i<borrowerCollateralDetailListDel.size();i++) {

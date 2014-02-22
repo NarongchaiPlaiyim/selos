@@ -7,7 +7,7 @@ import com.clevel.selos.model.db.working.NewCollateralCredit;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.WorkCase;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Order;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -30,7 +30,7 @@ public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long
         log.info("getListCollRelationByNewGuarantor. (newCollateral: {})", newCollateral);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCollateral", newCollateral));
-        criteria.addOrder(Order.asc("newCollateral.id"));
+        criteria.setFetchMode("newCollateral", FetchMode.LAZY);
         List<NewCollateralCredit> newCollateralRelCreditList = (List<NewCollateralCredit>)criteria.list();
         log.info("getList. (result size: {})", newCollateralRelCreditList.size());
 
@@ -47,6 +47,7 @@ public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long
             for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
                 criteria.add(Restrictions.eq("newCollateral", newCollateral));
             }
+            criteria.setFetchMode("newCollateral", FetchMode.LAZY);
             newCollateralCreditList = criteria.list();
         }
 
