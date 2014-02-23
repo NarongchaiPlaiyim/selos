@@ -28,6 +28,7 @@ public class OpenAccount implements Serializable {
     private WorkCase workCase;
 
     @Column(name = "request_type",columnDefinition="int default 0")
+    @Enumerated(EnumType.ORDINAL)
     private RadioValue requestType;
 
     @Column(name = "account_number")
@@ -60,8 +61,9 @@ public class OpenAccount implements Serializable {
     @OneToMany(mappedBy = "openAccount")
     private List<OpenAccountDeposit> openAccountDepositList;
 
-    @Column(name = "confirm_open_account")
-    private int confirmOpenAccount;
+    @Column(name = "confirm_open_account",columnDefinition="int default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private RadioValue confirmOpenAccount;
     
     @Column(name = "is_pledge_account",columnDefinition="int default 0")
     private boolean pledgeAccount;
@@ -165,11 +167,11 @@ public class OpenAccount implements Serializable {
         this.openAccountDepositList = openAccountDepositList;
     }
 
-    public int getConfirmOpenAccount() {
+    public RadioValue getConfirmOpenAccount() {
         return confirmOpenAccount;
     }
 
-    public void setConfirmOpenAccount(int confirmOpenAccount) {
+    public void setConfirmOpenAccount(RadioValue confirmOpenAccount) {
         this.confirmOpenAccount = confirmOpenAccount;
     }
 
