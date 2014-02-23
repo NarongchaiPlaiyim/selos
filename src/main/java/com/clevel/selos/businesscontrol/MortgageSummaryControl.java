@@ -15,6 +15,8 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
+import com.clevel.selos.dao.master.BankAccountProductDAO;
+import com.clevel.selos.dao.master.BankAccountPurposeDAO;
 import com.clevel.selos.dao.master.BankBranchDAO;
 import com.clevel.selos.dao.master.MortgageTypeDAO;
 import com.clevel.selos.dao.master.UserZoneDAO;
@@ -27,12 +29,17 @@ import com.clevel.selos.dao.working.MortgageInfoDAO;
 import com.clevel.selos.dao.working.MortgageSummaryDAO;
 import com.clevel.selos.dao.working.NewCollateralSubDAO;
 import com.clevel.selos.dao.working.NewGuarantorDetailDAO;
+import com.clevel.selos.dao.working.OpenAccountDAO;
 import com.clevel.selos.dao.working.PledgeInfoDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.AttorneyRelationType;
+import com.clevel.selos.model.ConfirmAccountType;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.RequestAccountType;
+import com.clevel.selos.model.db.master.BankAccountProduct;
+import com.clevel.selos.model.db.master.BankAccountPurpose;
 import com.clevel.selos.model.db.master.BankBranch;
 import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.User;
@@ -53,6 +60,11 @@ import com.clevel.selos.model.db.working.NewCollateralSubMortgage;
 import com.clevel.selos.model.db.working.NewCollateralSubOwner;
 import com.clevel.selos.model.db.working.NewCollateralSubRelated;
 import com.clevel.selos.model.db.working.NewGuarantorDetail;
+import com.clevel.selos.model.db.working.OpenAccount;
+import com.clevel.selos.model.db.working.OpenAccountCredit;
+import com.clevel.selos.model.db.working.OpenAccountDeposit;
+import com.clevel.selos.model.db.working.OpenAccountName;
+import com.clevel.selos.model.db.working.OpenAccountPurpose;
 import com.clevel.selos.model.db.working.PledgeInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.GuarantorInfoView;
@@ -78,6 +90,7 @@ public class MortgageSummaryControl extends BusinessControl {
     @Inject private NewCollateralSubDAO newCollateralSubDAO;
     @Inject private WorkCaseDAO workCaseDAO;
     @Inject private NewGuarantorDetailDAO newGuarantorDetailDAO;
+    @Inject private OpenAccountDAO openAccountDAO;
     
     @Inject private MortgageSummaryDAO mortgageSummaryDAO;
     @Inject private AgreementInfoDAO agreementInfoDAO;
@@ -94,6 +107,9 @@ public class MortgageSummaryControl extends BusinessControl {
     @Inject private UserZoneDAO userZoneDAO;
     @Inject private BankBranchDAO bankBranchDAO;
     @Inject private MortgageTypeDAO mortgageTypeDAO;
+   
+    @Inject private BankAccountPurposeDAO bankAccountPurposeDAO;
+    @Inject private BankAccountProductDAO bankAccountProductDAO;
     
     
     public MortgageSummaryControl(){
@@ -242,6 +258,7 @@ public class MortgageSummaryControl extends BusinessControl {
     	_processMortgageGroup(collateralMap,mortgageGroup,joinMortgageList,referredGroup,
     			user,workCase);
     	_processGuarantorData(user,workCase);
+    	_processPledgeData(collateralMap, pledgeSet, user, workCase);
     	
     	//Loading mortgage summary
     	MortgageSummary mortgage = null;
@@ -630,8 +647,202 @@ public class MortgageSummaryControl extends BusinessControl {
     }
     
     private void _processPledgeData(HashMap<Long, NewCollateralSub> collateralMap,HashSet<Long> pledgeSet,User user, WorkCase workCase) {
+    	BankAccountPurpose defaultPurpose = bankAccountPurposeDAO.getDefaultProposeForPledge();
+    	List<OpenAccount> accounts = openAccountDAO.findByWorkCaseId(workCase.getId());
+    	List<PledgeInfo> pledgeInfos = pledgeInfoDAO.findAllByWorkCaseId(workCase.getId());
+    	
+    	HashMap<Long, PledgeInfo> pledgeMap = new HashMap<Long, PledgeInfo>();
+    	for (PledgeInfo info : pledgeInfos) {
+    		pledgeMap.put(info.getNewCollateralSub().getId(), info);
+    	}
+    	HashMap<Long,OpenAccount> accountMap = new HashMap<Long, OpenAccount>();
+    	for (OpenAccount account : accounts) {
+    		accountMap.put(account.getId(), account);
+    	}
+    	
     	for (Long subCollateralId : pledgeSet) {
-    		
+    		NewCollateralSub collateral = collateralMap.get(subCollateralId);
+    		PledgeInfo pledgeInfo = pledgeMap.get(subCollateralId);
+    		if (pledgeInfo == null) {
+    			OpenAccount account = new OpenAccount();
+        		account.setWorkCase(workCase);
+        		account.setTerm(null);
+        		account.setNumberOfDep(0);
+        		updateOpenAccountData(account, collateral, defaultPurpose);
+        		openAccountDAO.save(account);
+        		
+    			pledgeInfo = new PledgeInfo();
+    			pledgeInfo.setCreateBy(user);
+    			pledgeInfo.setCreateDate(new Date());
+    			pledgeInfo.setNewCollateralSub(collateral);
+    			pledgeInfo.setWorkCase(workCase);
+    			pledgeInfo.setTotalHoldAmount(new BigDecimal(0));
+    			pledgeInfo.setOpenAccount(account);
+    			
+    			pledgeInfo.setModifyBy(user);
+    			pledgeInfo.setModifyDate(new Date());
+    			pledgeInfo.setPledgeType(collateral.getNewCollateralSubMortgageList().get(0).getMortgageType());
+    			pledgeInfo.setPledgeAmount(collateral.getMortgageValue());
+    			pledgeInfoDAO.save(pledgeInfo);
+    		} else {
+    			pledgeMap.remove(subCollateralId);
+    			
+    			pledgeInfo.setModifyBy(user);
+    			pledgeInfo.setModifyDate(new Date());
+    			pledgeInfo.setPledgeType(collateral.getNewCollateralSubMortgageList().get(0).getMortgageType());
+    			pledgeInfo.setPledgeAmount(collateral.getMortgageValue());
+    			
+    			OpenAccount account = pledgeInfo.getOpenAccount();
+    			if (account == null) {
+    				account = new OpenAccount();
+            		account.setWorkCase(workCase);
+            		account.setTerm(null);
+            		account.setNumberOfDep(0);
+            		updateOpenAccountData(account, collateral, defaultPurpose);
+            		openAccountDAO.save(account);
+    			} else {
+    				updateOpenAccountData(account, collateral, defaultPurpose);
+            		openAccountDAO.persist(account);
+            		
+            		accountMap.remove(account.getId());
+    			}
+    		}
+    	}
+    	
+    	//clean pledge info
+    	for (Long key : pledgeMap.keySet()) {
+    		PledgeInfo info = pledgeMap.get(key);
+    		pledgeInfoDAO.delete(info);
+    	}
+    	
+    	//mark open account from pledge = false
+    	for (Long key : accountMap.keySet()) {
+    		OpenAccount account = accountMap.get(key);
+    		if (!account.isPledgeAccount())
+    			continue;
+    		account.setPledgeAccount(false);
+    		List<OpenAccountCredit> credits = account.getOpenAccountCreditList();
+    		if (credits != null && !credits.isEmpty()) {
+    			for (OpenAccountCredit credit : credits) {
+    				credit.setFromPledge(false);
+    			}
+    		}
+    		openAccountDAO.persist(account);
     	}
     }
+	private void updateOpenAccountData(OpenAccount account,NewCollateralSub collateral,BankAccountPurpose defaultPurpose) {
+		account.setRequestType(RequestAccountType.EXISTING);
+		account.setAccountNumber(collateral.getTitleDeed());
+		account.setBankBranch(null);
+		BankAccountProduct accountProduct = bankAccountProductDAO.findByCollateral(collateral.getCollateralTypeType(), collateral.getSubCollateralType());
+		account.setBankAccountProduct(accountProduct);
+		if (accountProduct != null)
+			account.setBankAccountType(accountProduct.getBankAccountType());
+		account.setConfirmOpenAccount(ConfirmAccountType.NOT_OPEN);
+		account.setPledgeAccount(true);
+		
+		//Process Open Account Name
+		List<OpenAccountName> accountNames = account.getOpenAccountNameList();
+		if (accountNames == null) {
+			accountNames = new ArrayList<OpenAccountName>();
+			account.setOpenAccountNameList(accountNames);
+		}
+		HashSet<Long> accountNameSet = new HashSet<Long>();
+		for (OpenAccountName name : accountNames)
+			accountNameSet.add(name.getCustomer().getId());
+		List<NewCollateralSubOwner> owners = collateral.getNewCollateralSubOwnerList();
+		for (NewCollateralSubOwner owner : owners) {
+			if (owner.getCustomer() == null)
+				continue;
+			if (accountNameSet.contains(owner.getCustomer().getId()))
+				continue;
+			OpenAccountName accountName = new OpenAccountName();
+			accountName.setCustomer(owner.getCustomer());
+			accountName.setOpenAccount(account);
+			accountNames.add(accountName);
+		}
+		
+		//Process Account Purpose
+		List<OpenAccountPurpose> purposes = account.getOpenAccountPurposeList();
+		if (purposes == null) {
+			purposes = new ArrayList<OpenAccountPurpose>();
+			account.setOpenAccountPurposeList(purposes);
+		}
+		if (defaultPurpose != null) {
+			boolean foundDefault = false;
+			for (OpenAccountPurpose purpose : purposes) {
+				if (purpose.getAccountPurpose().getId() == defaultPurpose.getId()) {
+					foundDefault = true;
+					break;
+				}
+			}
+			if (!foundDefault) {
+				OpenAccountPurpose purpose = new OpenAccountPurpose();
+				purpose.setAccountPurpose(defaultPurpose);
+				purpose.setOpenAccount(account);
+				purposes.add(purpose);
+			}
+		}
+		
+		//Process Account Credit
+		ArrayList<OpenAccountCredit> newOpenCredits = new ArrayList<OpenAccountCredit>();
+		List<OpenAccountCredit> credits = account.getOpenAccountCreditList();
+		if (credits == null) {
+			credits = new ArrayList<OpenAccountCredit>();
+		}
+		List<NewCollateralCredit> collCredits = collateral.getNewCollateralHead().getNewCollateral().getNewCollateralCreditList();
+		HashMap<String,OpenAccountCredit> creditHash = new HashMap<String, OpenAccountCredit>();
+		for (OpenAccountCredit credit : credits) {
+			if (credit.getExistingCreditDetail()  != null) {
+				creditHash.put("E::"+credit.getExistingCreditDetail().getId(), credit);
+			} else if (credit.getNewCreditDetail() != null) {
+				creditHash.put("N::"+credit.getNewCreditDetail().getId(), credit);
+			}
+		}
+		//new and update
+		for (NewCollateralCredit collCredit : collCredits) {
+			if (collCredit.getExistingCreditDetail() != null) {
+				String key = "E::"+collCredit.getExistingCreditDetail().getId();
+				OpenAccountCredit credit = creditHash.get(key);
+				if (credit == null) {
+					credit = new OpenAccountCredit();
+					credit.setOpenAccount(account);
+					credit.setExistingCreditDetail(collCredit.getExistingCreditDetail());
+					credit.setFromPledge(true);
+					newOpenCredits.add(credit);
+				} else {
+					credit.setFromPledge(true);
+					creditHash.remove(key);
+				}
+			} else if (collCredit.getNewCreditDetail() != null) {
+				String key = "N::"+collCredit.getNewCreditDetail().getId();
+				OpenAccountCredit credit = creditHash.get(key);
+				if (credit == null) {
+					credit = new OpenAccountCredit();
+					credit.setOpenAccount(account);
+					credit.setNewCreditDetail(collCredit.getNewCreditDetail());
+					credit.setFromPledge(true);
+					newOpenCredits.add(credit);
+				} else {
+					credit.setFromPledge(true);
+					creditHash.remove(key);
+				}
+			}
+		}
+		//remove
+		for (String key : creditHash.keySet()) {
+			OpenAccountCredit credit = creditHash.get(key);
+			if (!credit.isFromPledge()) //keep only created by user
+				newOpenCredits.add(credit);
+		}
+		account.setOpenAccountCreditList(newOpenCredits);
+		
+		//Process Account DEP
+		List<OpenAccountDeposit> deposits = account.getOpenAccountDepositList();
+		if (deposits == null) {
+			deposits = new ArrayList<OpenAccountDeposit>();
+			account.setOpenAccountDepositList(deposits);
+		}
+			
+	}
 }

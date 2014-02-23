@@ -1,5 +1,7 @@
 package com.clevel.selos.model.db.working;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -7,14 +9,15 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "wrk_open_account_name")
-public class OpenAccountName {
+public class OpenAccountName implements Serializable {
+    private static final long serialVersionUID = 6561832903791525764L;
 
-    @Id
+	@Id
     @SequenceGenerator(name = "SEQ_WRK_OPEN_ACC_NAME_ID", sequenceName = "SEQ_WRK_OPEN_ACC_NAME_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_OPEN_ACC_NAME_ID")
     private long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "open_account_id")
     private OpenAccount openAccount;
 

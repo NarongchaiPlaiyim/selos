@@ -3,18 +3,22 @@ package com.clevel.selos.dao.master;
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountProduct;
+import com.clevel.selos.model.db.master.CollateralType;
+import com.clevel.selos.model.db.master.SubCollateralType;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+
 import java.util.List;
 
 public class BankAccountProductDAO extends GenericDAO<BankAccountProduct, Integer> {
     @Inject
     @SELOS
     Logger log;
-    @Inject
+    
     public BankAccountProductDAO() {
     }
 
@@ -35,5 +39,18 @@ public class BankAccountProductDAO extends GenericDAO<BankAccountProduct, Intege
         log.info("findByAccountTypeId. (result size: {})", accountProductList.size());
 
         return accountProductList;
+    }
+    
+    public BankAccountProduct findByCollateral(CollateralType collateralType,SubCollateralType subCollateralType) {
+    	if (collateralType == null || subCollateralType == null)
+    		return null;
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("collateralType", collateralType));
+		criteria.add(Restrictions.eq("subCollateralType", subCollateralType));
+		criteria.add(Restrictions.eq("active", 1));
+		try {
+			return (BankAccountProduct) criteria.uniqueResult();
+		} catch (Throwable e) {}
+		return null;
     }
 }
