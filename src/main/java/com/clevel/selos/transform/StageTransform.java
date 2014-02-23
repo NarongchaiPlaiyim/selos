@@ -17,12 +17,15 @@ public class StageTransform extends Transform {
     }
 
     public Stage transformToModel(StageView stageView) {
-        Stage stage = new Stage();
         if (stageView == null) {
-            return stage;
+            return null;
         }
+
+        Stage stage;
         if (stageView.getId() != 0) {
             stage = stageDAO.findById(stageView.getId());
+        } else {
+            stage = new Stage();
         }
         stage.setName(stageView.getName());
         stage.setDescription(stageView.getDescription());
