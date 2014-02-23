@@ -76,15 +76,19 @@ public class Appraisal implements Serializable {
     @Column(name = "AAD_admin_remark")
     private String AADAdminRemark;
 
-    @OneToMany(mappedBy = "appraisal")
+    @OneToMany(mappedBy = "appraisal", cascade = CascadeType.ALL)
     private List<AppraisalPurpose> appraisalDetailList;
 
-    @OneToMany(mappedBy = "appraisal")
+    @OneToMany(mappedBy = "appraisal", cascade = CascadeType.ALL)
     private List<AppraisalContactDetail> appraisalContactDetailList;
 
     @OneToOne
     @JoinColumn(name="workcase_appraisal_id")
     private WorkCase workCase;
+
+    @OneToOne
+    @JoinColumn(name = "workcase_prescreen_id")
+    private WorkCasePrescreen workCasePrescreen;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -272,6 +276,14 @@ public class Appraisal implements Serializable {
 
     public void setWorkCase(WorkCase workCase) {
         this.workCase = workCase;
+    }
+
+    public WorkCasePrescreen getWorkCasePrescreen() {
+        return workCasePrescreen;
+    }
+
+    public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
+        this.workCasePrescreen = workCasePrescreen;
     }
 
     public Date getCreateDate() {

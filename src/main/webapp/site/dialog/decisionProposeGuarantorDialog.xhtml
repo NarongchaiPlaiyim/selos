@@ -4,55 +4,56 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
-
+<style >
+    .ui-chkbox.ui-chkbox-all.ui-widget {
+        padding-top: 20px;
+    }
+</style>
 <p:panel id="guarantorDlgPanel" styleClass="panel-dialog">
     <h:form id="guarantorDlgForm">
         <table class="content_form content_table_form">
             <tr>
                 <td class="title" style="width: 20%">
-                    <p:outputLabel for="dlgGuarantorRadioApprove"
-                                   value="#{msg.get('app.decision.header')}"/>
+                    <h:outputText value="#{msg.get('app.decision.header')} :"/>
                 </td>
                 <td class="left" style="width: 80%">
                     <p:selectOneRadio id="dlgGuarantorRadioApprove"
-                                      value="#{decision.selectedAppProposeGuarantor.approved}"
+                                      value="#{decision.selectedApproveGuarantor.uwDecision}"
                                       required="#{not empty param[saveGuarantorButton.clientId]}">
-                        <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="2"/>
-                        <f:selectItem itemLabel="#{msg.get('app.button.notApprove')}" itemValue="1"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.notApprove')}" itemValue="#{decision.decisionREJECTED}"/>
                     </p:selectOneRadio>
                 </td>
             </tr>
             <tr>
                 <td class="title">
-                    <p:outputLabel for="dlgGuarantorName"
-                                   value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.guarantorName')}"/>
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.guarantorName')}"/>
                 </td>
                 <td class="left">
                     <p:selectOneMenu id="dlgGuarantorName"
-                                     value="#{decision.selectedAppProposeGuarantor.guarantorName.id}"
+                                     value="#{decision.selectedApproveGuarantor.guarantorName.id}"
                                      style="width: 200px;"
                                      required="#{not empty param[saveGuarantorButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{decision.guarantorList}"
-                                       var="guarantorList"
-                                       itemLabel="#{guarantorList.firstNameTh} #{guarantorList.lastNameTh}"
-                                       itemValue="#{guarantorList.id}"/>
+                                       var="guarantorDlg"
+                                       itemLabel="#{guarantorDlg.firstNameTh} #{guarantorDlg.lastNameTh}"
+                                       itemValue="#{guarantorDlg.id}"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
             <tr>
                 <td class="title">
-                    <p:outputLabel for="dlgTcgLgNo" value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.TCGLGNo')}"/>
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.TCGLGNo')}"/>
                 </td>
                 <td class="left">
-                    <p:inputMask id="dlgTcgLgNo" value="#{decision.selectedAppProposeGuarantor.tcgLgNo}"
+                    <p:inputMask id="dlgTcgLgNo" value="#{decision.selectedApproveGuarantor.tcgLgNo}"
                                  mask="99-9999"/>
                 </td>
             </tr>
             <tr>
                 <td class="title" colspan="2">
-                    <p:outputLabel for="dlgGuarantorCreditTypeTable"
-                                   value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.creditType')}"/>
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.creditType')}"/>
                 </td>
             </tr>
             <tr>
@@ -98,11 +99,11 @@
                         </p:column>
 
                         <p:column styleClass="left top">
-                            #{not empty creditTypeItem.productProgram ? creditTypeItem.productProgram.name : ''}
+                            #{not empty creditTypeItem.productProgramView ? creditTypeItem.productProgramView.name : ''}
                         </p:column>
 
                         <p:column styleClass="left top">
-                            #{not empty creditTypeItem.creditFacility ? creditTypeItem.creditFacility.name : ''}
+                            #{not empty creditTypeItem.creditFacilityView ? creditTypeItem.creditFacilityView.name : ''}
                         </p:column>
 
                         <p:column styleClass="right top">
@@ -115,6 +116,7 @@
 
                         <p:column styleClass="center top">
                             <p:inputText value="#{creditTypeItem.guaranteeAmount}"
+                                         maxlength="18"
                                          onclick="this.select()"
                                          onkeydown="return onKeyDownMoney(event);"
                                          onkeypress="return onKeyPressMoney(event);"
@@ -129,6 +131,7 @@
                     </p:dataTable>
                 </td>
             </tr>
+
             <tr>
                 <td colspan="2" style="height:28px;"></td>
             </tr>
@@ -139,11 +142,13 @@
                             value="#{msg.get('app.credit.facility.propose.okButton')}"
                             binding="#{saveGuarantorButton}"
                             styleClass="small"
-                            action="#{decision.onSaveGuarantorInfo()}"
+                            action="#{decision.onSaveApproveGuarantor()}"
                             process=":@form"
                             update=":guarantorDlgForm,:frmMain,:msgBoxSystemMessagePanel"
                             oncomplete="handleDialogRequest(xhr, status, args, 'proposeGuarantorDlg')"/>
+
                     <p:spacer width="10" height="0"/>
+
                     <p:commandButton
                             value="#{msg.get('app.credit.facility.propose.cancelButton')}"
                             styleClass="small"

@@ -2,9 +2,11 @@ package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.Role;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.UserZone;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -59,6 +61,42 @@ public class UserDAO extends GenericDAO<User,String> {
         criteria.add(Restrictions.eq("role", role));
         criteria.add(Restrictions.eq("team", user.getTeam()));
         criteria.addOrder(Order.asc("id"));
+
+        List<User> userList = criteria.list();
+
+        return userList;
+    }
+
+    public List<User> findUserZoneList(User user){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.ne("id", user.getId()));
+        criteria.add(Restrictions.eq("role.id", RoleValue.ZM.id()));
+        criteria.add(Restrictions.eq("team", user.getTeam()));
+        criteria.addOrder(Order.asc("userName"));
+
+        List<User> userList = criteria.list();
+
+        return userList;
+    }
+
+    public List<User> findUserRegionList(User user){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.ne("id", user.getId()));
+        criteria.add(Restrictions.eq("role.id", RoleValue.RGM.id()));
+        criteria.add(Restrictions.eq("team", user.getTeam()));
+        criteria.addOrder(Order.asc("userName"));
+
+        List<User> userList = criteria.list();
+
+        return userList;
+    }
+
+    public List<User> findUserHeadList(User user){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.ne("id", user.getId()));
+        criteria.add(Restrictions.eq("role.id", RoleValue.GH.id()));
+        criteria.add(Restrictions.eq("team", user.getTeam()));
+        criteria.addOrder(Order.asc("userName"));
 
         List<User> userList = criteria.list();
 

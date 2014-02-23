@@ -13,5 +13,4 @@ public enum DecisionType {
         return value;
     }
 
-
 }

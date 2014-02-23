@@ -6,6 +6,7 @@ import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.dao.working.TCGDAO;
 import com.clevel.selos.dao.working.TCGDetailDAO;
+import com.clevel.selos.dao.working.TCGInfoDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RadioValue;
@@ -16,17 +17,23 @@ import com.clevel.selos.model.db.relation.PotentialColToTCGCol;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.TCG;
 import com.clevel.selos.model.db.working.TCGDetail;
+import com.clevel.selos.model.db.working.TCGInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.TCGDetailView;
+import com.clevel.selos.model.view.TCGInfoView;
 import com.clevel.selos.model.view.TCGView;
 import com.clevel.selos.transform.TCGDetailTransform;
+import com.clevel.selos.transform.TCGInfoTransform;
 import com.clevel.selos.transform.TCGTransform;
 import com.clevel.selos.util.Util;
+
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 
@@ -40,6 +47,9 @@ public class TCGInfoControl extends BusinessControl {
     TCGDetailTransform tcgDetailTransform;
     @Inject
     TCGTransform tcgTransform;
+    
+    @Inject
+    TCGInfoTransform tcgInfoTransform;
 
     @Inject
     TCGDAO TCGDAO;
@@ -57,8 +67,37 @@ public class TCGInfoControl extends BusinessControl {
     BasicInfoDAO basicInfoDAO;
 
     @Inject
+    TCGInfoDAO tcgInfoDAO;
+    @Inject
     public void TCGInfoControl() {
 
+    }
+    
+    public TCGInfoView getTCGInfoView(long workCaseId){
+    	TCGInfo tcgInfo = tcgInfoDAO.findByWorkCaseId(workCaseId);
+    	return tcgInfoTransform.transformToView(tcgInfo);
+    }
+    
+    public void onSaveTCGInfo(TCGInfoView tcgInfoView, long workCaseId, User user){
+    	TCGInfo tcgInfo = tcgInfoDAO.findByWorkCaseId(workCaseId);
+    	if (tcgInfo != null){
+    		tcgInfo.setApprovedResult(tcgInfoView.getApprovedResult());
+    		tcgInfo.setApproveDate(tcgInfoView.getApproveDate());
+    		tcgInfo.setTcgSubmitDate(tcgInfoView.getTcgSubmitDate());
+    		tcgInfo.setModifyBy(user);
+    		tcgInfo.setModifyDate(new Date());
+    	}else{
+    		tcgInfo = new TCGInfo();
+    		tcgInfo.setApprovedResult(tcgInfoView.getApprovedResult());
+    		tcgInfo.setApproveDate(tcgInfoView.getApproveDate());
+    		tcgInfo.setTcgSubmitDate(tcgInfoView.getTcgSubmitDate());	
+    		WorkCase workCase = workCaseDAO.findById(workCaseId);
+    		tcgInfo.setWorkCase(workCase);
+    		tcgInfo.setCreateBy(user);
+    		tcgInfo.setCreateDate(new Date());
+    	}
+    	tcgInfoDAO.persist(tcgInfo);
+    	log.debug("persist tcgInfo");
     }
 
     public void onSaveTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList, Long workCaseId) {

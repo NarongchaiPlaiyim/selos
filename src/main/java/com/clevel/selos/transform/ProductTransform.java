@@ -9,6 +9,8 @@ import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.view.*;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductTransform extends Transform{
 
@@ -28,7 +30,7 @@ public class ProductTransform extends Transform{
 
     public ProductProgramView transformToView(ProductProgram productProgram){
         ProductProgramView productProgramView = new ProductProgramView();
-        if(productProgram !=null){
+        if(productProgram != null){
             productProgramView.setId(productProgram.getId());
             productProgramView.setName(productProgram.getName());
             productProgramView.setDescription(productProgram.getDescription());
@@ -109,7 +111,7 @@ public class ProductTransform extends Transform{
 
     public CreditType transformToModel(CreditTypeView creditTypeView){
         log.debug("begin transformToModel(CreditTypeView {})", creditTypeView);
-        if(creditTypeView.getId() != 0){
+        if(creditTypeView!=null && creditTypeView.getId() != 0){
             try{
                 CreditType creditType = creditTypeDAO.findById(creditTypeView.getId());
                 return creditType;
@@ -122,13 +124,30 @@ public class ProductTransform extends Transform{
 
     public ProductProgram transformToModel(ProductProgramView productProgramView){
         log.debug("begin transformToModel(productProgramView {})", productProgramView);
-        if(productProgramView.getId() != 0){
+        if(productProgramView!=null && productProgramView.getId() != 0){
             try{
                 ProductProgram productProgram = productProgramDAO.findById(productProgramView.getId());
                 return productProgram;
             } catch (Exception ex){
                 log.info("cannot find ProductProgram for {}", productProgramView);
             }
+        }
+        return null;
+    }
+
+    public List<ProductProgramView> transformToView(List<ProductProgram> productProgramList) {
+        try {
+            if(productProgramList!=null && productProgramList.size()>0) {
+                log.debug("begin transformToView(productProgramList size : {})", productProgramList.size());
+                List<ProductProgramView> productProgramViewList = new ArrayList<ProductProgramView>();
+                for(ProductProgram productProgram : productProgramList) {
+                    ProductProgramView productProgramView = transformToView(productProgram);
+                    productProgramViewList.add(productProgramView);
+                }
+                return productProgramViewList;
+            }
+        } catch (Exception ex) {
+            log.error("",ex);
         }
         return null;
     }

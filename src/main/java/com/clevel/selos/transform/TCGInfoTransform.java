@@ -17,6 +17,10 @@ public class TCGInfoTransform extends Transform {
 			view.setPayinSlipSendDate(tcgInfo.getPayinSlipSendDate());
 			view.setReceiveTCGSlip(tcgInfo.getReceiveTCGSlip());
 			view.setTcgSubmitDate(tcgInfo.getTcgSubmitDate());
+			view.setCreateBy(tcgInfo.getCreateBy());
+			view.setCreateDate(tcgInfo.getCreateDate());
+			view.setModifyBy(tcgInfo.getModifyBy());
+			view.setModifyDate(tcgInfo.getModifyDate());
 		}
 		return view;
 	}
@@ -27,6 +31,10 @@ public class TCGInfoTransform extends Transform {
 		model.setPayinSlipSendDate(view.getPayinSlipSendDate());
 		model.setReceiveTCGSlip(view.getReceiveTCGSlip());
 		model.setTcgSubmitDate(view.getTcgSubmitDate());
+		model.setCreateBy(view.getCreateBy());
+		model.setCreateDate(view.getCreateDate());
+		model.setModifyBy(view.getModifyBy());
+		model.setModifyDate(view.getModifyDate());
 		model.setWorkCase(workCase);
 		return model;
 	}

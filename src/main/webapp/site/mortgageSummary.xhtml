@@ -84,10 +84,10 @@
                         				value="#{msg.get('app.mortgageSummary.agreement.loanDate')}" />	
                         		</td>
                         		<td>
-                        			<p:calendar id='loan_contractdate' value="#{mortgageSummary.mortgageSummaryView.loanContractDate}"
+                        			<clv:BECalendar id='loan_contractdate' value="#{mortgageSummary.mortgageSummaryView.loanContractDate}"
                         					pattern="dd/MM/yyyy" showOn="button"
                                        		mindate="#{mortgageSummary.minDate}"
-                                       		autocomplete="false"
+                                       		autocomplete="false" locale="th_TH"
                                        		required="true" requiredMessage="#{msg.get('app.mortgageSummary.loanDate.validate')}"
                                        		/>
                         		</td>
@@ -114,6 +114,7 @@
                         		<td>
                         			<p:selectOneMenu id='signcontract_loc' widgetVar="p_signcontract_loc"
                         				value="#{mortgageSummary.mortgageSummaryView.updLocation}"
+                        				disabled="#{not mortgageSummary.enableSignContractLocation}"
                         				 style="width:160px">
                         				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         				<f:selectItems value="#{mortgageSummary.locations}"/>
@@ -144,39 +145,43 @@
                         	<tr>
                         		<td colspan="100%">
                         			<p:dataTable id='mortgagesumm_tbl' styleClass="full_table"
+                        				value="#{mortgageSummary.mortgageInfos}" var="mortgage"
                         				rowIndexVar="rowIdx"
                         				>
                         				<p:column style="width:20px" styleClass="center">
-                        					#{rowIdx}
+                        					#{rowIdx+1}
                         				</p:column>
                         				<p:column style="width:270px"
                         					headerText="#{msg.get('app.mortgageSummary.mortgageSummary.mortgageType')}" 
                         					>
+                        					#{mortgage.mortgageType}	
                         				</p:column>
                         				<p:column style="width:180px" styleClass="right"
                         					headerText="#{msg.get('app.mortgageSummary.mortgageSummary.mortgageAmount')}"
                         					>
-                        					<h:outputText value="0">
+                        					<h:outputText value="#{mortgage.mortgageAmount}">
                         						<f:convertNumber pattern="#,##0.00"/>
                         					</h:outputText>
                         				</p:column>
                         				<p:column style="width:180px" styleClass="center"
                         					headerText="#{msg.get('app.mortgageSummary.mortgageSummary.signingDate')}"
                         					>
-                        					<h:outputText value="">
-                        						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
+                        					<h:outputText value="#{mortgage.signingDate}">
+                        						<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                         					</h:outputText>
                         				</p:column>
                         				<p:column 
                         					headerText="#{msg.get('app.mortgageSummary.mortgageSummary.landOffice')}"
                         					>
-                        					
+                        					#{mortgage.landOfficeStr}
                         				</p:column>
                         				<p:column style="width:30px" styleClass="center">
                         					<p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
-                           						action="#{mortgageSummary.clickMorgageDetail(0)}"
-                           						ajax="false"
+                           						action="#{mortgageSummary.clickMorgageDetail(mortgage.id)}"
+                           						ajax="true"
                            						process="@this"
+                           						immediate="true"
+                           						partialSubmit="true"
                            						style="margin-right:0px !important"
                            						/>
                         				</p:column>
@@ -197,38 +202,43 @@
                         	<tr>
                         		<td colspan="100%">
                         			<p:dataTable id='pledgesumm_tbl' styleClass="full_table"
+                        				value="#{mortgageSummary.pledgeInfos}" var="pledge"
                         				rowIndexVar="rowIdx"
                         				>
                         				<p:column style="width:20px" styleClass="center">
-                        					#{rowIdx}
+                        					#{rowIdx+1}
                         				</p:column>
                         				<p:column style="width:200px"
                         					headerText="#{msg.get('app.mortgageSummary.pledgeSummary.accountNumber')}"
                         					>
+                        					#{pledge.accountNo}
                         				</p:column>
                         				<p:column
                         					headerText="#{msg.get('app.mortgageSummary.pledgeSummary.pledgeType')}"
                         					>
+                        					#{pledge.pledgeType}
                         				</p:column>
                         				<p:column style="width:180px" styleClass="right"
                         					headerText="#{msg.get('app.mortgageSummary.pledgeSummary.pledgeAmount')}"
                         					>
-                        					<h:outputText value="0">
+                        					<h:outputText value="#{pledge.pledgeAmount}">
                         						<f:convertNumber pattern="#,##0.00"/>
                         					</h:outputText>
                         				</p:column>
                         				<p:column style="width:180px" styleClass="center"
                         					headerText="#{msg.get('app.mortgageSummary.pledgeSummary.signingDate')}"
                         					>
-                        					<h:outputText value="">
-                        						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
+                        					<h:outputText value="#{pledge.signingDate}">
+                        						<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                         					</h:outputText>
                         				</p:column>
                         				<p:column style="width:30px" styleClass="center">
                         					<p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
-                           						action="#{mortgageSummary.clickPledgeDetail(0)}"
-                           						ajax="false"
+                           						action="#{mortgageSummary.clickPledgeDetail(pledge.id)}"
+                           						ajax="true"
                            						process="@this"
+                           						immediate="true"
+                           						partialSubmit="true"
                            						style="margin-right:0px !important"
                            						/>
                         				</p:column>
@@ -249,38 +259,43 @@
                         	<tr>
                         		<td colspan="100%">
                         			<p:dataTable id='guarantorsumm_tbl' styleClass="full_table"
+                        				value="#{mortgageSummary.guarantorInfos}" var="guarantor"
                         				rowIndexVar="rowIdx"
                         				>
                         				<p:column style="width:20px" styleClass="center">
-                        					#{rowIdx}
+                        					#{rowIdx+1}
                         				</p:column>
                         				<p:column style="width:270px"
                         					headerText="#{msg.get('app.mortgageSummary.guarantorSummary.guarantorName')}"
                         					>
+                        					#{guarantor.guarantorName}
                         				</p:column>
                         				<p:column
                         					headerText="#{msg.get('app.mortgageSummary.guarantorSummary.guarantorType')}"
                         					>
+                        					#{guarantor.guarantorType}
                         				</p:column>
                         				<p:column style="width:180px" styleClass="right"
                         					headerText="#{msg.get('app.mortgageSummary.guarantorSummary.guarantorAmount')}"
                         					>
-                        					<h:outputText value="0">
+                        					<h:outputText value="#{guarantor.guarantorAmount}">
                         						<f:convertNumber pattern="#,##0.00"/>
                         					</h:outputText>
                         				</p:column>
                         				<p:column style="width:180px" styleClass="center"
                         					headerText="#{msg.get('app.mortgageSummary.guarantorSummary.signingDate')}"
                         					>
-                        					<h:outputText value="">
-                        						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
+                        					<h:outputText value="#{guarantor.signingDate}">
+                        						<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                         					</h:outputText>
                         				</p:column>
                         				<p:column style="width:30px" styleClass="center">
                         					<p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
-                           						action="#{mortgageSummary.clickGuarantorDetail(0)}"
-                           						ajax="false"
+                           						action="#{mortgageSummary.clickGuarantorDetail(guarantor.id)}"
+                           						ajax="true"
                            						process="@this"
+                           						immediate="true"
+                           						partialSubmit="true"
                            						style="margin-right:0px !important"
                            						/>
                         				</p:column>

@@ -7,8 +7,8 @@
         xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-        <title>Appraisal Request</title>
-        <h:outputStylesheet name="css/style.css" />
+    <title>#{msg.get("app.name")} - Appraisal Request</title>
+    <h:outputStylesheet name="css/style.css" />
     <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
     <h:outputScript library="js" name="custom.js" />
     <style type="text/css">
@@ -151,56 +151,51 @@
                             </tr>
 
                             <tr>
-                                <td colspan="6" style="width:100%">
-                                    <table>
+                                <td >
+                                    <table class="table_content" border="0" style="padding: 0%" >
                                         <tr>
-                                            <td style="width: 30px;"/>
-                                            <td style="width: 30px;"/>
-                                            <td style="width: 30px;"/>
-                                        </tr>
-                                        <tr>
-                                            <td/>
-                                            <td class="center">
+                                            <th style="width: 50px;" />
+                                            <th style="width: 250px;" >
                                                 <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.table.customerName')}"/>
-                                            </td>
-                                            <td class="center">
+                                            </th>
+                                            <th style="width: 250px;" >
                                                 <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.table.contactNo')}"/>
-                                            </td>
+                                            </th>
                                         </tr>
                                         <tr id="contactId">
-                                            <td>
+                                            <td class="center">
                                                 <p:outputLabel value="1"/>
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName1}"
                                                              style = "#{appraisalRequest.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " />
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo1}"
                                                              mask="099-999-9999"
                                                              style = "#{appraisalRequest.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>
+                                            <td class="center">
                                                 <p:outputLabel value="2"/>
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName2}"/>
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo2}"
                                                              mask="099-999-9999" />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>
+                                            <td class="center">
                                                 <p:outputLabel value="3"/>
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName3}"/>
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo3}"
                                                              mask="099-999-9999" />
                                             </td>
@@ -289,12 +284,26 @@
     </ui:include>
     
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                         header="#{appraisalRequest.messageHeader}" message="#{appraisalRequest.message}" >
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
+                         header="#{appraisalRequest.messageHeader}" >
+            <f:facet name="message">
+                <h:outputText value="#{appraisalRequest.message}" escape="false"/>
+            </f:facet>
             <p:commandButton value="OK"
                              process="@this"
                              update=":frmMain"
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
+    <p:panel id="msgBoxRedirectPanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
+                         header="#{appraisalRequest.messageHeader}" >
+            <f:facet name="message">
+                <h:outputText value="#{appraisalRequest.message}" escape="false"/>
+            </f:facet>
+            <p:commandButton value="OK"
+                             process="@this"
+                             action="#{baseController.onGoToInbox}"/>
         </p:confirmDialog>
     </p:panel>
     <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">

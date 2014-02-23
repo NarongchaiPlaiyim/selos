@@ -414,15 +414,13 @@ public class CustomerInfoControl extends BusinessControl {
         log.info("getCustomerInfoFromRM ::: customerInfoView.getSearchBy : {}", customerInfoView.getSearchBy());
         log.info("getCustomerInfoFromRM ::: customerInfoView.getSearchId : {}", customerInfoView.getSearchId());
 
-        DocumentType masterDocumentType = new DocumentType();
+        DocumentType masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
 
         RMInterface.SearchBy searchBy = RMInterface.SearchBy.CUSTOMER_ID;
         if(customerInfoView.getSearchBy() == 1){
             searchBy = RMInterface.SearchBy.CUSTOMER_ID;
-            masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
         }else if(customerInfoView.getSearchBy() == 2){
             searchBy = RMInterface.SearchBy.TMBCUS_ID;
-            masterDocumentType = documentTypeDAO.findById(1);
         }
 
         User user = getCurrentUser();
@@ -647,7 +645,13 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getCountry() != null && add2.getCountry() != null){
-            if(!add1.getCountry().getCode().equals(add2.getCountry().getCode())){
+            if(add1.getCountry().getCode() != null && add2.getCountry().getCode() != null){
+                if(!add1.getCountry().getCode().equals(add2.getCountry().getCode())){
+                    return currentAddress;
+                }
+            } else if(add1.getCountry().getCode() != null && add2.getCountry().getCode() == null){
+                return currentAddress;
+            } else if(add2.getCountry().getCode() != null && add1.getCountry().getCode() == null){
                 return currentAddress;
             }
         } else if(add1.getCountry() != null && add2.getCountry() == null){
@@ -657,6 +661,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         currentAddress = 1;
+
         return currentAddress;
     }
 

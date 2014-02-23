@@ -23,7 +23,15 @@ public class NewCreditFacilityDAO extends GenericDAO<NewCreditFacility, Long> {
         log.info("-- findNewCreditFacilityByWorkCaseId : {}", workCaseId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
-        criteria.addOrder(Order.asc("id"));
+        NewCreditFacility newCreditFacility = (NewCreditFacility)criteria.uniqueResult();
+
+        return newCreditFacility;
+    }
+
+    public NewCreditFacility findByWorkCasePreScreenId(long workCasePreScreenId){
+        log.info("-- findByWorkCasePreScreenId : {}", workCasePreScreenId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
         NewCreditFacility newCreditFacility = (NewCreditFacility) criteria.uniqueResult();
 
         return newCreditFacility;

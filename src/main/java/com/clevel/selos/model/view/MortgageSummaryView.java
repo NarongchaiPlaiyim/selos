@@ -48,7 +48,10 @@ public class MortgageSummaryView implements Serializable {
 	}
 
 	public MortgageSignLocationType getSigningLocation() {
-		return signingLocation;
+		if (signingLocation == null)
+			return MortgageSignLocationType.NA;
+		else
+			return signingLocation;
 	}
 
 	public void setSigningLocation(MortgageSignLocationType signingLocation) {
@@ -85,5 +88,9 @@ public class MortgageSummaryView implements Serializable {
 	
 	public void setUpdLocation(int updLocation) {
 		this.updLocation = updLocation;
+	}
+	
+	public boolean requiredCalculate() {
+		return id <= 0 || agreementId <=0;
 	}
 }

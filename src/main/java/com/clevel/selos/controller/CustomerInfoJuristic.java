@@ -190,20 +190,46 @@ public class CustomerInfoJuristic implements Serializable {
     public CustomerInfoJuristic(){
     }
 
-    @PostConstruct
-    public void onCreation() {
+    public void preRender(){
+        log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         }else{
-            log.info("preRender ::: workCaseId is null.");
+            log.debug("onCreation ::: workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
-                return;
             }catch (Exception ex){
-                log.error("Exception :: {}", ex);
+                log.error("Exception :: {}",ex);
             }
+        }
+    }
+
+    @PostConstruct
+    public void onCreation() {
+        log.debug("onCreation");
+
+        HttpSession session = FacesUtil.getSession(true);
+
+        if(session.getAttribute("workCaseId") != null){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            if(workCaseId == 0){
+                try{
+                    FacesUtil.redirect("/site/inbox.jsf");
+                }catch (Exception ex){
+                    log.error("Exception :: {}",ex);
+                }
+                return;
+            }
+        }else{
+            log.debug("onCreation ::: workCaseId is null.");
+            try{
+                FacesUtil.redirect("/site/inbox.jsf");
+            }catch (Exception ex){
+                log.error("Exception :: {}",ex);
+            }
+            return;
         }
 
         enableAllFieldCus = false;
@@ -468,10 +494,8 @@ public class CustomerInfoJuristic implements Serializable {
                     customerInfoView.setCollateralOwner(1);
                     if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
                         if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
-//                            addressFlagForm2 = 1;
                             customerInfoView.getWorkAddress().setAddressTypeFlag(1);
                         } else {
-//                            addressFlagForm2 = 3;
                             customerInfoView.getWorkAddress().setAddressTypeFlag(3);
                         }
                         customerInfoView.getWorkAddress().setAddressTypeFlag(1);
@@ -504,8 +528,12 @@ public class CustomerInfoJuristic implements Serializable {
                 message = customerInfoResultView.getReason();
                 severity = "info";
             }
+
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
-            customerInfoView.setRegistrationId(customerInfoSearch.getSearchId());
+            if(customerInfoSearch.getSearchBy() == 1){
+                customerInfoView.setRegistrationId(customerInfoSearch.getSearchId());
+            }
+
             onChangeProvinceEditForm1();
             onChangeDistrictEditForm1();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");

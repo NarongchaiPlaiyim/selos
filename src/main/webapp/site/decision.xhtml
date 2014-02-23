@@ -31,6 +31,7 @@
         }
         table.ovr-border {
             margin: 0 auto !important;
+            width: auto !important;
         }
         table.ovr-border tbody td {
             border-style: none !important;
@@ -1618,12 +1619,12 @@
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                        #{proposeCredit.productProgramView.name}
+                                                        #{not empty proposeCredit.productProgramView ? proposeCredit.productProgramView.name : ''}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                        #{proposeCredit.creditTypeView.name}
+                                                        #{not empty proposeCredit.creditTypeView ? proposeCredit.creditTypeView.name : ''}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -1717,15 +1718,17 @@
                                                                     #{msg.get('app.decision.tb.td.label.requestType')}
                                                                 </td>
                                                                 <td class="left" style="border-style: none !important;">
-                                                                    #{proposeCredit.requestType == 2 ? msg.get('app.label.new') :
-                                                                    proposeCredit.requestType == 1 ? msg.get('app.label.change') : ''}
+                                                                    #{proposeCredit.requestType == decision.requestTypeNEW.value ? msg.get('app.label.new')
+                                                                    : proposeCredit.requestType == decision.requestTypeCHANGE.value ? msg.get('app.label.change')
+                                                                    : ''}
                                                                 </td>
                                                                 <td class="title" style="border-style: none !important;">
                                                                     #{msg.get('app.decision.tb.td.label.refinance')}
                                                                 </td>
                                                                 <td class="left" style="border-style: none !important;">
-                                                                    #{proposeCredit.refinance == 2 ? msg.get('app.label.yes') :
-                                                                    proposeCredit.refinance == 1 ? msg.get('app.label.no') : ''}
+                                                                    #{proposeCredit.refinance == decision.yesValue ? msg.get('app.label.yes')
+                                                                    : proposeCredit.refinance == decision.noValue ? msg.get('app.label.no')
+                                                                    : ''}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -1733,7 +1736,7 @@
                                                                     #{msg.get('app.decision.tb.td.label.purpose')}
                                                                 </td>
                                                                 <td class="left" colspan="3" style="border-style: none !important;">
-                                                                    #{proposeCredit.loanPurposeView.description}
+                                                                    #{not empty proposeCredit.loanPurposeView ? proposeCredit.loanPurposeView.description : ''}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -1748,7 +1751,7 @@
                                                                     #{msg.get('app.decision.tb.td.label.disbursement')}
                                                                 </td>
                                                                 <td class="left" style="border-style: none !important;">
-                                                                    #{proposeCredit.disbursementTypeView.disbursement}
+                                                                    #{not empty proposeCredit.disbursementTypeView ? proposeCredit.disbursementTypeView.disbursement : ''}
                                                                 </td>
                                                                 <td class="title" style="border-style: none !important;">
                                                                     #{msg.get('app.decision.tb.td.label.holdAmount')}
@@ -1768,7 +1771,7 @@
 
                                             <h:panelGroup rendered="#{empty decision.decisionView.proposeCreditList}">
                                                 <tr>
-                                                    <td colspan="11">No records found.</td>
+                                                    <td colspan="11">#{msg.get('app.label.noRecordsFound')}</td>
                                                 </tr>
                                             </h:panelGroup>
 
@@ -1813,8 +1816,8 @@
                         <tr>
                             <td class="left" colspan="2">
                                 <p:selectOneRadio value="#{decision.creditCustomerType}">
-                                    <f:selectItem itemLabel="#{msg.get('app.button.normal')}" itemValue="1"/>
-                                    <f:selectItem itemLabel="#{msg.get('app.button.prime')}" itemValue="2"/>
+                                    <f:selectItem itemLabel="#{msg.get('app.button.normal')}" itemValue="#{decision.creditCusTypeNORMAL}"/>
+                                    <f:selectItem itemLabel="#{msg.get('app.button.prime')}" itemValue="#{decision.creditCusTypePRIME}"/>
                                 </p:selectOneRadio>
                             </td>
                         </tr>
@@ -1902,7 +1905,7 @@
                                 <p:commandButton id="btnAddApprovedCredit"
                                                  value="#{msg.get('app.button.add')}"
                                                  disabled="#{decision.roleBDM}"
-                                                 actionListener="#{decision.onAddAppProposeCredit()}"
+                                                 actionListener="#{decision.onAddApproveCredit()}"
                                                  process="@form"
                                                  update=":proposeCreditDlgForm,:msgBoxSystemMessagePanel"
                                                  oncomplete="handleDialogOpen(xhr, status, args, 'proposeCreditDlg')"
@@ -1958,7 +1961,9 @@
                                                         <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                     fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
-                                                            #{proposeCredit.uwDecision.value eq 2 ? msg.get('app.label.approved') : proposeCredit.uwDecision.value eq 1 ? msg.get('app.label.notApproved') : ''}
+                                                            #{proposeCredit.uwDecision eq 'APPROVED' ? msg.get('app.label.approved')
+                                                            : proposeCredit.uwDecision eq 'REJECTED' ? msg.get('app.label.rejected')
+                                                            : ''}
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -2033,11 +2038,11 @@
                                                             <p:commandButton title="#{msg.get('app.button.edit')}"
                                                                              icon="ui-icon-pencil"
                                                                              disabled="#{not decision.roleUW}"
-                                                                             action="#{decision.onEditAppProposeCredit()}"
+                                                                             action="#{decision.onEditApproveCredit()}"
                                                                              update=":proposeCreditDlgForm"
                                                                              oncomplete="proposeCreditDlg.show()">
                                                                 <f:setPropertyActionListener value="#{proposeCredit}"
-                                                                                             target="#{decision.selectedAppProposeCredit}"/>
+                                                                                             target="#{decision.selectedApproveCredit}"/>
                                                                 <f:setPropertyActionListener value="#{i.index}"
                                                                                              target="#{decision.rowIndexCredit}"/>
                                                                 <!--<p:resetInput target=":proposeCreditDlgForm"/>-->
@@ -2048,7 +2053,7 @@
                                                                              disabled="#{not decision.roleUW}"
                                                                              oncomplete="confirmDeleteAppProposeCreditDlg.show()">
                                                                 <f:setPropertyActionListener value="#{proposeCredit}"
-                                                                                             target="#{decision.selectedAppProposeCredit}"/>
+                                                                                             target="#{decision.selectedApproveCredit}"/>
                                                                 <f:setPropertyActionListener value="#{i.index}"
                                                                                              target="#{decision.rowIndexCredit}"/>
                                                             </p:commandButton>
@@ -2226,10 +2231,6 @@
                                                                                  minFractionDigits="2" maxFractionDigits="2"
                                                                                  maxIntegerDigits="14"/>
                                                             </h:outputText>
-                                                            <!-- Approved Credit Hidden Field for BRMS -->
-                                                            <h:inputHidden value="#{decision.decisionView.approveTotalNumOfNewOD}"/>
-                                                            <h:inputHidden value="#{decision.decisionView.approveTotalNumProposeCreditFac}"/>
-                                                            <h:inputHidden value="#{decision.decisionView.approveTotalNumContingentPropose}"/>
                                                         </td>
                                                         <td class="summary_column" colspan="7"></td>
                                                     </tr>
@@ -2274,7 +2275,7 @@
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                             fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
                                                         #{proposeCredit.approved eq 2 ? msg.get('app.label.approved') :
-                                                          proposeCredit.approved eq 1 ? msg.get('app.label.notApproved') : ''}
+                                                          proposeCredit.approved eq 1 ? msg.get('app.label.rejected') : ''}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -2517,10 +2518,6 @@
                                                                          minFractionDigits="2" maxFractionDigits="2"
                                                                          maxIntegerDigits="14"/>
                                                     </h:outputText>
-                                                    <!-- Approved Credit Hidden Field for BRMS -->
-                                                    <h:inputHidden value="#{decision.decisionView.approveTotalNumOfNewOD}"/>
-                                                    <h:inputHidden value="#{decision.decisionView.approveTotalNumProposeCreditFac}"/>
-                                                    <h:inputHidden value="#{decision.decisionView.approveTotalNumContingentPropose}"/>
                                                 </td>
                                                 <td class="summary_column" colspan="6"></td>
                                             </tr>
@@ -2645,19 +2642,19 @@
                                                 </p:column>
 
                                                 <p:column styleClass="left top">
-                                                    #{collCrdType.requestType == 2 ? msg.get('app.label.new')
-                                                    : collCrdType.requestType == 1 ? msg.get('app.label.change')
+                                                    #{collCrdType.requestType == decision.requestTypeNEW.value ? msg.get('app.label.new')
+                                                    : collCrdType.requestType == decision.requestTypeCHANGE.value ? msg.get('app.label.change')
                                                     : ''}
                                                 </p:column>
 
                                                 <p:column styleClass="left top">
-                                                    <h:outputText value="#{collCrdType.productProgram.name}"
-                                                                  rendered="#{not empty collCrdType.productProgram}"/>
+                                                    <h:outputText value="#{collCrdType.productProgramView.name}"
+                                                                  rendered="#{not empty collCrdType.productProgramView}"/>
                                                 </p:column>
 
                                                 <p:column styleClass="left top">
-                                                    <h:outputText value="#{collCrdType.creditFacility.name}"
-                                                                  rendered="#{not empty collCrdType.creditFacility}"/>
+                                                    <h:outputText value="#{collCrdType.creditFacilityView.name}"
+                                                                  rendered="#{not empty collCrdType.creditFacilityView}"/>
                                                 </p:column>
 
                                                 <p:column styleClass="right top">
@@ -2735,12 +2732,8 @@
                                         <tr>
                                             <td class="title">#{msg.get('app.decision.label.insuranceCompany')}</td>
                                             <td class="left" colspan="3">
-                                                <!--<p:selectOneRadio value="#{collHeader.insuranceCompany}">-->
-                                                    <!--<f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.partner')}" itemValue="2"/>-->
-                                                    <!--<f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.nonPartner')}" itemValue="1"/>-->
-                                                <!--</p:selectOneRadio>-->
-                                                #{collHead.insuranceCompany eq 2 ? msg.get('app.button.partner')
-                                                : collHead.insuranceCompany eq 1 ? msg.get('app.button.nonPartner')
+                                                #{collHead.insuranceCompany eq decision.yesValue ? msg.get('app.button.partner')
+                                                : collHead.insuranceCompany eq decision.noValue ? msg.get('app.button.nonPartner')
                                                 : ''}
                                             </td>
                                         </tr>
@@ -2871,7 +2864,7 @@
                                                          oncomplete="proposeCollateralDlg.show()"
                                                          styleClass="smaller">
                                             <f:setPropertyActionListener value="#{proposeColl}"
-                                                                         target="#{decision.selectedAppProposeCollateral}"/>
+                                                                         target="#{decision.selectedApproveCollateral}"/>
                                             <f:setPropertyActionListener value="#{i.index}"
                                                                          target="#{decision.rowIndexCollateral}"/>
                                         </p:commandButton>
@@ -2884,7 +2877,7 @@
                                                          oncomplete="confirmDeleteAppProCollateralDlg.show()"
                                                          styleClass="smaller">
                                             <f:setPropertyActionListener value="#{proposeColl}"
-                                                                         target="#{decision.selectedAppProposeCollateral}"/>
+                                                                         target="#{decision.selectedApproveCollateral}"/>
                                             <f:setPropertyActionListener value="#{i.index}"
                                                                          target="#{decision.rowIndexCollateral}"/>
                                         </p:commandButton>
@@ -2921,13 +2914,8 @@
                                             <tr>
                                                 <td class="title">#{msg.get('app.decision.label.approved')}</td>
                                                 <td class="left">
-                                                    <!--<p:selectOneRadio value="#{proposeColl.approved}"-->
-                                                                      <!--disabled="true">-->
-                                                        <!--<f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>-->
-                                                        <!--<f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>-->
-                                                    <!--</p:selectOneRadio>-->
-                                                    #{proposeColl.uwDecision eq 2 ? msg.get('app.button.yes')
-                                                    : proposeColl.uwDecision eq 1 ? msg.get('app.button.no')
+                                                    #{proposeColl.uwDecision eq 'APPROVED' ? msg.get('app.button.yes')
+                                                    : proposeColl.uwDecision eq 'REJECTED' ? msg.get('app.button.no')
                                                     : ''}
                                                 </td>
                                             </tr>
@@ -2971,19 +2959,19 @@
                                             </p:column>
 
                                             <p:column styleClass="left top">
-                                                #{collCrdType.requestType == 2 ? msg.get('app.label.new')
-                                                : collCrdType.requestType == 1 ? msg.get('app.label.change')
+                                                #{collCrdType.requestType == decision.requestTypeNEW.value ? msg.get('app.label.new')
+                                                : collCrdType.requestType == decision.requestTypeCHANGE.value ? msg.get('app.label.change')
                                                 : ''}
                                             </p:column>
 
                                             <p:column styleClass="left top">
-                                                <h:outputText value="#{collCrdType.productProgram.name}"
-                                                              rendered="#{not empty collCrdType.productProgram}"/>
+                                                <h:outputText value="#{collCrdType.productProgramView.name}"
+                                                              rendered="#{not empty collCrdType.productProgramView}"/>
                                             </p:column>
 
                                             <p:column styleClass="left top">
-                                                <h:outputText value="#{collCrdType.creditFacility.name}"
-                                                              rendered="#{not empty collCrdType.creditFacility}"/>
+                                                <h:outputText value="#{collCrdType.creditFacilityView.name}"
+                                                              rendered="#{not empty collCrdType.creditFacilityView}"/>
                                             </p:column>
 
                                             <p:column styleClass="right top">
@@ -3061,12 +3049,8 @@
                                     <tr>
                                         <td class="title ">#{msg.get('app.decision.label.insuranceCompany')}</td>
                                         <td class="left" colspan="3">
-                                            <!--<p:selectOneRadio value="#{collHeader.insuranceCompany}" disabled="true">-->
-                                                <!--<f:selectItem itemLabel="#{msg.get('app.button.partner')}" itemValue="2"/>-->
-                                                <!--<f:selectItem itemLabel="#{msg.get('app.button.nonPartner')}" itemValue="1"/>-->
-                                            <!--</p:selectOneRadio>-->
-                                            #{collHeader.insuranceCompany eq 2 ? msg.get('app.button.partner')
-                                            : collHeader.insuranceCompany eq 1 ? msg.get('app.button.nonPartner')
+                                            #{collHeader.insuranceCompany eq decision.yesValue ? msg.get('app.button.partner')
+                                            : collHeader.insuranceCompany eq decision.noValue ? msg.get('app.button.nonPartner')
                                             : ''}
                                         </td>
                                     </tr>
@@ -3141,9 +3125,6 @@
                                                                          minFractionDigits="2" maxFractionDigits="2"
                                                                          maxIntegerDigits="14"/>
                                                     </h:outputText>
-                                                    <!-- Approved Collateral Hidden Field for BRMS -->
-                                                    <h:inputHidden value="#{decision.decisionView.grandTotalNumOfCoreAsset}"/>
-                                                    <h:inputHidden value="#{decision.decisionView.grandTotalNumOfNonCoreAsset}"/>
                                                 </p:column>
 
                                             </p:dataTable>
@@ -3214,7 +3195,8 @@
 
                                     <p:column styleClass="left top">
                                         <table border="0" style="margin:-1px 0 -1px -10px; width: 100%">
-                                            <ui:repeat value="#{guarantor.proposeCreditDetailViewList}" var="creditType">
+                                            <ui:repeat value="#{guarantor.proposeCreditDetailViewList}"
+                                                       var="creditType">
                                                 <tr>
                                                     <td class="left top" style="border-style: none !important;">
                                                         #{creditType.accountName}
@@ -3223,10 +3205,11 @@
                                                         #{msg.get('app.decision.tb.td.label.suf')} #{creditType.accountSuf}
                                                     </td>
                                                     <td class="center top" style="border-style: none !important;">
-                                                        <h:outputText value="#{not empty creditType.productProgram ?
-                                                                       creditType.productProgram.name : ''}"/><br/>
-                                                        <h:outputText value="#{not empty creditType.creditFacility ?
-                                                                       creditType.creditFacility.name : ''}"/>
+                                                        <h:outputText value="#{not empty creditType.productProgramView ?
+                                                                       creditType.productProgramView.name : ''}"/>
+                                                        <br/>
+                                                        <h:outputText value="#{not empty creditType.creditFacilityView ?
+                                                                       creditType.creditFacilityView.name : ''}"/>
                                                     </td>
                                                     <td class="top center" style="border-style: none !important;">
                                                         <h:outputText value="#{creditType.limit}">
@@ -3291,12 +3274,12 @@
                             </td>
                         </tr>
 
-                        <h:panelGroup rendered="#{decision.roleZM_RGM or decision.roleUW}">
                         <tr>
                             <td class="left" colspan="2">
                                 <p:commandButton id="btnAddApprovedGuarantor"
                                                  value="#{msg.get('app.button.add')}"
-                                                 actionListener="#{decision.onAddAppProposeGuarantor()}"
+                                                 disabled="#{decision.roleBDM}"
+                                                 actionListener="#{decision.onAddApproveGuarantor()}"
                                                  process="@this"
                                                  update=":guarantorDlgForm"
                                                  oncomplete="proposeGuarantorDlg.show()"
@@ -3305,13 +3288,10 @@
                                 </p:commandButton>
                             </td>
                         </tr>
-                        </h:panelGroup>
 
                         <tr>
                             <td class="left" colspan="2">
-                                <h:panelGroup rendered="#{decision.roleUW}">
-                                    <!-- Approved Guarantor - UW -->
-                                    <p:dataTable id="dtAppProposedGuarantorUW"
+                                <p:dataTable id="dtApproveGuarantor"
                                              var="guarantor" value="#{decision.decisionView.approveGuarantorList}"
                                              paginator="false" rowKey="#{guarantor}" rowIndexVar="rowIndex"
                                              style="width: 100%">
@@ -3322,17 +3302,18 @@
                                                 <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.decision')}"/>
                                                 <p:column style="width: 20%" headerText="#{msg.get('app.decision.tb.th.guarantorName')}"/>
                                                 <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.TCGLGNo')}"/>
-                                                <p:column style="width: 40%" headerText="#{msg.get('app.decision.tb.th.creditType')}"/>
+                                                <p:column style="width: #{decision.roleUW ? '40' : '45'}%"
+                                                          headerText="#{msg.get('app.decision.tb.th.creditType')}"/>
                                                 <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.guaranteeAmount')}"/>
-                                                <p:column style="width: 5%"/>
+                                                <p:column style="width: 5%" rendered="#{decision.roleUW}" />
                                             </p:row>
                                         </p:columnGroup>
 
                                         <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                         <p:column styleClass="center top">
-                                            #{guarantor.approved eq 2 ? msg.get('app.label.approved')
-                                            : guarantor.approved eq 1 ? msg.get('app.label.notApproved')
+                                            #{guarantor.uwDecision eq 'APPROVED' ? msg.get('app.label.approved')
+                                            : guarantor.uwDecision eq 'REJECTED' ? msg.get('app.label.rejected')
                                             : ''}
                                         </p:column>
 
@@ -3345,7 +3326,8 @@
 
                                         <p:column styleClass="left top">
                                             <table border="0" style="margin:-1px 0 -1px -10px; width: 100%">
-                                                <ui:repeat value="#{guarantor.proposeCreditDetailViewList}" var="creditType">
+                                                <ui:repeat value="#{guarantor.proposeCreditDetailViewList}"
+                                                           var="creditType">
                                                     <tr>
                                                         <td class="left top" style="border-style: none !important;">
                                                             #{creditType.accountName}
@@ -3354,10 +3336,10 @@
                                                             #{msg.get('app.decision.tb.td.label.suf')} #{creditType.accountSuf}
                                                         </td>
                                                         <td class="center top" style="border-style: none !important;">
-                                                            <h:outputText value="#{not empty creditType.productProgram ?
-                                                                       creditType.productProgram.name : ''}"/><br/>
-                                                            <h:outputText value="#{not empty creditType.creditFacility ?
-                                                                       creditType.creditFacility.name : ''}"/>
+                                                            <h:outputText value="#{not empty creditType.productProgramView ?
+                                                                       creditType.productProgramView.name : ''}"/><br/>
+                                                            <h:outputText value="#{not empty creditType.creditFacilityView ?
+                                                                       creditType.creditFacilityView.name : ''}"/>
                                                         </td>
                                                         <td class="top center" style="border-style: none !important;">
                                                             <h:outputText value="#{creditType.limit}">
@@ -3389,15 +3371,16 @@
                                             </h:outputText>
                                         </p:column>
 
-                                        <p:column styleClass="center top">
+                                        <p:column styleClass="center top" style="white-space: nowrap !important;"
+                                                  rendered="#{decision.roleUW}">
                                             <p:commandButton title="#{msg.get('app.button.edit')}"
                                                              icon="ui-icon-pencil"
-                                                             disabled="#{not decision.roleUW or not decision.roleZM_RGM}"
-                                                             action="#{decision.onEditAppProposeGuarantor()}"
+                                                             disabled="#{decision.roleBDM}"
+                                                             action="#{decision.onEditApproveGuarantor()}"
                                                              update=":guarantorDlgForm"
                                                              oncomplete="proposeGuarantorDlg.show()">
                                                 <f:setPropertyActionListener value="#{guarantor}"
-                                                                             target="#{decision.selectedAppProposeGuarantor}"/>
+                                                                             target="#{decision.selectedApproveGuarantor}"/>
                                                 <f:setPropertyActionListener value="#{rowIndex}"
                                                                              target="#{decision.rowIndexGuarantor}"/>
                                                 <!--<p:resetInput target=":guarantorDlgForm"/>-->
@@ -3405,10 +3388,10 @@
 
                                             <p:commandButton title="#{msg.get('app.button.delete')}"
                                                              icon="ui-icon-trash"
-                                                             disabled="#{not decision.roleUW or not decision.roleZM_RGM}"
+                                                             disabled="#{decision.roleBDM}"
                                                              oncomplete="confirmDeleteAppGuarantorDlg.show()">
                                                 <f:setPropertyActionListener value="#{guarantor}"
-                                                                             target="#{decision.selectedAppProposeGuarantor}"/>
+                                                                             target="#{decision.selectedApproveGuarantor}"/>
                                                 <f:setPropertyActionListener value="#{rowIndex}"
                                                                              target="#{decision.rowIndexGuarantor}"/>
                                             </p:commandButton>
@@ -3416,11 +3399,15 @@
 
                                         <p:columnGroup type="footer">
                                             <p:row>
-                                                <p:column colspan="7" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                                <p:column colspan="#{decision.roleUW ? '7' : '6'}"
+                                                          style="background-color:#ffffff; line-height:10px; height:10px;"/>
                                             </p:row>
+
                                             <p:row>
-                                                <p:column styleClass="summary_column title" style="text-align: left" colspan="5"
+                                                <p:column styleClass="summary_column title" style="text-align: left"
+                                                          colspan="5"
                                                           footerText="#{msg.get('app.label.total')}"/>
+
                                                 <p:column styleClass="summary_column title" style="text-align: right">
                                                     <f:facet name="footer">
                                                         <h:outputText value="#{decision.decisionView.approveTotalGuaranteeAmt}">
@@ -3429,122 +3416,14 @@
                                                                              maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </f:facet>
-                                                    <!-- Approved Guarantor Hidden Field for BRMS -->
-                                                    <h:inputHidden value="#{decision.decisionView.approveTotalTCGGuaranteeAmt}"/>
-                                                    <h:inputHidden value="#{decision.decisionView.approveTotalIndvGuaranteeAmt}"/>
-                                                    <h:inputHidden value="#{decision.decisionView.approveTotalJurisGuaranteeAmt}"/>
                                                 </p:column>
-                                                <p:column styleClass="summary_column" footerText=""/>
+
+                                                <p:column styleClass="summary_column"
+                                                          rendered="#{decision.roleUW}"/>
                                             </p:row>
                                         </p:columnGroup>
 
                                     </p:dataTable>
-                                </h:panelGroup>
-
-                                <h:panelGroup rendered="#{not decision.roleUW}">
-                                    <!-- Approved Guarantor - NOT UW -->
-                                    <p:dataTable id="dtAppProposedGuarantor"
-                                                 var="guarantor" value="#{decision.decisionView.approveGuarantorList}"
-                                                 paginator="false" rowKey="#{guarantor}" rowIndexVar="rowIndex"
-                                                 style="width: 100%">
-
-                                        <p:columnGroup type="header">
-                                            <p:row>
-                                                <p:column style="width: 5%"/>
-                                                <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.decision')}"/>
-                                                <p:column style="width: 20%" headerText="#{msg.get('app.decision.tb.th.guarantorName')}"/>
-                                                <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.TCGLGNo')}"/>
-                                                <p:column style="width: 45%" headerText="#{msg.get('app.decision.tb.th.creditType')}"/>
-                                                <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.guaranteeAmount')}"/>
-                                            </p:row>
-                                        </p:columnGroup>
-
-                                        <p:column styleClass="center top">#{rowIndex + 1}</p:column>
-
-                                        <p:column styleClass="center top">
-                                            #{guarantor.approved eq 2 ? msg.get('app.label.approved')
-                                            : proposeCredit.approved eq 1 ? msg.get('app.label.notApproved')
-                                            : ''}
-                                        </p:column>
-
-                                        <p:column styleClass="left top">
-                                            <h:outputText value="#{guarantor.guarantorName.firstNameTh} #{guarantor.guarantorName.lastNameTh}"
-                                                          rendered="#{not empty guarantor.guarantorName}"/>
-                                        </p:column>
-
-                                        <p:column styleClass="center top">#{guarantor.tcgLgNo}</p:column>
-
-                                        <p:column styleClass="left top">
-                                            <table border="0" style="margin:-1px 0 -1px -10px; width: 100%">
-                                                <ui:repeat value="#{guarantor.proposeCreditDetailViewList}" var="creditType">
-                                                    <tr>
-                                                        <td class="left top" style="border-style: none !important;">
-                                                            #{creditType.accountName}
-                                                            <br/>
-                                                            #{msg.get('app.decision.tb.td.label.accNo')} #{creditType.accountNumber}&#160;
-                                                            #{msg.get('app.decision.tb.td.label.suf')} #{creditType.accountSuf}
-                                                        </td>
-                                                        <td class="center top" style="border-style: none !important;">
-                                                            <h:outputText value="#{not empty creditType.productProgram ?
-                                                                       creditType.productProgram.name : ''}"/><br/>
-                                                            <h:outputText value="#{not empty creditType.creditFacility ?
-                                                                       creditType.creditFacility.name : ''}"/>
-                                                        </td>
-                                                        <td class="top center" style="border-style: none !important;">
-                                                            <h:outputText value="#{creditType.limit}">
-                                                                <f:convertNumber pattern="#,##0.##"
-                                                                                 minFractionDigits="2"
-                                                                                 maxFractionDigits="2"
-                                                                                 maxIntegerDigits="14"/>
-                                                            </h:outputText>
-                                                        </td>
-                                                        <td class="top center" style="border-style: none !important;">
-                                                            #{msg.get('app.decision.tb.td.label.guaranteeAmt')}<br/>
-                                                            <h:outputText value="#{creditType.guaranteeAmount}">
-                                                                <f:convertNumber pattern="#,##0.##"
-                                                                                 minFractionDigits="2"
-                                                                                 maxFractionDigits="2"
-                                                                                 maxIntegerDigits="14"/>
-                                                            </h:outputText>
-                                                        </td>
-                                                    </tr>
-                                                </ui:repeat>
-                                            </table>
-                                        </p:column>
-
-                                        <p:column styleClass="right top">
-                                            <h:outputText value="#{guarantor.totalLimitGuaranteeAmount}">
-                                                <f:convertNumber pattern="#,##0.##"
-                                                                 minFractionDigits="2" maxFractionDigits="2"
-                                                                 maxIntegerDigits="14"/>
-                                            </h:outputText>
-                                        </p:column>
-
-                                        <p:columnGroup type="footer">
-                                            <p:row>
-                                                <p:column colspan="6" style="background-color:#ffffff; line-height:10px; height:10px;"/>
-                                            </p:row>
-                                            <p:row>
-                                                <p:column styleClass="summary_column title" style="text-align: left" colspan="5"
-                                                          footerText="#{msg.get('app.label.total')}"/>
-                                                <p:column styleClass="summary_column title" style="text-align: right">
-                                                    <f:facet name="footer">
-                                                        <h:outputText value="#{decision.decisionView.approveTotalGuaranteeAmt}">
-                                                            <f:convertNumber pattern="#,##0.##"
-                                                                             minFractionDigits="2" maxFractionDigits="2"
-                                                                             maxIntegerDigits="14"/>
-                                                        </h:outputText>
-                                                    </f:facet>
-                                                    <!-- Approved Guarantor Hidden Field for BRMS -->
-                                                    <h:inputHidden value="#{decision.decisionView.approveTotalTCGGuaranteeAmt}"/>
-                                                    <h:inputHidden value="#{decision.decisionView.approveTotalIndvGuaranteeAmt}"/>
-                                                    <h:inputHidden value="#{decision.decisionView.approveTotalJurisGuaranteeAmt}"/>
-                                                </p:column>
-                                            </p:row>
-                                        </p:columnGroup>
-
-                                    </p:dataTable>
-                                </h:panelGroup>
                             </td>
                         </tr>
                         <tr>
@@ -3788,21 +3667,24 @@
 
                                     <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
-                                    <p:column styleClass="left top">#{approvalHistory.action}</p:column>
-
                                     <p:column styleClass="left top">
-                                        <h:outputText value="#{approvalHistory.approver.userName}"
-                                                      rendered="#{not empty approvalHistory.approver}"/>
+                                        <h:outputText value="#{approvalHistory.action}"
+                                                      rendered="#{not empty approvalHistory.action}"/>
                                     </p:column>
 
                                     <p:column styleClass="left top">
-                                        <h:outputText value="#{approvalHistory.approver.role.description}"
-                                                      rendered="#{not empty approvalHistory.approver and not empty approvalHistory.approver.role}"/>
+                                        <h:outputText value="#{approvalHistory.actionBy.userName}"
+                                                      rendered="#{not empty approvalHistory.actionBy}"/>
                                     </p:column>
 
                                     <p:column styleClass="left top">
-                                        <h:outputText value="#{approvalHistory.approver.title.name}"
-                                                      rendered="#{not empty approvalHistory.approver and not empty approvalHistory.approver.title}"/>
+                                        <h:outputText value="#{approvalHistory.actionBy.roleDescription}"
+                                                      rendered="#{not empty approvalHistory.actionBy}"/>
+                                    </p:column>
+
+                                    <p:column styleClass="left top">
+                                        <h:outputText value="#{approvalHistory.actionBy.titleName}"
+                                                      rendered="#{not empty approvalHistory.actionBy}"/>
                                     </p:column>
 
                                     <p:column styleClass="center top">
@@ -3812,7 +3694,7 @@
                                     </p:column>
 
                                     <p:column styleClass="left top">
-                                        #{approvalHistory.comment}
+                                        <h:outputText value="#{approvalHistory.comment}"/>
                                         <h:outputText value="-" rendered="#{empty approvalHistory.comment}"/>
                                     </p:column>
 
@@ -3824,17 +3706,20 @@
                         </tr>
 
                         <h:panelGroup rendered="#{decision.roleUW}">
+                            <!-- UW - (Comment , Approve) -->
                             <tr>
                                 <td class="center" colspan="2">
-                                    <!-- UW - (Comment , Approve) -->
                                     <div class="ui-datatable ui-widget">
                                         <div class="ui-datatable-tablewrapper">
-                                            <table style="margin: 0 auto; min-width: 500px">
+                                            <table style="margin: 0 auto; width: 500px !important;">
                                                 <thead>
                                                     <tr>
                                                         <th class="ui-state-default">
-                                                            <!--#{decision.approvalHistory.approver.userName} - #{decision.approvalHistory.action}-->
-                                                            UW#1 - Approve CA
+                                                            <h:outputText value="#{decision.approvalHistoryView.actionBy.userName}"
+                                                                          rendered="#{not empty decision.approvalHistoryView and not empty decision.approvalHistoryView.actionBy}"/>
+                                                            <h:outputText value=" - "/>
+                                                            <h:outputText value="#{decision.approvalHistoryView.action}"
+                                                                          rendered="#{not empty decision.approvalHistoryView and not empty decision.approvalHistoryView.action}"/>
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -3842,7 +3727,7 @@
                                                 <tbody class="ui-datatable-data ui-widget-content">
                                                     <tr>
                                                         <td>
-                                                            <table border="0" style="margin:-1px 0 -1px -10px;">
+                                                            <table border="0" style="margin: 0 auto;">
                                                                 <tr>
                                                                     <td class="title left" style="border-style: none !important;">
                                                                         #{msg.get('app.decision.tb.td.label.comment')}
@@ -3850,7 +3735,7 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td class="center" style="border-style: none !important;">
-                                                                        <p:inputTextarea value="#{decision.approvalHistory.comment}"
+                                                                        <p:inputTextarea value="#{decision.approvalHistoryView.comment}"
                                                                                          rows="5"
                                                                                          style="font-size: 12px !important; width: 450px"/>
                                                                     </td>
@@ -3860,10 +3745,10 @@
                                                     </tr>
                                                     <tr>
                                                         <td class="center">
-                                                            <p:selectOneRadio value="#{decision.approvalHistory.approveDecision}"
+                                                            <p:selectOneRadio value="#{decision.approvalHistoryView.uwDecision}"
                                                                               styleClass="ovr-border">
-                                                                <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="2"/>
-                                                                <f:selectItem itemLabel="#{msg.get('app.button.reject')}" itemValue="1"/>
+                                                                <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
+                                                                <f:selectItem itemLabel="#{msg.get('app.button.reject')}" itemValue="#{decision.decisionREJECTED}"/>
                                                             </p:selectOneRadio>
                                                         </td>
                                                     </tr>
@@ -3871,22 +3756,21 @@
                                                         <td>
                                                             <table border="0">
                                                                 <tr>
-                                                                    <td class="title left" style="border-style:none !important;">
+                                                                    <td class="title left" style="border-style: none !important; width: 120px;">
                                                                         #{msg.get('app.decision.tb.td.label.approvalName')}
                                                                     </td>
-                                                                    <td class="left" style="border-style:none !important;">
-                                                                        <!--#{decision.approvalHistory.approver.title.name}-->
-                                                                        <!--#{decision.approvalHistory.approver.userName}-->
-                                                                        Mr.UW#1
+                                                                    <td class="left" style="border-style: none !important;">
+                                                                        <h:outputText value="#{decision.approvalHistoryView.actionBy.userName}"
+                                                                                      rendered="#{not empty decision.approvalHistoryView and not empty decision.approvalHistoryView.actionBy}"/>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td class="title left" style="border-style:none !important;">
+                                                                    <td class="title left" style="border-style: none !important;">
                                                                         #{msg.get('app.decision.tb.td.label.position')}
                                                                     </td>
-                                                                    <td class="left" style="border-style:none !important;">
-                                                                        <!-- todo: getPosition of Approver -->
-                                                                        Example Position
+                                                                    <td class="left" style="border-style: none !important;">
+                                                                        <h:outputText value="#{decision.approvalHistoryView.actionBy.titleName}"
+                                                                                      rendered="#{not empty decision.approvalHistoryView and not empty decision.approvalHistoryView.actionBy}"/>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -3894,7 +3778,7 @@
                                                                         #{msg.get('app.decision.tb.td.label.date')}
                                                                     </td>
                                                                     <td class="left" style="border-style:none !important;">
-                                                                        <h:outputText value="#{decision.approvalHistory.approveDate}">
+                                                                        <h:outputText value="#{decision.approvalHistoryView.approveDate}">
                                                                             <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
                                                                         </h:outputText>
                                                                     </td>
@@ -3916,6 +3800,18 @@
                         <tr>
                             <td colspan="2">
                                 <div class="separate"><!-- --></div>
+
+                                <!-- Hidden Field -->
+                                <h:inputHidden value="#{decision.decisionView.approveTotalNumOfNewOD}"/>
+                                <h:inputHidden value="#{decision.decisionView.approveTotalNumProposeCreditFac}"/>
+                                <h:inputHidden value="#{decision.decisionView.approveTotalNumContingentPropose}"/>
+
+                                <h:inputHidden value="#{decision.decisionView.grandTotalNumOfCoreAsset}"/>
+                                <h:inputHidden value="#{decision.decisionView.grandTotalNumOfNonCoreAsset}"/>
+
+                                <h:inputHidden value="#{decision.decisionView.approveTotalTCGGuaranteeAmt}"/>
+                                <h:inputHidden value="#{decision.decisionView.approveTotalIndvGuaranteeAmt}"/>
+                                <h:inputHidden value="#{decision.decisionView.approveTotalJurisGuaranteeAmt}"/>
                             </td>
                         </tr>
 
@@ -3974,7 +3870,7 @@
     <ui:param name="name" value="confirmDeleteAppProposeCreditDlg"/>
     <ui:param name="formId" value="frmConfirmDeleteAppProposeCredit"/>
     <ui:param name="controller" value="#{decision}"/>
-    <ui:param name="action" value="onDeleteAppProposeCredit"/>
+    <ui:param name="action" value="onDeleteApproveCredit"/>
     <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
 </ui:include>
 
@@ -4028,7 +3924,7 @@
     <ui:param name="name" value="confirmDeleteAppGuarantorDlg"/>
     <ui:param name="formId" value="frmConfirmDeleteAppGuarantor"/>
     <ui:param name="controller" value="#{decision}"/>
-    <ui:param name="action" value="onDeleteAppProposeGuarantor"/>
+    <ui:param name="action" value="onDeleteApproveGuarantor"/>
     <ui:param name="update" value=":frmMain"/>
 </ui:include>
 

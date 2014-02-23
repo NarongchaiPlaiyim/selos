@@ -80,8 +80,8 @@ public class AppraisalAppointment implements Serializable {
     private String messageHeader;
     private String message;
 
-    private User user;
     private long workCaseId;
+    private long workCasePreScreenId;
     private long stepId;
     private AppraisalView appraisalView;
 
@@ -154,21 +154,13 @@ public class AppraisalAppointment implements Serializable {
         log.info("-- preRender.");
         HttpSession session = FacesUtil.getSession(true);
         log.debug("preRender ::: setSession ");
-        if(!Util.isNull(session.getAttribute("workCaseId")) && !Util.isNull(session.getAttribute("stepId")) && !Util.isNull(session.getAttribute("user"))){
-            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-            log.debug("-- workCaseId[{}]", workCaseId);
-            user = (User)session.getAttribute("user");
-            log.debug("-- User.id[{}]", user.getId());
+        if((!Util.isNull(session.getAttribute("workCaseId")) || !Util.isNull(session.getAttribute("workCasePreScreenId")) ) && !Util.isNull(session.getAttribute("stepId"))){
             stepId = Long.valueOf(""+session.getAttribute("stepId"));
             log.debug("-- stepId[{}]", stepId);
-            try{
-                String page = Util.getCurrentPage();
-                if(stepId != StepValue.APPOINTMENT_APPRAISAL.value() || !"appraisalAppointment.jsf".equals(page)){
-                    FacesUtil.redirect("/site/inbox.jsf");
-                    return;
-                }
-            }catch (Exception ex){
-                log.debug("Exception :: {}",ex);
+
+            if(stepId != StepValue.REQUEST_APPRAISAL.value()){
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
             }
         } else {
             log.debug("preRender ::: workCaseId is null.");
@@ -180,31 +172,39 @@ public class AppraisalAppointment implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("-- onCreation.");
-        preRender();
-        init();
-        appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId, user);
-        if(!Util.isNull(appraisalView)){
-            appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
-            if(Util.isZero(appraisalDetailViewList.size())){
-                appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
-            }
-            appraisalContactDetailView = appraisalView.getAppraisalContactDetailView();
-            if(Util.isNull(appraisalContactDetailView)){
-                appraisalContactDetailView = new AppraisalContactDetailView();
-            }
+        //preRender();
+        HttpSession session = FacesUtil.getSession(true);
+        boolean canRender = false;
+        if(!Util.isNull(session.getAttribute("workCaseId")) && Long.valueOf(""+session.getAttribute("workCaseId")) != 0){
+            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+            canRender = true;
+        }else if(!Util.isNull(session.getAttribute("workCasePreScreenId")) && Long.valueOf(""+session.getAttribute("workCasePreScreenId")) != 0){
+            workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
+            canRender = true;
+        }
 
-//                contactRecordDetailViewList = appraisalView.getContactRecordDetailViewList();
-//                for(ContactRecordDetailView view : contactRecordDetailViewList){
-//                    log.debug("-- ContactRecordDetailView.id[{}]", view.getId());
-//                }
-            updateContractFlag(appraisalContactDetailView);
-        } else {
-            appraisalView = new AppraisalView();
-            log.debug("-- AppraisalView[New] created");
-            appraisalContactDetailView = new AppraisalContactDetailView();
-            log.debug("-- AppraisalContactDetailView[New] created");
-            appraisalContactDetailView = new AppraisalContactDetailView();
-            log.debug("-- AppraisalContactDetailView[New] created");
+        if(canRender){
+            init();
+            appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId, workCasePreScreenId);
+            if(!Util.isNull(appraisalView)){
+                appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
+                if(Util.isZero(appraisalDetailViewList.size())){
+                    appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+                }
+                appraisalContactDetailView = appraisalView.getAppraisalContactDetailView();
+                if(Util.isNull(appraisalContactDetailView)){
+                    appraisalContactDetailView = new AppraisalContactDetailView();
+                }
+
+                updateContractFlag(appraisalContactDetailView);
+            } else {
+                appraisalView = new AppraisalView();
+                log.debug("-- AppraisalView[New] created");
+                appraisalContactDetailView = new AppraisalContactDetailView();
+                log.debug("-- AppraisalContactDetailView[New] created");
+                appraisalContactDetailView = new AppraisalContactDetailView();
+                log.debug("-- AppraisalContactDetailView[New] created");
+            }
         }
     }
 
@@ -555,7 +555,7 @@ public class AppraisalAppointment implements Serializable {
         log.info("-- onSaveAppraisalAppointment::::");
         try{
             appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
-            appraisalAppointmentControl.onSaveAppraisalAppointment(appraisalView, workCaseId, user);
+            appraisalAppointmentControl.onSaveAppraisalAppointment(appraisalView, workCaseId, workCasePreScreenId);
             messageHeader = msg.get("app.appraisal.request.message.header.save.success");
             message = msg.get("app.appraisal.request.message.body.save.success");
             onCreation();
@@ -576,16 +576,17 @@ public class AppraisalAppointment implements Serializable {
         log.info("appraisalDetailViewList.size()        ::: {} ", appraisalDetailViewList.size());
         log.info("appraisalContactDetailViewList.size() ::: {} ", appraisalContactDetailViewList.size());
         try{
-            if(appraisalView.getId() == 0){
+            //must set user from business controller only
+            /*if(appraisalView.getId() == 0){
                 appraisalView.setCreateBy(user);
                 appraisalView.setCreateDate(DateTime.now().toDate());
             }
-            appraisalView.setModifyBy(user);
+            appraisalView.setModifyBy(user);*/
             appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
 //            appraisalView.setAppraisalContactDetailViewList(appraisalContactDetailViewList);
             appraisalView.setContactRecordDetailViewList(contactRecordDetailViewList);
 
-            appraisalAppointmentControl.onSaveAppraisalAppointment(appraisalView, workCaseId, user);
+            appraisalAppointmentControl.onSaveAppraisalAppointment(appraisalView, workCaseId, workCasePreScreenId);
             messageHeader = msg.get("app.appraisal.appointment.message.header.save.success");
             message = msg.get("app.appraisal.appointment.message.body.save.success");
             onCreation();

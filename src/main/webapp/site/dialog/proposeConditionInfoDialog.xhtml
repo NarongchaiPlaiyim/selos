@@ -8,14 +8,17 @@
         <h:form id="conditionDlgForm">
             <table class="content_form content_table_form">
                 <tr>
-                    <td class="title" style="width: 40%">
+                    <td class="title" style="width: 45%">
                         <h:outputText value="#{msg.get('app.credit.facility.propose.label.condition.loanType')}"/>
                     </td>
-                    <td class="left" style="width: 60%">
+                    <td class="left" style="width: 55%">
                         <p:inputText styleClass="large"
                                      id="loanType"
                                      value="#{creditFacPropose.newConditionDetailView.loanType}"
                                      required="#{not empty param[addConditionDlg.clientId]}">
+                            <p:ajax event="change"
+                                    process="@this"
+                                    update="@this"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -29,6 +32,9 @@
                                          rows="3" cols="50"
                                          value="#{creditFacPropose.newConditionDetailView.conditionDesc}"
                                          required="#{not empty param[addConditionDlg.clientId]}" >
+                            <p:ajax event="change"
+                                    process="@this"
+                                    update="@this"/>
                         </p:inputTextarea>
                     </td>
                 </tr>

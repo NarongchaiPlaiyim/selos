@@ -30,7 +30,6 @@ public class NewCollateralView implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
-    private int isApproved;
     private BigDecimal premiumAmount;
     private ProposeType proposeType;
     private boolean coms;
@@ -199,14 +198,6 @@ public class NewCollateralView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public int getApproved() {
-        return isApproved;
-    }
-
-    public void setApproved(int approved) {
-        isApproved = approved;
-    }
-
     public List<NewCollateralHeadView> getNewCollateralHeadViewList() {
         return newCollateralHeadViewList;
     }
@@ -274,11 +265,12 @@ public class NewCollateralView implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
-                .append("isApproved", isApproved)
+                .append("premiumAmount", premiumAmount)
+                .append("proposeType", proposeType)
+                .append("coms", coms)
                 .append("newCollateralHeadViewList", newCollateralHeadViewList)
                 .append("proposeCreditDetailViewList", proposeCreditDetailViewList)
                 .append("jobIDSearch", jobIDSearch)
-                .append("premiumAmount", premiumAmount)
                 .toString();
     }
 

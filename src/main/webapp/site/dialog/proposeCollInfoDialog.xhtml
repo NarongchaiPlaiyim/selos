@@ -21,7 +21,7 @@
             <p:ajax event="change" listener="#{creditFacPropose.onChangeJobId}" update="@form"/>
         </p:inputText>
     </td>
-    <td class="right" colspan="2" style="width: 50%">
+    <td class="left" colspan="2" style="width: 50%">
         <p:commandButton value="#{msg.get('app.credit.facility.propose.dlg.retrieveButton')}"
                          binding="#{retrieveButton}"
                          styleClass="largest"
@@ -42,14 +42,15 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.appraisalDate')}"/>
     </td>
     <td class="left" colspan="3">
-        <clv:BECalendar id="expectSumitDate" showOn="both" showButtonPanel="true" navigator="true"
-                        yearRange="1950:2100"
+        <clv:BECalendar value="#{creditFacPropose.newCollateralView.appraisalDate}"
+                        id="expectSumitDate"
+                        showOn="button"
                         pattern="dd/MM/yyyy"
-                        value="#{creditFacPropose.newCollateralView.appraisalDate}"
+                        yearRange="1950:2100"
+                        mindate="01/01/1950"
+                        navigator="true"
                         locale="th_TH"
-                        readonlyInput="true"
-                        styleClass="calendar_right">
-        </clv:BECalendar>
+                        showButtonPanel="true"/>
     </td>
 </tr>
 
@@ -148,11 +149,11 @@
             </p:column>
 
             <p:column styleClass="left top">
-                #{not empty creditTypeDetailItem.productProgram ? creditTypeDetailItem.productProgram.name : ''}
+                #{not empty creditTypeDetailItem.productProgramView ? creditTypeDetailItem.productProgramView.name : ''}
             </p:column>
 
             <p:column styleClass="left top">
-                #{not empty creditTypeDetailItem.creditFacility ? creditTypeDetailItem.creditFacility.name : ''}
+                #{not empty creditTypeDetailItem.creditFacilityView ? creditTypeDetailItem.creditFacilityView.name : ''}
             </p:column>
 
             <p:column styleClass="right top">
@@ -201,6 +202,9 @@
                            var="potentialItem"
                            itemLabel="#{potentialItem.description}"
                            itemValue="#{potentialItem.id}"/>
+            <p:ajax event="change"
+                    process="@this"
+                    update="@this"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -218,6 +222,9 @@
                            var="collTypePercentItem"
                            itemLabel="#{collTypePercentItem.description}"
                            itemValue="#{collTypePercentItem.id}"/>
+            <p:ajax event="change"
+                    process="@this"
+                    update="@this"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -244,7 +251,9 @@
     </td>
     <td class="left" colspan="3">
         <p:inputText value="#{CollateralHeaderDetailView.titleDeed}"
-                     required="#{not empty param[btnSaveCollateral.clientId]}"/>
+                     required="#{not empty param[btnSaveCollateral.clientId]}">
+            <p:ajax event="blur" update="@this"/>
+        </p:inputText>
     </td>
 </tr>
 <tr>
@@ -254,7 +263,9 @@
     <td class="left" colspan="3">
         <p:inputText value="#{CollateralHeaderDetailView.collateralLocation}"
                      style="width: 400px;"
-                     required="#{not empty param[btnSaveCollateral.clientId]}"/>
+                     required="#{not empty param[btnSaveCollateral.clientId]}">
+            <p:ajax event="blur" update="@this"/>
+        </p:inputText>
     </td>
 </tr>
 <tr>
@@ -289,6 +300,9 @@
                            var="headCollateralTypeItem"
                            itemLabel="#{headCollateralTypeItem.description}"
                            itemValue="#{headCollateralTypeItem.id}"/>
+            <p:ajax event="change"
+                    process="@this"
+                    update="@this"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -374,28 +388,36 @@
             </p:column>
 
             <p:column styleClass="left top">
-                <ui:repeat value="#{newCollateralSubView.collateralOwnerUWList}"
-                           var="collateralOwnerUW" varStatus="a">
-                    <h:outputText value="#{collateralOwnerUW.firstNameTh} #{collateralOwnerUW.lastNameTh}"/>
-                    <h:outputText value="," rendered="#{not a.last}"/>
-                </ui:repeat>
+                <p:panel rendered="#{not empty newCollateralSubView.collateralOwnerUWList
+                                 and fn:length(newCollateralSubView.collateralOwnerUWList) gt 0}" styleClass="panel">
+                    <ui:repeat value="#{newCollateralSubView.collateralOwnerUWList}"
+                               var="collateralOwnerUW" varStatus="a">
+                        <h:outputText value="#{collateralOwnerUW.firstNameTh} #{collateralOwnerUW.lastNameTh}"/>
+                        <h:outputText value="," rendered="#{not a.last}"/>
+                    </ui:repeat>
+                </p:panel>
             </p:column>
 
             <p:column styleClass="left top">
-                <ui:repeat value="#{newCollateralSubView.mortgageList}"
-                           var="mortgage" varStatus="b">
-                    <h:outputText value="#{mortgage.mortgage}"/>
-                    <h:outputText value="," rendered="#{not b.last}"/>
-                </ui:repeat>
+                <p:panel rendered="#{not empty newCollateralSubView.mortgageList
+                                 and fn:length(newCollateralSubView.mortgageList) gt 0}" styleClass="panel">
+                    <ui:repeat value="#{newCollateralSubView.mortgageList}"
+                               var="mortgage" varStatus="b">
+                        <h:outputText value="#{mortgage.mortgage}"/>
+                        <h:outputText value="," rendered="#{not b.last}"/>
+                    </ui:repeat>
+                </p:panel>
             </p:column>
 
             <p:column styleClass="left top">
-                <ui:repeat value="#{newCollateralSubView.relatedWithList}"
-                           var="relatedWith" varStatus="c">
-                    <h:outputText
-                            value="#{not empty newCollateralSubView.relatedWithList and fn:length(newCollateralSubView.relatedWithList) gt 0 ?  relatedWith.titleDeed : '-'}"/>
-                    <h:outputText value="," rendered="#{not c.last}"/>
-                </ui:repeat>
+                <p:panel rendered="#{not empty newCollateralSubView.relatedWithList
+                                 and fn:length(newCollateralSubView.relatedWithList) gt 0}" styleClass="panel">
+                    <ui:repeat value="#{newCollateralSubView.relatedWithList}"
+                               var="relatedWith" varStatus="c">
+                        <h:outputText value="#{relatedWith.titleDeed}"/>
+                        <h:outputText value="," rendered="#{not c.last}"/>
+                    </ui:repeat>
+                </p:panel>
             </p:column>
 
             <p:column styleClass="right top">

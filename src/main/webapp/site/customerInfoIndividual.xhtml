@@ -10,13 +10,12 @@
 <h:head>
     <title>SE-LOS : Customer Info. Detail - Individual</title>
     <h:outputStylesheet name="css/style.css" />
-    <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
     <h:outputScript library="js" name="custom.js" />
     <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 </h:head>
 
 <h:body>
-    <!--<f:event type="preRenderView" listener="#{custInfoSumIndi.preRender()}" />-->
+    <f:event type="preRenderView" listener="#{custInfoSumIndi.preRender()}" />
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
             <div id="main_container">

@@ -24,7 +24,7 @@ public class NewGuarantorCreditTransform extends Transform {
     ExistingCreditDetailDAO existingCreditDetailDAO;
 
     public List<NewGuarantorCredit> transformsToModelForGuarantor(List<ProposeCreditDetailView> newCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewGuarantorDetail newGuarantorDetail, User user) {
-
+        log.info("newCreditDetailList  ::: {}",newCreditDetailList.size());
         List<NewGuarantorCredit> newGuarantorCreditList = new ArrayList<NewGuarantorCredit>();
         NewGuarantorCredit newGuarantorCredit;
 
@@ -58,10 +58,9 @@ public class NewGuarantorCreditTransform extends Transform {
                     }
                 }
 
+                newGuarantorCredit.setNewGuarantorDetail(newGuarantorDetail);
+                newGuarantorCreditList.add(newGuarantorCredit);
             }
-
-            newGuarantorCredit.setNewGuarantorDetail(newGuarantorDetail);
-            newGuarantorCreditList.add(newGuarantorCredit);
         }
 
         return newGuarantorCreditList;

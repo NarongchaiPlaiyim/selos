@@ -132,7 +132,7 @@ public class ExSummaryControl extends BusinessControl {
             ExSumAccountMovementView otherBank = null;
             if(bankStatementSummary.getBankStmtList() != null && bankStatementSummary.getBankStmtList().size() > 0 ){
                 for(BankStatement bs : bankStatementSummary.getBankStmtList()){
-                    if(bs.getMainAccount() == 1){
+                    if(bs.getMainAccount() == 2){ // 2 = main account , 1 = not main account
                         if(bs.getBank().getCode() == BankType.TMB.value()){ // TMB Bank
                             mainBank = exSummaryTransform.transformBankStmtToExSumBizView(bs);
                         } else { // Other Bank
@@ -160,6 +160,12 @@ public class ExSummaryControl extends BusinessControl {
         //Business Information
         BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
         BigDecimal bizSize = BigDecimal.ZERO;
+
+        List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
+        if(bizInfoSummaryView != null && bizInfoSummaryView.getId() != 0){
+            bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryView.getId());
+        }
+
         if(bizInfoSummaryView != null && bizInfoSummaryView.getId() != 0){
             if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // id = 1 use bank stmt
                 if(bankStatementSummary != null && bankStatementSummary.getGrdTotalIncomeGross() != null){
@@ -197,6 +203,8 @@ public class ExSummaryControl extends BusinessControl {
             addressTH = addressTH.append((bizInfoSummaryView.getDistrict() != null ? bizInfoSummaryView.getDistrict().getId() != 0 ? bizInfoSummaryView.getDistrict().getName() : "-" : "-").concat(" "));
             addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.province").concat(" "));
             addressTH = addressTH.append((bizInfoSummaryView.getProvince() != null ? bizInfoSummaryView.getProvince().getCode() != 0 ? bizInfoSummaryView.getProvince().getName() : "-" : "-").concat(" "));
+            addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.postCode").concat(" "));
+            addressTH = addressTH.append((bizInfoSummaryView.getPostCode() != null ? bizInfoSummaryView.getPostCode() : "-").concat(" "));
             addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.country").concat(" "));
             addressTH = addressTH.append((bizInfoSummaryView.getCountry() != null ? bizInfoSummaryView.getCountry().getId() != 0 ? bizInfoSummaryView.getCountry().getName() : "-" : "-").concat(" "));
 
@@ -212,19 +220,22 @@ public class ExSummaryControl extends BusinessControl {
             }
 
             //For footer borrower
-            //todo: this
             StringBuilder bizPermission = new StringBuilder();
-            if(bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0){
-                for(BizInfoDetailView bizInfoDetailView : bizInfoSummaryView.getBizInfoDetailViewList()){
-                    bizPermission = bizPermission.append(bizInfoDetailView.getBizPermission()+", "); //todo: this
+            if(bizInfoDetailViewList != null && bizInfoDetailViewList.size() > 0){
+                for(int i = 0 ; i < bizInfoDetailViewList.size() ; i++){
+                    if((bizInfoDetailViewList.size()-1) == i){
+                        bizPermission = bizPermission.append(bizInfoDetailViewList.get(i).getBizPermission());
+                    } else {
+                        bizPermission = bizPermission.append(bizInfoDetailViewList.get(i).getBizPermission().concat(", "));
+                    }
                 }
             }
 //            แสดงประเภทการค้าขายของธุรกิจที่มีสัดส่วนมากที่สุด กรณีมีธุรกิจที่มีสัดส่วนมากที่สุดเท่ากันมากว่า 1 ธุรกิจให้แสดงธุรกิจแรก
-            exSummaryView.setBusinessOperationActivity("");
+//            exSummaryView.setBusinessOperationActivity(""); //todo : todo this in find biz percent
 //            แสดง Business Permission จากทุกๆ ธุรกิจ โดยมีเครื่องหมายจุลภาค คั่น
             exSummaryView.setBusinessPermission(bizPermission.toString());
 //            แสดงวันที่ Expiration Date ของ Business Permission ที่ Update ที่สุด (หมดอายุ ช้าที่สุด)
-            exSummaryView.setExpiryDate(bizInfoSummaryView.getExpiryDate());
+//            exSummaryView.setExpiryDate(bizInfoSummaryView.getExpiryDate()); //todo : this condition
         } else {
             exSummaryView.setExSumBusinessInfoView(null);
         }
@@ -255,9 +266,13 @@ public class ExSummaryControl extends BusinessControl {
         if(newCreditFacilityView != null && newCreditFacilityView.getId() != 0){
             if(newCreditFacilityView.getCreditCustomerType() == 1){ // normal 1, prime 2
                 exSumCharacteristicView.setCustomer("Normal");
-            } else {
+            } else if(newCreditFacilityView.getCreditCustomerType() == 2){
                 exSumCharacteristicView.setCustomer("Prime");
+            } else {
+                exSumCharacteristicView.setCustomer("-");
             }
+        } else {
+            exSumCharacteristicView.setCustomer("-");
         }
 
         exSumCharacteristicView.setIncome(exSummary.getIncome());
@@ -283,7 +298,7 @@ public class ExSummaryControl extends BusinessControl {
         if(basicInfo != null && basicInfo.getExistingSMECustomer() == RadioValue.NO.value()){ //new customer
             if(qualitativeView != null && qualitativeView.getId() != 0){
                 //todo: BOT Class
-//                exSumCreditRiskInfoView.setBotClass();
+                exSumCreditRiskInfoView.setBotClass(qualitativeView.getQualityLevel().getDescription());
                 if(qualitativeView.getReason() != null){
                     exSumCreditRiskInfoView.setReason(qualitativeView.getReason());
                 } else {
@@ -292,14 +307,12 @@ public class ExSummaryControl extends BusinessControl {
             }
         }
 
-        List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
-        if(bizInfoSummaryView != null && bizInfoSummaryView.getId() != 0){
-            bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryView.getId());
-        }
-
+        //find highest percent biz
         if(bizInfoDetailViewList != null && bizInfoDetailViewList.size() > 1){
             int tmpIndex = 0;
+            int tmpIndexExpire = 0;
             BigDecimal tmpHighestProportion = BigDecimal.ZERO;
+            Date tmpHighestDate = new Date();
             for (int i=0 ; i < bizInfoDetailViewList.size() ; i++){ // find highest business proportion
                 BigDecimal currentProportion;
                 currentProportion = bizInfoDetailViewList.get(i).getPercentBiz();
@@ -307,12 +320,26 @@ public class ExSummaryControl extends BusinessControl {
                     tmpHighestProportion = currentProportion;
                     tmpIndex = i;
                 }
+
+                if(i == 0){
+                    tmpHighestDate = bizInfoDetailViewList.get(0).getBizDocExpiryDate();
+                }
+                Date currentDate = bizInfoDetailViewList.get(i).getBizDocExpiryDate();
+                if(DateTimeUtil.compareDate(tmpHighestDate,currentDate) > 0){
+                    tmpHighestDate = currentDate;
+                    tmpIndexExpire = i;
+                }
             }
+
             exSumCreditRiskInfoView.setIndirectCountryName(bizInfoDetailViewList.get(tmpIndex).getExpIndCountryName());
             exSumCreditRiskInfoView.setPercentExport(bizInfoDetailViewList.get(tmpIndex).getPercentExpIndCountryName());
+            exSummaryView.setBusinessOperationActivity(bizInfoDetailViewList.get(tmpIndex).getBizActivity().getDescription());
+            exSummaryView.setExpiryDate(bizInfoDetailViewList.get(tmpIndexExpire).getBizDocExpiryDate());
         } else if(bizInfoDetailViewList != null && bizInfoDetailViewList.size() == 1){
             exSumCreditRiskInfoView.setIndirectCountryName(bizInfoDetailViewList.get(0).getExpIndCountryName());
             exSumCreditRiskInfoView.setPercentExport(bizInfoDetailViewList.get(0).getPercentExpIndCountryName());
+            exSummaryView.setBusinessOperationActivity(bizInfoDetailViewList.get(0).getBizActivity().getDescription());
+            exSummaryView.setExpiryDate(bizInfoDetailViewList.get(0).getBizDocExpiryDate());
         }
 
         if(exSummary != null && exSummary.getLastReviewDate() != null){

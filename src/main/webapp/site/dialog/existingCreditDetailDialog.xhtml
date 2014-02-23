@@ -100,17 +100,17 @@
         </td>
         <td>
             <p:inputText id="limit" value="#{creditFacExisting.existingCreditDetailView.limit}"
-                         onkeydown="return onKeyDownMoney()" onkeypress="return onKeyPressMoney()"
+                         onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)"
                          style="text-align:right">
                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                <p:ajax event="blur" update=":existingCreditDlgForm:limit"/>
+                <p:ajax event="blur" listener="#{creditFacExisting.checkTotalLimit()}" update=":existingCreditDlgForm:limit, existingCreditDlgForm:saveCreditBtn"/>
             </p:inputText>
         </td>
         <td class="title">
             <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.pcePercent')}"/>
         </td>
         <td>
-            <p:inputText id="pcePercent" value="#{creditFacExisting.existingCreditDetailView.pcePercent}" style="text-align:right">
+            <p:inputText id="pcePercent" value="#{creditFacExisting.existingCreditDetailView.pcePercent}" style="text-align:right" maxlength="6">
                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                 <f:validateDoubleRange maximum="100"/>
                 <p:ajax event="blur" update=":existingCreditDlgForm:pcePercent"/>
@@ -128,7 +128,7 @@
         </td>
         <td>
             <p:inputText id="pceLimit" value="#{creditFacExisting.existingCreditDetailView.pceLimit}"
-                         onkeydown="return onKeyDownMoney()" onkeypress="return onKeyPressMoney()"
+                         onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)"
                          style="text-align:right">
                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                 <p:ajax event="blur" update=":existingCreditDlgForm:pceLimit"/>
@@ -141,7 +141,7 @@
         </td>
         <td>
             <p:inputText id="outstanding" value="#{creditFacExisting.existingCreditDetailView.outstanding}" style="text-align:right;"
-                         onkeydown="return onKeyDownMoney()" onkeypress="return onKeyPressMoney()">
+                         onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)">
                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                 <p:ajax event="blur" update=":existingCreditDlgForm:outstanding"/>
             </p:inputText>
@@ -184,10 +184,10 @@
                     <p:outputLabel value="#{creditTier.no}"/>
                 </p:column>
                 <p:column styleClass="center">
-                    <p:inputText  id="tierInstallment" style="text-align:right;"
+                    <p:inputText  id="tierInstallment" style="text-align:right;" maxlength="14"
                                   value="#{creditTier.installment}"
-                                  onkeydown="return onKeyDownMoney()" onkeypress="return onKeyPressMoney()" >
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="18"/>
+                                  onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)" >
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                         <p:ajax event="blur" update=":existingCreditDlgForm:resultTier:tierInstallment"/>
                     </p:inputText>
                 </p:column>
@@ -208,11 +208,11 @@
                             <p:column>
                                 <p:inputText value="#{creditTier.finalInterest}"
                                              id="tierFinalInterest"
-                                             onkeydown="return onKeyDownMoney()" onkeypress="return onKeyPressMoney()"
+                                             onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)" maxlength="14"
                                              style="text-align:right;width:50px;">
                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                     maxIntegerDigits="18"/>
-                                    <p:ajax event="blur" update=":existingCreditDlgForm:resultTier:tierFinalInterest"/>
+                                                     maxIntegerDigits="14"/>
+                                    <p:ajax event="blur" update="@this"/>
                                 </p:inputText>
                             </p:column>
                         </p:row>
@@ -220,10 +220,8 @@
                 </p:column>
                 <p:column styleClass="center">
                     <p:inputText id="tierTenor"
-                                 onkeydown="return onKeyDownNumber()" onkeypress="return onKeyPressNumber()"
+                                 onkeydown="return onKeyDownNumber(event)" onkeypress="return onKeyPressNumber(event)" maxlength="5"
                                  value="#{creditTier.tenor}" style="text-align:right;" >
-                        <f:convertNumber pattern="#,##0" integerOnly="true" maxIntegerDigits="14"/>
-                        <p:ajax event="blur" update=":existingCreditDlgForm:resultTier:tierTenor"/>
                     </p:inputText>
                 </p:column>
                 <p:column styleClass="center">
@@ -253,7 +251,7 @@
                     value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
                     styleClass="smaller"
                     actionListener="#{creditFacExisting.onAddExistingSplitLineDetailView()}"
-                    update=":existingCreditDlgForm:spiltResult"
+                    update=":existingCreditDlgForm:spiltResult, :existingCreditDlgForm:saveCreditBtn"
                     >
             </p:commandButton>
         </td>
@@ -285,7 +283,7 @@
                     <p:selectOneMenu id="dlgSplitProdProgram" value="#{existingSplitLine.productProgram.id}" required="#{not empty param[saveCreditBtn.clientId]}"
                                      size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{creditFacExisting.productProgramList}"
+                        <f:selectItems value="#{creditFacExisting.productProgramViewList}"
                                        var="productProgram"
                                        itemLabel="#{productProgram.name}"
                                        itemValue="#{productProgram.id}"/>
@@ -293,17 +291,17 @@
                 </p:column>
                 <p:column styleClass="center">
                     <p:inputText id="splitLimit"
-                                 onkeydown="return onKeyDownMoney()" onkeypress="return onKeyPressMoney()"
+                                 onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)" maxlength="14"
                                  value="#{existingSplitLine.limit}" style="text-align:right;" >
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
-                        <p:ajax event="blur" update=":existingCreditDlgForm:spiltResult:splitLimit"/>
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                        <p:ajax event="blur" listener="#{creditFacExisting.checkTotalLimit()}" update=":existingCreditDlgForm:spiltResult:splitLimit, :existingCreditDlgForm:saveCreditBtn"/>
                     </p:inputText>
                 </p:column>
                 <p:column styleClass="center">
                     <p:column styleClass="center">
                         <p:commandButton title="Remove" process="@form"
                                          icon="ui-icon-trash"
-                                         update=":existingCreditDlgForm:spiltResult"
+                                         update=":existingCreditDlgForm:spiltResult, :existingCreditDlgForm:saveCreditBtn"
                                          actionListener="#{creditFacExisting.onDeleteExistingSplitLineDetailView(rowIndex)}" >
                         </p:commandButton>
                     </p:column>
@@ -321,6 +319,7 @@
                              binding="#{saveCreditBtn}"
                              value="#{msg.get('app.button.ok')}"
                              action="#{creditFacExisting.onSaveCreditDetail()}"
+                             disabled="#{not creditFacExisting.canSaveCreditDetail}"
                              process="@form"
                              update=":existingCreditDlgForm :frmMain"
                              oncomplete="handleExistingCreditRequest(xhr, status, args)"/>

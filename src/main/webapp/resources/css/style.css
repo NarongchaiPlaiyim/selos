@@ -870,3 +870,15 @@ table tbody tr.grandtotal_summary td {
 .normal_checkbox.ui-chkbox {
 	vertical-align : middle;
 }
+
+table.ui-selectoneradio.nolabel_radio {
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+table.ui-selectoneradio.nolabel_radio tr,
+table.ui-selectoneradio.nolabel_radio td {
+	border-spacing: 0;
+	padding: 0;
+}

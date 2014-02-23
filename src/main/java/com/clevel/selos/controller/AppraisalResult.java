@@ -12,6 +12,7 @@ import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
@@ -91,8 +92,9 @@ public class AppraisalResult implements Serializable {
     private int rowCollateral;
     private boolean flagReadOnly;
 
-    private User user;
+    //private User user;
     private long workCaseId;
+    private long workCasePreScreenId;
     private long stepId;
     private AppraisalView appraisalView;
 
@@ -164,27 +166,28 @@ public class AppraisalResult implements Serializable {
         log.info("-- preRender.");
         HttpSession session = FacesUtil.getSession(true);
         log.debug("preRender ::: setSession ");
-//        workCaseId = 4;
-//        user = (User)session.getAttribute("user");
+        log.debug("preRender ::: workCaseId : {}, workCasePreScreenId : {}", session.getAttribute("workCaseId"), session.getAttribute("workCasePreScreenId"));
 
-        if(!Util.isNull(session.getAttribute("workCaseId")) && !Util.isNull(session.getAttribute("stepId")) && !Util.isNull(session.getAttribute("user"))){
-            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-            log.debug("-- workCaseId[{}]", workCaseId);
-            user = (User)session.getAttribute("user");
-            log.debug("-- User.id[{}]", user.getId());
+        if((!Util.isNull(session.getAttribute("workCaseId")) || !Util.isNull(session.getAttribute("workCasePreScreenId"))) && !Util.isNull(session.getAttribute("stepId"))){
             stepId = Long.valueOf(""+session.getAttribute("stepId"));
             log.debug("-- stepId[{}]", stepId);
-            try{
-                String page = Util.getCurrentPage();
-                if(stepId != StepValue.REVIEW_APPRAISAL_REQUEST.value() || !"appraisalResult.jsf".equals(page)){
+
+            if(stepId != StepValue.REVIEW_APPRAISAL_REQUEST.value()){
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
+            } else {
+                if(!Util.isNull(session.getAttribute("workCaseId")) && Long.valueOf(""+session.getAttribute("workCaseId")) != 0){
+                    workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+                }else if(!Util.isNull(session.getAttribute("workCasePreScreenId")) && Long.valueOf(""+session.getAttribute("workCasePreScreenId")) != 0){
+                    workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
+                }else{
+                    log.error("error while loading page, can not find workCaseId/workCasePreScreenId in session.");
                     FacesUtil.redirect("/site/inbox.jsf");
                     return;
                 }
-            }catch (Exception ex){
-                log.debug("Exception :: {}",ex);
             }
         } else {
-            log.debug("preRender ::: workCaseId is null.");
+            log.error("error while loading page, can not find workCaseId/workCasePreScreenId in session.");
             FacesUtil.redirect("/site/inbox.jsf");
             return;
         }
@@ -195,7 +198,7 @@ public class AppraisalResult implements Serializable {
         log.info("-- onCreation.");
         preRender();
         init();
-        appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, user);
+        appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, workCasePreScreenId);
         if(!Util.isNull(appraisalView)){
             newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
             if(newCollateralViewList.size() == 0){
@@ -297,8 +300,7 @@ public class AppraisalResult implements Serializable {
         return true;
     }
     private AppraisalDataResult callCOM_S(final String jobID){
-        log.info("-- jobIDSearch is  {}", jobID);
-        AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobID);
+        AppraisalDataResult appraisalDataResult = appraisalResultControl.retrieveDataFromCOMS(jobID);
         return appraisalDataResult;
     }
     public void onSaveCollateralDetailView(){
@@ -346,7 +348,7 @@ public class AppraisalResult implements Serializable {
         try{
             appraisalView.setNewCollateralViewList(newCollateralViewList);
 
-            appraisalResultControl.onSaveAppraisalResult(appraisalView, workCaseId, user);
+            appraisalResultControl.onSaveAppraisalResult(appraisalView, workCaseId, workCasePreScreenId);
             messageHeader = msg.get("app.appraisal.result.message.header.save.success");
             message = msg.get("app.appraisal.result.body.message.save.success");
             onCreation();
@@ -672,7 +674,7 @@ public class AppraisalResult implements Serializable {
         newCollateralView.setAadDecisionReason("AadDecisionReason");
         newCollateralView.setAadDecisionReasonDetail("AadDecisionReasonDetail");
         newCollateralView.setAppraisalDate(new Date());
-        newCollateralView.setApproved(1);
+        newCollateralView.setUwDecision(DecisionType.NO_DECISION);
         newCollateralView.setBdmComments("BdmComments");
 
         newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
@@ -701,7 +703,7 @@ public class AppraisalResult implements Serializable {
         newCollateralView.setAadDecisionReason("AadDecisionReason");
         newCollateralView.setAadDecisionReasonDetail("AadDecisionReasonDetail");
         newCollateralView.setAppraisalDate(new Date());
-        newCollateralView.setApproved(1);
+        newCollateralView.setUwDecision(DecisionType.NO_DECISION);
         newCollateralView.setBdmComments("BdmComments");
 
         newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();

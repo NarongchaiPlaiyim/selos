@@ -25,6 +25,9 @@ public class WorkCase extends AbstractWorkCase{
     @JoinColumn(name = "workcaseprescreen_id")
     private WorkCasePrescreen workCasePrescreen;
 
+    @Column(name = "request_appraisal", columnDefinition = "int default 0")
+    private int requestAppraisal;
+
     public long getId() {
         return id;
     }
@@ -55,6 +58,14 @@ public class WorkCase extends AbstractWorkCase{
 
     public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
         this.workCasePrescreen = workCasePrescreen;
+    }
+
+    public int getRequestAppraisal() {
+        return requestAppraisal;
+    }
+
+    public void setRequestAppraisal(int requestAppraisal) {
+        this.requestAppraisal = requestAppraisal;
     }
 
     @Override

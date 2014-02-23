@@ -11,12 +11,15 @@ import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.NewCreditTierDetail;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.CreditDetailSimpleView;
 import com.clevel.selos.model.view.NewCreditDetailView;
 import com.clevel.selos.model.view.NewCreditTierDetailView;
 import com.clevel.selos.util.Util;
+
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -105,60 +108,60 @@ public class NewCreditDetailTransform extends Transform {
     }
 
     public List<NewCreditDetailView> transformToView(List<NewCreditDetail> newCreditDetailList) {
-
         List<NewCreditDetailView> newCreditDetailViewList = new ArrayList<NewCreditDetailView>();
-        NewCreditDetailView newCreditDetailView;
-
         for (NewCreditDetail newCreditDetail : newCreditDetailList) {
-            newCreditDetailView = new NewCreditDetailView();
-
-            newCreditDetailView.setId(newCreditDetail.getId());
-            newCreditDetailView.setProposeType(newCreditDetail.getProposeType());
-            newCreditDetailView.setCreateBy(newCreditDetail.getCreateBy());
-            newCreditDetailView.setCreateDate(newCreditDetail.getCreateDate());
-            newCreditDetailView.setModifyBy(newCreditDetail.getModifyBy());
-            newCreditDetailView.setModifyDate(newCreditDetail.getModifyDate());
-            newCreditDetailView.setSeq(newCreditDetail.getSeq());
-            newCreditDetailView.setGuaranteeAmount(newCreditDetail.getGuaranteeAmount());
-            newCreditDetailView.setAccountNumber(newCreditDetail.getAccountNumber());
-            newCreditDetailView.setAccountSuf(newCreditDetail.getAccountSuf());
-            newCreditDetailView.setAccountName(newCreditDetail.getAccountName());
-            newCreditDetailView.setRequestType(newCreditDetail.getRequestType());
-            newCreditDetailView.setRefinance(newCreditDetail.getRefinance());
-            newCreditDetailView.setUwDecision(newCreditDetail.getUwDecision());
-            newCreditDetailView.setNoFlag(Util.isTrue(newCreditDetail.getNoFlag()));
-            newCreditDetailView.setBorrowerName(newCreditDetail.getBorrowerName());
-            newCreditDetailView.setDisbursementTypeView(disbursementTypeTransform.transformToView(newCreditDetail.getDisbursementType()));
-            newCreditDetailView.setCreditTypeView(productTransform.transformToView(newCreditDetail.getCreditType()));
-            newCreditDetailView.setProductProgramView(productTransform.transformToView(newCreditDetail.getProductProgram()));
-            newCreditDetailView.setFrontEndFee(newCreditDetail.getFrontEndFee());
-            newCreditDetailView.setHoldLimitAmount(newCreditDetail.getHoldLimitAmount());
-            newCreditDetailView.setInstallment(newCreditDetail.getInstallment());
-            newCreditDetailView.setLimit(newCreditDetail.getLimit());
-            newCreditDetailView.setLoanPurposeView(loanPurposeTransform.transformToView(newCreditDetail.getLoanPurpose()));
-            newCreditDetailView.setOutstanding(newCreditDetail.getOutstanding());
-            newCreditDetailView.setPCEAmount(newCreditDetail.getPceAmount());
-            newCreditDetailView.setPCEPercent(newCreditDetail.getPcePercent());
-            newCreditDetailView.setProductCode(newCreditDetail.getProductCode());
-            newCreditDetailView.setProjectCode(newCreditDetail.getProjectCode());
-            newCreditDetailView.setPurpose(newCreditDetail.getPurpose());
-            newCreditDetailView.setReduceFrontEndFee(Util.isTrue(newCreditDetail.getReduceFrontEndFee()));
-            newCreditDetailView.setReducePriceFlag(Util.isTrue(newCreditDetail.getReducePriceFlag()));
-            newCreditDetailView.setRemark(newCreditDetail.getRemark());
-            newCreditDetailView.setUseCount(newCreditDetail.getUseCount());
-
-            List<NewCreditTierDetail> newCreditTierDetailList = newCreditTierDetailDAO.findByNewCreditDetail(newCreditDetail);
-
-            if (newCreditTierDetailList.size()>0)
-            {
-                List<NewCreditTierDetailView> newCreditTierDetailViewList = newCreditTierTransform.transformToView(newCreditTierDetailList);
-                newCreditDetailView.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
-            }
-
-            newCreditDetailViewList.add(newCreditDetailView);
+            newCreditDetailViewList.add(transformToView(newCreditDetail));
         }
 
         return newCreditDetailViewList;
+    }
+    public NewCreditDetailView transformToView(NewCreditDetail newCreditDetail) {
+    	 NewCreditDetailView newCreditDetailView = new NewCreditDetailView();
+
+         newCreditDetailView.setId(newCreditDetail.getId());
+         newCreditDetailView.setProposeType(newCreditDetail.getProposeType());
+         newCreditDetailView.setCreateBy(newCreditDetail.getCreateBy());
+         newCreditDetailView.setCreateDate(newCreditDetail.getCreateDate());
+         newCreditDetailView.setModifyBy(newCreditDetail.getModifyBy());
+         newCreditDetailView.setModifyDate(newCreditDetail.getModifyDate());
+         newCreditDetailView.setSeq(newCreditDetail.getSeq());
+         newCreditDetailView.setGuaranteeAmount(newCreditDetail.getGuaranteeAmount());
+         newCreditDetailView.setAccountNumber(newCreditDetail.getAccountNumber());
+         newCreditDetailView.setAccountSuf(newCreditDetail.getAccountSuf());
+         newCreditDetailView.setAccountName(newCreditDetail.getAccountName());
+         newCreditDetailView.setRequestType(newCreditDetail.getRequestType());
+         newCreditDetailView.setRefinance(newCreditDetail.getRefinance());
+         newCreditDetailView.setUwDecision(newCreditDetail.getUwDecision());
+         newCreditDetailView.setNoFlag(Util.isTrue(newCreditDetail.getNoFlag()));
+         newCreditDetailView.setBorrowerName(newCreditDetail.getBorrowerName());
+         newCreditDetailView.setDisbursementTypeView(disbursementTypeTransform.transformToView(newCreditDetail.getDisbursementType()));
+         newCreditDetailView.setCreditTypeView(productTransform.transformToView(newCreditDetail.getCreditType()));
+         newCreditDetailView.setProductProgramView(productTransform.transformToView(newCreditDetail.getProductProgram()));
+         newCreditDetailView.setFrontEndFee(newCreditDetail.getFrontEndFee());
+         newCreditDetailView.setHoldLimitAmount(newCreditDetail.getHoldLimitAmount());
+         newCreditDetailView.setInstallment(newCreditDetail.getInstallment());
+         newCreditDetailView.setLimit(newCreditDetail.getLimit());
+         newCreditDetailView.setLoanPurposeView(loanPurposeTransform.transformToView(newCreditDetail.getLoanPurpose()));
+         newCreditDetailView.setOutstanding(newCreditDetail.getOutstanding());
+         newCreditDetailView.setPCEAmount(newCreditDetail.getPceAmount());
+         newCreditDetailView.setPCEPercent(newCreditDetail.getPcePercent());
+         newCreditDetailView.setProductCode(newCreditDetail.getProductCode());
+         newCreditDetailView.setProjectCode(newCreditDetail.getProjectCode());
+         newCreditDetailView.setPurpose(newCreditDetail.getPurpose());
+         newCreditDetailView.setReduceFrontEndFee(Util.isTrue(newCreditDetail.getReduceFrontEndFee()));
+         newCreditDetailView.setReducePriceFlag(Util.isTrue(newCreditDetail.getReducePriceFlag()));
+         newCreditDetailView.setRemark(newCreditDetail.getRemark());
+         newCreditDetailView.setUseCount(newCreditDetail.getUseCount());
+
+         List<NewCreditTierDetail> newCreditTierDetailList = newCreditTierDetailDAO.findByNewCreditDetail(newCreditDetail);
+
+         if (newCreditTierDetailList.size()>0)
+         {
+             List<NewCreditTierDetailView> newCreditTierDetailViewList = newCreditTierTransform.transformToView(newCreditTierDetailList);
+             newCreditDetailView.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
+         }
+         return newCreditDetailView;
+
     }
 
    public String toGetPricing(BaseRate baseRate ,BigDecimal price){
@@ -173,5 +176,4 @@ public class NewCreditDetailTransform extends Transform {
         log.info("priceToShow :: {}",priceToShow);
        return priceToShow;
    }
-
 }

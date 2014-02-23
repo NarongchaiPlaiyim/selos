@@ -30,7 +30,8 @@ public class InsuranceInfoDAO extends GenericDAO<InsuranceInfo, Long> {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         List<InsuranceInfo> insuranceInfoList = (List<InsuranceInfo>) criteria.list();
-        log.info("-- newCollateralDetailList ::: size : {}", insuranceInfoList.size());
+        if (insuranceInfoList != null)
+        	log.info("-- newCollateralDetailList ::: size : {}", insuranceInfoList.size());
         return insuranceInfoList;
     }
 

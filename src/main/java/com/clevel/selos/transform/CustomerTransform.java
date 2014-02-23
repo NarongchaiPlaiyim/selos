@@ -10,11 +10,14 @@ import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerCSIView;
+import com.clevel.selos.model.view.CustomerInfoSimpleView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.util.Util;
+
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -969,5 +972,28 @@ public class CustomerTransform extends Transform {
             }
         }
         return customerList;
+    }
+    
+    public CustomerInfoSimpleView transformToSimpleView(Customer model) {
+    	StringBuilder builder = new StringBuilder();
+    	
+    	CustomerInfoSimpleView view = new CustomerInfoSimpleView();
+    	view.setId(model.getId());
+    	if (model.getTitle() != null)
+			builder.append(model.getTitle().getTitleTh()).append(' ');
+		builder.append(model.getNameTh());
+		if (!Util.isEmpty(model.getLastNameTh()))
+			builder.append(" ").append(model.getLastNameTh());
+    	view.setCustomerName(builder.toString());
+    	if (model.getIndividual() != null)
+    		view.setCitizenId(model.getIndividual().getCitizenId());
+    	else if (model.getJuristic() != null)
+    		view.setCitizenId(model.getJuristic().getRegistrationId());
+    	
+    	view.setTmbCustomerId(model.getTmbCustomerId());
+    	if (model.getRelation() != null)
+    		view.setRelation(model.getRelation().getDescription());
+    	
+    	return view;
     }
 }

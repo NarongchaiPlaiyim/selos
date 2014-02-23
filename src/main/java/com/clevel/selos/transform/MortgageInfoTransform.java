@@ -2,6 +2,7 @@ package com.clevel.selos.transform;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -11,6 +12,7 @@ import com.clevel.selos.model.AttorneyRelationType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.MortgageInfo;
+import com.clevel.selos.model.db.working.MortgageInfoMortgage;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.MortgageInfoView;
 
@@ -20,7 +22,7 @@ public class MortgageInfoTransform extends Transform {
 	@Inject private MortgageOSCompanyDAO mortgageOSCompanyDAO;
 	@Inject private MortgageLandOfficeDAO mortgageLandOfficeDAO;
 	
-	public MortgageInfoView transfromToView(MortgageInfo model) {
+	public MortgageInfoView transformToView(MortgageInfo model) {
 		MortgageInfoView view = new MortgageInfoView();
 		if (model == null) {
 			view.setMortgageAmount(new BigDecimal(0));
@@ -31,13 +33,23 @@ public class MortgageInfoTransform extends Transform {
 			view.setSigningDate(model.getMortgageSigningDate());
 			if (model.getMortgageOSCompany() != null)
 				view.setOsCompanyId(model.getMortgageOSCompany().getId());
-			if (model.getMortgageLandOffice() != null)
+			if (model.getMortgageLandOffice() != null) {
 				view.setLandOfficeId(model.getMortgageLandOffice().getId());
-			if (model.getMortgageType() != null)
-				view.setMortgageType(model.getMortgageType().getMortgage());
+				view.setLandOfficeStr(model.getMortgageLandOffice().getName());
+			}
+			if (model.getMortgageTypeList() != null) {
+				List<MortgageInfoMortgage> mortgageTypes = model.getMortgageTypeList();
+				StringBuilder builder = new StringBuilder();
+				for (MortgageInfoMortgage mortgageType : mortgageTypes) {
+					builder.append(mortgageType.getMortgageType().getMortgage());
+					builder.append(", ");
+				}
+				if (builder.length() > 0)
+					builder.setLength(builder.length() -2);
+				view.setMortgageType(builder.toString());
+			}
 			view.setMortgageOrder(model.getMortgageOrder());
-			//TODO Check about mortgage amount
-			view.setMortgageAmount(new BigDecimal(0));
+			view.setMortgageAmount(model.getMortgageAmount());
 			view.setPoa(model.getAttorneyRequired());
 			view.setAttorneyRelation(model.getAttorneyRelation());
 			view.setModifyBy(model.getModifyBy());
@@ -47,17 +59,6 @@ public class MortgageInfoTransform extends Transform {
 				view.setCustomerAttorneyId(model.getCustomerAttorney().getId());
 		}
 		return view;
-	}
-	
-	public MortgageInfo createNewModel(MortgageInfoView view,User user,WorkCase workCase) {
-		MortgageInfo model = new MortgageInfo();
-		model.setMortgageType(null);
-		model.setWorkCase(workCase);
-		model.setCreateBy(user);
-		model.setCreateDate(new Date());
-		
-		updateModelFromView(model, view, user);
-		return model;
 	}
 	
 	public void updateModelFromView(MortgageInfo model,MortgageInfoView view,User user) {

@@ -22,6 +22,9 @@
                                        var="guarantor"
                                        itemLabel="#{guarantor.firstNameTh} #{guarantor.lastNameTh}"
                                        itemValue="#{guarantor.id}"/>
+                        <p:ajax event="change"
+                                process="@this"
+                                update="@this"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -92,11 +95,11 @@
                         </p:column>
 
                         <p:column styleClass="left top">
-                            #{not empty creditTypeItem.productProgram ? creditTypeItem.productProgram.name : ''}
+                            #{not empty creditTypeItem.productProgramView ? creditTypeItem.productProgramView.name : ''}
                         </p:column>
 
                         <p:column styleClass="left top">
-                            #{not empty creditTypeItem.creditFacility ? creditTypeItem.creditFacility.name : ''}
+                            #{not empty creditTypeItem.creditFacilityView ? creditTypeItem.creditFacilityView.name : ''}
                         </p:column>
 
                         <p:column styleClass="right top">
