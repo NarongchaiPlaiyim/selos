@@ -416,4 +416,11 @@ public class Util implements Serializable {
     	else
     		return 0;
     }
+
+    public static String getStringNotNull(String string){
+        if(string==null){
+            return "";
+        }
+        return string;
+    }
 }
