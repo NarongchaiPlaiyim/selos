@@ -25,6 +25,7 @@ import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.BAResultHC;
 import com.clevel.selos.model.db.master.InsuranceCompany;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.Address;
 import com.clevel.selos.model.db.working.BAPAInfo;
 import com.clevel.selos.model.db.working.BAPAInfoCredit;
 import com.clevel.selos.model.db.working.BAPAInfoCustomer;
@@ -241,8 +242,24 @@ public class BAPAInfoControl extends BusinessControl {
 		 return builder.toString();
 	 }
 	 private String _getCustomerContractNo(Customer customer) {
-		 //TODO Check contract no
-		 return customer.getMobileNumber();
+		 List<Address> addresses = customer.getAddressesList();
+		 if (addresses != null && !addresses.isEmpty()) {
+			 StringBuilder builder  = new StringBuilder();
+			 for (Address address : addresses) {
+				 if (Util.isEmpty(address.getPhoneNumber()))
+					 continue;
+				 builder.append(address.getPhoneNumber());
+				 if (!Util.isEmpty(address.getExtension())) {
+					 builder.append(" Ext ");
+					 builder.append(address.getExtension());
+				 }
+				 builder.append(", ");
+			 }
+			 if (builder.length() > 0)
+				 builder.setLength(builder.length() - 2);
+			 return builder.toString();
+		 }
+		 return null;
 	 }
 	 public List<BAPAInfoCreditToSelectView> getBAPAInfoCreditToSelectView(long workCaseId) {
 		 if (workCaseId <= 0)

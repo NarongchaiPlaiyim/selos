@@ -1,19 +1,24 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.BankAccountProduct;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.BankBranch;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "wrk_open_account")
 public class OpenAccount implements Serializable {
-    @Id
+    private static final long serialVersionUID = -2026955433252501973L;
+
+	@Id
     @SequenceGenerator(name = "SEQ_WRK_OPEN_ACC_ID", sequenceName = "SEQ_WRK_OPEN_ACC_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_OPEN_ACC_ID")
     private long id;
@@ -22,8 +27,9 @@ public class OpenAccount implements Serializable {
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
-    @Column(name = "request_type")
-    private int requestType;
+    @Column(name = "request_type",columnDefinition="int default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private RadioValue requestType;
 
     @Column(name = "account_number")
     private String accountNumber;
@@ -55,8 +61,12 @@ public class OpenAccount implements Serializable {
     @OneToMany(mappedBy = "openAccount")
     private List<OpenAccountDeposit> openAccountDepositList;
 
-    @Column(name = "confirm_open_account")
-    private int confirmOpenAccount;
+    @Column(name = "confirm_open_account",columnDefinition="int default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private RadioValue confirmOpenAccount;
+    
+    @Column(name = "is_pledge_account",columnDefinition="int default 0")
+    private boolean pledgeAccount;
 
     @OneToMany(mappedBy = "openAccount")
     private List<OpenAccountCredit> openAccountCreditList;
@@ -77,11 +87,11 @@ public class OpenAccount implements Serializable {
         this.workCase = workCase;
     }
 
-    public int getRequestType() {
+    public RadioValue getRequestType() {
         return requestType;
     }
 
-    public void setRequestType(int requestType) {
+    public void setRequestType(RadioValue requestType) {
         this.requestType = requestType;
     }
 
@@ -157,11 +167,11 @@ public class OpenAccount implements Serializable {
         this.openAccountDepositList = openAccountDepositList;
     }
 
-    public int getConfirmOpenAccount() {
+    public RadioValue getConfirmOpenAccount() {
         return confirmOpenAccount;
     }
 
-    public void setConfirmOpenAccount(int confirmOpenAccount) {
+    public void setConfirmOpenAccount(RadioValue confirmOpenAccount) {
         this.confirmOpenAccount = confirmOpenAccount;
     }
 
@@ -172,6 +182,12 @@ public class OpenAccount implements Serializable {
     public void setOpenAccountCreditList(List<OpenAccountCredit> openAccountCreditList) {
         this.openAccountCreditList = openAccountCreditList;
     }
+    public boolean isPledgeAccount() {
+		return pledgeAccount;
+	}
+    public void setPledgeAccount(boolean pledgeAccount) {
+		this.pledgeAccount = pledgeAccount;
+	}
 
     @Override
     public String toString() {
@@ -189,6 +205,7 @@ public class OpenAccount implements Serializable {
                 append("numberOfDep", numberOfDep).
                 append("openAccountDepositList", openAccountDepositList).
                 append("confirmOpenAccount", confirmOpenAccount).
+                append("pledgeAccount", pledgeAccount).
                 append("openAccountCreditList", openAccountCreditList).
                 toString();
     }

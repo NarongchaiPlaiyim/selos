@@ -2,6 +2,7 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.NewGuarantorDetail;
@@ -40,6 +41,7 @@ public class NewGuarantorDetailDAO extends GenericDAO<NewGuarantorDetail, Long> 
     	criteria.createAlias("cus.workCase", "wrk");
         criteria.add(Restrictions.eq("wrk.id", workCaseId));
         criteria.add(Restrictions.eq("proposeType",proposeType));
+        criteria.add(Restrictions.eq("uwDecision",DecisionType.APPROVED));
         criteria.addOrder(Order.asc("id"));
         return criteria.list();
     }
