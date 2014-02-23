@@ -77,6 +77,7 @@ public class MortgageSummaryControl extends BusinessControl {
     @Inject private GuarantorInfoDAO guarantorInfoDAO;
     @Inject private NewCollateralSubDAO newCollateralSubDAO;
     @Inject private WorkCaseDAO workCaseDAO;
+    @Inject private NewGuarantorDetailDAO newGuarantorDetailDAO;
     
     @Inject private MortgageSummaryDAO mortgageSummaryDAO;
     @Inject private AgreementInfoDAO agreementInfoDAO;
@@ -92,6 +93,8 @@ public class MortgageSummaryControl extends BusinessControl {
     
     @Inject private UserZoneDAO userZoneDAO;
     @Inject private BankBranchDAO bankBranchDAO;
+    @Inject private MortgageTypeDAO mortgageTypeDAO;
+    
     
     public MortgageSummaryControl(){
 
@@ -438,8 +441,8 @@ public class MortgageSummaryControl extends BusinessControl {
     	HashSet<NewCollateralCredit> creditSet = new HashSet<NewCollateralCredit>();
 		HashSet<Customer> ownerSet = new HashSet<Customer>();
 		for (NewCollateralSub collateral : collaterals) {
-			if (collateral.getAppraisalValue() != null)
-				mortgageAmount =mortgageAmount.add(collateral.getAppraisalValue());
+			if (collateral.getMortgageValue() != null)
+				mortgageAmount =mortgageAmount.add(collateral.getMortgageValue());
 			
 			MortgageInfoCollSub mortgageColl = subMap.get(collateral.getId());
 			if (mortgageColl == null) {
@@ -583,16 +586,13 @@ public class MortgageSummaryControl extends BusinessControl {
     		mortgageInfoDAO.delete(info);
     	}
     }
-    @Inject private MortgageTypeDAO mortgageTypeDAO;
-    @Inject private NewGuarantorDetailDAO newGuarantorDetailDAO;
+    
     private void _processGuarantorData(User user,WorkCase workCase) {
     	List<MortgageType> mortgageTypes = mortgageTypeDAO.findMortgageTypeForGuarantor();
-    	MortgageType type1 = null;
-    	MortgageType type2 = null;
+    	MortgageType defaultType = null;
     	if (mortgageTypes != null && !mortgageTypes.isEmpty()) {
-    		type1 = mortgageTypes.get(0);
-    		if (mortgageTypes.size() > 1)
-    			type2 = mortgageTypes.get(1);
+    		defaultType = mortgageTypes.get(0);
+    		
     	}
     	List<NewGuarantorDetail> newGuarantors = newGuarantorDetailDAO.findGuarantorByProposeType(workCase.getId(), ProposeType.A);
     	List<GuarantorInfo> guarantorInfos = guarantorInfoDAO.findAllByWorkCaseId(workCase.getId());
@@ -604,12 +604,8 @@ public class MortgageSummaryControl extends BusinessControl {
     	
     	for (NewGuarantorDetail newGuarantor : newGuarantors) {
     		MortgageType type = null;
-    		BigDecimal amount = newGuarantor.getTotalLimitGuaranteeAmount();
-    		if (amount != null && amount.compareTo(BigDecimal.ZERO) > 0) {
-    			type = type1;
-    		} else {
-    			type = type2;
-    		}
+    		if (newGuarantor.getGuarantorName() != null)
+    			type = defaultType;
     		
     		GuarantorInfo guarantorInfo = guarantorMap.get(newGuarantor.getId());
     		if (guarantorInfo == null) {
@@ -631,6 +627,11 @@ public class MortgageSummaryControl extends BusinessControl {
     	for (Object key : guarantorMap.keySet()) {
     		guarantorInfoDAO.delete(guarantorMap.get(key));
     	}
-    	
+    }
+    
+    private void _processPledgeData(HashMap<Long, NewCollateralSub> collateralMap,HashSet<Long> pledgeSet,User user, WorkCase workCase) {
+    	for (Long subCollateralId : pledgeSet) {
+    		
+    	}
     }
 }

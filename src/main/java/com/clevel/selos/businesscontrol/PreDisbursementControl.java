@@ -1,44 +1,29 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.master.StepLandingPageDAO;
-import com.clevel.selos.dao.master.UserDAO;
-import com.clevel.selos.dao.master.PreDisbursementDataDAO;
-import com.clevel.selos.dao.working.*;
-import com.clevel.selos.filenet.bpm.services.dto.CaseDTO;
-import com.clevel.selos.integration.BPMInterface;
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.PreDisbursementData;
-import com.clevel.selos.model.db.master.StepLandingPage;
-import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.view.AppBorrowerHeaderView;
-import com.clevel.selos.model.view.AppHeaderView;
-import com.clevel.selos.model.view.CustomerInfoView;
-import com.clevel.selos.model.view.PreDisbursementDetailView;
-import com.clevel.selos.model.view.PreDisbursementView;
-import com.clevel.selos.security.UserDetail;
-import com.clevel.selos.transform.PreDisbursementTransform;
-import com.clevel.selos.transform.business.InboxBizTransform;
-import com.clevel.selos.util.Util;
-import com.clevel.selos.model.db.working.PreDisbursement;
-
-import com.clevel.selos.model.db.working.PreDisbursementDetail;
-import com.clevel.selos.model.db.working.WorkCase;
-import com.sun.xml.internal.xsom.impl.scd.Iterators.Map;
-
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-import org.slf4j.Logger;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+
+import com.clevel.selos.dao.master.PreDisbursementDataDAO;
+import com.clevel.selos.dao.working.PreDisbursementDAO;
+import com.clevel.selos.dao.working.PreDisbursementDetailDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.BPMInterface;
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.PreDisbursementData;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.PreDisbursement;
+import com.clevel.selos.model.db.working.PreDisbursementDetail;
+import com.clevel.selos.model.view.PreDisbursementDetailView;
+import com.clevel.selos.model.view.PreDisbursementView;
+import com.clevel.selos.transform.PreDisbursementTransform;
 
 @Stateless
 public class PreDisbursementControl extends BusinessControl {
