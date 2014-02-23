@@ -10,11 +10,14 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-public class Convert implements Serializable {
+public class Converter implements Serializable {
+    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
 
     private ApplicationTypeLevel applicationTypeLevel = null;
     private List<BorrowerTypeLevel> borrowerTypeLevelList;
@@ -37,7 +40,7 @@ public class Convert implements Serializable {
     Logger log;
 
     @Inject
-    public Convert() {
+    public Converter() {
     }
 
     public com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceRequest convertInputModelToRequestModel(PreScreenRequest inputModel) throws Exception {
@@ -1787,6 +1790,13 @@ public class Convert implements Serializable {
             log.error("convertInputModelToRequestModel() Exception : {}", e);
             throw e;
         }
+    }
+
+    protected String getDecisionID(String applicationNo, String statusCode){
+
+        String decisionID = new StringBuilder("SELOS").append(statusCode == null ? "" : statusCode).append("_").append(simpleDateFormat.format(Calendar.getInstance().getTime())).toString();
+        return decisionID;
+
     }
 
 
