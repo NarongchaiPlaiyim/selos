@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.dao.master.RoleDAO;
 import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.dao.working.AppraisalDAO;
 import com.clevel.selos.dao.working.WorkCaseAppraisalDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
@@ -13,6 +14,7 @@ import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.master.RequestType;
 import com.clevel.selos.model.db.master.Role;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.Appraisal;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCaseAppraisal;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -25,6 +27,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -38,9 +41,11 @@ public class FullApplicationControl extends BusinessControl {
     @Inject
     RoleDAO roleDAO;
     @Inject
-    WorkCasePrescreenDAO workCasePrescreenDAO;
+    AppraisalDAO appraisalDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
+    @Inject
+    WorkCasePrescreenDAO workCasePrescreenDAO;
     @Inject
     WorkCaseAppraisalDAO workCaseAppraisalDAO;
 
@@ -186,5 +191,29 @@ public class FullApplicationControl extends BusinessControl {
         workCaseAppraisalDAO.persist(workCaseAppraisal);
 
         return workCaseAppraisal;
+    }
+
+    public void saveWorkCaseAppraisal(String appNumber, Appraisal appraisal){
+        if(!Util.isEmpty(appNumber)){
+            WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
+            workCaseAppraisal.setAppointmentDate(appraisal.getAppointmentDate());
+            appraisal.getLocationOfProperty();
+        }
+    }
+
+    public void submitToAADCommittee(long workCaseId, long workCasePreScreenId, String queueName){
+        //submit appraisal to aad
+        log.debug("requestAppraisalCommittee ::: start submit to AAD Committee");
+        String appNumber = "";
+        if(!Util.isNull(workCaseId) && workCaseId != 0){
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            Appraisal appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
+            appNumber = workCase.getAppNumber();
+        }else if(!Util.isNull(workCasePreScreenId) && workCasePreScreenId != 0){
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            Appraisal appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+            appNumber = workCasePrescreen.getAppNumber();
+        }
+
     }
 }

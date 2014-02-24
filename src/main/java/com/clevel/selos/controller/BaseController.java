@@ -95,7 +95,7 @@ public class BaseController implements Serializable {
             manageButton.setCheckNCBButton(true);
             manageButton.setReturnToMakerButton(true);
         } else if (stepId == StepValue.PRESCREEN_MAKER.value()) {
-            if(Util.getCurrentPage().equals("prescreenMaker.jsf")){
+            if(Util.getCurrentPage().equals("prescreenMaker.jsf") || Util.getCurrentPage().equals("prescreenResult.jsf")){
                 manageButton.setCancelCAButton(true);
                 manageButton.setCloseSaleButton(true);
                 manageButton.setCheckBRMSButton(true);
@@ -286,6 +286,32 @@ public class BaseController implements Serializable {
 
     public void onSubmitAppraisalCommittee(){
         log.debug("onSubmitAppraisalCommittee ( submit to aad committee )");
+        long workCasePreScreenId = 0;
+        long workCaseId = 0;
+        String queueName = "";
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            if(!Util.isNull(session.getAttribute("workCaseId"))){
+                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            }
+            if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
+                workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+            }
+            if(!Util.isNull(session.getAttribute("queueName"))){
+                queueName = session.getAttribute("queueName").toString();
+            }
+
+            fullApplicationControl.submitToAADCommittee(workCaseId, workCasePreScreenId, queueName);
+
+            messageHeader = "Information.";
+            message = "Request for appraisal success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+        } catch (Exception ex){
+            log.error("exception while request appraisal : ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
 
     }
 
