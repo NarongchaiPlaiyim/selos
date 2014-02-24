@@ -1,7 +1,6 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.integration.brms.model.RuleColorResult;
-import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;

@@ -1,4 +1,4 @@
-package com.clevel.selos.integration.brms.model.request.data;
+package com.clevel.selos.integration.brms.model.request;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

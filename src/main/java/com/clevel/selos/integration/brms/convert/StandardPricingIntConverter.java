@@ -1,37 +1,36 @@
 package com.clevel.selos.integration.brms.convert;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.brms.model.BRMSField;
 import com.clevel.selos.integration.brms.model.request.BRMSAccountRequested;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
-import com.clevel.selos.integration.brms.service.standardpricing.feerules.*;
+import com.clevel.selos.integration.brms.model.response.PricingIntTier;
+import com.clevel.selos.integration.brms.model.response.PricingInterest;
+import com.clevel.selos.integration.brms.model.response.StandardPricingIntResponse;
+import com.clevel.selos.integration.brms.service.standardpricing.interestrules.*;
+import com.clevel.selos.model.ActionResult;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.xml.datatype.DatatypeFactory;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
-public class StandardPricingFeeConverter extends Converter{
-
+public class StandardPricingIntConverter extends Converter {
     @Inject
     @BRMS
     Logger logger;
 
     @Inject
-    public StandardPricingFeeConverter(){
-    }
+    public StandardPricingIntConverter(){}
 
     public DecisionServiceRequest getDecisionServiceRequest(BRMSApplicationInfo applicationInfo){
-
         if(applicationInfo != null){
-            //Initial Decision Service Request//
 
             ApplicationType applicationType = new ApplicationType();
-
 
             applicationType.setApplicationNumber(applicationInfo.getApplicationNo());
             try{
@@ -99,6 +98,61 @@ public class StandardPricingFeeConverter extends Converter{
         }
 
         return null;
+    }
+
+    public StandardPricingIntResponse getStandardPricingResponse(DecisionServiceResponse decisionServiceResponse){
+        StandardPricingIntResponse standardPricingIntResponse = new StandardPricingIntResponse();
+        if(decisionServiceResponse != null){
+
+
+            UnderwritingRequest underwritingRequest = decisionServiceResponse.getUnderwritingRequest();
+            UnderwritingApprovalRequestType approvalRequestType = underwritingRequest.getUnderwritingApprovalRequest();
+            ApplicationType applicationType = approvalRequestType.getApplication();
+
+            //To store List of Pricing Interest Object.
+            List<PricingInterest> pricingInterestList = new ArrayList<PricingInterest>();
+
+            List<ProductType> productTypeList = applicationType.getProduct();
+            for(ProductType productType : productTypeList){
+
+                List<SELOSProductProgramType> productProgramTypeList = productType.getSelosProductProgram();
+                for(SELOSProductProgramType productProgramType : productProgramTypeList){
+                    List<CreditFacilityType> creditFacilityTypeList = productProgramType.getCreditFacility();
+                    for(CreditFacilityType creditFacilityType : creditFacilityTypeList){
+
+                        PricingType pricingType = creditFacilityType.getPricing();
+                        PricingInterest pricingInterest = new PricingInterest();
+                        pricingInterest.setCreditDetailId(creditFacilityType.getID());
+                        List<PricingIntTier> pricingIntTierList = new ArrayList<PricingIntTier>();
+
+                        List<PricingTierType> pricingTierList = pricingType.getPricingTier();
+                        for(PricingTierType pricingTierType : pricingTierList){
+                            PricingIntTier pricingIntTier = new PricingIntTier();
+                            pricingIntTier.setRateType(pricingTierType.getRateType());
+                            pricingIntTier.setSpread(pricingTierType.getSpread());
+                            pricingIntTier.setRateVariance(pricingTierType.getRateVariance());
+
+                            List<AttributeType> pricingAttrList = pricingTierType.getAttribute();
+                            for(AttributeType attributeType : pricingAttrList){
+                                if(attributeType.getName().equals(BRMSField.PRICE_MAXIMUM_RATE.value())){
+                                    pricingIntTier.setMaxRateVariance(attributeType.getNumericValue());
+                                    break;
+                                }
+                            }
+                            pricingIntTierList.add(pricingIntTier);
+                        }
+                        pricingInterest.setPricingIntTierList(pricingIntTierList);
+                        pricingInterestList.add(pricingInterest);
+                    }
+                }
+            }
+
+            standardPricingIntResponse.setDecisionID(decisionServiceResponse.getDecisionID());
+            standardPricingIntResponse.setApplicationNo(applicationType.getApplicationNumber());
+
+        }
+
+        return standardPricingIntResponse;
     }
 
     private AttributeType getAttributeType(BRMSField field, Date value){

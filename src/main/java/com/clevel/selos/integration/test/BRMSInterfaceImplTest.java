@@ -4,8 +4,8 @@ import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.brms.model.RuleColorResult;
-import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.*;
+import com.clevel.selos.integration.brms.model.response.StandardPricingIntResponse;
 import org.slf4j.Logger;
 
 import javax.enterprise.inject.Alternative;

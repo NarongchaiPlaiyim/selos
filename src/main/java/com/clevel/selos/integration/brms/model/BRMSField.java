@@ -134,7 +134,9 @@ public enum BRMSField {
     NUMBER_OF_INDV_GUARANTOR("Number Of Individual Guarantor"),
     NUMBER_OF_JURIS_GUARANTOR("Number Of Juristic Guarantor"),
     TOTAL_MORTGAGE_VALUE("Total Mortgage Value"),
-    NUMBER_OF_REDEEM_TRANSACTION("Number Of Redeem Transaction");
+    NUMBER_OF_REDEEM_TRANSACTION("Number Of Redeem Transaction"),
+    //Pricing Attribute
+    PRICE_MAXIMUM_RATE("Maximum Rate");
 
     String value;
 

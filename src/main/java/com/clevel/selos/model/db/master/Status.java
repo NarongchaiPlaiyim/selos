@@ -18,6 +18,8 @@ public class Status implements Serializable {
     private StepType stepType;
     @Column(name = "name", length = 100)
     private String name;
+    @Column(name = "code", length = 5)
+    private String code;
     @Column(name = "description", length = 100)
     private String description;
     @Column(name = "active")
@@ -48,6 +50,14 @@ public class Status implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getDescription() {
