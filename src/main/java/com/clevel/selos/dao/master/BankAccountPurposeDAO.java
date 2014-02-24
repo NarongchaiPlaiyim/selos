@@ -25,4 +25,16 @@ public class BankAccountPurposeDAO extends GenericDAO<BankAccountPurpose, Intege
         List<BankAccountPurpose> list = criteria.list();
         return list;
     }
+    
+    @SuppressWarnings("unchecked")
+    public BankAccountPurpose getDefaultProposeForPledge() {
+    	Criteria criteria = createCriteria()
+	        .add(Restrictions.eq("active", 1))
+	        .add(Restrictions.eq("pledgeDefault", true));
+    	List<BankAccountPurpose> purposes= criteria.list();
+    	if (purposes != null && !purposes.isEmpty())
+    		return purposes.get(0);
+    	else
+    		return null;
+    }
 }

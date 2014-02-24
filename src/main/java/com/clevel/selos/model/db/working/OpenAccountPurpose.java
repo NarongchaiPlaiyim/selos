@@ -10,12 +10,14 @@ import java.io.Serializable;
 @Entity
 @Table(name = "wrk_open_account_purpose")
 public class OpenAccountPurpose implements Serializable {
-    @Id
+    private static final long serialVersionUID = -5987678118223153608L;
+
+	@Id
     @SequenceGenerator(name = "SEQ_WRK_OPEN_ACC_PUR_ID", sequenceName = "SEQ_WRK_OPEN_ACC_PUR_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_OPEN_ACC_PUR_ID")
     private long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "open_account_id")
     private OpenAccount openAccount;
 

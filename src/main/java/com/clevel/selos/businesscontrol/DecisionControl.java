@@ -1,14 +1,13 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.controller.Decision;
 import com.clevel.selos.dao.working.ApprovalHistoryDAO;
+import com.clevel.selos.dao.working.DecisionFollowConditionDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.Action;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ApprovalHistory;
+import com.clevel.selos.model.db.working.DecisionFollowCondition;
 import com.clevel.selos.model.view.*;
-import com.clevel.selos.transform.ApprovalHistoryTransform;
-import com.clevel.selos.transform.DecisionTransform;
+import com.clevel.selos.transform.*;
 import com.rits.cloning.Cloner;
 import org.slf4j.Logger;
 
@@ -25,13 +24,22 @@ public class DecisionControl extends BusinessControl {
     private Logger log;
 
     //DAO
+    @Inject
     private ApprovalHistoryDAO approvalHistoryDAO;
+    @Inject
+    private DecisionFollowConditionDAO decisionFollowConditionDAO;
 
     //Transform
     @Inject
     private DecisionTransform decisionTransform;
     @Inject
+    private DecisionFollowConditionTransform decisionFollowConditionTransform;
+    @Inject
     private ApprovalHistoryTransform approvalHistoryTransform;
+    @Inject
+    private CreditRequestTypeTransform creditRequestTypeTransform;
+    @Inject
+    private CountryTransform countryTransform;
 
     //Other Business Control
     @Inject
@@ -48,9 +56,8 @@ public class DecisionControl extends BusinessControl {
     }
 
     public DecisionView getDecision(long workCaseId) {
-        Cloner cloner = new Cloner();
         DecisionView decisionView = new DecisionView();
-
+        // Credit Facility Existing
         ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.getExistingCreditFacility(workCaseId);
         if (existingCreditFacilityView != null) {
             // Existing Condition
@@ -97,6 +104,10 @@ public class DecisionControl extends BusinessControl {
         // Credit Facility Propose
         NewCreditFacilityView newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
         if (newCreditFacilityView != null) {
+            decisionView.setLoanRequestType(creditRequestTypeTransform.transformToView(newCreditFacilityView.getLoanRequestType()));
+            decisionView.setInvestedCountry(countryTransform.transformToView(newCreditFacilityView.getInvestedCountry()));
+            decisionView.setExistingSMELimit(newCreditFacilityView.getExistingSMELimit());
+            decisionView.setMaximumSMELimit(newCreditFacilityView.getMaximumSMELimit());
             // Propose Credit Info.
             decisionView.setProposeCreditList(newCreditFacilityView.getNewCreditDetailViewList());
             decisionView.setProposeTotalCreditLimit(newCreditFacilityView.getTotalPropose());
@@ -113,6 +124,7 @@ public class DecisionControl extends BusinessControl {
             decisionView.setGuarantorBA(newCreditFacilityView.getGuarantorBA());
             decisionView.setReasonForReduction(newCreditFacilityView.getReasonForReduction());
 
+            Cloner cloner = new Cloner();
             // Approve Credit
             decisionView.setApproveCreditList(cloner.deepClone(newCreditFacilityView.getNewCreditDetailViewList()));
             decisionView.setApproveTotalCreditLimit(newCreditFacilityView.getTotalPropose());
@@ -129,17 +141,16 @@ public class DecisionControl extends BusinessControl {
             decisionView.setApproveTotalNumOfNewOD(newCreditFacilityView.getTotalNumberOfNewOD());
             decisionView.setApproveTotalNumProposeCreditFac(newCreditFacilityView.getTotalNumberProposeCreditFac());
             decisionView.setApproveTotalNumContingentPropose(newCreditFacilityView.getTotalNumberContingenPropose());
-            decisionView.setGrandTotalNumOfCoreAsset(BigDecimal.valueOf(newCreditFacilityView.getTotalNumberOfCoreAsset()));
-            decisionView.setGrandTotalNumOfNonCoreAsset(BigDecimal.valueOf(newCreditFacilityView.getTotalNumberOfNonCoreAsset()));
-            decisionView.setApproveTotalTCGGuaranteeAmt(newCreditFacilityView.getTotalTCGGuaranteeAmount());
-            decisionView.setApproveTotalIndvGuaranteeAmt(newCreditFacilityView.getTotalIndvGuaranteeAmount());
-            decisionView.setApproveTotalJurisGuaranteeAmt(newCreditFacilityView.getTotalJurisGuaranteeAmount());
 
         }
 
+        // Decision FollowUp Condition
+        List<DecisionFollowCondition> decisionFollowConditionList = decisionFollowConditionDAO.findByWorkCase(workCaseId);
+        decisionView.setDecisionFollowConditionViewList(decisionFollowConditionTransform.transformToView(decisionFollowConditionList));
+
         // Approval History
-        List<ApprovalHistory> submittedApprovalHistory = approvalHistoryDAO.findByWorkCase(workCaseId, true);
-        decisionView.setApprovalHistoryList(approvalHistoryTransform.transformToView(submittedApprovalHistory));
+        List<ApprovalHistory> submittedApprovalHistories = approvalHistoryDAO.findByWorkCase(workCaseId, true);
+        decisionView.setApprovalHistoryList(approvalHistoryTransform.transformToView(submittedApprovalHistories));
         return decisionView;
     }
 

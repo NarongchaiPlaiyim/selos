@@ -129,7 +129,14 @@ public enum BRMSField {
     TOTAL_REQUESTED_WC_CREDIT_LIMIT("Total Requested WC Credit Limit"),
     MAX_CORE_WC_LOAN_LIMIT("Max Core WC Loan Limit"),
     TOTAL_REQUESTED_CORE_WC_LOAN_CREDIT_LIMIT("Total Requested Core WC Loan credit limit"),
-    TOTAL_REQUESTED_OD_CREDIT_LIMIT("Total Requested OD credit limit");
+    TOTAL_REQUESTED_OD_CREDIT_LIMIT("Total Requested OD credit limit"),
+    TOTAL_TCG_GUARANTEE_AMOUNT("Total TCG Guarantee Amount"),
+    NUMBER_OF_INDV_GUARANTOR("Number Of Individual Guarantor"),
+    NUMBER_OF_JURIS_GUARANTOR("Number Of Juristic Guarantor"),
+    TOTAL_MORTGAGE_VALUE("Total Mortgage Value"),
+    NUMBER_OF_REDEEM_TRANSACTION("Number Of Redeem Transaction"),
+    //Pricing Attribute
+    PRICE_MAXIMUM_RATE("Maximum Rate");
 
     String value;
 

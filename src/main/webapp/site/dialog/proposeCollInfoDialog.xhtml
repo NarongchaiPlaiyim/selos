@@ -21,7 +21,7 @@
             <p:ajax event="change" listener="#{creditFacPropose.onChangeJobId}" update="@form"/>
         </p:inputText>
     </td>
-    <td class="right" colspan="2" style="width: 50%">
+    <td class="left" colspan="2" style="width: 50%">
         <p:commandButton value="#{msg.get('app.credit.facility.propose.dlg.retrieveButton')}"
                          binding="#{retrieveButton}"
                          styleClass="largest"
@@ -202,6 +202,9 @@
                            var="potentialItem"
                            itemLabel="#{potentialItem.description}"
                            itemValue="#{potentialItem.id}"/>
+            <p:ajax event="change"
+                    process="@this"
+                    update="@this"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -219,6 +222,9 @@
                            var="collTypePercentItem"
                            itemLabel="#{collTypePercentItem.description}"
                            itemValue="#{collTypePercentItem.id}"/>
+            <p:ajax event="change"
+                    process="@this"
+                    update="@this"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -245,7 +251,9 @@
     </td>
     <td class="left" colspan="3">
         <p:inputText value="#{CollateralHeaderDetailView.titleDeed}"
-                     required="#{not empty param[btnSaveCollateral.clientId]}"/>
+                     required="#{not empty param[btnSaveCollateral.clientId]}">
+            <p:ajax event="blur" update="@this"/>
+        </p:inputText>
     </td>
 </tr>
 <tr>
@@ -255,7 +263,9 @@
     <td class="left" colspan="3">
         <p:inputText value="#{CollateralHeaderDetailView.collateralLocation}"
                      style="width: 400px;"
-                     required="#{not empty param[btnSaveCollateral.clientId]}"/>
+                     required="#{not empty param[btnSaveCollateral.clientId]}">
+            <p:ajax event="blur" update="@this"/>
+        </p:inputText>
     </td>
 </tr>
 <tr>
@@ -290,6 +300,9 @@
                            var="headCollateralTypeItem"
                            itemLabel="#{headCollateralTypeItem.description}"
                            itemValue="#{headCollateralTypeItem.id}"/>
+            <p:ajax event="change"
+                    process="@this"
+                    update="@this"/>
         </p:selectOneMenu>
     </td>
 </tr>

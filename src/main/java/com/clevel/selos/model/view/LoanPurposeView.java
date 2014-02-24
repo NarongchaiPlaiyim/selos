@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class LoanPurposeView implements Serializable{
     private int id;
     private String description;
-    private int brmsCode;
+    private String brmsCode;
     private int active;
 
     public int getId() {
@@ -27,11 +27,11 @@ public class LoanPurposeView implements Serializable{
         this.description = description;
     }
 
-    public int getBrmsCode() {
+    public String getBrmsCode() {
         return brmsCode;
     }
 
-    public void setBrmsCode(int brmsCode) {
+    public void setBrmsCode(String brmsCode) {
         this.brmsCode = brmsCode;
     }
 

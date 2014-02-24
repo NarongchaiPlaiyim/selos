@@ -8,12 +8,6 @@ import java.util.Date;
 import java.util.List;
 
 public class DecisionView implements Serializable {
-    private long id;
-    private User createBy;
-    private Date createDate;
-    private User modifyBy;
-    private Date modifyDate;
-
     // Existing
     private List<ExistingConditionDetailView> extConditionComCreditList;
     private List<ExistingCreditDetailView> extBorrowerComCreditList;
@@ -56,6 +50,8 @@ public class DecisionView implements Serializable {
     private BigDecimal proposeTotalCreditLimit;
     private BigDecimal proposeTotalGuaranteeAmt;
 
+    private CreditRequestTypeView loanRequestType;
+    private CountryView investedCountry;
     private BigDecimal existingSMELimit;
     private BigDecimal maximumSMELimit;
 
@@ -78,7 +74,7 @@ public class DecisionView implements Serializable {
     private BigDecimal approveTotalIndvGuaranteeAmt;
     private BigDecimal approveTotalJurisGuaranteeAmt;
 
-    private List<FollowUpConditionView> followUpConditionList;
+    private List<DecisionFollowConditionView> decisionFollowConditionViewList;
 
     private BigDecimal intFeeDOA;
     private BigDecimal frontendFeeDOA;
@@ -88,46 +84,6 @@ public class DecisionView implements Serializable {
     private List<ApprovalHistoryView> approvalHistoryList;
 
     public DecisionView() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public User getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(User createBy) {
-        this.createBy = createBy;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public User getModifyBy() {
-        return modifyBy;
-    }
-
-    public void setModifyBy(User modifyBy) {
-        this.modifyBy = modifyBy;
-    }
-
-    public Date getModifyDate() {
-        return modifyDate;
-    }
-
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
     }
 
     public List<ExistingConditionDetailView> getExtConditionComCreditList() {
@@ -418,6 +374,38 @@ public class DecisionView implements Serializable {
         this.proposeTotalGuaranteeAmt = proposeTotalGuaranteeAmt;
     }
 
+    public CreditRequestTypeView getLoanRequestType() {
+        return loanRequestType;
+    }
+
+    public void setLoanRequestType(CreditRequestTypeView loanRequestType) {
+        this.loanRequestType = loanRequestType;
+    }
+
+    public CountryView getInvestedCountry() {
+        return investedCountry;
+    }
+
+    public void setInvestedCountry(CountryView investedCountry) {
+        this.investedCountry = investedCountry;
+    }
+
+    public BigDecimal getExistingSMELimit() {
+        return existingSMELimit;
+    }
+
+    public void setExistingSMELimit(BigDecimal existingSMELimit) {
+        this.existingSMELimit = existingSMELimit;
+    }
+
+    public BigDecimal getMaximumSMELimit() {
+        return maximumSMELimit;
+    }
+
+    public void setMaximumSMELimit(BigDecimal maximumSMELimit) {
+        this.maximumSMELimit = maximumSMELimit;
+    }
+
     public List<NewCreditDetailView> getApproveCreditList() {
         return approveCreditList;
     }
@@ -440,6 +428,14 @@ public class DecisionView implements Serializable {
 
     public void setApproveGuarantorList(List<NewGuarantorDetailView> approveGuarantorList) {
         this.approveGuarantorList = approveGuarantorList;
+    }
+
+    public BigDecimal getApproveTotalCreditLimit() {
+        return approveTotalCreditLimit;
+    }
+
+    public void setApproveTotalCreditLimit(BigDecimal approveTotalCreditLimit) {
+        this.approveTotalCreditLimit = approveTotalCreditLimit;
     }
 
     public BigDecimal getApproveBrwTotalCommercial() {
@@ -538,12 +534,12 @@ public class DecisionView implements Serializable {
         this.approveTotalJurisGuaranteeAmt = approveTotalJurisGuaranteeAmt;
     }
 
-    public List<FollowUpConditionView> getFollowUpConditionList() {
-        return followUpConditionList;
+    public List<DecisionFollowConditionView> getDecisionFollowConditionViewList() {
+        return decisionFollowConditionViewList;
     }
 
-    public void setFollowUpConditionList(List<FollowUpConditionView> followUpConditionList) {
-        this.followUpConditionList = followUpConditionList;
+    public void setDecisionFollowConditionViewList(List<DecisionFollowConditionView> decisionFollowConditionViewList) {
+        this.decisionFollowConditionViewList = decisionFollowConditionViewList;
     }
 
     public BigDecimal getIntFeeDOA() {
@@ -584,29 +580,5 @@ public class DecisionView implements Serializable {
 
     public void setApprovalHistoryList(List<ApprovalHistoryView> approvalHistoryList) {
         this.approvalHistoryList = approvalHistoryList;
-    }
-
-    public BigDecimal getApproveTotalCreditLimit() {
-        return approveTotalCreditLimit;
-    }
-
-    public void setApproveTotalCreditLimit(BigDecimal approveTotalCreditLimit) {
-        this.approveTotalCreditLimit = approveTotalCreditLimit;
-    }
-
-    public BigDecimal getExistingSMELimit() {
-        return existingSMELimit;
-    }
-
-    public void setExistingSMELimit(BigDecimal existingSMELimit) {
-        this.existingSMELimit = existingSMELimit;
-    }
-
-    public BigDecimal getMaximumSMELimit() {
-        return maximumSMELimit;
-    }
-
-    public void setMaximumSMELimit(BigDecimal maximumSMELimit) {
-        this.maximumSMELimit = maximumSMELimit;
     }
 }

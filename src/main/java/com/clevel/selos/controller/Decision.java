@@ -4,8 +4,6 @@ import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
-import com.clevel.selos.dao.working.CustomerDAO;
-import com.clevel.selos.dao.working.DecisionDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
@@ -15,10 +13,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.DecisionTransform;
-import com.clevel.selos.transform.DisbursementTypeTransform;
-import com.clevel.selos.transform.LoanPurposeTransform;
-import com.clevel.selos.transform.ProductTransform;
+import com.clevel.selos.transform.*;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import com.rits.cloning.Cloner;
@@ -76,8 +71,6 @@ public class Decision implements Serializable {
 
     //DAO
     @Inject
-    DecisionDAO decisionDAO;
-    @Inject
     CreditRequestTypeDAO creditRequestTypeDAO;
     @Inject
     CountryDAO countryDAO;
@@ -88,17 +81,7 @@ public class Decision implements Serializable {
     @Inject
     BaseRateDAO baseRateDAO;
     @Inject
-    DisbursementTypeDAO disbursementDAO;
-    @Inject
-    CustomerDAO customerDAO;
-    @Inject
-    ProductProgramDAO productProgramDAO;
-    @Inject
     CreditTypeDAO creditTypeDAO;
-    @Inject
-    SpecialProgramDAO specialProgramDAO;
-    @Inject
-    ProductFormulaDAO productFormulaDAO;
     @Inject
     SubCollateralTypeDAO subCollateralTypeDAO;
     @Inject
@@ -108,7 +91,7 @@ public class Decision implements Serializable {
     @Inject
     MortgageTypeDAO mortgageTypeDAO;
     @Inject
-    LoanPurposeDAO loanPurposeDAO;
+    FollowConditionDAO followConditionDAO;
 
     //Transform
     @Inject
@@ -119,7 +102,8 @@ public class Decision implements Serializable {
     DisbursementTypeTransform disbursementTypeTransform;
     @Inject
     LoanPurposeTransform loanPurposeTransform;
-
+    @Inject
+    FollowConditionTransform followConditionTransform;
     
     private long workCaseId;
     
@@ -229,8 +213,9 @@ public class Decision implements Serializable {
     private List<ProposeCreditDetailView> selectedGuarantorCrdTypeItems;
 
     // Follow Up Condition
-    private FollowUpConditionView followUpConditionView;
-    private int rowIndexFollowUpCondition;
+    private DecisionFollowConditionView decisionFollowConditionView;
+    private int rowIndexDecisionFollowCondition;
+    private List<FollowConditionView> followConditionViewList;
 
     // Approval History
     private ApprovalHistoryView approvalHistoryView;
@@ -278,29 +263,7 @@ public class Decision implements Serializable {
     public void onCreation() {
         preRender();
 
-        decisionView = decisionTransform.getDecisionView(decisionDAO.findByWorkCaseId(workCaseId));
-        if (decisionView == null || decisionView.getId() == 0) {
-            decisionView = new DecisionView();
-        }
-
-        // New Credit Facility
-        newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
-        if (newCreditFacilityView != null) {
-            Cloner cloner = new Cloner();
-
-            decisionView.setProposeCreditList(newCreditFacilityView.getNewCreditDetailViewList());
-            decisionView.setProposeGuarantorList(newCreditFacilityView.getNewGuarantorDetailViewList());
-            decisionView.setProposeCollateralList(newCreditFacilityView.getNewCollateralViewList());
-            decisionView.setProposeFeeInfoList(newCreditFacilityView.getNewFeeDetailViewList());
-            decisionView.setProposeTotalCreditLimit(newCreditFacilityView.getTotalPropose());
-            decisionView.setProposeTotalGuaranteeAmt(newCreditFacilityView.getTotalGuaranteeAmount());
-
-            // clone Credit info
-            decisionView.setApproveCreditList(cloner.deepClone(newCreditFacilityView.getNewCreditDetailViewList()));
-            decisionView.setApproveCollateralList(cloner.deepClone(newCreditFacilityView.getNewCollateralViewList()));
-            decisionView.setApproveGuarantorList(cloner.deepClone(newCreditFacilityView.getNewGuarantorDetailViewList()));
-        }
-
+        decisionView = decisionControl.getDecision(workCaseId);
 
         BasicInfoView basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
         if (basicInfoView != null) {
@@ -437,8 +400,15 @@ public class Decision implements Serializable {
             guarantorList = new ArrayList<CustomerInfoView>();
         // ================================================== //
 
-        followUpConditionView = new FollowUpConditionView();
+        // ========== Follow Up Condition ========== //
+        decisionFollowConditionView = new DecisionFollowConditionView();
 
+        followConditionViewList = followConditionTransform.transformToView(followConditionDAO.findAll());
+        if (followConditionViewList == null) {
+            followConditionViewList = new ArrayList<FollowConditionView>();
+        }
+
+        // ========== Approval History ========== //
         approvalHistoryView = new ApprovalHistoryView();
 
         // Initial sequence number credit
@@ -651,7 +621,6 @@ public class Decision implements Serializable {
         selectedApproveCredit.setProductCode("");
         selectedApproveCredit.setProjectCode("");
 
-        //ProductProgram productProgram = productProgramDAO.findById(selectedApproveCredit.getProductProgram().getId());
         prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(selectedApproveCredit.getProductProgramView());;
         selectedApproveCredit.setCreditTypeView(new CreditTypeView());
     }
@@ -1075,20 +1044,20 @@ public class Decision implements Serializable {
     // ---------- FollowUp Condition - Action ---------- //
     public void onAddFollowUpCondition() {
         log.debug("onAddFollowUpCondition()");
-        if (decisionView.getFollowUpConditionList() != null) {
-            decisionView.getFollowUpConditionList().add(followUpConditionView);
+        if (decisionView.getDecisionFollowConditionViewList() != null) {
+            decisionView.getDecisionFollowConditionViewList().add(decisionFollowConditionView);
         } else {
-            List<FollowUpConditionView> followUpConditionList = new ArrayList<FollowUpConditionView>();
-            followUpConditionList.add(followUpConditionView);
-            decisionView.setFollowUpConditionList(followUpConditionList);
+            List<DecisionFollowConditionView> followUpConditionList = new ArrayList<DecisionFollowConditionView>();
+            followUpConditionList.add(decisionFollowConditionView);
+            decisionView.setDecisionFollowConditionViewList(followUpConditionList);
         }
         // Clear form
-        followUpConditionView = new FollowUpConditionView();
+        decisionFollowConditionView = new DecisionFollowConditionView();
     }
 
     public void onDeleteFollowUpCondition() {
-        log.debug("onDeleteFollowUpCondition() rowIndexFollowUpCondition: {}", rowIndexFollowUpCondition);
-        decisionView.getFollowUpConditionList().remove(rowIndexFollowUpCondition);
+        log.debug("onDeleteFollowUpCondition() rowIndexFollowUpCondition: {}", rowIndexDecisionFollowCondition);
+        decisionView.getDecisionFollowConditionViewList().remove(rowIndexDecisionFollowCondition);
     }
 
     public void onSave() {
@@ -1219,12 +1188,12 @@ public class Decision implements Serializable {
         this.decisionView = decisionView;
     }
 
-    public FollowUpConditionView getFollowUpConditionView() {
-        return followUpConditionView;
+    public DecisionFollowConditionView getFollowUpConditionView() {
+        return decisionFollowConditionView;
     }
 
-    public void setFollowUpConditionView(FollowUpConditionView followUpConditionView) {
-        this.followUpConditionView = followUpConditionView;
+    public void setFollowUpConditionView(DecisionFollowConditionView followUpConditionView) {
+        this.decisionFollowConditionView = followUpConditionView;
     }
 
     public ApprovalHistoryView getApprovalHistoryView() {
@@ -1539,12 +1508,12 @@ public class Decision implements Serializable {
         this.modeEditSubColl = modeEditSubColl;
     }
 
-    public int getRowIndexFollowUpCondition() {
-        return rowIndexFollowUpCondition;
+    public int getRowIndexDecisionFollowCondition() {
+        return rowIndexDecisionFollowCondition;
     }
 
-    public void setRowIndexFollowUpCondition(int rowIndexFollowUpCondition) {
-        this.rowIndexFollowUpCondition = rowIndexFollowUpCondition;
+    public void setRowIndexDecisionFollowCondition(int rowIndexDecisionFollowCondition) {
+        this.rowIndexDecisionFollowCondition = rowIndexDecisionFollowCondition;
     }
 
     public boolean isModeEditReducePricing() {

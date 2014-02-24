@@ -22,6 +22,9 @@
                                        var="guarantor"
                                        itemLabel="#{guarantor.firstNameTh} #{guarantor.lastNameTh}"
                                        itemValue="#{guarantor.id}"/>
+                        <p:ajax event="change"
+                                process="@this"
+                                update="@this"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
