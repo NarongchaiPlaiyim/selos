@@ -172,6 +172,27 @@ public class NewCreditFacility implements Serializable {
     @Column(name = "total_loan_wc_tmb")
     private BigDecimal totalLoanWCTMB;
 
+    // *********** add *************** //
+    @Column(name = "tot_num_core_asset")
+    private BigDecimal totalNumberOfCoreAsset;
+
+    @Column(name = "tot_num__non_core_asset")
+    private BigDecimal totalNumberOfNonCoreAsset;
+
+    @Column(name = "tot_tcg_gauarantee_amt")
+    private BigDecimal totalTCGGuaranteeAmount;
+
+    @Column(name = "tot_indv_guarantee_amt")
+    private BigDecimal totalIndvGuaranteeAmount;
+
+    @Column(name = "tot_juris_guarantee_amt")
+    private BigDecimal totalJurisGuaranteeAmount;
+
+    @Column(name = "tot_mortgage_value")
+    private BigDecimal totalMortgageValue;
+
+    // *********** add *************** //
+
     @OneToOne
     @JoinColumn(name = "credit_request_type")
     private  CreditRequestType loanRequestType;
@@ -705,6 +726,54 @@ public class NewCreditFacility implements Serializable {
 
     public void setTotalLoanWCTMB(BigDecimal totalLoanWCTMB) {
         this.totalLoanWCTMB = totalLoanWCTMB;
+    }
+
+    public BigDecimal getTotalNumberOfCoreAsset() {
+        return totalNumberOfCoreAsset;
+    }
+
+    public void setTotalNumberOfCoreAsset(BigDecimal totalNumberOfCoreAsset) {
+        this.totalNumberOfCoreAsset = totalNumberOfCoreAsset;
+    }
+
+    public BigDecimal getTotalNumberOfNonCoreAsset() {
+        return totalNumberOfNonCoreAsset;
+    }
+
+    public void setTotalNumberOfNonCoreAsset(BigDecimal totalNumberOfNonCoreAsset) {
+        this.totalNumberOfNonCoreAsset = totalNumberOfNonCoreAsset;
+    }
+
+    public BigDecimal getTotalTCGGuaranteeAmount() {
+        return totalTCGGuaranteeAmount;
+    }
+
+    public void setTotalTCGGuaranteeAmount(BigDecimal totalTCGGuaranteeAmount) {
+        this.totalTCGGuaranteeAmount = totalTCGGuaranteeAmount;
+    }
+
+    public BigDecimal getTotalIndvGuaranteeAmount() {
+        return totalIndvGuaranteeAmount;
+    }
+
+    public void setTotalIndvGuaranteeAmount(BigDecimal totalIndvGuaranteeAmount) {
+        this.totalIndvGuaranteeAmount = totalIndvGuaranteeAmount;
+    }
+
+    public BigDecimal getTotalJurisGuaranteeAmount() {
+        return totalJurisGuaranteeAmount;
+    }
+
+    public void setTotalJurisGuaranteeAmount(BigDecimal totalJurisGuaranteeAmount) {
+        this.totalJurisGuaranteeAmount = totalJurisGuaranteeAmount;
+    }
+
+    public BigDecimal getTotalMortgageValue() {
+        return totalMortgageValue;
+    }
+
+    public void setTotalMortgageValue(BigDecimal totalMortgageValue) {
+        this.totalMortgageValue = totalMortgageValue;
     }
 
     @Override
