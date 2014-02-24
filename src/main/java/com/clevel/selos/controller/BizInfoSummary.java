@@ -182,11 +182,13 @@ public class BizInfoSummary implements Serializable {
             bizInfoSummaryView = new BizInfoSummaryView();
 
             Country country = new Country();
+
             country.setId(211);
             bizInfoSummaryView.setCountry(country);
             bizInfoSummaryView.setProvince(new Province());
             bizInfoSummaryView.setDistrict(new District());
             bizInfoSummaryView.setSubDistrict(new SubDistrict());
+            bizInfoSummaryView.setReferredExperience(new ReferredExperience());
             bizInfoSummaryView.setSumIncomeAmount(BigDecimal.ZERO);
             bizInfoSummaryView.setSumIncomePercent(BigDecimal.ZERO);
             bizInfoSummaryView.setSumWeightAR(BigDecimal.ZERO);

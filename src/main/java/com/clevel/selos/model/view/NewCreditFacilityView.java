@@ -46,6 +46,13 @@ public class NewCreditFacilityView implements Serializable {
     private BigDecimal totalExposure;
     private BigDecimal totalApproveCredit;
     private BigDecimal totalGuaranteeAmount;
+    private BigDecimal numberMonthsFromApprDate;
+    private BigDecimal totalNumberOfCoreAsset;
+    private BigDecimal totalNumberOfNonCoreAsset;
+    private BigDecimal totalTCGGuaranteeAmount;
+    private BigDecimal totalIndvGuaranteeAmount;
+    private BigDecimal totalJurisGuaranteeAmount;
+    private BigDecimal totalMortgageValue;
 
     private String contactName;
     private String contactPhoneNo;
@@ -122,6 +129,13 @@ public class NewCreditFacilityView implements Serializable {
         this.totalNumberContingenPropose=BigDecimal.ZERO;
         this.totalApproveCredit = BigDecimal.ZERO;
         this.totalGuaranteeAmount = BigDecimal.ZERO;
+        this.numberMonthsFromApprDate = BigDecimal.ZERO;
+        this.totalNumberOfCoreAsset = BigDecimal.ZERO;
+        this.totalNumberOfNonCoreAsset = BigDecimal.ZERO;
+        this.totalTCGGuaranteeAmount = BigDecimal.ZERO;
+        this.totalIndvGuaranteeAmount = BigDecimal.ZERO;
+        this.totalJurisGuaranteeAmount = BigDecimal.ZERO;
+        this.totalMortgageValue = BigDecimal.ZERO;
 
         this.contactName = "";
         this.contactPhoneNo = "";
@@ -639,69 +653,131 @@ public class NewCreditFacilityView implements Serializable {
         this.totalLoanWCTMB = totalLoanWCTMB;
     }
 
+    public BigDecimal getNumberMonthsFromApprDate() {
+        return numberMonthsFromApprDate;
+    }
+
+    public void setNumberMonthsFromApprDate(BigDecimal numberMonthsFromApprDate) {
+        this.numberMonthsFromApprDate = numberMonthsFromApprDate;
+    }
+
+    public BigDecimal getTotalNumberOfCoreAsset() {
+        return totalNumberOfCoreAsset;
+    }
+
+    public void setTotalNumberOfCoreAsset(BigDecimal totalNumberOfCoreAsset) {
+        this.totalNumberOfCoreAsset = totalNumberOfCoreAsset;
+    }
+
+    public BigDecimal getTotalNumberOfNonCoreAsset() {
+        return totalNumberOfNonCoreAsset;
+    }
+
+    public void setTotalNumberOfNonCoreAsset(BigDecimal totalNumberOfNonCoreAsset) {
+        this.totalNumberOfNonCoreAsset = totalNumberOfNonCoreAsset;
+    }
+
+    public BigDecimal getTotalTCGGuaranteeAmount() {
+        return totalTCGGuaranteeAmount;
+    }
+
+    public void setTotalTCGGuaranteeAmount(BigDecimal totalTCGGuaranteeAmount) {
+        this.totalTCGGuaranteeAmount = totalTCGGuaranteeAmount;
+    }
+
+    public BigDecimal getTotalIndvGuaranteeAmount() {
+        return totalIndvGuaranteeAmount;
+    }
+
+    public void setTotalIndvGuaranteeAmount(BigDecimal totalIndvGuaranteeAmount) {
+        this.totalIndvGuaranteeAmount = totalIndvGuaranteeAmount;
+    }
+
+    public BigDecimal getTotalJurisGuaranteeAmount() {
+        return totalJurisGuaranteeAmount;
+    }
+
+    public void setTotalJurisGuaranteeAmount(BigDecimal totalJurisGuaranteeAmount) {
+        this.totalJurisGuaranteeAmount = totalJurisGuaranteeAmount;
+    }
+
+    public BigDecimal getTotalMortgageValue() {
+        return totalMortgageValue;
+    }
+
+    public void setTotalMortgageValue(BigDecimal totalMortgageValue) {
+        this.totalMortgageValue = totalMortgageValue;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("WCNeed", WCNeed).
-                append("totalWcTmb", totalWcTmb).
-                append("WCNeedDiffer", WCNeedDiffer).
-                append("totalWcDebit", totalWcDebit).
-                append("case1WcLimit", case1WcLimit).
-                append("case1WcMinLimit", case1WcMinLimit).
-                append("case1Wc50CoreWc", case1Wc50CoreWc).
-                append("case1WcDebitCoreWc", case1WcDebitCoreWc).
-                append("case2WcLimit", case2WcLimit).
-                append("case2WcMinLimit", case2WcMinLimit).
-                append("case2Wc50CoreWc", case2Wc50CoreWc).
-                append("case2WcDebitCoreWc", case2WcDebitCoreWc).
-                append("case3WcLimit", case3WcLimit).
-                append("case3WcMinLimit", case3WcMinLimit).
-                append("case3Wc50CoreWc", case3Wc50CoreWc).
-                append("case3WcDebitCoreWc", case3WcDebitCoreWc).
-                append("existingSMELimit", existingSMELimit).
-                append("maximumSMELimit", maximumSMELimit).
-                append("totalPropose", totalPropose).
-                append("totalProposeLoanDBR", totalProposeLoanDBR).
-                append("totalProposeNonLoanDBR", totalProposeNonLoanDBR).
-                append("totalCommercial", totalCommercial).
-                append("totalCommercialAndOBOD", totalCommercialAndOBOD).
-                append("totalExposure", totalExposure).
-                append("totalApproveCredit", totalApproveCredit).
-                append("totalGuaranteeAmount", totalGuaranteeAmount).
-                append("contactName", contactName).
-                append("contactPhoneNo", contactPhoneNo).
-                append("interService", interService).
-                append("currentAddress", currentAddress).
-                append("registeredAddress", registeredAddress).
-                append("emailAddress", emailAddress).
-                append("importMail", importMail).
-                append("exportMail", exportMail).
-                append("depositBranchCode", depositBranchCode).
-                append("ownerBranchCode", ownerBranchCode).
-                append("intFeeDOA", intFeeDOA).
-                append("frontendFeeDOA", frontendFeeDOA).
-                append("guarantorBA", guarantorBA).
-                append("reasonForReduction", reasonForReduction).
-                append("creditCustomerType", creditCustomerType).
-                append("loanRequestType", loanRequestType).
-                append("investedCountry", investedCountry).
-                append("relatedTMBLending", relatedTMBLending).
-                append("twentyFivePercentShareRelatedTMBLending", twentyFivePercentShareRelatedTMBLending).
-                append("singleLendingLimit", singleLendingLimit).
-                append("newFeeDetailViewList", newFeeDetailViewList).
-                append("newCreditDetailViewList", newCreditDetailViewList).
-                append("newCollateralViewList", newCollateralViewList).
-                append("newGuarantorDetailViewList", newGuarantorDetailViewList).
-                append("newConditionDetailViewList", newConditionDetailViewList).
-                append("totalLoanWCTMB", totalLoanWCTMB).
-                append("totalNumberOfNewOD", totalNumberOfNewOD).
-                append("totalNumberProposeCreditFac", totalNumberProposeCreditFac).
-                append("totalNumberContingenPropose", totalNumberContingenPropose).
-                append("createDate", createDate).
-                append("modifyDate", modifyDate).
-                append("createBy", createBy).
-                append("modifyBy", modifyBy).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("WCNeed", WCNeed)
+                .append("totalWcTmb", totalWcTmb)
+                .append("WCNeedDiffer", WCNeedDiffer)
+                .append("totalWcDebit", totalWcDebit)
+                .append("case1WcLimit", case1WcLimit)
+                .append("case1WcMinLimit", case1WcMinLimit)
+                .append("case1Wc50CoreWc", case1Wc50CoreWc)
+                .append("case1WcDebitCoreWc", case1WcDebitCoreWc)
+                .append("case2WcLimit", case2WcLimit)
+                .append("case2WcMinLimit", case2WcMinLimit)
+                .append("case2Wc50CoreWc", case2Wc50CoreWc)
+                .append("case2WcDebitCoreWc", case2WcDebitCoreWc)
+                .append("case3WcLimit", case3WcLimit)
+                .append("case3WcMinLimit", case3WcMinLimit)
+                .append("case3Wc50CoreWc", case3Wc50CoreWc)
+                .append("case3WcDebitCoreWc", case3WcDebitCoreWc)
+                .append("existingSMELimit", existingSMELimit)
+                .append("maximumSMELimit", maximumSMELimit)
+                .append("totalPropose", totalPropose)
+                .append("totalProposeLoanDBR", totalProposeLoanDBR)
+                .append("totalProposeNonLoanDBR", totalProposeNonLoanDBR)
+                .append("totalCommercial", totalCommercial)
+                .append("totalCommercialAndOBOD", totalCommercialAndOBOD)
+                .append("totalExposure", totalExposure)
+                .append("totalApproveCredit", totalApproveCredit)
+                .append("totalGuaranteeAmount", totalGuaranteeAmount)
+                .append("numberMonthsFromApprDate", numberMonthsFromApprDate)
+                .append("totalNumberOfCoreAsset", totalNumberOfCoreAsset)
+                .append("totalNumberOfNonCoreAsset", totalNumberOfNonCoreAsset)
+                .append("totalTCGGuaranteeAmount", totalTCGGuaranteeAmount)
+                .append("totalIndvGuaranteeAmount", totalIndvGuaranteeAmount)
+                .append("totalJurisGuaranteeAmount", totalJurisGuaranteeAmount)
+                .append("contactName", contactName)
+                .append("contactPhoneNo", contactPhoneNo)
+                .append("interService", interService)
+                .append("currentAddress", currentAddress)
+                .append("registeredAddress", registeredAddress)
+                .append("emailAddress", emailAddress)
+                .append("importMail", importMail)
+                .append("exportMail", exportMail)
+                .append("depositBranchCode", depositBranchCode)
+                .append("ownerBranchCode", ownerBranchCode)
+                .append("intFeeDOA", intFeeDOA)
+                .append("frontendFeeDOA", frontendFeeDOA)
+                .append("guarantorBA", guarantorBA)
+                .append("reasonForReduction", reasonForReduction)
+                .append("creditCustomerType", creditCustomerType)
+                .append("loanRequestType", loanRequestType)
+                .append("investedCountry", investedCountry)
+                .append("relatedTMBLending", relatedTMBLending)
+                .append("twentyFivePercentShareRelatedTMBLending", twentyFivePercentShareRelatedTMBLending)
+                .append("singleLendingLimit", singleLendingLimit)
+                .append("newFeeDetailViewList", newFeeDetailViewList)
+                .append("newCreditDetailViewList", newCreditDetailViewList)
+                .append("newCollateralViewList", newCollateralViewList)
+                .append("newGuarantorDetailViewList", newGuarantorDetailViewList)
+                .append("newConditionDetailViewList", newConditionDetailViewList)
+                .append("totalLoanWCTMB", totalLoanWCTMB)
+                .append("totalNumberOfNewOD", totalNumberOfNewOD)
+                .append("totalNumberProposeCreditFac", totalNumberProposeCreditFac)
+                .append("totalNumberContingenPropose", totalNumberContingenPropose)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .toString();
     }
 }

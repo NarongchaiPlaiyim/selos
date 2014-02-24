@@ -187,7 +187,7 @@
                     <p:inputText  id="tierInstallment" style="text-align:right;" maxlength="14"
                                   value="#{creditTier.installment}"
                                   onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)" >
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="16"/>
                         <p:ajax event="blur" update=":existingCreditDlgForm:resultTier:tierInstallment"/>
                     </p:inputText>
                 </p:column>
@@ -208,10 +208,10 @@
                             <p:column>
                                 <p:inputText value="#{creditTier.finalInterest}"
                                              id="tierFinalInterest"
-                                             onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)" maxlength="14"
+                                             onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)" maxlength="16"
                                              style="text-align:right;width:50px;">
                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                     maxIntegerDigits="14"/>
+                                                     maxIntegerDigits="16"/>
                                     <p:ajax event="blur" update="@this"/>
                                 </p:inputText>
                             </p:column>
@@ -291,9 +291,9 @@
                 </p:column>
                 <p:column styleClass="center">
                     <p:inputText id="splitLimit"
-                                 onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)" maxlength="14"
+                                 onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)" maxlength="16"
                                  value="#{existingSplitLine.limit}" style="text-align:right;" >
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="16"/>
                         <p:ajax event="blur" listener="#{creditFacExisting.checkTotalLimit()}" update=":existingCreditDlgForm:spiltResult:splitLimit, :existingCreditDlgForm:saveCreditBtn"/>
                     </p:inputText>
                 </p:column>

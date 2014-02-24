@@ -776,7 +776,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             }
 
             complete = true;
-//            hashSeqCredit.put(seq, 0);
+            hashSeqCredit.put(seq, 0);
             seq++;
             log.info("seq++ of credit after add complete proposeCredit :: {}", seq);
 
@@ -2026,6 +2026,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void setStandardInterestDlg(BigDecimal standardInterestDlg) {
         this.standardInterestDlg = standardInterestDlg;
+    }
+
+    public boolean isFlagComs() {
+        return flagComs;
+    }
+
+    public void setFlagComs(boolean flagComs) {
+        this.flagComs = flagComs;
     }
 }
 
