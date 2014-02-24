@@ -1,0 +1,198 @@
+<!DOCTYPE html >
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Check Mandate Doc</title>
+    <h:outputStylesheet name="css/style.css" />
+    <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
+    <h:outputScript library="js" name="custom.js" />
+</h:head>
+<h:body>
+    <h:form id="checkMandateDocDialog">
+        <table class="table_content" border="0">
+            <tr>
+                <td style="width: 100px; min-width: 100px; max-width: 100px;" />
+                <td style="width: 100px; min-width: 100px; max-width: 100px;" />
+                <td style="width: 100px; min-width: 100px; max-width: 100px;" />
+                <td style="width: 100px; min-width: 100px; max-width: 100px;" />
+                <td style="width: 100px; min-width: 100px; max-width: 100px;" />
+                <td style="width: 100px; min-width: 100px; max-width: 100px;" />
+                <td style="width: 100px; min-width: 100px; max-width: 100px;" />
+            </tr>
+            <tr>
+                <th>
+                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.documentType')}"/>
+                </th>
+                <th>
+                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.brmsDocumentType')}"/>
+                </th>
+                <th>
+                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.owners')}"/>
+                </th>
+                <th>
+                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.fileName')}"/>
+                </th>
+                <th>
+                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.isComplete')}"/>
+                </th>
+                <th>
+                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason')}"/>
+                </th>
+                <th>
+                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.remark')}"/>
+                </th>
+            </tr>
+            <tr>
+                <td class="title" colspan="7" style="background-color: lightcoral">
+                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.mandatory')}"/>
+                </td>
+            </tr>
+            <ui:repeat value="#{checkMandateDoc.mandatoryDocumentsList}" var="mandatoryItem" varStatus="mandatoryItemIndex">
+                <tr>
+                    <td >
+                        <p:outputLabel value="#{mandatoryItem}"/>
+                    </td>
+                    <td >
+                        <p:outputLabel value="#{mandatoryItem}"/>
+                    </td>
+                    <td >
+                        <p:outputLabel value="#{mandatoryItem}"/>
+                    </td>
+                    <td >
+                        <p:outputLabel value="#{mandatoryItem}"/>
+                    </td>
+                    <td class="center">
+                        <p:selectOneRadio layout="grid" columns="1">
+                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')}" itemValue="1"/>
+                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.no')}" itemValue="2"/>
+                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.enable')}" itemValue="3"/>
+                        </p:selectOneRadio>
+                    </td>
+                    <td class="left">
+                        <h:selectBooleanCheckbox value="#{true}" />
+                        <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.a')}"/> <br />
+                        <h:selectBooleanCheckbox value="#{true}" />
+                        <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.b')}"/> <br />
+                        <h:selectBooleanCheckbox value="#{true}" />
+                        <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.c')}"/> <br />
+                        <h:selectBooleanCheckbox value="#{true}" />
+                        <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.d')}"/>
+                    </td>
+                    <td class="center">
+                        <p:inputTextarea rows="3" cols="25" />
+                    </td>
+                </tr>
+            </ui:repeat>
+
+
+            <tr>
+                <td class="title" colspan="7" style="background-color: darkseagreen">
+                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.optional')}"/>
+                </td>
+            </tr>
+            <ui:repeat value="#{checkMandateDoc.optionalDocumentslList}" var="optionalItem" varStatus="optionalItemIndex">
+                <tr>
+                    <td >
+                        <p:outputLabel value="#{optionalItem}"/>
+                    </td>
+                    <td >
+                        <p:outputLabel value="#{optionalItem}"/>
+                    </td>
+                    <td >
+                        <p:outputLabel value="#{optionalItem}"/>
+                    </td>
+                    <td >
+                        <p:outputLabel value="#{optionalItem}"/>
+                    </td>
+                    <td class="center">
+                        <p:selectOneRadio layout="grid" columns="1">
+                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')}" itemValue="1"/>
+                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.no')}" itemValue="2"/>
+                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.enable')}" itemValue="3"/>
+                        </p:selectOneRadio>
+                    </td>
+                    <td class="left">
+                        <h:selectBooleanCheckbox value="#{true}" />
+                        <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.a')}"/> <br />
+                        <h:selectBooleanCheckbox value="#{true}" />
+                        <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.b')}"/> <br />
+                        <h:selectBooleanCheckbox value="#{true}" />
+                        <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.c')}"/> <br />
+                        <h:selectBooleanCheckbox value="#{true}" />
+                        <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.d')}"/>
+                    </td>
+                    <td class="center">
+                        <p:inputTextarea rows="3" cols="25" />
+                    </td>
+                </tr>
+            </ui:repeat>
+
+            <tr>
+                <td class="title" colspan="7" style="background-color: #868686">
+                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.other')}"/>
+                </td>
+            </tr>
+            <ui:repeat value="#{checkMandateDoc.otherDocumentsList}" var="otherItem" varStatus="otherItemIndex">
+                <tr>
+                    <td >
+                        <p:outputLabel value="#{otherItem}"/>
+                    </td>
+                    <td >
+                        <p:outputLabel value="#{otherItem}"/>
+                    </td>
+                    <td >
+                        <p:outputLabel value="#{otherItem}"/>
+                    </td>
+                    <td >
+                        <p:outputLabel value="#{otherItem}"/>
+                    </td>
+                    <td class="center">
+                        <p:selectOneRadio layout="grid" columns="1">
+                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')}" itemValue="1"/>
+                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.no')}" itemValue="2"/>
+                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.enable')}" itemValue="3"/>
+                        </p:selectOneRadio>
+                    </td>
+                    <td class="left">
+                        <h:selectBooleanCheckbox value="#{true}" />
+                        <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.a')}"/> <br />
+                        <h:selectBooleanCheckbox value="#{true}" />
+                        <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.b')}"/> <br />
+                        <h:selectBooleanCheckbox value="#{true}" />
+                        <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.c')}"/> <br />
+                        <h:selectBooleanCheckbox value="#{true}" />
+                        <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.d')}"/>
+                    </td>
+                    <td class="center">
+                        <p:inputTextarea rows="3" cols="25" />
+                    </td>
+                </tr>
+            </ui:repeat>
+
+
+            <tr>
+                <td class="center" colspan="7">
+                    <p:commandButton id="btnSave"
+                                     value="#{msg.get('app.saveButton')}"
+                                     styleClass="medium"
+                                     process="@form"
+                                     action="#{checkMandateDoc.onSaveCheckMandateDoc()}" />
+                                     <!--update=":frmMain, :msgBoxSystemMessagePanel"/>-->
+
+                    <p:commandButton value="#{msg.get('app.cancelButton')}"
+                                     id="btnCancel"
+                                     styleClass="medium"
+                                     process="@form"
+                                     action="#{checkMandateDoc.onCancelCheckMandateDoc()}" />
+                                     <!--update=":frmMain"/>-->
+                </td>
+            </tr>
+        </table>
+    </h:form>
+</h:body>
+</f:view>
+</html>
