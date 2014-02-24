@@ -1,5 +1,6 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.master.StageDAO;
 import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.view.StepView;
@@ -11,6 +12,8 @@ import java.util.List;
 public class StepTransform extends Transform {
     @Inject
     private StepDAO stepDAO;
+    @Inject
+    private StageDAO stageDAO;
 
     @Inject
     private StageTransform stageTransform;
@@ -20,16 +23,25 @@ public class StepTransform extends Transform {
     }
 
     public Step transformToModel(StepView stepView) {
-        Step step = new Step();
         if (stepView == null) {
-            return step;
+            return null;
         }
+
+        Step step;
         if (stepView.getId() != 0) {
             step = stepDAO.findById(stepView.getId());
+        } else {
+            step = new Step();
         }
+
+        if (stepView.getStageView() != null && stepView.getStageView().getId() != 0) {
+            step.setStage(stageDAO.findById(stepView.getStageView().getId()));
+        } else {
+            step.setStage(null);
+        }
+
         step.setName(stepView.getName());
         step.setDescription(stepView.getDescription());
-        step.setStage(stageTransform.transformToModel(stepView.getStageView()));
         step.setDocCheck(stepView.getDocCheck());
         step.setCheckBRMS(stepView.getCheckBRMS());
         step.setActive(stepView.getActive());

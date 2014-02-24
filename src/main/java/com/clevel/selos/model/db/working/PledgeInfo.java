@@ -42,6 +42,9 @@ public class PledgeInfo implements Serializable  {
     @Column(name="pledge_amount")
     private BigDecimal pledgeAmount;
     
+    @Column(name="total_hold_amount")
+    private BigDecimal totalHoldAmount;
+    
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="workcase_id")
     private WorkCase workCase;
@@ -161,5 +164,11 @@ public class PledgeInfo implements Serializable  {
 		this.modifyBy = modifyBy;
 	}
     
+	public BigDecimal getTotalHoldAmount() {
+		return totalHoldAmount;
+	}
+	public void setTotalHoldAmount(BigDecimal totalHoldAmount) {
+		this.totalHoldAmount = totalHoldAmount;
+	}
     
 }
