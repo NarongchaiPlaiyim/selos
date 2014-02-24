@@ -16,6 +16,7 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
+import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -72,6 +73,9 @@ public class AccountInfo implements Serializable {
 	private List<SelectItem> accountTypes;
 	private List<SelectItem> productTypes;
 	
+	private SelectOneMenu accountTypeBind;
+	private SelectOneMenu productTypeBind;
+	
 	public AccountInfo() {
 	}
 	
@@ -109,9 +113,11 @@ public class AccountInfo implements Serializable {
 		return addDialog;
 	}
 	public int getSelectedRowId() {
+		
 		return selectedRowId;
 	}
 	public void setSelectedRowId(int selectedRowId) {
+		//log.info("Set Selected Row ID "+this.selectedRowId +" << "+selectedRowId);
 		this.selectedRowId = selectedRowId;
 	}
 	public long getSelectedAddAccountNameId() {
@@ -122,6 +128,18 @@ public class AccountInfo implements Serializable {
 	}
 	public List<SelectItem> getToAddAccountNameList() {
 		return toAddAccountNameList;
+	}
+	public SelectOneMenu getAccountTypeBind() {
+		return accountTypeBind;
+	}
+	public void setAccountTypeBind(SelectOneMenu accountTypeBind) {
+		this.accountTypeBind = accountTypeBind;
+	}
+	public SelectOneMenu getProductTypeBind() {
+		return productTypeBind;
+	}
+	public void setProductTypeBind(SelectOneMenu productTypeBind) {
+		this.productTypeBind = productTypeBind;
 	}
 	/*
 	 * Action
@@ -174,7 +192,6 @@ public class AccountInfo implements Serializable {
 		}
 	}
 	public void onOpenAddOpenAccountDialog() {
-		log.debug("Open Add Account Dialog");
 		openAccount = new OpenAccountFullView();
 		ArrayList<OpenAccountPurposeView> purposes = new ArrayList<OpenAccountPurposeView>();
 		for (OpenAccountPurposeView purpose : allPurposeList) {
@@ -190,7 +207,6 @@ public class AccountInfo implements Serializable {
 		addDialog = true;
 	}
 	public void onOpenUpdateOpenAccountDialog() {
-		log.debug("Open Update Account Dialog "+selectedRowId);
 		OpenAccountFullView toUpd = null;
 		if (selectedRowId >= 0 && selectedRowId < openAccounts.size()) {
 			toUpd = openAccounts.get(selectedRowId);
@@ -203,7 +219,7 @@ public class AccountInfo implements Serializable {
 		openAccount.updateValues(toUpd);
 		_prepareDropdown();
 		_recalculateAccountNameList();
-		log.debug("Open Update Account Dialog "+selectedRowId);
+		
 		addDialog = false;
 	}
 	public void onAddOpenAccountName() {
@@ -301,6 +317,20 @@ public class AccountInfo implements Serializable {
 			return false;
 		boolean isError = false;
 		FacesContext context = FacesContext.getCurrentInstance();
+		
+		if (openAccount.getAccountTypeId() <= 0) {
+			String msg = message.get("app.accountInfo.account.accountType.validate");
+			context.addMessage("accountType", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,null));
+			accountTypeBind.setValid(false);
+			isError = true;
+		}
+		if (openAccount.getProductTypeId() <= 0) {
+			String msg = message.get("app.accountInfo.account.productType.validate");
+			context.addMessage("productType", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,null));
+			productTypeBind.setValid(false);
+			isError = true;
+		}
+		
 		if (openAccount.getNames().isEmpty()) {
 			String msg = message.get("app.accountInfo.account.accountName.validate.required");
 			context.addMessage("dep", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,null));
