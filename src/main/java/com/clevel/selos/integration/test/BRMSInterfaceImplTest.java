@@ -6,7 +6,7 @@ import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.brms.model.RuleColorResult;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.*;
-import com.clevel.selos.integration.brms.model.response.StandardPricingIntResponse;
+import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import org.slf4j.Logger;
 
 import javax.enterprise.inject.Alternative;
@@ -69,25 +69,25 @@ public class BRMSInterfaceImplTest implements BRMSInterface {
     }
 
     @Override
-    public StandardPricingIntResponse checkStandardPricingIntRule(BRMSApplicationInfo standardPricingIntRequest) throws ValidationException {
+    public StandardPricingResponse checkStandardPricingIntRule(BRMSApplicationInfo standardPricingIntRequest) throws ValidationException {
         log.debug("checkStandardPricingIntRule : standardPricingIntRequest {}", standardPricingIntRequest);
         if (standardPricingIntRequest == null) {
             log.error("standardPricingIntRequest is null for request");
             throw new ValidationException("002");
         }
         //todo call service
-        return new StandardPricingIntResponse();
+        return new StandardPricingResponse();
     }
 
     @Override
-    public List<StandardPricingFeeResponse> checkStandardPricingFeeRule(BRMSApplicationInfo standardPricingFeeRequest) throws ValidationException {
+    public StandardPricingResponse checkStandardPricingFeeRule(BRMSApplicationInfo standardPricingFeeRequest) throws ValidationException {
         log.debug("checkStandardPricingFeeRule : standardPricingFeeRequest {}", standardPricingFeeRequest);
         if (standardPricingFeeRequest == null) {
             log.error("standardPricingFeeRequest is null for request");
             throw new ValidationException("002");
         }
         //todo call service
-        return new ArrayList<StandardPricingFeeResponse>();
+        return new StandardPricingResponse();
     }
 
     @Override

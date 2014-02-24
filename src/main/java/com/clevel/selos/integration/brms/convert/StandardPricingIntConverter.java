@@ -6,9 +6,8 @@ import com.clevel.selos.integration.brms.model.request.BRMSAccountRequested;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.PricingIntTier;
 import com.clevel.selos.integration.brms.model.response.PricingInterest;
-import com.clevel.selos.integration.brms.model.response.StandardPricingIntResponse;
+import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.brms.service.standardpricing.interestrules.*;
-import com.clevel.selos.model.ActionResult;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -100,8 +99,8 @@ public class StandardPricingIntConverter extends Converter {
         return null;
     }
 
-    public StandardPricingIntResponse getStandardPricingResponse(DecisionServiceResponse decisionServiceResponse){
-        StandardPricingIntResponse standardPricingIntResponse = new StandardPricingIntResponse();
+    public StandardPricingResponse getStandardPricingResponse(DecisionServiceResponse decisionServiceResponse){
+        StandardPricingResponse standardPricingIntResponse = new StandardPricingResponse();
         if(decisionServiceResponse != null){
 
 
