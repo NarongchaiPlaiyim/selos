@@ -441,6 +441,9 @@
                         <f:selectItems value="#{creditFacPropose.creditRequestTypeList}" var="creditRequest"
                                        itemLabel="#{creditRequest.name}"
                                        itemValue="#{creditRequest.id}"/>
+                        <p:ajax event="change"
+                                process="@this"
+                                update="@this"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -464,6 +467,9 @@
                         <f:selectItems value="#{creditFacPropose.countryList}" var="country"
                                        itemLabel="#{country.name}"
                                        itemValue="#{country.id}"/>
+                        <p:ajax event="change"
+                                process="@this"
+                                update="@this"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -720,8 +726,8 @@
                     #{msg.get('app.decision.tb.td.label.refinance')}
                 </td>
                 <td class="left" style="border-style: none !important;">
-                    #{proposeCredit.refinance == 2 ? msg.get('app.label.no') :
-                            proposeCredit.refinance == 1 ? msg.get('app.label.yes') : ''}
+                    #{proposeCredit.refinance == 2 ? msg.get('app.label.yes') :
+                            proposeCredit.refinance == 1 ? msg.get('app.label.no') : ''}
                 </td>
             </tr>
             <tr>

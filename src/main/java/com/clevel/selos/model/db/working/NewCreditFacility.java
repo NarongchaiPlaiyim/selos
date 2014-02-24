@@ -169,27 +169,6 @@ public class NewCreditFacility implements Serializable {
     @Column(name = "credit_customer_type")
     private int creditCustomerType;
 
-    @Column(name = "num_months_appr_date")
-    private int numberMonthsFromApprDate;
-
-    @Column(name = "total_core_asset")
-    private int totalNumberOfCoreAsset;
-
-    @Column(name = "total_non_core_asset")
-    private int totalNumberOfNonCoreAsset;
-
-    @Column(name = "total_mortgage_value")
-    private int totalMortgageValue;
-
-    @Column(name = "total_TCG_guarantee_amt")
-    private BigDecimal totalTCGGuaranteeAmount;
-
-    @Column(name = "total_indv_guarantee_amt")
-    private BigDecimal totalIndvGuaranteeAmount;
-
-    @Column(name = "total_juris_guarantee_amt")
-    private BigDecimal totalJurisGuaranteeAmount;
-
     @Column(name = "total_loan_wc_tmb")
     private BigDecimal totalLoanWCTMB;
 
@@ -720,62 +699,6 @@ public class NewCreditFacility implements Serializable {
         this.newConditionDetailList = newConditionDetailList;
     }
 
-    public int getNumberMonthsFromApprDate() {
-        return numberMonthsFromApprDate;
-    }
-
-    public void setNumberMonthsFromApprDate(int numberMonthsFromApprDate) {
-        this.numberMonthsFromApprDate = numberMonthsFromApprDate;
-    }
-
-    public int getTotalNumberOfCoreAsset() {
-        return totalNumberOfCoreAsset;
-    }
-
-    public void setTotalNumberOfCoreAsset(int totalNumberOfCoreAsset) {
-        this.totalNumberOfCoreAsset = totalNumberOfCoreAsset;
-    }
-
-    public int getTotalNumberOfNonCoreAsset() {
-        return totalNumberOfNonCoreAsset;
-    }
-
-    public void setTotalNumberOfNonCoreAsset(int totalNumberOfNonCoreAsset) {
-        this.totalNumberOfNonCoreAsset = totalNumberOfNonCoreAsset;
-    }
-
-    public int getTotalMortgageValue() {
-        return totalMortgageValue;
-    }
-
-    public void setTotalMortgageValue(int totalMortgageValue) {
-        this.totalMortgageValue = totalMortgageValue;
-    }
-
-    public BigDecimal getTotalTCGGuaranteeAmount() {
-        return totalTCGGuaranteeAmount;
-    }
-
-    public void setTotalTCGGuaranteeAmount(BigDecimal totalTCGGuaranteeAmount) {
-        this.totalTCGGuaranteeAmount = totalTCGGuaranteeAmount;
-    }
-
-    public BigDecimal getTotalIndvGuaranteeAmount() {
-        return totalIndvGuaranteeAmount;
-    }
-
-    public void setTotalIndvGuaranteeAmount(BigDecimal totalIndvGuaranteeAmount) {
-        this.totalIndvGuaranteeAmount = totalIndvGuaranteeAmount;
-    }
-
-    public BigDecimal getTotalJurisGuaranteeAmount() {
-        return totalJurisGuaranteeAmount;
-    }
-
-    public void setTotalJurisGuaranteeAmount(BigDecimal totalJurisGuaranteeAmount) {
-        this.totalJurisGuaranteeAmount = totalJurisGuaranteeAmount;
-    }
-
     public BigDecimal getTotalLoanWCTMB() {
         return totalLoanWCTMB;
     }
@@ -836,13 +759,6 @@ public class NewCreditFacility implements Serializable {
                 .append("frontendFeeDOA", frontendFeeDOA)
                 .append("guarantorBA", guarantorBA)
                 .append("creditCustomerType", creditCustomerType)
-                .append("numberMonthsFromApprDate", numberMonthsFromApprDate)
-                .append("totalNumberOfCoreAsset", totalNumberOfCoreAsset)
-                .append("totalNumberOfNonCoreAsset", totalNumberOfNonCoreAsset)
-                .append("totalMortgageValue", totalMortgageValue)
-                .append("totalTCGGuaranteeAmount", totalTCGGuaranteeAmount)
-                .append("totalIndvGuaranteeAmount", totalIndvGuaranteeAmount)
-                .append("totalJurisGuaranteeAmount", totalJurisGuaranteeAmount)
                 .append("totalLoanWCTMB", totalLoanWCTMB)
                 .append("loanRequestType", loanRequestType)
                 .append("investedCountry", investedCountry)

@@ -13,6 +13,7 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.PotentialColToTCGCol;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.TCGDetailView;
+import com.clevel.selos.model.view.TCGInfoView;
 import com.clevel.selos.model.view.TCGView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -49,13 +50,14 @@ public class TCGApprovalInfo implements Serializable {
     private long workCaseId = -1;
 	private long stepId = -1;
 	private User user;
-    
-    private Date approveDate;
-    private Date submitDate;
-    private int approveResult;
+   
     private BasicInfoView basicInfoView;
     
     
+    private TCGInfoView tcgInfoView;
+    
+    private boolean isEnableSubmit = true;
+    private boolean isEnableApprove = true;
 
     @Inject
     TCGInfoControl tcgInfoControl;
@@ -75,21 +77,28 @@ public class TCGApprovalInfo implements Serializable {
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 			user = (User) session.getAttribute("user");
 		}
-
+		this.setTcgInfoView(this.tcgInfoControl.getTCGInfoView(workCaseId));
+		
+		//Disable Button
+		if (stepId == 2222){
+			this.isEnableSubmit = true;
+			this.isEnableApprove = false;
+		}else{
+			this.isEnableSubmit = false;
+			this.isEnableApprove = true;
+		}
+		
     }
-
-
     
-
     public void onSaveTcgInfo() {
-        //log.info("onSaveTcgInfo ::: ModeForDB  {}", modeForDB);
-        
-
+        log.info("onSaveTcgInfo ::: workCaseId  {}", workCaseId);
+        log.info("onSaveTcgInfo ::: stepId  {}", stepId);
+        this.tcgInfoControl.onSaveTCGInfo(tcgInfoView, workCaseId, user);
+       
     }
 
 
     public void onCancelTcgInfo() {
-        //modeForDB = ModeForDB.CANCEL_DB;
         log.info("onCancelTcgInfo ::: ");
 
         onCreation();
@@ -103,36 +112,39 @@ public class TCGApprovalInfo implements Serializable {
 	}
 
 	public Date getApproveDate() {
-		return approveDate;
-	}
-
-	public void setApproveDate(Date approveDate) {
-		this.approveDate = approveDate;
-	}
-
-	public Date getSubmitDate() {
-		return submitDate;
-	}
-
-	public void setSubmitDate(Date submitDate) {
-		this.submitDate = submitDate;
-	}
-
-	public int getApproveResult() {
-		return approveResult;
-	}
-
-	public void setApproveResult(int approveResult) {
-		this.approveResult = approveResult;
+		return this.getTcgInfoView().getApproveDate();
 	}
 	
 	public Date getLastUpdateDateTime() {
 		//TODO 
-		return new Date();
+		if (tcgInfoView.getModifyDate() != null){
+			return tcgInfoView.getModifyDate();
+		}
+		return tcgInfoView.getCreateDate();
 	}
 	public String getLastUpdateBy() {
 		//TODO
-		return user.getDisplayName();
+		//return user.getDisplayName();
+		if (tcgInfoView.getModifyBy() != null){
+			return tcgInfoView.getModifyBy().getDisplayName();
+		}		
+		return tcgInfoView.getCreateBy().getDisplayName();
+	}
+
+	public TCGInfoView getTcgInfoView() {
+		return tcgInfoView;
+	}
+
+	public void setTcgInfoView(TCGInfoView tcgInfoView) {
+		this.tcgInfoView = tcgInfoView;
+	}
+
+	public boolean getIsEnableSubmit() {
+		return isEnableSubmit;
+	}
+
+	public boolean getIsEnableApprove() {
+		return isEnableApprove;
 	}
 
 }

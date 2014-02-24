@@ -223,10 +223,14 @@
                         					headerText="#{msg.get('app.mortgageDetail.detail.collateral.table.SUB')}">
                         					#{coll.subNo}
                         				</p:column>
-                        				<p:column style="width:100px"
-                        					headerText="#{msg.get('app.mortgageDetail.detail.collateral.table.UW')}">
-                        					<h:outputText value="#{coll.owner}" escape="false" />
+                        				<p:column style="width:100px;line-height: 1.5em;"
+                        					headerText="#{msg.get('app.mortgageDetail.detail.collateral.table.UW')}"
+                        					>
+                        					<h:panelGroup layout="block" rendered="#{not empty coll.owner}"  style="padding : 5px 0;">
+                        						<h:outputText value="#{coll.owner}" escape="false" />
+                        					</h:panelGroup>
                         				</p:column>
+                        				
                         				<p:column style="width:100px"
                         					headerText="#{msg.get('app.mortgageDetail.detail.collateral.table.type')}">
                         					#{coll.collateralType}
@@ -239,9 +243,12 @@
                         					headerText="#{msg.get('app.mortgageDetail.detail.collateral.table.detail')}">
                         					#{coll.mortgageDetail}
                         				</p:column>
-                        				<p:column style="width:100px"
-                        					headerText="#{msg.get('app.mortgageDetail.detail.collateral.table.related')}">
-                        					<h:outputText value="#{coll.relatedWith}" escape="false" />
+                        				<p:column style="width:100px;line-height: 1.5em;"
+                        					headerText="#{msg.get('app.mortgageDetail.detail.collateral.table.related')}"
+                        					>
+                        					<h:panelGroup layout="block" rendered="#{not empty coll.relatedWith}"  style="padding : 5px 0;">
+                        						<h:outputText value="#{coll.relatedWith}" escape="false" />
+                        					</h:panelGroup>
                         				</p:column>
                         				<p:column style="width:100px" styleClass="right"
                         					headerText="#{msg.get('app.mortgageDetail.detail.collateral.table.appraisalValue')}">

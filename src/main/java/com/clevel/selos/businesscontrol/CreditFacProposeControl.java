@@ -528,7 +528,7 @@ public class CreditFacProposeControl extends BusinessControl {
 
         if ((!Util.isNull(newCreditDetailViewList)) && newCreditDetailViewList.size() > 0) {
             proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
-            for (NewCreditDetailView tmp : newCreditDetailViewList) {
+            for (NewCreditDetailView tmp : Util.safetyList(newCreditDetailViewList)) {
                 proposeCreditDetailView = new ProposeCreditDetailView();
                 proposeCreditDetailView.setSeq(tmp.getSeq());
                 proposeCreditDetailView.setId(rowCount);
@@ -575,7 +575,7 @@ public class CreditFacProposeControl extends BusinessControl {
     public List<NewCollateralSubView> findNewCollateralSubView(List<NewCollateralView> newCollateralViewList) {
         List<NewCollateralSubView> relatedWithAllList = new ArrayList<NewCollateralSubView>();
         int countNo = 1;
-        for (NewCollateralView newCollateralView : newCollateralViewList) {
+        for (NewCollateralView newCollateralView : Util.safetyList(newCollateralViewList)) {
             for (NewCollateralHeadView newCollateralHeadDetail : newCollateralView.getNewCollateralHeadViewList()) {
                 if (newCollateralHeadDetail.getNewCollateralSubViewList().size() > 0) {
                     log.debug("newCollateralHeadDetail . getId:: {}", newCollateralHeadDetail.getId());
@@ -844,11 +844,11 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //--- Save to NewCollateral
         //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
-//        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase);
-//        newSubCollMortgageDAO.delete(newCollateralSubMortgages);
+        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase);
+        newSubCollMortgageDAO.delete(newCollateralSubMortgages);
         //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
-//        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase);
-//        newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
+        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase);
+        newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
         //--- Need to delete Collateral Credit from CollateralRelCredit before Insert new
         List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditDAO.getListByWorkCase(workCase);
         newCollateralCreditDAO.delete(newCollateralCreditList);

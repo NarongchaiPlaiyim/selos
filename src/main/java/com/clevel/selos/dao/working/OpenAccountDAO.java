@@ -12,10 +12,11 @@ import javax.inject.Inject;
 import java.util.List;
 
 public class OpenAccountDAO extends GenericDAO<OpenAccount, Long> {
-    @Inject
+    private static final long serialVersionUID = 4685523653223504682L;
+	@Inject
     @SELOS
     Logger log;
-    @Inject
+
     public OpenAccountDAO() {
     }
 
@@ -27,5 +28,14 @@ public class OpenAccountDAO extends GenericDAO<OpenAccount, Long> {
         List<OpenAccount> openAccountList = criteria.list();
 
         return openAccountList;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<OpenAccount> findPledgeAccountByWorkCaseId(long workCaseId) {
+    	Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.eq("pledgeAccount", true));
+        criteria.addOrder(Order.asc("id"));
+        return criteria.list();
     }
 }

@@ -16,6 +16,9 @@
                                      id="loanType"
                                      value="#{creditFacPropose.newConditionDetailView.loanType}"
                                      required="#{not empty param[addConditionDlg.clientId]}">
+                            <p:ajax event="change"
+                                    process="@this"
+                                    update="@this"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -29,6 +32,9 @@
                                          rows="3" cols="50"
                                          value="#{creditFacPropose.newConditionDetailView.conditionDesc}"
                                          required="#{not empty param[addConditionDlg.clientId]}" >
+                            <p:ajax event="change"
+                                    process="@this"
+                                    update="@this"/>
                         </p:inputTextarea>
                     </td>
                 </tr>

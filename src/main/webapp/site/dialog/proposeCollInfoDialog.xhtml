@@ -21,7 +21,7 @@
             <p:ajax event="change" listener="#{creditFacPropose.onChangeJobId}" update="@form"/>
         </p:inputText>
     </td>
-    <td class="right" colspan="2" style="width: 50%">
+    <td class="left" colspan="2" style="width: 50%">
         <p:commandButton value="#{msg.get('app.credit.facility.propose.dlg.retrieveButton')}"
                          binding="#{retrieveButton}"
                          styleClass="largest"
@@ -50,7 +50,7 @@
                         mindate="01/01/1950"
                         navigator="true"
                         locale="th_TH"
-                        showButtonPanel="true"/>
+                        showButtonPanel="true" />
     </td>
 </tr>
 
@@ -59,7 +59,7 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecision')}"/>
     </td>
     <td class="left" colspan="3">
-        <p:inputText value="#{creditFacPropose.newCollateralView.aadDecision}"/>
+        <p:inputText value="#{creditFacPropose.newCollateralView.aadDecision}" readonly="#{creditFacPropose.flagComs}"/>
     </td>
 </tr>
 
@@ -68,13 +68,13 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReason')}"/>
     </td>
     <td class="left">
-        <p:inputText value="#{creditFacPropose.newCollateralView.aadDecisionReason}"/>
+        <p:inputText value="#{creditFacPropose.newCollateralView.aadDecisionReason}" readonly="#{creditFacPropose.flagComs}"/>
     </td>
     <td class="title">
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReasonDetail')}"/>
     </td>
     <td class="left">
-        <p:inputText value="#{creditFacPropose.newCollateralView.aadDecisionReasonDetail}"/>
+        <p:inputText value="#{creditFacPropose.newCollateralView.aadDecisionReasonDetail}" readonly="#{creditFacPropose.flagComs}"/>
     </td>
 </tr>
 
@@ -83,13 +83,13 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.usage')}"/>
     </td>
     <td class="left">
-        <p:inputText value="#{creditFacPropose.newCollateralView.usage}"/>
+        <p:inputText value="#{creditFacPropose.newCollateralView.usage}" readonly="#{creditFacPropose.flagComs}"/>
     </td>
     <td class="title">
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.typeOfUsage')}"/>
     </td>
     <td class="left">
-        <p:inputText value="#{creditFacPropose.newCollateralView.typeOfUsage}"/>
+        <p:inputText value="#{creditFacPropose.newCollateralView.typeOfUsage}" readonly="#{creditFacPropose.flagComs}"/>
     </td>
 </tr>
 
@@ -98,13 +98,13 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageCondition')}"/>
     </td>
     <td class="left">
-        <p:inputText value="#{creditFacPropose.newCollateralView.mortgageCondition}"/>
+        <p:inputText value="#{creditFacPropose.newCollateralView.mortgageCondition}" readonly="#{creditFacPropose.flagComs}"/>
     </td>
     <td class="title">
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageConditionDetail')}"/>
     </td>
     <td class="left">
-        <p:inputText value="#{creditFacPropose.newCollateralView.mortgageConditionDetail}"/>
+        <p:inputText value="#{creditFacPropose.newCollateralView.mortgageConditionDetail}" readonly="#{creditFacPropose.flagComs}"/>
     </td>
 </tr>
 
@@ -175,7 +175,7 @@
     </td>
     <td class="left" colspan="3">
         <p:inputTextarea value="#{creditFacPropose.newCollateralView.bdmComments}"
-                         cols="100" rows="3"/>
+                         cols="100" rows="3" readonly="#{creditFacPropose.flagComs}"/>
     </td>
 </tr>
 
@@ -202,6 +202,9 @@
                            var="potentialItem"
                            itemLabel="#{potentialItem.description}"
                            itemValue="#{potentialItem.id}"/>
+            <p:ajax event="change"
+                    process="@this"
+                    update="@this"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -219,6 +222,9 @@
                            var="collTypePercentItem"
                            itemLabel="#{collTypePercentItem.description}"
                            itemValue="#{collTypePercentItem.id}"/>
+            <p:ajax event="change"
+                    process="@this"
+                    update="@this"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -245,7 +251,10 @@
     </td>
     <td class="left" colspan="3">
         <p:inputText value="#{CollateralHeaderDetailView.titleDeed}"
-                     required="#{not empty param[btnSaveCollateral.clientId]}"/>
+                     required="#{not empty param[btnSaveCollateral.clientId]}"
+                     readonly="#{creditFacPropose.flagComs}">
+            <p:ajax event="blur" update="@this"/>
+        </p:inputText>
     </td>
 </tr>
 <tr>
@@ -255,7 +264,10 @@
     <td class="left" colspan="3">
         <p:inputText value="#{CollateralHeaderDetailView.collateralLocation}"
                      style="width: 400px;"
-                     required="#{not empty param[btnSaveCollateral.clientId]}"/>
+                     required="#{not empty param[btnSaveCollateral.clientId]}"
+                     readonly="#{creditFacPropose.flagComs}">
+            <p:ajax event="blur" update="@this"/>
+        </p:inputText>
     </td>
 </tr>
 <tr>
@@ -269,7 +281,8 @@
                      onkeydown="return onKeyDownMoney(event);"
                      onkeypress="return onKeyPressMoney(event);"
                      required="#{not empty param[btnSaveCollateral.clientId]}"
-                     style="width:200px;text-align: right">
+                     style="width:200px;text-align: right"
+                     readonly="#{creditFacPropose.flagComs}">
             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                              type="number"/>
             <p:ajax event="blur" update="@this"/>
@@ -284,12 +297,16 @@
         <p:selectOneMenu id="dlgCollateralType"
                          value="#{CollateralHeaderDetailView.headCollType.id}"
                          style="min-width: 200px; width: 200px; max-width: 200px;"
-                         required="#{not empty param[btnSaveCollateral.clientId]}">
+                         required="#{not empty param[btnSaveCollateral.clientId]}"
+                         disabled="#{creditFacPropose.flagComs}">
             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
             <f:selectItems value="#{creditFacPropose.headCollateralTypeList}"
                            var="headCollateralTypeItem"
                            itemLabel="#{headCollateralTypeItem.description}"
                            itemValue="#{headCollateralTypeItem.id}"/>
+            <p:ajax event="change"
+                    process="@this"
+                    update="@this"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -427,11 +444,12 @@
 
             <p:column styleClass="center">
                 <p:commandButton icon="ui-icon-pencil"
-                                 rendered="#{creditFacPropose.flagButtonCollateral}"
                                  action="#{creditFacPropose.onEditSubCollateral()}"
                                  update=":subCollateralDlgForm"
                                  process="@this"
-                                 oncomplete="subCollateralInfoDlg.show();">
+                                 oncomplete="subCollateralInfoDlg.show();"
+                                 disabled="#{creditFacPropose.flagComs}">
+                    <!--rendered="#{creditFacPropose.flagButtonCollateral}"-->
                     <f:setPropertyActionListener value="#{i.index}"
                                                  target="#{creditFacPropose.rowCollHeadIndex}"/>
                     <f:setPropertyActionListener value="#{newCollateralSubView}"
@@ -443,8 +461,9 @@
 
                 <p:commandButton icon="ui-icon-trash"
                                  process="@this"
-                                 rendered="#{creditFacPropose.flagButtonCollateral}"
-                                 oncomplete="confirmDeleteSubCollateralInfoDlg.show()">
+                                 oncomplete="confirmDeleteSubCollateralInfoDlg.show()"
+                                 disabled="#{creditFacPropose.flagComs}">
+                    <!--rendered="#{creditFacPropose.flagButtonCollateral}"-->
                     <f:setPropertyActionListener value="#{newCollateralSubView}"
                                                  target="#{creditFacPropose.subCollateralDetailItem}"/>
                 </p:commandButton>

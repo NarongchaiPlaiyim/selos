@@ -83,13 +83,6 @@ public class NewCreditFacilityTransform extends Transform {
         newCreditFacility.setGuarantorBA(newCreditFacilityView.getGuarantorBA());
         newCreditFacility.setReasonForReduction(newCreditFacilityView.getReasonForReduction());
         newCreditFacility.setCreditCustomerType(newCreditFacilityView.getCreditCustomerType());
-        newCreditFacility.setNumberMonthsFromApprDate(newCreditFacilityView.getNumberMonthsFromApprDate());
-        newCreditFacility.setTotalNumberOfCoreAsset(newCreditFacilityView.getTotalNumberOfCoreAsset());
-        newCreditFacility.setTotalNumberOfNonCoreAsset(newCreditFacilityView.getTotalNumberOfNonCoreAsset());
-        newCreditFacility.setTotalMortgageValue(newCreditFacilityView.getTotalMortgageValue());
-        newCreditFacility.setTotalTCGGuaranteeAmount(newCreditFacilityView.getTotalTCGGuaranteeAmount());
-        newCreditFacility.setTotalIndvGuaranteeAmount(newCreditFacilityView.getTotalIndvGuaranteeAmount());
-        newCreditFacility.setTotalJurisGuaranteeAmount(newCreditFacilityView.getTotalJurisGuaranteeAmount());
 
         if (newCreditFacilityView.getLoanRequestType().getId() != 0) {
             CreditRequestType creditRequestType = creditRequestTypeDAO.findById(newCreditFacilityView.getLoanRequestType().getId());
@@ -173,13 +166,6 @@ public class NewCreditFacilityTransform extends Transform {
         newCreditFacilityView.setRelatedTMBLending(newCreditFacility.getRelatedTMBLending());
         newCreditFacilityView.setTwentyFivePercentShareRelatedTMBLending(newCreditFacility.getTwentyFivePercentShareRelatedTMBLending());
         newCreditFacilityView.setSingleLendingLimit(newCreditFacility.getSingleLendingLimit());
-        newCreditFacilityView.setNumberMonthsFromApprDate(newCreditFacility.getNumberMonthsFromApprDate());
-        newCreditFacilityView.setTotalNumberOfCoreAsset(newCreditFacility.getTotalNumberOfCoreAsset());
-        newCreditFacilityView.setTotalNumberOfNonCoreAsset(newCreditFacility.getTotalNumberOfNonCoreAsset());
-        newCreditFacilityView.setTotalMortgageValue(newCreditFacility.getTotalMortgageValue());
-        newCreditFacilityView.setTotalTCGGuaranteeAmount(newCreditFacility.getTotalTCGGuaranteeAmount());
-        newCreditFacilityView.setTotalIndvGuaranteeAmount(newCreditFacility.getTotalIndvGuaranteeAmount());
-        newCreditFacilityView.setTotalJurisGuaranteeAmount(newCreditFacility.getTotalJurisGuaranteeAmount());
         newCreditFacilityView.setTotalLoanWCTMB(newCreditFacility.getTotalLoanWCTMB());
         return newCreditFacilityView;
     }
