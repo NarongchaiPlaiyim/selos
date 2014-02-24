@@ -1044,20 +1044,20 @@ public class Decision implements Serializable {
     // ---------- FollowUp Condition - Action ---------- //
     public void onAddFollowUpCondition() {
         log.debug("onAddFollowUpCondition()");
-        if (decisionView.getFollowUpConditionList() != null) {
-            decisionView.getFollowUpConditionList().add(followUpConditionView);
+        if (decisionView.getDecisionFollowConditionViewList() != null) {
+            decisionView.getDecisionFollowConditionViewList().add(decisionFollowConditionView);
         } else {
-            List<FollowUpConditionView> followUpConditionList = new ArrayList<FollowUpConditionView>();
-            followUpConditionList.add(followUpConditionView);
-            decisionView.setFollowUpConditionList(followUpConditionList);
+            List<DecisionFollowConditionView> followUpConditionList = new ArrayList<DecisionFollowConditionView>();
+            followUpConditionList.add(decisionFollowConditionView);
+            decisionView.setDecisionFollowConditionViewList(followUpConditionList);
         }
         // Clear form
-        followUpConditionView = new FollowUpConditionView();
+        decisionFollowConditionView = new DecisionFollowConditionView();
     }
 
     public void onDeleteFollowUpCondition() {
-        log.debug("onDeleteFollowUpCondition() rowIndexFollowUpCondition: {}", rowIndexFollowUpCondition);
-        decisionView.getFollowUpConditionList().remove(rowIndexFollowUpCondition);
+        log.debug("onDeleteFollowUpCondition() rowIndexFollowUpCondition: {}", rowIndexDecisionFollowCondition);
+        decisionView.getDecisionFollowConditionViewList().remove(rowIndexDecisionFollowCondition);
     }
 
     public void onSave() {
@@ -1188,12 +1188,12 @@ public class Decision implements Serializable {
         this.decisionView = decisionView;
     }
 
-    public FollowUpConditionView getFollowUpConditionView() {
-        return followUpConditionView;
+    public DecisionFollowConditionView getFollowUpConditionView() {
+        return decisionFollowConditionView;
     }
 
-    public void setFollowUpConditionView(FollowUpConditionView followUpConditionView) {
-        this.followUpConditionView = followUpConditionView;
+    public void setFollowUpConditionView(DecisionFollowConditionView followUpConditionView) {
+        this.decisionFollowConditionView = followUpConditionView;
     }
 
     public ApprovalHistoryView getApprovalHistoryView() {
@@ -1508,12 +1508,12 @@ public class Decision implements Serializable {
         this.modeEditSubColl = modeEditSubColl;
     }
 
-    public int getRowIndexFollowUpCondition() {
-        return rowIndexFollowUpCondition;
+    public int getRowIndexDecisionFollowCondition() {
+        return rowIndexDecisionFollowCondition;
     }
 
-    public void setRowIndexFollowUpCondition(int rowIndexFollowUpCondition) {
-        this.rowIndexFollowUpCondition = rowIndexFollowUpCondition;
+    public void setRowIndexDecisionFollowCondition(int rowIndexDecisionFollowCondition) {
+        this.rowIndexDecisionFollowCondition = rowIndexDecisionFollowCondition;
     }
 
     public boolean isModeEditReducePricing() {
