@@ -195,7 +195,7 @@ public class BAPAInfoControl extends BusinessControl {
 		 ArrayList<BAPAInfoCustomerView> rtnDatas = new ArrayList<BAPAInfoCustomerView>();
 		 for (Customer customer : customers) {
 			 BAPAInfoCustomerView view = new BAPAInfoCustomerView();
-			 String customerName = _getCustomerName(customer);
+			 String customerName = customer.getDisplayName();
 			 String contractNo = _getCustomerContractNo(customer);
 			 
 			 BAPAInfoCustomer bapaCus = bapaHash.get(customer.getId());
@@ -232,15 +232,7 @@ public class BAPAInfoControl extends BusinessControl {
 		 return rtnDatas;
 	 }
 	 
-	 private String _getCustomerName(Customer customer) {
-		 StringBuilder builder = new StringBuilder();
-		 if (customer.getTitle() != null)
-			 builder.append(customer.getTitle().getTitleTh()).append(' ');
-		 builder.append(customer.getNameTh());
-		 if (!Util.isEmpty(customer.getLastNameTh()))
-			 builder.append(" ").append(customer.getLastNameTh());
-		 return builder.toString();
-	 }
+	
 	 private String _getCustomerContractNo(Customer customer) {
 		 List<Address> addresses = customer.getAddressesList();
 		 if (addresses != null && !addresses.isEmpty()) {

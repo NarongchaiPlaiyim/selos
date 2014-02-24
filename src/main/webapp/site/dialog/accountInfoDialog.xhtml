@@ -1,260 +1,278 @@
-<!DOCTYPE html >
-<html>
-<f:view xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:clv="http://clevel.com/ui">
+<h:form id="openAccountFrm">
+	<p:scrollPanel style="height:530px" styleClass="panel-dialog"
+	mode="native" 
+		rendered="#{not empty accountInfo.openAccount}">	
+			<p:messages />
+			<table class="content_form">
+				<tr>
+					<td class="title" style="width:180px">
+						<p:outputLabel
+							for="requestType"
+							value="#{msg.get('app.accountInfo.account.dialog.requestAccountType')}" />
+					</td>
+					<td>
+						<p:selectOneRadio id="requestType"
+							disabled="#{accountInfo.openAccount.fromPledge}" 
+							value="#{accountInfo.openAccount.requestAccountType}"
+							required="true" requiredMessage="#{msg.get('app.accountInfo.account.requestType.validate')}"
+							>
+							<p:ajax update="confirmOpenAccount"/>
+                        	<f:selectItems value="#{enumGeneralControl.requestAccountTypes}" var="requesttype"
+                        		itemLabel="#{msg.get(requesttype.msgKey)}" itemValue="#{requesttype}" 
+                        		/>
+                        </p:selectOneRadio>
+					</td>
+				</tr>
+				<tr>
+					<td class="title">
+						<p:outputLabel
+							for="accountNo"
+							value="#{msg.get('app.accountInfo.account.dialog.accountNo')}" />
+					</td>
+					<td>
+						<p:inputText id="accountNo"
+							required="true" requiredMessage="#{msg.get('app.accountInfo.account.accountNo.validate')}" 
+							readonly="#{accountInfo.openAccount.fromPledge}"
+							value="#{accountInfo.openAccount.accountNo}"
+							/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title">
+						<p:outputLabel
+							for="branch"
+							value="#{msg.get('app.accountInfo.account.dialog.branch')}" />
+					</td>
+					<td>
+						<p:selectOneMenu id="branch" style="width:200px"
+							value="#{accountInfo.openAccount.branchId}"
+							required="true" requiredMessage="#{msg.get('app.accountInfo.account.branch.validate')}"
+							>
+							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="-1"/>
+							<f:selectItems value="#{accountInfo.branches}"/>
+						</p:selectOneMenu>
+					</td>
+				</tr>
+				<tr>
+					<td class="title">
+						<p:outputLabel
+							for="accountType"
+							value="#{msg.get('app.accountInfo.account.dialog.accountType')}" />
+					</td>
+					<td>
+						<p:selectOneMenu id="accountType" style="width:200px"
+							value="#{accountInfo.openAccount.accountTypeId}"
+							required="true" requiredMessage="#{msg.get('app.accountInfo.account.accountType.validate')}"
+							>
+							<p:ajax update="productType" listener="#{accountInfo.onSelectAccountType()}"
+								
+								/>
+							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="-1"/>
+							<f:selectItems value="#{accountInfo.accountTypes}"/>
+						</p:selectOneMenu>
+					</td>
+				</tr>
+				<tr>
+					<td class="title">
+						<p:outputLabel
+							for="productType"
+							value="#{msg.get('app.accountInfo.account.dialog.productType')}" />
+					</td>
+					<td>
+						<p:selectOneMenu id="productType" style="width:200px"
+							value="#{accountInfo.openAccount.productTypeId}"
+							required="true" requiredMessage="#{msg.get('app.accountInfo.account.productType.validate')}"
+							>
+							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="-1"/>
+							<f:selectItems value="#{accountInfo.productTypes}"/>
+						</p:selectOneMenu>
+					</td>
+				</tr>
+				<tr>
+					<td class="title">
+						<p:outputLabel
+							for="term"
+							value="#{msg.get('app.accountInfo.account.dialog.term')}" />
+					</td>
+					<td>
+						<p:inputText id="term" styleClass="smaller"
+							maxlength="3"
+							value="#{accountInfo.openAccount.term}"
+							onkeydown="return onKeyDownNumber(event)"
+							onkeypress="return onKeyPressNumber(event)"
+							required="true" requiredMessage="#{msg.get('app.accountInfo.account.term.validate')}"
+							/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title">
+						<p:outputLabel for="accountName"
+							value="#{msg.get('app.accountInfo.account.dialog.accountName')}" />
+					</td>
+					<td class="middle">
+						<p:selectOneMenu id="accountName" style="width:200px;margin-right:10px"
+							styleClass="inline_select"
+							value="#{accountInfo.selectedAddAccountNameId}"
+							>
+							<p:ajax update="addNameBtn" />
+							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+							<f:selectItems value="#{accountInfo.toAddAccountNameList}"/>
+						</p:selectOneMenu>
+						
+						<p:commandButton id="addNameBtn" style="margin-top:2px"
+							value="#{msg.get('app.button.add')}"
+							styleClass="medium"
+							process="@this"
+							partialSubmit="true"
+							immediate="true"
+							actionListener="#{accountInfo.onAddOpenAccountName()}"
+							disabled="#{accountInfo.selectedAddAccountNameId le 0}"
+							update="accountname_tbl,accountName"
+							/>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<p:dataTable id="accountname_tbl" styleClass="content_table_form"
+							value="#{accountInfo.openAccount.names}" var="name"
+							rowIndexVar="rowIdx" style="margin:10px 0"
+							>
+							<p:column style="width:20px" styleClass="center">
+								#{rowIdx+1}
+							</p:column>
+							<p:column style="width:200px"
+								headerText="#{msg.get('app.accountInfo.account.dialog.accountName.table')}"
+								>
+								#{name.name}
+							</p:column>
+							<p:column style="width:30px" styleClass="center">
+								<p:commandButton icon="ui-icon-trash" title="#{msg.get('app.button.delete')}"
+               						process="@this"
+                					style="margin-right:0px !important;margin-bottom:4px !important"
+                					rendered="#{not name.fromPledge}"
+                					actionListener="#{accountInfo.onDeleteOpenAccountName(name.customerId)}"
+                					update="accountname_tbl,:openAccountFrm:accountName,:openAccountFrm:addNameBtn"
+                                 	>
+                                 </p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</td>
+				</tr>
+				<tr>
+					<td class="title top">
+						<p:outputLabel for="purpose_pane"
+							value="#{msg.get('app.accountInfo.account.dialog.purpose')}" />
+					</td>
+					<td>
+						<h:panelGroup id="purpose_pane" layout="block">
+							<ui:repeat var="purpose" value="#{accountInfo.openAccount.purposes}">
+								<p:selectBooleanCheckbox itemLabel="#{purpose.purpose}"
+									styleClass="normal_checkbox" style="display:block;margin-top:4px;margin-bottom:4px"
+									value="#{purpose.checked}" disabled="#{not purpose.editable}" 
+									/>
+							</ui:repeat>
+						</h:panelGroup>
+					</td>
+				</tr>
+				<tr>
+					<td class="title">
+						<p:outputLabel
+							for="confirmOpenAccount"
+							value="#{msg.get('app.accountInfo.account.dialog.confirmOpenAccount')}" />
+					</td>
+					<td>
+						<p:selectOneRadio
+							id="confirmOpenAccount" disabled="true" 
+							value="#{accountInfo.openAccount.confirmAccountType}">
+							<f:selectItems value="#{enumGeneralControl.confirmAccountTypes}" var="confirmtype"
+                        		itemLabel="#{msg.get(confirmtype.msgKey)}" itemValue="#{confirmtype}" 
+                        		/>
+                        </p:selectOneRadio>
+					</td>
+				</tr>
+				<tr>
+					<td class="title top">
+						<p:outputLabel
+							for="credit_tbl"
+							value="#{msg.get('app.accountInfo.account.dialog.creditType')}" />
+					</td>
+					<td>
+						<p:dataTable id="credit_tbl" styleClass="content_table_form"
+						 	value="#{accountInfo.openAccount.credits}" var="credit"
+						 	style="margin:10px 0"
+							>
+							<p:column style="width:30px" styleClass="center">
+								<p:selectBooleanCheckbox styleClass="normal_checkbox"
+									value="#{credit.checked}"
+									disabled="#{credit.fromPledge}" 
+									/>
+							</p:column>
+							<p:column style="width:200px" 
+								headerText="#{msg.get('app.accountInfo.account.dialog.creditType.productProgram')}"
+								>
+								#{credit.productProgram}
+							</p:column>
+							<p:column 
+								headerText="#{msg.get('app.accountInfo.account.dialog.creditType.creditFacility')}"
+								>
+								#{credit.creditFacility}
+							</p:column>
+							<p:column style="width:150px" styleClass="right" 
+								headerText="#{msg.get('app.accountInfo.account.dialog.creditType.limit')}"
+								>
+								<h:outputText value="#{credit.limit}">
+									<f:convertNumber pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+					</td>
+				</tr>
+				 <tr>
+	                <td colspan="2">
+	                    <p:spacer></p:spacer>
+	                </td>
+	            </tr>
+				<tr>
+					<td colspan="2" class="center">
+						<p:commandButton
+	                         id="addOpenAccountBtn"
+	                         value="#{msg.get('app.button.ok')}"
+	                         actionListener="#{accountInfo.onAddOpenAccount()}"
+	                         update=":frmMain:accountinfo_tbl,:openAccountFrm"
+	                         oncomplete="handleDialogRequest(xhr, status, args,'p_openAccountDlg')"
+	                         styleClass="small"
+	                         rendered="#{accountInfo.addDialog}"/>
+	                     <p:commandButton
+	                         id="updOpenAccountBtn"
+	                         value="#{msg.get('app.button.ok')}"
+	                         actionListener="#{accountInfo.onUpdateOpenAccount()}"
+	                         update=":frmMain:accountinfo_tbl,:openAccountFrm"
+	                         oncomplete="handleDialogRequest(xhr, status, args,'p_openAccountDlg')"
+	                         styleClass="small"
+	                         rendered="#{not accountInfo.addDialog}"/>
+	                    <p:commandButton
+	                    	type='button' styleClass="small" 
+	                    	value="#{msg.get('app.button.cancel')}" onclick="p_openAccountDlg.hide()"/>
+	                    
+					</td>
+				</tr>
+				<tr>
+	                <td colspan="2">
+	                    <p:spacer></p:spacer>
+	                </td>
+	            </tr>
+			</table>
+	</p:scrollPanel>
+	<p:blockUI block="openAccountFrm" trigger="addOpenAccountBtn,updOpenAccountBtn">
+	    LOADING<br />
+	    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+	</p:blockUI>
+</h:form>
 
-<h:head>
-    <title>Account Detail Information</title>
-    <h:outputStylesheet name="css/style.css" />
-    <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
-    <h:outputScript library="js" name="custom.js" />
-</h:head>
-<h:body>
-    <h:form id="accountInfoDialogForm">
-
-        <table class="content_table_form" border="0">
-            <tr>
-                <td style="width: 180px; max-width: 180px; min-width: 180px;">
-
-                </td>
-
-                <td style="width: 200px; max-width: 200px; min-width: 200px;">
-
-                </td>
-            </tr>
-
-            <tr >
-                <td class="title" >
-                    <p:outputLabel value="#{msg.get('app.accountInfo.dialog.content.request')}"/>
-                </td>
-
-                <td >
-                    <h:selectOneRadio value="#{accountInfo.accountInfoView.accountInfoDetailViewSelected.reqAccountType}">
-                        <f:selectItem itemLabel="#{'New'}" itemValue="0"/>
-                        <f:selectItem itemLabel="#{'Existing'}" itemValue="1"/>
-                    </h:selectOneRadio>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="title">
-                    <p:outputLabel value="#{msg.get('app.accountInfo.dialog.content.account.number')}"/>
-                </td>
-
-                <td>
-                    <p:inputText value="#{accountInfo.accountInfoView.accountInfoDetailViewSelected.accountNumber}"
-                            styleClass="larger"/>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="title">
-                    <p:outputLabel value="#{msg.get('app.accountInfo.dialog.content.branch')}"/>
-                </td>
-
-                <td>
-                    <p:selectOneMenu styleClass="largest" size="1"
-                                     value="#{accountInfo.accountInfoView.accountInfoDetailViewSelected.branchView.id}">
-                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{accountInfo.branchList}"
-                                       var="branchView"
-                                       itemLabel="#{branchView.name}"
-                                       itemValue="#{branchView.id}"/>
-                    </p:selectOneMenu>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="title">
-                    <p:outputLabel value="#{msg.get('app.accountInfo.dialog.content.account.type')}"/>
-                </td>
-
-                <td>
-                    <p:selectOneMenu styleClass="largest" size="1"
-                                     value="#{accountInfo.accountInfoView.accountInfoDetailViewSelected.accountTypeView.id}">
-                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
-                        <f:selectItems value="#{accountInfo.accountTypeList}"
-                                       var="accountType"
-                                       itemLabel="#{accountType.name}"
-                                       itemValue="#{accountType.id}"/>
-                        <p:ajax event="change"
-                                listener="#{accountInfo.onChangeAccountType()}"
-                                update=":accountInfoDialogForm:productType" />
-                    </p:selectOneMenu>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="title">
-                    <p:outputLabel value="#{msg.get('app.accountInfo.dialog.content.product.type')}"/>
-                </td>
-
-                <td>
-                    <p:selectOneMenu id="productType" styleClass="largest" size="1"
-                                     value="#{accountInfo.accountInfoView.accountInfoDetailViewSelected.productTypeView.id}">
-                        <f:selectItem itemLabel="- Please Select -" itemValue=""  />
-                        <f:selectItems value="#{accountInfo.productTypeList}"
-                                       var="productType"
-                                       itemLabel="#{productType.name}"
-                                       itemValue="#{productType.id}"/>
-                    </p:selectOneMenu>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="title">
-                    <p:outputLabel value="#{msg.get('app.accountInfo.dialog.content.term')}"/>
-                </td>
-
-                <td>
-                    <p:inputText value="#{accountInfo.accountInfoView.accountInfoDetailViewSelected.term}" styleClass="larger"/>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="title">
-                    <p:outputLabel value="#{msg.get('app.accountInfo.dialog.content.account.name')}"/>
-                </td>
-
-                <td>
-                    <div style="float:left; margin-top: 4px;">
-                        <p:selectOneMenu styleClass="largest" size="1"
-                                         value="#{accountInfo.accountInfoView.accountInfoDetailViewSelected.accountNameViewSelected.id}">
-                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                            <f:selectItems value="#{accountInfo.accountNameList}"
-                                         var="accountNameList"
-                                         itemLabel="#{accountNameList.name}"
-                                         itemValue="#{accountNameList.id}"/>
-                        </p:selectOneMenu>
-                    </div>
-                    <div style="float:left; margin-left: 5px; margin-bottom: 4px;">
-                        <p:commandButton value="#{msg.get('app.button.add')}"
-                                         process="@form"
-                                         action="#{accountInfo.addAccountName()}"
-                                         update=":accountInfoDialogForm"/>
-                    </div>
-                </td>
-
-            </tr>
-
-            <tr>
-                <td class="title">
-                </td>
-
-                <td>
-                    <p:dataTable id="resultTableAccountName" var="item" value="#{accountInfo.accountInfoView.accountInfoDetailViewSelected.accountNameViewList}"
-                                 paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
-
-                        <p:column headerText="" styleClass="center"
-                                  style="width:10px;  max-width: 10px; min-width: 10px;"
-                                >
-                            <p:outputLabel value="#{rowIndex+1}"/>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.accountInfo.dialog.table.account.name')}" style="width: 110px;">
-                            <p:outputLabel value="#{item.name}"/>
-                        </p:column>
-
-                        <p:column headerText="" styleClass="center" style="width:20px;">
-                            <p:commandButton title="#{msg.get('app.button.remove')}"
-                                             icon="ui-icon-trash"
-                                             oncomplete="confirmDeleteAccountNameDlg.show()"
-                                             update=":accountInfoDialogForm"
-                                             process="@form">
-                                <f:setPropertyActionListener value="#{item}"
-                                                             target="#{accountInfo.accountInfoView.accountInfoDetailViewSelected.accountNameViewSelected}"/>
-                            </p:commandButton>
-                        </p:column>
-
-                    </p:dataTable>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="title">
-                    <p:outputLabel value="#{msg.get('app.accountInfo.dialog.content.purpose')}"/>
-                </td>
-
-                <td>
-                    <p:dataGrid value="#{accountInfo.accountInfoView.accountInfoDetailViewSelected.accountInfoPurposeViewList}" var="purposeList" columns="1" style="border: 0">
-                        <p:column>
-                            <h:selectBooleanCheckbox value="#{purposeList.selected}"/>
-                            <h:outputText value="#{purposeList.name}"/>
-                        </p:column>
-                    </p:dataGrid>
-                </td>
-            </tr>
-
-            <tr >
-                <td class="title" >
-                    <p:outputLabel value="#{msg.get('app.accountInfo.dialog.content.request')}"/>
-                </td>
-
-                <td >
-                    <h:selectOneRadio value="#{accountInfo.accountInfoView.accountInfoDetailViewSelected.openAccount}">
-                        <f:selectItem itemLabel="#{'Open'}" itemValue="0"/>
-                        <f:selectItem itemLabel="#{'Not Open'}" itemValue="1"/>
-                    </h:selectOneRadio>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="title">
-                    <p:outputLabel value="#{msg.get('app.accountInfo.dialog.content.credit.type')}"/>
-                </td>
-
-                <td>
-                    <p:dataTable id="creditTyeTable" var="item2" value="#{accountInfo.accountInfoView.accountInfoDetailViewSelected.accountInfoCreditTypeViewList}"
-                                 paginator="false" rowKey="#{item2}" rowIndexVar="rowIndex">
-
-                        <p:column style="width: 50px;">
-                            <h:selectBooleanCheckbox value="#{item2.selected}"/>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.accountInfo.dialog.table.product.program')}" style="width: 150px;">
-                            <p:outputLabel value="#{item2.productProgram}"/>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.accountInfo.dialog.table.credit.facility')}" style="width: 80px;">
-                            <p:outputLabel value="#{item2.creditFacility}"/>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.accountInfo.dialog.table.limit')}" style="width: 150px;">
-                            <div class="right">
-                                <p:outputLabel value="#{item2.limit}" styleClass="right">
-                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14" />
-                                </p:outputLabel>
-                            </div>
-                        </p:column>
-
-                    </p:dataTable>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="center" colspan="2" style="margin-top: 20px;">
-                    <p:commandButton id="addAccountBtn"
-                                     value="#{msg.get('app.button.ok')}"
-                                     styleClass="small"
-                                     actionListener="#{accountInfo.addAccountDetail()}"
-                                     update=":accountInfoDialogForm,:frmMain:accountDetailTable "
-                                     oncomplete="handleAccountInfoRequest(xhr, status, args)"
-                            />
-                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
-                                     type="button" onclick="accountInfoDlg.hide()"/>
-                </td>
-            </tr>
-
-
-        </table>
-    </h:form>
-
-</h:body>
-
-</f:view>
-</html>
-
-
+</ui:composition>

@@ -179,7 +179,7 @@ public class PledgeDetail implements Serializable {
 	public void onOpenUpdatePledgeACDepDialog() {
 		pledgeACDepView = new PledgeACDepView();
 		PledgeACDepView upd = null;
-		if (selectedRowId > 0 && selectedRowId < pledgeACDepList.size()) {
+		if (selectedRowId >= 0 && selectedRowId < pledgeACDepList.size()) {
 			upd = pledgeACDepList.get(selectedRowId);
 		}
 		if (upd == null) {
@@ -222,7 +222,7 @@ public class PledgeDetail implements Serializable {
 		if (selectedRowId < 0 || selectedRowId > pledgeACDepList.size())
 			return;
 		PledgeACDepView delete = pledgeACDepList.remove(selectedRowId);
-		if (delete != null)
+		if (delete != null && delete.getId() > 0)
 			deleteList.add(delete);
 		selectedRowId = -1;
 		
