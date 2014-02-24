@@ -144,7 +144,7 @@
                 <tr>
                     <td class="title" style="width:145px;">ราคาประเมิน :</td>
                     <td>
-                        <p:inputText id="appraisalValue"  value="#{creditFacExisting.existingCollateralDetailView.appraisalValue}" >
+                        <p:inputText id="appraisalValue"  value="#{creditFacExisting.existingCollateralDetailView.appraisalValue}" maxlength="16">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                             <p:ajax event="blur" update=":existingCollateralBorrowerDlgForm:appraisalValue"/>
                         </p:inputText>
@@ -153,7 +153,7 @@
                 <tr>
                     <td class="title" style="width:145px;">จำนอง :</td>
                     <td>
-                        <p:inputText id="mortgageValue" value="#{creditFacExisting.existingCollateralDetailView.mortgageValue}" >
+                        <p:inputText id="mortgageValue" value="#{creditFacExisting.existingCollateralDetailView.mortgageValue}" maxlength="16">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                             <p:ajax event="blur" update=":existingCollateralBorrowerDlgForm:mortgageValue"/>
                         </p:inputText>
