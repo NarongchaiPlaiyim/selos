@@ -963,6 +963,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailListTemp);
         newCollateralView.getNewCollateralHeadViewList().add(new NewCollateralHeadView());
         flagButtonCollateral = true;
+        flagComs = false;
     }
 
     public void onEditProposeCollInfo() {

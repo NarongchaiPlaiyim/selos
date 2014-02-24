@@ -745,6 +745,7 @@ public class NewCreditFacilityView implements Serializable {
                 .append("totalTCGGuaranteeAmount", totalTCGGuaranteeAmount)
                 .append("totalIndvGuaranteeAmount", totalIndvGuaranteeAmount)
                 .append("totalJurisGuaranteeAmount", totalJurisGuaranteeAmount)
+                .append("totalMortgageValue", totalMortgageValue)
                 .append("contactName", contactName)
                 .append("contactPhoneNo", contactPhoneNo)
                 .append("interService", interService)

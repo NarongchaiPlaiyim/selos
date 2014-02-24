@@ -327,7 +327,7 @@
                 id="btnAddSubCollateralInfo"
                 value="#{msg.get('app.addButton')}"
                 styleClass="smaller"
-                rendered="#{creditFacPropose.flagButtonCollateral}"
+                disabled="#{creditFacPropose.flagComs}"
                 process="@form"
                 action="#{creditFacPropose.onAddSubCollateral}"
                 update=":subCollateralDlgForm"

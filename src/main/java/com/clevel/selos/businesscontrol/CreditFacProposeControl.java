@@ -421,25 +421,25 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
     public BigDecimal calTotalProposeLoanDBRForIntYear(NewCreditDetail newCreditDetail, BigDecimal dbrSpread) {
-//        log.debug("calTotalProposeLoanDBRForIntYear start :: newCreditDetail and  dbrSpread ::{}", newCreditDetail, dbrSpread);
+        log.debug("calTotalProposeLoanDBRForIntYear start :: newCreditDetail and  dbrSpread ::{}", newCreditDetail, dbrSpread);
         BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
-//        BigDecimal sum;
-//        log.info("limit :: {}", newCreditDetail.getLimit());
-//        log.info("newCreditTierDetailViews.size :: {}", newCreditDetail.getProposeCreditTierDetailList().size());
-//        if (newCreditDetail.getProposeCreditTierDetailList() != null) {
-//            sum = BigDecimal.ZERO;
-//            for (NewCreditTierDetail newCreditTierDetail : newCreditDetail.getProposeCreditTierDetailList()) //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
-//            {
-//                if (newCreditTierDetail != null) {
-//                    log.info("newCreditTierDetail.getFinalBasePrice().getValue() :: {}", newCreditTierDetail.getFinalBasePrice().getValue());
-//                    log.info("newCreditTierDetail.getFinalInterest() :: {}", newCreditTierDetail.getFinalInterest());
-//                    log.info("dbrSpread :: {}", dbrSpread);
-//                    log.info("newCreditDetail.getLimit() :: {}", newCreditDetail.getLimit());
-//                    sum = Util.divide(Util.multiply(Util.divide(Util.add(Util.add(newCreditTierDetail.getFinalBasePrice().getValue(), newCreditTierDetail.getFinalInterest()), dbrSpread), BigDecimal.valueOf(100)), newCreditDetail.getLimit()), BigDecimal.valueOf(12));
-//                    sumTotalLoanDbr = Util.add(sumTotalLoanDbr, sum);
-//                }
-//            }
-//        }
+        BigDecimal sum;
+        log.info("limit :: {}", newCreditDetail.getLimit());
+        log.info("newCreditTierDetailViews.size :: {}", newCreditDetail.getProposeCreditTierDetailList().size());
+        if (newCreditDetail.getProposeCreditTierDetailList() != null) {
+            sum = BigDecimal.ZERO;
+            for (NewCreditTierDetail newCreditTierDetail : newCreditDetail.getProposeCreditTierDetailList()) //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
+            {
+                if (newCreditTierDetail != null) {
+                    log.info("newCreditTierDetail.getFinalBasePrice().getValue() :: {}", newCreditTierDetail.getFinalBasePrice().getValue());
+                    log.info("newCreditTierDetail.getFinalInterest() :: {}", newCreditTierDetail.getFinalInterest());
+                    log.info("dbrSpread :: {}", dbrSpread);
+                    log.info("newCreditDetail.getLimit() :: {}", newCreditDetail.getLimit());
+                    sum = Util.divide(Util.multiply(Util.divide(Util.add(Util.add(newCreditTierDetail.getFinalBasePrice().getValue(), newCreditTierDetail.getFinalInterest()), dbrSpread), BigDecimal.valueOf(100)), newCreditDetail.getLimit()), BigDecimal.valueOf(12));
+                    sumTotalLoanDbr = Util.add(sumTotalLoanDbr, sum);
+                }
+            }
+        }
 
         log.info("calTotalProposeLoanDBRForIntYear end ::: sumTotalLoanDbr ::: {}", sumTotalLoanDbr);
         return sumTotalLoanDbr;
@@ -528,7 +528,7 @@ public class CreditFacProposeControl extends BusinessControl {
 
         if ((!Util.isNull(newCreditDetailViewList)) && newCreditDetailViewList.size() > 0) {
             proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
-            for (NewCreditDetailView tmp : Util.safetyList(newCreditDetailViewList)) {
+            for (NewCreditDetailView tmp : newCreditDetailViewList) {
                 proposeCreditDetailView = new ProposeCreditDetailView();
                 proposeCreditDetailView.setSeq(tmp.getSeq());
                 proposeCreditDetailView.setId(rowCount);
