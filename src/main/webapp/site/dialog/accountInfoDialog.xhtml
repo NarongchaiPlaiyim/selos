@@ -53,7 +53,7 @@
 							value="#{accountInfo.openAccount.branchId}"
 							required="true" requiredMessage="#{msg.get('app.accountInfo.account.branch.validate')}"
 							>
-							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="-1"/>
+							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 							<f:selectItems value="#{accountInfo.branches}"/>
 						</p:selectOneMenu>
 					</td>
@@ -67,10 +67,10 @@
 					<td>
 						<p:selectOneMenu id="accountType" style="width:200px"
 							value="#{accountInfo.openAccount.accountTypeId}"
+							binding="#{accountInfo.accountTypeBind}"
 							required="true" requiredMessage="#{msg.get('app.accountInfo.account.accountType.validate')}"
 							>
 							<p:ajax update="productType" listener="#{accountInfo.onSelectAccountType()}"
-								
 								/>
 							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="-1"/>
 							<f:selectItems value="#{accountInfo.accountTypes}"/>
@@ -86,6 +86,7 @@
 					<td>
 						<p:selectOneMenu id="productType" style="width:200px"
 							value="#{accountInfo.openAccount.productTypeId}"
+							binding="#{accountInfo.productTypeBind}"
 							required="true" requiredMessage="#{msg.get('app.accountInfo.account.productType.validate')}"
 							>
 							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="-1"/>
@@ -96,7 +97,7 @@
 				<tr>
 					<td class="title">
 						<p:outputLabel
-							for="term"
+							for="term" 
 							value="#{msg.get('app.accountInfo.account.dialog.term')}" />
 					</td>
 					<td>

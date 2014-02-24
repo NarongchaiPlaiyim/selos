@@ -146,8 +146,8 @@
                            						update=":openAccountDlg"
                            						style="margin-right:0px !important"
                            						>
-                           						<p:resetInput target=":openAccountDlg" />
                            						<f:setPropertyActionListener target="#{accountInfo.selectedRowId}" value="#{rowIdx}" />
+                           						<p:resetInput target=":openAccountDlg" />
                            					</p:commandButton>
                            					<p:commandButton icon="ui-icon-trash" title="#{msg.get('app.button.delete')}"
                           							process="@this"
@@ -155,7 +155,7 @@
                            							style="margin-right:0px !important"
                            							rendered="#{not account.fromPledge}"
                                             	>
-                                            	<f:setPropertyActionListener target="#{accountInfo.selectedRowId}" value="#{rowIdx}" />
+                                            	<f:setPropertyActionListener target="#{accountInfo.selectedRowId}" value="#{rowIdx}"/>
                                             </p:commandButton>
 	                           			</p:column>
 	                           		</p:dataTable>
