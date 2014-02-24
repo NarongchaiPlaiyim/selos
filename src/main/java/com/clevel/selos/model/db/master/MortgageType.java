@@ -21,8 +21,11 @@ public class MortgageType implements Serializable {
     @Column(name = "mortgage_type", length = 255)
     private String mortgage;
 
-    @Column(name = "redeem")
-    private String redeem;
+    @Column(name = "redeem", columnDefinition = "int default 0", length = 1)
+    private boolean redeem;
+
+    @Column(name = "mortgage_fee_flag", columnDefinition = "int default 0", length = 1)
+    private boolean mortgageFeeFlag;
 
     @Column(name = "active")
     private int active;
@@ -61,12 +64,20 @@ public class MortgageType implements Serializable {
         this.mortgage = mortgage;
     }
 
-    public String getRedeem() {
+    public boolean isRedeem() {
         return redeem;
     }
 
-    public void setRedeem(String redeem) {
+    public void setRedeem(boolean redeem) {
         this.redeem = redeem;
+    }
+
+    public boolean isMortgageFeeFlag() {
+        return mortgageFeeFlag;
+    }
+
+    public void setMortgageFeeFlag(boolean mortgageFeeFlag) {
+        this.mortgageFeeFlag = mortgageFeeFlag;
     }
 
     public int getActive() {
@@ -116,13 +127,14 @@ public class MortgageType implements Serializable {
 	public void setReferredFlag(boolean referredFlag) {
 		this.referredFlag = referredFlag;
 	}
-    
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("mortgage", mortgage)
                 .append("redeem", redeem)
+                .append("mortgageFeeFlag", mortgageFeeFlag)
                 .append("active", active)
                 .append("mortgageFlag", mortgageFlag)
                 .append("pledgeFlag", pledgeFlag)
@@ -131,5 +143,4 @@ public class MortgageType implements Serializable {
                 .append("referredFlag", referredFlag)
                 .toString();
     }
-
 }

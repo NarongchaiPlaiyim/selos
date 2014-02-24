@@ -8,7 +8,7 @@ import com.clevel.selos.integration.brms.convert.StandardPricingIntConverter;
 import com.clevel.selos.integration.brms.model.RuleColorResult;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.*;
-import com.clevel.selos.integration.brms.model.response.StandardPricingIntResponse;
+import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.brms.service.EndPoint;
 import com.clevel.selos.model.ActionResult;
 import org.slf4j.Logger;
@@ -81,38 +81,48 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
     }
 
     @Override
-    public StandardPricingIntResponse checkStandardPricingIntRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
+    public StandardPricingResponse checkStandardPricingIntRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
         log.debug("checkStandardPricingIntRule : standardPricingIntRequest {}", applicationInfo);
         if (applicationInfo == null) {
             log.error("standardPricingIntRequest is null for request");
             throw new ValidationException("002");
         }
 
-        StandardPricingIntResponse standardPricingIntResponse = new StandardPricingIntResponse();
+        StandardPricingResponse standardPricingResponse = new StandardPricingResponse();
 
         try{
             com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceResponse decisionServiceResponse = endpoint.callStandardPricingInterestRulesService(standardPricingIntConverter.getDecisionServiceRequest(applicationInfo));
-            standardPricingIntResponse = standardPricingIntConverter.getStandardPricingResponse(decisionServiceResponse);
-            standardPricingIntResponse.setActionResult(ActionResult.SUCCESS);
+            standardPricingResponse = standardPricingIntConverter.getStandardPricingResponse(decisionServiceResponse);
+            standardPricingResponse.setActionResult(ActionResult.SUCCESS);
 
         }catch (Exception ex){
-            standardPricingIntResponse.setActionResult(ActionResult.FAILED);
-            standardPricingIntResponse.setReason(ex.getMessage());
-
+            standardPricingResponse.setActionResult(ActionResult.FAILED);
+            standardPricingResponse.setReason(ex.getMessage());
         }
 
-        return standardPricingIntResponse;
+        return standardPricingResponse;
     }
 
     @Override
-    public List<StandardPricingFeeResponse> checkStandardPricingFeeRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
+    public StandardPricingResponse checkStandardPricingFeeRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
         log.debug("checkStandardPricingFeeRule : applicationInfo {}", applicationInfo);
         if (applicationInfo == null) {
             log.error("standardPricingFeeRequest is null for request");
             throw new ValidationException("002");
         }
 
-        return new ArrayList<StandardPricingFeeResponse>();
+        StandardPricingResponse standardPricingResponse = new StandardPricingResponse();
+        try{
+            com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceResponse decisionServiceResponse = endpoint.callStandardPricingFeeRulesService(standardPricingFeeConverter.getDecisionServiceRequest(applicationInfo));
+            standardPricingResponse = standardPricingFeeConverter.getStandardPricingResponse(decisionServiceResponse);
+            standardPricingResponse.setActionResult(ActionResult.SUCCESS);
+
+        }catch (Exception ex){
+            standardPricingResponse.setActionResult(ActionResult.FAILED);
+            standardPricingResponse.setReason(ex.getMessage());
+        }
+
+        return standardPricingResponse;
     }
 
     @Override

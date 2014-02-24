@@ -136,7 +136,11 @@ public enum BRMSField {
     TOTAL_MORTGAGE_VALUE("Total Mortgage Value"),
     NUMBER_OF_REDEEM_TRANSACTION("Number Of Redeem Transaction"),
     //Pricing Attribute
-    PRICE_MAXIMUM_RATE("Maximum Rate");
+    PRICE_MAXIMUM_RATE("Maximum Rate"),
+    PRICE_FEE_PERCENT("Fee Percent"),
+    PRICE_FEE_PERCENT_AFT_DISCOUNT("Fee Percent After Discount"),
+    PRICE_PAYMENT_METHOD("Payment Method"),
+    PRICE_YEAR("Year");
 
     String value;
 
