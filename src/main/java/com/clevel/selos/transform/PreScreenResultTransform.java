@@ -24,12 +24,6 @@ public class PreScreenResultTransform extends Transform {
 
     }
 
-    public PreScreenRequest transformToRequest(List<CustomerInfoView> customerInfoViewList) {
-        PreScreenRequest preScreenRequest = new PreScreenRequest();
-        //TODO Transform to preScreenRequest
-        return preScreenRequest;
-    }
-
     public List<PreScreenResponseView> transformResponseToView(List<PreScreenResponse> presCreenResponses) {
         List<PreScreenResponseView> preScreenResponseList = new ArrayList<PreScreenResponseView>();
         //TODO Transform to preScreenResponse

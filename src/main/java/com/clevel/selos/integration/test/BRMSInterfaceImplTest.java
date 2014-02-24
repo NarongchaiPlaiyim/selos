@@ -4,6 +4,7 @@ import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.brms.model.RuleColorResult;
+import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.*;
 import com.clevel.selos.integration.brms.model.response.StandardPricingIntResponse;
 import org.slf4j.Logger;
@@ -24,9 +25,9 @@ public class BRMSInterfaceImplTest implements BRMSInterface {
     }
 
     @Override
-    public List<PreScreenResponse> checkPreScreenRule(PreScreenRequest preScreenRequest) throws ValidationException {
-        log.debug("checkPreScreenRule : preScreenRequest {}", preScreenRequest);
-        if (preScreenRequest == null) {
+    public List<PreScreenResponse> checkPreScreenRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
+        log.debug("checkPreScreenRule : applicationInfo {}", applicationInfo);
+        if (applicationInfo == null) {
             log.error("preScreenRequest is null for request");
             throw new ValidationException("002");
         }
@@ -57,7 +58,7 @@ public class BRMSInterfaceImplTest implements BRMSInterface {
     }
 
     @Override
-    public List<FullApplicationResponse> checkFullApplicationRule(FullApplicationRequest fullApplicationRequest) throws ValidationException {
+    public List<FullApplicationResponse> checkFullApplicationRule(BRMSApplicationInfo fullApplicationRequest) throws ValidationException {
         log.debug("checkFullApplicationRule : fullApplicationRequest {}", fullApplicationRequest);
         if (fullApplicationRequest == null) {
             log.error("fullApplicationRequest is null for request");
@@ -68,18 +69,18 @@ public class BRMSInterfaceImplTest implements BRMSInterface {
     }
 
     @Override
-    public List<StandardPricingIntResponse> checkStandardPricingIntRule(StandardPricingIntRequest standardPricingIntRequest) throws ValidationException {
+    public StandardPricingIntResponse checkStandardPricingIntRule(BRMSApplicationInfo standardPricingIntRequest) throws ValidationException {
         log.debug("checkStandardPricingIntRule : standardPricingIntRequest {}", standardPricingIntRequest);
         if (standardPricingIntRequest == null) {
             log.error("standardPricingIntRequest is null for request");
             throw new ValidationException("002");
         }
         //todo call service
-        return new ArrayList<StandardPricingIntResponse>();
+        return new StandardPricingIntResponse();
     }
 
     @Override
-    public List<StandardPricingFeeResponse> checkStandardPricingFeeRule(StandardPricingFeeRequest standardPricingFeeRequest) throws ValidationException {
+    public List<StandardPricingFeeResponse> checkStandardPricingFeeRule(BRMSApplicationInfo standardPricingFeeRequest) throws ValidationException {
         log.debug("checkStandardPricingFeeRule : standardPricingFeeRequest {}", standardPricingFeeRequest);
         if (standardPricingFeeRequest == null) {
             log.error("standardPricingFeeRequest is null for request");
@@ -90,7 +91,7 @@ public class BRMSInterfaceImplTest implements BRMSInterface {
     }
 
     @Override
-    public List<DocCustomerResponse> checkDocCustomerRule(DocCustomerRequest docCustomerRequest) throws ValidationException {
+    public List<DocCustomerResponse> checkDocCustomerRule(BRMSApplicationInfo docCustomerRequest) throws ValidationException {
         log.debug("checkDocCustomerRule : docCustomerRequest {}", docCustomerRequest);
         if (docCustomerRequest == null) {
             log.error("docCustomerRequest is null for request");
@@ -101,7 +102,7 @@ public class BRMSInterfaceImplTest implements BRMSInterface {
     }
 
     @Override
-    public List<DocAppraisalResponse> checkDocAppraisalRule(DocAppraisalRequest docAppraisalRequest) throws ValidationException {
+    public List<DocAppraisalResponse> checkDocAppraisalRule(BRMSApplicationInfo docAppraisalRequest) throws ValidationException {
         log.debug("checkDocAppraisalRule : docAppraisalRequest {}", docAppraisalRequest);
         if (docAppraisalRequest == null) {
             log.error("docAppraisalRequest is null for request");

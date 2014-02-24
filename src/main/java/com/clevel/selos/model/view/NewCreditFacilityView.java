@@ -81,15 +81,6 @@ public class NewCreditFacilityView implements Serializable {
     private BigDecimal totalNumberOfNewOD;
     private BigDecimal totalNumberProposeCreditFac;
     private BigDecimal totalNumberContingenPropose;
-    //hidden Collateral
-    private int numberMonthsFromApprDate;
-    private int totalNumberOfCoreAsset;
-    private int totalNumberOfNonCoreAsset;
-    private int totalMortgageValue;
-    //hidden Guarantor
-    private BigDecimal totalTCGGuaranteeAmount;
-    private BigDecimal totalIndvGuaranteeAmount;
-    private BigDecimal totalJurisGuaranteeAmount;
 
     private Date createDate;
     private Date modifyDate;
@@ -165,13 +156,6 @@ public class NewCreditFacilityView implements Serializable {
         this.totalNumberOfNewOD = BigDecimal.ZERO;
         this.totalNumberProposeCreditFac = BigDecimal.ZERO;
         this.totalNumberContingenPropose = BigDecimal.ZERO;
-        this.numberMonthsFromApprDate=0;
-        this.totalNumberOfCoreAsset=0;
-        this.totalNumberOfNonCoreAsset=0;
-        this.totalMortgageValue=0;
-        this.totalTCGGuaranteeAmount = BigDecimal.ZERO;
-        this.totalIndvGuaranteeAmount = BigDecimal.ZERO;
-        this.totalJurisGuaranteeAmount = BigDecimal.ZERO;
         this.totalLoanWCTMB = BigDecimal.ZERO;
     }
 
@@ -647,62 +631,6 @@ public class NewCreditFacilityView implements Serializable {
         this.totalNumberContingenPropose = totalNumberContingenPropose;
     }
 
-    public int getNumberMonthsFromApprDate() {
-        return numberMonthsFromApprDate;
-    }
-
-    public void setNumberMonthsFromApprDate(int numberMonthsFromApprDate) {
-        this.numberMonthsFromApprDate = numberMonthsFromApprDate;
-    }
-
-    public int getTotalNumberOfCoreAsset() {
-        return totalNumberOfCoreAsset;
-    }
-
-    public void setTotalNumberOfCoreAsset(int totalNumberOfCoreAsset) {
-        this.totalNumberOfCoreAsset = totalNumberOfCoreAsset;
-    }
-
-    public int getTotalNumberOfNonCoreAsset() {
-        return totalNumberOfNonCoreAsset;
-    }
-
-    public void setTotalNumberOfNonCoreAsset(int totalNumberOfNonCoreAsset) {
-        this.totalNumberOfNonCoreAsset = totalNumberOfNonCoreAsset;
-    }
-
-    public int getTotalMortgageValue() {
-        return totalMortgageValue;
-    }
-
-    public void setTotalMortgageValue(int totalMortgageValue) {
-        this.totalMortgageValue = totalMortgageValue;
-    }
-
-    public BigDecimal getTotalTCGGuaranteeAmount() {
-        return totalTCGGuaranteeAmount;
-    }
-
-    public void setTotalTCGGuaranteeAmount(BigDecimal totalTCGGuaranteeAmount) {
-        this.totalTCGGuaranteeAmount = totalTCGGuaranteeAmount;
-    }
-
-    public BigDecimal getTotalIndvGuaranteeAmount() {
-        return totalIndvGuaranteeAmount;
-    }
-
-    public void setTotalIndvGuaranteeAmount(BigDecimal totalIndvGuaranteeAmount) {
-        this.totalIndvGuaranteeAmount = totalIndvGuaranteeAmount;
-    }
-
-    public BigDecimal getTotalJurisGuaranteeAmount() {
-        return totalJurisGuaranteeAmount;
-    }
-
-    public void setTotalJurisGuaranteeAmount(BigDecimal totalJurisGuaranteeAmount) {
-        this.totalJurisGuaranteeAmount = totalJurisGuaranteeAmount;
-    }
-
     public BigDecimal getTotalLoanWCTMB() {
         return totalLoanWCTMB;
     }
@@ -770,13 +698,6 @@ public class NewCreditFacilityView implements Serializable {
                 append("totalNumberOfNewOD", totalNumberOfNewOD).
                 append("totalNumberProposeCreditFac", totalNumberProposeCreditFac).
                 append("totalNumberContingenPropose", totalNumberContingenPropose).
-                append("numberMonthsFromApprDate", numberMonthsFromApprDate).
-                append("totalNumberOfCoreAsset", totalNumberOfCoreAsset).
-                append("totalNumberOfNonCoreAsset", totalNumberOfNonCoreAsset).
-                append("totalMortgageValue", totalMortgageValue).
-                append("totalTCGGuaranteeAmount", totalTCGGuaranteeAmount).
-                append("totalIndvGuaranteeAmount", totalIndvGuaranteeAmount).
-                append("totalJurisGuaranteeAmount", totalJurisGuaranteeAmount).
                 append("createDate", createDate).
                 append("modifyDate", modifyDate).
                 append("createBy", createBy).

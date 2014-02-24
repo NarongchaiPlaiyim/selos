@@ -6,6 +6,7 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.*;
+import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
@@ -315,9 +316,9 @@ public class PrescreenBusinessControl extends BusinessControl {
     // *** Function for BRMS (PreScreenRules) ***//
     public List<PreScreenResponseView> getPreScreenResultFromBRMS(List<CustomerInfoView> customerInfoViewList){
         //TODO Transform view model to prescreenRequest
-        PreScreenRequest preScreenRequest = preScreenResultTransform.transformToRequest(customerInfoViewList);
+        //PreScreenRequest preScreenRequest = preScreenResultTransform.transformToRequest(customerInfoViewList);
         List<PreScreenResponse> preScreenResponseList;
-        preScreenResponseList = brmsInterface.checkPreScreenRule(preScreenRequest);
+        preScreenResponseList = brmsInterface.checkPreScreenRule(new BRMSApplicationInfo());
 
         List<PreScreenResponseView> preScreenResponseViewList = preScreenResultTransform.transformResponseToView(preScreenResponseList);
 

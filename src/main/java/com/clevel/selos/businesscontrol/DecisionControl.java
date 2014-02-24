@@ -141,11 +141,7 @@ public class DecisionControl extends BusinessControl {
             decisionView.setApproveTotalNumOfNewOD(newCreditFacilityView.getTotalNumberOfNewOD());
             decisionView.setApproveTotalNumProposeCreditFac(newCreditFacilityView.getTotalNumberProposeCreditFac());
             decisionView.setApproveTotalNumContingentPropose(newCreditFacilityView.getTotalNumberContingenPropose());
-            decisionView.setGrandTotalNumOfCoreAsset(BigDecimal.valueOf(newCreditFacilityView.getTotalNumberOfCoreAsset()));
-            decisionView.setGrandTotalNumOfNonCoreAsset(BigDecimal.valueOf(newCreditFacilityView.getTotalNumberOfNonCoreAsset()));
-            decisionView.setApproveTotalTCGGuaranteeAmt(newCreditFacilityView.getTotalTCGGuaranteeAmount());
-            decisionView.setApproveTotalIndvGuaranteeAmt(newCreditFacilityView.getTotalIndvGuaranteeAmount());
-            decisionView.setApproveTotalJurisGuaranteeAmt(newCreditFacilityView.getTotalJurisGuaranteeAmount());
+
         }
 
         // Decision FollowUp Condition
