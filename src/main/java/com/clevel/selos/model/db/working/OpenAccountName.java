@@ -24,6 +24,9 @@ public class OpenAccountName implements Serializable {
     @OneToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+    
+    @Column(name="from_pledge",columnDefinition="int default 0")
+    private boolean fromPledge;
 
     public long getId() {
         return id;
@@ -48,6 +51,12 @@ public class OpenAccountName implements Serializable {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
+    public boolean isFromPledge() {
+		return fromPledge;
+	}
+    public void setFromPledge(boolean fromPledge) {
+		this.fromPledge = fromPledge;
+	}
 
     @Override
     public String toString() {
@@ -55,6 +64,8 @@ public class OpenAccountName implements Serializable {
                 append("id", id).
                 append("openAccount", openAccount).
                 append("customer", customer).
+                append("fromPledge", fromPledge).
+                
                 toString();
     }
 }

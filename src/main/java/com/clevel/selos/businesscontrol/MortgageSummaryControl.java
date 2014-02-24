@@ -26,10 +26,13 @@ import com.clevel.selos.dao.working.MortgageInfoCollOwnerDAO;
 import com.clevel.selos.dao.working.MortgageInfoCollSubDAO;
 import com.clevel.selos.dao.working.MortgageInfoCreditDAO;
 import com.clevel.selos.dao.working.MortgageInfoDAO;
+import com.clevel.selos.dao.working.MortgageInfoMortgageDAO;
 import com.clevel.selos.dao.working.MortgageSummaryDAO;
 import com.clevel.selos.dao.working.NewCollateralSubDAO;
 import com.clevel.selos.dao.working.NewGuarantorDetailDAO;
+import com.clevel.selos.dao.working.OpenAccountCreditDAO;
 import com.clevel.selos.dao.working.OpenAccountDAO;
+import com.clevel.selos.dao.working.OpenAccountNameDAO;
 import com.clevel.selos.dao.working.PledgeInfoDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
@@ -91,13 +94,15 @@ public class MortgageSummaryControl extends BusinessControl {
     @Inject private WorkCaseDAO workCaseDAO;
     @Inject private NewGuarantorDetailDAO newGuarantorDetailDAO;
     @Inject private OpenAccountDAO openAccountDAO;
+    @Inject private OpenAccountNameDAO openAccountNameDAO;
+    @Inject private OpenAccountCreditDAO openAccountCreditDAO;
     
     @Inject private MortgageSummaryDAO mortgageSummaryDAO;
     @Inject private AgreementInfoDAO agreementInfoDAO;
     @Inject private MortgageInfoCollOwnerDAO mortgageInfoCollOwnerDAO;
     @Inject private MortgageInfoCreditDAO mortgageInfoCreditDAO;
     @Inject private MortgageInfoCollSubDAO mortgageInfoCollSubDAO;
-    
+    @Inject private MortgageInfoMortgageDAO mortgageInfoMortgageDAO;
     
     @Inject private MortgageSummaryTransform mortgageSummaryTransform;
     @Inject private MortgageInfoTransform mortgageInfoTransform;
@@ -414,7 +419,6 @@ public class MortgageSummaryControl extends BusinessControl {
     	BigDecimal mortgageAmount = new BigDecimal(0);
 		HashMap<Long,MortgageInfoCollSub> subMap = new HashMap<Long, MortgageInfoCollSub>();
 		HashMap<Long,MortgageInfoCollOwner> ownerMap = new HashMap<Long, MortgageInfoCollOwner>();
-		HashMap<Integer,MortgageInfoMortgage> typeMap = new HashMap<Integer, MortgageInfoMortgage>();
 		HashMap<Long,MortgageInfoCredit> creditMap = new HashMap<Long, MortgageInfoCredit>();
 
     	if (mortgageInfo == null) {
@@ -442,15 +446,12 @@ public class MortgageSummaryControl extends BusinessControl {
     		long infoId = mortgageInfo.getId();
     		List<MortgageInfoCollSub> mortgageSubs = mortgageInfoCollSubDAO.findAllByMortgageInfoId(infoId);
     		List<MortgageInfoCollOwner> mortgageOwners = mortgageInfoCollOwnerDAO.findAllByMortgageInfoId(infoId);
-    		List<MortgageInfoMortgage> mortgageTypes = mortgageInfo.getMortgageTypeList();
     		List<MortgageInfoCredit> mortgageCredits = mortgageInfoCreditDAO.findAllByMortgageInfoId(infoId);
     		
     		for (MortgageInfoCollSub sub : mortgageSubs)
     			subMap.put(sub.getNewCollateralSub().getId(),sub);
     		for (MortgageInfoCollOwner owner : mortgageOwners)
     			ownerMap.put(owner.getCustomer().getId(),owner);
-    		for (MortgageInfoMortgage type : mortgageTypes)
-    			typeMap.put(type.getMortgageType().getId(), type);
     		for (MortgageInfoCredit credit : mortgageCredits)
     			creditMap.put(credit.getNewCollateralCredit().getId(),credit);    		
     	}
@@ -522,20 +523,37 @@ public class MortgageSummaryControl extends BusinessControl {
 		
 		//process mortgage type
 		//Main is always in index 0 , and refer is always the same then can use 0 as input
-		List<MortgageInfoMortgage> mortgageTypeList = new ArrayList<MortgageInfoMortgage>();
+		List<MortgageInfoMortgage> mortgageTypeList = mortgageInfo.getMortgageTypeList();
+		if (mortgageTypeList == null) {
+			mortgageTypeList = new ArrayList<MortgageInfoMortgage>();
+			mortgageInfo.setMortgageTypeList(mortgageTypeList);
+		}
+		HashMap<Integer,MortgageInfoMortgage> mortgageTypeMap = new HashMap<Integer,MortgageInfoMortgage>();
+		for (MortgageInfoMortgage type : mortgageTypeList) {
+			mortgageTypeMap.put(type.getMortgageType().getId(),type);
+		}
+		
 		NewCollateralSub collateral = collaterals.get(0);
 		List<NewCollateralSubMortgage> types = collateral.getNewCollateralSubMortgageList();
 		for (NewCollateralSubMortgage type : types) {
-			MortgageInfoMortgage mortgageType = typeMap.get(type.getMortgageType().getId());
+			MortgageInfoMortgage mortgageType = mortgageTypeMap.get(type.getMortgageType().getId());
 			if (mortgageType == null) {
 				mortgageType = new MortgageInfoMortgage();
 				mortgageType.setMortgageInfo(mortgageInfo);
 				mortgageType.setMortgageType(type.getMortgageType());
-			} 
-			mortgageTypeList.add(mortgageType);
+				mortgageTypeList.add(mortgageType);	
+			} else {
+				mortgageTypeMap.remove(mortgageType);
+			}
+		}
+		//remove
+		for (Integer key : mortgageTypeMap.keySet()) {
+			MortgageInfoMortgage mortgageType = mortgageTypeMap.get(key);
+			mortgageTypeList.remove(mortgageType);
+			mortgageType.setMortgageType(null);
+			mortgageInfoMortgageDAO.delete(mortgageType);
 		}
 		mortgageInfo.setMortgageAmount(mortgageAmount);
-		mortgageInfo.setMortgageTypeList(mortgageTypeList);
 		mortgageInfoDAO.persist(mortgageInfo);
 		
 		//Clean up credit, collsub ,owner
@@ -747,20 +765,37 @@ public class MortgageSummaryControl extends BusinessControl {
 			accountNames = new ArrayList<OpenAccountName>();
 			account.setOpenAccountNameList(accountNames);
 		}
-		HashSet<Long> accountNameSet = new HashSet<Long>();
+		HashMap<Long,OpenAccountName> accountNameMap = new HashMap<Long,OpenAccountName> ();
 		for (OpenAccountName name : accountNames)
-			accountNameSet.add(name.getCustomer().getId());
+			accountNameMap.put(name.getCustomer().getId(),name);
 		List<NewCollateralSubOwner> owners = collateral.getNewCollateralSubOwnerList();
 		for (NewCollateralSubOwner owner : owners) {
 			if (owner.getCustomer() == null)
 				continue;
-			if (accountNameSet.contains(owner.getCustomer().getId()))
-				continue;
-			OpenAccountName accountName = new OpenAccountName();
-			accountName.setCustomer(owner.getCustomer());
-			accountName.setOpenAccount(account);
-			accountNames.add(accountName);
+			OpenAccountName accountName = accountNameMap.get(owner.getCustomer().getId());
+			if (accountName == null) {
+				accountName = new OpenAccountName();
+				accountName.setCustomer(owner.getCustomer());
+				accountName.setOpenAccount(account);
+				accountName.setFromPledge(true);
+				accountNames.add(accountName);
+			} else {
+				accountName.setFromPledge(true);
+				accountNameMap.remove(owner.getCustomer().getId());
+			}
 		}
+		//remove
+		for (Long key : accountNameMap.keySet()) {
+			OpenAccountName accountName = accountNameMap.get(key);
+			if (!accountName.isFromPledge())
+				continue;
+			
+			//detach from OpenAccount
+			accountName.setOpenAccount(null);
+			accountNames.remove(accountName);
+			openAccountNameDAO.delete(accountName);
+		}
+		
 		
 		//Process Account Purpose
 		List<OpenAccountPurpose> purposes = account.getOpenAccountPurposeList();
@@ -785,10 +820,10 @@ public class MortgageSummaryControl extends BusinessControl {
 		}
 		
 		//Process Account Credit
-		ArrayList<OpenAccountCredit> newOpenCredits = new ArrayList<OpenAccountCredit>();
 		List<OpenAccountCredit> credits = account.getOpenAccountCreditList();
 		if (credits == null) {
 			credits = new ArrayList<OpenAccountCredit>();
+			account.setOpenAccountCreditList(credits);
 		}
 		List<NewCollateralCredit> collCredits = collateral.getNewCollateralHead().getNewCollateral().getNewCollateralCreditList();
 		HashMap<String,OpenAccountCredit> creditHash = new HashMap<String, OpenAccountCredit>();
@@ -799,6 +834,7 @@ public class MortgageSummaryControl extends BusinessControl {
 				creditHash.put("N::"+credit.getNewCreditDetail().getId(), credit);
 			}
 		}
+		
 		//new and update
 		for (NewCollateralCredit collCredit : collCredits) {
 			if (collCredit.getExistingCreditDetail() != null) {
@@ -808,12 +844,11 @@ public class MortgageSummaryControl extends BusinessControl {
 					credit = new OpenAccountCredit();
 					credit.setOpenAccount(account);
 					credit.setExistingCreditDetail(collCredit.getExistingCreditDetail());
-					credit.setFromPledge(true);
-					newOpenCredits.add(credit);
+					credits.add(credit);
 				} else {
-					credit.setFromPledge(true);
 					creditHash.remove(key);
 				}
+				credit.setFromPledge(true);
 			} else if (collCredit.getNewCreditDetail() != null) {
 				String key = "N::"+collCredit.getNewCreditDetail().getId();
 				OpenAccountCredit credit = creditHash.get(key);
@@ -821,21 +856,23 @@ public class MortgageSummaryControl extends BusinessControl {
 					credit = new OpenAccountCredit();
 					credit.setOpenAccount(account);
 					credit.setNewCreditDetail(collCredit.getNewCreditDetail());
-					credit.setFromPledge(true);
-					newOpenCredits.add(credit);
+					credits.add(credit);
 				} else {
-					credit.setFromPledge(true);
 					creditHash.remove(key);
 				}
+				credit.setFromPledge(true);
 			}
 		}
 		//remove
 		for (String key : creditHash.keySet()) {
 			OpenAccountCredit credit = creditHash.get(key);
 			if (!credit.isFromPledge()) //keep only created by user
-				newOpenCredits.add(credit);
+				continue;
+			//detach from OpenAccount
+			credit.setOpenAccount(null);
+			credits.remove(credit);
+			openAccountCreditDAO.delete(credit);
 		}
-		account.setOpenAccountCreditList(newOpenCredits);
 		
 		//Process Account DEP
 		List<OpenAccountDeposit> deposits = account.getOpenAccountDepositList();
