@@ -421,25 +421,25 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
     public BigDecimal calTotalProposeLoanDBRForIntYear(NewCreditDetail newCreditDetail, BigDecimal dbrSpread) {
-//        log.debug("calTotalProposeLoanDBRForIntYear start :: newCreditDetail and  dbrSpread ::{}", newCreditDetail, dbrSpread);
+        log.debug("calTotalProposeLoanDBRForIntYear start :: newCreditDetail and  dbrSpread ::{}", newCreditDetail, dbrSpread);
         BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
-//        BigDecimal sum;
-//        log.info("limit :: {}", newCreditDetail.getLimit());
-//        log.info("newCreditTierDetailViews.size :: {}", newCreditDetail.getProposeCreditTierDetailList().size());
-//        if (newCreditDetail.getProposeCreditTierDetailList() != null) {
-//            sum = BigDecimal.ZERO;
-//            for (NewCreditTierDetail newCreditTierDetail : newCreditDetail.getProposeCreditTierDetailList()) //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
-//            {
-//                if (newCreditTierDetail != null) {
-//                    log.info("newCreditTierDetail.getFinalBasePrice().getValue() :: {}", newCreditTierDetail.getFinalBasePrice().getValue());
-//                    log.info("newCreditTierDetail.getFinalInterest() :: {}", newCreditTierDetail.getFinalInterest());
-//                    log.info("dbrSpread :: {}", dbrSpread);
-//                    log.info("newCreditDetail.getLimit() :: {}", newCreditDetail.getLimit());
-//                    sum = Util.divide(Util.multiply(Util.divide(Util.add(Util.add(newCreditTierDetail.getFinalBasePrice().getValue(), newCreditTierDetail.getFinalInterest()), dbrSpread), BigDecimal.valueOf(100)), newCreditDetail.getLimit()), BigDecimal.valueOf(12));
-//                    sumTotalLoanDbr = Util.add(sumTotalLoanDbr, sum);
-//                }
-//            }
-//        }
+        BigDecimal sum;
+        log.info("limit :: {}", newCreditDetail.getLimit());
+        log.info("newCreditTierDetailViews.size :: {}", newCreditDetail.getProposeCreditTierDetailList().size());
+        if (newCreditDetail.getProposeCreditTierDetailList() != null) {
+            sum = BigDecimal.ZERO;
+            for (NewCreditTierDetail newCreditTierDetail : newCreditDetail.getProposeCreditTierDetailList()) //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
+            {
+                if (newCreditTierDetail != null) {
+                    log.info("newCreditTierDetail.getFinalBasePrice().getValue() :: {}", newCreditTierDetail.getFinalBasePrice().getValue());
+                    log.info("newCreditTierDetail.getFinalInterest() :: {}", newCreditTierDetail.getFinalInterest());
+                    log.info("dbrSpread :: {}", dbrSpread);
+                    log.info("newCreditDetail.getLimit() :: {}", newCreditDetail.getLimit());
+                    sum = Util.divide(Util.multiply(Util.divide(Util.add(Util.add(newCreditTierDetail.getFinalBasePrice().getValue(), newCreditTierDetail.getFinalInterest()), dbrSpread), BigDecimal.valueOf(100)), newCreditDetail.getLimit()), BigDecimal.valueOf(12));
+                    sumTotalLoanDbr = Util.add(sumTotalLoanDbr, sum);
+                }
+            }
+        }
 
         log.info("calTotalProposeLoanDBRForIntYear end ::: sumTotalLoanDbr ::: {}", sumTotalLoanDbr);
         return sumTotalLoanDbr;
@@ -575,7 +575,7 @@ public class CreditFacProposeControl extends BusinessControl {
     public List<NewCollateralSubView> findNewCollateralSubView(List<NewCollateralView> newCollateralViewList) {
         List<NewCollateralSubView> relatedWithAllList = new ArrayList<NewCollateralSubView>();
         int countNo = 1;
-        for (NewCollateralView newCollateralView : newCollateralViewList) {
+        for (NewCollateralView newCollateralView : Util.safetyList(newCollateralViewList)) {
             for (NewCollateralHeadView newCollateralHeadDetail : newCollateralView.getNewCollateralHeadViewList()) {
                 if (newCollateralHeadDetail.getNewCollateralSubViewList().size() > 0) {
                     log.debug("newCollateralHeadDetail . getId:: {}", newCollateralHeadDetail.getId());
@@ -844,11 +844,11 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //--- Save to NewCollateral
         //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
-//        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase);
-//        newSubCollMortgageDAO.delete(newCollateralSubMortgages);
+        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase);
+        newSubCollMortgageDAO.delete(newCollateralSubMortgages);
         //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
-//        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase);
-//        newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
+        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase);
+        newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
         //--- Need to delete Collateral Credit from CollateralRelCredit before Insert new
         List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditDAO.getListByWorkCase(workCase);
         newCollateralCreditDAO.delete(newCollateralCreditList);

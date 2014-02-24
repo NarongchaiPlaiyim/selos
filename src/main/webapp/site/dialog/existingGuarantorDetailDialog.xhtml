@@ -79,7 +79,7 @@
                                 <p:outputLabel  value="#{creditTypeBorrower.limit}" />
                             </p:column>
                             <p:column styleClass="right">
-                                <p:inputText value="#{creditTypeBorrower.guaranteeAmount}" style="text-align:right">
+                                <p:inputText value="#{creditTypeBorrower.guaranteeAmount}" style="text-align:right" maxlength="16">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                     <p:ajax event="blur" update="@this"/>
                                 </p:inputText>

@@ -523,7 +523,7 @@ public class CreditFacExisting implements Serializable {
 
         CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
         if(Util.isTrue(creditType.getCanSplit())){
-            showSplitLine = false;
+            showSplitLine = true;
             BigDecimal totalLimit = existingCreditDetailView.getLimit();
             BigDecimal splitLimit = BigDecimal.ZERO;
             if(existingSplitLineDetailViewList!=null && existingSplitLineDetailViewList.size()>0){
