@@ -1,20 +1,78 @@
 package com.clevel.selos.model.db.working;
 
-import javax.persistence.*;
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "wrk_open_account_credit")
-public class OpenAccountCredit {
-    @Id
+public class OpenAccountCredit implements Serializable {
+    private static final long serialVersionUID = -48823277081216169L;
+
+	@Id
     @SequenceGenerator(name = "SEQ_WRK_OPEN_ACC_CREDIT_ID", sequenceName = "SEQ_WRK_OPEN_ACC_CREDIT_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_OPEN_ACC_CREDIT_ID")
     private long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "open_account_id")
     private OpenAccount openAccount;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "new_credit_detail_id")
-    private NewCreditDetail creditDetail;
+    private NewCreditDetail newCreditDetail;
+    
+    @ManyToOne
+    @JoinColumn(name = "existing_credit_detail_id")
+    private ExistingCreditDetail existingCreditDetail;
+    
+    @Column(name="from_pledge",columnDefinition="int default 0")
+    private boolean fromPledge;
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public OpenAccount getOpenAccount() {
+		return openAccount;
+	}
+
+	public void setOpenAccount(OpenAccount openAccount) {
+		this.openAccount = openAccount;
+	}
+
+	public NewCreditDetail getNewCreditDetail() {
+		return newCreditDetail;
+	}
+
+	public void setNewCreditDetail(NewCreditDetail newCreditDetail) {
+		this.newCreditDetail = newCreditDetail;
+	}
+
+	public ExistingCreditDetail getExistingCreditDetail() {
+		return existingCreditDetail;
+	}
+
+	public void setExistingCreditDetail(ExistingCreditDetail existingCreditDetail) {
+		this.existingCreditDetail = existingCreditDetail;
+	}
+    
+    public boolean isFromPledge() {
+		return fromPledge;
+	}
+    public void setFromPledge(boolean fromPledge) {
+		this.fromPledge = fromPledge;
+	}
 }

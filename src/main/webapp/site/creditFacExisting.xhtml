@@ -189,7 +189,6 @@
                                                                         fn:length(borrowerCredit.existingSplitLineDetailViewList)+1 : '1'}">
                                                             <p:commandButton icon="ui-icon-pencil" rendered="#{borrowerCredit.existingCreditFrom==1}"
                                                                              action="#{creditFacExisting.onEditCommercialCredit()}"
-                                                                             process="@this"
                                                                              update=":existingCreditDlgForm"
                                                                              oncomplete="existingCreditDlg.show();">
                                                                 <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfList}" />
@@ -197,6 +196,7 @@
                                                                                              target="#{creditFacExisting.selectCreditDetail}"/>
                                                                 <f:setPropertyActionListener value="#{i.index}"
                                                                                              target="#{creditFacExisting.rowIndex}"/>
+                                                                <p:resetInput target=":existingCreditDlgForm"/>
                                                             </p:commandButton>
                                                             <p:commandButton title="Remove"
                                                                              icon="ui-icon-trash" rendered="#{borrowerCredit.existingCreditFrom==1}"
@@ -787,6 +787,7 @@
                                                                                                          target="#{creditFacExisting.selectCreditDetail}"/>
                                                                             <f:setPropertyActionListener value="#{i.index}"
                                                                                                          target="#{creditFacExisting.rowIndex}"/>
+                                                                            <p:resetInput target=":existingCreditDlgForm"/>
                                                                         </p:commandButton>
 
                                                                         <p:commandButton title="Remove"
@@ -1313,7 +1314,9 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="width: 80px;" class="title">#{msg.get('app.credit.facility.existing.tb.label.collateralType.appraisalDate')}</td>
-                                                                <td><p:outputLabel value="#{borrowerCollateral.appraisalDate}"/></td>
+                                                                <td><p:outputLabel value="#{borrowerCollateral.appraisalDate}">
+                                                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                                                </p:outputLabel></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="width: 80px;" class="title">#{msg.get('app.credit.facility.existing.tb.label.collateralType.number')}</td>
@@ -1370,6 +1373,7 @@
                                                                                      target="#{creditFacExisting.selectCollateralDetail}"/>
                                                         <f:setPropertyActionListener value="#{rowIndex}"
                                                                                      target="#{creditFacExisting.rowIndex}"/>
+                                                        <p:resetInput target=":existingCollateralBorrowerDlgForm"/>
                                                     </p:commandButton>
                                                     <p:commandButton title="Remove"
                                                                      icon="ui-icon-trash"
@@ -1466,7 +1470,9 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="width: 80px;" class="title">#{msg.get('app.credit.facility.existing.tb.label.collateralType.appraisalDate')}</td>
-                                                                <td><p:outputLabel value="#{relatedCollateral.appraisalDate}"/></td>
+                                                                <td><p:outputLabel value="#{relatedCollateral.appraisalDate}">
+                                                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                                                </p:outputLabel></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="width: 80px;" class="title">#{msg.get('app.credit.facility.existing.tb.label.collateralType.number')}</td>
@@ -1523,6 +1529,7 @@
                                                                                      target="#{creditFacExisting.selectCollateralDetail}"/>
                                                         <f:setPropertyActionListener value="#{rowIndex}"
                                                                                      target="#{creditFacExisting.rowIndex}"/>
+                                                        <p:resetInput target=":existingCollateralRelatedDlgForm"/>
                                                     </p:commandButton>
                                                     <p:commandButton title="Remove"
                                                                      icon="ui-icon-trash"
@@ -1637,6 +1644,7 @@
                                                                                      target="#{creditFacExisting.selectGuarantorDetail}"/>
                                                         <f:setPropertyActionListener value="#{rowIndex}"
                                                                                      target="#{creditFacExisting.rowIndex}"/>
+                                                        <p:resetInput target=":existingGuarantorDlgForm"/>
                                                     </p:commandButton>
 
                                                     <p:commandButton title="Remove"

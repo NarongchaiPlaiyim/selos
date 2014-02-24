@@ -3,6 +3,11 @@ package com.clevel.selos.model.db.working;
 
 import javax.persistence.*;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import com.clevel.selos.model.db.master.User;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -19,25 +24,41 @@ public class TCGInfo implements Serializable {
     private long id;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "payin_slip_send_date")
+    @Column(name = "payin_slip_send_date", nullable = true)
     private Date payinSlipSendDate;
 
-    @Column(name = "receive_tcg_slip")
+    @Column(name = "receive_tcg_slip", nullable = true)
     private int receiveTCGSlip;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "tcg_submit_date")
+    @Column(name = "tcg_submit_date", nullable = true)
     private Date tcgSubmitDate;
 
-    @Column(name = "approve_result")
+    @Column(name = "approve_result", nullable = true)
     private int approvedResult;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "approve_date")
+    @Column(name = "approve_date", nullable = true)
     private Date approveDate;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_date")
+    private Date createDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modify_date")
+    private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name = "wrk_case_id")
+    @JoinColumn(name = "create_user_id")
+    private User createBy;
+
+    @OneToOne
+    @JoinColumn(name = "modify_user_id")
+    private User modifyBy;
+
+    @OneToOne
+    @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
 	public long getId() {
@@ -95,6 +116,55 @@ public class TCGInfo implements Serializable {
 	public void setWorkCase(WorkCase workCase) {
 		this.workCase = workCase;
 	}
+	
+	public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+    
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .append("workCase", workCase)
+                .append("approveDate", approveDate)
+                .append("approvedResult", approvedResult)
+                .append("tcgSubmitDate", tcgSubmitDate)
+                .append("payinSlipSendDate", payinSlipSendDate)
+                .append("receiveTCGSlip", receiveTCGSlip)
+                .toString();
+    }
 
     
 }

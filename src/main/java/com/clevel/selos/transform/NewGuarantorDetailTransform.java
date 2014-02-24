@@ -75,7 +75,7 @@ public class NewGuarantorDetailTransform extends Transform {
         return newGuarantorDetailList;
     }
 
-    public List<NewGuarantorDetailView> transformToView(List<NewGuarantorDetail> newGuarantorDetailList,WorkCase workCase) {
+    public List<NewGuarantorDetailView> transformToView(List<NewGuarantorDetail> newGuarantorDetailList) {
         List<NewGuarantorDetailView> newGuarantorDetailViews = new ArrayList<NewGuarantorDetailView>();
         NewGuarantorDetailView newGuarantorDetailView;
 
@@ -98,20 +98,22 @@ public class NewGuarantorDetailTransform extends Transform {
             List<ExistingCreditDetail> existingCreditDetailList = new ArrayList<ExistingCreditDetail>();
 
             for (NewGuarantorCredit newGuarantorCredit : newGuarantorCreditList) {
-                if (newGuarantorCredit.getExistingCreditDetail() != null) {
+                if(newGuarantorCredit.getExistingCreditDetail() != null) {
                     log.info("newGuarantorCredit.getExistingCreditDetail :: {}", newGuarantorCredit.getExistingCreditDetail().getId());
                     existingCreditDetailList.add(newGuarantorCredit.getExistingCreditDetail());
-                } else if (newGuarantorCredit.getNewCreditDetail() != null) {
+                } else if(newGuarantorCredit.getNewCreditDetail() != null) {
                     log.info("newGuarantorCredit.getNewCreditDetail :: {}", newGuarantorCredit.getNewCreditDetail().getId());
                     newCreditDetailList.add(newGuarantorCredit.getNewCreditDetail());
                 }
             }
+
             log.info("newCreditDetailList Guarantor:: {}", newCreditDetailList.size());
             log.info("getExistingCreditDetail Guarantor:: {}", existingCreditDetailList.size());
             List<ProposeCreditDetailView> proposeCreditDetailViewList = proposeCreditDetailTransform(newCreditDetailList, existingCreditDetailList);
             newGuarantorDetailView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
 
             newGuarantorDetailViews.add(newGuarantorDetailView);
+
         }
 
         return newGuarantorDetailViews;

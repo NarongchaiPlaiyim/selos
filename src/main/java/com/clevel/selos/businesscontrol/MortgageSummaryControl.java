@@ -15,6 +15,8 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
+import com.clevel.selos.dao.master.BankAccountProductDAO;
+import com.clevel.selos.dao.master.BankAccountPurposeDAO;
 import com.clevel.selos.dao.master.BankBranchDAO;
 import com.clevel.selos.dao.master.MortgageTypeDAO;
 import com.clevel.selos.dao.master.UserZoneDAO;
@@ -24,15 +26,23 @@ import com.clevel.selos.dao.working.MortgageInfoCollOwnerDAO;
 import com.clevel.selos.dao.working.MortgageInfoCollSubDAO;
 import com.clevel.selos.dao.working.MortgageInfoCreditDAO;
 import com.clevel.selos.dao.working.MortgageInfoDAO;
+import com.clevel.selos.dao.working.MortgageInfoMortgageDAO;
 import com.clevel.selos.dao.working.MortgageSummaryDAO;
 import com.clevel.selos.dao.working.NewCollateralSubDAO;
 import com.clevel.selos.dao.working.NewGuarantorDetailDAO;
+import com.clevel.selos.dao.working.OpenAccountCreditDAO;
+import com.clevel.selos.dao.working.OpenAccountDAO;
+import com.clevel.selos.dao.working.OpenAccountNameDAO;
 import com.clevel.selos.dao.working.PledgeInfoDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.AttorneyRelationType;
+import com.clevel.selos.model.ConfirmAccountType;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.RequestAccountType;
+import com.clevel.selos.model.db.master.BankAccountProduct;
+import com.clevel.selos.model.db.master.BankAccountPurpose;
 import com.clevel.selos.model.db.master.BankBranch;
 import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.User;
@@ -53,6 +63,11 @@ import com.clevel.selos.model.db.working.NewCollateralSubMortgage;
 import com.clevel.selos.model.db.working.NewCollateralSubOwner;
 import com.clevel.selos.model.db.working.NewCollateralSubRelated;
 import com.clevel.selos.model.db.working.NewGuarantorDetail;
+import com.clevel.selos.model.db.working.OpenAccount;
+import com.clevel.selos.model.db.working.OpenAccountCredit;
+import com.clevel.selos.model.db.working.OpenAccountDeposit;
+import com.clevel.selos.model.db.working.OpenAccountName;
+import com.clevel.selos.model.db.working.OpenAccountPurpose;
 import com.clevel.selos.model.db.working.PledgeInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.GuarantorInfoView;
@@ -77,13 +92,17 @@ public class MortgageSummaryControl extends BusinessControl {
     @Inject private GuarantorInfoDAO guarantorInfoDAO;
     @Inject private NewCollateralSubDAO newCollateralSubDAO;
     @Inject private WorkCaseDAO workCaseDAO;
+    @Inject private NewGuarantorDetailDAO newGuarantorDetailDAO;
+    @Inject private OpenAccountDAO openAccountDAO;
+    @Inject private OpenAccountNameDAO openAccountNameDAO;
+    @Inject private OpenAccountCreditDAO openAccountCreditDAO;
     
     @Inject private MortgageSummaryDAO mortgageSummaryDAO;
     @Inject private AgreementInfoDAO agreementInfoDAO;
     @Inject private MortgageInfoCollOwnerDAO mortgageInfoCollOwnerDAO;
     @Inject private MortgageInfoCreditDAO mortgageInfoCreditDAO;
     @Inject private MortgageInfoCollSubDAO mortgageInfoCollSubDAO;
-    
+    @Inject private MortgageInfoMortgageDAO mortgageInfoMortgageDAO;
     
     @Inject private MortgageSummaryTransform mortgageSummaryTransform;
     @Inject private MortgageInfoTransform mortgageInfoTransform;
@@ -92,6 +111,11 @@ public class MortgageSummaryControl extends BusinessControl {
     
     @Inject private UserZoneDAO userZoneDAO;
     @Inject private BankBranchDAO bankBranchDAO;
+    @Inject private MortgageTypeDAO mortgageTypeDAO;
+   
+    @Inject private BankAccountPurposeDAO bankAccountPurposeDAO;
+    @Inject private BankAccountProductDAO bankAccountProductDAO;
+    
     
     public MortgageSummaryControl(){
 
@@ -239,6 +263,7 @@ public class MortgageSummaryControl extends BusinessControl {
     	_processMortgageGroup(collateralMap,mortgageGroup,joinMortgageList,referredGroup,
     			user,workCase);
     	_processGuarantorData(user,workCase);
+    	_processPledgeData(collateralMap, pledgeSet, user, workCase);
     	
     	//Loading mortgage summary
     	MortgageSummary mortgage = null;
@@ -365,7 +390,12 @@ public class MortgageSummaryControl extends BusinessControl {
     		HashMap<Long, NewCollateralSub> collateralMap,
     		HashMap<Long,ArrayList<NewCollateralSub>> mortgageGroup,
     		HashMap<Long,ArrayList<Long>> joinMortgageList,
-    		HashSet<Long> mainCollSet) {
+    		HashSet<Long> mainCollSet,
+    		HashSet<Long> checkRecursive) {
+    	if (checkRecursive.contains(mainCollSubId))
+    		return;
+    	checkRecursive.add(mainCollSubId);
+    	
     	if (!collateralMap.containsKey(mainCollSubId)) //Invalid main id
     		return;
     	
@@ -379,7 +409,8 @@ public class MortgageSummaryControl extends BusinessControl {
     		return;
     	
     	for (Long checkMainCollSubId : mainCollSubIdList) {
-    		_findMainCollateralSub(checkMainCollSubId, collateralMap, mortgageGroup, joinMortgageList, mainCollSet);
+    		HashSet<Long> toCheck = new HashSet<Long>(checkRecursive);
+    		_findMainCollateralSub(checkMainCollSubId, collateralMap, mortgageGroup, joinMortgageList, mainCollSet,toCheck);
     	}
     }
     
@@ -388,7 +419,6 @@ public class MortgageSummaryControl extends BusinessControl {
     	BigDecimal mortgageAmount = new BigDecimal(0);
 		HashMap<Long,MortgageInfoCollSub> subMap = new HashMap<Long, MortgageInfoCollSub>();
 		HashMap<Long,MortgageInfoCollOwner> ownerMap = new HashMap<Long, MortgageInfoCollOwner>();
-		HashMap<Integer,MortgageInfoMortgage> typeMap = new HashMap<Integer, MortgageInfoMortgage>();
 		HashMap<Long,MortgageInfoCredit> creditMap = new HashMap<Long, MortgageInfoCredit>();
 
     	if (mortgageInfo == null) {
@@ -416,15 +446,12 @@ public class MortgageSummaryControl extends BusinessControl {
     		long infoId = mortgageInfo.getId();
     		List<MortgageInfoCollSub> mortgageSubs = mortgageInfoCollSubDAO.findAllByMortgageInfoId(infoId);
     		List<MortgageInfoCollOwner> mortgageOwners = mortgageInfoCollOwnerDAO.findAllByMortgageInfoId(infoId);
-    		List<MortgageInfoMortgage> mortgageTypes = mortgageInfo.getMortgageTypeList();
     		List<MortgageInfoCredit> mortgageCredits = mortgageInfoCreditDAO.findAllByMortgageInfoId(infoId);
     		
     		for (MortgageInfoCollSub sub : mortgageSubs)
     			subMap.put(sub.getNewCollateralSub().getId(),sub);
     		for (MortgageInfoCollOwner owner : mortgageOwners)
     			ownerMap.put(owner.getCustomer().getId(),owner);
-    		for (MortgageInfoMortgage type : mortgageTypes)
-    			typeMap.put(type.getMortgageType().getId(), type);
     		for (MortgageInfoCredit credit : mortgageCredits)
     			creditMap.put(credit.getNewCollateralCredit().getId(),credit);    		
     	}
@@ -432,8 +459,8 @@ public class MortgageSummaryControl extends BusinessControl {
     	HashSet<NewCollateralCredit> creditSet = new HashSet<NewCollateralCredit>();
 		HashSet<Customer> ownerSet = new HashSet<Customer>();
 		for (NewCollateralSub collateral : collaterals) {
-			if (collateral.getAppraisalValue() != null)
-				mortgageAmount =mortgageAmount.add(collateral.getAppraisalValue());
+			if (collateral.getMortgageValue() != null)
+				mortgageAmount =mortgageAmount.add(collateral.getMortgageValue());
 			
 			MortgageInfoCollSub mortgageColl = subMap.get(collateral.getId());
 			if (mortgageColl == null) {
@@ -496,20 +523,37 @@ public class MortgageSummaryControl extends BusinessControl {
 		
 		//process mortgage type
 		//Main is always in index 0 , and refer is always the same then can use 0 as input
-		List<MortgageInfoMortgage> mortgageTypeList = new ArrayList<MortgageInfoMortgage>();
+		List<MortgageInfoMortgage> mortgageTypeList = mortgageInfo.getMortgageTypeList();
+		if (mortgageTypeList == null) {
+			mortgageTypeList = new ArrayList<MortgageInfoMortgage>();
+			mortgageInfo.setMortgageTypeList(mortgageTypeList);
+		}
+		HashMap<Integer,MortgageInfoMortgage> mortgageTypeMap = new HashMap<Integer,MortgageInfoMortgage>();
+		for (MortgageInfoMortgage type : mortgageTypeList) {
+			mortgageTypeMap.put(type.getMortgageType().getId(),type);
+		}
+		
 		NewCollateralSub collateral = collaterals.get(0);
 		List<NewCollateralSubMortgage> types = collateral.getNewCollateralSubMortgageList();
 		for (NewCollateralSubMortgage type : types) {
-			MortgageInfoMortgage mortgageType = typeMap.get(type.getMortgageType().getId());
+			MortgageInfoMortgage mortgageType = mortgageTypeMap.get(type.getMortgageType().getId());
 			if (mortgageType == null) {
 				mortgageType = new MortgageInfoMortgage();
 				mortgageType.setMortgageInfo(mortgageInfo);
 				mortgageType.setMortgageType(type.getMortgageType());
-			} 
-			mortgageTypeList.add(mortgageType);
+				mortgageTypeList.add(mortgageType);	
+			} else {
+				mortgageTypeMap.remove(mortgageType);
+			}
+		}
+		//remove
+		for (Integer key : mortgageTypeMap.keySet()) {
+			MortgageInfoMortgage mortgageType = mortgageTypeMap.get(key);
+			mortgageTypeList.remove(mortgageType);
+			mortgageType.setMortgageType(null);
+			mortgageInfoMortgageDAO.delete(mortgageType);
 		}
 		mortgageInfo.setMortgageAmount(mortgageAmount);
-		mortgageInfo.setMortgageTypeList(mortgageTypeList);
 		mortgageInfoDAO.persist(mortgageInfo);
 		
 		//Clean up credit, collsub ,owner
@@ -540,7 +584,7 @@ public class MortgageSummaryControl extends BusinessControl {
 			HashSet<Long> mainCollSet = new HashSet<Long>();
 			ArrayList<Long> mainCollSubIdList = joinMortgageList.get(joinCollSubId);
 			for (Long mainCollSubId : mainCollSubIdList) {
-				_findMainCollateralSub(mainCollSubId, collateralMap, mortgageGroup, joinMortgageList, mainCollSet);
+				_findMainCollateralSub(mainCollSubId, collateralMap, mortgageGroup, joinMortgageList, mainCollSet,new HashSet<Long>());
 			}
 			
 			if (mainCollSet.isEmpty()) //Invalid join
@@ -577,16 +621,13 @@ public class MortgageSummaryControl extends BusinessControl {
     		mortgageInfoDAO.delete(info);
     	}
     }
-    @Inject private MortgageTypeDAO mortgageTypeDAO;
-    @Inject private NewGuarantorDetailDAO newGuarantorDetailDAO;
+    
     private void _processGuarantorData(User user,WorkCase workCase) {
     	List<MortgageType> mortgageTypes = mortgageTypeDAO.findMortgageTypeForGuarantor();
-    	MortgageType type1 = null;
-    	MortgageType type2 = null;
+    	MortgageType defaultType = null;
     	if (mortgageTypes != null && !mortgageTypes.isEmpty()) {
-    		type1 = mortgageTypes.get(0);
-    		if (mortgageTypes.size() > 1)
-    			type2 = mortgageTypes.get(1);
+    		defaultType = mortgageTypes.get(0);
+    		
     	}
     	List<NewGuarantorDetail> newGuarantors = newGuarantorDetailDAO.findGuarantorByProposeType(workCase.getId(), ProposeType.A);
     	List<GuarantorInfo> guarantorInfos = guarantorInfoDAO.findAllByWorkCaseId(workCase.getId());
@@ -598,12 +639,8 @@ public class MortgageSummaryControl extends BusinessControl {
     	
     	for (NewGuarantorDetail newGuarantor : newGuarantors) {
     		MortgageType type = null;
-    		BigDecimal amount = newGuarantor.getTotalLimitGuaranteeAmount();
-    		if (amount != null && amount.compareTo(BigDecimal.ZERO) > 0) {
-    			type = type1;
-    		} else {
-    			type = type2;
-    		}
+    		if (newGuarantor.getGuarantorName() != null)
+    			type = defaultType;
     		
     		GuarantorInfo guarantorInfo = guarantorMap.get(newGuarantor.getId());
     		if (guarantorInfo == null) {
@@ -625,6 +662,224 @@ public class MortgageSummaryControl extends BusinessControl {
     	for (Object key : guarantorMap.keySet()) {
     		guarantorInfoDAO.delete(guarantorMap.get(key));
     	}
-    	
     }
+    
+    private void _processPledgeData(HashMap<Long, NewCollateralSub> collateralMap,HashSet<Long> pledgeSet,User user, WorkCase workCase) {
+    	BankAccountPurpose defaultPurpose = bankAccountPurposeDAO.getDefaultProposeForPledge();
+    	List<OpenAccount> accounts = openAccountDAO.findByWorkCaseId(workCase.getId());
+    	List<PledgeInfo> pledgeInfos = pledgeInfoDAO.findAllByWorkCaseId(workCase.getId());
+    	
+    	HashMap<Long, PledgeInfo> pledgeMap = new HashMap<Long, PledgeInfo>();
+    	for (PledgeInfo info : pledgeInfos) {
+    		pledgeMap.put(info.getNewCollateralSub().getId(), info);
+    	}
+    	HashMap<Long,OpenAccount> accountMap = new HashMap<Long, OpenAccount>();
+    	for (OpenAccount account : accounts) {
+    		accountMap.put(account.getId(), account);
+    	}
+    	
+    	for (Long subCollateralId : pledgeSet) {
+    		NewCollateralSub collateral = collateralMap.get(subCollateralId);
+    		PledgeInfo pledgeInfo = pledgeMap.get(subCollateralId);
+    		if (pledgeInfo == null) {
+    			OpenAccount account = new OpenAccount();
+        		account.setWorkCase(workCase);
+        		account.setTerm(null);
+        		account.setNumberOfDep(0);
+        		updateOpenAccountData(account, collateral, defaultPurpose);
+        		openAccountDAO.save(account);
+        		
+    			pledgeInfo = new PledgeInfo();
+    			pledgeInfo.setCreateBy(user);
+    			pledgeInfo.setCreateDate(new Date());
+    			pledgeInfo.setNewCollateralSub(collateral);
+    			pledgeInfo.setWorkCase(workCase);
+    			pledgeInfo.setTotalHoldAmount(new BigDecimal(0));
+    			pledgeInfo.setOpenAccount(account);
+    			
+    			pledgeInfo.setModifyBy(user);
+    			pledgeInfo.setModifyDate(new Date());
+    			pledgeInfo.setPledgeType(collateral.getNewCollateralSubMortgageList().get(0).getMortgageType());
+    			pledgeInfo.setPledgeAmount(collateral.getMortgageValue());
+    			pledgeInfoDAO.save(pledgeInfo);
+    		} else {
+    			pledgeMap.remove(subCollateralId);
+    			
+    			pledgeInfo.setModifyBy(user);
+    			pledgeInfo.setModifyDate(new Date());
+    			pledgeInfo.setPledgeType(collateral.getNewCollateralSubMortgageList().get(0).getMortgageType());
+    			pledgeInfo.setPledgeAmount(collateral.getMortgageValue());
+    			
+    			OpenAccount account = pledgeInfo.getOpenAccount();
+    			if (account == null) {
+    				account = new OpenAccount();
+            		account.setWorkCase(workCase);
+            		account.setTerm(null);
+            		account.setNumberOfDep(0);
+            		updateOpenAccountData(account, collateral, defaultPurpose);
+            		openAccountDAO.save(account);
+    			} else {
+    				updateOpenAccountData(account, collateral, defaultPurpose);
+            		openAccountDAO.persist(account);
+            		
+            		accountMap.remove(account.getId());
+    			}
+    		}
+    	}
+    	
+    	//clean pledge info
+    	for (Long key : pledgeMap.keySet()) {
+    		PledgeInfo info = pledgeMap.get(key);
+    		pledgeInfoDAO.delete(info);
+    	}
+    	
+    	//mark open account from pledge = false
+    	for (Long key : accountMap.keySet()) {
+    		OpenAccount account = accountMap.get(key);
+    		if (!account.isPledgeAccount())
+    			continue;
+    		account.setPledgeAccount(false);
+    		List<OpenAccountCredit> credits = account.getOpenAccountCreditList();
+    		if (credits != null && !credits.isEmpty()) {
+    			for (OpenAccountCredit credit : credits) {
+    				credit.setFromPledge(false);
+    			}
+    		}
+    		openAccountDAO.persist(account);
+    	}
+    }
+	private void updateOpenAccountData(OpenAccount account,NewCollateralSub collateral,BankAccountPurpose defaultPurpose) {
+		account.setRequestType(RequestAccountType.EXISTING);
+		account.setAccountNumber(collateral.getTitleDeed());
+		account.setBankBranch(null);
+		BankAccountProduct accountProduct = bankAccountProductDAO.findByCollateral(collateral.getCollateralTypeType(), collateral.getSubCollateralType());
+		account.setBankAccountProduct(accountProduct);
+		if (accountProduct != null)
+			account.setBankAccountType(accountProduct.getBankAccountType());
+		account.setConfirmOpenAccount(ConfirmAccountType.NOT_OPEN);
+		account.setPledgeAccount(true);
+		
+		//Process Open Account Name
+		List<OpenAccountName> accountNames = account.getOpenAccountNameList();
+		if (accountNames == null) {
+			accountNames = new ArrayList<OpenAccountName>();
+			account.setOpenAccountNameList(accountNames);
+		}
+		HashMap<Long,OpenAccountName> accountNameMap = new HashMap<Long,OpenAccountName> ();
+		for (OpenAccountName name : accountNames)
+			accountNameMap.put(name.getCustomer().getId(),name);
+		List<NewCollateralSubOwner> owners = collateral.getNewCollateralSubOwnerList();
+		for (NewCollateralSubOwner owner : owners) {
+			if (owner.getCustomer() == null)
+				continue;
+			OpenAccountName accountName = accountNameMap.get(owner.getCustomer().getId());
+			if (accountName == null) {
+				accountName = new OpenAccountName();
+				accountName.setCustomer(owner.getCustomer());
+				accountName.setOpenAccount(account);
+				accountName.setFromPledge(true);
+				accountNames.add(accountName);
+			} else {
+				accountName.setFromPledge(true);
+				accountNameMap.remove(owner.getCustomer().getId());
+			}
+		}
+		//remove
+		for (Long key : accountNameMap.keySet()) {
+			OpenAccountName accountName = accountNameMap.get(key);
+			if (!accountName.isFromPledge())
+				continue;
+			
+			//detach from OpenAccount
+			accountName.setOpenAccount(null);
+			accountNames.remove(accountName);
+			openAccountNameDAO.delete(accountName);
+		}
+		
+		
+		//Process Account Purpose
+		List<OpenAccountPurpose> purposes = account.getOpenAccountPurposeList();
+		if (purposes == null) {
+			purposes = new ArrayList<OpenAccountPurpose>();
+			account.setOpenAccountPurposeList(purposes);
+		}
+		if (defaultPurpose != null) {
+			boolean foundDefault = false;
+			for (OpenAccountPurpose purpose : purposes) {
+				if (purpose.getAccountPurpose().getId() == defaultPurpose.getId()) {
+					foundDefault = true;
+					break;
+				}
+			}
+			if (!foundDefault) {
+				OpenAccountPurpose purpose = new OpenAccountPurpose();
+				purpose.setAccountPurpose(defaultPurpose);
+				purpose.setOpenAccount(account);
+				purposes.add(purpose);
+			}
+		}
+		
+		//Process Account Credit
+		List<OpenAccountCredit> credits = account.getOpenAccountCreditList();
+		if (credits == null) {
+			credits = new ArrayList<OpenAccountCredit>();
+			account.setOpenAccountCreditList(credits);
+		}
+		List<NewCollateralCredit> collCredits = collateral.getNewCollateralHead().getNewCollateral().getNewCollateralCreditList();
+		HashMap<String,OpenAccountCredit> creditHash = new HashMap<String, OpenAccountCredit>();
+		for (OpenAccountCredit credit : credits) {
+			if (credit.getExistingCreditDetail()  != null) {
+				creditHash.put("E::"+credit.getExistingCreditDetail().getId(), credit);
+			} else if (credit.getNewCreditDetail() != null) {
+				creditHash.put("N::"+credit.getNewCreditDetail().getId(), credit);
+			}
+		}
+		
+		//new and update
+		for (NewCollateralCredit collCredit : collCredits) {
+			if (collCredit.getExistingCreditDetail() != null) {
+				String key = "E::"+collCredit.getExistingCreditDetail().getId();
+				OpenAccountCredit credit = creditHash.get(key);
+				if (credit == null) {
+					credit = new OpenAccountCredit();
+					credit.setOpenAccount(account);
+					credit.setExistingCreditDetail(collCredit.getExistingCreditDetail());
+					credits.add(credit);
+				} else {
+					creditHash.remove(key);
+				}
+				credit.setFromPledge(true);
+			} else if (collCredit.getNewCreditDetail() != null) {
+				String key = "N::"+collCredit.getNewCreditDetail().getId();
+				OpenAccountCredit credit = creditHash.get(key);
+				if (credit == null) {
+					credit = new OpenAccountCredit();
+					credit.setOpenAccount(account);
+					credit.setNewCreditDetail(collCredit.getNewCreditDetail());
+					credits.add(credit);
+				} else {
+					creditHash.remove(key);
+				}
+				credit.setFromPledge(true);
+			}
+		}
+		//remove
+		for (String key : creditHash.keySet()) {
+			OpenAccountCredit credit = creditHash.get(key);
+			if (!credit.isFromPledge()) //keep only created by user
+				continue;
+			//detach from OpenAccount
+			credit.setOpenAccount(null);
+			credits.remove(credit);
+			openAccountCreditDAO.delete(credit);
+		}
+		
+		//Process Account DEP
+		List<OpenAccountDeposit> deposits = account.getOpenAccountDepositList();
+		if (deposits == null) {
+			deposits = new ArrayList<OpenAccountDeposit>();
+			account.setOpenAccountDepositList(deposits);
+		}
+			
+	}
 }
