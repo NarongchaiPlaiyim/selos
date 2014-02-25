@@ -1,10 +1,9 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.CreditCustomerType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 public class DecisionView implements Serializable {
@@ -50,6 +49,7 @@ public class DecisionView implements Serializable {
     private BigDecimal proposeTotalCreditLimit;
     private BigDecimal proposeTotalGuaranteeAmt;
 
+    private CreditCustomerType creditCustomerType;
     private CreditRequestTypeView loanRequestType;
     private CountryView investedCountry;
     private BigDecimal existingSMELimit;
@@ -580,5 +580,13 @@ public class DecisionView implements Serializable {
 
     public void setApprovalHistoryList(List<ApprovalHistoryView> approvalHistoryList) {
         this.approvalHistoryList = approvalHistoryList;
+    }
+
+    public CreditCustomerType getCreditCustomerType() {
+        return creditCustomerType;
+    }
+
+    public void setCreditCustomerType(CreditCustomerType creditCustomerType) {
+        this.creditCustomerType = creditCustomerType;
     }
 }

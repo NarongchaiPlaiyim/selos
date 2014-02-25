@@ -14,6 +14,7 @@ public class BankDAO extends GenericDAO<Bank, Integer> {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     public BankDAO() {
     }

@@ -130,7 +130,7 @@ public class CreditFacProposeControl extends BusinessControl {
 
     private ExistingCreditFacilityView existingCreditFacilityView;
 
-
+    @Inject
     public CreditFacProposeControl() {
     }
 
@@ -711,7 +711,7 @@ public class CreditFacProposeControl extends BusinessControl {
 //        case1WcLimit - totalWcDebit
         case1WcMinLimit = Util.subtract(case1WcLimit, totalWcDebit);
 //        ไม่เกิน 50% ของ case1WcLimit และไม่เกิน case1WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
-        case1Wc50CoreWc = compareToFindLower(Util.subtract(case1WcLimit, fifty), case1WcMinLimit);
+        case1Wc50CoreWc = Util.compareToFindLower(Util.subtract(case1WcLimit, fifty), case1WcMinLimit);
 //        case1WcMinLimit - case1Wc50CoreWc
         case1WcDebitCoreWc = Util.subtract(case1WcMinLimit, case1Wc50CoreWc);
 
@@ -724,7 +724,7 @@ public class CreditFacProposeControl extends BusinessControl {
 //        case2WcLimit - totalWcDebit
         case2WcMinLimit = Util.subtract(case2WcLimit, totalWcDebit);
 //        ไม่เกิน 50% ของ case2WcLimit และไม่เกิน case2WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
-        case2Wc50CoreWc = compareToFindLower(Util.subtract(case2WcLimit, fifty), case2WcMinLimit);
+        case2Wc50CoreWc = Util.compareToFindLower(Util.subtract(case2WcLimit, fifty), case2WcMinLimit);
 //        case2WcMinLimit - case2Wc50CoreWc
         case2WcDebitCoreWc = Util.subtract(case2WcMinLimit, case2Wc50CoreWc);
 
@@ -737,7 +737,7 @@ public class CreditFacProposeControl extends BusinessControl {
 //        case3WcLimit - totalWcDebit
         case3WcMinLimit = Util.subtract(case2WcLimit, totalWcDebit);
 //        ไม่เกิน 50% ของ case3WcLimit และไม่เกิน case3WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
-        case3Wc50CoreWc = compareToFindLower(Util.subtract(case3WcLimit, fifty), case3WcMinLimit);
+        case3Wc50CoreWc = Util.compareToFindLower(Util.subtract(case3WcLimit, fifty), case3WcMinLimit);
 //        case3WcMinLimit - case3Wc50CoreWc
         case3WcDebitCoreWc = Util.subtract(case3WcMinLimit, case3Wc50CoreWc);
 
@@ -771,21 +771,6 @@ public class CreditFacProposeControl extends BusinessControl {
         log.debug("newCreditFacility : {}", newCreditFacility);
         newCreditFacilityDAO.persist(newCreditFacility);
         log.debug("after persist newCreditFacility : {}", newCreditFacility);
-    }
-
-    public BigDecimal compareToFindLower(BigDecimal b1, BigDecimal b2) {
-        if (b1 == null) {
-            b1 = BigDecimal.ZERO;
-        }
-        if (b2 == null) {
-            b2 = BigDecimal.ZERO;
-        }
-
-        if (b1.compareTo(b2) > 0) {
-            return b2;
-        } else {
-            return b1;
-        }
     }
 
     public void saveCreditFacility(NewCreditFacilityView newCreditFacilityView, long workCaseId) {
