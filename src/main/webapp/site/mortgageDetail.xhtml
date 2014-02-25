@@ -329,7 +329,7 @@
                         				</p:column>
                         				<p:column style="width:30px" styleClass="center">
                         					<p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
-	                           						action="#{mortgageDetail.clickCustomerInfo(owner.customerId)}"
+	                           						action="#{mortgageDetail.clickCustomerInfo(owner.customerId,owner.juristic)}"
 	                           						ajax="false"
 	                           						process="@this"
 	                           						style="margin-right:0px !important"
@@ -400,7 +400,7 @@
                         				
                         				<p:column style="width:30px" styleClass="center">
                         					<p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
-	                           						action="#{mortgageDetail.clickCustomerInfo(attorney.customerId)}"
+	                           						action="#{mortgageDetail.clickCustomerInfo(attorney.customerId,attorney.juristic)}"
 	                           						ajax="false"
 	                           						process="@this"
 	                           						style="margin-right:0px !important"

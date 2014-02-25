@@ -12,6 +12,7 @@ public class MortgageInfoCollOwnerView implements Serializable {
 	private String relation;
 	private boolean isPOA;
 	private boolean canSelectPOA;
+	private boolean isJuristic;
 	
 	public MortgageInfoCollOwnerView() {
 		
@@ -81,4 +82,10 @@ public class MortgageInfoCollOwnerView implements Serializable {
 		this.canSelectPOA = canSelectPOA;
 	}
 	
+	public boolean isJuristic() {
+		return isJuristic;
+	}
+	public void setJuristic(boolean isJuristic) {
+		this.isJuristic = isJuristic;
+	}
 }

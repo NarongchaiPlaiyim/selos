@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+
+<h:head>
+    <title>#{msg.get('app.custInfoIndi.post.title')}</title>
+    <h:outputStylesheet name="css/style.css" />
+    <h:outputScript library="js" name="custom.js" />
+</h:head>
+
+<h:body>
+    <f:event type="preRenderView" listener="#{postCustomerInfoIndv.preRender()}" />
+    
+    <p:panel id="pnl_maincontainer" styleClass="panel">
+        <h:form id="frmMain">
+        	<div id="main_container">
+        	
+            <!-- Start Header Logo -->
+            <ui:include src="include/header_logo.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="include/header_detail.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="include/menubar.xhtml" />
+           
+            <!-- End Menu -->
+            <h:panelGroup id="full_main_container" layout="block">
+            <div id="content_container">
+                <div id="content_name">#{msg.get('app.custInfoIndi.post.header')}</div>
+                <div id="content">
+                    <div id="content_info">
+                        <div id="content_trackchange">
+                        	[
+                        	<h:outputLink value="#">
+                        		<h:outputText value="#{msg.get('app.viewTrackChange')}" />
+                        	</h:outputLink>
+                        	]
+                        </div>
+                        <div id="content_lastupdate">
+                        	<h:outputText value="#{msg.get('app.lastUpdateBy')} "/>
+                        	<h:outputText value="#{postCustomerInfoIndv.lastUpdateBy}"/>, 
+                        	<h:outputText value="#{postCustomerInfoIndv.lastUpdateDateTime}">
+                        		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="th_TH"/>
+                        	</h:outputText>
+                        </div>
+                    </div>
+                    <div id="content_form">
+                        <!-- start content -->
+                        <table class="content_table_form">
+	                        <tr>
+                               <td>
+                                    <table>
+                                        <tr>
+                                            <td class="title" style="width:200px;">
+                                                <p:outputLabel value="#{msg.get('app.approveType')}" styleClass="center"/>
+                                            </td>
+                                            <td style="width:200px;">
+                                                <p:selectOneRadio disabled="true" value="#{postCustomerInfoIndv.approveType}">
+                                                	<f:selectItems value="#{enumGeneralControl.approveTypes}" var="approveType"
+                                                		itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}" 
+                                                		/>
+                                                </p:selectOneRadio>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                              <td><div class="separate"><!-- --></div></td>
+                        	</tr>
+                        	<tr>
+                        		<td>
+                        			<h2><h:outputText value="#{msg.get('app.custInfoIndi.post.subtitle')}" /></h2>
+	                            </td>
+                        	</tr>
+                        	<tr>
+                        		<td>
+<table class="content_table_form">
+	<tr>
+		<td class="title" style="width: 180px">
+			<p:outputLabel  for="relation"
+				value="#{msg.get('app.custInfoIndi.content.relationship')}" />
+		</td>
+		<td style="width:300px">
+			<p:inputText id='relation'
+				value="#{postCustomerInfoIndv.customer.displayRelation}"
+				readonly="true"
+				/>
+		</td>
+		<td class="title" style="width:180px">
+			<p:outputLabel  for="coll_owner"
+				value="#{msg.get('app.custInfoIndi.content.collOwner')}" />
+		</td>
+		<td>
+			<p:selectOneRadio id='coll_owner' disabled="true" value="#{postCustomerInfoIndv.customer.collateralOwner}">
+            	<f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="yesNoEnum"
+            		itemLabel="#{msg.get(yesNoEnum.msgKey)}" itemValue="yesNoEnum" 
+            		/>
+            </p:selectOneRadio>
+		</td>
+	</tr>
+	<tr>
+		<td class="title">
+			<p:outputLabel  for="doctype"
+				value="#{msg.get('app.custInfoIndi.content.docType')}" />
+		</td>
+		<td colspan="3">
+			<p:inputText id='doctype'
+				value="#{postCustomerInfoIndv.customer.displayDocumentType}"
+				readonly="true"
+				/>
+		</td>
+	</tr>
+	<tr>
+		<td class="title">
+			<p:outputLabel  for="personalid"
+				value="#{msg.get('app.custInfoIndi.content.citiId')}" />
+		</td>
+		<td colspan="3">
+			<p:inputText id='personalid' styleClass="large"
+				value="#{postCustomerInfoIndv.customer.personalId}"
+				readonly="true"
+				 />
+		</td>
+	</tr>
+	<tr>
+		<td class="title">
+			<p:outputLabel  for="title"
+				value="#{msg.get('app.custInfoIndi.content.nameTh')}" />
+		</td>
+		<td colspan="3">
+			<p:selectOneMenu id='title' styleClass="inline_select"
+				value="#{postCustomerInfoIndv.customer.titleId}"
+				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
+				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.nameTh.required')}"
+				>
+				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+				<f:selectItems value="#{postCustomerInfoIndv.titles}" />
+			</p:selectOneMenu>
+			<p:inputText styleClass="small"
+				value="#{postCustomerInfoIndv.customer.displayTitle}"
+				readonly="true"
+				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				/>
+			<p:spacer width="5"/>
+			<p:inputText id='nameTH' styleClass="large" 
+				value="#{postCustomerInfoIndv.customer.nameTH}"
+				readonly="true"/>
+			<p:spacer width="5"/>
+			<p:inputText id='lastNameTH' styleClass="largest"
+				value="#{postCustomerInfoIndv.customer.lastNameTH}"
+				readonly="true"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="title">
+			<p:outputLabel  for="birthdate"
+				value="#{msg.get('app.custInfoIndi.content.dob')}" />
+		</td>
+		<td>
+			<clv:BECalendar id='birthdate' navigator="true" 
+				yearRange="#{postCustomerInfoIndv.ageYearRange}"
+				maxDate="#{postCustomerInfoIndv.currentDate}"
+				value="#{postCustomerInfoIndv.customer.birthDate}"
+				pattern="dd/MM/yyyy" showOn="button"
+				autocomplete="false" locale="th_TH"
+				disabled="#{not postCustomerInfoIndv.canUpdateInfo}"
+				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.dob.required')}"
+				>
+				<p:ajax update="age" event="dateSelect" 
+					listener="#{postCustomerInfoIndv.handleBirthDay}"
+					/>
+			</clv:BECalendar>
+		</td>
+		<td class="title">
+			<p:outputLabel  for="age"
+				value="#{msg.get('app.custInfoIndi.content.age')}" />
+		</td>
+		<td>
+			<p:inputText id="age" styleClass="smaller"
+				value="#{postCustomerInfoIndv.customer.age}" 
+				readonly="true">
+				<f:convertNumber pattern="0"/>
+			</p:inputText>
+		</td>
+	</tr>
+	<tr>
+		<td class="title">
+			<p:outputLabel  for="gender"
+				value="#{msg.get('app.custInfoIndi.content.gender')}" />
+		</td>
+		<td colspan="3">
+			<p:selectOneMenu id='gender'
+				value="#{postCustomerInfoIndv.customer.gender}"
+				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
+				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.gender.required')}"
+				>
+				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+				<f:selectItems value="#{enumGeneralControl.genders}" var="gender"
+					itemLabel="#{msg.get(gender.msgKey)}" itemValue="#{gender}"
+					/>
+			</p:selectOneMenu>
+			<p:inputText
+				value="#{msg.get(postCustomerInfoIndv.customer.gender.msgKey)}"
+				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				readonly="true"
+				/>
+		</td>
+	</tr>
+	<tr>
+		<td class="title">
+			<p:outputLabel  for="race"
+				value="#{msg.get('app.custInfoIndi.content.origin')}" />
+		</td>
+		<td>
+			<p:selectOneMenu id='race'
+				value="#{postCustomerInfoIndv.customer.raceId}"
+				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
+				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.origin.required')}"
+				>
+				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+				<f:selectItems value="#{postCustomerInfoIndv.races}"/>
+			</p:selectOneMenu>
+			<p:inputText
+				value="#{postCustomerInfoIndv.customer.displayRace}"
+				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				readonly="true"
+				/>
+		</td>
+		<td class="title">
+			<p:outputLabel  for="nationality"
+				value="#{msg.get('app.custInfoIndi.content.nation')}" />
+		</td>
+		<td>
+			<p:selectOneMenu id='nationality'
+				value="#{postCustomerInfoIndv.customer.nationalityId}"
+				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
+				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.nation.required')}"
+				>
+				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+				<f:selectItems value="#{postCustomerInfoIndv.nationalities}"/>
+			</p:selectOneMenu>
+			<p:inputText
+				value="#{postCustomerInfoIndv.customer.displayNationality}"
+				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				readonly="true"
+				/>
+		</td>
+	</tr>
+	<tr><td colspan="100%"><p:spacer height="0.8em"/></td></tr>
+
+	
+	<tr><td colspan="100%"><p:spacer height="0.8em"/></td></tr>
+	
+	<tr>
+		<td class="title">
+			<p:outputLabel for="mailing_addresstype"
+				value="#{msg.get('app.custInfoIndi.content.mailAdd')}" />
+		</td>
+		<td colspan="3">
+			<p:inputText id="mailing_addresstype"
+				value="#{postCustomerInfoIndv.customer.displayMailingAddressType}"
+				readonly="true"
+				/>
+		</td>
+	</tr>
+	<tr>
+		<td class="title">
+			<p:outputLabel for="mobile"
+				value="#{msg.get('app.custInfoIndi.content.mobile')}" />
+		</td>
+		<td colspan="3">
+			<p:inputText id='mobile'
+				value="#{postCustomerInfoIndv.customer.mobile}"
+				readonly="true"
+				/>
+		</td>
+	</tr>
+	<tr>
+		<td class="title">
+			<p:outputLabel for="fax"
+				value="#{msg.get('app.custInfoIndi.content.fax')}" />
+		</td>
+		<td colspan="3">
+			<p:inputText id='fax'
+				value="#{postCustomerInfoIndv.customer.fax}"
+				readonly="true"
+				/>
+		</td>
+	</tr>
+	<tr>
+		<td class="title">
+			<p:outputLabel for="email"
+				value="#{msg.get('app.custInfoIndi.content.email')}" />
+		</td>
+		<td colspan="3">
+			<p:inputText id='email'
+				value="#{postCustomerInfoIndv.customer.email}"
+				readonly="true"
+				/>
+		</td>
+	</tr>
+	<tr>
+		<td class="title">
+			<p:outputLabel for="businesstype"
+				value="#{msg.get('app.custInfoIndi.content.bussType')}" />
+		</td>
+		<td colspan="3">
+			<p:selectOneMenu id='businesstype'
+				value="#{postCustomerInfoIndv.customer.businessTypeId}"
+				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
+				required="#{postCustomerInfoIndv.requiredBusinessType}"
+				requiredMessage="#{msg.get('app.custInfoIndi.content.bussType.required')}"
+				>
+				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+				<f:selectItems value="#{postCustomerInfoIndv.businessTypes}"/>
+			</p:selectOneMenu>
+			<p:inputText
+				value="#{postCustomerInfoIndv.customer.displayBusinessType}"
+				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				readonly="true"
+				/>
+		</td>
+	</tr>
+	<tr>
+		<td class="title">
+			<p:outputLabel for="marital"
+				value="#{msg.get('app.custInfoIndi.content.maritalStatus')}" />
+		</td>
+		<td colspan="3">
+			<p:selectOneMenu id='marital'
+				value="#{postCustomerInfoIndv.customer.maritalStatusId}"
+				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
+				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.maritalStatus.required')}"
+				>
+				<p:ajax update="marriagetitle,marriagename,marriagelastname"
+					listener="#{postCustomerInfoIndv.onChangeMaritalStatus()}"
+					 />
+				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+				<f:selectItems value="#{postCustomerInfoIndv.maritalStatuses}"/>
+			</p:selectOneMenu>
+			<p:inputText
+				value="#{postCustomerInfoIndv.customer.displayMaritalStatus}"
+				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				readonly="true"
+				/>
+		</td>
+	</tr>
+	<tr>
+		<td class="title">
+			<p:outputLabel for="marriagename"
+				value="#{msg.get('app.custInfoIndi.content.spouseNameTH')}" />
+		</td>
+		<td colspan="3">
+			<p:selectOneMenu id='marriagetitle' styleClass="inline_select"
+				value="#{postCustomerInfoIndv.customer.spouseTitleId}"
+				disabled="#{not postCustomerInfoIndv.canUpdateSpouse}"
+				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
+				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.spouseNameTH.required')}"
+				>
+				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+				<f:selectItems value="#{postCustomerInfoIndv.titles}"/>
+			</p:selectOneMenu>
+			<p:inputText styleClass="small"
+				value="#{postCustomerInfoIndv.customer.displaySpouseTitle}"
+				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				readonly="true"
+				/>
+			<p:spacer width="5"/>
+			<p:inputText id='marriagename' styleClass="large" 
+				value="#{postCustomerInfoIndv.customer.spouseNameTH}"
+				readonly="#{not postCustomerInfoIndv.canUpdateSpouse}"
+				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.spouseNameTH.required')}"
+				/>
+			<p:spacer width="5"/>
+			<p:inputText id='marriagelastname' styleClass="largest"
+				value="#{postCustomerInfoIndv.customer.spouseLastNameTH}"
+				readonly="#{not postCustomerInfoIndv.canUpdateSpouse}"
+				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.spouseNameTH.required')}"
+				/>
+		</td>
+	</tr>
+	<tr>
+	<td class="title">
+			<p:outputLabel for="fathername"
+				value="#{msg.get('app.custInfoIndi.content.fatherNameTH')}" />
+		</td>
+		<td colspan="3">
+			<p:selectOneMenu id='fathertitle' styleClass="inline_select"
+				value="#{postCustomerInfoIndv.customer.fatherTitleId}"
+				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
+				>
+				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+				<f:selectItems value="#{postCustomerInfoIndv.titles}"/>
+			</p:selectOneMenu>
+			<p:inputText styleClass="small"
+				value="#{postCustomerInfoIndv.customer.displayFatherTitle}"
+				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				readonly="true"
+				/>
+			<p:spacer width="5"/>
+			<p:inputText id='fathername' styleClass="large" 
+				value="#{postCustomerInfoIndv.customer.fatherNameTH}"
+				readonly="#{not postCustomerInfoIndv.canUpdateInfo}"
+				/>
+			<p:spacer width="5"/>
+			<p:inputText id='fatherlastname' styleClass="largest"
+				value="#{postCustomerInfoIndv.customer.fatherLastNameTH}"
+				readonly="#{not postCustomerInfoIndv.canUpdateInfo}"
+				/>	
+		</td>
+	</tr>
+	<tr>
+		<td class="title">
+			<p:outputLabel for="mothername"
+				value="#{msg.get('app.custInfoIndi.content.motherNameTH')}" />
+		</td>
+		<td colspan="3">
+			<p:selectOneMenu id='mothertitle' styleClass="inline_select"
+				value="#{postCustomerInfoIndv.customer.motherTitleId}"
+				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
+				>
+				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+				<f:selectItems value="#{postCustomerInfoIndv.titles}"/>
+			</p:selectOneMenu>
+			<p:inputText styleClass="small"
+				value="#{postCustomerInfoIndv.customer.displayMotherTitle}"
+				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				readonly="true"
+				/>
+			<p:spacer width="5"/>
+			<p:inputText id='mothername' styleClass="large" 
+				value="#{postCustomerInfoIndv.customer.motherNameTH}"
+				readonly="#{not postCustomerInfoIndv.canUpdateInfo}"
+				/>
+			<p:spacer width="5"/>
+			<p:inputText id='motherlastname' styleClass="largest"
+				value="#{postCustomerInfoIndv.customer.motherLastNameTH}"
+				readonly="#{not postCustomerInfoIndv.canUpdateInfo}"
+				/>	
+		</td>
+	</tr>
+</table>
+                        		</td>
+                        	</tr>
+                        	
+                        	<tr><td colspan="100%"><p:spacer height="1em"/></td></tr>
+                        	
+	                        <tr>
+	                            <td colspan="100%"><p:separator/></td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="100%"><p:spacer width="5px"/></td>
+	                        </tr>
+	                        <tr>
+	                             <td colspan="100%" class="center">
+	                                 <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
+	                                 	styleClass="medium"
+	                                 	onstart="handleOnStartOpenCfmDlg();"
+	                                 	oncomplete="handleOnCompleteOpenCfmDlg(args,p_savePostCustIndvDlg);"
+	                                 	update=":frmMain:full_main_container,:result_dialog"
+	                                 	 />
+	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
+										styleClass="medium"
+										/>
+	                             </td>
+	                        </tr>
+                        	
+                        </table>
+                    </div>
+                </div>
+                <div id="bottom_line"><!-- --></div>
+            </div>
+           
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="include/footer.xhtml" />
+            <!-- End Footer -->
+            </h:panelGroup>
+            </div>
+        </h:form>
+    </p:panel>
+    
+ 	<ui:include src="dialog/postLoadingAndErrorDialog.xhtml" />
+    <ui:include src="dialog/confirmEditDlg.xhtml">
+		<ui:param name="id" value="savePostCustIndvDlg"/>
+		<ui:param name="name" value="p_savePostCustIndvDlg"/>
+		<ui:param name="formId" value="savePostCustIndvFrm"/>
+		<ui:param name="controller" value="#{postCustomerInfoIndv}"/>
+		<ui:param name="action" value="onSaveCustomerInfo"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
+	</ui:include>
+</h:body>
+</f:view>
+</html>
