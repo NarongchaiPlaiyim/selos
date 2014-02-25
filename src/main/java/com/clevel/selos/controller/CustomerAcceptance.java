@@ -209,7 +209,7 @@ public class CustomerAcceptance implements Serializable {
 		if (deletedRowId < 0 || deletedRowId > contactRecordDetailViews.size())
 			return;
 		ContactRecordDetailView delete = contactRecordDetailViews.remove(deletedRowId);
-		if (delete != null) {
+		if (delete != null && delete.getId() > 0) {
 			deleteList.add(delete);
 		}
 		deletedRowId = -1;
