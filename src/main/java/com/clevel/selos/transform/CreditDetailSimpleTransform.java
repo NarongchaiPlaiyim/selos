@@ -11,33 +11,44 @@ public class CreditDetailSimpleTransform extends Transform {
 
 	public CreditDetailSimpleView transformToSimpleView(NewCreditDetail model) {
 		CreditDetailSimpleView view = new CreditDetailSimpleView();
+		updateSimpleView(view, model);
+		return view;
+	}
+	
+	public CreditDetailSimpleView transformToSimpleView(ExistingCreditDetail model) {
+		CreditDetailSimpleView view = new CreditDetailSimpleView();
+		updateSimpleView(view, model);
+		return view;
+	}
+	
+	public void updateSimpleView(CreditDetailSimpleView view,NewCreditDetail model) {
 		view.setId(model.getId());
 
 		view.setAccountName(model.getAccountName());
 		view.setAccountNo(model.getAccountNumber());
 		view.setAccountStatus(model.getAccountSuf());
 		view.setNewCredit(true);
-		view.setProductProgram(model.getProductProgram().getName());
-		view.setCreditFacility(model.getCreditType().getName());
+		if (model.getProductProgram() != null)
+			view.setProductProgram(model.getProductProgram().getName());
+		if (model.getCreditType() != null)
+			view.setCreditFacility(model.getCreditType().getName());
 		view.setLimit(model.getLimit());
 		boolean hasAccountInfo = !(Util.isEmpty(model.getAccountName()) || Util.isEmpty(model.getAccountNumber()));
 		view.setHasAccountInfo(hasAccountInfo);
-		return view;
 	}
-	
-	public CreditDetailSimpleView transformToSimpleView(ExistingCreditDetail model) {
-		CreditDetailSimpleView view = new CreditDetailSimpleView();
+	public void updateSimpleView(CreditDetailSimpleView view,ExistingCreditDetail model) {
 		view.setId(model.getId());
 
 		view.setAccountName(model.getAccountName());
 		view.setAccountNo(model.getAccountNumber());
 		view.setAccountStatus(model.getAccountSuf());
 		view.setNewCredit(false);
-		view.setProductProgram(model.getProductProgram());
-		view.setCreditFacility(model.getCreditType());
+		if (model.getExistProductProgram() != null)
+			view.setProductProgram(model.getExistProductProgram().getName());
+		if (model.getExistCreditType() != null)
+			view.setCreditFacility(model.getExistCreditType().getName());
 		view.setLimit(model.getLimit());
 		boolean hasAccountInfo = !(Util.isEmpty(model.getAccountName()) || Util.isEmpty(model.getAccountNumber()));
 		view.setHasAccountInfo(hasAccountInfo);
-		return view;
 	}
 }

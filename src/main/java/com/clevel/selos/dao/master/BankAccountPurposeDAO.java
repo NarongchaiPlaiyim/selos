@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class BankAccountPurposeDAO extends GenericDAO<BankAccountPurpose, Integer> {
+public class BankAccountPurposeDAO extends GenericDAO<BankAccountPurpose, Long> {
     @Inject
     @SELOS
     Logger log;

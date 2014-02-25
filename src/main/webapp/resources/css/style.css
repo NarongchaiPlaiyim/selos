@@ -862,10 +862,14 @@ table tbody tr.grandtotal_summary td {
 .inline_select label {
     line-height:16px;
 }
+.normal_checkbox {
+	line-height: normal;
+}
 .normal_checkbox.ui-chkbox .ui-chkbox-box ,
 .normal_checkbox.ui-chkbox .ui-chkbox-box.ui-state-default.ui-state-active{
 	top : 0px !important;
 	margin : 0px !important;
+	display: inline-block !important;
 }
 .normal_checkbox.ui-chkbox {
 	vertical-align : middle;
