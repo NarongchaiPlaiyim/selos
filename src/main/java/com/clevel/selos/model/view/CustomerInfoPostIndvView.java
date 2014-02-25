@@ -250,6 +250,6 @@ public class CustomerInfoPostIndvView extends CustomerInfoPostBaseView<CustomerI
 	}
 	@Override
 	public int getDefaultCustomerEntityId() {
-		return 2;
+		return 1;
 	}
 }
