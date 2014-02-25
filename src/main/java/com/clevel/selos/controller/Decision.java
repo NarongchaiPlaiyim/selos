@@ -397,13 +397,12 @@ public class Decision implements Serializable {
     public void onAddApproveCredit() {
         log.debug("onAddApproveCredit()");
         selectedApproveCredit = new NewCreditDetailView();
+        onChangeRequestType();
 
         if (baseRateList != null && !baseRateList.isEmpty()) {
             standardBasePriceDlg = baseRateList.get(0);
             suggestBasePriceDlg = baseRateList.get(0);
         }
-
-        onChangeRequestType();
 
         modeEditCredit = false;
         modeForButton = ModeForButton.ADD;
@@ -412,9 +411,24 @@ public class Decision implements Serializable {
 
     public void onEditApproveCredit() {
         log.debug("onEditApproveCredit() selectedApproveCredit: {}", selectedApproveCredit);
-        ProductProgramView productProgramView = selectedApproveCredit.getProductProgramView();
+        onChangeRequestType();
+        creditFacProposeControl.calculateInstallment(selectedApproveCredit);
 
-        prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(productProgramView);
+        if (selectedApproveCredit.getRequestType() == 2) {
+            if (selectedApproveCredit.getNewCreditTierDetailViewList() != null && !selectedApproveCredit.getNewCreditTierDetailViewList().isEmpty()) {
+                BaseRate baseRateFromTier = selectedApproveCredit.getNewCreditTierDetailViewList().get(0).getStandardBasePrice();
+                BigDecimal interestFromTier = selectedApproveCredit.getNewCreditTierDetailViewList().get(0).getStandardInterest();
+                standardBasePriceDlg = getNewBaseRate(baseRateFromTier);
+                standardInterestDlg = new BigDecimal(interestFromTier.doubleValue());
+                suggestBasePriceDlg = getNewBaseRate(baseRateFromTier);
+                suggestInterestDlg = new BigDecimal(interestFromTier.doubleValue());
+            }
+        } else {
+            standardBasePriceDlg = new BaseRate();
+            standardInterestDlg = BigDecimal.ZERO;
+            suggestBasePriceDlg = new BaseRate();
+            suggestInterestDlg = BigDecimal.ZERO;
+        }
 
         modeEditCredit = true;
         modeForButton = ModeForButton.EDIT;
@@ -422,6 +436,7 @@ public class Decision implements Serializable {
 
     public void onDeleteApproveCredit() {
         log.debug("onDeleteApproveCredit() rowIndexCredit: {}", rowIndexCredit);
+        // keep exist id from DB for delete on save decision
         if (decisionView.getApproveCreditList().get(rowIndexCredit).getId() != 0) {
             if (approveCreditIdList != null) {
                 approveCreditIdList.add(decisionView.getApproveCreditList().get(rowIndexCredit).getId());
@@ -581,28 +596,7 @@ public class Decision implements Serializable {
     }
 
     public void onAddTierInfo() {
-//        log.debug("onAddTierInfo(standardBaseRate.id: {}, standardInterest: {}, suggestBaseRate.id: {}, suggestInterest: {}, finalBaseRate.id: {}, finalInterest: {})",
-//                standardBaseRate.getId(), selectedApproveCredit.getStandardInterest(),
-//                suggestBaseRate.getId(), selectedApproveCredit.getSuggestInterest(),
-//                finalBaseRate.getId(), finalInterest);
 
-//        NewCreditTierDetailView newCreditTierDetail = new NewCreditTierDetailView();
-//        newCreditTierDetail.setFinalBasePrice(finalBaseRate);
-//        newCreditTierDetail.setFinalInterest(finalInterest);
-//        newCreditTierDetail.setFinalPriceLabel(finalPriceRate);
-//        newCreditTierDetail.setStandardBasePrice(standardBaseRate);
-//        newCreditTierDetail.setStandardPriceLabel(standardPriceLabel);
-//        newCreditTierDetail.setSuggestBasePrice(suggestBaseRate);
-//        newCreditTierDetail.setSuggestPriceLabel(suggestPriceLabel);
-//        newCreditTierDetail.setCanEdit(true);
-//
-//        if (selectedApproveCredit.getNewCreditTierDetailViewList() != null) {
-//            selectedApproveCredit.getNewCreditTierDetailViewList().add(newCreditTierDetail);
-//        } else {
-//            List<NewCreditTierDetailView> newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
-//            newCreditTierDetailViewList.add(newCreditTierDetail);
-//            selectedApproveCredit.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
-//        }
     }
 
     public void onDeleteTierInfo(int rowIndex) {
@@ -996,6 +990,18 @@ public class Decision implements Serializable {
     }
 
     // ----------------------------------------------- Private Methods ----------------------------------------------- //
+    private BaseRate getNewBaseRate(BaseRate baseRate) {
+        if (baseRate == null) {
+            return new BaseRate();
+        }
+        BaseRate newBaseRate = new BaseRate();
+        newBaseRate.setId(baseRate.getId());
+        newBaseRate.setActive(baseRate.getActive());
+        newBaseRate.setName(baseRate.getName());
+        newBaseRate.setValue(baseRate.getValue());
+        return newBaseRate;
+    }
+
     private ProductProgramView getProductProgramById(int id) {
         if (productProgramList == null || productProgramList.isEmpty() || id == 0) {
             return new ProductProgramView();
