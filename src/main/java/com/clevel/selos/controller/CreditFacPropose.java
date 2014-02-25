@@ -136,6 +136,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private CustomerInfoView collateralOwnerUW;
     private boolean flagComs;
     private boolean flagButtonCollateral;
+    private boolean editProposeColl;
 
     // for  control Guarantor Information Dialog
     private NewGuarantorDetailView newGuarantorDetailView;
@@ -407,6 +408,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         flagButtonCollateral = true;
         modeEditReducePricing = false;
         modeEditReduceFront = false;
+        editProposeColl = false;
 
         creditRequestTypeList = creditRequestTypeDAO.findAll();
         countryList = countryDAO.findAll();
@@ -443,6 +445,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                     if (!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())) {
                         newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
+                        newCollateralView.setComs(true);
                         flagComs = true;
                         flagButtonCollateral = false;
                     } else {
@@ -483,7 +486,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     public void onChangeJobId() {
         flagButtonCollateral = true;
     }
-
 
     // ***************************************************************************************************************//
 
@@ -954,6 +956,11 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //  **************************************** END Tier Dialog  ****************************************//
 
     // **************************************** Start Propose Collateral Information  *********************************//
+    public void onChangeCollTypeLTV(){
+        log.info("onChangeCollTypeLTV ::; {}");
+
+    }
+
     public void onAddProposeCollInfo() {
         log.debug("onAddProposeCollInfo ::: {}", newCreditFacilityView.getNewCollateralViewList().size());
         modeForButton = ModeForButton.ADD;
@@ -970,18 +977,22 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.debug("onEditProposeCollInfo :: {}", selectCollateralDetailView.getId());
         log.debug("onEditProposeCollInfo ::rowIndexCollateral  {}", rowIndexCollateral);
         modeForButton = ModeForButton.EDIT;
+        editProposeColl = true;
         newCollateralView = new NewCollateralView();
         Cloner collateralClone = new Cloner();
         newCollateralView = collateralClone.deepClone(selectCollateralDetailView);
         int tempSeq = 0;
         Cloner cloner = new Cloner();
         proposeCreditDetailListTemp = cloner.deepClone(proposeCreditDetailViewList);
-        newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailListTemp);
         flagComs = false;
-        if (newCollateralView.isComs()) { //ถ้าเป็น data  ที่ได้จาก coms  set rendered false (ไม่แสดงปุ่ม edit)
+
+        log.info("selectCollateralDetailView.isComs() ::: {}",selectCollateralDetailView.isComs());
+        if (selectCollateralDetailView.isComs()) { //ถ้าเป็น data  ที่ได้จาก coms  set rendered false (ไม่แสดงปุ่ม edit)
             flagButtonCollateral = false;
+            flagComs = true;
         } else {
             flagButtonCollateral = true;
+            newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailListTemp);
         }
 
         if (selectCollateralDetailView.getProposeCreditDetailViewList().size() > 0) {
@@ -1020,7 +1031,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             proposeCollateralInfoAdd.setBdmComments(newCollateralView.getBdmComments());
             proposeCollateralInfoAdd.setMortgageCondition(newCollateralView.getMortgageCondition());
             proposeCollateralInfoAdd.setMortgageConditionDetail(newCollateralView.getMortgageConditionDetail());
-
+            proposeCollateralInfoAdd.setComs(newCollateralView.isComs());
             newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
 
             if (newCollateralView.getNewCollateralHeadViewList().size() > 0) {
@@ -1072,13 +1083,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
             }
 
-            if (flagComs) {
-                proposeCollateralInfoAdd.setComs(false);
-                flagButtonCollateral = false;
-            } else {
-                proposeCollateralInfoAdd.setComs(true);
-                flagButtonCollateral = true;
-            }
 
             newCreditFacilityView.getNewCollateralViewList().add(proposeCollateralInfoAdd);
 //            else {
@@ -1105,6 +1109,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setBdmComments(newCollateralView.getBdmComments());
             newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setMortgageCondition(newCollateralView.getMortgageCondition());
             newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setMortgageConditionDetail(newCollateralView.getMortgageConditionDetail());
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setComs(newCollateralView.isComs());
+            //  headCollateral not update
             newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setNewCollateralHeadViewList(newCollateralView.getNewCollateralHeadViewList());
 
             boolean checkPlus;
@@ -1142,7 +1148,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 }
             }
             newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setProposeCreditDetailViewList(newCollateralView.getProposeCreditDetailViewList());
-
+            editProposeColl = false;
 
         } else {
             log.debug("onSaveSubCollateral ::: Undefined modeForButton !!");
@@ -2035,6 +2041,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void setFlagComs(boolean flagComs) {
         this.flagComs = flagComs;
+    }
+
+    public boolean isEditProposeColl() {
+        return editProposeColl;
+    }
+
+    public void setEditProposeColl(boolean editProposeColl) {
+        this.editProposeColl = editProposeColl;
     }
 }
 
