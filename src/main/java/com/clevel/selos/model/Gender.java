@@ -22,7 +22,7 @@ public enum Gender {
 	}
 	public static final Gender lookup(int value) {
 		for (Gender gender : Gender.values()) {
-			if (gender.value == value)
+			if (gender.ordinal() == value)
 				return gender;
 		}
 		return NA;

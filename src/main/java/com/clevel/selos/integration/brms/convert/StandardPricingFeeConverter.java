@@ -1,6 +1,7 @@
 package com.clevel.selos.integration.brms.convert;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -9,7 +10,18 @@ import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.brms.model.BRMSField;
 import com.clevel.selos.integration.brms.model.request.BRMSAccountRequested;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
+import com.clevel.selos.integration.brms.model.response.PricingFee;
+import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.brms.service.standardpricing.feerules.*;
+import com.clevel.selos.integration.brms.service.standardpricing.feerules.ApplicationType;
+import com.clevel.selos.integration.brms.service.standardpricing.feerules.AttributeType;
+import com.clevel.selos.integration.brms.service.standardpricing.feerules.CreditFacilityType;
+import com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceRequest;
+import com.clevel.selos.integration.brms.service.standardpricing.feerules.ProductType;
+import com.clevel.selos.integration.brms.service.standardpricing.feerules.SELOSProductProgramType;
+import com.clevel.selos.integration.brms.service.standardpricing.feerules.UnderwritingApprovalRequestType;
+import com.clevel.selos.integration.brms.service.standardpricing.feerules.UnderwritingRequest;
+import com.clevel.selos.model.FeeLevel;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -101,6 +113,41 @@ public class StandardPricingFeeConverter extends Converter{
         return null;
     }
 
+    public StandardPricingResponse getStandardPricingResponse(DecisionServiceResponse decisionServiceResponse){
+        StandardPricingResponse standardPricingResponse = new StandardPricingResponse();
+        if(decisionServiceResponse != null){
+
+            standardPricingResponse.setDecisionID(decisionServiceResponse.getDecisionID());
+            UnderwritingRequest underwritingRequest = decisionServiceResponse.getUnderwritingRequest();
+            UnderwritingApprovalRequestType underwritingApprovalRequestType = underwritingRequest.getUnderwritingApprovalRequest();
+            ApplicationType applicationType = underwritingApprovalRequestType.getApplication();
+
+            List<PricingFee> pricingFeeList = new ArrayList<PricingFee>();
+
+            List<FeeType> feeTypeList = applicationType.getFee();
+            for(FeeType feeType : feeTypeList){
+                pricingFeeList.add(getPricingFee(feeType, null));
+            }
+
+            List<ProductType> productTypeList = applicationType.getProduct();
+            for(ProductType productType : productTypeList){
+                List<SELOSProductProgramType> productProgramTypeList = productType.getSelosProductProgram();
+                for(SELOSProductProgramType productProgramType : productProgramTypeList){
+                    List<CreditFacilityType> creditFacilityTypeList = productProgramType.getCreditFacility();
+                    for(CreditFacilityType creditFacilityType : creditFacilityTypeList){
+                        feeTypeList = creditFacilityType.getFee();
+                        for(FeeType feeType : feeTypeList){
+                            pricingFeeList.add(getPricingFee(feeType, creditFacilityType.getID()));
+                        }
+                    }
+                }
+            }
+            standardPricingResponse.setPricingFeeList(pricingFeeList);
+
+        }
+        return standardPricingResponse;
+    }
+
     private AttributeType getAttributeType(BRMSField field, Date value){
         AttributeType attributeType = new AttributeType();
 
@@ -128,6 +175,33 @@ public class StandardPricingFeeConverter extends Converter{
         attributeType.setNumericValue(value);
 
         return attributeType;
+    }
+
+    private PricingFee getPricingFee(FeeType feeType, String creditTypeId){
+        PricingFee pricingFee = new PricingFee();
+        pricingFee.setType(feeType.getType());
+        if(creditTypeId == null){
+            pricingFee.setFeeLevel(FeeLevel.APP_LEVEL);
+        } else {
+            pricingFee.setFeeLevel(FeeLevel.CREDIT_LEVEL);
+        }
+        pricingFee.setCreditDetailId(creditTypeId);
+        pricingFee.setAmount(feeType.getAmount());
+        pricingFee.setDescription(feeType.getDescription());
+
+        List<AttributeType> attributeTypeList = feeType.getAttribute();
+        for(AttributeType attributeType : attributeTypeList){
+            if(attributeType.getName().equals(BRMSField.PRICE_FEE_PERCENT.value())){
+                pricingFee.setFeePercent(attributeType.getNumericValue());
+            } else if(attributeType.getName().equals(BRMSField.PRICE_FEE_PERCENT_AFT_DISCOUNT.value())){
+                pricingFee.setFeePercentAfterDiscount(attributeType.getNumericValue());
+            } else if(attributeType.getName().equals(BRMSField.PRICE_PAYMENT_METHOD.value())){
+                pricingFee.setPaymentMethod(attributeType.getStringValue());
+            } else if(attributeType.getName().equals(BRMSField.PRICE_YEAR)){
+                pricingFee.setYear(attributeType.getNumericValue());
+            }
+        }
+        return pricingFee;
     }
 
 }

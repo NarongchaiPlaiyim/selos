@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+
+<h:head>
+    <title>#{msg.get('app.custInfoSummary.title')}</title>
+    <h:outputStylesheet name="css/style.css" />
+    <h:outputScript library="js" name="custom.js" />
+</h:head>
+
+<h:body>
+    <f:event type="preRenderView" listener="#{postCustomerInfoSummary.preRender()}" />
+    
+    <p:panel id="pnl_maincontainer" styleClass="panel">
+        <h:form id="frmMain">
+        	<div id="main_container">
+        	
+            <!-- Start Header Logo -->
+            <ui:include src="include/header_logo.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="include/header_detail.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="include/menubar.xhtml" />
+           
+           <!-- End Menu -->
+			<h:panelGroup id="full_main_container" layout="block">
+            <div id="content_container">
+                <div id="content_name">#{msg.get('app.custInfoSummary.header')}</div>
+                <div id="content">
+                    <div id="content_info">
+                        <div id="content_trackchange">
+                        	[
+                        	<h:outputLink value="#">
+                        		<h:outputText value="#{msg.get('app.viewTrackChange')}" />
+                        	</h:outputLink>
+                        	]
+                        </div>
+                        <div id="content_lastupdate">
+                        	<h:outputText value="#{msg.get('app.lastUpdateBy')} "/>
+                        	<h:outputText value="#{postCustomerInfoSummary.lastUpdateBy}"/>, 
+                        	<h:outputText value="#{postCustomerInfoSummary.lastUpdateDateTime}">
+                        		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="th_TH"/>
+                        	</h:outputText>
+                        </div>
+                    </div>
+                    <div id="content_form">
+                        <!-- start content -->
+                        <table class="content_table_form">
+	                        <tr>
+                               <td>
+                                    <table>
+                                        <tr>
+                                            <td class="title" style="width:200px;">
+                                                <p:outputLabel value="#{msg.get('app.approveType')}" styleClass="center"/>
+                                            </td>
+                                            <td style="width:200px;">
+                                                <p:selectOneRadio disabled="true" value="#{accountInfo.approveType}">
+                                                	<f:selectItems value="#{enumGeneralControl.approveTypes}" var="approveType"
+                                                		itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}" 
+                                                		/>
+                                                </p:selectOneRadio>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                              <td><div class="separate"><!-- --></div></td>
+                        	</tr>
+                        	<ui:repeat var="group" value="#{postCustomerInfoSummary.groups}">
+	                        	<tr>
+			                   		<td>
+	                        			<h2><h:outputText value="#{msg.get(group.titleKey)}" /></h2>
+		                            </td>
+			                    </tr>
+			                    <tr>
+			                    	<td>
+			                    		<p:dataTable var="item" value="#{group.customers}"
+			                    			style="width:1600px !important"
+		                                 	rowIndexVar="rowIdx">
+			                                
+			                                <p:columnGroup type="header">
+			                                    <p:row>
+			                                        <p:column rowspan="2"
+			                                                  style="width: 20px;"/>
+			                                        <p:column rowspan="2"
+			                                                  style="width: 200px;"
+			                                                  headerText="#{msg.get('app.custInfoSummary.table.customerName')}" />
+			                                        <p:column colspan="2"
+			                                                  style="width: 260px;"
+			                                                  headerText="#{msg.get('app.custInfoSummary.table.id')}"
+			                                                  />
+			                                        <p:column colspan="2"
+			                                                  style="width: 130px;"
+			                                                  headerText="#{msg.get('app.custInfoSummary.table.relationShip')}" 
+			                                                  />
+			                                        <p:column colspan="2"
+			                                                  style="width: 400px;"
+			                                                  headerText="#{msg.get('app.custInfoSummary.table.reference')}"
+			                                                  />
+			                                        <p:column rowspan="2"
+			                                                  style="width: 70px;"
+			                                                  headerText="#{msg.get('app.custInfoSummary.table.share')}"
+			                                                  />
+			                                        <p:column rowspan="2"
+			                                                  style="width: 30px;"
+			                                                  headerText="#{msg.get('app.custInfoSummary.table.age')}"
+			                                                  />
+			                                        <p:column rowspan="2"
+			                                                  style="width: 30px;"
+			                                                  headerText="#{msg.get('app.custInfoSummary.table.kyc')}"
+			                                                  />
+			                                        <p:column rowspan="2"
+			                                                  style="width: 80px;"
+			                                                  headerText="#{msg.get('app.custInfoSummary.table.csi')}"
+			                                                  />
+			                                        <p:column rowspan="2"
+			                                                  style="width: 50px;max-width:50px;white-space:normal !important;word-wrap : break-word!important"
+			                                                  headerText="#{msg.get('app.custInfoSummary.table.worth')}"
+			                                                  />
+			                                        <p:column rowspan="2" width="30"
+			                                                  style="width: 30px;max-width:30px"/>
+			                                    </p:row>
+			                                    <p:row>
+			                                        <p:column
+			                                                  style="width: 130px;"
+			                                                  headerText="#{msg.get('app.custInfoSummary.table.id.citiRegis')}"
+			                                                  />
+			                                        <p:column 
+			                                                  style="width: 130px;"
+			                                                  headerText="#{msg.get('app.custInfoSummary.table.id.cus')}"
+			                                                  />
+			                                        <p:column 
+			                                                  style="width: 80px;"
+			                                                  headerText="#{msg.get('app.custInfoSummary.table.relationShip.type')}"
+			                                                  />
+			                                        <p:column 
+			                                                  style="width: 50px;max-width:50px;white-space:normal !important;word-wrap : break-word!important"
+			                                                  headerText="#{msg.get('app.custInfoSummary.table.relationShip.coll')}"
+			                                                  />
+			                                        <p:column 
+			                                                  style="width: 200px;"
+			                                                  headerText="#{msg.get('app.custInfoSummary.table.reference.ind')}"
+			                                                  />
+			                                        <p:column 
+			                                                  style="width: 200px;"
+			                                                  headerText="#{msg.get('app.custInfoSummary.table.reference.jus')}"
+			                                                  />
+			                                    </p:row>
+			                                </p:columnGroup>
+			
+			                                <p:column styleClass="center">
+			                                    #{rowIdx+1}
+			                                </p:column>
+			
+			                                <p:column styleClass="left">
+			                                    <h:outputText 
+			                                    	value="#{item.titleTh.titleTh}#{item.firstNameTh} #{item.lastNameTh}"
+													/>
+			                                </p:column>
+			
+			                                <p:column styleClass="center">
+			                                    <h:outputText value="#{item.customerEntity.id eq 1 ? item.citizenId : item.registrationId}"/>
+			                                </p:column>
+			
+			                                <p:column styleClass="center">
+			                                    <h:outputText value="#{item.tmbCustomerId}"/>
+			                                </p:column>
+			
+			                                <p:column styleClass="center">
+			                                    <h:outputText value="#{item.relation.description}"/>
+			                                </p:column>
+			
+			                                <p:column styleClass="center">
+			                                    <h:outputText value="#{item.collateralOwner == 2 ? 'Y' : 'N'}"/>
+			                                </p:column>
+			
+			                                <p:column styleClass="center">
+			                                    <h:outputText value="#{item.indLv}"/>
+			                                </p:column>
+			
+			                                <p:column styleClass="center">
+			                                    <h:outputText value="#{item.jurLv}"/>
+			                                </p:column>
+			
+			                                <p:column styleClass="center">
+			                                    <h:outputText value="#{item.percentShare}">
+			                                    	<f:convertNumber pattern="#0.00"/>
+			                                    </h:outputText>
+			                                </p:column>
+			
+			                                <p:column styleClass="center">
+			                                    <h:outputText value="#{item.age}"/>
+			                                </p:column>
+			
+			                                <p:column styleClass="center">
+			                                    <h:outputText value="#{item.kycLevel.kycLevel}"/>
+			                                </p:column>
+			
+			                                <p:column styleClass="center" style="white-space: normal!important;line-height: 1.5em;">
+			                                	<h:panelGroup layout="block" style="padding : 5px 0;">
+				                                	 <ui:repeat value="#{item.customerCSIList}" var="customerCSI">
+				                                        <h:outputText value="#{customerCSI.warningCode.code}"/><p:spacer width="5" />
+				                                    </ui:repeat>
+			                                	</h:panelGroup>
+			                                </p:column>
+			
+			                                <p:column styleClass="center">
+			                                    <h:outputText value="#{item.worthiness == 3 ? 'Pass' : item.worthiness == 4 ? 'Fail' : item.worthiness == 5 ? 'N/A' : '-'}"
+			                                                  />
+			                                </p:column>
+			
+			                                <p:column styleClass="center"> 
+			                                    <p:commandButton 
+			                                    	title="#{msg.get('app.button.edit')}"
+			                                        icon="ui-icon-pencil"
+			                                        style="margin-right:0px !important"
+			                                        action="#{postCustomerInfoSummary.onClickLink()}"
+			                                        process="@this"
+			                                        >
+			                                        <f:setPropertyActionListener value="#{item}" target="#{postCustomerInfoSummary.selectedCustomer}"/>
+			                                    </p:commandButton>
+			                                </p:column>
+		                           	 </p:dataTable>
+			                    	</td>
+			                    </tr>
+                        	</ui:repeat>
+                        </table>
+                    </div>
+                </div>
+                <div id="bottom_line"><!-- --></div>
+            </div>
+           
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="include/footer.xhtml" />
+            <!-- End Footer -->
+            </h:panelGroup>
+            </div>
+        </h:form>
+    </p:panel>
+</h:body>
+</f:view>
+</html>

@@ -127,4 +127,15 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
         log.info("-- List<NewCollateral> ::: size : {}", newCollateralDetailList.size());
         return newCollateralDetailList;
     }
+
+    public List<NewCollateral> findNewCollateral(long workCaseId, ProposeType proposeType){
+        log.info("-- findNewCollateralByWorkCaseId ::: {}", workCaseId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.eq("proposeType", proposeType));
+        criteria.addOrder(Order.asc("id"));
+        List<NewCollateral> newCollateralDetailList = (List<NewCollateral>) criteria.list();
+        log.info("-- List<NewCollateral> ::: size : {}", newCollateralDetailList.size());
+        return newCollateralDetailList;
+    }
  }

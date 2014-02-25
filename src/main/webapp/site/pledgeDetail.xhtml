@@ -29,6 +29,7 @@
             <ui:include src="include/menubar.xhtml" />
            
             <!-- End Menu -->
+			<h:panelGroup id="full_main_container" layout="block">
             <div id="content_container">
                 <div id="content_name">#{msg.get('app.pledgeDetail.subtitle')}</div>
                 <div id="content">
@@ -223,15 +224,14 @@
                         				<p:column style="width:50px" styleClass="center">
 	                        				<p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
                            						process="@this"
-                           						onstart="p_blockUI.show()"
-                           						oncomplete="p_blockUI.hide();p_pledgeACDepDlg.show();"
+                           						oncomplete="p_pledgeACDepDlg.show();"
                            						action="#{pledgeDetail.onOpenUpdatePledgeACDepDialog()}"
                            						update=":pledgeACDepDlg"
                            						style="margin-right:0px !important"
                            						rendered="#{pledgeAC.updatable}"
                            						>
-                           						<p:resetInput target=":pledgeACDepDlg" />
                            						<f:setPropertyActionListener target="#{pledgeDetail.selectedRowId}" value="#{rowIdx}" />
+                           						<p:resetInput target=":pledgeACDepDlg" />
                            					</p:commandButton>
                                             
                                             <p:commandButton icon="ui-icon-trash"  title="#{msg.get('app.button.delete')}"
@@ -315,7 +315,9 @@
 	                             <td colspan="100%" class="center">
 	                                 <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
 	                                 	styleClass="medium"
-	                                 	oncomplete="p_savePledgeDetailDlg.show()"
+										onstart="handleOnStartOpenCfmDlg();"
+										oncomplete="handleOnCompleteOpenCfmDlg(args,p_savePledgeDetailDlg);"
+										update=":frmMain:full_main_container,:result_dialog"
 	                                 	 />
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"
@@ -332,15 +334,11 @@
             <!-- Start Footer -->
             <ui:include src="include/footer.xhtml" />
             <!-- End Footer -->
+            </h:panelGroup>
             </div>
-           	
-           	<p:blockUI widgetVar="p_blockUI" block=":frmMain" trigger='saveBtn,cancelBtn,addBtn'>
-           		LOADING<br />
-                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-             </p:blockUI>
         </h:form>
     </p:panel>
-    
+    <ui:include src="dialog/postLoadingAndErrorDialog.xhtml" />
     <p:dialog id='pledgeACDepDlg' widgetVar="p_pledgeACDepDlg"
 		header="#{msg.get('app.pledgeDetail.pledgeAC.dialog.title')}" 
 		onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()' resizable="false"
@@ -363,7 +361,7 @@
 		<ui:param name="formId" value="savePledgeDetailFrm"/>
 		<ui:param name="controller" value="#{pledgeDetail}"/>
 		<ui:param name="action" value="onSavePledgeDetail"/>
-		<ui:param name="update" value=":frmMain"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
 </h:body>
 </f:view>
