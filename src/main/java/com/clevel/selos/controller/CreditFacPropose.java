@@ -8,6 +8,7 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.RadioValue;
@@ -490,20 +491,44 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     // ***************************************************************************************************************//
 
     //TODO Call Brms to get data Propose Credit Info
-    public void onRetrievePricingFee() {
+    public void onRetrievePricingFee(){
+        log.info("onRetrievePricingFee ::workCaseId :::  {}",workCaseId);
+        if (!Util.isNull(workCaseId)){
+            try {
+                StandardPricingResponse standardPricingResponse = creditFacProposeControl.getPriceFeeInterest(workCaseId);
+
+                if (!Util.isNull(standardPricingResponse) && ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
+                    log.info("standardPricingResponse ::: {}",standardPricingResponse.getPricingInterest().toString());
+                    log.info("standardPricingResponse ::: {}",standardPricingResponse.getPricingFeeList().toString());
+                }
+            } catch (Exception e) {
+                log.error("Exception while get getPriceFeeInterest data!", e);
+//                messageHeader = msg.get("app.propose.exception");
+//                message = e.getMessage();
+//                messageErr = true;
+//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
+        } else {
+//            messageHeader = msg.get("app.propose.exception");
+//            message = msg.get("app.credit.facility.propose.coms.err");
+//            messageErr = true;
+//            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+
+/*
         // test create data from retrieving
         BaseRate baseRate = baseRateDAO.findById(1);                            // for test only
         BigDecimal testValue = BigDecimal.valueOf(-1.75);                       // for test only
         String testLabel;                                                       // for test only
 
-        // ************************************************* fix ****************************************************//
+        // ************************************************* fix ****************************************************//*/
 
         if (testValue.compareTo(BigDecimal.ZERO) < 0) {
             testLabel = baseRate.getName() + " " + testValue;
         } else {
             testLabel = baseRate.getName() + " + " + testValue;
         }
-        //****** tier test create ********//
+        /*//****** tier test create ********//*/
         newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
 
         NewCreditTierDetailView newCreditTierDetailView = new NewCreditTierDetailView();
@@ -535,6 +560,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 newCreditFacilityView.getNewCreditDetailViewList().get(a).setNewCreditTierDetailViewList(newCreditTierDetailViewList);
             }
         }
+        */
 
     }
 

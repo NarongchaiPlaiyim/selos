@@ -6,6 +6,7 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.DBRMethod;
 import com.clevel.selos.model.ExposureMethod;
@@ -127,12 +128,13 @@ public class CreditFacProposeControl extends BusinessControl {
     ExistingCollateralDetailDAO existingCollateralDetailDAO;
     @Inject
     private COMSInterface comsInterface;
+    @Inject
+    BRMSControl brmsControl;
 
     private ExistingCreditFacilityView existingCreditFacilityView;
 
 
-    public CreditFacProposeControl() {
-    }
+    public CreditFacProposeControl() {}
 
     public NewCreditFacilityView findNewCreditFacilityByWorkCase(Long workCaseId) {
         NewCreditFacilityView newCreditFacilityView = null;
@@ -882,6 +884,23 @@ public class CreditFacProposeControl extends BusinessControl {
             log.error("Exception while get CSI data!", e);
         }
         return appraisalDataResult;
+    }
+
+    //call BRMS
+    public StandardPricingResponse getPriceFeeInterest(final long workCaseId ) {
+        log.info("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
+        StandardPricingResponse standardPricingResponse  = null;
+        try {
+            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
+
+            if (standardPricingResponse != null) {
+                log.info("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult());
+            }
+
+        }catch (Exception e) {
+            log.error("Exception while get getPriceFeeInterest data!", e);
+        }
+        return standardPricingResponse;
     }
 
 }
