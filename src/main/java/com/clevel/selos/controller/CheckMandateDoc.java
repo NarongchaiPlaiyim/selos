@@ -40,6 +40,7 @@ public class CheckMandateDoc implements Serializable {
         checkMandatoryDocView.setBRMSDocument("Citizen ID");
         checkMandatoryDocView.setOwners("Mr. Narongchai");
         checkMandatoryDocView.setFileName("File_2013107_1501");
+        checkMandatoryDocView.setDisabledCompleteFlag(true);
         checkMandatoryDocView.setComplete(1);
         checkMandatoryDocView.setIndistinct(true);
         checkMandatoryDocView.setRemark("test");
@@ -89,6 +90,15 @@ public class CheckMandateDoc implements Serializable {
         checkOtherDocView.setExpire(true);
         checkOtherDocView.setRemark("test");
         otherDocumentsList.add(checkOtherDocView);
+    }
+
+    public void onCreation() {
+        log.info("-- onCreation.");
+
+        //if found the documents matched in ECM completed = Y and will not allow user to change it;
+        //if not found the documents matched in ECM completed = N and it will be changed to Yes when user upload the document into ECM;
+
+        //query ECM for list of documents uploaded by user via ECM linkage by Application number.
     }
 
     public void onSaveCheckMandateDoc(){
