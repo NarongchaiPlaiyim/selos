@@ -45,6 +45,17 @@ public class BRMSControl extends BusinessControl {
     @Inject
     private DecisionDAO decisionDAO;
 
+    @Inject
+    private WorkCasePrescreenDAO workCasePrescreenDAO;
+    @Inject
+    private PrescreenDAO prescreenDAO;
+    @Inject
+    private PrescreenBusinessDAO prescreenBusinessDAO;
+    @Inject
+    private PrescreenCollateralDAO prescreenCollateralDAO;
+    @Inject
+    private PrescreenFacilityDAO prescreenFacilityDAO;
+
     public StandardPricingResponse getPriceFeeInterest(long workCaseId){
         BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId);
         StandardPricingResponse _returnPricingResponse = new StandardPricingResponse();
@@ -72,7 +83,6 @@ public class BRMSControl extends BusinessControl {
         StandardPricingResponse standardPricingResponse = brmsInterface.checkStandardPricingFeeRule(applicationInfo);
         return standardPricingResponse;
     }
-
 
     public StandardPricingResponse getPricingInt(long workCaseId){
         BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId);
@@ -159,7 +169,7 @@ public class BRMSControl extends BusinessControl {
             if(newCreditDetail.getRequestType() == RequestTypes.NEW.value()){
                 BRMSAccountRequested accountRequested = new BRMSAccountRequested();
 
-                accountRequested.setProposeId(String.valueOf(newCreditDetail.getId()));
+                accountRequested.setCreditDetailId(String.valueOf(newCreditDetail.getId()));
                 accountRequested.setProductProgram(newCreditDetail.getProductProgram().getBrmsCode());
                 accountRequested.setCreditType(newCreditDetail.getCreditType().getBrmsCode());
                 accountRequested.setLimit(newCreditDetail.getLimit());
@@ -175,6 +185,12 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setTotalApprovedCredit(totalApprovedCredit);
         applicationInfo.setAccountRequestedList(accountRequestedList);
         return applicationInfo;
+    }
+
+    public void getPrescreenResult(long workcasePrescreenId){
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workcasePrescreenId);
+
+
     }
 
 }
