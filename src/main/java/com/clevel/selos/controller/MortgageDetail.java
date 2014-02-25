@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -34,13 +33,12 @@ import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.AttorneyRelationType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.model.view.CreditDetailSimpleView;
 import com.clevel.selos.model.view.CustomerAttorneyView;
-import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.MortgageInfoAttorneySelectView;
 import com.clevel.selos.model.view.MortgageInfoCollOwnerView;
 import com.clevel.selos.model.view.MortgageInfoCollSubView;
 import com.clevel.selos.model.view.MortgageInfoView;
-import com.clevel.selos.model.view.CreditDetailSimpleView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
@@ -65,7 +63,6 @@ public class MortgageDetail implements Serializable {
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
-	private String fromPage;
 	private long mortgageId = -1;
 	private BasicInfoView basicInfoView;
 	private List<MortgageInfoAttorneySelectView> attorneySelectViews;
@@ -257,7 +254,6 @@ public class MortgageDetail implements Serializable {
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 		}
 		Map<String,Object> params =  FacesUtil.getParamMapFromFlash("mortgageParams");
-		fromPage = (String)params.get("fromPage");
 		mortgageId = Util.parseLong(params.get("mortgageId"),-1);
 		if (mortgageId <= 0)
 			mortgageId = Util.parseLong(FacesUtil.getParameter("mortgageId"),-1);
@@ -340,19 +336,14 @@ public class MortgageDetail implements Serializable {
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
 	
-	public String clickCustomerInfo(long id) {
-		//TODO Clear what it is
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-        map.put("isFromSummaryParam",false);
-        map.put("isFromJuristicParam",false);
-        map.put("isFromIndividualParam",false);
-        map.put("isEditFromJuristic", false);
-        CustomerInfoView cusView = new CustomerInfoView();
-        cusView.reset();
-        map.put("customerInfoView", cusView);
-        map.put("customerId", id);
-		return "customerInfoIndividual?faces-redirect=true";
+	public String clickCustomerInfo(long id,boolean juristic) {
+		FacesUtil.getFlash().put("customerId", id);
+		if (juristic) {
+			return "postCustomerInfoJuris?faces-redirect=true";
+		} else {
+			// Individual
+			return "postCustomerInfoIndv?faces-redirect=true";
+		}
 	}
 	/*
 	 * Private method
@@ -368,10 +359,10 @@ public class MortgageDetail implements Serializable {
 		provinces = generalPeopleInfoControl.listProvinces();
 		districts = Collections.emptyList(); // Need to process
 		subdistricts = Collections.emptyList(); //Need to process
-		maritalStatuses = generalPeopleInfoControl.listMaritialStatuses();
+		maritalStatuses = generalPeopleInfoControl.listMaritalStatuses();
 		countries = generalPeopleInfoControl.listCountries();
 		
-		spouseMaritialSet = generalPeopleInfoControl.listSpouseReqMaritialStatues();
+		spouseMaritialSet = generalPeopleInfoControl.listSpouseReqMaritalStatues();
 	}
 	private void _loadInitData() {
 		preRenderCheck = false;

@@ -60,6 +60,9 @@ public class ExistingCreditFacilityTransform extends Transform {
 
     public ExistingCreditFacilityView transformsToView(ExistingCreditFacility existingCreditFacility) {
         ExistingCreditFacilityView existingCreditFacilityView = new ExistingCreditFacilityView();
+        if (existingCreditFacility == null) {
+            return existingCreditFacilityView;
+        }
 
         existingCreditFacilityView.setId(existingCreditFacility.getId());
         existingCreditFacilityView.setCreateDate(existingCreditFacility.getCreateDate());

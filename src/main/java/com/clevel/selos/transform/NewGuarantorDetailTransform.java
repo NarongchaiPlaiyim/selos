@@ -37,7 +37,7 @@ public class NewGuarantorDetailTransform extends Transform {
     NewGuarantorCreditTransform newGuarantorCreditTransform;
 
 
-    public List<NewGuarantorDetail> transformToModel(List<NewGuarantorDetailView> newGuarantorDetailViewList, NewCreditFacility newCreditFacility, User user) {
+    public List<NewGuarantorDetail> transformToModel(List<NewGuarantorDetailView> newGuarantorDetailViewList, NewCreditFacility newCreditFacility, User user ) {
 
         List<NewGuarantorDetail> newGuarantorDetailList = new ArrayList<NewGuarantorDetail>();
         NewGuarantorDetail newGuarantorDetail;
@@ -63,7 +63,7 @@ public class NewGuarantorDetailTransform extends Transform {
 
             if(Util.safetyList(newGuarantorDetailView.getProposeCreditDetailViewList()).size() > 0){
                 log.debug("Start.. transformToModel proposeCreditDetailViewList : {}", newGuarantorDetailView.getProposeCreditDetailViewList());
-                List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorCreditTransform.transformsToModelForGuarantor(newGuarantorDetailView.getProposeCreditDetailViewList(), newCreditFacility.getNewCreditDetailList(), newGuarantorDetail, user);
+                List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorCreditTransform.transformsToModelForGuarantor(newGuarantorDetailView.getProposeCreditDetailViewList(), newCreditFacility.getNewCreditDetailList(), newGuarantorDetail, user );
                 log.debug("End.. transformToModel newGuarantorCreditList : {}", newGuarantorCreditList);
                 newGuarantorDetail.setNewGuarantorCreditList(newGuarantorCreditList);
             }

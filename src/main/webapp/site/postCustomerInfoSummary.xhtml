@@ -19,7 +19,7 @@
     <p:panel id="pnl_maincontainer" styleClass="panel">
         <h:form id="frmMain">
         	<div id="main_container">
-        	<h:panelGroup id="full_main_container" layout="block">
+        	
             <!-- Start Header Logo -->
             <ui:include src="include/header_logo.xhtml" />
             <!-- End Header Logo -->
@@ -29,7 +29,8 @@
             <!-- Start Menu -->
             <ui:include src="include/menubar.xhtml" />
            
-            <!-- End Menu -->
+           <!-- End Menu -->
+			<h:panelGroup id="full_main_container" layout="block">
             <div id="content_container">
                 <div id="content_name">#{msg.get('app.custInfoSummary.header')}</div>
                 <div id="content">
@@ -221,8 +222,6 @@
 			                                    	title="#{msg.get('app.button.edit')}"
 			                                        icon="ui-icon-pencil"
 			                                        style="margin-right:0px !important"
-			                                        onstart="blockUI.show()"
-			                                        oncomplete="blockUI.hide()"
 			                                        action="#{postCustomerInfoSummary.onClickLink()}"
 			                                        process="@this"
 			                                        >
@@ -245,11 +244,6 @@
             <!-- End Footer -->
             </h:panelGroup>
             </div>
-            
-            <p:blockUI block=":frmMain:full_main_container" widgetVar="blockUI">
-	            LOADING<br />
-	            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-	        </p:blockUI>
         </h:form>
     </p:panel>
 </h:body>
