@@ -51,7 +51,10 @@ public class PostCustomerInfoSummary implements Serializable {
 	public PostCustomerInfoSummary() {
 	}
 	public Date getLastUpdateDateTime() {
-		return basicInfoView.getModifyDate();
+		if (basicInfoView == null)
+			return null;
+		else
+			return basicInfoView.getModifyDate();
 	}
 	public String getLastUpdateBy() {
 		if (basicInfoView != null && basicInfoView.getModifyBy() != null)
@@ -74,6 +77,7 @@ public class PostCustomerInfoSummary implements Serializable {
 	public void setSelectedCustomer(CustomerInfoView selectedCustomer) {
 		this.selectedCustomer = selectedCustomer;
 	}
+	
 	
 	/*
 	 * Action
@@ -117,9 +121,9 @@ public class PostCustomerInfoSummary implements Serializable {
 		FacesUtil.getFlash().put("customerId", selectedCustomer.getId());
 		if (selectedCustomer.getCustomerEntity().getId() == 1) {
 			// Individual
-			return "postCustomerInfoIndividual?faces-redirect=true";
+			return "postCustomerInfoIndv?faces-redirect=true";
 		} else {
-			return "postCustomerInfoJuristic?faces-redirect=true";
+			return "postCustomerInfoJuris?faces-redirect=true";
 		}
 	}
 	
@@ -127,7 +131,7 @@ public class PostCustomerInfoSummary implements Serializable {
 	 * Private method
 	 */
 	private void _loadInitData() {
-		preRenderCheck = false;
+		
 		CustomerInfoSummaryView summary = null;
 		if (workCaseId > 0) {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);

@@ -152,9 +152,17 @@ public class CustomerAttorneyTransform extends Transform {
 		}
 		
 		view.setMobile1(model.getMobileNumber());
+		if (model.getSpouseId() > 0) {
+    		Customer spouseModel = customerDAO.findById(model.getSpouseId());
+    		if (spouseModel != null) {
+    			if (spouseModel.getTitle() != null)
+    				view.setSpouseTitleId(spouseModel.getTitle().getId());
+    			view.setSpouseNameTh(spouseModel.getNameTh());
+    			view.setSpouseLastNameTh(spouseModel.getLastNameTh());
+    		}
+    	}
 		/*
 		 * No data from customer
-		 * spouse -> Info
 		 * father -> Info
 		 * mother -> Info
 		 * Home Phone
