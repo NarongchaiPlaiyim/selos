@@ -6,6 +6,7 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.DBRMethod;
 import com.clevel.selos.model.ExposureMethod;
@@ -127,6 +128,8 @@ public class CreditFacProposeControl extends BusinessControl {
     ExistingCollateralDetailDAO existingCollateralDetailDAO;
     @Inject
     private COMSInterface comsInterface;
+    @Inject
+    BRMSControl brmsControl;
 
     private ExistingCreditFacilityView existingCreditFacilityView;
 
@@ -813,7 +816,7 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         //--- Need to Delete newGuarantorCreditList from newGuarantorCredit before Insert new
-        List<NewGuarantorCredit> newGuarantorCreditListDelete = newGuarantorRelationDAO.getListByWorkCase(workCase);
+        List<NewGuarantorCredit> newGuarantorCreditListDelete = newGuarantorRelationDAO.getListByNewCreditFacility(workCase);
         log.info("before :: newGuarantorCreditListDelete :: size :: {}",newGuarantorCreditListDelete.size());
         newGuarantorRelationDAO.delete(newGuarantorCreditListDelete);
         log.info("after :: newGuarantorCreditListDelete :: size :: {}",newGuarantorCreditListDelete.size());
@@ -822,7 +825,6 @@ public class CreditFacProposeControl extends BusinessControl {
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newGuarantorDetailViewList : {}", newCreditFacilityView.getNewGuarantorDetailViewList());
             List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser);
-
             newGuarantorDetailDAO.persist(newGuarantorDetailList);
             log.debug("saveCreditFacility ::: persist newGuarantorDetailList : {}", newGuarantorDetailList);
         }
@@ -830,13 +832,17 @@ public class CreditFacProposeControl extends BusinessControl {
         //--- Save to NewCollateral
         //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
         List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase);
+        log.info("before :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
         newSubCollMortgageDAO.delete(newCollateralSubMortgages);
+        log.info("after :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
         //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
         List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase);
         newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
         //--- Need to delete Collateral Credit from CollateralRelCredit before Insert new
         List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditDAO.getListByWorkCase(workCase);
+        log.info("before :: newCollateralCreditList :: size :: {}",newCollateralCreditList.size());
         newCollateralCreditDAO.delete(newCollateralCreditList);
+        log.info("after :: newCollateralCreditList :: size :: {}",newCollateralCreditList.size());
 
         if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCollateralViewList : {}", newCreditFacilityView.getNewCollateralViewList());
@@ -864,6 +870,23 @@ public class CreditFacProposeControl extends BusinessControl {
             log.error("Exception while get CSI data!", e);
         }
         return appraisalDataResult;
+    }
+
+    //call BRMS
+    public StandardPricingResponse getPriceFeeInterest(final long workCaseId ) {
+        log.info("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
+        StandardPricingResponse standardPricingResponse  = null;
+        try {
+            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
+
+            if (standardPricingResponse != null) {
+                log.info("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult());
+            }
+
+        }catch (Exception e) {
+            log.error("Exception while get getPriceFeeInterest data!", e);
+        }
+        return standardPricingResponse;
     }
 
 }
