@@ -29,6 +29,7 @@
             <ui:include src="include/menubar.xhtml" />
            
             <!-- End Menu -->
+			<h:panelGroup id="full_main_container" layout="block">
             <div id="content_container">
                 <div id="content_name">#{msg.get('app.limitSetup.subtitle')}</div>
                 <div id="content">
@@ -121,8 +122,10 @@
                         
                         <div style="margin:40px auto 0;" class="medium">
                         	<p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
-                             	styleClass="medium"
-                             	oncomplete="p_saveLimitSetupDlg.show();"
+                                styleClass="medium"
+								onstart="handleOnStartOpenCfmDlg();"
+								oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveLimitSetupDlg);"
+								update=":frmMain:full_main_container,:result_dialog"
                              	 />
                         </div>
                     </div>
@@ -134,22 +137,19 @@
             <!-- Start Footer -->
             <ui:include src="include/footer.xhtml" />
             <!-- End Footer -->
+            </h:panelGroup>
             </div>
-           	
-           	<p:blockUI widgetVar="p_blockUI" block=":frmMain" trigger='saveBtn'>
-           		LOADING<br />
-                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-             </p:blockUI>
+ 
         </h:form>
     </p:panel>
-
+	<ui:include src="dialog/postLoadingAndErrorDialog.xhtml" />
 	<ui:include src="dialog/confirmEditDlg.xhtml">
 		<ui:param name="id" value="saveLimitSetupDlg"/>
 		<ui:param name="name" value="p_saveLimitSetupDlg"/>
 		<ui:param name="formId" value="saveLimitSetupFrm"/>
 		<ui:param name="controller" value="#{limitSetup}"/>
 		<ui:param name="action" value="onSaveLimitSetup"/>
-		<ui:param name="update" value=":frmMain"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
 </h:body>
 </f:view>

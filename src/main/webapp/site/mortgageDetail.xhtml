@@ -29,6 +29,7 @@
             <ui:include src="include/menubar.xhtml" />
            
             <!-- End Menu -->
+			<h:panelGroup id="full_main_container" layout="block">
             <div id="content_container">
                 <div id="content_name">#{msg.get('app.mortgageDetail.subtitle')}</div>
                 <div id="content">
@@ -816,7 +817,9 @@
 	                             <td colspan="100%" class="center">
 	                                 <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
 	                                 	styleClass="medium"
-	                                 	oncomplete="p_saveMortgageDetailDlg.show()"
+										onstart="handleOnStartOpenCfmDlg();"
+										oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveMortgageDetailDlg);"
+										update=":frmMain:full_main_container,:result_dialog"
 	                                 	 />
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"
@@ -833,28 +836,19 @@
             <!-- Start Footer -->
             <ui:include src="include/footer.xhtml" />
             <!-- End Footer -->
+            </h:panelGroup>
             </div>
-           	<p:blockUI widgetVar="p_blockUI" block=":frmMain" trigger='saveBtn,cancelBtn'>
-           		LOADING<br />
-                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-             </p:blockUI>
         </h:form>
     </p:panel>
    
-   <p:dialog widgetVar='p_loading_dialog' id='loading_dialog' modal='true' 
-		closable='false' resizable='false' draggable="false"
-		onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()'
-		appendTo="@(body)" header="LOADING">
-	 	<p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-	 	<h:outputText value="LOADING" />
-	</p:dialog>
+   <ui:include src="dialog/postLoadingAndErrorDialog.xhtml" />
     <ui:include src="dialog/confirmEditDlg.xhtml">
 		<ui:param name="id" value="saveMortgageDetailDlg"/>
 		<ui:param name="name" value="p_saveMortgageDetailDlg"/>
 		<ui:param name="formId" value="saveMortgageDetailFrm"/>
 		<ui:param name="controller" value="#{mortgageDetail}"/>
 		<ui:param name="action" value="onSaveMortgageDetail"/>
-		<ui:param name="update" value=":frmMain"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
 </h:body>
 </f:view>
