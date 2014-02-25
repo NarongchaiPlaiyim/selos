@@ -8,6 +8,7 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.RadioValue;
@@ -136,6 +137,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private CustomerInfoView collateralOwnerUW;
     private boolean flagComs;
     private boolean flagButtonCollateral;
+    private boolean editProposeColl;
 
     // for  control Guarantor Information Dialog
     private NewGuarantorDetailView newGuarantorDetailView;
@@ -407,6 +409,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         flagButtonCollateral = true;
         modeEditReducePricing = false;
         modeEditReduceFront = false;
+        editProposeColl = false;
 
         creditRequestTypeList = creditRequestTypeDAO.findAll();
         countryList = countryDAO.findAll();
@@ -443,6 +446,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                     if (!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())) {
                         newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
+                        newCollateralView.setComs(true);
                         flagComs = true;
                         flagButtonCollateral = false;
                     } else {
@@ -484,24 +488,47 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         flagButtonCollateral = true;
     }
 
-
     // ***************************************************************************************************************//
 
     //TODO Call Brms to get data Propose Credit Info
-    public void onRetrievePricingFee() {
+    public void onRetrievePricingFee(){
+        log.info("onRetrievePricingFee ::workCaseId :::  {}",workCaseId);
+        if (!Util.isNull(workCaseId)){
+            try {
+                StandardPricingResponse standardPricingResponse = creditFacProposeControl.getPriceFeeInterest(workCaseId);
+
+                if (!Util.isNull(standardPricingResponse) && ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
+                    log.info("standardPricingResponse ::: {}",standardPricingResponse.getPricingInterest().toString());
+                    log.info("standardPricingResponse ::: {}",standardPricingResponse.getPricingFeeList().toString());
+                }
+            } catch (Exception e) {
+                log.error("Exception while get getPriceFeeInterest data!", e);
+//                messageHeader = msg.get("app.propose.exception");
+//                message = e.getMessage();
+//                messageErr = true;
+//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
+        } else {
+//            messageHeader = msg.get("app.propose.exception");
+//            message = msg.get("app.credit.facility.propose.coms.err");
+//            messageErr = true;
+//            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+
+/*
         // test create data from retrieving
         BaseRate baseRate = baseRateDAO.findById(1);                            // for test only
         BigDecimal testValue = BigDecimal.valueOf(-1.75);                       // for test only
         String testLabel;                                                       // for test only
 
-        // ************************************************* fix ****************************************************//
+        // ************************************************* fix ****************************************************//*/
 
         if (testValue.compareTo(BigDecimal.ZERO) < 0) {
             testLabel = baseRate.getName() + " " + testValue;
         } else {
             testLabel = baseRate.getName() + " + " + testValue;
         }
-        //****** tier test create ********//
+        /*//****** tier test create ********//*/
         newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
 
         NewCreditTierDetailView newCreditTierDetailView = new NewCreditTierDetailView();
@@ -533,6 +560,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 newCreditFacilityView.getNewCreditDetailViewList().get(a).setNewCreditTierDetailViewList(newCreditTierDetailViewList);
             }
         }
+        */
 
     }
 
@@ -954,6 +982,11 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //  **************************************** END Tier Dialog  ****************************************//
 
     // **************************************** Start Propose Collateral Information  *********************************//
+    public void onChangeCollTypeLTV(){
+        log.info("onChangeCollTypeLTV ::; {}");
+
+    }
+
     public void onAddProposeCollInfo() {
         log.debug("onAddProposeCollInfo ::: {}", newCreditFacilityView.getNewCollateralViewList().size());
         modeForButton = ModeForButton.ADD;
@@ -970,18 +1003,22 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.debug("onEditProposeCollInfo :: {}", selectCollateralDetailView.getId());
         log.debug("onEditProposeCollInfo ::rowIndexCollateral  {}", rowIndexCollateral);
         modeForButton = ModeForButton.EDIT;
+        editProposeColl = true;
         newCollateralView = new NewCollateralView();
         Cloner collateralClone = new Cloner();
         newCollateralView = collateralClone.deepClone(selectCollateralDetailView);
         int tempSeq = 0;
         Cloner cloner = new Cloner();
         proposeCreditDetailListTemp = cloner.deepClone(proposeCreditDetailViewList);
-        newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailListTemp);
         flagComs = false;
-        if (newCollateralView.isComs()) { //ถ้าเป็น data  ที่ได้จาก coms  set rendered false (ไม่แสดงปุ่ม edit)
+
+        log.info("selectCollateralDetailView.isComs() ::: {}",selectCollateralDetailView.isComs());
+        if (selectCollateralDetailView.isComs()) { //ถ้าเป็น data  ที่ได้จาก coms  set rendered false (ไม่แสดงปุ่ม edit)
             flagButtonCollateral = false;
+            flagComs = true;
         } else {
             flagButtonCollateral = true;
+            newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailListTemp);
         }
 
         if (selectCollateralDetailView.getProposeCreditDetailViewList().size() > 0) {
@@ -1020,7 +1057,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             proposeCollateralInfoAdd.setBdmComments(newCollateralView.getBdmComments());
             proposeCollateralInfoAdd.setMortgageCondition(newCollateralView.getMortgageCondition());
             proposeCollateralInfoAdd.setMortgageConditionDetail(newCollateralView.getMortgageConditionDetail());
-
+            proposeCollateralInfoAdd.setComs(newCollateralView.isComs());
             newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
 
             if (newCollateralView.getNewCollateralHeadViewList().size() > 0) {
@@ -1072,13 +1109,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
             }
 
-            if (flagComs) {
-                proposeCollateralInfoAdd.setComs(false);
-                flagButtonCollateral = false;
-            } else {
-                proposeCollateralInfoAdd.setComs(true);
-                flagButtonCollateral = true;
-            }
 
             newCreditFacilityView.getNewCollateralViewList().add(proposeCollateralInfoAdd);
 //            else {
@@ -1105,6 +1135,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setBdmComments(newCollateralView.getBdmComments());
             newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setMortgageCondition(newCollateralView.getMortgageCondition());
             newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setMortgageConditionDetail(newCollateralView.getMortgageConditionDetail());
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setComs(newCollateralView.isComs());
+            //  headCollateral not update
             newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setNewCollateralHeadViewList(newCollateralView.getNewCollateralHeadViewList());
 
             boolean checkPlus;
@@ -1142,7 +1174,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 }
             }
             newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setProposeCreditDetailViewList(newCollateralView.getProposeCreditDetailViewList());
-
+            editProposeColl = false;
 
         } else {
             log.debug("onSaveSubCollateral ::: Undefined modeForButton !!");
@@ -2035,6 +2067,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void setFlagComs(boolean flagComs) {
         this.flagComs = flagComs;
+    }
+
+    public boolean isEditProposeColl() {
+        return editProposeColl;
+    }
+
+    public void setEditProposeColl(boolean editProposeColl) {
+        this.editProposeColl = editProposeColl;
     }
 }
 
