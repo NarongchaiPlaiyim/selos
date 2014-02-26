@@ -31,12 +31,15 @@ public class NewCollateral implements Serializable {
     @Column(name = "coms")
     private int coms;
 
+    @Column(name = "job_id")
+    private String jobID;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "appraisal_date")
     private Date appraisalDate;
 
-    @Column(name = "job_id")
-    private String jobID;
+    @Column(name = "number_months_from_appr_date", columnDefinition = "int default 0")
+    private int numberMonthsFromApprDate;
 
     @Column(name = "aad_decision")
     private String aadDecision;
@@ -128,6 +131,14 @@ public class NewCollateral implements Serializable {
         this.appraisalRequest = appraisalRequest;
     }
 
+    public String getJobID() {
+        return jobID;
+    }
+
+    public void setJobID(String jobID) {
+        this.jobID = jobID;
+    }
+
     public Date getAppraisalDate() {
         return appraisalDate;
     }
@@ -136,12 +147,8 @@ public class NewCollateral implements Serializable {
         this.appraisalDate = appraisalDate;
     }
 
-    public String getJobID() {
-        return jobID;
-    }
-
-    public void setJobID(String jobID) {
-        this.jobID = jobID;
+    public void setNumberMonthsFromApprDate(int numberMonthsFromApprDate) {
+        this.numberMonthsFromApprDate = numberMonthsFromApprDate;
     }
 
     public String getAadDecision() {
@@ -310,8 +317,10 @@ public class NewCollateral implements Serializable {
                 .append("id", id)
                 .append("proposeType", proposeType)
                 .append("appraisalRequest", appraisalRequest)
-                .append("appraisalDate", appraisalDate)
+                .append("coms", coms)
                 .append("jobID", jobID)
+                .append("appraisalDate", appraisalDate)
+                .append("numberMonthsFromApprDate", numberMonthsFromApprDate)
                 .append("aadDecision", aadDecision)
                 .append("aadDecisionReason", aadDecisionReason)
                 .append("aadDecisionReasonDetail", aadDecisionReasonDetail)

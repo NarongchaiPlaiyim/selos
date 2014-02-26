@@ -659,12 +659,12 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
         onChangeRequestType();
 
-        BaseRate standardBase = baseRateDAO.findById(1);
-        BaseRate suggestBase = baseRateDAO.findById(1);
+        if (baseRateList != null && !baseRateList.isEmpty()) {
+            standardBasePriceDlg = getNewBaseRate(baseRateList.get(0));
+            suggestBasePriceDlg = getNewBaseRate(baseRateList.get(0));
+        }
 
-        standardBasePriceDlg = standardBase;
         standardInterestDlg = BigDecimal.ZERO;
-        suggestBasePriceDlg = suggestBase;
         suggestInterestDlg = BigDecimal.ZERO;
     }
 
