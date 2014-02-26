@@ -98,8 +98,6 @@ public class Decision implements Serializable {
 
     //Transform
     @Inject
-    DecisionTransform decisionTransform;
-    @Inject
     ProductTransform productTransform;
     @Inject
     DisbursementTypeTransform disbursementTypeTransform;
@@ -576,9 +574,14 @@ public class Decision implements Serializable {
     public void onChangeCreditType() {
         log.debug("onChangeCreditType() creditType.id: {}", selectedApproveCredit.getCreditTypeView().getId());
         if (selectedApproveCredit.getProductProgramView().getId() != 0 && selectedApproveCredit.getCreditTypeView().getId() != 0) {
-            ProductFormulaView productFormulaView = productControl.getProductFormulaView(selectedApproveCredit.getCreditTypeView().getId(),
+            int specialProgramId = specialProgramBasicInfo != null ? specialProgramBasicInfo.getId() : 0;
+            int creditCusType = decisionView.getCreditCustomerType() != null ? decisionView.getCreditCustomerType().value() : CreditCustomerType.NOT_SELECTED.value();
+
+            ProductFormulaView productFormulaView = productControl.getProductFormulaView(
+                    selectedApproveCredit.getCreditTypeView().getId(),
                     selectedApproveCredit.getProductProgramView().getId(),
-                    decisionView.getCreditCustomerType().value(), specialProgramBasicInfo.getId(), applyTCG);
+                    creditCusType, specialProgramId, applyTCG);
+
             if (productFormulaView != null) {
                 log.debug("onChangeCreditType :::: productFormula : {}", productFormulaView.getId());
                 selectedApproveCredit.setProductCode(productFormulaView.getProductCode());

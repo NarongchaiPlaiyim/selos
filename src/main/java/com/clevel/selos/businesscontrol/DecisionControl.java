@@ -36,8 +36,6 @@ public class DecisionControl extends BusinessControl {
 
     //Transform
     @Inject
-    private DecisionTransform decisionTransform;
-    @Inject
     private DecisionFollowConditionTransform decisionFollowConditionTransform;
     @Inject
     private ApprovalHistoryTransform approvalHistoryTransform;
