@@ -2,17 +2,16 @@ package com.clevel.selos.model.view;
 
 import java.io.Serializable;
 
-public class MortgageInfoAttorneySelectView implements Serializable {
+public class CustomerAttorneySelectView implements Serializable {
 	private static final long serialVersionUID = 3281627929136469566L;
 	private long customerId;
-	private CustomerAttorneyView attorneyDetail;
 	private String customerName;
 	private String citizenId;
 	private String tmbCustomerId;
 	private String relation;
 	private boolean juristic;
 	
-	public MortgageInfoAttorneySelectView() {
+	public CustomerAttorneySelectView() {
 		
 	}
 
@@ -22,14 +21,6 @@ public class MortgageInfoAttorneySelectView implements Serializable {
 
 	public void setCustomerId(long customerId) {
 		this.customerId = customerId;
-	}
-
-	public CustomerAttorneyView getAttorneyDetail() {
-		return attorneyDetail;
-	}
-
-	public void setAttorneyDetail(CustomerAttorneyView attorneyDetail) {
-		this.attorneyDetail = attorneyDetail;
 	}
 
 	public String getCustomerName() {
