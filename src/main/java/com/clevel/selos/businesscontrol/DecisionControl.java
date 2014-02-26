@@ -1,8 +1,11 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.working.ApprovalHistoryDAO;
 import com.clevel.selos.dao.working.DecisionFollowConditionDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.CreditCustomerType;
+import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ApprovalHistory;
 import com.clevel.selos.model.db.working.DecisionFollowCondition;
@@ -28,6 +31,8 @@ public class DecisionControl extends BusinessControl {
     private ApprovalHistoryDAO approvalHistoryDAO;
     @Inject
     private DecisionFollowConditionDAO decisionFollowConditionDAO;
+    @Inject
+    private StepDAO stepDAO;
 
     //Transform
     @Inject
@@ -40,6 +45,8 @@ public class DecisionControl extends BusinessControl {
     private CreditRequestTypeTransform creditRequestTypeTransform;
     @Inject
     private CountryTransform countryTransform;
+    @Inject
+    private StepTransform stepTransform;
 
     //Other Business Control
     @Inject
@@ -58,8 +65,8 @@ public class DecisionControl extends BusinessControl {
     public DecisionView getDecision(long workCaseId) {
         DecisionView decisionView = new DecisionView();
         // Credit Facility Existing
-        ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.getExistingCreditFacility(workCaseId);
-        if (existingCreditFacilityView != null) {
+        ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
+        if (existingCreditFacilityView != null && existingCreditFacilityView.getId() != 0) {
             // Existing Condition
             decisionView.setExtConditionComCreditList(existingCreditFacilityView.getExistingConditionDetailViewList());
             // Borrower - List
@@ -103,7 +110,11 @@ public class DecisionControl extends BusinessControl {
 
         // Credit Facility Propose
         NewCreditFacilityView newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
-        if (newCreditFacilityView != null) {
+        if (newCreditFacilityView != null && newCreditFacilityView.getId() != 0) {
+            decisionView.setCreditCustomerType(
+                      newCreditFacilityView.getCreditCustomerType() == 2 ? CreditCustomerType.PRIME
+                    : newCreditFacilityView.getCreditCustomerType() == 1 ? CreditCustomerType.NORMAL
+                    : CreditCustomerType.NOT_SELECTED);
             decisionView.setLoanRequestType(creditRequestTypeTransform.transformToView(newCreditFacilityView.getLoanRequestType()));
             decisionView.setInvestedCountry(countryTransform.transformToView(newCreditFacilityView.getInvestedCountry()));
             decisionView.setExistingSMELimit(newCreditFacilityView.getExistingSMELimit());
@@ -152,6 +163,29 @@ public class DecisionControl extends BusinessControl {
         List<ApprovalHistory> submittedApprovalHistories = approvalHistoryDAO.findByWorkCase(workCaseId, true);
         decisionView.setApprovalHistoryList(approvalHistoryTransform.transformToView(submittedApprovalHistories));
         return decisionView;
+    }
+
+    public ApprovalHistoryView getApprovalHistoryView(long stepId) {
+        ApprovalHistoryView approvalHistoryView = new ApprovalHistoryView();
+        StepView stepView;
+        if (stepId != 0) {
+            stepView = stepTransform.transformToView(stepDAO.findById(stepId));
+        } else {
+            stepView = new StepView();
+        }
+
+        User user = getCurrentUser();
+        UserView userView = new UserView();
+        if (user != null) {
+            userView.setId(user.getId());
+            userView.setUserName(user.getUserName());
+            userView.setTitleName(user.getTitle() != null ? user.getTitle().getName() : "");
+            userView.setRoleDescription(user.getRole() != null ? user.getRole().getDescription() : "");
+        }
+
+        approvalHistoryView.setStepView(stepView);
+        approvalHistoryView.setUserView(userView);
+        return approvalHistoryView;
     }
 
     public int getUserRoleId() {

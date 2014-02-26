@@ -313,6 +313,21 @@ public class Util implements Serializable {
         }
     }
 
+    public static BigDecimal compareToFindLower(BigDecimal b1, BigDecimal b2) {
+        if (b1 == null) {
+            b1 = BigDecimal.ZERO;
+        }
+        if (b2 == null) {
+            b2 = BigDecimal.ZERO;
+        }
+
+        if (b1.compareTo(b2) > 0) {
+            return b2;
+        } else {
+            return b1;
+        }
+    }
+
     public static <T> List<T> safetyList(List<T> list) {
         return list == null ? Collections.<T>emptyList() : list;
     }

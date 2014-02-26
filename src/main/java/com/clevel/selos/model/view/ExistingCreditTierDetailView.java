@@ -13,13 +13,13 @@ public class ExistingCreditTierDetailView implements Serializable {
     private long id;
     private int no;
     private BigDecimal finalInterest;
-    private BaseRate finalBasePrice;
+    private BaseRateView finalBasePrice;
     private String finalPriceRate;
     private BigDecimal installment;
-    private BaseRate standardBasePrice;
+    private BaseRateView standardBasePrice;
     private String standardPrice;
     private BigDecimal standardInterest;
-    private BaseRate suggestBasePrice;
+    private BaseRateView suggestBasePrice;
     private String suggestPrice;
     private BigDecimal suggestInterest;
     private int tenor;
@@ -34,9 +34,9 @@ public class ExistingCreditTierDetailView implements Serializable {
     }
 
     public void reset() {
-        this.standardBasePrice =  new BaseRate();
-        this.suggestBasePrice = new BaseRate();
-        this.finalBasePrice = new BaseRate();
+        this.standardBasePrice =  new BaseRateView();
+        this.suggestBasePrice = new BaseRateView();
+        this.finalBasePrice = new BaseRateView();
     }
 
     public long getId() {
@@ -160,27 +160,27 @@ public class ExistingCreditTierDetailView implements Serializable {
         this.suggestInterest = suggestInterest;
     }
 
-    public BaseRate getFinalBasePrice() {
+    public BaseRateView getFinalBasePrice() {
         return finalBasePrice;
     }
 
-    public void setFinalBasePrice(BaseRate finalBasePrice) {
+    public void setFinalBasePrice(BaseRateView finalBasePrice) {
         this.finalBasePrice = finalBasePrice;
     }
 
-    public BaseRate getStandardBasePrice() {
+    public BaseRateView getStandardBasePrice() {
         return standardBasePrice;
     }
 
-    public void setStandardBasePrice(BaseRate standardBasePrice) {
+    public void setStandardBasePrice(BaseRateView standardBasePrice) {
         this.standardBasePrice = standardBasePrice;
     }
 
-    public BaseRate getSuggestBasePrice() {
+    public BaseRateView getSuggestBasePrice() {
         return suggestBasePrice;
     }
 
-    public void setSuggestBasePrice(BaseRate suggestBasePrice) {
+    public void setSuggestBasePrice(BaseRateView suggestBasePrice) {
         this.suggestBasePrice = suggestBasePrice;
     }
 

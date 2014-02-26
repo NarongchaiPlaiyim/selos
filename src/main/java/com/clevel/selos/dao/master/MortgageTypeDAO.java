@@ -14,13 +14,14 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 
 public class MortgageTypeDAO extends GenericDAO<MortgageType, Integer> {
-    private static final long serialVersionUID = 2836623946607484238L;
 	@Inject
     @SELOS
     Logger log;
-    
+
+    @Inject
     public MortgageTypeDAO() {
     }
+
     @SuppressWarnings("unchecked")
     public List<MortgageType> findMortgageTypeForGuarantor() {
 		Criteria criteria = createCriteria()

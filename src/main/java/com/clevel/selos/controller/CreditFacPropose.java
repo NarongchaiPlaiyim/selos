@@ -564,54 +564,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     }
 
-    public void calculateInstallment(NewCreditDetailView creditDetailView) {
-        log.info("creditDetailView : {}", creditDetailView);
-        BigDecimal sumOfInstallment = BigDecimal.ZERO;
-        if (creditDetailView != null && creditDetailView.getNewCreditTierDetailViewList() != null && creditDetailView.getNewCreditTierDetailViewList().size() > 0) {
-
-            for (NewCreditTierDetailView newCreditTierDetailView : creditDetailView.getNewCreditTierDetailViewList()) {
-                // Installment = (อัตราดอกเบี้ยต่อเดือน * Limit * (1 + อัตราดอกเบี้ยต่อเดือน)ยกกำลัง tenors(month)) / ((1 + อัตราดอกเบี้ยต่อเดือน) ยกกำลัง tenors(month) - 1)
-                // อัตราดอกเบี้ยต่อเดือน = baseRate.value +  interest + 1% / 12
-                BigDecimal twelve = BigDecimal.valueOf(12);
-                BigDecimal baseRate = BigDecimal.ZERO;
-                BigDecimal interest = BigDecimal.ZERO;
-
-                if (newCreditTierDetailView.getFinalBasePrice() != null) {
-                    baseRate = newCreditTierDetailView.getFinalBasePrice().getValue();
-                }
-                if (newCreditTierDetailView.getFinalInterest() != null) {
-                    interest = newCreditTierDetailView.getFinalInterest();
-                }
-
-                BigDecimal interestPerMonth = Util.divide(Util.add(baseRate, Util.add(interest, BigDecimal.ONE)), twelve);
-                log.info("baseRate :: {}", baseRate);
-                log.info("interest :: {}", interest);
-                log.info("interestPerMonth :: {}", interestPerMonth);
-
-                BigDecimal limit = BigDecimal.ZERO;
-                int tenor = newCreditTierDetailView.getTenor();
-                BigDecimal installment;
-
-                if (creditDetailView.getLimit() != null) {
-                    limit = creditDetailView.getLimit();
-                }
-
-                log.info("limit :: {}", limit);
-                log.info("tenor :: {}", tenor);
-
-                installment = Util.divide(Util.multiply(Util.multiply(interestPerMonth, limit), (Util.add(BigDecimal.ONE, interestPerMonth)).pow(tenor)),
-                        Util.subtract(Util.add(BigDecimal.ONE, interestPerMonth).pow(tenor), BigDecimal.ONE));
-                log.info("installment : {}", installment);
-
-                newCreditTierDetailView.setInstallment(installment);
-                sumOfInstallment = Util.add(sumOfInstallment, installment);
-                log.info("creditDetailAdd :sumOfInstallment: {}", sumOfInstallment);
-                creditDetailView.setInstallment(sumOfInstallment);
-            }
-        }
-    }
-
-
     // **************************************** Start Propose Credit Information   ****************************************//
     public void onChangeProductProgram() {
         ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgramView().getId());
@@ -694,8 +646,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     public void onAddCreditInfo() {
         log.info("onAddCreditInfo ::: ");
         RequestContext.getCurrentInstance().execute("creditInfoDlg.show()");
-        prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
         newCreditDetailView = new NewCreditDetailView();
+        modeEdit = false;
         modeForButton = ModeForButton.ADD;
 
         onChangeRequestType();
@@ -707,8 +659,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         standardInterestDlg = BigDecimal.ZERO;
         suggestBasePriceDlg = suggestBase;
         suggestInterestDlg = BigDecimal.ZERO;
-
-        modeEdit = false;
     }
 
     public void onEditCreditInfo() {
@@ -719,7 +669,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         Cloner cloner = new Cloner();
         newCreditDetailView = cloner.deepClone(newCreditDetailSelected);
         onChangeRequestType();
-        calculateInstallment(newCreditDetailView);
+        creditFacProposeControl.calculateInstallment(newCreditDetailView);
 
         if (newCreditDetailView.getRequestType() == 2) { // 1 = change , 2 = new
             if (newCreditDetailView.getNewCreditTierDetailViewList() != null && newCreditDetailView.getNewCreditTierDetailViewList().size() > 0) {
@@ -769,7 +719,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 creditDetailAdd.setHoldLimitAmount(newCreditDetailView.getHoldLimitAmount());
                 creditDetailAdd.setNewCreditTierDetailViewList(newCreditDetailView.getNewCreditTierDetailViewList());
                 creditDetailAdd.setSeq(seq);
-                calculateInstallment(creditDetailAdd);
+                creditFacProposeControl.calculateInstallment(creditDetailAdd);
                 log.info("creditDetailAdd :getInstallment: {}", creditDetailAdd.getInstallment());
                 newCreditFacilityView.getNewCreditDetailViewList().add(creditDetailAdd);
                 log.info("seq of credit after add proposeCredit :: {}", seq);
@@ -798,7 +748,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setHoldLimitAmount(newCreditDetailView.getHoldLimitAmount());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setSeq(newCreditDetailView.getSeq());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setNewCreditTierDetailViewList(newCreditDetailView.getNewCreditTierDetailViewList());
-                calculateInstallment(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex));
+                creditFacProposeControl.calculateInstallment(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex));
             } else {
                 log.info("onSaveCreditInfo ::: Undefined modeForButton !!");
             }

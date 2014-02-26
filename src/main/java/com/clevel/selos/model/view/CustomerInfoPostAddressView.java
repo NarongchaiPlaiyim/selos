@@ -1,6 +1,11 @@
 package com.clevel.selos.model.view;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.faces.model.SelectItem;
 
 public class CustomerInfoPostAddressView implements Serializable {
 	private static final long serialVersionUID = 6453045708735225439L;
@@ -20,8 +25,17 @@ public class CustomerInfoPostAddressView implements Serializable {
 	private String phoneNumber;
 	private String phoneExt;
 	
-	private boolean hasSetValue;
+	private String displayProvince;
+	private String displayDistrict;
+	private String displaySubDistrict;
+	private String displayCountry;
 	
+	private int index;
+	private int addressFlag;
+	
+	//For using in screen
+	private List<SelectItem> districtList;
+	private List<SelectItem> subDistrictList;
 	public CustomerInfoPostAddressView() {
 	}
 
@@ -136,16 +150,89 @@ public class CustomerInfoPostAddressView implements Serializable {
 	public void setPhoneExt(String phoneExt) {
 		this.phoneExt = phoneExt;
 	}
-	public boolean isHasSetValue() {
-		return hasSetValue;
+	
+	
+	public String getDisplayProvince() {
+		return displayProvince;
 	}
-	public void setHasSetValue(boolean hasSetValue) {
-		this.hasSetValue = hasSetValue;
+
+	public void setDisplayProvince(String displayProvince) {
+		this.displayProvince = displayProvince;
+	}
+
+	public String getDisplayDistrict() {
+		return displayDistrict;
+	}
+
+	public void setDisplayDistrict(String displayDistrict) {
+		this.displayDistrict = displayDistrict;
+	}
+
+	public String getDisplaySubDistrict() {
+		return displaySubDistrict;
+	}
+
+	public void setDisplaySubDistrict(String displaySubDistrict) {
+		this.displaySubDistrict = displaySubDistrict;
+	}
+
+	public String getDisplayCountry() {
+		return displayCountry;
+	}
+
+	public void setDisplayCountry(String displayCountry) {
+		this.displayCountry = displayCountry;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	public int getAddressFlag() {
+		return addressFlag;
+	}
+
+	public void setAddressFlag(int addressFlag) {
+		this.addressFlag = addressFlag;
+	}
+	public List<SelectItem> getDistrictList() {
+		return districtList;
+	}
+	public void setDistrictList(List<SelectItem> districtList) {
+		this.districtList = districtList;
+	}
+	public List<SelectItem> getSubDistrictList() {
+		return subDistrictList;
+	}
+	public void setSubDistrictList(List<SelectItem> subDistrictList) {
+		this.subDistrictList = subDistrictList;
+	}
+	public boolean canUpdate() {
+		return index == 0 || addressFlag == 3;
+	}
+	public List<Integer> getAvailableFlagList() {
+		if (index == 0)
+			return Collections.emptyList();
+		List<Integer> rtnDatas = new ArrayList<Integer>();
+		for (int i=0;i<index;i++)
+			rtnDatas.add(i);
+		rtnDatas.add(3);
+		return rtnDatas;
 	}
 	public void updateValue(CustomerInfoPostAddressView view) {
 		this.id = view.id;
+		this.index = view.index;
+		this.addressFlag = view.addressFlag;
 		this.addressType = view.addressType;
 		this.displayAddressType = view.displayAddressType;
+		duplicateData(view);
+	}
+	
+	public void duplicateData(CustomerInfoPostAddressView view) {
 		this.addressNo = view.addressNo;
 		this.moo = view.moo;
 		this.building = view.building;
@@ -157,6 +244,10 @@ public class CustomerInfoPostAddressView implements Serializable {
 		this.countryId = view.countryId;
 		this.phoneNumber = view.phoneNumber;
 		this.phoneExt = view.phoneExt;
-		this.hasSetValue = view.hasSetValue;
+		
+		this.displayProvince = view.displayProvince;
+		this.displayDistrict = view.displayDistrict;
+		this.displaySubDistrict = view.displaySubDistrict;
+		this.displayCountry = view.displayCountry;
 	}
 }

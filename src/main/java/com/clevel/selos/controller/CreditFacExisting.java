@@ -16,6 +16,7 @@ import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.BankAccountStatusTransform;
+import com.clevel.selos.transform.BaseRateTransform;
 import com.clevel.selos.transform.ProductTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
@@ -165,6 +166,8 @@ public class CreditFacExisting implements Serializable {
     private ExistingCreditControl existingCreditControl;
     @Inject
     private ProductTransform productTransform;
+    @Inject
+    private BaseRateTransform baseRateTransform;
 
 
     public CreditFacExisting(){
@@ -707,8 +710,10 @@ public class CreditFacExisting implements Serializable {
 
             for(int i=0;i<existingCreditTierDetailViewList.size();i++){
                 BaseRate baseRate = baseRateDAO.findById(existingCreditTierDetailViewList.get(i).getFinalBasePrice().getId());
-                existingCreditTierDetailViewList.get(i).setFinalBasePrice(baseRate);
+                BaseRateView baseRateView = baseRateTransform.transformToView(baseRate);
+                existingCreditTierDetailViewList.get(i).setFinalBasePrice(baseRateView);
             }
+
             existingCreditDetailView.setExistingCreditTierDetailViewList(existingCreditTierDetailViewList);
 
             int index = 0;
@@ -797,7 +802,8 @@ public class CreditFacExisting implements Serializable {
 
             for(int i=0;i<existingCreditTierDetailViewList.size();i++){
                 BaseRate baseRate = baseRateDAO.findById(existingCreditTierDetailViewList.get(i).getFinalBasePrice().getId());
-                existingCreditTierDetailViewList.get(i).setFinalBasePrice(baseRate);
+                BaseRateView baseRateView = baseRateTransform.transformToView(baseRate);
+                existingCreditTierDetailViewList.get(i).setFinalBasePrice(baseRateView);
             }
             existingCreditDetailViewRow.setExistingCreditTierDetailViewList(existingCreditTierDetailViewList);
 
@@ -831,7 +837,7 @@ public class CreditFacExisting implements Serializable {
     public void onAddCreditTierDetailView() {
         log.info("onAddCreditTierDetailView ::: ");
         existingCreditTierDetailView = new ExistingCreditTierDetailView();
-        existingCreditTierDetailView.setFinalBasePrice(new BaseRate());
+        existingCreditTierDetailView.setFinalBasePrice(new BaseRateView());
         existingCreditTierDetailView.setNo(existingCreditTierDetailViewList.size()+1);
         existingCreditTierDetailViewList.add(existingCreditTierDetailView);
     }
@@ -1340,6 +1346,7 @@ public class CreditFacExisting implements Serializable {
                 relatedCollateralDetailViewRow.setAppraisalDate(existingCollateralDetailView.getAppraisalDate());
                 relatedCollateralDetailViewRow.setAppraisalValue(existingCollateralDetailView.getAppraisalValue());
                 relatedCollateralDetailViewRow.setMortgageValue(existingCollateralDetailView.getMortgageValue());
+                relatedCollateralDetailViewRow.setCollateralNumber(existingCollateralDetailView.getCollateralNumber());
 
                 List<ExistingCreditTypeDetailView> existingCreditTypeDetailViewList;
 

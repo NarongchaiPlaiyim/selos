@@ -4,21 +4,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
-public class StageView implements Serializable {
+public class BaseRateView implements Serializable {
     private int id;
     private String name;
-    private String description;
+    private BigDecimal value;
     private int active;
-
-    public StageView() {
-        reset();
-    }
-
-    public void reset() {
-        this.name = "";
-        this.description = "";
-    }
 
     public int getId() {
         return id;
@@ -36,12 +28,12 @@ public class StageView implements Serializable {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public BigDecimal getValue() {
+        return value;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setValue(BigDecimal value) {
+        this.value = value;
     }
 
     public int getActive() {
@@ -57,7 +49,7 @@ public class StageView implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("name", name)
-                .append("description", description)
+                .append("value", value)
                 .append("active", active)
                 .toString();
     }

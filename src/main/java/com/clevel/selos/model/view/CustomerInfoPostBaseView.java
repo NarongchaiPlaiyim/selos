@@ -14,6 +14,7 @@ public  abstract class CustomerInfoPostBaseView <T extends CustomerInfoPostBaseV
 	protected String displayDocumentType;
 	
 	protected String personalId;
+	protected String tmbCustomerId;
 	protected int age;
 	protected int titleId;
 	protected String nameTH;
@@ -169,7 +170,12 @@ public  abstract class CustomerInfoPostBaseView <T extends CustomerInfoPostBaseV
 	public void setRelationId(int relationId) {
 		this.relationId = relationId;
 	}
-	
+	public String getTmbCustomerId() {
+		return tmbCustomerId;
+	}
+	public void setTmbCustomerId(String tmbCustomerId) {
+		this.tmbCustomerId = tmbCustomerId;
+	}
 	public final void updateValue(T view) {
 		_updateBaseValue(view);
 		updateOwnValue(view);
@@ -178,6 +184,7 @@ public  abstract class CustomerInfoPostBaseView <T extends CustomerInfoPostBaseV
 		id = view.id;
 		collateralOwner = view.collateralOwner;
 		personalId = view.personalId;
+		tmbCustomerId = view.tmbCustomerId;
 		age =view.age;
 		titleId = view.titleId;
 		nameTH = view.nameTH;
