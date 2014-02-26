@@ -138,7 +138,7 @@
             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                              type="number"/>
             <p:ajax event="blur"
-                    listener="#{creditFacPropose.calculateInstallment(creditFacPropose.newCreditDetailView)}"
+                    listener="#{creditFacPropose.onCalInstallment(creditFacPropose.newCreditDetailView)}"
                     process="@form" update=":creditInfoDlgForm:limit,:creditInfoDlgForm:resultFinal"/>
         </p:inputText>
     </td>

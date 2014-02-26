@@ -123,6 +123,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private BigDecimal reducePrice;
     private boolean reducePricePanelRendered;
     private boolean cannotEditStandard;
+    private boolean notRetrivePricing;
 
     // for control Propose Collateral
     private NewCollateralView newCollateralView;
@@ -262,7 +263,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
             modeForDB = ModeForDB.ADD_DB;
             hashSeqCredit = new HashMap<String, String>();
-
+            notRetrivePricing = true;
             try {
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
                 log.debug("onCreation ::: newCreditFacilityView : {}", newCreditFacilityView);
@@ -278,6 +279,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                             hashSeqCredit.put(i, proposeCreditDetailViewList.get(i).getUseCount());
                         }
                     }*/
+                    notRetrivePricing = false;
                 }
 
             } catch (Exception ex) {
@@ -499,15 +501,15 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     // ***************************************************************************************************************//
 
     //TODO Call Brms to get data Propose Credit Info
-    public void onRetrievePricingFee(){
-        log.info("onRetrievePricingFee ::workCaseId :::  {}",workCaseId);
-        if (!Util.isNull(workCaseId)){
+    public void onRetrievePricingFee() {
+        log.info("onRetrievePricingFee ::workCaseId :::  {}", workCaseId);
+        if (!Util.isNull(workCaseId)) {
             try {
                 StandardPricingResponse standardPricingResponse = creditFacProposeControl.getPriceFeeInterest(workCaseId);
 
                 if (!Util.isNull(standardPricingResponse) && ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
-                    log.info("standardPricingResponse ::: {}",standardPricingResponse.getPricingInterest().toString());
-                    log.info("standardPricingResponse ::: {}",standardPricingResponse.getPricingFeeList().toString());
+                    log.info("standardPricingResponse ::: {}", standardPricingResponse.getPricingInterest().toString());
+                    log.info("standardPricingResponse ::: {}", standardPricingResponse.getPricingFeeList().toString());
                 }
             } catch (Exception e) {
                 log.error("Exception while get getPriceFeeInterest data!", e);
@@ -641,6 +643,11 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onRequestReducePrice() {
         log.info("reducePrice ::: {}", reducePrice);
+    }
+
+    public void onCalInstallment(NewCreditDetailView newCreditDetailView) {
+        log.info("onCalInstallment :: ");
+        creditFacProposeControl.calculateInstallment(newCreditDetailView);
     }
 
     public void onAddCreditInfo() {
@@ -820,7 +827,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //
 //        if (used == 0) {
 //            log.info("used ::: {} ", used);
-            newCreditFacilityView.getNewCreditDetailViewList().remove(rowIndex);
+        newCreditFacilityView.getNewCreditDetailViewList().remove(rowIndex);
 //        } else {
 //            log.info("used::: {}", used);
 //            messageHeader = msg.get("app.propose.exception");
@@ -945,9 +952,12 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //  **************************************** END Tier Dialog  ****************************************//
 
     // **************************************** Start Propose Collateral Information  *********************************//
-    public void onChangeCollTypeLTV(){
-        log.info("onChangeCollTypeLTV ::; {}");
-
+    public void onChangeCollTypeLTV(NewCollateralHeadView newCollateralHeadView) {
+        if (!flagComs) {
+            log.info("onChangeCollTypeLTV ::; {}", newCollateralHeadView.getCollTypePercentLTV().getId());
+            CollateralType headType = collateralTypeDAO.findRefById(newCollateralHeadView.getCollTypePercentLTV().getId());
+            newCollateralHeadView.setHeadCollType(headType);
+        }
     }
 
     public void onAddProposeCollInfo() {
@@ -960,6 +970,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         newCollateralView.getNewCollateralHeadViewList().add(new NewCollateralHeadView());
         flagButtonCollateral = true;
         flagComs = false;
+        editProposeColl = false;
     }
 
     public void onEditProposeCollInfo() {
@@ -975,7 +986,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         proposeCreditDetailListTemp = cloner.deepClone(proposeCreditDetailViewList);
         flagComs = false;
 
-        log.info("selectCollateralDetailView.isComs() ::: {}",selectCollateralDetailView.isComs());
+        log.info("selectCollateralDetailView.isComs() ::: {}", selectCollateralDetailView.isComs());
         if (selectCollateralDetailView.isComs()) { //ถ้าเป็น data  ที่ได้จาก coms  set rendered false (ไม่แสดงปุ่ม edit)
             flagButtonCollateral = false;
             flagComs = true;
@@ -1512,15 +1523,15 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //                    && (newCreditFacilityView.getNewCollateralViewList().size() > 0)
 //                    && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0)
 //                    && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
-                //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
-                creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
-                creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
-                messageHeader = msg.get("app.header.save.success");
-                message = msg.get("app.propose.response.save.success");
-                exSummaryControl.calForCreditFacility(workCaseId);
-                onCreation();
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-
+            //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
+            creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
+            creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
+            messageHeader = msg.get("app.header.save.success");
+            message = msg.get("app.propose.response.save.success");
+            exSummaryControl.calForCreditFacility(workCaseId);
+            onCreation();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            notRetrivePricing = true;
 //            } else {
 //                messageHeader = msg.get("app.propose.response.cannot.save");
 //                message = msg.get("app.propose.response.desc.cannot.save");
@@ -2038,6 +2049,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void setEditProposeColl(boolean editProposeColl) {
         this.editProposeColl = editProposeColl;
+    }
+
+    public boolean isNotRetrivePricing() {
+        return notRetrivePricing;
+    }
+
+    public void setNotRetrivePricing(boolean notRetrivePricing) {
+        this.notRetrivePricing = notRetrivePricing;
     }
 }
 
