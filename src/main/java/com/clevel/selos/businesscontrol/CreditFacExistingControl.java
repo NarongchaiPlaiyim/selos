@@ -136,7 +136,7 @@ public class CreditFacExistingControl extends BusinessControl {
             log.info("persist :: existingConditionDetailList ...");
         }
 
-        List<ExistingCollateralDetail> borrowerCollateralDetailListDel = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,1);
+        List<ExistingCollateralDetail> borrowerCollateralDetailListDel = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility, RelationValue.BORROWER.value());
         if(borrowerCollateralDetailListDel!=null && borrowerCollateralDetailListDel.size()>0){
             for (int i=0 ;i<borrowerCollateralDetailListDel.size();i++) {
                 log.info(" Round borrowerComExistingCreditListDel  is " + i );
@@ -147,7 +147,7 @@ public class CreditFacExistingControl extends BusinessControl {
             existingCollateralDetailDAO.delete(borrowerCollateralDetailListDel);
         }
 
-        List<ExistingCollateralDetail> relatedCollateralDetailListDel = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,2);
+        List<ExistingCollateralDetail> relatedCollateralDetailListDel = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility, RelationValue.DIRECTLY_RELATED.value());
         if(relatedCollateralDetailListDel!=null && relatedCollateralDetailListDel.size()>0){
             for (int i=0 ;i<relatedCollateralDetailListDel.size();i++) {
                 log.info(" Round relatedComExistingCreditListDel  is " + i );

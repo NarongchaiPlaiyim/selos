@@ -162,7 +162,7 @@
                 <tr>
                     <td colspan="2" class="center">
                         <p:commandButton
-                                id="saveBorrowerCollateral"
+                                id="saveBorrowerCollateral" disabled="#{not creditFacExisting.canSaveBorrowerCol}"
                                 binding="#{saveBorrowerCollateral}"
                                 value="#{msg.get('app.tcg.dlg.button.ok')}"
                                 actionListener="#{creditFacExisting.onSaveExistingCollateral()}"

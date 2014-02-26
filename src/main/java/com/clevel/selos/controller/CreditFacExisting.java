@@ -132,6 +132,9 @@ public class CreditFacExisting implements Serializable {
     private String currentDateDDMMYY;
 
     private boolean canSaveCreditDetail;
+    private boolean canSaveBorrowerCol;
+    private boolean canSaveRelatedCol;
+    private boolean canSaveGarantor;
 
     @Inject
     private CreditTypeDAO creditTypeDAO;
@@ -1103,10 +1106,17 @@ public class CreditFacExisting implements Serializable {
 
         log.info("typeOfListCollateral ::: " + typeOfListCollateral);
         if(typeOfListCollateral.equals("borrower")){
-
+            canSaveBorrowerCol = false;
             existingCollateralDetailView.setExistingCreditTypeDetailViewList(findBorrowerCreditFacility());
+            if(existingCollateralDetailView.getExistingCreditTypeDetailViewList()!=null && existingCollateralDetailView.getExistingCreditTypeDetailViewList().size()>0){
+                canSaveBorrowerCol = true;
+            }
         }else if(typeOfListCollateral.equals("related")){
+            canSaveRelatedCol = false;
             existingCollateralDetailView.setExistingCreditTypeDetailViewList(findRelatedCreditFacility());
+            if(existingCollateralDetailView.getExistingCreditTypeDetailViewList()!=null && existingCollateralDetailView.getExistingCreditTypeDetailViewList().size()>0){
+                canSaveRelatedCol = true;
+            }
         }
 
 
@@ -1288,6 +1298,7 @@ public class CreditFacExisting implements Serializable {
                 borrowerCollateralDetailViewRow.setAppraisalValue(existingCollateralDetailView.getAppraisalValue());
                 borrowerCollateralDetailViewRow.setMortgageValue(existingCollateralDetailView.getMortgageValue());
                 borrowerCollateralDetailViewRow.setCollateralNumber(existingCollateralDetailView.getCollateralNumber());
+                borrowerCollateralDetailViewRow.setBorrowerType(RelationValue.BORROWER.value());
 
                 List<ExistingCreditTypeDetailView> existingCreditTypeDetailViewList;
                 existingCreditTypeDetailViewList = existingCollateralDetailView.getExistingCreditTypeDetailViewList();
@@ -1348,6 +1359,7 @@ public class CreditFacExisting implements Serializable {
                 relatedCollateralDetailViewRow.setAppraisalValue(existingCollateralDetailView.getAppraisalValue());
                 relatedCollateralDetailViewRow.setMortgageValue(existingCollateralDetailView.getMortgageValue());
                 relatedCollateralDetailViewRow.setCollateralNumber(existingCollateralDetailView.getCollateralNumber());
+                relatedCollateralDetailViewRow.setBorrowerType(RelationValue.DIRECTLY_RELATED.value());
 
                 List<ExistingCreditTypeDetailView> existingCreditTypeDetailViewList;
 
@@ -1485,7 +1497,11 @@ public class CreditFacExisting implements Serializable {
         log.info("onAddExistingCollateral ::: ");
         existingGuarantorDetailView = new ExistingGuarantorDetailView();
         borrowerGuarantorCreditTypeDetailViewList = new ArrayList<ExistingCreditTypeDetailView>();
+        canSaveGarantor = false;
         existingGuarantorDetailView.setExistingCreditTypeDetailViewList(findBorrowerCreditFacility());
+        if(existingGuarantorDetailView.getExistingCreditTypeDetailViewList()!=null && existingGuarantorDetailView.getExistingCreditTypeDetailViewList().size()>0){
+            canSaveGarantor = true;
+        }
 
         modeForButton = ModeForButton.ADD;
         log.info("onAddCommercialCredit ::: modeForButton : {}", modeForButton);
@@ -2253,5 +2269,29 @@ public class CreditFacExisting implements Serializable {
 
     public void setCanSaveCreditDetail(boolean canSaveCreditDetail) {
         this.canSaveCreditDetail = canSaveCreditDetail;
+    }
+
+    public boolean isCanSaveGarantor() {
+        return canSaveGarantor;
+    }
+
+    public void setCanSaveGarantor(boolean canSaveGarantor) {
+        this.canSaveGarantor = canSaveGarantor;
+    }
+
+    public boolean isCanSaveBorrowerCol() {
+        return canSaveBorrowerCol;
+    }
+
+    public void setCanSaveBorrowerCol(boolean canSaveBorrowerCol) {
+        this.canSaveBorrowerCol = canSaveBorrowerCol;
+    }
+
+    public boolean isCanSaveRelatedCol() {
+        return canSaveRelatedCol;
+    }
+
+    public void setCanSaveRelatedCol(boolean canSaveRelatedCol) {
+        this.canSaveRelatedCol = canSaveRelatedCol;
     }
 }
