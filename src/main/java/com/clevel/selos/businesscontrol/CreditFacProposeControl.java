@@ -521,7 +521,6 @@ public class CreditFacProposeControl extends BusinessControl {
         return returnValues;
     }
 
-
     public List<ProposeCreditDetailView> findProposeCreditDetail(List<NewCreditDetailView> newCreditDetailViewList, long workCaseId) {
         log.debug("findProposeCreditDetail :: ", workCaseId);
         // todo: find credit existing and propose in this workCase
@@ -545,6 +544,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 proposeCreditDetailView.setLimit(tmp.getLimit());
                 proposeCreditDetailView.setGuaranteeAmount(tmp.getGuaranteeAmount());
                 proposeCreditDetailView.setUseCount(tmp.getUseCount());
+                proposeCreditDetailView.setNoFlag(tmp.isNoFlag());
                 proposeCreditDetailViewList.add(proposeCreditDetailView);
                 rowCount++;
             }

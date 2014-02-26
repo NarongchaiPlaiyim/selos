@@ -56,6 +56,9 @@ public class BRMSControl extends BusinessControl {
     @Inject
     private PrescreenFacilityDAO prescreenFacilityDAO;
 
+    @Inject
+    public BRMSControl(){}
+
     public StandardPricingResponse getPriceFeeInterest(long workCaseId){
         BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId);
         StandardPricingResponse _returnPricingResponse = new StandardPricingResponse();

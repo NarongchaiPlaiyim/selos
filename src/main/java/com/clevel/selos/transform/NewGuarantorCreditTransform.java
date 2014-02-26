@@ -44,6 +44,7 @@ public class NewGuarantorCreditTransform extends Transform {
                     if (proposeCreditDetailView.getSeq() == newCreditDetailAdd.getSeq()) {
                         log.info("newCreditDetailAdd id is " + newCreditDetailAdd.getId() + " detail seq  is " + newCreditDetailAdd.getSeq());
                         log.info("guarantor choose seq  is " + proposeCreditDetailView.getSeq());
+                        newCreditDetailAdd.setNoFlag(1);
                         newGuarantorCredit.setNewCreditDetail(newCreditDetailAdd);
                         log.info("newGuarantorCredit newCreditDetailAdd id toSet is " + newGuarantorCredit.getNewCreditDetail().getId());
                         newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
