@@ -19,6 +19,7 @@
                                            var="potentialColl"
                                            itemLabel="#{potentialColl.name}"
                                            itemValue="#{potentialColl.id}"/>
+                            <p:ajax event="change" update="@this"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -32,6 +33,7 @@
                                            var="collateralType"
                                            itemLabel="#{collateralType.description}"
                                            itemValue="#{collateralType.id}"/>
+                            <p:ajax event="change" update="@this"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -51,6 +53,7 @@
                                            var="relation"
                                            itemLabel="#{relation.description}"
                                            itemValue="#{relation.id}"/>
+                            <p:ajax event="change" update="@this"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -65,7 +68,12 @@
                                         mindate="01/01/1950"
                                         navigator="true"
                                         locale="th_TH"
-                                        showButtonPanel="true"/>
+                                        showButtonPanel="true">
+                            <p:ajax event="dateSelect"
+                                    listener="#{creditFacExisting.validateCalendar}"
+                                    update=":existingCollateralRelatedDlgForm:dateOfInfo,:existingCollateralRelatedDlgForm:validateMsg, :existingCollateralRelatedDlgForm:saveRelatedCollateral"/>
+                        </clv:BECalendar>
+                        <h:outputText id="validateMsg" value="#{creditFacExisting.validateMsg}" style="color: red"/>
                     </td>
                 </tr>
 
@@ -138,6 +146,7 @@
                                            var="mortgage"
                                            itemLabel="#{mortgage.mortgage}"
                                            itemValue="#{mortgage.id}"/>
+                            <p:ajax event="change" update="@this"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>

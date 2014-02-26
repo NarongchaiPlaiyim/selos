@@ -14,6 +14,18 @@
                 src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
         <h:outputScript library="js" name="custom.js" />
         <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
+        <style type="text/css">
+            .normal_table {
+                border-width: 0!important;
+                border-style: none!important;
+                border-color: transparent!important;
+            }
+            .normal_table td {
+                border-width: 0!important;
+                border-style: none!important;
+                border-color: transparent!important;
+            }
+        </style>
     </h:head>
     <h:body>
         <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
@@ -1263,7 +1275,7 @@
                                                 </p:column>
                                                 <p:column headerText="">
                                                     <div>
-                                                        <table style="border: 0px;">
+                                                        <table class="normal_table">
                                                             <tr>
                                                                 <td style="width: 80px;" class="title">#{msg.get('app.credit.facility.existing.tb.label.collateralType.potential')}</td>
                                                                 <td><p:outputLabel value="#{borrowerCollateral.potentialCollateral.description}"/></td>
@@ -1415,7 +1427,7 @@
                                                 </p:column>
                                                 <p:column headerText="">
                                                     <div>
-                                                        <table style="border: 0px;">
+                                                        <table class="normal_table">
                                                             <tr>
                                                                 <td style="width: 80px;" class="title">#{msg.get('app.credit.facility.existing.tb.label.collateralType.potential')}</td>
                                                                 <td><p:outputLabel value="#{relatedCollateral.potentialCollateral.description}"/></td>
