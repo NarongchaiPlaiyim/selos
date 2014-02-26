@@ -167,4 +167,15 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         criteria.add(Restrictions.eq("r.canBePOA",true));
         return criteria.list();
     }
+
+	@SuppressWarnings("unchecked")
+	public List<Customer> findCustomerCanBeAttorneyRight(long workCaseId) {
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("workCase.id", workCaseId));
+		criteria.add(Restrictions.eq("customerEntity.id", 1)); // Individual only
+		//TODO Check about can be attorney
+		criteria.createAlias("relation", "r");
+		criteria.add(Restrictions.eq("r.canBePOA", true));
+		return criteria.list();
+	}
 }
