@@ -70,7 +70,6 @@ public class PerfectionReview implements Serializable {
 		preRenderCheck = true;
 		
 		String redirectPage = null;
-		log.info("preRender workCase Id = "+workCaseId);
 		if (workCaseId > 0) {
 			//TODO Validate step 
 			if (stepId <= 0) {
@@ -80,7 +79,6 @@ public class PerfectionReview implements Serializable {
 			}
 		}
 		try {
-			log.info("preRender "+redirectPage);
 			if (redirectPage == null) {
 				redirectPage = "/site/inbox.jsf";
 			}

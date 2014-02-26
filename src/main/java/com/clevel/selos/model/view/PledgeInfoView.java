@@ -14,8 +14,12 @@ public class PledgeInfoView implements Serializable {
 	private BigDecimal pledgeAmount;
 	private String accountNo;
 	
+	private int numberOfDep;
+	private String accountName;
+	
 	private User modifyBy;
 	private Date modifyDate;
+	
 	
 	public PledgeInfoView() {
 		
@@ -76,5 +80,16 @@ public class PledgeInfoView implements Serializable {
 	public void setAccountNo(String accountNo) {
 		this.accountNo = accountNo;
 	}
-	
+	public String getAccountName() {
+		return accountName;
+	}
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+	public int getNumberOfDep() {
+		return numberOfDep;
+	}
+	public void setNumberOfDep(int numberOfDep) {
+		this.numberOfDep = numberOfDep;
+	}
 }

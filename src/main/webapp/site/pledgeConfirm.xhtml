@@ -8,13 +8,13 @@
         xmlns:clv="http://clevel.com/ui">
 
 <h:head>
-    <title>#{msg.get('app.agreement.title')}</title>
+    <title>#{msg.get('app.pledgeConfirm.title')}</title>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
 </h:head>
 
 <h:body>
-    <f:event type="preRenderView" listener="#{agreementSignContract.preRender()}" />
+    <f:event type="preRenderView" listener="#{pledgeConfirm.preRender()}" />
     
     <p:panel id="pnl_maincontainer" styleClass="panel">
         <h:form id="frmMain">
@@ -31,7 +31,7 @@
             <!-- End Menu -->
 			<h:panelGroup id="full_main_container" layout="block">
             <div id="content_container">
-                <div id="content_name">#{msg.get('app.agreement.subtitle')}</div>
+                <div id="content_name">#{msg.get('app.pledgeConfirm.subtitle')}</div>
                 <div id="content">
                     <div id="content_info">
                         <div id="content_trackchange">
@@ -43,8 +43,8 @@
                         </div>
                         <div id="content_lastupdate">
                         	<h:outputText value="#{msg.get('app.lastUpdateBy')} "/>
-                        	<h:outputText value="#{agreementSignContract.lastUpdateBy}"/>, 
-                        	<h:outputText value="#{agreementSignContract.lastUpdateDateTime}">
+                        	<h:outputText value="#{pledgeConfirm.lastUpdateBy}"/>, 
+                        	<h:outputText value="#{pledgeConfirm.lastUpdateDateTime}">
                         		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="th_TH"/>
                         	</h:outputText>
                         </div>
@@ -60,7 +60,7 @@
                                                 <p:outputLabel value="#{msg.get('app.approveType')}" styleClass="center"/>
                                             </td>
                                             <td style="width:200px;">
-                                                <p:selectOneRadio disabled="true" value="#{agreementSignContract.approveType}">
+                                                <p:selectOneRadio disabled="true" value="#{pledgeConfirm.approveType}">
                                                 	<f:selectItems value="#{enumGeneralControl.approveTypes}" var="approveType"
                                                 		itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}" 
                                                 		/>
@@ -75,32 +75,53 @@
                         	</tr>
                         	<tr>
                         		<td colspan="100%">
-                        			<h2><h:outputText value="#{msg.get('app.agreement.confirmation')}" /></h2>
+                        			<h2><h:outputText value="#{msg.get('app.pledgeConfirm.pledgeConfirm')}" /></h2>
 	                            </td>
                         	</tr>
                         	<tr>
-                        		<td class="title" style="width: 180px">
-                        			<p:outputLabel for="iscomplete" 
-                        				value="#{msg.get('app.agreement.complete')}" />			
+                        		<td colspan="100%">
+                        			<p:dataTable styleClass="full_table"
+                        				value="#{pledgeConfirm.pledges}" var="pledge"
+                        				rowIndexVar="rowIdx"
+                        				>
+                        				<p:column style="width:30px" styleClass="center">
+                        					#{rowIdx+1}                        					
+                        				</p:column>
+                        				<p:column style="width:200px" styleClass="center"
+                        					headerText="#{msg.get('app.pledgeConfirm.table.confirm')}"
+                        					>
+                        					<p:selectOneRadio style="margin:0 auto">
+	                        					<f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="radio"
+			                                       	itemLabel="#{msg.get(radio.msgKey)}" 
+		    	                                   	itemValue="#{radio}"/>
+	    	                                </p:selectOneRadio>
+                        				</p:column>
+                        				<p:column styleClass="left"
+                        					headerText="#{msg.get('app.pledgeConfirm.table.accountName')}"
+                        					style="line-height: 1.5em;">
+                        					<h:panelGroup layout="block" style="padding : 5px 0">
+                        						<h:outputText value="#{pledge.accountName}" escape="false" />
+                        					</h:panelGroup>
+                        				</p:column>
+                        				<p:column style="width:200px" styleClass="center"
+                        					headerText="#{msg.get('app.pledgeConfirm.table.accountNo')}"
+                        					>
+                        					#{pledge.accountNo}
+                        				</p:column>
+                        				<p:column style="width:100px" styleClass="center"
+                        					headerText="#{msg.get('app.pledgeConfirm.table.dep')}"
+                        					>
+                        					#{pledge.numberOfDep}
+                        				</p:column>
+                        				<p:column style="width:150px" styleClass="right"
+                        					headerText="#{msg.get('app.pledgeConfirm.table.pledgeAmount')}"
+                        					>
+                        					<h:outputText value="#{pledge.pledgeAmount}">
+                        						<f:convertNumber pattern="#,##0.00"/>
+                        					</h:outputText>
+                        				</p:column>
+                        			</p:dataTable>			
                         		</td>
-                        		<td>
-             			            <p:selectOneRadio id="iscomplete" 
-             			            	>
-             			               <f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="radio"
-	                                       	itemLabel="#{msg.get(radio.msgKey)}" 
-    	                                   	itemValue="#{radio}"/>
-                                   </p:selectOneRadio>
-                        		</td>                     		
-                        	</tr>
-                        	<tr>
-                        		<td class="title top">
-                        			<p:outputLabel for="remark" 
-                        				value="#{msg.get('app.agreement.remark')}" />			
-                        		</td>
-                        		<td>
-             			            <p:inputTextarea id="remark" 
-             			            	rows="3" cols="130" />
-                        		</td>                     		
                         	</tr>
                         	<tr>
 	                            <td colspan="100%"><p:spacer width="5px"/></td>
@@ -116,7 +137,7 @@
 	                                 <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
 	                                 	styleClass="medium"
 										onstart="handleOnStartOpenCfmDlg();"
-										oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveAgreementContractDlg);"
+										oncomplete="handleOnCompleteOpenCfmDlg(args,p_savePledgeConfirmDlg);"
 										update=":frmMain:full_main_container,:result_dialog"
 	                                 	 />
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
@@ -140,11 +161,11 @@
     </p:panel>
 	<ui:include src="dialog/postLoadingAndErrorDialog.xhtml" />
 	<ui:include src="dialog/confirmEditDlg.xhtml">
-		<ui:param name="id" value="saveAgreementContractDlg"/>
-		<ui:param name="name" value="p_saveAgreementContractDlg"/>
-		<ui:param name="formId" value="saveAgreementContractFrm"/>
-		<ui:param name="controller" value="#{agreementSignContract}"/>
-		<ui:param name="action" value="onSaveAgreementContract"/>
+		<ui:param name="id" value="savePledgeConfirmDlg"/>
+		<ui:param name="name" value="p_savePledgeConfirmDlg"/>
+		<ui:param name="formId" value="savePledgeConfirmFrm"/>
+		<ui:param name="controller" value="#{pledgeConfirm}"/>
+		<ui:param name="action" value="onSavePledgeConfirm"/>
 		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
 </h:body>
