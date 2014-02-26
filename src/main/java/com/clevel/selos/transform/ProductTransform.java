@@ -105,6 +105,8 @@ public class ProductTransform extends Transform{
             creditTypeView.setComsIntType(creditType.getComsIntType());
             creditTypeView.setDescription(creditType.getDescription());
             creditTypeView.setName(creditType.getName());
+            creditTypeView.setCanSplit(creditType.getCanSplit());
+            creditTypeView.setCalLimitType(creditType.getCalLimitType());
         }
         return creditTypeView;
     }
