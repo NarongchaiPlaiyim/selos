@@ -138,8 +138,6 @@ public class CreditFacExisting implements Serializable {
     private boolean canSaveBorrowerCol;
     private boolean canSaveRelatedCol;
     private boolean canSaveGarantor;
-    private boolean canSaveCol;
-    private String validateMsg;
 
     @Inject
     private CreditTypeDAO creditTypeDAO;
@@ -219,7 +217,6 @@ public class CreditFacExisting implements Serializable {
         log.info("preRender ::: 1.7 ");
         hashBorrower = new Hashtable<String,String>();
         hashRelated  = new Hashtable<String,String>();
-        validateMsg = "";
 
 
         log.info("preRender ::: 2 ");
@@ -1128,8 +1125,6 @@ public class CreditFacExisting implements Serializable {
 
 
         modeForButton = ModeForButton.ADD;
-        canSaveCol = true;
-        validateMsg = "";
         log.info("onAddCommercialCredit ::: modeForButton : {}", modeForButton);
     }
 
@@ -1876,25 +1871,6 @@ public class CreditFacExisting implements Serializable {
         existingCreditFacilityView.setBorrowerGuarantorList(borrowerExistingGuarantorDetailViewList);
     }
 
-    public void validateCalendar(SelectEvent event){
-        canSaveCol = false;
-        validateMsg="";
-        if(event!=null){
-            Date appraisalDate = (Date)event.getObject();
-            if(DateTimeUtil.compareDate(new Date(), appraisalDate) >= 0){
-                canSaveCol = true;
-            } else {
-                FacesContext facesContext = FacesContext.getCurrentInstance();
-                facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Appraisal Date", ""));
-                validateMsg="Invalid Appraisal Date";
-            }
-        } else {
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Appraisal Date", ""));
-            validateMsg="Invalid Appraisal Date";
-        }
-    }
-
     public ExistingConditionDetailView getExistingConditionDetailView() {
         return existingConditionDetailView;
     }
@@ -2320,21 +2296,5 @@ public class CreditFacExisting implements Serializable {
 
     public void setCanSaveRelatedCol(boolean canSaveRelatedCol) {
         this.canSaveRelatedCol = canSaveRelatedCol;
-    }
-
-    public boolean isCanSaveCol() {
-        return canSaveCol;
-    }
-
-    public void setCanSaveCol(boolean canSaveCol) {
-        this.canSaveCol = canSaveCol;
-    }
-
-    public String getValidateMsg() {
-        return validateMsg;
-    }
-
-    public void setValidateMsg(String validateMsg) {
-        this.validateMsg = validateMsg;
     }
 }

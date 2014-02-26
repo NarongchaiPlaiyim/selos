@@ -64,16 +64,13 @@
                                         id="dateOfInfo"
                                         showOn="button"
                                         pattern="dd/MM/yyyy"
+                                        maxdate="#{creditFacExisting.currentDateDDMMYY}"
                                         yearRange="1950:2100"
                                         mindate="01/01/1950"
                                         navigator="true"
                                         locale="th_TH"
                                         showButtonPanel="true">
-                            <p:ajax event="dateSelect"
-                                    listener="#{creditFacExisting.validateCalendar}"
-                                    update=":existingCollateralRelatedDlgForm:dateOfInfo,:existingCollateralRelatedDlgForm:validateMsg, :existingCollateralRelatedDlgForm:saveRelatedCollateral"/>
                         </clv:BECalendar>
-                        <h:outputText id="validateMsg" value="#{creditFacExisting.validateMsg}" style="color: red"/>
                     </td>
                 </tr>
 

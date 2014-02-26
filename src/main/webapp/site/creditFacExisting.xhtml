@@ -361,15 +361,15 @@
 
                                                 </p:columnGroup>
 
-                                                <p:column styleClass="center">
+                                                <p:column styleClass="center" style="vertical-align:top;">
                                                     <h:outputText value="#{conditionDetailItem.no}"/>
                                                 </p:column>
 
-                                                <p:column styleClass="center">
+                                                <p:column styleClass="center" style="vertical-align:top; max-width: 372px; white-space: pre-wrap!important;">
                                                     <h:outputText value="#{conditionDetailItem.loanType}"/>
                                                 </p:column>
 
-                                                <p:column styleClass="center">
+                                                <p:column styleClass="center" style="vertical-align:top; max-width: 771px; white-space: pre-wrap!important;">
                                                     <h:outputText value="#{conditionDetailItem.conditionDesc}"/>
                                                 </p:column>
 
@@ -1270,7 +1270,7 @@
                                                     </p:row>
                                                 </p:columnGroup>
 
-                                                <p:column headerText="">
+                                                <p:column headerText="" style="vertical-align:top;">
                                                     <p:outputLabel value="#{borrowerCollateral.no}"></p:outputLabel>
                                                 </p:column>
                                                 <p:column headerText="">
@@ -1422,7 +1422,7 @@
                                                     </p:row>
                                                 </p:columnGroup>
 
-                                                <p:column headerText="">
+                                                <p:column headerText="" style="vertical-align:top;">
                                                     <p:outputLabel value="#{relatedCollateral.no}"></p:outputLabel>
                                                 </p:column>
                                                 <p:column headerText="">
@@ -1721,7 +1721,7 @@
                   modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" >
             <ui:include src="dialog/existingCreditDetailDialog.xhtml"/>
         </p:dialog>
-        <p:dialog id="conditionDialog" header="Condition Information" widgetVar="conditionDlg" closable="false" resizable="false">
+        <p:dialog id="conditionDialog" header="Condition Information" modal="true" widgetVar="conditionDlg" closable="false" resizable="false">
             <ui:include src="dialog/existingConditionDetailDialog.xhtml"/>
         </p:dialog>
         <p:dialog id="existingCollateraBorrowerlDialog" header="Existing Collateral Borrower Information" widgetVar="existingCollateralBorrowerDlg" closable="false" resizable="false"
