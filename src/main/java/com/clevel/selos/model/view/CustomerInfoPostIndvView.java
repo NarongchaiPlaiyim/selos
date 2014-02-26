@@ -2,7 +2,9 @@ package com.clevel.selos.model.view;
 
 import java.util.Date;
 
+import com.clevel.selos.model.AttorneyRelationType;
 import com.clevel.selos.model.Gender;
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.util.Util;
 
 public class CustomerInfoPostIndvView extends CustomerInfoPostBaseView<CustomerInfoPostIndvView> {
@@ -26,6 +28,12 @@ public class CustomerInfoPostIndvView extends CustomerInfoPostBaseView<CustomerI
 	private int motherTitleId;
 	private String motherNameTH;
 	private String motherLastNameTH;
+	
+	private AttorneyRelationType attorneyRelationType;
+	private RadioValue attorneyRequired;
+	private long customerAttorneyId;
+	
+	private boolean hasSpouseData;
 	
 	private String displayRace;
 	private String displayNationality;
@@ -215,6 +223,35 @@ public class CustomerInfoPostIndvView extends CustomerInfoPostBaseView<CustomerI
 		this.displayMotherTitle = displayMotherTitle;
 	}
 	
+	public AttorneyRelationType getAttorneyRelationType() {
+		if (attorneyRelationType == null)
+			attorneyRelationType = AttorneyRelationType.OTHERS;
+		return attorneyRelationType;
+	}
+	public void setAttorneyRelationType(AttorneyRelationType attorneyRelationType) {
+		this.attorneyRelationType = attorneyRelationType;
+	}
+	public RadioValue getAttorneyRequired() {
+		if (attorneyRequired == null)
+			attorneyRequired = RadioValue.NO;
+		return attorneyRequired;
+	}
+	public void setAttorneyRequired(RadioValue attorneyRequired) {
+		this.attorneyRequired = attorneyRequired;
+	}
+	public long getCustomerAttorneyId() {
+		return customerAttorneyId;
+	}
+	public void setCustomerAttorneyId(long customerAttorneyId) {
+		this.customerAttorneyId = customerAttorneyId;
+	}
+	public boolean isHasSpouseData() {
+		return hasSpouseData;
+	}
+	public void setHasSpouseData(boolean hasSpouseData) {
+		this.hasSpouseData = hasSpouseData;
+	}
+	
 	@Override
 	protected void updateOwnValue(CustomerInfoPostIndvView view) {
 		individualId = view.individualId;
@@ -233,6 +270,12 @@ public class CustomerInfoPostIndvView extends CustomerInfoPostBaseView<CustomerI
 		motherTitleId = view.motherTitleId;
 		motherNameTH = view.motherNameTH;
 		motherLastNameTH = view.motherLastNameTH;
+		
+		attorneyRequired = view.attorneyRequired;
+		attorneyRelationType = view.attorneyRelationType;
+		customerAttorneyId = view.customerAttorneyId;
+		
+		hasSpouseData = view.hasSpouseData;
 		
 		displayRace = view.displayRace;
 		displayNationality = view.displayNationality;

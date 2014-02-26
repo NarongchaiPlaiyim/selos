@@ -5,6 +5,7 @@ import com.clevel.selos.dao.working.AddressDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.CustomerOblInfoDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.AttorneyRelationType;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.RadioValue;
@@ -1034,6 +1035,9 @@ public class CustomerTransform extends Transform {
     			}
     			view.setSpouseNameTH(spouseModel.getNameTh());
     			view.setSpouseLastNameTH(spouseModel.getLastNameTh());
+    			view.setHasSpouseData(true);
+    		} else {
+    			view.setHasSpouseData(false);
     		}
     	}
     	
@@ -1050,6 +1054,15 @@ public class CustomerTransform extends Transform {
     	view.setMotherNameTH(indv.getMotherNameTh());
     	view.setMotherLastNameTH(indv.getMotherLastNameTh());
     	
+    	if (!RadioValue.YES.equals(indv.getAttorneyRequired())) {
+    		view.setAttorneyRequired(RadioValue.NO);
+    		view.setAttorneyRelationType(AttorneyRelationType.OTHERS);
+    	} else {
+	    	view.setAttorneyRequired(indv.getAttorneyRequired());
+	    	view.setAttorneyRelationType(indv.getAttorneyRelation());
+	    	if (indv.getCustomerAttorney() != null)
+	    		view.setCustomerAttorneyId(indv.getCustomerAttorney().getId());
+    	}
     	return view;
     }
     public CustomerInfoPostJurisView transformToJurisPostView(Customer model) {
@@ -1187,6 +1200,9 @@ public class CustomerTransform extends Transform {
     		indv.setMotherTitle(null);
     	indv.setMotherNameTh(view.getMotherNameTH());
     	indv.setMotherLastNameTh(view.getMotherLastNameTH());
+    	
+    	indv.setAttorneyRelation(view.getAttorneyRelationType());
+    	indv.setAttorneyRequired(view.getAttorneyRequired());
     	
     	//For spouse this should be updated in controller
     }

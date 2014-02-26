@@ -5,7 +5,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,6 +21,8 @@ import javax.persistence.TemporalType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.clevel.selos.model.AttorneyRelationType;
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.Country;
 import com.clevel.selos.model.db.master.Education;
 import com.clevel.selos.model.db.master.MaritalStatus;
@@ -103,8 +106,16 @@ public class Individual implements Serializable {
     @Column(name="mother_lastname_th")
     private String motherLastNameTh;
     
-    @OneToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="customer_attorney_id")
+    @Column(name = "attorney_required",columnDefinition="int default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private RadioValue attorneyRequired;
+
+    @Column(name = "attorney_relation",columnDefinition="int default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private AttorneyRelationType attorneyRelation;
+
+    @OneToOne
+    @JoinColumn(name = "customer_attorney_id", nullable = true)
     private CustomerAttorney customerAttorney;
     
 
@@ -257,7 +268,18 @@ public class Individual implements Serializable {
     public void setMotherTitle(Title motherTitle) {
 		this.motherTitle = motherTitle;
 	}
-    
+    public AttorneyRelationType getAttorneyRelation() {
+		return attorneyRelation;
+	}
+    public RadioValue getAttorneyRequired() {
+		return attorneyRequired;
+	}
+    public void setAttorneyRelation(AttorneyRelationType attorneyRelation) {
+		this.attorneyRelation = attorneyRelation;
+	}
+    public void setAttorneyRequired(RadioValue attorneyRequired) {
+		this.attorneyRequired = attorneyRequired;
+	}
 
     @Override
     public String toString() {
@@ -276,6 +298,8 @@ public class Individual implements Serializable {
                 append("numberOfChildren", numberOfChildren).
                 append("citizenCountry", citizenCountry).
                 append("customerAttorney", customerAttorney).
+                append("attorneyRequired", attorneyRequired).
+                append("attorneyRelation", attorneyRelation).
                 append("fatherTitle", fatherTitle).
                 append("fatherNameTh", fatherNameTh).
                 append("fatherLastNameTh", fatherLastNameTh).
