@@ -23,8 +23,10 @@ public class CreditType implements Serializable {
     private String brmsCode;
     @Column(name = "coms_int_type", length = 1)
     private String comsIntType;
-    @Column(name = "can_split")
+    @Column(name = "can_split",columnDefinition="int default 0")
     private int canSplit;
+    @Column(name = "cal_limit_type",columnDefinition="int default 1")
+    private int calLimitType;
     @Column(name = "active")
     private int active;
 
@@ -77,6 +79,14 @@ public class CreditType implements Serializable {
 
     public void setCanSplit(int canSplit) {
         this.canSplit = canSplit;
+    }
+
+    public int getCalLimitType() {
+        return calLimitType;
+    }
+
+    public void setCalLimitType(int calLimitType) {
+        this.calLimitType = calLimitType;
     }
 
     public int getActive() {

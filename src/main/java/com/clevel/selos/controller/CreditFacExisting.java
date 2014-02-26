@@ -9,6 +9,7 @@ import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.CreditCategory;
+import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
@@ -727,7 +728,7 @@ public class CreditFacExisting implements Serializable {
                 }
 
                 existingCreditDetailView.setNo(index+1);
-                existingCreditDetailView.setBorrowerType(1);
+                existingCreditDetailView.setBorrowerType(RelationValue.BORROWER.value());
                 existingCreditDetailView.setCreditCategory(CreditCategory.COMMERCIAL);
                 existingCreditDetailView.setExistingCreditFrom(1);
                 existingCreditDetailView.setSeq(seqBorrower);
@@ -749,7 +750,7 @@ public class CreditFacExisting implements Serializable {
                 }
 
                 existingCreditDetailView.setNo(index+1);
-                existingCreditDetailView.setBorrowerType(2);
+                existingCreditDetailView.setBorrowerType(RelationValue.DIRECTLY_RELATED.value());
                 existingCreditDetailView.setCreditCategory(CreditCategory.COMMERCIAL);
                 existingCreditDetailView.setExistingCreditFrom(1);
                 existingCreditDetailView.setSeq(seqRelated);
@@ -1228,7 +1229,7 @@ public class CreditFacExisting implements Serializable {
                     existingCreditFacilityView.setBorrowerCollateralList(new ArrayList<ExistingCollateralDetailView>());
                 }
                 existingCollateralDetailViewAdd.setNo(existingCreditFacilityView.getBorrowerCollateralList().size()+1);
-                existingCollateralDetailViewAdd.setBorrowerType(1);
+                existingCollateralDetailViewAdd.setBorrowerType(RelationValue.BORROWER.value());
                 for (int l=0;l<hashBorrower.size();l++){
                     log.info("hashBorrower.get(j) in use   :  "+ l + " is   " +hashBorrower.get(l+1).toString());
                 }
@@ -1253,7 +1254,7 @@ public class CreditFacExisting implements Serializable {
                     existingCreditFacilityView.setRelatedCollateralList(new ArrayList<ExistingCollateralDetailView>());
                 }
                 existingCollateralDetailViewAdd.setNo(existingCreditFacilityView.getRelatedCollateralList().size()+1);
-                existingCollateralDetailViewAdd.setBorrowerType(2);
+                existingCollateralDetailViewAdd.setBorrowerType(RelationValue.DIRECTLY_RELATED.value());
                 for (ExistingCreditTypeDetailView existingCreditTypeDetail : existingCollateralDetailView.getExistingCreditTypeDetailViewList()) {
                     log.info("existingCreditTypeDetail.isNoFlag()  :: {}", existingCreditTypeDetail.isNoFlag());
                     if (existingCreditTypeDetail.isNoFlag()) {
