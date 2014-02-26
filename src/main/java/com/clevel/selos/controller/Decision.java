@@ -2,7 +2,6 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.*;
-import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.ApprovalHistoryDAO;
 import com.clevel.selos.integration.SELOS;
@@ -76,8 +75,6 @@ public class Decision implements Serializable {
     CreditRequestTypeDAO creditRequestTypeDAO;
     @Inject
     CountryDAO countryDAO;
-    @Inject
-    PrdGroupToPrdProgramDAO prdGroupToPrdProgramDAO;
     @Inject
     PrdProgramToCreditTypeDAO prdProgramToCreditTypeDAO;
     @Inject
@@ -167,7 +164,7 @@ public class Decision implements Serializable {
     private boolean modeEditReduceFrontEndFee;
     private boolean cannotEditStandard;
     private boolean cannotAddTier;
-    private List<PrdGroupToPrdProgram> prdGroupToPrdProgramList;
+    private List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewList;
     private List<PrdProgramToCreditTypeView> prdProgramToCreditTypeViewList;
     private List<BaseRate> baseRateList;
     private List<LoanPurposeView> loanPurposeViewList;
@@ -209,8 +206,8 @@ public class Decision implements Serializable {
     private ApprovalHistoryView approvalHistoryView;
 
     // List One Time Query on init
-    private List<PrdGroupToPrdProgram> _prdGroupToPrdProgramAll;
-    private List<PrdGroupToPrdProgram> _prdGroupToPrdProgramPropose;
+    private List<PrdGroupToPrdProgramView> _prdGroupToPrdProgramAll;
+    private List<PrdGroupToPrdProgramView> _prdGroupToPrdProgramByGroup;
 
     private NewCreditFacilityView newCreditFacilityView;
 
@@ -300,11 +297,11 @@ public class Decision implements Serializable {
         suggestBasePriceDlg = new BaseRate();
         suggestInterestDlg = BigDecimal.ZERO;
 
-        _prdGroupToPrdProgramAll = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramProposeAll();
-        _prdGroupToPrdProgramPropose = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramPropose(productGroup);
+        _prdGroupToPrdProgramAll = productControl.getPrdGroupToPrdProgramProposeAll();
+        _prdGroupToPrdProgramByGroup = productControl.getPrdGroupToPrdProgramProposeByGroup(productGroup);
 
-        if (prdGroupToPrdProgramList == null)
-            prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
+        if (prdGroupToPrdProgramViewList == null)
+            prdGroupToPrdProgramViewList = new ArrayList<PrdGroupToPrdProgramView>();
 
         creditTypeList = creditTypeDAO.findAll();
         if (creditTypeList == null)
@@ -414,7 +411,7 @@ public class Decision implements Serializable {
         onChangeRequestType();
         creditFacProposeControl.calculateInstallment(selectedApproveCredit);
 
-        if (selectedApproveCredit.getRequestType() == 2) {
+        if (selectedApproveCredit.getRequestType() == RequestTypes.NEW.value()) {
             if (selectedApproveCredit.getNewCreditTierDetailViewList() != null && !selectedApproveCredit.getNewCreditTierDetailViewList().isEmpty()) {
                 BaseRate baseRateFromTier = selectedApproveCredit.getNewCreditTierDetailViewList().get(0).getStandardBasePrice();
                 BigDecimal interestFromTier = selectedApproveCredit.getNewCreditTierDetailViewList().get(0).getStandardInterest();
@@ -540,22 +537,22 @@ public class Decision implements Serializable {
 
     public void onChangeRequestType() {
         log.debug("onChangeRequestType() requestType: {}", selectedApproveCredit.getRequestType());
-        prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
+        prdGroupToPrdProgramViewList = new ArrayList<PrdGroupToPrdProgramView>();
         prdProgramToCreditTypeViewList = new ArrayList<PrdProgramToCreditTypeView>();
 
         if (RequestTypes.CHANGE.value() == selectedApproveCredit.getRequestType()) {   //change
-            prdGroupToPrdProgramList = _prdGroupToPrdProgramAll;
+            prdGroupToPrdProgramViewList = _prdGroupToPrdProgramAll;
             selectedApproveCredit.setProductProgramView(new ProductProgramView());
             cannotEditStandard = false;
             cannotAddTier = false;
         }
         else if (RequestTypes.NEW.value() == selectedApproveCredit.getRequestType()) {  //new
             if (productGroup != null) {
-                prdGroupToPrdProgramList = _prdGroupToPrdProgramPropose;
+                prdGroupToPrdProgramViewList = _prdGroupToPrdProgramByGroup;
             }
             cannotEditStandard = true;
             if (modeEditCredit) {
-                if (selectedApproveCredit.getNewCreditTierDetailViewList() == null || selectedApproveCredit.getNewCreditTierDetailViewList().size() < 1) {
+                if (selectedApproveCredit.getNewCreditTierDetailViewList() == null || selectedApproveCredit.getNewCreditTierDetailViewList().isEmpty()) {
                     cannotAddTier = true;
                 } else {
                     cannotAddTier = false;
@@ -596,6 +593,10 @@ public class Decision implements Serializable {
     }
 
     public void onAddTierInfo() {
+        log.debug("onAddTierInfo()");
+        BaseRate finalBaseRate;
+        BigDecimal finalInterest;
+        String finalPriceLabel;
 
     }
 
@@ -1192,12 +1193,12 @@ public class Decision implements Serializable {
         this.countryList = countryList;
     }
 
-    public List<PrdGroupToPrdProgram> getPrdGroupToPrdProgramList() {
-        return prdGroupToPrdProgramList;
+    public List<PrdGroupToPrdProgramView> getPrdGroupToPrdProgramViewList() {
+        return prdGroupToPrdProgramViewList;
     }
 
-    public void setPrdGroupToPrdProgramList(List<PrdGroupToPrdProgram> prdGroupToPrdProgramList) {
-        this.prdGroupToPrdProgramList = prdGroupToPrdProgramList;
+    public void setPrdGroupToPrdProgramViewList(List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewList) {
+        this.prdGroupToPrdProgramViewList = prdGroupToPrdProgramViewList;
     }
 
     public List<PrdProgramToCreditTypeView> getPrdProgramToCreditTypeViewList() {
