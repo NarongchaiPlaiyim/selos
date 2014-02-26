@@ -14,6 +14,16 @@ public class StepView implements Serializable {
     private int checkBRMS;
     private int active;
 
+    public StepView() {
+        reset();
+    }
+
+    public void reset() {
+        this.name = "";
+        this.description = "";
+        this.stageView = new StageView();
+    }
+
     public long getId() {
         return id;
     }

@@ -258,9 +258,6 @@
                                                    var="suggest"
                                                    itemLabel="#{suggest.name}"
                                                    itemValue="#{suggest.id}"/>
-                                    <p:ajax event="change"
-                                            listener="#{decision.onChangeSuggestValue()}"
-                                            process=":proposeCreditDlgForm"/>
                                 </p:selectOneMenu>
                             </td>
                             <td>
@@ -276,9 +273,7 @@
                                     <f:convertNumber pattern="##0.##"
                                                      minFractionDigits="2" maxFractionDigits="2"
                                                      maxIntegerDigits="3"/>
-                                    <p:ajax event="blur"
-                                            listener="#{decision.onChangeSuggestValue()}"
-                                            process=":proposeCreditDlgForm" />
+                                    <p:ajax event="blur" update="@this"/>
                                 </p:inputText>
                             </td>
                         </tr>
