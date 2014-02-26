@@ -13,6 +13,7 @@ public class CheckOptionalDocView implements Serializable {
     private boolean Incorrect ;
     private boolean expire;
     private String remark;
+    private boolean disabledCompleteFlag;
 
     public CheckOptionalDocView() {
         init();
@@ -24,6 +25,14 @@ public class CheckOptionalDocView implements Serializable {
 
     private void init(){
 
+    }
+
+    public boolean isDisabledCompleteFlag() {
+        return disabledCompleteFlag;
+    }
+
+    public void setDisabledCompleteFlag(boolean disabledCompleteFlag) {
+        this.disabledCompleteFlag = disabledCompleteFlag;
     }
 
     public String getOwners() {

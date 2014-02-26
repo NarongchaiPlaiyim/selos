@@ -80,6 +80,7 @@ public class CreditFacExistingControl extends BusinessControl {
     @Inject
     ExistingGuarantorDetailDAO existingGuarantorDetailDAO;
 
+    @Inject
     public CreditFacExistingControl() {
     }
 

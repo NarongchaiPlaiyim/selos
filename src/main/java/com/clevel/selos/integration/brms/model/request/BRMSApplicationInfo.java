@@ -11,6 +11,7 @@ import java.util.List;
 public class BRMSApplicationInfo implements Serializable{
 
     private String statusCode;
+    private String stepCode;
     private String applicationNo;
     private Date processDate;
     private Date bdmSubmitDate;
@@ -56,6 +57,7 @@ public class BRMSApplicationInfo implements Serializable{
     private BigDecimal totalLoanWCTMB;
     private String bizLocation;
     private BigDecimal yearInBusinessMonth;
+    private String countryOfRegistration;
     private String productGroup;
     private BigDecimal maximumSMELimit;
     private BigDecimal totalApprovedCredit;
@@ -79,6 +81,14 @@ public class BRMSApplicationInfo implements Serializable{
 
     public void setStatusCode(String statusCode) {
         this.statusCode = statusCode;
+    }
+
+    public String getStepCode() {
+        return stepCode;
+    }
+
+    public void setStepCode(String stepCode) {
+        this.stepCode = stepCode;
     }
 
     public String getApplicationNo() {
@@ -439,6 +449,14 @@ public class BRMSApplicationInfo implements Serializable{
 
     public void setYearInBusinessMonth(BigDecimal yearInBusinessMonth) {
         this.yearInBusinessMonth = yearInBusinessMonth;
+    }
+
+    public String getCountryOfRegistration() {
+        return countryOfRegistration;
+    }
+
+    public void setCountryOfRegistration(String countryOfRegistration) {
+        this.countryOfRegistration = countryOfRegistration;
     }
 
     public String getProductGroup() {

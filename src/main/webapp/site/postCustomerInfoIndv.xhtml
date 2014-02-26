@@ -54,7 +54,7 @@
                         <!-- start content -->
                         <table class="content_table_form">
 	                        <tr>
-                               <td>
+                               <td colspan="100%">
                                     <table>
                                         <tr>
                                             <td class="title" style="width:200px;">
@@ -72,15 +72,15 @@
                                 </td>
                             </tr>
                             <tr>
-                              <td><div class="separate"><!-- --></div></td>
+                              <td colspan="100%"><div class="separate"><!-- --></div></td>
                         	</tr>
                         	<tr>
-                        		<td>
+                        		<td colspan="100%">
                         			<h2><h:outputText value="#{msg.get('app.custInfoIndi.post.subtitle')}" /></h2>
 	                            </td>
                         	</tr>
                         	<tr>
-                        		<td>
+                        		<td colspan="100%">
 <table class="content_table_form">
 	<tr>
 		<td class="title" style="width: 180px">
@@ -93,14 +93,14 @@
 				readonly="true"
 				/>
 		</td>
-		<td class="title" style="width:180px">
+		<td class="title" style="width:150px">
 			<p:outputLabel  for="coll_owner"
 				value="#{msg.get('app.custInfoIndi.content.collOwner')}" />
 		</td>
 		<td>
 			<p:selectOneRadio id='coll_owner' disabled="true" value="#{postCustomerInfoIndv.customer.collateralOwner}">
             	<f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="yesNoEnum"
-            		itemLabel="#{msg.get(yesNoEnum.msgKey)}" itemValue="yesNoEnum" 
+            		itemLabel="#{msg.get(yesNoEnum.msgKey)}" itemValue="#{yesNoEnum}" 
             		/>
             </p:selectOneRadio>
 		</td>
@@ -185,9 +185,8 @@
 		<td>
 			<p:inputText id="age" styleClass="smaller"
 				value="#{postCustomerInfoIndv.customer.age}" 
-				readonly="true">
-				<f:convertNumber pattern="0"/>
-			</p:inputText>
+				readonly="true"
+				/>
 		</td>
 	</tr>
 	<tr>
@@ -254,9 +253,183 @@
 		</td>
 	</tr>
 	<tr><td colspan="100%"><p:spacer height="0.8em"/></td></tr>
-
 	
-	<tr><td colspan="100%"><p:spacer height="0.8em"/></td></tr>
+	<ui:repeat var="address" value="#{postCustomerInfoIndv.customer.addresses}"
+		varStatus="repeatStatus"
+		>
+		<tr>
+			<td rowspan="2" class="title top">#{address.displayAddressType} :</td>
+			<td colspan="3">
+				<p:selectOneRadio value="#{address.addressFlag}"
+					rendered="#{not empty address.availableFlagList}"
+					disabled="#{not postCustomerInfoIndv.canUpdateInfo}"
+					>
+					<p:ajax update="address_detail" 
+						listener="#{postCustomerInfoIndv.onSelectAddressFlag(repeatStatus.index)}"
+						onstart="p_loading_dialog.show()"
+						oncomplete="p_loading_dialog.hide()"
+						/>
+	            	<f:selectItems value="#{address.availableFlagList}" var="flag"
+	            		itemLabel="#{postCustomerInfoIndv.getAddressFlagLabel(flag)}" itemValue="#{flag}" 
+	            		/>
+	            </p:selectOneRadio>
+			</td>
+		</tr>
+		<tr>
+			<td  colspan="3">
+				<h:panelGroup layout="block" id="address_detail" style="padding-bottom:28px">
+					<h:panelGroup layout="block" styleClass="div_row">
+						<div style="width:120px;display:inline-block">
+							<p:outputLabel for="addressno" styleClass="title"
+								value="#{msg.get('app.custInfoIndi.content.no')}" />
+						</div>
+						<p:inputText id='addressno' styleClass="smaller"
+							value="#{address.addressNo}"
+							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							/>
+						<p:spacer width="30" height="10"/>
+						<p:outputLabel for="addressmoo" styleClass="title"
+							value="#{msg.get('app.custInfoIndi.content.moo')}" />
+						<p:spacer width="8"/>
+						<p:inputText id='addressmoo'
+							value="#{address.moo}"
+							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							onkeydown="return onKeyDownNumber(event);"
+							onkeypress="return onKeyPressNumber(event);"
+							size="5" maxlength="5"
+							/>
+						<p:spacer width="30" height="10"/>
+						<p:outputLabel for="addressbuilding" styleClass="title"
+							value="#{msg.get('app.custInfoIndi.content.building')}" />
+						<p:spacer width="8"/>
+						<p:inputText id='addressbuilding'
+							value="#{address.building}"
+							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							/>
+					</h:panelGroup>
+					
+					<h:panelGroup layout="block" styleClass="div_row">
+						<div style="width:120px;display:inline-block">
+							<p:outputLabel for="addressstreet" styleClass="title"
+								value="#{msg.get('app.custInfoIndi.content.road')}" />
+						</div>
+						<p:inputText id='addressstreet' style="width:500px"
+							value="#{address.road}"
+							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"		
+							/>
+					</h:panelGroup>
+					
+					<h:panelGroup layout="block" styleClass="div_row">
+						<div style="width:120px;height: 10px;float:left"></div>
+						<p:selectOneMenu id="province" styleClass="inline_select"
+							value="#{address.provinceId}"
+							rendered="#{(postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							>
+							<p:ajax update="district,subdistrict" 
+								listener="#{postCustomerInfoIndv.onSelectProvince(repeatStatus.index)}"/>
+							
+							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+							<f:selectItems value="#{postCustomerInfoIndv.provinces}"/>
+						</p:selectOneMenu>
+						<p:inputText
+							value="#{address.displayProvince}"
+							readonly="true"
+							rendered="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							/>
+						
+						<p:selectOneMenu id="district" styleClass="inline_select"
+							style="margin-left:4px;margin-right:4px"
+							value="#{address.districtId}"
+							rendered="#{(postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							>
+							<p:ajax update="subdistrict" 
+								listener="#{postCustomerInfoIndv.onSelectDistrict(repeatStatus.index)}"/>
+							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+							<f:selectItems value="#{address.districtList}"/>
+						</p:selectOneMenu>
+						<p:inputText
+							value="#{address.displayDistrict}"
+							style="margin-left:4px !important;margin-right:4px !important;"
+							readonly="true"
+							rendered="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							/>
+						
+						<p:selectOneMenu id="subdistrict" styleClass="inline_select"
+							value="#{address.subDistrictId}"
+							rendered="#{(postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							>
+							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+							<f:selectItems value="#{address.subDistrictList}"/>
+						</p:selectOneMenu>
+						<p:inputText
+							value="#{address.displaySubDistrict}"
+							readonly="true"
+							rendered="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							/>
+					</h:panelGroup>
+					
+					<h:panelGroup layout="block" styleClass="div_row">
+						<div style="width:120px;display:inline-block">
+							<p:outputLabel for="addresspostcode" styleClass="title"
+								value="#{msg.get('app.custInfoIndi.content.postalCode')}" />
+						</div>
+						<p:inputText id='addresspostcode'
+							value="#{address.postalCode}"
+							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							onkeydown="return onKeyDownNumber(event);"
+							onkeypress="return onKeyPressNumber(event);"
+							size="5" maxlength="5"
+							/>
+					</h:panelGroup>
+					
+					<h:panelGroup layout="block" styleClass="div_row">
+						<div style="width:120px;height: 10px;float:left">
+							<p:outputLabel for="addresscountry" styleClass="title"
+								value="#{msg.get('app.custInfoIndi.content.country')}" />
+						</div>
+						<p:selectOneMenu id="addresscountry" styleClass="inline_select"
+							value="#{address.countryId}"
+							rendered="#{(postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							>
+							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+							<f:selectItems value="#{postCustomerInfoIndv.countries}"/>
+						</p:selectOneMenu>
+						<p:inputText
+							value="#{address.displayCountry}"
+							readonly="true"
+							rendered="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							/>
+					</h:panelGroup>
+					
+					<h:panelGroup layout="block" styleClass="div_row">
+						<div style="width:120px;display:inline-block">
+							<p:outputLabel for="addressphone" styleClass="title"
+								value="#{msg.get('app.custInfoIndi.content.tel')}" />
+						</div>
+						<p:inputText id='addressphone'
+							value="#{address.phoneNumber}"
+							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							onkeydown="return onKeyDownNumber(event);"
+                            onkeypress="return onKeyPressNumber(event);"
+                            maxlength="10"
+							/>
+						<p:spacer width="10"/>
+						<p:outputLabel for="addressphoneext" 
+							value="#{msg.get('app.custInfoIndi.content.telTo')}" />
+						<p:spacer width="5"/>
+						<p:inputText id='addressphoneext'
+							value="#{address.phoneExt}"
+							size="5"
+							onkeydown="return onKeyDownNumber(event);"
+                            onkeypress="return onKeyPressNumber(event);"
+                            maxlength="10"
+							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"	
+						/>
+					</h:panelGroup>
+				</h:panelGroup>
+			</td>
+		</tr>
+	</ui:repeat>	
 	
 	<tr>
 		<td class="title">
@@ -264,8 +437,17 @@
 				value="#{msg.get('app.custInfoIndi.content.mailAdd')}" />
 		</td>
 		<td colspan="3">
-			<p:inputText id="mailing_addresstype"
+			<p:selectOneMenu id='mailing_addresstype'
+				value="#{postCustomerInfoIndv.customer.mailingAddressTypeId}"
+				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
+				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.mailAdd.required')}"
+				>
+				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+				<f:selectItems value="#{postCustomerInfoIndv.addressTypes}"/>
+			</p:selectOneMenu>
+			<p:inputText 
 				value="#{postCustomerInfoIndv.customer.displayMailingAddressType}"
+				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
 				readonly="true"
 				/>
 		</td>
@@ -334,20 +516,8 @@
 				value="#{msg.get('app.custInfoIndi.content.maritalStatus')}" />
 		</td>
 		<td colspan="3">
-			<p:selectOneMenu id='marital'
-				value="#{postCustomerInfoIndv.customer.maritalStatusId}"
-				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
-				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.maritalStatus.required')}"
-				>
-				<p:ajax update="marriagetitle,marriagename,marriagelastname"
-					listener="#{postCustomerInfoIndv.onChangeMaritalStatus()}"
-					 />
-				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-				<f:selectItems value="#{postCustomerInfoIndv.maritalStatuses}"/>
-			</p:selectOneMenu>
-			<p:inputText
+			<p:inputText id="marital"
 				value="#{postCustomerInfoIndv.customer.displayMaritalStatus}"
-				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
 				readonly="true"
 				/>
 		</td>
@@ -362,7 +532,7 @@
 				value="#{postCustomerInfoIndv.customer.spouseTitleId}"
 				disabled="#{not postCustomerInfoIndv.canUpdateSpouse}"
 				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
-				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.spouseNameTH.required')}"
+				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.spouseTitleTH.required')}"
 				>
 				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				<f:selectItems value="#{postCustomerInfoIndv.titles}"/>
@@ -382,7 +552,7 @@
 			<p:inputText id='marriagelastname' styleClass="largest"
 				value="#{postCustomerInfoIndv.customer.spouseLastNameTH}"
 				readonly="#{not postCustomerInfoIndv.canUpdateSpouse}"
-				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.spouseNameTH.required')}"
+				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.spouseLastNameTH.required')}"
 				/>
 		</td>
 	</tr>
@@ -449,10 +619,361 @@
 </table>
                         		</td>
                         	</tr>
-                        	
                         	<tr><td colspan="100%"><p:spacer height="1em"/></td></tr>
-                        	
-	                        <tr>
+                            <tr>
+	                            <td colspan="100%"><p:separator/></td>
+	                        </tr>
+<!--  Attorney -->
+<tr>
+	<td colspan="100%">
+		<h2><h:outputText value="#{msg.get('app.custInfoIndi.appointee.title')}" /></h2>
+    </td>
+</tr>
+                     	
+<tr>
+	<td class="title" style="width:180px">
+		<p:outputLabel for='right'
+			value="#{msg.get('app.custInfoIndi.appointee.right')}" />						
+	</td>
+	<td colspan="3">
+		<p:selectOneRadio id='right' value="#{postCustomerInfoIndv.customer.attorneyRequired}"
+			disabled="#{not postCustomerInfoIndv.canUpdateInfo}"
+			>
+			<p:ajax update="appointee_owner_tbl,appointee_relation,attorney_pane"
+				process="@this"
+				onstart="p_loading_dialog.show()"
+				oncomplete="p_loading_dialog.hide()"
+				partialSubmit="true"
+				listener="#{postCustomerInfoIndv.onSelectAttorneyRight()}" />
+			<f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="radioEnum"
+				itemLabel="#{msg.get(radioEnum.msgKey)}" itemValue="#{radioEnum}"
+				/>
+        </p:selectOneRadio>
+	</td>
+</tr>
+<tr>
+	<td class="title" >
+		<p:outputLabel for="appointee_relation"
+			value="#{msg.get('app.custInfoIndi.appointee.relationship')}" />						
+	</td>
+	<td colspan="3"> 
+		<p:selectOneRadio id='appointee_relation' 
+			value="#{postCustomerInfoIndv.customer.attorneyRelationType}"
+			disabled="#{not postCustomerInfoIndv.enableAttorneyRight}">
+			<p:ajax update="appointee_owner_tbl,attorney_pane"
+				process="@this"
+				partialSubmit="true"
+				onstart="p_loading_dialog.show()"
+				oncomplete="p_loading_dialog.hide()"
+				listener="#{postCustomerInfoIndv.onSelectAppointeeRelationship()}"
+				/>
+			<f:selectItems value="#{enumGeneralControl.attorneyRelationTypes}" var="attorneyType"
+				itemLabel="#{msg.get(attorneyType.msgKey)}" itemValue="#{attorneyType}"
+				/>
+		</p:selectOneRadio>
+	</td>
+</tr>
+<tr>
+	<td></td>
+	<td colspan="3">
+		<p:dataTable id='appointee_owner_tbl'
+			value="#{postCustomerInfoIndv.attorneySelectDataModel}" var="attorney" 
+			rowIndexVar="rowIdx" disabledSelection="#{not postCustomerInfoIndv.appointeeOwnerSelectable}"
+			selection="#{postCustomerInfoIndv.selectedAttorney}"
+			>
+			<p:ajax event="rowSelectRadio" update=":frmMain:attorney_pane"
+				process="@this"
+				partialSubmit="true"
+				onstart="p_loading_dialog.show()"
+				oncomplete="p_loading_dialog.hide()"
+				listener="#{postCustomerInfoIndv.onSelectAppotineeOwner()}"
+				/>
+			<p:column selectionMode="single" style="width:30px" styleClass="center" />
+			<p:column style="width:200px" 
+				headerText="#{msg.get('app.custInfoIndi.appointee.relationship.table.customerName')}"
+				>
+				#{attorney.customerName}
+			</p:column>
+			<p:column style="width:200px"
+				headerText="#{msg.get('app.custInfoIndi.appointee.relationship.table.citizen')}"
+				>
+				#{attorney.citizenId}
+			</p:column>
+			<p:column style="width:150px"
+				headerText="#{msg.get('app.custInfoIndi.appointee.relationship.table.customerId')}"
+				>
+				#{attorney.tmbCustomerId}
+			</p:column>
+			<p:column style="width:200px"
+				headerText="#{msg.get('app.custInfoIndi.appointee.relationship.table.relationship')}"
+				>
+				#{attorney.relation}
+			</p:column>
+		</p:dataTable>
+	</td>
+</tr>
+
+<tr><td colspan="100%">
+	<h:panelGroup id='attorney_pane' layout="block">
+		<table class="content_table_form">
+	    	<tr>
+	    		<td class="title" style="width: 180px">
+					<p:outputLabel  for="att_name"
+						value="#{msg.get('app.custInfoIndi.attorneyInRight.customerNameTH')}" />
+				</td>
+				<td colspan="3">
+					<p:selectOneMenu id='att_title' styleClass="inline_select"
+						value="#{postCustomerInfoIndv.attorneyView.titleId}"
+						rendered="#{postCustomerInfoIndv.attorneyDetailEditable}"
+						>
+	    				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+	    				<f:selectItems value="#{postCustomerInfoIndv.titles}" />
+	    			</p:selectOneMenu>
+	    			<p:inputText styleClass="small"
+						value="#{postCustomerInfoIndv.attorneyView.displayTitle}"
+						readonly="true"
+						rendered="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+						/>
+	       			<p:spacer width="5"/>
+					<p:inputText id='att_name' styleClass="large" 
+						value="#{postCustomerInfoIndv.attorneyView.nameTH}"
+						readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+						/>
+					<p:spacer width="5"/>
+					<p:inputText id='att_surname' styleClass="largest"
+						value="#{postCustomerInfoIndv.attorneyView.lastNameTH}"
+						readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+						/>
+	       		</td>
+	       	</tr>
+			<tr>
+				<td rowspan="2" class="title top">#{msg.get('app.custInfoIndi.attorneyInRight.address')}</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td  colspan="3">
+					<h:panelGroup layout="block" id="address_detail" style="padding-bottom:28px">
+						<h:panelGroup layout="block" styleClass="div_row">
+							<div style="width:120px;display:inline-block">
+								<p:outputLabel for="att_addressno" styleClass="title"
+	                 					value="#{msg.get('app.custInfoIndi.attorneyInRight.address.addressNo')}" />
+							</div>
+							<p:inputText id='att_addressno' styleClass="smaller"
+	                   			value="#{postCustomerInfoIndv.attorneyView.addressNo}"
+	                   			readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+	                   			/>	
+							<p:spacer width="30" height="10"/>
+							<p:outputLabel for="att_addressmoo" styleClass="title"
+	                  			value="#{msg.get('app.custInfoIndi.attorneyInRight.address.moo')}" />
+							<p:spacer width="8"/>
+							<p:inputText id='att_addressmoo'
+	     						value="#{postCustomerInfoIndv.attorneyView.moo}"
+	      						readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+	      						onkeydown="return onKeyDownNumber(event);"
+								onkeypress="return onKeyPressNumber(event);"
+								size="5" maxlength="5"
+								/>	
+							<p:spacer width="30" height="10"/>
+							<p:outputLabel for="att_addressbuilding" styleClass="title"
+	                  			value="#{msg.get('app.custInfoIndi.attorneyInRight.address.building')}" />
+							<p:spacer width="8"/>
+							<p:inputText id='att_addressbuilding'
+	                  			value="#{postCustomerInfoIndv.attorneyView.building}"
+	                   			readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+	                   			/>
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" styleClass="div_row">
+							<div style="width:120px;display:inline-block">
+								<p:outputLabel for="att_addressstreet" styleClass="title"
+	                   				value="#{msg.get('app.custInfoIndi.attorneyInRight.address.street')}" />
+							</div>
+							<p:inputText id='att_addressstreet' style="width:500px"
+	                   			value="#{postCustomerInfoIndv.attorneyView.road}"
+	                   			readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+	                   		/>	
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" styleClass="div_row">
+							<div style="width:120px;height: 10px;float:left"></div>
+							<p:selectOneMenu id="att_province" styleClass="inline_select"
+								value="#{postCustomerInfoIndv.attorneyView.provinceId}"
+								rendered="#{postCustomerInfoIndv.attorneyDetailEditable}"
+								>
+								<p:ajax update="att_district,att_subdistrict" listener="#{postCustomerInfoIndv.onSelectAttorneyProvince()}"/>
+	                     			<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+	                     			<f:selectItems value="#{postCustomerInfoIndv.provinces}"/>
+	                     		</p:selectOneMenu>
+	                     		<p:inputText
+									value="#{postCustomerInfoIndv.attorneyView.displayProvince}"
+									rendered="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+									readonly="true"
+									/>
+	                     		<p:selectOneMenu id="att_district" styleClass="inline_select"
+	                     			style="margin-left:4px;margin-right:4px"
+	                   				value="#{postCustomerInfoIndv.attorneyView.districtId}"
+									rendered="#{postCustomerInfoIndv.attorneyDetailEditable}"
+									>
+									<p:ajax update="att_subdistrict" listener="#{postCustomerInfoIndv.onSelectAttorneyDistrict()}"/>
+	                     			<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+	                     			<f:selectItems value="#{postCustomerInfoIndv.attorneyDistricts}"/>
+	                     		</p:selectOneMenu>
+	                     		<p:inputText
+									value="#{postCustomerInfoIndv.attorneyView.displayDistrict}"
+									rendered="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+									style="margin-left:4px !important;margin-right:4px !important;"
+									readonly="true"
+									/>
+	                     		<p:selectOneMenu id="att_subdistrict" styleClass="inline_select"
+	                   				value="#{postCustomerInfoIndv.attorneyView.subDistrictId}"
+									rendered="#{postCustomerInfoIndv.attorneyDetailEditable}"
+									>
+									<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+	                     				<f:selectItems value="#{postCustomerInfoIndv.attorneySubdistricts}"/>
+	                   			</p:selectOneMenu>
+	                   			<p:inputText
+									value="#{postCustomerInfoIndv.attorneyView.displaySubDistrict}"
+									rendered="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+									readonly="true"
+									/>
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" styleClass="div_row">
+							<div style="width:120px;display:inline-block">
+								<p:outputLabel for="att_addresspostcode" styleClass="title"
+	                   				value="#{msg.get('app.custInfoIndi.attorneyInRight.address.postcode')}" />
+	                   		</div>
+							<p:inputText id='att_addresspostcode'
+	       						value="#{postCustomerInfoIndv.attorneyView.postalCode}"
+	       						readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+	       						onkeydown="return onKeyDownNumber(event);"
+								onkeypress="return onKeyPressNumber(event);"
+								size="5" maxlength="5"
+	                   			/>
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" styleClass="div_row">
+							<div style="width:120px;height: 10px;float:left">
+								<p:outputLabel for="att_addresscountry" styleClass="title"
+	                   				value="#{msg.get('app.custInfoIndi.attorneyInRight.address.country')}" />
+	                   		</div>
+							<p:selectOneMenu id="att_addresscountry" styleClass="inline_select"
+	                   			value="#{postCustomerInfoIndv.attorneyView.countryId}"
+	                   			rendered="#{postCustomerInfoIndv.attorneyDetailEditable}"
+	                   			>
+								<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+	                     		<f:selectItems value="#{postCustomerInfoIndv.countries}"/>
+	                     	</p:selectOneMenu>
+							<p:inputText
+								value="#{postCustomerInfoIndv.attorneyView.displayCountry}"
+								readonly="true"
+								rendered="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+								/>
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" styleClass="div_row">
+							<div style="width:120px;display:inline-block">
+								<p:outputLabel for="att_addressphone" styleClass="title"
+	                   				value="#{msg.get('app.custInfoIndi.attorneyInRight.address.phone')}" />
+	                   		</div>
+							<p:inputText id='att_addressphone'
+								value="#{postCustomerInfoIndv.attorneyView.phoneNumber}"
+								readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+								onkeydown="return onKeyDownNumber(event);"
+	                            onkeypress="return onKeyPressNumber(event);"
+	                            maxlength="10"
+								/>
+							<p:spacer width="10"/>
+							<p:outputLabel for="att_addressphoneext" 
+	                   			value="#{msg.get('app.custInfoIndi.attorneyInRight.address.phoneext')}" />
+							<p:spacer width="5"/>
+							<p:inputText id='att_addressphoneext'
+	                   			value="#{postCustomerInfoIndv.attorneyView.phoneExt}"
+								size="5"
+								onkeydown="return onKeyDownNumber(event);"
+	                            onkeypress="return onKeyPressNumber(event);"
+	                            maxlength="10"
+								readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+							/>
+						</h:panelGroup>
+					</h:panelGroup>
+				</td>
+			</tr>
+	
+			<tr><td colspan="100%"><p:spacer height="0.8em"/></td></tr>
+	                     	
+	        <tr>
+	        	<td class="title">
+	            	<p:outputLabel 
+	                 	value="#{msg.get('app.custInfoIndi.attorneyInRight.contactNumber')}" />
+	            </td>
+				<td colspan="3">
+					<div class="title" style="width:100px;float:left">
+						<p:outputLabel for="att_homenumber"
+		                	value="#{msg.get('app.custInfoIndi.attorneyInRight.homeNumber')}" />
+					</div>
+		   			<div style="width:180px;float:left">
+		            	<p:inputText id="att_homenumber"
+		                	value="#{postCustomerInfoIndv.attorneyView.homePhoneNumber}"
+		                 	readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+							onkeydown="return onKeyDownNumber(event);"
+							onkeypress="return onKeyPressNumber(event);"
+							maxlength="10"
+		                	/>
+					</div>
+		            <div class="title" style="width:100px;float:left">
+						<p:outputLabel for="att_extnumber"
+							value="#{msg.get('app.custInfoIndi.attorneyInRight.extNumber')}" />
+					</div>
+					<div style="width:180px;float:left">
+						<p:inputText id="att_extnumber" 
+							value="#{postCustomerInfoIndv.attorneyView.homePhoneExt}"
+							readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+							onkeydown="return onKeyDownNumber(event);"
+							onkeypress="return onKeyPressNumber(event);"
+							size="5" maxlength="10"
+		              		/>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td colspan="3">
+					<div class="title" style="width:100px;float:left">
+						<p:outputLabel for="att_mobile1"
+							value="#{msg.get('app.custInfoIndi.attorneyInRight.mobile1Number')}" />
+					</div>
+					<div style="width:180px;float:left">
+						<p:inputText id="att_mobile1" 
+							value="#{postCustomerInfoIndv.attorneyView.mobile1}"
+							readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+							onkeydown="return onKeyDownNumber(event);"
+							onkeypress="return onKeyPressNumber(event);"
+							maxlength="15"
+							/>
+					</div>
+					<div class="title" style="width:100px;float:left">
+						<p:outputLabel for="att_mobile2"
+							value="#{msg.get('app.custInfoIndi.attorneyInRight.mobile2Number')}" />
+					</div>
+					<div style="width:180px;float:left">
+						<p:inputText id="att_mobile2"
+							value="#{postCustomerInfoIndv.attorneyView.mobile2}" 
+	              			readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+							onkeydown="return onKeyDownNumber(event);"
+							onkeypress="return onKeyPressNumber(event);"
+							maxlength="15"
+	              			/>
+					</div>
+				</td>
+	        </tr>
+		</table>
+	</h:panelGroup>
+</td></tr>
+
+	                        
+	                        <tr><td colspan="100%"><p:spacer height="1em"/></td></tr>
+                        	<tr>
 	                            <td colspan="100%"><p:separator/></td>
 	                        </tr>
 	                        <tr>

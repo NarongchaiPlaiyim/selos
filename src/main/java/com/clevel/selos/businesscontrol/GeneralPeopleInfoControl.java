@@ -123,6 +123,27 @@ public class GeneralPeopleInfoControl extends BusinessControl {
 		 }
 		 return rtnDatas;
 	 }
+	 public List<SelectItem> listJuristicTitles(Language lang) {
+		 List<SelectItem> rtnDatas = new ArrayList<SelectItem>();
+		 
+		 List<Title> list = titleDAO.getListByCustomerEntityId(CUSTOMER_ENTITY_JURISTIC);
+		 for (Title data : list) {
+			 SelectItem item = new SelectItem();
+			 item.setValue(data.getId());
+			 //Not use Langauge flag, send default as TH
+			 item.setLabel(data.getTitleTh());
+			 item.setDescription(data.getTitleTh());
+//			 if (Language.TH.equals(lang)) {
+//				 item.setLabel(data.getTitleTh());
+//				 item.setDescription(data.getTitleTh());
+//			 } else {
+//				 item.setLabel(data.getTitleEn());
+//				 item.setDescription(data.getTitleEn());
+//			 }
+			 rtnDatas.add(item);
+		 }
+		 return rtnDatas;
+	 }
 	 
 	 public List<SelectItem> listRaces() {
 		 List<SelectItem> rtnDatas = new ArrayList<SelectItem>();

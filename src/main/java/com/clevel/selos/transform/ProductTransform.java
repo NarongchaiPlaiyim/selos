@@ -28,6 +28,16 @@ public class ProductTransform extends Transform{
         return prdGroupToPrdProgramView;
     }
 
+    public List<PrdGroupToPrdProgramView> transformToViewList(List<PrdGroupToPrdProgram> prdGroupToPrdProgramList) {
+        List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewList = new ArrayList<PrdGroupToPrdProgramView>();
+        if (prdGroupToPrdProgramList != null && !prdGroupToPrdProgramList.isEmpty()) {
+            for (PrdGroupToPrdProgram prdGroupToPrdProgram : prdGroupToPrdProgramList) {
+                prdGroupToPrdProgramViewList.add(transformToView(prdGroupToPrdProgram));
+            }
+        }
+        return prdGroupToPrdProgramViewList;
+    }
+
     public ProductProgramView transformToView(ProductProgram productProgram){
         ProductProgramView productProgramView = new ProductProgramView();
         if(productProgram != null){

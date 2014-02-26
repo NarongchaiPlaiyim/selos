@@ -137,7 +137,7 @@
                                                                            var="province"
                                                                            itemLabel="#{province.name}"
                                                                            itemValue="#{province.code}"/>
-                                                            <p:ajax process="@form" update=":frmMain" listener="#{bizInfoSummary.onChangeProvince}"/>
+                                                            <p:ajax process="@form" update=":frmMain:provinceCode,:frmMain:districtCode,:frmMain:subDistrictCode" listener="#{bizInfoSummary.onChangeProvince}"/>
                                                         </p:selectOneMenu>
                                                     </td>
                                                     <td>
@@ -149,7 +149,7 @@
                                                                            var="district"
                                                                            itemLabel="#{district.name}"
                                                                            itemValue="#{district.id}"/>
-                                                            <p:ajax process="@form" update=":frmMain" listener="#{bizInfoSummary.onChangeDistrict()}" />
+                                                            <p:ajax process="@form" update=":frmMain:districtCode,:frmMain:subDistrictCode" listener="#{bizInfoSummary.onChangeDistrict()}" />
                                                         </p:selectOneMenu>
                                                     </td>
                                                     <td>
@@ -161,7 +161,7 @@
                                                                            var="subDis"
                                                                            itemLabel="#{subDis.name}"
                                                                            itemValue="#{subDis.code}"/>
-                                                            <p:ajax event="change" process="@form" update=":frmMain"/>
+                                                            <p:ajax event="change" process="@form" update=":frmMain:subDistrictCode"/>
                                                         </p:selectOneMenu>
                                                     </td>
                                                 </tr>
