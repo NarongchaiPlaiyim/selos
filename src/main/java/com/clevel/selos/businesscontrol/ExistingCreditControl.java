@@ -324,6 +324,8 @@ public class ExistingCreditControl extends BusinessControl {
             AppInProcessResult appInProcessResult = rlosInterface.getAppInProcessData(getCurrentUserID(), personalIDList);
             log.info("Result from RLOSInterface, {} from personalID {}", appInProcessResult, personalIDList);
             if (appInProcessResult.getActionResult().equals(ActionResult.SUCCESS)) {
+                int borrowerId = 0;
+                int relatedId = 0;
 
                 log.info("Start Transform Result");
                 List<ExistingCreditDetailView> borrowerRLOSApp = new ArrayList<ExistingCreditDetailView>();
@@ -347,8 +349,10 @@ public class ExistingCreditControl extends BusinessControl {
 
                     for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViews) {
                         if (isBorrower) {
+                            borrowerId = borrowerId+1;
                             existingCreditDetailView.setCreditRelationType(CreditRelationType.BORROWER);
                             existingCreditDetailView.setBorrowerType(RelationValue.BORROWER.value());
+                            existingCreditDetailView.setNo(borrowerId);
                             borrowerRLOSApp.add(existingCreditDetailView);
 
                             log.info("Existing Credit : {} ", existingCreditDetailView.getLimit());
@@ -356,9 +360,11 @@ public class ExistingCreditControl extends BusinessControl {
 
                             log.info("total borrower RLOS Limit {}", totalBorrowerRLOSApp);
                         } else {
-                            relatedRLOSApp.add(existingCreditDetailView);
+                            relatedId = relatedId+1;
                             existingCreditDetailView.setCreditRelationType(CreditRelationType.RELATED);
                             existingCreditDetailView.setBorrowerType(RelationValue.DIRECTLY_RELATED.value());
+                            existingCreditDetailView.setNo(relatedId);
+                            relatedRLOSApp.add(existingCreditDetailView);
                             log.info("Existing Credit : {} ", existingCreditDetailView.getLimit());
                             totalRelatedRLOSApp = totalRelatedRLOSApp.add(existingCreditDetailView.getLimit());
                             log.info("total related RLOS Limit {}", totalRelatedRLOSApp);
