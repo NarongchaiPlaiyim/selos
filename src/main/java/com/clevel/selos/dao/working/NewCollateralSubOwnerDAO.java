@@ -5,7 +5,6 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.*;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -28,7 +27,7 @@ public class NewCollateralSubOwnerDAO extends GenericDAO<NewCollateralSubOwner, 
         log.info("getListNewCollateralSubCustomer. (newCollateralSub: {})", newCollateralSub);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCollateralSub", newCollateralSub));
-        criteria.addOrder(Order.asc("newCollateralSub.id"));
+        criteria.setFetchMode("customer", FetchMode.LAZY);
         List<NewCollateralSubOwner> newCollateralSubCustomerList = (List<NewCollateralSubOwner>)criteria.list();
         log.info("getList. (result size: {})", newCollateralSubCustomerList.size());
 
