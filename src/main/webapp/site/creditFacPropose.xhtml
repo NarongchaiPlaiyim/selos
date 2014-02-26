@@ -535,6 +535,7 @@
 
         <p:commandButton value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
                          styleClass="largest"
+                         disabled="#{creditFacPropose.notRetrivePricing}"
                          process="@this"
                          update=":frmMain"
                          action="#{creditFacPropose.onRetrievePricingFee}"/>
