@@ -11,6 +11,15 @@ public class StageView implements Serializable {
     private String description;
     private int active;
 
+    public StageView() {
+        reset();
+    }
+
+    public void reset() {
+        this.name = "";
+        this.description = "";
+    }
+
     public int getId() {
         return id;
     }

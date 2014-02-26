@@ -1,8 +1,8 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.util.DateTimeUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.joda.time.DateTime;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,12 +14,13 @@ public class DecisionFollowConditionView implements Serializable {
     private Date followDate;
 
     public DecisionFollowConditionView() {
+        reset();
     }
 
     public void reset() {
         this.conditionView = new FollowConditionView();
         this.detail = "";
-        this.followDate = DateTimeUtil.getCurrentDateTH();
+        this.followDate = DateTime.now().toDate();
     }
 
     public long getId() {

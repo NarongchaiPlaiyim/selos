@@ -11,8 +11,8 @@ public class PotentialCollateralDAO extends GenericDAO<PotentialCollateral, Inte
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     PotentialCollateralDAO() {
-
     }
 }

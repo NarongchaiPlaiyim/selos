@@ -93,14 +93,14 @@
 				readonly="true"
 				/>
 		</td>
-		<td class="title" style="width:180px">
+		<td class="title" style="width:150px">
 			<p:outputLabel  for="coll_owner"
 				value="#{msg.get('app.custInfoIndi.content.collOwner')}" />
 		</td>
 		<td>
 			<p:selectOneRadio id='coll_owner' disabled="true" value="#{postCustomerInfoIndv.customer.collateralOwner}">
             	<f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="yesNoEnum"
-            		itemLabel="#{msg.get(yesNoEnum.msgKey)}" itemValue="yesNoEnum" 
+            		itemLabel="#{msg.get(yesNoEnum.msgKey)}" itemValue="#{yesNoEnum}" 
             		/>
             </p:selectOneRadio>
 		</td>
@@ -254,9 +254,183 @@
 		</td>
 	</tr>
 	<tr><td colspan="100%"><p:spacer height="0.8em"/></td></tr>
-
 	
-	<tr><td colspan="100%"><p:spacer height="0.8em"/></td></tr>
+	<ui:repeat var="address" value="#{postCustomerInfoIndv.customer.addresses}"
+		varStatus="repeatStatus"
+		>
+		<tr>
+			<td rowspan="2" class="title top">#{address.displayAddressType} :</td>
+			<td colspan="3">
+				<p:selectOneRadio value="#{address.addressFlag}"
+					rendered="#{not empty address.availableFlagList}"
+					disabled="#{not postCustomerInfoIndv.canUpdateInfo}"
+					>
+					<p:ajax update="address_detail" 
+						listener="#{postCustomerInfoIndv.onSelectAddressFlag(repeatStatus.index)}"
+						onstart="p_loading_dialog.show()"
+						oncomplete="p_loading_dialog.hide()"
+						/>
+	            	<f:selectItems value="#{address.availableFlagList}" var="flag"
+	            		itemLabel="#{postCustomerInfoIndv.getAddressFlagLabel(flag)}" itemValue="#{flag}" 
+	            		/>
+	            </p:selectOneRadio>
+			</td>
+		</tr>
+		<tr>
+			<td  colspan="3">
+				<h:panelGroup layout="block" id="address_detail" style="padding-bottom:28px">
+					<h:panelGroup layout="block" styleClass="div_row">
+						<div style="width:120px;display:inline-block">
+							<p:outputLabel for="addressno" styleClass="title"
+								value="#{msg.get('app.custInfoIndi.content.no')}" />
+						</div>
+						<p:inputText id='addressno' styleClass="smaller"
+							value="#{address.addressNo}"
+							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							/>
+						<p:spacer width="30" height="10"/>
+						<p:outputLabel for="addressmoo" styleClass="title"
+							value="#{msg.get('app.custInfoIndi.content.moo')}" />
+						<p:spacer width="8"/>
+						<p:inputText id='addressmoo'
+							value="#{address.moo}"
+							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							onkeydown="return onKeyDownNumber(event);"
+							onkeypress="return onKeyPressNumber(event);"
+							size="5" maxlength="5"
+							/>
+						<p:spacer width="30" height="10"/>
+						<p:outputLabel for="addressbuilding" styleClass="title"
+							value="#{msg.get('app.custInfoIndi.content.building')}" />
+						<p:spacer width="8"/>
+						<p:inputText id='addressbuilding'
+							value="#{address.building}"
+							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							/>
+					</h:panelGroup>
+					
+					<h:panelGroup layout="block" styleClass="div_row">
+						<div style="width:120px;display:inline-block">
+							<p:outputLabel for="addressstreet" styleClass="title"
+								value="#{msg.get('app.custInfoIndi.content.road')}" />
+						</div>
+						<p:inputText id='addressstreet' style="width:500px"
+							value="#{address.road}"
+							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"		
+							/>
+					</h:panelGroup>
+					
+					<h:panelGroup layout="block" styleClass="div_row">
+						<div style="width:120px;height: 10px;float:left"></div>
+						<p:selectOneMenu id="province" styleClass="inline_select"
+							value="#{address.provinceId}"
+							rendered="#{(postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							>
+							<p:ajax update="district,subdistrict" 
+								listener="#{postCustomerInfoIndv.onSelectProvince(repeatStatus.index)}"/>
+							
+							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+							<f:selectItems value="#{postCustomerInfoIndv.provinces}"/>
+						</p:selectOneMenu>
+						<p:inputText
+							value="#{address.displayProvince}"
+							readonly="true"
+							rendered="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							/>
+						
+						<p:selectOneMenu id="district" styleClass="inline_select"
+							style="margin-left:4px;margin-right:4px"
+							value="#{address.districtId}"
+							rendered="#{(postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							>
+							<p:ajax update="subdistrict" 
+								listener="#{postCustomerInfoIndv.onSelectDistrict(repeatStatus.index)}"/>
+							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+							<f:selectItems value="#{address.districtList}"/>
+						</p:selectOneMenu>
+						<p:inputText
+							value="#{address.displayDistrict}"
+							style="margin-left:4px !important;margin-right:4px !important;"
+							readonly="true"
+							rendered="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							/>
+						
+						<p:selectOneMenu id="subdistrict" styleClass="inline_select"
+							value="#{address.subDistrictId}"
+							rendered="#{(postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							>
+							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+							<f:selectItems value="#{address.subDistrictList}"/>
+						</p:selectOneMenu>
+						<p:inputText
+							value="#{address.displaySubDistrict}"
+							readonly="true"
+							rendered="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							/>
+					</h:panelGroup>
+					
+					<h:panelGroup layout="block" styleClass="div_row">
+						<div style="width:120px;display:inline-block">
+							<p:outputLabel for="addresspostcode" styleClass="title"
+								value="#{msg.get('app.custInfoIndi.content.postalCode')}" />
+						</div>
+						<p:inputText id='addresspostcode'
+							value="#{address.postalCode}"
+							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							onkeydown="return onKeyDownNumber(event);"
+							onkeypress="return onKeyPressNumber(event);"
+							size="5" maxlength="5"
+							/>
+					</h:panelGroup>
+					
+					<h:panelGroup layout="block" styleClass="div_row">
+						<div style="width:120px;height: 10px;float:left">
+							<p:outputLabel for="addresscountry" styleClass="title"
+								value="#{msg.get('app.custInfoIndi.content.country')}" />
+						</div>
+						<p:selectOneMenu id="addresscountry" styleClass="inline_select"
+							value="#{address.countryId}"
+							rendered="#{(postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							>
+							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+							<f:selectItems value="#{postCustomerInfoIndv.countries}"/>
+						</p:selectOneMenu>
+						<p:inputText
+							value="#{address.displayCountry}"
+							readonly="true"
+							rendered="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							/>
+					</h:panelGroup>
+					
+					<h:panelGroup layout="block" styleClass="div_row">
+						<div style="width:120px;display:inline-block">
+							<p:outputLabel for="addressphone" styleClass="title"
+								value="#{msg.get('app.custInfoIndi.content.tel')}" />
+						</div>
+						<p:inputText id='addressphone'
+							value="#{address.phoneNumber}"
+							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							onkeydown="return onKeyDownNumber(event);"
+                            onkeypress="return onKeyPressNumber(event);"
+                            maxlength="10"
+							/>
+						<p:spacer width="10"/>
+						<p:outputLabel for="addressphoneext" 
+							value="#{msg.get('app.custInfoIndi.content.telTo')}" />
+						<p:spacer width="5"/>
+						<p:inputText id='addressphoneext'
+							value="#{address.phoneExt}"
+							size="5"
+							onkeydown="return onKeyDownNumber(event);"
+                            onkeypress="return onKeyPressNumber(event);"
+                            maxlength="10"
+							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"	
+						/>
+					</h:panelGroup>
+				</h:panelGroup>
+			</td>
+		</tr>
+	</ui:repeat>	
 	
 	<tr>
 		<td class="title">
@@ -264,8 +438,17 @@
 				value="#{msg.get('app.custInfoIndi.content.mailAdd')}" />
 		</td>
 		<td colspan="3">
-			<p:inputText id="mailing_addresstype"
+			<p:selectOneMenu id='mailing_addresstype'
+				value="#{postCustomerInfoIndv.customer.mailingAddressTypeId}"
+				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
+				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.mailAdd.required')}"
+				>
+				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+				<f:selectItems value="#{postCustomerInfoIndv.addressTypes}"/>
+			</p:selectOneMenu>
+			<p:inputText 
 				value="#{postCustomerInfoIndv.customer.displayMailingAddressType}"
+				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
 				readonly="true"
 				/>
 		</td>
@@ -334,20 +517,8 @@
 				value="#{msg.get('app.custInfoIndi.content.maritalStatus')}" />
 		</td>
 		<td colspan="3">
-			<p:selectOneMenu id='marital'
-				value="#{postCustomerInfoIndv.customer.maritalStatusId}"
-				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
-				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.maritalStatus.required')}"
-				>
-				<p:ajax update="marriagetitle,marriagename,marriagelastname"
-					listener="#{postCustomerInfoIndv.onChangeMaritalStatus()}"
-					 />
-				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-				<f:selectItems value="#{postCustomerInfoIndv.maritalStatuses}"/>
-			</p:selectOneMenu>
-			<p:inputText
+			<p:inputText id="marital"
 				value="#{postCustomerInfoIndv.customer.displayMaritalStatus}"
-				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
 				readonly="true"
 				/>
 		</td>
@@ -362,7 +533,7 @@
 				value="#{postCustomerInfoIndv.customer.spouseTitleId}"
 				disabled="#{not postCustomerInfoIndv.canUpdateSpouse}"
 				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
-				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.spouseNameTH.required')}"
+				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.spouseTitleTH.required')}"
 				>
 				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				<f:selectItems value="#{postCustomerInfoIndv.titles}"/>
@@ -382,7 +553,7 @@
 			<p:inputText id='marriagelastname' styleClass="largest"
 				value="#{postCustomerInfoIndv.customer.spouseLastNameTH}"
 				readonly="#{not postCustomerInfoIndv.canUpdateSpouse}"
-				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.spouseNameTH.required')}"
+				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.spouseLastNameTH.required')}"
 				/>
 		</td>
 	</tr>
