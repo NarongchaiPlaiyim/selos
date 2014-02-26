@@ -11,9 +11,11 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCollateralCredit;
 import com.clevel.selos.model.db.working.NewCollateralSub;
 import com.clevel.selos.model.db.working.NewCollateralSubOwner;
+import com.clevel.selos.model.db.working.OpenAccountName;
 import com.clevel.selos.model.db.working.PledgeInfo;
 import com.clevel.selos.model.view.CreditDetailSimpleView;
 import com.clevel.selos.model.view.CustomerInfoSimpleView;
+import com.clevel.selos.model.view.OpenAccountView;
 import com.clevel.selos.model.view.PledgeInfoFullView;
 import com.clevel.selos.model.view.PledgeInfoView;
 
@@ -68,8 +70,20 @@ public class PledgeInfoTransform extends Transform {
 		view.setPledgeAmount(model.getPledgeAmount());
 		view.setModifyBy(model.getModifyBy());
 		view.setModifyDate(model.getModifyDate());
-		if (model.getOpenAccount() != null)
+		if (model.getOpenAccount() != null) {
 			view.setAccountNo(model.getOpenAccount().getAccountNumber());
+			view.setNumberOfDep(model.getOpenAccount().getNumberOfDep());
+			List<OpenAccountName> names = model.getOpenAccount().getOpenAccountNameList();
+			StringBuilder builder = new StringBuilder();
+			for (OpenAccountName name : names) {
+				builder.append(name.getCustomer().getDisplayName());
+				builder.append("<br/>");
+			}
+			if (builder.length() > 0)
+				builder.setLength(builder.length()-5);
+			view.setAccountName(builder.toString());
+		}
+		
 	}
 	
 	public void updateModel(PledgeInfo model,PledgeInfoView view,BigDecimal totalHoldAmount,User user) {

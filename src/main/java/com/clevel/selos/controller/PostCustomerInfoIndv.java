@@ -322,6 +322,15 @@ public class PostCustomerInfoIndv implements Serializable {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
 		customer = postCustomerInfoIndvControl.getCustomer(customerId);
+		if (customer.getIndividualId() <= 0) {
+			String redirectPage = "/site/postCustomerInfoSummary.jsf";
+			try {
+				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+				ec.redirect(ec.getRequestContextPath()+redirectPage);
+			} catch (IOException e) {
+				log.error("Fail to redirect screen to "+redirectPage,e);
+			}
+		}
 		
 		if (canUpdateInfo && customer.getMaritalStatusId() >= 0)
 			canUpdateSpouse = spouseMaritalSet.contains(customer.getMaritalStatusId()) && customer.isHasSpouseData();

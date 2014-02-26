@@ -61,10 +61,10 @@
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
                                      required="#{not empty param[saveAppProposeCreditButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                        <f:selectItems value="#{decision.prdGroupToPrdProgramList}"
-                                       var="prdGroupToPrdProgramItem"
-                                       itemLabel="#{prdGroupToPrdProgramItem.productProgram.name}"
-                                       itemValue="#{prdGroupToPrdProgramItem.productProgram.id}"/>
+                        <f:selectItems value="#{decision.prdGroupToPrdProgramViewList}"
+                                       var="groupToProgramItem"
+                                       itemLabel="#{groupToProgramItem.productProgramView.name}"
+                                       itemValue="#{groupToProgramItem.productProgramView.id}"/>
                         <p:ajax event="change"
                                 listener="#{decision.onChangeProductProgram()}"
                                 process="@form"

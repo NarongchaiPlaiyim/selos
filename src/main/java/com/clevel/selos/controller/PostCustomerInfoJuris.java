@@ -25,6 +25,7 @@ import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.CustomerInfoPostAddressView;
 import com.clevel.selos.model.view.CustomerInfoPostJurisView;
+import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.FacesUtil;
@@ -60,6 +61,8 @@ public class PostCustomerInfoJuris  implements Serializable {
 	
 	//Property
 	private CustomerInfoPostJurisView customer;
+	private List<CustomerInfoView> committees;
+	private CustomerInfoView selectedCustomer;
 	private boolean canUpdateInfo;
 	
 	public PostCustomerInfoJuris() {
@@ -106,6 +109,15 @@ public class PostCustomerInfoJuris  implements Serializable {
 	}
 	public List<SelectItem> getAddressTypes() {
 		return addressTypes;
+	}
+	public List<CustomerInfoView> getCommittees() {
+		return committees;
+	}
+	public CustomerInfoView getSelectedCustomer() {
+		return selectedCustomer;
+	}
+	public void setSelectedCustomer(CustomerInfoView selectedCustomer) {
+		this.selectedCustomer = selectedCustomer;
 	}
 	
 	/*
@@ -187,6 +199,18 @@ public class PostCustomerInfoJuris  implements Serializable {
 			addressView.setSubDistrictList(null);
 		}
 	}
+	public String onClickLink() {
+		if (selectedCustomer == null)
+			return "";
+		FacesUtil.getFlash().put("customerId", selectedCustomer.getId());
+		if (selectedCustomer.getCustomerEntity().getId() == 1) {
+			// Individual
+			return "postCustomerInfoIndv?faces-redirect=true";
+		} else {
+			return "postCustomerInfoJuris?faces-redirect=true";
+		}
+	}
+	
 	
 	public void onSaveCustomerInfo() {
 		postCustomerInfoJurisControl.saveCustomerInfoJuristic(customer);
@@ -203,7 +227,17 @@ public class PostCustomerInfoJuris  implements Serializable {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
 		customer = postCustomerInfoJurisControl.getCustomer(customerId);
+		if (customer.getJuristicId() <= 0) {
+			String redirectPage = "/site/postCustomerInfoSummary.jsf";
+			try {
+				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+				ec.redirect(ec.getRequestContextPath()+redirectPage);
+			} catch (IOException e) {
+				log.error("Fail to redirect screen to "+redirectPage,e);
+			}
+		}
 		
+		committees = postCustomerInfoJurisControl.getCustomerCommittees(customerId);
 		_preCalculateDropdown();
 	}
 	private void _loadDropdown() {
