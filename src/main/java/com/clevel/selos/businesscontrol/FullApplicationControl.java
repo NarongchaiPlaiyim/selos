@@ -3,10 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.dao.master.RoleDAO;
 import com.clevel.selos.dao.master.UserDAO;
-import com.clevel.selos.dao.working.AppraisalDAO;
-import com.clevel.selos.dao.working.WorkCaseAppraisalDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionCode;
 import com.clevel.selos.model.RoleValue;
@@ -14,10 +11,7 @@ import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.master.RequestType;
 import com.clevel.selos.model.db.master.Role;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.Appraisal;
-import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.db.working.WorkCaseAppraisal;
-import com.clevel.selos.model.db.working.WorkCasePrescreen;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -26,6 +20,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +43,10 @@ public class FullApplicationControl extends BusinessControl {
     WorkCasePrescreenDAO workCasePrescreenDAO;
     @Inject
     WorkCaseAppraisalDAO workCaseAppraisalDAO;
+    @Inject
+    NewCreditFacilityDAO newCreditFacilityDAO;
+    @Inject
+    NewCreditDetailDAO newCreditDetailDAO;
 
     @Inject
     BPMExecutor bpmExecutor;
@@ -193,26 +192,104 @@ public class FullApplicationControl extends BusinessControl {
         return workCaseAppraisal;
     }
 
-    public void saveWorkCaseAppraisal(String appNumber, Appraisal appraisal){
-        if(!Util.isEmpty(appNumber)){
-            WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
-            workCaseAppraisal.setAppointmentDate(appraisal.getAppointmentDate());
-            appraisal.getLocationOfProperty();
+    public void submitToAADCommittee(String aadCommitteeUserId, long workCaseId, long workCasePreScreenId, String queueName) throws Exception{
+        log.debug("submitToAADCommittee ::: starting...");
+        String appNumber = "";
+        Appraisal appraisal = null;
+        if(!Util.isNull(workCaseId) && workCaseId != 0){
+            appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            appNumber = workCase.getAppNumber();
+            log.debug("submitToAADCommittee ::: find appraisal by workCase : {}", appraisal);
+            log.debug("submitToAADCommittee ::: find workCase : {}", workCase);
+        }else if(!Util.isNull(workCasePreScreenId) && workCasePreScreenId != 0){
+            appraisal = appraisalDAO.findByWorkCasePreScreenId(workCaseId);
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            appNumber = workCasePrescreen.getAppNumber();
+            log.debug("submitToAADCommittee ::: find appraisal by workCasePrescreen: {}", appraisal);
+            log.debug("submitToAADCommittee ::: find workCasePrescreen : {}", workCasePrescreen);
         }
+
+        if(appraisal != null){
+            User aadCommittee = userDAO.findById(aadCommitteeUserId);
+            appraisal.setAadCommittee(aadCommittee);
+            appraisalDAO.persist(appraisal);
+            //Save appointment date for appraisal work case
+            if(!Util.isEmpty(appNumber)){
+                WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
+                log.debug("submitToAADCommittee ::: find workCaseAppraisal : {}", workCaseAppraisal);
+                workCaseAppraisal.setAppointmentDate(appraisal.getAppointmentDate());
+                workCaseAppraisalDAO.persist(workCaseAppraisal);
+                log.debug("submitToAADCommittee ::: save workCaseAppraisal : {}", workCaseAppraisal);
+                long appraisalLocationCode = 0;
+                if(appraisal.getLocationOfProperty() != null){
+                    appraisalLocationCode = appraisal.getLocationOfProperty().getCode();
+                }
+                bpmExecutor.submitAADCommittee(appNumber, aadCommitteeUserId, appraisal.getAppointmentDate(), appraisalLocationCode, queueName, ActionCode.SUBMIT_TO_ADD_COMMITTEE.getVal(), workCaseAppraisal.getWobNumber());
+            }
+        }
+        log.debug("submitToAADCommittee ::: end...");
     }
 
-    public void submitToAADCommittee(long workCaseId, long workCasePreScreenId, String queueName){
-        //submit appraisal to aad
-        log.debug("requestAppraisalCommittee ::: start submit to AAD Committee");
-        String appNumber = "";
-        if(!Util.isNull(workCaseId) && workCaseId != 0){
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
-            Appraisal appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
-            appNumber = workCase.getAppNumber();
-        }else if(!Util.isNull(workCasePreScreenId) && workCasePreScreenId != 0){
-            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-            Appraisal appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
-            appNumber = workCasePrescreen.getAppNumber();
+    public void submitUW2FromAAD(){
+
+    }
+
+    public void calculatePricingDOA(long workCaseId){
+        //List of Credit detail
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        List<NewCreditDetail> newCreditDetailList = newCreditFacility.getNewCreditDetailList();
+        //List of Credit tier ( find by Credit detail )
+        BigDecimal priceReduceDOA = newCreditFacility.getIntFeeDOA();
+        BigDecimal frontEndFeeReduceDOA = newCreditFacility.getFrontendFeeDOA();
+
+        if(priceReduceDOA.compareTo(BigDecimal.ONE) > 0 || priceReduceDOA.compareTo(BigDecimal.ZERO) == 0){
+
+        } else {
+
+        }
+
+        for(NewCreditDetail newCreditDetail : newCreditDetailList){
+            BigDecimal standardPrice = null;
+            BigDecimal suggestPrice = null;
+            BigDecimal finalPrice = null;
+            BigDecimal tmpStandardPrice = null;
+            BigDecimal tmpSuggestPrice = null;
+            BigDecimal tmpFinalPrice = null;
+            int reducePricing = newCreditDetail.getReducePriceFlag();
+            int reduceFrontEndFee = newCreditDetail.getReduceFrontEndFee();
+            for(NewCreditTierDetail newCreditTierDetail : newCreditDetail.getProposeCreditTierDetailList()){
+                //Check for Final Price first...
+                if(finalPrice != null){
+                    tmpFinalPrice = newCreditTierDetail.getFinalInterest().add(newCreditTierDetail.getFinalBasePrice().getValue());
+                    tmpStandardPrice = newCreditTierDetail.getStandardInterest().add(newCreditTierDetail.getStandardBasePrice().getValue());
+                    tmpSuggestPrice = newCreditTierDetail.getSuggestInterest().add(newCreditTierDetail.getSuggestBasePrice().getValue());
+
+                    if(reducePricing == 1){
+                        tmpFinalPrice = tmpFinalPrice.subtract(priceReduceDOA);
+                    }
+                    if(tmpFinalPrice.compareTo(finalPrice) > 0){
+                        finalPrice = tmpFinalPrice;
+                        standardPrice = tmpStandardPrice;
+                        suggestPrice = tmpSuggestPrice;
+                    }
+                }else{
+                    finalPrice = newCreditTierDetail.getFinalInterest().add(newCreditTierDetail.getFinalBasePrice().getValue());
+                    standardPrice = newCreditTierDetail.getStandardInterest().add(newCreditTierDetail.getStandardBasePrice().getValue());
+                    suggestPrice = newCreditTierDetail.getSuggestInterest().add(newCreditTierDetail.getSuggestBasePrice().getValue());
+                    if(reducePricing == 1){
+                        finalPrice = finalPrice.subtract(priceReduceDOA);
+                    }
+                    //Check for Exceptional flow (CSSO DOA Only)
+                    if(priceReduceDOA.compareTo(BigDecimal.ZERO) > 0 && priceReduceDOA.compareTo(BigDecimal.ONE) <= 0){
+                        if(finalPrice.compareTo(suggestPrice) < 0){
+                            //DOA is CSSO only
+
+                        }
+                    }
+                }
+            }
+
         }
 
     }

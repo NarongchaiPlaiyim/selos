@@ -50,11 +50,17 @@ public class BaseController implements Serializable {
     private User user;
     //private User abdm;
 
+    private String aadCommitteeId;
+
     private String abdmUserId;
     private String assignRemark;
 
     private String zmEndorseUserId;
     private String zmEndorseRemark;
+
+    private String zmPriceUserId;
+    private String rmPriceUserId;
+    private String ghPriceUserId;
 
     private String messageHeader;
     private String message;
@@ -301,7 +307,10 @@ public class BaseController implements Serializable {
                 queueName = session.getAttribute("queueName").toString();
             }
 
-            fullApplicationControl.submitToAADCommittee(workCaseId, workCasePreScreenId, queueName);
+            //TODO Save AADCommittee user id to appraisal
+            fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName);
+
+            //fullApplicationControl.submitToAADCommittee(workCaseId, workCasePreScreenId, queueName);
 
             messageHeader = "Information.";
             message = "Request for appraisal success.";
@@ -407,6 +416,30 @@ public class BaseController implements Serializable {
         this.assignRemark = assignRemark;
     }
 
+    public String getZmPriceUserId() {
+        return zmPriceUserId;
+    }
+
+    public void setZmPriceUserId(String zmPriceUserId) {
+        this.zmPriceUserId = zmPriceUserId;
+    }
+
+    public String getRmPriceUserId() {
+        return rmPriceUserId;
+    }
+
+    public void setRmPriceUserId(String rmPriceUserId) {
+        this.rmPriceUserId = rmPriceUserId;
+    }
+
+    public String getGhPriceUserId() {
+        return ghPriceUserId;
+    }
+
+    public void setGhPriceUserId(String ghPriceUserId) {
+        this.ghPriceUserId = ghPriceUserId;
+    }
+
     public String getZmEndorseUserId() {
         return zmEndorseUserId;
     }
@@ -454,4 +487,14 @@ public class BaseController implements Serializable {
     public void setGhUserList(List<User> ghUserList) {
         this.ghUserList = ghUserList;
     }
+
+    public String getAadCommitteeId() {
+        return aadCommitteeId;
+    }
+
+    public void setAadCommitteeId(String aadCommitteeId) {
+        this.aadCommitteeId = aadCommitteeId;
+    }
+
+
 }
