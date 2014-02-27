@@ -10,13 +10,15 @@ import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.DBRMethod;
 import com.clevel.selos.model.ExposureMethod;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.CreditType;
+import com.clevel.selos.model.db.master.ProductFormula;
+import com.clevel.selos.model.db.master.ProductProgram;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.util.Util;
-import com.clevel.selos.util.ValidationUtil;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -803,7 +805,7 @@ public class CreditFacProposeControl extends BusinessControl {
             log.debug("saveCreditFacility ::: persist newGuarantorDetailList : {}", newGuarantorDetailList);
         }
 
-/*
+
         //--- Save to NewCollateral
         //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
         List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase);
@@ -813,12 +815,6 @@ public class CreditFacProposeControl extends BusinessControl {
         //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
         List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase);
         newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
-        //--- Need to delete Collateral Credit from CollateralRelCredit before Insert new
-        List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditDAO.getListByWorkCase(workCase);
-        log.info("before :: newCollateralCreditList :: size :: {}",newCollateralCreditList.size());
-        newCollateralCreditDAO.delete(newCollateralCreditList);
-        log.info("after :: newCollateralCreditList :: size :: {}",newCollateralCreditList.size());
-*/
 
         if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCollateralViewList : {}", newCreditFacilityView.getNewCollateralViewList());
