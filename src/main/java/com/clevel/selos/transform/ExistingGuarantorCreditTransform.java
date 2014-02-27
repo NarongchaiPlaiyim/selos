@@ -42,10 +42,10 @@ public class ExistingGuarantorCreditTransform extends Transform {
             existingGuarantorCredit.setModifyBy(user);
             for(int i=0;i<existingCreditDetailList.size();i++){
                 ExistingCreditDetail  existingCreditDetail = existingCreditDetailList.get(i);
-                log.debug ("existingCreditDetail id is {} detail seq is {}",existingCreditDetail.getId(),existingCreditDetail.getSeq());
-                log.debug ("  guarantor choose seq  is {}",existingCreditTypeDetailView.getSeq());
+                log.debug ("existingCreditDetail id is {} detail seqNo is {}",existingCreditDetail.getId(),existingCreditDetail.getNo());
+                log.debug ("  guarantor choose seq  is {}",existingCreditTypeDetailView.getNo());
 
-                if( existingCreditTypeDetailView.getSeq() == existingCreditDetail.getSeq()){
+                if( existingCreditTypeDetailView.getNo() == existingCreditDetail.getNo()){
                     existingGuarantorCredit.setExistingCreditDetail(existingCreditDetail);
                     existingGuarantorCredit.setGuaranteeAmount(existingCreditTypeDetailView.getGuaranteeAmount());
                     log.debug ("existingGuarantorCredit id is {}",existingGuarantorCredit.getExistingCreditDetail().getId());

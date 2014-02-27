@@ -1,16 +1,16 @@
 package com.clevel.selos.model;
 
 public enum CreditTypeGroup {
-    LOAN(1),
-    OD(2),
-    LG(3),
-    ACCEPTANCE(4),
-    AVAL(5),
-    LC(6),
-    FX(7),
-    CARD(8),
-    CASH_IN(9),
-    OTHER(10);
+    LOAN(0),
+    OD(1),
+    LG(2),
+    ACCEPTANCE(3),
+    AVAL(4),
+    LC(5),
+    FX(6),
+    CARD(7),
+    CASH_IN(8),
+    OTHER(9);
 
     int value;
 
