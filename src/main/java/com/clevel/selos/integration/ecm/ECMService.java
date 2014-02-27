@@ -1,13 +1,19 @@
 package com.clevel.selos.integration.ecm;
 
+import com.clevel.selos.exception.ECMInterfaceException;
 import com.clevel.selos.integration.ECM;
+import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.module.DBExecute;
+import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ECMService implements Serializable {
     @Inject
@@ -21,5 +27,29 @@ public class ECMService implements Serializable {
     @Inject
     public ECMService() {
 
+    }
+
+    public List<ECMDetail> getECMData(final String caNumber) throws Exception{
+        System.out.println("-- getECMData");
+        List<ECMDetail> ecmDetailList = null;
+        try {
+            if(!Util.isNull(caNumber) && !Util.isZero(caNumber.length())){
+                ecmDetailList = Util.safetyList(dbExecute.findByCANumber(caNumber));
+                System.out.println("--getECMData before get ecmDetailList");
+                if(Util.isZero(ecmDetailList.size())){
+                    log.debug("Data Not Found!");
+                    throw new ECMInterfaceException(new Exception(msg.get(ExceptionMapping.ECM_DATA_NOT_FOUND)),ExceptionMapping.ECM_DATA_NOT_FOUND, msg.get(ExceptionMapping.ECM_DATA_NOT_FOUND));
+                }
+            }
+            return ecmDetailList;
+        } catch (ECMInterfaceException e){
+            log.error("ECMInterfaceException while get ECM data!",e);
+            System.err.println("-- ECMInterfaceException while get ECM data! "+e);
+            throw e;
+        } catch (Exception e) {
+            log.error("Exception while get ECM data!",e);
+            System.err.println("-- Exception while get ECM data! "+e);
+            throw new Exception(e.getMessage());
+        }
     }
 }

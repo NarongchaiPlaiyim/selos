@@ -46,13 +46,13 @@ public class DBContext implements Serializable {
         log.debug("DB URL: {}, User: {}, Password: HIDDEN", jdbcURL, user);
 
         try {
-            if (Util.isTrue(encryptionEnable)) {
-                password = encryptionService.decrypt(Base64.decodeBase64(password));
-            }
+//            if (Util.isTrue(encryptionEnable)) {
+//                password = encryptionService.decrypt(Base64.decodeBase64(password));
+//            }
             conn = DriverManager.getConnection(jdbcURL, user, password);
         } catch (Exception e) {
             log.error("Exception while connect to database!", e);
-            throw new ECMInterfaceException(e, ExceptionMapping.COMS_CONNECT_ERROR, msg.get(ExceptionMapping.COMS_CONNECT_ERROR));
+            throw new ECMInterfaceException(e, ExceptionMapping.ECM_CONNECT_ERROR, msg.get(ExceptionMapping.ECM_CONNECT_ERROR));
         }
         return conn;
     }

@@ -68,4 +68,10 @@ public interface ExceptionMapping {
     //DB Inteface
     public static final String INVALID_SYSTEM_PARAM = "701";
     public static final String NOT_FOUND_SYSTEM_PARAM = "702";
+
+    //ECM Exception
+    public static final String ECM_EXCEPTION = "801";
+    public static final String ECM_CONNECT_ERROR = "802";
+    public static final String ECM_GETDATA_ERROR = "803";
+    public static final String ECM_DATA_NOT_FOUND = "804";
 }
