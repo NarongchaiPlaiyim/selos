@@ -44,6 +44,7 @@
                                var="accountStatus"
                                itemLabel="#{accountStatus.description}"
                                itemValue="#{accountStatus.id}"/>
+                <p:ajax event="change" update="@this"/>
 
             </p:selectOneMenu>
         </td>
@@ -203,6 +204,7 @@
                                                    var="standard"
                                                    itemLabel="#{standard.name}"
                                                    itemValue="#{standard.id}"/>
+                                    <p:ajax event="change" update="@this"/>
                                 </p:selectOneMenu>
                             </p:column>
                             <p:column>
@@ -287,6 +289,7 @@
                                        var="productProgram"
                                        itemLabel="#{productProgram.name}"
                                        itemValue="#{productProgram.id}"/>
+                        <p:ajax event="change" update="@this"/>
                     </p:selectOneMenu>
                 </p:column>
                 <p:column styleClass="center">

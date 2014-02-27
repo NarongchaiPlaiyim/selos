@@ -46,7 +46,11 @@ public class ExistingGuarantorDetailTransform extends Transform {
             existingGuarantorDetail.setModifyBy(user);
             existingGuarantorDetail.setNo(existingGuarantorDetailView.getNo());
             log.debug("existingGuarantorDetailView.getGuarantorName().getId() is {}",existingGuarantorDetailView.getGuarantorName().getId());
-            Customer guarantor = customerDAO.findById(existingGuarantorDetailView.getGuarantorName().getId());
+            Customer guarantor = null;
+            if(existingGuarantorDetailView.getGuarantorName()!=null && existingGuarantorDetailView.getGuarantorName().getId()!=0) {
+                guarantor = new Customer();
+                guarantor.setId(existingGuarantorDetailView.getGuarantorName().getId());
+            }
             existingGuarantorDetail.setGuarantorName(guarantor);
             existingGuarantorDetail.setTcglgNo(existingGuarantorDetailView.getTcgLgNo());
             existingGuarantorDetail.setExistingCreditFacility(existingCreditFacility);
@@ -69,7 +73,10 @@ public class ExistingGuarantorDetailTransform extends Transform {
             existingGuarantorDetailView.setCreateBy(existingGuarantorDetail.getCreateBy());
             existingGuarantorDetailView.setModifyDate(existingGuarantorDetail.getModifyDate());
             existingGuarantorDetailView.setModifyBy(existingGuarantorDetail.getModifyBy());
-            CustomerInfoView guarantorView = customerTransform.transformToView(existingGuarantorDetail.getGuarantorName());
+            CustomerInfoView guarantorView = new CustomerInfoView();
+            if(existingGuarantorDetail.getGuarantorName()!=null && existingGuarantorDetail.getGuarantorName().getId()!=0){
+                guarantorView = customerTransform.transformToView(customerDAO.findById(existingGuarantorDetail.getGuarantorName().getId()));
+            }
             existingGuarantorDetailView.setGuarantorName(guarantorView);
             existingGuarantorDetailView.setTcgLgNo(existingGuarantorDetail.getTcglgNo());
             existingGuarantorDetailView.setTotalLimitGuaranteeAmount(existingGuarantorDetail.getTotalLimitGuaranteeAmount());
