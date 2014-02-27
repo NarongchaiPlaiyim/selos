@@ -273,7 +273,7 @@ public class BankStmtControl extends BusinessControl {
             return null;
 
         if ((bankAccountType != null && BankAccountTypeEnum.CA.name().equalsIgnoreCase(bankAccountType.getShortName()))
-                && ValidationUtil.isValueLessEqualZero(bankStmtDetailView.getMaxBalance()))
+            && ValidationUtil.isValueCompareToZero(bankStmtDetailView.getMaxBalance(), ValidationUtil.CompareMode.LESS_THAN))
             return BigDecimal.ZERO;
         else
             return bankStmtDetailView.getMaxBalance();
@@ -373,7 +373,8 @@ public class BankStmtControl extends BusinessControl {
         // Within 6 months, must has limit(OD Limit is NOT Blank and OD Limit > 0) at least one month
         boolean hasODLimit = false;
         for (BankStmtDetailView detailView : getLastSixMonthBankStmtDetails(bankStmtView.getBankStmtDetailViewList())) {
-            if (detailView.getOverLimitAmount() != null && ValidationUtil.isValueGreaterThanZero(detailView.getOverLimitAmount())) {
+            if (detailView.getOverLimitAmount() != null
+                && ValidationUtil.isValueCompareToZero(detailView.getOverLimitAmount(), ValidationUtil.CompareMode.GREATER_THAN)) {
                 hasODLimit = true;
                 break;
             }
@@ -409,24 +410,24 @@ public class BankStmtControl extends BusinessControl {
                     continue;
 
                 if (bankStmtView.getAvgIncomeNetUW() != null) {
-                    if (ValidationUtil.isGreaterThan(bankStmtView.getAvgIncomeNetUW(), maxValue)) {
+                    if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetUW(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
                         maxValue = bankStmtView.getAvgIncomeNetUW();
                         candidateMaxIncomeNetList.clear();
                         candidateMaxIncomeNetList.add(bankStmtView);
                         atId = bankStmtView.getId();
                     }
-                    else if (ValidationUtil.isValueEqual(bankStmtView.getAvgIncomeNetUW(), maxValue)) {
+                    else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetUW(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
                         candidateMaxIncomeNetList.add(bankStmtView);
                     }
                 }
                 else if (bankStmtView.getAvgIncomeNetBDM() != null) {
-                    if (ValidationUtil.isGreaterThan(bankStmtView.getAvgIncomeNetBDM(), maxValue)) {
+                    if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetBDM(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
                         maxValue = bankStmtView.getAvgIncomeNetBDM();
                         candidateMaxIncomeNetList.clear();
                         candidateMaxIncomeNetList.add(bankStmtView);
                         atId = bankStmtView.getId();
                     }
-                    else if (ValidationUtil.isValueEqual(bankStmtView.getAvgIncomeNetBDM(), maxValue)) {
+                    else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetBDM(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
                         candidateMaxIncomeNetList.add(bankStmtView);
                     }
                 }
@@ -443,13 +444,13 @@ public class BankStmtControl extends BusinessControl {
                 // find MAX Limit from the same max incomeNet
                 for (BankStmtView bankStmtView : candidateMaxIncomeNetList) {
                     if (bankStmtView.getAvgLimit() != null) {
-                        if (ValidationUtil.isGreaterThan(bankStmtView.getAvgLimit(), maxValue)) {
+                        if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgLimit(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
                             maxValue = bankStmtView.getAvgLimit();
                             candidateMaxLimitList.clear();
                             candidateMaxLimitList.add(bankStmtView);
                             atId = bankStmtView.getId();
                         }
-                        else if (ValidationUtil.isValueEqual(bankStmtView.getAvgLimit(), maxValue)) {
+                        else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgLimit(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
                             candidateMaxLimitList.add(bankStmtView);
                         }
                     }
@@ -466,13 +467,13 @@ public class BankStmtControl extends BusinessControl {
                     // find MAX Debit tx from the same max limit
                     for (BankStmtView bankStmtView : candidateMaxLimitList) {
                         if (bankStmtView.getAvgWithDrawAmount() != null) {
-                            if (ValidationUtil.isGreaterThan(bankStmtView.getAvgWithDrawAmount(), maxValue)) {
+                            if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgWithDrawAmount(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
                                 maxValue = bankStmtView.getAvgWithDrawAmount();
                                 candidateMaxDebitTxList.clear();
                                 candidateMaxDebitTxList.add(bankStmtView);
                                 atId = bankStmtView.getId();
                             }
-                            else if (ValidationUtil.isValueEqual(bankStmtView.getAvgWithDrawAmount(), maxValue)) {
+                            else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgWithDrawAmount(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
                                 candidateMaxDebitTxList.add(bankStmtView);
                             }
                         }
@@ -489,13 +490,13 @@ public class BankStmtControl extends BusinessControl {
                         // find MAX Credit tx from the same max debit tx
                         for (BankStmtView bankStmtView : candidateMaxDebitTxList) {
                             if (bankStmtView.getAvgIncomeGross() != null) {
-                                if (ValidationUtil.isGreaterThan(bankStmtView.getAvgIncomeGross(), maxValue)) {
+                                if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeGross(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
                                     maxValue = bankStmtView.getAvgIncomeGross();
                                     candidateMaxCreditTxList.clear();
                                     candidateMaxCreditTxList.add(bankStmtView);
                                     atId = bankStmtView.getId();
                                 }
-                                else if (ValidationUtil.isValueEqual(bankStmtView.getAvgIncomeGross(), maxValue)) {
+                                else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeGross(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
                                     candidateMaxCreditTxList.add(bankStmtView);
                                 }
                             }
@@ -527,7 +528,8 @@ public class BankStmtControl extends BusinessControl {
             // find maxAvgGrossInflowPerLimit from all of BankStmt
             for (int i=0; i<bankStmtViewList.size(); i++) {
                 BankStmtView bankStmtView = bankStmtViewList.get(i);
-                if (bankStmtView.getAvgGrossInflowPerLimit() != null && ValidationUtil.isGreaterThan(bankStmtView.getAvgGrossInflowPerLimit(), maxAvgGrossInflowPerLimit)) {
+                if (bankStmtView.getAvgGrossInflowPerLimit() != null
+                    && ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgGrossInflowPerLimit(), maxAvgGrossInflowPerLimit, ValidationUtil.CompareMode.GREATER_THAN)) {
                     maxAvgGrossInflowPerLimit = bankStmtView.getAvgGrossInflowPerLimit();
                     highestBankStmtView = bankStmtView;
                     atIndex = i;
@@ -561,7 +563,8 @@ public class BankStmtControl extends BusinessControl {
                 BankStmtView bankStmtView = bankStmtViewList.get(i);
 
                 // find MAX AvgGrossInflowPerLimit
-                if (bankStmtView.getAvgGrossInflowPerLimit() != null && ValidationUtil.isGreaterThan(bankStmtView.getAvgGrossInflowPerLimit(), maxAvgGrossInflowPerLimit)) {
+                if (bankStmtView.getAvgGrossInflowPerLimit() != null
+                    && ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgGrossInflowPerLimit(), maxAvgGrossInflowPerLimit, ValidationUtil.CompareMode.GREATER_THAN)) {
                     maxAvgGrossInflowPerLimit = bankStmtView.getAvgGrossInflowPerLimit();
                     highestBankStmtView = bankStmtView;
                     highestAtIndex = i;
@@ -573,24 +576,24 @@ public class BankStmtControl extends BusinessControl {
 
                 // find MAX AvgIncomeNet(UW/BDM)
                 if (bankStmtView.getAvgIncomeNetUW() != null) {
-                    if (ValidationUtil.isGreaterThan(bankStmtView.getAvgIncomeNetUW(), maxValue)) {
+                    if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetUW(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
                         maxValue = bankStmtView.getAvgIncomeNetUW();
                         candidateMaxIncomeNetList.clear();
                         candidateMaxIncomeNetList.add(bankStmtView);
                         atId = bankStmtView.getId();
                     }
-                    else if (ValidationUtil.isValueEqual(bankStmtView.getAvgIncomeNetUW(), maxValue)) {
+                    else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetUW(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
                         candidateMaxIncomeNetList.add(bankStmtView);
                     }
                 }
                 else if (bankStmtView.getAvgIncomeNetBDM() != null) {
-                    if (ValidationUtil.isGreaterThan(bankStmtView.getAvgIncomeNetBDM(), maxValue)) {
+                    if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetBDM(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
                         maxValue = bankStmtView.getAvgIncomeNetBDM();
                         candidateMaxIncomeNetList.clear();
                         candidateMaxIncomeNetList.add(bankStmtView);
                         atId = bankStmtView.getId();
                     }
-                    else if (ValidationUtil.isValueEqual(bankStmtView.getAvgIncomeNetBDM(), maxValue)) {
+                    else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetBDM(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
                         candidateMaxIncomeNetList.add(bankStmtView);
                     }
                 }
@@ -618,13 +621,13 @@ public class BankStmtControl extends BusinessControl {
                 // find MAX Limit from the same max incomeNet
                 for (BankStmtView bankStmtView : candidateMaxIncomeNetList) {
                     if (bankStmtView.getAvgLimit() != null) {
-                        if (ValidationUtil.isGreaterThan(bankStmtView.getAvgLimit(), maxValue)) {
+                        if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgLimit(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
                             maxValue = bankStmtView.getAvgLimit();
                             candidateMaxLimitList.clear();
                             candidateMaxLimitList.add(bankStmtView);
                             atId = bankStmtView.getId();
                         }
-                        else if (ValidationUtil.isValueEqual(bankStmtView.getAvgLimit(), maxValue)) {
+                        else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgLimit(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
                             candidateMaxLimitList.add(bankStmtView);
                         }
                     }
@@ -640,13 +643,13 @@ public class BankStmtControl extends BusinessControl {
                     // find MAX Debit tx from the same max limit
                     for (BankStmtView bankStmtView : candidateMaxLimitList) {
                         if (bankStmtView.getAvgWithDrawAmount() != null) {
-                            if (ValidationUtil.isGreaterThan(bankStmtView.getAvgWithDrawAmount(), maxValue)) {
+                            if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgWithDrawAmount(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
                                 maxValue = bankStmtView.getAvgWithDrawAmount();
                                 candidateMaxDebitTxList.clear();
                                 candidateMaxDebitTxList.add(bankStmtView);
                                 atId = bankStmtView.getId();
                             }
-                            else if (ValidationUtil.isValueEqual(bankStmtView.getAvgWithDrawAmount(), maxValue)) {
+                            else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgWithDrawAmount(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
                                 candidateMaxDebitTxList.add(bankStmtView);
                             }
                         }
@@ -662,13 +665,13 @@ public class BankStmtControl extends BusinessControl {
                         // find MAX Credit tx from the same max debit tx
                         for (BankStmtView bankStmtView : candidateMaxDebitTxList) {
                             if (bankStmtView.getAvgIncomeGross() != null) {
-                                if (ValidationUtil.isGreaterThan(bankStmtView.getAvgIncomeGross(), maxValue)) {
+                                if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeGross(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
                                     maxValue = bankStmtView.getAvgIncomeGross();
                                     candidateMaxCreditTxList.clear();
                                     candidateMaxCreditTxList.add(bankStmtView);
                                     atId = bankStmtView.getId();
                                 }
-                                else if (ValidationUtil.isValueEqual(bankStmtView.getAvgIncomeGross(), maxValue)) {
+                                else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeGross(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
                                     candidateMaxCreditTxList.add(bankStmtView);
                                 }
                             }
@@ -725,7 +728,7 @@ public class BankStmtControl extends BusinessControl {
 
                 // ---------- Swing & Utilization (%) ---------- //
                 // overLimitAmount = 0 -> Swing & Utilization (%) = 0
-                if (detailView.getOverLimitAmount() == null || ValidationUtil.isValueEqualZero(detailView.getOverLimitAmount())) {
+                if (detailView.getOverLimitAmount() == null || ValidationUtil.isValueCompareToZero(detailView.getOverLimitAmount(), ValidationUtil.CompareMode.EQUAL)) {
                     detailView.setSwingPercent(BigDecimal.ZERO);
                     detailView.setUtilizationPercent(BigDecimal.ZERO);
                 } else {
@@ -733,7 +736,7 @@ public class BankStmtControl extends BusinessControl {
                     detailView.setUtilizationPercent(calUtilizationPercent(detailView.getMonthBalance(), detailView.getOverLimitAmount()));
                 }
                 // monthBalance > 0 -> Utilization (%) = 0
-                if (detailView.getMonthBalance() != null && ValidationUtil.isValueGreaterThanZero(detailView.getMonthBalance())) {
+                if (detailView.getMonthBalance() != null && ValidationUtil.isValueCompareToZero(detailView.getMonthBalance(), ValidationUtil.CompareMode.GREATER_THAN)) {
                     detailView.setUtilizationPercent(BigDecimal.ZERO);
                 }
 
@@ -744,7 +747,7 @@ public class BankStmtControl extends BusinessControl {
                 detailView.setTotalTransaction(detailView.getNumberOfCreditTxn() + detailView.getNumberOfDebitTxn());
 
                 // Count number of month Non-OverLimitAmount (overLimitAmount = 0)
-                if (detailView.getOverLimitAmount() == null || ValidationUtil.isValueEqualZero(detailView.getOverLimitAmount())) {
+                if (detailView.getOverLimitAmount() == null || ValidationUtil.isValueCompareToZero(detailView.getOverLimitAmount(), ValidationUtil.CompareMode.EQUAL)) {
                     numMonthNonOvrLmtAmt += 1;
                 }
 
@@ -764,7 +767,7 @@ public class BankStmtControl extends BusinessControl {
 
                 // ---------- Swing & Utilization (%) ---------- //
                 // overLimitAmount = 0 -> Swing & Utilization (%) = 0
-                if (detailView.getOverLimitAmount() == null || ValidationUtil.isValueEqualZero(detailView.getOverLimitAmount())) {
+                if (detailView.getOverLimitAmount() == null || ValidationUtil.isValueCompareToZero(detailView.getOverLimitAmount(), ValidationUtil.CompareMode.EQUAL)) {
                     detailView.setSwingPercent(BigDecimal.ZERO);
                     detailView.setUtilizationPercent(BigDecimal.ZERO);
                 } else {
@@ -772,7 +775,7 @@ public class BankStmtControl extends BusinessControl {
                     detailView.setUtilizationPercent(calUtilizationPercent(detailView.getMonthBalance(), detailView.getOverLimitAmount()));
                 }
                 // monthBalance > 0 -> Utilization (%) = 0
-                if (detailView.getMonthBalance() != null && ValidationUtil.isValueGreaterThanZero(detailView.getMonthBalance())) {
+                if (detailView.getMonthBalance() != null && ValidationUtil.isValueCompareToZero(detailView.getMonthBalance(), ValidationUtil.CompareMode.GREATER_THAN)) {
                     detailView.setUtilizationPercent(BigDecimal.ZERO);
                 }
 
@@ -783,7 +786,7 @@ public class BankStmtControl extends BusinessControl {
                 detailView.setTotalTransaction(detailView.getNumberOfCreditTxn() + detailView.getNumberOfDebitTxn());
 
                 // Count number of month Non-OverLimitAmount (overLimitAmount = 0)
-                if (detailView.getOverLimitAmount() == null || ValidationUtil.isValueEqualZero(detailView.getOverLimitAmount())) {
+                if (detailView.getOverLimitAmount() == null || ValidationUtil.isValueCompareToZero(detailView.getOverLimitAmount(), ValidationUtil.CompareMode.EQUAL)) {
                     numMonthNonOvrLmtAmt += 1;
                 }
 
@@ -826,7 +829,7 @@ public class BankStmtControl extends BusinessControl {
                 sumUtilPctOfLastSixM = Util.add(sumUtilPctOfLastSixM, detailView.getUtilizationPercent());
                 sumChqRetAmtOfLastSixM = Util.add(sumChqRetAmtOfLastSixM, detailView.getChequeReturnAmount());
 
-                if (detailView.getOverLimitAmount() != null && ValidationUtil.isValueGreaterThanZero(detailView.getOverLimitAmount())) {
+                if (detailView.getOverLimitAmount() != null && ValidationUtil.isValueCompareToZero(detailView.getOverLimitAmount(), ValidationUtil.CompareMode.GREATER_THAN)) {
                     numMonthOvrLmtAmtOfLastSixM += 1;
                 }
 
@@ -848,7 +851,7 @@ public class BankStmtControl extends BusinessControl {
                 sumUtilPctOfLastSixM = Util.add(sumUtilPctOfLastSixM, detailView.getUtilizationPercent());
                 sumChqRetAmtOfLastSixM = Util.add(sumChqRetAmtOfLastSixM, detailView.getChequeReturnAmount());
 
-                if (detailView.getOverLimitAmount() != null && ValidationUtil.isValueGreaterThanZero(detailView.getOverLimitAmount())) {
+                if (detailView.getOverLimitAmount() != null && ValidationUtil.isValueCompareToZero(detailView.getOverLimitAmount(), ValidationUtil.CompareMode.GREATER_THAN)) {
                     numMonthOvrLmtAmtOfLastSixM += 1;
                 }
 
@@ -1011,7 +1014,7 @@ public class BankStmtControl extends BusinessControl {
                             - Income Gross = 0      -> Red
                          */
                         if (bankStmtView.getAvgIncomeGross() != null) {
-                            if (ValidationUtil.isValueEqualZero(bankStmtView.getAvgIncomeGross())) {
+                            if (ValidationUtil.isValueCompareToZero(bankStmtView.getAvgIncomeGross(), ValidationUtil.CompareMode.EQUAL)) {
                                 bankStmtView.setColorIncomeGross(ColorStyleType.RED.code());
                             } else {
                                 bankStmtView.setColorIncomeGross(ColorStyleType.GREEN.code());
@@ -1027,17 +1030,17 @@ public class BankStmtControl extends BusinessControl {
                             - Utilization > 90% & Swing < 15%    -> Red
                          */
                         if (bankStmtView.getAvgSwingPercent() != null && bankStmtView.getAvgUtilizationPercent() != null) {
-                            if (ValidationUtil.isLessEqual(bankStmtView.getAvgUtilizationPercent(), ninety)) {
+                            if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgUtilizationPercent(), ninety, ValidationUtil.CompareMode.LESS_THAN_OR_EQUAL)) {
                                 bankStmtView.setColorSwingPercent(ColorStyleType.GREEN.code());
                                 bankStmtView.setColorUtilPercent(ColorStyleType.GREEN.code());
                             }
-                            else if (ValidationUtil.isGreaterThan(bankStmtView.getAvgUtilizationPercent(), ninety)
-                                    && ValidationUtil.isGreaterEqual(bankStmtView.getAvgSwingPercent(), fifteen)) {
+                            else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgUtilizationPercent(), ninety, ValidationUtil.CompareMode.GREATER_THAN)
+                                    && ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgSwingPercent(), fifteen, ValidationUtil.CompareMode.GREATER_THAN_OR_EQUAL)) {
                                 bankStmtView.setColorSwingPercent(ColorStyleType.YELLOW.code());
                                 bankStmtView.setColorUtilPercent(ColorStyleType.YELLOW.code());
                             }
-                            else if (ValidationUtil.isGreaterThan(bankStmtView.getAvgUtilizationPercent(), ninety)
-                                    && ValidationUtil.isLessThan(bankStmtView.getAvgSwingPercent(), fifteen)) {
+                            else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgUtilizationPercent(), ninety, ValidationUtil.CompareMode.GREATER_THAN)
+                                    && ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgSwingPercent(), fifteen, ValidationUtil.CompareMode.LESS_THAN)) {
                                 bankStmtView.setColorSwingPercent(ColorStyleType.RED.code());
                                 bankStmtView.setColorUtilPercent(ColorStyleType.RED.code());
                             }
@@ -1057,14 +1060,14 @@ public class BankStmtControl extends BusinessControl {
                             - Over Limit (Times) > 2            -> Red
                          */
                         if (bankStmtView.getOverLimitTimes() != null) {
-                            if (ValidationUtil.isLessThan(bankStmtView.getOverLimitTimes(), BigDecimal.ONE)) {
+                            if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getOverLimitTimes(), BigDecimal.ONE, ValidationUtil.CompareMode.LESS_THAN)) {
                                 bankStmtView.setColorOvrLimitTime(ColorStyleType.GREEN.code());
                             }
-                            else if (ValidationUtil.isGreaterEqual(bankStmtView.getOverLimitTimes(), BigDecimal.ONE)
-                                    && ValidationUtil.isLessEqual(bankStmtView.getOverLimitTimes(), two)) {
+                            else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getOverLimitTimes(), BigDecimal.ONE, ValidationUtil.CompareMode.GREATER_THAN_OR_EQUAL)
+                                    && ValidationUtil.isFirstCompareToSecond(bankStmtView.getOverLimitTimes(), two, ValidationUtil.CompareMode.LESS_THAN_OR_EQUAL)) {
                                 bankStmtView.setColorOvrLimitTime(ColorStyleType.YELLOW.code());
                             }
-                            else if (ValidationUtil.isGreaterThan(bankStmtView.getOverLimitTimes(), two)) {
+                            else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getOverLimitTimes(), two, ValidationUtil.CompareMode.GREATER_THAN)) {
                                 bankStmtView.setColorOvrLimitTime(ColorStyleType.RED.code());
                             }
                             else {
@@ -1081,14 +1084,14 @@ public class BankStmtControl extends BusinessControl {
                             - Over Limit (Days) > 7         -> Red
                          */
                         if (bankStmtView.getOverLimitDays() != null) {
-                            if (ValidationUtil.isLessEqual(bankStmtView.getOverLimitDays(), three)) {
+                            if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getOverLimitDays(), three, ValidationUtil.CompareMode.LESS_THAN_OR_EQUAL)) {
                                 bankStmtView.setColorOvrLimitDays(ColorStyleType.GREEN.code());
                             }
-                            else if (ValidationUtil.isGreaterThan(bankStmtView.getOverLimitDays(), three)
-                                    && ValidationUtil.isLessEqual(bankStmtView.getOverLimitDays(), seven)) {
+                            else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getOverLimitDays(), three, ValidationUtil.CompareMode.GREATER_THAN)
+                                    && ValidationUtil.isFirstCompareToSecond(bankStmtView.getOverLimitDays(), seven, ValidationUtil.CompareMode.LESS_THAN_OR_EQUAL)) {
                                 bankStmtView.setColorOvrLimitDays(ColorStyleType.YELLOW.code());
                             }
-                            else if (ValidationUtil.isGreaterThan(bankStmtView.getOverLimitDays(), seven)) {
+                            else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getOverLimitDays(), seven, ValidationUtil.CompareMode.GREATER_THAN)) {
                                 bankStmtView.setColorOvrLimitDays(ColorStyleType.RED.code());
                             }
                             else {
@@ -1105,14 +1108,14 @@ public class BankStmtControl extends BusinessControl {
                             - Cheque Return > 2         -> Red
                          */
                         if (bankStmtView.getChequeReturn() != null) {
-                            if (ValidationUtil.isLessThan(bankStmtView.getChequeReturn(), BigDecimal.ONE)) {
+                            if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getChequeReturn(), BigDecimal.ONE, ValidationUtil.CompareMode.LESS_THAN)) {
                                 bankStmtView.setColorChequeReturn(ColorStyleType.GREEN.code());
                             }
-                            else if (ValidationUtil.isGreaterEqual(bankStmtView.getChequeReturn(), BigDecimal.ONE)
-                                    && ValidationUtil.isLessEqual(bankStmtView.getChequeReturn(), two)) {
+                            else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getChequeReturn(), BigDecimal.ONE, ValidationUtil.CompareMode.GREATER_THAN_OR_EQUAL)
+                                    && ValidationUtil.isFirstCompareToSecond(bankStmtView.getChequeReturn(), two, ValidationUtil.CompareMode.LESS_THAN_OR_EQUAL)) {
                                 bankStmtView.setColorChequeReturn(ColorStyleType.YELLOW.code());
                             }
-                            else if (ValidationUtil.isGreaterThan(bankStmtView.getChequeReturn(), two)) {
+                            else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getChequeReturn(), two, ValidationUtil.CompareMode.GREATER_THAN)) {
                                 bankStmtView.setColorChequeReturn(ColorStyleType.RED.code());
                             }
                             else {
@@ -1130,14 +1133,14 @@ public class BankStmtControl extends BusinessControl {
                     // - Trade Cheque Return > 3%, <= 5%    -> Yellow
                     // - Trade Cheque Return > 5%           -> Red
                     if ( !(RadioValue.YES.value() == bankStmtView.getNotCountIncome()) && bankStmtView.getTrdChequeReturnPercent() != null) {
-                        if (ValidationUtil.isLessEqual(bankStmtView.getTrdChequeReturnPercent(), three)) {
+                        if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getTrdChequeReturnPercent(), three, ValidationUtil.CompareMode.LESS_THAN_OR_EQUAL)) {
                             bankStmtView.setColorTrdChqRetPercent(ColorStyleType.GREEN.code());
                         }
-                        else if (ValidationUtil.isGreaterThan(bankStmtView.getTrdChequeReturnPercent(), three)
-                                && ValidationUtil.isLessEqual(bankStmtView.getTrdChequeReturnPercent(), five)) {
+                        else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getTrdChequeReturnPercent(), three, ValidationUtil.CompareMode.GREATER_THAN)
+                                && ValidationUtil.isFirstCompareToSecond(bankStmtView.getTrdChequeReturnPercent(), five, ValidationUtil.CompareMode.LESS_THAN_OR_EQUAL)) {
                             bankStmtView.setColorTrdChqRetPercent(ColorStyleType.YELLOW.code());
                         }
-                        else if (ValidationUtil.isGreaterThan(bankStmtView.getTrdChequeReturnPercent(), five)) {
+                        else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getTrdChequeReturnPercent(), five, ValidationUtil.CompareMode.GREATER_THAN)) {
                             bankStmtView.setColorTrdChqRetPercent(ColorStyleType.RED.code());
                         }
                         else {

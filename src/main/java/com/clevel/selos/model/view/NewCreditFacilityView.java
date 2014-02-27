@@ -19,6 +19,7 @@ public class NewCreditFacilityView implements Serializable {
     private BigDecimal totalWcTmb;
     private BigDecimal WCNeedDiffer;
     private BigDecimal totalWcDebit;
+    private BigDecimal totalLoanWCTMB;  //Existing Core W/Loan Credit limit with TMB
 
     private BigDecimal case1WcLimit;
     private BigDecimal case1WcMinLimit;
@@ -44,15 +45,31 @@ public class NewCreditFacilityView implements Serializable {
     private BigDecimal totalCommercial;
     private BigDecimal totalCommercialAndOBOD;
     private BigDecimal totalExposure;
-    private BigDecimal totalApproveCredit;
-    private BigDecimal totalGuaranteeAmount;
-    private BigDecimal numberMonthsFromApprDate;
+    private BigDecimal totalNumberOfNewOD;
+    private BigDecimal totalNumberProposeCreditFac;
+    private BigDecimal totalNumberContingenPropose;
     private BigDecimal totalNumberOfCoreAsset;
     private BigDecimal totalNumberOfNonCoreAsset;
+    private BigDecimal totalMortgageValue;
+    private BigDecimal totalGuaranteeAmount;
     private BigDecimal totalTCGGuaranteeAmount;
     private BigDecimal totalIndvGuaranteeAmount;
     private BigDecimal totalJurisGuaranteeAmount;
-    private BigDecimal totalMortgageValue;
+
+    // Approve
+    private BigDecimal totalApproveCredit;
+    private BigDecimal totalApproveCommercial;
+    private BigDecimal totalApproveComAndOBOD;
+    private BigDecimal totalApproveExposure;
+    private BigDecimal totalApproveNumOfNewOD;
+    private BigDecimal totalApproveNumProposeCreditFac;
+    private BigDecimal totalApproveNumContingenPropose;
+    private BigDecimal totalApproveNumOfCoreAsset;
+    private BigDecimal totalApproveNumOfNonCoreAsset;
+    private BigDecimal totalApproveGuaranteeAmt;
+    private BigDecimal totalApproveTCGGuaranteeAmt;
+    private BigDecimal totalApproveIndiGuaranteeAmt;
+    private BigDecimal totalApproveJurisGuaranteeAmt;
 
     private String contactName;
     private String contactPhoneNo;
@@ -83,12 +100,6 @@ public class NewCreditFacilityView implements Serializable {
     private List<NewGuarantorDetailView> newGuarantorDetailViewList;
     private List<NewConditionDetailView> newConditionDetailViewList;
 
-    //hidden credit type
-    private BigDecimal totalLoanWCTMB;  //Existing Core W/Loan Credit limit with TMB
-    private BigDecimal totalNumberOfNewOD;
-    private BigDecimal totalNumberProposeCreditFac;
-    private BigDecimal totalNumberContingenPropose;
-
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -103,6 +114,7 @@ public class NewCreditFacilityView implements Serializable {
         this.totalWcTmb = BigDecimal.ZERO;
         this.WCNeedDiffer = BigDecimal.ZERO;
         this.totalWcDebit = BigDecimal.ZERO;
+        this.totalLoanWCTMB = BigDecimal.ZERO;
         this.case1WcLimit = BigDecimal.ZERO;
         this.case1WcMinLimit = BigDecimal.ZERO;
         this.case1Wc50CoreWc = BigDecimal.ZERO;
@@ -127,15 +139,27 @@ public class NewCreditFacilityView implements Serializable {
         this.totalNumberOfNewOD = BigDecimal.ZERO;
         this.totalNumberProposeCreditFac = BigDecimal.ZERO;
         this.totalNumberContingenPropose=BigDecimal.ZERO;
-        this.totalApproveCredit = BigDecimal.ZERO;
-        this.totalGuaranteeAmount = BigDecimal.ZERO;
-        this.numberMonthsFromApprDate = BigDecimal.ZERO;
         this.totalNumberOfCoreAsset = BigDecimal.ZERO;
         this.totalNumberOfNonCoreAsset = BigDecimal.ZERO;
+        this.totalMortgageValue = BigDecimal.ZERO;
+        this.totalGuaranteeAmount = BigDecimal.ZERO;
         this.totalTCGGuaranteeAmount = BigDecimal.ZERO;
         this.totalIndvGuaranteeAmount = BigDecimal.ZERO;
         this.totalJurisGuaranteeAmount = BigDecimal.ZERO;
-        this.totalMortgageValue = BigDecimal.ZERO;
+
+        this.totalApproveCredit = BigDecimal.ZERO;
+        this.totalApproveCommercial = BigDecimal.ZERO;
+        this.totalApproveComAndOBOD = BigDecimal.ZERO;
+        this.totalApproveExposure = BigDecimal.ZERO;
+        this.totalApproveNumOfNewOD = BigDecimal.ZERO;
+        this.totalApproveNumProposeCreditFac = BigDecimal.ZERO;
+        this.totalApproveNumContingenPropose = BigDecimal.ZERO;
+        this.totalApproveNumOfCoreAsset = BigDecimal.ZERO;
+        this.totalApproveNumOfNonCoreAsset = BigDecimal.ZERO;
+        this.totalApproveGuaranteeAmt = BigDecimal.ZERO;
+        this.totalApproveTCGGuaranteeAmt = BigDecimal.ZERO;
+        this.totalApproveIndiGuaranteeAmt = BigDecimal.ZERO;
+        this.totalApproveJurisGuaranteeAmt = BigDecimal.ZERO;
 
         this.contactName = "";
         this.contactPhoneNo = "";
@@ -158,7 +182,6 @@ public class NewCreditFacilityView implements Serializable {
         this.newGuarantorDetailViewList = new ArrayList<NewGuarantorDetailView>();
         this.newConditionDetailViewList = new ArrayList<NewConditionDetailView>();
 
-
         this.relatedTMBLending = 0;
         this.twentyFivePercentShareRelatedTMBLending = 0;
         this.singleLendingLimit = 0;
@@ -166,11 +189,6 @@ public class NewCreditFacilityView implements Serializable {
         this.loanRequestType = new CreditRequestType();
         this.investedCountry = new Country();
         this.creditCustomerType = CreditCustomerType.NOT_SELECTED.value();
-
-        this.totalNumberOfNewOD = BigDecimal.ZERO;
-        this.totalNumberProposeCreditFac = BigDecimal.ZERO;
-        this.totalNumberContingenPropose = BigDecimal.ZERO;
-        this.totalLoanWCTMB = BigDecimal.ZERO;
     }
 
     public long getId() {
@@ -179,30 +197,6 @@ public class NewCreditFacilityView implements Serializable {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public BigDecimal getTotalProposeNonLoanDBR() {
-        return totalProposeNonLoanDBR;
-    }
-
-    public void setTotalProposeNonLoanDBR(BigDecimal totalProposeNonLoanDBR) {
-        this.totalProposeNonLoanDBR = totalProposeNonLoanDBR;
-    }
-
-    public BigDecimal getTotalProposeLoanDBR() {
-        return totalProposeLoanDBR;
-    }
-
-    public void setTotalProposeLoanDBR(BigDecimal totalProposeLoanDBR) {
-        this.totalProposeLoanDBR = totalProposeLoanDBR;
-    }
-
-    public BigDecimal getTotalApproveCredit() {
-        return totalApproveCredit;
-    }
-
-    public void setTotalApproveCredit(BigDecimal totalApproveCredit) {
-        this.totalApproveCredit = totalApproveCredit;
     }
 
     public BigDecimal getWCNeed() {
@@ -235,6 +229,14 @@ public class NewCreditFacilityView implements Serializable {
 
     public void setTotalWcDebit(BigDecimal totalWcDebit) {
         this.totalWcDebit = totalWcDebit;
+    }
+
+    public BigDecimal getTotalLoanWCTMB() {
+        return totalLoanWCTMB;
+    }
+
+    public void setTotalLoanWCTMB(BigDecimal totalLoanWCTMB) {
+        this.totalLoanWCTMB = totalLoanWCTMB;
     }
 
     public BigDecimal getCase1WcLimit() {
@@ -333,22 +335,6 @@ public class NewCreditFacilityView implements Serializable {
         this.case3WcDebitCoreWc = case3WcDebitCoreWc;
     }
 
-    public List<NewCreditDetailView> getNewCreditDetailViewList() {
-        return newCreditDetailViewList;
-    }
-
-    public void setNewCreditDetailViewList(List<NewCreditDetailView> newCreditDetailViewList) {
-        this.newCreditDetailViewList = newCreditDetailViewList;
-    }
-
-    public List<NewCollateralView> getNewCollateralViewList() {
-        return newCollateralViewList;
-    }
-
-    public void setNewCollateralViewList(List<NewCollateralView> newCollateralViewList) {
-        this.newCollateralViewList = newCollateralViewList;
-    }
-
     public BigDecimal getExistingSMELimit() {
         return existingSMELimit;
     }
@@ -365,52 +351,28 @@ public class NewCreditFacilityView implements Serializable {
         this.maximumSMELimit = maximumSMELimit;
     }
 
-    public Country getInvestedCountry() {
-        return investedCountry;
-    }
-
-    public void setInvestedCountry(Country investedCountry) {
-        this.investedCountry = investedCountry;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getModifyDate() {
-        return modifyDate;
-    }
-
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
-    }
-
-    public User getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(User createBy) {
-        this.createBy = createBy;
-    }
-
-    public User getModifyBy() {
-        return modifyBy;
-    }
-
-    public void setModifyBy(User modifyBy) {
-        this.modifyBy = modifyBy;
-    }
-
     public BigDecimal getTotalPropose() {
         return totalPropose;
     }
 
     public void setTotalPropose(BigDecimal totalPropose) {
         this.totalPropose = totalPropose;
+    }
+
+    public BigDecimal getTotalProposeLoanDBR() {
+        return totalProposeLoanDBR;
+    }
+
+    public void setTotalProposeLoanDBR(BigDecimal totalProposeLoanDBR) {
+        this.totalProposeLoanDBR = totalProposeLoanDBR;
+    }
+
+    public BigDecimal getTotalProposeNonLoanDBR() {
+        return totalProposeNonLoanDBR;
+    }
+
+    public void setTotalProposeNonLoanDBR(BigDecimal totalProposeNonLoanDBR) {
+        this.totalProposeNonLoanDBR = totalProposeNonLoanDBR;
     }
 
     public BigDecimal getTotalCommercial() {
@@ -435,6 +397,190 @@ public class NewCreditFacilityView implements Serializable {
 
     public void setTotalExposure(BigDecimal totalExposure) {
         this.totalExposure = totalExposure;
+    }
+
+    public BigDecimal getTotalNumberOfNewOD() {
+        return totalNumberOfNewOD;
+    }
+
+    public void setTotalNumberOfNewOD(BigDecimal totalNumberOfNewOD) {
+        this.totalNumberOfNewOD = totalNumberOfNewOD;
+    }
+
+    public BigDecimal getTotalNumberProposeCreditFac() {
+        return totalNumberProposeCreditFac;
+    }
+
+    public void setTotalNumberProposeCreditFac(BigDecimal totalNumberProposeCreditFac) {
+        this.totalNumberProposeCreditFac = totalNumberProposeCreditFac;
+    }
+
+    public BigDecimal getTotalNumberContingenPropose() {
+        return totalNumberContingenPropose;
+    }
+
+    public void setTotalNumberContingenPropose(BigDecimal totalNumberContingenPropose) {
+        this.totalNumberContingenPropose = totalNumberContingenPropose;
+    }
+
+    public BigDecimal getTotalNumberOfCoreAsset() {
+        return totalNumberOfCoreAsset;
+    }
+
+    public void setTotalNumberOfCoreAsset(BigDecimal totalNumberOfCoreAsset) {
+        this.totalNumberOfCoreAsset = totalNumberOfCoreAsset;
+    }
+
+    public BigDecimal getTotalNumberOfNonCoreAsset() {
+        return totalNumberOfNonCoreAsset;
+    }
+
+    public void setTotalNumberOfNonCoreAsset(BigDecimal totalNumberOfNonCoreAsset) {
+        this.totalNumberOfNonCoreAsset = totalNumberOfNonCoreAsset;
+    }
+
+    public BigDecimal getTotalMortgageValue() {
+        return totalMortgageValue;
+    }
+
+    public void setTotalMortgageValue(BigDecimal totalMortgageValue) {
+        this.totalMortgageValue = totalMortgageValue;
+    }
+
+    public BigDecimal getTotalGuaranteeAmount() {
+        return totalGuaranteeAmount;
+    }
+
+    public void setTotalGuaranteeAmount(BigDecimal totalGuaranteeAmount) {
+        this.totalGuaranteeAmount = totalGuaranteeAmount;
+    }
+
+    public BigDecimal getTotalTCGGuaranteeAmount() {
+        return totalTCGGuaranteeAmount;
+    }
+
+    public void setTotalTCGGuaranteeAmount(BigDecimal totalTCGGuaranteeAmount) {
+        this.totalTCGGuaranteeAmount = totalTCGGuaranteeAmount;
+    }
+
+    public BigDecimal getTotalIndvGuaranteeAmount() {
+        return totalIndvGuaranteeAmount;
+    }
+
+    public void setTotalIndvGuaranteeAmount(BigDecimal totalIndvGuaranteeAmount) {
+        this.totalIndvGuaranteeAmount = totalIndvGuaranteeAmount;
+    }
+
+    public BigDecimal getTotalJurisGuaranteeAmount() {
+        return totalJurisGuaranteeAmount;
+    }
+
+    public void setTotalJurisGuaranteeAmount(BigDecimal totalJurisGuaranteeAmount) {
+        this.totalJurisGuaranteeAmount = totalJurisGuaranteeAmount;
+    }
+
+    public BigDecimal getTotalApproveCredit() {
+        return totalApproveCredit;
+    }
+
+    public void setTotalApproveCredit(BigDecimal totalApproveCredit) {
+        this.totalApproveCredit = totalApproveCredit;
+    }
+
+    public BigDecimal getTotalApproveCommercial() {
+        return totalApproveCommercial;
+    }
+
+    public void setTotalApproveCommercial(BigDecimal totalApproveCommercial) {
+        this.totalApproveCommercial = totalApproveCommercial;
+    }
+
+    public BigDecimal getTotalApproveComAndOBOD() {
+        return totalApproveComAndOBOD;
+    }
+
+    public void setTotalApproveComAndOBOD(BigDecimal totalApproveComAndOBOD) {
+        this.totalApproveComAndOBOD = totalApproveComAndOBOD;
+    }
+
+    public BigDecimal getTotalApproveExposure() {
+        return totalApproveExposure;
+    }
+
+    public void setTotalApproveExposure(BigDecimal totalApproveExposure) {
+        this.totalApproveExposure = totalApproveExposure;
+    }
+
+    public BigDecimal getTotalApproveNumOfNewOD() {
+        return totalApproveNumOfNewOD;
+    }
+
+    public void setTotalApproveNumOfNewOD(BigDecimal totalApproveNumOfNewOD) {
+        this.totalApproveNumOfNewOD = totalApproveNumOfNewOD;
+    }
+
+    public BigDecimal getTotalApproveNumProposeCreditFac() {
+        return totalApproveNumProposeCreditFac;
+    }
+
+    public void setTotalApproveNumProposeCreditFac(BigDecimal totalApproveNumProposeCreditFac) {
+        this.totalApproveNumProposeCreditFac = totalApproveNumProposeCreditFac;
+    }
+
+    public BigDecimal getTotalApproveNumContingenPropose() {
+        return totalApproveNumContingenPropose;
+    }
+
+    public void setTotalApproveNumContingenPropose(BigDecimal totalApproveNumContingenPropose) {
+        this.totalApproveNumContingenPropose = totalApproveNumContingenPropose;
+    }
+
+    public BigDecimal getTotalApproveNumOfCoreAsset() {
+        return totalApproveNumOfCoreAsset;
+    }
+
+    public void setTotalApproveNumOfCoreAsset(BigDecimal totalApproveNumOfCoreAsset) {
+        this.totalApproveNumOfCoreAsset = totalApproveNumOfCoreAsset;
+    }
+
+    public BigDecimal getTotalApproveNumOfNonCoreAsset() {
+        return totalApproveNumOfNonCoreAsset;
+    }
+
+    public void setTotalApproveNumOfNonCoreAsset(BigDecimal totalApproveNumOfNonCoreAsset) {
+        this.totalApproveNumOfNonCoreAsset = totalApproveNumOfNonCoreAsset;
+    }
+
+    public BigDecimal getTotalApproveGuaranteeAmt() {
+        return totalApproveGuaranteeAmt;
+    }
+
+    public void setTotalApproveGuaranteeAmt(BigDecimal totalApproveGuaranteeAmt) {
+        this.totalApproveGuaranteeAmt = totalApproveGuaranteeAmt;
+    }
+
+    public BigDecimal getTotalApproveTCGGuaranteeAmt() {
+        return totalApproveTCGGuaranteeAmt;
+    }
+
+    public void setTotalApproveTCGGuaranteeAmt(BigDecimal totalApproveTCGGuaranteeAmt) {
+        this.totalApproveTCGGuaranteeAmt = totalApproveTCGGuaranteeAmt;
+    }
+
+    public BigDecimal getTotalApproveIndiGuaranteeAmt() {
+        return totalApproveIndiGuaranteeAmt;
+    }
+
+    public void setTotalApproveIndiGuaranteeAmt(BigDecimal totalApproveIndiGuaranteeAmt) {
+        this.totalApproveIndiGuaranteeAmt = totalApproveIndiGuaranteeAmt;
+    }
+
+    public BigDecimal getTotalApproveJurisGuaranteeAmt() {
+        return totalApproveJurisGuaranteeAmt;
+    }
+
+    public void setTotalApproveJurisGuaranteeAmt(BigDecimal totalApproveJurisGuaranteeAmt) {
+        this.totalApproveJurisGuaranteeAmt = totalApproveJurisGuaranteeAmt;
     }
 
     public String getContactName() {
@@ -549,36 +695,28 @@ public class NewCreditFacilityView implements Serializable {
         this.reasonForReduction = reasonForReduction;
     }
 
-    public List<NewFeeDetailView> getNewFeeDetailViewList() {
-        return newFeeDetailViewList;
+    public int getCreditCustomerType() {
+        return creditCustomerType;
     }
 
-    public void setNewFeeDetailViewList(List<NewFeeDetailView> newFeeDetailViewList) {
-        this.newFeeDetailViewList = newFeeDetailViewList;
+    public void setCreditCustomerType(int creditCustomerType) {
+        this.creditCustomerType = creditCustomerType;
     }
 
-    public List<NewGuarantorDetailView> getNewGuarantorDetailViewList() {
-        return newGuarantorDetailViewList;
+    public CreditRequestType getLoanRequestType() {
+        return loanRequestType;
     }
 
-    public void setNewGuarantorDetailViewList(List<NewGuarantorDetailView> newGuarantorDetailViewList) {
-        this.newGuarantorDetailViewList = newGuarantorDetailViewList;
+    public void setLoanRequestType(CreditRequestType loanRequestType) {
+        this.loanRequestType = loanRequestType;
     }
 
-    public List<NewConditionDetailView> getNewConditionDetailViewList() {
-        return newConditionDetailViewList;
+    public Country getInvestedCountry() {
+        return investedCountry;
     }
 
-    public void setNewConditionDetailViewList(List<NewConditionDetailView> newConditionDetailViewList) {
-        this.newConditionDetailViewList = newConditionDetailViewList;
-    }
-
-    public int getSingleLendingLimit() {
-        return singleLendingLimit;
-    }
-
-    public void setSingleLendingLimit(int singleLendingLimit) {
-        this.singleLendingLimit = singleLendingLimit;
+    public void setInvestedCountry(Country investedCountry) {
+        this.investedCountry = investedCountry;
     }
 
     public int getRelatedTMBLending() {
@@ -597,116 +735,84 @@ public class NewCreditFacilityView implements Serializable {
         this.twentyFivePercentShareRelatedTMBLending = twentyFivePercentShareRelatedTMBLending;
     }
 
-    public BigDecimal getTotalGuaranteeAmount() {
-        return totalGuaranteeAmount;
+    public int getSingleLendingLimit() {
+        return singleLendingLimit;
     }
 
-    public void setTotalGuaranteeAmount(BigDecimal totalGuaranteeAmount) {
-        this.totalGuaranteeAmount = totalGuaranteeAmount;
+    public void setSingleLendingLimit(int singleLendingLimit) {
+        this.singleLendingLimit = singleLendingLimit;
     }
 
-    public int getCreditCustomerType() {
-        return creditCustomerType;
+    public List<NewFeeDetailView> getNewFeeDetailViewList() {
+        return newFeeDetailViewList;
     }
 
-    public void setCreditCustomerType(int creditCustomerType) {
-        this.creditCustomerType = creditCustomerType;
+    public void setNewFeeDetailViewList(List<NewFeeDetailView> newFeeDetailViewList) {
+        this.newFeeDetailViewList = newFeeDetailViewList;
     }
 
-    public CreditRequestType getLoanRequestType() {
-        return loanRequestType;
+    public List<NewCreditDetailView> getNewCreditDetailViewList() {
+        return newCreditDetailViewList;
     }
 
-    public void setLoanRequestType(CreditRequestType loanRequestType) {
-        this.loanRequestType = loanRequestType;
+    public void setNewCreditDetailViewList(List<NewCreditDetailView> newCreditDetailViewList) {
+        this.newCreditDetailViewList = newCreditDetailViewList;
     }
 
-    public BigDecimal getTotalNumberOfNewOD() {
-        return totalNumberOfNewOD;
+    public List<NewCollateralView> getNewCollateralViewList() {
+        return newCollateralViewList;
     }
 
-    public void setTotalNumberOfNewOD(BigDecimal totalNumberOfNewOD) {
-        this.totalNumberOfNewOD = totalNumberOfNewOD;
+    public void setNewCollateralViewList(List<NewCollateralView> newCollateralViewList) {
+        this.newCollateralViewList = newCollateralViewList;
     }
 
-    public BigDecimal getTotalNumberProposeCreditFac() {
-        return totalNumberProposeCreditFac;
+    public List<NewGuarantorDetailView> getNewGuarantorDetailViewList() {
+        return newGuarantorDetailViewList;
     }
 
-    public void setTotalNumberProposeCreditFac(BigDecimal totalNumberProposeCreditFac) {
-        this.totalNumberProposeCreditFac = totalNumberProposeCreditFac;
+    public void setNewGuarantorDetailViewList(List<NewGuarantorDetailView> newGuarantorDetailViewList) {
+        this.newGuarantorDetailViewList = newGuarantorDetailViewList;
     }
 
-    public BigDecimal getTotalNumberContingenPropose() {
-        return totalNumberContingenPropose;
+    public List<NewConditionDetailView> getNewConditionDetailViewList() {
+        return newConditionDetailViewList;
     }
 
-    public void setTotalNumberContingenPropose(BigDecimal totalNumberContingenPropose) {
-        this.totalNumberContingenPropose = totalNumberContingenPropose;
+    public void setNewConditionDetailViewList(List<NewConditionDetailView> newConditionDetailViewList) {
+        this.newConditionDetailViewList = newConditionDetailViewList;
     }
 
-    public BigDecimal getTotalLoanWCTMB() {
-        return totalLoanWCTMB;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setTotalLoanWCTMB(BigDecimal totalLoanWCTMB) {
-        this.totalLoanWCTMB = totalLoanWCTMB;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
-    public BigDecimal getNumberMonthsFromApprDate() {
-        return numberMonthsFromApprDate;
+    public Date getModifyDate() {
+        return modifyDate;
     }
 
-    public void setNumberMonthsFromApprDate(BigDecimal numberMonthsFromApprDate) {
-        this.numberMonthsFromApprDate = numberMonthsFromApprDate;
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
     }
 
-    public BigDecimal getTotalNumberOfCoreAsset() {
-        return totalNumberOfCoreAsset;
+    public User getCreateBy() {
+        return createBy;
     }
 
-    public void setTotalNumberOfCoreAsset(BigDecimal totalNumberOfCoreAsset) {
-        this.totalNumberOfCoreAsset = totalNumberOfCoreAsset;
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
     }
 
-    public BigDecimal getTotalNumberOfNonCoreAsset() {
-        return totalNumberOfNonCoreAsset;
+    public User getModifyBy() {
+        return modifyBy;
     }
 
-    public void setTotalNumberOfNonCoreAsset(BigDecimal totalNumberOfNonCoreAsset) {
-        this.totalNumberOfNonCoreAsset = totalNumberOfNonCoreAsset;
-    }
-
-    public BigDecimal getTotalTCGGuaranteeAmount() {
-        return totalTCGGuaranteeAmount;
-    }
-
-    public void setTotalTCGGuaranteeAmount(BigDecimal totalTCGGuaranteeAmount) {
-        this.totalTCGGuaranteeAmount = totalTCGGuaranteeAmount;
-    }
-
-    public BigDecimal getTotalIndvGuaranteeAmount() {
-        return totalIndvGuaranteeAmount;
-    }
-
-    public void setTotalIndvGuaranteeAmount(BigDecimal totalIndvGuaranteeAmount) {
-        this.totalIndvGuaranteeAmount = totalIndvGuaranteeAmount;
-    }
-
-    public BigDecimal getTotalJurisGuaranteeAmount() {
-        return totalJurisGuaranteeAmount;
-    }
-
-    public void setTotalJurisGuaranteeAmount(BigDecimal totalJurisGuaranteeAmount) {
-        this.totalJurisGuaranteeAmount = totalJurisGuaranteeAmount;
-    }
-
-    public BigDecimal getTotalMortgageValue() {
-        return totalMortgageValue;
-    }
-
-    public void setTotalMortgageValue(BigDecimal totalMortgageValue) {
-        this.totalMortgageValue = totalMortgageValue;
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
     }
 
     @Override
@@ -717,6 +823,7 @@ public class NewCreditFacilityView implements Serializable {
                 .append("totalWcTmb", totalWcTmb)
                 .append("WCNeedDiffer", WCNeedDiffer)
                 .append("totalWcDebit", totalWcDebit)
+                .append("totalLoanWCTMB", totalLoanWCTMB)
                 .append("case1WcLimit", case1WcLimit)
                 .append("case1WcMinLimit", case1WcMinLimit)
                 .append("case1Wc50CoreWc", case1Wc50CoreWc)
@@ -737,15 +844,29 @@ public class NewCreditFacilityView implements Serializable {
                 .append("totalCommercial", totalCommercial)
                 .append("totalCommercialAndOBOD", totalCommercialAndOBOD)
                 .append("totalExposure", totalExposure)
-                .append("totalApproveCredit", totalApproveCredit)
-                .append("totalGuaranteeAmount", totalGuaranteeAmount)
-                .append("numberMonthsFromApprDate", numberMonthsFromApprDate)
+                .append("totalNumberOfNewOD", totalNumberOfNewOD)
+                .append("totalNumberProposeCreditFac", totalNumberProposeCreditFac)
+                .append("totalNumberContingenPropose", totalNumberContingenPropose)
                 .append("totalNumberOfCoreAsset", totalNumberOfCoreAsset)
                 .append("totalNumberOfNonCoreAsset", totalNumberOfNonCoreAsset)
+                .append("totalMortgageValue", totalMortgageValue)
+                .append("totalGuaranteeAmount", totalGuaranteeAmount)
                 .append("totalTCGGuaranteeAmount", totalTCGGuaranteeAmount)
                 .append("totalIndvGuaranteeAmount", totalIndvGuaranteeAmount)
                 .append("totalJurisGuaranteeAmount", totalJurisGuaranteeAmount)
-                .append("totalMortgageValue", totalMortgageValue)
+                .append("totalApproveCredit", totalApproveCredit)
+                .append("totalApproveCommercial", totalApproveCommercial)
+                .append("totalApproveComAndOBOD", totalApproveComAndOBOD)
+                .append("totalApproveExposure", totalApproveExposure)
+                .append("totalApproveNumOfNewOD", totalApproveNumOfNewOD)
+                .append("totalApproveNumProposeCreditFac", totalApproveNumProposeCreditFac)
+                .append("totalApproveNumContingenPropose", totalApproveNumContingenPropose)
+                .append("totalApproveNumOfCoreAsset", totalApproveNumOfCoreAsset)
+                .append("totalApproveNumOfNonCoreAsset", totalApproveNumOfNonCoreAsset)
+                .append("totalApproveGuaranteeAmt", totalApproveGuaranteeAmt)
+                .append("totalApproveTCGGuaranteeAmt", totalApproveTCGGuaranteeAmt)
+                .append("totalApproveIndiGuaranteeAmt", totalApproveIndiGuaranteeAmt)
+                .append("totalApproveJurisGuaranteeAmt", totalApproveJurisGuaranteeAmt)
                 .append("contactName", contactName)
                 .append("contactPhoneNo", contactPhoneNo)
                 .append("interService", interService)
@@ -771,10 +892,6 @@ public class NewCreditFacilityView implements Serializable {
                 .append("newCollateralViewList", newCollateralViewList)
                 .append("newGuarantorDetailViewList", newGuarantorDetailViewList)
                 .append("newConditionDetailViewList", newConditionDetailViewList)
-                .append("totalLoanWCTMB", totalLoanWCTMB)
-                .append("totalNumberOfNewOD", totalNumberOfNewOD)
-                .append("totalNumberProposeCreditFac", totalNumberProposeCreditFac)
-                .append("totalNumberContingenPropose", totalNumberContingenPropose)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)

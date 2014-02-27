@@ -13,6 +13,7 @@ public class CollateralTypeDAO extends GenericDAO<CollateralType, Integer> {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     public CollateralTypeDAO() {
     }

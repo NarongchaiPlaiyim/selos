@@ -133,8 +133,9 @@ public class CreditFacProposeControl extends BusinessControl {
 
     private ExistingCreditFacilityView existingCreditFacilityView;
 
-
-    public CreditFacProposeControl() {}
+    @Inject
+    public CreditFacProposeControl() {
+    }
 
     public NewCreditFacilityView findNewCreditFacilityByWorkCase(Long workCaseId) {
         NewCreditFacilityView newCreditFacilityView = null;
@@ -447,80 +448,6 @@ public class CreditFacProposeControl extends BusinessControl {
         return sumTotalLoanDbr;
     }
 
-    /**
-     * Formula: <br/>
-     * if(standard > suggest) -> final = standard <br/>
-     * else if(standard < suggest) -> final = suggest <br/>
-     * else *(standard == suggest) -> final = (standard | suggest)
-     *
-     * @param standardBaseRateId
-     * @param standardInterest
-     * @param suggestBaseRateId
-     * @param suggestInterest
-     * @return Object[0]: (BaseRate) finalBaseRate, Object[1]: (BigDecimal) finalInterest, Object[2]: (String) finalPriceLabel,<br/>
-     *         Object[3]: (BaseRate) standardBaseRate, Object[4]: (String) standardPriceLabel,<br/>
-     *         Object[5]: (BaseRate) suggestBaseRate, Object[6]: (String) suggestPriceLabel
-     */
-    public Object[] findFinalPriceRate(int standardBaseRateId, BigDecimal standardInterest,
-                                       int suggestBaseRateId, BigDecimal suggestInterest) {
-        Object[] returnValues = new Object[7];
-
-        BigDecimal standardPrice = BigDecimal.ZERO;
-        StringBuilder standardPriceLabel = new StringBuilder("");
-
-        BigDecimal suggestPrice = BigDecimal.ZERO;
-        StringBuilder suggestPriceLabel = new StringBuilder("");
-
-        BaseRate finalBaseRate = new BaseRate();
-        BigDecimal finalInterest = BigDecimal.ZERO;
-        String finalPriceLabel = "";
-
-        //  Standard Price Rate
-        BaseRate standardBaseRate = baseRateDAO.findById(standardBaseRateId);
-        if (standardBaseRate != null && standardInterest != null) {
-            standardPrice = standardBaseRate.getValue().add(standardInterest);
-
-            if (ValidationUtil.isValueLessThanZero(standardInterest)) {
-                standardPriceLabel.append(standardBaseRate.getName()).append(" ").append(standardInterest);
-            } else {
-                standardPriceLabel.append(standardBaseRate.getName()).append(" + ").append(standardInterest);
-            }
-        }
-
-        // Suggest Price Rate
-        BaseRate suggestBaseRate = baseRateDAO.findById(suggestBaseRateId);
-        if (suggestBaseRate != null && suggestInterest != null) {
-            suggestPrice = suggestBaseRate.getValue().add(suggestInterest);
-
-            if (ValidationUtil.isValueLessThanZero(suggestInterest)) {
-                suggestPriceLabel.append(suggestBaseRate.getName()).append(" ").append(suggestInterest);
-            } else {
-                suggestPriceLabel.append(suggestBaseRate.getName()).append(" + ").append(suggestInterest);
-            }
-        }
-
-        // Compare for Final Price
-        if (ValidationUtil.isGreaterThan(standardPrice, suggestPrice) || ValidationUtil.isValueEqual(standardPrice, suggestPrice)) {
-            finalBaseRate = standardBaseRate;
-            finalInterest = standardInterest;
-            finalPriceLabel = standardPriceLabel.toString();
-        } else {
-            finalBaseRate = suggestBaseRate;
-            finalInterest = suggestInterest;
-            finalPriceLabel = suggestPriceLabel.toString();
-        }
-
-        returnValues[0] = finalBaseRate;
-        returnValues[1] = finalInterest;
-        returnValues[2] = finalPriceLabel;
-        returnValues[3] = standardBaseRate != null ? standardBaseRate : new BaseRate();
-        returnValues[4] = standardPriceLabel.toString();
-        returnValues[5] = suggestBaseRate != null ? suggestBaseRate : new BaseRate();
-        returnValues[6] = suggestPriceLabel.toString();
-        return returnValues;
-    }
-
-
     public List<ProposeCreditDetailView> findProposeCreditDetail(List<NewCreditDetailView> newCreditDetailViewList, long workCaseId) {
         log.debug("findProposeCreditDetail :: ", workCaseId);
         // todo: find credit existing and propose in this workCase
@@ -544,6 +471,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 proposeCreditDetailView.setLimit(tmp.getLimit());
                 proposeCreditDetailView.setGuaranteeAmount(tmp.getGuaranteeAmount());
                 proposeCreditDetailView.setUseCount(tmp.getUseCount());
+                proposeCreditDetailView.setNoFlag(tmp.isNoFlag());
                 proposeCreditDetailViewList.add(proposeCreditDetailView);
                 rowCount++;
             }
@@ -713,7 +641,7 @@ public class CreditFacProposeControl extends BusinessControl {
 //        case1WcLimit - totalWcDebit
         case1WcMinLimit = Util.subtract(case1WcLimit, totalWcDebit);
 //        ไม่เกิน 50% ของ case1WcLimit และไม่เกิน case1WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
-        case1Wc50CoreWc = compareToFindLower(Util.subtract(case1WcLimit, fifty), case1WcMinLimit);
+        case1Wc50CoreWc = Util.compareToFindLower(Util.subtract(case1WcLimit, fifty), case1WcMinLimit);
 //        case1WcMinLimit - case1Wc50CoreWc
         case1WcDebitCoreWc = Util.subtract(case1WcMinLimit, case1Wc50CoreWc);
 
@@ -726,7 +654,7 @@ public class CreditFacProposeControl extends BusinessControl {
 //        case2WcLimit - totalWcDebit
         case2WcMinLimit = Util.subtract(case2WcLimit, totalWcDebit);
 //        ไม่เกิน 50% ของ case2WcLimit และไม่เกิน case2WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
-        case2Wc50CoreWc = compareToFindLower(Util.subtract(case2WcLimit, fifty), case2WcMinLimit);
+        case2Wc50CoreWc = Util.compareToFindLower(Util.subtract(case2WcLimit, fifty), case2WcMinLimit);
 //        case2WcMinLimit - case2Wc50CoreWc
         case2WcDebitCoreWc = Util.subtract(case2WcMinLimit, case2Wc50CoreWc);
 
@@ -739,7 +667,7 @@ public class CreditFacProposeControl extends BusinessControl {
 //        case3WcLimit - totalWcDebit
         case3WcMinLimit = Util.subtract(case2WcLimit, totalWcDebit);
 //        ไม่เกิน 50% ของ case3WcLimit และไม่เกิน case3WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
-        case3Wc50CoreWc = compareToFindLower(Util.subtract(case3WcLimit, fifty), case3WcMinLimit);
+        case3Wc50CoreWc = Util.compareToFindLower(Util.subtract(case3WcLimit, fifty), case3WcMinLimit);
 //        case3WcMinLimit - case3Wc50CoreWc
         case3WcDebitCoreWc = Util.subtract(case3WcMinLimit, case3Wc50CoreWc);
 
@@ -775,18 +703,50 @@ public class CreditFacProposeControl extends BusinessControl {
         log.debug("after persist newCreditFacility : {}", newCreditFacility);
     }
 
-    public BigDecimal compareToFindLower(BigDecimal b1, BigDecimal b2) {
-        if (b1 == null) {
-            b1 = BigDecimal.ZERO;
-        }
-        if (b2 == null) {
-            b2 = BigDecimal.ZERO;
-        }
+    public void calculateInstallment(NewCreditDetailView creditDetailView) {
+        log.info("creditDetailView : {}", creditDetailView);
+        BigDecimal sumOfInstallment = BigDecimal.ZERO;
+        if (creditDetailView != null && creditDetailView.getNewCreditTierDetailViewList() != null && creditDetailView.getNewCreditTierDetailViewList().size() > 0) {
 
-        if (b1.compareTo(b2) > 0) {
-            return b2;
-        } else {
-            return b1;
+            for (NewCreditTierDetailView newCreditTierDetailView : creditDetailView.getNewCreditTierDetailViewList()) {
+                // Installment = (อัตราดอกเบี้ยต่อเดือน * Limit * (1 + อัตราดอกเบี้ยต่อเดือน)ยกกำลัง tenors(month)) / ((1 + อัตราดอกเบี้ยต่อเดือน) ยกกำลัง tenors(month) - 1)
+                // อัตราดอกเบี้ยต่อเดือน = baseRate.value +  interest + 1% / 12
+                BigDecimal twelve = new BigDecimal(12);
+                BigDecimal baseRate = BigDecimal.ZERO;
+                BigDecimal interest = BigDecimal.ZERO;
+
+                if (newCreditTierDetailView.getFinalBasePrice() != null) {
+                    baseRate = newCreditTierDetailView.getFinalBasePrice().getValue();
+                }
+                if (newCreditTierDetailView.getFinalInterest() != null) {
+                    interest = newCreditTierDetailView.getFinalInterest();
+                }
+
+                BigDecimal interestPerMonth = Util.divide(Util.add(baseRate, Util.add(interest, BigDecimal.ONE)), twelve);
+                log.info("baseRate :: {}", baseRate);
+                log.info("interest :: {}", interest);
+                log.info("interestPerMonth :: {}", interestPerMonth);
+
+                BigDecimal limit = BigDecimal.ZERO;
+                int tenor = newCreditTierDetailView.getTenor();
+                BigDecimal installment;
+
+                if (creditDetailView.getLimit() != null) {
+                    limit = creditDetailView.getLimit();
+                }
+
+                log.info("limit :: {}", limit);
+                log.info("tenor :: {}", tenor);
+
+                installment = Util.divide(Util.multiply(Util.multiply(interestPerMonth, limit), (Util.add(BigDecimal.ONE, interestPerMonth)).pow(tenor)),
+                        Util.subtract(Util.add(BigDecimal.ONE, interestPerMonth).pow(tenor), BigDecimal.ONE));
+                log.info("installment : {}", installment);
+
+                newCreditTierDetailView.setInstallment(installment);
+                sumOfInstallment = Util.add(sumOfInstallment, installment);
+                log.info("creditDetailAdd :sumOfInstallment: {}", sumOfInstallment);
+                creditDetailView.setInstallment(sumOfInstallment);
+            }
         }
     }
 

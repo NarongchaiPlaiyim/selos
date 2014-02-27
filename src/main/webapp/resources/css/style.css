@@ -889,3 +889,20 @@ table.ui-selectoneradio.nolabel_radio td {
 .dialog_noheader.ui-dialog .ui-dialog-titlebar {
 	display:none;
 }
+.div_row {
+   display: block;
+   height: 28px;
+   line-height: 28px;
+   padding: 1px;
+}
+table table.ui-selectoneradio, 
+table table.ui-selectoneradio td, 
+table table.ui-selectoneradio tr {
+    border: medium none !important;
+}
+.full_table table.ui-selectoneradio td {
+	padding : 0 10px 0 0 !important;
+}
+.full_table table.ui-selectoneradio {
+	width : auto !important;
+}

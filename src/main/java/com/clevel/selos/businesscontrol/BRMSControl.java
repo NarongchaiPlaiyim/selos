@@ -42,8 +42,20 @@ public class BRMSControl extends BusinessControl {
     private NewCollateralDAO newCollateralDAO;
     @Inject
     private NewCreditFacilityDAO creditFacilityDAO;
+
     @Inject
-    private DecisionDAO decisionDAO;
+    private WorkCasePrescreenDAO workCasePrescreenDAO;
+    @Inject
+    private PrescreenDAO prescreenDAO;
+    @Inject
+    private PrescreenBusinessDAO prescreenBusinessDAO;
+    @Inject
+    private PrescreenCollateralDAO prescreenCollateralDAO;
+    @Inject
+    private PrescreenFacilityDAO prescreenFacilityDAO;
+
+    @Inject
+    public BRMSControl(){}
 
     public StandardPricingResponse getPriceFeeInterest(long workCaseId){
         BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId);
@@ -52,7 +64,7 @@ public class BRMSControl extends BusinessControl {
         StandardPricingResponse _tmpPricingIntResponse = brmsInterface.checkStandardPricingIntRule(applicationInfo);
         StandardPricingResponse _tmpPricingFeeResponse = brmsInterface.checkStandardPricingFeeRule(applicationInfo);
 
-        if(_tmpPricingIntResponse.getActionResult().equals(ActionResult.SUCCESS) && _tmpPricingIntResponse.getActionResult().equals(ActionResult.SUCCESS)){
+        if(_tmpPricingIntResponse.getActionResult().equals(ActionResult.SUCCESS) && _tmpPricingFeeResponse.getActionResult().equals(ActionResult.SUCCESS)){
             _returnPricingResponse.setActionResult(_tmpPricingFeeResponse.getActionResult());
             _returnPricingResponse.setPricingInterest(_tmpPricingIntResponse.getPricingInterest());
             _returnPricingResponse.setPricingFeeList(_tmpPricingFeeResponse.getPricingFeeList());
@@ -72,7 +84,6 @@ public class BRMSControl extends BusinessControl {
         StandardPricingResponse standardPricingResponse = brmsInterface.checkStandardPricingFeeRule(applicationInfo);
         return standardPricingResponse;
     }
-
 
     public StandardPricingResponse getPricingInt(long workCaseId){
         BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId);
@@ -148,7 +159,6 @@ public class BRMSControl extends BusinessControl {
             applicationInfo.setLoanRequestType(newCreditFacility.getLoanRequestType().getBrmsCode());
         }
         else if(workCase.getStep().getProposeType().equals(ProposeType.A)){
-            Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
             //TODO: To set Loan Request Type when Decision is complete.
         }
 
@@ -159,7 +169,7 @@ public class BRMSControl extends BusinessControl {
             if(newCreditDetail.getRequestType() == RequestTypes.NEW.value()){
                 BRMSAccountRequested accountRequested = new BRMSAccountRequested();
 
-                accountRequested.setProposeId(String.valueOf(newCreditDetail.getId()));
+                accountRequested.setCreditDetailId(String.valueOf(newCreditDetail.getId()));
                 accountRequested.setProductProgram(newCreditDetail.getProductProgram().getBrmsCode());
                 accountRequested.setCreditType(newCreditDetail.getCreditType().getBrmsCode());
                 accountRequested.setLimit(newCreditDetail.getLimit());
@@ -175,6 +185,12 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setTotalApprovedCredit(totalApprovedCredit);
         applicationInfo.setAccountRequestedList(accountRequestedList);
         return applicationInfo;
+    }
+
+    public void getPrescreenResult(long workcasePrescreenId){
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workcasePrescreenId);
+
+
     }
 
 }

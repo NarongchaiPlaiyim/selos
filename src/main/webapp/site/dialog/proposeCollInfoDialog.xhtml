@@ -228,9 +228,9 @@
                            itemLabel="#{collTypePercentItem.description}"
                            itemValue="#{collTypePercentItem.id}"/>
             <p:ajax event="change"
-                    listener="#{creditFacPropose.onChangeCollTypeLTV()}"
-                    process="@this"
-                    update="@this"/>
+                    listener="#{creditFacPropose.onChangeCollTypeLTV(CollateralHeaderDetailView)}"
+                    process="@form"
+                    update=":collateralDlgForm"/>
         </p:selectOneMenu>
     </td>
 </tr>

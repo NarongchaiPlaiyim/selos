@@ -4,20 +4,26 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.clevel.selos.model.Gender;
+import com.clevel.selos.util.Util;
 
 public class CustomerAttorneyView implements Serializable {
 	private static final long serialVersionUID = 3741911726626140767L;
+	private long id;
 	private long customerId;
+	
 	private int documentTypeId;
 	private String personalId;
-	private int titleId;
-	private String nameTh;
-	private String lastNameTh;
-	private Date birthDate;
 	private int age;
+	private int titleId;
+	private String nameTH;
+	private String lastNameTH;
+	private Date birthDate;
+	
 	private Gender gender;
 	private int raceId;
 	private int nationalityId;
+	
+	//Address
 	private String addressNo;
 	private String moo;
 	private String building;
@@ -29,36 +35,58 @@ public class CustomerAttorneyView implements Serializable {
 	private int countryId;
 	private String phoneNumber;
 	private String phoneExt;
+	
+	//
 	private int maritalStatusId;
 	private int spouseTitleId;
-	private String spouseNameTh;
-	private String spouseLastNameTh;
+	private String spouseNameTH;
+	private String spouseLastNameTH;
 	private int fatherTitleId;
-	private String fatherNameTh;
-	private String fatherLastNameTh;
+	private String fatherNameTH;
+	private String fatherLastNameTH;
 	private int motherTitleId;
-	private String motherNameTh;
-	private String motherLastNameTh;
+	private String motherNameTH;
+	private String motherLastNameTH;
+	
 	private String homePhoneNumber;
 	private String homePhoneExt;
 	private String mobile1;
 	private String mobile2;
 	
-	//Permission Set
-	private boolean canUpdateGeneralData;
-	private boolean canUpdateAddress;
-	private boolean canUpdateRelationInfo;
-	private boolean canUpdateOthers;
+	//Display
+	private String displayDocumentType;
+	private String displayTitle;
+	
+	private String displayRace;
+	private String displayNationality;
+	private String displayMaritalStatus;
+	private String displaySpouseTitle;
+	private String displayFatherTitle;
+	private String displayMotherTitle;
+	
+	private String displayProvince;
+	private String displayDistrict;
+	private String displaySubDistrict;
+	private String displayCountry;
+	
+	private boolean juristic;
 	
 	public CustomerAttorneyView() {
-		gender = Gender.NA;
-		canUpdateGeneralData = true;
-		canUpdateAddress = true;
-		canUpdateRelationInfo = true;
-		canUpdateOthers = true;
+	}
+	
+	public void calculateAge() {
+		if (birthDate == null)
+			age = 0;
+		else
+			age = Util.calAge(birthDate);
 	}
 
-
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
 	public long getCustomerId() {
 		return customerId;
 	}
@@ -83,6 +111,14 @@ public class CustomerAttorneyView implements Serializable {
 		this.personalId = personalId;
 	}
 
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
 	public int getTitleId() {
 		return titleId;
 	}
@@ -91,20 +127,20 @@ public class CustomerAttorneyView implements Serializable {
 		this.titleId = titleId;
 	}
 
-	public String getNameTh() {
-		return nameTh;
+	public String getNameTH() {
+		return nameTH;
 	}
 
-	public void setNameTh(String nameTh) {
-		this.nameTh = nameTh;
+	public void setNameTH(String nameTH) {
+		this.nameTH = nameTH;
 	}
 
-	public String getLastNameTh() {
-		return lastNameTh;
+	public String getLastNameTH() {
+		return lastNameTH;
 	}
 
-	public void setLastNameTh(String lastNameTh) {
-		this.lastNameTh = lastNameTh;
+	public void setLastNameTH(String lastNameTH) {
+		this.lastNameTH = lastNameTH;
 	}
 
 	public Date getBirthDate() {
@@ -115,19 +151,10 @@ public class CustomerAttorneyView implements Serializable {
 		this.birthDate = birthDate;
 	}
 
-	public int getAge() {
-		return age;
-	}
-
-	public void setAge(int age) {
-		this.age = age;
-	}
-
 	public Gender getGender() {
 		if (gender == null)
-			return Gender.NA;
-		else
-			return gender;
+			gender = Gender.NA;
+		return gender;
 	}
 
 	public void setGender(Gender gender) {
@@ -254,20 +281,20 @@ public class CustomerAttorneyView implements Serializable {
 		this.spouseTitleId = spouseTitleId;
 	}
 
-	public String getSpouseNameTh() {
-		return spouseNameTh;
+	public String getSpouseNameTH() {
+		return spouseNameTH;
 	}
 
-	public void setSpouseNameTh(String spouseNameTh) {
-		this.spouseNameTh = spouseNameTh;
+	public void setSpouseNameTH(String spouseNameTH) {
+		this.spouseNameTH = spouseNameTH;
 	}
 
-	public String getSpouseLastNameTh() {
-		return spouseLastNameTh;
+	public String getSpouseLastNameTH() {
+		return spouseLastNameTH;
 	}
 
-	public void setSpouseLastNameTh(String spouseLastNameTh) {
-		this.spouseLastNameTh = spouseLastNameTh;
+	public void setSpouseLastNameTH(String spouseLastNameTH) {
+		this.spouseLastNameTH = spouseLastNameTH;
 	}
 
 	public int getFatherTitleId() {
@@ -278,20 +305,20 @@ public class CustomerAttorneyView implements Serializable {
 		this.fatherTitleId = fatherTitleId;
 	}
 
-	public String getFatherNameTh() {
-		return fatherNameTh;
+	public String getFatherNameTH() {
+		return fatherNameTH;
 	}
 
-	public void setFatherNameTh(String fatherNameTh) {
-		this.fatherNameTh = fatherNameTh;
+	public void setFatherNameTH(String fatherNameTH) {
+		this.fatherNameTH = fatherNameTH;
 	}
 
-	public String getFatherLastNameTh() {
-		return fatherLastNameTh;
+	public String getFatherLastNameTH() {
+		return fatherLastNameTH;
 	}
 
-	public void setFatherLastNameTh(String fatherLastNameTh) {
-		this.fatherLastNameTh = fatherLastNameTh;
+	public void setFatherLastNameTH(String fatherLastNameTH) {
+		this.fatherLastNameTH = fatherLastNameTH;
 	}
 
 	public int getMotherTitleId() {
@@ -302,20 +329,20 @@ public class CustomerAttorneyView implements Serializable {
 		this.motherTitleId = motherTitleId;
 	}
 
-	public String getMotherNameTh() {
-		return motherNameTh;
+	public String getMotherNameTH() {
+		return motherNameTH;
 	}
 
-	public void setMotherNameTh(String motherNameTh) {
-		this.motherNameTh = motherNameTh;
+	public void setMotherNameTH(String motherNameTH) {
+		this.motherNameTH = motherNameTH;
 	}
 
-	public String getMotherLastNameTh() {
-		return motherLastNameTh;
+	public String getMotherLastNameTH() {
+		return motherLastNameTH;
 	}
 
-	public void setMotherLastNameTh(String motherLastNameTh) {
-		this.motherLastNameTh = motherLastNameTh;
+	public void setMotherLastNameTH(String motherLastNameTH) {
+		this.motherLastNameTH = motherLastNameTH;
 	}
 
 	public String getHomePhoneNumber() {
@@ -350,37 +377,107 @@ public class CustomerAttorneyView implements Serializable {
 		this.mobile2 = mobile2;
 	}
 
-	public boolean isCanUpdateGeneralData() {
-		return canUpdateGeneralData;
+	public String getDisplayDocumentType() {
+		return displayDocumentType;
 	}
 
-	public void setCanUpdateGeneralData(boolean canUpdateGeneralData) {
-		this.canUpdateGeneralData = canUpdateGeneralData;
+	public void setDisplayDocumentType(String displayDocumentType) {
+		this.displayDocumentType = displayDocumentType;
 	}
 
-	public boolean isCanUpdateAddress() {
-		return canUpdateAddress;
+	public String getDisplayTitle() {
+		return displayTitle;
 	}
 
-	public void setCanUpdateAddress(boolean canUpdateAddress) {
-		this.canUpdateAddress = canUpdateAddress;
+	public void setDisplayTitle(String displayTitle) {
+		this.displayTitle = displayTitle;
 	}
 
-	public boolean isCanUpdateRelationInfo() {
-		return canUpdateRelationInfo;
+	public String getDisplayRace() {
+		return displayRace;
 	}
 
-	public void setCanUpdateRelationInfo(boolean canUpdateRelationInfo) {
-		this.canUpdateRelationInfo = canUpdateRelationInfo;
+	public void setDisplayRace(String displayRace) {
+		this.displayRace = displayRace;
 	}
 
-	public boolean isCanUpdateOthers() {
-		return canUpdateOthers;
+	public String getDisplayNationality() {
+		return displayNationality;
 	}
 
-	public void setCanUpdateOthers(boolean canUpdateOthers) {
-		this.canUpdateOthers = canUpdateOthers;
+	public void setDisplayNationality(String displayNationality) {
+		this.displayNationality = displayNationality;
+	}
+
+	public String getDisplayMaritalStatus() {
+		return displayMaritalStatus;
+	}
+
+	public void setDisplayMaritalStatus(String displayMaritalStatus) {
+		this.displayMaritalStatus = displayMaritalStatus;
+	}
+
+	public String getDisplaySpouseTitle() {
+		return displaySpouseTitle;
+	}
+
+	public void setDisplaySpouseTitle(String displaySpouseTitle) {
+		this.displaySpouseTitle = displaySpouseTitle;
+	}
+
+	public String getDisplayFatherTitle() {
+		return displayFatherTitle;
+	}
+
+	public void setDisplayFatherTitle(String displayFatherTitle) {
+		this.displayFatherTitle = displayFatherTitle;
+	}
+
+	public String getDisplayMotherTitle() {
+		return displayMotherTitle;
+	}
+
+	public void setDisplayMotherTitle(String displayMotherTitle) {
+		this.displayMotherTitle = displayMotherTitle;
+	}
+
+	public String getDisplayProvince() {
+		return displayProvince;
+	}
+
+	public void setDisplayProvince(String displayProvince) {
+		this.displayProvince = displayProvince;
+	}
+
+	public String getDisplayDistrict() {
+		return displayDistrict;
+	}
+
+	public void setDisplayDistrict(String displayDistrict) {
+		this.displayDistrict = displayDistrict;
+	}
+
+	public String getDisplaySubDistrict() {
+		return displaySubDistrict;
+	}
+
+	public void setDisplaySubDistrict(String displaySubDistrict) {
+		this.displaySubDistrict = displaySubDistrict;
+	}
+
+	public String getDisplayCountry() {
+		return displayCountry;
+	}
+
+	public void setDisplayCountry(String displayCountry) {
+		this.displayCountry = displayCountry;
 	}
 	
+	public boolean isJuristic() {
+		return juristic;
+	}
 	
+	public void setJuristic(boolean juristic) {
+		this.juristic = juristic;
+	}
 }

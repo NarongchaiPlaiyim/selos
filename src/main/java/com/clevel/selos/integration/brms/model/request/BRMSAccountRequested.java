@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 public class BRMSAccountRequested implements Serializable{
     private String productProgram;
-    private String proposeId;
+    private String creditDetailId;
     private String creditType;
     private BigDecimal limit;
     private int tenors;
@@ -23,12 +23,12 @@ public class BRMSAccountRequested implements Serializable{
         this.productProgram = productProgram;
     }
 
-    public String getProposeId() {
-        return proposeId;
+    public String getCreditDetailId() {
+        return creditDetailId;
     }
 
-    public void setProposeId(String proposeId) {
-        this.proposeId = proposeId;
+    public void setCreditDetailId(String creditDetailId) {
+        this.creditDetailId = creditDetailId;
     }
 
     public String getCreditType() {
@@ -75,7 +75,7 @@ public class BRMSAccountRequested implements Serializable{
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("productProgram", productProgram)
-                .append("proposeId", proposeId)
+                .append("creditDetailId", creditDetailId)
                 .append("creditType", creditType)
                 .append("limit", limit)
                 .append("tenors", tenors)
