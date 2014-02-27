@@ -491,14 +491,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     //TODO Call Brms to get data Propose Credit Info
     public void onRetrievePricingFee() {
-        log.info("onRetrievePricingFee ::workCaseId :::  {}", workCaseId);
+        log.debug("onRetrievePricingFee ::workCaseId :::  {}", workCaseId);
         if (!Util.isNull(workCaseId)) {
             try {
                 StandardPricingResponse standardPricingResponse = creditFacProposeControl.getPriceFeeInterest(workCaseId);
 
                 if (!Util.isNull(standardPricingResponse) && ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
-                    log.info("standardPricingResponse ::: {}", standardPricingResponse.getPricingInterest().toString());
-                    log.info("standardPricingResponse ::: {}", standardPricingResponse.getPricingFeeList().toString());
+                    log.debug("standardPricingResponse ::: {}", standardPricingResponse.getPricingInterest().toString());
+                    log.debug("standardPricingResponse ::: {}", standardPricingResponse.getPricingFeeList().toString());
                 }
             } catch (Exception e) {
                 log.error("Exception while get getPriceFeeInterest data!", e);
