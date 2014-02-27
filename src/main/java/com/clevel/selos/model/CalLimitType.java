@@ -1,7 +1,7 @@
 package com.clevel.selos.model;
 
 public enum CalLimitType {
-    LIMIT(1), OUTSTANDING(2), PCE(3);
+    LIMIT(0), OUTSTANDING(1), PCE(2);
     int value;
 
     CalLimitType(int value) {

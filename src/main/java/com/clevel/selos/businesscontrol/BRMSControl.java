@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.SELOS;
@@ -10,6 +11,7 @@ import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.GuarantorCategory;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestTypes;
+import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.*;
 import org.slf4j.Logger;
 
@@ -53,22 +55,25 @@ public class BRMSControl extends BusinessControl {
     private PrescreenCollateralDAO prescreenCollateralDAO;
     @Inject
     private PrescreenFacilityDAO prescreenFacilityDAO;
+    @Inject
+    StepDAO stepDAO;
 
     @Inject
-    public BRMSControl(){}
+    public BRMSControl() {
+    }
 
-    public StandardPricingResponse getPriceFeeInterest(long workCaseId){
-        BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId);
+    public StandardPricingResponse getPriceFeeInterest(long workCaseId,long stepId) {
+        BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId,stepId);
         StandardPricingResponse _returnPricingResponse = new StandardPricingResponse();
 
         StandardPricingResponse _tmpPricingIntResponse = brmsInterface.checkStandardPricingIntRule(applicationInfo);
         StandardPricingResponse _tmpPricingFeeResponse = brmsInterface.checkStandardPricingFeeRule(applicationInfo);
 
-        if(_tmpPricingIntResponse.getActionResult().equals(ActionResult.SUCCESS) && _tmpPricingFeeResponse.getActionResult().equals(ActionResult.SUCCESS)){
+        if (_tmpPricingIntResponse.getActionResult().equals(ActionResult.SUCCESS) && _tmpPricingFeeResponse.getActionResult().equals(ActionResult.SUCCESS)) {
             _returnPricingResponse.setActionResult(_tmpPricingFeeResponse.getActionResult());
             _returnPricingResponse.setPricingInterest(_tmpPricingIntResponse.getPricingInterest());
             _returnPricingResponse.setPricingFeeList(_tmpPricingFeeResponse.getPricingFeeList());
-        } else if(_tmpPricingFeeResponse.getActionResult().equals(ActionResult.FAILED)){
+        } else if (_tmpPricingFeeResponse.getActionResult().equals(ActionResult.FAILED)) {
             _returnPricingResponse.setActionResult(_tmpPricingFeeResponse.getActionResult());
             _returnPricingResponse.setReason(_tmpPricingFeeResponse.getReason());
         } else {
@@ -79,21 +84,22 @@ public class BRMSControl extends BusinessControl {
         return _returnPricingResponse;
     }
 
-    public StandardPricingResponse getPriceFee(long workCaseId){
-        BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId);
+    public StandardPricingResponse getPriceFee(long workCaseId,long stepId) {
+        BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId,stepId);
         StandardPricingResponse standardPricingResponse = brmsInterface.checkStandardPricingFeeRule(applicationInfo);
         return standardPricingResponse;
     }
 
-    public StandardPricingResponse getPricingInt(long workCaseId){
-        BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId);
+    public StandardPricingResponse getPricingInt(long workCaseId,long stepId) {
+        BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId,stepId);
         StandardPricingResponse response = brmsInterface.checkStandardPricingIntRule(applicationInfo);
         return response;
     }
 
-    private BRMSApplicationInfo getApplicationInfoForPricing(long workCaseId){
+    private BRMSApplicationInfo getApplicationInfoForPricing(long workCaseId,long stepId) {
         logger.debug("-- start getApplicationInfoForPricing with workCaseId {}", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+        Step step = stepDAO.findById(stepId);
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         BRMSApplicationInfo applicationInfo = new BRMSApplicationInfo();
         applicationInfo.setStatusCode(workCase.getStatus().getCode());
@@ -109,17 +115,26 @@ public class BRMSControl extends BusinessControl {
         BigDecimal numberOfIndvGuarantor = BigDecimal.ZERO;
         BigDecimal numberOfJurisGuarantor = BigDecimal.ZERO;
 
-        List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailDAO.findGuarantorByProposeType(workCaseId, workCase.getStep().getProposeType());
-        for(NewGuarantorDetail newGuarantorDetail : newGuarantorDetailList){
-            if(newGuarantorDetail.getGuarantorCategory().equals(GuarantorCategory.TCG)){
-                if(newGuarantorDetail.getTotalLimitGuaranteeAmount().compareTo(BigDecimal.ZERO) > 0){
-                    totalTCGGuaranteeAmount = totalTCGGuaranteeAmount.add(newGuarantorDetail.getTotalLimitGuaranteeAmount());
-                }
-            } else if(newGuarantorDetail.getGuarantorCategory().equals(GuarantorCategory.INDIVIDUAL)){
-                numberOfIndvGuarantor = numberOfIndvGuarantor.add(BigDecimal.ONE);
+        if (workCase.getStep() != null) {
 
-            } else if(newGuarantorDetail.getGuarantorCategory().equals(GuarantorCategory.JURISTIC)){
-                numberOfJurisGuarantor = numberOfJurisGuarantor.add(BigDecimal.ONE);
+            logger.debug("workCaseId :: {}", workCaseId);
+            logger.debug("workCase.getStep() :: {}", workCase.getStep());
+            logger.debug("workCase.getStep().getProposeType() :: {}", workCase.getStep().getProposeType());
+            logger.debug("step :: {}",step.getProposeType().value());
+
+//            List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailDAO.findGuarantorByProposeType(workCaseId, workCase.getStep().getProposeType());
+            List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailDAO.findGuarantorByProposeType(workCaseId, step.getProposeType());
+            for (NewGuarantorDetail newGuarantorDetail : newGuarantorDetailList) {
+                if (newGuarantorDetail.getGuarantorCategory().equals(GuarantorCategory.TCG)) {
+                    if (newGuarantorDetail.getTotalLimitGuaranteeAmount().compareTo(BigDecimal.ZERO) > 0) {
+                        totalTCGGuaranteeAmount = totalTCGGuaranteeAmount.add(newGuarantorDetail.getTotalLimitGuaranteeAmount());
+                    }
+                } else if (newGuarantorDetail.getGuarantorCategory().equals(GuarantorCategory.INDIVIDUAL)) {
+                    numberOfIndvGuarantor = numberOfIndvGuarantor.add(BigDecimal.ONE);
+
+                } else if (newGuarantorDetail.getGuarantorCategory().equals(GuarantorCategory.JURISTIC)) {
+                    numberOfJurisGuarantor = numberOfJurisGuarantor.add(BigDecimal.ONE);
+                }
             }
         }
 
@@ -131,17 +146,21 @@ public class BRMSControl extends BusinessControl {
         BigDecimal totalRedeemTransaction = BigDecimal.ZERO;
         BigDecimal totalMortgageValue = BigDecimal.ZERO;
         List<NewCollateral> newCollateralList = newCollateralDAO.findNewCollateral(workCaseId, workCase.getStep().getProposeType());
-        for(NewCollateral newCollateral : newCollateralList){
+        for (
+                NewCollateral newCollateral
+                : newCollateralList)
+
+        {
             List<NewCollateralHead> newCollateralHeadList = newCollateral.getNewCollateralHeadList();
-            for(NewCollateralHead newCollateralHead : newCollateralHeadList){
+            for (NewCollateralHead newCollateralHead : newCollateralHeadList) {
                 List<NewCollateralSub> newCollateralSubList = newCollateralHead.getNewCollateralSubList();
-                for(NewCollateralSub newCollateralSub : newCollateralSubList){
+                for (NewCollateralSub newCollateralSub : newCollateralSubList) {
                     List<NewCollateralSubMortgage> newCollateralSubMortgageList = newCollateralSub.getNewCollateralSubMortgageList();
-                    for(NewCollateralSubMortgage newCollateralSubMortgage : newCollateralSubMortgageList){
-                        if(newCollateralSubMortgage.getMortgageType() != null && newCollateralSubMortgage.getMortgageType().isRedeem()){
+                    for (NewCollateralSubMortgage newCollateralSubMortgage : newCollateralSubMortgageList) {
+                        if (newCollateralSubMortgage.getMortgageType() != null && newCollateralSubMortgage.getMortgageType().isRedeem()) {
                             totalRedeemTransaction = totalRedeemTransaction.add(BigDecimal.ONE);
                             break;
-                        } else if(newCollateralSubMortgage.getMortgageType().isMortgageFeeFlag()){
+                        } else if (newCollateralSubMortgage.getMortgageType().isMortgageFeeFlag()) {
                             totalMortgageValue = totalMortgageValue.add(newCollateralSub.getMortgageValue());
                             break;
                         }
@@ -149,24 +168,44 @@ public class BRMSControl extends BusinessControl {
                 }
             }
         }
+
         applicationInfo.setTotalRedeemTransaction(totalRedeemTransaction);
         applicationInfo.setTotalMortgageValue(totalMortgageValue);
 
         //Update Credit Type info
         NewCreditFacility newCreditFacility = creditFacilityDAO.findByWorkCaseId(workCaseId);
         BigDecimal discountFrontEndFeeRate = newCreditFacility.getFrontendFeeDOA();
-        if(workCase.getStep().getProposeType() == ProposeType.P){
+        if (workCase.getStep().
+
+                getProposeType()
+
+                == ProposeType.P)
+
+        {
             applicationInfo.setLoanRequestType(newCreditFacility.getLoanRequestType().getBrmsCode());
-        }
-        else if(workCase.getStep().getProposeType().equals(ProposeType.A)){
+        } else if (workCase.getStep().
+
+                getProposeType()
+
+                .
+
+                        equals(ProposeType.A)
+
+                )
+
+        {
             //TODO: To set Loan Request Type when Decision is complete.
         }
 
         BigDecimal totalApprovedCredit = BigDecimal.ZERO;
         List<NewCreditDetail> newCreditDetailList = newCreditDetailDAO.findNewCreditDetail(workCaseId, workCase.getStep().getProposeType());
         List<BRMSAccountRequested> accountRequestedList = new ArrayList();
-        for(NewCreditDetail newCreditDetail : newCreditDetailList){
-            if(newCreditDetail.getRequestType() == RequestTypes.NEW.value()){
+        for (
+                NewCreditDetail newCreditDetail
+                : newCreditDetailList)
+
+        {
+            if (newCreditDetail.getRequestType() == RequestTypes.NEW.value()) {
                 BRMSAccountRequested accountRequested = new BRMSAccountRequested();
 
                 accountRequested.setCreditDetailId(String.valueOf(newCreditDetail.getId()));
@@ -177,7 +216,7 @@ public class BRMSControl extends BusinessControl {
                 accountRequested.setFontEndFeeDiscountRate(discountFrontEndFeeRate);
                 accountRequestedList.add(accountRequested);
 
-                if(!newCreditDetail.getProductProgram().isBa())
+                if (!newCreditDetail.getProductProgram().isBa())
                     totalApprovedCredit = totalApprovedCredit.add(newCreditDetail.getLimit());
             }
         }
@@ -187,7 +226,7 @@ public class BRMSControl extends BusinessControl {
         return applicationInfo;
     }
 
-    public void getPrescreenResult(long workcasePrescreenId){
+    public void getPrescreenResult(long workcasePrescreenId) {
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workcasePrescreenId);
 
 

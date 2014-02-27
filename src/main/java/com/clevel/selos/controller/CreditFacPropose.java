@@ -11,11 +11,10 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.GuarantorCategory;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
-import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.TCG;
 import com.clevel.selos.model.view.*;
@@ -62,6 +61,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     Message exceptionMsg;
 
     private Long workCaseId;
+    private Long stepId;
 
     enum ModeForButton {ADD, EDIT}
 
@@ -249,6 +249,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         if (!Util.isNull(session.getAttribute("workCaseId"))) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             log.debug("workCaseId :: {} ", workCaseId);
+            stepId = Long.parseLong(session.getAttribute("stepId").toString());
+            log.info("preRender ::: 3.2 " + stepId);
+
         } else {
             log.debug("preRender ::: workCaseId is null.");
             FacesUtil.redirect("/site/inbox.jsf");
@@ -496,14 +499,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     //TODO Call Brms to get data Propose Credit Info
     public void onRetrievePricingFee() {
-        log.info("onRetrievePricingFee ::workCaseId :::  {}", workCaseId);
+        log.debug("onRetrievePricingFee ::workCaseId :::  {}", workCaseId);
         if (!Util.isNull(workCaseId)) {
             try {
-                StandardPricingResponse standardPricingResponse = creditFacProposeControl.getPriceFeeInterest(workCaseId);
+                StandardPricingResponse standardPricingResponse = creditFacProposeControl.getPriceFeeInterest(workCaseId,stepId);
 
                 if (!Util.isNull(standardPricingResponse) && ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
-                    log.info("standardPricingResponse ::: {}", standardPricingResponse.getPricingInterest().toString());
-                    log.info("standardPricingResponse ::: {}", standardPricingResponse.getPricingFeeList().toString());
+                    log.debug("standardPricingResponse ::: {}", standardPricingResponse.getPricingInterest().toString());
+                    log.debug("standardPricingResponse ::: {}", standardPricingResponse.getPricingFeeList().toString());
                 }
             } catch (Exception e) {
                 log.error("Exception while get getPriceFeeInterest data!", e);
@@ -729,8 +732,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 log.info("creditDetailAdd :getInstallment: {}", creditDetailAdd.getInstallment());
                 newCreditFacilityView.getNewCreditDetailViewList().add(creditDetailAdd);
                 log.info("seq of credit after add proposeCredit :: {}", seq);
-            }
-            else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
+            } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
                 log.info("onEditRecord ::: mode : {}", modeForButton);
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setProductProgramView(productProgramView);
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setCreditTypeView(creditTypeView);
@@ -1466,6 +1468,12 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 CustomerInfoView customerInfoView = customerInfoControl.getCustomerById(newGuarantorDetailView.getGuarantorName());
                 NewGuarantorDetailView guarantorDetailAdd = new NewGuarantorDetailView();
                 guarantorDetailAdd.setGuarantorName(customerInfoView);
+
+                /*if(customerInfoView.get){
+
+                }*/
+                guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
+
                 guarantorDetailAdd.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
 
                 if (newGuarantorDetailView.getProposeCreditDetailViewList().size() > 0) {
@@ -1607,26 +1615,26 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.debug("onSaveCreditFacPropose ::: ModeForDB  {}", modeForDB);
 //        onSetInUsedProposeCreditDetail();
         try {
-//            if ((newCreditFacilityView.getInvestedCountry().getId() != 0)
-//                    && (newCreditFacilityView.getLoanRequestType().getId() != 0)
-//                    && (newCreditFacilityView.getNewCreditDetailViewList().size() > 0)
-//                    && (newCreditFacilityView.getNewCollateralViewList().size() > 0)
-//                    && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0)
-//                    && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
-            //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
-            creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
-            creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
-            messageHeader = msg.get("app.header.save.success");
-            message = msg.get("app.propose.response.save.success");
-            exSummaryControl.calForCreditFacility(workCaseId);
-            onCreation();
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            notRetrivePricing = true;
-//            } else {
-//                messageHeader = msg.get("app.propose.response.cannot.save");
-//                message = msg.get("app.propose.response.desc.cannot.save");
-//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-//            }
+            if ((newCreditFacilityView.getInvestedCountry().getId() != 0)
+                    && (newCreditFacilityView.getLoanRequestType().getId() != 0)
+                    && (newCreditFacilityView.getNewCreditDetailViewList().size() > 0)
+                    && (newCreditFacilityView.getNewCollateralViewList().size() > 0)
+                    && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0)
+                    && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
+                //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
+                creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
+                creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
+                messageHeader = msg.get("app.header.save.success");
+                message = msg.get("app.propose.response.save.success");
+                exSummaryControl.calForCreditFacility(workCaseId);
+                onCreation();
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                notRetrivePricing = false;
+            } else {
+                messageHeader = msg.get("app.propose.response.cannot.save");
+                message = msg.get("app.propose.response.desc.cannot.save");
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.propose.response.save.failed");

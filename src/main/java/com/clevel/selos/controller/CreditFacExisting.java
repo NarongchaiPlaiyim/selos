@@ -8,6 +8,7 @@ import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BorrowerType;
+import com.clevel.selos.model.CalLimitType;
 import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.master.*;
@@ -895,67 +896,167 @@ public class CreditFacExisting implements Serializable {
     }
 
     private void calTotalCreditBorrower(){
-        double totalBorrowerCom =0;
-        double totalBorrowerRetail =0;
-        double totalBorrowerRlos =0;
-        double limitRow;
+        BigDecimal totalBorrowerCom = BigDecimal.ZERO;
+        BigDecimal totalBorrowerRetail = BigDecimal.ZERO;
+        BigDecimal totalBorrowerRlos = BigDecimal.ZERO;
 
         if(existingCreditFacilityView.getBorrowerComExistingCredit() != null){
             for(int i=0;i< existingCreditFacilityView.getBorrowerComExistingCredit().size();i++){
-                limitRow = existingCreditFacilityView.getBorrowerComExistingCredit().get(i).getLimit().doubleValue();
-                totalBorrowerCom += limitRow;
+                ExistingCreditDetailView existingCreditDetailViewTmp = existingCreditFacilityView.getBorrowerComExistingCredit().get(i);
+                if(existingCreditDetailViewTmp.getExistCreditTypeView()!=null && existingCreditDetailViewTmp.getExistCreditTypeView().getId()!=0){
+                    switch (CalLimitType.getCalLimitType(existingCreditDetailViewTmp.getExistCreditTypeView().getCalLimitType())) {
+                        case LIMIT:
+                            totalBorrowerCom = totalBorrowerCom.add(existingCreditDetailViewTmp.getLimit());
+                            break;
+                        case OUTSTANDING:
+                            totalBorrowerCom = totalBorrowerCom.add(existingCreditDetailViewTmp.getOutstanding());
+                            break;
+                        case PCE:
+                            totalBorrowerCom = totalBorrowerCom.add(existingCreditDetailViewTmp.getPceLimit());
+                            break;
+                        default:
+                            totalBorrowerCom = totalBorrowerCom.add(existingCreditDetailViewTmp.getLimit());
+                            break;
+                    }
+                } else {
+                    totalBorrowerCom = totalBorrowerCom.add(existingCreditDetailViewTmp.getLimit());
+                }
             }
         }
 
         if(existingCreditFacilityView.getBorrowerRetailExistingCredit() != null){
             for(int i=0;i< existingCreditFacilityView.getBorrowerRetailExistingCredit().size();i++){
-                limitRow = existingCreditFacilityView.getBorrowerRetailExistingCredit().get(i).getLimit().doubleValue();
-                totalBorrowerRetail += limitRow;
+                ExistingCreditDetailView existingCreditDetailViewTmp = existingCreditFacilityView.getBorrowerRetailExistingCredit().get(i);
+                if(existingCreditDetailViewTmp.getExistCreditTypeView()!=null && existingCreditDetailViewTmp.getExistCreditTypeView().getId()!=0){
+                    switch (CalLimitType.getCalLimitType(existingCreditDetailViewTmp.getExistCreditTypeView().getCalLimitType())) {
+                        case LIMIT:
+                            totalBorrowerRetail = totalBorrowerRetail.add(existingCreditDetailViewTmp.getLimit());
+                            break;
+                        case OUTSTANDING:
+                            totalBorrowerRetail = totalBorrowerRetail.add(existingCreditDetailViewTmp.getOutstanding());
+                            break;
+                        case PCE:
+                            totalBorrowerRetail = totalBorrowerRetail.add(existingCreditDetailViewTmp.getPceLimit());
+                            break;
+                        default:
+                            totalBorrowerRetail = totalBorrowerRetail.add(existingCreditDetailViewTmp.getLimit());
+                            break;
+                    }
+                } else {
+                    totalBorrowerRetail = totalBorrowerRetail.add(existingCreditDetailViewTmp.getLimit());
+                }
             }
         }
 
         if(existingCreditFacilityView.getBorrowerAppInRLOSCredit() != null){
             for(int i=0;i< existingCreditFacilityView.getBorrowerAppInRLOSCredit().size();i++){
-                limitRow = existingCreditFacilityView.getBorrowerAppInRLOSCredit().get(i).getLimit().doubleValue();
-                totalBorrowerRlos += limitRow;
+                ExistingCreditDetailView existingCreditDetailViewTmp = existingCreditFacilityView.getBorrowerAppInRLOSCredit().get(i);
+                if(existingCreditDetailViewTmp.getExistCreditTypeView()!=null && existingCreditDetailViewTmp.getExistCreditTypeView().getId()!=0){
+                    switch (CalLimitType.getCalLimitType(existingCreditDetailViewTmp.getExistCreditTypeView().getCalLimitType())) {
+                        case LIMIT:
+                            totalBorrowerRlos = totalBorrowerRlos.add(existingCreditDetailViewTmp.getLimit());
+                            break;
+                        case OUTSTANDING:
+                            totalBorrowerRlos = totalBorrowerRlos.add(existingCreditDetailViewTmp.getOutstanding());
+                            break;
+                        case PCE:
+                            totalBorrowerRlos = totalBorrowerRlos.add(existingCreditDetailViewTmp.getPceLimit());
+                            break;
+                        default:
+                            totalBorrowerRlos = totalBorrowerRlos.add(existingCreditDetailViewTmp.getLimit());
+                            break;
+                    }
+                } else {
+                    totalBorrowerRlos = totalBorrowerRlos.add(existingCreditDetailViewTmp.getLimit());
+                }
             }
         }
-        existingCreditFacilityView.setTotalBorrowerComLimit( new BigDecimal(totalBorrowerCom).setScale(2, RoundingMode.HALF_UP));
-        existingCreditFacilityView.setTotalBorrowerRetailLimit( new BigDecimal(totalBorrowerRetail).setScale(2, RoundingMode.HALF_UP));
-        existingCreditFacilityView.setTotalBorrowerAppInRLOSLimit( new BigDecimal(totalBorrowerRlos).setScale(2, RoundingMode.HALF_UP));
+        existingCreditFacilityView.setTotalBorrowerComLimit(totalBorrowerCom);
+        existingCreditFacilityView.setTotalBorrowerRetailLimit(totalBorrowerRetail);
+        existingCreditFacilityView.setTotalBorrowerAppInRLOSLimit(totalBorrowerRlos);
         calTotalCreditGroup();
 
     }
 
     private void calTotalCreditRelated(){
-        double totalRelatedCom =0;
-        double totalRelatedRetail =0;
-        double totalRelatedRlos =0;
-        double limitRow;
+        BigDecimal totalRelatedCom = BigDecimal.ZERO;
+        BigDecimal totalRelatedRetail = BigDecimal.ZERO;
+        BigDecimal totalRelatedRlos = BigDecimal.ZERO;
 
         if(existingCreditFacilityView.getRelatedComExistingCredit() != null){
             for(int i=0;i< existingCreditFacilityView.getRelatedComExistingCredit().size();i++){
-                limitRow = existingCreditFacilityView.getRelatedComExistingCredit().get(i).getLimit().doubleValue();
-                totalRelatedCom += limitRow;
+                ExistingCreditDetailView existingCreditDetailViewTmp = existingCreditFacilityView.getRelatedComExistingCredit().get(i);
+                if(existingCreditDetailViewTmp.getExistCreditTypeView()!=null && existingCreditDetailViewTmp.getExistCreditTypeView().getId()!=0){
+                    switch (CalLimitType.getCalLimitType(existingCreditDetailViewTmp.getExistCreditTypeView().getCalLimitType())) {
+                        case LIMIT:
+                            totalRelatedCom = totalRelatedCom.add(existingCreditDetailViewTmp.getLimit());
+                            break;
+                        case OUTSTANDING:
+                            totalRelatedCom = totalRelatedCom.add(existingCreditDetailViewTmp.getOutstanding());
+                            break;
+                        case PCE:
+                            totalRelatedCom = totalRelatedCom.add(existingCreditDetailViewTmp.getPceLimit());
+                            break;
+                        default:
+                            totalRelatedCom = totalRelatedCom.add(existingCreditDetailViewTmp.getLimit());
+                            break;
+                    }
+                } else {
+                    totalRelatedCom = totalRelatedCom.add(existingCreditDetailViewTmp.getLimit());
+                }
             }
         }
 
         if(existingCreditFacilityView.getRelatedRetailExistingCredit() != null){
             for(int i=0;i< existingCreditFacilityView.getRelatedRetailExistingCredit().size();i++){
-                limitRow = existingCreditFacilityView.getRelatedRetailExistingCredit().get(i).getLimit().doubleValue();
-                totalRelatedRetail += limitRow;
+                ExistingCreditDetailView existingCreditDetailViewTmp = existingCreditFacilityView.getRelatedRetailExistingCredit().get(i);
+                if(existingCreditDetailViewTmp.getExistCreditTypeView()!=null && existingCreditDetailViewTmp.getExistCreditTypeView().getId()!=0){
+                    switch (CalLimitType.getCalLimitType(existingCreditDetailViewTmp.getExistCreditTypeView().getCalLimitType())) {
+                        case LIMIT:
+                            totalRelatedRetail = totalRelatedRetail.add(existingCreditDetailViewTmp.getLimit());
+                            break;
+                        case OUTSTANDING:
+                            totalRelatedRetail = totalRelatedRetail.add(existingCreditDetailViewTmp.getOutstanding());
+                            break;
+                        case PCE:
+                            totalRelatedRetail = totalRelatedRetail.add(existingCreditDetailViewTmp.getPceLimit());
+                            break;
+                        default:
+                            totalRelatedRetail = totalRelatedRetail.add(existingCreditDetailViewTmp.getLimit());
+                            break;
+                    }
+                } else {
+                    totalRelatedRetail = totalRelatedRetail.add(existingCreditDetailViewTmp.getLimit());
+                }
             }
         }
 
         if(existingCreditFacilityView.getRelatedAppInRLOSCredit() != null){
             for(int i=0;i< existingCreditFacilityView.getRelatedAppInRLOSCredit().size();i++){
-                limitRow = existingCreditFacilityView.getRelatedAppInRLOSCredit().get(i).getLimit().doubleValue();
-                totalRelatedRlos += limitRow;
+                ExistingCreditDetailView existingCreditDetailViewTmp = existingCreditFacilityView.getRelatedAppInRLOSCredit().get(i);
+                if(existingCreditDetailViewTmp.getExistCreditTypeView()!=null && existingCreditDetailViewTmp.getExistCreditTypeView().getId()!=0){
+                    switch (CalLimitType.getCalLimitType(existingCreditDetailViewTmp.getExistCreditTypeView().getCalLimitType())) {
+                        case LIMIT:
+                            totalRelatedRlos = totalRelatedRlos.add(existingCreditDetailViewTmp.getLimit());
+                            break;
+                        case OUTSTANDING:
+                            totalRelatedRlos = totalRelatedRlos.add(existingCreditDetailViewTmp.getOutstanding());
+                            break;
+                        case PCE:
+                            totalRelatedRlos = totalRelatedRlos.add(existingCreditDetailViewTmp.getPceLimit());
+                            break;
+                        default:
+                            totalRelatedRlos = totalRelatedRlos.add(existingCreditDetailViewTmp.getLimit());
+                            break;
+                    }
+                } else {
+                    totalRelatedRlos = totalRelatedRlos.add(existingCreditDetailViewTmp.getLimit());
+                }
             }
         }
-        existingCreditFacilityView.setTotalRelatedComLimit( new BigDecimal(totalRelatedCom).setScale(2, RoundingMode.HALF_UP));
-        existingCreditFacilityView.setTotalRelatedRetailLimit( new BigDecimal(totalRelatedRetail).setScale(2, RoundingMode.HALF_UP));
-        existingCreditFacilityView.setTotalRelatedAppInRLOSLimit( new BigDecimal(totalRelatedRlos).setScale(2, RoundingMode.HALF_UP));
+        existingCreditFacilityView.setTotalRelatedComLimit(totalRelatedCom);
+        existingCreditFacilityView.setTotalRelatedRetailLimit(totalRelatedRetail);
+        existingCreditFacilityView.setTotalRelatedAppInRLOSLimit(totalRelatedRlos);
         calTotalCreditGroup();
 
     }
@@ -1156,42 +1257,41 @@ public class CreditFacExisting implements Serializable {
 
         log.info("onEditExistingCollateral 2 ");
 
-        int tempSeq =0;
         List<ExistingCreditTypeDetailView> existingCreditTypeDetailList;
         if(typeOfListCollateral.equals("borrower")){
             log.info("onEditExistingCollateral 3 b ");
+            canSaveBorrowerCol = true;
             existingCreditTypeDetailList = findBorrowerCreditFacility();
             existingCollateralDetailView.setExistingCreditTypeDetailViewList(existingCreditTypeDetailList);
 
             if(selectCollateralDetail.getExistingCreditTypeDetailViewList()!=null && selectCollateralDetail.getExistingCreditTypeDetailViewList().size()>0){
                 for (int i = 0; i < selectCollateralDetail.getExistingCreditTypeDetailViewList().size(); i++) {
-                    for (int j = tempSeq; j < existingCreditTypeDetailList.size(); j++) {
+                    for (int j = 0; j < existingCreditTypeDetailList.size(); j++) {
                         log.info("creditType at " + j + " seq is     " + existingCreditTypeDetailList.get(j).getNo());
 
                         if (selectCollateralDetail.getExistingCreditTypeDetailViewList().get(i).getNo() == existingCreditTypeDetailList.get(j).getNo()) {
                             existingCollateralDetailView.getExistingCreditTypeDetailViewList().get(j).setNoFlag(true);
-                            tempSeq = j;
+                            break;
                         }
-                        continue;
                     }
                 }
             }
 
         }else  if(typeOfListCollateral.equals("related")){
             log.info("onEditExistingCollateral 3 r ");
+            canSaveRelatedCol = true;
             existingCreditTypeDetailList = findRelatedCreditFacility();
             existingCollateralDetailView.setExistingCreditTypeDetailViewList(existingCreditTypeDetailList);
 
             if(selectCollateralDetail.getExistingCreditTypeDetailViewList()!=null && selectCollateralDetail.getExistingCreditTypeDetailViewList().size()>0){
                 for (int i = 0; i < selectCollateralDetail.getExistingCreditTypeDetailViewList().size(); i++) {
-                    for (int j = tempSeq; j < existingCreditTypeDetailList.size(); j++) {
+                    for (int j = 0; j < existingCreditTypeDetailList.size(); j++) {
                         log.info("creditType at " + j + " seq is     " + existingCreditTypeDetailList.get(j).getNo());
 
                         if (selectCollateralDetail.getExistingCreditTypeDetailViewList().get(i).getNo() == existingCreditTypeDetailList.get(j).getNo()) {
                             existingCollateralDetailView.getExistingCreditTypeDetailViewList().get(j).setNoFlag(true);
-                            tempSeq = j;
+                            break;
                         }
-                        continue;
                     }
                 }
             }
@@ -1261,7 +1361,7 @@ public class CreditFacExisting implements Serializable {
                 }
                 existingCreditFacilityView.getBorrowerCollateralList().add(existingCollateralDetailViewAdd);
                 //borrowerExistingCollateralDetailViewList.add(existingCollateralDetailViewAdd);
-                onSetRowNoCreditTypeDetail(existingCollateralDetailViewAdd.getExistingCreditTypeDetailViewList());
+                //onSetRowNoCreditTypeDetail(existingCollateralDetailViewAdd.getExistingCreditTypeDetailViewList());
 
             }else if(typeOfListCollateral.equals("related")){
                 if(existingCreditFacilityView.getRelatedCollateralList()==null){
@@ -1279,7 +1379,7 @@ public class CreditFacExisting implements Serializable {
                 }
                 existingCreditFacilityView.getRelatedCollateralList().add(existingCollateralDetailViewAdd);
                 //relatedExistingCollateralDetailViewList.add(existingCollateralDetailViewAdd);
-                onSetRowNoCreditTypeDetail(existingCollateralDetailViewAdd.getExistingCreditTypeDetailViewList());
+                //onSetRowNoCreditTypeDetail(existingCollateralDetailViewAdd.getExistingCreditTypeDetailViewList());
             }
         }else if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)){
 
@@ -1338,7 +1438,7 @@ public class CreditFacExisting implements Serializable {
                 for (int l=0;l<hashBorrower.size();l++){
                     log.info("hashBorrower.get(j) in use   :  "+ l + " is   " +hashBorrower.get(l+1).toString());
                 }
-                onSetRowNoCreditTypeDetail(borrowerCollateralDetailViewRow.getExistingCreditTypeDetailViewList());
+                //onSetRowNoCreditTypeDetail(borrowerCollateralDetailViewRow.getExistingCreditTypeDetailViewList());
                 existingCreditFacilityView.getBorrowerCollateralList().remove(rowIndex);
                 existingCreditFacilityView.getBorrowerCollateralList().add(rowIndex,borrowerCollateralDetailViewRow);
                 //existingCreditFacilityView.getBorrowerCollateralList().get(rowIndex).setExistingCreditTypeDetailViewList(existingCollateralDetailView.getExistingCreditTypeDetailViewList());
@@ -1397,7 +1497,7 @@ public class CreditFacExisting implements Serializable {
                 for (int l=0;l<hashRelated.size();l++){
                     log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l+1).toString());
                 }
-                onSetRowNoCreditTypeDetail(relatedCollateralDetailViewRow.getExistingCreditTypeDetailViewList());
+                //onSetRowNoCreditTypeDetail(relatedCollateralDetailViewRow.getExistingCreditTypeDetailViewList());
                 existingCreditFacilityView.getRelatedCollateralList().remove(rowIndex);
                 existingCreditFacilityView.getRelatedCollateralList().add(rowIndex,relatedCollateralDetailViewRow);
                 //relatedCollateralDetailViewRow.setExistingCreditTypeDetailViewList(existingCollateralDetailView.getExistingCreditTypeDetailViewList());
@@ -1519,6 +1619,7 @@ public class CreditFacExisting implements Serializable {
             ///log.info("selectGuarantorDetail is " + selectGuarantorDetail.toString());
         }
 
+        canSaveGarantor = true;
         modeForButton = ModeForButton.EDIT;
         existingGuarantorDetailView = new ExistingGuarantorDetailView();
 
@@ -1529,22 +1630,20 @@ public class CreditFacExisting implements Serializable {
         existingGuarantorDetailView.setGuarantorName(selectGuarantorDetail.getGuarantorName());
         existingGuarantorDetailView.setTotalLimitGuaranteeAmount(selectGuarantorDetail.getTotalLimitGuaranteeAmount());
 
-        int tempSeq =0;
         List<ExistingCreditTypeDetailView> existingCreditTypeDetailList;
         existingCreditTypeDetailList = findBorrowerCreditFacility();
         existingGuarantorDetailView.setExistingCreditTypeDetailViewList(existingCreditTypeDetailList);
 
         if(selectGuarantorDetail.getExistingCreditTypeDetailViewList()!=null && selectGuarantorDetail.getExistingCreditTypeDetailViewList().size()>0){
             for (int i = 0; i < selectGuarantorDetail.getExistingCreditTypeDetailViewList().size(); i++) {
-                for (int j = tempSeq; j < existingCreditTypeDetailList.size(); j++) {
+                for (int j=0; j < existingCreditTypeDetailList.size(); j++) {
                     log.info("creditType at " + j + " seq is     " + existingCreditTypeDetailList.get(j).getNo());
 
                     if (selectGuarantorDetail.getExistingCreditTypeDetailViewList().get(i).getNo() == existingCreditTypeDetailList.get(j).getNo()) {
                         existingGuarantorDetailView.getExistingCreditTypeDetailViewList().get(j).setNoFlag(true);
                         existingGuarantorDetailView.getExistingCreditTypeDetailViewList().get(j).setGuaranteeAmount(selectGuarantorDetail.getExistingCreditTypeDetailViewList().get(i).getGuaranteeAmount());
-                        tempSeq = j;
+                        break;
                     }
-                    continue;
                 }
             }
         }
@@ -1598,7 +1697,7 @@ public class CreditFacExisting implements Serializable {
             }
             borrowerExistingGuarantorDetailViewList.add(existingGuarantorDetailViewAdd);
             existingCreditFacilityView.setBorrowerGuarantorList(borrowerExistingGuarantorDetailViewList);
-            onSetRowNoCreditTypeDetail(existingGuarantorDetailViewAdd.getExistingCreditTypeDetailViewList());
+            //onSetRowNoCreditTypeDetail(existingGuarantorDetailViewAdd.getExistingCreditTypeDetailViewList());
         }else if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)){
             ExistingGuarantorDetailView existingGuarantorDetailViewOnRow = borrowerExistingGuarantorDetailViewList.get(rowIndex);
             existingGuarantorDetailViewOnRow.setExistingCreditTypeDetailViewList(new ArrayList<ExistingCreditTypeDetailView>());
@@ -1655,7 +1754,7 @@ public class CreditFacExisting implements Serializable {
             }
             //existingCreditFacilityView.getBorrowerGuarantorList().get(rowIndex).setExistingCreditTypeDetailViewList(existingCollateralDetailView.getExistingCreditTypeDetailViewList());
             existingCreditFacilityView.setBorrowerGuarantorList(borrowerExistingGuarantorDetailViewList);
-            onSetRowNoCreditTypeDetail(existingGuarantorDetailViewOnRow.getExistingCreditTypeDetailViewList());
+            //onSetRowNoCreditTypeDetail(existingGuarantorDetailViewOnRow.getExistingCreditTypeDetailViewList());
 
 
         }else {
