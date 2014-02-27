@@ -361,19 +361,19 @@
 
                                                 </p:columnGroup>
 
-                                                <p:column styleClass="center" style="vertical-align:top;">
+                                                <p:column styleClass="left top">
                                                     <h:outputText value="#{conditionDetailItem.no}"/>
                                                 </p:column>
 
-                                                <p:column styleClass="center" style="vertical-align:top; max-width: 372px; white-space: pre-wrap!important;">
+                                                <p:column styleClass="left top" style="max-width: 372px; white-space: pre-wrap!important;">
                                                     <h:outputText value="#{conditionDetailItem.loanType}"/>
                                                 </p:column>
 
-                                                <p:column styleClass="center" style="vertical-align:top; max-width: 771px; white-space: pre-wrap!important;">
+                                                <p:column styleClass="left top" style="max-width: 771px; white-space: pre-wrap!important;">
                                                     <h:outputText value="#{conditionDetailItem.conditionDesc}"/>
                                                 </p:column>
 
-                                                <p:column styleClass="center">
+                                                <p:column styleClass="top">
                                                     <p:commandButton title="Remove"
                                                                      icon="ui-icon-trash"
                                                                      oncomplete="confirmDeleteConditionDetailDlg.show()">
@@ -411,49 +411,49 @@
 
                                                     <!--Data dtCommercialCreditborrowerPerson-->
                                                 </p:columnGroup>
-                                                <p:column headerText="">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{borrowerRetailCredit.no}"></p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{borrowerRetailCredit.accountName}"/><br/>
                                                     <p:outputLabel value="Acc No.: #{borrowerRetailCredit.accountNumber}"/> Suff. <p:outputLabel value="#{borrowerRetailCredit.accountSuf}"/><br/>
                                                     <p:outputLabel value="Acc Status: #{borrowerRetailCredit.existAccountStatus.description}" />
                                                 </p:column>
 
-                                                <p:column headerText="">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{borrowerRetailCredit.existProductProgramView.name}"></p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{borrowerRetailCredit.existCreditTypeView.name}"></p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="" style="text-align: left">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="Product: #{borrowerRetailCredit.productCode}" /><br/>
                                                     <p:outputLabel value="Project: #{borrowerRetailCredit.projectCode}" />
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{borrowerRetailCredit.limit}">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{borrowerRetailCredit.outstanding}">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{borrowerRetailCredit.installment}">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{borrowerRetailCredit.intFeePercent}">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{borrowerRetailCredit.tenor}"/>
                                                 </p:column>
                                                 <p:column headerText="">
@@ -508,49 +508,49 @@
 
                                                     <!--Data dtCommercialCreditborrowerPerson-->
                                                 </p:columnGroup>
-                                                <p:column headerText="">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{borrowerRLOSCredit.no}"></p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{borrowerRLOSCredit.accountName}"/><br/>
                                                     <p:outputLabel value="Acc No.: #{borrowerRLOSCredit.accountNumber}"/> Suff. <p:outputLabel value="#{borrowerRLOSCredit.accountSuf}"/><br/>
                                                     <p:outputLabel value="Acc Status: #{borrowerRLOSCredit.accountStatus.description}" />
                                                 </p:column>
 
-                                                <p:column headerText="">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{borrowerRLOSCredit.existProductProgramView.name}"></p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{borrowerRLOSCredit.existCreditTypeView.name}"></p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="" style="text-align: left;">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="Product: #{borrowerRLOSCredit.productCode}"/><br/>
                                                     <p:outputLabel value="Project: #{borrowerRLOSCredit.projectCode}"/>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{borrowerRLOSCredit.limit}">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{borrowerRLOSCredit.outstanding}">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{borrowerRLOSCredit.installment}">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{borrowerRLOSCredit.intFeePercent}">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{borrowerRLOSCredit.tenor}"/>
                                                 </p:column>
                                                 <p:column/>
@@ -915,49 +915,49 @@
 
                                                     <!--Data dtCommercialCreditrelatedPerson-->
                                                 </p:columnGroup>
-                                                <p:column headerText="">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{relatedRetailCredit.no}"></p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{relatedRetailCredit.accountName}"/><br/>
                                                     <p:outputLabel value="Acc No.: #{relatedRetailCredit.accountNumber}"/> Suff. <p:outputLabel value="#{relatedRetailCredit.accountSuf}"/><br/>
                                                     <p:outputLabel value="Acc Status: #{relatedRetailCredit.accountStatus.description}" />
                                                 </p:column>
 
-                                                <p:column headerText="">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{relatedRetailCredit.existProductProgramView.name}"></p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{relatedRetailCredit.existCreditTypeView.name}"></p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="" style="text-align: left">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="Product: #{relatedRetailCredit.productCode}" /><br/>
                                                     <p:outputLabel value="Project: #{relatedRetailCredit.projectCode}" />
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{relatedRetailCredit.limit}" >
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{relatedRetailCredit.outstanding}" >
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{relatedRetailCredit.installment}" >
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{relatedRetailCredit.intFeePercent}" >
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{relatedRetailCredit.tenor}" />
                                                 </p:column>
                                                 <p:column/>
@@ -1007,49 +1007,49 @@
 
                                                     <!--Data dtCommercialCreditRelatedPerson-->
                                                 </p:columnGroup>
-                                                <p:column headerText="">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{relatedRLOSCredit.no}"></p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{relatedRLOSCredit.accountName}"/><br/>
                                                     <p:outputLabel value="Acc No.: #{relatedRLOSCredit.accountNumber}"/> Suff. <p:outputLabel value="#{relatedRLOSCredit.accountSuf}"/><br/>
                                                     <p:outputLabel value="Acc Status: #{relatedRLOSCredit.accountStatus.description}" />
                                                 </p:column>
 
-                                                <p:column headerText="">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{relatedRLOSCredit.existProductProgramView.name}"></p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{relatedRLOSCredit.existCreditTypeView.name}"></p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="" style="text-align: left">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="Product: #{relatedRLOSCredit.productCode}" /><br/>
                                                     <p:outputLabel value="Project: #{relatedRLOSCredit.projectCode}" />
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{relatedRLOSCredit.limit}" >
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{relatedRLOSCredit.outstanding}" >
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{relatedRLOSCredit.installment}" >
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{relatedRLOSCredit.intFeePercent}" >
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align: right">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{relatedRLOSCredit.tenor}" />
                                                 </p:column>
                                                 <p:column/>
@@ -1251,6 +1251,7 @@
                                                              update=":existingCollateralBorrowerDlgForm"
                                                              oncomplete="existingCollateralBorrowerDlg.show();">
                                                 <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfListCollateral}" />
+                                                <p:resetInput target=":existingCollateralBorrowerDlgForm"/>
                                             </p:commandButton>
 
                                         </td>
@@ -1314,7 +1315,7 @@
                                                     </div>
                                                 </p:column>
 
-                                                <p:column headerText="" style="vertical-align: top;">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:panel rendered="#{not empty borrowerCollateral.existingCreditTypeDetailViewList and fn:length(borrowerCollateral.existingCreditTypeDetailViewList) gt 0}" styleClass="panel">
                                                         <ui:repeat value="#{borrowerCollateral.existingCreditTypeDetailViewList}" var="creditFacility">
                                                             <p:outputLabel value="#{creditFacility.accountName}"/><br/>
@@ -1324,23 +1325,23 @@
                                                     </p:panel>
                                                 </p:column>
 
-                                                <p:column headerText="" style="vertical-align: top;">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{borrowerCollateral.mortgageType.mortgage}"></p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="" style="text-align:right; vertical-align: top;">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{borrowerCollateral.appraisalValue}">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="" style="text-align:right; vertical-align: top;">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{borrowerCollateral.mortgageValue}">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="" style="vertical-align: top;">
+                                                <p:column headerText="" styleClass="top">
                                                     <p:commandButton icon="ui-icon-pencil"
                                                                      action="#{creditFacExisting.onEditExistingCollateral()}"
                                                                      process="@this"
@@ -1403,6 +1404,7 @@
                                                               update=":existingCollateralRelatedDlgForm"
                                                               oncomplete="existingCollateralRelatedDlg.show();">
                                                 <f:setPropertyActionListener value="related"  target="#{creditFacExisting.typeOfListCollateral}" />
+                                                <p:resetInput target=":existingCollateralRelatedDlgForm"/>
                                             </p:commandButton>
 
                                         </td>
@@ -1466,7 +1468,7 @@
                                                     </div>
                                                 </p:column>
 
-                                                <p:column headerText="" style="vertical-align: top;">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:panel rendered="#{not empty relatedCollateral.existingCreditTypeDetailViewList and fn:length(relatedCollateral.existingCreditTypeDetailViewList) gt 0}" styleClass="panel">
                                                         <ui:repeat value="#{relatedCollateral.existingCreditTypeDetailViewList}" var="creditFacility">
                                                             <p:outputLabel value="#{creditFacility.accountName}"/><br/>
@@ -1476,23 +1478,23 @@
                                                     </p:panel>
                                                 </p:column>
 
-                                                <p:column headerText="" style="vertical-align: top;">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{relatedCollateral.mortgageType.mortgage}"></p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="" style="text-align:right; vertical-align: top;">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{relatedCollateral.appraisalValue}">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="" style="text-align:right; vertical-align: top;">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{relatedCollateral.mortgageValue}">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
 
-                                                <p:column headerText="" style="vertical-align: top;">
+                                                <p:column headerText="" styleClass="top">
                                                     <p:commandButton icon="ui-icon-pencil"
                                                                      action="#{creditFacExisting.onEditExistingCollateral()}"
                                                                      process="@this"
@@ -1566,6 +1568,7 @@
                                                     process="@this"
                                                     update=":existingGuarantorDlgForm"
                                                     oncomplete="existingGuarantorDlg.show();">
+                                                <p:resetInput target=":existingGuarantorDlgForm"/>
                                             </p:commandButton>
                                         </td>
                                     </tr>
@@ -1582,16 +1585,16 @@
                                                         <p:column headerText="" style="width: 50px"/>
                                                     </p:row>
                                                 </p:columnGroup>
-                                                <p:column headerText="" style="vertical-align: top;">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{existingGuarantor.no}"></p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="vertical-align: top;">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{existingGuarantor.guarantorName.firstNameTh}"></p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="vertical-align: top;">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{existingGuarantor.tcgLgNo}"></p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="vertical-align: top;">
+                                                <p:column headerText="" styleClass="left top">
                                                     <p:panel rendered="#{not empty existingGuarantor.existingCreditTypeDetailViewList and fn:length(existingGuarantor.existingCreditTypeDetailViewList) gt 0}" styleClass="panel">
                                                         <ui:repeat value="#{existingGuarantor.existingCreditTypeDetailViewList}" var="creditFacility">
                                                             <p:outputLabel value="#{creditFacility.accountName}"/><br/>
@@ -1600,12 +1603,12 @@
                                                         </ui:repeat>
                                                     </p:panel>
                                                 </p:column>
-                                                <p:column headerText="" style="text-align:right; vertical-align: top;">
+                                                <p:column headerText="" styleClass="right top">
                                                     <p:outputLabel value="#{existingGuarantor.totalLimitGuaranteeAmount}">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="" style="vertical-align: top;">
+                                                <p:column headerText="" styleClass="top">
                                                     <p:commandButton icon="ui-icon-pencil"
                                                                      action="#{creditFacExisting.onEditExistingGuarantor()}"
                                                                      process="@this"
