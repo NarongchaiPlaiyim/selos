@@ -30,7 +30,6 @@ public class ECMInterfaceImpl implements ECMInterface, Serializable {
 
     @Override
     public ECMDataResult getECMDataResult(final String caNumber) {
-        System.out.println("-- getECMDataResult");
         ECMDataResult ecmDataResult = null;
         try {
             ecmDataResult = new ECMDataResult();

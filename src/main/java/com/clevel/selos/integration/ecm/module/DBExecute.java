@@ -49,13 +49,11 @@ public class DBExecute implements Serializable {
 
     public List<ECMDetail> findByCANumber(final String caNumber){
         log.debug("-- findByCANumber.[{}]",caNumber);
-        System.out.println("-- findByCANumber "+ caNumber);
         List<ECMDetail> ecmDetailList = null;
         StringBuilder stringBuilder = null;
 
         stringBuilder = new StringBuilder();
         if(!Util.isNull(schema) && !Util.isZero(schema.length())){
-            System.out.println("-- schema "+schema);
             stringBuilder.append("SELECT ");
             stringBuilder.append("DOCUMENT.ECM_DOC_ID, ");
             stringBuilder.append("DOCUMENT.CA_NUMBER, ");
@@ -85,7 +83,6 @@ public class DBExecute implements Serializable {
             stringBuilder.append("CATOCUST.CA_NUMBER = ? AND ");
             stringBuilder.append("DOCUMENT.CA_NUMBER IS NULL AND DOCUMENT.TX_DETAIL_ID <> 0");
         } else {
-            System.out.println("-- -- --");
             stringBuilder.append("SELECT ");
             stringBuilder.append("DOCUMENT.ECM_DOC_ID, ");
             stringBuilder.append("DOCUMENT.CA_NUMBER, ");
@@ -126,7 +123,6 @@ public class DBExecute implements Serializable {
             log.debug("open connection.");
             String sql = stringBuilder.toString();
             log.debug("-- SQL[{}]", sql);
-            System.out.println("-- SQL "+ sql);
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, caNumber);
@@ -145,20 +141,16 @@ public class DBExecute implements Serializable {
                 ecmDetailList.add(ecmDetail);
             }
             log.debug("-- ECMDetail was added to ecmDetailList[Size {}]", ecmDetailList.size());
-            System.out.println("-- ECMDetail was added to ecmDetailList[Size {}]"+ ecmDetailList.size());
             resultSet.close();
             connection.close();
             connection = null;
             log.debug("connection closed.");
-            System.out.println("-- connection closed.");
         } catch (SQLException e) {
             log.error("execute query exception!",e);
-            System.out.println("-- execute query exception! "+e);
             throw new ECMInterfaceException(e, ExceptionMapping.ECM_GETDATA_ERROR, msg.get(ExceptionMapping.ECM_GETDATA_ERROR));
         } finally {
             closeConnection();
         }
-        System.out.println("-- END");
         return ecmDetailList;
     }
 
@@ -167,7 +159,6 @@ public class DBExecute implements Serializable {
             try{
                 resultSet.close();
                 log.debug("result set closed. (in finally)");
-                System.out.println("-- result set closed. (in finally)");
             } catch (SQLException e) {
                 resultSet = null;
             }
@@ -176,7 +167,6 @@ public class DBExecute implements Serializable {
             try {
                 connection.close();
                 log.debug("connection closed. (in finally)");
-                System.out.println("-- connection closed. (in finally)");
             } catch (SQLException e) {
                 connection = null;
             }
