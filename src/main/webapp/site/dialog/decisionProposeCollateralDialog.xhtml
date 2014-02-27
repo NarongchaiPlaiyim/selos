@@ -75,8 +75,8 @@
                                 <p:selectOneRadio id="dlgCollateralRadioApprove"
                                                   value="#{decision.selectedApproveCollateral.uwDecision}"
                                                   required="#{not empty param[saveCollateralButton.clientId]}">
-                                    <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
-                                    <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
+                                    <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="#{decision.decisionAPPROVED}"/>
+                                    <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="#{decision.decisionREJECTED}"/>
                                 </p:selectOneRadio>
                             </td>
                         </tr>

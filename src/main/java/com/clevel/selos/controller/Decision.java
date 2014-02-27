@@ -7,7 +7,6 @@ import com.clevel.selos.dao.working.ApprovalHistoryDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.working.ApprovalHistory;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -99,7 +98,9 @@ public class Decision implements Serializable {
 
     //Transform
     @Inject
-    ProductTransform productTransform;
+    CreditRequestTypeTransform creditRequestTypeTransform;
+    @Inject
+    CountryTransform countryTransform;
     @Inject
     DisbursementTypeTransform disbursementTypeTransform;
     @Inject
@@ -108,6 +109,8 @@ public class Decision implements Serializable {
     FollowConditionTransform followConditionTransform;
     @Inject
     ApprovalHistoryTransform approvalHistoryTransform;
+    @Inject
+    SpecialProgramTransform specialProgramTransform;
 
     // Session
     private long workCaseId;
@@ -135,20 +138,16 @@ public class Decision implements Serializable {
 
     //Main Model View
     private DecisionView decisionView;
-
-    private SpecialProgram specialProgramBasicInfo;
+    private SpecialProgramView specialProgramView;
     private TCGView tcgView;
     private int applyTCG;
-
-    private List<ProposeCreditDetailView> sharedProposeCreditTypeList;
     private ProductGroup productGroup;
-
     private int seq;
     private HashMap<Integer, Integer> hashSeqCredit;
 
     // Retrieve Price/Fee
-    private List<CreditRequestType> creditRequestTypeList;
-    private List<Country> countryList;
+    private List<CreditRequestTypeView> creditRequestTypeViewList;
+    private List<CountryView> countryViewList;
 
     // Approve Credit
     private NewCreditDetailView selectedApproveCredit;
@@ -175,6 +174,7 @@ public class Decision implements Serializable {
     private int rowIndexCollateral;
     private int rowIndexCollHead;
     private int rowIndexSubColl;
+    private boolean flagComs;
     private List<PotentialCollateral> potentialCollateralList;
     private List<CollateralType> collateralTypeList;
     private List<SubCollateralType> subCollateralTypeList;
@@ -205,8 +205,6 @@ public class Decision implements Serializable {
     // List One Time Query on init
     private List<PrdGroupToPrdProgramView> _prdGroupToPrdProgramAll;
     private List<PrdGroupToPrdProgramView> _prdGroupToPrdProgramByGroup;
-
-    private NewCreditFacilityView newCreditFacilityView;
 
     public Decision() {
     }
@@ -254,9 +252,9 @@ public class Decision implements Serializable {
         BasicInfoView basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
         if (basicInfoView != null) {
             if (basicInfoView.getSpProgram() == RadioValue.YES.value()) {
-                specialProgramBasicInfo = basicInfoView.getSpecialProgram();
+                specialProgramView = specialProgramTransform.transformToView(basicInfoView.getSpecialProgram());
             } else {
-                specialProgramBasicInfo = specialProgramDAO.findById(3);
+                specialProgramView = specialProgramTransform.transformToView(specialProgramDAO.findById(3));
             }
             productGroup = basicInfoView.getProductGroup();
         }
@@ -276,13 +274,13 @@ public class Decision implements Serializable {
         if (decisionView.getInvestedCountry() == null)
             decisionView.setInvestedCountry(new CountryView());
 
-        creditRequestTypeList = creditRequestTypeDAO.findAll();
-        if (creditRequestTypeList == null)
-            creditRequestTypeList = new ArrayList<CreditRequestType>();
+        creditRequestTypeViewList = creditRequestTypeTransform.transformToView(creditRequestTypeDAO.findAll());
+        if (creditRequestTypeViewList == null)
+            creditRequestTypeViewList = new ArrayList<CreditRequestTypeView>();
 
-        countryList = countryDAO.findAll();
-        if (countryList == null)
-            countryList = new ArrayList<Country>();
+        countryViewList = countryTransform.transformToView(countryDAO.findAll());
+        if (countryViewList == null)
+            countryViewList = new ArrayList<CountryView>();
         // ================================================== //
 
 
@@ -519,12 +517,6 @@ public class Decision implements Serializable {
                 success = true;
             }
 
-//            BigDecimal sumTotalCreditLimit = BigDecimal.ZERO;
-//            for (NewCreditDetailView newCreditDetailView : Util.safetyList(decisionView.getApproveCreditList())) {
-//                sumTotalCreditLimit = Util.add(sumTotalCreditLimit, newCreditDetailView.getLimit());
-//            }
-//            decisionView.setApproveTotalCreditLimit(sumTotalCreditLimit);
-
             hashSeqCredit.put(seq, 0);
             seq++;
             log.debug("seq++ of credit after add complete Approve Propose Credit :: {}", seq);
@@ -575,7 +567,7 @@ public class Decision implements Serializable {
     public void onChangeCreditType() {
         log.debug("onChangeCreditType() creditType.id: {}", selectedApproveCredit.getCreditTypeView().getId());
         if (selectedApproveCredit.getProductProgramView().getId() != 0 && selectedApproveCredit.getCreditTypeView().getId() != 0) {
-            int specialProgramId = specialProgramBasicInfo != null ? specialProgramBasicInfo.getId() : 0;
+            int specialProgramId = specialProgramView != null ? specialProgramView.getId() : 0;
             int creditCusType = decisionView.getCreditCustomerType() != null ? decisionView.getCreditCustomerType().value() : CreditCustomerType.NOT_SELECTED.value();
 
             ProductFormulaView productFormulaView = productControl.getProductFormulaView(
@@ -678,22 +670,21 @@ public class Decision implements Serializable {
     }
 
     // ==================== Approve Collateral - Actions ==================== //
-    public void onEditAppProposeCollateral() {
-        log.debug("onEditAppProposeCollateral() rowIndexCollateral: {}, selectedApproveCollateral: {}", rowIndexCollateral, selectedApproveCollateral);
+    public void onEditApproveCollateral() {
+        log.debug("onEditApproveCollateral() rowIndexCollateral: {}, selectedApproveCollateral: {}", rowIndexCollateral, selectedApproveCollateral);
         if (selectedApproveCollateral.getProposeCreditDetailViewList() != null && selectedApproveCollateral.getProposeCreditDetailViewList().size() > 0) {
             // set selected credit type items (check/uncheck)
             selectedCollateralCrdTypeItems = selectedApproveCollateral.getProposeCreditDetailViewList();
-            // update Guarantee Amount before render dialog
-            Cloner cloner = new Cloner();
-            collateralCreditTypeList = cloner.deepClone(sharedProposeCreditTypeList);
         }
+
+        collateralCreditTypeList = creditFacProposeControl.findProposeCreditDetail(decisionView.getApproveCreditList(), workCaseId);
 
         modeEditCollateral = true;
         modeForButton = ModeForButton.EDIT;
     }
 
-    public void onDeleteAppProposeCollateral() {
-        log.debug("onDeleteAppProposeCollateral() rowIndexCollateral: {}", rowIndexCollateral);
+    public void onDeleteApproveCollateral() {
+        log.debug("onDeleteApproveCollateral() rowIndexCollateral: {}", rowIndexCollateral);
         // keep exist id from DB for delete on save decision
         if (decisionView.getApproveCollateralList().get(rowIndexCollateral).getId() != 0) {
             if (approveCollateralIdList != null) {
@@ -893,9 +884,7 @@ public class Decision implements Serializable {
         log.debug("onAddAppProposeGuarantor()");
         selectedApproveGuarantor = new NewGuarantorDetailView();
         selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
-
-        Cloner cloner = new Cloner();
-        guarantorCreditTypeList = cloner.deepClone(sharedProposeCreditTypeList);
+        guarantorCreditTypeList = creditFacProposeControl.findProposeCreditDetail(decisionView.getApproveCreditList(), workCaseId);
 
         modeEditGuarantor = false;
         modeForButton = ModeForButton.ADD;
@@ -903,12 +892,12 @@ public class Decision implements Serializable {
 
     public void onEditApproveGuarantor() {
         log.debug("onEditAppProposeGuarantor() selectedApproveGuarantor: {}", selectedApproveGuarantor);
+        guarantorCreditTypeList = creditFacProposeControl.findProposeCreditDetail(decisionView.getApproveCreditList(), workCaseId);
+
         if (selectedApproveGuarantor.getProposeCreditDetailViewList() != null && selectedApproveGuarantor.getProposeCreditDetailViewList().size() > 0) {
             // set selected credit type items (check/uncheck)
             selectedGuarantorCrdTypeItems = selectedApproveGuarantor.getProposeCreditDetailViewList();
             // update Guarantee Amount before render dialog
-            Cloner cloner = new Cloner();
-            guarantorCreditTypeList = cloner.deepClone(sharedProposeCreditTypeList);
             for (ProposeCreditDetailView creditTypeFromAll : guarantorCreditTypeList) {
                 for (ProposeCreditDetailView creditTypeFromSelected : selectedApproveGuarantor.getProposeCreditDetailViewList()) {
                     if (creditTypeFromAll.getSeq() == creditTypeFromSelected.getSeq()) {
@@ -1287,20 +1276,20 @@ public class Decision implements Serializable {
         this.selectedApproveGuarantor = selectedApproveGuarantor;
     }
 
-    public List<CreditRequestType> getCreditRequestTypeList() {
-        return creditRequestTypeList;
+    public List<CreditRequestTypeView> getCreditRequestTypeViewList() {
+        return creditRequestTypeViewList;
     }
 
-    public void setCreditRequestTypeList(List<CreditRequestType> creditRequestTypeList) {
-        this.creditRequestTypeList = creditRequestTypeList;
+    public void setCreditRequestTypeViewList(List<CreditRequestTypeView> creditRequestTypeViewList) {
+        this.creditRequestTypeViewList = creditRequestTypeViewList;
     }
 
-    public List<Country> getCountryList() {
-        return countryList;
+    public List<CountryView> getCountryViewList() {
+        return countryViewList;
     }
 
-    public void setCountryList(List<Country> countryList) {
-        this.countryList = countryList;
+    public void setCountryViewList(List<CountryView> countryViewList) {
+        this.countryViewList = countryViewList;
     }
 
     public List<PrdGroupToPrdProgramView> getPrdGroupToPrdProgramViewList() {
@@ -1503,14 +1492,6 @@ public class Decision implements Serializable {
         this.rowIndexCollateral = rowIndexCollateral;
     }
 
-    public List<ProposeCreditDetailView> getsharedProposeCreditTypeList() {
-        return sharedProposeCreditTypeList;
-    }
-
-    public void setsharedProposeCreditTypeList(List<ProposeCreditDetailView> sharedProposeCreditTypeList) {
-        this.sharedProposeCreditTypeList = sharedProposeCreditTypeList;
-    }
-
     public List<ProposeCreditDetailView> getCollateralCreditTypeList() {
         return collateralCreditTypeList;
     }
@@ -1645,5 +1626,13 @@ public class Decision implements Serializable {
 
     public void setFollowConditionViewList(List<FollowConditionView> followConditionViewList) {
         this.followConditionViewList = followConditionViewList;
+    }
+
+    public boolean isFlagComs() {
+        return flagComs;
+    }
+
+    public void setFlagComs(boolean flagComs) {
+        this.flagComs = flagComs;
     }
 }
