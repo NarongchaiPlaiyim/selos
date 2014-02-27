@@ -846,13 +846,13 @@ public class CreditFacProposeControl extends BusinessControl {
 
     //call BRMS
     public StandardPricingResponse getPriceFeeInterest(final long workCaseId ) {
-        log.info("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
+        log.debug("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
         StandardPricingResponse standardPricingResponse  = null;
         try {
             standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
 
             if (standardPricingResponse != null) {
-                log.info("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult());
+                log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult());
             }
 
         }catch (Exception e) {
