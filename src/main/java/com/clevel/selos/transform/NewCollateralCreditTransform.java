@@ -18,9 +18,7 @@ import java.util.List;
 public class NewCollateralCreditTransform extends Transform {
 
     @Inject
-    public NewCollateralCreditTransform() {
-    }
-
+    public NewCollateralCreditTransform() {}
     @Inject
     ExistingCreditDetailDAO existingCreditDetailDAO;
     @Inject
