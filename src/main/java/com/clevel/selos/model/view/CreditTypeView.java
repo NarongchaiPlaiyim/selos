@@ -11,6 +11,8 @@ public class CreditTypeView implements Serializable {
     private String description;
     private String brmsCode;
     private String comsIntType;
+    private int canSplit;
+    private int calLimitType;
     private int active;
 
     public int getId() {
@@ -53,6 +55,22 @@ public class CreditTypeView implements Serializable {
         this.comsIntType = comsIntType;
     }
 
+    public int getCanSplit() {
+        return canSplit;
+    }
+
+    public void setCanSplit(int canSplit) {
+        this.canSplit = canSplit;
+    }
+
+    public int getCalLimitType() {
+        return calLimitType;
+    }
+
+    public void setCalLimitType(int calLimitType) {
+        this.calLimitType = calLimitType;
+    }
+
     public int getActive() {
         return active;
     }
@@ -69,6 +87,8 @@ public class CreditTypeView implements Serializable {
                 .append("description", description)
                 .append("brmsCode", brmsCode)
                 .append("comsIntType", comsIntType)
+                .append("canSplit", canSplit)
+                .append("calLimitType", calLimitType)
                 .append("active", active)
                 .toString();
     }

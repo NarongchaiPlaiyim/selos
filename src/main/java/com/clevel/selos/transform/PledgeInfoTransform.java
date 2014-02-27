@@ -8,11 +8,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.OpenAccountCredit;
+import com.clevel.selos.model.db.working.NewCollateralCredit;
+import com.clevel.selos.model.db.working.NewCollateralSub;
+import com.clevel.selos.model.db.working.NewCollateralSubOwner;
 import com.clevel.selos.model.db.working.OpenAccountName;
 import com.clevel.selos.model.db.working.PledgeInfo;
 import com.clevel.selos.model.view.CreditDetailSimpleView;
 import com.clevel.selos.model.view.CustomerInfoSimpleView;
+import com.clevel.selos.model.view.OpenAccountView;
 import com.clevel.selos.model.view.PledgeInfoFullView;
 import com.clevel.selos.model.view.PledgeInfoView;
 
@@ -33,25 +36,26 @@ public class PledgeInfoTransform extends Transform {
 		if (model == null)
 			return view;
 		_processSimpleView(model, view);
-		//TODO About credit and customer
 		List<CustomerInfoSimpleView> customerViews = new ArrayList<CustomerInfoSimpleView>();
 		List<CreditDetailSimpleView> creditViews = new ArrayList<CreditDetailSimpleView>();
 		
-		List<OpenAccountName> accountNames = model.getOpenAccount().getOpenAccountNameList();
-		for (OpenAccountName accountName : accountNames) {
-			if (accountName.isFromPledge())
-				customerViews.add(customerTransform.transformToSimpleView(accountName.getCustomer()));
+		NewCollateralSub collateral = model.getNewCollateralSub();
+		List<NewCollateralSubOwner> owners = collateral.getNewCollateralSubOwnerList();
+		if (owners != null && !owners.isEmpty()) {
+			for (NewCollateralSubOwner owner : owners) {
+				customerViews.add(customerTransform.transformToSimpleView(owner.getCustomer()));
+			}
 		}
 		view.setCustomers(customerViews);
 		
-		List<OpenAccountCredit> accountCredits = model.getOpenAccount().getOpenAccountCreditList();
-		for (OpenAccountCredit accountCredit : accountCredits) {
-			if (!accountCredit.isFromPledge())
-				continue;
-			if (accountCredit.getExistingCreditDetail() != null) {
-				creditViews.add(creditDetailSimpleTransform.transformToSimpleView(accountCredit.getExistingCreditDetail()));
-			} else if (accountCredit.getNewCreditDetail() != null) {
-				creditViews.add(creditDetailSimpleTransform.transformToSimpleView(accountCredit.getNewCreditDetail()));
+		List<NewCollateralCredit> credits = collateral.getNewCollateralHead().getNewCollateral().getNewCollateralCreditList();
+		if (credits != null && !credits.isEmpty()) {
+			for (NewCollateralCredit credit : credits) {
+				if (credit.getExistingCreditDetail() != null) {
+					creditViews.add(creditDetailSimpleTransform.transformToSimpleView(credit.getExistingCreditDetail()));
+				} else if (credit.getNewCreditDetail() != null) {
+					creditViews.add(creditDetailSimpleTransform.transformToSimpleView(credit.getNewCreditDetail()));
+				}
 			}
 		}
 		view.setCredits(creditViews);
@@ -66,8 +70,20 @@ public class PledgeInfoTransform extends Transform {
 		view.setPledgeAmount(model.getPledgeAmount());
 		view.setModifyBy(model.getModifyBy());
 		view.setModifyDate(model.getModifyDate());
-		if (model.getOpenAccount() != null)
+		if (model.getOpenAccount() != null) {
 			view.setAccountNo(model.getOpenAccount().getAccountNumber());
+			view.setNumberOfDep(model.getOpenAccount().getNumberOfDep());
+			List<OpenAccountName> names = model.getOpenAccount().getOpenAccountNameList();
+			StringBuilder builder = new StringBuilder();
+			for (OpenAccountName name : names) {
+				builder.append(name.getCustomer().getDisplayName());
+				builder.append("<br/>");
+			}
+			if (builder.length() > 0)
+				builder.setLength(builder.length()-5);
+			view.setAccountName(builder.toString());
+		}
+		
 	}
 	
 	public void updateModel(PledgeInfo model,PledgeInfoView view,BigDecimal totalHoldAmount,User user) {

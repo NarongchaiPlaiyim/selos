@@ -6,9 +6,8 @@ import com.clevel.selos.integration.brms.model.request.BRMSAccountRequested;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.PricingIntTier;
 import com.clevel.selos.integration.brms.model.response.PricingInterest;
-import com.clevel.selos.integration.brms.model.response.StandardPricingIntResponse;
+import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.brms.service.standardpricing.interestrules.*;
-import com.clevel.selos.model.ActionResult;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -59,20 +58,22 @@ public class StandardPricingIntConverter extends Converter {
 
             List<SELOSProductProgramType> selosProductProgramTypeList = productType.getSelosProductProgram();
 
-            SELOSProductProgramType selosProductProgramType = null;
+            SELOSProductProgramType selosProductProgramType = new SELOSProductProgramType();
             List<CreditFacilityType> creditFacilityTypeList = null;
             for(BRMSAccountRequested accountRequested: accountRequestedList){
                 if(!accountRequested.getProductProgram().equals(selosProductProgramType.getName())){
-                    selosProductProgramTypeList.add(selosProductProgramType);
-                    selosProductProgramType = new SELOSProductProgramType();
-                    selosProductProgramType.setID(accountRequested.getProposeId());
+                    if(selosProductProgramType.getName() != null && !"".equals(selosProductProgramType.getName())){
+                        selosProductProgramTypeList.add(selosProductProgramType);
+                        selosProductProgramType = new SELOSProductProgramType();
+                    }
+                    selosProductProgramType.setID(accountRequested.getCreditDetailId());
                     selosProductProgramType.setName(accountRequested.getProductProgram());
                     selosProductProgramType.setFrontEndDiscount(accountRequested.getFontEndFeeDiscountRate());
                     creditFacilityTypeList = selosProductProgramType.getCreditFacility();
                 }
 
                 CreditFacilityType creditFacilityType = new CreditFacilityType();
-                creditFacilityType.setID(accountRequested.getProposeId());
+                creditFacilityType.setID(accountRequested.getCreditDetailId());
                 creditFacilityType.setType(accountRequested.getCreditType());
                 creditFacilityType.setCreditLimit(accountRequested.getLimit());
 
@@ -100,8 +101,8 @@ public class StandardPricingIntConverter extends Converter {
         return null;
     }
 
-    public StandardPricingIntResponse getStandardPricingResponse(DecisionServiceResponse decisionServiceResponse){
-        StandardPricingIntResponse standardPricingIntResponse = new StandardPricingIntResponse();
+    public StandardPricingResponse getStandardPricingResponse(DecisionServiceResponse decisionServiceResponse){
+        StandardPricingResponse standardPricingIntResponse = new StandardPricingResponse();
         if(decisionServiceResponse != null){
 
 

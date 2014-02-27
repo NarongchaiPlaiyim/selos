@@ -892,3 +892,26 @@ function onKeyDownName(evt){
 
     return true;
 }
+
+function is_defined(varname) {
+	return eval('typeof('+varname+')') != 'undefined';
+}
+function handleOnStartOpenCfmDlg() {
+	if (is_defined('p_loading_dialog'))
+		p_loading_dialog.show();
+}
+function handleOnCompleteOpenCfmDlg(args,cfmDialog) {
+	if (is_defined('p_loading_dialog'))
+		p_loading_dialog.hide();
+	if (isValidateComplete(args)) {
+		cfmDialog.show();
+	} else {
+		if (is_defined('p_result_dialog'))
+			p_result_dialog.show();	
+	}
+}
+function isValidateComplete(args) {
+	if (!args)
+		return false;
+	return !args.validationFailed;
+}

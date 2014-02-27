@@ -1,10 +1,13 @@
 package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.util.Util;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -643,5 +646,15 @@ public class Customer implements Serializable {
                 append("isCommittee", isCommittee).
                 append("juristicId", juristicId).
                 toString();
+    }
+    
+    public String getDisplayName() {
+    	StringBuilder builder = new StringBuilder();
+    	if (getTitle() != null)
+    		builder.append(getTitle().getTitleTh()).append(' ');
+    	builder.append(getNameTh());
+    	if (!Util.isEmpty(getLastNameTh()))
+    		builder.append(" ").append(getLastNameTh());
+    	return builder.toString();
     }
 }

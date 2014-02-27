@@ -5,18 +5,28 @@ import com.clevel.selos.model.ActionResult;
 import java.io.Serializable;
 import java.util.List;
 
-public class StandardPricingFeeResponse implements Serializable{
-    private String appRefNumber;
+public class StandardPricingResponse implements Serializable {
+    private String decisionID;
+    private String applicationNo;
     private ActionResult actionResult;
     private String reason;
+    private List<PricingInterest> pricingInterest;
     private List<PricingFee> pricingFeeList;
 
-    public String getAppRefNumber() {
-        return appRefNumber;
+    public String getDecisionID() {
+        return decisionID;
     }
 
-    public void setAppRefNumber(String appRefNumber) {
-        this.appRefNumber = appRefNumber;
+    public void setDecisionID(String decisionID) {
+        this.decisionID = decisionID;
+    }
+
+    public String getApplicationNo() {
+        return applicationNo;
+    }
+
+    public void setApplicationNo(String applicationNo) {
+        this.applicationNo = applicationNo;
     }
 
     public ActionResult getActionResult() {
@@ -33,6 +43,14 @@ public class StandardPricingFeeResponse implements Serializable{
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public List<PricingInterest> getPricingInterest() {
+        return pricingInterest;
+    }
+
+    public void setPricingInterest(List<PricingInterest> pricingInterest) {
+        this.pricingInterest = pricingInterest;
     }
 
     public List<PricingFee> getPricingFeeList() {

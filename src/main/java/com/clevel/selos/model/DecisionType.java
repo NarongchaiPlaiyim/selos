@@ -13,4 +13,7 @@ public enum DecisionType {
         return value;
     }
 
+    public int getValue() {
+        return value;
+    }
 }

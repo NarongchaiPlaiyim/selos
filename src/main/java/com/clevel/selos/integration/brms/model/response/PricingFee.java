@@ -1,5 +1,9 @@
 package com.clevel.selos.integration.brms.model.response;
 
+import com.clevel.selos.model.FeeLevel;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -86,9 +90,18 @@ public class PricingFee implements Serializable{
         this.paymentMethod = paymentMethod;
     }
 
-    public enum FeeLevel{
-        APP_LEVEL, CREDIT_LEVEL;
-        private FeeLevel(){
-        }
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("feeLevel", feeLevel)
+                .append("creditDetailId", creditDetailId)
+                .append("type", type)
+                .append("description", description)
+                .append("feePercent", feePercent)
+                .append("feePercentAfterDiscount", feePercentAfterDiscount)
+                .append("year", year)
+                .append("amount", amount)
+                .append("paymentMethod", paymentMethod)
+                .toString();
     }
 }

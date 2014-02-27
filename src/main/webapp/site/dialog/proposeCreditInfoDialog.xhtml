@@ -59,10 +59,10 @@
                          style="min-width: 200px; width: 200px; max-width: 200px;"
                          required="#{not empty param[onSaveCreditInfo.clientId]}">
             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-            <f:selectItems value="#{creditFacPropose.prdGroupToPrdProgramList}"
+            <f:selectItems value="#{creditFacPropose.prdGroupToPrdProgramViewList}"
                            var="prdGroupToPrdProgramItem"
-                           itemLabel="#{prdGroupToPrdProgramItem.productProgram.name}"
-                           itemValue="#{prdGroupToPrdProgramItem.productProgram.id}"/>
+                           itemLabel="#{prdGroupToPrdProgramItem.productProgramView.name}"
+                           itemValue="#{prdGroupToPrdProgramItem.productProgramView.id}"/>
             <p:ajax event="change"
                     listener="#{creditFacPropose.onChangeProductProgram}"
                     process="@this"
@@ -86,10 +86,10 @@
                          style="min-width: 200px; width: 200px; max-width: 200px;"
                          required="#{not empty param[onSaveCreditInfo.clientId]}">
             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-            <f:selectItems value="#{creditFacPropose.prdProgramToCreditTypeList}"
+            <f:selectItems value="#{creditFacPropose.prdProgramToCreditTypeViewList}"
                            var="creditTypeItem"
-                           itemLabel="#{creditTypeItem.creditType.name}"
-                           itemValue="#{creditTypeItem.creditType.id}"/>
+                           itemLabel="#{creditTypeItem.creditTypeView.name}"
+                           itemValue="#{creditTypeItem.creditTypeView.id}"/>
             <p:ajax event="change"
                     listener="#{creditFacPropose.onChangeCreditType}"
                     process=":creditInfoDlgForm:dlgSelCreditType,
@@ -138,7 +138,7 @@
             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                              type="number"/>
             <p:ajax event="blur"
-                    listener="#{creditFacPropose.calculateInstallment(creditFacPropose.newCreditDetailView)}"
+                    listener="#{creditFacPropose.onCalInstallment(creditFacPropose.newCreditDetailView)}"
                     process="@form" update=":creditInfoDlgForm:limit,:creditInfoDlgForm:resultFinal"/>
         </p:inputText>
     </td>

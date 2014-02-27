@@ -1,9 +1,9 @@
 package com.clevel.selos.model;
 
 public enum AttorneyRelationType {
-    NA("app.mortgageDetail.appointee.relationship.radio.na"), 
-    BORROWER("app.mortgageDetail.appointee.relationship.radio.borrower"), 
-    OTHERS("app.mortgageDetail.appointee.relationship.radio.other");
+    NA("app.appointee.relationship.radio.na"), 
+    BORROWER("app.appointee.relationship.radio.borrower"), 
+    OTHERS("app.appointee.relationship.radio.other");
 
     private final String msgKey;
     private AttorneyRelationType(String msgKey){
