@@ -14,8 +14,6 @@ import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
-import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.TCG;
 import com.clevel.selos.model.view.*;
@@ -727,8 +725,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 log.info("creditDetailAdd :getInstallment: {}", creditDetailAdd.getInstallment());
                 newCreditFacilityView.getNewCreditDetailViewList().add(creditDetailAdd);
                 log.info("seq of credit after add proposeCredit :: {}", seq);
-            }
-            else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
+            } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
                 log.info("onEditRecord ::: mode : {}", modeForButton);
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setProductProgramView(productProgramView);
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setCreditTypeView(creditTypeView);
@@ -1607,26 +1604,26 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.debug("onSaveCreditFacPropose ::: ModeForDB  {}", modeForDB);
 //        onSetInUsedProposeCreditDetail();
         try {
-//            if ((newCreditFacilityView.getInvestedCountry().getId() != 0)
-//                    && (newCreditFacilityView.getLoanRequestType().getId() != 0)
-//                    && (newCreditFacilityView.getNewCreditDetailViewList().size() > 0)
-//                    && (newCreditFacilityView.getNewCollateralViewList().size() > 0)
-//                    && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0)
-//                    && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
-            //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
-            creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
-            creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
-            messageHeader = msg.get("app.header.save.success");
-            message = msg.get("app.propose.response.save.success");
-            exSummaryControl.calForCreditFacility(workCaseId);
-            onCreation();
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            notRetrivePricing = true;
-//            } else {
-//                messageHeader = msg.get("app.propose.response.cannot.save");
-//                message = msg.get("app.propose.response.desc.cannot.save");
-//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-//            }
+            if ((newCreditFacilityView.getInvestedCountry().getId() != 0)
+                    && (newCreditFacilityView.getLoanRequestType().getId() != 0)
+                    && (newCreditFacilityView.getNewCreditDetailViewList().size() > 0)
+                    && (newCreditFacilityView.getNewCollateralViewList().size() > 0)
+                    && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0)
+                    && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
+                //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
+                creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
+                creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
+                messageHeader = msg.get("app.header.save.success");
+                message = msg.get("app.propose.response.save.success");
+                exSummaryControl.calForCreditFacility(workCaseId);
+                onCreation();
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                notRetrivePricing = false;
+            } else {
+                messageHeader = msg.get("app.propose.response.cannot.save");
+                message = msg.get("app.propose.response.desc.cannot.save");
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.propose.response.save.failed");
