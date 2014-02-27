@@ -1,12 +1,21 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.exception.ECMInterfaceException;
+import com.clevel.selos.integration.ECMInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.ecm.ECMInterfaceImpl;
+import com.clevel.selos.integration.ecm.db.ECMDetail;
+import com.clevel.selos.integration.ecm.model.ECMDataResult;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.view.CheckMandatoryDocView;
 import com.clevel.selos.model.view.CheckOptionalDocView;
 import com.clevel.selos.model.view.CheckOtherDocView;
+import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
+
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
@@ -28,6 +37,9 @@ public class CheckMandateDoc implements Serializable {
     private int rowIndex;
     private String messageHeader;
     private String message;
+
+    @Inject
+    private ECMInterface ecmInterface;
 
     public CheckMandateDoc() {
         init();
@@ -79,19 +91,9 @@ public class CheckMandateDoc implements Serializable {
         checkOptionalDocView.setRemark("test");
         optionalDocumentsList.add(checkOptionalDocView);
 
-
-        otherDocumentsList = new ArrayList<CheckOtherDocView>();
-        CheckOtherDocView checkOtherDocView = new CheckOtherDocView();
-        checkOtherDocView.setDocumentType("6.9.3 Statement");
-        checkOtherDocView.setOwners("Application");
-        checkOtherDocView.setFileName("File_2013107_1502");
-        checkOtherDocView.setComplete(2);
-        checkOtherDocView.setIndistinct(true);
-        checkOtherDocView.setExpire(true);
-        checkOtherDocView.setRemark("test");
-        otherDocumentsList.add(checkOtherDocView);
     }
 
+    @PostConstruct
     public void onCreation() {
         log.info("-- onCreation.");
 
@@ -99,6 +101,36 @@ public class CheckMandateDoc implements Serializable {
         //if not found the documents matched in ECM completed = N and it will be changed to Yes when user upload the document into ECM;
 
         //query ECM for list of documents uploaded by user via ECM linkage by Application number.
+
+        otherDocumentsList = new ArrayList<CheckOtherDocView>();
+        String result = null;
+        try{
+            ECMDataResult ecmDataResult = ecmInterface.getECMDataResult("04621809124082010060");
+            if(!Util.isNull(ecmDataResult) && ActionResult.SUCCESS.equals(ecmDataResult.getActionResult())){
+                List<ECMDetail> ecmDetailList = ecmDataResult.getEcmDetailList();
+                CheckOtherDocView checkOtherDocView = null;
+                for (ECMDetail ecmDetail : ecmDetailList) {
+                    checkOtherDocView = new CheckOtherDocView();
+                    checkOtherDocView.setDocumentType(ecmDetail.getTypeNameTH());
+                    checkOtherDocView.setOwners(ecmDetail.getTypeCode());
+                    checkOtherDocView.setFileName(ecmDetail.getOrgFileName());
+                    checkOtherDocView.setComplete(2);
+                    checkOtherDocView.setIndistinct(true);
+                    checkOtherDocView.setExpire(true);
+                    checkOtherDocView.setRemark("test");
+                    otherDocumentsList.add(checkOtherDocView);
+                }
+                result = ecmDetailList.toString();
+            } else {
+                result = "FAILED";
+            }
+        } catch (ECMInterfaceException e) {
+            log.error("-- ECMInterfaceException : {}", e.getMessage());
+            result = e.getMessage();
+        } catch (Exception e) {
+            log.error("-- Exception : {}", e.getMessage());
+            result = e.getMessage();
+        }
     }
 
     public void onSaveCheckMandateDoc(){

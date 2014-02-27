@@ -19,6 +19,7 @@
                                            var="potentialColl"
                                            itemLabel="#{potentialColl.name}"
                                            itemValue="#{potentialColl.id}"/>
+                            <p:ajax event="change" update="@this"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -32,6 +33,7 @@
                                            var="collateralType"
                                            itemLabel="#{collateralType.description}"
                                            itemValue="#{collateralType.id}"/>
+                            <p:ajax event="change" update="@this"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -51,6 +53,7 @@
                                            var="relation"
                                            itemLabel="#{relation.description}"
                                            itemValue="#{relation.id}"/>
+                            <p:ajax event="change" update="@this"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -61,11 +64,13 @@
                                         id="dateOfInfo"
                                         showOn="button"
                                         pattern="dd/MM/yyyy"
+                                        maxdate="#{creditFacExisting.currentDateDDMMYY}"
                                         yearRange="1950:2100"
                                         mindate="01/01/1950"
                                         navigator="true"
                                         locale="th_TH"
-                                        showButtonPanel="true"/>
+                                        showButtonPanel="true">
+                        </clv:BECalendar>
                     </td>
                 </tr>
 
@@ -138,6 +143,7 @@
                                            var="mortgage"
                                            itemLabel="#{mortgage.mortgage}"
                                            itemValue="#{mortgage.id}"/>
+                            <p:ajax event="change" update="@this"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -162,7 +168,7 @@
                 <tr>
                     <td colspan="2" class="center">
                         <p:commandButton
-                                id="saveRelatedCollateral"
+                                id="saveRelatedCollateral" disabled="#{not creditFacExisting.canSaveRelatedCol}"
                                 value="#{msg.get('app.tcg.dlg.button.ok')}"
                                 binding="#{saveRelatedCollateral}"
                                 actionListener="#{creditFacExisting.onSaveExistingCollateral()}"

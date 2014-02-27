@@ -1,5 +1,7 @@
 package com.clevel.selos.integration;
 
-public interface ECMInterface {
+import com.clevel.selos.integration.ecm.model.ECMDataResult;
 
+public interface ECMInterface {
+    public ECMDataResult getECMDataResult(final String caNumber);
 }

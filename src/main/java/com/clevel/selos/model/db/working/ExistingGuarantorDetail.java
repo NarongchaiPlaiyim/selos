@@ -21,7 +21,7 @@ public class ExistingGuarantorDetail implements Serializable {
     @Column(name = "no")
     private int no ;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "guarantor_id")
     private Customer guarantorName;
 
