@@ -609,7 +609,7 @@ public class Decision implements Serializable {
             suggestBase = getBaseRateById(suggestBasePriceDlg.getId());
             if (suggestBase != null) {
                 suggestPrice = suggestBase.getValue().add(suggestInterestDlg);
-                if (ValidationUtil.isValueLessThanZero(suggestInterestDlg)) {
+                if (ValidationUtil.isValueCompareToZero(suggestInterestDlg, ValidationUtil.CompareMode.LESS_THAN)) {
                     suggestPriceLabel = suggestBase.getName() + " " + suggestInterestDlg;
                 } else {
                     suggestPriceLabel = suggestBase.getName() + " + " + suggestInterestDlg;
@@ -621,7 +621,7 @@ public class Decision implements Serializable {
             standardBase = getBaseRateById(standardBasePriceDlg.getId());
             if (standardBase != null) {
                 standardPrice = standardBase.getValue().add(standardInterestDlg);
-                if (ValidationUtil.isValueLessThanZero(standardInterestDlg)) {
+                if (ValidationUtil.isValueCompareToZero(standardInterestDlg, ValidationUtil.CompareMode.LESS_THAN)) {
                     standardPriceLabel = standardBase.getName() + " " + standardInterestDlg;
                 } else {
                     standardPriceLabel = standardBase.getName() + " + " + standardInterestDlg;
@@ -629,11 +629,11 @@ public class Decision implements Serializable {
             }
         }
 
-        if (ValidationUtil.isGreaterThan(standardPrice, suggestPrice)) {
+        if (ValidationUtil.isFirstCompareToSecond(standardPrice, suggestPrice, ValidationUtil.CompareMode.GREATER_THAN)) {
             finalBaseRate = getNewBaseRate(standardBasePriceDlg);
             finalInterest = new BigDecimal(standardInterestDlg.doubleValue());
             finalPriceLabel = standardPriceLabel;
-        } else if (ValidationUtil.isLessThan(standardPrice, suggestPrice)) {
+        } else if (ValidationUtil.isFirstCompareToSecond(standardPrice, suggestPrice, ValidationUtil.CompareMode.LESS_THAN)) {
             finalBaseRate = getNewBaseRate(suggestBasePriceDlg);
             finalInterest = new BigDecimal(suggestInterestDlg.doubleValue());
             finalPriceLabel = suggestPriceLabel;
@@ -650,11 +650,11 @@ public class Decision implements Serializable {
         creditTierDetailAdd.setFinalBasePrice(finalBaseRate);
 
         creditTierDetailAdd.setSuggestPriceLabel(suggestPriceLabel);
-        creditTierDetailAdd.setSuggestInterest(suggestInterestDlg);
+        creditTierDetailAdd.setSuggestInterest(new BigDecimal(suggestInterestDlg.doubleValue()));
         creditTierDetailAdd.setSuggestBasePrice(suggestBase);
 
         creditTierDetailAdd.setStandardPriceLabel(standardPriceLabel);
-        creditTierDetailAdd.setStandardInterest(standardInterestDlg);
+        creditTierDetailAdd.setStandardInterest(new BigDecimal(standardInterestDlg.doubleValue()));
         creditTierDetailAdd.setStandardBasePrice(standardBase);
 
         creditTierDetailAdd.setCanEdit(true);
