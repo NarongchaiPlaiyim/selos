@@ -42,8 +42,6 @@ public class BRMSControl extends BusinessControl {
     private NewCollateralDAO newCollateralDAO;
     @Inject
     private NewCreditFacilityDAO creditFacilityDAO;
-    @Inject
-    private DecisionDAO decisionDAO;
 
     @Inject
     private WorkCasePrescreenDAO workCasePrescreenDAO;
@@ -161,7 +159,6 @@ public class BRMSControl extends BusinessControl {
             applicationInfo.setLoanRequestType(newCreditFacility.getLoanRequestType().getBrmsCode());
         }
         else if(workCase.getStep().getProposeType().equals(ProposeType.A)){
-            Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
             //TODO: To set Loan Request Type when Decision is complete.
         }
 

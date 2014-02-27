@@ -17,6 +17,7 @@ import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import com.clevel.selos.util.ValidationUtil;
 import com.rits.cloning.Cloner;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -98,8 +99,6 @@ public class Decision implements Serializable {
 
     //Transform
     @Inject
-    DecisionTransform decisionTransform;
-    @Inject
     ProductTransform productTransform;
     @Inject
     DisbursementTypeTransform disbursementTypeTransform;
@@ -142,8 +141,6 @@ public class Decision implements Serializable {
     private int applyTCG;
 
     private List<ProposeCreditDetailView> sharedProposeCreditTypeList;
-    private List<ProductProgram> productProgramList;
-    private List<CreditType> creditTypeList;
     private ProductGroup productGroup;
 
     private int seq;
@@ -303,10 +300,6 @@ public class Decision implements Serializable {
         if (prdGroupToPrdProgramViewList == null)
             prdGroupToPrdProgramViewList = new ArrayList<PrdGroupToPrdProgramView>();
 
-        creditTypeList = creditTypeDAO.findAll();
-        if (creditTypeList == null)
-            creditTypeList = new ArrayList<CreditType>();
-
         loanPurposeViewList = loanPurposeControl.getLoanPurposeViewList();
         if (loanPurposeViewList == null)
             loanPurposeViewList = new ArrayList<LoanPurposeView>();
@@ -421,9 +414,15 @@ public class Decision implements Serializable {
                 suggestInterestDlg = new BigDecimal(interestFromTier.doubleValue());
             }
         } else {
-            standardBasePriceDlg = new BaseRate();
+            if (baseRateList != null && !baseRateList.isEmpty()) {
+                standardBasePriceDlg = baseRateList.get(0);
+                suggestBasePriceDlg = baseRateList.get(0);
+            } else {
+                standardBasePriceDlg = new BaseRate();
+                suggestBasePriceDlg = new BaseRate();
+            }
+
             standardInterestDlg = BigDecimal.ZERO;
-            suggestBasePriceDlg = new BaseRate();
             suggestInterestDlg = BigDecimal.ZERO;
         }
 
@@ -461,6 +460,7 @@ public class Decision implements Serializable {
 
             if (modeEditCredit) {
                 NewCreditDetailView creditDetailEdit = decisionView.getApproveCreditList().get(rowIndexCredit);
+                creditDetailEdit.setUwDecision(selectedApproveCredit.getUwDecision());
                 creditDetailEdit.setProductProgramView(productProgramView);
                 creditDetailEdit.setCreditTypeView(creditTypeView);
                 creditDetailEdit.setRequestType(selectedApproveCredit.getRequestType());
@@ -472,21 +472,19 @@ public class Decision implements Serializable {
                 creditDetailEdit.setPCEAmount(selectedApproveCredit.getPCEAmount());
                 creditDetailEdit.setReducePriceFlag(selectedApproveCredit.isReducePriceFlag());
                 creditDetailEdit.setReduceFrontEndFee(selectedApproveCredit.isReduceFrontEndFee());
-//                creditDetailEdit.setStandardBasePrice(selectedApproveCredit.getStandardBasePrice()); // todo: change standard to tier
-//                creditDetailEdit.setStandardInterest(selectedApproveCredit.getStandardInterest()); // todo: change standard to tier
-//                creditDetailEdit.setSuggestBasePrice(selectedApproveCredit.getSuggestBasePrice()); //todo: change suggest to tier
-//                creditDetailEdit.setSuggestInterest(selectedApproveCredit.getSuggestInterest()); //todo: change suggest to tier
                 creditDetailEdit.setFrontEndFee(selectedApproveCredit.getFrontEndFee());
                 creditDetailEdit.setLoanPurposeView(loanPurposeView);
                 creditDetailEdit.setRemark(selectedApproveCredit.getRemark());
                 creditDetailEdit.setDisbursementTypeView(disbursementTypeView);
                 creditDetailEdit.setHoldLimitAmount(selectedApproveCredit.getHoldLimitAmount());
                 creditDetailEdit.setNewCreditTierDetailViewList(selectedApproveCredit.getNewCreditTierDetailViewList());
+                creditDetailEdit.setSeq(selectedApproveCredit.getSeq());
 
                 success = true;
             } else {
                 // Add New
                 NewCreditDetailView creditDetailAdd = new NewCreditDetailView();
+                creditDetailAdd.setUwDecision(selectedApproveCredit.getUwDecision());
                 creditDetailAdd.setProductProgramView(productProgramView);
                 creditDetailAdd.setCreditTypeView(creditTypeView);
                 creditDetailAdd.setRequestType(selectedApproveCredit.getRequestType());
@@ -498,10 +496,6 @@ public class Decision implements Serializable {
                 creditDetailAdd.setPCEAmount(selectedApproveCredit.getPCEAmount());
                 creditDetailAdd.setReducePriceFlag(selectedApproveCredit.isReducePriceFlag());
                 creditDetailAdd.setReduceFrontEndFee(selectedApproveCredit.isReduceFrontEndFee());
-//                creditDetailAdd.setStandardBasePrice(selectedApproveCredit.getStandardBasePrice()); // todo: change standard to tier
-//                creditDetailAdd.setStandardInterest(selectedApproveCredit.getStandardInterest()); // todo: change standard to tier
-//                creditDetailAdd.setSuggestBasePrice(selectedApproveCredit.getSuggestBasePrice()); //todo: change suggest to tier
-//                creditDetailAdd.setSuggestInterest(selectedApproveCredit.getSuggestInterest()); //todo: change suggest to tier
                 creditDetailAdd.setFrontEndFee(selectedApproveCredit.getFrontEndFee());
                 creditDetailAdd.setLoanPurposeView(loanPurposeView);
                 creditDetailAdd.setRemark(selectedApproveCredit.getRemark());
@@ -521,11 +515,11 @@ public class Decision implements Serializable {
                 success = true;
             }
 
-            BigDecimal sumTotalCreditLimit = BigDecimal.ZERO;
-            for (NewCreditDetailView newCreditDetailView : Util.safetyList(decisionView.getApproveCreditList())) {
-                sumTotalCreditLimit = Util.add(sumTotalCreditLimit, newCreditDetailView.getLimit());
-            }
-            decisionView.setApproveTotalCreditLimit(sumTotalCreditLimit);
+//            BigDecimal sumTotalCreditLimit = BigDecimal.ZERO;
+//            for (NewCreditDetailView newCreditDetailView : Util.safetyList(decisionView.getApproveCreditList())) {
+//                sumTotalCreditLimit = Util.add(sumTotalCreditLimit, newCreditDetailView.getLimit());
+//            }
+//            decisionView.setApproveTotalCreditLimit(sumTotalCreditLimit);
 
             hashSeqCredit.put(seq, 0);
             seq++;
@@ -576,9 +570,14 @@ public class Decision implements Serializable {
     public void onChangeCreditType() {
         log.debug("onChangeCreditType() creditType.id: {}", selectedApproveCredit.getCreditTypeView().getId());
         if (selectedApproveCredit.getProductProgramView().getId() != 0 && selectedApproveCredit.getCreditTypeView().getId() != 0) {
-            ProductFormulaView productFormulaView = productControl.getProductFormulaView(selectedApproveCredit.getCreditTypeView().getId(),
+            int specialProgramId = specialProgramBasicInfo != null ? specialProgramBasicInfo.getId() : 0;
+            int creditCusType = decisionView.getCreditCustomerType() != null ? decisionView.getCreditCustomerType().value() : CreditCustomerType.NOT_SELECTED.value();
+
+            ProductFormulaView productFormulaView = productControl.getProductFormulaView(
+                    selectedApproveCredit.getCreditTypeView().getId(),
                     selectedApproveCredit.getProductProgramView().getId(),
-                    decisionView.getCreditCustomerType().value(), specialProgramBasicInfo.getId(), applyTCG);
+                    creditCusType, specialProgramId, applyTCG);
+
             if (productFormulaView != null) {
                 log.debug("onChangeCreditType :::: productFormula : {}", productFormulaView.getId());
                 selectedApproveCredit.setProductCode(productFormulaView.getProductCode());
@@ -598,6 +597,75 @@ public class Decision implements Serializable {
         BigDecimal finalInterest;
         String finalPriceLabel;
 
+        BaseRate suggestBase = new BaseRate();
+        BigDecimal suggestPrice = BigDecimal.ZERO;
+        String suggestPriceLabel = "";
+
+        BaseRate standardBase = new BaseRate();
+        BigDecimal standardPrice = BigDecimal.ZERO;
+        String standardPriceLabel = "";
+
+        if (suggestBasePriceDlg.getId() != 0) {
+            suggestBase = getBaseRateById(suggestBasePriceDlg.getId());
+            if (suggestBase != null) {
+                suggestPrice = suggestBase.getValue().add(suggestInterestDlg);
+                if (ValidationUtil.isValueCompareToZero(suggestInterestDlg, ValidationUtil.CompareMode.LESS_THAN)) {
+                    suggestPriceLabel = suggestBase.getName() + " " + suggestInterestDlg;
+                } else {
+                    suggestPriceLabel = suggestBase.getName() + " + " + suggestInterestDlg;
+                }
+            }
+        }
+
+        if (standardBasePriceDlg.getId() != 0) {
+            standardBase = getBaseRateById(standardBasePriceDlg.getId());
+            if (standardBase != null) {
+                standardPrice = standardBase.getValue().add(standardInterestDlg);
+                if (ValidationUtil.isValueCompareToZero(standardInterestDlg, ValidationUtil.CompareMode.LESS_THAN)) {
+                    standardPriceLabel = standardBase.getName() + " " + standardInterestDlg;
+                } else {
+                    standardPriceLabel = standardBase.getName() + " + " + standardInterestDlg;
+                }
+            }
+        }
+
+        if (ValidationUtil.isFirstCompareToSecond(standardPrice, suggestPrice, ValidationUtil.CompareMode.GREATER_THAN)) {
+            finalBaseRate = getNewBaseRate(standardBasePriceDlg);
+            finalInterest = new BigDecimal(standardInterestDlg.doubleValue());
+            finalPriceLabel = standardPriceLabel;
+        } else if (ValidationUtil.isFirstCompareToSecond(standardPrice, suggestPrice, ValidationUtil.CompareMode.LESS_THAN)) {
+            finalBaseRate = getNewBaseRate(suggestBasePriceDlg);
+            finalInterest = new BigDecimal(suggestInterestDlg.doubleValue());
+            finalPriceLabel = suggestPriceLabel;
+        } else {
+            finalBaseRate = getNewBaseRate(standardBasePriceDlg);
+            finalInterest = new BigDecimal(standardInterestDlg.doubleValue());
+            finalPriceLabel = standardPriceLabel;
+        }
+
+        NewCreditTierDetailView creditTierDetailAdd = new NewCreditTierDetailView();
+
+        creditTierDetailAdd.setFinalPriceLabel(finalPriceLabel);
+        creditTierDetailAdd.setFinalInterest(finalInterest);
+        creditTierDetailAdd.setFinalBasePrice(finalBaseRate);
+
+        creditTierDetailAdd.setSuggestPriceLabel(suggestPriceLabel);
+        creditTierDetailAdd.setSuggestInterest(new BigDecimal(suggestInterestDlg.doubleValue()));
+        creditTierDetailAdd.setSuggestBasePrice(suggestBase);
+
+        creditTierDetailAdd.setStandardPriceLabel(standardPriceLabel);
+        creditTierDetailAdd.setStandardInterest(new BigDecimal(standardInterestDlg.doubleValue()));
+        creditTierDetailAdd.setStandardBasePrice(standardBase);
+
+        creditTierDetailAdd.setCanEdit(true);
+
+        if (selectedApproveCredit.getNewCreditTierDetailViewList() != null) {
+            selectedApproveCredit.getNewCreditTierDetailViewList().add(0, creditTierDetailAdd);
+        } else {
+            List<NewCreditTierDetailView> tierDetailViewList = new ArrayList<NewCreditTierDetailView>();
+            tierDetailViewList.add(0, creditTierDetailAdd);
+            selectedApproveCredit.setNewCreditTierDetailViewList(tierDetailViewList);
+        }
     }
 
     public void onDeleteTierInfo(int rowIndex) {
@@ -1003,30 +1071,62 @@ public class Decision implements Serializable {
         return newBaseRate;
     }
 
+    private BaseRate getBaseRateById(int id) {
+        if (baseRateList == null || baseRateList.isEmpty() || id == 0) {
+            return new BaseRate();
+        }
+
+        BaseRate returnBaseRate = new BaseRate();
+        for (BaseRate baseRate : baseRateList) {
+            if (baseRate.getId() == id) {
+                returnBaseRate.setId(baseRate.getId());
+                returnBaseRate.setActive(baseRate.getActive());
+                returnBaseRate.setName(baseRate.getName());
+                returnBaseRate.setValue(baseRate.getValue());
+            }
+        }
+        return returnBaseRate;
+    }
+
     private ProductProgramView getProductProgramById(int id) {
-        if (productProgramList == null || productProgramList.isEmpty() || id == 0) {
+        if (prdGroupToPrdProgramViewList == null || prdGroupToPrdProgramViewList.isEmpty() || id == 0) {
             return new ProductProgramView();
         }
 
-        for (ProductProgram productProgram : productProgramList) {
-            if (productProgram.getId() == id) {
-                return productTransform.transformToView(productProgram);
+        ProductProgramView returnPrdProgramView = new ProductProgramView();
+        for (PrdGroupToPrdProgramView groupToProgramView : prdGroupToPrdProgramViewList) {
+            if (groupToProgramView.getProductProgramView() != null
+                && groupToProgramView.getProductProgramView().getId() == id) {
+
+                returnPrdProgramView.setId(groupToProgramView.getProductProgramView().getId());
+                returnPrdProgramView.setActive(groupToProgramView.getProductProgramView().getActive());
+                returnPrdProgramView.setName(groupToProgramView.getProductProgramView().getName());
+                returnPrdProgramView.setDescription(groupToProgramView.getProductProgramView().getDescription());
+                returnPrdProgramView.setBrmsCode(groupToProgramView.getProductProgramView().getBrmsCode());
             }
         }
-        return new ProductProgramView();
+        return returnPrdProgramView;
     }
 
     private CreditTypeView getCreditTypeById(int id) {
-        if (creditTypeList == null || creditTypeList.isEmpty() || id == 0) {
+        if (prdProgramToCreditTypeViewList == null || prdProgramToCreditTypeViewList.isEmpty() || id == 0) {
             return new CreditTypeView();
         }
 
-        for (CreditType creditType : creditTypeList) {
-            if (creditType.getId() == id) {
-                return productTransform.transformToView(creditType);
+        CreditTypeView returnCreditTypeView = new CreditTypeView();
+        for (PrdProgramToCreditTypeView programToCreditTypeView : prdProgramToCreditTypeViewList) {
+            if (programToCreditTypeView.getCreditTypeView() != null
+                && programToCreditTypeView.getCreditTypeView().getId() == id) {
+
+                returnCreditTypeView.setId(programToCreditTypeView.getCreditTypeView().getId());
+                returnCreditTypeView.setActive(programToCreditTypeView.getCreditTypeView().getActive());
+                returnCreditTypeView.setName(programToCreditTypeView.getCreditTypeView().getName());
+                returnCreditTypeView.setDescription(programToCreditTypeView.getCreditTypeView().getDescription());
+                returnCreditTypeView.setComsIntType(programToCreditTypeView.getCreditTypeView().getComsIntType());
+                returnCreditTypeView.setBrmsCode(programToCreditTypeView.getCreditTypeView().getBrmsCode());
             }
         }
-        return new CreditTypeView();
+        return returnCreditTypeView;
     }
 
     private LoanPurposeView getLoanPurposeById(int id) {
@@ -1038,7 +1138,9 @@ public class Decision implements Serializable {
         for (LoanPurposeView loanPurposeView : loanPurposeViewList) {
             if (loanPurposeView.getId() == id) {
                 returnLoanPurpose.setId(loanPurposeView.getId());
+                returnLoanPurpose.setActive(loanPurposeView.getActive());
                 returnLoanPurpose.setDescription(loanPurposeView.getDescription());
+                returnLoanPurpose.setBrmsCode(loanPurposeView.getBrmsCode());
             }
         }
         return returnLoanPurpose;
@@ -1048,10 +1150,12 @@ public class Decision implements Serializable {
         if (disbursementTypeViewList == null || disbursementTypeViewList.isEmpty() || id == 0) {
             return new DisbursementTypeView();
         }
+
         DisbursementTypeView returnDisbursementType = new DisbursementTypeView();
         for (DisbursementTypeView disbursementTypeView : disbursementTypeViewList) {
             if (disbursementTypeView.getId() == id) {
                 returnDisbursementType.setId(disbursementTypeView.getId());
+                returnDisbursementType.setActive(disbursementTypeView.getActive());
                 returnDisbursementType.setDisbursement(disbursementTypeView.getDisbursement());
             }
         }
@@ -1064,7 +1168,7 @@ public class Decision implements Serializable {
         }
 
         CustomerInfoView returnCusInfoView = new CustomerInfoView();
-        for (CustomerInfoView customerInfoView : Util.safetyList(guarantorList)) {
+        for (CustomerInfoView customerInfoView : guarantorList) {
             if (customerInfoView.getId() == id) {
                 returnCusInfoView.setId(customerInfoView.getId());
                 returnCusInfoView.setFirstNameTh(customerInfoView.getFirstNameTh());
@@ -1471,14 +1575,6 @@ public class Decision implements Serializable {
 
     public void setCannotEditStandard(boolean cannotEditStandard) {
         this.cannotEditStandard = cannotEditStandard;
-    }
-
-    public List<ProductProgram> getProductProgramList() {
-        return productProgramList;
-    }
-
-    public void setProductProgramList(List<ProductProgram> productProgramList) {
-        this.productProgramList = productProgramList;
     }
 
     public boolean isRoleBDM() {
