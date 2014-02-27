@@ -393,6 +393,8 @@ public class Decision implements Serializable {
             standardBasePriceDlg = baseRateList.get(0);
             suggestBasePriceDlg = baseRateList.get(0);
         }
+        standardInterestDlg = BigDecimal.ZERO;
+        suggestInterestDlg = BigDecimal.ZERO;
 
         modeEditCredit = false;
         modeForButton = ModeForButton.ADD;
@@ -406,12 +408,15 @@ public class Decision implements Serializable {
 
         if (selectedApproveCredit.getRequestType() == RequestTypes.NEW.value()) {
             if (selectedApproveCredit.getNewCreditTierDetailViewList() != null && !selectedApproveCredit.getNewCreditTierDetailViewList().isEmpty()) {
-                BaseRate baseRateFromTier = selectedApproveCredit.getNewCreditTierDetailViewList().get(0).getStandardBasePrice();
-                BigDecimal interestFromTier = selectedApproveCredit.getNewCreditTierDetailViewList().get(0).getStandardInterest();
-                standardBasePriceDlg = getNewBaseRate(baseRateFromTier);
-                standardInterestDlg = new BigDecimal(interestFromTier.doubleValue());
-                suggestBasePriceDlg = getNewBaseRate(baseRateFromTier);
-                suggestInterestDlg = new BigDecimal(interestFromTier.doubleValue());
+                BaseRate standardBaseRate = selectedApproveCredit.getNewCreditTierDetailViewList().get(0).getStandardBasePrice();
+                BigDecimal standardInterest = selectedApproveCredit.getNewCreditTierDetailViewList().get(0).getStandardInterest();
+                standardBasePriceDlg = getNewBaseRate(standardBaseRate);
+                standardInterestDlg = new BigDecimal(standardInterest.doubleValue());
+
+                BaseRate suggestBaseRate = selectedApproveCredit.getNewCreditTierDetailViewList().get(0).getSuggestBasePrice();
+                BigDecimal suggestInterest = selectedApproveCredit.getNewCreditTierDetailViewList().get(0).getSuggestInterest();
+                suggestBasePriceDlg = getNewBaseRate(suggestBaseRate);
+                suggestInterestDlg = new BigDecimal(suggestInterest.doubleValue());
             }
         } else {
             if (baseRateList != null && !baseRateList.isEmpty()) {
@@ -421,7 +426,6 @@ public class Decision implements Serializable {
                 standardBasePriceDlg = new BaseRate();
                 suggestBasePriceDlg = new BaseRate();
             }
-
             standardInterestDlg = BigDecimal.ZERO;
             suggestInterestDlg = BigDecimal.ZERO;
         }
@@ -540,11 +544,12 @@ public class Decision implements Serializable {
             cannotEditStandard = false;
             cannotAddTier = false;
         }
-        else if (RequestTypes.NEW.value() == selectedApproveCredit.getRequestType()) {  //new
+        else if (RequestTypes.NEW.value() == selectedApproveCredit.getRequestType()) {
             if (productGroup != null) {
                 prdGroupToPrdProgramViewList = _prdGroupToPrdProgramByGroup;
             }
             cannotEditStandard = true;
+
             if (modeEditCredit) {
                 if (selectedApproveCredit.getNewCreditTierDetailViewList() == null || selectedApproveCredit.getNewCreditTierDetailViewList().isEmpty()) {
                     cannotAddTier = true;
@@ -888,6 +893,7 @@ public class Decision implements Serializable {
         log.debug("onAddAppProposeGuarantor()");
         selectedApproveGuarantor = new NewGuarantorDetailView();
         selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
+
         Cloner cloner = new Cloner();
         guarantorCreditTypeList = cloner.deepClone(sharedProposeCreditTypeList);
 

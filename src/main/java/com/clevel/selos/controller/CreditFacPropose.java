@@ -654,7 +654,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             standardBasePriceDlg = getNewBaseRate(baseRateList.get(0));
             suggestBasePriceDlg = getNewBaseRate(baseRateList.get(0));
         }
-
         standardInterestDlg = BigDecimal.ZERO;
         suggestInterestDlg = BigDecimal.ZERO;
     }
@@ -1418,7 +1417,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         newGuarantorDetailView = new NewGuarantorDetailView();
         modeForButton = ModeForButton.ADD;
         newGuarantorDetailView.setProposeCreditDetailViewList(creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId));
-
     }
 
     public void onEditGuarantorInfo() {
