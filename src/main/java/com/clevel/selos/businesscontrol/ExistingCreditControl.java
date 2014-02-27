@@ -11,9 +11,7 @@ import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcessResult;
 import com.clevel.selos.integration.rlos.appin.model.CustomerDetail;
-import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.CreditCategory;
-import com.clevel.selos.model.CreditRelationType;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.Reference;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;
@@ -158,9 +156,26 @@ public class ExistingCreditControl extends BusinessControl {
                                 if(!borrowerComCreditDetailHashMap.containsKey(borrowerKey)){
                                     borrowerComId = borrowerComId+1;
                                     existingCreditDetailView.setNo(borrowerComId);
-                                    existingCreditDetailView.setBorrowerType(1);
+                                    existingCreditDetailView.setBorrowerType(RelationValue.BORROWER.value());
                                     borrowerComCreditDetailHashMap.put(borrowerKey, existingCreditDetailView);
-                                    _totalBorrowerComLimit = _totalBorrowerComLimit.add(existingCreditDetailView.getLimit());
+                                    if(existingCreditDetailView.getExistCreditTypeView()!=null && existingCreditDetailView.getExistCreditTypeView().getId()!=0){
+                                        switch (CalLimitType.getCalLimitType(existingCreditDetailView.getExistCreditTypeView().getCalLimitType())) {
+                                            case LIMIT:
+                                                _totalBorrowerComLimit = _totalBorrowerComLimit.add(existingCreditDetailView.getLimit());
+                                                break;
+                                            case OUTSTANDING:
+                                                _totalBorrowerComLimit = _totalBorrowerComLimit.add(existingCreditDetailView.getOutstanding());
+                                                break;
+                                            case PCE:
+                                                _totalBorrowerComLimit = _totalBorrowerComLimit.add(existingCreditDetailView.getPceLimit());
+                                                break;
+                                            default:
+                                                _totalBorrowerComLimit = _totalBorrowerComLimit.add(existingCreditDetailView.getLimit());
+                                                break;
+                                        }
+                                    } else {
+                                        _totalBorrowerComLimit = _totalBorrowerComLimit.add(existingCreditDetailView.getLimit());
+                                    }
                                     borrowerComCreditDetailViews.add(existingCreditDetailView);
                                 }
                             } else {
@@ -170,9 +185,26 @@ public class ExistingCreditControl extends BusinessControl {
                                 if(!relatedComCreditDetailHashMap.containsKey(relateKey)){
                                     relatedComId = relatedComId+1;
                                     existingCreditDetailView.setNo(relatedComId);
-                                    existingCreditDetailView.setBorrowerType(2);
+                                    existingCreditDetailView.setBorrowerType(RelationValue.DIRECTLY_RELATED.value());
                                     relatedComCreditDetailHashMap.put(relateKey, existingCreditDetailView);
-                                    _totalRelatedComLimit = _totalRelatedComLimit.add(existingCreditDetailView.getLimit());
+                                    if(existingCreditDetailView.getExistCreditTypeView()!=null && existingCreditDetailView.getExistCreditTypeView().getId()!=0){
+                                        switch (CalLimitType.getCalLimitType(existingCreditDetailView.getExistCreditTypeView().getCalLimitType())) {
+                                            case LIMIT:
+                                                _totalRelatedComLimit = _totalRelatedComLimit.add(existingCreditDetailView.getLimit());
+                                                break;
+                                            case OUTSTANDING:
+                                                _totalRelatedComLimit = _totalRelatedComLimit.add(existingCreditDetailView.getOutstanding());
+                                                break;
+                                            case PCE:
+                                                _totalRelatedComLimit = _totalRelatedComLimit.add(existingCreditDetailView.getPceLimit());
+                                                break;
+                                            default:
+                                                _totalRelatedComLimit = _totalRelatedComLimit.add(existingCreditDetailView.getLimit());
+                                                break;
+                                        }
+                                    } else {
+                                        _totalRelatedComLimit = _totalRelatedComLimit.add(existingCreditDetailView.getLimit());
+                                    }
                                     relatedComCreditDetailViews.add(existingCreditDetailView);
                                 }
                             }
@@ -183,10 +215,27 @@ public class ExistingCreditControl extends BusinessControl {
                                 existingCreditDetailView.setCreditRelationType(CreditRelationType.BORROWER);
                                 if(!borrowerRetailCreditDetailHashMap.containsKey(borrowerKey)){
                                     borrowerRetailId = borrowerRetailId+1;
-                                    existingCreditDetailView.setBorrowerType(1);
+                                    existingCreditDetailView.setBorrowerType(RelationValue.BORROWER.value());
                                     existingCreditDetailView.setNo(borrowerRetailId);
                                     borrowerRetailCreditDetailHashMap.put(borrowerKey, existingCreditDetailView);
-                                    _totalBorrowerRetailLimit = _totalBorrowerRetailLimit.add(existingCreditDetailView.getLimit());
+                                    if(existingCreditDetailView.getExistCreditTypeView()!=null && existingCreditDetailView.getExistCreditTypeView().getId()!=0){
+                                        switch (CalLimitType.getCalLimitType(existingCreditDetailView.getExistCreditTypeView().getCalLimitType())) {
+                                            case LIMIT:
+                                                _totalBorrowerRetailLimit = _totalBorrowerRetailLimit.add(existingCreditDetailView.getLimit());
+                                                break;
+                                            case OUTSTANDING:
+                                                _totalBorrowerRetailLimit = _totalBorrowerRetailLimit.add(existingCreditDetailView.getOutstanding());
+                                                break;
+                                            case PCE:
+                                                _totalBorrowerRetailLimit = _totalBorrowerRetailLimit.add(existingCreditDetailView.getPceLimit());
+                                                break;
+                                            default:
+                                                _totalBorrowerRetailLimit = _totalBorrowerRetailLimit.add(existingCreditDetailView.getLimit());
+                                                break;
+                                        }
+                                    } else {
+                                        _totalBorrowerRetailLimit = _totalBorrowerRetailLimit.add(existingCreditDetailView.getLimit());
+                                    }
                                     borrowerRetailCreditDetailViews.add(existingCreditDetailView);
                                 }
                             } else {
@@ -195,9 +244,27 @@ public class ExistingCreditControl extends BusinessControl {
                                 existingCreditDetailView.setCreditRelationType(CreditRelationType.RELATED);
                                 if(!relatedRetailCreditDetailHashMap.containsKey(relateKey)){
                                     relatedRetailId = relatedRetailId+1;
-                                    existingCreditDetailView.setBorrowerType(2);
+                                    existingCreditDetailView.setBorrowerType(RelationValue.DIRECTLY_RELATED.value());
                                     existingCreditDetailView.setNo(relatedRetailId);
                                     relatedRetailCreditDetailHashMap.put(relateKey, existingCreditDetailView);
+                                    if(existingCreditDetailView.getExistCreditTypeView()!=null && existingCreditDetailView.getExistCreditTypeView().getId()!=0){
+                                        switch (CalLimitType.getCalLimitType(existingCreditDetailView.getExistCreditTypeView().getCalLimitType())) {
+                                            case LIMIT:
+                                                _totalRelatedRetailLimit = _totalRelatedRetailLimit.add(existingCreditDetailView.getLimit());
+                                                break;
+                                            case OUTSTANDING:
+                                                _totalRelatedRetailLimit = _totalRelatedRetailLimit.add(existingCreditDetailView.getOutstanding());
+                                                break;
+                                            case PCE:
+                                                _totalRelatedRetailLimit = _totalRelatedRetailLimit.add(existingCreditDetailView.getPceLimit());
+                                                break;
+                                            default:
+                                                _totalRelatedRetailLimit = _totalRelatedRetailLimit.add(existingCreditDetailView.getLimit());
+                                                break;
+                                        }
+                                    } else {
+                                        _totalRelatedRetailLimit = _totalRelatedRetailLimit.add(existingCreditDetailView.getLimit());
+                                    }
                                     _totalRelatedRetailLimit = _totalRelatedRetailLimit.add(existingCreditDetailView.getLimit());
                                     relatedRetailCreditDetailViews.add(existingCreditDetailView);
                                 }
@@ -257,6 +324,8 @@ public class ExistingCreditControl extends BusinessControl {
             AppInProcessResult appInProcessResult = rlosInterface.getAppInProcessData(getCurrentUserID(), personalIDList);
             log.info("Result from RLOSInterface, {} from personalID {}", appInProcessResult, personalIDList);
             if (appInProcessResult.getActionResult().equals(ActionResult.SUCCESS)) {
+                int borrowerId = 0;
+                int relatedId = 0;
 
                 log.info("Start Transform Result");
                 List<ExistingCreditDetailView> borrowerRLOSApp = new ArrayList<ExistingCreditDetailView>();
@@ -280,8 +349,10 @@ public class ExistingCreditControl extends BusinessControl {
 
                     for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViews) {
                         if (isBorrower) {
+                            borrowerId = borrowerId+1;
                             existingCreditDetailView.setCreditRelationType(CreditRelationType.BORROWER);
-
+                            existingCreditDetailView.setBorrowerType(RelationValue.BORROWER.value());
+                            existingCreditDetailView.setNo(borrowerId);
                             borrowerRLOSApp.add(existingCreditDetailView);
 
                             log.info("Existing Credit : {} ", existingCreditDetailView.getLimit());
@@ -289,8 +360,11 @@ public class ExistingCreditControl extends BusinessControl {
 
                             log.info("total borrower RLOS Limit {}", totalBorrowerRLOSApp);
                         } else {
-                            relatedRLOSApp.add(existingCreditDetailView);
+                            relatedId = relatedId+1;
                             existingCreditDetailView.setCreditRelationType(CreditRelationType.RELATED);
+                            existingCreditDetailView.setBorrowerType(RelationValue.DIRECTLY_RELATED.value());
+                            existingCreditDetailView.setNo(relatedId);
+                            relatedRLOSApp.add(existingCreditDetailView);
                             log.info("Existing Credit : {} ", existingCreditDetailView.getLimit());
                             totalRelatedRLOSApp = totalRelatedRLOSApp.add(existingCreditDetailView.getLimit());
                             log.info("total related RLOS Limit {}", totalRelatedRLOSApp);

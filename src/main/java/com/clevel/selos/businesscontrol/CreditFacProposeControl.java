@@ -790,10 +790,10 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         //--- Need to Delete newGuarantorCreditList from newGuarantorCredit before Insert new
-        List<NewGuarantorCredit> newGuarantorCreditListDelete = newGuarantorRelationDAO.getListByNewCreditFacility(workCase);
-        log.info("before :: newGuarantorCreditListDelete :: size :: {}",newGuarantorCreditListDelete.size());
-        newGuarantorRelationDAO.delete(newGuarantorCreditListDelete);
-        log.info("after :: newGuarantorCreditListDelete :: size :: {}",newGuarantorCreditListDelete.size());
+//        List<NewGuarantorCredit> newGuarantorCreditListDelete = newGuarantorRelationDAO.getListByNewCreditFacility(workCase);
+//        log.info("before :: newGuarantorCreditListDelete :: size :: {}",newGuarantorCreditListDelete.size());
+//        newGuarantorRelationDAO.delete(newGuarantorCreditListDelete);
+//        log.info("after :: newGuarantorCreditListDelete :: size :: {}",newGuarantorCreditListDelete.size());
 
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
@@ -803,6 +803,7 @@ public class CreditFacProposeControl extends BusinessControl {
             log.debug("saveCreditFacility ::: persist newGuarantorDetailList : {}", newGuarantorDetailList);
         }
 
+/*
         //--- Save to NewCollateral
         //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
         List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase);
@@ -817,6 +818,7 @@ public class CreditFacProposeControl extends BusinessControl {
         log.info("before :: newCollateralCreditList :: size :: {}",newCollateralCreditList.size());
         newCollateralCreditDAO.delete(newCollateralCreditList);
         log.info("after :: newCollateralCreditList :: size :: {}",newCollateralCreditList.size());
+*/
 
         if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCollateralViewList : {}", newCreditFacilityView.getNewCollateralViewList());

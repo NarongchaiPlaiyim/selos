@@ -64,7 +64,7 @@ public class NewGuarantorDetailTransform extends Transform {
             if (Util.safetyList(newGuarantorDetailView.getProposeCreditDetailViewList()).size() > 0) {
                 log.debug("Start.. transformToModel proposeCreditDetailViewList : {}", newGuarantorDetailView.getProposeCreditDetailViewList());
                 List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorCreditTransform.transformsToModelForGuarantor(newGuarantorDetailView.getProposeCreditDetailViewList(), newCreditFacility.getNewCreditDetailList(), newGuarantorDetail, user);
-                log.debug("End.. transformToModel newGuarantorCreditList : {}", newGuarantorCreditList);
+                log.debug("End.. transformToModel newGuarantorCreditList size :: {}", newGuarantorCreditList.size());
                 newGuarantorDetail.setNewGuarantorCreditList(newGuarantorCreditList);
             }
 
@@ -103,7 +103,6 @@ public class NewGuarantorDetailTransform extends Transform {
                     existingCreditDetailList.add(newGuarantorCredit.getExistingCreditDetail());
                 } else if (newGuarantorCredit.getNewCreditDetail() != null) {
                     log.info("newGuarantorCredit.getNewCreditDetail :: {}", newGuarantorCredit.getNewCreditDetail().getId());
-                    log.info("newGuarantorCredit.getGuaranteeAmount() ::: {}", newGuarantorCredit.getGuaranteeAmount());
                     newCreditDetailList.add(newGuarantorCredit.getNewCreditDetail());
                 }
             }
@@ -135,7 +134,6 @@ public class NewGuarantorDetailTransform extends Transform {
                 proposeCreditDetailView = new ProposeCreditDetailView();
                 proposeCreditDetailView.setSeq(tmp.getSeq());
                 proposeCreditDetailView.setId(rowCount);
-                proposeCreditDetailView.setNoFlag(true);
                 proposeCreditDetailView.setTypeOfStep("N");
                 proposeCreditDetailView.setAccountName(tmp.getAccountName());
                 proposeCreditDetailView.setAccountNumber(tmp.getAccountNumber());
