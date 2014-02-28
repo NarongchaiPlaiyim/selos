@@ -77,7 +77,7 @@ public class NewGuarantorCreditTransform extends Transform {
             log.info("guarantor choose seq is {}", proposeCreditDetailView.getSeq());
             if (proposeCreditDetailView.getSeq() == newCreditDetailAdd.getSeq()) {
                 newCreditDetailReturn = newCreditDetailAdd;
-                return newCreditDetailReturn;
+                break;
             }
         }
         return newCreditDetailReturn;

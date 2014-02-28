@@ -1006,7 +1006,8 @@
                                  onclick="this.select()"
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);"
-                                 styleClass="right">
+                                 styleClass="right"
+                                 required="true">
                         <f:convertNumber pattern="##0.00"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
@@ -1026,7 +1027,8 @@
                                  onclick="this.select()"
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);"
-                                 styleClass="right">
+                                 styleClass="right"
+                                 required="true">
                         <f:convertNumber pattern="##0.00"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
@@ -1876,7 +1878,6 @@
         <h:inputHidden value="#{creditFacPropose.newCreditFacilityView.totalNumberOfNewOD}"/>
         <h:inputHidden value="#{creditFacPropose.newCreditFacilityView.totalNumberProposeCreditFac}"/>
         <h:inputHidden value="#{creditFacPropose.newCreditFacilityView.totalNumberContingenPropose}"/>
-        <h:inputHidden value="#{creditFacPropose.newCreditFacilityView.numberMonthsFromApprDate}"/>
         <h:inputHidden value="#{creditFacPropose.newCreditFacilityView.totalNumberOfCoreAsset}"/>
         <h:inputHidden value="#{creditFacPropose.newCreditFacilityView.totalNumberOfNonCoreAsset}"/>
         <h:inputHidden value="#{creditFacPropose.newCreditFacilityView.totalMortgageValue}"/>
