@@ -334,7 +334,7 @@ public class TestNCRS implements Serializable {
         log.info("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
         StandardPricingResponse standardPricingResponse  = null;
         try {
-            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
+//            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
 
             if (standardPricingResponse != null) {
                 log.info("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult());
