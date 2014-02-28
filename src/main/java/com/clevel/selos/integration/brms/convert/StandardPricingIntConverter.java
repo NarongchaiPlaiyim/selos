@@ -28,9 +28,7 @@ public class StandardPricingIntConverter extends Converter {
 
     public DecisionServiceRequest getDecisionServiceRequest(BRMSApplicationInfo applicationInfo){
         if(applicationInfo != null){
-
             ApplicationType applicationType = new ApplicationType();
-
             applicationType.setApplicationNumber(applicationInfo.getApplicationNo());
             try{
                 GregorianCalendar gregorianCalendar = new GregorianCalendar();
@@ -39,7 +37,6 @@ public class StandardPricingIntConverter extends Converter {
             }catch (Exception ex){
                 logger.error("Could not transform Date");
             }
-
             List<AttributeType> attributeTypeList = applicationType.getAttribute();
             attributeTypeList.add(getAttributeType(BRMSField.APP_IN_DATE, applicationInfo.getBdmSubmitDate()));
             attributeTypeList.add(getAttributeType(BRMSField.GUARANTEE_TYPE, applicationInfo.getLoanRequestType()));
@@ -157,15 +154,18 @@ public class StandardPricingIntConverter extends Converter {
     }
 
     private AttributeType getAttributeType(BRMSField field, Date value){
+        logger.debug("-- getAttributeType()");
         AttributeType attributeType = new AttributeType();
-
         try{
             attributeType.setName(field.value());
+            logger.debug("-- field.value()[{}]", field.value());
             GregorianCalendar gregorianCalendar = new GregorianCalendar();
             gregorianCalendar.setTime(value);
+            logger.debug("-- value()[{}]", value);
             attributeType.setDateTimeValue(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
         } catch (Exception ex){
             logger.error("Cannot convert XML");
+            logger.error("-- Exception : {}", ex.getMessage());
         }
         return attributeType;
     }

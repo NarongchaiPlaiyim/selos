@@ -17,25 +17,26 @@ import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
-import com.clevel.selos.businesscontrol.PledgeConfirmControl;
+import com.clevel.selos.businesscontrol.MortgageConfirmControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.view.BasicInfoView;
-import com.clevel.selos.model.view.PledgeInfoView;
+import com.clevel.selos.model.view.MortgageInfoView;
+import com.clevel.selos.model.view.MortgageSummaryView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
 @ViewScoped
-@ManagedBean(name="pledgeConfirm")
-public class PledgeConfirm implements Serializable {
-	private static final long serialVersionUID = -4174470383570669219L;
+@ManagedBean(name="mortgageConfirm")
+public class MortgageConfirm implements Serializable {
+	private static final long serialVersionUID = -2455694528177787475L;
 	@Inject @SELOS
 	private Logger log;
 	@Inject
 	private BasicInfoControl basicInfoControl;
 	
 	@Inject
-	private PledgeConfirmControl pledgeConfirmControl;
+	private MortgageConfirmControl mortgageConfirmControl;
 	
 	//Private variable
 	private boolean preRenderCheck = false;
@@ -45,17 +46,20 @@ public class PledgeConfirm implements Serializable {
 	private BasicInfoView basicInfoView;
 	
 	//Property
-	private List<PledgeInfoView> pledges;
+	private MortgageSummaryView summary;
+	private List<MortgageInfoView> mortgages;
 	
-	public PledgeConfirm() {
+	public MortgageConfirm() {
 		
 	}
 	public Date getLastUpdateDateTime() {
-		return null;
+		return summary.getModifyDate();
 	}
 	public String getLastUpdateBy() {
-		//TODO
-		return null;
+		if (summary.getModifyBy() != null)
+			return summary.getModifyBy().getDisplayName();
+		else
+			return null;
 	}
 	public ApproveType getApproveType() {
 		if (basicInfoView == null)
@@ -63,8 +67,11 @@ public class PledgeConfirm implements Serializable {
 		else
 			return basicInfoView.getApproveType();
 	}
-	public List<PledgeInfoView> getPledges() {
-		return pledges;
+	public List<MortgageInfoView> getMortgages() {
+		return mortgages;
+	}
+	public MortgageSummaryView getSummary() {
+		return summary;
 	}
 	
 	/*
@@ -106,13 +113,12 @@ public class PledgeConfirm implements Serializable {
 		}
 	}
 	
-	public void onSavePledgeConfirm() {
-		pledgeConfirmControl.savePledgeConfirm(pledges);
+	public void onSaveMortgageConfirm() {
+		mortgageConfirmControl.saveMortgageConfirm(summary, mortgages);
 		
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
-	
 	/*
 	 * Private method
 	 */
@@ -121,7 +127,7 @@ public class PledgeConfirm implements Serializable {
 		if (workCaseId > 0) {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
-		pledges = pledgeConfirmControl.getPledgeInfoList(workCaseId);
+		summary = mortgageConfirmControl.getMortgageSummary(workCaseId);
+		mortgages = mortgageConfirmControl.getMortgageInfoList(workCaseId);
 	}
 }
-
