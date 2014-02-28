@@ -671,23 +671,32 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         modeForButton = ModeForButton.EDIT;
         Cloner cloner = new Cloner();
         newCreditDetailView = cloner.deepClone(newCreditDetailSelected);
+
         onChangeRequestType();
         creditFacProposeControl.calculateInstallment(newCreditDetailView);
 
         if (newCreditDetailView.getRequestType() == RequestTypes.NEW.value()) {
             if (newCreditDetailView.getNewCreditTierDetailViewList() != null && newCreditDetailView.getNewCreditTierDetailViewList().size() > 0) {
-                BaseRate baseRateFromTier = newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardBasePrice();
-                BigDecimal interestFromTier = newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardInterest();
-                suggestInterestDlg = new BigDecimal(interestFromTier.doubleValue());
-                suggestBasePriceDlg = getNewBaseRate(baseRateFromTier);
-                standardInterestDlg = new BigDecimal(interestFromTier.doubleValue());
-                standardBasePriceDlg = getNewBaseRate(baseRateFromTier);
+                BaseRate suggestBaseRate = newCreditDetailView.getNewCreditTierDetailViewList().get(0).getSuggestBasePrice();
+                BigDecimal suggestInterest = newCreditDetailView.getNewCreditTierDetailViewList().get(0).getSuggestInterest();
+                suggestInterestDlg = new BigDecimal(suggestInterest.doubleValue());
+                suggestBasePriceDlg = getNewBaseRate(suggestBaseRate);
+
+                BaseRate standardBaseRate = newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardBasePrice();
+                BigDecimal standardInterest = newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardInterest();
+                standardInterestDlg = new BigDecimal(standardInterest.doubleValue());
+                standardBasePriceDlg = getNewBaseRate(standardBaseRate);
             }
         } else {
+            if (baseRateList != null && !baseRateList.isEmpty()) {
+                suggestBasePriceDlg = getNewBaseRate(baseRateList.get(0));
+                standardBasePriceDlg = getNewBaseRate(baseRateList.get(0));
+            } else {
+                suggestBasePriceDlg = new BaseRate();
+                standardBasePriceDlg = new BaseRate();
+            }
             suggestInterestDlg = BigDecimal.ZERO;
-            suggestBasePriceDlg = new BaseRate();
             standardInterestDlg = BigDecimal.ZERO;
-            standardBasePriceDlg = new BaseRate();
         }
     }
 
@@ -1288,7 +1297,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     public void onEditSubCollateral() {
         log.debug("rowSubIndex :: {}", rowSubIndex);
         modeForSubColl = ModeForButton.EDIT;
-        newCollateralSubView = new NewCollateralSubView();
         Cloner cloner = new Cloner();
         newCollateralSubView = cloner.deepClone(subCollateralDetailItem);
     }
