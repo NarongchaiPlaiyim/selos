@@ -55,6 +55,8 @@ public class ExistingCreditDetailView implements Serializable {
     private User createBy;
     private User modifyBy;
 
+    private boolean isUsePCE;
+
     private List<ExistingCreditTierDetailView> existingCreditTierDetailViewList;
     private List<ExistingSplitLineDetailView> existingSplitLineDetailViewList;
 
@@ -354,6 +356,14 @@ public class ExistingCreditDetailView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    public boolean isUsePCE() {
+        return isUsePCE;
+    }
+
+    public void setUsePCE(boolean usePCE) {
+        isUsePCE = usePCE;
+    }
+
     public List<ExistingCreditTierDetailView> getExistingCreditTierDetailViewList() {
         return existingCreditTierDetailViewList;
     }
@@ -401,6 +411,7 @@ public class ExistingCreditDetailView implements Serializable {
                 .append("source", source)
                 .append("tenor", tenor)
                 .append("accountRef", accountRef)
+                .append("isUsePCE", isUsePCE)
                 .append("existingCreditTierDetailViewList", existingCreditTierDetailViewList)
                 .append("existingSplitLineDetailViewList", existingSplitLineDetailViewList)
                 .append("productSegment", productSegment)
