@@ -140,6 +140,8 @@ public class CreditFacExisting implements Serializable {
     private boolean canSaveRelatedCol;
     private boolean canSaveGarantor;
 
+    private boolean isUsePCE;
+
     @Inject
     private CreditTypeDAO creditTypeDAO;
     @Inject
@@ -218,6 +220,8 @@ public class CreditFacExisting implements Serializable {
         log.info("preRender ::: 1.7 ");
         hashBorrower = new Hashtable<String,String>();
         hashRelated  = new Hashtable<String,String>();
+
+        isUsePCE = false;
 
 
         log.info("preRender ::: 2 ");
@@ -450,6 +454,13 @@ public class CreditFacExisting implements Serializable {
 
             showSplitLine = Util.isTrue(creditType.getCanSplit());
 
+            //check for PCE
+            if(CalLimitType.getCalLimitType(creditType.getCalLimitType()) == CalLimitType.PCE){
+                isUsePCE = true;
+            } else {
+                isUsePCE = false;
+            }
+
             if(productProgram != null && creditType != null){
                 PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType,productProgram);
                 ProductFormula productFormula = productFormulaDAO.findProductFormula(prdProgramToCreditType);
@@ -505,6 +516,7 @@ public class CreditFacExisting implements Serializable {
         showSplitLine = false;
         modeForButton = ModeForButton.ADD;
         canSaveCreditDetail = false;
+        isUsePCE = false;
         log.info("onAddCommercialCredit ::: modeForButton : {}", modeForButton);
     }
 
@@ -534,6 +546,13 @@ public class CreditFacExisting implements Serializable {
         onChangeProductProgram();
 
         CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
+
+        if(CalLimitType.getCalLimitType(creditType.getCalLimitType()) == CalLimitType.PCE){
+            isUsePCE = true;
+        } else {
+            isUsePCE = false;
+        }
+
         if(Util.isTrue(creditType.getCanSplit())){
             showSplitLine = true;
             BigDecimal totalLimit = existingCreditDetailView.getLimit();
@@ -681,6 +700,33 @@ public class CreditFacExisting implements Serializable {
         } else {
             canSaveCreditDetail = true;
         }
+
+
+        if(CalLimitType.getCalLimitType(creditType.getCalLimitType()) == CalLimitType.PCE){
+            BigDecimal limit = existingCreditDetailView.getLimit();
+            BigDecimal percentPCE = existingCreditDetailView.getPcePercent();
+            BigDecimal hundred = new BigDecimal(100);
+            BigDecimal limitPCE = new BigDecimal(0);
+
+            if(limit!=null && limit.compareTo(BigDecimal.ZERO) > 0){
+                limitPCE = (limit.multiply(percentPCE)).divide(hundred,2,BigDecimal.ROUND_HALF_UP);
+            }
+
+            existingCreditDetailView.setPceLimit(limitPCE);
+        }
+    }
+
+    public void calPCELimit(){
+        BigDecimal limit = existingCreditDetailView.getLimit();
+        BigDecimal percentPCE = existingCreditDetailView.getPcePercent();
+        BigDecimal hundred = new BigDecimal(100);
+        BigDecimal limitPCE = new BigDecimal(0);
+
+        if(limit!=null && limit.compareTo(BigDecimal.ZERO) > 0){
+            limitPCE = (limit.multiply(percentPCE)).divide(hundred,2,BigDecimal.ROUND_HALF_UP);
+        }
+
+        existingCreditDetailView.setPceLimit(limitPCE);
     }
 
     public void onSaveCreditDetail() {
@@ -706,6 +752,12 @@ public class CreditFacExisting implements Serializable {
             existingCreditDetailView.setExistProductProgramView(productTransform.transformToView(productProgramDAO.findById(existingCreditDetailView.getExistProductProgramView().getId())));
             existingCreditDetailView.setExistCreditTypeView(productTransform.transformToView(creditType));
             existingCreditDetailView.setExistAccountStatus(bankAccountStatus);
+
+            if(CalLimitType.getCalLimitType(creditType.getCalLimitType()) == CalLimitType.PCE){
+                existingCreditDetailView.setUsePCE(true);
+            } else {
+                existingCreditDetailView.setUsePCE(false);
+            }
 
             if(Util.isTrue(creditType.getCanSplit())){
                 for(int i=0;i<existingSplitLineDetailViewList.size();i++){
@@ -783,6 +835,12 @@ public class CreditFacExisting implements Serializable {
             BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findById(existingCreditDetailView.getExistAccountStatus().getId());
             BankAccountStatusView bankAccountStatusV = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
             CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
+
+            if(CalLimitType.getCalLimitType(creditType.getCalLimitType()) == CalLimitType.PCE){
+                existingCreditDetailViewRow.setUsePCE(true);
+            } else {
+                existingCreditDetailViewRow.setUsePCE(false);
+            }
 
             existingCreditDetailViewRow.setExistProductProgramView(productTransform.transformToView(productProgramDAO.findById(existingCreditDetailView.getExistProductProgramView().getId())));
             existingCreditDetailViewRow.setExistCreditTypeView(productTransform.transformToView(creditType));
@@ -2395,5 +2453,13 @@ public class CreditFacExisting implements Serializable {
 
     public void setCanSaveRelatedCol(boolean canSaveRelatedCol) {
         this.canSaveRelatedCol = canSaveRelatedCol;
+    }
+
+    public boolean isUsePCE() {
+        return isUsePCE;
+    }
+
+    public void setUsePCE(boolean usePCE) {
+        isUsePCE = usePCE;
     }
 }
