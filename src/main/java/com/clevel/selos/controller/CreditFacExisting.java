@@ -701,18 +701,24 @@ public class CreditFacExisting implements Serializable {
             canSaveCreditDetail = true;
         }
 
+        if(creditType!=null && creditType.getId()!=0){
+            if(CalLimitType.getCalLimitType(creditType.getCalLimitType()) == CalLimitType.PCE){
+                BigDecimal limit = existingCreditDetailView.getLimit();
+                BigDecimal percentPCE = existingCreditDetailView.getPcePercent();
+                BigDecimal hundred = new BigDecimal(100);
+                BigDecimal limitPCE = new BigDecimal(0);
 
-        if(CalLimitType.getCalLimitType(creditType.getCalLimitType()) == CalLimitType.PCE){
-            BigDecimal limit = existingCreditDetailView.getLimit();
-            BigDecimal percentPCE = existingCreditDetailView.getPcePercent();
-            BigDecimal hundred = new BigDecimal(100);
-            BigDecimal limitPCE = new BigDecimal(0);
+                if(percentPCE==null) {
+                    percentPCE = BigDecimal.ZERO;
+                    existingCreditDetailView.setPcePercent(percentPCE);
+                }
 
-            if(limit!=null && limit.compareTo(BigDecimal.ZERO) > 0){
-                limitPCE = (limit.multiply(percentPCE)).divide(hundred,2,BigDecimal.ROUND_HALF_UP);
+                if(limit!=null && limit.compareTo(BigDecimal.ZERO) > 0){
+                    limitPCE = (limit.multiply(percentPCE)).divide(hundred,2,BigDecimal.ROUND_HALF_UP);
+                }
+
+                existingCreditDetailView.setPceLimit(limitPCE);
             }
-
-            existingCreditDetailView.setPceLimit(limitPCE);
         }
     }
 
@@ -721,6 +727,11 @@ public class CreditFacExisting implements Serializable {
         BigDecimal percentPCE = existingCreditDetailView.getPcePercent();
         BigDecimal hundred = new BigDecimal(100);
         BigDecimal limitPCE = new BigDecimal(0);
+
+        if(percentPCE==null) {
+            percentPCE = BigDecimal.ZERO;
+            existingCreditDetailView.setPcePercent(percentPCE);
+        }
 
         if(limit!=null && limit.compareTo(BigDecimal.ZERO) > 0){
             limitPCE = (limit.multiply(percentPCE)).divide(hundred,2,BigDecimal.ROUND_HALF_UP);
