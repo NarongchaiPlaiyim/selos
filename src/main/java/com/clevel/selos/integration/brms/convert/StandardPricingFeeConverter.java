@@ -151,15 +151,18 @@ public class StandardPricingFeeConverter extends Converter{
     }
 
     private AttributeType getAttributeType(BRMSField field, Date value){
+        logger.debug("-- getAttributeType()");
         AttributeType attributeType = new AttributeType();
-
         try{
             attributeType.setName(field.value());
+            logger.debug("-- field.value()[{}]", field.value());
             GregorianCalendar gregorianCalendar = new GregorianCalendar();
             gregorianCalendar.setTime(value);
+            logger.debug("-- value()[{}]", value);
             attributeType.setDateTimeValue(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
         } catch (Exception ex){
             logger.error("Cannot convert XML");
+            logger.error("-- Exception : {}", ex.getMessage());
         }
         return attributeType;
     }

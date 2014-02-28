@@ -1,11 +1,14 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.AppraisalResultControl;
+import com.clevel.selos.businesscontrol.BRMSControl;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.exception.ECMInterfaceException;
+import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.ECMInterface;
 import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.model.ECMDataResult;
@@ -55,10 +58,14 @@ public class TestNCRS implements Serializable {
 
     @Inject
     private COMSInterface comsInterface;
-
     @Inject
     private ECMInterface ecmInterface;
+    @Inject
+    private BRMSInterface brmsInterface;
 
+
+    @Inject
+    private BRMSControl brmsControl;
 
     //    @Inject
 //    NCBIService ncbiService;
@@ -315,6 +322,28 @@ public class TestNCRS implements Serializable {
             log.error("-- Exception : {}", e.getMessage());
             result = e.getMessage();
         }
+    }
+
+    public void onClickCallBRMS(){
+//        brmsInterface.checkStandardPricingIntRule();
+    }
+
+    //call BRMS
+    public StandardPricingResponse getPriceFeeInterest() {
+        long workCaseId = 321;
+        log.info("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
+        StandardPricingResponse standardPricingResponse  = null;
+        try {
+            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
+
+            if (standardPricingResponse != null) {
+                log.info("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult());
+            }
+
+        }catch (Exception e) {
+            log.error("Exception while get getPriceFeeInterest data!", e);
+        }
+        return standardPricingResponse;
     }
 
     public String getUserIdForComS() {
