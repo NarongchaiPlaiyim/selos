@@ -1,10 +1,17 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.AppraisalResultControl;
+import com.clevel.selos.businesscontrol.BRMSControl;
 import com.clevel.selos.exception.COMSInterfaceException;
+import com.clevel.selos.exception.ECMInterfaceException;
+import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.COMSInterface;
+import com.clevel.selos.integration.ECMInterface;
 import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
+import com.clevel.selos.integration.ecm.db.ECMDetail;
+import com.clevel.selos.integration.ecm.model.ECMDataResult;
 import com.clevel.selos.integration.ncb.NCBInterfaceImpl;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSInputModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
@@ -27,6 +34,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "TestNCRS")
@@ -50,8 +58,14 @@ public class TestNCRS implements Serializable {
 
     @Inject
     private COMSInterface comsInterface;
+    @Inject
+    private ECMInterface ecmInterface;
+    @Inject
+    private BRMSInterface brmsInterface;
 
 
+    @Inject
+    private BRMSControl brmsControl;
 
     //    @Inject
 //    NCBIService ncbiService;
@@ -88,6 +102,10 @@ public class TestNCRS implements Serializable {
     @Inject
     private CollateralBizTransform collateralBizTransform;
     private NewCollateralView newCollateralView;
+
+    //Call ECM
+    private String caNumberECM = "04621809124082010060";
+
 
     @Inject
     public TestNCRS() {
@@ -264,6 +282,7 @@ public class TestNCRS implements Serializable {
     }
 
     public void onClickCallComS(){
+
         try{                                                                           //10001
              AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(userIdForComS, jobId);
             if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())){
@@ -281,6 +300,51 @@ public class TestNCRS implements Serializable {
         }
     }
 
+    public void onClickCallECM(){
+        log.debug("-- onClickCallECM");
+        System.out.println("-- onClickCallECM");
+        try{
+            ECMDataResult ecmDataResult = ecmInterface.getECMDataResult(caNumberECM);
+            if(!Util.isNull(ecmDataResult) && ActionResult.SUCCESS.equals(ecmDataResult.getActionResult())){
+                List<ECMDetail> ecmDetailList = ecmDataResult.getEcmDetailList();
+                for (ECMDetail ecmDetail : ecmDetailList) {
+                    log.debug("-- ECMDetail : [{}]", ecmDetail.toString());
+                    System.out.println("-- ECMDetail "+ ecmDetail.toString());
+                }
+                result = ecmDetailList.toString();
+            } else {
+                result = "FAILED";
+            }
+        } catch (ECMInterfaceException e) {
+            log.error("-- ECMInterfaceException : {}", e.getMessage());
+            result = e.getMessage();
+        } catch (Exception e) {
+            log.error("-- Exception : {}", e.getMessage());
+            result = e.getMessage();
+        }
+    }
+
+    public void onClickCallBRMS(){
+//        brmsInterface.checkStandardPricingIntRule();
+    }
+
+    //call BRMS
+    public StandardPricingResponse getPriceFeeInterest() {
+        long workCaseId = 321;
+        log.info("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
+        StandardPricingResponse standardPricingResponse  = null;
+        try {
+//            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
+
+            if (standardPricingResponse != null) {
+                log.info("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult());
+            }
+
+        }catch (Exception e) {
+            log.error("Exception while get getPriceFeeInterest data!", e);
+        }
+        return standardPricingResponse;
+    }
 
     public String getUserIdForComS() {
         return userIdForComS;
@@ -324,6 +388,14 @@ public class TestNCRS implements Serializable {
 
     public String getMemberref() {
         return memberref;
+    }
+
+    public String getCaNumberECM() {
+        return caNumberECM;
+    }
+
+    public void setCaNumberECM(String caNumberECM) {
+        this.caNumberECM = caNumberECM;
     }
 
     public void setMemberref(String memberref) {

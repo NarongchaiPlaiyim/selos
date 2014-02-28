@@ -27,6 +27,8 @@ public class CreditType implements Serializable {
     private int canSplit;
     @Column(name = "cal_limit_type",columnDefinition="int default 1")
     private int calLimitType;
+    @Column(name = "credit_group",columnDefinition="int default 10")
+    private int creditGroup;
     @Column(name = "active")
     private int active;
 
@@ -89,6 +91,14 @@ public class CreditType implements Serializable {
         this.calLimitType = calLimitType;
     }
 
+    public int getCreditGroup() {
+        return creditGroup;
+    }
+
+    public void setCreditGroup(int creditGroup) {
+        this.creditGroup = creditGroup;
+    }
+
     public int getActive() {
         return active;
     }
@@ -106,6 +116,8 @@ public class CreditType implements Serializable {
                 .append("brmsCode", brmsCode)
                 .append("comsIntType", comsIntType)
                 .append("canSplit", canSplit)
+                .append("calLimitType", calLimitType)
+                .append("creditGroup", creditGroup)
                 .append("active", active)
                 .toString();
     }
