@@ -236,8 +236,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     @Inject
     private LoanPurposeControl loanPurposeControl;
 
-    public CreditFacPropose() {
-    }
+    public CreditFacPropose(){}
 
     public void preRender() {
         log.debug("preRender ::: setSession ");
@@ -245,10 +244,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
         if (!Util.isNull(session.getAttribute("workCaseId"))) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            log.debug("workCaseId :: {} ", workCaseId);
+            log.info("workCaseId :: {} ", workCaseId);
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            log.info("preRender ::: 3.2 " + stepId);
-
+            log.info("preRender :: {} ", stepId);
         } else {
             log.debug("preRender ::: workCaseId is null.");
             FacesUtil.redirect("/site/inbox.jsf");
@@ -294,6 +292,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             if (basicInfo == null) {
                 specialProgramBasicInfo = null;
                 productGroup = null;
+                FacesUtil.redirect("/site/basicInfo.jsf");
             } else {
                 log.info("basicInfo.id ::: {}", basicInfo.getId());
                 if (basicInfo.getApplySpecialProgram() == RadioValue.YES.value()) {
