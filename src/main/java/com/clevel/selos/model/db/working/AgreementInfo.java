@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.MortgageConfirmedType;
 import com.clevel.selos.model.MortgageSignLocationType;
 import com.clevel.selos.model.db.master.BankBranch;
 import com.clevel.selos.model.db.master.UserZone;
@@ -49,6 +50,10 @@ public class AgreementInfo implements Serializable {
     @OneToOne
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
+    
+    @Column(name="confirmed",columnDefinition="int default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private MortgageConfirmedType confirmed;
     
     public AgreementInfo() {
     	
@@ -126,4 +131,10 @@ public class AgreementInfo implements Serializable {
 		this.workCase = workCase;
 	}
 
+	public MortgageConfirmedType getConfirmed() {
+		return confirmed;
+	}
+	public void setConfirmed(MortgageConfirmedType confirmed) {
+		this.confirmed = confirmed;
+	}
 }

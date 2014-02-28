@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.User;
 
 public class PledgeInfoView implements Serializable {
@@ -20,9 +21,10 @@ public class PledgeInfoView implements Serializable {
 	private User modifyBy;
 	private Date modifyDate;
 	
+	private RadioValue confirmed;
 	
 	public PledgeInfoView() {
-		
+		confirmed = RadioValue.NA;
 	}
 
 	public long getId() {
@@ -91,5 +93,11 @@ public class PledgeInfoView implements Serializable {
 	}
 	public void setNumberOfDep(int numberOfDep) {
 		this.numberOfDep = numberOfDep;
+	}
+	public RadioValue getConfirmed() {
+		return confirmed;
+	}
+	public void setConfirmed(RadioValue confirmed) {
+		this.confirmed = confirmed;
 	}
 }
