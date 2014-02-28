@@ -11,6 +11,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.GuarantorCategory;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.master.*;
@@ -63,6 +64,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     Message exceptionMsg;
 
     private Long workCaseId;
+    private Long stepId;
 
     enum ModeForButton {ADD, EDIT}
 
@@ -244,6 +246,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         if (!Util.isNull(session.getAttribute("workCaseId"))) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             log.debug("workCaseId :: {} ", workCaseId);
+            stepId = Long.parseLong(session.getAttribute("stepId").toString());
+            log.info("preRender ::: 3.2 " + stepId);
+
         } else {
             log.debug("preRender ::: workCaseId is null.");
             FacesUtil.redirect("/site/inbox.jsf");
@@ -494,7 +499,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.debug("onRetrievePricingFee ::workCaseId :::  {}", workCaseId);
         if (!Util.isNull(workCaseId)) {
             try {
-                StandardPricingResponse standardPricingResponse = creditFacProposeControl.getPriceFeeInterest(workCaseId);
+                StandardPricingResponse standardPricingResponse = creditFacProposeControl.getPriceFeeInterest(workCaseId,stepId);
 
                 if (!Util.isNull(standardPricingResponse) && ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
                     log.debug("standardPricingResponse ::: {}", standardPricingResponse.getPricingInterest().toString());
@@ -1463,6 +1468,12 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 CustomerInfoView customerInfoView = customerInfoControl.getCustomerById(newGuarantorDetailView.getGuarantorName());
                 NewGuarantorDetailView guarantorDetailAdd = new NewGuarantorDetailView();
                 guarantorDetailAdd.setGuarantorName(customerInfoView);
+
+                /*if(customerInfoView.get){
+
+                }*/
+                guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
+
                 guarantorDetailAdd.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
 
                 if (newGuarantorDetailView.getProposeCreditDetailViewList().size() > 0) {

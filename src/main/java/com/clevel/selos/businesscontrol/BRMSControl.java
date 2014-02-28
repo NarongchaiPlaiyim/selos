@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.SELOS;
@@ -10,6 +11,7 @@ import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.GuarantorCategory;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestTypes;
+import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.*;
 import org.slf4j.Logger;
 
@@ -53,13 +55,15 @@ public class BRMSControl extends BusinessControl {
     private PrescreenCollateralDAO prescreenCollateralDAO;
     @Inject
     private PrescreenFacilityDAO prescreenFacilityDAO;
+    @Inject
+    StepDAO stepDAO;
 
     @Inject
     public BRMSControl() {
     }
 
-    public StandardPricingResponse getPriceFeeInterest(long workCaseId) {
-        BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId);
+    public StandardPricingResponse getPriceFeeInterest(long workCaseId,long stepId) {
+        BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId,stepId);
         StandardPricingResponse _returnPricingResponse = new StandardPricingResponse();
 
         StandardPricingResponse _tmpPricingIntResponse = brmsInterface.checkStandardPricingIntRule(applicationInfo);
@@ -80,21 +84,22 @@ public class BRMSControl extends BusinessControl {
         return _returnPricingResponse;
     }
 
-    public StandardPricingResponse getPriceFee(long workCaseId) {
-        BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId);
+    public StandardPricingResponse getPriceFee(long workCaseId,long stepId) {
+        BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId,stepId);
         StandardPricingResponse standardPricingResponse = brmsInterface.checkStandardPricingFeeRule(applicationInfo);
         return standardPricingResponse;
     }
 
-    public StandardPricingResponse getPricingInt(long workCaseId) {
-        BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId);
+    public StandardPricingResponse getPricingInt(long workCaseId,long stepId) {
+        BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId,stepId);
         StandardPricingResponse response = brmsInterface.checkStandardPricingIntRule(applicationInfo);
         return response;
     }
 
-    private BRMSApplicationInfo getApplicationInfoForPricing(long workCaseId) {
+    private BRMSApplicationInfo getApplicationInfoForPricing(long workCaseId,long stepId) {
         logger.debug("-- start getApplicationInfoForPricing with workCaseId {}", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+        Step step = stepDAO.findById(stepId);
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         BRMSApplicationInfo applicationInfo = new BRMSApplicationInfo();
         applicationInfo.setStatusCode(workCase.getStatus().getCode());
@@ -115,9 +120,10 @@ public class BRMSControl extends BusinessControl {
             logger.debug("workCaseId :: {}", workCaseId);
             logger.debug("workCase.getStep() :: {}", workCase.getStep());
             logger.debug("workCase.getStep().getProposeType() :: {}", workCase.getStep().getProposeType());
+            logger.debug("step :: {}",step.getProposeType().value());
 
-
-            List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailDAO.findGuarantorByProposeType(workCaseId, workCase.getStep().getProposeType());
+//            List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailDAO.findGuarantorByProposeType(workCaseId, workCase.getStep().getProposeType());
+            List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailDAO.findGuarantorByProposeType(workCaseId, step.getProposeType());
             for (NewGuarantorDetail newGuarantorDetail : newGuarantorDetailList) {
                 if (newGuarantorDetail.getGuarantorCategory().equals(GuarantorCategory.TCG)) {
                     if (newGuarantorDetail.getTotalLimitGuaranteeAmount().compareTo(BigDecimal.ZERO) > 0) {

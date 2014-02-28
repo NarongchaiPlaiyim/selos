@@ -96,12 +96,15 @@
                                         <td colspan="3">
                                             <table style="border-spacing: 0;">
                                                 <tr>
-                                                    <td class="left title" style="min-width: 115px; width: 115px; max-width: 115px;"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressNo')}" /> : </td>
-                                                    <td class="left" colspan="3"><p:inputText styleClass="medium" style="width: 140px;" id="addressNo" onkeydown="return onKeyDownHomeNo(event);"
-                                                                                              onkeypress="return onKeyPressHomeNo(event);" value="#{bizInfoSummary.bizInfoSummaryView.addressNo}"
-                                                                                              required="#{not empty param[addBizInfoSummary.clientId]}">
-                                                                                             <p:ajax event="blur" update=":frmMain:addressMoo"/>
-                                                                                 </p:inputText>
+                                                    <td class="left title" style="min-width: 115px; width: 115px; max-width: 115px;">
+                                                        <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressNo')}" /> :
+                                                    </td>
+                                                    <td class="left" colspan="3">
+                                                        <p:inputText styleClass="medium" style="width: 140px;" id="addressNo" onkeydown="return onKeyDownHomeNo(event);"
+                                                             onkeypress="return onKeyPressHomeNo(event);" value="#{bizInfoSummary.bizInfoSummaryView.addressNo}"
+                                                            required="#{not empty param[addBizInfoSummary.clientId]}">
+                                                            <p:ajax event="blur" update=":frmMain:addressMoo,:frmMain:addressNo"/>
+                                                        </p:inputText>
                                                         <p:spacer width="35" height="5" />
                                                         <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressMoo')} :" styleClass="title" for="addressMoo"/>
                                                         <p:spacer width="5" height="5"/>

@@ -56,6 +56,7 @@ public class NewGuarantorDetailTransform extends Transform {
             newGuarantorDetail.setProposeType(ProposeType.P);
             Customer guarantor = customerDAO.findById(newGuarantorDetailView.getGuarantorName().getId());
             newGuarantorDetail.setGuarantorName(guarantor);
+            newGuarantorDetail.setGuarantorCategory(newGuarantorDetailView.getGuarantorCategory());
             newGuarantorDetail.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
             newGuarantorDetail.setNewCreditFacility(newCreditFacility);
             newGuarantorDetail.setTotalLimitGuaranteeAmount(newGuarantorDetailView.getTotalLimitGuaranteeAmount());
@@ -90,6 +91,7 @@ public class NewGuarantorDetailTransform extends Transform {
             newGuarantorDetailView.setModifyBy(newGuarantorDetail.getModifyBy());
             newGuarantorDetailView.setGuarantorName(guarantorView);
             newGuarantorDetailView.setTcgLgNo(newGuarantorDetail.getTcgLgNo());
+            newGuarantorDetailView.setGuarantorCategory(newGuarantorDetail.getGuarantorCategory());
             newGuarantorDetailView.setTotalLimitGuaranteeAmount(newGuarantorDetail.getTotalLimitGuaranteeAmount());
 
             List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorRelationDAO.getListGuarantorRelationByNewGuarantor(newGuarantorDetail);
