@@ -493,6 +493,15 @@ public class CustomerInfoControl extends BusinessControl {
         return customerInfoViewList;
     }
 
+    public List<CustomerInfoView> getBorrowerByWorkCase(long workCaseId){
+        log.info("getBorrowerByWorkCase ::: workCaseId : {}", workCaseId);
+
+        List<Customer> customerList = customerDAO.findBorrowerByWorkCaseId(workCaseId);
+        List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customerList);
+
+        return customerInfoViewList;
+    }
+
     public List<CustomerInfoView> getCollateralOwnerUWByWorkCase(long workCaseId){
         log.info("getCollateralOwnerUWByWorkCase ::: workCaseId : {}", workCaseId);
 
