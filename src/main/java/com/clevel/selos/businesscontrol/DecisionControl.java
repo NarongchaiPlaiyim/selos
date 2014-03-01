@@ -5,6 +5,7 @@ import com.clevel.selos.dao.working.ApprovalHistoryDAO;
 import com.clevel.selos.dao.working.DecisionFollowConditionDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.CreditCustomerType;
+import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ApprovalHistory;
@@ -35,8 +36,6 @@ public class DecisionControl extends BusinessControl {
     private StepDAO stepDAO;
 
     //Transform
-    @Inject
-    private DecisionTransform decisionTransform;
     @Inject
     private DecisionFollowConditionTransform decisionFollowConditionTransform;
     @Inject
@@ -149,10 +148,20 @@ public class DecisionControl extends BusinessControl {
             decisionView.setApproveTotalGuaranteeAmt(newCreditFacilityView.getTotalGuaranteeAmount());
 
             // Hidden Fields
-            decisionView.setApproveTotalNumOfNewOD(newCreditFacilityView.getTotalNumberOfNewOD());
-            decisionView.setApproveTotalNumProposeCreditFac(newCreditFacilityView.getTotalNumberProposeCreditFac());
-            decisionView.setApproveTotalNumContingentPropose(newCreditFacilityView.getTotalNumberContingenPropose());
-
+//            decisionView.setApproveTotalNumOfNewOD(newCreditFacilityView.getTotalApproveNumOfNewOD());
+//            decisionView.setApproveTotalNumProposeCreditFac(newCreditFacilityView.getTotalApproveNumProposeCreditFac());
+//            decisionView.setApproveTotalNumContingentPropose(newCreditFacilityView.getTotalApproveNumContingenPropose());
+//            decisionView.setGrandTotalNumOfCoreAsset(newCreditFacilityView.getTotalApproveNumOfCoreAsset());
+//            decisionView.setGrandTotalNumOfNonCoreAsset(newCreditFacilityView.getTotalApproveNumOfNonCoreAsset());
+//            decisionView.setApproveTotalTCGGuaranteeAmt(newCreditFacilityView.getTotalApproveTCGGuaranteeAmt());
+//            decisionView.setApproveTotalIndvGuaranteeAmt(newCreditFacilityView.getTotalApproveIndiGuaranteeAmt());
+//            decisionView.setApproveTotalJurisGuaranteeAmt(newCreditFacilityView.getTotalApproveJurisGuaranteeAmt());
+        }
+        else {
+            //if credit facility propose is not found
+            decisionView.setCreditCustomerType(CreditCustomerType.NOT_SELECTED);
+            decisionView.setLoanRequestType(new CreditRequestTypeView());
+            decisionView.setInvestedCountry(new CountryView());
         }
 
         // Decision FollowUp Condition

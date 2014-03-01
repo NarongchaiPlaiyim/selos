@@ -10,13 +10,15 @@ import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.DBRMethod;
 import com.clevel.selos.model.ExposureMethod;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.CreditType;
+import com.clevel.selos.model.db.master.ProductFormula;
+import com.clevel.selos.model.db.master.ProductProgram;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.util.Util;
-import com.clevel.selos.util.ValidationUtil;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -448,80 +450,6 @@ public class CreditFacProposeControl extends BusinessControl {
         return sumTotalLoanDbr;
     }
 
-    /**
-     * Formula: <br/>
-     * if(standard > suggest) -> final = standard <br/>
-     * else if(standard < suggest) -> final = suggest <br/>
-     * else *(standard == suggest) -> final = (standard | suggest)
-     *
-     * @param standardBaseRateId
-     * @param standardInterest
-     * @param suggestBaseRateId
-     * @param suggestInterest
-     * @return Object[0]: (BaseRate) finalBaseRate, Object[1]: (BigDecimal) finalInterest, Object[2]: (String) finalPriceLabel,<br/>
-     *         Object[3]: (BaseRate) standardBaseRate, Object[4]: (String) standardPriceLabel,<br/>
-     *         Object[5]: (BaseRate) suggestBaseRate, Object[6]: (String) suggestPriceLabel
-     */
-    public Object[] findFinalPriceRate(int standardBaseRateId, BigDecimal standardInterest,
-                                       int suggestBaseRateId, BigDecimal suggestInterest) {
-        Object[] returnValues = new Object[7];
-
-        BigDecimal standardPrice = BigDecimal.ZERO;
-        StringBuilder standardPriceLabel = new StringBuilder("");
-
-        BigDecimal suggestPrice = BigDecimal.ZERO;
-        StringBuilder suggestPriceLabel = new StringBuilder("");
-
-        BaseRate finalBaseRate = new BaseRate();
-        BigDecimal finalInterest = BigDecimal.ZERO;
-        String finalPriceLabel = "";
-
-        //  Standard Price Rate
-        BaseRate standardBaseRate = baseRateDAO.findById(standardBaseRateId);
-        if (standardBaseRate != null && standardInterest != null) {
-            standardPrice = standardBaseRate.getValue().add(standardInterest);
-
-            if (ValidationUtil.isValueLessThanZero(standardInterest)) {
-                standardPriceLabel.append(standardBaseRate.getName()).append(" ").append(standardInterest);
-            } else {
-                standardPriceLabel.append(standardBaseRate.getName()).append(" + ").append(standardInterest);
-            }
-        }
-
-        // Suggest Price Rate
-        BaseRate suggestBaseRate = baseRateDAO.findById(suggestBaseRateId);
-        if (suggestBaseRate != null && suggestInterest != null) {
-            suggestPrice = suggestBaseRate.getValue().add(suggestInterest);
-
-            if (ValidationUtil.isValueLessThanZero(suggestInterest)) {
-                suggestPriceLabel.append(suggestBaseRate.getName()).append(" ").append(suggestInterest);
-            } else {
-                suggestPriceLabel.append(suggestBaseRate.getName()).append(" + ").append(suggestInterest);
-            }
-        }
-
-        // Compare for Final Price
-        if (ValidationUtil.isGreaterThan(standardPrice, suggestPrice) || ValidationUtil.isValueEqual(standardPrice, suggestPrice)) {
-            finalBaseRate = standardBaseRate;
-            finalInterest = standardInterest;
-            finalPriceLabel = standardPriceLabel.toString();
-        } else {
-            finalBaseRate = suggestBaseRate;
-            finalInterest = suggestInterest;
-            finalPriceLabel = suggestPriceLabel.toString();
-        }
-
-        returnValues[0] = finalBaseRate;
-        returnValues[1] = finalInterest;
-        returnValues[2] = finalPriceLabel;
-        returnValues[3] = standardBaseRate != null ? standardBaseRate : new BaseRate();
-        returnValues[4] = standardPriceLabel.toString();
-        returnValues[5] = suggestBaseRate != null ? suggestBaseRate : new BaseRate();
-        returnValues[6] = suggestPriceLabel.toString();
-        return returnValues;
-    }
-
-
     public List<ProposeCreditDetailView> findProposeCreditDetail(List<NewCreditDetailView> newCreditDetailViewList, long workCaseId) {
         log.debug("findProposeCreditDetail :: ", workCaseId);
         // todo: find credit existing and propose in this workCase
@@ -545,6 +473,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 proposeCreditDetailView.setLimit(tmp.getLimit());
                 proposeCreditDetailView.setGuaranteeAmount(tmp.getGuaranteeAmount());
                 proposeCreditDetailView.setUseCount(tmp.getUseCount());
+                proposeCreditDetailView.setNoFlag(tmp.isNoFlag());
                 proposeCreditDetailViewList.add(proposeCreditDetailView);
                 rowCount++;
             }
@@ -863,10 +792,10 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         //--- Need to Delete newGuarantorCreditList from newGuarantorCredit before Insert new
-        List<NewGuarantorCredit> newGuarantorCreditListDelete = newGuarantorRelationDAO.getListByNewCreditFacility(workCase);
-        log.info("before :: newGuarantorCreditListDelete :: size :: {}",newGuarantorCreditListDelete.size());
-        newGuarantorRelationDAO.delete(newGuarantorCreditListDelete);
-        log.info("after :: newGuarantorCreditListDelete :: size :: {}",newGuarantorCreditListDelete.size());
+//        List<NewGuarantorCredit> newGuarantorCreditListDelete = newGuarantorRelationDAO.getListByNewCreditFacility(workCase);
+//        log.info("before :: newGuarantorCreditListDelete :: size :: {}",newGuarantorCreditListDelete.size());
+//        newGuarantorRelationDAO.delete(newGuarantorCreditListDelete);
+//        log.info("after :: newGuarantorCreditListDelete :: size :: {}",newGuarantorCreditListDelete.size());
 
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
@@ -875,6 +804,7 @@ public class CreditFacProposeControl extends BusinessControl {
             newGuarantorDetailDAO.persist(newGuarantorDetailList);
             log.debug("saveCreditFacility ::: persist newGuarantorDetailList : {}", newGuarantorDetailList);
         }
+
 
         //--- Save to NewCollateral
         //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
@@ -885,11 +815,6 @@ public class CreditFacProposeControl extends BusinessControl {
         //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
         List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase);
         newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
-        //--- Need to delete Collateral Credit from CollateralRelCredit before Insert new
-        List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditDAO.getListByWorkCase(workCase);
-        log.info("before :: newCollateralCreditList :: size :: {}",newCollateralCreditList.size());
-        newCollateralCreditDAO.delete(newCollateralCreditList);
-        log.info("after :: newCollateralCreditList :: size :: {}",newCollateralCreditList.size());
 
         if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCollateralViewList : {}", newCreditFacilityView.getNewCollateralViewList());
@@ -920,14 +845,14 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
     //call BRMS
-    public StandardPricingResponse getPriceFeeInterest(final long workCaseId ) {
-        log.info("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
+    public StandardPricingResponse getPriceFeeInterest(final long workCaseId ,final long stepId) {
+        log.debug("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
         StandardPricingResponse standardPricingResponse  = null;
         try {
-            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
+            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId,stepId);
 
             if (standardPricingResponse != null) {
-                log.info("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult());
+                log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult());
             }
 
         }catch (Exception e) {

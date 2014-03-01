@@ -75,8 +75,8 @@
                                 <p:selectOneRadio id="dlgCollateralRadioApprove"
                                                   value="#{decision.selectedApproveCollateral.uwDecision}"
                                                   required="#{not empty param[saveCollateralButton.clientId]}">
-                                    <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
-                                    <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
+                                    <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="#{decision.decisionAPPROVED}"/>
+                                    <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="#{decision.decisionREJECTED}"/>
                                 </p:selectOneRadio>
                             </td>
                         </tr>
@@ -187,7 +187,7 @@
 
             <!-- Collateral Head -->
             <ui:repeat value="#{decision.selectedApproveCollateral.newCollateralHeadViewList}"
-                       var="collHeadDetail" varStatus="i">
+                       var="collHeadDetail" varStatus="collHeadIndex">
                 <tr>
                     <td class="title">
                         <p:outputLabel for="dlgPotentialColl"
@@ -199,7 +199,7 @@
                                          style="min-width: 200px; width: 200px; max-width: 200px;"
                                          required="#{not empty param[saveCollateralButton.clientId]}">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                            <f:selectItems value="#{decision.potentialCollateralList}"
+                            <f:selectItems value="#{decision.potentialCollViewList}"
                                            var="potentialItem"
                                            itemLabel="#{potentialItem.description}"
                                            itemValue="#{potentialItem.id}"/>
@@ -217,7 +217,7 @@
                                          style="min-width: 200px; width: 200px; max-width: 200px;"
                                          required="#{not empty param[saveCollateralButton.clientId]}">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                            <f:selectItems value="#{decision.collateralTypeList}"
+                            <f:selectItems value="#{decision.collateralTypeViewList}"
                                            var="collTypePercentItem"
                                            itemLabel="#{collTypePercentItem.description}"
                                            itemValue="#{collTypePercentItem.id}"/>
@@ -297,7 +297,7 @@
                                          style="min-width: 200px; width: 200px; max-width: 200px;"
                                          required="#{not empty param[saveCollateralButton.clientId]}">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                            <f:selectItems value="#{decision.collateralTypeList}"
+                            <f:selectItems value="#{decision.collateralTypeViewList}"
                                            var="collateralTypeItem"
                                            itemLabel="#{collateralTypeItem.description}"
                                            itemValue="#{collateralTypeItem.id}"/>
@@ -327,7 +327,7 @@
                                 action="#{decision.onAddSubCollateral()}"
                                 update=":subCollateralDlgForm"
                                 oncomplete="subCollateralInfoDlg.show();">
-                            <f:setPropertyActionListener value="#{i.index}"
+                            <f:setPropertyActionListener value="#{collHeadIndex.index}"
                                                          target="#{decision.rowIndexCollHead}"/>
                         </p:commandButton>
                     </td>
@@ -427,19 +427,19 @@
                                                  update=":subCollateralDlgForm"
                                                  process="@this"
                                                  oncomplete="subCollateralInfoDlg.show();">
-                                    <f:setPropertyActionListener value="#{i.index}"
+                                    <f:setPropertyActionListener value="#{collHeadIndex.index}"
                                                                  target="#{decision.rowIndexCollHead}"/>
-                                    <f:setPropertyActionListener value="#{subCollateralDetail}"
-                                                                 target="#{decision.selectedApproveSubColl}"/>
                                     <f:setPropertyActionListener value="#{rowIndex}"
                                                                  target="#{decision.rowIndexSubColl}"/>
+                                    <f:setPropertyActionListener value="#{subCollateralDetail}"
+                                                                 target="#{decision.selectedApproveSubColl}"/>
                                 </p:commandButton>
 
                                 <p:commandButton title="#{msg.get('app.button.delete')}"
                                                  icon="ui-icon-trash"
                                                  process="@this"
                                                  oncomplete="confirmDeleteSubCollateralInfoDlg.show()">
-                                    <f:setPropertyActionListener value="#{i.index}"
+                                    <f:setPropertyActionListener value="#{collHeadIndex.index}"
                                                                  target="#{decision.rowIndexCollHead}"/>
                                     <f:setPropertyActionListener value="#{rowIndex}"
                                                                  target="#{decision.rowIndexSubColl}"/>
@@ -450,7 +450,7 @@
                     </td>
                 </tr>
                 <!-- Separate Line if Collateral Header more than one -->
-                <h:panelGroup rendered="#{not i.last}">
+                <h:panelGroup rendered="#{not collHeadIndex.last}">
                     <tr>
                         <td colspan="4">
                             <div class="separate"><!-- --></div>

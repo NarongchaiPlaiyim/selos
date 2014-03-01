@@ -52,7 +52,7 @@ public class DBContext implements Serializable {
             conn = DriverManager.getConnection(jdbcURL, user, password);
         } catch (Exception e) {
             log.error("Exception while connect to database!", e);
-            throw new ECMInterfaceException(e, ExceptionMapping.COMS_CONNECT_ERROR, msg.get(ExceptionMapping.COMS_CONNECT_ERROR));
+            throw new ECMInterfaceException(e, ExceptionMapping.ECM_CONNECT_ERROR, msg.get(ExceptionMapping.ECM_CONNECT_ERROR));
         }
         return conn;
     }

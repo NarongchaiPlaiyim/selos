@@ -16,6 +16,7 @@ public class NewCollateralView implements Serializable {
     private long id;
     private String jobID;
     private Date appraisalDate;
+    private int numberMonthsFromApprDate;
     private String  aadDecision;
     private String  aadDecisionReason;
     private String  aadDecisionReasonDetail;
@@ -46,6 +47,7 @@ public class NewCollateralView implements Serializable {
     public void reset(){
         this.jobID = "";
         this.appraisalDate = new Date();
+        this.numberMonthsFromApprDate = 0;
         this.aadDecision = "";
         this.aadDecisionReason = "";
         this.aadDecisionReasonDetail = "";
@@ -84,6 +86,14 @@ public class NewCollateralView implements Serializable {
 
     public void setAppraisalDate(Date appraisalDate) {
         this.appraisalDate = appraisalDate;
+    }
+
+    public int getNumberMonthsFromApprDate() {
+        return numberMonthsFromApprDate;
+    }
+
+    public void setNumberMonthsFromApprDate(int numberMonthsFromApprDate) {
+        this.numberMonthsFromApprDate = numberMonthsFromApprDate;
     }
 
     public String getAadDecision() {
@@ -251,6 +261,7 @@ public class NewCollateralView implements Serializable {
                 .append("id", id)
                 .append("jobID", jobID)
                 .append("appraisalDate", appraisalDate)
+                .append("numberMonthsFromApprDate", numberMonthsFromApprDate)
                 .append("aadDecision", aadDecision)
                 .append("aadDecisionReason", aadDecisionReason)
                 .append("aadDecisionReasonDetail", aadDecisionReasonDetail)

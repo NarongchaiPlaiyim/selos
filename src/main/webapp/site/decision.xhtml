@@ -1825,8 +1825,8 @@
                                             <p:selectOneMenu value="#{decision.decisionView.loanRequestType.id}"
                                                              style="width: 200px">
                                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
-                                                <f:selectItems value="#{decision.creditRequestTypeList}" var="crdRequestType"
-                                                               itemLabel="#{crdRequestType.description}" itemValue="#{crdRequestType.id}"/>
+                                                <f:selectItems value="#{decision.creditRequestTypeViewList}" var="crdRequestType"
+                                                               itemLabel="#{crdRequestType.name}" itemValue="#{crdRequestType.id}"/>
                                             </p:selectOneMenu>
                                         </td>
                                     </tr>
@@ -1843,7 +1843,7 @@
                                                              style="width: 200px"
                                                              disabled="true">
                                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
-                                                <f:selectItems value="#{decision.countryList}" var="country"
+                                                <f:selectItems value="#{decision.countryViewList}" var="country"
                                                                itemLabel="#{country.name}" itemValue="#{country.id}"/>
                                             </p:selectOneMenu>
                                         </td>
@@ -2263,26 +2263,26 @@
                                                 <tr>
                                                     <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
+                                                                    fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
                                                         #{i.index + 1}
                                                     </td>
                                                     <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
-                                                        #{proposeCredit.approved eq 2 ? msg.get('app.label.approved') :
-                                                          proposeCredit.approved eq 1 ? msg.get('app.label.rejected') : ''}
+                                                                    fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
+                                                        #{proposeCredit.uwDecision eq 'APPROVED' ? msg.get('app.label.approved') :
+                                                          proposeCredit.uwDecision eq 'REJECTED' ? msg.get('app.label.rejected') : ''}
+                                                    </td>
+                                                    <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
+                                                        #{not empty proposeCredit.productProgramView ?
+                                                          proposeCredit.productProgramView.description : ''}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                             fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                        #{not empty proposeCredit.productProgram ?
-                                                          proposeCredit.productProgram.description : ''}
-                                                    </td>
-                                                    <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                        #{not empty proposeCredit.creditType ?
-                                                          proposeCredit.creditType.description : ''}
+                                                        #{not empty proposeCredit.creditTypeView ?
+                                                          proposeCredit.creditTypeView.description : ''}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -2394,8 +2394,8 @@
                                                                     #{msg.get('app.decision.tb.td.label.purpose')}
                                                                 </td>
                                                                 <td class="left" colspan="3" style="border-style: none !important;">
-                                                                    #{not empty proposeCredit.loanPurpose ?
-                                                                      proposeCredit.loanPurpose.description : ''}
+                                                                    #{not empty proposeCredit.loanPurposeView ?
+                                                                      proposeCredit.loanPurposeView.description : ''}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -2411,8 +2411,8 @@
                                                                     #{msg.get('app.decision.tb.td.label.disbursement')}
                                                                 </td>
                                                                 <td class="left" style="border-style: none !important;">
-                                                                    #{not empty proposeCredit.disbursement ?
-                                                                      proposeCredit.disbursement.disbursement : ''}
+                                                                    #{not empty proposeCredit.disbursementTypeView ?
+                                                                      proposeCredit.disbursementTypeView.disbursement : ''}
                                                                 </td>
                                                                 <td class="title" style="border-style: none !important;">
                                                                     #{msg.get('app.decision.tb.td.label.holdAmount')}
@@ -2854,7 +2854,7 @@
                                         <p:commandButton id="btnEditApprovedCollateral"
                                                          rendered="#{decision.roleUW}"
                                                          value="#{msg.get('app.button.edit')}"
-                                                         action="#{decision.onEditAppProposeCollateral()}"
+                                                         action="#{decision.onEditApproveCollateral()}"
                                                          update=":collateralDlgForm"
                                                          oncomplete="proposeCollateralDlg.show()"
                                                          styleClass="smaller">
@@ -3891,7 +3891,7 @@
     <ui:param name="name" value="confirmDeleteAppProCollateralDlg"/>
     <ui:param name="formId" value="frmConfirmDeleteAppProCollateral"/>
     <ui:param name="controller" value="#{decision}"/>
-    <ui:param name="action" value="onDeleteAppProposeCollateral"/>
+    <ui:param name="action" value="onDeleteApproveCollateral"/>
     <ui:param name="update" value=":frmMain"/>
 </ui:include>
 

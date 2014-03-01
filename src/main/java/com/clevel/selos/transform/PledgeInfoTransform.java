@@ -7,10 +7,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCollateralCredit;
 import com.clevel.selos.model.db.working.NewCollateralSub;
 import com.clevel.selos.model.db.working.NewCollateralSubOwner;
+import com.clevel.selos.model.db.working.OpenAccountName;
 import com.clevel.selos.model.db.working.PledgeInfo;
 import com.clevel.selos.model.view.CreditDetailSimpleView;
 import com.clevel.selos.model.view.CustomerInfoSimpleView;
@@ -68,16 +70,41 @@ public class PledgeInfoTransform extends Transform {
 		view.setPledgeAmount(model.getPledgeAmount());
 		view.setModifyBy(model.getModifyBy());
 		view.setModifyDate(model.getModifyDate());
-		if (model.getOpenAccount() != null)
+		if (model.getOpenAccount() != null) {
 			view.setAccountNo(model.getOpenAccount().getAccountNumber());
+			view.setNumberOfDep(model.getOpenAccount().getNumberOfDep());
+			List<OpenAccountName> names = model.getOpenAccount().getOpenAccountNameList();
+			StringBuilder builder = new StringBuilder();
+			for (OpenAccountName name : names) {
+				builder.append(name.getCustomer().getDisplayName());
+				builder.append("<br/>");
+			}
+			if (builder.length() > 0)
+				builder.setLength(builder.length()-5);
+			view.setAccountName(builder.toString());
+		}
+		if (!RadioValue.YES.equals(model.getConfirmed()))
+			view.setConfirmed(RadioValue.NO);
+		else
+			view.setConfirmed(model.getConfirmed());
+		
 	}
 	
 	public void updateModel(PledgeInfo model,PledgeInfoView view,BigDecimal totalHoldAmount,User user) {
 		model.setModifyBy(user);
 		model.setModifyDate(new Date());
-		if (view == null)
+		if (view == null) {
+			model.setConfirmed(RadioValue.NA);
 			return;
+		}
 		model.setPledgeSigningDate(view.getSigningDate());
 		model.setTotalHoldAmount(totalHoldAmount);
+		model.setConfirmed(view.getConfirmed());
+	}
+	
+	public void updateModelConfirmed(PledgeInfo model,PledgeInfoView view,User user) {
+		model.setConfirmed(view.getConfirmed());
+		model.setModifyBy(user);
+		model.setModifyDate(new Date());
 	}
 }

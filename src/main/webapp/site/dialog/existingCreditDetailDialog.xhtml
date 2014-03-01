@@ -44,6 +44,7 @@
                                var="accountStatus"
                                itemLabel="#{accountStatus.description}"
                                itemValue="#{accountStatus.id}"/>
+                <p:ajax event="change" update="@this"/>
 
             </p:selectOneMenu>
         </td>
@@ -103,33 +104,32 @@
                          onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)"
                          style="text-align:right">
                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                <p:ajax event="blur" listener="#{creditFacExisting.checkTotalLimit()}" update=":existingCreditDlgForm:limit, existingCreditDlgForm:saveCreditBtn"/>
+                <p:ajax event="blur" listener="#{creditFacExisting.checkTotalLimit()}" update=":existingCreditDlgForm:limit, existingCreditDlgForm:saveCreditBtn, :existingCreditDlgForm:pcePercent, :existingCreditDlgForm:pceLimit"/>
             </p:inputText>
         </td>
         <td class="title">
-            <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.pcePercent')}"/>
+            <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.pcePercent')}" rendered="#{creditFacExisting.usePCE}"/>
         </td>
         <td>
-            <p:inputText id="pcePercent" value="#{creditFacExisting.existingCreditDetailView.pcePercent}" style="text-align:right" maxlength="6">
+            <p:inputText id="pcePercent" value="#{creditFacExisting.existingCreditDetailView.pcePercent}" style="text-align:right" maxlength="6" rendered="#{creditFacExisting.usePCE}">
                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                 <f:validateDoubleRange maximum="100"/>
-                <p:ajax event="blur" update=":existingCreditDlgForm:pcePercent"/>
+                <p:ajax event="blur" listener="#{creditFacExisting.calPCELimit()}" update=":existingCreditDlgForm:pcePercent, :existingCreditDlgForm:pceLimit"/>
             </p:inputText>
 
             <p:spacer/>
-            <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.percent')}"/>
+            <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.percent')}" rendered="#{creditFacExisting.usePCE}"/>
         </td>
     </tr>
     <tr>
         <td colspan="2">
         </td>
         <td class="title">
-            <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.pceAmt')}" integerOnly="true" />
+            <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.pceAmt')}" integerOnly="true" rendered="#{creditFacExisting.usePCE}"/>
         </td>
         <td>
-            <p:inputText id="pceLimit" value="#{creditFacExisting.existingCreditDetailView.pceLimit}"
-                         onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)"
-                         style="text-align:right">
+            <p:inputText id="pceLimit" value="#{creditFacExisting.existingCreditDetailView.pceLimit}" readonly="true" styleClass="readonly"
+                         style="text-align:right" rendered="#{creditFacExisting.usePCE}">
                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                 <p:ajax event="blur" update=":existingCreditDlgForm:pceLimit"/>
             </p:inputText>
@@ -203,6 +203,7 @@
                                                    var="standard"
                                                    itemLabel="#{standard.name}"
                                                    itemValue="#{standard.id}"/>
+                                    <p:ajax event="change" update="@this"/>
                                 </p:selectOneMenu>
                             </p:column>
                             <p:column>
@@ -287,6 +288,7 @@
                                        var="productProgram"
                                        itemLabel="#{productProgram.name}"
                                        itemValue="#{productProgram.id}"/>
+                        <p:ajax event="change" update="@this"/>
                     </p:selectOneMenu>
                 </p:column>
                 <p:column styleClass="center">

@@ -18,9 +18,7 @@ import java.util.List;
 public class NewCollateralCreditTransform extends Transform {
 
     @Inject
-    public NewCollateralCreditTransform() {
-    }
-
+    public NewCollateralCreditTransform() {}
     @Inject
     ExistingCreditDetailDAO existingCreditDetailDAO;
     @Inject
@@ -31,24 +29,23 @@ public class NewCollateralCreditTransform extends Transform {
 
         List<NewCollateralCredit> newCollateralCreditList = new ArrayList<NewCollateralCredit>();
         NewCollateralCredit newCollateralRelCredit;
+        NewCreditDetail newCreditDetailAdd;
 
         for (ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViewList) {
             log.debug("Start... transformToModelForCollateral : proposeCreditDetailView : {}", proposeCreditDetailView);
-            newCollateralRelCredit = new NewCollateralCredit();
-            newCollateralRelCredit.setModifyDate(DateTime.now().toDate());
-            newCollateralRelCredit.setModifyBy(user);
-            newCollateralRelCredit.setCreateDate(DateTime.now().toDate());
-            newCollateralRelCredit.setCreateBy(user);
+            if (proposeCreditDetailView.isNoFlag()) {
+                newCollateralRelCredit = new NewCollateralCredit();
+                newCollateralRelCredit.setModifyDate(DateTime.now().toDate());
+                newCollateralRelCredit.setModifyBy(user);
+                newCollateralRelCredit.setCreateDate(DateTime.now().toDate());
+                newCollateralRelCredit.setCreateBy(user);
 
-            for (NewCreditDetail newCreditDetailAdd : newCreditDetailList) {
-                log.info("newCreditDetailAdd id is {} detail seq is {}", newCreditDetailAdd.getId(), newCreditDetailAdd.getSeq());
-                log.info("guarantor choose seq is {}", proposeCreditDetailView.getSeq());
                 log.info("proposeCreditDetailView::: getTypeOfStep :: {}", proposeCreditDetailView.getTypeOfStep());
 
                 if ("N".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
-                    if (proposeCreditDetailView.getSeq() == newCreditDetailAdd.getSeq()) {
-                        log.info("newCreditDetailAdd id is " + newCreditDetailAdd.getId() + " detail seq  is " + newCreditDetailAdd.getSeq());
-                        log.info("guarantor choose seq  is " + proposeCreditDetailView.getSeq());
+                    log.info("guarantor choose seq  is " + proposeCreditDetailView.getSeq());
+                    newCreditDetailAdd = findNewCreditDetail(newCreditDetailList, proposeCreditDetailView);
+                    if (newCreditDetailAdd != null) {
                         newCollateralRelCredit.setNewCreditDetail(newCreditDetailAdd);
                         log.info("newCollateralRelCredit newCreditDetailAdd id toSet is " + newCollateralRelCredit.getNewCreditDetail().getId());
                     }
@@ -57,17 +54,31 @@ public class NewCollateralCreditTransform extends Transform {
                     if (existingCreditDetail.getId() == (long) proposeCreditDetailView.getSeq()) {
                         log.info("guarantor choose seq  is :: {}", proposeCreditDetailView.getSeq());
                         newCollateralRelCredit.setExistingCreditDetail(existingCreditDetail);
-                        log.info("newGuarantorCredit existingCreditDetail id toSet is " + newCollateralRelCredit.getExistingCreditDetail().getId());
-
+                        log.info("newCollateralRelCredit existingCreditDetail id toSet is " + newCollateralRelCredit.getExistingCreditDetail().getId());
                     }
                 }
+
 
                 newCollateralRelCredit.setNewCollateral(newCollateralDetail);
                 newCollateralCreditList.add(newCollateralRelCredit);
             }
         }
+
         return newCollateralCreditList;
     }
 
+    public NewCreditDetail findNewCreditDetail(List<NewCreditDetail> newCreditDetailList, ProposeCreditDetailView proposeCreditDetailView) {
+        NewCreditDetail newCreditDetailReturn = null;
 
+        for (NewCreditDetail newCreditDetailAdd : newCreditDetailList) {
+            log.info("newCreditDetailAdd id is  :: {}", newCreditDetailAdd.getId());
+            log.info("newCreditDetailAdd seq is :: {}", newCreditDetailAdd.getSeq());
+            log.info("guarantor choose seq is {}", proposeCreditDetailView.getSeq());
+            if (proposeCreditDetailView.getSeq() == newCreditDetailAdd.getSeq()) {
+                newCreditDetailReturn = newCreditDetailAdd;
+                return newCreditDetailReturn;
+            }
+        }
+        return newCreditDetailReturn;
+    }
 }

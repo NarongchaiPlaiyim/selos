@@ -21,6 +21,7 @@
                      readonly="#{creditFacPropose.editProposeColl}">
             <p:ajax event="change" listener="#{creditFacPropose.onChangeJobId}" update="@form"/>
         </p:inputText>
+        <h:inputHidden value="#{creditFacPropose.newCollateralView.numberMonthsFromApprDate}"/>
     </td>
     <td class="left" colspan="2" style="width: 50%">
         <p:commandButton value="#{msg.get('app.credit.facility.propose.dlg.retrieveButton')}"
@@ -228,9 +229,9 @@
                            itemLabel="#{collTypePercentItem.description}"
                            itemValue="#{collTypePercentItem.id}"/>
             <p:ajax event="change"
-                    listener="#{creditFacPropose.onChangeCollTypeLTV()}"
-                    process="@this"
-                    update="@this"/>
+                    listener="#{creditFacPropose.onChangeCollTypeLTV(CollateralHeaderDetailView)}"
+                    process="@form"
+                    update=":collateralDlgForm"/>
         </p:selectOneMenu>
     </td>
 </tr>

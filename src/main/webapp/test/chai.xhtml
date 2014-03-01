@@ -115,6 +115,25 @@
                 </p:panel>
             </h:form>
 
+            <h:form id="ECM">
+                <p:panel header="ECMHeader">
+                    <h:panelGrid columns="2">
+
+                        <h:outputText value=""/>
+                        <p:commandButton id="submitOnClickCallECM" value="CallECM" update="@form"
+                                         action="#{TestNCRS.onClickCallECM()}"/>
+
+                        <h:outputText value="CA Number"/>
+                        <p:inputText value="#{TestNCRS.caNumberECM}"/>
+
+                        <h:outputText value="Result"/>
+                        <p:inputTextarea value="#{TestNCRS.result}" rows="50" cols="100">
+
+                        </p:inputTextarea>
+
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
 
         </p:panel>
 

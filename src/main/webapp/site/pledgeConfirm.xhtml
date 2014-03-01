@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+
+<h:head>
+    <title>#{msg.get('app.pledgeConfirm.title')}</title>
+    <h:outputStylesheet name="css/style.css" />
+    <h:outputScript library="js" name="custom.js" />
+</h:head>
+
+<h:body>
+    <f:event type="preRenderView" listener="#{pledgeConfirm.preRender()}" />
+    
+    <p:panel id="pnl_maincontainer" styleClass="panel">
+        <h:form id="frmMain">
+            <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="include/header_logo.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="include/header_detail.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="include/menubar.xhtml" />
+           
+            <!-- End Menu -->
+			<h:panelGroup id="full_main_container" layout="block">
+            <div id="content_container">
+                <div id="content_name">#{msg.get('app.pledgeConfirm.subtitle')}</div>
+                <div id="content">
+                    <div id="content_info">
+                        <div id="content_trackchange">
+                        	[
+                        	<h:outputLink value="#">
+                        		<h:outputText value="#{msg.get('app.viewTrackChange')}" />
+                        	</h:outputLink>
+                        	]
+                        </div>
+                        <div id="content_lastupdate">
+                        	<h:outputText value="#{msg.get('app.lastUpdateBy')} "/>
+                        	<h:outputText value="#{pledgeConfirm.lastUpdateBy}"/>, 
+                        	<h:outputText value="#{pledgeConfirm.lastUpdateDateTime}">
+                        		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="th_TH"/>
+                        	</h:outputText>
+                        </div>
+                    </div>
+                    <div id="content_form">
+                   		<!-- start content -->
+                        <table class="content_table_form">
+	                        <tr>
+                               <td colspan="100%">
+                                    <table>
+                                        <tr>
+                                            <td class="title" style="width:200px;">
+                                                <p:outputLabel value="#{msg.get('app.approveType')}" styleClass="center"/>
+                                            </td>
+                                            <td style="width:200px;">
+                                                <p:selectOneRadio disabled="true" value="#{pledgeConfirm.approveType}">
+                                                	<f:selectItems value="#{enumGeneralControl.approveTypes}" var="approveType"
+                                                		itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}" 
+                                                		/>
+                                                </p:selectOneRadio>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                              <td colspan="100%"><div class="separate"><!-- --></div></td>
+                        	</tr>
+                        	<tr>
+                        		<td colspan="100%">
+                        			<h2><h:outputText value="#{msg.get('app.pledgeConfirm.pledgeConfirm')}" /></h2>
+	                            </td>
+                        	</tr>
+                        	<tr>
+                        		<td colspan="100%">
+                        			<p:dataTable styleClass="full_table"
+                        				value="#{pledgeConfirm.pledges}" var="pledge"
+                        				rowIndexVar="rowIdx"
+                        				>
+                        				<p:column style="width:30px" styleClass="center">
+                        					#{rowIdx+1}                        					
+                        				</p:column>
+                        				<p:column style="width:200px" styleClass="center"
+                        					headerText="#{msg.get('app.pledgeConfirm.table.confirm')}"
+                        					>
+                        					<p:selectOneRadio value="#{pledge.confirmed}" 
+                        						style="margin:0 auto">
+	                        					<f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="radio"
+			                                       	itemLabel="#{msg.get(radio.msgKey)}" 
+		    	                                   	itemValue="#{radio}"/>
+	    	                                </p:selectOneRadio>
+                        				</p:column>
+                        				<p:column styleClass="left"
+                        					headerText="#{msg.get('app.pledgeConfirm.table.accountName')}"
+                        					style="line-height: 1.5em;">
+                        					<h:panelGroup layout="block" style="padding : 5px 0">
+                        						<h:outputText value="#{pledge.accountName}" escape="false" />
+                        					</h:panelGroup>
+                        				</p:column>
+                        				<p:column style="width:200px" styleClass="center"
+                        					headerText="#{msg.get('app.pledgeConfirm.table.accountNo')}"
+                        					>
+                        					#{pledge.accountNo}
+                        				</p:column>
+                        				<p:column style="width:100px" styleClass="center"
+                        					headerText="#{msg.get('app.pledgeConfirm.table.dep')}"
+                        					>
+                        					#{pledge.numberOfDep}
+                        				</p:column>
+                        				<p:column style="width:150px" styleClass="right"
+                        					headerText="#{msg.get('app.pledgeConfirm.table.pledgeAmount')}"
+                        					>
+                        					<h:outputText value="#{pledge.pledgeAmount}">
+                        						<f:convertNumber pattern="#,##0.00"/>
+                        					</h:outputText>
+                        				</p:column>
+                        			</p:dataTable>			
+                        		</td>
+                        	</tr>
+                        	<tr>
+	                            <td colspan="100%"><p:spacer width="5px"/></td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="100%"><p:separator/></td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="100%"><p:spacer width="5px"/></td>
+	                        </tr>
+	                        <tr>
+	                             <td colspan="100%" class="center">
+	                                 <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
+	                                 	styleClass="medium"
+										onstart="handleOnStartOpenCfmDlg();"
+										oncomplete="handleOnCompleteOpenCfmDlg(args,p_savePledgeConfirmDlg);"
+										update=":frmMain:full_main_container,:result_dialog"
+	                                 	 />
+	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
+										styleClass="medium"
+										/>
+	                             </td>
+	                        </tr>
+                        </table>
+	                </div>
+	                <div id="bottom_line"><!-- --></div>
+	            </div>
+           	</div>
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="include/footer.xhtml" />
+            <!-- End Footer -->
+            </h:panelGroup>
+            </div>
+ 
+        </h:form>
+    </p:panel>
+	<ui:include src="dialog/postLoadingAndErrorDialog.xhtml" />
+	<ui:include src="dialog/confirmEditDlg.xhtml">
+		<ui:param name="id" value="savePledgeConfirmDlg"/>
+		<ui:param name="name" value="p_savePledgeConfirmDlg"/>
+		<ui:param name="formId" value="savePledgeConfirmFrm"/>
+		<ui:param name="controller" value="#{pledgeConfirm}"/>
+		<ui:param name="action" value="onSavePledgeConfirm"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
+	</ui:include>
+</h:body>
+</f:view>
+</html>

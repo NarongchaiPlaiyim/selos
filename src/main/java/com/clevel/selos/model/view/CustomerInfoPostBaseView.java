@@ -1,10 +1,10 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.RadioValue;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.clevel.selos.model.RadioValue;
 
 public  abstract class CustomerInfoPostBaseView <T extends CustomerInfoPostBaseView<T>> implements Serializable {
 	private static final long serialVersionUID = 863095588631439899L;
@@ -199,7 +199,7 @@ public  abstract class CustomerInfoPostBaseView <T extends CustomerInfoPostBaseV
 		displayTitle = view.displayTitle;
 		displayMailingAddressType = view.displayMailingAddressType;
 		
-		relationId = view.relationId;
+//		relationId = view.relationId;
 				
 		addresses.clear();
 		for (CustomerInfoPostAddressView address : view.addresses) {

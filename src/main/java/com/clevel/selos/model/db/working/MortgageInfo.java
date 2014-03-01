@@ -24,6 +24,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.clevel.selos.model.AttorneyRelationType;
+import com.clevel.selos.model.MortgageConfirmedType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.MortgageLandOffice;
 import com.clevel.selos.model.db.master.MortgageOSCompany;
@@ -97,6 +98,10 @@ public class MortgageInfo implements Serializable {
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
+    
+    @Column(name="confirmed",columnDefinition="int default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private MortgageConfirmedType confirmed;
     
 	public long getId() {
 		return id;
@@ -221,5 +226,12 @@ public class MortgageInfo implements Serializable {
 	}
 	public void setMortgageRefKey(String mortgageRefKey) {
 		this.mortgageRefKey = mortgageRefKey;
+	}
+	
+	public MortgageConfirmedType getConfirmed() {
+		return confirmed;
+	}
+	public void setConfirmed(MortgageConfirmedType confirmed) {
+		this.confirmed = confirmed;
 	}
 }

@@ -174,9 +174,8 @@
 		<td>
 			<p:inputText id="age" styleClass="smaller"
 				value="#{postCustomerInfoJuris.customer.age}" 
-				readonly="true">
-				<f:convertNumber pattern="0"/>
-			</p:inputText>
+				readonly="true"
+				/>
 		</td>
 	</tr>
 	<tr>
@@ -447,7 +446,154 @@
 </table>
                         		</td>
                         	</tr>
+                        	<tr><td colspan="100%"><p:spacer height="1em"/></td></tr>
                         	
+	                        <tr>
+	                            <td colspan="100%"><p:separator/></td>
+	                        </tr>
+							<tr>
+	                       		<td>
+	                       			<h2><h:outputText value="#{msg.get('app.custInfoJuri.content.authorizedDirector')}" /></h2>
+	                            </td>
+	                       	</tr>
+<tr>
+	<td>	                       	
+
+<p:dataTable var="item" value="#{postCustomerInfoJuris.committees}"
+	rowIndexVar="rowIdx">
+	       
+    <p:columnGroup type="header">
+        <p:row>
+            <p:column rowspan="2"
+                      style="width: 20px;"/>
+			<p:column rowspan="2"
+                      style="width: 55px;"
+                      headerText="#{msg.get('app.custInfoJuri.content.table.signContract')}" />
+			<p:column rowspan="2"
+                      style="width: 100px;"
+                      headerText="#{msg.get('app.custInfoJuri.content.table.needRepresent')}" />
+            <p:column rowspan="2"
+                      style="width: 200px;"
+                      headerText="#{msg.get('app.custInfoJuri.content.table.customerName')}" />
+                      
+            <p:column colspan="2"
+                      style="width: 260px;"
+                      headerText="#{msg.get('app.custInfoJuri.content.table.id')}"
+                      />
+            <p:column colspan="2"
+                      style="width: 130px;"
+                      headerText="#{msg.get('app.custInfoJuri.content.table.relationShip')}" 
+                      />
+            <p:column colspan="2"
+                      style="width: 400px;"
+                      headerText="#{msg.get('app.custInfoJuri.content.table.reference')}"
+                      />
+            <p:column rowspan="2"
+                      style="width: 70px;"
+                      headerText="#{msg.get('app.custInfoJuri.content.table.share')}"
+                      />
+            <p:column rowspan="2"
+                      style="width: 30px;"
+                      headerText="#{msg.get('app.custInfoJuri.content.table.age')}"
+                      />
+            <p:column rowspan="2" width="30"
+                      style="width: 30px;max-width:30px"/>
+        </p:row>
+        <p:row>
+            <p:column
+                      style="width: 130px;"
+                      headerText="#{msg.get('app.custInfoJuri.content.table.id.citiRegis')}"
+                      />
+            <p:column 
+                      style="width: 130px;"
+                      headerText="#{msg.get('app.custInfoJuri.content.table.id.cus')}"
+                      />
+            <p:column 
+                      style="width: 80px;"
+                      headerText="#{msg.get('app.custInfoJuri.content.table.relationShip.type')}"
+                      />
+            <p:column 
+                      style="width: 50px;max-width:50px;white-space:normal !important;word-wrap : break-word!important"
+                      headerText="#{msg.get('app.custInfoJuri.content.table.relationShip.coll')}"
+                      />
+            <p:column 
+                      style="width: 200px;"
+                      headerText="#{msg.get('app.custInfoJuri.content.table.reference.ind')}"
+                      />
+            <p:column 
+                      style="width: 200px;"
+                      headerText="#{msg.get('app.custInfoJuri.content.table.reference.jus')}"
+                                     />
+                       </p:row>
+	</p:columnGroup>
+	
+	<p:column styleClass="center">
+	    #{rowIdx+1}
+	</p:column>
+	<p:column styleClass="center">
+	    STUB
+	</p:column>
+	<p:column styleClass="center">
+	    STUB
+	</p:column>
+	<p:column styleClass="left">
+	    <h:outputText 
+	    	value="#{item.titleTh.titleTh}#{item.firstNameTh} #{item.lastNameTh}"
+		/>
+	</p:column>
+	
+    <p:column styleClass="center">
+        <h:outputText value="#{item.customerEntity.id eq 1 ? item.citizenId : item.registrationId}"/>
+    </p:column>
+
+    <p:column styleClass="center">
+        <h:outputText value="#{item.tmbCustomerId}"/>
+    </p:column>
+
+    <p:column styleClass="center">
+        <h:outputText value="#{item.relation.description}"/>
+    </p:column>
+
+    <p:column styleClass="center">
+        <h:outputText value="#{item.collateralOwner == 2 ? 'Y' : 'N'}"/>
+    </p:column>
+
+    <p:column styleClass="center">
+        <h:outputText value="#{item.indLv}"/>
+    </p:column>
+
+    <p:column styleClass="center">
+        <h:outputText value="#{item.jurLv}"/>
+    </p:column>
+
+    <p:column styleClass="center">
+        <h:outputText value="#{item.percentShare}">
+        	<f:convertNumber pattern="#0.00"/>
+        </h:outputText>
+    </p:column>
+	
+	 <p:column styleClass="center">
+	     <h:outputText value="#{item.age}"/>
+	 </p:column>
+	
+      <p:column styleClass="center"> 
+          <p:commandButton 
+          	title="#{msg.get('app.button.edit')}"
+              icon="ui-icon-pencil"
+              style="margin-right:0px !important"
+              action="#{postCustomerInfoJuris.onClickLink()}"
+              process="@this"
+              >
+              <f:setPropertyActionListener value="#{item}" target="#{postCustomerInfoJuris.selectedCustomer}"/>
+          </p:commandButton>
+      </p:column>
+</p:dataTable>
+</td></tr>
+<tr>
+ 	<td colspan="100%" class="title">
+    	<h:outputText value="#{msg.get('app.custInfoJuri.content.warningMessage')}" style="color: red"/>
+    </td>
+</tr>                       	
                         	<tr><td colspan="100%"><p:spacer height="1em"/></td></tr>
                         	
 	                        <tr>

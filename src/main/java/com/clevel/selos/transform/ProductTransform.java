@@ -28,6 +28,16 @@ public class ProductTransform extends Transform{
         return prdGroupToPrdProgramView;
     }
 
+    public List<PrdGroupToPrdProgramView> transformToViewList(List<PrdGroupToPrdProgram> prdGroupToPrdProgramList) {
+        List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewList = new ArrayList<PrdGroupToPrdProgramView>();
+        if (prdGroupToPrdProgramList != null && !prdGroupToPrdProgramList.isEmpty()) {
+            for (PrdGroupToPrdProgram prdGroupToPrdProgram : prdGroupToPrdProgramList) {
+                prdGroupToPrdProgramViewList.add(transformToView(prdGroupToPrdProgram));
+            }
+        }
+        return prdGroupToPrdProgramViewList;
+    }
+
     public ProductProgramView transformToView(ProductProgram productProgram){
         ProductProgramView productProgramView = new ProductProgramView();
         if(productProgram != null){
@@ -105,6 +115,9 @@ public class ProductTransform extends Transform{
             creditTypeView.setComsIntType(creditType.getComsIntType());
             creditTypeView.setDescription(creditType.getDescription());
             creditTypeView.setName(creditType.getName());
+            creditTypeView.setCanSplit(creditType.getCanSplit());
+            creditTypeView.setCalLimitType(creditType.getCalLimitType());
+            creditTypeView.setCreditGroup(creditType.getCreditGroup());
         }
         return creditTypeView;
     }
