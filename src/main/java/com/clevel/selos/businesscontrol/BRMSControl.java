@@ -3,14 +3,13 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.integration.brms.model.request.BRMSAccountRequested;
-import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
-import com.clevel.selos.integration.brms.model.request.BRMSCustomerInfo;
-import com.clevel.selos.integration.brms.model.request.BRMSNCBAccountInfo;
+import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.model.*;
+import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.transform.BRMSTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -45,8 +44,6 @@ public class BRMSControl extends BusinessControl {
     private NewCollateralDAO newCollateralDAO;
     @Inject
     private NewCreditFacilityDAO creditFacilityDAO;
-    @Inject
-    private DecisionDAO decisionDAO;
 
     @Inject
     private WorkCasePrescreenDAO workCasePrescreenDAO;
@@ -62,6 +59,18 @@ public class BRMSControl extends BusinessControl {
     private CustomerDAO customerDAO;
     @Inject
     private CustomerCSIDAO customerCSIDAO;
+    @Inject
+    private BankStatementSummaryDAO bankStatementSummaryDAO;
+    @Inject
+    private ExistingCreditFacilityDAO existingCreditFacilityDAO;
+
+    @Inject
+    BRMSTransform brmsTransform;
+
+    @Inject
+    public BRMSControl(){
+
+    }
 
     public StandardPricingResponse getPriceFeeInterest(long workCaseId){
         BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId);
@@ -109,7 +118,6 @@ public class BRMSControl extends BusinessControl {
 
         applicationInfo.setProcessDate(Calendar.getInstance().getTime());
         applicationInfo.setProductGroup(basicInfo.getProductGroup().getBrmsCode());
-
 
         BigDecimal totalTCGGuaranteeAmount = BigDecimal.ZERO;
         BigDecimal numberOfIndvGuarantor = BigDecimal.ZERO;
@@ -165,7 +173,7 @@ public class BRMSControl extends BusinessControl {
             applicationInfo.setLoanRequestType(newCreditFacility.getLoanRequestType().getBrmsCode());
         }
         else if(workCase.getStep().getProposeType().equals(ProposeType.A)){
-            Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
+
             //TODO: To set Loan Request Type when Decision is complete.
         }
 
@@ -195,13 +203,10 @@ public class BRMSControl extends BusinessControl {
     }
 
     public UWRulesResponse getPrescreenResult(long workcasePrescreenId){
-
+        logger.debug("getPrescreenReult from workcasePrescreenId {}", workcasePrescreenId);
         Date now = Calendar.getInstance().getTime();
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workcasePrescreenId);
         Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workcasePrescreenId);
-        List<PrescreenBusiness> businessList = prescreenBusinessDAO.findByPreScreenId(workcasePrescreenId);
-        List<Customer> customerList = customerDAO.findCustomerByWorkCasePreScreenId(workcasePrescreenId);
-
 
         BRMSApplicationInfo applicationInfo = new BRMSApplicationInfo();
         applicationInfo.setApplicationNo(workCasePrescreen.getAppNumber());
@@ -211,20 +216,19 @@ public class BRMSControl extends BusinessControl {
         if(workCasePrescreen.getBorrowerType() != null)
             applicationInfo.setBorrowerType(workCasePrescreen.getBorrowerType().getBrmsCode());
 
-        applicationInfo.setExistingSMECustomer(getBoolean(prescreen.getExistingSMECustomer()));
-        applicationInfo.setRefinanceIN(getBoolean(prescreen.getRefinanceIN()));
-        applicationInfo.setRefinanceOUT(getBoolean(prescreen.getRefinanceOUT()));
+        applicationInfo.setExistingSMECustomer(getRadioBoolean(prescreen.getExistingSMECustomer()));
+        applicationInfo.setRefinanceIN(getRadioBoolean(prescreen.getRefinanceIN()));
+        applicationInfo.setRefinanceOUT(getRadioBoolean(prescreen.getRefinanceOUT()));
         applicationInfo.setStepCode(workCasePrescreen.getStep().getCode());
-
 
         applicationInfo.setBizLocation(String.valueOf(prescreen.getBusinessLocation().getCode()));
         applicationInfo.setYearInBusinessMonth(new BigDecimal(DateTimeUtil.monthBetween2DatesWithNoDate(prescreen.getRegisterDate(), now)));
         applicationInfo.setCountryOfRegistration(prescreen.getCountry().getCode2());
 
         BigDecimal borrowerGroupIncome = BigDecimal.ZERO;
-        String bizCountry = new String();
 
         boolean appExistingSMECustomer = Boolean.TRUE;
+        List<Customer> customerList = customerDAO.findCustomerByWorkCasePreScreenId(workcasePrescreenId);
         List<BRMSCustomerInfo> customerInfoList = new ArrayList<BRMSCustomerInfo>();
         for(Customer customer : customerList){
             BRMSCustomerInfo customerInfo = new BRMSCustomerInfo();
@@ -241,7 +245,7 @@ public class BRMSControl extends BusinessControl {
                 customerInfo.setExistingSMECustomer(Boolean.FALSE);
                 customerInfo.setNumberOfMonthLastContractDate(BigDecimal.ZERO);
             } else {
-                customerInfo.setExistingSMECustomer(getBoolean(customerOblInfo.getExistingSMECustomer()));
+                customerInfo.setExistingSMECustomer(getRadioBoolean(customerOblInfo.getExistingSMECustomer()));
                 customerInfo.setNumberOfMonthLastContractDate(new BigDecimal(DateTimeUtil.monthBetween2DatesWithNoDate(customerOblInfo.getLastContractDate(), now)));
                 customerInfo.setNextReviewDate(customerOblInfo.getNextReviewDate());
                 customerInfo.setNextReviewDateFlag(customerOblInfo.getNextReviewDate() == null? Boolean.FALSE: Boolean.TRUE);
@@ -251,7 +255,6 @@ public class BRMSControl extends BusinessControl {
                 customerInfo.setUnpaidFeeInsurance(customerOblInfo.getUnpaidFeeInsurance().compareTo(BigDecimal.ZERO) != 0);
                 customerInfo.setPendingClaimLG(customerOblInfo.getPendingClaimLG().compareTo(BigDecimal.ZERO) != 0);
             }
-
 
             if(customer.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
                 Juristic juristic = customer.getJuristic();
@@ -291,26 +294,7 @@ public class BRMSControl extends BusinessControl {
                 customerInfo.setNcbFlag(Boolean.TRUE);
                 List<BRMSNCBAccountInfo> ncbAccountInfoList = new ArrayList<BRMSNCBAccountInfo>();
                 for(NCBDetail ncbDetail : ncbDetailList){
-                    BRMSNCBAccountInfo ncbAccountInfo = new BRMSNCBAccountInfo();
-                    if(customerInfo.isIndividual())
-                        ncbAccountInfo.setLoanAccountStatus(ncbDetail.getAccountStatus().getNcbCodeInd());
-                    else
-                        ncbAccountInfo.setLoanAccountStatus(ncbDetail.getAccountStatus().getNcbCodeJur());
-                    ncbAccountInfo.setLoanAccountType(ncbDetail.getAccountType().getNcbCode());
-                    ncbAccountInfo.setTmbFlag(isActive(ncbDetail.getAccountTMBFlag()));
-                    ncbAccountInfo.setNplFlag(isActive(ncbDetail.getNplFlag()));
-                    ncbAccountInfo.setCreditAmtAtNPLDate(ncbDetail.getNplCreditAmount());
-                    ncbAccountInfo.setTdrFlag(isActive(ncbDetail.getTdrFlag()));
-                    ncbAccountInfo.setCurrentPaymentType(ncbDetail.getCurrentPayment().getNcbCode());
-                    ncbAccountInfo.setSixMonthPaymentType(ncbDetail.getHistorySixPayment().getNcbCode());
-                    ncbAccountInfo.setTwelveMonthPaymentType(ncbDetail.getHistoryTwelvePayment().getNcbCode());
-                    ncbAccountInfo.setNumberOfOverDue(ncbDetail.getOutstandingIn12Month());
-                    ncbAccountInfo.setNumberOfOverLimit(ncbDetail.getOverLimit());
-                    if(ncbDetail.getAccountCloseDate() != null)
-                        ncbAccountInfo.setAccountCloseDateMonths(String.valueOf(DateTimeUtil.monthBetween2DatesWithNoDate(ncbDetail.getAccountCloseDate(), now)));
-                    else
-                        ncbAccountInfo.setAccountCloseDateMonths(String.valueOf(0));
-                    ncbAccountInfoList.add(ncbAccountInfo);
+                    ncbAccountInfoList.add(brmsTransform.getBRMSNCBAccountInfo(ncbDetail, customerInfo.isIndividual()));
                 }
                 customerInfo.setNcbAccountInfoList(ncbAccountInfoList);
             }
@@ -330,27 +314,90 @@ public class BRMSControl extends BusinessControl {
             customerInfo.setQualitativeClass("P");
             borrowerGroupIncome = borrowerGroupIncome.add(customer.getApproxIncome());
 
+            /*Start setting TMB Account for each customer*/
+            ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCasePreScreenId(workcasePrescreenId);
+            if(existingCreditFacility != null){
+
+            }
+
             customerInfoList.add(customerInfo);
         }
 
+        /** Setup Bank Statement Account **/
+        BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkcasePrescreenId(workcasePrescreenId);
+        if(bankStatementSummary != null){
+            List<BankStatement> bankStatementList = bankStatementSummary.getBankStmtList();
+            List<BRMSAccountStmtInfo> accountStmtInfoList = new ArrayList<BRMSAccountStmtInfo>();
+            for(BankStatement bankStatement : bankStatementList){
+                accountStmtInfoList.add(brmsTransform.getBRMSBizInfo(bankStatement));
+            }
+            applicationInfo.setAccountStmtInfoList(accountStmtInfoList);
+        }
+
+        /*Start Set Account Request - Propose Credit Facility*/
+        BigDecimal proposedCreditAmount = BigDecimal.ZERO;
+        BigDecimal totalNumberOfProposedCredit = BigDecimal.ZERO;
+        BigDecimal totalNumberOfContingenCredit = BigDecimal.ZERO;
+        List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreenId(workcasePrescreenId);
+        List<BRMSAccountRequested> accountRequestedList = new ArrayList<BRMSAccountRequested>();
+        for(PrescreenFacility prescreenFacility : prescreenFacilityList){
+            BRMSAccountRequested accountRequested = new BRMSAccountRequested();
+            accountRequested.setCreditDetailId(String.valueOf(prescreenFacility.getId()));
+            accountRequested.setCreditType(prescreenFacility.getCreditType().getBrmsCode());
+            accountRequested.setProductProgram(prescreenFacility.getProductProgram().getBrmsCode());
+            accountRequestedList.add(accountRequested);
+
+            if(prescreenFacility.getCreditType().isContingentFlag())
+                totalNumberOfContingenCredit = totalNumberOfContingenCredit.add(BigDecimal.ONE);
+            else
+                totalNumberOfProposedCredit = totalNumberOfProposedCredit.add(BigDecimal.ONE);
+            proposedCreditAmount.add(prescreenFacility.getRequestAmount());
+        }
+        applicationInfo.setTotalNumberProposeCredit(totalNumberOfProposedCredit);
+        applicationInfo.setTotalNumberContingenPropose(totalNumberOfContingenCredit);
+        applicationInfo.setAccountRequestedList(accountRequestedList);
+        /*End Set Account Request*/
+
+        /*Start Set Business Info List*/
+        List<PrescreenBusiness> businessList = prescreenBusinessDAO.findByPreScreenId(workcasePrescreenId);
+        List<BRMSBizInfo> bizInfoList = new ArrayList<BRMSBizInfo>();
+        for(PrescreenBusiness prescreenBusiness : businessList){
+            BRMSBizInfo bizInfo = new BRMSBizInfo();
+            bizInfo.setId(String.valueOf(prescreenBusiness.getId()));
+            BusinessDescription businessDescription = prescreenBusiness.getBusinessDescription();
+            bizInfo.setBizCode(businessDescription.getTmbCode());
+            bizInfo.setNegativeValue(businessDescription.getNegative());
+            bizInfo.setHighRiskValue(businessDescription.getHighRisk());
+            bizInfo.setEsrValue(businessDescription.getEsr());
+            bizInfo.setSuspendValue(businessDescription.getSuspend());
+            bizInfo.setDeviationValue(businessDescription.getSuspend());
+            bizInfoList.add(bizInfo);
+        }
+        applicationInfo.setBizInfoList(bizInfoList);
+        /*Start Set Business Info List*/
+
+        applicationInfo.setProductGroup(prescreen.getProductGroup().getBrmsCode());
         applicationInfo.setBorrowerGroupIncome(borrowerGroupIncome);
         applicationInfo.setTotalGroupIncome(prescreen.getGroupIncome());
-        //applicationInfo.setTotalNumberProposeCredit();
-        //applicationInfo.setTotalNumberContingenPropose();
-        applicationInfo.setProductGroup(prescreen.getProductGroup().getBrmsCode());
+        applicationInfo.setExistingSMECustomer(appExistingSMECustomer);
         applicationInfo.setReferredDocType(prescreen.getReferredExperience().getBrmsCode());
 
         UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
+
         return uwRulesResponse;
     }
 
-    private boolean getBoolean(int value){
+    private boolean getRadioBoolean(int value){
         RadioValue radioValue = RadioValue.lookup(value);
         return radioValue.getBoolValue();
     }
 
     private boolean isActive(int value){
         return value == 1;
+    }
+
+    private boolean toBoolean(String value){
+        return "Y".equals(value)? true: false;
     }
 
 }

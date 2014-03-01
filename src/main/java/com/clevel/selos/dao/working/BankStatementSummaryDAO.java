@@ -48,4 +48,18 @@ public class BankStatementSummaryDAO extends GenericDAO<BankStatementSummary, Lo
         }
         return bankStatementSummary;
     }
+
+    public BankStatementSummary findByWorkcasePrescreenId(long workCasePrescreenId){
+        log.info("findByWorkCaseId : {}", workCasePrescreenId);
+        BankStatementSummary bankStatementSummary = new BankStatementSummary();
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
+        criteria.addOrder(Order.asc("id"));
+//        bankStatementSummary = (BankStatementSummary) criteria.uniqueResult();
+        List list = criteria.list();
+        if (list != null && list.size() > 0) {
+            bankStatementSummary = (BankStatementSummary) list.get(0);
+        }
+        return bankStatementSummary;
+    }
 }

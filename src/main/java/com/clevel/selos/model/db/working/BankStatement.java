@@ -102,6 +102,9 @@ public class BankStatement implements Serializable {
     @Column(name = "over_limit_days")
     private BigDecimal overLimitDays;
 
+    @Column(name = "total_transaction")
+    private BigDecimal totalTransaction;
+
     @Column(name = "remark")
     private String remark;
 
@@ -339,6 +342,14 @@ public class BankStatement implements Serializable {
         this.overLimitDays = overLimitDays;
     }
 
+    public BigDecimal getTotalTransaction() {
+        return totalTransaction;
+    }
+
+    public void setTotalTransaction(BigDecimal totalTransaction) {
+        this.totalTransaction = totalTransaction;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -415,6 +426,7 @@ public class BankStatement implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
+                .append("isNotCountIncome", isNotCountIncome)
                 .append("bank", bank)
                 .append("branch", branch)
                 .append("bankAccountType", bankAccountType)
@@ -440,14 +452,12 @@ public class BankStatement implements Serializable {
                 .append("tdChequeReturnPercent", tdChequeReturnPercent)
                 .append("overLimitTimes", overLimitTimes)
                 .append("overLimitDays", overLimitDays)
+                .append("totalTransaction", totalTransaction)
                 .append("remark", remark)
                 .append("createBy", createBy)
                 .append("createDate", createDate)
                 .append("modifyBy", modifyBy)
                 .append("modifyDate", modifyDate)
-                .append("bankStatementSummary", bankStatementSummary)
-                .append("bankStatementDetailList", bankStatementDetailList)
-                .append("srcOfCollateralProofList", srcOfCollateralProofList)
                 .toString();
     }
 }
