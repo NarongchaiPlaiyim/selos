@@ -2,31 +2,27 @@ package com.clevel.selos.model.view;
 
 
 import com.clevel.selos.model.db.master.Bank;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DisbursementBahtnetDetailView implements Serializable{
 
-    private Bank bankName;
+	private long id;
     private int bankCode;
     private String accountNumber;
     private String branchName;
     private String benefitName;
-    private List<CreditTypeDetailView> creditType;
+    private List<DisbursementCreditTypeView> disbursementCreditTypeView;
     private BigDecimal totalAmount;
-
-    public Bank getBankName() {
-        return bankName;
-    }
-
-    public void setBankName(Bank bankName) {
-        this.bankName = bankName;
-    }
-
+    
+    
+    
     public String getAccountNumber() {
         return accountNumber;
     }
@@ -51,13 +47,6 @@ public class DisbursementBahtnetDetailView implements Serializable{
         this.benefitName = benefitName;
     }
 
-    public List<CreditTypeDetailView> getCreditType() {
-        return creditType;
-    }
-
-    public void setCreditType(List<CreditTypeDetailView> creditType) {
-        this.creditType = creditType;
-    }
 
     public BigDecimal getTotalAmount() {
         return totalAmount;
@@ -78,12 +67,27 @@ public class DisbursementBahtnetDetailView implements Serializable{
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("bankName", bankName)
                 .append("accountNumber", accountNumber)
                 .append("branchName", branchName)
                 .append("benefitName", benefitName)
-                .append("creditType", creditType)
+                .append("disbursementCreditTypeView", disbursementCreditTypeView)
                 .append("totalAmount", totalAmount)
                 .toString();
     }
+
+	public List<DisbursementCreditTypeView> getDisbursementCreditTypeView() {
+		return disbursementCreditTypeView;
+	}
+
+	public void setDisbursementCreditTypeView(List<DisbursementCreditTypeView> disbursementCreditTypeView) {
+		this.disbursementCreditTypeView = disbursementCreditTypeView;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 }

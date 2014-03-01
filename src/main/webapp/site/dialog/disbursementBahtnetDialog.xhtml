@@ -10,9 +10,9 @@
             <tr>
                 <td><p:outputLabel for="bankName" value="#{msg.get('app.disbursement.detail.bahtnet.dialog.bankName')}"/></td>
                 <td>
-                    <p:selectOneMenu id="bankName" value="#{disbursementInfo.disbursementBahtnetDetailView.bankCode}" required="true">
-                           <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                           <f:selectItems value="#{disbursementInfo.bankList}" var="bankList" itemLabel="#{bankList.name}" itemValue="#{bankList.code}"/>
+                	<p:selectOneMenu id="bankName" value="#{disbursementInfo.disbursementBahtnetDetailView.bankCode}" required="true">
+                           <f:selectItem itemLabel="- Please Select -" itemValue="-1"/>
+                           <f:selectItems value="#{disbursementInfo.bankList}"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -37,7 +37,7 @@
             <tr>
                 <td><p:outputLabel for="creditType" value="#{msg.get('app.disbursement.detail.bahtnet.dialog.creditType')}"/></td>
                 <td>
-                    <p:dataTable id="creditType" value="#{disbursementInfo.disbursementBahtnetDetailView.creditType}" rowIndexVar="rowIndex" var="item">
+                    <p:dataTable id="creditType" value="#{disbursementInfo.disbursementBahtnetDetailView.disbursementCreditTypeView}" rowIndexVar="rowIndex" var="item">
                         <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.dialog.tb.productProgram')}">
                             <h:outputText value="#{item.productProgram}"/>
                         </p:column>
@@ -45,7 +45,7 @@
                             <h:outputText value="#{item.creditFacility}"/>
                         </p:column>
                         <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.dialog.tb.limit')}">
-                            <h:outputText value="#{item.limit}">
+                            <h:outputText value="#{item.limitAmount}">
                                 <f:convertNumber pattern="#,##0"
                                                  minFractionDigits="2"
                                                  maxFractionDigits="2"
@@ -66,7 +66,7 @@
                                      update=":disbursementForm ,:disbursementBahtnetForm"
                                      process="@form"
                                      oncomplete="handleDisbursementBahtnetDialogRequest(xhr, status, args)"/>
-                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller"
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller" type="button"
                                      onclick="bahtnetDisbursementDialog.hide()"
                                      update=":disbursementForm"/>
                 </td>

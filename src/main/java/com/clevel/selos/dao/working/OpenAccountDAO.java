@@ -30,6 +30,15 @@ public class OpenAccountDAO extends GenericDAO<OpenAccount, Long> {
         return openAccountList;
     }
     
+    public OpenAccount findByAccountNumber(String accountNumber) {
+        log.info("findByAccountNumber : {}", accountNumber);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("accountNumber", accountNumber));
+        OpenAccount openAccount = (OpenAccount) criteria.uniqueResult();
+
+        return openAccount;
+    }
+    
     @SuppressWarnings("unchecked")
     public List<OpenAccount> findPledgeAccountByWorkCaseId(long workCaseId) {
     	Criteria criteria = createCriteria();

@@ -11,7 +11,7 @@ public class DisbursementMCCredit {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_MC_CREDIT_REQ")
     private long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "disburse_mc_id")
     private DisbursementMC disbursementMC;
 
@@ -21,6 +21,38 @@ public class DisbursementMCCredit {
 
     @Column(name = "disburse_amount")
     private BigDecimal disburseAmount;
+
+	public DisbursementMC getDisbursementMC() {
+		return disbursementMC;
+	}
+
+	public void setDisbursementMC(DisbursementMC disbursementMC) {
+		this.disbursementMC = disbursementMC;
+	}
+
+	public NewCreditDetail getCreditDetail() {
+		return creditDetail;
+	}
+
+	public void setCreditDetail(NewCreditDetail creditDetail) {
+		this.creditDetail = creditDetail;
+	}
+
+	public BigDecimal getDisburseAmount() {
+		return disburseAmount;
+	}
+
+	public void setDisburseAmount(BigDecimal disburseAmount) {
+		this.disburseAmount = disburseAmount;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 
 
 }

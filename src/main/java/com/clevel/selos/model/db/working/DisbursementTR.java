@@ -23,5 +23,37 @@ public class DisbursementTR {
     @OneToMany(mappedBy = "disbursementTR")
     private List<DisbursementTRCredit> disbursementTRCreditList;
 
+	public Disbursement getDisbursement() {
+		return disbursement;
+	}
+
+	public void setDisbursement(Disbursement disbursement) {
+		this.disbursement = disbursement;
+	}
+
+	public OpenAccount getOpenAccount() {
+		return openAccount;
+	}
+
+	public void setOpenAccount(OpenAccount openAccount) {
+		this.openAccount = openAccount;
+	}
+
+	public List<DisbursementTRCredit> getDisbursementTRCreditList() {
+		return disbursementTRCreditList;
+	}
+
+	public void setDisbursementTRCreditList(List<DisbursementTRCredit> disbursementTRCreditList) {
+		this.disbursementTRCreditList = disbursementTRCreditList;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 
 }
