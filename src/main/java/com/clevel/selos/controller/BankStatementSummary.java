@@ -72,7 +72,7 @@ public class BankStatementSummary implements Serializable {
     @Inject
     BankAccountTypeTransform bankAccTypeTransform;
 
-    //View
+    // Variables for binding from page
     private int seasonalFlag;
     private Date expectedSubmitDate;
     private BankStmtSummaryView summaryView;
@@ -83,28 +83,27 @@ public class BankStatementSummary implements Serializable {
     private Date lastThreeMonth3;
     private Date currentDate;
     private String currentDateDDMMYY;
-    private int yesValue;
     private List<BankAccountTypeView> othBankAccTypeViewList;
+    private int yesValue;
+    private boolean disableRefresh;
 
-    //Session
+    // Variables for control
     private long workCaseId;
-
-    //Message Dialog
-    private String messageHeader;
-    private String message;
-
-    //Confirm Dialog
-    private String confirmMessageHeader;
-    private String confirmMessage;
-
+    private boolean isABDM_BDM;
+    private boolean isTMB;
+    private boolean isRetrieveDWH;
     private Date lastMonthDate;
     private int numberOfMonths;
     private int countRefresh;
-    private int maxRefreshTime = 3;
-    private boolean isABDM_BDM;
-    private boolean disableRefresh;
-    private boolean isTMB;
+    private static final int MAX_REFRESH_TIME = 3;
+
     private List<BankStmtView> TMBBankStmtDeleteList;
+
+    // Variables for messages dialog
+    private String messageHeader;
+    private String message;
+    private String confirmMessageHeader;
+    private String confirmMessage;
 
     public BankStatementSummary() {
     }
@@ -152,6 +151,8 @@ public class BankStatementSummary implements Serializable {
         numberOfMonths = bankStmtControl.getNumberOfMonthsBankStmt(seasonalFlag);
         lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
         log.debug("numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
+
+        TMBBankStmtDeleteList = new ArrayList<BankStmtView>();
     }
 
     private void initBankStmtSummary() {
@@ -162,7 +163,6 @@ public class BankStatementSummary implements Serializable {
             currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(summaryView.getExpectedSubmitDate());
             // Set Summary Colors
             //bankStmtControl.setSummaryColor(summaryView, workCaseId);
-
             Date[] threeMonthsOfSrcOfColl = bankStmtControl.getSourceOfCollateralMonths(summaryView);
             if (threeMonthsOfSrcOfColl.length == 3) {
                 lastThreeMonth1 = threeMonthsOfSrcOfColl[0];
@@ -174,7 +174,6 @@ public class BankStatementSummary implements Serializable {
                 lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -1);
                 lastThreeMonth1 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -2);
             }
-
             // provide Source of Collateral Proof from all Bank statement
             provideSrcOfCollateralProofList();
             // calculate total & grand total summary
@@ -215,11 +214,11 @@ public class BankStatementSummary implements Serializable {
         log.debug("onRefresh()");
         // user (ABDM/BDM) can click refresh by 3 times in Full Application step.
         if (isABDM_BDM) {
-            if (countRefresh < maxRefreshTime) {
+            if (countRefresh < MAX_REFRESH_TIME) {
                 countRefresh += 1;
             }
             // check disable refresh button
-            disableRefresh = countRefresh >= maxRefreshTime;
+            disableRefresh = countRefresh >= MAX_REFRESH_TIME;
         }
 
         if (workCaseId != 0) {
@@ -240,13 +239,14 @@ public class BankStatementSummary implements Serializable {
 
             if ( !dwhIsDown && (summaryResult.getTmbBankStmtViewList() != null && summaryResult.getTmbBankStmtViewList().size() > 0)) {
                 Cloner cloner = new Cloner();
+
                 // previous TMB Bank statement for delete on save
                 if (summaryView.getTmbBankStmtViewList() != null && summaryView.getTmbBankStmtViewList().size() > 0) {
-                    TMBBankStmtDeleteList = new ArrayList<BankStmtView>();
-
                     int size = summaryView.getTmbBankStmtViewList().size();
                     for (int i=0; i<size; i++) {
-                        TMBBankStmtDeleteList.add(summaryView.getTmbBankStmtViewList().get(i));
+                        if (summaryView.getTmbBankStmtViewList().get(i).getId() != 0) {
+                            TMBBankStmtDeleteList.add(summaryView.getTmbBankStmtViewList().get(i));
+                        }
                     }
                 }
 
@@ -264,7 +264,6 @@ public class BankStatementSummary implements Serializable {
                     lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -1);
                     lastThreeMonth1 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -2);
                 }
-
                 // provide Source of Collateral Proof from all Bank statement
                 provideSrcOfCollateralProofList();
                 // calculate total summary for Borrower
@@ -293,6 +292,9 @@ public class BankStatementSummary implements Serializable {
             dbrControl.updateValueOfDBR(workCaseId);
             exSummaryControl.calForBankStmtSummary(workCaseId);
             bizInfoSummaryControl.calByBankStatement(workCaseId);
+
+            // delete previous TMB Bank statement after retrieve from DWH
+            bankStmtControl.deleteBankStmtList(TMBBankStmtDeleteList);
 
             messageHeader = "Save Bank Statement Summary Success.";
             message = "Save Bank Statement Summary data success.";
@@ -325,7 +327,7 @@ public class BankStatementSummary implements Serializable {
 
         try {
             // delete Bank statement selected from Database
-            bankStmtControl.deleteBankStmt(selectedBankStmtView.getId());
+            bankStmtControl.deleteBankStmtById(selectedBankStmtView.getId());
             // update Summary after re-calculated to Database
             bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
             // update related parts
