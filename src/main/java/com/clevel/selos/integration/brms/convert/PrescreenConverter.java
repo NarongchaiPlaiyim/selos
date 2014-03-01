@@ -3,34 +3,16 @@ package com.clevel.selos.integration.brms.convert;
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.brms.model.BRMSField;
 import com.clevel.selos.integration.brms.model.request.*;
+import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
+import com.clevel.selos.integration.brms.model.response.UWRulesResult;
 import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.*;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AccountType;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.ApplicationType;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.BorrowerType;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.BusinessType;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.CreditFacilityType;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceRequest;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.IndividualType;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.NCBAccountType;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.NCBEnquiryType;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.NCBReportType;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.ProductType;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.SELOSProductProgramType;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.UnderwritingApprovalRequestType;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.UnderwritingRequest;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.WarningCodeFullMatchedType;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.WarningCodePartialMatchedType;
-import com.clevel.selos.integration.brms.service.standardpricing.interestrules.*;
+
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.xml.datatype.DatatypeFactory;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 public class PrescreenConverter extends Converter{
     @Inject
@@ -69,7 +51,7 @@ public class PrescreenConverter extends Converter{
         attributeTypeList.add(getAttributeType(BRMSField.BUSINESS_LOCATION, applicationInfo.getBizLocation()));
         attributeTypeList.add(getAttributeType(BRMSField.YEAR_IN_BUSINESS, applicationInfo.getYearInBusinessMonth()));
         attributeTypeList.add(getAttributeType(BRMSField.COUNTRY_OF_REGISTRATION, applicationInfo.getCountryOfRegistration()));
-        attributeTypeList.add(getAttributeType(BRMSField.REFERENCE_DOCUMENT_TYPE, applicationInfo.getEstablishFrom()));
+        attributeTypeList.add(getAttributeType(BRMSField.REFERENCE_DOCUMENT_TYPE, applicationInfo.getReferredDocType()));
 
         List<ProductType> productTypeList =  applicationType.getProduct();
         ProductType productType = new ProductType();
@@ -130,6 +112,7 @@ public class PrescreenConverter extends Converter{
             cusAttributeTypeList.add(getAttributeType(BRMSField.RELATIONSHIP_TYPE, customerInfo.getRelation()));
             cusAttributeTypeList.add(getAttributeType(BRMSField.REFERENCE, customerInfo.getReference()));
             cusAttributeTypeList.add(getAttributeType(BRMSField.NUMBER_OF_MONTH_FROM_LAST_SET_UP_DATE, customerInfo.getNumberOfMonthLastContractDate()));
+            //Set P by default at prescreen //
             cusAttributeTypeList.add(getAttributeType(BRMSField.NEW_QUALITATIVE, customerInfo.getQualitativeClass()));
             cusAttributeTypeList.add(getAttributeType(BRMSField.NEXT_REVIEW_DATE, customerInfo.getNextReviewDate()));
             cusAttributeTypeList.add(getAttributeType(BRMSField.NEXT_REVIEW_DATE_FLAG, customerInfo.isNextReviewDateFlag()));
@@ -260,6 +243,50 @@ public class PrescreenConverter extends Converter{
         decisionServiceRequest.setUnderwritingRequest(underwritingRequest);
 
         return decisionServiceRequest;
+    }
+
+    public UWRulesResponse getUWRulesResponse(DecisionServiceResponse decisionServiceResponse){
+
+        UWRulesResponse uwRulesResponse = new UWRulesResponse();
+
+        if(decisionServiceResponse != null){
+            uwRulesResponse.setDecisionID(decisionServiceResponse.getDecisionID());
+
+            UnderwritingRequest underwritingRequest = decisionServiceResponse.getUnderwritingRequest();
+            UnderwritingApprovalRequestType underwritingApprovalRequestType = underwritingRequest.getUnderwritingApprovalRequest();
+
+            ApplicationType applicationType = underwritingApprovalRequestType.getApplication();
+            uwRulesResponse.setApplicationNo(applicationType.getApplicationNumber());
+
+            UnderwritingResult underwritingResult = decisionServiceResponse.getUnderwritingResult();
+            UnderwritingApprovalResultType underwritingApprovalResultType = underwritingResult.getUnderwritingApprovalResult();
+
+            Map<String, UWRulesResult> uwRulesResultMap = new TreeMap<String, UWRulesResult>();
+            List<ResultType> resultTypeList = underwritingApprovalResultType.getResult();
+            for(ResultType resultType : resultTypeList){
+                UWRulesResult uwRulesResult = new UWRulesResult();
+                uwRulesResult.setRuleName(resultType.getRuleName());
+                uwRulesResult.setType(resultType.getType());
+                uwRulesResult.setColor(resultType.getColor());
+                uwRulesResult.setDeviationFlag(resultType.getDeviationFlag());
+                uwRulesResult.setRejectGroupCode(resultType.getRejectGroupCode());
+
+                List<AttributeType> uwAttributeTypeList = resultType.getAttribute();
+                for(AttributeType attributeType : uwAttributeTypeList){
+                    if(attributeType.getName() != null){
+                        if(attributeType.getName().equals(BRMSField.UW_RULE_ORDER.value())){
+                            uwRulesResult.setRuleOrder(attributeType.getStringValue());
+                        }
+                        if(attributeType.getName().equals(BRMSField.UW_PERSONAL_ID)){
+                            uwRulesResult.setRuleName(attributeType.getStringValue());
+                        }
+                    }
+                }
+                uwRulesResultMap.put(uwRulesResult.getRuleOrder(), uwRulesResult);
+            }
+            uwRulesResponse.setUwRulesResultMap(uwRulesResultMap);
+        }
+        return uwRulesResponse;
     }
 
     private AttributeType getAttributeType(BRMSField field, Date value){

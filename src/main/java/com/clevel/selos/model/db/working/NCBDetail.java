@@ -40,6 +40,9 @@ public class NCBDetail implements Serializable {
     @Column(name = "account_open_date")
     private Date accountOpenDate;
 
+    @Column(name = "account_close_date")
+    private Date accountCloseDate;
+
     @Column(name = "limit")
     private BigDecimal limit;
 
@@ -57,11 +60,15 @@ public class NCBDetail implements Serializable {
     private SettlementStatus currentPayment;
 
     @OneToOne
-    @JoinColumn(name = "history_payment_id")
-    private SettlementStatus historyPayment;
+    @JoinColumn(name = "history_six_payment_id")
+    private SettlementStatus historySixPayment;
+
+    @OneToOne
+    @JoinColumn(name = "history_twl_payment_id")
+    private SettlementStatus historyTwelvePayment;
 
     @Column(name = "outstanding_in_12_month")
-    private BigDecimal outstandingIn12Month;
+    private int outstandingIn12Month;
 
     @Column(name = "over_limit")
     private int overLimit;
@@ -72,23 +79,14 @@ public class NCBDetail implements Serializable {
     @Column(name = "no_of_months_payment")
     private int noOfMonthPayment;
 
-    @Column(name = "month1")
-    private BigDecimal month1;
+    @Column(name = "npl_flag")
+    private int nplFlag;
 
-    @Column(name = "month2")
-    private BigDecimal month2;
+    @Column(name = "npl_credit_amount")
+    private BigDecimal nplCreditAmount;
 
-    @Column(name = "month3")
-    private BigDecimal month3;
-
-    @Column(name = "month4")
-    private BigDecimal month4;
-
-    @Column(name = "month5")
-    private BigDecimal month5;
-
-    @Column(name = "month6")
-    private BigDecimal month6;
+    @Column(name = "tdr_flag")
+    private int tdrFlag;
 
     @Column(name = "wcFlag")
     private int wcFlag;
@@ -144,6 +142,14 @@ public class NCBDetail implements Serializable {
         this.accountOpenDate = accountOpenDate;
     }
 
+    public Date getAccountCloseDate() {
+        return accountCloseDate;
+    }
+
+    public void setAccountCloseDate(Date accountCloseDate) {
+        this.accountCloseDate = accountCloseDate;
+    }
+
     public BigDecimal getLimit() {
         return limit;
     }
@@ -184,19 +190,27 @@ public class NCBDetail implements Serializable {
         this.currentPayment = currentPayment;
     }
 
-    public SettlementStatus getHistoryPayment() {
-        return historyPayment;
+    public SettlementStatus getHistorySixPayment() {
+        return historySixPayment;
     }
 
-    public void setHistoryPayment(SettlementStatus historyPayment) {
-        this.historyPayment = historyPayment;
+    public void setHistorySixPayment(SettlementStatus historySixPayment) {
+        this.historySixPayment = historySixPayment;
     }
 
-    public BigDecimal getOutstandingIn12Month() {
+    public SettlementStatus getHistoryTwelvePayment() {
+        return historyTwelvePayment;
+    }
+
+    public void setHistoryTwelvePayment(SettlementStatus historyTwelvePayment) {
+        this.historyTwelvePayment = historyTwelvePayment;
+    }
+
+    public int getOutstandingIn12Month() {
         return outstandingIn12Month;
     }
 
-    public void setOutstandingIn12Month(BigDecimal outstandingIn12Month) {
+    public void setOutstandingIn12Month(int outstandingIn12Month) {
         this.outstandingIn12Month = outstandingIn12Month;
     }
 
@@ -214,54 +228,6 @@ public class NCBDetail implements Serializable {
 
     public void setNoOfMonthPayment(int noOfMonthPayment) {
         this.noOfMonthPayment = noOfMonthPayment;
-    }
-
-    public BigDecimal getMonth1() {
-        return month1;
-    }
-
-    public void setMonth1(BigDecimal month1) {
-        this.month1 = month1;
-    }
-
-    public BigDecimal getMonth2() {
-        return month2;
-    }
-
-    public void setMonth2(BigDecimal month2) {
-        this.month2 = month2;
-    }
-
-    public BigDecimal getMonth3() {
-        return month3;
-    }
-
-    public void setMonth3(BigDecimal month3) {
-        this.month3 = month3;
-    }
-
-    public BigDecimal getMonth4() {
-        return month4;
-    }
-
-    public void setMonth4(BigDecimal month4) {
-        this.month4 = month4;
-    }
-
-    public BigDecimal getMonth5() {
-        return month5;
-    }
-
-    public void setMonth5(BigDecimal month5) {
-        this.month5 = month5;
-    }
-
-    public BigDecimal getMonth6() {
-        return month6;
-    }
-
-    public void setMonth6(BigDecimal month6) {
-        this.month6 = month6;
     }
 
     public int getRefinanceFlag() {
@@ -282,6 +248,30 @@ public class NCBDetail implements Serializable {
 
     public int getAccountTMBFlag() {
         return accountTMBFlag;
+    }
+
+    public int getNplFlag() {
+        return nplFlag;
+    }
+
+    public void setNplFlag(int nplFlag) {
+        this.nplFlag = nplFlag;
+    }
+
+    public BigDecimal getNplCreditAmount() {
+        return nplCreditAmount;
+    }
+
+    public void setNplCreditAmount(BigDecimal nplCreditAmount) {
+        this.nplCreditAmount = nplCreditAmount;
+    }
+
+    public int getTdrFlag() {
+        return tdrFlag;
+    }
+
+    public void setTdrFlag(int tdrFlag) {
+        this.tdrFlag = tdrFlag;
     }
 
     public void setAccountTMBFlag(int accountTMBFlag) {
@@ -306,22 +296,21 @@ public class NCBDetail implements Serializable {
                 .append("accountStatus", accountStatus)
                 .append("asOfDate", asOfDate)
                 .append("accountOpenDate", accountOpenDate)
+                .append("accountCloseDate", accountCloseDate)
                 .append("limit", limit)
                 .append("outstanding", outstanding)
                 .append("installment", installment)
                 .append("lastReStructureDate", lastReStructureDate)
                 .append("currentPayment", currentPayment)
-                .append("historyPayment", historyPayment)
+                .append("historySixPayment", historySixPayment)
+                .append("historyTwelvePayment", historyTwelvePayment)
                 .append("outstandingIn12Month", outstandingIn12Month)
                 .append("overLimit", overLimit)
                 .append("refinanceFlag", refinanceFlag)
                 .append("noOfMonthPayment", noOfMonthPayment)
-                .append("month1", month1)
-                .append("month2", month2)
-                .append("month3", month3)
-                .append("month4", month4)
-                .append("month5", month5)
-                .append("month6", month6)
+                .append("nplFlag", nplFlag)
+                .append("nplCreditAmount", nplCreditAmount)
+                .append("tdrFlag", tdrFlag)
                 .append("wcFlag", wcFlag)
                 .append("canToEdit", canToEdit)
                 .toString();

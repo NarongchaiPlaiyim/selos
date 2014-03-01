@@ -62,7 +62,7 @@ public class BRMSApplicationInfo implements Serializable{
     private BigDecimal maximumSMELimit;
     private BigDecimal totalApprovedCredit;
     private String loanRequestType;
-    private String establishFrom;
+    private String referredDocType;
     private BigDecimal totalTCGGuaranteeAmount;
     private BigDecimal numberOfIndvGuarantor;
     private BigDecimal numberOfJurisGuarantor;
@@ -491,12 +491,12 @@ public class BRMSApplicationInfo implements Serializable{
         this.loanRequestType = loanRequestType;
     }
 
-    public String getEstablishFrom() {
-        return establishFrom;
+    public String getReferredDocType() {
+        return referredDocType;
     }
 
-    public void setEstablishFrom(String establishFrom) {
-        this.establishFrom = establishFrom;
+    public void setReferredDocType(String referredDocType) {
+        this.referredDocType = referredDocType;
     }
 
     public BigDecimal getTotalTCGGuaranteeAmount() {
@@ -583,6 +583,7 @@ public class BRMSApplicationInfo implements Serializable{
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("statusCode", statusCode)
+                .append("stepCode", stepCode)
                 .append("applicationNo", applicationNo)
                 .append("processDate", processDate)
                 .append("bdmSubmitDate", bdmSubmitDate)
@@ -628,11 +629,12 @@ public class BRMSApplicationInfo implements Serializable{
                 .append("totalLoanWCTMB", totalLoanWCTMB)
                 .append("bizLocation", bizLocation)
                 .append("yearInBusinessMonth", yearInBusinessMonth)
+                .append("countryOfRegistration", countryOfRegistration)
                 .append("productGroup", productGroup)
                 .append("maximumSMELimit", maximumSMELimit)
                 .append("totalApprovedCredit", totalApprovedCredit)
                 .append("loanRequestType", loanRequestType)
-                .append("establishFrom", establishFrom)
+                .append("referredDocType", referredDocType)
                 .append("totalTCGGuaranteeAmount", totalTCGGuaranteeAmount)
                 .append("numberOfIndvGuarantor", numberOfIndvGuarantor)
                 .append("numberOfJurisGuarantor", numberOfJurisGuarantor)

@@ -19,6 +19,8 @@ public class CustomerEntity implements Serializable {
     private String description;
     @Column(name = "active")
     private int active;
+    @Column(name = "brms_code", length = 2)
+    private String brmsCode;
     @Column(name = "default_qualitative")
     private int defaultQualitative;
     @Column(name = "change_quali_enable")
@@ -50,6 +52,14 @@ public class CustomerEntity implements Serializable {
 
     public void setActive(int active) {
         this.active = active;
+    }
+
+    public String getBrmsCode() {
+        return brmsCode;
+    }
+
+    public void setBrmsCode(String brmsCode) {
+        this.brmsCode = brmsCode;
     }
 
     public int getDefaultQualitative() {

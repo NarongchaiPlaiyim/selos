@@ -149,7 +149,9 @@ public enum BRMSField {
     PRICE_FEE_PERCENT("Fee Percent"),
     PRICE_FEE_PERCENT_AFT_DISCOUNT("Fee Percent After Discount"),
     PRICE_PAYMENT_METHOD("Payment Method"),
-    PRICE_YEAR("Year");
+    PRICE_YEAR("Year"),
+    UW_RULE_ORDER("Order"),
+    UW_PERSONAL_ID("Borrower_Id");
 
     String value;
 

@@ -5,12 +5,14 @@ import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.request.BRMSAccountRequested;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
+import com.clevel.selos.integration.brms.model.request.BRMSCustomerInfo;
+import com.clevel.selos.integration.brms.model.request.BRMSNCBAccountInfo;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
-import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.GuarantorCategory;
-import com.clevel.selos.model.ProposeType;
-import com.clevel.selos.model.RequestTypes;
+import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.util.DateTimeUtil;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -18,6 +20,7 @@ import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -55,6 +58,10 @@ public class BRMSControl extends BusinessControl {
     private PrescreenCollateralDAO prescreenCollateralDAO;
     @Inject
     private PrescreenFacilityDAO prescreenFacilityDAO;
+    @Inject
+    private CustomerDAO customerDAO;
+    @Inject
+    private CustomerCSIDAO customerCSIDAO;
 
     public StandardPricingResponse getPriceFeeInterest(long workCaseId){
         BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId);
@@ -98,7 +105,7 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setStatusCode(workCase.getStatus().getCode());
         applicationInfo.setApplicationNo(workCase.getAppNumber());
         //TODO: Using real bdm Submit Date;
-        applicationInfo.setBdmSubmitDate(null);
+        applicationInfo.setBdmSubmitDate(workCase.getReceivedDate());
 
         applicationInfo.setProcessDate(Calendar.getInstance().getTime());
         applicationInfo.setProductGroup(basicInfo.getProductGroup().getBrmsCode());
@@ -187,10 +194,163 @@ public class BRMSControl extends BusinessControl {
         return applicationInfo;
     }
 
-    public void getPrescreenResult(long workcasePrescreenId){
+    public UWRulesResponse getPrescreenResult(long workcasePrescreenId){
+
+        Date now = Calendar.getInstance().getTime();
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workcasePrescreenId);
+        Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workcasePrescreenId);
+        List<PrescreenBusiness> businessList = prescreenBusinessDAO.findByPreScreenId(workcasePrescreenId);
+        List<Customer> customerList = customerDAO.findCustomerByWorkCasePreScreenId(workcasePrescreenId);
 
 
+        BRMSApplicationInfo applicationInfo = new BRMSApplicationInfo();
+        applicationInfo.setApplicationNo(workCasePrescreen.getAppNumber());
+        applicationInfo.setProcessDate(Calendar.getInstance().getTime());
+        applicationInfo.setBdmSubmitDate(workCasePrescreen.getReceivedDate());
+        applicationInfo.setExpectedSubmitDate(prescreen.getExpectedSubmitDate());
+        if(workCasePrescreen.getBorrowerType() != null)
+            applicationInfo.setBorrowerType(workCasePrescreen.getBorrowerType().getBrmsCode());
+
+        applicationInfo.setExistingSMECustomer(getBoolean(prescreen.getExistingSMECustomer()));
+        applicationInfo.setRefinanceIN(getBoolean(prescreen.getRefinanceIN()));
+        applicationInfo.setRefinanceOUT(getBoolean(prescreen.getRefinanceOUT()));
+        applicationInfo.setStepCode(workCasePrescreen.getStep().getCode());
+
+
+        applicationInfo.setBizLocation(String.valueOf(prescreen.getBusinessLocation().getCode()));
+        applicationInfo.setYearInBusinessMonth(new BigDecimal(DateTimeUtil.monthBetween2DatesWithNoDate(prescreen.getRegisterDate(), now)));
+        applicationInfo.setCountryOfRegistration(prescreen.getCountry().getCode2());
+
+        BigDecimal borrowerGroupIncome = BigDecimal.ZERO;
+        String bizCountry = new String();
+
+        boolean appExistingSMECustomer = Boolean.TRUE;
+        List<BRMSCustomerInfo> customerInfoList = new ArrayList<BRMSCustomerInfo>();
+        for(Customer customer : customerList){
+            BRMSCustomerInfo customerInfo = new BRMSCustomerInfo();
+            customerInfo.setRelation(customer.getRelation().getBrmsCode());
+            customerInfo.setCustomerEntity(customer.getCustomerEntity().getBrmsCode());
+            customerInfo.setReference(customer.getReference().getBrmsCode());
+
+            CustomerOblInfo customerOblInfo = customer.getCustomerOblInfo();
+            if(customer.getRelation().getId() == RelationValue.BORROWER.value() && customerOblInfo == null){
+                appExistingSMECustomer = Boolean.FALSE;
+            }
+
+            if(customerOblInfo == null) {
+                customerInfo.setExistingSMECustomer(Boolean.FALSE);
+                customerInfo.setNumberOfMonthLastContractDate(BigDecimal.ZERO);
+            } else {
+                customerInfo.setExistingSMECustomer(getBoolean(customerOblInfo.getExistingSMECustomer()));
+                customerInfo.setNumberOfMonthLastContractDate(new BigDecimal(DateTimeUtil.monthBetween2DatesWithNoDate(customerOblInfo.getLastContractDate(), now)));
+                customerInfo.setNextReviewDate(customerOblInfo.getNextReviewDate());
+                customerInfo.setNextReviewDateFlag(customerOblInfo.getNextReviewDate() == null? Boolean.FALSE: Boolean.TRUE);
+                customerInfo.setExtendedReviewDate(customerOblInfo.getExtendedReviewDate());
+                customerInfo.setExtendedReviewDateFlag(customerOblInfo.getExtendedReviewDate() == null? Boolean.FALSE: Boolean.TRUE);
+                customerInfo.setRatingFinal(String.valueOf(customerOblInfo.getRatingFinal().getScore()));
+                customerInfo.setUnpaidFeeInsurance(customerOblInfo.getUnpaidFeeInsurance().compareTo(BigDecimal.ZERO) != 0);
+                customerInfo.setPendingClaimLG(customerOblInfo.getPendingClaimLG().compareTo(BigDecimal.ZERO) != 0);
+            }
+
+
+            if(customer.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
+                Juristic juristic = customer.getJuristic();
+                customerInfo.setIndividual(Boolean.FALSE);
+                customerInfo.setPersonalID(juristic.getRegistrationId());
+            } else if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                Individual individual = customer.getIndividual();
+                customerInfo.setIndividual(Boolean.TRUE);
+                customerInfo.setPersonalID(individual.getCitizenId());
+                customerInfo.setAgeMonths(DateTimeUtil.monthBetween2DatesWithNoDate(individual.getBirthDate(), now));
+                customerInfo.setNationality(individual.getNationality().getCode());
+                customerInfo.setMarriageStatus(individual.getMaritalStatus().getCode());
+
+                if(isActive(customer.getSpouse())){
+                    Customer spouse = customerDAO.findSpouseById(customer.getSpouseId());
+                    Individual spouseIndv = spouse.getIndividual();
+                    customerInfo.setSpousePersonalID(spouseIndv.getCitizenId());
+                    customerInfo.setRelation(spouse.getRelation().getBrmsCode());
+                } else {
+                    if(isActive(individual.getMaritalStatus().getSpouseFlag())) {
+                        Customer spouse = customerDAO.findMainCustomerBySpouseId(customer.getId());
+                        Individual spouseIndv = spouse.getIndividual();
+                        customerInfo.setSpousePersonalID(spouseIndv.getCitizenId());
+                        customerInfo.setRelation(spouse.getRelation().getBrmsCode());
+                    }
+                }
+            }
+
+            NCB ncb = customer.getNcb();
+            customerInfo.setNumberOfNCBCheckIn6Months(ncb.getCheckIn6Month());
+            customerInfo.setNumberOfDayLastNCBCheck(new BigDecimal(DateTimeUtil.daysBetween2Dates(ncb.getCheckingDate(), now)));
+
+            List<NCBDetail> ncbDetailList = ncb.getNcbDetailList();
+            if(ncbDetailList == null || ncbDetailList.size() == 0){
+                customerInfo.setNcbFlag(Boolean.FALSE);
+            } else {
+                customerInfo.setNcbFlag(Boolean.TRUE);
+                List<BRMSNCBAccountInfo> ncbAccountInfoList = new ArrayList<BRMSNCBAccountInfo>();
+                for(NCBDetail ncbDetail : ncbDetailList){
+                    BRMSNCBAccountInfo ncbAccountInfo = new BRMSNCBAccountInfo();
+                    if(customerInfo.isIndividual())
+                        ncbAccountInfo.setLoanAccountStatus(ncbDetail.getAccountStatus().getNcbCodeInd());
+                    else
+                        ncbAccountInfo.setLoanAccountStatus(ncbDetail.getAccountStatus().getNcbCodeJur());
+                    ncbAccountInfo.setLoanAccountType(ncbDetail.getAccountType().getNcbCode());
+                    ncbAccountInfo.setTmbFlag(isActive(ncbDetail.getAccountTMBFlag()));
+                    ncbAccountInfo.setNplFlag(isActive(ncbDetail.getNplFlag()));
+                    ncbAccountInfo.setCreditAmtAtNPLDate(ncbDetail.getNplCreditAmount());
+                    ncbAccountInfo.setTdrFlag(isActive(ncbDetail.getTdrFlag()));
+                    ncbAccountInfo.setCurrentPaymentType(ncbDetail.getCurrentPayment().getNcbCode());
+                    ncbAccountInfo.setSixMonthPaymentType(ncbDetail.getHistorySixPayment().getNcbCode());
+                    ncbAccountInfo.setTwelveMonthPaymentType(ncbDetail.getHistoryTwelvePayment().getNcbCode());
+                    ncbAccountInfo.setNumberOfOverDue(ncbDetail.getOutstandingIn12Month());
+                    ncbAccountInfo.setNumberOfOverLimit(ncbDetail.getOverLimit());
+                    if(ncbDetail.getAccountCloseDate() != null)
+                        ncbAccountInfo.setAccountCloseDateMonths(String.valueOf(DateTimeUtil.monthBetween2DatesWithNoDate(ncbDetail.getAccountCloseDate(), now)));
+                    else
+                        ncbAccountInfo.setAccountCloseDateMonths(String.valueOf(0));
+                    ncbAccountInfoList.add(ncbAccountInfo);
+                }
+                customerInfo.setNcbAccountInfoList(ncbAccountInfoList);
+            }
+
+            List<String> warningFullMatchList = new ArrayList<String>();
+            List<String> warningSomeMatchList = new ArrayList<String>();
+            List<CustomerCSI> customerCSIList = customerCSIDAO.findCustomerCSIByCustomerId(customer.getId());
+            for(CustomerCSI customerCSI : customerCSIList){
+                if(customerCSI.getMatchedType().equals(CSIMatchedType.F.name())){
+                    warningFullMatchList.add(customerCSI.getWarningCode().getCode());
+                } else {
+                    warningSomeMatchList.add(customerCSI.getWarningCode().getCode());
+                }
+            }
+            customerInfo.setCsiFullyMatchCode(warningFullMatchList);
+            customerInfo.setCsiSomeMatchCode(warningSomeMatchList);
+            customerInfo.setQualitativeClass("P");
+            borrowerGroupIncome = borrowerGroupIncome.add(customer.getApproxIncome());
+
+            customerInfoList.add(customerInfo);
+        }
+
+        applicationInfo.setBorrowerGroupIncome(borrowerGroupIncome);
+        applicationInfo.setTotalGroupIncome(prescreen.getGroupIncome());
+        //applicationInfo.setTotalNumberProposeCredit();
+        //applicationInfo.setTotalNumberContingenPropose();
+        applicationInfo.setProductGroup(prescreen.getProductGroup().getBrmsCode());
+        applicationInfo.setReferredDocType(prescreen.getReferredExperience().getBrmsCode());
+
+        UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
+        return uwRulesResponse;
+    }
+
+    private boolean getBoolean(int value){
+        RadioValue radioValue = RadioValue.lookup(value);
+        return radioValue.getBoolValue();
+    }
+
+    private boolean isActive(int value){
+        return value == 1;
     }
 
 }

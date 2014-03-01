@@ -22,7 +22,7 @@ public class NCBDetailView implements Serializable {
     private BigDecimal outstanding;
     private BigDecimal installment;
     private Date dateOfDebtRestructuring;
-    private BigDecimal noOfOutstandingPaymentIn12months;
+    private int noOfOutstandingPaymentIn12months;
     private int noOfOverLimit;
     private AccountType accountType;
     private AccountStatus accountStatus;
@@ -54,7 +54,7 @@ public class NCBDetailView implements Serializable {
         this.outstanding = BigDecimal.ZERO;
         this.installment = BigDecimal.ZERO;
         this.dateOfDebtRestructuring = new Date();
-        this.noOfOutstandingPaymentIn12months = BigDecimal.ZERO;
+        this.noOfOutstandingPaymentIn12months = 0;
         this.noOfOverLimit = 0;
         this.accountType = new AccountType();
         this.accountStatus = new AccountStatus();
@@ -147,11 +147,11 @@ public class NCBDetailView implements Serializable {
         this.dateOfDebtRestructuring = dateOfDebtRestructuring;
     }
 
-    public BigDecimal getNoOfOutstandingPaymentIn12months() {
+    public int getNoOfOutstandingPaymentIn12months() {
         return noOfOutstandingPaymentIn12months;
     }
 
-    public void setNoOfOutstandingPaymentIn12months(BigDecimal noOfOutstandingPaymentIn12months) {
+    public void setNoOfOutstandingPaymentIn12months(int noOfOutstandingPaymentIn12months) {
         this.noOfOutstandingPaymentIn12months = noOfOutstandingPaymentIn12months;
     }
 
