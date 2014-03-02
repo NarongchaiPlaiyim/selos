@@ -24,6 +24,7 @@ public class NewCreditDetailView implements Serializable {
     private int useCount;
     private int seq;
     private int requestType;
+    private int isSetupCompleted;
     private int isRefinance;
     private ProductProgramView productProgramView;
     private CreditTypeView creditTypeView;
@@ -424,4 +425,12 @@ public class NewCreditDetailView implements Serializable {
                 .append("newCreditTierDetailViewList", newCreditTierDetailViewList)
                 .toString();
     }
+
+	public int getIsSetupCompleted() {
+		return isSetupCompleted;
+	}
+
+	public void setIsSetupCompleted(int isSetupCompleted) {
+		this.isSetupCompleted = isSetupCompleted;
+	}
 }

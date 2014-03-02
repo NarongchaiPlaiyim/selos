@@ -129,6 +129,9 @@ public class NewCreditDetail implements Serializable {
 
     @Column(name = "type", nullable = false, columnDefinition = "int default 0")
     private int type;
+    
+    @Column(name = "setup_completed", nullable = false, columnDefinition = "int default 0")
+    private int setupCompleted;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -500,6 +503,15 @@ public class NewCreditDetail implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("setupCompleted", setupCompleted)
                 .toString();
     }
+
+	public int getSetupCompleted() {
+		return setupCompleted;
+	}
+
+	public void setSetupCompleted(int setupCompleted) {
+		this.setupCompleted = setupCompleted;
+	}
 }
