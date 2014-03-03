@@ -697,7 +697,7 @@ function handleAppraisalDetailRequest(xhr, status, args) {
 
 function handleAppraisalContactDetailRequest(xhr, status, args) {
     if(args.functionComplete){
-        appraisalContactDetailViewDlg.hide();
+        contactRecordViewDlg.hide();
     }
 }
 

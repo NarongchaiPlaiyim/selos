@@ -45,7 +45,7 @@
                 <td class="title left">Zone Manager :</td>
                 <td>
                     <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                     value="#{baseController.zmEndorseUserId}"
+                                     value="#{baseController.zmPriceUserId}"
                                      required="#{not empty param[btnSubmitCaseZM.clientId]}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{baseController.zmUserList}"
@@ -59,13 +59,13 @@
                 <td class="title left">Regional Manager :</td>
                 <td>
                     <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                     value="#{baseController.zmEndorseUserId}"
+                                     value="#{baseController.rmPriceUserId}"
                                      required="#{not empty param[btnSubmitCaseZM.clientId]}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{baseController.rmUserList}"
-                                       var="zmItem"
-                                       itemLabel="#{zmItem.id} - #{zmItem.userName}"
-                                       itemValue="#{zmItem.id}"/>
+                                       var="rmItem"
+                                       itemLabel="#{rmItem.id} - #{rmItem.userName}"
+                                       itemValue="#{rmItem.id}"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -73,13 +73,13 @@
                 <td class="title left">Group Head :</td>
                 <td>
                     <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                     value="#{baseController.zmEndorseUserId}"
+                                     value="#{baseController.ghPriceUserId}"
                                      required="#{not empty param[btnSubmitCaseZM.clientId]}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{baseController.ghUserList}"
-                                       var="zmItem"
-                                       itemLabel="#{zmItem.id} - #{zmItem.userName}"
-                                       itemValue="#{zmItem.id}"/>
+                                       var="ghItem"
+                                       itemLabel="#{ghItem.id} - #{ghItem.userName}"
+                                       itemValue="#{ghItem.id}"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -92,7 +92,7 @@
                                      actionListener="#{baseController.onSubmitZM()}"
                                      oncomplete="handleAssignCheckerDialogRequest(xhr, status, args)"
                                      process="@form"
-                                     update=":frmMain:assignABDMDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
+                                     update=":frmMain:submitCaseDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
                                      styleClass="small" onclick="assignCheckerDlg.hide()"/>
                 </td>

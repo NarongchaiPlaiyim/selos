@@ -185,8 +185,6 @@ public class AppraisalRequest implements Serializable {
     public void onEditAppraisalDetailView(){
         modeForButton = ModeForButton.EDIT;
         log.debug("-- onEditAppraisalDetailView() RowIndex[{}]", rowIndex);
-//        Cloner cloner = new Cloner();
-//        appraisalDetailViewDialog = cloner.deepClone(appraisalDetailViewSelected);
         appraisalDetailViewDialog = appraisalDetailViewSelected;
     }
 

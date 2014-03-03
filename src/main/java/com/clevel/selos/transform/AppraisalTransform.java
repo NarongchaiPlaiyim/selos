@@ -90,6 +90,9 @@ public class AppraisalTransform extends Transform {
         appraisal.setModifyDate(DateTime.now().toDate());
         appraisal.setModifyBy(user);
 
+        appraisal.setAadCommittee(appraisalView.getAadCommittee());
+        appraisal.setAadAdmin(appraisalView.getAadAdmin());
+
         List<AppraisalContactDetail> appraisalContactDetailList = safetyList(appraisalContactDetailTransform.transformToModel(appraisalView.getAppraisalContactDetailView(), appraisal, user));
         appraisal.setAppraisalContactDetailList(appraisalContactDetailList);
 
@@ -140,6 +143,9 @@ public class AppraisalTransform extends Transform {
         appraisalView.setCreateDate(appraisal.getCreateDate());
         appraisalView.setModifyBy(appraisal.getModifyBy());
         appraisalView.setModifyDate(appraisal.getModifyDate());
+
+        appraisalView.setAadCommittee(appraisal.getAadCommittee());
+        appraisalView.setAadAdmin(appraisal.getAadAdmin());
 
         AppraisalContactDetailView appraisalContactDetailView = appraisalContactDetailTransform.transformToView(safetyList(appraisal.getAppraisalContactDetailList()), appraisal, user);
         appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);

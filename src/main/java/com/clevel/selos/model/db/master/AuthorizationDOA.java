@@ -21,6 +21,8 @@ public class AuthorizationDOA implements Serializable {
     private String description;
     @Column(name = "active")
     private int active;
+    @Column(name = "priority_order")
+    private int priorityOrder;
 
     public AuthorizationDOA() {
     }
