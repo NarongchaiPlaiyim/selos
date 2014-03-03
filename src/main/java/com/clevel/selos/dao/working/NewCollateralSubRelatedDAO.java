@@ -2,9 +2,9 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.working.NewCollateralSub;
-import com.clevel.selos.model.db.working.NewCollateralSubRelated;
+import com.clevel.selos.model.db.working.*;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -17,8 +17,9 @@ public class NewCollateralSubRelatedDAO extends GenericDAO<NewCollateralSubRelat
     @SELOS
     Logger log;
     @Inject
-    public NewCollateralSubRelatedDAO() {
-    }
+    NewCreditFacilityDAO newCreditFacilityDAO;
+    @Inject
+    public NewCollateralSubRelatedDAO() {}
 
     @SuppressWarnings("unchecked")
     public List<NewCollateralSubRelated> getListNewCollateralSubRelate(NewCollateralSub newCollateralSub) {
@@ -31,6 +32,25 @@ public class NewCollateralSubRelatedDAO extends GenericDAO<NewCollateralSubRelat
 
         return newCollateralSubRelates;
 
+    }
+
+    public List<NewCollateralSubRelated> getListByWorkCase(WorkCase workCase){
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
+        Criteria criteria = createCriteria();
+        if(newCreditFacility != null && newCreditFacility.getNewCollateralDetailList() != null && newCreditFacility.getNewCollateralDetailList().size() > 0){
+            for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
+                for(NewCollateralHead newCollateralHead : newCollateral.getNewCollateralHeadList()){
+                    for(NewCollateralSub newCollateralSub : newCollateralHead.getNewCollateralSubList()){
+                        criteria.add(Restrictions.eq("newCollateralSub", newCollateralSub));
+                    }
+
+                }
+            }
+        }
+        criteria.setFetchMode("customer", FetchMode.LAZY);
+        List<NewCollateralSubRelated> newCollateralSubList = criteria.list();
+
+        return newCollateralSubList;
     }
 
 }

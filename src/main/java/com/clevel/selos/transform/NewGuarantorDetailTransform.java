@@ -178,8 +178,6 @@ public class NewGuarantorDetailTransform extends Transform {
 
             proposeCreditDetailViewList.add(proposeCreditDetailView);
 
-
-
             rowCount++;
         }
 

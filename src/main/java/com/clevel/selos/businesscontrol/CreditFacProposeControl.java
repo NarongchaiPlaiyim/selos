@@ -132,12 +132,15 @@ public class CreditFacProposeControl extends BusinessControl {
     private COMSInterface comsInterface;
     @Inject
     BRMSControl brmsControl;
+    @Inject
+    NewCollateralDAO newCollateralDAO;
+    @Inject
+    NewCollateralSubRelatedDAO newCollateralSubRelatedDAO;
 
     private ExistingCreditFacilityView existingCreditFacilityView;
 
     @Inject
-    public CreditFacProposeControl() {
-    }
+    public CreditFacProposeControl() {}
 
     public NewCreditFacilityView findNewCreditFacilityByWorkCase(Long workCaseId) {
         NewCreditFacilityView newCreditFacilityView = null;
@@ -791,12 +794,6 @@ public class CreditFacProposeControl extends BusinessControl {
             log.debug("saveCreditFacility ::: persist newCreditDetailList : {}", newCreditDetailList);
         }
 
-        //--- Need to Delete newGuarantorCreditList from newGuarantorCredit before Insert new
-//        List<NewGuarantorCredit> newGuarantorCreditListDelete = newGuarantorRelationDAO.getListByNewCreditFacility(workCase);
-//        log.info("before :: newGuarantorCreditListDelete :: size :: {}",newGuarantorCreditListDelete.size());
-//        newGuarantorRelationDAO.delete(newGuarantorCreditListDelete);
-//        log.info("after :: newGuarantorCreditListDelete :: size :: {}",newGuarantorCreditListDelete.size());
-
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newGuarantorDetailViewList : {}", newCreditFacilityView.getNewGuarantorDetailViewList());
@@ -805,9 +802,14 @@ public class CreditFacProposeControl extends BusinessControl {
             log.debug("saveCreditFacility ::: persist newGuarantorDetailList : {}", newGuarantorDetailList);
         }
 
-
         //--- Save to NewCollateral
         //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
+//        List<NewCollateral> newCollateralDelList = newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
+//        log.info("before :: newCollateralDelList :: size :: {}",newCollateralDelList.size());
+//        newCollateralDAO.delete(newCollateralDelList);
+//        log.info("after :: newCollateralDelList :: size :: {}",newCollateralDelList.size());
+
+      //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
         List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase);
         log.info("before :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
         newSubCollMortgageDAO.delete(newCollateralSubMortgages);
@@ -815,6 +817,9 @@ public class CreditFacProposeControl extends BusinessControl {
         //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
         List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase);
         newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
+        //--- Need to Delete SubOwner from newCollateralSubRelatedList before Insert new
+        List<NewCollateralSubRelated> newCollateralSubRelatedList = newCollateralSubRelatedDAO.getListByWorkCase(workCase);
+        newCollateralSubRelatedDAO.delete(newCollateralSubRelatedList);
 
         if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCollateralViewList : {}", newCreditFacilityView.getNewCollateralViewList());
@@ -854,6 +859,8 @@ public class CreditFacProposeControl extends BusinessControl {
             if (standardPricingResponse != null) {
                 log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult());
             }
+
+            return standardPricingResponse;
 
         }catch (Exception e) {
             log.error("Exception while get getPriceFeeInterest data!", e);
