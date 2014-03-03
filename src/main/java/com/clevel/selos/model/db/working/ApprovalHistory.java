@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "wrk_decision_history")
+@Table(name = "wrk_approval_history")
 public class ApprovalHistory implements Serializable {
     @Id
     @SequenceGenerator(name = "SEQ_WRK_APPROVAL_HISTORY_ID", sequenceName = "SEQ_WRK_APPROVAL_HISTORY_ID", allocationSize = 1)
