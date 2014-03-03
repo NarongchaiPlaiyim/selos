@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCollateralCredit;
 import com.clevel.selos.model.db.working.NewCollateralSub;
@@ -15,7 +16,6 @@ import com.clevel.selos.model.db.working.OpenAccountName;
 import com.clevel.selos.model.db.working.PledgeInfo;
 import com.clevel.selos.model.view.CreditDetailSimpleView;
 import com.clevel.selos.model.view.CustomerInfoSimpleView;
-import com.clevel.selos.model.view.OpenAccountView;
 import com.clevel.selos.model.view.PledgeInfoFullView;
 import com.clevel.selos.model.view.PledgeInfoView;
 
@@ -83,15 +83,28 @@ public class PledgeInfoTransform extends Transform {
 				builder.setLength(builder.length()-5);
 			view.setAccountName(builder.toString());
 		}
+		if (!RadioValue.YES.equals(model.getConfirmed()))
+			view.setConfirmed(RadioValue.NO);
+		else
+			view.setConfirmed(model.getConfirmed());
 		
 	}
 	
 	public void updateModel(PledgeInfo model,PledgeInfoView view,BigDecimal totalHoldAmount,User user) {
 		model.setModifyBy(user);
 		model.setModifyDate(new Date());
-		if (view == null)
+		if (view == null) {
+			model.setConfirmed(RadioValue.NA);
 			return;
+		}
 		model.setPledgeSigningDate(view.getSigningDate());
 		model.setTotalHoldAmount(totalHoldAmount);
+		model.setConfirmed(view.getConfirmed());
+	}
+	
+	public void updateModelConfirmed(PledgeInfo model,PledgeInfoView view,User user) {
+		model.setConfirmed(view.getConfirmed());
+		model.setModifyBy(user);
+		model.setModifyDate(new Date());
 	}
 }

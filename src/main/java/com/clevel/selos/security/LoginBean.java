@@ -209,11 +209,15 @@ public class LoginBean {
         log.debug("signing out.");
         HttpSession httpSession = FacesUtil.getSession(false);
         httpSession.setAttribute("user", null);
+        httpSession.setAttribute("workCaseId", null);
+        httpSession.setAttribute("workCasePreScreenId", null);
+        httpSession.setAttribute("stepId", null);
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SecurityContextHolder.clearContext();
         securityAuditor.addSucceed(userDetail.getUserName(), "Logout", "", new Date());
         loginExceptionMessage = "";
         FacesUtil.redirect("/login.xhtml");
+        return;
     }
 
     public String getUserName() {

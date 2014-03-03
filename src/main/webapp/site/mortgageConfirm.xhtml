@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+
+<h:head>
+    <title>#{msg.get('app.mortgageReviewContract.title')}</title>
+    <h:outputStylesheet name="css/style.css" />
+    <h:outputScript library="js" name="custom.js" />
+</h:head>
+
+<h:body>
+    <f:event type="preRenderView" listener="#{mortgageConfirm.preRender()}" />
+    
+    <p:panel id="pnl_maincontainer" styleClass="panel">
+        <h:form id="frmMain">
+            <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="include/header_logo.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="include/header_detail.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="include/menubar.xhtml" />
+           
+            <!-- End Menu -->
+			<h:panelGroup id="full_main_container" layout="block">
+            <div id="content_container">
+                <div id="content_name">#{msg.get('app.mortgageReviewContract.subtitle')}</div>
+                <div id="content">
+                    <div id="content_info">
+                        <div id="content_trackchange">
+                        	[
+                        	<h:outputLink value="#">
+                        		<h:outputText value="#{msg.get('app.viewTrackChange')}" />
+                        	</h:outputLink>
+                        	]
+                        </div>
+                        <div id="content_lastupdate">
+                        	<h:outputText value="#{msg.get('app.lastUpdateBy')} "/>
+                        	<h:outputText value="#{mortgageConfirm.lastUpdateBy}"/>, 
+                        	<h:outputText value="#{mortgageConfirm.lastUpdateDateTime}">
+                        		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="th_TH"/>
+                        	</h:outputText>
+                        </div>
+                    </div>
+                    <div id="content_form">
+                   		<!-- start content -->
+                        <table class="content_table_form">
+	                        <tr>
+                               <td colspan="100%">
+                                    <table>
+                                        <tr>
+                                            <td class="title" style="width:200px;">
+                                                <p:outputLabel value="#{msg.get('app.approveType')}" styleClass="center"/>
+                                            </td>
+                                            <td style="width:200px;">
+                                                <p:selectOneRadio disabled="true" value="#{mortgageConfirm.approveType}">
+                                                	<f:selectItems value="#{enumGeneralControl.approveTypes}" var="approveType"
+                                                		itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}" 
+                                                		/>
+                                                </p:selectOneRadio>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                              <td colspan="100%"><div class="separate"><!-- --></div></td>
+                        	</tr>
+                        	
+                        	<tr>
+                        		<td colspan="100%">
+                        			<h2><h:outputText value="#{msg.get('app.mortgageReviewContract.agreementConfirm')}" /></h2>
+	                            </td>
+                        	</tr>
+                        	<tr>
+                               <td colspan="100%">
+                                    <table>
+                                        <tr>
+                                            <td class="title" style="width:200px;">
+                                                <p:outputLabel for="agreeCfm" 
+                                                	value="#{msg.get('app.mortgageReviewContract.agreementConfirm.complete')}" styleClass="center"/>
+                                            </td>
+                                            <td>
+                                                <p:selectOneRadio id="agreeCfm" value="#{mortgageConfirm.summary.confirmed}">
+                                                	<f:selectItems value="#{enumGeneralControl.mortgageConfirmedTypes}" var="confirmType"
+                                                		itemLabel="#{msg.get(confirmType.msgKey)}" itemValue="#{confirmType}" 
+                                                		/>
+                                                </p:selectOneRadio>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        	<tr>
+	                            <td colspan="100%"><p:spacer width="5px"/></td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="100%"><p:separator/></td>
+	                        </tr>
+                        	<tr>
+                        		<td colspan="100%">
+                        			<h2><h:outputText value="#{msg.get('app.mortgageReviewContract.mortgageConfirm')}" /></h2>
+	                            </td>
+                        	</tr>
+                        	<tr>
+                        		<td colspan="100%">
+                        			<p:dataTable styleClass="full_table"
+                        				value="#{mortgageConfirm.mortgages}" var="mortgage"
+                        				rowIndexVar="rowIdx"
+                        				>
+                        				<p:column style="width:30px" styleClass="center">
+                        					#{rowIdx+1}                        					
+                        				</p:column>
+                        				<p:column styleClass="center"
+                        					headerText="#{msg.get('app.mortgageReviewContract.mortgageConfirm.table.confirm')}"
+                        					>
+                        					<p:selectOneRadio value="#{mortgage.confirmed}" 
+                        						style="margin:0 auto">
+	                        					<f:selectItems value="#{enumGeneralControl.mortgageConfirmedTypes}" var="radio"
+			                                       	itemLabel="#{msg.get(radio.msgKey)}" 
+		    	                                   	itemValue="#{radio}"/>
+	    	                                </p:selectOneRadio>
+                        				</p:column>
+                        				<p:column style="width:250px"
+                        					headerText="#{msg.get('app.mortgageReviewContract.mortgageConfirm.table.landOffice')}"
+                        					>
+                        					#{mortgage.landOfficeStr}
+                        				</p:column>
+                        				<p:column styleClass="left"
+                        					headerText="#{msg.get('app.mortgageReviewContract.mortgageConfirm.table.mortgageType')}"
+                        					style="width:250px;line-height: 1.5em;">
+                        					<h:panelGroup layout="block" style="padding : 5px 0">
+                        						<h:outputText value="#{mortgage.mortgageType}" escape="false" />
+                        					</h:panelGroup>
+                        				</p:column>
+                        				
+                        				<p:column style="width:150px" styleClass="right"
+                        					headerText="#{msg.get('app.mortgageReviewContract.mortgageConfirm.table.mortgageAmount')}"
+                        					>
+                        					<h:outputText value="#{mortgage.mortgageAmount}">
+                        						<f:convertNumber pattern="#,##0.00"/>
+                        					</h:outputText>
+                        				</p:column>
+                        			</p:dataTable>			
+                        		</td>
+                        	</tr>
+                        	<tr>
+	                            <td colspan="100%"><p:spacer width="5px"/></td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="100%"><p:separator/></td>
+	                        </tr>
+	                        <tr>
+                        		<td colspan="100%">
+                        			<h2><h:outputText value="#{msg.get('app.mortgageReviewContract.perfectReview')}" /></h2>
+	                            </td>
+                        	</tr>
+                        	<tr>
+                        		<td colspan="100%">
+                        			<p:dataTable styleClass="full_table"
+                        				
+                        				rowIndexVar="rowIdx"
+                        				>
+                        				<p:column style="width:30px" styleClass="center">
+                        					#{rowIdx+1}                        					
+                        				</p:column>
+                        				<p:column style="width:300px;" 
+                        					headerText="#{msg.get('app.mortgageReviewContract.perfectReview.table.type')}"
+                        					>
+                        					
+                        				</p:column>
+                        				<p:column style="width:100px" styleClass="center"
+                        					headerText="#{msg.get('app.mortgageReviewContract.perfectReview.table.date')}"
+                        					>
+                        					
+                        				</p:column>
+                        				<p:column style="width:150px" styleClass="center"
+                        					headerText="#{msg.get('app.mortgageReviewContract.perfectReview.table.completedDate')}"
+                        					>
+                        					
+                        				</p:column>
+                        				<p:column style="width:100px" styleClass="center"
+                        					headerText="#{msg.get('app.mortgageReviewContract.perfectReview.table.status')}"
+                        					>
+                        					
+                        				</p:column>
+                        				<p:column
+                        					headerText="#{msg.get('app.mortgageReviewContract.perfectReview.table.remark')}"
+                        					>
+                        					
+                        				</p:column>
+                        			</p:dataTable>			
+                        		</td>
+                        	</tr>
+	                        
+	                        <tr>
+	                            <td colspan="100%"><p:spacer width="5px"/></td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="100%"><p:separator/></td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="100%"><p:spacer width="5px"/></td>
+	                        </tr>
+	                        <tr>
+	                             <td colspan="100%" class="center">
+	                                 <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
+	                                 	styleClass="medium"
+										onstart="handleOnStartOpenCfmDlg();"
+										oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveMortgageConfirmDlg);"
+										update=":frmMain:full_main_container,:result_dialog"
+	                                 	 />
+	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
+										styleClass="medium"
+										/>
+	                             </td>
+	                        </tr>
+                        </table>
+	                </div>
+	                <div id="bottom_line"><!-- --></div>
+	            </div>
+           	</div>
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="include/footer.xhtml" />
+            <!-- End Footer -->
+            </h:panelGroup>
+            </div>
+ 
+        </h:form>
+    </p:panel>
+	<ui:include src="dialog/postLoadingAndErrorDialog.xhtml" />
+	<ui:include src="dialog/confirmEditDlg.xhtml">
+		<ui:param name="id" value="saveMortgageConfirmDlg"/>
+		<ui:param name="name" value="p_saveMortgageConfirmDlg"/>
+		<ui:param name="formId" value="saveMortgageConfirmFrm"/>
+		<ui:param name="controller" value="#{mortgageConfirm}"/>
+		<ui:param name="action" value="onSaveMortgageConfirm"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
+	</ui:include>
+</h:body>
+</f:view>
+</html>

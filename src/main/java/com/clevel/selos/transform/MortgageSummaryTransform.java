@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import com.clevel.selos.dao.master.BankBranchDAO;
 import com.clevel.selos.dao.master.UserZoneDAO;
+import com.clevel.selos.model.MortgageConfirmedType;
 import com.clevel.selos.model.MortgageSignLocationType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.AgreementInfo;
@@ -32,6 +33,10 @@ public class MortgageSummaryTransform extends Transform {
     		view.setLoanContractDate(agreementModel.getLoanContractDate());
     		view.setSigningLocation(agreementModel.getSigningLocation());
     		view.setComsNumber(agreementModel.getComsNumber());
+    		if (agreementModel.getConfirmed() == null)
+				view.setConfirmed(MortgageConfirmedType.NA);
+			else
+				view.setConfirmed(agreementModel.getConfirmed());
     		switch (view.getSigningLocation()) {
     			case BRANCH :
     				if (agreementModel.getBankBranch() != null)
@@ -96,5 +101,8 @@ public class MortgageSummaryTransform extends Transform {
 	    	}
     	}
     }
-    
+    public void updateConfirmed(MortgageSummary model,AgreementInfo agreementModel,MortgageSummaryView view,User user) {
+    	updateMortgageSummary(model, user);
+    	agreementModel.setConfirmed(view.getConfirmed());
+    }
 }

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.clevel.selos.model.AttorneyRelationType;
+import com.clevel.selos.model.MortgageConfirmedType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.User;
 
@@ -26,6 +27,8 @@ public class MortgageInfoView implements Serializable {
 	
 	private String landOfficeStr;
 	private long customerAttorneyId;
+	
+	private MortgageConfirmedType confirmed;
 	
 	public MortgageInfoView() {
 		
@@ -135,5 +138,11 @@ public class MortgageInfoView implements Serializable {
 	}
 	public void setLandOfficeStr(String landOfficeStr) {
 		this.landOfficeStr = landOfficeStr;
+	}
+	public MortgageConfirmedType getConfirmed() {
+		return confirmed;
+	}
+	public void setConfirmed(MortgageConfirmedType confirmed) {
+		this.confirmed = confirmed;
 	}
 }

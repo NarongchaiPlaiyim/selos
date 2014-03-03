@@ -227,8 +227,8 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         ExistingCreditFacilityView existingCreditFacilityView = existingCreditControl.refreshExistingCredit(customerInfoViewList);
 
-        //BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, prescreenResultView.getExpectedSubmitDate());
-        BankStmtSummaryView bankStmtSummaryView = new BankStmtSummaryView();
+        BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, prescreenResultView.getExpectedSubmitDate());
+        //BankStmtSummaryView bankStmtSummaryView = new BankStmtSummaryView();
 
         if(bankStmtSummaryView != null){
             if(Util.safetyList(bankStmtSummaryView.getActionStatusViewList()).size() >= 1){
