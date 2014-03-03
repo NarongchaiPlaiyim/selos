@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.MortgageType;
 
 import javax.persistence.*;
@@ -24,6 +25,18 @@ public class NewCollateralSubMortgage implements Serializable {
     @ManyToOne
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
+
+    @Column(name = "propose_type")
+    @Enumerated(EnumType.ORDINAL)
+    private ProposeType proposeType;
+
+    public ProposeType getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(ProposeType proposeType) {
+        this.proposeType = proposeType;
+    }
 
     public WorkCase getWorkCase() {
         return workCase;

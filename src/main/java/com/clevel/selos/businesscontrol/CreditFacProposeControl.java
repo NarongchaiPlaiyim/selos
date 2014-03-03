@@ -10,6 +10,7 @@ import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.DBRMethod;
 import com.clevel.selos.model.ExposureMethod;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.CreditType;
 import com.clevel.selos.model.db.master.ProductFormula;
 import com.clevel.selos.model.db.master.ProductProgram;
@@ -804,24 +805,22 @@ public class CreditFacProposeControl extends BusinessControl {
             log.debug("saveCreditFacility ::: persist newGuarantorDetailList : {}", newGuarantorDetailList);
         }
 
-        //--- Save to NewCollateral
-        //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
-//        List<NewCollateral> newCollateralDelList = newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
-//        log.info("before :: newCollateralDelList :: size :: {}",newCollateralDelList.size());
-//        newCollateralDAO.delete(newCollateralDelList);
-//        log.info("after :: newCollateralDelList :: size :: {}",newCollateralDelList.size());
 
       //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
-        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase);
+        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase, ProposeType.P);
         log.info("before :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
         newSubCollMortgageDAO.delete(newCollateralSubMortgages);
         log.info("after :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
-//        //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
-//        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase);
-//        newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
-//        //--- Need to Delete SubOwner from newCollateralSubRelatedList before Insert new
-//        List<NewCollateralSubRelated> newCollateralSubRelatedList = newCollateralSubRelatedDAO.getListByWorkCase(workCase);
-//        newCollateralSubRelatedDAO.delete(newCollateralSubRelatedList);
+        //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
+        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase, ProposeType.P);
+        log.info("before :: newCollateralSubOwnerList :: size :: {}",newCollateralSubOwnerList.size());
+        newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
+        log.info("before :: newCollateralSubOwnerList :: size :: {}",newCollateralSubOwnerList.size());
+        //--- Need to Delete SubOwner from newCollateralSubRelatedList before Insert new
+        List<NewCollateralSubRelated> newCollateralSubRelatedList = newCollateralSubRelatedDAO.getListByWorkCase(workCase, ProposeType.P);
+        log.info("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
+        newCollateralSubRelatedDAO.delete(newCollateralSubRelatedList);
+        log.info("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
 
         if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCollateralViewList : {}", newCreditFacilityView.getNewCollateralViewList());

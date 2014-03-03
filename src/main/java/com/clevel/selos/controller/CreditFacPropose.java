@@ -1630,12 +1630,12 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.debug("onSaveCreditFacPropose ::: ModeForDB  {}", modeForDB);
 //        onSetInUsedProposeCreditDetail();
         try {
-            if ((newCreditFacilityView.getInvestedCountry().getId() != 0)
-                    && (newCreditFacilityView.getLoanRequestType().getId() != 0)
-                    && (newCreditFacilityView.getNewCreditDetailViewList().size() > 0)
-                    && (newCreditFacilityView.getNewCollateralViewList().size() > 0)
-                    && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0)
-                    && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
+//            if ((newCreditFacilityView.getInvestedCountry().getId() != 0)
+//                    && (newCreditFacilityView.getLoanRequestType().getId() != 0)
+//                    && (newCreditFacilityView.getNewCreditDetailViewList().size() > 0)
+//                    && (newCreditFacilityView.getNewCollateralViewList().size() > 0)
+//                    && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0)
+//                    && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
                 //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
                 creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
                 creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
@@ -1645,11 +1645,11 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 notRetrivePricing = false;
-            } else {
-                messageHeader = msg.get("app.propose.response.cannot.save");
-                message = msg.get("app.propose.response.desc.cannot.save");
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            }
+//            } else {
+//                messageHeader = msg.get("app.propose.response.cannot.save");
+//                message = msg.get("app.propose.response.desc.cannot.save");
+//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//            }
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.propose.response.save.failed");
