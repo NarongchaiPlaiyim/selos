@@ -374,6 +374,10 @@ public class Decision implements Serializable {
 
         onChangeRequestType();
 
+        prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(selectedApproveCredit.getProductProgramView());
+
+        onChangeCreditType();
+
         creditFacProposeControl.calculateInstallment(selectedApproveCredit);
 
         if (selectedApproveCredit.getRequestType() == RequestTypes.NEW.value()) {
