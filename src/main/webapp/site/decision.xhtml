@@ -2775,6 +2775,7 @@
                                                     <p:column styleClass="left top">
                                                         <ui:repeat value="#{subColl.collateralOwnerUWList}"
                                                                    var="collOwnerUW" varStatus="i">
+                                                            #{not empty collOwnerUW.titleTh ? collOwnerUW.titleTh.titleTh : ''}
                                                             #{collOwnerUW.firstNameTh} #{collOwnerUW.lastNameTh}#{!i.last ? ', ' : ''}
                                                         </ui:repeat>
                                                     </p:column>
@@ -3092,6 +3093,7 @@
                                                 <p:column styleClass="left top">
                                                     <ui:repeat value="#{subColl.collateralOwnerUWList}"
                                                                var="collOwnerUW" varStatus="i">
+                                                        #{not empty collOwnerUW.titleTh ? collOwnerUW.titleTh.titleTh : ''}
                                                         #{collOwnerUW.firstNameTh} #{collOwnerUW.lastNameTh}#{!i.last ? ', ' : ''}
                                                     </ui:repeat>
                                                 </p:column>
@@ -3186,6 +3188,8 @@
                                     <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                     <p:column styleClass="left top">
+                                        <h:outputText value="#{guarantor.guarantorName.titleTh.titleTh}"
+                                                      rendered="#{not empty guarantor.guarantorName and not empty guarantor.guarantorName.titleTh}"/>
                                         <h:outputText value="#{guarantor.guarantorName.firstNameTh} #{guarantor.guarantorName.lastNameTh}"
                                                       rendered="#{not empty guarantor.guarantorName}"/>
                                     </p:column>
@@ -3317,6 +3321,8 @@
                                         </p:column>
 
                                         <p:column styleClass="left top">
+                                            <h:outputText value="#{guarantor.guarantorName.titleTh.titleTh}"
+                                                          rendered="#{not empty guarantor.guarantorName and not empty guarantor.guarantorName.titleTh}"/>
                                             <h:outputText value="#{guarantor.guarantorName.firstNameTh} #{guarantor.guarantorName.lastNameTh}"
                                                           rendered="#{not empty guarantor.guarantorName}"/>
                                         </p:column>
