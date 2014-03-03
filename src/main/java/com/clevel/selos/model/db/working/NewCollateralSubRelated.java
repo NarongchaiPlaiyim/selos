@@ -1,5 +1,7 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.ProposeType;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -19,6 +21,15 @@ public class NewCollateralSubRelated implements Serializable {
     @JoinColumn(name = "relate_collateral_sub_id")
     private NewCollateralSub newCollateralSubRelated;
 
+    @ManyToOne
+    @JoinColumn(name = "workcase_id")
+    private WorkCase workCase;
+
+    @Column(name = "propose_type")
+    @Enumerated(EnumType.ORDINAL)
+    private ProposeType proposeType;
+
+
     public long getId() {
         return id;
     }
@@ -26,6 +37,23 @@ public class NewCollateralSubRelated implements Serializable {
     public void setId(long id) {
         this.id = id;
     }
+
+    public WorkCase getWorkCase() {
+        return workCase;
+    }
+
+    public void setWorkCase(WorkCase workCase) {
+        this.workCase = workCase;
+    }
+
+    public ProposeType getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(ProposeType proposeType) {
+        this.proposeType = proposeType;
+    }
+
 
     public NewCollateralSub getNewCollateralSub() {
         return newCollateralSub;

@@ -539,7 +539,7 @@
                          action="#{creditFacPropose.onSaveCreditInfo}"
                          process="@form"
                          update=":creditInfoDlgForm,:frmMain"
-                         oncomplete="handleDlgCreditProposeRequest(xhr, status, args)"/>
+                         oncomplete="handleDialogRequest(xhr, status, args, 'creditInfoDlg')"/>
         <p:spacer width="10" height="0"/>
         <p:commandButton value="#{msg.get('app.button.cancel')}"
                          styleClass="small"
