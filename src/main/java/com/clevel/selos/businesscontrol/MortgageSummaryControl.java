@@ -167,7 +167,7 @@ public class MortgageSummaryControl extends BusinessControl {
     	List<MortgageInfoView> rtnDatas = new ArrayList<MortgageInfoView>();
     	List<MortgageInfo> datas = mortgageInfoDAO.findAllByWorkCaseId(workCaseId);
     	for (MortgageInfo data : datas) {
-    		rtnDatas.add(mortgageInfoTransform.transformToView(data));
+    		rtnDatas.add(mortgageInfoTransform.transformToView(data,workCaseId));
     	}
     	return rtnDatas;
     }
@@ -177,7 +177,7 @@ public class MortgageSummaryControl extends BusinessControl {
     	List<PledgeInfoView> rtnDatas = new ArrayList<PledgeInfoView>();
     	List<PledgeInfo> datas = pledgeInfoDAO.findAllByWorkCaseId(workCaseId);
     	for (PledgeInfo data : datas) {
-    		rtnDatas.add(pledgeInfoTransform.transformToView(data));
+    		rtnDatas.add(pledgeInfoTransform.transformToView(data,workCaseId));
     	}
     	return rtnDatas;
     }
@@ -187,7 +187,7 @@ public class MortgageSummaryControl extends BusinessControl {
     	List<GuarantorInfoView> rtnDatas = new ArrayList<GuarantorInfoView>();
     	List<GuarantorInfo> datas = guarantorInfoDAO.findAllByWorkCaseId(workCaseId);
     	for (GuarantorInfo data : datas) {
-    		rtnDatas.add(guarantorInfoTransform.transformToView(data));
+    		rtnDatas.add(guarantorInfoTransform.transformToView(data,workCaseId));
     	}
     	return rtnDatas;
     }

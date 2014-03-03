@@ -32,7 +32,7 @@ public class PledgeConfirmControl extends BusinessControl {
     	List<PledgeInfoView> rtnDatas = new ArrayList<PledgeInfoView>();
     	List<PledgeInfo> datas = pledgeInfoDAO.findAllByWorkCaseId(workCaseId);
     	for (PledgeInfo data : datas) {
-    		rtnDatas.add(pledgeInfoTransform.transformToView(data));
+    		rtnDatas.add(pledgeInfoTransform.transformToView(data,workCaseId));
     	}
     	return rtnDatas;
     }

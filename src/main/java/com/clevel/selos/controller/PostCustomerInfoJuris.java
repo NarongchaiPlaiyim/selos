@@ -227,7 +227,7 @@ public class PostCustomerInfoJuris  implements Serializable {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
 		customer = postCustomerInfoJurisControl.getCustomer(customerId);
-		if (customer.getJuristicId() <= 0) {
+		if (customer.getJuristicId() <= 0 || customer.getWorkCaseId() != workCaseId) {
 			String redirectPage = "/site/postCustomerInfoSummary.jsf";
 			try {
 				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();

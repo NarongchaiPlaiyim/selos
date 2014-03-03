@@ -1075,6 +1075,7 @@ public class CustomerTransform extends Transform {
     
     private void _tranformBasePostView(Customer model,CustomerInfoPostBaseView<?> view) {
     	view.setId(model.getId());
+    	view.setWorkCaseId(model.getWorkCase().getId());
     	view.setTmbCustomerId(model.getTmbCustomerId());
     	if (model.getRelation() != null) {
     		view.setRelationId(model.getRelation().getId());

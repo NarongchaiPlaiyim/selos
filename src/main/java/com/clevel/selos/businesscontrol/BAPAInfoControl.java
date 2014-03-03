@@ -237,18 +237,23 @@ public class BAPAInfoControl extends BusinessControl {
 		 List<Address> addresses = customer.getAddressesList();
 		 if (addresses != null && !addresses.isEmpty()) {
 			 StringBuilder builder  = new StringBuilder();
+			 //Using address 1 or 4
+			 Address toUseAddr = null;
 			 for (Address address : addresses) {
-				 if (Util.isEmpty(address.getPhoneNumber()))
-					 continue;
-				 builder.append(address.getPhoneNumber());
-				 if (!Util.isEmpty(address.getExtension())) {
-					 builder.append(" Ext ");
-					 builder.append(address.getExtension());
+				 if (address.getAddressType().getId() == 1 || address.getAddressType().getId() == 4) {
+					 toUseAddr = address;
+					 break;
 				 }
-				 builder.append(", ");
 			 }
-			 if (builder.length() > 0)
-				 builder.setLength(builder.length() - 2);
+			 if (toUseAddr == null)
+				 toUseAddr = addresses.get(0);
+			 if (!Util.isEmpty(toUseAddr.getPhoneNumber())) {
+				 builder.append(toUseAddr.getPhoneNumber());
+				 if (!Util.isEmpty(toUseAddr.getExtension())) {
+					 builder.append(" Ext ");
+					 builder.append(toUseAddr.getExtension());
+				 }
+			 }
 			 return builder.toString();
 		 }
 		 return null;
@@ -302,6 +307,7 @@ public class BAPAInfoControl extends BusinessControl {
 			 view.setFromCredit(bapaCredit.isFromCredit());
 			 view.setLimit(bapaCredit.getLimit());
 			 view.setPremiumAmount(bapaCredit.getPremiumAmount());
+			 view.setExpenseAmount(bapaCredit.getExpenseAmount());
 			 
 			 if (bapaCredit.getCreditDetail() != null) {
 				 NewCreditDetail credit = creditHash.get(bapaCredit.getCreditDetail().getId());
@@ -327,6 +333,7 @@ public class BAPAInfoControl extends BusinessControl {
 				 view.setFromCredit(true);
 				 view.setLimit(credit.getLimit());
 				 view.setPremiumAmount(new BigDecimal(0));
+				 view.setExpenseAmount(credit.getLimit());
 				 rtnDatas.add(view);
 			 }
 		 }

@@ -378,6 +378,17 @@ public class MortgageDetail implements Serializable {
 		}
 		
 		mortgageInfoView = mortgageDetailControl.getMortgageInfo(mortgageId);
+		
+		if (mortgageInfoView.getId() <= 0 || mortgageInfoView.getWorkCaseId() != workCaseId) {
+			String redirectPage = "/site/mortgageSummary.jsf";
+			try {
+				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+				ec.redirect(ec.getRequestContextPath()+redirectPage);
+			} catch (IOException e) {
+				log.error("Fail to redirect screen to "+redirectPage,e);
+			}
+		}
+		
 		collOwners = mortgageDetailControl.getCollOwners(mortgageInfoView.getId());
 		collSubs = mortgageDetailControl.getMortgageInfoCollSubList(mortgageInfoView.getId());
 		credits = mortgageDetailControl.getMortgageInfoCreditList(mortgageInfoView.getId());
