@@ -29,7 +29,7 @@ public class MortgageTypeTransform extends Transform {
         }
         mortgageType.setActive(mortgageTypeView.getActive());
         mortgageType.setMortgage(mortgageTypeView.getMortgage());
-        mortgageType.setRedeem(mortgageTypeView.isRedeem());
+        //mortgageType.setRedeem(mortgageTypeView.isRedeem());
         mortgageType.setMortgageFeeFlag(mortgageTypeView.isMortgageFeeFlag());
         mortgageType.setMortgageFlag(mortgageTypeView.isMortgageFlag());
         mortgageType.setPledgeFlag(mortgageTypeView.isPledgeFlag());
@@ -58,7 +58,7 @@ public class MortgageTypeTransform extends Transform {
         mortgageTypeView.setId(mortgageType.getId());
         mortgageTypeView.setActive(mortgageType.getActive());
         mortgageTypeView.setMortgage(mortgageType.getMortgage());
-        mortgageTypeView.setRedeem(mortgageType.isRedeem());
+        //mortgageTypeView.setRedeem(mortgageType.isRedeem());
         mortgageTypeView.setMortgageFeeFlag(mortgageType.isMortgageFeeFlag());
         mortgageTypeView.setMortgageFlag(mortgageType.isMortgageFlag());
         mortgageTypeView.setPledgeFlag(mortgageType.isPledgeFlag());

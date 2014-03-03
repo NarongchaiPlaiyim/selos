@@ -1,7 +1,7 @@
 package com.clevel.selos.integration.brms.convert;
 
 import com.clevel.selos.integration.BRMS;
-import com.clevel.selos.integration.brms.model.BRMSField;
+import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.integration.brms.model.response.UWRulesResult;
@@ -36,22 +36,22 @@ public class PrescreenConverter extends Converter{
         }
 
         List<AttributeType> attributeTypeList = applicationType.getAttribute();
-        attributeTypeList.add(getAttributeType(BRMSField.APP_IN_DATE, applicationInfo.getBdmSubmitDate()));
-        attributeTypeList.add(getAttributeType(BRMSField.EXPECTED_SUBMIT_DATE, applicationInfo.getExpectedSubmitDate()));
-        attributeTypeList.add(getAttributeType(BRMSField.CUSTOMER_ENTITY, applicationInfo.getBorrowerType()));
-        attributeTypeList.add(getAttributeType(BRMSField.EXISTING_SME_CUSTOMER, applicationInfo.isExistingSMECustomer()));
-        attributeTypeList.add(getAttributeType(BRMSField.SAME_SET_OF_BORROWER, applicationInfo.isRequestLoanWithSameName()));
-        attributeTypeList.add(getAttributeType(BRMSField.REFINANCE_IN_FLAG, applicationInfo.isRefinanceIN()));
-        attributeTypeList.add(getAttributeType(BRMSField.REFINANCE_OUT_FLAG, applicationInfo.isRefinanceOUT()));
-        attributeTypeList.add(getAttributeType(BRMSField.STEP, applicationInfo.getStepCode()));
-        attributeTypeList.add(getAttributeType(BRMSField.BORROWER_GROUP_SALE, applicationInfo.getBorrowerGroupIncome()));
-        attributeTypeList.add(getAttributeType(BRMSField.TOTAL_GROUP_SALE, applicationInfo.getTotalGroupIncome()));
-        attributeTypeList.add(getAttributeType(BRMSField.NUM_OF_TOTAL_FACILITY, applicationInfo.getTotalNumberProposeCredit()));
-        attributeTypeList.add(getAttributeType(BRMSField.NUM_OF_CONTIGENT_FACILITY, applicationInfo.getTotalNumberContingenPropose()));
-        attributeTypeList.add(getAttributeType(BRMSField.BUSINESS_LOCATION, applicationInfo.getBizLocation()));
-        attributeTypeList.add(getAttributeType(BRMSField.YEAR_IN_BUSINESS, applicationInfo.getYearInBusinessMonth()));
-        attributeTypeList.add(getAttributeType(BRMSField.COUNTRY_OF_REGISTRATION, applicationInfo.getCountryOfRegistration()));
-        attributeTypeList.add(getAttributeType(BRMSField.REFERENCE_DOCUMENT_TYPE, applicationInfo.getReferredDocType()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.APP_IN_DATE, applicationInfo.getBdmSubmitDate()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.EXPECTED_SUBMIT_DATE, applicationInfo.getExpectedSubmitDate()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.CUSTOMER_ENTITY, applicationInfo.getBorrowerType()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.EXISTING_SME_CUSTOMER, applicationInfo.isExistingSMECustomer()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.SAME_SET_OF_BORROWER, applicationInfo.isRequestLoanWithSameName()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.REFINANCE_IN_FLAG, applicationInfo.isRefinanceIN()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.REFINANCE_OUT_FLAG, applicationInfo.isRefinanceOUT()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.STEP, applicationInfo.getStepCode()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.BORROWER_GROUP_SALE, applicationInfo.getBorrowerGroupIncome()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.TOTAL_GROUP_SALE, applicationInfo.getTotalGroupIncome()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_TOTAL_FACILITY, applicationInfo.getTotalNumberProposeCredit()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_CONTINGENT_FACILITY, applicationInfo.getTotalNumberContingenPropose()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.BUSINESS_LOCATION, applicationInfo.getBizLocation()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.YEAR_IN_BUSINESS, applicationInfo.getYearInBusinessMonth()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.COUNTRY_OF_BUSINESS, applicationInfo.getCountryOfRegistration()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.REFERENCE_DOCUMENT_TYPE, applicationInfo.getReferredDocType()));
 
         List<ProductType> productTypeList =  applicationType.getProduct();
         ProductType productType = new ProductType();
@@ -92,11 +92,11 @@ public class PrescreenConverter extends Converter{
             businessType.setID(bizInfo.getId());
             businessType.setBusinessType(bizInfo.getBizCode());
             List<AttributeType> bizAttributeTypeList = businessType.getAttribute();
-            bizAttributeTypeList.add(getAttributeType(BRMSField.NEGATIVE_FLAG, bizInfo.isNegativeFlag()));
-            bizAttributeTypeList.add(getAttributeType(BRMSField.HIGH_RISK_FLAG, bizInfo.isHighRiskFlag()));
-            bizAttributeTypeList.add(getAttributeType(BRMSField.ESR_FLAG, bizInfo.isEsrFlag()));
-            bizAttributeTypeList.add(getAttributeType(BRMSField.SUSPEND_FLAG, bizInfo.isSuspendFlag()));
-            bizAttributeTypeList.add(getAttributeType(BRMSField.BUSINESS_DEVIATION_FLAG, bizInfo.isDeviationFlag()));
+            bizAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.NEGATIVE_FLAG, bizInfo.getNegativeValue()));
+            bizAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.HIGH_RISK_FLAG, bizInfo.getHighRiskValue()));
+            bizAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.ESR_FLAG, bizInfo.getEsrValue()));
+            bizAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.SUSPEND_FLAG, bizInfo.getSuspendValue()));
+            bizAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.BUSINESS_DEVIATION_FLAG, bizInfo.getDeviationValue()));
             businessTypeList.add(businessType);
         }
 
@@ -107,22 +107,22 @@ public class PrescreenConverter extends Converter{
             borrowerType.setNationality(customerInfo.getNationality());
 
             List<AttributeType> cusAttributeTypeList = borrowerType.getAttribute();
-            cusAttributeTypeList.add(getAttributeType(BRMSField.CUSTOMER_ENTITY, customerInfo.getCustomerEntity()));
-            cusAttributeTypeList.add(getAttributeType(BRMSField.EXISTING_SME_CUSTOMER, customerInfo.isExistingSMECustomer()));
-            cusAttributeTypeList.add(getAttributeType(BRMSField.RELATIONSHIP_TYPE, customerInfo.getRelation()));
-            cusAttributeTypeList.add(getAttributeType(BRMSField.REFERENCE, customerInfo.getReference()));
-            cusAttributeTypeList.add(getAttributeType(BRMSField.NUMBER_OF_MONTH_FROM_LAST_SET_UP_DATE, customerInfo.getNumberOfMonthLastContractDate()));
+            cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.CUSTOMER_ENTITY, customerInfo.getCustomerEntity()));
+            cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.EXISTING_SME_CUSTOMER, customerInfo.isExistingSMECustomer()));
+            cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.RELATIONSHIP_TYPE, customerInfo.getRelation()));
+            cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.REFERENCE, customerInfo.getReference()));
+            cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_FROM_LAST_SET_UP_DATE, customerInfo.getNumberOfMonthLastContractDate()));
             //Set P by default at prescreen //
-            cusAttributeTypeList.add(getAttributeType(BRMSField.NEW_QUALITATIVE, customerInfo.getQualitativeClass()));
-            cusAttributeTypeList.add(getAttributeType(BRMSField.NEXT_REVIEW_DATE, customerInfo.getNextReviewDate()));
-            cusAttributeTypeList.add(getAttributeType(BRMSField.NEXT_REVIEW_DATE_FLAG, customerInfo.isNextReviewDateFlag()));
-            cusAttributeTypeList.add(getAttributeType(BRMSField.EXTENDED_REVIEW_DATE, customerInfo.getExtendedReviewDate()));
-            cusAttributeTypeList.add(getAttributeType(BRMSField.EXTENDED_REVIEW_DATE_FLAG, customerInfo.isExtendedReviewDateFlag()));
-            cusAttributeTypeList.add(getAttributeType(BRMSField.RATING_FINAL, customerInfo.getRatingFinal()));
-            cusAttributeTypeList.add(getAttributeType(BRMSField.UNPAID_FEE_INSURANCE_PREMIUM, customerInfo.isUnpaidFeeInsurance()));
-            cusAttributeTypeList.add(getAttributeType(BRMSField.CLAIMED_LG, customerInfo.isPendingClaimLG()));
-            cusAttributeTypeList.add(getAttributeType(BRMSField.SPOUSE_ID, customerInfo.getSpousePersonalID()));
-            cusAttributeTypeList.add(getAttributeType(BRMSField.SPOUSE_RELATIONSHIP_TYPE, customerInfo.getSpouseRelationType()));
+            cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.NEW_QUALITATIVE, customerInfo.getQualitativeClass()));
+            cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.NEXT_REVIEW_DATE, customerInfo.getNextReviewDate()));
+            cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.NEXT_REVIEW_DATE_FLAG, customerInfo.isNextReviewDateFlag()));
+            cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.EXTENDED_REVIEW_DATE, customerInfo.getExtendedReviewDate()));
+            cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.EXTENDED_REVIEW_DATE_FLAG, customerInfo.isExtendedReviewDateFlag()));
+            cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.RATING_FINAL, customerInfo.getRatingFinal()));
+            cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.UNPAID_FEE_INSURANCE_PREMIUM, customerInfo.isUnpaidFeeInsurance()));
+            cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.PENDING_CLAIMED_LG, customerInfo.isPendingClaimLG()));
+            cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.SPOUSE_ID, customerInfo.getSpousePersonalID()));
+            cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.SPOUSE_RELATIONSHIP_TYPE, customerInfo.getSpouseRelationType()));
 
             if(customerInfo.isIndividual()){
                 IndividualType individualType = new IndividualType();
@@ -136,13 +136,9 @@ public class PrescreenConverter extends Converter{
             List<NCBReportType> ncbReportTypeList = borrowerType.getNcbReport();
             NCBReportType ncbReportType = new NCBReportType();
             List<AttributeType> ncbAttributeTypeList = ncbReportType.getAttribute();
-            ncbAttributeTypeList.add(getAttributeType(BRMSField.NCB_FLAG, customerInfo.isNcbFlag()));
+            ncbAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.NCB_FLAG, customerInfo.isNcbFlag()));
 
-            List<NCBEnquiryType> ncbEnquiryTypeList = ncbReportType.getNcbEnquiry();
-            NCBEnquiryType ncbEnquiryType = new NCBEnquiryType();
-            ncbEnquiryType.setNumSearchesLast6Mths(customerInfo.getNumberOfNCBCheckIn6Months());
-            List<AttributeType> ncbEnAttributeTypeList = ncbEnquiryType.getAttribute();
-            ncbEnAttributeTypeList.add(getAttributeType(BRMSField.NUMBER_OF_DAYS_NCB_CHECK, customerInfo.getNumberOfDayLastNCBCheck()));
+
 
             List<NCBAccountType> ncbAccountTypeList = ncbReportType.getNcbAccount();
             List<BRMSNCBAccountInfo> ncbAccountInfoList = customerInfo.getNcbAccountInfoList();
@@ -150,28 +146,33 @@ public class PrescreenConverter extends Converter{
                 NCBAccountType ncbAccountType = new NCBAccountType();
                 ncbAccountType.setNcbAccountStatus(ncbAccountInfo.getLoanAccountStatus());
                 ncbAccountType.setAccountType(ncbAccountInfo.getLoanAccountType());
-
-                List<AttributeType> ncbAccAttributeList = ncbAccountType.getAttribute();
-                ncbAccAttributeList.add(getAttributeType(BRMSField.TMB_BANK_FLAG, ncbAccountInfo.isTmbFlag()));
-                ncbAccAttributeList.add(getAttributeType(BRMSField.NCB_NPL_FLAG, ncbAccountInfo.isNplFlag()));
-                ncbAccAttributeList.add(getAttributeType(BRMSField.CREDIT_AMOUNT_AT_FIRST_NPL_DATE, ncbAccountInfo.getCreditAmtAtNPLDate()));
-                if(customerInfo.isIndividual()){
-                    ncbAccAttributeList.add(getAttributeType(BRMSField.CURRENT_PAYMENT_PATTERN_INDV, ncbAccountInfo.getCurrentPaymentType()));
-                    ncbAccAttributeList.add(getAttributeType(BRMSField.SIX_MONTHS_PAYMENT_PATTERN_INDV, ncbAccountInfo.getSixMonthPaymentType()));
-                    ncbAccAttributeList.add(getAttributeType(BRMSField.TWELVE_MONTHS_PAYMENT_PATTERN_INDV, ncbAccountInfo.getTwelveMonthPaymentType()));
-                } else {
-                    ncbAccAttributeList.add(getAttributeType(BRMSField.CURRENT_PAYMENT_PATTERN_JURIS, ncbAccountInfo.getCurrentPaymentType()));
-                    ncbAccAttributeList.add(getAttributeType(BRMSField.SIX_MONTHS_PAYMENT_PATTERN_JURIS, ncbAccountInfo.getSixMonthPaymentType()));
-                    ncbAccAttributeList.add(getAttributeType(BRMSField.TWELVE_MONTHS_PAYMENT_PATTERN_JURIS, ncbAccountInfo.getTwelveMonthPaymentType()));
-                }
-                ncbAccAttributeList.add(getAttributeType(BRMSField.NUMBER_OF_MONTH_ACCOUNT_CLOSE_DATE, ncbAccountInfo.getAccountCloseDateMonths()));
-
                 ncbAccountType.setTdrFlag(ncbAccountInfo.isTdrFlag());
                 ncbAccountType.setOverdue31DTo60DCount(ncbAccountInfo.getNumberOfOverDue());
                 ncbAccountType.setOverLimitLast6MthsCount(ncbAccountInfo.getNumberOfOverLimit());
 
+                List<AttributeType> ncbAccAttributeList = ncbAccountType.getAttribute();
+                ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_BANK_FLAG, ncbAccountInfo.isTmbFlag()));
+                ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NCB_NPL_FLAG, ncbAccountInfo.isNplFlag()));
+                ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CREDIT_AMOUNT_AT_FIRST_NPL_DATE, ncbAccountInfo.getCreditAmtAtNPLDate()));
+                if(customerInfo.isIndividual()){
+                    ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CURRENT_PAYMENT_PATTERN_INDV, ncbAccountInfo.getCurrentPaymentType()));
+                    ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.SIX_MONTHS_PAYMENT_PATTERN_INDV, ncbAccountInfo.getSixMonthPaymentType()));
+                    ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TWELVE_MONTHS_PAYMENT_PATTERN_INDV, ncbAccountInfo.getTwelveMonthPaymentType()));
+                } else {
+                    ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CURRENT_PAYMENT_PATTERN_JURIS, ncbAccountInfo.getCurrentPaymentType()));
+                    ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.SIX_MONTHS_PAYMENT_PATTERN_JURIS, ncbAccountInfo.getSixMonthPaymentType()));
+                    ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TWELVE_MONTHS_PAYMENT_PATTERN_JURIS, ncbAccountInfo.getTwelveMonthPaymentType()));
+                }
+                ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_ACCOUNT_CLOSE_DATE, ncbAccountInfo.getAccountCloseDateMonths()));
+
                 ncbAccountTypeList.add(ncbAccountType);
             }
+
+            List<NCBEnquiryType> ncbEnquiryTypeList = ncbReportType.getNcbEnquiry();
+            NCBEnquiryType ncbEnquiryType = new NCBEnquiryType();
+            ncbEnquiryType.setNumSearchesLast6Mths(customerInfo.getNumberOfNCBCheckIn6Months());
+            List<AttributeType> ncbEnAttributeTypeList = ncbEnquiryType.getAttribute();
+            ncbEnAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAYS_NCB_CHECK, customerInfo.getNumberOfDayLastNCBCheck()));
 
             ncbEnquiryTypeList.add(ncbEnquiryType);
             ncbReportTypeList.add(ncbReportType);
@@ -199,16 +200,16 @@ public class PrescreenConverter extends Converter{
             for(BRMSTMBAccountInfo tmbAccountInfo : tmbAccountInfoList){
                 AccountType accountType = new AccountType();
                 List<AttributeType> tmbAccAttributeList = accountType.getAttribute();
-                tmbAccAttributeList.add(getAttributeType(BRMSField.ACCOUNT_ACTIVE_FLAG, tmbAccountInfo.isActiveFlag()));
-                tmbAccAttributeList.add(getAttributeType(BRMSField.DATA_SOURCE, tmbAccountInfo.getDataSource()));
-                tmbAccAttributeList.add(getAttributeType(BRMSField.ACCOUNT_REF, tmbAccountInfo.getAccountRef()));
-                tmbAccAttributeList.add(getAttributeType(BRMSField.CUST_TO_ACCOUNT_RELATIONSHIP, tmbAccountInfo.getCustToAccountRelationCD()));
-                tmbAccAttributeList.add(getAttributeType(BRMSField.TMB_TDR_FLAG, tmbAccountInfo.isTmbTDRFlag()));
-                tmbAccAttributeList.add(getAttributeType(BRMSField.NUMBER_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE, tmbAccountInfo.getDelPrinIntMonth()));
-                tmbAccAttributeList.add(getAttributeType(BRMSField.NUMBER_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE_OF_TDR_ACCOUNT, tmbAccountInfo.getTmbMonthClass()));
-                tmbAccAttributeList.add(getAttributeType(BRMSField.NUMBER_OF_DAY_PRINCIPAL_PAST_DUE, tmbAccountInfo.getTmbDelPriDay()));
-                tmbAccAttributeList.add(getAttributeType(BRMSField.NUMBER_OF_DAY_INTEREST_PAST_DUE, tmbAccountInfo.getTmbDelIntDay()));
-                tmbAccAttributeList.add(getAttributeType(BRMSField.CARD_BLOCK_CODE, tmbAccountInfo.getTmbBlockCode()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_ACTIVE_FLAG, tmbAccountInfo.isActiveFlag()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.DATA_SOURCE, tmbAccountInfo.getDataSource()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_REFERENCE, tmbAccountInfo.getAccountRef()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CUST_TO_ACCOUNT_RELATIONSHIP, tmbAccountInfo.getCustToAccountRelationCD()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_TDR_FLAG, tmbAccountInfo.isTmbTDRFlag()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE, tmbAccountInfo.getNumMonthIntPastDue()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE_OF_TDR_ACCOUNT, tmbAccountInfo.getNumMonthIntPastDueTDRAcc()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_PRINCIPAL_PAST_DUE, tmbAccountInfo.getTmbDelPriDay()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_INTEREST_PAST_DUE, tmbAccountInfo.getTmbDelIntDay()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CARD_BLOCK_CODE, tmbAccountInfo.getTmbBlockCode()));
 
                 accountTypeList.add(accountType);
             }
@@ -221,14 +222,14 @@ public class PrescreenConverter extends Converter{
         for(BRMSAccountStmtInfo accountStmtInfo : accountStmtInfoList){
             AccountType accountType = new AccountType();
             List<AttributeType> accAttributeList = accountType.getAttribute();
-            accAttributeList.add(getAttributeType(BRMSField.UTILIZATION_PERCENT, accountStmtInfo.getAvgUtilizationPercent()));
-            accAttributeList.add(getAttributeType(BRMSField.SWING_PERCENT, accountStmtInfo.getAvgSwingPercent()));
-            accAttributeList.add(getAttributeType(BRMSField.AVG_LAST_6_MONTHS_INFLOW_LIMIT, accountStmtInfo.getAvgGrossInflowPerLimit()));
-            accAttributeList.add(getAttributeType(BRMSField.NUMBER_OF_TRANSACTION, accountStmtInfo.getTotalTransaction()));
-            accAttributeList.add(getAttributeType(BRMSField.MAIN_ACCOUNT_FLAG, accountStmtInfo.isMainAccount()));
-            accAttributeList.add(getAttributeType(BRMSField.HIGHEST_INFLOW_FLAG, accountStmtInfo.isHighestInflow()));
-            accAttributeList.add(getAttributeType(BRMSField.TMB_ACCOUNT_FLAG, accountStmtInfo.isTmb()));
-            accAttributeList.add(getAttributeType(BRMSField.EXCLUDE_INCOME_FLAG, accountStmtInfo.isNotCountIncome()));
+            accAttributeList.add(getAttributeType(BRMSFieldAttributes.UTILIZATION_PERCENT, accountStmtInfo.getAvgUtilizationPercent()));
+            accAttributeList.add(getAttributeType(BRMSFieldAttributes.SWING_PERCENT, accountStmtInfo.getAvgSwingPercent()));
+            accAttributeList.add(getAttributeType(BRMSFieldAttributes.AVG_LAST_6_MONTHS_INFLOW_LIMIT, accountStmtInfo.getAvgGrossInflowPerLimit()));
+            accAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_TRANSACTION, accountStmtInfo.getTotalTransaction()));
+            accAttributeList.add(getAttributeType(BRMSFieldAttributes.MAIN_ACCOUNT_FLAG, accountStmtInfo.isMainAccount()));
+            accAttributeList.add(getAttributeType(BRMSFieldAttributes.HIGHEST_INFLOW_FLAG, accountStmtInfo.isHighestInflow()));
+            accAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_ACCOUNT_FLAG, accountStmtInfo.isTmb()));
+            accAttributeList.add(getAttributeType(BRMSFieldAttributes.EXCLUDE_INCOME_FLAG, accountStmtInfo.isNotCountIncome()));
             accountTypeList.add(accountType);
         }
 
@@ -274,10 +275,10 @@ public class PrescreenConverter extends Converter{
                 List<AttributeType> uwAttributeTypeList = resultType.getAttribute();
                 for(AttributeType attributeType : uwAttributeTypeList){
                     if(attributeType.getName() != null){
-                        if(attributeType.getName().equals(BRMSField.UW_RULE_ORDER.value())){
+                        if(attributeType.getName().equals(BRMSFieldAttributes.UW_RULE_ORDER.value())){
                             uwRulesResult.setRuleOrder(attributeType.getStringValue());
                         }
-                        if(attributeType.getName().equals(BRMSField.UW_PERSONAL_ID)){
+                        if(attributeType.getName().equals(BRMSFieldAttributes.UW_PERSONAL_ID)){
                             uwRulesResult.setRuleName(attributeType.getStringValue());
                         }
                     }
@@ -289,7 +290,7 @@ public class PrescreenConverter extends Converter{
         return uwRulesResponse;
     }
 
-    private AttributeType getAttributeType(BRMSField field, Date value){
+    private AttributeType getAttributeType(BRMSFieldAttributes field, Date value){
         AttributeType attributeType = new AttributeType();
 
         try{
@@ -303,21 +304,21 @@ public class PrescreenConverter extends Converter{
         return attributeType;
     }
 
-    private AttributeType getAttributeType(BRMSField field, String value){
+    private AttributeType getAttributeType(BRMSFieldAttributes field, String value){
         AttributeType attributeType = new AttributeType();
         attributeType.setName(field.value());
         attributeType.setStringValue(value);
         return attributeType;
     }
 
-    private AttributeType getAttributeType(BRMSField field, BigDecimal value){
+    private AttributeType getAttributeType(BRMSFieldAttributes field, BigDecimal value){
         AttributeType attributeType = new AttributeType();
         attributeType.setName(field.value());
         attributeType.setNumericValue(value);
         return attributeType;
     }
 
-    private AttributeType getAttributeType(BRMSField field, boolean existingSMECustomer){
+    private AttributeType getAttributeType(BRMSFieldAttributes field, boolean existingSMECustomer){
         AttributeType attributeType = new AttributeType();
         attributeType.setName(field.value());
         attributeType.setBooleanValue(existingSMECustomer);

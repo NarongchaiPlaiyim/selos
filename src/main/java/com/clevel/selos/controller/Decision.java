@@ -1186,7 +1186,7 @@ public class Decision implements Serializable {
                     returnMortgageType.setId(mortgageType.getId());
                     returnMortgageType.setActive(mortgageType.getActive());
                     returnMortgageType.setMortgage(mortgageType.getMortgage());
-                    returnMortgageType.setRedeem(mortgageType.isRedeem());
+                    //returnMortgageType.setRedeem(mortgageType.isRedeem());
                     returnMortgageType.setMortgageFeeFlag(mortgageType.isMortgageFeeFlag());
                     returnMortgageType.setMortgageFlag(mortgageType.isMortgageFlag());
                     returnMortgageType.setPledgeFlag(mortgageType.isPledgeFlag());

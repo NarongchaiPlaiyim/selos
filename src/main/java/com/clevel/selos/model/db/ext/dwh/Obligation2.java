@@ -114,11 +114,17 @@ public class Obligation2 implements Serializable {
     @Column(name = "tdr_flag", length = 1)
     private String tdrFlag;
 
-    @Column(name = "num_month_int_past_due")
+    @Column(name = "num_month_int_past_due", length = 5, precision = 0)
     private BigDecimal numMonthIntPastDue;
 
-    @Column(name = "num_month_int_past_due_tdr_acc")
+    @Column(name = "num_month_int_past_due_tdr_acc", length = 5, precision = 0)
     private BigDecimal numMonthIntPastDueTDRAcc;
+
+    @Column(name = "tmb_del_pri_day", length = 5, precision = 0)
+    private BigDecimal tmbDelPriDay;
+
+    @Column(name = "tmb_del_int_day", length = 5, precision = 0)
+    private BigDecimal tmbDelIntDay;
 
     @Column(name = "tmb_installment_amt")
     private BigDecimal tmbInstallmentAmt;
@@ -449,6 +455,22 @@ public class Obligation2 implements Serializable {
 
     public void setNumMonthIntPastDueTDRAcc(BigDecimal numMonthIntPastDueTDRAcc) {
         this.numMonthIntPastDueTDRAcc = numMonthIntPastDueTDRAcc;
+    }
+
+    public BigDecimal getTmbDelPriDay() {
+        return tmbDelPriDay;
+    }
+
+    public void setTmbDelPriDay(BigDecimal tmbDelPriDay) {
+        this.tmbDelPriDay = tmbDelPriDay;
+    }
+
+    public BigDecimal getTmbDelIntDay() {
+        return tmbDelIntDay;
+    }
+
+    public void setTmbDelIntDay(BigDecimal tmbDelIntDay) {
+        this.tmbDelIntDay = tmbDelIntDay;
     }
 
     public BigDecimal getTmbInstallmentAmt() {
