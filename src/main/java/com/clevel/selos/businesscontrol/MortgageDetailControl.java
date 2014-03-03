@@ -109,7 +109,7 @@ public class MortgageDetailControl extends BusinessControl {
 			 if (mortgageInfoId > 0)
 				 result = mortgageInfoDAO.findById(mortgageInfoId);
 		 } catch (Throwable e) {}
-		 return mortgageInfoTransform.transformToView(result);
+		 return mortgageInfoTransform.transformToView(result,result.getWorkCase().getId());
 	 }
 	 
 	 public List<CustomerInfoView> getCustomerCanBePOAList(long workCaseId) {

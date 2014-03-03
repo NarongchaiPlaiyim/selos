@@ -29,7 +29,7 @@ public class GuarantorDetailControl extends BusinessControl {
 			if (guarantorInfoId > 0)
 				result = guarantorInfoDAO.findById(guarantorInfoId);
 		} catch (Throwable e) {}
-		return guarantorInfoTransform.transformToFullView(result);
+		return guarantorInfoTransform.transformToFullView(result,result.getWorkCase().getId());
 	}
 	
 	 public void saveGuarantorDetail(GuarantorInfoFullView view) {

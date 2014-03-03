@@ -29,6 +29,8 @@ public  abstract class CustomerInfoPostBaseView <T extends CustomerInfoPostBaseV
 	protected String displayMailingAddressType;
 	protected String displayBusinessType;
 	
+	protected long workCaseId;
+	
 	protected List<CustomerInfoPostAddressView> addresses;
 	
 	protected abstract void updateOwnValue(T view);
@@ -180,6 +182,12 @@ public  abstract class CustomerInfoPostBaseView <T extends CustomerInfoPostBaseV
 		_updateBaseValue(view);
 		updateOwnValue(view);
 	}
+	public long getWorkCaseId() {
+		return workCaseId;
+	}
+	public void setWorkCaseId(long workCaseId) {
+		this.workCaseId = workCaseId;
+	}
 	private void _updateBaseValue(T view) {
 		id = view.id;
 		collateralOwner = view.collateralOwner;
@@ -198,7 +206,7 @@ public  abstract class CustomerInfoPostBaseView <T extends CustomerInfoPostBaseV
 		displayRelation = view.displayRelation;
 		displayTitle = view.displayTitle;
 		displayMailingAddressType = view.displayMailingAddressType;
-		
+		workCaseId = view.workCaseId;
 //		relationId = view.relationId;
 				
 		addresses.clear();

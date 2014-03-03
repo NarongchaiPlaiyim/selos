@@ -42,7 +42,7 @@ public class MortgageConfirmControl extends BusinessControl {
 		List<MortgageInfoView> rtnDatas = new ArrayList<MortgageInfoView>();
 		List<MortgageInfo> datas = mortgageInfoDAO.findAllByWorkCaseId(workCaseId);
 		for (MortgageInfo data : datas) {
-			rtnDatas.add(mortgageInfoTransform.transformToView(data));
+			rtnDatas.add(mortgageInfoTransform.transformToView(data,workCaseId));
 		}
 		return rtnDatas;
 	}

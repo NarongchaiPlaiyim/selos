@@ -249,8 +249,7 @@
 	                           			<p:column styleClass="center" style="width:50px;">
 	                           				<p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
                            						process="@this"
-	                           						onstart="p_blockUI.show()"
-	                           						oncomplete="p_blockUI.hide();p_bapaApplyInfoDlg.show();"
+	                           						oncomplete="p_bapaApplyInfoDlg.show();"
 	                           						actionListener="#{baInfo.onOpenUpdateBAPAInformaionDialog(credit)}"
 	                           						update=":bapaApplyInfoDlg"
 	                           						style="margin-right:0px !important"

@@ -322,7 +322,7 @@ public class PostCustomerInfoIndv implements Serializable {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
 		customer = postCustomerInfoIndvControl.getCustomer(customerId);
-		if (customer.getIndividualId() <= 0) {
+		if (customer.getIndividualId() <= 0 || customer.getWorkCaseId() != workCaseId) {
 			String redirectPage = "/site/postCustomerInfoSummary.jsf";
 			try {
 				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
