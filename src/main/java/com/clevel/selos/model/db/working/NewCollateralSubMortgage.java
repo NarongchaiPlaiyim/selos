@@ -21,6 +21,18 @@ public class NewCollateralSubMortgage implements Serializable {
     @JoinColumn(name = "mortgage_type_id")
     private MortgageType mortgageType;
 
+    @ManyToOne
+    @JoinColumn(name = "workcase_id")
+    private WorkCase workCase;
+
+    public WorkCase getWorkCase() {
+        return workCase;
+    }
+
+    public void setWorkCase(WorkCase workCase) {
+        this.workCase = workCase;
+    }
+
     public long getId() {
         return id;
     }

@@ -766,6 +766,7 @@ public class CreditFacProposeControl extends BusinessControl {
         newCreditFacilityDAO.persist(newCreditFacility);
         log.debug("saveCreditFacility ::: persist newCreditFacility : {}", newCreditFacility);
 
+
         //--- Save to NewFeeCredit
         if (Util.safetyList(newCreditFacilityView.getNewFeeDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newFeeDetailViewList : {}", newCreditFacilityView.getNewFeeDetailViewList());
@@ -798,6 +799,7 @@ public class CreditFacProposeControl extends BusinessControl {
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newGuarantorDetailViewList : {}", newCreditFacilityView.getNewGuarantorDetailViewList());
             List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser);
+            newCreditFacility.setNewGuarantorDetailList(newGuarantorDetailList);
             newGuarantorDetailDAO.persist(newGuarantorDetailList);
             log.debug("saveCreditFacility ::: persist newGuarantorDetailList : {}", newGuarantorDetailList);
         }
@@ -814,16 +816,17 @@ public class CreditFacProposeControl extends BusinessControl {
         log.info("before :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
         newSubCollMortgageDAO.delete(newCollateralSubMortgages);
         log.info("after :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
-        //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
-        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase);
-        newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
-        //--- Need to Delete SubOwner from newCollateralSubRelatedList before Insert new
-        List<NewCollateralSubRelated> newCollateralSubRelatedList = newCollateralSubRelatedDAO.getListByWorkCase(workCase);
-        newCollateralSubRelatedDAO.delete(newCollateralSubRelatedList);
+//        //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
+//        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase);
+//        newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
+//        //--- Need to Delete SubOwner from newCollateralSubRelatedList before Insert new
+//        List<NewCollateralSubRelated> newCollateralSubRelatedList = newCollateralSubRelatedDAO.getListByWorkCase(workCase);
+//        newCollateralSubRelatedDAO.delete(newCollateralSubRelatedList);
 
         if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCollateralViewList : {}", newCreditFacilityView.getNewCollateralViewList());
             List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, currentUser, workCase);
+            newCreditFacility.setNewCollateralDetailList(newCollateralList);
             newCollateralDetailDAO.persist(newCollateralList);
             log.debug("saveCreditFacility ::: persist newCollateralList : {}", newCollateralList);
         }

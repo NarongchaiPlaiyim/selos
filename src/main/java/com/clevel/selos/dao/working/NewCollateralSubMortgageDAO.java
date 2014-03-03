@@ -2,7 +2,9 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.NewCollateralSub;
+import com.clevel.selos.model.db.working.NewCollateralSubMortgage;
+import com.clevel.selos.model.db.working.WorkCase;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -36,17 +38,17 @@ public class NewCollateralSubMortgageDAO extends GenericDAO<NewCollateralSubMort
 
 
     public List<NewCollateralSubMortgage> getListByWorkCase(WorkCase workCase){
-        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
+//        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
         Criteria criteria = createCriteria();
-        if(newCreditFacility != null && newCreditFacility.getNewCollateralDetailList() != null && newCreditFacility.getNewCollateralDetailList().size() > 0){
-            for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
-                for(NewCollateralHead newCollateralHead : newCollateral.getNewCollateralHeadList()){
-                    for(NewCollateralSub newCollateralSub : newCollateralHead.getNewCollateralSubList()){
-                        criteria.add(Restrictions.eq("newCollateralSub", newCollateralSub));
-                    }
-                }
-            }
-        }
+//        if(newCreditFacility != null && newCreditFacility.getNewCollateralDetailList() != null && newCreditFacility.getNewCollateralDetailList().size() > 0){
+//            for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
+//                for(NewCollateralHead newCollateralHead : newCollateral.getNewCollateralHeadList()){
+//                    for(NewCollateralSub newCollateralSub : newCollateralHead.getNewCollateralSubList()){
+                        criteria.add(Restrictions.eq("workCase", workCase));
+//                    }
+//                }
+//            }
+//        }
         List<NewCollateralSubMortgage> newCollateralSubMortgageList = criteria.list();
 
         return newCollateralSubMortgageList;
