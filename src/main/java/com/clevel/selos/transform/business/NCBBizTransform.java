@@ -1037,7 +1037,7 @@ public class NCBBizTransform extends BusinessTransform {
                                             }
                                         }
                                         //set number of outstanding payment
-                                        ncbDetailView.setNoOfOutstandingPaymentIn12months(new BigDecimal(numberOfOutStandingPayment));
+                                        ncbDetailView.setNoOfOutstandingPaymentIn12months(numberOfOutStandingPayment);
                                         //set number of over limit
                                         ncbDetailView.setNoOfOverLimit(numberOfOverLimit);
 
@@ -1437,7 +1437,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                 }
                                             }
                                             //set number of outstanding payment
-                                            ncbDetailView.setNoOfOutstandingPaymentIn12months(new BigDecimal(numberOfOutStandingPayment));
+                                            ncbDetailView.setNoOfOutstandingPaymentIn12months(numberOfOutStandingPayment);
                                             //set number of over limit
                                             ncbDetailView.setNoOfOverLimit(numberOfOverLimit);
 
@@ -1645,7 +1645,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                 }
                                             }
                                             //set number of outstanding payment
-                                            ncbDetailView.setNoOfOutstandingPaymentIn12months(new BigDecimal(numberOfOutStandingPayment));
+                                            ncbDetailView.setNoOfOutstandingPaymentIn12months(numberOfOutStandingPayment);
                                             //set number of over limit
                                             ncbDetailView.setNoOfOverLimit(numberOfOverLimit);
 

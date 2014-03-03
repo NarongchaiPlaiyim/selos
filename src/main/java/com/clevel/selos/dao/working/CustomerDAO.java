@@ -6,6 +6,8 @@ import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.working.Customer;
 
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;

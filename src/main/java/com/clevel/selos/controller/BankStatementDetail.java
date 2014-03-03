@@ -188,29 +188,19 @@ public class BankStatementDetail implements Serializable {
 
     private void initViewFormAndSelectItems() {
         if (bankStmtView == null) {
-            // add new Bank statement
+            // ADD NEW - Click Add New from Summary page
             bankStmtView = new BankStmtView();
             bankStmtView.setBankStmtDetailViewList(generateBankStmtDetail());
-            modeForButton = ModeForButton.ADD;
-        } else {
-            // edit Bank statement
-            numberOfMonths = Util.safetyList(bankStmtView.getBankStmtDetailViewList()).size();
-
-//            bankStmtControl.sortAsOfDateBankStmtDetails(bankStmtView.getBankStmtDetailViewList(), SortOrder.ASCENDING);
-//            Date lastMonth = bankStmtView.getBankStmtDetailViewList().get(bankStmtView.getBankStmtDetailViewList().size() - 1).getAsOfDate();
-//            int monthsDetail = bankStmtView.getBankStmtDetailViewList().size();
-//            int monthsDiff = numberOfMonths - monthsDetail;
-//            if (monthsDetail < numberOfMonths) {
-//                // add 6 new details
-//                Date date;
-//                for (int i=1; i <= monthsDiff; i++) {
-//                    BankStmtDetailView bankStmtDetailView = new BankStmtDetailView();
-//                    date = DateTimeUtil.getOnlyDatePlusMonth(lastMonth, i);
-//                    bankStmtDetailView.setAsOfDate(date);
-//                    bankStmtView.getBankStmtDetailViewList().add(bankStmtDetailView);
-//                }
-//            }
-            modeForButton = ModeForButton.EDIT;
+        }
+        else {
+            // Click Edit from Summary page
+            // - Edit already exist Bank statement from Database
+            // - Edit Bank statement from DWH (NOT EXIST from Database) will be generate detail from
+            if (bankStmtView.getBankStmtDetailViewList() != null && bankStmtView.getBankStmtDetailViewList().size() > 0) {
+                numberOfMonths = Util.safetyList(bankStmtView.getBankStmtDetailViewList()).size();
+            } else {
+                bankStmtView.setBankStmtDetailViewList(generateBankStmtDetail());
+            }
         }
 
         bankStmtControl.sortAsOfDateBankStmtDetails(bankStmtView.getBankStmtDetailViewList(), SortOrder.ASCENDING);
@@ -318,17 +308,17 @@ public class BankStatementDetail implements Serializable {
 
             messageHeader = "Save Bank Statement Detail Success.";
             message = "Save Bank Statement Detail data success.";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             messageHeader = "Save Bank Statement Detail Failed.";
             if (e.getCause() != null) {
                 message = "Save Bank Statement Detail data failed. Cause : " + e.getCause().toString();
             } else {
                 message = "Save Bank Statement Detail data failed. Cause : " + e.getMessage();
             }
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
     public void onCancel() {

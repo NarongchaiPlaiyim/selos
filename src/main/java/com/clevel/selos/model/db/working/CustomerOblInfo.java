@@ -42,9 +42,6 @@ public class CustomerOblInfo implements Serializable{
     @Column(name="last_contract_date")
     private Date lastContractDate;
 
-    @Column(name="months_last_contract_date")
-    private Date numberOfMonthsLastContractDate;
-
     @Column(name="adjust_class")
     private String adjustClass;
 
@@ -134,14 +131,6 @@ public class CustomerOblInfo implements Serializable{
         this.lastContractDate = lastContractDate;
     }
 
-    public Date getNumberOfMonthsLastContractDate() {
-        return numberOfMonthsLastContractDate;
-    }
-
-    public void setNumberOfMonthsLastContractDate(Date numberOfMonthsLastContractDate) {
-        this.numberOfMonthsLastContractDate = numberOfMonthsLastContractDate;
-    }
-
     public String getAdjustClass() {
         return adjustClass;
     }
@@ -194,7 +183,6 @@ public class CustomerOblInfo implements Serializable{
                 .append("nextReviewDate", nextReviewDate)
                 .append("nextReviewDateFlag", nextReviewDateFlag)
                 .append("lastContractDate", lastContractDate)
-                .append("numberOfMonthsLastContractDate", numberOfMonthsLastContractDate)
                 .append("adjustClass", adjustClass)
                 .append("ratingFinal", ratingFinal)
                 .append("unpaidFeeInsurance", unpaidFeeInsurance)

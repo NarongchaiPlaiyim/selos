@@ -3,12 +3,12 @@ package com.clevel.selos.integration.brms;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.BRMSInterface;
+import com.clevel.selos.integration.brms.convert.PrescreenConverter;
 import com.clevel.selos.integration.brms.convert.StandardPricingFeeConverter;
 import com.clevel.selos.integration.brms.convert.StandardPricingIntConverter;
 import com.clevel.selos.integration.brms.model.RuleColorResult;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.*;
-import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.brms.service.EndPoint;
 import com.clevel.selos.model.ActionResult;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ import java.util.List;
 public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
     @Inject
     @BRMS
-    Logger log;
+    Logger logger;
 
     @Inject
     EndPoint endpoint;
@@ -31,49 +31,41 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
     StandardPricingFeeConverter standardPricingFeeConverter;
     @Inject
     StandardPricingIntConverter standardPricingIntConverter;
+    @Inject
+    PrescreenConverter prescreenConverter;
 
     @Inject
     public BRMSInterfaceImpl() {
     }
 
     @Override
-    public List<PreScreenResponse> checkPreScreenRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
-        log.debug("checkPreScreenRule : applicationInfo {}", applicationInfo);
+    public UWRulesResponse checkPreScreenRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
+        logger.debug("checkPreScreenRule : applicationInfo {}", applicationInfo);
         if (applicationInfo == null) {
-            log.error("preScreenRequest is null for request");
+            logger.error("preScreenRequest is null for request");
             throw new ValidationException("002");
         }
 
-        List<PreScreenResponse> preScreenResponseList = new ArrayList<PreScreenResponse>();
+        UWRulesResponse uwRulesResponse = null;
 
-        PreScreenResponse preScreenResponse = new PreScreenResponse();
-        preScreenResponse.setRuleName("Group_Result_Final_AppLevel");
-        preScreenResponse.setRuleOrder("2010");
-        preScreenResponse.setType("Group Result");
-        preScreenResponse.setPersonalId("");
-        preScreenResponse.setColor(RuleColorResult.GREEN);
-        preScreenResponse.setDeviationFlag("No Deviation");
-        preScreenResponse.setRejectGroupCode("P");
-        preScreenResponseList.add(preScreenResponse);
+        try {
+            com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceResponse decisionServiceResponse = endpoint.callPrescreenUnderwritingRulesService(prescreenConverter.getDecisionServiceRequest(applicationInfo));
+            uwRulesResponse = prescreenConverter.getUWRulesResponse(decisionServiceResponse);
+            uwRulesResponse.setActionResult(ActionResult.SUCCESS);
+        }catch (Exception ex) {
+            uwRulesResponse = new UWRulesResponse();
+            uwRulesResponse.setActionResult(ActionResult.FAILED);
+            uwRulesResponse.setReason(ex.getMessage());
+        }
 
-        PreScreenResponse preScreenResponse2 = new PreScreenResponse();
-        preScreenResponse2.setRuleName("Decision_Matrix_NCB_DB");
-        preScreenResponse2.setRuleOrder("1010");
-        preScreenResponse2.setType("");
-        preScreenResponse2.setPersonalId("1234567890123");
-        preScreenResponse2.setColor(RuleColorResult.RED);
-        preScreenResponse2.setDeviationFlag("");
-        preScreenResponse2.setRejectGroupCode("");
-        preScreenResponseList.add(preScreenResponse2);
-
-        return preScreenResponseList;
+        return uwRulesResponse;
     }
 
     @Override
     public List<FullApplicationResponse> checkFullApplicationRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
-        log.debug("checkFullApplicationRule : applicationInfo {}", applicationInfo);
+        logger.debug("checkFullApplicationRule : applicationInfo {}", applicationInfo);
         if (applicationInfo == null) {
-            log.error("fullApplicationRequest is null for request");
+            logger.error("fullApplicationRequest is null for request");
             throw new ValidationException("002");
         }
 
@@ -82,9 +74,9 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
 
     @Override
     public StandardPricingResponse checkStandardPricingIntRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
-        log.debug("checkStandardPricingIntRule : standardPricingIntRequest {}", applicationInfo);
+        logger.debug("checkStandardPricingIntRule : standardPricingIntRequest {}", applicationInfo);
         if (applicationInfo == null) {
-            log.error("standardPricingIntRequest is null for request");
+            logger.error("standardPricingIntRequest is null for request");
             throw new ValidationException("002");
         }
 
@@ -105,9 +97,9 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
 
     @Override
     public StandardPricingResponse checkStandardPricingFeeRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
-        log.debug("checkStandardPricingFeeRule : applicationInfo {}", applicationInfo);
+        logger.debug("checkStandardPricingFeeRule : applicationInfo {}", applicationInfo);
         if (applicationInfo == null) {
-            log.error("standardPricingFeeRequest is null for request");
+            logger.error("standardPricingFeeRequest is null for request");
             throw new ValidationException("002");
         }
 
@@ -127,9 +119,9 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
 
     @Override
     public List<DocCustomerResponse> checkDocCustomerRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
-        log.debug("checkDocCustomerRule : applicationInfo {}", applicationInfo);
+        logger.debug("checkDocCustomerRule : applicationInfo {}", applicationInfo);
         if (applicationInfo == null) {
-            log.error("docCustomerRequest is null for request");
+            logger.error("docCustomerRequest is null for request");
             throw new ValidationException("002");
         }
         //todo call service
@@ -138,9 +130,9 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
 
     @Override
     public List<DocAppraisalResponse> checkDocAppraisalRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
-        log.debug("checkDocAppraisalRule : applicationInfo {}", applicationInfo);
+        logger.debug("checkDocAppraisalRule : applicationInfo {}", applicationInfo);
         if (applicationInfo == null) {
-            log.error("docAppraisalRequest is null for request");
+            logger.error("docAppraisalRequest is null for request");
             throw new ValidationException("002");
         }
         //todo call service

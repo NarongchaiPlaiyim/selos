@@ -88,6 +88,13 @@ public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<
         }
     }
 
+    public List<T> persistAndReturn(List<T> entities) {
+        for (T entity : entities) {
+            getSession().saveOrUpdate(entity);
+        }
+        return entities;
+    }
+
     public void delete(T entity) {
         getSession().delete(entity);
     }

@@ -25,7 +25,7 @@ public class BRMSInterfaceImplTest implements BRMSInterface {
     }
 
     @Override
-    public List<PreScreenResponse> checkPreScreenRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
+    public UWRulesResponse checkPreScreenRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
         log.debug("checkPreScreenRule : applicationInfo {}", applicationInfo);
         if (applicationInfo == null) {
             log.error("preScreenRequest is null for request");
@@ -52,9 +52,9 @@ public class BRMSInterfaceImplTest implements BRMSInterface {
         preScreenResponse2.setColor(RuleColorResult.RED);
         preScreenResponse2.setDeviationFlag("");
         preScreenResponse2.setRejectGroupCode("");
-        preScreenResponseList.add(preScreenResponse2);
-
-        return preScreenResponseList;
+        //preScreenResponseList.add(preScreenResponse2);
+        return null;
+        //return preScreenResponseList;
     }
 
     @Override

@@ -34,4 +34,60 @@ public class DisbursementBahtnet {
     @OneToMany(mappedBy = "disbursementBahtnet")
     private List<DisbursementBahtnetCredit> disburseBahtnetCreditList;
 
+	public Disbursement getDisbursement() {
+		return disbursement;
+	}
+
+	public void setDisbursement(Disbursement disbursement) {
+		this.disbursement = disbursement;
+	}
+
+	public Bank getBank() {
+		return bank;
+	}
+
+	public void setBank(Bank bank) {
+		this.bank = bank;
+	}
+
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
+	public String getBranchName() {
+		return branchName;
+	}
+
+	public void setBranchName(String branchName) {
+		this.branchName = branchName;
+	}
+
+	public String getBeneficiaryName() {
+		return beneficiaryName;
+	}
+
+	public void setBeneficiaryName(String beneficiaryName) {
+		this.beneficiaryName = beneficiaryName;
+	}
+
+	public List<DisbursementBahtnetCredit> getDisburseBahtnetCreditList() {
+		return disburseBahtnetCreditList;
+	}
+
+	public void setDisburseBahtnetCreditList(List<DisbursementBahtnetCredit> disburseBahtnetCreditList) {
+		this.disburseBahtnetCreditList = disburseBahtnetCreditList;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 }

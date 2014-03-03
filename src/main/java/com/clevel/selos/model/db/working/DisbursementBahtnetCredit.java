@@ -22,4 +22,36 @@ public class DisbursementBahtnetCredit {
 
     @Column(name = "disburse_amount")
     private BigDecimal disburseAmount;
+
+	public DisbursementBahtnet getDisbursementBahtnet() {
+		return disbursementBahtnet;
+	}
+
+	public void setDisbursementBahtnet(DisbursementBahtnet disbursementBahtnet) {
+		this.disbursementBahtnet = disbursementBahtnet;
+	}
+
+	public NewCreditDetail getCreditDetail() {
+		return creditDetail;
+	}
+
+	public void setCreditDetail(NewCreditDetail creditDetail) {
+		this.creditDetail = creditDetail;
+	}
+
+	public BigDecimal getDisburseAmount() {
+		return disburseAmount;
+	}
+
+	public void setDisburseAmount(BigDecimal disburseAmount) {
+		this.disburseAmount = disburseAmount;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 }

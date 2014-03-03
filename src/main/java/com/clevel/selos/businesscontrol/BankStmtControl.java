@@ -841,6 +841,7 @@ public class BankStmtControl extends BusinessControl {
                 }
 
                 sumNetUWofLastSixM = sumNetUWofLastSixM.add(detailView.getCreditAmountUW());
+
             }
 
             sumNetBDMofLastSixM = null;
@@ -863,6 +864,7 @@ public class BankStmtControl extends BusinessControl {
                 }
 
                 sumNetBDMofLastSixM = Util.add(sumNetBDMofLastSixM, detailView.getCreditAmountBDM());
+
             }
 
             sumNetUWofLastSixM = null;
@@ -926,6 +928,7 @@ public class BankStmtControl extends BusinessControl {
             grdTotalTrdChqRetAmount = Util.add(grdTotalTrdChqRetAmount, tmbBankStmtView.getTrdChequeReturnAmount());
             grdTotalTrdChqRetPercent = Util.add(grdTotalTrdChqRetPercent, tmbBankStmtView.getTrdChequeReturnPercent());
             grdTotalAvgOSBalance = Util.add(grdTotalAvgOSBalance, tmbBankStmtView.getAvgOSBalanceAmount());
+
 
             if (tmbBankStmtView.getAvgIncomeNetUW() != null) {
                 useNetUWToCal = true;
@@ -1183,10 +1186,27 @@ public class BankStmtControl extends BusinessControl {
         return bankStmtTransform.getBankStmtSummaryView(returnBankStmtSummary);
     }
 
-    public void deleteBankStmt(long bankStmtId) {
+    public void deleteBankStmtById(long bankStmtId) {
         log.debug("deleteBankStmt() bankStmtId: {}", bankStmtId);
-        BankStatement bankStatement = bankStatementDAO.findById(bankStmtId);
-        bankStatementDAO.delete(bankStatement);
+        if (bankStmtId != 0) {
+            BankStatement bankStatement = bankStatementDAO.findById(bankStmtId);
+            bankStatementDAO.delete(bankStatement);
+        }
+    }
+
+    public void deleteBankStmtList(List<BankStmtView> bankStmtViewList) {
+        log.debug("deleteBankStmtList()");
+        if (bankStmtViewList != null && bankStmtViewList.size() > 0) {
+            List<BankStatement> deleteList = new ArrayList<BankStatement>();
+            int size = bankStmtViewList.size();
+            for (int i=0; i<size; i++) {
+                BankStmtView bankStmtView = bankStmtViewList.get(i);
+                if (bankStmtView.getId() != 0) {
+                    deleteList.add(bankStatementDAO.findById(bankStmtView.getId()));
+                }
+            }
+            bankStatementDAO.delete(deleteList);
+        }
     }
 
     // --------------- Source of Collateral Proof ---------------

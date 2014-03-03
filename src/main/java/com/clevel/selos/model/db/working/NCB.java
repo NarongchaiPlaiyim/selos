@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "wrk_ncb")
@@ -138,6 +139,8 @@ public class NCB implements Serializable {
     @Column(name = "loan_credit_wc_tmb")
     private BigDecimal loanCreditWCTMB;
 
+    @OneToMany(mappedBy = "ncb")
+    private List<NCBDetail> ncbDetailList;
 
     public long getId() {
         return id;
@@ -444,6 +447,14 @@ public class NCB implements Serializable {
 
     public void setLoanCreditWCTMB(BigDecimal loanCreditWCTMB) {
         this.loanCreditWCTMB = loanCreditWCTMB;
+    }
+
+    public List<NCBDetail> getNcbDetailList() {
+        return ncbDetailList;
+    }
+
+    public void setNcbDetailList(List<NCBDetail> ncbDetailList) {
+        this.ncbDetailList = ncbDetailList;
     }
 
     @Override

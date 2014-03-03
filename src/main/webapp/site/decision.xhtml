@@ -1825,8 +1825,8 @@
                                             <p:selectOneMenu value="#{decision.decisionView.loanRequestType.id}"
                                                              style="width: 200px">
                                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
-                                                <f:selectItems value="#{decision.creditRequestTypeList}" var="crdRequestType"
-                                                               itemLabel="#{crdRequestType.description}" itemValue="#{crdRequestType.id}"/>
+                                                <f:selectItems value="#{decision.creditRequestTypeViewList}" var="crdRequestType"
+                                                               itemLabel="#{crdRequestType.name}" itemValue="#{crdRequestType.id}"/>
                                             </p:selectOneMenu>
                                         </td>
                                     </tr>
@@ -1843,7 +1843,7 @@
                                                              style="width: 200px"
                                                              disabled="true">
                                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
-                                                <f:selectItems value="#{decision.countryList}" var="country"
+                                                <f:selectItems value="#{decision.countryViewList}" var="country"
                                                                itemLabel="#{country.name}" itemValue="#{country.id}"/>
                                             </p:selectOneMenu>
                                         </td>
@@ -2854,7 +2854,7 @@
                                         <p:commandButton id="btnEditApprovedCollateral"
                                                          rendered="#{decision.roleUW}"
                                                          value="#{msg.get('app.button.edit')}"
-                                                         action="#{decision.onEditAppProposeCollateral()}"
+                                                         action="#{decision.onEditApproveCollateral()}"
                                                          update=":collateralDlgForm"
                                                          oncomplete="proposeCollateralDlg.show()"
                                                          styleClass="smaller">
@@ -3749,6 +3749,7 @@
                                                     <tr>
                                                         <td class="center">
                                                             <p:selectOneRadio value="#{decision.approvalHistoryView.uwDecision}"
+                                                                              required="#{decision.roleUW and not empty param[saveDecisionBtn.clientId]}"
                                                                               styleClass="ovr-border">
                                                                 <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
                                                                 <f:selectItem itemLabel="#{msg.get('app.button.reject')}" itemValue="#{decision.decisionREJECTED}"/>
@@ -3822,6 +3823,7 @@
                         <tr>
                             <td colspan="2" class="center">
                                 <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                                                 binding="#{saveDecisionBtn}"
                                                  action="#{decision.onSave()}"
                                                  process="@form"
                                                  update=":frmMain, :msgBoxSystemMessagePanel"
@@ -3891,7 +3893,7 @@
     <ui:param name="name" value="confirmDeleteAppProCollateralDlg"/>
     <ui:param name="formId" value="frmConfirmDeleteAppProCollateral"/>
     <ui:param name="controller" value="#{decision}"/>
-    <ui:param name="action" value="onDeleteAppProposeCollateral"/>
+    <ui:param name="action" value="onDeleteApproveCollateral"/>
     <ui:param name="update" value=":frmMain"/>
 </ui:include>
 

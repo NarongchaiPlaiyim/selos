@@ -105,72 +105,98 @@
                                            </tr>                         
 	                        			</thead>
 	                        			<tbody>
-	                        				<ui:repeat varStatus="rowStatus">
+	                        				<ui:repeat varStatus="rowStatus" value="#{approveDetailInformation.approveDetailInformationView.newCreditDetailViewList}"	var="item">
 	                        					<tr class='#{rowStatus.even ? "row_even" : "row_odd"}'>
 	                        						<td class="center" rowspan="2">
 	                        							#{rowStatus.index + 1}
 	                        						</td>
 			                        				<td class="center" rowspan="2">
 			                        					<!--  decision  -->
+			                        					<h:outputText value="#{item.uwDecision}" />
 			                        				</td>	
 			                        				<td>
 			                        					<!--  product program -->
+			                        					<h:outputText value="#{item.productProgramView.name}" />
 			                        				</td>
 			                        				<td>
 			                        					<!--  credit type -->
+			                        					<h:outputText value="#{item.creditTypeView.name}" />
 			                        				</td>
 			                        				<td>
 			                        					<!--  code -->
+			                        					<table border="">
+			                        						<tr>
+			                        							<td><h:outputText value="#{item.productCode}" /></td>
+			                        						</tr>
+			                        						<tr>
+			                        							<td><h:outputText value="#{item.projectCode}" /></td>
+			                        						</tr>
+			                        					</table>
 			                        				</td>
 			                        				<td class="right">
 			                        					<!--  limit  -->
-			                        					<h:outputText value="0">
+			                        					<h:outputText value="#{item.limit}">
 			                        						<f:convertNumber pattern="#,##0.00"/>
 			                        					</h:outputText>			                        				
 			                        				</td>
 			                        				<td>
 			                        					<!-- Standard price  -->
+			                        					<p:dataTable value="#{item.newCreditTierDetailViewList}"	var="creditItem">
+			                        						<p:row>
+			                        							<h:outputText value="#{creditItem.standardBasePrice.value}" />
+			                        						</p:row>
+			                        					</p:dataTable>
 			                        				</td>
 			                        				<td>
 			                        					<!-- Suggest price  -->
+			                        					<p:dataTable value="#{item.newCreditTierDetailViewList}"	var="creditItem">
+			                        						<p:row>
+			                        							<h:outputText value="#{creditItem.suggestBasePrice.value}" />
+			                        						</p:row>
+			                        					</p:dataTable>
 			                        				</td>
 			                        				<td>
 			                        					<!-- Final price  -->
+			                        					<p:dataTable value="#{item.newCreditTierDetailViewList}"	var="creditItem">
+			                        						<p:row>
+			                        							<h:outputText value="#{creditItem.finalBasePrice.value}" />
+			                        						</p:row>
+			                        					</p:dataTable>
 			                        				</td>
 			                        				<td class="right">
 			                        					<!--  installment  -->
-			                        					<h:outputText value="0">
+			                        					<h:outputText value="#{item.installment}">
 			                        						<f:convertNumber pattern="#,##0.00"/>
 			                        					</h:outputText>			                        				
 			                        				</td>
 			                        				<td class="right">
 			                        					<!--  tenor  -->
-			                        					<h:outputText value="0">
+			                        					<h:outputText value="#{item.tenor}">
 			                        						<f:convertNumber pattern="0"/>
 			                        					</h:outputText>			                        				
 			                        				</td>
 			                        				<td class="right">
 			                        					<!--  tenor  -->
-			                        					<h:outputText value="0">
+			                        					<h:outputText value="#{item.frontEndFee}">
 			                        						<f:convertNumber pattern="#,##0.00"/>
 			                        					</h:outputText>			                        				
 			                        				</td>
 	                        					</tr>
 	                        					<tr class='#{rowStatus.even ? "row_even" : "row_odd"}'>
 	                        						<td colspan="10">
-	                        							<table>
+	                        							<table border="">
 	                        								<tr>
 	                        									<td style="width:100px" class="title">
 	                        										#{msg.get('app.approveDetail.approvedCredit.table.detail.requestType')}
 	                        									</td>
 	                        									<td style="width:100px">
-	                        										
+	                        										<h:outputText value="#{item.requestType}" />
 	                        									</td>
 	                        									<td style="width:100px" class="title">
 	                        										#{msg.get('app.approveDetail.approvedCredit.table.detail.refinance')}
 	                        									</td>
 	                        									<td style="width:100px">
-	                        										
+	                        										<h:outputText value="#{item.refinance}" />
 	                        									</td>
 	                        								</tr>
 	                        								<tr>
@@ -178,6 +204,7 @@
 	                        										#{msg.get('app.approveDetail.approvedCredit.table.detail.purpose')}
 	                        									</td>
 	                        									<td colspan="3">
+	                        										<h:outputText value="#{item.loanPurposeView.description}" />
 	                        									</td>
 	                        								</tr>
 	                        								<tr>
@@ -185,6 +212,7 @@
 	                        										#{msg.get('app.approveDetail.approvedCredit.table.detail.purposeDetail')}
 	                        									</td>
 	                        									<td colspan="3">
+	                        										<h:outputText value="#{item.loanPurposeView.description}" />
 	                        									</td>
 	                        								</tr>
 	                        								<tr>
@@ -192,12 +220,13 @@
 	                        										#{msg.get('app.approveDetail.approvedCredit.table.detail.disbursement')}
 	                        									</td>
 	                        									<td>
+	                        									<h:outputText value="#{item.disbursementTypeView.disbursement}" />
 	                        									</td>
 	                        									<td class="title">
 	                        										#{msg.get('app.approveDetail.approvedCredit.table.detail.holdAmount')}
 	                        									</td>
 	                        									<td>
-	                        										<h:outputText value="0">
+	                        										<h:outputText value="#{item.holdLimitAmount}">
 	                        											<f:convertNumber pattern="#,##0.00"/>
 	                        										</h:outputText>
 	                        									</td>

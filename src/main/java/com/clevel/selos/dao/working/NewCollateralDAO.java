@@ -21,7 +21,6 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
 
     @Inject
     public NewCollateralDAO() {
-
     }
 
     public void persistProposeTypeA(final List<NewCollateral> newCollateralList){
@@ -93,8 +92,6 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
         }
     }
 
-
-
     public void updateAppraisalFlag(final NewCollateral newCollateral) {
         log.debug("-- updateAppraisalFlag()");
         long id = newCollateral.getId();
@@ -105,7 +102,6 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
             log.debug("-- NewCollateral(id : {}) has Updated", id);
         }
     }
-
 
     public List<NewCollateral> findNewCollateralByWorkCaseId(long workCaseId) {
         log.info("-- findNewCollateralByWorkCaseId ::: {}", workCaseId);

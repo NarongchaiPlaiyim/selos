@@ -59,13 +59,15 @@ public class PrescreenTransform extends Transform {
         } else {
             prescreen.setReferredExperience(null);
         }
+        /*
         prescreen.setRefinance(prescreenView.getRefinance());
         prescreen.setTcg(prescreenView.getTcg());
         if (prescreenView.getRefinanceBank() != null && prescreenView.getRefinanceBank().getCode() != 0) {
             prescreen.setRefinanceBank(bankDAO.findById(prescreenView.getRefinanceBank().getCode()));
         } else {
             prescreen.setRefinanceBank(null);
-        }
+        }*/
+
         prescreen.setBorrowingType(prescreenView.getBorrowingType());
         if (prescreenView.getBorrowingType() != null && prescreenView.getBorrowingType().getId() != 0) {
             prescreen.setBorrowingType(borrowingTypeDAO.findById(prescreenView.getBorrowingType().getId()));
@@ -97,12 +99,14 @@ public class PrescreenTransform extends Transform {
         if (prescreenView.getReferredExperience() == null) {
             prescreenView.setReferredExperience(new ReferredExperience());
         }
+        /*
         prescreenView.setRefinance(prescreen.getRefinance());
         prescreenView.setTcg(prescreen.getTcg());
         prescreenView.setRefinanceBank(prescreen.getRefinanceBank());
         if (prescreenView.getRefinanceBank() == null) {
             prescreenView.setRefinanceBank(new Bank());
         }
+        */
         prescreenView.setBorrowingType(prescreen.getBorrowingType());
         if (prescreenView.getBorrowingType() == null) {
             prescreenView.setBorrowingType(new BorrowingType());

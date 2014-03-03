@@ -19,6 +19,9 @@ public class ReferredExperience implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "brms_code", length = 2)
+    private String brmsCode;
+
     @Column(name = "active")
     private int active;
 
@@ -38,6 +41,14 @@ public class ReferredExperience implements Serializable {
         this.description = description;
     }
 
+    public String getBrmsCode() {
+        return brmsCode;
+    }
+
+    public void setBrmsCode(String brmsCode) {
+        this.brmsCode = brmsCode;
+    }
+
     public int getActive() {
         return active;
     }
@@ -51,6 +62,7 @@ public class ReferredExperience implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("description", description)
+                .append("brmsCode", brmsCode)
                 .append("active", active)
                 .toString();
     }

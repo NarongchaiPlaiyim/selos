@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 
 public class DisbursementSummaryView implements Serializable{
 
+	private long id;
+	private long newCreditDetailID;
     private String productProgram ;
     private String creditFacility;
     private String code;
@@ -125,4 +127,20 @@ public class DisbursementSummaryView implements Serializable{
                 .append("noFlag", noFlag)
                 .toString();
     }
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public long getNewCreditDetailID() {
+		return newCreditDetailID;
+	}
+
+	public void setNewCreditDetailID(long newCreditDetailID) {
+		this.newCreditDetailID = newCreditDetailID;
+	}
 }

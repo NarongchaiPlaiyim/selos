@@ -107,6 +107,7 @@ public class PledgeConfirm implements Serializable {
 	}
 	
 	public void onSavePledgeConfirm() {
+		pledgeConfirmControl.savePledgeConfirm(pledges);
 		
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);

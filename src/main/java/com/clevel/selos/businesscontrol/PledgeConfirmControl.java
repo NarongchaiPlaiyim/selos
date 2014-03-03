@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 
 import com.clevel.selos.dao.working.PledgeInfoDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.PledgeInfo;
 import com.clevel.selos.model.view.PledgeInfoView;
 import com.clevel.selos.transform.PledgeInfoTransform;
@@ -35,4 +36,15 @@ public class PledgeConfirmControl extends BusinessControl {
     	}
     	return rtnDatas;
     }
+	
+	public void savePledgeConfirm(List<PledgeInfoView> views) {
+		User user = getCurrentUser();
+		for (PledgeInfoView view : views) {
+			if (view.getId() <= 0)
+				continue;
+			PledgeInfo model = pledgeInfoDAO.findById(view.getId());
+			pledgeInfoTransform.updateModelConfirmed(model, view, user);
+			pledgeInfoDAO.persist(model);
+		}
+	}
 }
