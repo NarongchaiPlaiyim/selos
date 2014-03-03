@@ -96,7 +96,10 @@ textarea {
     resize: none;
     border: 1px solid #868686;
 }
-
+textarea[readonly="readonly"], textarea[readonly] {
+    border: 1px solid #cfcfcf;
+    background: #e8e8ff;
+}
 /** end default style by tag name **/
 
 #main_container {

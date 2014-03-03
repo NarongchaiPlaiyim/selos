@@ -10,6 +10,7 @@ import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.DBRMethod;
 import com.clevel.selos.model.ExposureMethod;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.CreditType;
 import com.clevel.selos.model.db.master.ProductFormula;
 import com.clevel.selos.model.db.master.ProductProgram;
@@ -132,12 +133,15 @@ public class CreditFacProposeControl extends BusinessControl {
     private COMSInterface comsInterface;
     @Inject
     BRMSControl brmsControl;
+    @Inject
+    NewCollateralDAO newCollateralDAO;
+    @Inject
+    NewCollateralSubRelatedDAO newCollateralSubRelatedDAO;
 
     private ExistingCreditFacilityView existingCreditFacilityView;
 
     @Inject
-    public CreditFacProposeControl() {
-    }
+    public CreditFacProposeControl() {}
 
     public NewCreditFacilityView findNewCreditFacilityByWorkCase(Long workCaseId) {
         NewCreditFacilityView newCreditFacilityView = null;
@@ -763,6 +767,7 @@ public class CreditFacProposeControl extends BusinessControl {
         newCreditFacilityDAO.persist(newCreditFacility);
         log.debug("saveCreditFacility ::: persist newCreditFacility : {}", newCreditFacility);
 
+
         //--- Save to NewFeeCredit
         if (Util.safetyList(newCreditFacilityView.getNewFeeDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newFeeDetailViewList : {}", newCreditFacilityView.getNewFeeDetailViewList());
@@ -785,40 +790,42 @@ public class CreditFacProposeControl extends BusinessControl {
         //--- Save to NewCreditDetail
         if (Util.safetyList(newCreditFacilityView.getNewCreditDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCreditDetailViewList : {}", newCreditFacilityView.getNewCreditDetailViewList());
-            List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, currentUser, workCase);
+            List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, currentUser, workCase, ProposeType.P);
             newCreditFacility.setNewCreditDetailList(newCreditDetailList);
             newCreditDetailDAO.persist(newCreditDetailList);
             log.debug("saveCreditFacility ::: persist newCreditDetailList : {}", newCreditDetailList);
         }
 
-        //--- Need to Delete newGuarantorCreditList from newGuarantorCredit before Insert new
-//        List<NewGuarantorCredit> newGuarantorCreditListDelete = newGuarantorRelationDAO.getListByNewCreditFacility(workCase);
-//        log.info("before :: newGuarantorCreditListDelete :: size :: {}",newGuarantorCreditListDelete.size());
-//        newGuarantorRelationDAO.delete(newGuarantorCreditListDelete);
-//        log.info("after :: newGuarantorCreditListDelete :: size :: {}",newGuarantorCreditListDelete.size());
-
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newGuarantorDetailViewList : {}", newCreditFacilityView.getNewGuarantorDetailViewList());
-            List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser);
+            List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser,ProposeType.P);
+//            newCreditFacility.setNewGuarantorDetailList(newGuarantorDetailList);
             newGuarantorDetailDAO.persist(newGuarantorDetailList);
             log.debug("saveCreditFacility ::: persist newGuarantorDetailList : {}", newGuarantorDetailList);
         }
 
 
-        //--- Save to NewCollateral
-        //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
-        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase);
+      //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
+        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase, ProposeType.P);
         log.info("before :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
         newSubCollMortgageDAO.delete(newCollateralSubMortgages);
         log.info("after :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
         //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
-        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase);
+        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase, ProposeType.P);
+        log.info("before :: newCollateralSubOwnerList :: size :: {}",newCollateralSubOwnerList.size());
         newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
+        log.info("before :: newCollateralSubOwnerList :: size :: {}",newCollateralSubOwnerList.size());
+        //--- Need to Delete SubOwner from newCollateralSubRelatedList before Insert new
+        List<NewCollateralSubRelated> newCollateralSubRelatedList = newCollateralSubRelatedDAO.getListByWorkCase(workCase, ProposeType.P);
+        log.info("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
+        newCollateralSubRelatedDAO.delete(newCollateralSubRelatedList);
+        log.info("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
 
         if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCollateralViewList : {}", newCreditFacilityView.getNewCollateralViewList());
-            List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, currentUser, workCase);
+            List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, currentUser, workCase,ProposeType.P);
+//            newCreditFacility.setNewCollateralDetailList(newCollateralList);
             newCollateralDetailDAO.persist(newCollateralList);
             log.debug("saveCreditFacility ::: persist newCollateralList : {}", newCollateralList);
         }
@@ -854,6 +861,8 @@ public class CreditFacProposeControl extends BusinessControl {
             if (standardPricingResponse != null) {
                 log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult());
             }
+
+            return standardPricingResponse;
 
         }catch (Exception e) {
             log.error("Exception while get getPriceFeeInterest data!", e);

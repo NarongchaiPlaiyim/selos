@@ -48,13 +48,12 @@ public class NewGuarantorCreditTransform extends Transform {
                         newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
                     }
                 } else if ("E".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
+                    log.info(" Existing ::  proposeCreditDetailView.getSeq() ::: {}",proposeCreditDetailView.getSeq());
                     ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById((long) proposeCreditDetailView.getSeq());
-                    if (existingCreditDetail.getId() == (long) proposeCreditDetailView.getSeq()) {
-                        log.info("guarantor choose seq  is :: {}", proposeCreditDetailView.getSeq());
-                        newGuarantorCredit.setExistingCreditDetail(existingCreditDetail);
-                        log.info("newGuarantorCredit existingCreditDetail id toSet is " + newGuarantorCredit.getExistingCreditDetail().getId());
-                        newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
-                    }
+                    log.info(" existingCreditDetail id ::: {}",existingCreditDetail.getId());
+                    log.info("newGuarantorCredit existingCreditDetail id toSet is " + newGuarantorCredit.getExistingCreditDetail().getId());
+                    newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
+
                 }
 
                 newGuarantorCredit.setNewGuarantorDetail(newGuarantorDetail);

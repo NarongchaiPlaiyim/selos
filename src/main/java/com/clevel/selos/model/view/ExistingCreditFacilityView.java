@@ -23,6 +23,7 @@ public class ExistingCreditFacilityView implements Serializable {
     private BigDecimal totalBorrowerComOBOD;
     private BigDecimal totalBorrowerExposure;
     private BigDecimal totalBorrowerNumberOfExistingOD;
+    private BigDecimal totalBorrowerLimitPreScreen;
 
     private BigDecimal totalRelatedComLimit;
     private BigDecimal totalRelatedRetailLimit;
@@ -31,6 +32,7 @@ public class ExistingCreditFacilityView implements Serializable {
     private BigDecimal totalRelatedComOBOD;
     private BigDecimal totalRelatedExposure;
     private BigDecimal totalRelatedNumberOfExistingOD;
+    private BigDecimal totalRelatedLimitPreScreen;
 
     private BigDecimal totalGroupCom;
     private BigDecimal totalGroupComOBOD;
@@ -45,12 +47,15 @@ public class ExistingCreditFacilityView implements Serializable {
     private List<ExistingCreditDetailView> borrowerComExistingCredit;
     private List<ExistingCreditDetailView> borrowerRetailExistingCredit;
     private List<ExistingCreditDetailView> borrowerAppInRLOSCredit;
+    private List<ExistingCreditDetailView> borrowerExistingCreditPreScreen;
 
     private List<ExistingConditionDetailView> existingConditionDetailViewList;
 
     private List<ExistingCreditDetailView> relatedComExistingCredit;
     private List<ExistingCreditDetailView> relatedRetailExistingCredit;
     private List<ExistingCreditDetailView> relatedAppInRLOSCredit;
+    private List<ExistingCreditDetailView> relateExistingCreditPresScreen;
+
     /* Collateral list for Decision */
     private List<ExistingCollateralDetailView> borrowerCollateralList;
     private List<ExistingCollateralDetailView> relatedCollateralList;
@@ -380,6 +385,38 @@ public class ExistingCreditFacilityView implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public BigDecimal getTotalBorrowerLimitPreScreen() {
+        return totalBorrowerLimitPreScreen;
+    }
+
+    public void setTotalBorrowerLimitPreScreen(BigDecimal totalBorrowerLimitPreScreen) {
+        this.totalBorrowerLimitPreScreen = totalBorrowerLimitPreScreen;
+    }
+
+    public BigDecimal getTotalRelatedLimitPreScreen() {
+        return totalRelatedLimitPreScreen;
+    }
+
+    public void setTotalRelatedLimitPreScreen(BigDecimal totalRelatedLimitPreScreen) {
+        this.totalRelatedLimitPreScreen = totalRelatedLimitPreScreen;
+    }
+
+    public List<ExistingCreditDetailView> getBorrowerExistingCreditPreScreen() {
+        return borrowerExistingCreditPreScreen;
+    }
+
+    public void setBorrowerExistingCreditPreScreen(List<ExistingCreditDetailView> borrowerExistingCreditPreScreen) {
+        this.borrowerExistingCreditPreScreen = borrowerExistingCreditPreScreen;
+    }
+
+    public List<ExistingCreditDetailView> getRelateExistingCreditPresScreen() {
+        return relateExistingCreditPresScreen;
+    }
+
+    public void setRelateExistingCreditPresScreen(List<ExistingCreditDetailView> relateExistingCreditPresScreen) {
+        this.relateExistingCreditPresScreen = relateExistingCreditPresScreen;
     }
 
     @Override

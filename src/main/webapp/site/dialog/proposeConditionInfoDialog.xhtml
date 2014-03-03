@@ -52,7 +52,7 @@
                                 actionListener="#{creditFacPropose.onSaveConditionInfoDlg()}"
                                 process=":conditionDlgForm"
                                 update=":conditionDlgForm,:frmMain:conditionInfoDetailTable"
-                                oncomplete="handleConditionInfoRequest(xhr, status, args)"/>
+                                oncomplete="handleDialogRequest(xhr, status, args, 'conditionDlg')"/>
                         <p:spacer width="10" height="0"/>
                         <p:commandButton
                                 value="#{msg.get('app.credit.facility.propose.cancelButton')}"

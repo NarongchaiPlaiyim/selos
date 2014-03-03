@@ -78,7 +78,7 @@
                             <td class="title top"><h:outputText value="#{msg.get('app.prescreen.result.borrower')}"/></td>
                             <td>
                                 <p:dataTable id="resultBorrowerCOMFacility" var="creditItem"
-                                             value="#{prescreenResult.prescreenResultView.existingCreditFacilityView.borrowerComExistingCredit}"
+                                             value="#{prescreenResult.prescreenResultView.existingCreditFacilityView.borrowerExistingCreditPreScreen}"
                                              paginator="false" rowKey="#{creditItem.id}" rowIndexVar="rowIndex">
                                     <p:columnGroup type="header">
                                         <p:row>
@@ -146,7 +146,7 @@
                                             <p:column style="background-color:#f4f8b6; text-align: right">
                                                 <f:facet name="footer">
                                                     <h:outputText
-                                                            value="#{prescreenResult.prescreenResultView.existingCreditFacilityView.totalBorrowerComLimit}"
+                                                            value="#{prescreenResult.prescreenResultView.existingCreditFacilityView.totalBorrowerLimitPreScreen}"
                                                             style="text-align: right">
                                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </h:outputText>
@@ -251,7 +251,7 @@
                             <td class="title top"><h:outputText value="#{msg.get('app.prescreen.result.related')}"/></td>
                             <td>
                                 <p:dataTable id="resultRelatedCOMFacility" var="creditItem"
-                                             value="#{prescreenResult.prescreenResultView.existingCreditFacilityView.relatedComExistingCredit}"
+                                             value="#{prescreenResult.prescreenResultView.existingCreditFacilityView.relateExistingCreditPresScreen}"
                                              paginator="false" rowKey="#{creditItem.id}" rowIndexVar="rowIndex">
                                     <p:columnGroup type="header">
                                         <p:row>
@@ -317,7 +317,7 @@
                                             <p:column style="background-color:#f4f8b6; text-align: right">
                                                 <f:facet name="footer">
                                                     <h:outputText
-                                                            value="#{prescreenResult.prescreenResultView.existingCreditFacilityView.totalRelatedComLimit}"
+                                                            value="#{prescreenResult.prescreenResultView.existingCreditFacilityView.totalRelatedLimitPreScreen}"
                                                             style="text-align: right">
                                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </h:outputText>
