@@ -231,6 +231,63 @@ public class PrescreenBusinessControl extends BusinessControl {
         BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, prescreenResultView.getExpectedSubmitDate());
         //BankStmtSummaryView bankStmtSummaryView = new BankStmtSummaryView();
 
+        //Set Existing Credit for PreScreen
+        List<ExistingCreditDetailView> borrowerComExistingCredit = existingCreditFacilityView.getBorrowerComExistingCredit();
+        List<ExistingCreditDetailView> borrowerRetailExistingCredit = existingCreditFacilityView.getBorrowerRetailExistingCredit();
+        List<ExistingCreditDetailView> relatedComExistingCredit = existingCreditFacilityView.getRelatedComExistingCredit();
+        List<ExistingCreditDetailView> relatedRetailExistingCredit = existingCreditFacilityView.getRelatedRetailExistingCredit();
+        BigDecimal totalBorrowerComLimit = existingCreditFacilityView.getTotalBorrowerComLimit();
+        BigDecimal totalBorrowerRetailLimit = existingCreditFacilityView.getTotalBorrowerRetailLimit();
+        BigDecimal totalRelatedComLimit = existingCreditFacilityView.getTotalRelatedComLimit();
+        BigDecimal totalRelatedRetailLimit = existingCreditFacilityView.getTotalRelatedRetailLimit();
+
+        List<ExistingCreditDetailView> borrowerExistingCreditPreScreen = new ArrayList<ExistingCreditDetailView>();
+        List<ExistingCreditDetailView> relateExistingCreditPresScreen = new ArrayList<ExistingCreditDetailView>();
+        BigDecimal totalBorrowerLimitPreScreen = BigDecimal.ZERO;
+        BigDecimal totalRelatedLimitPreScreen = BigDecimal.ZERO;
+
+        if(borrowerComExistingCredit!=null && borrowerComExistingCredit.size()>0){
+            for(ExistingCreditDetailView existingCreditDetailView : borrowerComExistingCredit) {
+                borrowerExistingCreditPreScreen.add(existingCreditDetailView);
+            }
+        }
+        if(borrowerRetailExistingCredit!=null && borrowerRetailExistingCredit.size()>0){
+            for(ExistingCreditDetailView existingCreditDetailView : borrowerRetailExistingCredit) {
+                borrowerExistingCreditPreScreen.add(existingCreditDetailView);
+            }
+        }
+
+        if(relatedComExistingCredit!=null && relatedComExistingCredit.size()>0){
+            for(ExistingCreditDetailView existingCreditDetailView : relatedComExistingCredit) {
+                borrowerExistingCreditPreScreen.add(existingCreditDetailView);
+            }
+        }
+        if(relatedRetailExistingCredit!=null && relatedRetailExistingCredit.size()>0){
+            for(ExistingCreditDetailView existingCreditDetailView : relatedRetailExistingCredit) {
+                relateExistingCreditPresScreen.add(existingCreditDetailView);
+            }
+        }
+
+        //add total
+        if(totalBorrowerComLimit!=null && totalBorrowerComLimit.compareTo(BigDecimal.ZERO)>0){
+            totalBorrowerLimitPreScreen = totalBorrowerLimitPreScreen.add(totalBorrowerComLimit);
+        }
+        if(totalBorrowerRetailLimit!=null && totalBorrowerRetailLimit.compareTo(BigDecimal.ZERO)>0){
+            totalBorrowerLimitPreScreen = totalBorrowerLimitPreScreen.add(totalBorrowerRetailLimit);
+        }
+
+        if(totalRelatedComLimit!=null && totalRelatedComLimit.compareTo(BigDecimal.ZERO)>0){
+            totalRelatedLimitPreScreen = totalRelatedLimitPreScreen.add(totalRelatedComLimit);
+        }
+        if(totalRelatedRetailLimit!=null && totalRelatedRetailLimit.compareTo(BigDecimal.ZERO)>0){
+            totalRelatedRetailLimit = totalRelatedRetailLimit.add(totalRelatedRetailLimit);
+        }
+
+        existingCreditFacilityView.setBorrowerExistingCreditPreScreen(borrowerExistingCreditPreScreen);
+        existingCreditFacilityView.setRelateExistingCreditPresScreen(relateExistingCreditPresScreen);
+        existingCreditFacilityView.setTotalBorrowerLimitPreScreen(totalBorrowerLimitPreScreen);
+        existingCreditFacilityView.setTotalRelatedLimitPreScreen(totalRelatedRetailLimit);
+
         if(bankStmtSummaryView != null){
             if(Util.safetyList(bankStmtSummaryView.getActionStatusViewList()).size() >= 1){
                 ActionStatusView actionStatusView = bankStmtSummaryView.getActionStatusViewList().get(0);
@@ -250,19 +307,6 @@ public class PrescreenBusinessControl extends BusinessControl {
                 }
             }
             prescreenResultView.setGroupIncome(groupIncome);
-
-            //Calculate for Group Exposure
-            BigDecimal groupExposure = new BigDecimal(0);
-            if(existingCreditFacilityView.getTotalBorrowerComLimit() != null)
-                groupExposure = groupExposure.add(existingCreditFacilityView.getTotalBorrowerComLimit());
-            if(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit() != null)
-                groupExposure = groupExposure.add(existingCreditFacilityView.getTotalBorrowerAppInRLOSLimit());
-            if(existingCreditFacilityView.getTotalRelatedComLimit() != null)
-                groupExposure = groupExposure.add(existingCreditFacilityView.getTotalRelatedComLimit());
-            if(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit() != null)
-                groupExposure = groupExposure.add(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit());
-
-            prescreenResultView.setGroupExposure(groupExposure);
         }
 
         prescreenResultView.setExistingCreditFacilityView(existingCreditFacilityView);
@@ -287,6 +331,10 @@ public class PrescreenBusinessControl extends BusinessControl {
             groupExposure = groupExposure.add(existingCreditFacilityView.getTotalRelatedComLimit());
         if(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit() != null)
             groupExposure = groupExposure.add(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit());
+        if(existingCreditFacilityView.getTotalBorrowerRetailLimit() != null)
+            groupExposure = groupExposure.add(existingCreditFacilityView.getTotalBorrowerRetailLimit());
+        if(existingCreditFacilityView.getTotalRelatedRetailLimit() != null)
+            groupExposure = groupExposure.add(existingCreditFacilityView.getTotalRelatedRetailLimit());
 
         prescreenResultView.setGroupExposure(groupExposure);
 
