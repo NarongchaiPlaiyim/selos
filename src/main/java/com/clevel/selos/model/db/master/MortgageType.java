@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.master;
 
+import com.clevel.selos.model.MortgageCategory;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -21,8 +22,8 @@ public class MortgageType implements Serializable {
     @Column(name = "mortgage_type", length = 255)
     private String mortgage;
 
-    @Column(name = "redeem", columnDefinition = "int default 0", length = 1)
-    private boolean redeem;
+    @Column(name = "mortgage_category", columnDefinition = "int default 0", length = 1)
+    private MortgageCategory mortgageCategory;
 
     @Column(name = "mortgage_fee_flag", columnDefinition = "int default 0", length = 1)
     private boolean mortgageFeeFlag;
@@ -64,12 +65,12 @@ public class MortgageType implements Serializable {
         this.mortgage = mortgage;
     }
 
-    public boolean isRedeem() {
-        return redeem;
+    public MortgageCategory getMortgageCategory() {
+        return mortgageCategory;
     }
 
-    public void setRedeem(boolean redeem) {
-        this.redeem = redeem;
+    public void setMortgageCategory(MortgageCategory mortgageCategory) {
+        this.mortgageCategory = mortgageCategory;
     }
 
     public boolean isMortgageFeeFlag() {
@@ -133,7 +134,7 @@ public class MortgageType implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("mortgage", mortgage)
-                .append("redeem", redeem)
+                .append("mortgageCategory", mortgageCategory)
                 .append("mortgageFeeFlag", mortgageFeeFlag)
                 .append("active", active)
                 .append("mortgageFlag", mortgageFlag)

@@ -173,9 +173,6 @@ public class Customer implements Serializable {
     @Column(name="juristic_id")
     private long juristicId;
 
-    @Column(name="age_months", nullable=false, columnDefinition="int default 0")
-    private int ageMonths;
-
     @OneToOne
     @JoinColumn (name = "customer_obl_info_id")
     CustomerOblInfo customerOblInfo;
@@ -568,14 +565,6 @@ public class Customer implements Serializable {
 
     public void setTitle(Title title) {
         this.title = title;
-    }
-
-    public int getAgeMonths() {
-        return ageMonths;
-    }
-
-    public void setAgeMonths(int ageMonths) {
-        this.ageMonths = ageMonths;
     }
 
     public CustomerOblInfo getCustomerOblInfo() {

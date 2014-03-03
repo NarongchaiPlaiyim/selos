@@ -25,7 +25,7 @@ public class BRMSApplicationInfo implements Serializable{
     private boolean applyBA;
     private boolean topupBA;
     private boolean requestTCG;
-    private boolean requestAppraisal;
+    private boolean passAppraisalProcess;
     private boolean brmsRequestStep;
     private BigDecimal numberOfYearFinancialStmt;
     private BigDecimal shareHolderRatio;
@@ -44,6 +44,7 @@ public class BRMSApplicationInfo implements Serializable{
     private BigDecimal totalNumberProposeCredit;
     private BigDecimal totalNumberContingenPropose;
     private BigDecimal totalNumberOfExistingOD;
+    private BigDecimal totalNumberOfRequestedOD;
     private BigDecimal totalNumberOfCoreAsset;
     private BigDecimal totalNumberOfNonCoreAsset;
     private BigDecimal netFixAsset;
@@ -58,11 +59,12 @@ public class BRMSApplicationInfo implements Serializable{
     private String bizLocation;
     private BigDecimal yearInBusinessMonth;
     private String countryOfRegistration;
+    private BigDecimal tradeChequeReturnPercent;
     private String productGroup;
     private BigDecimal maximumSMELimit;
     private BigDecimal totalApprovedCredit;
     private String loanRequestType;
-    private String establishFrom;
+    private String referredDocType;
     private BigDecimal totalTCGGuaranteeAmount;
     private BigDecimal numberOfIndvGuarantor;
     private BigDecimal numberOfJurisGuarantor;
@@ -195,12 +197,12 @@ public class BRMSApplicationInfo implements Serializable{
         this.requestTCG = requestTCG;
     }
 
-    public boolean isRequestAppraisal() {
-        return requestAppraisal;
+    public boolean isPassAppraisalProcess() {
+        return passAppraisalProcess;
     }
 
-    public void setRequestAppraisal(boolean requestAppraisal) {
-        this.requestAppraisal = requestAppraisal;
+    public void setPassAppraisalProcess(boolean passAppraisalProcess) {
+        this.passAppraisalProcess = passAppraisalProcess;
     }
 
     public boolean isBrmsRequestStep() {
@@ -347,6 +349,14 @@ public class BRMSApplicationInfo implements Serializable{
         this.totalNumberOfExistingOD = totalNumberOfExistingOD;
     }
 
+    public BigDecimal getTotalNumberOfRequestedOD() {
+        return totalNumberOfRequestedOD;
+    }
+
+    public void setTotalNumberOfRequestedOD(BigDecimal totalNumberOfRequestedOD) {
+        this.totalNumberOfRequestedOD = totalNumberOfRequestedOD;
+    }
+
     public BigDecimal getTotalNumberOfCoreAsset() {
         return totalNumberOfCoreAsset;
     }
@@ -459,6 +469,14 @@ public class BRMSApplicationInfo implements Serializable{
         this.countryOfRegistration = countryOfRegistration;
     }
 
+    public BigDecimal getTradeChequeReturnPercent() {
+        return tradeChequeReturnPercent;
+    }
+
+    public void setTradeChequeReturnPercent(BigDecimal tradeChequeReturnPercent) {
+        this.tradeChequeReturnPercent = tradeChequeReturnPercent;
+    }
+
     public String getProductGroup() {
         return productGroup;
     }
@@ -491,12 +509,12 @@ public class BRMSApplicationInfo implements Serializable{
         this.loanRequestType = loanRequestType;
     }
 
-    public String getEstablishFrom() {
-        return establishFrom;
+    public String getReferredDocType() {
+        return referredDocType;
     }
 
-    public void setEstablishFrom(String establishFrom) {
-        this.establishFrom = establishFrom;
+    public void setReferredDocType(String referredDocType) {
+        this.referredDocType = referredDocType;
     }
 
     public BigDecimal getTotalTCGGuaranteeAmount() {
@@ -583,6 +601,7 @@ public class BRMSApplicationInfo implements Serializable{
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("statusCode", statusCode)
+                .append("stepCode", stepCode)
                 .append("applicationNo", applicationNo)
                 .append("processDate", processDate)
                 .append("bdmSubmitDate", bdmSubmitDate)
@@ -596,7 +615,7 @@ public class BRMSApplicationInfo implements Serializable{
                 .append("applyBA", applyBA)
                 .append("topupBA", topupBA)
                 .append("requestTCG", requestTCG)
-                .append("requestAppraisal", requestAppraisal)
+                .append("passAppraisalProcess", passAppraisalProcess)
                 .append("brmsRequestStep", brmsRequestStep)
                 .append("numberOfYearFinancialStmt", numberOfYearFinancialStmt)
                 .append("shareHolderRatio", shareHolderRatio)
@@ -615,6 +634,7 @@ public class BRMSApplicationInfo implements Serializable{
                 .append("totalNumberProposeCredit", totalNumberProposeCredit)
                 .append("totalNumberContingenPropose", totalNumberContingenPropose)
                 .append("totalNumberOfExistingOD", totalNumberOfExistingOD)
+                .append("totalNumberOfRequestedOD", totalNumberOfRequestedOD)
                 .append("totalNumberOfCoreAsset", totalNumberOfCoreAsset)
                 .append("totalNumberOfNonCoreAsset", totalNumberOfNonCoreAsset)
                 .append("netFixAsset", netFixAsset)
@@ -628,11 +648,13 @@ public class BRMSApplicationInfo implements Serializable{
                 .append("totalLoanWCTMB", totalLoanWCTMB)
                 .append("bizLocation", bizLocation)
                 .append("yearInBusinessMonth", yearInBusinessMonth)
+                .append("countryOfRegistration", countryOfRegistration)
+                .append("tradeChequeReturnPercent", tradeChequeReturnPercent)
                 .append("productGroup", productGroup)
                 .append("maximumSMELimit", maximumSMELimit)
                 .append("totalApprovedCredit", totalApprovedCredit)
                 .append("loanRequestType", loanRequestType)
-                .append("establishFrom", establishFrom)
+                .append("referredDocType", referredDocType)
                 .append("totalTCGGuaranteeAmount", totalTCGGuaranteeAmount)
                 .append("numberOfIndvGuarantor", numberOfIndvGuarantor)
                 .append("numberOfJurisGuarantor", numberOfJurisGuarantor)

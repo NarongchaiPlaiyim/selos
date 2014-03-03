@@ -23,6 +23,8 @@ public class Relation implements Serializable {
     private int priority;
     @Column(name = "active")
     private int active;
+    @Column(name = "brms_code", length = 2)
+    private String brmsCode;
     @Column(name="canbe_poa",columnDefinition="int default 0")
     private boolean canBePOA;
    
@@ -68,6 +70,13 @@ public class Relation implements Serializable {
 		this.canBePOA = canBePOA;
 	}
 
+    public String getBrmsCode() {
+        return brmsCode;
+    }
+
+    public void setBrmsCode(String brmsCode) {
+        this.brmsCode = brmsCode;
+    }
 
     @Override
     public String toString() {

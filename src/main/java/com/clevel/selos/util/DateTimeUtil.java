@@ -156,6 +156,10 @@ public class DateTimeUtil implements Serializable {
         return Months.monthsBetween(new DateTime(date1).withDayOfMonth(1), new DateTime(date2).withDayOfMonth(1)).getMonths();
     }
 
+    public static int monthBetween2Dates(Date date1, Date date2){
+        return Months.monthsBetween(new DateTime(date1), new DateTime(date2)).getMonths();
+    }
+
     public static int checkDateDelete(Date startDate,Date endDate){
         if(daysBetween2Dates(new Date(), startDate) <= 0
                 && daysBetween2Dates(new Date(), endDate) > 0 ){

@@ -841,6 +841,7 @@ public class BankStmtControl extends BusinessControl {
                 }
 
                 sumNetUWofLastSixM = sumNetUWofLastSixM.add(detailView.getCreditAmountUW());
+
             }
 
             sumNetBDMofLastSixM = null;
@@ -863,6 +864,7 @@ public class BankStmtControl extends BusinessControl {
                 }
 
                 sumNetBDMofLastSixM = Util.add(sumNetBDMofLastSixM, detailView.getCreditAmountBDM());
+
             }
 
             sumNetUWofLastSixM = null;
@@ -926,6 +928,7 @@ public class BankStmtControl extends BusinessControl {
             grdTotalTrdChqRetAmount = Util.add(grdTotalTrdChqRetAmount, tmbBankStmtView.getTrdChequeReturnAmount());
             grdTotalTrdChqRetPercent = Util.add(grdTotalTrdChqRetPercent, tmbBankStmtView.getTrdChequeReturnPercent());
             grdTotalAvgOSBalance = Util.add(grdTotalAvgOSBalance, tmbBankStmtView.getAvgOSBalanceAmount());
+
 
             if (tmbBankStmtView.getAvgIncomeNetUW() != null) {
                 useNetUWToCal = true;

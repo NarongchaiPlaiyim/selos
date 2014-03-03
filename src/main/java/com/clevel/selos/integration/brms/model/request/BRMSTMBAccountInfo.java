@@ -13,8 +13,8 @@ public class BRMSTMBAccountInfo implements Serializable{
     private String accountRef;
     private String custToAccountRelationCD;
     private boolean tmbTDRFlag;
-    private BigDecimal delPrinIntMonth;
-    private BigDecimal tmbMonthClass;
+    private BigDecimal numMonthIntPastDue;
+    private BigDecimal numMonthIntPastDueTDRAcc;
     private BigDecimal tmbDelPriDay;
     private BigDecimal tmbDelIntDay;
     private String tmbBlockCode;
@@ -59,20 +59,20 @@ public class BRMSTMBAccountInfo implements Serializable{
         this.tmbTDRFlag = tmbTDRFlag;
     }
 
-    public BigDecimal getDelPrinIntMonth() {
-        return delPrinIntMonth;
+    public BigDecimal getNumMonthIntPastDue() {
+        return numMonthIntPastDue;
     }
 
-    public void setDelPrinIntMonth(BigDecimal delPrinIntMonth) {
-        this.delPrinIntMonth = delPrinIntMonth;
+    public void setNumMonthIntPastDue(BigDecimal numMonthIntPastDue) {
+        this.numMonthIntPastDue = numMonthIntPastDue;
     }
 
-    public BigDecimal getTmbMonthClass() {
-        return tmbMonthClass;
+    public BigDecimal getNumMonthIntPastDueTDRAcc() {
+        return numMonthIntPastDueTDRAcc;
     }
 
-    public void setTmbMonthClass(BigDecimal tmbMonthClass) {
-        this.tmbMonthClass = tmbMonthClass;
+    public void setNumMonthIntPastDueTDRAcc(BigDecimal numMonthIntPastDueTDRAcc) {
+        this.numMonthIntPastDueTDRAcc = numMonthIntPastDueTDRAcc;
     }
 
     public BigDecimal getTmbDelPriDay() {
@@ -107,8 +107,8 @@ public class BRMSTMBAccountInfo implements Serializable{
                 .append("accountRef", accountRef)
                 .append("custToAccountRelationCD", custToAccountRelationCD)
                 .append("tmbTDRFlag", tmbTDRFlag)
-                .append("delPrinIntMonth", delPrinIntMonth)
-                .append("tmbMonthClass", tmbMonthClass)
+                .append("numMonthIntPastDue", numMonthIntPastDue)
+                .append("numMonthIntPastDueTDRAcc", numMonthIntPastDueTDRAcc)
                 .append("tmbDelPriDay", tmbDelPriDay)
                 .append("tmbDelIntDay", tmbDelIntDay)
                 .append("tmbBlockCode", tmbBlockCode)

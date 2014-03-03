@@ -147,8 +147,8 @@ public class WelcomePage implements Serializable {
 
     public void testBRMS() {
         try {
-            List<PreScreenResponse> preScreenResponseList = brms.checkPreScreenRule(new BRMSApplicationInfo());
-            log.debug("{}", preScreenResponseList);
+            //List<PreScreenResponse> preScreenResponseList = brms.checkPreScreenRule(new BRMSApplicationInfo());
+            //log.debug("{}", preScreenResponseList);
         } catch (Exception e) {
             log.error("", e);
         }
