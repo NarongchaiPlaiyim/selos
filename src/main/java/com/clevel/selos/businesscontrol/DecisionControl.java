@@ -81,19 +81,25 @@ public class DecisionControl extends BusinessControl {
 
             // Approve Credit Info.
             if (decisionView.getApproveCreditList() != null && decisionView.getApproveCreditList().size() > 0) {
+                log.debug("Before persist - ApproveCreditViews: {}", decisionView.getApproveCreditList());
                 List<NewCreditDetail> returnCreditList = newCreditDetailDAO.persistAndReturn(newCreditDetailTransform.transformToModel(decisionView.getApproveCreditList(), newCreditFacility, user, workCase));
+                log.debug("After persist - ApproveCredits: {}", returnCreditList);
                 decisionView.setApproveCreditList(newCreditDetailTransform.transformToView(returnCreditList));
             }
 
             // Approve Collateral
             if (decisionView.getApproveCollateralList() != null && decisionView.getApproveCollateralList().size() > 0) {
+                log.debug("Before persist - ApproveCollateralViews: {}", decisionView.getApproveCollateralList());
                 List<NewCollateral> returnCollateralList = newCollateralDAO.persistAndReturn(newCollateralTransform.transformsCollateralToModel(decisionView.getApproveCollateralList(), newCreditFacility, user, workCase));
+                log.debug("After persist - ApproveCollaterals: {}", returnCollateralList);
                 decisionView.setApproveCollateralList(newCollateralTransform.transformsCollateralToView(returnCollateralList));
             }
 
             // Approve Guarantor
             if (decisionView.getApproveGuarantorList() != null && decisionView.getApproveGuarantorList().size() > 0) {
+                log.debug("Before persist - ApproveGuarantorViews: {}", decisionView.getApproveGuarantorList());
                 List<NewGuarantorDetail> returnGuarantorList = newGuarantorDetailDAO.persistAndReturn(newGuarantorDetailTransform.transformToModel(decisionView.getApproveGuarantorList(), newCreditFacility, user));
+                log.debug("After persist - ApproveGuarantors: {}", returnGuarantorList);
                 decisionView.setApproveGuarantorList(newGuarantorDetailTransform.transformToView(returnGuarantorList));
             }
 
