@@ -135,6 +135,8 @@ public class BasicInfo implements Serializable {
     @Column(name = "referral_id")
     private String referralID;
 
+    @Column(name = "bdm_submit_date")
+    private Date bdmSubmitDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -442,6 +444,14 @@ public class BasicInfo implements Serializable {
 
     public void setReferralID(String referralID) {
         this.referralID = referralID;
+    }
+
+    public Date getBdmSubmitDate() {
+        return bdmSubmitDate;
+    }
+
+    public void setBdmSubmitDate(Date bdmSubmitDate) {
+        this.bdmSubmitDate = bdmSubmitDate;
     }
 
     public Date getCreateDate() {

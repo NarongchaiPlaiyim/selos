@@ -123,7 +123,6 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     //for new field
     //age , customer entity
-    private int ageMonths;
     private long customerOblInfoID;
     private int existingSMECustomer;
     private Date lastReviewDate;
@@ -132,7 +131,6 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private Date nextReviewDate;
     private int nextReviewDateFlag;
     private Date lastContractDate;
-    private Date numberOfMonthsLastContractDate;
     private String adjustClass;
     private SBFScoreView ratingFinal;
     private BigDecimal unpaidFeeInsurance;
@@ -890,14 +888,6 @@ public class CustomerInfoView implements Serializable, Cloneable {
 //        this.percentShareSummary = percentShareSummary;
 //    }
 
-    public int getAgeMonths() {
-        return ageMonths;
-    }
-
-    public void setAgeMonths(int ageMonths) {
-        this.ageMonths = ageMonths;
-    }
-
     public int getExistingSMECustomer() {
         return existingSMECustomer;
     }
@@ -968,14 +958,6 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setLastContractDate(Date lastContractDate) {
         this.lastContractDate = lastContractDate;
-    }
-
-    public Date getNumberOfMonthsLastContractDate() {
-        return numberOfMonthsLastContractDate;
-    }
-
-    public void setNumberOfMonthsLastContractDate(Date numberOfMonthsLastContractDate) {
-        this.numberOfMonthsLastContractDate = numberOfMonthsLastContractDate;
     }
 
     public String getAdjustClass() {

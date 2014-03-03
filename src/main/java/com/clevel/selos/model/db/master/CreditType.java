@@ -29,6 +29,8 @@ public class CreditType implements Serializable {
     private int calLimitType;
     @Column(name = "credit_group",columnDefinition="int default 10")
     private int creditGroup;
+    @Column(name = "contingent_flag", columnDefinition = "int default 1")
+    private boolean contingentFlag;
     @Column(name = "active")
     private int active;
 
@@ -97,6 +99,14 @@ public class CreditType implements Serializable {
 
     public void setCreditGroup(int creditGroup) {
         this.creditGroup = creditGroup;
+    }
+
+    public boolean isContingentFlag() {
+        return contingentFlag;
+    }
+
+    public void setContingentFlag(boolean contingentFlag) {
+        this.contingentFlag = contingentFlag;
     }
 
     public int getActive() {

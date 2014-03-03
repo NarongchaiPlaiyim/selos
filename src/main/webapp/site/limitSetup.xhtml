@@ -53,6 +53,8 @@
                    		<p:spacer height="18"/>
                         <!-- start content -->
                         <p:dataTable styleClass="content_table_form full_table" 
+                        	value="#{limitSetup.limitSetupView.newCreditDetailViewList}"
+                        	var="item"
                         	style="width:90%;margin:0 auto" 
                         	rowIndexVar="rowIdx" 
                         	>
@@ -63,7 +65,7 @@
                         	<p:column style="width:150px" styleClass="center"
 								headerText="#{msg.get('app.limitSetup.table.setupcomplete')}"
                         		>
-                        		<p:selectOneRadio>
+                        		<p:selectOneRadio value="#{item.isSetupCompleted}">
                                      <f:selectItem
                                      	itemLabel="#{msg.get('app.button.yes')}" 
                                      	itemValue="2"/>
@@ -75,47 +77,53 @@
                         	<p:column style="width:70px" styleClass="center"
 								headerText="#{msg.get('app.limitSetup.table.type')}"
                         		>
+                        		<h:outputText value="#{item.requestType}" />
                         	</p:column>
                         	<p:column style="width:150px" 
 								headerText="#{msg.get('app.limitSetup.table.productProgram')}"
                         		>
+                        		<h:outputText value="#{item.productProgramView.name}" />
                         	</p:column>
                         	<p:column style="width:150px"
 								headerText="#{msg.get('app.limitSetup.table.creditType')}"
                         		>
+                        		<h:outputText value="#{item.creditTypeView.name}" />
                         	</p:column>
                         	
                         	<p:column style="width:100px" styleClass="center"
 								headerText="#{msg.get('app.limitSetup.table.productCode')}"
                         		>
-                        		
+                        		<h:outputText value="#{item.productCode}" />
                         	</p:column>
                         	<p:column style="width:100px" styleClass="center"
 								headerText="#{msg.get('app.limitSetup.table.projectCode')}"
                         		>
-                        		
+                        		<h:outputText value="#{item.projectCode}" />
                         	</p:column>
                         	<p:column style="width:100px" styleClass="right"
                         		headerText="#{msg.get('app.limitSetup.table.limit')}"
                         		>
-                        		<h:outputText value="0">
+                        		<h:outputText value="#{item.limit}">
                         			<f:convertNumber pattern="#,##0.00"/>
                         		</h:outputText>
                         	</p:column>
                         	<p:column style="width:100px" styleClass="right"
                         		headerText="#{msg.get('app.limitSetup.table.installment')}"
                         		>
-                        		<h:outputText value="0">
+                        		<h:outputText value="#{item.installment}">
                         			<f:convertNumber pattern="#,##0.00"/>
                         		</h:outputText>
                         	</p:column>
                         	<p:column style="width:80px" styleClass="right"
                         		headerText="#{msg.get('app.limitSetup.table.tenor')}"
                         		>
-                        		<h:outputText value="0">
+                        		<h:outputText value="#{item.tenor}">
                         			<f:convertNumber pattern="0"/>
                         		</h:outputText>
                         	</p:column>
+                        	
+                        	
+                        	
                         </p:dataTable>
                         <p:spacer height="18"/>
                         <p:separator/>

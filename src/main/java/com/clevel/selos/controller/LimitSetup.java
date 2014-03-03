@@ -15,8 +15,10 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
+import com.clevel.selos.businesscontrol.LimitSetupControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.view.LimitSetupView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
@@ -30,11 +32,17 @@ public class LimitSetup implements Serializable {
 	@Inject @SELOS
 	private Logger log;
 	
+	@Inject
+	LimitSetupControl limitSetupControl;
+	
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
+	private LimitSetupView limitSetupView;
 	private User user;
+	
+	
 	
 	public LimitSetup() {
 		
@@ -61,6 +69,7 @@ public class LimitSetup implements Serializable {
 			user = (User) session.getAttribute("user");
 		}
 		_loadInitData();
+		this.setLimitSetupView(limitSetupControl.getLimitSetupView(workCaseId));
 	}
 	
 	public void preRender() {
@@ -91,7 +100,7 @@ public class LimitSetup implements Serializable {
 	}
 	
 	public void onSaveLimitSetup() {
-		
+		this.limitSetupControl.saveLimitSetup(limitSetupView);
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
 	/*
@@ -100,5 +109,11 @@ public class LimitSetup implements Serializable {
 	private void _loadInitData() {
 		preRenderCheck = false;
 		
+	}
+	public LimitSetupView getLimitSetupView() {
+		return limitSetupView;
+	}
+	public void setLimitSetupView(LimitSetupView limitSetupView) {
+		this.limitSetupView = limitSetupView;
 	}
 }

@@ -181,95 +181,76 @@
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.avgLimit}"
-                                                                      rendered="#{not empty item.avgLimit}">
+                                                        <h:outputText value="#{item.avgLimit}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.avgIncomeGross}"
-                                                                      style="color:#{not empty item.colorIncomeGross ? item.colorIncomeGross : ''}"
-                                                                      rendered="#{not empty item.avgIncomeGross}">
+                                                        <h:outputText value="#{item.avgIncomeGross}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.avgIncomeNetBDM}"
-                                                                      rendered="#{not empty item.avgIncomeNetBDM}">
+                                                        <h:outputText value="#{item.avgIncomeNetBDM}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.avgIncomeNetUW}"
-                                                                      rendered="#{not empty item.avgIncomeNetUW}">
+                                                        <h:outputText value="#{item.avgIncomeNetUW}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.avgUtilizationPercent}"
-                                                                      style="color:#{not empty item.colorUtilPercent ? item.colorUtilPercent : ''}"
-                                                                      rendered="#{not empty item.avgUtilizationPercent}">
+                                                        <h:outputText value="#{item.avgUtilizationPercent}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                         <h:outputText value="%"/>
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.avgSwingPercent}"
-                                                                      style="color:#{not empty item.colorSwingPercent ? item.colorSwingPercent : ''}"
-                                                                      rendered="#{not empty item.avgSwingPercent}">
+                                                        <h:outputText value="#{item.avgSwingPercent}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                         <h:outputText value="%"/>
                                                     </td>
 
                                                     <td class="center top">
-                                                        <h:outputText value="#{item.overLimitTimes}"
-                                                                      style="color:#{not empty item.colorOvrLimitTime ? item.colorOvrLimitTime : ''}"
-                                                                      rendered="#{not empty item.overLimitTimes}">
+                                                        <h:outputText value="#{item.overLimitTimes}">
                                                             <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
 
                                                     <td class="center top">
-                                                        <h:outputText value="#{item.overLimitDays}"
-                                                                      style="color:#{not empty item.colorOvrLimitDays ? item.colorOvrLimitDays : ''}"
-                                                                      rendered="#{not empty item.overLimitDays}">
+                                                        <h:outputText value="#{item.overLimitDays}">
                                                             <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
 
                                                     <td class="center top">
-                                                        <h:outputText value="#{item.chequeReturn}"
-                                                                      style="color:#{not empty item.colorChequeReturn ? item.colorChequeReturn : ''}"
-                                                                      rendered="#{not empty item.chequeReturn}">
+                                                        <h:outputText value="#{item.chequeReturn}">
                                                             <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.avgGrossInflowPerLimit}"
-                                                                      rendered="#{not empty item.avgGrossInflowPerLimit}">
+                                                        <h:outputText value="#{item.avgGrossInflowPerLimit}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                         <h:outputText value="%"/>
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.trdChequeReturnAmount}"
-                                                                      rendered="#{not empty item.trdChequeReturnAmount}">
+                                                        <h:outputText value="#{item.trdChequeReturnAmount}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.trdChequeReturnPercent}"
-                                                                      style="color:#{not empty item.colorTrdChqRetPercent ? item.colorTrdChqRetPercent : ''}"
-                                                                      rendered="#{not empty item.trdChequeReturnPercent}">
+                                                        <h:outputText value="#{item.trdChequeReturnPercent}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                         <h:outputText value="%"/>
@@ -393,95 +374,76 @@
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.avgLimit}"
-                                                                      rendered="#{not empty item.avgLimit}">
+                                                        <h:outputText value="#{item.avgLimit}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.avgIncomeGross}"
-                                                                      style="color:#{not empty item.colorIncomeGross ? item.colorIncomeGross : ''}"
-                                                                      rendered="#{not empty item.avgIncomeGross}">
+                                                        <h:outputText value="#{item.avgIncomeGross}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.avgIncomeNetBDM}"
-                                                                      rendered="#{not empty item.avgIncomeNetBDM}">
+                                                        <h:outputText value="#{item.avgIncomeNetBDM}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.avgIncomeNetUW}"
-                                                                      rendered="#{not empty item.avgIncomeNetUW}">
+                                                        <h:outputText value="#{item.avgIncomeNetUW}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.avgUtilizationPercent}"
-                                                                      style="color:#{not empty item.colorUtilPercent ? item.colorUtilPercent : ''}"
-                                                                      rendered="#{not empty item.avgUtilizationPercent}">
+                                                        <h:outputText value="#{item.avgUtilizationPercent}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                         <h:outputText value="%"/>
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.avgSwingPercent}"
-                                                                      style="color:#{not empty item.colorSwingPercent ? item.colorSwingPercent : ''}"
-                                                                      rendered="#{not empty item.avgSwingPercent}">
+                                                        <h:outputText value="#{item.avgSwingPercent}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                         <h:outputText value="%"/>
                                                     </td>
 
                                                     <td class="center top">
-                                                        <h:outputText value="#{item.overLimitTimes}"
-                                                                      style="color:#{not empty item.colorOvrLimitTime ? item.colorOvrLimitTime : ''}"
-                                                                      rendered="#{not empty item.overLimitTimes}">
+                                                        <h:outputText value="#{item.overLimitTimes}">
                                                             <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
 
                                                     <td class="center top">
-                                                        <h:outputText value="#{item.overLimitDays}"
-                                                                      style="color:#{not empty item.colorOvrLimitDays ? item.colorOvrLimitDays : ''}"
-                                                                      rendered="#{not empty item.overLimitDays}">
+                                                        <h:outputText value="#{item.overLimitDays}">
                                                             <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
 
                                                     <td class="center top">
-                                                        <h:outputText value="#{item.chequeReturn}"
-                                                                      style="color:#{not empty item.colorChequeReturn ? item.colorChequeReturn : ''}"
-                                                                      rendered="#{not empty item.chequeReturn}">
+                                                        <h:outputText value="#{item.chequeReturn}">
                                                             <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.avgGrossInflowPerLimit}"
-                                                                      rendered="#{not empty item.avgGrossInflowPerLimit}">
+                                                        <h:outputText value="#{item.avgGrossInflowPerLimit}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                         <h:outputText value="%"/>
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.trdChequeReturnAmount}"
-                                                                      rendered="#{not empty item.trdChequeReturnAmount}">
+                                                        <h:outputText value="#{item.trdChequeReturnAmount}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
 
                                                     <td class="right top">
-                                                        <h:outputText value="#{item.trdChequeReturnPercent}"
-                                                                      style="color:#{not empty item.colorTrdChqRetPercent ? item.colorTrdChqRetPercent : ''}"
-                                                                      rendered="#{not empty item.trdChequeReturnPercent}">
+                                                        <h:outputText value="#{item.trdChequeReturnPercent}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                         <h:outputText value="%"/>
@@ -729,8 +691,7 @@
 
                                             <p:column style="background-color:#f4f8b6; text-align: right;">
                                                 <f:facet name="footer">
-                                                    <h:outputText value="#{bankStatementSummary.summaryView.grdTotalAvgOSBalanceAmount}"
-                                                                  rendered="#{not empty bankStatementSummary.summaryView and not empty bankStatementSummary.summaryView.grdTotalAvgOSBalanceAmount}">
+                                                    <h:outputText value="#{bankStatementSummary.summaryView.grdTotalAvgOSBalanceAmount}">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
@@ -745,12 +706,9 @@
                         <tr>
                             <td colspan="2" style="height:28px;">
                                 <!-- Hidden -->
-                                <h:inputHidden value="#{bankStatementSummary.summaryView.grdTotalBorrowerIncomeGross}"
-                                               rendered="#{not empty bankStatementSummary.summaryView and not empty bankStatementSummary.summaryView.grdTotalBorrowerIncomeGross}"/>
-                                <h:inputHidden value="#{bankStatementSummary.summaryView.grdTotalBorrowerIncomeNetBDM}"
-                                               rendered="#{not empty bankStatementSummary.summaryView and not empty bankStatementSummary.summaryView.grdTotalBorrowerIncomeNetBDM}"/>
-                                <h:inputHidden value="#{bankStatementSummary.summaryView.grdTotalBorrowerIncomeNetUW}"
-                                               rendered="#{not empty bankStatementSummary.summaryView and not empty bankStatementSummary.summaryView.grdTotalBorrowerIncomeNetUW}"/>
+                                <h:inputHidden value="#{bankStatementSummary.summaryView.grdTotalBorrowerIncomeGross}"/>
+                                <h:inputHidden value="#{bankStatementSummary.summaryView.grdTotalBorrowerIncomeNetBDM}"/>
+                                <h:inputHidden value="#{bankStatementSummary.summaryView.grdTotalBorrowerIncomeNetUW}"/>
                             </td>
                         </tr>
 
