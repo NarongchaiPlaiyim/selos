@@ -20,7 +20,7 @@
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{creditFacPropose.guarantorList}"
                                        var="guarantor"
-                                       itemLabel="#{guarantor.firstNameTh} #{guarantor.lastNameTh}"
+                                       itemLabel="#{guarantor.titleTh.titleTh} #{guarantor.firstNameTh} #{guarantor.lastNameTh}"
                                        itemValue="#{guarantor.id}"/>
                         <p:ajax event="change"
                                 process="@this"

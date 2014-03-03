@@ -101,7 +101,7 @@
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{creditFacPropose.collateralOwnerUwAllList}"
                                        var="collateralOwnerUWItem"
-                                       itemLabel="#{collateralOwnerUWItem.firstNameTh} #{collateralOwnerUWItem.lastNameTh}"
+                                       itemLabel="#{collateralOwnerUWItem.titleTh.titleTh} #{collateralOwnerUWItem.firstNameTh} #{collateralOwnerUWItem.lastNameTh}"
                                        itemValue="#{collateralOwnerUWItem.id}"/>
                         <p:ajax event="change"
                                 process="@this"
@@ -148,7 +148,7 @@
             </p:column>
 
             <p:column styleClass="left">
-                <h:outputText value="#{collateralOwnerUWItem.firstNameTh} #{collateralOwnerUWItem.lastNameTh}"/>
+                <h:outputText value="#{collateralOwnerUWItem.titleTh.titleTh} #{collateralOwnerUWItem.firstNameTh} #{collateralOwnerUWItem.lastNameTh}"/>
             </p:column>
 
             <p:column styleClass="center">

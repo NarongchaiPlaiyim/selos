@@ -1503,7 +1503,7 @@
                                  and fn:length(newCollateralSubView.collateralOwnerUWList) gt 0}" styleClass="panel">
                                 <ui:repeat value="#{newCollateralSubView.collateralOwnerUWList}"
                                            var="collateralOwnerUW" varStatus="a">
-                                    #{collateralOwnerUW.firstNameTh} #{collateralOwnerUW.lastNameTh}#{!a.last ? ', ' : ''}
+                                    #{collateralOwnerUW.titleTh.titleTh} #{collateralOwnerUW.firstNameTh} #{collateralOwnerUW.lastNameTh}#{!a.last ? ', ' : ''}
                                 </ui:repeat>
                         </p:panel>
                     </p:column>
@@ -1632,7 +1632,7 @@
 
             <p:column styleClass="top left">
                 <h:outputText
-                        value="#{newGuarantorDetailView.guarantorName.firstNameTh} #{newGuarantorDetailView.guarantorName.lastNameTh}"
+                        value="#{newGuarantorDetailView.guarantorName.titleTh.titleTh} #{newGuarantorDetailView.guarantorName.firstNameTh} #{newGuarantorDetailView.guarantorName.lastNameTh}"
                         rendered="#{not empty newGuarantorDetailView.guarantorName}"/>
             </p:column>
 

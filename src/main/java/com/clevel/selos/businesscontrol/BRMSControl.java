@@ -7,12 +7,9 @@ import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.model.*;
-import com.clevel.selos.model.db.master.BusinessDescription;
-import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.transform.BRMSTransform;
 import com.clevel.selos.util.DateTimeUtil;
-import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -80,11 +77,8 @@ public class BRMSControl extends BusinessControl {
     @Inject
     BRMSTransform brmsTransform;
 
-
     @Inject
-    public BRMSControl(){
-
-    }
+    public BRMSControl(){}
 
     public StandardPricingResponse getPriceFeeInterest(long workCaseId){
         BRMSApplicationInfo applicationInfo = getApplicationInfoForPricing(workCaseId);
