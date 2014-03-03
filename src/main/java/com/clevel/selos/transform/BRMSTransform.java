@@ -13,20 +13,14 @@ import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.util.DateTimeUtil;
-import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class BRMSTransform extends Transform{
-
-    @Inject
-    private Logger logger;
-
     @Inject
     private CustomerDAO customerDAO;
 
@@ -41,7 +35,7 @@ public class BRMSTransform extends Transform{
     }
 
     public BRMSAccountStmtInfo getBRMSAccountStmtInfo(BankStatement bankStatement){
-        logger.debug("transform BankStatement {}", bankStatement);
+        log.debug("transform BankStatement {}", bankStatement);
         BRMSAccountStmtInfo accountStmtInfo = new BRMSAccountStmtInfo();
         accountStmtInfo.setAvgUtilizationPercent(bankStatement.getAvgUtilizationPercent());
         accountStmtInfo.setAvgSwingPercent(bankStatement.getAvgSwingPercent());
@@ -51,7 +45,7 @@ public class BRMSTransform extends Transform{
         accountStmtInfo.setHighestInflow(toBoolean(bankStatement.getHighestInflow()));
         accountStmtInfo.setTmb(toBoolean(bankStatement.getTMB()));
         accountStmtInfo.setNotCountIncome(isActive(bankStatement.getNotCountIncome()));
-        logger.debug("transform Result {}", accountStmtInfo);
+        log.debug("transform Result {}", accountStmtInfo);
         return accountStmtInfo;
     }
 
@@ -79,7 +73,7 @@ public class BRMSTransform extends Transform{
     }
 
     public BRMSTMBAccountInfo getBRMSTMBAccountInfo(CustomerOblAccountInfo customerOblAccountInfo){
-        logger.debug("");
+        log.debug("");
         if(customerOblAccountInfo != null){
             BRMSTMBAccountInfo tmbAccountInfo = new BRMSTMBAccountInfo();
             tmbAccountInfo.setActiveFlag(customerOblAccountInfo.isAccountActiveFlag());
@@ -194,9 +188,9 @@ public class BRMSTransform extends Transform{
     }
 
     public BRMSAccountRequested getBRMSAccountRequested(NewCreditDetail newCreditDetail, BigDecimal discountFrontEndFeeRate){
-        logger.debug("-- getBRMSAccountRequested with newCreditDetail {}, discountFrontEndFeeRate", newCreditDetail, discountFrontEndFeeRate);
+        log.debug("-- getBRMSAccountRequested with newCreditDetail {}, discountFrontEndFeeRate", newCreditDetail, discountFrontEndFeeRate);
         if(newCreditDetail == null){
-            logger.debug("getBRMSAccountRequested return null");
+            log.debug("getBRMSAccountRequested return null");
             return null;
         }
 
@@ -226,22 +220,22 @@ public class BRMSTransform extends Transform{
     }
 
     public BRMSBizInfo getBRMSBizInfo(PrescreenBusiness prescreenBusiness){
-        logger.debug("- getBRMSBizInfo with prescreenBusiness {}", prescreenBusiness);
+        log.debug("- getBRMSBizInfo with prescreenBusiness {}", prescreenBusiness);
         BRMSBizInfo brmsBizInfo = new BRMSBizInfo();
         brmsBizInfo.setId(String.valueOf(prescreenBusiness.getId()));
         BusinessDescription businessDescription = prescreenBusiness.getBusinessDescription();
         brmsBizInfo = updateBusinessDescription(businessDescription, brmsBizInfo);
-        logger.debug("return BRMSBizInfo {}", brmsBizInfo);
+        log.debug("return BRMSBizInfo {}", brmsBizInfo);
         return brmsBizInfo;
     }
 
     public BRMSBizInfo getBRMSBizInfo(BizInfoDetail bizInfoDetail){
-        logger.debug("- getBRMSBizInfo with bizInfoDetail {}", bizInfoDetail);
+        log.debug("- getBRMSBizInfo with bizInfoDetail {}", bizInfoDetail);
         BRMSBizInfo brmsBizInfo = new BRMSBizInfo();
         brmsBizInfo.setId(String.valueOf(bizInfoDetail.getId()));
         BusinessDescription businessDescription = bizInfoDetail.getBusinessDescription();
         brmsBizInfo = updateBusinessDescription(businessDescription, brmsBizInfo);
-        logger.debug("return BRMSBizInfo {}", brmsBizInfo);
+        log.debug("return BRMSBizInfo {}", brmsBizInfo);
         return brmsBizInfo;
 
     }

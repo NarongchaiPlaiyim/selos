@@ -1061,17 +1061,18 @@ public class Decision implements Serializable {
             decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
 
             //exSummaryControl.calForDecision(workCaseId);
-
-        } catch (Exception e) {
+            messageHeader = "Save Decision Success.";
+            message = "Save Decision data success.";
+        }
+        catch (Exception e) {
             messageHeader = "Save Decision Failed.";
             if (e.getCause() != null) {
                 message = "Save Decision data failed. Cause : " + e.getCause().toString();
             } else {
                 message = "Save Decision data failed. Cause : " + e.getMessage();
             }
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
-
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
     public void onCancel() {
@@ -1242,6 +1243,7 @@ public class Decision implements Serializable {
                     returnMortgageType.setGuarantorFlag(mortgageType.isGuarantorFlag());
                     returnMortgageType.setTcgFlag(mortgageType.isTcgFlag());
                     returnMortgageType.setReferredFlag(mortgageType.isReferredFlag());
+                    break;
                 }
             }
         }
