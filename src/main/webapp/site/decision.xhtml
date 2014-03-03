@@ -3749,6 +3749,7 @@
                                                     <tr>
                                                         <td class="center">
                                                             <p:selectOneRadio value="#{decision.approvalHistoryView.uwDecision}"
+                                                                              required="#{decision.roleUW and not empty param[saveDecisionBtn.clientId]}"
                                                                               styleClass="ovr-border">
                                                                 <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
                                                                 <f:selectItem itemLabel="#{msg.get('app.button.reject')}" itemValue="#{decision.decisionREJECTED}"/>
@@ -3822,6 +3823,7 @@
                         <tr>
                             <td colspan="2" class="center">
                                 <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                                                 binding="#{saveDecisionBtn}"
                                                  action="#{decision.onSave()}"
                                                  process="@form"
                                                  update=":frmMain, :msgBoxSystemMessagePanel"

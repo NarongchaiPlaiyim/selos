@@ -11,8 +11,8 @@ public class BankStatementDAO extends GenericDAO<BankStatement, Long> {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     public BankStatementDAO() {
-
     }
 }

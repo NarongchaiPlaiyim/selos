@@ -23,4 +23,36 @@ public class DisbursementTRCredit {
     @Column(name = "disburse_amount")
     private BigDecimal disburseAmount;
 
+	public DisbursementTR getDisbursementTR() {
+		return disbursementTR;
+	}
+
+	public void setDisbursementTR(DisbursementTR disbursementTR) {
+		this.disbursementTR = disbursementTR;
+	}
+
+	public NewCreditDetail getCreditDetail() {
+		return creditDetail;
+	}
+
+	public void setCreditDetail(NewCreditDetail creditDetail) {
+		this.creditDetail = creditDetail;
+	}
+
+	public BigDecimal getDisburseAmount() {
+		return disburseAmount;
+	}
+
+	public void setDisburseAmount(BigDecimal disburseAmount) {
+		this.disburseAmount = disburseAmount;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 }
