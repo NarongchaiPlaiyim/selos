@@ -308,17 +308,17 @@ public class BankStatementDetail implements Serializable {
 
             messageHeader = "Save Bank Statement Detail Success.";
             message = "Save Bank Statement Detail data success.";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             messageHeader = "Save Bank Statement Detail Failed.";
             if (e.getCause() != null) {
                 message = "Save Bank Statement Detail data failed. Cause : " + e.getCause().toString();
             } else {
                 message = "Save Bank Statement Detail data failed. Cause : " + e.getMessage();
             }
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
     public void onCancel() {

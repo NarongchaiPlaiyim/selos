@@ -298,17 +298,16 @@ public class BankStatementSummary implements Serializable {
 
             messageHeader = "Save Bank Statement Summary Success.";
             message = "Save Bank Statement Summary data success.";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             messageHeader = "Save Bank Statement Summary Failed.";
             if (e.getCause() != null) {
                 message = "Save Bank Statement Summary data failed. Cause : " + e.getCause().toString();
             } else {
                 message = "Save Bank Statement Summary data failed. Cause : " + e.getMessage();
             }
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
     public void onDeleteBankStmt() {
@@ -337,16 +336,16 @@ public class BankStatementSummary implements Serializable {
 
             messageHeader = "Delete Bank Statement Success.";
             message = "Delete Bank Statement success.";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             messageHeader = "Delete Bank Statement Failed.";
             if (e.getCause() != null) {
                 message = "Delete Bank Statement failed. Cause : " + e.getCause().toString();
             } else {
                 message = "Delete Bank Statement failed. Cause : " + e.getMessage();
             }
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
     public void onEditTmbBankStmt() {
