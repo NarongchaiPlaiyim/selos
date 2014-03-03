@@ -799,8 +799,8 @@ public class CreditFacProposeControl extends BusinessControl {
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newGuarantorDetailViewList : {}", newCreditFacilityView.getNewGuarantorDetailViewList());
-            List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser, ProposeType.P);
-            newCreditFacility.setNewGuarantorDetailList(newGuarantorDetailList);
+            List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser,ProposeType.P);
+//            newCreditFacility.setNewGuarantorDetailList(newGuarantorDetailList);
             newGuarantorDetailDAO.persist(newGuarantorDetailList);
             log.debug("saveCreditFacility ::: persist newGuarantorDetailList : {}", newGuarantorDetailList);
         }
@@ -824,8 +824,8 @@ public class CreditFacProposeControl extends BusinessControl {
 
         if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCollateralViewList : {}", newCreditFacilityView.getNewCollateralViewList());
-            List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, currentUser, workCase, ProposeType.P);
-            newCreditFacility.setNewCollateralDetailList(newCollateralList);
+            List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, currentUser, workCase,ProposeType.P);
+//            newCreditFacility.setNewCollateralDetailList(newCollateralList);
             newCollateralDetailDAO.persist(newCollateralList);
             log.debug("saveCreditFacility ::: persist newCollateralList : {}", newCollateralList);
         }
