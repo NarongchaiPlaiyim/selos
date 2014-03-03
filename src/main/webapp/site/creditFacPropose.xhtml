@@ -537,7 +537,7 @@
                          styleClass="largest"
                          disabled="#{creditFacPropose.notRetrivePricing}"
                          process="@this"
-                         update=":frmMain"
+                         update=":frmMain,:msgBoxSystemMessagePanel"
                          action="#{creditFacPropose.onRetrievePricingFee}"/>
     </td>
 </tr>
@@ -607,7 +607,8 @@
     <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
         <h:outputText value="#{(not empty proposeCredit.newCreditTierDetailViewList
                                                                     and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0) ?
-                                                                    proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}"/>
+                                                                    proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}">
+        </h:outputText>
     </td>
     <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
         <h:outputText value="#{(not empty proposeCredit.newCreditTierDetailViewList
@@ -913,9 +914,9 @@
                 <td class="left" style="background-color: #e6e6e6;">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.currentAddress')}"/>
                 </td>
-                <td class="left" style="background-color: #e6e6e6">
+                <td class="left" style="background-color: #e6e6e6;">
                     <p:inputText value="#{creditFacPropose.newCreditFacilityView.currentAddress}"
-                                 styleClass="largest"/>
+                                 style="width:70%"/>
                 </td>
             </tr>
 
@@ -925,7 +926,7 @@
                 </td>
                 <td class="left" style="background-color: #ffffff">
                     <p:inputText value="#{creditFacPropose.newCreditFacilityView.registeredAddress}"
-                                 styleClass="largest">
+                                 style="width:70%">
                     </p:inputText>
                 </td>
             </tr>

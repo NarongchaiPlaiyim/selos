@@ -168,6 +168,7 @@ public class NewCollateralTransform extends Transform {
             newCollateralSub.setTitleDeed(newCollateralSubView.getTitleDeed());
             newCollateralSub.setAppraisalValue(newCollateralSubView.getAppraisalValue());
             newCollateralSub.setAddress(newCollateralSubView.getAddress());
+            newCollateralSub.setLandOffice(newCollateralSubView.getLandOffice());
             newCollateralSub.setCollateralOwner(newCollateralSubView.getCollateralOwner());
             newCollateralSub.setCollateralOwnerAAD(newCollateralSubView.getCollateralOwnerAAD());
             newCollateralSub.setSubCollateralType(newCollateralSubView.getSubCollateralType());
@@ -370,10 +371,6 @@ public class NewCollateralTransform extends Transform {
         for (NewCollateralHead collateralHeaderDetail : collateralHeaderDetailList) {
             newCollateralHeadView = new NewCollateralHeadView();
             newCollateralHeadView.setId(collateralHeaderDetail.getId());
-            newCollateralHeadView.setCreateBy(collateralHeaderDetail.getCreateBy());
-            newCollateralHeadView.setCreateDate(collateralHeaderDetail.getCreateDate());
-            newCollateralHeadView.setModifyBy(collateralHeaderDetail.getModifyBy());
-            newCollateralHeadView.setModifyDate(collateralHeaderDetail.getModifyDate());
             newCollateralHeadView.setHeadCollType(collateralHeaderDetail.getHeadCollType());
             newCollateralHeadView.setPotentialCollateral(collateralHeaderDetail.getPotential());
             newCollateralHeadView.setCollateralLocation(collateralHeaderDetail.getCollateralLocation());
@@ -383,10 +380,8 @@ public class NewCollateralTransform extends Transform {
             newCollateralHeadView.setInsuranceCompany(collateralHeaderDetail.getInsuranceCompany());
             newCollateralHeadView.setAppraisalValue(collateralHeaderDetail.getAppraisalValue());
             newCollateralHeadView.setModifyBy(collateralHeaderDetail.getModifyBy());
-            newCollateralHeadView.setModifyDate(collateralHeaderDetail.getModifyDate());
             newCollateralHeadView.setCreateBy(collateralHeaderDetail.getCreateBy());
             newCollateralHeadView.setCreateDate(collateralHeaderDetail.getCreateDate());
-            newCollateralHeadView.setModifyBy(collateralHeaderDetail.getModifyBy());
             newCollateralHeadView.setModifyDate(collateralHeaderDetail.getModifyDate());
 
             List<NewCollateralSub> newCollateralSubDetails = newCollateralSubDAO.getAllNewSubCollateral(collateralHeaderDetail);
@@ -415,6 +410,7 @@ public class NewCollateralTransform extends Transform {
             newCollateralSubView.setCollateralOwnerAAD(subCollateralDetail.getCollateralOwnerAAD());
             newCollateralSubView.setCollateralOwner(subCollateralDetail.getCollateralOwner());
             newCollateralSubView.setSubCollateralType(subCollateralDetail.getSubCollateralType());
+            newCollateralSubView.setLandOffice(subCollateralDetail.getLandOffice());
             newCollateralSubView.setCreateBy(subCollateralDetail.getCreateBy());
             newCollateralSubView.setCreateDate(subCollateralDetail.getCreateDate());
             newCollateralSubView.setModifyBy(subCollateralDetail.getModifyBy());

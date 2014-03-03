@@ -230,7 +230,7 @@
                            itemValue="#{collTypePercentItem.id}"/>
             <p:ajax event="change"
                     listener="#{creditFacPropose.onChangeCollTypeLTV(CollateralHeaderDetailView)}"
-                    process="@form"
+                    process="@this"
                     update=":collateralDlgForm"/>
         </p:selectOneMenu>
     </td>
@@ -336,7 +336,7 @@
                 value="#{msg.get('app.addButton')}"
                 styleClass="smaller"
                 disabled="#{creditFacPropose.flagComs}"
-                process="@form"
+                process="@this"
                 action="#{creditFacPropose.onAddSubCollateral}"
                 update=":subCollateralDlgForm"
                 oncomplete="subCollateralInfoDlg.show();">
