@@ -10,6 +10,7 @@ import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.DBRMethod;
 import com.clevel.selos.model.ExposureMethod;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.CreditType;
 import com.clevel.selos.model.db.master.ProductFormula;
 import com.clevel.selos.model.db.master.ProductProgram;
@@ -785,7 +786,7 @@ public class CreditFacProposeControl extends BusinessControl {
         //--- Save to NewCreditDetail
         if (Util.safetyList(newCreditFacilityView.getNewCreditDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCreditDetailViewList : {}", newCreditFacilityView.getNewCreditDetailViewList());
-            List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, currentUser, workCase);
+            List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, currentUser, workCase, ProposeType.P);
             newCreditFacility.setNewCreditDetailList(newCreditDetailList);
             newCreditDetailDAO.persist(newCreditDetailList);
             log.debug("saveCreditFacility ::: persist newCreditDetailList : {}", newCreditDetailList);
@@ -800,7 +801,7 @@ public class CreditFacProposeControl extends BusinessControl {
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newGuarantorDetailViewList : {}", newCreditFacilityView.getNewGuarantorDetailViewList());
-            List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser);
+            List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser, ProposeType.P);
             newGuarantorDetailDAO.persist(newGuarantorDetailList);
             log.debug("saveCreditFacility ::: persist newGuarantorDetailList : {}", newGuarantorDetailList);
         }
@@ -818,7 +819,7 @@ public class CreditFacProposeControl extends BusinessControl {
 
         if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCollateralViewList : {}", newCreditFacilityView.getNewCollateralViewList());
-            List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, currentUser, workCase);
+            List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, currentUser, workCase, ProposeType.P);
             newCollateralDetailDAO.persist(newCollateralList);
             log.debug("saveCreditFacility ::: persist newCollateralList : {}", newCollateralList);
         }

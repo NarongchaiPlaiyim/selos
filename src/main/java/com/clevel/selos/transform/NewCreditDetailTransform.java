@@ -44,7 +44,7 @@ public class NewCreditDetailTransform extends Transform {
     @Inject
     BaseRateDAO baseRateDAO;
 
-    public List<NewCreditDetail> transformToModel(List<NewCreditDetailView> newCreditDetailViews, NewCreditFacility newCreditFacility ,User user , WorkCase workCase) {
+    public List<NewCreditDetail> transformToModel(List<NewCreditDetailView> newCreditDetailViews, NewCreditFacility newCreditFacility ,User user , WorkCase workCase, ProposeType proposeType) {
         List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
         NewCreditDetail newCreditDetail;
 
@@ -62,7 +62,7 @@ public class NewCreditDetailTransform extends Transform {
                 newCreditDetail.setCreateBy(user);
             }
 
-            newCreditDetail.setProposeType(ProposeType.P);
+            newCreditDetail.setProposeType(proposeType);
             newCreditDetail.setWorkCase(workCase);
             newCreditDetail.setSeq(newCreditDetailView.getSeq());
             newCreditDetail.setGuaranteeAmount(newCreditDetailView.getGuaranteeAmount());

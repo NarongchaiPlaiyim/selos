@@ -82,7 +82,7 @@ public class DecisionControl extends BusinessControl {
             // Approve Credit Info.
             if (decisionView.getApproveCreditList() != null && decisionView.getApproveCreditList().size() > 0) {
                 log.debug("Before persist - ApproveCreditViews: {}", decisionView.getApproveCreditList());
-                List<NewCreditDetail> returnCreditList = newCreditDetailDAO.persistAndReturn(newCreditDetailTransform.transformToModel(decisionView.getApproveCreditList(), newCreditFacility, user, workCase));
+                List<NewCreditDetail> returnCreditList = newCreditDetailDAO.persistAndReturn(newCreditDetailTransform.transformToModel(decisionView.getApproveCreditList(), newCreditFacility, user, workCase, ProposeType.A));
                 log.debug("After persist - ApproveCredits: {}", returnCreditList);
                 decisionView.setApproveCreditList(newCreditDetailTransform.transformToView(returnCreditList));
             }
@@ -90,7 +90,7 @@ public class DecisionControl extends BusinessControl {
             // Approve Collateral
             if (decisionView.getApproveCollateralList() != null && decisionView.getApproveCollateralList().size() > 0) {
                 log.debug("Before persist - ApproveCollateralViews: {}", decisionView.getApproveCollateralList());
-                List<NewCollateral> returnCollateralList = newCollateralDAO.persistAndReturn(newCollateralTransform.transformsCollateralToModel(decisionView.getApproveCollateralList(), newCreditFacility, user, workCase));
+                List<NewCollateral> returnCollateralList = newCollateralDAO.persistAndReturn(newCollateralTransform.transformsCollateralToModel(decisionView.getApproveCollateralList(), newCreditFacility, user, workCase, ProposeType.A));
                 log.debug("After persist - ApproveCollaterals: {}", returnCollateralList);
                 decisionView.setApproveCollateralList(newCollateralTransform.transformsCollateralToView(returnCollateralList));
             }
@@ -98,7 +98,7 @@ public class DecisionControl extends BusinessControl {
             // Approve Guarantor
             if (decisionView.getApproveGuarantorList() != null && decisionView.getApproveGuarantorList().size() > 0) {
                 log.debug("Before persist - ApproveGuarantorViews: {}", decisionView.getApproveGuarantorList());
-                List<NewGuarantorDetail> returnGuarantorList = newGuarantorDetailDAO.persistAndReturn(newGuarantorDetailTransform.transformToModel(decisionView.getApproveGuarantorList(), newCreditFacility, user));
+                List<NewGuarantorDetail> returnGuarantorList = newGuarantorDetailDAO.persistAndReturn(newGuarantorDetailTransform.transformToModel(decisionView.getApproveGuarantorList(), newCreditFacility, user, ProposeType.A));
                 log.debug("After persist - ApproveGuarantors: {}", returnGuarantorList);
                 decisionView.setApproveGuarantorList(newGuarantorDetailTransform.transformToView(returnGuarantorList));
             }

@@ -1680,6 +1680,7 @@
                                                 </tr>
 
                                                 <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
+                                                <h:panelGroup rendered="#{fn:length(proposeCredit.newCreditTierDetailViewList) gt 1}">
                                                 <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
                                                     <tr>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
@@ -1703,6 +1704,7 @@
                                                         </td>
                                                     </tr>
                                                 </ui:repeat>
+                                                </h:panelGroup>
                                                 <!-- END: Credit Tier Detail [1]->[N-1] -->
 
                                                 <tr>
@@ -1810,7 +1812,8 @@
                         </tr>
                         <tr>
                             <td class="left" colspan="2">
-                                <p:selectOneRadio value="#{decision.decisionView.creditCustomerType}">
+                                <p:selectOneRadio value="#{decision.decisionView.creditCustomerType}"
+                                                  disabled="true">
                                     <f:selectItem itemLabel="#{msg.get('app.button.normal')}" itemValue="#{decision.creditCusTypeNORMAL}"/>
                                     <f:selectItem itemLabel="#{msg.get('app.button.prime')}" itemValue="#{decision.creditCusTypePRIME}"/>
                                 </p:selectOneRadio>
@@ -1823,6 +1826,7 @@
                                         <td class="title"><h:outputText value="#{msg.get('app.decision.label.typeOfLoan')}"/></td>
                                         <td class="left">
                                             <p:selectOneMenu value="#{decision.decisionView.loanRequestType.id}"
+                                                             disabled="true"
                                                              style="width: 200px">
                                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
                                                 <f:selectItems value="#{decision.creditRequestTypeViewList}" var="crdRequestType"
@@ -1840,8 +1844,8 @@
                                         <td class="title"><h:outputText value="#{msg.get('app.decision.label.investedCountry')}"/></td>
                                         <td class="left">
                                             <p:selectOneMenu value="#{decision.decisionView.investedCountry.id}"
-                                                             style="width: 200px"
-                                                             disabled="true">
+                                                             disabled="true"
+                                                             style="width: 200px">
                                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
                                                 <f:selectItems value="#{decision.countryViewList}" var="country"
                                                                itemLabel="#{country.name}" itemValue="#{country.id}"/>
@@ -2056,9 +2060,8 @@
                                                     </tr>
 
                                                     <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
-                                                    <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}"
-                                                               var="creditTierDetail" varStatus="j"
-                                                               offset="1">
+                                                    <h:panelGroup rendered="#{fn:length(proposeCredit.newCreditTierDetailViewList) gt 1}">
+                                                    <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
                                                         <tr>
                                                             <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                                 <h:outputText value="#{creditTierDetail.standardPriceLabel}"/>
@@ -2081,6 +2084,7 @@
                                                             </td>
                                                         </tr>
                                                     </ui:repeat>
+                                                    </h:panelGroup>
                                                     <!-- END: Credit Tier Detail [1]->[N-1] -->
 
                                                     <tr>
@@ -2343,9 +2347,8 @@
                                                 </tr>
 
                                                 <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
-                                                <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}"
-                                                           var="creditTierDetail" varStatus="j"
-                                                           offset="1">
+                                                <h:panelGroup rendered="#{fn:length(proposeCredit.newCreditTierDetailViewList) gt 1}">
+                                                <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
                                                     <tr>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{creditTierDetail.standardPriceLabel}"/>
@@ -2368,6 +2371,7 @@
                                                         </td>
                                                     </tr>
                                                 </ui:repeat>
+                                                </h:panelGroup>
                                                 <!-- END: Credit Tier Detail [1]->[N-1] -->
 
                                                 <tr>
@@ -3622,7 +3626,7 @@
                                         <td class="left" style="width: 250px;">
                                             #{msg.get('app.decision.tb.td.label.reasonForReduction')}
                                         </td>
-                                        <td class="left middle" colspan="5">
+                                        <td class="left middle" colspan="5" style="padding-top: 10px;">
                                             <p:inputTextarea value="#{decision.decisionView.reasonForReduction}"
                                                              rows="3" cols="150"
                                                              readonly="true" autoResize="false"/>

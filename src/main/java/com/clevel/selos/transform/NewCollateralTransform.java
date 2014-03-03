@@ -60,7 +60,7 @@ public class NewCollateralTransform extends Transform {
     private List<NewCollateral> newCollateralList;
     private List<NewCollateralView> newCollateralViewList;
 
-    public List<NewCollateral> transformsCollateralToModel(List<NewCollateralView> newCollateralViewList, NewCreditFacility newCreditFacility, User user, WorkCase workCase) {
+    public List<NewCollateral> transformsCollateralToModel(List<NewCollateralView> newCollateralViewList, NewCreditFacility newCreditFacility, User user, WorkCase workCase, ProposeType proposeType) {
         List<NewCollateral> newCollateralList = new ArrayList<NewCollateral>();
         NewCollateral newCollateral;
 
@@ -77,7 +77,7 @@ public class NewCollateralTransform extends Transform {
                 newCollateral.setCreateBy(user);
             }
             newCollateral.setComs(Util.isTrue(newCollateralView.isComs()));
-            newCollateral.setProposeType(ProposeType.P);
+            newCollateral.setProposeType(proposeType);
             newCollateral.setWorkCase(workCase);
             newCollateral.setJobID(newCollateralView.getJobID());
             newCollateral.setAadDecision(newCollateralView.getAadDecision());
