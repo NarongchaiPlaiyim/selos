@@ -854,7 +854,7 @@ public class CreditFacProposeControl extends BusinessControl {
         log.debug("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
         StandardPricingResponse standardPricingResponse  = null;
         try {
-            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId,stepId);
+            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
 
             if (standardPricingResponse != null) {
                 log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult());

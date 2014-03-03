@@ -4,26 +4,32 @@ package com.clevel.selos.model.view;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.clevel.selos.model.db.master.Bank;
+import com.clevel.selos.model.db.master.BankBranch;
+import com.clevel.selos.model.db.master.CrossType;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class DisbursementMcDetailView implements Serializable{
 
-    private String issuedBy;
+	private long id;
+    private int issuedBy;
     private Date issuedDate;
-    private String payeeName;
+    private int payeeName;
     private String payeeSubname;
-    private String crossType;
-    private List<CreditTypeDetailView> creditType;
+    private int crossType;
+    private List<DisbursementCreditTypeView> disbursementCreditTypeView;
     private BigDecimal totalAmount;
-
-    public String getIssuedBy() {
+    
+    public int getIssuedBy() {
         return issuedBy;
     }
 
-    public void setIssuedBy(String issuedBy) {
+    public void setIssuedBy(int issuedBy) {
         this.issuedBy = issuedBy;
     }
 
@@ -35,11 +41,11 @@ public class DisbursementMcDetailView implements Serializable{
         this.issuedDate = issuedDate;
     }
 
-    public String getPayeeName() {
+    public int getPayeeName() {
         return payeeName;
     }
 
-    public void setPayeeName(String payeeName) {
+    public void setPayeeName(int payeeName) {
         this.payeeName = payeeName;
     }
 
@@ -51,21 +57,15 @@ public class DisbursementMcDetailView implements Serializable{
         this.payeeSubname = payeeSubname;
     }
 
-    public String getCrossType() {
+    public int getCrossType() {
         return crossType;
     }
 
-    public void setCrossType(String crossType) {
+    public void setCrossType(int crossType) {
         this.crossType = crossType;
     }
 
-    public List<CreditTypeDetailView> getCreditType() {
-        return creditType;
-    }
-
-    public void setCreditType(List<CreditTypeDetailView> creditType) {
-        this.creditType = creditType;
-    }
+    
 
     public BigDecimal getTotalAmount() {
         return totalAmount;
@@ -83,9 +83,26 @@ public class DisbursementMcDetailView implements Serializable{
                 .append("payeeName", payeeName)
                 .append("payeeSubname",payeeSubname)
                 .append("crossType", crossType)
-                .append("creditType", creditType)
+                .append("creditType", disbursementCreditTypeView)
                 .append("totalAmount",totalAmount)
                 .toString();
     }
+
+	public List<DisbursementCreditTypeView> getDisbursementCreditTypeView() {
+		return disbursementCreditTypeView;
+	}
+
+	public void setDisbursementCreditTypeView(List<DisbursementCreditTypeView> disbursementCreditTypeView) {
+		this.disbursementCreditTypeView = disbursementCreditTypeView;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+	
 
 }

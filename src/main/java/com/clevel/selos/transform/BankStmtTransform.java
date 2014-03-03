@@ -429,6 +429,7 @@ public class BankStmtTransform extends Transform {
             bankStatement.setMainAccount(bankStmtView.getMainAccount());
             bankStatement.setAccountCharacteristic(bankStmtView.getAccountCharacteristic());
             bankStatement.setTMB(bankStmtView.getTMB());
+
             bankStatement.setHighestInflow(bankStmtView.getHighestInflow());
             bankStatement.setAvgLimit(bankStmtView.getAvgLimit());
             bankStatement.setAvgIncomeGross(bankStmtView.getAvgIncomeGross());

@@ -45,14 +45,14 @@ public class NewCollateralSubView implements Serializable {
     }
 
     public void reset() {
-        this.address    = "";
+        this.address = "";
         this.titleDeed  = "";
         this.landOffice = "";
         this.collateralOwner = "";
         this.collateralOwnerAAD = "";
         this.appraisalValue = BigDecimal.ZERO;
-        this.mortgageValue  = BigDecimal.ZERO;
-        this.subCollateralType    = new SubCollateralType();
+        this.mortgageValue = BigDecimal.ZERO;
+        this.subCollateralType = new SubCollateralType();
         this.mortgageType= new MortgageType();
         this.collateralOwnerUWList = new ArrayList<CustomerInfoView>();
         this.mortgageList = new ArrayList<MortgageType>();

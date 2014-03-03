@@ -8,7 +8,7 @@ import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import java.util.List;
 
 public interface BRMSInterface {
-    public List<PreScreenResponse> checkPreScreenRule(BRMSApplicationInfo applicationInfo) throws ValidationException;
+    public UWRulesResponse checkPreScreenRule(BRMSApplicationInfo applicationInfo) throws ValidationException;
 
     public List<FullApplicationResponse> checkFullApplicationRule(BRMSApplicationInfo applicationInfo) throws ValidationException;
 

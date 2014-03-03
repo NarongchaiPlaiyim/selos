@@ -3,6 +3,7 @@ package com.clevel.selos.model.view;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.clevel.selos.model.MortgageConfirmedType;
 import com.clevel.selos.model.MortgageSignLocationType;
 import com.clevel.selos.model.db.master.User;
 
@@ -19,6 +20,7 @@ public class MortgageSummaryView implements Serializable {
     
     private Date modifyDate;
     private User modifyBy;
+    private MortgageConfirmedType confirmed;
     
     public MortgageSummaryView() {
     }
@@ -92,5 +94,13 @@ public class MortgageSummaryView implements Serializable {
 	
 	public boolean requiredCalculate() {
 		return id <= 0 || agreementId <=0;
+	}
+	public MortgageConfirmedType getConfirmed() {
+		if (confirmed == null)
+			confirmed = MortgageConfirmedType.NA;
+		return confirmed;
+	}
+	public void setConfirmed(MortgageConfirmedType confirmed) {
+		this.confirmed = confirmed;
 	}
 }

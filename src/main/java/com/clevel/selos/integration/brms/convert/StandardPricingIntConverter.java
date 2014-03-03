@@ -1,7 +1,7 @@
 package com.clevel.selos.integration.brms.convert;
 
 import com.clevel.selos.integration.BRMS;
-import com.clevel.selos.integration.brms.model.BRMSField;
+import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
 import com.clevel.selos.integration.brms.model.request.BRMSAccountRequested;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.PricingIntTier;
@@ -28,9 +28,7 @@ public class StandardPricingIntConverter extends Converter {
 
     public DecisionServiceRequest getDecisionServiceRequest(BRMSApplicationInfo applicationInfo){
         if(applicationInfo != null){
-
             ApplicationType applicationType = new ApplicationType();
-
             applicationType.setApplicationNumber(applicationInfo.getApplicationNo());
             try{
                 GregorianCalendar gregorianCalendar = new GregorianCalendar();
@@ -39,15 +37,14 @@ public class StandardPricingIntConverter extends Converter {
             }catch (Exception ex){
                 logger.error("Could not transform Date");
             }
-
             List<AttributeType> attributeTypeList = applicationType.getAttribute();
-            attributeTypeList.add(getAttributeType(BRMSField.APP_IN_DATE, applicationInfo.getBdmSubmitDate()));
-            attributeTypeList.add(getAttributeType(BRMSField.GUARANTEE_TYPE, applicationInfo.getLoanRequestType()));
-            attributeTypeList.add(getAttributeType(BRMSField.TOTAL_TCG_GUARANTEE_AMOUNT, applicationInfo.getTotalTCGGuaranteeAmount()));
-            attributeTypeList.add(getAttributeType(BRMSField.NUMBER_OF_INDV_GUARANTOR, applicationInfo.getNumberOfIndvGuarantor()));
-            attributeTypeList.add(getAttributeType(BRMSField.NUMBER_OF_JURIS_GUARANTOR, applicationInfo.getNumberOfJurisGuarantor()));
-            attributeTypeList.add(getAttributeType(BRMSField.TOTAL_MORTGAGE_VALUE, applicationInfo.getTotalMortgageValue()));
-            attributeTypeList.add(getAttributeType(BRMSField.NUMBER_OF_REDEEM_TRANSACTION, applicationInfo.getTotalRedeemTransaction()));
+            attributeTypeList.add(getAttributeType(BRMSFieldAttributes.APP_IN_DATE, applicationInfo.getBdmSubmitDate()));
+            attributeTypeList.add(getAttributeType(BRMSFieldAttributes.GUARANTEE_TYPE, applicationInfo.getLoanRequestType()));
+            attributeTypeList.add(getAttributeType(BRMSFieldAttributes.TOTAL_TCG_GUARANTEE_AMOUNT, applicationInfo.getTotalTCGGuaranteeAmount()));
+            attributeTypeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_INDV_GUARANTOR, applicationInfo.getNumberOfIndvGuarantor()));
+            attributeTypeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_JURIS_GUARANTOR, applicationInfo.getNumberOfJurisGuarantor()));
+            attributeTypeList.add(getAttributeType(BRMSFieldAttributes.TOTAL_MORTGAGE_VALUE, applicationInfo.getTotalMortgageValue()));
+            attributeTypeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_REDEEM_TRANSACTION, applicationInfo.getTotalRedeemTransaction()));
 
 
             List<ProductType> productTypeList = applicationType.getProduct();
@@ -135,7 +132,7 @@ public class StandardPricingIntConverter extends Converter {
 
                             List<AttributeType> pricingAttrList = pricingTierType.getAttribute();
                             for(AttributeType attributeType : pricingAttrList){
-                                if(attributeType.getName().equals(BRMSField.PRICE_MAXIMUM_RATE.value())){
+                                if(attributeType.getName().equals(BRMSFieldAttributes.PRICE_MAXIMUM_RATE.value())){
                                     pricingIntTier.setMaxRateVariance(attributeType.getNumericValue());
                                     break;
                                 }
@@ -156,28 +153,31 @@ public class StandardPricingIntConverter extends Converter {
         return standardPricingIntResponse;
     }
 
-    private AttributeType getAttributeType(BRMSField field, Date value){
+    private AttributeType getAttributeType(BRMSFieldAttributes field, Date value){
+        logger.debug("-- getAttributeType()");
         AttributeType attributeType = new AttributeType();
-
         try{
             attributeType.setName(field.value());
+            logger.debug("-- field.value()[{}]", field.value());
             GregorianCalendar gregorianCalendar = new GregorianCalendar();
             gregorianCalendar.setTime(value);
+            logger.debug("-- value()[{}]", value);
             attributeType.setDateTimeValue(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
         } catch (Exception ex){
             logger.error("Cannot convert XML");
+            logger.error("-- Exception : {}", ex.getMessage());
         }
         return attributeType;
     }
 
-    private AttributeType getAttributeType(BRMSField field, String value){
+    private AttributeType getAttributeType(BRMSFieldAttributes field, String value){
         AttributeType attributeType = new AttributeType();
         attributeType.setName(field.value());
         attributeType.setStringValue(value);
         return attributeType;
     }
 
-    private AttributeType getAttributeType(BRMSField field, BigDecimal value){
+    private AttributeType getAttributeType(BRMSFieldAttributes field, BigDecimal value){
         AttributeType attributeType = new AttributeType();
         attributeType.setName(field.value());
         attributeType.setNumericValue(value);

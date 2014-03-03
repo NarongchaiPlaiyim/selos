@@ -378,8 +378,6 @@ public class CustomerTransform extends Transform {
             }
         }
 
-        //for new field
-        customerInfoView.setAgeMonths(customer.getAgeMonths());
         // set customer credit information.
         if(customer.getCustomerOblInfo() != null){
             CustomerOblInfo customerOblInfo = customer.getCustomerOblInfo();
@@ -392,7 +390,6 @@ public class CustomerTransform extends Transform {
             customerInfoView.setNextReviewDate(customerOblInfo.getNextReviewDate());
             customerInfoView.setNextReviewDateFlag(customerOblInfo.getNextReviewDateFlag());
             customerInfoView.setLastContractDate(customerOblInfo.getLastContractDate());
-            customerInfoView.setNumberOfMonthsLastContractDate(customerOblInfo.getNumberOfMonthsLastContractDate());
             customerInfoView.setAdjustClass(customerOblInfo.getAdjustClass());
             customerInfoView.setRatingFinal(sbfScoreTransform.transformToView(customerOblInfo.getRatingFinal()));
             customerInfoView.setUnpaidFeeInsurance(customerOblInfo.getUnpaidFeeInsurance());
@@ -801,8 +798,6 @@ public class CustomerTransform extends Transform {
             customer.setJuristic(juristic);
         }
 
-        customer.setAgeMonths(customerInfoView.getAgeMonths());
-
         //set for Customer Obligation Info
         if(customerInfoView.getTmbCustomerId() != null && !Util.isEmpty(customerInfoView.getTmbCustomerId())){
             CustomerOblInfo customerOblInfo = null;
@@ -827,7 +822,6 @@ public class CustomerTransform extends Transform {
             customerOblInfo.setNextReviewDate(customerInfoView.getNextReviewDate());
             customerOblInfo.setNextReviewDateFlag(customerInfoView.getNextReviewDateFlag());
             customerOblInfo.setLastContractDate(customerInfoView.getLastContractDate());
-            customerOblInfo.setNumberOfMonthsLastContractDate(customerInfoView.getNumberOfMonthsLastContractDate());
             customerOblInfo.setAdjustClass(customerInfoView.getAdjustClass());
             customerOblInfo.setRatingFinal(sbfScoreTransform.transformToModel(customerInfoView.getRatingFinal()));
             if(customerInfoView.getUnpaidFeeInsurance() != null){

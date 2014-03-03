@@ -20,6 +20,8 @@ public class Reference implements Serializable {
     private CustomerEntity customerEntity;
     @Column(name = "description")
     private String description;
+    @Column(name = "brms_code")
+    private String brmsCode;
     @OneToOne
     @JoinColumn(name = "borrower_type_id")
     private CustomerEntity borrowerType;
@@ -85,6 +87,14 @@ public class Reference implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getBrmsCode() {
+        return brmsCode;
+    }
+
+    public void setBrmsCode(String brmsCode) {
+        this.brmsCode = brmsCode;
     }
 
     public CustomerEntity getBorrowerType() {

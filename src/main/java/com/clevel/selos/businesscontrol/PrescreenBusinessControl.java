@@ -8,6 +8,7 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
+import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
 import com.clevel.selos.integration.ncb.NCBInterfaceImpl;
@@ -227,8 +228,8 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         ExistingCreditFacilityView existingCreditFacilityView = existingCreditControl.refreshExistingCredit(customerInfoViewList);
 
-        //BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, prescreenResultView.getExpectedSubmitDate());
-        BankStmtSummaryView bankStmtSummaryView = new BankStmtSummaryView();
+        BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, prescreenResultView.getExpectedSubmitDate());
+        //BankStmtSummaryView bankStmtSummaryView = new BankStmtSummaryView();
 
         if(bankStmtSummaryView != null){
             if(Util.safetyList(bankStmtSummaryView.getActionStatusViewList()).size() >= 1){
@@ -317,12 +318,12 @@ public class PrescreenBusinessControl extends BusinessControl {
     public List<PreScreenResponseView> getPreScreenResultFromBRMS(List<CustomerInfoView> customerInfoViewList){
         //TODO Transform view model to prescreenRequest
         //PreScreenRequest preScreenRequest = preScreenResultTransform.transformToRequest(customerInfoViewList);
-        List<PreScreenResponse> preScreenResponseList;
-        preScreenResponseList = brmsInterface.checkPreScreenRule(new BRMSApplicationInfo());
+        UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(new BRMSApplicationInfo());
 
-        List<PreScreenResponseView> preScreenResponseViewList = preScreenResultTransform.transformResponseToView(preScreenResponseList);
+        //List<PreScreenResponseView> preScreenResponseViewList = preScreenResultTransform.transformResponseToView(preScreenResponseList);
 
-        return preScreenResponseViewList;
+        //return preScreenResponseViewList;
+        return null;
     }
 
     // *** Function for NCB *** //
@@ -587,7 +588,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                         customerCSI.setCustomer(customer);
                         customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
                         customerCSI.setWarningDate(csiData.getDateWarningCode());
-                        customerCSI.setMatchedType("F");
+                        customerCSI.setMatchedType(CSIMatchedType.F.name());
                         customerCSIList.add(customerCSI);
                     }
                 }
@@ -599,7 +600,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                         customerCSI.setCustomer(customer);
                         customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
                         customerCSI.setWarningDate(csiData.getDateWarningCode());
-                        customerCSI.setMatchedType("P");
+                        customerCSI.setMatchedType(CSIMatchedType.P.name());
                         customerCSIList.add(customerCSI);
                     }
                 }
@@ -695,7 +696,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                             customerCSI.setCustomer(customer);
                             customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
                             customerCSI.setWarningDate(csiData.getDateWarningCode());
-                            customerCSI.setMatchedType("F");
+                            customerCSI.setMatchedType(CSIMatchedType.F.name());
                             customerCSIList.add(customerCSI);
                         }
                     }
@@ -707,7 +708,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                             customerCSI.setCustomer(customer);
                             customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
                             customerCSI.setWarningDate(csiData.getDateWarningCode());
-                            customerCSI.setMatchedType("P");
+                            customerCSI.setMatchedType(CSIMatchedType.P.name());
                             customerCSIList.add(customerCSI);
                         }
                     }

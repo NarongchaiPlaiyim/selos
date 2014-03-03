@@ -438,7 +438,7 @@
                                      style="width: 200px;"
                                      required="#{not empty param[onsaveNewFacility.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                        <f:selectItems value="#{creditFacPropose.creditRequestTypeList}" var="creditRequest"
+                        <f:selectItems value="#{creditFacPropose.creditRequestTypeViewList}" var="creditRequest"
                                        itemLabel="#{creditRequest.name}"
                                        itemValue="#{creditRequest.id}"/>
                         <p:ajax event="change"
@@ -464,7 +464,7 @@
                                      style="width: 200px;"
                                      required="#{not empty param[onsaveNewFacility.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                        <f:selectItems value="#{creditFacPropose.countryList}" var="country"
+                        <f:selectItems value="#{creditFacPropose.countryViewList}" var="country"
                                        itemLabel="#{country.name}"
                                        itemValue="#{country.id}"/>
                         <p:ajax event="change"

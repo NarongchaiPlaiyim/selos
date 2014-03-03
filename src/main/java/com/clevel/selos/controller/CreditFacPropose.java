@@ -22,10 +22,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.DisbursementTypeTransform;
-import com.clevel.selos.transform.LoanPurposeTransform;
-import com.clevel.selos.transform.NewCollateralTransform;
-import com.clevel.selos.transform.ProductTransform;
+import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.business.CollateralBizTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -87,9 +84,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     //Master all in Propose
     private List<DisbursementTypeView> disbursementTypeViewList;
     private List<LoanPurposeView> loanPurposeViewList;
-    private List<CreditRequestType> creditRequestTypeList;
-    private List<Country> countryList;
-    private List<CreditType> creditTypeList;
+    private List<CreditRequestTypeView> creditRequestTypeViewList;
+    private List<CountryView> countryViewList;
     private ProductGroup productGroup;
     private List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewList;
     private List<PrdProgramToCreditTypeView> prdProgramToCreditTypeViewList;
@@ -166,6 +162,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewByGroup;
 
     @Inject
+    WorkCaseDAO workCaseDAO;
+    @Inject
     UserDAO userDAO;
     @Inject
     CreditRequestTypeDAO creditRequestTypeDAO;
@@ -182,8 +180,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     @Inject
     ProductFormulaDAO productFormulaDAO;
     @Inject
-    DisbursementTypeControl disbursementTypeControl;
-    @Inject
     CustomerDAO customerDAO;
     @Inject
     SubCollateralTypeDAO subCollateralTypeDAO;
@@ -193,10 +189,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     PotentialCollateralDAO potentialCollateralDAO;
     @Inject
     BasicInfoDAO basicInfoDAO;
-    @Inject
-    CreditFacProposeControl creditFacProposeControl;
-    @Inject
-    NewCollateralTransform collateralInfoTransform;
     @Inject
     BaseRateDAO baseRateDAO;
     @Inject
@@ -210,6 +202,24 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     @Inject
     ExistingCreditDetailDAO existingCreditDetailDAO;
     @Inject
+    DisbursementTypeDAO disbursementDAO;
+
+    @Inject
+    NewCollateralTransform collateralInfoTransform;
+    @Inject
+    private CollateralBizTransform collateralBizTransform;
+    @Inject
+    private ProductTransform productTransform;
+    @Inject
+    private LoanPurposeTransform loanPurposeTransform;
+    @Inject
+    private DisbursementTypeTransform disbursementTypeTransform;
+    @Inject
+    private CreditRequestTypeTransform creditRequestTypeTransform;
+    @Inject
+    private CountryTransform countryTransform;
+
+    @Inject
     BasicInfoControl basicInfoControl;
     @Inject
     CustomerInfoControl customerInfoControl;
@@ -220,21 +230,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     @Inject
     ProductControl productControl;
     @Inject
-    WorkCaseDAO workCaseDAO;
-    @Inject
-    private CollateralBizTransform collateralBizTransform;
-    @Inject
-    private ProductTransform productTransform;
-    @Inject
-    private LoanPurposeTransform loanPurposeTransform;
-    @Inject
-    private DisbursementTypeTransform disbursementTypeTransform;
-    @Inject
-    private COMSInterface comsInterface;
-    @Inject
-    DisbursementTypeDAO disbursementDAO;
+    CreditFacProposeControl creditFacProposeControl;
     @Inject
     private LoanPurposeControl loanPurposeControl;
+    @Inject
+    DisbursementTypeControl disbursementTypeControl;
+
+    @Inject
+    private COMSInterface comsInterface;
 
     public CreditFacPropose() {
     }
@@ -339,12 +342,12 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             cannotEditStandard = true;
         }
 
-        if (creditRequestTypeList == null) {
-            creditRequestTypeList = new ArrayList<CreditRequestType>();
+        if (creditRequestTypeViewList == null) {
+            creditRequestTypeViewList = new ArrayList<CreditRequestTypeView>();
         }
 
-        if (countryList == null) {
-            countryList = new ArrayList<Country>();
+        if (countryViewList == null) {
+            countryViewList = new ArrayList<CountryView>();
         }
 
         if (newCreditDetailView == null) {
@@ -411,8 +414,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         modeEditReduceFront = false;
         editProposeColl = false;
 
-        creditRequestTypeList = creditRequestTypeDAO.findAll();
-        countryList = countryDAO.findAll();
+        creditRequestTypeViewList = creditRequestTypeTransform.transformToView(creditRequestTypeDAO.findAll());
+        countryViewList = countryTransform.transformToView(countryDAO.findAll());
         mortgageTypeList = mortgageTypeDAO.findAll();
         loanPurposeViewList = loanPurposeControl.getLoanPurposeViewList();
         disbursementTypeViewList = disbursementTypeControl.getDisbursementTypeViewList();
@@ -663,7 +666,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             standardBasePriceDlg = getNewBaseRate(baseRateList.get(0));
             suggestBasePriceDlg = getNewBaseRate(baseRateList.get(0));
         }
-
         standardInterestDlg = BigDecimal.ZERO;
         suggestInterestDlg = BigDecimal.ZERO;
     }
@@ -675,23 +677,32 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         modeForButton = ModeForButton.EDIT;
         Cloner cloner = new Cloner();
         newCreditDetailView = cloner.deepClone(newCreditDetailSelected);
+
         onChangeRequestType();
         creditFacProposeControl.calculateInstallment(newCreditDetailView);
 
         if (newCreditDetailView.getRequestType() == RequestTypes.NEW.value()) {
             if (newCreditDetailView.getNewCreditTierDetailViewList() != null && newCreditDetailView.getNewCreditTierDetailViewList().size() > 0) {
-                BaseRate baseRateFromTier = newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardBasePrice();
-                BigDecimal interestFromTier = newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardInterest();
-                suggestInterestDlg = new BigDecimal(interestFromTier.doubleValue());
-                suggestBasePriceDlg = getNewBaseRate(baseRateFromTier);
-                standardInterestDlg = new BigDecimal(interestFromTier.doubleValue());
-                standardBasePriceDlg = getNewBaseRate(baseRateFromTier);
+                BaseRate suggestBaseRate = newCreditDetailView.getNewCreditTierDetailViewList().get(0).getSuggestBasePrice();
+                BigDecimal suggestInterest = newCreditDetailView.getNewCreditTierDetailViewList().get(0).getSuggestInterest();
+                suggestInterestDlg = new BigDecimal(suggestInterest.doubleValue());
+                suggestBasePriceDlg = getNewBaseRate(suggestBaseRate);
+
+                BaseRate standardBaseRate = newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardBasePrice();
+                BigDecimal standardInterest = newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardInterest();
+                standardInterestDlg = new BigDecimal(standardInterest.doubleValue());
+                standardBasePriceDlg = getNewBaseRate(standardBaseRate);
             }
         } else {
+            if (baseRateList != null && !baseRateList.isEmpty()) {
+                suggestBasePriceDlg = getNewBaseRate(baseRateList.get(0));
+                standardBasePriceDlg = getNewBaseRate(baseRateList.get(0));
+            } else {
+                suggestBasePriceDlg = new BaseRate();
+                standardBasePriceDlg = new BaseRate();
+            }
             suggestInterestDlg = BigDecimal.ZERO;
-            suggestBasePriceDlg = new BaseRate();
             standardInterestDlg = BigDecimal.ZERO;
-            standardBasePriceDlg = new BaseRate();
         }
     }
 
@@ -1295,7 +1306,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     public void onEditSubCollateral() {
         log.debug("rowSubIndex :: {}", rowSubIndex);
         modeForSubColl = ModeForButton.EDIT;
-        newCollateralSubView = new NewCollateralSubView();
         Cloner cloner = new Cloner();
         newCollateralSubView = cloner.deepClone(subCollateralDetailItem);
     }
@@ -1427,14 +1437,12 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         newGuarantorDetailView = new NewGuarantorDetailView();
         modeForButton = ModeForButton.ADD;
         newGuarantorDetailView.setProposeCreditDetailViewList(creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId));
-
     }
 
     public void onEditGuarantorInfo() {
         log.debug("onEditGuarantorInfo ::: {}", rowIndexGuarantor);
         modeForButton = ModeForButton.EDIT;
         int tempSeq = 0;
-        BigDecimal summary = BigDecimal.ZERO;
         newGuarantorDetailView = new NewGuarantorDetailView();
         newGuarantorDetailView.setGuarantorName(newGuarantorDetailViewItem.getGuarantorName());
         newGuarantorDetailView.setTcgLgNo(newGuarantorDetailViewItem.getTcgLgNo());
@@ -1683,20 +1691,20 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         this.messageHeader = messageHeader;
     }
 
-    public List<CreditRequestType> getCreditRequestTypeList() {
-        return creditRequestTypeList;
+    public List<CreditRequestTypeView> getCreditRequestTypeViewList() {
+        return creditRequestTypeViewList;
     }
 
-    public void setCreditRequestTypeList(List<CreditRequestType> creditRequestTypeList) {
-        this.creditRequestTypeList = creditRequestTypeList;
+    public void setCreditRequestTypeViewList(List<CreditRequestTypeView> creditRequestTypeViewList) {
+        this.creditRequestTypeViewList = creditRequestTypeViewList;
     }
 
-    public List<Country> getCountryList() {
-        return countryList;
+    public List<CountryView> getCountryViewList() {
+        return countryViewList;
     }
 
-    public void setCountryList(List<Country> countryList) {
-        this.countryList = countryList;
+    public void setCountryViewList(List<CountryView> countryViewList) {
+        this.countryViewList = countryViewList;
     }
 
     public NewCreditFacilityView getNewCreditFacilityView() {

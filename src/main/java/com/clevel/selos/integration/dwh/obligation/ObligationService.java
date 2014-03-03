@@ -181,6 +181,8 @@ public class ObligationService implements Serializable {
                 obligation.setTdrFlag(obligation1.getTdrFlag());
                 obligation.setNumMonthIntPastDue(obligation1.getNumMonthIntPastDue());
                 obligation.setNumMonthIntPastDueTDRAcc(obligation1.getNumMonthIntPastDueTDRAcc());
+                obligation.setTmbDelPriDay(obligation1.getTmbDelPriDay());
+                obligation.setTmbDelIntDay(obligation1.getTmbDelIntDay());
                 obligation.setTmbInstallmentAmt(obligation1.getTmbInstallmentAmt());
                 obligation.setCovenantFlag(obligation1.getCovenantFlag());
                 obligation.setReviewFlag(obligation1.getReviewFlag());
@@ -228,6 +230,8 @@ public class ObligationService implements Serializable {
                 obligation.setTdrFlag(obligation2.getTdrFlag());
                 obligation.setNumMonthIntPastDue(obligation2.getNumMonthIntPastDue());
                 obligation.setNumMonthIntPastDueTDRAcc(obligation2.getNumMonthIntPastDueTDRAcc());
+                obligation.setTmbDelPriDay(obligation2.getTmbDelPriDay());
+                obligation.setTmbDelIntDay(obligation2.getTmbDelIntDay());
                 obligation.setTmbInstallmentAmt(obligation2.getTmbInstallmentAmt());
                 obligation.setCovenantFlag(obligation2.getCovenantFlag());
                 obligation.setReviewFlag(obligation2.getReviewFlag());

@@ -8,11 +8,11 @@ import java.io.Serializable;
 public class BRMSBizInfo implements Serializable {
     private String id;
     private String bizCode;
-    private boolean negativeFlag;
-    private boolean highRiskFlag;
-    private boolean esrFlag;
-    private boolean suspendFlag;
-    private boolean deviationFlag;
+    private String negativeValue;
+    private String highRiskValue;
+    private String esrValue;
+    private String suspendValue;
+    private String deviationValue;
 
     public String getId() {
         return id;
@@ -30,56 +30,43 @@ public class BRMSBizInfo implements Serializable {
         this.bizCode = bizCode;
     }
 
-    public boolean isNegativeFlag() {
-        return negativeFlag;
+    public String getNegativeValue() {
+        return negativeValue;
     }
 
-    public void setNegativeFlag(boolean negativeFlag) {
-        this.negativeFlag = negativeFlag;
+    public void setNegativeValue(String negativeValue) {
+        this.negativeValue = negativeValue;
     }
 
-    public boolean isHighRiskFlag() {
-        return highRiskFlag;
+    public String getHighRiskValue() {
+        return highRiskValue;
     }
 
-    public void setHighRiskFlag(boolean highRiskFlag) {
-        this.highRiskFlag = highRiskFlag;
+    public void setHighRiskValue(String highRiskValue) {
+        this.highRiskValue = highRiskValue;
     }
 
-    public boolean isEsrFlag() {
-        return esrFlag;
+    public String getSuspendValue() {
+        return suspendValue;
     }
 
-    public void setEsrFlag(boolean esrFlag) {
-        this.esrFlag = esrFlag;
+    public void setSuspendValue(String suspendValue) {
+        this.suspendValue = suspendValue;
     }
 
-    public boolean isSuspendFlag() {
-        return suspendFlag;
+    public String getDeviationValue() {
+        return deviationValue;
     }
 
-    public void setSuspendFlag(boolean suspendFlag) {
-        this.suspendFlag = suspendFlag;
+    public void setDeviationValue(String deviationValue) {
+        this.deviationValue = deviationValue;
     }
 
-    public boolean isDeviationFlag() {
-        return deviationFlag;
+    public String getEsrValue() {
+        return esrValue;
     }
 
-    public void setDeviationFlag(boolean deviationFlag) {
-        this.deviationFlag = deviationFlag;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("bizCode", bizCode)
-                .append("negativeFlag", negativeFlag)
-                .append("highRiskFlag", highRiskFlag)
-                .append("esrFlag", esrFlag)
-                .append("suspendFlag", suspendFlag)
-                .append("deviationFlag", deviationFlag)
-                .toString();
+    public void setEsrValue(String esrValue) {
+        this.esrValue = esrValue;
     }
 }

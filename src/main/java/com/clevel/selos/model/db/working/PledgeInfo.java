@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +19,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.User;
 
@@ -72,6 +74,11 @@ public class PledgeInfo implements Serializable  {
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
+    
+    
+    @Column(name="confirmed",columnDefinition="int default 0")
+    @Enumerated
+    private RadioValue confirmed;
     
     public PledgeInfo() {
     }
@@ -170,5 +177,10 @@ public class PledgeInfo implements Serializable  {
 	public void setTotalHoldAmount(BigDecimal totalHoldAmount) {
 		this.totalHoldAmount = totalHoldAmount;
 	}
-    
+    public RadioValue getConfirmed() {
+		return confirmed;
+	}
+    public void setConfirmed(RadioValue confirmed) {
+		this.confirmed = confirmed;
+	}
 }

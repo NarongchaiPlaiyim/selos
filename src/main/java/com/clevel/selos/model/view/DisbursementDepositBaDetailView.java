@@ -6,15 +6,17 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DisbursementDepositBaDetailView implements Serializable{
 
+	private long id;
+	private long openAccountId;
     private String accountNumber;
     private String accountName;
-    private List<CreditTypeDetailView> creditType;
+    private List<DisbursementCreditTypeView> disbursementCreditTypeView;
     private BigDecimal totalAmount;
-
 
     public String getAccountNumber() {
         return accountNumber;
@@ -32,15 +34,6 @@ public class DisbursementDepositBaDetailView implements Serializable{
         this.accountName = accountName;
     }
 
-    public List<CreditTypeDetailView> getCreditType() {
-        return creditType;
-    }
-
-    public void setCreditType(List<CreditTypeDetailView> creditType) {
-        this.creditType = creditType;
-    }
-
-
     public BigDecimal getTotalAmount() {
         return totalAmount;
     }
@@ -54,8 +47,32 @@ public class DisbursementDepositBaDetailView implements Serializable{
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("accountNumber", accountNumber)
                 .append("accountName", accountName)
-                .append("creditType", creditType)
+                .append("creditType", disbursementCreditTypeView)
                 .append("totalAmount", totalAmount)
                 .toString();
     }
+
+	public List<DisbursementCreditTypeView> getDisbursementCreditTypeView() {
+		return disbursementCreditTypeView;
+	}
+
+	public void setDisbursementCreditTypeView(List<DisbursementCreditTypeView> disbursementCreditTypeView) {
+		this.disbursementCreditTypeView = disbursementCreditTypeView;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public long getOpenAccountId() {
+		return openAccountId;
+	}
+
+	public void setOpenAccountId(long openAccountId) {
+		this.openAccountId = openAccountId;
+	}
 }
