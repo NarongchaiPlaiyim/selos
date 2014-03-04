@@ -143,6 +143,7 @@ public class Decision implements Serializable {
     // Dialog Messages
     private String messageHeader;
     private String message;
+    private String severity;
 
     //Main Model View
     private DecisionView decisionView;
@@ -376,7 +377,7 @@ public class Decision implements Serializable {
 
         prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(selectedApproveCredit.getProductProgramView());
 
-        onChangeCreditType();
+        //onChangeCreditType();
 
         creditFacProposeControl.calculateInstallment(selectedApproveCredit);
 
@@ -740,8 +741,9 @@ public class Decision implements Serializable {
             success = true;
             log.debug("Success: Edit Collateral from ApproveCollateralList");
         } else {
-            messageHeader = "Error Message";
-            message = "Non selected Credit Type!";
+            messageHeader = msg.get("app.messageHeader.error");
+            message = "Select credit type is required!";
+            severity = MessageDialogSeverity.ALERT.severity();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             log.error("Failed: Can not edit Collateral from ApproveCollateralList because non selected credit type!");
         }
@@ -840,6 +842,19 @@ public class Decision implements Serializable {
             if (selectedApproveSubColl.getCollateralOwnerUWList() == null) {
                 selectedApproveSubColl.setCollateralOwnerUWList(new ArrayList<CustomerInfoView>());
             }
+            // Validate select duplicate
+            if (selectedApproveSubColl.getCollateralOwnerUWList().size() > 0) {
+                for (CustomerInfoView cusOwnerUW : selectedApproveSubColl.getCollateralOwnerUWList()) {
+                    if (cusOwnerUW.getId() == selectedApproveSubColl.getCollateralOwnerUW().getId()) {
+                        messageHeader = msg.get("app.messageHeader.error");
+                        message = "Can not add duplicate Customer owner!";
+                        severity = MessageDialogSeverity.ALERT.severity();
+                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                        return;
+                    }
+                }
+            }
+            // Add Customer UW to list
             selectedApproveSubColl.getCollateralOwnerUWList().add(
                     getCustomerInfoViewById(selectedApproveSubColl.getCollateralOwnerUW().getId(), collateralOwnerUwAllList));
         }
@@ -856,6 +871,19 @@ public class Decision implements Serializable {
             if (selectedApproveSubColl.getMortgageList() == null) {
                 selectedApproveSubColl.setMortgageList(new ArrayList<MortgageType>());
             }
+            // Validate select duplicate
+            if (selectedApproveSubColl.getMortgageList().size() > 0) {
+                for (MortgageType mortgageType : selectedApproveSubColl.getMortgageList()) {
+                    if (mortgageType.getId() == selectedApproveSubColl.getMortgageType().getId()) {
+                        messageHeader = msg.get("app.messageHeader.error");
+                        message = "Can not add duplicate Mortgage type!";
+                        severity = MessageDialogSeverity.ALERT.severity();
+                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                        return;
+                    }
+                }
+            }
+            // Add Mortgage Type to list
             selectedApproveSubColl.getMortgageList().add(
                     getMortgageTypeById(selectedApproveSubColl.getMortgageType().getId()));
         }
@@ -869,11 +897,13 @@ public class Decision implements Serializable {
     public void onAddRelatedWith() {
         log.debug("onAddRelatedWith() id = {}", selectedApproveSubColl.getRelatedWithId());
         if (selectedApproveSubColl.getRelatedWithId() != 0) {
-            NewCollateralSubView relatedWith = getIdNewSubCollateralDetail(selectedApproveSubColl.getRelatedWithId());
             if (selectedApproveSubColl.getRelatedWithList() != null) {
                 selectedApproveSubColl.setRelatedWithList(new ArrayList<NewCollateralSubView>());
             }
-            selectedApproveSubColl.getRelatedWithList().add(relatedWith);
+            // Validate select duplicate
+            // todo: validate select duplicate RelatedWith
+            // Add RelatedWith to list
+            selectedApproveSubColl.getRelatedWithList().add(getIdNewSubCollateralDetail(selectedApproveSubColl.getRelatedWithId()));
         }
     }
 
@@ -884,13 +914,16 @@ public class Decision implements Serializable {
 
     public NewCollateralSubView getIdNewSubCollateralDetail(long newSubCollateralId) {
         NewCollateralSubView newSubCollateralReturn = new NewCollateralSubView();
+        //Cloner cloner = new Cloner();
         for (NewCollateralView newCollateralView : Util.safetyList(decisionView.getApproveCollateralList())) {
             for (NewCollateralHeadView newCollateralHeadView : Util.safetyList(newCollateralView.getNewCollateralHeadViewList())) {
                 for (NewCollateralSubView newSubCollateralDetailOnAdded : Util.safetyList(newCollateralHeadView.getNewCollateralSubViewList())) {
                     log.info("newSubCollateralDetailView1 id ::: {}", newSubCollateralDetailOnAdded.getId());
+                    log.info("newSubCollateralDetailView1 no ::: {}", newSubCollateralDetailOnAdded.getNo());
                     log.info("newSubCollateralDetailView1 title deed ::: {}", newSubCollateralDetailOnAdded.getTitleDeed());
                     if (newSubCollateralId == newSubCollateralDetailOnAdded.getId()) {
                         newSubCollateralReturn = newSubCollateralDetailOnAdded;
+                        return newSubCollateralReturn;
                     }
                 }
             }
@@ -959,8 +992,9 @@ public class Decision implements Serializable {
                 success = true;
             } else {
                 log.error("Failed: Can not edit Guarantor from ApproveGuarantorList because non selected credit type!");
-                messageHeader = "Error Message";
-                message = "Non selected Credit Type!";
+                messageHeader = msg.get("app.messageHeader.error");
+                message = "Select credit type is required!";
+                severity = MessageDialogSeverity.ALERT.severity();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
 
@@ -999,8 +1033,9 @@ public class Decision implements Serializable {
                 success = true;
             } else {
                 log.error("Failed: Can not add new Guarantor to ApproveGuarantorList because non selected credit type!");
-                messageHeader = "Error Message";
-                message = "Non selected Credit Type!";
+                messageHeader = msg.get("app.messageHeader.error");
+                message = "Select credit type is required!";
+                severity = MessageDialogSeverity.ALERT.severity();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
 
@@ -1024,18 +1059,28 @@ public class Decision implements Serializable {
     // ---------- FollowUp Condition - Action ---------- //
     public void onAddFollowUpCondition() {
         log.debug("onAddFollowUpCondition()");
+        if (decisionView.getDecisionFollowConditionViewList() == null) {
+            decisionView.setDecisionFollowConditionViewList(new ArrayList<DecisionFollowConditionView>());
+        }
+        // Validate add duplicate condition
+        if (decisionView.getDecisionFollowConditionViewList().size() > 0) {
+            for (DecisionFollowConditionView followConditionView : decisionView.getDecisionFollowConditionViewList()) {
+                if (followConditionView.getConditionView().getId() == decisionFollowConditionView.getConditionView().getId()) {
+                    messageHeader = msg.get("app.messageHeader.error");
+                    message = "Can not add duplicate Condition!";
+                    severity = MessageDialogSeverity.ALERT.severity();
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    return;
+                }
+            }
+        }
+
         DecisionFollowConditionView addNewDecisionFollowCondition = new DecisionFollowConditionView();
         addNewDecisionFollowCondition.setConditionView(getFollowConditionById(decisionFollowConditionView.getConditionView().getId()));
         addNewDecisionFollowCondition.setDetail(decisionFollowConditionView.getDetail());
         addNewDecisionFollowCondition.setFollowDate(decisionFollowConditionView.getFollowDate());
+        decisionView.getDecisionFollowConditionViewList().add(addNewDecisionFollowCondition);
 
-        if (decisionView.getDecisionFollowConditionViewList() != null) {
-            decisionView.getDecisionFollowConditionViewList().add(addNewDecisionFollowCondition);
-        } else {
-            List<DecisionFollowConditionView> decisionFollowConditionViewList = new ArrayList<DecisionFollowConditionView>();
-            decisionFollowConditionViewList.add(addNewDecisionFollowCondition);
-            decisionView.setDecisionFollowConditionViewList(decisionFollowConditionViewList);
-        }
         // Clear form
         decisionFollowConditionView = new DecisionFollowConditionView();
     }
@@ -1050,8 +1095,8 @@ public class Decision implements Serializable {
     }
 
     // ---------- Decision - Action ---------- //
-    public void onSave() {
-        log.debug("onSave()");
+    public void onSaveDecision() {
+        log.debug("onSaveDecision()");
 
         try {
             // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
@@ -1065,11 +1110,13 @@ public class Decision implements Serializable {
             decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
 
             //exSummaryControl.calForDecision(workCaseId);
-            messageHeader = "Save Decision Success.";
+            messageHeader = msg.get("app.messageHeader.info");
             message = "Save Decision data success.";
+            severity = MessageDialogSeverity.INFO.severity();
         }
         catch (Exception e) {
-            messageHeader = "Save Decision Failed.";
+            messageHeader = msg.get("app.messageHeader.error");
+            severity = MessageDialogSeverity.ALERT.severity();
             if (e.getCause() != null) {
                 message = "Save Decision data failed. Cause : " + e.getCause().toString();
             } else {
@@ -1079,8 +1126,9 @@ public class Decision implements Serializable {
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
-    public void onCancel() {
+    public void onCancelDecision() {
         log.debug("onCancel()");
+        // todo: cancel decision action
     }
 
     // ----------------------------------------------- get Item from Select List ----------------------------------------------- //
@@ -1731,4 +1779,11 @@ public class Decision implements Serializable {
         this.flagComs = flagComs;
     }
 
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
+    }
 }

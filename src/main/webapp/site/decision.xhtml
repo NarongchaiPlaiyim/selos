@@ -3834,13 +3834,13 @@
                             <td colspan="2" class="center">
                                 <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
                                                  binding="#{saveDecisionBtn}"
-                                                 action="#{decision.onSave()}"
+                                                 action="#{decision.onSaveDecision()}"
                                                  process="@form"
                                                  update=":frmMain, :msgBoxSystemMessagePanel"
                                                  styleClass="smaller"/>
                                 <p:spacer width="10" height="0"/>
                                 <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
-                                                 action="#{decision.onCancel()}"
+                                                 action="#{decision.onCancelDecision()}"
                                                  process="@form"
                                                  update=":frmMain"
                                                  styleClass="smaller"/>
@@ -3954,6 +3954,7 @@
 
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                     severity="#{decision.severity}"
                      header="#{decision.messageHeader}" message="#{decision.message}">
         <p:commandButton value="OK"
                          process="@this"
