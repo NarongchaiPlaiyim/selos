@@ -18,15 +18,13 @@ import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AppInProcessService implements Serializable {
     @Inject
@@ -47,6 +45,8 @@ public class AppInProcessService implements Serializable {
     @Inject
     @ExceptionMessage
     Message exceptionMsg;
+
+    private final String DATE_FORMAT = "ddMMyyyy";
 
     @Inject
     public AppInProcessService() {
@@ -231,6 +231,12 @@ public class AppInProcessService implements Serializable {
             }
             appInProcess.setCreditDetailList(creditDetails);
             appInProcess.setStatus(appInProcessEntity.getStatus());
+            if(appInProcessEntity.getDateSentSTP()!=null && !appInProcessEntity.getDateSentSTP().equalsIgnoreCase("00000000")){
+                appInProcess.setDateSentSTP(DateTimeUtil.convertStringToDate(appInProcessEntity.getDateSentSTP(),DATE_FORMAT));
+            } else {
+                appInProcess.setDateSentSTP(null);
+            }
+
             appInProcess.setCustomerDetailList(customerDetailList);
         } else if (customerDetail2 != null) {
             List<CreditDetail> creditDetails = new ArrayList<CreditDetail>();
@@ -264,6 +270,11 @@ public class AppInProcessService implements Serializable {
             }
             appInProcess.setCreditDetailList(creditDetails);
             appInProcess.setStatus(appInProcessEntity.getStatus());
+            if(appInProcessEntity.getDateSentSTP()!=null && !appInProcessEntity.getDateSentSTP().equalsIgnoreCase("00000000")){
+                appInProcess.setDateSentSTP(DateTimeUtil.convertStringToDate(appInProcessEntity.getDateSentSTP(),DATE_FORMAT));
+            } else {
+                appInProcess.setDateSentSTP(null);
+            }
             appInProcess.setCustomerDetailList(customerDetailList);
         }
 
