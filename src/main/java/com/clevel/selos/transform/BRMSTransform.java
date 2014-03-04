@@ -112,7 +112,7 @@ public class BRMSTransform extends Transform{
             customerInfo.setNextReviewDateFlag(customerOblInfo.getNextReviewDate() == null? Boolean.FALSE: Boolean.TRUE);
             customerInfo.setExtendedReviewDate(customerOblInfo.getExtendedReviewDate());
             customerInfo.setExtendedReviewDateFlag(customerOblInfo.getExtendedReviewDate() == null? Boolean.FALSE: Boolean.TRUE);
-            customerInfo.setRatingFinal(String.valueOf(customerOblInfo.getRatingFinal().getScore()));
+            customerInfo.setRatingFinal(String.valueOf(customerOblInfo.getRatingFinal() == null? "" : customerOblInfo.getRatingFinal().getScore()));
             customerInfo.setUnpaidFeeInsurance(customerOblInfo.getUnpaidFeeInsurance().compareTo(BigDecimal.ZERO) != 0);
             customerInfo.setPendingClaimLG(customerOblInfo.getPendingClaimLG().compareTo(BigDecimal.ZERO) != 0);
         }
@@ -130,13 +130,14 @@ public class BRMSTransform extends Transform{
             customerInfo.setMarriageStatus(individual.getMaritalStatus().getCode());
 
             if(isActive(customer.getSpouse())){
-                Customer spouse = customerDAO.findSpouseById(customer.getSpouseId());
+                Customer spouse = customerDAO.findMainCustomerBySpouseId(customer.getId());
                 Individual spouseIndv = spouse.getIndividual();
                 customerInfo.setSpousePersonalID(spouseIndv.getCitizenId());
                 customerInfo.setRelation(spouse.getRelation().getBrmsCode());
             } else {
                 if(isActive(individual.getMaritalStatus().getSpouseFlag())) {
-                    Customer spouse = customerDAO.findMainCustomerBySpouseId(customer.getId());
+                    //Customer spouse = customerDAO.findMainCustomerBySpouseId(customer.getId());
+                    Customer spouse = customerDAO.findById(customer.getSpouseId());
                     Individual spouseIndv = spouse.getIndividual();
                     customerInfo.setSpousePersonalID(spouseIndv.getCitizenId());
                     customerInfo.setRelation(spouse.getRelation().getBrmsCode());
