@@ -91,6 +91,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private List<PrdProgramToCreditTypeView> prdProgramToCreditTypeViewList;
     private List<BaseRate> baseRateList;
     private List<SubCollateralType> subCollateralTypeList;
+    private List<SubCollateralTypeView> subCollateralTypeViewList;
     private List<CollateralType> collateralTypeList;
     private List<CollateralType> headCollateralTypeList;
     private List<PotentialCollateral> potentialCollateralList;
@@ -132,6 +133,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private List<NewCollateralSubView> newCollateralSubViewList;
     private NewCollateralSubView relatedWithSelected;
     private CustomerInfoView collateralOwnerUW;
+    private List<NewCollateralView> newCollateralViewDelList;
     private boolean flagComs;
     private boolean flagButtonCollateral;
     private boolean editProposeColl;
@@ -218,6 +220,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private CreditRequestTypeTransform creditRequestTypeTransform;
     @Inject
     private CountryTransform countryTransform;
+    @Inject
+    private SubCollateralTypeTransform subCollateralTypeTransform;
 
     @Inject
     BasicInfoControl basicInfoControl;
@@ -278,11 +282,11 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
                     log.debug("[List for select in Collateral] :: proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
 
-                    /*for (int i = 0; i < proposeCreditDetailViewList.size(); i++) {
+                    for (int i = 0; i < proposeCreditDetailViewList.size(); i++) {
                         if (proposeCreditDetailViewList.get(i).getTypeOfStep().equals("N")) {
                             hashSeqCredit.put(i, proposeCreditDetailViewList.get(i).getUseCount());
                         }
-                    }*/
+                    }
                     notRetrivePricing = false;
                 }
 
@@ -448,7 +452,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
             if (flag) {
                 try {
-//                  AppraisalDataResult appraisalDataResult = creditFacProposeControl.toCallComsInterface(jobId);
                     AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(user.getId(), jobId);
 
                     if (!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())) {
@@ -502,7 +505,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.debug("onRetrievePricingFee ::workCaseId :::  {}", workCaseId);
         if (!Util.isNull(workCaseId)) {
             try {
-                StandardPricingResponse standardPricingResponse = creditFacProposeControl.getPriceFeeInterest(workCaseId, stepId);
+                StandardPricingResponse standardPricingResponse = creditFacProposeControl.getPriceFeeInterest(workCaseId);
 
                 if (!Util.isNull(standardPricingResponse) && ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
                     log.debug("standardPricingResponse ::: {}", standardPricingResponse.getPricingInterest().toString());
@@ -644,10 +647,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         }
     }
 
-    public void onRequestReducePrice() {
-        log.info("reducePrice ::: {}", reducePrice);
-    }
-
     public void onCalInstallment(NewCreditDetailView newCreditDetailView) {
         log.info("onCalInstallment :: ");
         creditFacProposeControl.calculateInstallment(newCreditDetailView);
@@ -679,6 +678,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         newCreditDetailView = cloner.deepClone(newCreditDetailSelected);
 
         onChangeRequestType();
+
+        prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(newCreditDetailView.getProductProgramView());
         creditFacProposeControl.calculateInstallment(newCreditDetailView);
 
         if (newCreditDetailView.getRequestType() == RequestTypes.NEW.value()) {
@@ -742,6 +743,10 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 creditDetailAdd.setHoldLimitAmount(newCreditDetailView.getHoldLimitAmount());
                 creditDetailAdd.setNewCreditTierDetailViewList(newCreditDetailView.getNewCreditTierDetailViewList());
                 creditDetailAdd.setSeq(seq);
+
+                if (modeForDB == ModeForDB.EDIT_DB) {
+                    creditDetailAdd.setModeSaved(true);
+                }
 
                 creditFacProposeControl.calculateInstallment(creditDetailAdd);
                 log.info("creditDetailAdd :getInstallment: {}", creditDetailAdd.getInstallment());
@@ -838,7 +843,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //
 //        if (used == 0) {
 //            log.info("used ::: {} ", used);
-        newCreditFacilityView.getNewCreditDetailViewList().remove(rowIndex);
+
+        newCreditFacilityView.getNewCreditViewDelList().add(newCreditDetailSelected);
+        newCreditFacilityView.getNewCreditDetailViewList().remove(newCreditDetailSelected);
 //        } else {
 //            log.info("used::: {}", used);
 //            messageHeader = msg.get("app.propose.exception");
@@ -988,9 +995,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             if (suggestBase != null) {
                 suggestPrice = suggestBase.getValue().add(suggestInterestDlg);
                 if (ValidationUtil.isValueCompareToZero(suggestInterestDlg, ValidationUtil.CompareMode.LESS_THAN)) {
-                    suggestPriceLabel = suggestBase.getName() + " " + suggestInterestDlg;
+                    suggestPriceLabel = suggestBase.getName() + " " + suggestInterestDlg.doubleValue();
                 } else {
-                    suggestPriceLabel = suggestBase.getName() + " + " + suggestInterestDlg;
+                    suggestPriceLabel = suggestBase.getName() + " + " + suggestInterestDlg.doubleValue();
                 }
             }
         }
@@ -1000,9 +1007,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             if (standardBase != null) {
                 standardPrice = standardBase.getValue().add(standardInterestDlg);
                 if (ValidationUtil.isValueCompareToZero(standardInterestDlg, ValidationUtil.CompareMode.LESS_THAN)) {
-                    standardPriceLabel = standardBase.getName() + " " + standardInterestDlg;
+                    standardPriceLabel = standardBase.getName() + " " + standardInterestDlg.doubleValue();
                 } else {
-                    standardPriceLabel = standardBase.getName() + " + " + standardInterestDlg;
+                    standardPriceLabel = standardBase.getName() + " + " + standardInterestDlg.doubleValue();
                 }
             }
         }
@@ -1044,12 +1051,23 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
         creditTierDetailAdd.setCanEdit(true);
 
-        if (newCreditDetailView.getNewCreditTierDetailViewList() != null) {
-            newCreditDetailView.getNewCreditTierDetailViewList().add(0, creditTierDetailAdd);
-        } else {
-            List<NewCreditTierDetailView> tierDetailViewList = new ArrayList<NewCreditTierDetailView>();
-            tierDetailViewList.add(0, creditTierDetailAdd);
-            newCreditDetailView.setNewCreditTierDetailViewList(tierDetailViewList);
+        if (newCreditDetailView.getRequestType() == 2) {
+            log.debug("newCreditDetailView.getRequestType() ::: {}", newCreditDetailView.getRequestType());
+            if (newCreditDetailView.getNewCreditTierDetailViewList() != null) {
+                newCreditDetailView.getNewCreditTierDetailViewList().add(0, creditTierDetailAdd);
+            } else {
+                List<NewCreditTierDetailView> tierDetailViewList = new ArrayList<NewCreditTierDetailView>();
+                tierDetailViewList.add(0, creditTierDetailAdd);
+                newCreditDetailView.setNewCreditTierDetailViewList(tierDetailViewList);
+            }
+        } else if (newCreditDetailView.getRequestType() == 1) {
+            if (newCreditDetailView.getNewCreditTierDetailViewList() != null) {
+                newCreditDetailView.getNewCreditTierDetailViewList().add(creditTierDetailAdd);
+            } else {
+                List<NewCreditTierDetailView> tierDetailViewList = new ArrayList<NewCreditTierDetailView>();
+                tierDetailViewList.add(creditTierDetailAdd);
+                newCreditDetailView.setNewCreditTierDetailViewList(tierDetailViewList);
+            }
         }
     }
 
@@ -1068,6 +1086,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             newCollateralHeadView.setHeadCollType(headType);
         }
     }
+
 
     public void onAddProposeCollInfo() {
         log.debug("onAddProposeCollInfo ::: {}", newCreditFacilityView.getNewCollateralViewList().size());
@@ -1088,28 +1107,12 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         modeForButton = ModeForButton.EDIT;
         editProposeColl = true;
         newCollateralView = new NewCollateralView();
-//        Cloner collateralClone = new Cloner();
-//        newCollateralView = collateralClone.deepClone(selectCollateralDetailView);
-        newCollateralView.setJobID(selectCollateralDetailView.getJobID());
-        newCollateralView.setAppraisalDate(selectCollateralDetailView.getAppraisalDate());
-        newCollateralView.setAadDecision(selectCollateralDetailView.getAadDecision());
-        newCollateralView.setAadDecisionReason(selectCollateralDetailView.getAadDecisionReason());
-        newCollateralView.setAadDecisionReasonDetail(selectCollateralDetailView.getAadDecisionReasonDetail());
-        newCollateralView.setUsage(selectCollateralDetailView.getUsage());
-        newCollateralView.setTypeOfUsage(selectCollateralDetailView.getTypeOfUsage());
-        newCollateralView.setUwDecision(selectCollateralDetailView.getUwDecision());
-        newCollateralView.setUwRemark(selectCollateralDetailView.getUwRemark());
-        newCollateralView.setBdmComments(selectCollateralDetailView.getBdmComments());
-        newCollateralView.setMortgageCondition(selectCollateralDetailView.getMortgageCondition());
-        newCollateralView.setMortgageConditionDetail(selectCollateralDetailView.getMortgageConditionDetail());
-        newCollateralView.setComs(selectCollateralDetailView.isComs());
-        newCollateralView.setNewCollateralHeadViewList(selectCollateralDetailView.getNewCollateralHeadViewList());
-
+        Cloner collateralClone = new Cloner();
+        newCollateralView = collateralClone.deepClone(selectCollateralDetailView);
         int tempSeq = 0;
         Cloner cloner = new Cloner();
         proposeCreditDetailListTemp = cloner.deepClone(proposeCreditDetailViewList);
         flagComs = false;
-
         log.info("selectCollateralDetailView.isComs() ::: {}", selectCollateralDetailView.isComs());
         if (selectCollateralDetailView.isComs()) { //ถ้าเป็น data  ที่ได้จาก coms  set rendered false (ไม่แสดงปุ่ม edit)
             flagButtonCollateral = false;
@@ -1138,6 +1141,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     public void onSaveProposeCollInfo() {
         log.debug("onSaveProposeCollInfo ::: mode : {}", modeForButton);
         boolean complete = false;
+        boolean complete1 = false;
+        boolean complete2 = false;
+        boolean complete3 = false;
         RequestContext context = RequestContext.getCurrentInstance();
         int seqTemp;
 
@@ -1176,54 +1182,64 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                     if (newCollateralHeadView.getNewCollateralSubViewList().size() > 0) {
                         newCollateralHeadDetailAdd.setNewCollateralSubViewList(newCollateralHeadView.getNewCollateralSubViewList());
-
-                        if (proposeCreditDetailViewList != null) {
-                            if (flagComs == false) {
-                                if (newCollateralView.getProposeCreditDetailViewList().size() > 0) { //if this is data from COMS it 's not have List of ProposeCreditType
-
-                                    for (ProposeCreditDetailView proposeCreditDetailView : newCollateralView.getProposeCreditDetailViewList()) {
-                                        log.debug("proposeCreditDetailView.isNoFlag()  :: {}", proposeCreditDetailView.isNoFlag());
-                                        if (proposeCreditDetailView.isNoFlag()) {
-                                            proposeCollateralInfoAdd.getProposeCreditDetailViewList().add(proposeCreditDetailView);
-                                            // seqTemp = proposeCreditDetailView.getSeq();
-                                            // hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
-                                        }
-                                    }
-
-                                    newCreditFacilityView.getNewCollateralViewList().add(proposeCollateralInfoAdd);
-                                } else {
-                                    messageHeader = msg.get("app.propose.exception");
-                                    message = msg.get("app.propose.desc.add.data");
-                                    messageErr = true;
-                                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-
-                                }
-                            }
-                        }
-
-                        log.debug("newCreditFacilityView.getNewCollateralViewList() {}", newCreditFacilityView.getNewCollateralViewList().size());
                     } else {
                         messageHeader = msg.get("app.propose.exception");
                         message = msg.get("app.propose.desc.add.sub.data");
                         messageErr = true;
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-
+                        complete1 = false;
                     }
 
                     newCollateralHeadViewList.add(newCollateralHeadDetailAdd);
+                    complete1 = true;
+                    log.info("  complete1 >>>>  :  {}", complete1);
                 }
 
                 proposeCollateralInfoAdd.setNewCollateralHeadViewList(newCollateralHeadViewList);
-                complete=true;
+                complete2 = true;
             } else {
                 messageHeader = msg.get("app.propose.exception");
                 message = msg.get("app.propose.desc.add.head.data");
                 messageErr = true;
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-
+                complete2 = false;
             }
 
-            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+            log.info("  complete2 >>>>  :  {}", complete2);
+            log.info("flagComs ::; {}",flagComs);
+
+            if (flagComs==false) {
+                if (newCollateralView.getProposeCreditDetailViewList().size() > 0) { //if this is data from COMS it 's not have List of ProposeCreditType
+
+                    for (ProposeCreditDetailView proposeCreditDetailView : newCollateralView.getProposeCreditDetailViewList()) {
+                        log.debug("proposeCreditDetailView.isNoFlag()  :: {}", proposeCreditDetailView.isNoFlag());
+                        if (proposeCreditDetailView.isNoFlag()) {
+                            proposeCollateralInfoAdd.getProposeCreditDetailViewList().add(proposeCreditDetailView);
+                            seqTemp = proposeCreditDetailView.getSeq();
+                            // hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
+                        }
+                    }
+                } else {
+                    messageHeader = msg.get("app.propose.exception");
+                    message = msg.get("app.propose.desc.add.data");
+                    messageErr = true;
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    complete3 = false;
+                }
+
+
+            }else{
+                complete3 = true;
+            }
+
+            newCreditFacilityView.getNewCollateralViewList().add(proposeCollateralInfoAdd);
+            complete3 = true;
+            log.info("newCreditFacilityView.getNewCollateralViewList() {}", newCreditFacilityView.getNewCollateralViewList().size());
+            log.info("  complete3 >>>>  :  {}", complete3);
+
+            if (complete1 == true && complete2 == true && complete3 == true) {
+                complete = true;
+            }
 
         } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
             log.debug("modeForButton:: {} ", modeForButton);
@@ -1261,17 +1277,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     newCollateralView.getProposeCreditDetailViewList().add(proposeCreditDetailListTemp.get(i));
                     seqTemp = proposeCreditDetailListTemp.get(i).getSeq();
                     checkPlus = true;
-
-//                    for (ProposeCreditDetailView proposeCreditCollateral : selectCollateralDetailView.getProposeCreditDetailViewList()) {
-//                        if (proposeCreditCollateral.getSeq() == seqTemp) {
-//                            checkPlus = false;
-//                        }
-//                    }
-//
+                    for (ProposeCreditDetailView proposeCreditCollateral : selectCollateralDetailView.getProposeCreditDetailViewList()) {
+                        if (proposeCreditCollateral.getSeq() == seqTemp) {
+                            checkPlus = false;
+                        }
+                    }
 //                    if (checkPlus) {
 //                        hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
 //                    }
-
                 } else if (proposeCreditDetailListTemp.get(i).isNoFlag() == false) {
 //                    if (Integer.parseInt(hashSeqCredit.get(i).toString()) > 0) {
 //                        hashSeqCredit.put(i, Integer.parseInt(hashSeqCredit.get(i).toString()) - 1);
@@ -1294,12 +1307,15 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onDeleteProposeCollInfo() {
         log.debug("onDeleteProposeCollInfo :: ");
-//        for (int i = 0; i < selectCollateralDetailView.getProposeCreditDetailViewList().size(); i++) {
-//            if (Integer.parseInt(hashSeqCredit.get(i).toString()) > 0) {
-//                hashSeqCredit.put(i, Integer.parseInt(hashSeqCredit.get(i).toString()) - 1);
-//            }
-//        }
+        for (int i = 0; i < selectCollateralDetailView.getProposeCreditDetailViewList().size(); i++) {
+            if (Integer.parseInt(hashSeqCredit.get(i).toString()) > 0) {
+                hashSeqCredit.put(i, Integer.parseInt(hashSeqCredit.get(i).toString()) - 1);
+            }
+        }
+        newCreditFacilityView.getNewCollateralViewDelList().add(selectCollateralDetailView);
         newCreditFacilityView.getNewCollateralViewList().remove(selectCollateralDetailView);
+
+        log.info("onDeleteProposeCollInfo :: newCreditFacilityView.getNewCollateralViewDelList() :: {}",newCreditFacilityView.getNewCollateralViewDelList().size());
     }
 
     // ****************************************************Start Add SUB Collateral****************************************************//
@@ -1314,6 +1330,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         if (newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId() != 0) {
             CollateralType collateralType = collateralTypeDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId());
             subCollateralTypeList = subCollateralTypeDAO.findByCollateralType(collateralType);
+            subCollateralTypeViewList = subCollateralTypeTransform.transformToView(subCollateralTypeList);
             log.debug("subCollateralTypeList ::: {}", subCollateralTypeList.size());
         } else {
 
@@ -1329,7 +1346,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //        newCollateralSubView = cloner.deepClone(subCollateralDetailItem);
         if (newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId() != 0) {
             CollateralType collateralType = collateralTypeDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId());
-            subCollateralTypeList = subCollateralTypeDAO.findByCollateralType(collateralType);
+            subCollateralTypeViewList = subCollateralTypeTransform.transformToView(subCollateralTypeList);
+            log.debug("subCollateralTypeViewList ::: {}", subCollateralTypeViewList.size());
             log.debug("subCollateralTypeList ::: {}", subCollateralTypeList.size());
         }
 
@@ -1391,6 +1409,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onDeleteSubCollateral() {
         log.debug("onDeleteSubCollateral :: ");
+        newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubDeleteList().add(subCollateralDetailItem);
         newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().remove(subCollateralDetailItem);
         log.debug("rowCollHeadIndex :: ");
     }
@@ -1497,7 +1516,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     }
 
     public void onEditGuarantorInfo() {
-        log.debug("onEditGuarantorInfo ::: {}", rowIndexGuarantor);
+        log.info("onEditGuarantorInfo ::: {}", rowIndexGuarantor);
         modeForButton = ModeForButton.EDIT;
         int tempSeq = 0;
         newGuarantorDetailView = new NewGuarantorDetailView();
@@ -1592,7 +1611,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setTotalLimitGuaranteeAmount(summary);
 
                 for (int i = 0; i < proposeCreditDetailListTemp.size(); i++) {
-                    if (proposeCreditDetailListTemp.get(i).isNoFlag() == true) {
+                    if (proposeCreditDetailListTemp.get(i).isNoFlag()==true) {
                         newCollateralView.getProposeCreditDetailViewList().add(proposeCreditDetailListTemp.get(i));
                         seqTemp = proposeCreditDetailListTemp.get(i).getSeq();
                         checkPlus = true;
@@ -1635,7 +1654,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //                hashSeqCredit.put(i, Integer.parseInt(hashSeqCredit.get(i).toString()) - 1);
 //            }
         }
-
+        newCreditFacilityView.getNewGuarantorViewDelList().add(newGuarantorDetailViewItem);
         newCreditFacilityView.getNewGuarantorDetailViewList().remove(newGuarantorDetailViewItem);
         log.debug("delete success");
         newCreditFacilityView.setTotalGuaranteeAmount(creditFacProposeControl.calTotalGuaranteeAmount(newCreditFacilityView.getNewGuarantorDetailViewList()));
@@ -1677,6 +1696,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onDeleteConditionInfo() {
         log.debug("onDeleteConditionInfo :: ");
+        newCreditFacilityView.getNewConditionViewDelList().add(selectConditionItem);
         newCreditFacilityView.getNewConditionDetailViewList().remove(selectConditionItem);
     }
 
@@ -2211,6 +2231,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void setNotRetrivePricing(boolean notRetrivePricing) {
         this.notRetrivePricing = notRetrivePricing;
+    }
+
+    public List<SubCollateralTypeView> getSubCollateralTypeViewList() {
+        return subCollateralTypeViewList;
+    }
+
+    public void setSubCollateralTypeViewList(List<SubCollateralTypeView> subCollateralTypeViewList) {
+        this.subCollateralTypeViewList = subCollateralTypeViewList;
     }
 }
 

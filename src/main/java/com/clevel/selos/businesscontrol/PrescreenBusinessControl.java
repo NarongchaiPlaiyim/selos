@@ -1045,11 +1045,19 @@ public class PrescreenBusinessControl extends BusinessControl {
             if(tmpPrescreenView.getTcg() != currentPrescreenView.getTcg()){
                 modifyCount = modifyCount + 1;
             }
-            if(tmpPrescreenView.getRefinance() != currentPrescreenView.getRefinance()){
+            if(tmpPrescreenView.getRefinanceIn() != currentPrescreenView.getRefinanceIn()){
                 modifyCount = modifyCount + 1;
             }
-            if(tmpPrescreenView.getRefinanceBank() != null && currentPrescreenView.getRefinanceBank() != null){
-                if(tmpPrescreenView.getRefinanceBank().getCode() != currentPrescreenView.getRefinanceBank().getCode()){
+            if(tmpPrescreenView.getRefinanceInBank() != null && currentPrescreenView.getRefinanceInBank() != null){
+                if(tmpPrescreenView.getRefinanceInBank().getCode() != currentPrescreenView.getRefinanceInBank().getCode()){
+                    modifyCount = modifyCount + 1;
+                }
+            }
+            if(tmpPrescreenView.getRefinanceOut() != currentPrescreenView.getRefinanceOut()){
+                modifyCount = modifyCount + 1;
+            }
+            if(tmpPrescreenView.getRefinanceOutBank() != null && currentPrescreenView.getRefinanceOutBank() != null){
+                if(tmpPrescreenView.getRefinanceOutBank().getCode() != currentPrescreenView.getRefinanceOutBank().getCode()){
                     modifyCount = modifyCount + 1;
                 }
             }
