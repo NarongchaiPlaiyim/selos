@@ -153,6 +153,7 @@ public class ExistingCreditControl extends BusinessControl {
                                 log.info("add obligation into borrower");
                                 String borrowerKey = existingCreditDetailView.getAccountNumber().concat(existingCreditDetailView.getAccountSuf()).concat(existingCreditDetailView.getAccountRef());
                                 existingCreditDetailView.setCreditRelationType(CreditRelationType.BORROWER);
+                                existingCreditDetailView.setCreditCategory(CreditCategory.COMMERCIAL);
                                 if(!borrowerComCreditDetailHashMap.containsKey(borrowerKey)){
                                     borrowerComId = borrowerComId+1;
                                     existingCreditDetailView.setNo(borrowerComId);
@@ -182,6 +183,7 @@ public class ExistingCreditControl extends BusinessControl {
                                 log.info("add obligation into relate");
                                 String relateKey = existingCreditDetailView.getAccountNumber().concat(existingCreditDetailView.getAccountSuf()).concat(existingCreditDetailView.getAccountRef());
                                 existingCreditDetailView.setCreditRelationType(CreditRelationType.RELATED);
+                                existingCreditDetailView.setCreditCategory(CreditCategory.COMMERCIAL);
                                 if(!relatedComCreditDetailHashMap.containsKey(relateKey)){
                                     relatedComId = relatedComId+1;
                                     existingCreditDetailView.setNo(relatedComId);
@@ -213,6 +215,7 @@ public class ExistingCreditControl extends BusinessControl {
                                 log.info("add obligation into borrower");
                                 String borrowerKey = existingCreditDetailView.getAccountNumber().concat(existingCreditDetailView.getAccountSuf()).concat(existingCreditDetailView.getAccountRef());
                                 existingCreditDetailView.setCreditRelationType(CreditRelationType.BORROWER);
+                                existingCreditDetailView.setCreditCategory(CreditCategory.RETAIL);
                                 if(!borrowerRetailCreditDetailHashMap.containsKey(borrowerKey)){
                                     borrowerRetailId = borrowerRetailId+1;
                                     existingCreditDetailView.setBorrowerType(RelationValue.BORROWER.value());
@@ -242,6 +245,7 @@ public class ExistingCreditControl extends BusinessControl {
                                 log.info("add obligation into relate");
                                 String relateKey = existingCreditDetailView.getAccountNumber().concat(existingCreditDetailView.getAccountSuf()).concat(existingCreditDetailView.getAccountRef());
                                 existingCreditDetailView.setCreditRelationType(CreditRelationType.RELATED);
+                                existingCreditDetailView.setCreditCategory(CreditCategory.RETAIL);
                                 if(!relatedRetailCreditDetailHashMap.containsKey(relateKey)){
                                     relatedRetailId = relatedRetailId+1;
                                     existingCreditDetailView.setBorrowerType(RelationValue.DIRECTLY_RELATED.value());
