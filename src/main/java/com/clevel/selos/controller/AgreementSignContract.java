@@ -15,9 +15,11 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
+import com.clevel.selos.businesscontrol.AgreementSignContractControl;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.view.AgreementInfoView;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -30,6 +32,8 @@ public class AgreementSignContract implements Serializable {
 	private Logger log;
 	@Inject
 	private BasicInfoControl basicInfoControl;
+	@Inject
+	private AgreementSignContractControl agreementSignContractControl;
 	
 	//Private variable
 	private boolean preRenderCheck = false;
@@ -39,23 +43,25 @@ public class AgreementSignContract implements Serializable {
 	private BasicInfoView basicInfoView;
 	
 	//Property
-	
+	private AgreementInfoView agreement;
 	
 	public AgreementSignContract() {
 		
 	}
 	public Date getLastUpdateDateTime() {
-		return null;
+		return agreement.getModifyDate();
 	}
 	public String getLastUpdateBy() {
-		//TODO
-		return null;
+		return agreement.getModifyUser();
 	}
 	public ApproveType getApproveType() {
 		if (basicInfoView == null)
 			return ApproveType.NA;
 		else
 			return basicInfoView.getApproveType();
+	}
+	public AgreementInfoView getAgreement() {
+		return agreement;
 	}
 	
 	/*
@@ -98,6 +104,7 @@ public class AgreementSignContract implements Serializable {
 	}
 	
 	public void onSaveAgreementContract() {
+		agreementSignContractControl.saveAgreementConfirm(agreement, workCaseId);
 		
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
@@ -111,5 +118,7 @@ public class AgreementSignContract implements Serializable {
 		if (workCaseId > 0) {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
+		
+		agreement = agreementSignContractControl.getAgreementInfoView(workCaseId);
 	}
 }

@@ -107,7 +107,15 @@ public class ObligationBizTransform extends BusinessTransform {
 
         //get ProductProgram
         ExistingProductFormula existingProductFormula = existingProductFormulaDAO.findProductFormula(obligation.getProductCode(), obligation.getProjectCode(), obligation.getTmbExtProductTypeCD());
-        if(existingProductFormula!=null){
+        if(existingProductFormula==null || (existingProductFormula!=null && existingProductFormula.getId()==0)){
+            existingProductFormula = new ExistingProductFormula();
+            List<ExistingProductFormula> existingProductFormulas = existingProductFormulaDAO.findProductFormula(obligation.getProductCode(), obligation.getProjectCode());
+            if(existingProductFormulas!=null && existingProductFormulas.size()>0){
+                existingProductFormula = existingProductFormulas.get(0);
+            }
+        }
+
+        if(existingProductFormula!=null && existingProductFormula.getId()!=0){
             existingCreditDetailView.setExistProductProgramView(productTransform.transformToView(existingProductFormula.getProductProgram()));
             existingCreditDetailView.setExistCreditTypeView(productTransform.transformToView(existingProductFormula.getCreditType()));
             existingCreditDetailView.setProductSegment(existingProductFormula.getProductSegment());

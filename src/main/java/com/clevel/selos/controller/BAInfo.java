@@ -60,6 +60,7 @@ public class BAInfo implements Serializable {
 	private BasicInfoView basicInfoView;
 	private List<BAPAInfoCreditView> deleteCreditList;
 	private List<BAPAInfoCreditToSelectView> toSelectCredits;
+	private BAPAInfoCreditView toUpdCreditView;
 	
 	//Property
 	private CreditSelectedDataModel creditDataModel;
@@ -72,6 +73,7 @@ public class BAInfo implements Serializable {
 	private BAPAInfoCustomerView bapaInfoCustomerView;
 	private int deleteCreditRowId;
 	private BAPAInfoCreditView bapaInfoCreditView;
+	
 	private boolean addCreditDialog;
 	private BAPAInfoCreditToSelectView selectedCredit;
 	
@@ -287,7 +289,10 @@ public class BAInfo implements Serializable {
 	}
 	public void onOpenUpdateBAPAInformaionDialog(BAPAInfoCreditView selected) {
 		log.info("Open Update BAPA INfo "+selected);
-		bapaInfoCreditView = selected;
+		toUpdCreditView = selected;
+		bapaInfoCreditView = new BAPAInfoCreditView();
+		bapaInfoCreditView.updateValue(toUpdCreditView);
+		
 		long creditId = bapaInfoCreditView.getCreditId();
 		selectedCredit = null;
 		if (creditId > 0) {
@@ -316,7 +321,11 @@ public class BAInfo implements Serializable {
 		}
 		
 		bapaInfoCreditView.setNeedUpdate(true);
+		
+		toUpdCreditView.updateValue(bapaInfoCreditView);
+		
 		bapaInfoCreditView = null;
+		toUpdCreditView = null;
 		selectedCredit = null;
 		
 		_calculateTotal();
@@ -342,6 +351,36 @@ public class BAInfo implements Serializable {
 		
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	
+	public void onCalculateExpense() {
+		if (bapaInfoCreditView == null)
+			return;
+		BigDecimal expense = BigDecimal.ZERO;
+		BAPAType type = bapaInfoCreditView.getType();
+		if (type != null) {
+			switch (type) {
+			case BA:
+				BigDecimal premium = bapaInfoCreditView.getPremiumAmount();
+				BigDecimal limit = null;
+				if (bapaInfoCreditView.isFromCredit()) {
+					limit = bapaInfoCreditView.getLimit();
+				} else {
+					if (selectedCredit != null && selectedCredit.isTopupBA())
+						limit = selectedCredit.getLimit(); 
+				}
+				if (limit != null && premium != null)
+					expense = limit.subtract(premium);
+				else if (limit != null) 
+					expense = limit;
+				else if (premium != null)
+					expense = premium;
+				break;
+			default :
+				expense = bapaInfoCreditView.getPremiumAmount();
+			}
+		}
+		bapaInfoCreditView.setExpenseAmount(expense);
 	}
 	/*
 	 * Private method

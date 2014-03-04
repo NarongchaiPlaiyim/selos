@@ -25,11 +25,15 @@ public class GuarantorDetailControl extends BusinessControl {
 	
 	public GuarantorInfoFullView getGuarantorInfoFull(long guarantorInfoId) {
 		GuarantorInfo result = null;
+		long workCaseId = 0;
 		try {
-			if (guarantorInfoId > 0)
+			if (guarantorInfoId > 0) {
 				result = guarantorInfoDAO.findById(guarantorInfoId);
+				if (result != null && result.getWorkCase() !=null)
+					workCaseId = result.getWorkCase().getId();
+			}
 		} catch (Throwable e) {}
-		return guarantorInfoTransform.transformToFullView(result);
+		return guarantorInfoTransform.transformToFullView(result,workCaseId);
 	}
 	
 	 public void saveGuarantorDetail(GuarantorInfoFullView view) {

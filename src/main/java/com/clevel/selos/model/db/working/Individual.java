@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,6 +31,7 @@ import com.clevel.selos.model.db.master.Nationality;
 import com.clevel.selos.model.db.master.Occupation;
 import com.clevel.selos.model.db.master.Race;
 import com.clevel.selos.model.db.master.Title;
+import com.clevel.selos.model.db.master.User;
 
 @Entity
 @Table(name = "wrk_individual")
@@ -118,6 +120,21 @@ public class Individual implements Serializable {
     @JoinColumn(name = "customer_attorney_id", nullable = true)
     private CustomerAttorney customerAttorney;
     
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_date")
+    private Date createDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modify_date")
+    private Date modifyDate;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "create_user_id")
+    private User createBy;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "modify_user_id")
+    private User modifyBy;
 
     public Individual() {
     }
@@ -280,8 +297,40 @@ public class Individual implements Serializable {
     public void setAttorneyRequired(RadioValue attorneyRequired) {
 		this.attorneyRequired = attorneyRequired;
 	}
+    
+    public Date getCreateDate() {
+		return createDate;
+	}
 
-    @Override
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Date getModifyDate() {
+		return modifyDate;
+	}
+
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
+	}
+
+	public User getCreateBy() {
+		return createBy;
+	}
+
+	public void setCreateBy(User createBy) {
+		this.createBy = createBy;
+	}
+
+	public User getModifyBy() {
+		return modifyBy;
+	}
+
+	public void setModifyBy(User modifyBy) {
+		this.modifyBy = modifyBy;
+	}
+
+	@Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).

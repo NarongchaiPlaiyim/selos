@@ -19,7 +19,7 @@
 					disabled="#{baInfo.bapaInfoCreditView.fromCredit}"
 					required="true" requiredMessage="#{msg.get('app.baInfo.bapa.baType.validate')}"
 					>
-					<p:ajax update='morepay' />
+					<p:ajax update='morepay' listener="#{baInfo.onCalculateExpense()}" />
 					<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 					<f:selectItems value="#{enumGeneralControl.BAPATypes}"/>
 				</p:selectOneMenu>
@@ -35,6 +35,7 @@
 					selection="#{baInfo.selectedCredit}"
 					disabledSelection="#{baInfo.bapaInfoCreditView.fromCredit}"
 					>
+					<p:ajax event="rowSelectRadio" update=':bapaApplyInfoDlgForm:morepay' listener="#{baInfo.onCalculateExpense()}" />
 					<p:column styleClass="center" style="width:30px"
 						selectionMode="single"
 						/>
@@ -78,7 +79,7 @@
 					validatorMessage="#{msg.get('app.baInfo.bapa.premium.validate')}"
 					
 					>
-					<p:ajax event="blur" update='morepay' />
+					<p:ajax event="blur" update='morepay' listener="#{baInfo.onCalculateExpense()}" />
 					<f:validateDoubleRange minimum="0"/>
 					<f:convertNumber pattern="0.00" />
 				</p:inputText>
