@@ -220,7 +220,7 @@
     <td class="left" colspan="3">
         <p:selectOneMenu id="dlgCollTypePercentLTV"
                          value="#{CollateralHeaderDetailView.collTypePercentLTV.id}"
-                         style="min-width: 200px; width: 200px; max-width: 200px;"
+                         style="min-width: 400px; width: 400px; max-width: 400px;"
                          required="#{not empty param[btnSaveCollateral.clientId]}">
            <!-- disabled="#{creditFacPropose.flagComs}"-->
             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -304,9 +304,9 @@
     <td class="left" colspan="3">
         <p:selectOneMenu id="dlgHeadCollType"
                          value="#{CollateralHeaderDetailView.headCollType.id}"
-                         style="min-width: 200px; width: 200px; max-width: 200px;"
+                         style="min-width: 400px; width: 400px; max-width: 400px;"
                          required="#{not empty param[btnSaveCollateral.clientId]}"
-                         disabled="#{creditFacPropose.flagComs}">
+                         disabled="true">
             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
             <f:selectItems value="#{creditFacPropose.headCollateralTypeList}"
                            var="headCollateralTypeItem"
@@ -502,7 +502,7 @@
                          value="#{msg.get('app.button.ok')}"
                          action="#{creditFacPropose.onSaveProposeCollInfo}"
                          process=":collateralDlgForm"
-                         update=":collateralDlgForm,:frmMain,:msgBoxSystemMessagePanel"
+                         update=":collateralDlgForm,:frmMain:,:msgBoxSystemMessagePanel"
                          oncomplete="handleDialogRequest(xhr, status, args, 'collateralInfoDlg')"/>
         <p:spacer width="10" height=""/>
         <p:commandButton value="#{msg.get('app.button.cancel')}"
