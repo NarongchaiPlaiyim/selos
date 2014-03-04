@@ -1177,8 +1177,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     newCollateralHeadDetailAdd.setInsuranceCompany(newCollateralHeadView.getInsuranceCompany());
 
                     if (newCollateralHeadView.getNewCollateralSubViewList().size() > 0) {
-                        Cloner cloner = new Cloner();
-                        newCollateralHeadDetailAdd.setNewCollateralSubViewList(cloner.deepClone(newCollateralHeadView.getNewCollateralSubViewList()));
+                        newCollateralHeadDetailAdd.setNewCollateralSubViewList(newCollateralHeadView.getNewCollateralSubViewList());
                     } else {
                         messageHeader = msg.get("app.propose.exception");
                         message = msg.get("app.propose.desc.add.sub.data");
@@ -1189,8 +1188,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                     newCollateralHeadViewList.add(newCollateralHeadDetailAdd);
                     complete1 = true;
-                    log.debug("  complete1 >>>>  :  {}", complete1);
-                    RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete1);
+                    log.info("  complete1 >>>>  :  {}", complete1);
                 }
 
                 proposeCollateralInfoAdd.setNewCollateralHeadViewList(newCollateralHeadViewList);
@@ -1203,37 +1201,37 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 complete2 = false;
             }
 
-            log.debug("  complete2 >>>>  :  {}", complete2);
-            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete2);
+            log.info("  complete2 >>>>  :  {}", complete2);
+            log.info("flagComs ::; {}",flagComs);
 
-            if (!flagComs) {
-                if (proposeCreditDetailViewList != null) {
-                    if (newCollateralView.getProposeCreditDetailViewList().size() > 0) { //if this is data from COMS it 's not have List of ProposeCreditType
+            if (flagComs==false) {
+                if (newCollateralView.getProposeCreditDetailViewList().size() > 0) { //if this is data from COMS it 's not have List of ProposeCreditType
 
-                        for (ProposeCreditDetailView proposeCreditDetailView : newCollateralView.getProposeCreditDetailViewList()) {
-                            log.debug("proposeCreditDetailView.isNoFlag()  :: {}", proposeCreditDetailView.isNoFlag());
-                            if (proposeCreditDetailView.isNoFlag()) {
-                                proposeCollateralInfoAdd.getProposeCreditDetailViewList().add(proposeCreditDetailView);
-                                seqTemp = proposeCreditDetailView.getSeq();
-                                // hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
-                            }
+                    for (ProposeCreditDetailView proposeCreditDetailView : newCollateralView.getProposeCreditDetailViewList()) {
+                        log.debug("proposeCreditDetailView.isNoFlag()  :: {}", proposeCreditDetailView.isNoFlag());
+                        if (proposeCreditDetailView.isNoFlag()) {
+                            proposeCollateralInfoAdd.getProposeCreditDetailViewList().add(proposeCreditDetailView);
+                            seqTemp = proposeCreditDetailView.getSeq();
+                            // hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
                         }
-                    } else {
-                        messageHeader = msg.get("app.propose.exception");
-                        message = msg.get("app.propose.desc.add.data");
-                        messageErr = true;
-                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                        complete3 = false;
                     }
-
+                } else {
+                    messageHeader = msg.get("app.propose.exception");
+                    message = msg.get("app.propose.desc.add.data");
+                    messageErr = true;
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    complete3 = false;
                 }
+
+
+            }else{
+                complete3 = true;
             }
 
             newCreditFacilityView.getNewCollateralViewList().add(proposeCollateralInfoAdd);
             complete3 = true;
-            log.debug("newCreditFacilityView.getNewCollateralViewList() {}", newCreditFacilityView.getNewCollateralViewList().size());
-            log.debug("  complete3 >>>>  :  {}", complete3);
-            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete3);
+            log.info("newCreditFacilityView.getNewCollateralViewList() {}", newCreditFacilityView.getNewCollateralViewList().size());
+            log.info("  complete3 >>>>  :  {}", complete3);
 
             if (complete1 == true && complete2 == true && complete3 == true) {
                 complete = true;

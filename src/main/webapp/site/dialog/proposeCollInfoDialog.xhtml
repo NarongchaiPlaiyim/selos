@@ -230,7 +230,7 @@
                            itemValue="#{collTypePercentItem.id}"/>
             <p:ajax event="change"
                     listener="#{creditFacPropose.onChangeCollTypeLTV(CollateralHeaderDetailView)}"
-                    process="@this"
+                    process="@form"
                     update=":collateralDlgForm"/>
         </p:selectOneMenu>
     </td>
