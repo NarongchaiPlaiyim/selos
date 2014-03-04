@@ -23,7 +23,6 @@ public class  ProposeCreditDetailView implements Serializable {
     private BigDecimal guaranteeAmount;
     private int useCount;
 
-
     public  ProposeCreditDetailView(){
         reset();
     }

@@ -360,8 +360,12 @@ public class PrescreenMaker implements Serializable {
                 prescreenView.setBusinessLocation(new Province());
             }
 
-            if(prescreenView.getRefinanceBank() == null){
-                prescreenView.setRefinanceBank(new Bank());
+            if(prescreenView.getRefinanceInBank() == null){
+                prescreenView.setRefinanceInBank(new Bank());
+            }
+
+            if(prescreenView.getRefinanceOutBank() == null){
+                prescreenView.setRefinanceOutBank(new Bank());
             }
 
             if(prescreenView.getReferredExperience() == null){
@@ -2281,7 +2285,8 @@ public class PrescreenMaker implements Serializable {
             prescreenView.setBusinessLocation(null);
             prescreenView.setBorrowingType(null);
             prescreenView.setReferredExperience(null);
-            prescreenView.setRefinanceBank(null);
+            prescreenView.setRefinanceInBank(null);
+            prescreenView.setRefinanceOutBank(null);
             prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, deleteCustomerInfoViewList, workCasePreScreenId, caseBorrowerTypeId, user);
 
             //TODO show messageBox success

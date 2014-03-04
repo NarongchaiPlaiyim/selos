@@ -2775,6 +2775,7 @@
                                                     <p:column styleClass="left top">
                                                         <ui:repeat value="#{subColl.collateralOwnerUWList}"
                                                                    var="collOwnerUW" varStatus="i">
+                                                            #{not empty collOwnerUW.titleTh ? collOwnerUW.titleTh.titleTh : ''}
                                                             #{collOwnerUW.firstNameTh} #{collOwnerUW.lastNameTh}#{!i.last ? ', ' : ''}
                                                         </ui:repeat>
                                                     </p:column>
@@ -3092,6 +3093,7 @@
                                                 <p:column styleClass="left top">
                                                     <ui:repeat value="#{subColl.collateralOwnerUWList}"
                                                                var="collOwnerUW" varStatus="i">
+                                                        #{not empty collOwnerUW.titleTh ? collOwnerUW.titleTh.titleTh : ''}
                                                         #{collOwnerUW.firstNameTh} #{collOwnerUW.lastNameTh}#{!i.last ? ', ' : ''}
                                                     </ui:repeat>
                                                 </p:column>
@@ -3186,6 +3188,8 @@
                                     <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                     <p:column styleClass="left top">
+                                        <h:outputText value="#{guarantor.guarantorName.titleTh.titleTh}"
+                                                      rendered="#{not empty guarantor.guarantorName and not empty guarantor.guarantorName.titleTh}"/>
                                         <h:outputText value="#{guarantor.guarantorName.firstNameTh} #{guarantor.guarantorName.lastNameTh}"
                                                       rendered="#{not empty guarantor.guarantorName}"/>
                                     </p:column>
@@ -3317,6 +3321,8 @@
                                         </p:column>
 
                                         <p:column styleClass="left top">
+                                            <h:outputText value="#{guarantor.guarantorName.titleTh.titleTh}"
+                                                          rendered="#{not empty guarantor.guarantorName and not empty guarantor.guarantorName.titleTh}"/>
                                             <h:outputText value="#{guarantor.guarantorName.firstNameTh} #{guarantor.guarantorName.lastNameTh}"
                                                           rendered="#{not empty guarantor.guarantorName}"/>
                                         </p:column>
@@ -3828,13 +3834,13 @@
                             <td colspan="2" class="center">
                                 <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
                                                  binding="#{saveDecisionBtn}"
-                                                 action="#{decision.onSave()}"
+                                                 action="#{decision.onSaveDecision()}"
                                                  process="@form"
                                                  update=":frmMain, :msgBoxSystemMessagePanel"
                                                  styleClass="smaller"/>
                                 <p:spacer width="10" height="0"/>
                                 <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
-                                                 action="#{decision.onCancel()}"
+                                                 action="#{decision.onCancelDecision()}"
                                                  process="@form"
                                                  update=":frmMain"
                                                  styleClass="smaller"/>
@@ -3948,6 +3954,7 @@
 
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                     severity="#{decision.severity}"
                      header="#{decision.messageHeader}" message="#{decision.message}">
         <p:commandButton value="OK"
                          process="@this"

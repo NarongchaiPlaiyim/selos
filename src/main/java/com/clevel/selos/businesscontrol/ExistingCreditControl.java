@@ -22,16 +22,14 @@ import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.ExistingCreditDetailView;
 import com.clevel.selos.model.view.ExistingCreditFacilityView;
 import com.clevel.selos.transform.business.ObligationBizTransform;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Stateless
 public class ExistingCreditControl extends BusinessControl {
@@ -341,6 +339,27 @@ public class ExistingCreditControl extends BusinessControl {
                 List<AppInProcess> appInProcessList = appInProcessResult.getAppInProcessList();
                 log.info("App In {}", appInProcessList);
                 for (AppInProcess appInProcess : appInProcessList) {
+                    log.debug("Staus : {}", appInProcess.getStatus());
+
+                    //Check for STAUS = STPCP, PDSTP
+                    if(appInProcess.getStatus()!=null && (appInProcess.getStatus().equalsIgnoreCase("PDSTP") || appInProcess.getStatus().equalsIgnoreCase("STPCP"))){
+                        //check date T+2
+                        int diffNumber = DateTimeUtil.daysBetween2Dates(DateTimeUtil.getOnlyDate(appInProcess.getDateSentSTP()), DateTimeUtil.getOnlyDate(new Date()));
+                        log.debug("Staus : {}, DiffDate SentSTP: {}", appInProcess.getStatus(),diffNumber);
+                        if(appInProcess.getDateSentSTP()!=null && diffNumber > 1) {
+                            log.debug("Not use!");
+                            continue;
+                        }
+
+                        if(appInProcess.getDateSentSTP()==null){
+                            log.debug("Staus : {}, Sent STP Date is null", appInProcess.getStatus());
+                            log.debug("Not use!");
+                            continue;
+                        }
+                    }
+
+                    log.debug("Use!");
+
                     List<ExistingCreditDetailView> existingCreditDetailViews = existingCreditTransform.getExistingCredit(appInProcess);
                     List<CustomerDetail> customerDetailList = appInProcess.getCustomerDetailList();
                     boolean isBorrower = false;
