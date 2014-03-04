@@ -43,7 +43,8 @@ public class PledgeConfirm implements Serializable {
 	private long stepId = -1;
 	
 	private BasicInfoView basicInfoView;
-	
+	private Date lastUpdateDate;
+	private String lastUpdateBy;
 	//Property
 	private List<PledgeInfoView> pledges;
 	
@@ -51,11 +52,10 @@ public class PledgeConfirm implements Serializable {
 		
 	}
 	public Date getLastUpdateDateTime() {
-		return null;
+		return lastUpdateDate;
 	}
 	public String getLastUpdateBy() {
-		//TODO
-		return null;
+		return lastUpdateBy;
 	}
 	public ApproveType getApproveType() {
 		if (basicInfoView == null)
@@ -122,6 +122,26 @@ public class PledgeConfirm implements Serializable {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
 		pledges = pledgeConfirmControl.getPledgeInfoList(workCaseId);
+		if (pledges == null || pledges.isEmpty()) {
+			lastUpdateBy = null;
+			lastUpdateDate = null;
+		} else {
+			Date checkDate = new Date(0);
+			for (PledgeInfoView view : pledges) {
+				if (view.getModifyDate() == null) 
+					continue;
+				
+				if (view.getModifyDate().after(checkDate)) {
+					checkDate = view.getModifyDate();
+					lastUpdateDate = view.getModifyDate();
+					if (view.getModifyBy() != null)
+						lastUpdateBy = view.getModifyBy().getDisplayName();
+					else
+						lastUpdateBy = null;
+				}
+				
+			}
+		}
 	}
 }
 

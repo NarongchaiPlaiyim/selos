@@ -1272,6 +1272,8 @@ public class NCBBizTransform extends BusinessTransform {
                                                 if (!Util.isEmpty(creditInfoModel.getInstallmentamount())) {
                                                     ncbDetailView.setInstallment(new BigDecimal(creditInfoModel.getInstallmentamount()));
                                                 }
+                                                //for calculate brms rules,, add npl flag and tdr flag
+                                                ncbDetailView.setNplFlag(0);
                                                 //set restructure date
                                                 if (!Util.isEmpty(creditInfoModel.getRestructuredate())) {
                                                     String[] reStructureDate = Util.splitSpace(creditInfoModel.getRestructuredate());

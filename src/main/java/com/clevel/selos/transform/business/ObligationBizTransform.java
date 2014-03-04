@@ -385,7 +385,7 @@ public class ObligationBizTransform extends BusinessTransform {
 
             if(relatedComExistingCredit!=null && relatedComExistingCredit.size()>0){
                 for(ExistingCreditDetailView existingCreditDetailView : relatedComExistingCredit) {
-                    borrowerExistingCreditPreScreen.add(existingCreditDetailView);
+                    relateExistingCreditPresScreen.add(existingCreditDetailView);
                 }
             }
             if(relatedRetailExistingCredit!=null && relatedRetailExistingCredit.size()>0){

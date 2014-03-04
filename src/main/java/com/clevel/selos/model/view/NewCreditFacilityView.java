@@ -100,6 +100,11 @@ public class NewCreditFacilityView implements Serializable {
     private List<NewGuarantorDetailView> newGuarantorDetailViewList;
     private List<NewConditionDetailView> newConditionDetailViewList;
 
+    private List<NewCollateralView> newCollateralViewDelList;
+    private List<NewCreditDetailView> newCreditViewDelList;
+    private List<NewGuarantorDetailView> newGuarantorViewDelList;
+    private List<NewConditionDetailView> newConditionViewDelList;
+
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -189,6 +194,13 @@ public class NewCreditFacilityView implements Serializable {
         this.loanRequestType = new CreditRequestType();
         this.investedCountry = new Country();
         this.creditCustomerType = CreditCustomerType.NOT_SELECTED.value();
+
+        this.newCollateralViewDelList = new ArrayList<NewCollateralView>();
+        this.newCollateralViewDelList = new ArrayList<NewCollateralView>();
+        this.newCreditViewDelList = new ArrayList<NewCreditDetailView>();
+        this.newGuarantorViewDelList = new ArrayList<NewGuarantorDetailView>();
+        this.newConditionViewDelList = new ArrayList<NewConditionDetailView>();
+
     }
 
     public long getId() {
@@ -813,6 +825,38 @@ public class NewCreditFacilityView implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public List<NewCollateralView> getNewCollateralViewDelList() {
+        return newCollateralViewDelList;
+    }
+
+    public void setNewCollateralViewDelList(List<NewCollateralView> newCollateralViewDelList) {
+        this.newCollateralViewDelList = newCollateralViewDelList;
+    }
+
+    public List<NewCreditDetailView> getNewCreditViewDelList() {
+        return newCreditViewDelList;
+    }
+
+    public void setNewCreditViewDelList(List<NewCreditDetailView> newCreditViewDelList) {
+        this.newCreditViewDelList = newCreditViewDelList;
+    }
+
+    public List<NewGuarantorDetailView> getNewGuarantorViewDelList() {
+        return newGuarantorViewDelList;
+    }
+
+    public void setNewGuarantorViewDelList(List<NewGuarantorDetailView> newGuarantorViewDelList) {
+        this.newGuarantorViewDelList = newGuarantorViewDelList;
+    }
+
+    public List<NewConditionDetailView> getNewConditionViewDelList() {
+        return newConditionViewDelList;
+    }
+
+    public void setNewConditionViewDelList(List<NewConditionDetailView> newConditionViewDelList) {
+        this.newConditionViewDelList = newConditionViewDelList;
     }
 
     @Override

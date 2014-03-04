@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.brms.model.response;
 
 import com.clevel.selos.model.ActionResult;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.List;
@@ -52,5 +54,16 @@ public class UWRulesResponse implements Serializable {
 
     public void setUwRulesResultMap(Map<String, UWRulesResult> uwRulesResultMap) {
         this.uwRulesResultMap = uwRulesResultMap;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("decisionID", decisionID)
+                .append("applicationNo", applicationNo)
+                .append("actionResult", actionResult)
+                .append("reason", reason)
+                .append("uwRulesResultMap", uwRulesResultMap)
+                .toString();
     }
 }

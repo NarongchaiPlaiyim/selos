@@ -27,6 +27,7 @@ import com.clevel.selos.businesscontrol.MortgageSummaryControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.MortgageSignLocationType;
+import com.clevel.selos.model.view.AgreementInfoView;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.GuarantorInfoView;
 import com.clevel.selos.model.view.MortgageInfoView;
@@ -61,6 +62,7 @@ public class MortgageSummary implements Serializable {
 	//Property
 	private List<SelectItem> locations;
 	private MortgageSummaryView mortgageSummaryView;
+	private AgreementInfoView agreementInfoView;
 	private List<MortgageInfoView> mortgageInfos;
 	private List<PledgeInfoView> pledgeInfos;
 	private List<GuarantorInfoView> guarantorInfos;
@@ -94,8 +96,11 @@ public class MortgageSummary implements Serializable {
 	public MortgageSummaryView getMortgageSummaryView() {
 		return mortgageSummaryView;
 	}
+	public AgreementInfoView getAgreementInfoView() {
+		return agreementInfoView;
+	}
 	public boolean isEnableSignContractLocation() {
-		return ! MortgageSignLocationType.NA.equals(mortgageSummaryView.getSigningLocation());
+		return ! MortgageSignLocationType.NA.equals(agreementInfoView.getSigningLocation());
 	}
 	public List<MortgageInfoView> getMortgageInfos() {
 		return mortgageInfos;
@@ -151,8 +156,8 @@ public class MortgageSummary implements Serializable {
 		}
 	}
 	public void onSelectSignContract() {
-		mortgageSummaryView.setUpdLocation(0);
-		switch(mortgageSummaryView.getSigningLocation()) {
+		agreementInfoView.setUpdLocation(0);
+		switch(agreementInfoView.getSigningLocation()) {
 			case BRANCH :
 				locations = branches;
 				break;
@@ -166,7 +171,7 @@ public class MortgageSummary implements Serializable {
 	}
 	
 	public void onSaveMortgageSummary() {
-		mortgageSummaryControl.saveMortgageSummary(mortgageSummaryView, workCaseId);
+		mortgageSummaryControl.saveMortgageSummary(mortgageSummaryView, agreementInfoView, workCaseId);
 		
 		_loadInitData(true);
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
@@ -202,10 +207,11 @@ public class MortgageSummary implements Serializable {
 		}
 		mortgageSummaryView = mortgageSummaryControl.getMortgageSummaryView(workCaseId);
 		if (!ignoreRecalculate) {
-			if ("true".equals(FacesUtil.getParameter("force")) || mortgageSummaryView.requiredCalculate()) {
+			if ("true".equals(FacesUtil.getParameter("force")) || mortgageSummaryView.getId() <= 0) {
 				mortgageSummaryView = mortgageSummaryControl.calculateMortgageSummary(workCaseId);
 			}
 		}
+		agreementInfoView = mortgageSummaryControl.getAgreementInfoView(workCaseId);
 		
 		mortgageInfos = mortgageSummaryControl.getMortgageInfoList(workCaseId);
 		pledgeInfos = mortgageSummaryControl.getPledgeInfoList(workCaseId);

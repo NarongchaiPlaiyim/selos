@@ -43,7 +43,7 @@
             <!--Check PreScreen (BRMS)-->
             <p:commandButton id="btnCheckPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkPreScreen')}"
                              rendered="#{baseController.manageButton.checkBRMSButton}"
-                             action="#{prescreenMaker.onCheckPreScreen}" disabled="true"/>
+                             action="#{baseController.onCheckPreScreen}"/>
             <!--Request Appraisal-->
             <p:commandButton id="btnRequestAppraisal" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
                              onclick="confirmRequestAppraisal.show()" type="button"

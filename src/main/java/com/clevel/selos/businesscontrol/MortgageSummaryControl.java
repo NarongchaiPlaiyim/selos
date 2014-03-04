@@ -70,10 +70,12 @@ import com.clevel.selos.model.db.working.OpenAccountName;
 import com.clevel.selos.model.db.working.OpenAccountPurpose;
 import com.clevel.selos.model.db.working.PledgeInfo;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.AgreementInfoView;
 import com.clevel.selos.model.view.GuarantorInfoView;
 import com.clevel.selos.model.view.MortgageInfoView;
 import com.clevel.selos.model.view.MortgageSummaryView;
 import com.clevel.selos.model.view.PledgeInfoView;
+import com.clevel.selos.transform.AgreementInfoTransform;
 import com.clevel.selos.transform.GuarantorInfoTransform;
 import com.clevel.selos.transform.MortgageInfoTransform;
 import com.clevel.selos.transform.MortgageSummaryTransform;
@@ -105,6 +107,7 @@ public class MortgageSummaryControl extends BusinessControl {
     @Inject private MortgageInfoMortgageDAO mortgageInfoMortgageDAO;
     
     @Inject private MortgageSummaryTransform mortgageSummaryTransform;
+    @Inject private AgreementInfoTransform agreementInfoTransform;
     @Inject private MortgageInfoTransform mortgageInfoTransform;
     @Inject private PledgeInfoTransform pledgeInfoTransform;
     @Inject private GuarantorInfoTransform guarantorInfoTransform;
@@ -149,16 +152,21 @@ public class MortgageSummaryControl extends BusinessControl {
     }
     public MortgageSummaryView getMortgageSummaryView(long workCaseId) {
         MortgageSummary mortgage = null;
-        AgreementInfo agreement = null;
         if (workCaseId > 0) {
         	try {
         		mortgage = mortgageSummaryDAO.findByWorkCaseId(workCaseId);
         	} catch (Throwable e) {}
-        	try {
+        }
+        return mortgageSummaryTransform.transformToView(mortgage);
+    }
+    public AgreementInfoView getAgreementInfoView(long workCaseId) {
+    	AgreementInfo agreement = null;
+    	if (workCaseId > 0) {
+    		try {
         		agreement = agreementInfoDAO.findByWorkCaseId(workCaseId);
         	} catch (Throwable e) {}
         }
-        return mortgageSummaryTransform.transformToView(mortgage, agreement);
+    	return agreementInfoTransform.transformToView(agreement);
     }
     
     public List<MortgageInfoView> getMortgageInfoList(long workCaseId) {
@@ -194,7 +202,7 @@ public class MortgageSummaryControl extends BusinessControl {
 
     public MortgageSummaryView calculateMortgageSummary(long workCaseId) {
     	if (workCaseId <= 0)
-    		return mortgageSummaryTransform.transformToView(null,null);
+    		return mortgageSummaryTransform.transformToView(null);
     	User user = getCurrentUser();
     	WorkCase workCase = workCaseDAO.findRefById(workCaseId);
     	
@@ -276,37 +284,37 @@ public class MortgageSummaryControl extends BusinessControl {
     	} catch (Throwable e) {}
     	
     	if (mortgage == null) {
-    		mortgage = mortgageSummaryTransform.createMortgageSummary(user, workCase);
+    		mortgage = mortgageSummaryTransform.createMortgageSummary(null,user,workCase);
     		mortgageSummaryDAO.save(mortgage);
     	} else {
-    		mortgageSummaryTransform.updateMortgageSummary(mortgage, user);
+    		mortgageSummaryTransform.updateMortgageSummary(mortgage, null,user);
     		mortgageSummaryDAO.persist(mortgage);
     	}
     	if (agreement == null) {
-    		agreement = mortgageSummaryTransform.creatAgreementInfo(null, workCase);
+    		agreement = agreementInfoTransform.creatAgreementInfo(null, workCase,user);
     		agreementInfoDAO.save(agreement);
     	} 
-    	return mortgageSummaryTransform.transformToView(mortgage,agreement);
+    	return mortgageSummaryTransform.transformToView(mortgage);
     }
     
-    public void saveMortgageSummary(MortgageSummaryView view,long workCaseId) {
+    public void saveMortgageSummary(MortgageSummaryView view,AgreementInfoView agreementView,long workCaseId) {
     	User user = getCurrentUser();
     	WorkCase workCase = workCaseDAO.findRefById(workCaseId);
     	if (view.getId() <= 0) {
-    		MortgageSummary model = mortgageSummaryTransform.createMortgageSummary(user, workCase);
+    		MortgageSummary model = mortgageSummaryTransform.createMortgageSummary(view, user, workCase);
     		mortgageSummaryDAO.save(model);
     	} else {
     		MortgageSummary model = mortgageSummaryDAO.findById(view.getId());
-    		mortgageSummaryTransform.updateMortgageSummary(model, user);
+    		mortgageSummaryTransform.updateMortgageSummary(model, view,user);
     		mortgageSummaryDAO.persist(model);
     	}
     	
-    	if (view.getAgreementId() <= 0) {
-    		AgreementInfo model = mortgageSummaryTransform.creatAgreementInfo(view, workCase);
+    	if (agreementView.getId() <= 0) {
+    		AgreementInfo model = agreementInfoTransform.creatAgreementInfo(agreementView, workCase,user);
     		agreementInfoDAO.save(model);
     	} else {
-    		AgreementInfo model = agreementInfoDAO.findById(view.getAgreementId());
-    		mortgageSummaryTransform.updateAgreementInfo(model, view);
+    		AgreementInfo model = agreementInfoDAO.findById(agreementView.getId());
+    		agreementInfoTransform.updateAgreementInfo(model, agreementView,user);
     		agreementInfoDAO.persist(model);
     	}
     }

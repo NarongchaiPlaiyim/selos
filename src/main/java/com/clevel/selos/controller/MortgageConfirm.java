@@ -114,7 +114,7 @@ public class MortgageConfirm implements Serializable {
 	}
 	
 	public void onSaveMortgageConfirm() {
-		mortgageConfirmControl.saveMortgageConfirm(summary, mortgages);
+		mortgageConfirmControl.saveMortgageConfirm(summary, mortgages,workCaseId);
 		
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
@@ -127,7 +127,7 @@ public class MortgageConfirm implements Serializable {
 		if (workCaseId > 0) {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
-		summary = mortgageConfirmControl.getMortgageSummary(workCaseId);
+		summary = mortgageConfirmControl.getMortgageSummaryView(workCaseId);
 		mortgages = mortgageConfirmControl.getMortgageInfoList(workCaseId);
 	}
 }

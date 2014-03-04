@@ -31,6 +31,7 @@ public class NewCollateralHeadView implements Serializable {
     private User modifyBy;
 
     private List<NewCollateralSubView> newCollateralSubViewList;
+    private List<NewCollateralSubView> newCollateralSubDeleteList;
 
     public NewCollateralHeadView(){
           reset();
@@ -46,6 +47,7 @@ public class NewCollateralHeadView implements Serializable {
         this.insuranceCompany = 0;
         this.titleDeed = "";
         this.newCollateralSubViewList = new ArrayList<NewCollateralSubView>();
+        this.newCollateralSubDeleteList = new ArrayList<NewCollateralSubView>();
     }
 
     public long getId() {
@@ -174,6 +176,14 @@ public class NewCollateralHeadView implements Serializable {
 
     public void setCollID(String collID) {
         this.collID = collID;
+    }
+
+    public List<NewCollateralSubView> getNewCollateralSubDeleteList() {
+        return newCollateralSubDeleteList;
+    }
+
+    public void setNewCollateralSubDeleteList(List<NewCollateralSubView> newCollateralSubDeleteList) {
+        this.newCollateralSubDeleteList = newCollateralSubDeleteList;
     }
 
     @Override

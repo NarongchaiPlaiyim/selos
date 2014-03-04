@@ -4,6 +4,7 @@ import com.clevel.selos.model.RadioValue;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public  abstract class CustomerInfoPostBaseView <T extends CustomerInfoPostBaseView<T>> implements Serializable {
@@ -30,6 +31,9 @@ public  abstract class CustomerInfoPostBaseView <T extends CustomerInfoPostBaseV
 	protected String displayBusinessType;
 	
 	protected long workCaseId;
+	
+	protected Date modifyDate;
+	protected String modifyUser;
 	
 	protected List<CustomerInfoPostAddressView> addresses;
 	
@@ -188,6 +192,19 @@ public  abstract class CustomerInfoPostBaseView <T extends CustomerInfoPostBaseV
 	public void setWorkCaseId(long workCaseId) {
 		this.workCaseId = workCaseId;
 	}
+	public Date getModifyDate() {
+		return modifyDate;
+	}
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
+	}
+	public String getModifyUser() {
+		return modifyUser;
+	}
+	public void setModifyUser(String modifyUser) {
+		this.modifyUser = modifyUser;
+	}
+	
 	private void _updateBaseValue(T view) {
 		id = view.id;
 		collateralOwner = view.collateralOwner;
@@ -208,7 +225,8 @@ public  abstract class CustomerInfoPostBaseView <T extends CustomerInfoPostBaseV
 		displayMailingAddressType = view.displayMailingAddressType;
 		workCaseId = view.workCaseId;
 //		relationId = view.relationId;
-				
+		modifyDate = view.modifyDate;
+		modifyUser = view.modifyUser;
 		addresses.clear();
 		for (CustomerInfoPostAddressView address : view.addresses) {
 			CustomerInfoPostAddressView toAdd = new CustomerInfoPostAddressView();

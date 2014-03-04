@@ -76,19 +76,19 @@ public class NCBDetail implements Serializable {
     @Column(name = "refinance_flag")
     private int refinanceFlag;
 
-    @Column(name = "no_of_months_payment")
+    @Column(name = "no_of_months_payment", columnDefinition = "int default 0")
     private int noOfMonthPayment;
 
-    @Column(name = "npl_flag")
+    @Column(name = "npl_flag", columnDefinition = "int default 0")
     private int nplFlag;
 
     @Column(name = "npl_credit_amount")
     private BigDecimal nplCreditAmount;
 
-    @Column(name = "tdr_flag")
+    @Column(name = "tdr_flag", columnDefinition = "int default 0")
     private int tdrFlag;
 
-    @Column(name = "wcFlag")
+    @Column(name = "wcFlag", columnDefinition = "int default 0")
     private int wcFlag;
 
     @Column(name = "can_edit")
