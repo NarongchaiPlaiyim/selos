@@ -434,9 +434,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         standardBasePriceDlg = new BaseRate();
         standardInterestDlg = BigDecimal.ZERO;
 
-        prdGroupToPrdProgramViewAll = productControl.getPrdGroupToPrdProgramProposeAll();
+        prdGroupToPrdProgramViewAll = productControl.getPrdGroupToPrdProgramFromAllPrdProgram();
         prdGroupToPrdProgramViewByGroup = productControl.getPrdGroupToPrdProgramProposeByGroup(productGroup);
-
     }
 
 
@@ -1719,7 +1718,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("app.propose.response.save.success");
             exSummaryControl.calForCreditFacility(workCaseId);
-            onCreation();
+//            onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             notRetrivePricing = false;
 //            } else {
@@ -2240,5 +2239,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     public void setSubCollateralTypeViewList(List<SubCollateralTypeView> subCollateralTypeViewList) {
         this.subCollateralTypeViewList = subCollateralTypeViewList;
     }
+
 }
 

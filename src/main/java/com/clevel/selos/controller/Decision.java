@@ -303,7 +303,7 @@ public class Decision implements Serializable {
             baseRateList = new ArrayList<BaseRate>();
 
         prdGroupToPrdProgramViewList = new ArrayList<PrdGroupToPrdProgramView>();
-        _prdGroupToPrdProgramAll = productControl.getPrdGroupToPrdProgramProposeAll();
+        _prdGroupToPrdProgramAll = productControl.getPrdGroupToPrdProgramFromAllPrdProgram();
         _prdGroupToPrdProgramByGroup = productControl.getPrdGroupToPrdProgramProposeByGroup(productGroup);
         loanPurposeViewList = loanPurposeControl.getLoanPurposeViewList();
         disbursementTypeViewList = disbursementTypeControl.getDisbursementTypeViewList();
