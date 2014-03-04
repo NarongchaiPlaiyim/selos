@@ -10,25 +10,27 @@ public class MortgageInfoCollOwnerTransform extends Transform {
 	public MortgageInfoCollOwnerView transformToView(MortgageInfoCollOwner model) {
 		MortgageInfoCollOwnerView view = new MortgageInfoCollOwnerView();
 		view.setId(model.getId());
-		view.setCustomerId(model.getId());
 		Customer customer = model.getCustomer();
-		view.setCustomerName(customer.getDisplayName());
-		
-		if (customer.getIndividual() != null)
-			view.setCitizenId(customer.getIndividual().getCitizenId());
-		else if (customer.getJuristic() != null)
-			view.setCitizenId(customer.getJuristic().getRegistrationId());
-		else
-			view.setCitizenId("-");
-		view.setTmbCustomerId(customer.getTmbCustomerId());
-		if (customer.getRelation() != null)
-			view.setRelation(customer.getRelation().getDescription());
-		view.setPOA(model.isPoa());
-		view.setCanSelectPOA(true);
-		if (customer.getJuristic() != null)
-			view.setJuristic(true);
-		else
-			view.setJuristic(false);
+		if (customer != null) {
+			view.setCustomerId(customer.getId());
+			view.setCustomerName(customer.getDisplayName());
+			
+			if (customer.getIndividual() != null)
+				view.setCitizenId(customer.getIndividual().getCitizenId());
+			else if (customer.getJuristic() != null)
+				view.setCitizenId(customer.getJuristic().getRegistrationId());
+			else
+				view.setCitizenId("-");
+			view.setTmbCustomerId(customer.getTmbCustomerId());
+			if (customer.getRelation() != null)
+				view.setRelation(customer.getRelation().getDescription());
+			view.setPOA(model.isPoa());
+			view.setCanSelectPOA(true);
+			if (customer.getJuristic() != null)
+				view.setJuristic(true);
+			else
+				view.setJuristic(false);
+		}
 		return view;
 	}
 

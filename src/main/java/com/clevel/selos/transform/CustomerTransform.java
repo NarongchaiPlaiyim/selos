@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -301,6 +302,8 @@ public class CustomerTransform extends Transform {
             Individual individual = customer.getIndividual();
 
             if(individual != null){
+            	customerInfoView.setNeedAttorney(RadioValue.YES.equals(individual.getAttorneyRequired()));
+            	customerInfoView.setSignContract(customer.getReference().isCanSignContract());
                 customerInfoView.setIndividualId(individual.getId());
                 customerInfoView.setCitizenId(individual.getCitizenId());
                 customerInfoView.setGender(individual.getGender());
@@ -1075,6 +1078,12 @@ public class CustomerTransform extends Transform {
     
     private void _tranformBasePostView(Customer model,CustomerInfoPostBaseView<?> view) {
     	view.setId(model.getId());
+    	if (model.getWorkCase() != null)
+    		view.setWorkCaseId(model.getWorkCase().getId());
+    	view.setModifyDate(model.getModifyDate());
+    	if (model.getModifyBy() != null)
+    		view.setModifyUser(model.getModifyBy().getDisplayName());
+    	
     	view.setTmbCustomerId(model.getTmbCustomerId());
     	if (model.getRelation() != null) {
     		view.setRelationId(model.getRelation().getId());
@@ -1170,8 +1179,8 @@ public class CustomerTransform extends Transform {
     	}
     }
     
-    public void updateModelFromPostView(Customer model,CustomerInfoPostIndvView view) {
-    	_updateModelFromBasePostView(model, view);
+    public void updateModelFromPostView(Customer model,CustomerInfoPostIndvView view,User user) {
+    	_updateModelFromBasePostView(model, view,user);
     	//Read only list (No need to update)
     	//last name
     	
@@ -1200,17 +1209,18 @@ public class CustomerTransform extends Transform {
     	
     	//For spouse this should be updated in controller
     }
-    public void updateModelFromPostView(Customer model,CustomerInfoPostJurisView view) {
-    	_updateModelFromBasePostView(model, view);
+    public void updateModelFromPostView(Customer model,CustomerInfoPostJurisView view,User user) {
+    	_updateModelFromBasePostView(model, view,user);
     	//Read only list (No need to update)
     	//regist date, contact person
     }
-    private void _updateModelFromBasePostView(Customer model,CustomerInfoPostBaseView<?> view) {
+    private void _updateModelFromBasePostView(Customer model,CustomerInfoPostBaseView<?> view,User user) {
     	//Read only list (No need to update)
     	// Relation, Collateral Owner, Document Type, Personal Id,
     	// NameTH , Mobile, Fax, Email, tmb customerId
     	
-    	
+    	model.setModifyBy(user);
+    	model.setModifyDate(new Date());
     	view.calculateAge();
     	model.setAge(view.getAge());
     	model.setTitle(titleDAO.findRefById(view.getTitleId()));

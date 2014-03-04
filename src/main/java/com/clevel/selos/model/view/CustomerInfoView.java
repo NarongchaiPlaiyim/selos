@@ -105,6 +105,8 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private BigDecimal shareHolderRatio;
     private String numberOfAuthorizedUsers;
     private String contactName; // new 23-12-13
+    private boolean signContract;
+    private boolean needAttorney;
 
     //*** Var for Address ***//
     private AddressView currentAddress;
@@ -1023,6 +1025,20 @@ public class CustomerInfoView implements Serializable, Cloneable {
     public void setRemoveIndividualIdList(List<Long> removeIndividualIdList) {
         this.removeIndividualIdList = removeIndividualIdList;
     }
+    
+    public boolean isNeedAttorney() {
+		return needAttorney;
+	}
+    public void setNeedAttorney(boolean needAttorney) {
+		this.needAttorney = needAttorney;
+	}
+    public boolean isSignContract() {
+		return signContract;
+	}
+    public void setSignContract(boolean signContract) {
+		this.signContract = signContract;
+	}
+    
 
     @Override
     public String toString() {

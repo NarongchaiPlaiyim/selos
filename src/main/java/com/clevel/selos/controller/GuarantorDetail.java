@@ -151,5 +151,14 @@ public class GuarantorDetail implements Serializable {
 		}
 		
 		guarantorInfoView = guarantorDetailControl.getGuarantorInfoFull(guarantorId);
+		if (guarantorInfoView.getId() <= 0 || guarantorInfoView.getWorkCaseId() != workCaseId) {
+			String redirectPage = "/site/mortgageSummary.jsf";
+			try {
+				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+				ec.redirect(ec.getRequestContextPath()+redirectPage);
+			} catch (IOException e) {
+				log.error("Fail to redirect screen to "+redirectPage,e);
+			}
+		}
 	}
 }

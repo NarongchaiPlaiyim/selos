@@ -22,7 +22,7 @@ public class MortgageInfoTransform extends Transform {
 	@Inject private MortgageOSCompanyDAO mortgageOSCompanyDAO;
 	@Inject private MortgageLandOfficeDAO mortgageLandOfficeDAO;
 	
-	public MortgageInfoView transformToView(MortgageInfo model) {
+	public MortgageInfoView transformToView(MortgageInfo model,long workCaseId) {
 		MortgageInfoView view = new MortgageInfoView();
 		if (model == null) {
 			view.setMortgageAmount(new BigDecimal(0));
@@ -31,6 +31,7 @@ public class MortgageInfoTransform extends Transform {
 			view.setConfirmed(MortgageConfirmedType.NA);
 		} else {
 			view.setId(model.getId());
+			view.setWorkCaseId(workCaseId);
 			view.setSigningDate(model.getMortgageSigningDate());
 			if (model.getMortgageOSCompany() != null)
 				view.setOsCompanyId(model.getMortgageOSCompany().getId());

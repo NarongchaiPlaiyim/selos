@@ -23,11 +23,11 @@ public class GuarantorInfoTransform extends Transform {
 	@Inject private CustomerTransform customerTransform;
 	@Inject private CreditDetailSimpleTransform creditDetailSimpleTransform;
 	
-	public GuarantorInfoView transformToView(GuarantorInfo model) {
+	public GuarantorInfoView transformToView(GuarantorInfo model,long workCaseId) {
 		GuarantorInfoView view = new GuarantorInfoView();
 		if (model == null)
 			return view;
-		_processSimpleView(model, view);
+		_processSimpleView(model, view,workCaseId);
 		return view;
 	}
 	
@@ -48,11 +48,11 @@ public class GuarantorInfoTransform extends Transform {
 		model.setGuarantorSigningDate(view.getSigningDate());
 	}
 	
-	public GuarantorInfoFullView transformToFullView(GuarantorInfo model) {
+	public GuarantorInfoFullView transformToFullView(GuarantorInfo model,long workCaseId) {
 		GuarantorInfoFullView view = new GuarantorInfoFullView();
 		if (model == null)
 			return view;
-		_processSimpleView(model, view);
+		_processSimpleView(model, view,workCaseId);
 		if (model.getNewGuarantorDetail() == null)
 			return view;
 		List<CustomerInfoSimpleView> customerViews = new ArrayList<CustomerInfoSimpleView>();
@@ -76,8 +76,9 @@ public class GuarantorInfoTransform extends Transform {
 		return view;
 	}
 	
-	private void _processSimpleView(GuarantorInfo model,GuarantorInfoView view) {
+	private void _processSimpleView(GuarantorInfo model,GuarantorInfoView view,long workCaseId) {
 		view.setId(model.getId());
+		view.setWorkCaseId(workCaseId);
 		view.setSigningDate(model.getGuarantorSigningDate());
 		view.setModifyBy(model.getModifyBy());
 		view.setModifyDate(model.getModifyDate());

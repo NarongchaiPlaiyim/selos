@@ -243,6 +243,15 @@ public class PledgeDetail implements Serializable {
 		}
 		
 		pledgeInfoView = pledgeDetailControl.getPledgeInfoFull(pledgeId);
+		if (pledgeInfoView.getId() <= 0 || pledgeInfoView.getWorkCaseId() != workCaseId) {
+			String redirectPage = "/site/mortgageSummary.jsf";
+			try {
+				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+				ec.redirect(ec.getRequestContextPath()+redirectPage);
+			} catch (IOException e) {
+				log.error("Fail to redirect screen to "+redirectPage,e);
+			}
+		}
 		List<PledgeACDepView> list = pledgeDetailControl.getPledgeACList(pledgeId);
 		if (list == null)
 			pledgeACDepList = new ArrayList<PledgeACDepView>();
