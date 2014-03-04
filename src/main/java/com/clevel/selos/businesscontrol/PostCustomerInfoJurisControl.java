@@ -57,7 +57,7 @@ public class PostCustomerInfoJurisControl extends BusinessControl {
 		if (view.getId() <= 0)
 			return;
 		Customer model = customerDAO.findById(view.getId());
-		customerTransform.updateModelFromPostView(model, view);
+		customerTransform.updateModelFromPostView(model, view,getCurrentUser());
 		customerDAO.persist(model);
 	}
 }

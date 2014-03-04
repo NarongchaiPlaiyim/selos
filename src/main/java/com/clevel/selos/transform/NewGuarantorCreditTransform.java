@@ -48,10 +48,13 @@ public class NewGuarantorCreditTransform extends Transform {
                         newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
                     }
                 } else if ("E".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
-                    log.info(" Existing ::  proposeCreditDetailView.getSeq() ::: {}",proposeCreditDetailView.getSeq());
+                    log.info(" Existing ::  proposeCreditDetailView.getSeq() ::: {}", proposeCreditDetailView.getSeq());
                     ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById((long) proposeCreditDetailView.getSeq());
-                    log.info(" existingCreditDetail id ::: {}",existingCreditDetail.getId());
-                    log.info("newGuarantorCredit existingCreditDetail id toSet is " + newGuarantorCredit.getExistingCreditDetail().getId());
+//                    log.info(" existingCreditDetail id ::: {}",existingCreditDetail.getId());
+                    if (existingCreditDetail != null) {
+                        newGuarantorCredit.setExistingCreditDetail(existingCreditDetail);
+                        log.info("newGuarantorCredit existingCreditDetail id toSet is " + newGuarantorCredit.getExistingCreditDetail().getId());
+                    }
                     newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
 
                 }
@@ -71,7 +74,7 @@ public class NewGuarantorCreditTransform extends Transform {
         NewCreditDetail newCreditDetailReturn = null;
 
         for (NewCreditDetail newCreditDetailAdd : newCreditDetailList) {
-            log.info("newCreditDetailAdd id is  :: {}",newCreditDetailAdd.getId());
+            log.info("newCreditDetailAdd id is  :: {}", newCreditDetailAdd.getId());
             log.info("newCreditDetailAdd seq is :: {}", newCreditDetailAdd.getSeq());
             log.info("guarantor choose seq is {}", proposeCreditDetailView.getSeq());
             if (proposeCreditDetailView.getSeq() == newCreditDetailAdd.getSeq()) {

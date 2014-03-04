@@ -23,19 +23,19 @@ public class PledgeInfoTransform extends Transform {
 	private static final long serialVersionUID = 1909028796575736180L;
 	@Inject private CustomerTransform customerTransform;
 	@Inject private CreditDetailSimpleTransform creditDetailSimpleTransform;
-	public PledgeInfoView transformToView(PledgeInfo model) {
+	public PledgeInfoView transformToView(PledgeInfo model,long workCaseId) {
 		PledgeInfoView view = new PledgeInfoView();
 		if (model == null)
 			return view;
-		_processSimpleView(model, view);
+		_processSimpleView(model, view,workCaseId);
 		return view;
 	}
 	
-	public PledgeInfoFullView transformToFullView(PledgeInfo model) {
+	public PledgeInfoFullView transformToFullView(PledgeInfo model,long workCaseId) {
 		PledgeInfoFullView view = new PledgeInfoFullView();
 		if (model == null)
 			return view;
-		_processSimpleView(model, view);
+		_processSimpleView(model, view,workCaseId);
 		List<CustomerInfoSimpleView> customerViews = new ArrayList<CustomerInfoSimpleView>();
 		List<CreditDetailSimpleView> creditViews = new ArrayList<CreditDetailSimpleView>();
 		
@@ -62,8 +62,9 @@ public class PledgeInfoTransform extends Transform {
 		return view;
 	}
 	
-	private void _processSimpleView(PledgeInfo model,PledgeInfoView view) {
+	private void _processSimpleView(PledgeInfo model,PledgeInfoView view,long workCaseId) {
 		view.setId(model.getId());
+		view.setWorkCaseId(workCaseId);
 		if (model.getPledgeType() != null)
 			view.setPledgeType(model.getPledgeType().getMortgage());
 		view.setSigningDate(model.getPledgeSigningDate());
