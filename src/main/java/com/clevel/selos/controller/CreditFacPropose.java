@@ -512,7 +512,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     log.debug("standardPricingResponse ::: {}", standardPricingResponse.getPricingFeeList().toString());
                 } else if (!Util.isNull(standardPricingResponse) && ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
                     messageHeader = msg.get("app.propose.exception");
-                    message = standardPricingResponse.getActionResult().toString();
+                    message = " onRetrievePricingFee : Action result FAILED !!!";//standardPricingResponse.getActionResult().toString();
                     messageErr = true;
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }

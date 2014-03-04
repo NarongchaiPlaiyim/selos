@@ -178,6 +178,7 @@ public class CreditFacProposeControl extends BusinessControl {
                         newCreditFacilityView.setNewCollateralViewList(newCollateralViewList);
                     }
 
+                    //error when saved and find data from table by newCreditFacility
 //                    List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
 //                    if (newGuarantorDetails.size() > 0) {
 //                        log.debug("newGuarantorDetails:: {}", newGuarantorDetails.size());
