@@ -1,504 +1,433 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.AccountInfoControl;
-import com.clevel.selos.dao.master.BankAccountProductDAO;
-import com.clevel.selos.dao.master.BankAccountPurposeDAO;
-import com.clevel.selos.dao.master.BankAccountTypeDAO;
-import com.clevel.selos.dao.master.BankBranchDAO;
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.BankAccountProduct;
-import com.clevel.selos.model.db.master.BankAccountPurpose;
-import com.clevel.selos.model.db.master.BankAccountType;
-import com.clevel.selos.model.db.master.BankBranch;
-import com.clevel.selos.model.view.*;
-import com.clevel.selos.system.message.Message;
-import com.clevel.selos.system.message.NormalMessage;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
+
+import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.inject.Inject;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.clevel.selos.businesscontrol.AccountInfoControl;
+import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.RequestAccountType;
+import com.clevel.selos.model.view.AccountInfoSummaryView;
+import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.model.view.OpenAccountCreditView;
+import com.clevel.selos.model.view.OpenAccountFullView;
+import com.clevel.selos.model.view.OpenAccountNameView;
+import com.clevel.selos.model.view.OpenAccountPurposeView;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 
 @ViewScoped
 @ManagedBean(name = "accountInfo")
 public class AccountInfo implements Serializable {
-    @Inject
-    @SELOS
-    Logger log;
-
-    @Inject
-    @NormalMessage
-    Message msg;
-
-    @Inject
-    private BankAccountProductDAO productTypeDAO;
-    @Inject
-    private BankAccountTypeDAO accountTypeDAO;
-    @Inject
-    private BankAccountPurposeDAO purposeDAO;
-    @Inject
-    private AccountInfoControl accountInfoControl;
-    @Inject
-    private BankBranchDAO bankBranchDAO;
-
-    private List<BankAccountPurpose> purposeList;
-
-    private String messageHeader;
-    private String message;
-
-    //session
-    private long workCaseId = 2001L;
-
-    enum ModeForButton{ ADD, EDIT }
-    private ModeForButton modeForButton;
-    private int rowIndex;
-
-    //*** View ***//
-    private AccountInfoView accountInfoView;
-    private List<AccountInfoDetailView> accountInfoDetailViewList;
-    private AccountInfoDetailView accountInfoDetailView;
-
-    //*** Drop down List ***//
-    private List<BankAccountType> accountTypeList;
-    private List<BankAccountProduct> productTypeList;
-    private List<BankBranch> branchList;
-    private List<AccountNameView> accountNameList;
-
-    //*** Check box ***//
-    private List<AccountInfoPurposeView> purposeViewList;
-
-    //*** Account Name (Table) ***//
-    private List<AccountNameView> accountNameViewList;
-    private AccountNameView accountNameView;
-
-    //*** Credit Type (Table) ***//
-    private List<AccountInfoCreditTypeView> creditTypeViewList;
-    private AccountInfoCreditTypeView creditTypeView;
-
-    @Inject
-    public AccountInfo() {
-
-    }
-
-    @PostConstruct
-    public void onCreation(){
-        //todo
-//        HttpSession session = FacesUtil.getSession(true);
-//
-//        if(session.getAttribute("workCaseId") != null){
-//            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-//        }else{
-//            log.info("preRender ::: workCaseId is null.");
-//            try{
-//                FacesUtil.redirect("/site/inbox.jsf");
-//                return;
-//            }catch (Exception ex){
-//                log.info("Exception :: {}",ex);
-//            }
-//        }
-
-        init();
-        accountInfoView = accountInfoControl.getAccountInfo(workCaseId);
-        if(accountInfoView!=null){
-            accountInfoDetailViewList = accountInfoView.getAccountInfoDetailViewList();
-            log.debug("-- accountInfoDetailViewList.size() : {}", accountInfoDetailViewList.size());
-            for(AccountInfoDetailView view : accountInfoDetailViewList){
-                accountNameViewList = view.getAccountNameViewList();
-                log.debug("-- accountNameViewList.size() : {}", accountNameViewList.size());
-                for(AccountNameView nameView : accountNameViewList){
-                    log.debug("-- Account Name View : {}", nameView.getName());
-                }
-            }
-        } else {
-            accountInfoView = new AccountInfoView();
-            accountInfoDetailViewList = new ArrayList<AccountInfoDetailView>();
-        }
-    }
-
-    public void onAddAccountDetail(){
-        modeForButton = ModeForButton.ADD;
-        init();
-    }
-
-    public void onChangeAccountType(){
-        int id = (int) accountInfoView.getAccountInfoDetailViewSelected().getAccountTypeView().getId();
-        productTypeList = productTypeDAO.findByBankAccountTypeId(id);
-    }
-
-    public void addAccountName(){
-        long id = 0;
-        id = accountInfoView.getAccountInfoDetailViewSelected().getAccountNameViewSelected().getId();
-        for(AccountNameView nameView : accountNameList){
-            if(nameView.getId() == id){
-                accountNameView = new AccountNameView();
-                accountNameView.setId(id);
-                accountNameView.setName(nameView.getName());
-                accountInfoView.getAccountInfoDetailViewSelected().getAccountNameViewList().add(accountNameView);
-                break;
-            }
-        }
-    }
-
-    public void addAccountDetail(){
-        int id = 0;
-        long idLong = 0L;
-        String value = null;
-
-        //Request Account Type
-        id = accountInfoView.getAccountInfoDetailViewSelected().getReqAccountType();
-        log.debug("-- Request Account Type id : {}", id);
-        if(1 == id){
-            accountInfoView.getAccountInfoDetailViewSelected().setReqAccountTypeForShow("Existing");
-            log.debug("-- Request Account Type : {}", "Existing");
-        } else {
-            accountInfoView.getAccountInfoDetailViewSelected().setReqAccountTypeForShow("New");
-            log.debug("-- Request Account Type : {}", "New");
-        }
-
-        //Account Number
-        value = accountInfoView.getAccountInfoDetailViewSelected().getAccountNumber();
-        if(value == null || "".equals(value)){
-            accountInfoView.getAccountInfoDetailViewSelected().setAccountNumberForShow(" - ");
-            log.debug("-- Account Number : {}", "Null or Empty");
-        } else {
-            accountInfoView.getAccountInfoDetailViewSelected().setAccountNumberForShow(value);
-            log.debug("-- Account Number : {}", value);
-        }
-
-        //Branch
-        idLong = accountInfoView.getAccountInfoDetailViewSelected().getBranchView().getId();
-        log.debug("-- Branch id : {}", idLong);
-        if(0 != idLong){
-            for (BankBranch branch : branchList){
-                if (branch.getId() == idLong){
-                    accountInfoView.getAccountInfoDetailViewSelected().getBranchView().setName(branch.getName());
-                    log.debug("-- Branch : {}", branch.getName());
-                    break;
-                }
-            }
-        }
-
-        //Product Type
-        id = (int) accountInfoView.getAccountInfoDetailViewSelected().getProductTypeView().getId();
-        log.debug("-- Product Type id : {}", id);
-        if(0 != id){
-            for (BankAccountProduct productType : productTypeList){
-                if (productType.getId() == id){
-                    accountInfoView.getAccountInfoDetailViewSelected().getProductTypeView().setName(productType.getName());
-                    log.debug("-- Product Type : {}", productType.getName());
-                    break;
-                }
-            }
-        }
-
-        //Term
-        value = accountInfoView.getAccountInfoDetailViewSelected().getTerm();
-        if(value == null || "null".equalsIgnoreCase(value) || "".equals(value)){
-            accountInfoView.getAccountInfoDetailViewSelected().setTermForShow(" - ");
-            log.debug("-- Term : {}", "Null or Empty");
-        } else {
-            accountInfoView.getAccountInfoDetailViewSelected().setTermForShow(value);
-            log.debug("-- Term : {}", value);
-        }
-
-        if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
-            accountInfoDetailView = accountInfoView.getAccountInfoDetailViewSelected();
-            accountInfoDetailViewList.add(accountInfoDetailView);
-            accountInfoView.setAccountInfoDetailViewList(accountInfoDetailViewList);
-        } else {
-            accountInfoDetailView = accountInfoView.getAccountInfoDetailViewSelected();
-            accountInfoDetailViewList.set(rowIndex, accountInfoDetailView);
-        }
-
-        boolean complete = true;
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.addCallbackParam("functionComplete", complete);
-
-    }
-
-    public void removeAccountName() {
-        AccountNameView accountNameViewSelected = accountInfoView.getAccountInfoDetailViewSelected().getAccountNameViewSelected();
-        accountInfoView.getAccountInfoDetailViewSelected().getAccountNameViewList().remove(accountNameViewSelected);
-    }
-
-    public void removeAccountDetail() {
-        accountInfoDetailView = accountInfoView.getAccountInfoDetailViewSelected();
-        accountInfoDetailViewList.remove(accountInfoDetailView);
-    }
-
-    public void editAccountDetail(){
-        long id = 0;
-        modeForButton = ModeForButton.EDIT;
-        accountInfoDetailView = accountInfoView.getAccountInfoDetailViewSelected();
-        id = accountInfoDetailView.getAccountTypeView().getId();
-        if(id != 0){
-            productTypeList = productTypeDAO.findByBankAccountTypeId((int)id);
-        }
-        accountInfoView.setAccountInfoDetailViewSelected(accountInfoDetailView);
-    }
-
-    public void onSave(){
-        //todo :
-        try{
-            accountInfoControl.saveAccountInfo(accountInfoView, workCaseId);
-            messageHeader = "Save Account Info Success.";
-            message = "Save data in Account Information success.";
-//            onCreation();
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        } catch(Exception ex){
-            messageHeader = "Save Account Info Failed.";
-            if(ex.getCause() != null){     // Retrieve Appra
-                message = "Save Account Info data failed. Cause : " + ex.getCause().toString();
-            } else {
-                message = "Save Account Info data failed. Cause : " + ex.getMessage();
-            }
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            onCreation();
-        }
-    }
-
-    private void init(){
-        accountInfoView = new AccountInfoView();
-        accountInfoDetailView = new AccountInfoDetailView();
-
-        //branchModelList
-        branchList = bankBranchDAO.findAll();
-
-        //Account Type
-        accountTypeList = accountTypeDAO.findOpenAccountType();
-
-        //product Type
-        productTypeList = Collections.EMPTY_LIST;
-
-        //Purpose
-        purposeList = purposeDAO.findAll();
-
-        purposeViewList = new ArrayList<AccountInfoPurposeView>();
-        AccountInfoPurposeView purposeView = null;
-        for(BankAccountPurpose purpose : purposeList){
-            purposeView = new AccountInfoPurposeView();
-            purposeView.setName(purpose.getName());
-            purposeView.setId(purpose.getId());
-            purposeViewList.add(purposeView);
-        }
-        accountInfoDetailView.setAccountInfoPurposeViewList(purposeViewList);
-
-        //Account Name for test
-        accountNameList = new ArrayList<AccountNameView>();
-
-        accountNameView = new AccountNameView();
-        accountNameView.setId(01);
-        accountNameView.setName("Mr. Ki mu ji");
-        accountNameList.add(accountNameView);
-
-        accountNameView = new AccountNameView();
-        accountNameView.setId(02);
-        accountNameView.setName("Mr. Sbay D");
-        accountNameList.add(accountNameView);
-
-        accountNameView = new AccountNameView();
-        accountNameView.setId(03);
-        accountNameView.setName("Mr. Kim ji");
-        accountNameList.add(accountNameView);
-
-        //Account Name (Table) for test
-        accountNameViewList = new ArrayList<AccountNameView>();
-
-        //Credit Type (Table) for test
-        creditTypeViewList = new ArrayList<AccountInfoCreditTypeView>();
-        creditTypeView = new AccountInfoCreditTypeView();
-        creditTypeView.setId(1);
-        creditTypeView.setSelected(false);
-        creditTypeView.setProductProgram("ProductProgram");
-        creditTypeView.setCreditFacility("Loan");
-        creditTypeView.setLimit(new BigDecimal("99999"));
-        creditTypeViewList.add(creditTypeView);
-        creditTypeView = new AccountInfoCreditTypeView();
-        creditTypeView.setId(2);
-        creditTypeView.setSelected(false);
-        creditTypeView.setProductProgram("ProductProgram2");
-        creditTypeView.setCreditFacility("OD");
-        creditTypeView.setLimit(new BigDecimal("99999999999999"));
-        creditTypeViewList.add(creditTypeView);
-
-        accountInfoDetailView.setAccountInfoCreditTypeViewList(creditTypeViewList);
-
-        accountInfoView.setAccountInfoDetailViewSelected(accountInfoDetailView);
-
-    }
-
-    public List<BankBranch> getBranchList() {
-        return branchList;
-    }
-
-    public void setBranchList(List<BankBranch> branchList) {
-        this.branchList = branchList;
-    }
-
-    public BankAccountProductDAO getProductTypeDAO() {
-        return productTypeDAO;
-    }
-
-    public void setProductTypeDAO(BankAccountProductDAO productTypeDAO) {
-        this.productTypeDAO = productTypeDAO;
-    }
-
-    public BankAccountTypeDAO getAccountTypeDAO() {
-        return accountTypeDAO;
-    }
-
-    public void setAccountTypeDAO(BankAccountTypeDAO accountTypeDAO) {
-        this.accountTypeDAO = accountTypeDAO;
-    }
-
-    public BankAccountPurposeDAO getPurposeDAO() {
-        return purposeDAO;
-    }
-
-    public void setPurposeDAO(BankAccountPurposeDAO purposeDAO) {
-        this.purposeDAO = purposeDAO;
-    }
-
-    public List<BankAccountPurpose> getPurposeList() {
-        return purposeList;
-    }
-
-    public void setPurposeList(List<BankAccountPurpose> purposeList) {
-        this.purposeList = purposeList;
-    }
-
-    public ModeForButton getModeForButton() {
-        return modeForButton;
-    }
-
-    public void setModeForButton(ModeForButton modeForButton) {
-        this.modeForButton = modeForButton;
-    }
-
-    public int getRowIndex() {
-        return rowIndex;
-    }
-
-    public void setRowIndex(int rowIndex) {
-        this.rowIndex = rowIndex;
-    }
-
-    public AccountInfoView getAccountInfoView() {
-        return accountInfoView;
-    }
-
-    public void setAccountInfoView(AccountInfoView accountInfoView) {
-        this.accountInfoView = accountInfoView;
-    }
-
-    public List<AccountInfoDetailView> getAccountInfoDetailViewList() {
-        return accountInfoDetailViewList;
-    }
-
-    public void setAccountInfoDetailViewList(List<AccountInfoDetailView> accountInfoDetailViewList) {
-        this.accountInfoDetailViewList = accountInfoDetailViewList;
-    }
-
-    public AccountInfoDetailView getAccountInfoDetailView() {
-        return accountInfoDetailView;
-    }
-
-    public void setAccountInfoDetailView(AccountInfoDetailView accountInfoDetailView) {
-        this.accountInfoDetailView = accountInfoDetailView;
-    }
-
-    public List<BankAccountType> getAccountTypeList() {
-        return accountTypeList;
-    }
-
-    public void setAccountTypeList(List<BankAccountType> accountTypeList) {
-        this.accountTypeList = accountTypeList;
-    }
-
-    public List<BankAccountProduct> getProductTypeList() {
-        return productTypeList;
-    }
-
-    public void setProductTypeList(List<BankAccountProduct> productTypeList) {
-        this.productTypeList = productTypeList;
-    }
-
-    public List<AccountInfoPurposeView> getPurposeViewList() {
-        return purposeViewList;
-    }
-
-    public void setPurposeViewList(List<AccountInfoPurposeView> purposeViewList) {
-        this.purposeViewList = purposeViewList;
-    }
-
-    public List<AccountNameView> getAccountNameList() {
-        return accountNameList;
-    }
-
-    public void setAccountNameList(List<AccountNameView> accountNameList) {
-        this.accountNameList = accountNameList;
-    }
-
-    public List<AccountNameView> getAccountNameViewList() {
-        return accountNameViewList;
-    }
-
-    public void setAccountNameViewList(List<AccountNameView> accountNameViewList) {
-        this.accountNameViewList = accountNameViewList;
-    }
-
-    public AccountNameView getAccountNameView() {
-        return accountNameView;
-    }
-
-    public void setAccountNameView(AccountNameView accountNameView) {
-        this.accountNameView = accountNameView;
-    }
-
-    public List<AccountInfoCreditTypeView> getCreditTypeViewList() {
-        return creditTypeViewList;
-    }
-
-    public void setCreditTypeViewList(List<AccountInfoCreditTypeView> creditTypeViewList) {
-        this.creditTypeViewList = creditTypeViewList;
-    }
-
-    public AccountInfoCreditTypeView getCreditTypeView() {
-        return creditTypeView;
-    }
-
-    public void setCreditTypeView(AccountInfoCreditTypeView creditTypeView) {
-        this.creditTypeView = creditTypeView;
-    }
-
-    public long getWorkCaseId() {
-        return workCaseId;
-    }
-
-    public void setWorkCaseId(long workCaseId) {
-        this.workCaseId = workCaseId;
-    }
-
-    public String getMessageHeader() {
-        return messageHeader;
-    }
-
-    public void setMessageHeader(String messageHeader) {
-        this.messageHeader = messageHeader;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
+	private static final long serialVersionUID = -2790471412596111994L;
+
+	@Inject @SELOS
+	private Logger log;
+	@Inject @NormalMessage
+	private Message message;
+	@Inject
+	private BasicInfoControl basicInfoControl;
+	@Inject
+	private AccountInfoControl accountInfoControl;
+	
+	//Private variable
+	private boolean preRenderCheck = false;
+	private long workCaseId = -1;
+	private long stepId = -1;
+	private BasicInfoView basicInfoView;
+	private AccountInfoSummaryView summaryView;
+	private boolean addDialog = false;
+	private List<OpenAccountFullView> deleteList;
+	private List<OpenAccountNameView> allNameList;
+	private List<OpenAccountCreditView> allCreditList;
+	private List<OpenAccountPurposeView> allPurposeList;
+	
+	//Property
+	private List<OpenAccountFullView> openAccounts;
+	private int selectedRowId;
+	private OpenAccountFullView openAccount;
+	private List<SelectItem> toAddAccountNameList;
+	private long selectedAddAccountNameId;
+	//Drop down
+	private List<SelectItem> branches;
+	private List<SelectItem> accountTypes;
+	private List<SelectItem> productTypes;
+	
+	private SelectOneMenu accountTypeBind;
+	private SelectOneMenu productTypeBind;
+	
+	public AccountInfo() {
+	}
+	
+	public Date getLastUpdateDateTime() {
+		return summaryView.getModifyDate();
+	}
+	public String getLastUpdateBy() {
+		if (summaryView.getModifyBy() != null)
+			return summaryView.getModifyBy().getDisplayName();
+		else
+			return null;
+	}
+	public ApproveType getApproveType() {
+		if (basicInfoView == null)
+			return ApproveType.NA;
+		else
+			return basicInfoView.getApproveType();
+	}
+	public List<SelectItem> getBranches() {
+		return branches;
+	}
+	public List<SelectItem> getAccountTypes() {
+		return accountTypes;
+	}
+	public List<SelectItem> getProductTypes() {
+		return productTypes;
+	}
+	public List<OpenAccountFullView> getOpenAccounts() {
+		return openAccounts;
+	}
+	public OpenAccountFullView getOpenAccount() {
+		return openAccount;
+	}
+	public boolean isAddDialog() {
+		return addDialog;
+	}
+	public int getSelectedRowId() {
+		
+		return selectedRowId;
+	}
+	public void setSelectedRowId(int selectedRowId) {
+		//log.info("Set Selected Row ID "+this.selectedRowId +" << "+selectedRowId);
+		this.selectedRowId = selectedRowId;
+	}
+	public long getSelectedAddAccountNameId() {
+		return selectedAddAccountNameId;
+	}
+	public void setSelectedAddAccountNameId(long selectedAddAccountNameId) {
+		this.selectedAddAccountNameId = selectedAddAccountNameId;
+	}
+	public List<SelectItem> getToAddAccountNameList() {
+		return toAddAccountNameList;
+	}
+	public SelectOneMenu getAccountTypeBind() {
+		return accountTypeBind;
+	}
+	public void setAccountTypeBind(SelectOneMenu accountTypeBind) {
+		this.accountTypeBind = accountTypeBind;
+	}
+	public SelectOneMenu getProductTypeBind() {
+		return productTypeBind;
+	}
+	public void setProductTypeBind(SelectOneMenu productTypeBind) {
+		this.productTypeBind = productTypeBind;
+	}
+	/*
+	 * Action
+	 */
+	@PostConstruct
+	private void init() {
+		HttpSession session = FacesUtil.getSession(false);
+		if (session != null) {
+			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
+			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+		}
+		accountInfoControl.initialOpenAccount(workCaseId);
+		
+		_loadDropdown();
+		_loadInitData();
+	}
+	public void preRender() {
+		if (preRenderCheck)
+			return;
+		preRenderCheck = true;
+		
+		String redirectPage = null;
+		if (workCaseId > 0) {
+			//TODO Validate step 
+			if (stepId <= 0) {
+				redirectPage = "/site/inbox.jsf";
+			} else {
+				return;
+			}
+		}
+		try {
+			if (redirectPage == null) {
+				redirectPage = "/site/inbox.jsf";
+			}
+			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+			ec.redirect(ec.getRequestContextPath()+redirectPage);
+		} catch (IOException e) {
+			log.error("Fail to redirect screen to "+redirectPage,e);
+		}
+	}
+	
+	public void onSelectAccountType() {
+		if (openAccount == null)
+			return;
+		openAccount.setProductTypeId(0);
+		if (openAccount.getAccountTypeId() <= 0) {
+			productTypes = null;
+		} else {
+			productTypes = accountInfoControl.getProductTypes(openAccount.getAccountTypeId());
+		}
+	}
+	public void onOpenAddOpenAccountDialog() {
+		openAccount = new OpenAccountFullView();
+		ArrayList<OpenAccountPurposeView> purposes = new ArrayList<OpenAccountPurposeView>();
+		for (OpenAccountPurposeView purpose : allPurposeList) {
+			purposes.add(purpose.clone());
+		}
+		openAccount.setPurposes(purposes);
+		ArrayList<OpenAccountCreditView> credits = new ArrayList<OpenAccountCreditView>();
+		for (OpenAccountCreditView credit : allCreditList) {
+			credits.add(credit.clone());
+		}
+		openAccount.setCredits(credits);
+		_recalculateAccountNameList();
+		addDialog = true;
+	}
+	public void onOpenUpdateOpenAccountDialog() {
+		OpenAccountFullView toUpd = null;
+		if (selectedRowId >= 0 && selectedRowId < openAccounts.size()) {
+			toUpd = openAccounts.get(selectedRowId);
+		}
+		if (toUpd == null) {
+			onOpenAddOpenAccountDialog();
+			return;
+		}
+		openAccount = new OpenAccountFullView();
+		openAccount.updateValues(toUpd);
+		_prepareDropdown();
+		_recalculateAccountNameList();
+		
+		addDialog = false;
+	}
+	public void onAddOpenAccountName() {
+		if (openAccount == null || selectedAddAccountNameId <= 0)
+			return;
+		for (OpenAccountNameView name : allNameList) {
+			if (name.getCustomerId() != selectedAddAccountNameId)
+				continue;
+			openAccount.getNames().add(name.clone());
+			_recalculateAccountNameList();
+			break;
+		}
+	}
+	public void onDeleteOpenAccountName(long customerId) {
+		if (openAccount == null || customerId <= 0)
+			return;
+		OpenAccountNameView toDelete = null;
+		for (OpenAccountNameView name : openAccount.getNames()) {
+			if (name.getCustomerId() == customerId) {
+				toDelete = name;
+				break;
+			}
+		}
+		if (toDelete != null) {
+			openAccount.deleteOpenAccountName(toDelete);
+			_recalculateAccountNameList();
+		}
+	}
+	public void onAddOpenAccount() {
+		if (!_validateOpenAccount()) {
+			RequestContext.getCurrentInstance().addCallbackParam("functionComplete", false);
+			return;
+		}
+		_calculateDisplayField();
+		openAccounts.add(openAccount);
+		openAccount = null;
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onUpdateOpenAccount() {
+		if (!_validateOpenAccount()) {
+			RequestContext.getCurrentInstance().addCallbackParam("functionComplete", false);
+			return;
+		}
+		_calculateDisplayField();
+		openAccount.setNeedUpdate(true);
+		OpenAccountFullView upd = openAccounts.get(selectedRowId);
+		upd.updateValues(openAccount);
+		openAccount = null;
+		selectedRowId = -1;
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onDeleteOpenAccount() {
+		if (selectedRowId < 0 || selectedRowId > openAccounts.size())
+			return;
+		OpenAccountFullView delete = openAccounts.remove(selectedRowId);
+		if (delete != null && delete.getId() > 0)
+			deleteList.add(delete);
+		selectedRowId = -1;
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	
+	public void onSaveAccountInformation() {
+		accountInfoControl.saveAccountInfo(workCaseId, summaryView, openAccounts, deleteList);
+		
+		_loadInitData();
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	
+	/*
+	 * Private method
+	 */
+	private void _loadInitData() {
+		preRenderCheck = false;
+		if (workCaseId > 0) {
+			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+		}
+		
+		summaryView = accountInfoControl.getAccountInfoSummary(workCaseId);
+		openAccounts = new ArrayList<OpenAccountFullView>(accountInfoControl.getAccountInfoList(workCaseId));
+		
+		deleteList = new ArrayList<OpenAccountFullView>();
+		selectedRowId = -1;
+	}
+	
+	private void _loadDropdown() {
+		allNameList = accountInfoControl.getAllAccountNames(workCaseId);
+		allCreditList = accountInfoControl.getAllAccountCredits(workCaseId);
+		allPurposeList = accountInfoControl.getAllAccountPurposes();
+		branches = accountInfoControl.getBankBranches();
+		accountTypes = accountInfoControl.getAccountTypes();
+		productTypes = null;
+	}
+	private boolean _validateOpenAccount() {
+		if (openAccount == null)
+			return false;
+		boolean isError = false;
+		FacesContext context = FacesContext.getCurrentInstance();
+		
+		if (openAccount.getAccountTypeId() <= 0) {
+			String msg = message.get("app.accountInfo.account.accountType.validate");
+			context.addMessage("accountType", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,null));
+			accountTypeBind.setValid(false);
+			isError = true;
+		}
+		if (openAccount.getProductTypeId() <= 0) {
+			String msg = message.get("app.accountInfo.account.productType.validate");
+			context.addMessage("productType", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,null));
+			productTypeBind.setValid(false);
+			isError = true;
+		}
+		
+		if (openAccount.getNames().isEmpty()) {
+			String msg = message.get("app.accountInfo.account.accountName.validate.required");
+			context.addMessage("dep", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,null));
+			isError = true;
+		}
+		boolean purposeError = true;
+		for (OpenAccountPurposeView purpose : openAccount.getPurposes()) {
+			if (purpose.isChecked()) {
+				purposeError = false;
+				break;
+			}
+		}
+		if (purposeError) {
+			String msg = message.get("app.accountInfo.account.purpose.validate.required");
+			context.addMessage("dep", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,null));
+			isError = true;
+		}
+		
+		boolean creditError = true;
+		for (OpenAccountCreditView credit : openAccount.getCredits()) {
+			if (credit.isChecked()) {
+				creditError = false;
+				break;
+			}
+		}
+		if (creditError) {
+			String msg = message.get("app.accountInfo.account.creditType.validate.required");
+			context.addMessage("dep", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,null));
+			isError = true;
+		}
+		return !isError;
+	}
+	private void _calculateDisplayField() {
+		if (openAccount == null)
+			return;
+		if (openAccount.getAccountTypeId() > 0) {
+			openAccount.setDisplayAccountType(_getDisplayValue(accountTypes, openAccount.getAccountTypeId()));
+		} else {
+			openAccount.setDisplayAccountType(null);
+		}
+		if (openAccount.getProductTypeId() > 0) {
+			openAccount.setDisplayProductType(_getDisplayValue(productTypes, openAccount.getProductTypeId()));
+		} else {
+			openAccount.setDisplayProductType(null);
+		}
+		if (openAccount.getBranchId() > 0) {
+			openAccount.setDisplayBranch(_getDisplayValue(branches, openAccount.getBranchId()));
+		} else {
+			openAccount.setDisplayBranch(null);
+		}
+		if (openAccount.getRequestAccountType() == null)
+			openAccount.setRequestAccountType(RequestAccountType.NA);
+	}
+	private String _getDisplayValue(List<SelectItem> list,Object value) {
+		String check = value.toString();
+		for (SelectItem item : list) {
+			if (check.equals(item.getValue().toString())){
+				return item.getLabel();
+			}
+		}
+		return null;
+	}
+	
+	private void _recalculateAccountNameList() {
+		selectedAddAccountNameId = -1;
+		if (openAccount == null) {
+			toAddAccountNameList = null;
+			return;
+		}
+		toAddAccountNameList = new ArrayList<SelectItem>();
+		List<OpenAccountNameView> currNames = openAccount.getNames();
+		for (OpenAccountNameView name : allNameList) {
+			boolean isFound = false;
+			for (OpenAccountNameView currName : currNames) {
+				if (currName.getCustomerId() == name.getCustomerId()) {
+					isFound = true;
+					break;
+				}
+			}
+			if (!isFound) {
+				SelectItem item = new SelectItem();
+				item.setLabel(name.getName());
+				item.setDescription(name.getName());
+				item.setValue(name.getCustomerId());
+				toAddAccountNameList.add(item);
+			}
+		}
+	}
+	private void _prepareDropdown() {
+		//for product type
+		if (openAccount == null)
+			return;
+		if (openAccount.getAccountTypeId() <= 0)
+			return;
+		productTypes = accountInfoControl.getProductTypes(openAccount.getAccountTypeId());
+		if (productTypes == null || productTypes.isEmpty())
+			openAccount.setProductTypeId(0);
+	}
+	
 }

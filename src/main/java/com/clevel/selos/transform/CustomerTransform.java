@@ -5,11 +5,18 @@ import com.clevel.selos.dao.working.AddressDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.CustomerOblInfoDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.AttorneyRelationType;
 import com.clevel.selos.model.BorrowerType;
+import com.clevel.selos.model.Gender;
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerCSIView;
+import com.clevel.selos.model.view.CustomerInfoPostAddressView;
+import com.clevel.selos.model.view.CustomerInfoPostBaseView;
+import com.clevel.selos.model.view.CustomerInfoPostIndvView;
+import com.clevel.selos.model.view.CustomerInfoPostJurisView;
 import com.clevel.selos.model.view.CustomerInfoSimpleView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.util.Util;
@@ -20,6 +27,7 @@ import javax.inject.Inject;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -294,6 +302,8 @@ public class CustomerTransform extends Transform {
             Individual individual = customer.getIndividual();
 
             if(individual != null){
+            	customerInfoView.setNeedAttorney(RadioValue.YES.equals(individual.getAttorneyRequired()));
+            	customerInfoView.setSignContract(customer.getReference().isCanSignContract());
                 customerInfoView.setIndividualId(individual.getId());
                 customerInfoView.setCitizenId(individual.getCitizenId());
                 customerInfoView.setGender(individual.getGender());
@@ -371,8 +381,6 @@ public class CustomerTransform extends Transform {
             }
         }
 
-        //for new field
-        customerInfoView.setAgeMonths(customer.getAgeMonths());
         // set customer credit information.
         if(customer.getCustomerOblInfo() != null){
             CustomerOblInfo customerOblInfo = customer.getCustomerOblInfo();
@@ -385,7 +393,6 @@ public class CustomerTransform extends Transform {
             customerInfoView.setNextReviewDate(customerOblInfo.getNextReviewDate());
             customerInfoView.setNextReviewDateFlag(customerOblInfo.getNextReviewDateFlag());
             customerInfoView.setLastContractDate(customerOblInfo.getLastContractDate());
-            customerInfoView.setNumberOfMonthsLastContractDate(customerOblInfo.getNumberOfMonthsLastContractDate());
             customerInfoView.setAdjustClass(customerOblInfo.getAdjustClass());
             customerInfoView.setRatingFinal(sbfScoreTransform.transformToView(customerOblInfo.getRatingFinal()));
             customerInfoView.setUnpaidFeeInsurance(customerOblInfo.getUnpaidFeeInsurance());
@@ -794,8 +801,6 @@ public class CustomerTransform extends Transform {
             customer.setJuristic(juristic);
         }
 
-        customer.setAgeMonths(customerInfoView.getAgeMonths());
-
         //set for Customer Obligation Info
         if(customerInfoView.getTmbCustomerId() != null && !Util.isEmpty(customerInfoView.getTmbCustomerId())){
             CustomerOblInfo customerOblInfo = null;
@@ -820,7 +825,6 @@ public class CustomerTransform extends Transform {
             customerOblInfo.setNextReviewDate(customerInfoView.getNextReviewDate());
             customerOblInfo.setNextReviewDateFlag(customerInfoView.getNextReviewDateFlag());
             customerOblInfo.setLastContractDate(customerInfoView.getLastContractDate());
-            customerOblInfo.setNumberOfMonthsLastContractDate(customerInfoView.getNumberOfMonthsLastContractDate());
             customerOblInfo.setAdjustClass(customerInfoView.getAdjustClass());
             customerOblInfo.setRatingFinal(sbfScoreTransform.transformToModel(customerInfoView.getRatingFinal()));
             if(customerInfoView.getUnpaidFeeInsurance() != null){
@@ -975,16 +979,9 @@ public class CustomerTransform extends Transform {
     }
     
     public CustomerInfoSimpleView transformToSimpleView(Customer model) {
-    	StringBuilder builder = new StringBuilder();
-    	
     	CustomerInfoSimpleView view = new CustomerInfoSimpleView();
     	view.setId(model.getId());
-    	if (model.getTitle() != null)
-			builder.append(model.getTitle().getTitleTh()).append(' ');
-		builder.append(model.getNameTh());
-		if (!Util.isEmpty(model.getLastNameTh()))
-			builder.append(" ").append(model.getLastNameTh());
-    	view.setCustomerName(builder.toString());
+    	view.setCustomerName(model.getDisplayName());
     	if (model.getIndividual() != null)
     		view.setCitizenId(model.getIndividual().getCitizenId());
     	else if (model.getJuristic() != null)
@@ -993,7 +990,288 @@ public class CustomerTransform extends Transform {
     	view.setTmbCustomerId(model.getTmbCustomerId());
     	if (model.getRelation() != null)
     		view.setRelation(model.getRelation().getDescription());
+    	if (model.getJuristic() != null)
+    		view.setJuristic(true);
+    	else
+    		view.setJuristic(false);
+    	return view;
+    }
+    
+    public CustomerInfoPostIndvView transformToIndvPostView(Customer model) {
+    	CustomerInfoPostIndvView view = new CustomerInfoPostIndvView();
+    	if (model == null || model.getIndividual() == null)
+    		return view;
+    	_tranformBasePostView(model, view);
+    	
+    	view.setLastNameTH(model.getLastNameTh());
+    	
+    	Individual indv = model.getIndividual();
+    	view.setIndividualId(indv.getId());
+    	view.setBirthDate(indv.getBirthDate());
+    	view.setGender(Gender.lookup(indv.getGender()));
+    	if (indv.getRace() != null) {
+    		view.setRaceId(indv.getRace().getId());
+    		view.setDisplayRace(indv.getRace().getName());
+    	}
+    	
+    	if (indv.getNationality() != null) {
+    		view.setNationalityId(indv.getNationality().getId());
+    		view.setDisplayNationality(indv.getNationality().getName());
+    	}
+    	if (indv.getMaritalStatus() != null) {
+    		view.setMaritalStatusId(indv.getMaritalStatus().getId());
+    		view.setDisplayMaritalStatus(indv.getMaritalStatus().getName());
+    	}
+    	
+    	if (model.getSpouseId() > 0) {
+    		Customer spouseModel = customerDAO.findById(model.getSpouseId());
+    		if (spouseModel != null) {
+    			if (spouseModel.getTitle() != null) {
+    				view.setSpouseTitleId(spouseModel.getTitle().getId());
+    				view.setDisplaySpouseTitle(model.getTitle().getTitleTh());
+    			}
+    			view.setSpouseNameTH(spouseModel.getNameTh());
+    			view.setSpouseLastNameTH(spouseModel.getLastNameTh());
+    			view.setHasSpouseData(true);
+    		} else {
+    			view.setHasSpouseData(false);
+    		}
+    	}
+    	
+    	if (indv.getFatherTitle() != null) {
+    		view.setFatherTitleId(indv.getFatherTitle().getId());
+    		view.setDisplayFatherTitle(indv.getFatherTitle().getTitleTh());
+    	}
+    	view.setFatherNameTH(indv.getFatherNameTh());
+    	view.setFatherLastNameTH(indv.getFatherLastNameTh());
+    	if (indv.getMotherTitle() != null) {
+    		view.setMotherTitleId(indv.getMotherTitle().getId());
+    		view.setDisplayMotherTitle(indv.getMotherTitle().getTitleTh());
+    	}
+    	view.setMotherNameTH(indv.getMotherNameTh());
+    	view.setMotherLastNameTH(indv.getMotherLastNameTh());
+    	
+    	if (!RadioValue.YES.equals(indv.getAttorneyRequired())) {
+    		view.setAttorneyRequired(RadioValue.NO);
+    		view.setAttorneyRelationType(AttorneyRelationType.OTHERS);
+    	} else {
+	    	view.setAttorneyRequired(indv.getAttorneyRequired());
+	    	view.setAttorneyRelationType(indv.getAttorneyRelation());
+	    	if (indv.getCustomerAttorney() != null)
+	    		view.setCustomerAttorneyId(indv.getCustomerAttorney().getId());
+    	}
+    	return view;
+    }
+    public CustomerInfoPostJurisView transformToJurisPostView(Customer model) {
+    	CustomerInfoPostJurisView view = new CustomerInfoPostJurisView();
+    	if (model == null || model.getJuristic() == null)
+    		return view;
+    	_tranformBasePostView(model, view);
+    	
+    	Juristic juris = model.getJuristic();
+    	view.setJuristicId(juris.getId());
+    	view.setRegistrationDate(juris.getRegisterDate());
+    	view.setContactPerson(juris.getContactName());
     	
     	return view;
+    }
+    
+    private void _tranformBasePostView(Customer model,CustomerInfoPostBaseView<?> view) {
+    	view.setId(model.getId());
+    	if (model.getWorkCase() != null)
+    		view.setWorkCaseId(model.getWorkCase().getId());
+    	view.setModifyDate(model.getModifyDate());
+    	if (model.getModifyBy() != null)
+    		view.setModifyUser(model.getModifyBy().getDisplayName());
+    	
+    	view.setTmbCustomerId(model.getTmbCustomerId());
+    	if (model.getRelation() != null) {
+    		view.setRelationId(model.getRelation().getId());
+    		view.setDisplayRelation(model.getRelation().getDescription());
+    	}
+    	view.setCollateralOwner(RadioValue.lookup(model.getCollateralOwner()));
+    	if (model.getDocumentType() != null)
+    		view.setDisplayDocumentType(model.getDocumentType().getDescription());
+    	
+    	if (model.getIndividual() != null) {
+    		view.setPersonalId(model.getIndividual().getCitizenId());
+    	} else if (model.getJuristic() != null){
+    		view.setPersonalId(model.getJuristic().getRegistrationId());
+    	}
+    	view.setAge(model.getAge());
+    	if (model.getTitle() != null) {
+    		view.setTitleId(model.getTitle().getId());
+    		view.setDisplayTitle(model.getTitle().getTitleTh());
+    	}
+    	view.setNameTH(model.getNameTh());
+    	view.setMobile(model.getMobileNumber());
+    	view.setFax(model.getFaxNumber());
+    	view.setEmail(model.getEmail());
+    	if (model.getMailingAddressType() != null) {
+    		view.setMailingAddressTypeId(model.getMailingAddressType().getId());
+    		view.setDisplayMailingAddressType(model.getMailingAddressType().getName());
+    	}
+    	if (model.getBusinessType() !=null) {
+    		view.setBusinessTypeId(model.getBusinessType().getId());
+    		view.setDisplayBusinessType(model.getBusinessType().getName());
+    	}
+    	//address type
+    	List<Address> addresses = model.getAddressesList();
+    	HashMap<Integer, Address> addressMap = new HashMap<Integer, Address>();
+    	for (Address address : addresses) {
+    		addressMap.put(address.getAddressType().getId(), address);
+    	}
+    	
+    	List<AddressType> addressTypes = addressTypeDAO.findByCustomerEntityId(view.getDefaultCustomerEntityId());
+    	int index=0;
+    	for (AddressType addressType : addressTypes) {
+    		CustomerInfoPostAddressView addressView = new CustomerInfoPostAddressView();
+			addressView.setAddressType(addressType.getId());
+			addressView.setDisplayAddressType(addressType.getName());
+
+			Address address = addressMap.get(addressType.getId());
+			addressView.setIndex(index);
+			
+    		if (address != null) {
+    			int flag = address.getAddressTypeFlag();
+    			addressView.setId(address.getId());
+    			
+    			if (index != 0 && flag != 3 && flag < index
+    					) { //dup data from address flag
+    				CustomerInfoPostAddressView toClone = view.getAddresses().get(flag);
+    				addressView.duplicateData(toClone);
+    				addressView.setAddressFlag(flag);
+    			} else {
+	    			addressView.setAddressNo(address.getAddressNo());
+	    			addressView.setMoo(address.getMoo());
+	    			addressView.setBuilding(address.getBuilding());
+	    			addressView.setRoad(address.getRoad());
+	    			if (address.getProvince() != null) {
+	    				addressView.setProvinceId(address.getProvince().getCode());
+	    				addressView.setDisplayProvince(address.getProvince().getName());
+	    			}
+	    			if (address.getDistrict() != null) {
+	    				addressView.setDistrictId(address.getDistrict().getId());
+	    				addressView.setDisplayDistrict(address.getDistrict().getName());
+	    			}
+	    			if (address.getSubDistrict() != null) {
+	    				addressView.setSubDistrictId(address.getSubDistrict().getCode());
+	    				addressView.setDisplaySubDistrict(address.getSubDistrict().getName());
+	    			}
+	    			addressView.setPostalCode(address.getPostalCode());
+	    			if (address.getCountry() != null) {
+	    				addressView.setCountryId(address.getCountry().getId());
+	    				addressView.setDisplayCountry(address.getCountry().getName());
+	    			}
+	    			addressView.setPhoneNumber(address.getPhoneNumber());
+	    			addressView.setPhoneExt(address.getExtension());
+	    			addressView.setAddressFlag(3);
+    			}
+    		} else {
+    			addressView.setAddressFlag(0);
+    			if (index != 0) {
+    				CustomerInfoPostAddressView toClone = view.getAddresses().get(0);
+    				addressView.duplicateData(toClone);
+    			}
+    		}
+    		view.addAddress(addressView);
+    		index++;
+    	}
+    }
+    
+    public void updateModelFromPostView(Customer model,CustomerInfoPostIndvView view,User user) {
+    	_updateModelFromBasePostView(model, view,user);
+    	//Read only list (No need to update)
+    	//last name
+    	
+    	Individual indv = model.getIndividual();
+    	indv.setBirthDate(view.getBirthDate());
+    	indv.setGender(view.getGender().value());
+    	indv.setRace(raceDAO.findRefById(view.getRaceId()));
+    	indv.setNationality(nationalityDAO.findRefById(view.getNationalityId()));
+    	
+    	if (view.getFatherTitleId() > 0)
+    		indv.setFatherTitle(titleDAO.findRefById(view.getFatherTitleId()));
+    	else
+    		indv.setFatherTitle(null);
+    	indv.setFatherNameTh(view.getFatherNameTH());
+    	indv.setFatherLastNameTh(view.getFatherLastNameTH());
+    	
+    	if (view.getMotherTitleId() > 0)
+    		indv.setMotherTitle(titleDAO.findRefById(view.getMotherTitleId()));
+    	else
+    		indv.setMotherTitle(null);
+    	indv.setMotherNameTh(view.getMotherNameTH());
+    	indv.setMotherLastNameTh(view.getMotherLastNameTH());
+    	
+    	indv.setAttorneyRelation(view.getAttorneyRelationType());
+    	indv.setAttorneyRequired(view.getAttorneyRequired());
+    	
+    	//For spouse this should be updated in controller
+    }
+    public void updateModelFromPostView(Customer model,CustomerInfoPostJurisView view,User user) {
+    	_updateModelFromBasePostView(model, view,user);
+    	//Read only list (No need to update)
+    	//regist date, contact person
+    }
+    private void _updateModelFromBasePostView(Customer model,CustomerInfoPostBaseView<?> view,User user) {
+    	//Read only list (No need to update)
+    	// Relation, Collateral Owner, Document Type, Personal Id,
+    	// NameTH , Mobile, Fax, Email, tmb customerId
+    	
+    	model.setModifyBy(user);
+    	model.setModifyDate(new Date());
+    	view.calculateAge();
+    	model.setAge(view.getAge());
+    	model.setTitle(titleDAO.findRefById(view.getTitleId()));
+    	model.setMailingAddressType(addressTypeDAO.findRefById(view.getMailingAddressTypeId()));
+    	model.setBusinessType(businessTypeDAO.findRefById(view.getBusinessTypeId()));
+    	
+    	//Update address
+    	List<Address> addresses = model.getAddressesList();
+    	HashMap<Long, Address> addressMap = new HashMap<Long, Address>();
+    	for (Address address : addresses) {
+    		addressMap.put(address.getId(), address);
+    	}
+    	for(CustomerInfoPostAddressView addressView : view.getAddresses()) {
+    		Address address = addressMap.get(addressView.getId());
+    		if (address == null) {
+    			address = new Address();
+    			address.setCustomer(model);
+    			model.getAddressesList().add(address);
+    		}
+    		int flag = addressView.getAddressFlag();
+    		if (addressView.getIndex() != 0) {
+    			if (flag != 3 && flag >= addressView.getIndex())
+    				flag = 0;
+    			//save with data from flag
+    			if (flag != 3)
+    				addressView.duplicateData(view.getAddresses().get(flag));
+    		}
+    		address.setAddressTypeFlag(flag);
+    		address.setAddressNo(addressView.getAddressNo());
+    		address.setMoo(addressView.getMoo());
+    		address.setBuilding(addressView.getBuilding());
+    		address.setRoad(addressView.getRoad());
+    		if (addressView.getProvinceId() > 0)
+    			address.setProvince(provinceDAO.findRefById(addressView.getProvinceId()));
+    		else
+    			address.setProvince(null);
+    		if (addressView.getDistrictId() > 0)
+    			address.setDistrict(districtDAO.findRefById(addressView.getDistrictId()));
+    		else
+    			address.setDistrict(null);
+    		if (addressView.getSubDistrictId() > 0)
+    			address.setSubDistrict(subDistrictDAO.findRefById(addressView.getSubDistrictId()));
+    		else
+    			address.setSubDistrict(null);
+    		address.setPostalCode(addressView.getPostalCode());
+    		if (addressView.getCountryId() > 0)
+    			address.setCountry(countryDAO.findRefById(addressView.getCountryId()));
+    		else
+    			address.setCountry(null);
+    		address.setPhoneNumber(addressView.getPhoneNumber());
+    		address.setExtension(addressView.getPhoneExt());
+    	}
     }
 }

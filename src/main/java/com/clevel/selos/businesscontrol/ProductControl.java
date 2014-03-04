@@ -1,14 +1,16 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.ProductFormulaDAO;
+import com.clevel.selos.dao.master.ProductGroupDAO;
+import com.clevel.selos.dao.master.ProductProgramDAO;
+import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.ProductFormula;
+import com.clevel.selos.model.db.master.ProductGroup;
+import com.clevel.selos.model.db.master.ProductProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
-import com.clevel.selos.model.view.CreditTypeView;
-import com.clevel.selos.model.view.PrdProgramToCreditTypeView;
-import com.clevel.selos.model.view.ProductFormulaView;
-import com.clevel.selos.model.view.ProductProgramView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.ProductTransform;
 import org.slf4j.Logger;
 
@@ -25,20 +27,47 @@ public class ProductControl extends BusinessControl{
     Logger logger;
 
     @Inject
-    ProductTransform productTransform;
+    private ProductTransform productTransform;
 
     @Inject
-    ProductFormulaDAO productFormulaDAO;
-
+    private ProductFormulaDAO productFormulaDAO;
     @Inject
-    PrdProgramToCreditTypeDAO prdProgramToCreditTypeDAO;
+    private PrdGroupToPrdProgramDAO prdGroupToPrdProgramDAO;
+    @Inject
+    private PrdProgramToCreditTypeDAO prdProgramToCreditTypeDAO;
+    @Inject
+    private ProductGroupDAO productGroupDAO;
+    @Inject
+    private ProductProgramDAO productProgramDAO;
 
     @Inject
     public ProductControl(){}
 
-    public PrdProgramToCreditTypeView getPrdProgramToCreditTypeView(CreditTypeView creditTypeView, ProductProgramView productProgramView){
-        PrdProgramToCreditTypeView prdProgramToCreditTypeView = new PrdProgramToCreditTypeView();
-        return null;
+    public List<PrdGroupToPrdProgramView> getPrdGroupToPrdProgramProposeAll() {
+        return productTransform.transformToViewList(prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramProposeAll());
+    }
+
+    public List<PrdGroupToPrdProgramView> getPrdGroupToPrdProgramProposeByGroup(ProductGroup productGroup) {
+        return productTransform.transformToViewList(prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramPropose(productGroup));
+    }
+
+    public List<ProductProgramView> getProductProgramAll() {
+        return productTransform.transformToView(productProgramDAO.findAll());
+    }
+
+    public List<PrdGroupToPrdProgramView> getPrdGroupToPrdProgramFromAllPrdProgram() {
+        List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewList = new ArrayList<PrdGroupToPrdProgramView>();
+        List<ProductProgram> productProgramList = productProgramDAO.findAll();
+        if (productProgramList != null) {
+            PrdGroupToPrdProgramView prdGroupToPrdProgramView;
+            for (ProductProgram productProgram : productProgramList) {
+                prdGroupToPrdProgramView = new PrdGroupToPrdProgramView();
+                prdGroupToPrdProgramView.setProductGroupView(new ProductGroupView());
+                prdGroupToPrdProgramView.setProductProgramView(productTransform.transformToView(productProgram));
+                prdGroupToPrdProgramViewList.add(prdGroupToPrdProgramView);
+            }
+        }
+        return prdGroupToPrdProgramViewList;
     }
 
     public List<PrdProgramToCreditTypeView> getPrdProgramToCreditTypeViewList(ProductProgramView productProgramView){

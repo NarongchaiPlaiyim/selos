@@ -63,12 +63,14 @@ public class FacesUtil implements Serializable {
             log.error("", e);
         }
     }
+
     public static final String getParameter(String name) {
 		Map<String,String> paramMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		if (paramMap == null)
 			return null;
 		return paramMap.get(name);
 	}
+
     @SuppressWarnings("unchecked")
 	public static final Map<String,Object> getParamMapFromFlash(String name) {
     	Object obj = getFlash().get(name);
@@ -77,6 +79,7 @@ public class FacesUtil implements Serializable {
     	else
     		return (HashMap<String, Object>) obj;
     }
+
     public static final Language getLanguage() {
     	Language lang = (Language) FacesUtil.getSession(false).getAttribute("language");
     	if (lang == null)

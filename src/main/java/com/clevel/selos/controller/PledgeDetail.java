@@ -11,6 +11,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
@@ -22,11 +23,14 @@ import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.PledgeDetailControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
-import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.PledgeACDepView;
+import com.clevel.selos.model.view.PledgeInfoFullView;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
@@ -40,33 +44,36 @@ public class PledgeDetail implements Serializable {
 	
 	@Inject
 	private BasicInfoControl basicInfoControl;
-
+	@Inject
+	private PledgeDetailControl pledgeDetailControl;
+	@Inject @NormalMessage
+	private Message message;
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
-	private String fromPage;
 	private long pledgeId = -1;
-	private User user;
 	private BasicInfoView basicInfoView;
 	private List<PledgeACDepView> deleteList;
+	
 	
 	//Property
 	private List<PledgeACDepView> pledgeACDepList;
 	private PledgeACDepView pledgeACDepView;
-	private int deletedRowId;
+	private PledgeInfoFullView pledgeInfoView;
+	private int selectedRowId;
 	private boolean addDialog = false;
 
     public PledgeDetail(){
-    	
     }
     public Date getLastUpdateDateTime() {
-		//TODO 
-		return new Date();
+		return pledgeInfoView.getModifyDate();
 	}
 	public String getLastUpdateBy() {
-		//TODO
-		return user.getDisplayName();
+		if (pledgeInfoView.getModifyBy() != null)
+			return pledgeInfoView.getModifyBy().getDisplayName();
+		else
+			return null;
 	}
 	public ApproveType getApproveType() {
 		if (basicInfoView == null)
@@ -85,14 +92,11 @@ public class PledgeDetail implements Serializable {
 	public PledgeACDepView getPledgeACDepView() {
 		return pledgeACDepView;
 	}
-	public void setPledgeACDepView(PledgeACDepView pledgeACDepView) {
-		this.pledgeACDepView = pledgeACDepView;
+	public int getSelectedRowId() {
+		return selectedRowId;
 	}
-	public int getDeletedRowId() {
-		return deletedRowId;
-	}
-	public void setDeletedRowId(int deletedRowId) {
-		this.deletedRowId = deletedRowId;
+	public void setSelectedRowId(int selectedRowId) {
+		this.selectedRowId = selectedRowId;
 	}
 	public int getNumberOfPledgeAC() {
 		if (pledgeACDepList == null)
@@ -114,21 +118,22 @@ public class PledgeDetail implements Serializable {
 	public boolean isAddDialog() {
 		return addDialog;
 	}
+	public PledgeInfoFullView getPledgeInfoView() {
+		return pledgeInfoView;
+	}
 	/*
 	 * Action
 	 */
 	@PostConstruct
 	private void init() {
-		log.info("Construct");
 		HttpSession session = FacesUtil.getSession(false);
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
-			user = (User) session.getAttribute("user");
 		}
 		Map<String,Object> params =  FacesUtil.getParamMapFromFlash("pledgeParams");
-		fromPage = (String)params.get("fromPage");
 		pledgeId = Util.parseLong(params.get("pledgeId"),-1);
+
 		_loadInitData();
 	}
 	
@@ -170,32 +175,60 @@ public class PledgeDetail implements Serializable {
 		addDialog = true;
 	}
 	public void onOpenUpdatePledgeACDepDialog() {
+		pledgeACDepView = new PledgeACDepView();
+		PledgeACDepView upd = null;
+		if (selectedRowId >= 0 && selectedRowId < pledgeACDepList.size()) {
+			upd = pledgeACDepList.get(selectedRowId);
+		}
+		if (upd == null) {
+			pledgeACDepView.setId(0);
+			pledgeACDepView.setHoldAmount(new BigDecimal(0));
+			pledgeACDepView.setDep("");
+		} else {
+			pledgeACDepView.setId(upd.getId());
+			pledgeACDepView.setHoldAmount(upd.getHoldAmount());
+			pledgeACDepView.setDep(upd.getDep());
+		}
 		addDialog = false;	
 	}
 	public void onAddPledgeACDep() {
+		if (!_validateACDep()) {
+			
+			RequestContext.getCurrentInstance().addCallbackParam("functionComplete", false);
+			return;
+		}
 		pledgeACDepList.add(pledgeACDepView);
 		pledgeACDepView = null;
 		
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
 	public void onUpdatePledgeACDep() {
-		pledgeACDepView.setNeedUpdate(true);
+		if (!_validateACDep()) {
+			RequestContext.getCurrentInstance().addCallbackParam("functionComplete", false);
+			return;
+		}
+		PledgeACDepView upd = pledgeACDepList.get(selectedRowId);
+		upd.setDep(pledgeACDepView.getDep());
+		upd.setHoldAmount(pledgeACDepView.getHoldAmount());
+		upd.setNeedUpdate(true);
+		selectedRowId = -1;
 		pledgeACDepView = null;
 		
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
 	public void onDeletePledgeACDep() {
-		if (deletedRowId < 0 || deletedRowId > pledgeACDepList.size())
+		if (selectedRowId < 0 || selectedRowId > pledgeACDepList.size())
 			return;
-		PledgeACDepView delete = pledgeACDepList.remove(deletedRowId);
-		if (delete != null)
+		PledgeACDepView delete = pledgeACDepList.remove(selectedRowId);
+		if (delete != null && delete.getId() > 0)
 			deleteList.add(delete);
-		deletedRowId = -1;
+		selectedRowId = -1;
 		
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
 	
 	public void onSavePledgeDetail() {
+		pledgeDetailControl.savePledgeDetail(pledgeInfoView, pledgeACDepList,deleteList);
 		
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
@@ -208,11 +241,67 @@ public class PledgeDetail implements Serializable {
 		if (workCaseId > 0) {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
-		//TODO Load pledge info by using workcase and pledgeId
-		//TODO Load pledge AC 
-		pledgeACDepList = new ArrayList<PledgeACDepView>();
+		
+		pledgeInfoView = pledgeDetailControl.getPledgeInfoFull(pledgeId);
+		if (pledgeInfoView.getId() <= 0 || pledgeInfoView.getWorkCaseId() != workCaseId) {
+			String redirectPage = "/site/mortgageSummary.jsf";
+			try {
+				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+				ec.redirect(ec.getRequestContextPath()+redirectPage);
+			} catch (IOException e) {
+				log.error("Fail to redirect screen to "+redirectPage,e);
+			}
+		}
+		List<PledgeACDepView> list = pledgeDetailControl.getPledgeACList(pledgeId);
+		if (list == null)
+			pledgeACDepList = new ArrayList<PledgeACDepView>();
+		else
+			pledgeACDepList = new ArrayList<PledgeACDepView>(list);
 		deleteList = new ArrayList<PledgeACDepView>();
 		pledgeACDepView = null;
-		deletedRowId = -1;
+		selectedRowId = -1;
+	}
+	
+	private boolean _validateACDep() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		boolean isError = false;
+		// validate dep
+		if (Util.isEmpty(pledgeACDepView.getDep())) {
+			String msg = message.get("app.pledgeDetail.dep.validate");
+			context.addMessage("dep", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,null));
+			isError = true;
+		}
+		//validate hold amount
+		if (pledgeACDepView.getHoldAmount().compareTo(BigDecimal.ZERO) <= 0) {
+			String msg = message.get("app.pledgeDetail.holdAmount.validate.positive");
+			context.addMessage("holdamount", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,null));
+			isError = true;
+		}
+		if (isError)
+			return false;
+		
+		BigDecimal newHoldAmount = new BigDecimal(0);
+		newHoldAmount = newHoldAmount.add(pledgeACDepView.getHoldAmount());
+		
+		for (int i=0;i<pledgeACDepList.size();i++) {
+			if (!addDialog) { //update dialog
+				if (i == selectedRowId) //same row
+					continue;
+			}
+			PledgeACDepView ac = pledgeACDepList.get(i);
+			newHoldAmount = newHoldAmount.add(ac.getHoldAmount());
+			if (ac.getDep().equals(pledgeACDepView.getDep())) {
+				String msg = message.get("app.pledgeDetail.dep.validate.duplicate");
+				context.addMessage("dep", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,null));
+				return false;
+			}
+		}
+		
+		if (newHoldAmount.compareTo(pledgeInfoView.getPledgeAmount()) > 0) {
+			String msg = message.get("app.pledgeDetail.holdAmount.validate.amount");
+			context.addMessage("dep", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,null));
+			return false;
+		}
+		return true;
 	}
 }

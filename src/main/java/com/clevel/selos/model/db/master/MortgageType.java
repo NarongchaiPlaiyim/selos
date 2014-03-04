@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.master;
 
+import com.clevel.selos.model.MortgageCategory;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -21,8 +22,11 @@ public class MortgageType implements Serializable {
     @Column(name = "mortgage_type", length = 255)
     private String mortgage;
 
-    @Column(name = "redeem")
-    private String redeem;
+    @Column(name = "mortgage_category", columnDefinition = "int default 0", length = 1)
+    private MortgageCategory mortgageCategory;
+
+    @Column(name = "mortgage_fee_flag", columnDefinition = "int default 0", length = 1)
+    private boolean mortgageFeeFlag;
 
     @Column(name = "active")
     private int active;
@@ -61,12 +65,20 @@ public class MortgageType implements Serializable {
         this.mortgage = mortgage;
     }
 
-    public String getRedeem() {
-        return redeem;
+    public MortgageCategory getMortgageCategory() {
+        return mortgageCategory;
     }
 
-    public void setRedeem(String redeem) {
-        this.redeem = redeem;
+    public void setMortgageCategory(MortgageCategory mortgageCategory) {
+        this.mortgageCategory = mortgageCategory;
+    }
+
+    public boolean isMortgageFeeFlag() {
+        return mortgageFeeFlag;
+    }
+
+    public void setMortgageFeeFlag(boolean mortgageFeeFlag) {
+        this.mortgageFeeFlag = mortgageFeeFlag;
     }
 
     public int getActive() {
@@ -116,13 +128,14 @@ public class MortgageType implements Serializable {
 	public void setReferredFlag(boolean referredFlag) {
 		this.referredFlag = referredFlag;
 	}
-    
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("mortgage", mortgage)
-                .append("redeem", redeem)
+                .append("mortgageCategory", mortgageCategory)
+                .append("mortgageFeeFlag", mortgageFeeFlag)
                 .append("active", active)
                 .append("mortgageFlag", mortgageFlag)
                 .append("pledgeFlag", pledgeFlag)
@@ -131,5 +144,4 @@ public class MortgageType implements Serializable {
                 .append("referredFlag", referredFlag)
                 .toString();
     }
-
 }

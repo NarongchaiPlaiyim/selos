@@ -44,7 +44,7 @@ public class NewCreditDetailTransform extends Transform {
     @Inject
     BaseRateDAO baseRateDAO;
 
-    public List<NewCreditDetail> transformToModel(List<NewCreditDetailView> newCreditDetailViews, NewCreditFacility newCreditFacility ,User user , WorkCase workCase) {
+    public List<NewCreditDetail> transformToModel(List<NewCreditDetailView> newCreditDetailViews, NewCreditFacility newCreditFacility ,User user , WorkCase workCase, ProposeType proposeType) {
         List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
         NewCreditDetail newCreditDetail;
 
@@ -62,7 +62,7 @@ public class NewCreditDetailTransform extends Transform {
                 newCreditDetail.setCreateBy(user);
             }
 
-            newCreditDetail.setProposeType(ProposeType.P);
+            newCreditDetail.setProposeType(proposeType);
             newCreditDetail.setWorkCase(workCase);
             newCreditDetail.setSeq(newCreditDetailView.getSeq());
             newCreditDetail.setGuaranteeAmount(newCreditDetailView.getGuaranteeAmount());
@@ -93,6 +93,7 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetail.setRemark(newCreditDetailView.getRemark());
             newCreditDetail.setUseCount(newCreditDetailView.getUseCount());
             newCreditDetail.setNewCreditFacility(newCreditFacility);
+            newCreditDetail.setSetupCompleted(newCreditDetailView.getIsSetupCompleted());
 
             if(Util.safetyList(newCreditDetailView.getNewCreditTierDetailViewList()).size() > 0){
                 log.debug("Start.. transformToModel for newCreditTierDetailViewList : {}", newCreditDetailView.getNewCreditTierDetailViewList());
@@ -152,6 +153,7 @@ public class NewCreditDetailTransform extends Transform {
          newCreditDetailView.setReducePriceFlag(Util.isTrue(newCreditDetail.getReducePriceFlag()));
          newCreditDetailView.setRemark(newCreditDetail.getRemark());
          newCreditDetailView.setUseCount(newCreditDetail.getUseCount());
+         newCreditDetailView.setIsSetupCompleted(newCreditDetail.getSetupCompleted());
 
          List<NewCreditTierDetail> newCreditTierDetailList = newCreditTierDetailDAO.findByNewCreditDetail(newCreditDetail);
 

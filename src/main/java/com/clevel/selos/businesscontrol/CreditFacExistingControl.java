@@ -6,6 +6,7 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.CreditCategory;
+import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -79,6 +80,7 @@ public class CreditFacExistingControl extends BusinessControl {
     @Inject
     ExistingGuarantorDetailDAO existingGuarantorDetailDAO;
 
+    @Inject
     public CreditFacExistingControl() {
     }
 
@@ -134,7 +136,7 @@ public class CreditFacExistingControl extends BusinessControl {
             log.info("persist :: existingConditionDetailList ...");
         }
 
-        List<ExistingCollateralDetail> borrowerCollateralDetailListDel = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,1);
+        List<ExistingCollateralDetail> borrowerCollateralDetailListDel = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility, RelationValue.BORROWER.value());
         if(borrowerCollateralDetailListDel!=null && borrowerCollateralDetailListDel.size()>0){
             for (int i=0 ;i<borrowerCollateralDetailListDel.size();i++) {
                 log.info(" Round borrowerComExistingCreditListDel  is " + i );
@@ -145,7 +147,7 @@ public class CreditFacExistingControl extends BusinessControl {
             existingCollateralDetailDAO.delete(borrowerCollateralDetailListDel);
         }
 
-        List<ExistingCollateralDetail> relatedCollateralDetailListDel = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,2);
+        List<ExistingCollateralDetail> relatedCollateralDetailListDel = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility, RelationValue.DIRECTLY_RELATED.value());
         if(relatedCollateralDetailListDel!=null && relatedCollateralDetailListDel.size()>0){
             for (int i=0 ;i<relatedCollateralDetailListDel.size();i++) {
                 log.info(" Round relatedComExistingCreditListDel  is " + i );
@@ -169,7 +171,7 @@ public class CreditFacExistingControl extends BusinessControl {
         }
 
 
-        List<ExistingCreditDetail> borrowerComExistingCreditListDel = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,1,CreditCategory.COMMERCIAL);
+        List<ExistingCreditDetail> borrowerComExistingCreditListDel = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,RelationValue.BORROWER.value(),CreditCategory.COMMERCIAL);
         if(borrowerComExistingCreditListDel!=null && borrowerComExistingCreditListDel.size()>0){
             for (int i=0 ;i<borrowerComExistingCreditListDel.size();i++) {
                 log.info(" Round borrowerComExistingCreditListDel  is " + i );
@@ -245,24 +247,12 @@ public class CreditFacExistingControl extends BusinessControl {
             }
         }
 
-        if(existingCreditFacilityView.getBorrowerRetailExistingCredit()!=null && existingCreditFacilityView.getBorrowerRetailExistingCredit().size()>0){
-            List<ExistingCreditDetail> borrowerRetailExistingCredit = existingCreditDetailTransform.transformsToModel(existingCreditFacilityView.getBorrowerRetailExistingCredit(), existingCreditFacility, user);
-            existingCreditDetailDAO.persist(borrowerRetailExistingCredit);
-            log.info("persist borrower Retail existingCreditDetailList...");
-        }
-
-        if(existingCreditFacilityView.getBorrowerAppInRLOSCredit()!=null && existingCreditFacilityView.getBorrowerAppInRLOSCredit().size()>0){
-            List<ExistingCreditDetail> borrowerAppInRLOSCredit = existingCreditDetailTransform.transformsToModel(existingCreditFacilityView.getBorrowerAppInRLOSCredit(), existingCreditFacility, user);
-            existingCreditDetailDAO.persist(borrowerAppInRLOSCredit);
-            log.info("persist borrower RLOS existingCreditDetailList...");
-        }
-
-
-        List<ExistingCreditDetail> relatedComExistingCreditListDel = existingCreditDetailDAO.findByExistingCreditFacility(existingCreditFacility,2,1);
-        if(relatedComExistingCreditListDel!=null && relatedComExistingCreditListDel.size()>0){
-            for (int i=0 ;i<relatedComExistingCreditListDel.size();i++) {
-                log.info(" Round relatedComExistingCreditListDel  is " + i );
-                ExistingCreditDetail existingCreditDetail =  relatedComExistingCreditListDel.get(i);
+        //Borrower Retail
+        List<ExistingCreditDetail> borrowerRetailExistingCredit = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility, RelationValue.BORROWER.value() ,CreditCategory.RETAIL);
+        if(borrowerRetailExistingCredit!=null && borrowerRetailExistingCredit.size()>0){
+            for (int i=0 ;i<borrowerRetailExistingCredit.size();i++) {
+                log.info(" Round borrowerRetailExistingCredit  is " + i );
+                ExistingCreditDetail existingCreditDetail =  borrowerRetailExistingCredit.get(i);
 
                 List<ExistingCreditTierDetail>  existingCreditTierDetailListDel = existingCreditTierDetailDAO.findByExistingCreditDetail(existingCreditDetail);
                 if(existingCreditTierDetailListDel!=null && existingCreditTierDetailListDel.size()>0){
@@ -274,6 +264,30 @@ public class CreditFacExistingControl extends BusinessControl {
                     existingSplitLineDetailDAO.delete(existingSplitLineDetailListDel);
                 }
             }
+            existingCreditDetailDAO.delete(borrowerRetailExistingCredit);
+        }
+
+        if(existingCreditFacilityView.getBorrowerRetailExistingCredit()!=null && existingCreditFacilityView.getBorrowerRetailExistingCredit().size()>0){
+            borrowerRetailExistingCredit = existingCreditDetailTransform.transformsToModel(existingCreditFacilityView.getBorrowerRetailExistingCredit(), existingCreditFacility, user);
+            existingCreditDetailDAO.persist(borrowerRetailExistingCredit);
+            log.info("persist borrower Retail existingCreditDetailList...");
+        }
+
+        //Borrower RLOS
+        List<ExistingCreditDetail> borrowerAppInRLOSCredit = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,RelationValue.BORROWER.value(),CreditCategory.RLOS_APP_IN);
+        if(borrowerAppInRLOSCredit!=null && borrowerAppInRLOSCredit.size()>0){
+            existingCreditDetailDAO.delete(borrowerAppInRLOSCredit);
+        }
+
+        if(existingCreditFacilityView.getBorrowerAppInRLOSCredit()!=null && existingCreditFacilityView.getBorrowerAppInRLOSCredit().size()>0){
+            borrowerAppInRLOSCredit = existingCreditDetailTransform.transformsToModel(existingCreditFacilityView.getBorrowerAppInRLOSCredit(), existingCreditFacility, user);
+            existingCreditDetailDAO.persist(borrowerAppInRLOSCredit);
+            log.info("persist borrower RLOS existingCreditDetailList...");
+        }
+
+
+        List<ExistingCreditDetail> relatedComExistingCreditListDel = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,RelationValue.DIRECTLY_RELATED.value(),CreditCategory.COMMERCIAL);
+        if(relatedComExistingCreditListDel!=null && relatedComExistingCreditListDel.size()>0){
             existingCreditDetailDAO.delete(relatedComExistingCreditListDel);
         }
 
@@ -314,17 +328,30 @@ public class CreditFacExistingControl extends BusinessControl {
             }
         }
 
+        //Borrower Retail
+        List<ExistingCreditDetail> relatedRetailExistingCredit = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility, RelationValue.DIRECTLY_RELATED.value() ,CreditCategory.RETAIL);
+        if(relatedRetailExistingCredit!=null && relatedRetailExistingCredit.size()>0){
+            existingCreditDetailDAO.delete(relatedRetailExistingCredit);
+        }
+
         if(existingCreditFacilityView.getRelatedRetailExistingCredit()!=null && existingCreditFacilityView.getRelatedRetailExistingCredit().size()>0){
-            List<ExistingCreditDetail> relatedRetailExistingCredit = existingCreditDetailTransform.transformsToModel(existingCreditFacilityView.getRelatedRetailExistingCredit(), existingCreditFacility, user);
+            relatedRetailExistingCredit = existingCreditDetailTransform.transformsToModel(existingCreditFacilityView.getRelatedRetailExistingCredit(), existingCreditFacility, user);
             existingCreditDetailDAO.persist(relatedRetailExistingCredit);
             log.info("persist related Retail existingCreditDetailList...");
         }
 
+        //Borrower RLOS
+        List<ExistingCreditDetail> relatedAppInRLOSCredit = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,RelationValue.DIRECTLY_RELATED.value(),CreditCategory.RLOS_APP_IN);
+        if(relatedAppInRLOSCredit!=null && relatedAppInRLOSCredit.size()>0){
+            existingCreditDetailDAO.delete(relatedAppInRLOSCredit);
+        }
+
         if(existingCreditFacilityView.getRelatedAppInRLOSCredit()!=null && existingCreditFacilityView.getRelatedAppInRLOSCredit().size()>0){
-            List<ExistingCreditDetail> relatedAppInRLOSCredit = existingCreditDetailTransform.transformsToModel(existingCreditFacilityView.getRelatedAppInRLOSCredit(), existingCreditFacility, user);
+            relatedAppInRLOSCredit = existingCreditDetailTransform.transformsToModel(existingCreditFacilityView.getRelatedAppInRLOSCredit(), existingCreditFacility, user);
             existingCreditDetailDAO.persist(relatedAppInRLOSCredit);
             log.info("persist related RLOS existingCreditDetailList...");
         }
+
 
        /*
         List<ExistingCollateralDetail> borrowerCollateralDetailListDel = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,1);
@@ -421,49 +448,49 @@ public class CreditFacExistingControl extends BusinessControl {
             log.info("onFind :: existingConditionDetailList ...");
             existingCreditFacilityView.setExistingConditionDetailViewList(existingConditionDetailListView);
             
-            List<ExistingCreditDetail> borrowerComExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,1,CreditCategory.COMMERCIAL);
+            List<ExistingCreditDetail> borrowerComExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,RelationValue.BORROWER.value(),CreditCategory.COMMERCIAL);
             log.info("onFind :: borrowerComExistingCreditList ..." + borrowerComExistingCreditList.size());
             List<ExistingCreditDetailView> borrowerComExistingCreditViewList = onFindCreditDetailChild(borrowerComExistingCreditList);
             log.info("onFind :: borrowerComExistingCreditList ...");
             existingCreditFacilityView.setBorrowerComExistingCredit(borrowerComExistingCreditViewList);
 
-            List<ExistingCreditDetail> borrowerRetailExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,1,CreditCategory.RETAIL);
+            List<ExistingCreditDetail> borrowerRetailExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,RelationValue.BORROWER.value(),CreditCategory.RETAIL);
             log.info("onFind :: borrowerRetailExistingCreditList ..." + borrowerRetailExistingCreditList.size());
             List<ExistingCreditDetailView> borrowerRetailExistingCreditViewList = onFindCreditDetailChild(borrowerRetailExistingCreditList);
             log.info("onFind :: borrowerRetailExistingCreditList ...");
             existingCreditFacilityView.setBorrowerRetailExistingCredit(borrowerRetailExistingCreditViewList);
 
-            List<ExistingCreditDetail> borrowerAppInRLOSCreditList = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,1,CreditCategory.RLOS_APP_IN);
+            List<ExistingCreditDetail> borrowerAppInRLOSCreditList = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,RelationValue.BORROWER.value(),CreditCategory.RLOS_APP_IN);
             log.info("onFind :: borrowerAppInRLOSCreditList ..." + borrowerAppInRLOSCreditList.size());
             List<ExistingCreditDetailView> borrowerAppInRLOSCreditViewList = onFindCreditDetailChild(borrowerAppInRLOSCreditList);
             log.info("onFind :: borrowerAppInRLOSCreditList ...");
             existingCreditFacilityView.setBorrowerAppInRLOSCredit(borrowerAppInRLOSCreditViewList);
 
-            List<ExistingCreditDetail> relatedComExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,2,CreditCategory.COMMERCIAL);
+            List<ExistingCreditDetail> relatedComExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,RelationValue.DIRECTLY_RELATED.value(),CreditCategory.COMMERCIAL);
             log.info("onFind :: relatedComExistingCreditList ..." + relatedComExistingCreditList.size());
             List<ExistingCreditDetailView> relatedComExistingCreditViewList = onFindCreditDetailChild(relatedComExistingCreditList);
             log.info("onFind :: relatedComExistingCreditList ...");
             existingCreditFacilityView.setRelatedComExistingCredit(relatedComExistingCreditViewList);
 
-            List<ExistingCreditDetail> relatedRetailExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,2,CreditCategory.RETAIL);
+            List<ExistingCreditDetail> relatedRetailExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,RelationValue.DIRECTLY_RELATED.value(),CreditCategory.RETAIL);
             log.info("onFind :: relatedRetailExistingCreditList ..." + relatedRetailExistingCreditList.size());
             List<ExistingCreditDetailView> relatedRetailExistingCreditViewList = onFindCreditDetailChild(relatedRetailExistingCreditList);
             log.info("onFind :: relatedRetailExistingCreditList ...");
             existingCreditFacilityView.setRelatedRetailExistingCredit(relatedRetailExistingCreditViewList);
 
-            List<ExistingCreditDetail> relatedAppInRLOSCreditList = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,2,CreditCategory.RLOS_APP_IN);
+            List<ExistingCreditDetail> relatedAppInRLOSCreditList = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,RelationValue.DIRECTLY_RELATED.value(),CreditCategory.RLOS_APP_IN);
             log.info("onFind :: relatedAppInRLOSCreditList ..." + relatedAppInRLOSCreditList.size());
             List<ExistingCreditDetailView> relatedAppInRLOSCreditViewList = onFindCreditDetailChild(relatedAppInRLOSCreditList);
             log.info("onFind :: relatedAppInRLOSCreditList ...");
             existingCreditFacilityView.setRelatedAppInRLOSCredit(relatedAppInRLOSCreditViewList);
 
-            List<ExistingCollateralDetail> borrowerCollateralDetailList = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,1);
+            List<ExistingCollateralDetail> borrowerCollateralDetailList = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,RelationValue.BORROWER.value());
             log.info("onFind :: borrowerCollateralDetailList ..." + borrowerCollateralDetailList.size());
             List<ExistingCollateralDetailView> borrowerCollateralDetailViewList = onFindCollateralDetailChild(borrowerCollateralDetailList);
             log.info("onFind :: borrowerCollateralDetailViewList ...");
             existingCreditFacilityView.setBorrowerCollateralList(borrowerCollateralDetailViewList);
 
-            List<ExistingCollateralDetail> relatedCollateralDetailList = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,2);
+            List<ExistingCollateralDetail> relatedCollateralDetailList = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,RelationValue.DIRECTLY_RELATED.value());
             log.info("onFind :: relatedCollateralDetailList ..." + relatedCollateralDetailList.size());
             List<ExistingCollateralDetailView> relatedCollateralDetailViewList = onFindCollateralDetailChild(relatedCollateralDetailList);
             log.info("onFind :: relatedCollateralDetailViewList ...");

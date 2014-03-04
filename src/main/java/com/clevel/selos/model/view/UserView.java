@@ -12,6 +12,14 @@ public class UserView implements Serializable {
     private String titleName;
 
     public UserView() {
+        reset();
+    }
+
+    public void reset() {
+        this.id = "";
+        this.userName = "";
+        this.roleDescription = "";
+        this.titleName = "";
     }
 
     public String getId() {

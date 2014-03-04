@@ -25,7 +25,6 @@ import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.MortgageLandOffice;
 import com.clevel.selos.model.db.master.MortgageOSCompany;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.Address;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.CustomerAttorney;
 import com.clevel.selos.model.db.working.MortgageInfo;
@@ -35,16 +34,15 @@ import com.clevel.selos.model.db.working.MortgageInfoCredit;
 import com.clevel.selos.model.db.working.NewCollateralCredit;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.CreditDetailSimpleView;
+import com.clevel.selos.model.view.CustomerAttorneySelectView;
 import com.clevel.selos.model.view.CustomerAttorneyView;
 import com.clevel.selos.model.view.CustomerInfoView;
-import com.clevel.selos.model.view.MortgageInfoAttorneySelectView;
 import com.clevel.selos.model.view.MortgageInfoCollOwnerView;
 import com.clevel.selos.model.view.MortgageInfoCollSubView;
 import com.clevel.selos.model.view.MortgageInfoView;
 import com.clevel.selos.transform.CreditDetailSimpleTransform;
 import com.clevel.selos.transform.CustomerAttorneyTransform;
 import com.clevel.selos.transform.CustomerTransform;
-import com.clevel.selos.transform.MortgageInfoAttorneySelectTransform;
 import com.clevel.selos.transform.MortgageInfoCollOwnerTransform;
 import com.clevel.selos.transform.MortgageInfoCollSubTransform;
 import com.clevel.selos.transform.MortgageInfoTransform;
@@ -70,7 +68,6 @@ public class MortgageDetailControl extends BusinessControl {
 	 @Inject private MortgageInfoTransform mortgageInfoTransform;
 	 @Inject private MortgageInfoCollSubTransform mortgageInfoCollSubTransform;
 	 @Inject private MortgageInfoCollOwnerTransform mortgageInfoCollOwnerTransform;
-	 @Inject private MortgageInfoAttorneySelectTransform mortgageInfoAttorneySelectTransform;
 	 @Inject private CustomerAttorneyTransform customerAttorneyTransform;
 	 @Inject private CreditDetailSimpleTransform creditDetailSimpleTransform;
 	 
@@ -108,11 +105,15 @@ public class MortgageDetailControl extends BusinessControl {
 	 
 	 public MortgageInfoView getMortgageInfo(long mortgageInfoId) {
 		 MortgageInfo result = null;
+		 long workCaseId = 0;
 		 try {
-			 if (mortgageInfoId > 0)
+			 if (mortgageInfoId > 0) {
 				 result = mortgageInfoDAO.findById(mortgageInfoId);
+				 if (result != null && result.getWorkCase() !=null)
+					workCaseId = result.getWorkCase().getId();
+			 }
 		 } catch (Throwable e) {}
-		 return mortgageInfoTransform.transformToView(result);
+		 return mortgageInfoTransform.transformToView(result,workCaseId);
 	 }
 	 
 	 public List<CustomerInfoView> getCustomerCanBePOAList(long workCaseId) {
@@ -169,22 +170,22 @@ public class MortgageDetailControl extends BusinessControl {
 		 } catch (Throwable e) {}
 		 return customerAttorneyTransform.transformToView(model);
 	 }
-	 public List<MortgageInfoAttorneySelectView> getAttorneySelectList(long workCaseId) {
+	 public CustomerAttorneyView getCustomerAttorneyViewFromCustomer(long customerId) {
+		 Customer model = null;
+		 try {
+			 if (customerId > 0)
+				 model = customerDAO.findById(customerId);
+		 } catch (Throwable e) {}
+		 return customerAttorneyTransform.transformToView(model);
+		 
+	 }
+	 public List<CustomerAttorneySelectView> getAttorneySelectList(long workCaseId) {
 		 if (workCaseId <=0)
 			 return Collections.emptyList();
 		 List<Customer> customers = customerDAO.findCustomerCanBePOA(workCaseId);
-		 List<MortgageInfoAttorneySelectView> rtnDatas = new ArrayList<MortgageInfoAttorneySelectView>();
+		 List<CustomerAttorneySelectView> rtnDatas = new ArrayList<CustomerAttorneySelectView>();
 		 for (Customer customer : customers) {
-			 List<Address> addresses = customer.getAddressesList();
-			 //TODO Hardcode for address by registration (ที่อยู่ทะเบียนบ้าน = 2)
-			 Address address = null;
-			 for (Address check : addresses) {
-				 if (check.getAddressType() != null && check.getAddressType().getId() == 2) {
-					 address = check;
-					 break;
-				 }
-			 }
-			 rtnDatas.add(mortgageInfoAttorneySelectTransform.transformToView(customer, address));
+			 rtnDatas.add(customerAttorneyTransform.transformAttorneySelectToView(customer));
 		 }
 		 return rtnDatas;
 	 }

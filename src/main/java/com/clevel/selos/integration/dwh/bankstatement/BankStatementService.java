@@ -155,7 +155,8 @@ public class BankStatementService implements Serializable {
                     firstMonth = monthTmp;
                 } else {
                     bankStatementResult.setActionResult(ActionResult.FAILED);
-                    bankStatementResult.setReason(exceptionMsg.get(ExceptionMapping.DWH_DATA_NOT_ENOUGH));
+                    //bankStatementResult.setReason(exceptionMsg.get(ExceptionMapping.DWH_DATA_NOT_ENOUGH));
+                    bankStatementResult.setReason("Data in Data Warehouse is not enough.");
                     bankStatementResult.setBankStatementList(new ArrayList<DWHBankStatement>());
                 }
 

@@ -3,29 +3,33 @@ package com.clevel.selos.model.view;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import com.clevel.selos.model.db.master.User;
 
 public class DisbursementInfoView implements Serializable{
 
-
+	private long id;
     private int approvedType;
     private List<DisbursementSummaryView> disburse;
-    private List<DisbursementMcDetailView> disburseMcList;
+    private List<DisbursementMcDetailView> disburseMcList = new ArrayList<DisbursementMcDetailView>();
     private int numberOfCheque;
     private BigDecimal totalMCDisburse;
-    private List<DisbursementDepositBaDetailView> disburseDepositList;
+    private List<DisbursementDepositBaDetailView> disburseDepositList = new ArrayList<DisbursementDepositBaDetailView>();
     private int numberOfDeposit;
     private BigDecimal totalDepositDisburse;
-    private List<DisbursementBahtnetDetailView> disbursementBahtnetList;
+    private List<DisbursementBahtnetDetailView> disbursementBahtnetList = new ArrayList<DisbursementBahtnetDetailView>();
     private int numberOfBahtnet;
     private BigDecimal totalBahtnetDisburse;
-    private List<DisbursementDepositBaDetailView> disbursementBaList;
+    private List<DisbursementDepositBaDetailView> disbursementBaList = new ArrayList<DisbursementDepositBaDetailView>();
     private int numberOfBA;
     private BigDecimal totalBADisburse;
-
-
-
-
+        
+    private User modifyBy;
+    private Date modifyDate;
+    
     public int getNumberOfDeposit() {
         return numberOfDeposit;
     }
@@ -137,4 +141,28 @@ public class DisbursementInfoView implements Serializable{
     public void setTotalBADisburse(BigDecimal totalBADisburse) {
         this.totalBADisburse = totalBADisburse;
     }
+
+	public User getModifyBy() {
+		return modifyBy;
+	}
+
+	public void setModifyBy(User modifyBy) {
+		this.modifyBy = modifyBy;
+	}
+
+	public Date getModifyDate() {
+		return modifyDate;
+	}
+
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 }

@@ -7,6 +7,7 @@ import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.db.working.ApprovalHistory;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.ApprovalHistoryView;
+import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -30,13 +31,15 @@ public class ApprovalHistoryTransform extends Transform {
     }
 
     public ApprovalHistory transformToModel(ApprovalHistoryView approvalHistoryView, WorkCase workCase) {
-        ApprovalHistory approvalHistory = new ApprovalHistory();
         if (approvalHistoryView == null) {
-            return approvalHistory;
+            return null;
         }
 
+        ApprovalHistory approvalHistory;
         if (approvalHistoryView.getId() != 0) {
             approvalHistory = approvalHistoryDAO.findById(approvalHistoryView.getId());
+        } else {
+            approvalHistory = new ApprovalHistory();
         }
 
         if (approvalHistoryView.getStepView() != null && approvalHistoryView.getStepView().getId() != 0) {
@@ -45,7 +48,7 @@ public class ApprovalHistoryTransform extends Transform {
             approvalHistory.setStep(null);
         }
 
-        if (approvalHistoryView.getUserView() != null && !"".equalsIgnoreCase(approvalHistoryView.getUserView().getId())) {
+        if (approvalHistoryView.getUserView() != null && !Util.isEmpty(approvalHistoryView.getUserView().getId())) {
             approvalHistory.setUser(userDAO.findById(approvalHistoryView.getUserView().getId()));
         } else {
             approvalHistory.setUser(null);
@@ -56,6 +59,18 @@ public class ApprovalHistoryTransform extends Transform {
         approvalHistory.setApproveDecision(DecisionType.APPROVED == approvalHistoryView.getUwDecision() ? 1 : 0);
         approvalHistory.setSubmit(approvalHistoryView.getSubmit());
         return approvalHistory;
+    }
+
+    public List<ApprovalHistory> transformToModel(List<ApprovalHistoryView> approvalHistoryViewList, WorkCase workCase) {
+        List<ApprovalHistory> approvalHistoryList = new ArrayList<ApprovalHistory>();
+        if (approvalHistoryViewList == null) {
+            return approvalHistoryList;
+        }
+
+        for (ApprovalHistoryView approvalHistoryView : approvalHistoryViewList) {
+            approvalHistoryList.add(transformToModel(approvalHistoryView, workCase));
+        }
+        return approvalHistoryList;
     }
 
     public ApprovalHistoryView transformToView(ApprovalHistory approvalHistory) {

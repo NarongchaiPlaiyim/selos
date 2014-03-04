@@ -23,8 +23,14 @@ public class CreditType implements Serializable {
     private String brmsCode;
     @Column(name = "coms_int_type", length = 1)
     private String comsIntType;
-    @Column(name = "can_split")
+    @Column(name = "can_split",columnDefinition="int default 0")
     private int canSplit;
+    @Column(name = "cal_limit_type",columnDefinition="int default 1")
+    private int calLimitType;
+    @Column(name = "credit_group",columnDefinition="int default 10")
+    private int creditGroup;
+    @Column(name = "contingent_flag", columnDefinition = "int default 1")
+    private boolean contingentFlag;
     @Column(name = "active")
     private int active;
 
@@ -79,6 +85,30 @@ public class CreditType implements Serializable {
         this.canSplit = canSplit;
     }
 
+    public int getCalLimitType() {
+        return calLimitType;
+    }
+
+    public void setCalLimitType(int calLimitType) {
+        this.calLimitType = calLimitType;
+    }
+
+    public int getCreditGroup() {
+        return creditGroup;
+    }
+
+    public void setCreditGroup(int creditGroup) {
+        this.creditGroup = creditGroup;
+    }
+
+    public boolean isContingentFlag() {
+        return contingentFlag;
+    }
+
+    public void setContingentFlag(boolean contingentFlag) {
+        this.contingentFlag = contingentFlag;
+    }
+
     public int getActive() {
         return active;
     }
@@ -96,6 +126,8 @@ public class CreditType implements Serializable {
                 .append("brmsCode", brmsCode)
                 .append("comsIntType", comsIntType)
                 .append("canSplit", canSplit)
+                .append("calLimitType", calLimitType)
+                .append("creditGroup", creditGroup)
                 .append("active", active)
                 .toString();
     }

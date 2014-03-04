@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -23,6 +22,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.SelectableDataModel;
 import org.slf4j.Logger;
 
@@ -34,13 +34,12 @@ import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.AttorneyRelationType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.model.view.CreditDetailSimpleView;
 import com.clevel.selos.model.view.CustomerAttorneyView;
-import com.clevel.selos.model.view.CustomerInfoView;
-import com.clevel.selos.model.view.MortgageInfoAttorneySelectView;
+import com.clevel.selos.model.view.CustomerAttorneySelectView;
 import com.clevel.selos.model.view.MortgageInfoCollOwnerView;
 import com.clevel.selos.model.view.MortgageInfoCollSubView;
 import com.clevel.selos.model.view.MortgageInfoView;
-import com.clevel.selos.model.view.CreditDetailSimpleView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
@@ -65,10 +64,9 @@ public class MortgageDetail implements Serializable {
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
-	private String fromPage;
 	private long mortgageId = -1;
 	private BasicInfoView basicInfoView;
-	private List<MortgageInfoAttorneySelectView> attorneySelectViews;
+	private List<CustomerAttorneySelectView> attorneySelectViews;
 	private CustomerAttorneyView currentAttorneyView;
 	private Set<Integer> spouseMaritialSet;
 	
@@ -94,7 +92,7 @@ public class MortgageDetail implements Serializable {
 	private List<CreditDetailSimpleView> credits;
 	
 	private AttorneySelectDataModel attorneySelectDataModel;
-	private MortgageInfoAttorneySelectView selectedAttorney;
+	private CustomerAttorneySelectView selectedAttorney;
 	private CustomerAttorneyView attorneyView;
 	
 	
@@ -116,10 +114,11 @@ public class MortgageDetail implements Serializable {
 		else
 			return basicInfoView.getApproveType();
 	}
-	public String getMinDate() {
+	public String getCurrentDate() {
 		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
 		return dFmt.format(new Date());
 	}
+	
 	public int[] getMortgageOrderList() {
 		int[] rtn = new int[10];
 		for (int i=1;i<=10;i++)
@@ -217,10 +216,10 @@ public class MortgageDetail implements Serializable {
 	public AttorneySelectDataModel getAttorneySelectDataModel() {
 		return attorneySelectDataModel;
 	}
-	public MortgageInfoAttorneySelectView getSelectedAttorney() {
+	public CustomerAttorneySelectView getSelectedAttorney() {
 		return selectedAttorney;
 	}
-	public void setSelectedAttorney(MortgageInfoAttorneySelectView selectedAttorney) {
+	public void setSelectedAttorney(CustomerAttorneySelectView selectedAttorney) {
 		this.selectedAttorney = selectedAttorney;
 	}
 	public CustomerAttorneyView getAttorneyView() {
@@ -230,7 +229,7 @@ public class MortgageDetail implements Serializable {
 		if (!attorneyDetailEditable)
 			return false;
 		
-		if (attorneyView.isCanUpdateRelationInfo() && attorneyView.getMaritalStatusId() >= 0)
+		if (attorneyView.getMaritalStatusId() >= 0)
 			return spouseMaritialSet.contains(attorneyView.getMaritalStatusId());
 		else
 			return false;
@@ -243,21 +242,19 @@ public class MortgageDetail implements Serializable {
 	}
 	public String getAgeYearRange() {
 		Calendar calendar = Calendar.getInstance(new Locale("th","TH"));
-		return "1900:"+calendar.get(Calendar.YEAR);
+		return "2450:"+calendar.get(Calendar.YEAR);
 	}
 	/*
 	 * Action
 	 */
 	@PostConstruct
 	private void init() {
-		log.info("Construct");
 		HttpSession session = FacesUtil.getSession(false);
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 		}
 		Map<String,Object> params =  FacesUtil.getParamMapFromFlash("mortgageParams");
-		fromPage = (String)params.get("fromPage");
 		mortgageId = Util.parseLong(params.get("mortgageId"),-1);
 		if (mortgageId <= 0)
 			mortgageId = Util.parseLong(FacesUtil.getParameter("mortgageId"),-1);
@@ -323,13 +320,13 @@ public class MortgageDetail implements Serializable {
 				owner.setPOA(false);
 			}
 		}
-		_calculateAttorneyDetail();
+		_calculateAttorneyDetail(false);
 	}
 	public void onSelectAppointeeRelationship() {
-		_calculateAttorneyDetail();
+		_calculateAttorneyDetail(false);
 	}
 	public void onSelectAppotineeOwner() {
-		_calculateAttorneyDetail();
+		_calculateAttorneyDetail(false);
 	}
 	
 	public void onSaveMortgageDetail() {
@@ -340,19 +337,20 @@ public class MortgageDetail implements Serializable {
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
 	
-	public String clickCustomerInfo(long id) {
-		//TODO Clear what it is
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-        map.put("isFromSummaryParam",false);
-        map.put("isFromJuristicParam",false);
-        map.put("isFromIndividualParam",false);
-        map.put("isEditFromJuristic", false);
-        CustomerInfoView cusView = new CustomerInfoView();
-        cusView.reset();
-        map.put("customerInfoView", cusView);
-        map.put("customerId", id);
-		return "customerInfoIndividual?faces-redirect=true";
+	public String clickCustomerInfo(long id,boolean juristic) {
+		FacesUtil.getFlash().put("customerId", id);
+		if (juristic) {
+			return "postCustomerInfoJuris?faces-redirect=true";
+		} else {
+			// Individual
+			return "postCustomerInfoIndv?faces-redirect=true";
+		}
+	}
+	public void handleBirthDay(SelectEvent event) {
+		if (attorneyView == null)
+			return;
+		Date newDate = (Date) event.getObject();
+		attorneyView.setAge(Util.calAge(newDate));
 	}
 	/*
 	 * Private method
@@ -368,10 +366,10 @@ public class MortgageDetail implements Serializable {
 		provinces = generalPeopleInfoControl.listProvinces();
 		districts = Collections.emptyList(); // Need to process
 		subdistricts = Collections.emptyList(); //Need to process
-		maritalStatuses = generalPeopleInfoControl.listMaritialStatuses();
+		maritalStatuses = generalPeopleInfoControl.listMaritalStatuses();
 		countries = generalPeopleInfoControl.listCountries();
 		
-		spouseMaritialSet = generalPeopleInfoControl.listSpouseReqMaritialStatues();
+		spouseMaritialSet = generalPeopleInfoControl.listSpouseReqMaritalStatues();
 	}
 	private void _loadInitData() {
 		preRenderCheck = false;
@@ -379,35 +377,41 @@ public class MortgageDetail implements Serializable {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
 		
-		//TODO Load mortgage info by using workcase and mortgageId
 		mortgageInfoView = mortgageDetailControl.getMortgageInfo(mortgageId);
+		
+		if (mortgageInfoView.getId() <= 0 || mortgageInfoView.getWorkCaseId() != workCaseId) {
+			String redirectPage = "/site/mortgageSummary.jsf";
+			try {
+				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+				ec.redirect(ec.getRequestContextPath()+redirectPage);
+			} catch (IOException e) {
+				log.error("Fail to redirect screen to "+redirectPage,e);
+			}
+		}
+		
 		collOwners = mortgageDetailControl.getCollOwners(mortgageInfoView.getId());
 		collSubs = mortgageDetailControl.getMortgageInfoCollSubList(mortgageInfoView.getId());
 		credits = mortgageDetailControl.getMortgageInfoCreditList(mortgageInfoView.getId());
 		
 		currentAttorneyView = mortgageDetailControl.getCustomerAttorneyView(mortgageInfoView.getCustomerAttorneyId());
 		if (currentAttorneyView.getCustomerId() > 0) {
-			for (MortgageInfoAttorneySelectView view : attorneySelectViews) {
+			for (CustomerAttorneySelectView view : attorneySelectViews) {
 				if (view.getCustomerId() == currentAttorneyView.getCustomerId()) {
-					view.setAttorneyDetail(currentAttorneyView);
 					selectedAttorney = view;
+					break;
 				}
 			}
 		}
-		if (selectedAttorney != null)
-			currentAttorneyView = new CustomerAttorneyView();
 		
-		_calculateAttorneyDetail();
+		_calculateAttorneyDetail(true);
 	}
-	private void _calculateAttorneyDetail() {
+	private void _calculateAttorneyDetail(boolean init) {
 		RadioValue poa = mortgageInfoView.getPoa();
 		AttorneyRelationType type = mortgageInfoView.getAttorneyRelation();
-		log.info("POA "+poa);
-		log.info("Type "+type);
 		
 		if (!RadioValue.YES.equals(poa)) {
 			//disable all about attorney
-			mortgageInfoView.setAttorneyRelation(AttorneyRelationType.NA);
+			mortgageInfoView.setAttorneyRelation(AttorneyRelationType.OTHERS);
 			attorneyDetailEditable = false;
 			attorneyView = new CustomerAttorneyView();
 			selectedAttorney = null;
@@ -420,25 +424,25 @@ public class MortgageDetail implements Serializable {
 			case BORROWER :
 				if (selectedAttorney != null) {
 					attorneyDetailEditable = true;
-					attorneyView = selectedAttorney.getAttorneyDetail();
+					if (init)
+						attorneyView = currentAttorneyView;
+					else
+						attorneyView = mortgageDetailControl.getCustomerAttorneyViewFromCustomer(selectedAttorney.getCustomerId());
 				} else {
 					attorneyDetailEditable = false;
 					attorneyView = currentAttorneyView;
 				}
-				break;
+				_preCalculateDropdown();
+				return;
 			case OTHERS :
 				attorneyDetailEditable = true;
-				attorneyView = currentAttorneyView;
-				_preCalculateDropdown();
-				selectedAttorney = null;
 				break;
 			default :
 				attorneyDetailEditable = false;
-				selectedAttorney = null;
-				attorneyView = currentAttorneyView;
 				break;
 		}
-		log.info("attorneyDetailEditable "+attorneyDetailEditable);
+		selectedAttorney = null;
+		attorneyView = currentAttorneyView;
 		_preCalculateDropdown();
 	}
 	
@@ -462,24 +466,24 @@ public class MortgageDetail implements Serializable {
 	}
 	
 	
-	public class AttorneySelectDataModel extends ListDataModel<MortgageInfoAttorneySelectView> implements SelectableDataModel<MortgageInfoAttorneySelectView> {
+	public class AttorneySelectDataModel extends ListDataModel<CustomerAttorneySelectView> implements SelectableDataModel<CustomerAttorneySelectView> {
 		@SuppressWarnings("unchecked")
 		@Override
-		public MortgageInfoAttorneySelectView getRowData(String key) {
+		public CustomerAttorneySelectView getRowData(String key) {
 			long id = Util.parseLong(key, -1);
 			if (id <= 0)
 				return null;
-			List<MortgageInfoAttorneySelectView> datas = (List<MortgageInfoAttorneySelectView>) getWrappedData();
+			List<CustomerAttorneySelectView> datas = (List<CustomerAttorneySelectView>) getWrappedData();
 			if (datas == null || datas.isEmpty())
 				return null;
-			for (MortgageInfoAttorneySelectView data : datas) {
+			for (CustomerAttorneySelectView data : datas) {
 				if (data.getCustomerId() == id)
 					return data;
 			}
 			return null;
 		}
 		@Override
-		public Object getRowKey(MortgageInfoAttorneySelectView data) {
+		public Object getRowKey(CustomerAttorneySelectView data) {
 			return data.getCustomerId();
 		}
 	}

@@ -21,6 +21,8 @@ public class CreditRequestType implements Serializable {
     private String name;
     @Column(name = "description")
     private String description;
+    @Column(name = "brms_code", length = 2)
+    private String brmsCode;
     @Column(name = "active")
     private int active;
 
@@ -57,6 +59,14 @@ public class CreditRequestType implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getBrmsCode() {
+        return brmsCode;
+    }
+
+    public void setBrmsCode(String brmsCode) {
+        this.brmsCode = brmsCode;
     }
 
     public int getActive() {

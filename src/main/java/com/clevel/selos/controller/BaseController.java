@@ -1,9 +1,14 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.BRMSControl;
 import com.clevel.selos.businesscontrol.FullApplicationControl;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
+import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.brms.BRMSInterfaceImpl;
+import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ManageButton;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.User;
@@ -30,12 +35,17 @@ public class BaseController implements Serializable {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     UserDAO userDAO;
     @Inject
     BasicInfoDAO basicInfoDAO;
+
     @Inject
     FullApplicationControl fullApplicationControl;
+
+    @Inject
+    BRMSControl brmsControl;
 
     private ManageButton manageButton;
     private AppHeaderView appHeaderView;
@@ -50,11 +60,17 @@ public class BaseController implements Serializable {
     private User user;
     //private User abdm;
 
+    private String aadCommitteeId;
+
     private String abdmUserId;
     private String assignRemark;
 
     private String zmEndorseUserId;
     private String zmEndorseRemark;
+
+    private String zmPriceUserId;
+    private String rmPriceUserId;
+    private String ghPriceUserId;
 
     private String messageHeader;
     private String message;
@@ -95,7 +111,7 @@ public class BaseController implements Serializable {
             manageButton.setCheckNCBButton(true);
             manageButton.setReturnToMakerButton(true);
         } else if (stepId == StepValue.PRESCREEN_MAKER.value()) {
-            if(Util.getCurrentPage().equals("prescreenMaker.jsf")){
+            if(Util.getCurrentPage().equals("prescreenMaker.jsf") || Util.getCurrentPage().equals("prescreenResult.jsf")){
                 manageButton.setCancelCAButton(true);
                 manageButton.setCloseSaleButton(true);
                 manageButton.setCheckBRMSButton(true);
@@ -286,6 +302,53 @@ public class BaseController implements Serializable {
 
     public void onSubmitAppraisalCommittee(){
         log.debug("onSubmitAppraisalCommittee ( submit to aad committee )");
+        long workCasePreScreenId = 0;
+        long workCaseId = 0;
+        String queueName = "";
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            if(!Util.isNull(session.getAttribute("workCaseId"))){
+                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            }
+            if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
+                workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+            }
+            if(!Util.isNull(session.getAttribute("queueName"))){
+                queueName = session.getAttribute("queueName").toString();
+            }
+
+            //TODO Save AADCommittee user id to appraisal
+            fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName);
+
+            //fullApplicationControl.submitToAADCommittee(workCaseId, workCasePreScreenId, queueName);
+
+            messageHeader = "Information.";
+            message = "Request for appraisal success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+        } catch (Exception ex){
+            log.error("exception while request appraisal : ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
+
+    }
+
+    public void onCheckPreScreen(){
+        long workCasePreScreenId = 0;
+        HttpSession session = FacesUtil.getSession(true);
+        if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
+            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+            UWRulesResponse uwRulesResponse = brmsControl.getPrescreenResult(workCasePreScreenId);
+            log.debug("onCheckPreScreen uwRulesResponse : {}", uwRulesResponse);
+            if(uwRulesResponse != null){
+                if(uwRulesResponse.getActionResult().equals(ActionResult.SUCCEED)){
+
+                }else if(uwRulesResponse.getActionResult().equals(ActionResult.FAILED)){
+
+                }
+            }
+        }
 
     }
 
@@ -381,6 +444,30 @@ public class BaseController implements Serializable {
         this.assignRemark = assignRemark;
     }
 
+    public String getZmPriceUserId() {
+        return zmPriceUserId;
+    }
+
+    public void setZmPriceUserId(String zmPriceUserId) {
+        this.zmPriceUserId = zmPriceUserId;
+    }
+
+    public String getRmPriceUserId() {
+        return rmPriceUserId;
+    }
+
+    public void setRmPriceUserId(String rmPriceUserId) {
+        this.rmPriceUserId = rmPriceUserId;
+    }
+
+    public String getGhPriceUserId() {
+        return ghPriceUserId;
+    }
+
+    public void setGhPriceUserId(String ghPriceUserId) {
+        this.ghPriceUserId = ghPriceUserId;
+    }
+
     public String getZmEndorseUserId() {
         return zmEndorseUserId;
     }
@@ -428,4 +515,14 @@ public class BaseController implements Serializable {
     public void setGhUserList(List<User> ghUserList) {
         this.ghUserList = ghUserList;
     }
+
+    public String getAadCommitteeId() {
+        return aadCommitteeId;
+    }
+
+    public void setAadCommitteeId(String aadCommitteeId) {
+        this.aadCommitteeId = aadCommitteeId;
+    }
+
+
 }

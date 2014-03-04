@@ -43,4 +43,68 @@ public class DisbursementMC {
     @OneToMany(mappedBy = "disbursementMC")
     private List<DisbursementMCCredit> disbursementMCCreditList;
 
+	public Disbursement getDisbursement() {
+		return disbursement;
+	}
+
+	public void setDisbursement(Disbursement disbursement) {
+		this.disbursement = disbursement;
+	}
+
+	public BankBranch getIssuedBy() {
+		return issuedBy;
+	}
+
+	public void setIssuedBy(BankBranch issuedBy) {
+		this.issuedBy = issuedBy;
+	}
+
+	public Date getIssuedDate() {
+		return issuedDate;
+	}
+
+	public void setIssuedDate(Date issuedDate) {
+		this.issuedDate = issuedDate;
+	}
+
+	public Bank getPayeeName() {
+		return payeeName;
+	}
+
+	public void setPayeeName(Bank payeeName) {
+		this.payeeName = payeeName;
+	}
+
+	public String getPayeeRemark() {
+		return payeeRemark;
+	}
+
+	public void setPayeeRemark(String payeeRemark) {
+		this.payeeRemark = payeeRemark;
+	}
+
+	public CrossType getCrossType() {
+		return crossType;
+	}
+
+	public void setCrossType(CrossType crossType) {
+		this.crossType = crossType;
+	}
+
+	public List<DisbursementMCCredit> getDisbursementMCCreditList() {
+		return disbursementMCCreditList;
+	}
+
+	public void setDisbursementMCCreditList(List<DisbursementMCCredit> disbursementMCCreditList) {
+		this.disbursementMCCreditList = disbursementMCCreditList;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 }

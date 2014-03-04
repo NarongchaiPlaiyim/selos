@@ -31,14 +31,8 @@ public class NewCreditFacility implements Serializable {
     @Column(name = "wc_need")
     private BigDecimal wcNeed;
 
-    @Column(name = "total_wc_tmb")
-    private BigDecimal totalWcTmb;
-
     @Column(name = "wc_need_differ")
     private BigDecimal WCNeedDiffer;
-
-    @Column(name = "total_wc_debit")
-    private BigDecimal totalWcDebit;
 
     @Column(name = "case1_wc_limit")
     private BigDecimal case1WcLimit;
@@ -81,39 +75,6 @@ public class NewCreditFacility implements Serializable {
 
     @Column(name = "maximum_sme_limit")
     private BigDecimal maximumSMELimit;
-
-    @Column(name = "total_approve_credit")
-    private BigDecimal totalApproveCredit;
-
-    @Column(name = "total_propose")
-    private BigDecimal totalPropose;
-
-    @Column(name = "total_propose_loan_dbr")
-    private BigDecimal totalProposeLoanDBR;
-
-    @Column(name = "total_propose_non_loan_dbr")
-    private BigDecimal totalProposeNonLoanDBR;
-
-    @Column(name = "total_commercial")
-    private BigDecimal totalCommercial;
-
-    @Column(name = "total_commercial_and_obod")
-    private BigDecimal totalCommercialAndOBOD;
-
-    @Column(name = "total_exposure")
-    private BigDecimal totalExposure;
-
-    @Column(name = "total_guarantee_amount")
-    private BigDecimal totalGuaranteeAmount;
-
-    @Column(name = "total_num_new_od")
-    private BigDecimal totalNumberOfNewOD;
-
-    @Column(name = "total_num_contingen_propose")
-    private BigDecimal totalNumberContingenPropose;
-
-    @Column(name = "total_number_propose_credit")
-    private BigDecimal totalNumberProposeCreditFac;
 
     @Column(name = "related_tmb_lending")
     private int relatedTMBLending;
@@ -169,29 +130,106 @@ public class NewCreditFacility implements Serializable {
     @Column(name = "credit_customer_type")
     private int creditCustomerType;
 
-    @Column(name = "num_months_appr_date")
-    private int numberMonthsFromApprDate;
+    // ********** Total Section ********** //
+    @Column(name = "total_wc_tmb")
+    private BigDecimal totalWcTmb;
 
-    @Column(name = "total_core_asset")
-    private int totalNumberOfCoreAsset;
-
-    @Column(name = "total_non_core_asset")
-    private int totalNumberOfNonCoreAsset;
-
-    @Column(name = "total_mortgage_value")
-    private int totalMortgageValue;
-
-    @Column(name = "total_TCG_guarantee_amt")
-    private BigDecimal totalTCGGuaranteeAmount;
-
-    @Column(name = "total_indv_guarantee_amt")
-    private BigDecimal totalIndvGuaranteeAmount;
-
-    @Column(name = "total_juris_guarantee_amt")
-    private BigDecimal totalJurisGuaranteeAmount;
+    @Column(name = "total_wc_debit")
+    private BigDecimal totalWcDebit;
 
     @Column(name = "total_loan_wc_tmb")
     private BigDecimal totalLoanWCTMB;
+
+    @Column(name = "total_propose")
+    private BigDecimal totalPropose;
+
+    @Column(name = "total_propose_loan_dbr")
+    private BigDecimal totalProposeLoanDBR;
+
+    @Column(name = "total_propose_non_loan_dbr")
+    private BigDecimal totalProposeNonLoanDBR;
+
+    @Column(name = "total_commercial")
+    private BigDecimal totalCommercial;
+
+    @Column(name = "total_commercial_and_obod")
+    private BigDecimal totalCommercialAndOBOD;
+
+    @Column(name = "total_exposure")
+    private BigDecimal totalExposure;
+
+    @Column(name = "total_num_new_od")
+    private BigDecimal totalNumberOfNewOD;
+
+    @Column(name = "total_number_propose_credit")
+    private BigDecimal totalNumberProposeCreditFac;
+
+    @Column(name = "total_num_contingen_propose")
+    private BigDecimal totalNumberContingenPropose;
+
+    @Column(name = "total_guarantee_amount")
+    private BigDecimal totalGuaranteeAmount;
+
+    // *********** add *************** //
+    @Column(name = "tot_num_core_asset")
+    private BigDecimal totalNumberOfCoreAsset;
+
+    @Column(name = "tot_num__non_core_asset")
+    private BigDecimal totalNumberOfNonCoreAsset;
+
+    @Column(name = "tot_mortgage_value")
+    private BigDecimal totalMortgageValue;
+
+    @Column(name = "tot_tcg_gauarantee_amt")
+    private BigDecimal totalTCGGuaranteeAmount;
+
+    @Column(name = "tot_indv_guarantee_amt")
+    private BigDecimal totalIndvGuaranteeAmount;
+
+    @Column(name = "tot_juris_guarantee_amt")
+    private BigDecimal totalJurisGuaranteeAmount;
+    // *********** add *************** //
+
+    // *********** Start Approve ************ //
+    @Column(name = "total_approve_credit")
+    private BigDecimal totalApproveCredit;
+
+    @Column(name = "total_approve_commercial")
+    private BigDecimal totalApproveCommercial;
+
+    @Column(name = "total_approve_com_and_obod")
+    private BigDecimal totalApproveComAndOBOD;
+
+    @Column(name = "total_approve_exposure")
+    private BigDecimal totalApproveExposure;
+
+    @Column(name = "total_approve_num_new_od")
+    private BigDecimal totalApproveNumOfNewOD;
+
+    @Column(name = "total_approve_num_propose_crd")
+    private BigDecimal totalApproveNumProposeCreditFac;
+
+    @Column(name = "total_approve_num_con_propose")
+    private BigDecimal totalApproveNumContingenPropose;
+
+    @Column(name = "tot_approve_num_core_asset")
+    private BigDecimal totalApproveNumOfCoreAsset;
+
+    @Column(name = "tot_approve_num_non_core_asset")
+    private BigDecimal totalApproveNumOfNonCoreAsset;
+
+    @Column(name = "total_approve_guarantee_amt")
+    private BigDecimal totalApproveGuaranteeAmt;
+
+    @Column(name = "tot_approve_tcg_gauarantee_amt")
+    private BigDecimal totalApproveTCGGuaranteeAmt;
+
+    @Column(name = "tot_approve_in_guarantee_amt")
+    private BigDecimal totalApproveIndiGuaranteeAmt;
+
+    @Column(name = "tot_approve_ju_guarantee_amt")
+    private BigDecimal totalApproveJurisGuaranteeAmt;
+    // *********** End Approve ************ //
 
     @OneToOne
     @JoinColumn(name = "credit_request_type")
@@ -720,36 +758,28 @@ public class NewCreditFacility implements Serializable {
         this.newConditionDetailList = newConditionDetailList;
     }
 
-    public int getNumberMonthsFromApprDate() {
-        return numberMonthsFromApprDate;
+    public BigDecimal getTotalLoanWCTMB() {
+        return totalLoanWCTMB;
     }
 
-    public void setNumberMonthsFromApprDate(int numberMonthsFromApprDate) {
-        this.numberMonthsFromApprDate = numberMonthsFromApprDate;
+    public void setTotalLoanWCTMB(BigDecimal totalLoanWCTMB) {
+        this.totalLoanWCTMB = totalLoanWCTMB;
     }
 
-    public int getTotalNumberOfCoreAsset() {
+    public BigDecimal getTotalNumberOfCoreAsset() {
         return totalNumberOfCoreAsset;
     }
 
-    public void setTotalNumberOfCoreAsset(int totalNumberOfCoreAsset) {
+    public void setTotalNumberOfCoreAsset(BigDecimal totalNumberOfCoreAsset) {
         this.totalNumberOfCoreAsset = totalNumberOfCoreAsset;
     }
 
-    public int getTotalNumberOfNonCoreAsset() {
+    public BigDecimal getTotalNumberOfNonCoreAsset() {
         return totalNumberOfNonCoreAsset;
     }
 
-    public void setTotalNumberOfNonCoreAsset(int totalNumberOfNonCoreAsset) {
+    public void setTotalNumberOfNonCoreAsset(BigDecimal totalNumberOfNonCoreAsset) {
         this.totalNumberOfNonCoreAsset = totalNumberOfNonCoreAsset;
-    }
-
-    public int getTotalMortgageValue() {
-        return totalMortgageValue;
-    }
-
-    public void setTotalMortgageValue(int totalMortgageValue) {
-        this.totalMortgageValue = totalMortgageValue;
     }
 
     public BigDecimal getTotalTCGGuaranteeAmount() {
@@ -776,12 +806,108 @@ public class NewCreditFacility implements Serializable {
         this.totalJurisGuaranteeAmount = totalJurisGuaranteeAmount;
     }
 
-    public BigDecimal getTotalLoanWCTMB() {
-        return totalLoanWCTMB;
+    public BigDecimal getTotalMortgageValue() {
+        return totalMortgageValue;
     }
 
-    public void setTotalLoanWCTMB(BigDecimal totalLoanWCTMB) {
-        this.totalLoanWCTMB = totalLoanWCTMB;
+    public void setTotalMortgageValue(BigDecimal totalMortgageValue) {
+        this.totalMortgageValue = totalMortgageValue;
+    }
+
+    public BigDecimal getTotalApproveCommercial() {
+        return totalApproveCommercial;
+    }
+
+    public void setTotalApproveCommercial(BigDecimal totalApproveCommercial) {
+        this.totalApproveCommercial = totalApproveCommercial;
+    }
+
+    public BigDecimal getTotalApproveComAndOBOD() {
+        return totalApproveComAndOBOD;
+    }
+
+    public void setTotalApproveComAndOBOD(BigDecimal totalApproveComAndOBOD) {
+        this.totalApproveComAndOBOD = totalApproveComAndOBOD;
+    }
+
+    public BigDecimal getTotalApproveExposure() {
+        return totalApproveExposure;
+    }
+
+    public void setTotalApproveExposure(BigDecimal totalApproveExposure) {
+        this.totalApproveExposure = totalApproveExposure;
+    }
+
+    public BigDecimal getTotalApproveNumOfNewOD() {
+        return totalApproveNumOfNewOD;
+    }
+
+    public void setTotalApproveNumOfNewOD(BigDecimal totalApproveNumOfNewOD) {
+        this.totalApproveNumOfNewOD = totalApproveNumOfNewOD;
+    }
+
+    public BigDecimal getTotalApproveNumProposeCreditFac() {
+        return totalApproveNumProposeCreditFac;
+    }
+
+    public void setTotalApproveNumProposeCreditFac(BigDecimal totalApproveNumProposeCreditFac) {
+        this.totalApproveNumProposeCreditFac = totalApproveNumProposeCreditFac;
+    }
+
+    public BigDecimal getTotalApproveNumContingenPropose() {
+        return totalApproveNumContingenPropose;
+    }
+
+    public void setTotalApproveNumContingenPropose(BigDecimal totalApproveNumContingenPropose) {
+        this.totalApproveNumContingenPropose = totalApproveNumContingenPropose;
+    }
+
+    public BigDecimal getTotalApproveNumOfCoreAsset() {
+        return totalApproveNumOfCoreAsset;
+    }
+
+    public void setTotalApproveNumOfCoreAsset(BigDecimal totalApproveNumOfCoreAsset) {
+        this.totalApproveNumOfCoreAsset = totalApproveNumOfCoreAsset;
+    }
+
+    public BigDecimal getTotalApproveNumOfNonCoreAsset() {
+        return totalApproveNumOfNonCoreAsset;
+    }
+
+    public void setTotalApproveNumOfNonCoreAsset(BigDecimal totalApproveNumOfNonCoreAsset) {
+        this.totalApproveNumOfNonCoreAsset = totalApproveNumOfNonCoreAsset;
+    }
+
+    public BigDecimal getTotalApproveGuaranteeAmt() {
+        return totalApproveGuaranteeAmt;
+    }
+
+    public void setTotalApproveGuaranteeAmt(BigDecimal totalApproveGuaranteeAmt) {
+        this.totalApproveGuaranteeAmt = totalApproveGuaranteeAmt;
+    }
+
+    public BigDecimal getTotalApproveTCGGuaranteeAmt() {
+        return totalApproveTCGGuaranteeAmt;
+    }
+
+    public void setTotalApproveTCGGuaranteeAmt(BigDecimal totalApproveTCGGuaranteeAmt) {
+        this.totalApproveTCGGuaranteeAmt = totalApproveTCGGuaranteeAmt;
+    }
+
+    public BigDecimal getTotalApproveIndiGuaranteeAmt() {
+        return totalApproveIndiGuaranteeAmt;
+    }
+
+    public void setTotalApproveIndiGuaranteeAmt(BigDecimal totalApproveIndiGuaranteeAmt) {
+        this.totalApproveIndiGuaranteeAmt = totalApproveIndiGuaranteeAmt;
+    }
+
+    public BigDecimal getTotalApproveJurisGuaranteeAmt() {
+        return totalApproveJurisGuaranteeAmt;
+    }
+
+    public void setTotalApproveJurisGuaranteeAmt(BigDecimal totalApproveJurisGuaranteeAmt) {
+        this.totalApproveJurisGuaranteeAmt = totalApproveJurisGuaranteeAmt;
     }
 
     @Override
@@ -789,10 +915,9 @@ public class NewCreditFacility implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("workCase", workCase)
+                .append("workCasePrescreen", workCasePrescreen)
                 .append("wcNeed", wcNeed)
-                .append("totalWcTmb", totalWcTmb)
                 .append("WCNeedDiffer", WCNeedDiffer)
-                .append("totalWcDebit", totalWcDebit)
                 .append("case1WcLimit", case1WcLimit)
                 .append("case1WcMinLimit", case1WcMinLimit)
                 .append("case1Wc50CoreWc", case1Wc50CoreWc)
@@ -807,17 +932,6 @@ public class NewCreditFacility implements Serializable {
                 .append("case3WcDebitCoreWc", case3WcDebitCoreWc)
                 .append("existingSMELimit", existingSMELimit)
                 .append("maximumSMELimit", maximumSMELimit)
-                .append("totalApproveCredit", totalApproveCredit)
-                .append("totalPropose", totalPropose)
-                .append("totalProposeLoanDBR", totalProposeLoanDBR)
-                .append("totalProposeNonLoanDBR", totalProposeNonLoanDBR)
-                .append("totalCommercial", totalCommercial)
-                .append("totalCommercialAndOBOD", totalCommercialAndOBOD)
-                .append("totalExposure", totalExposure)
-                .append("totalGuaranteeAmount", totalGuaranteeAmount)
-                .append("totalNumberOfNewOD", totalNumberOfNewOD)
-                .append("totalNumberContingenPropose", totalNumberContingenPropose)
-                .append("totalNumberProposeCreditFac", totalNumberProposeCreditFac)
                 .append("relatedTMBLending", relatedTMBLending)
                 .append("twentyFivePercentShareRelatedTMBLending", twentyFivePercentShareRelatedTMBLending)
                 .append("singleLendingLimit", singleLendingLimit)
@@ -836,14 +950,38 @@ public class NewCreditFacility implements Serializable {
                 .append("frontendFeeDOA", frontendFeeDOA)
                 .append("guarantorBA", guarantorBA)
                 .append("creditCustomerType", creditCustomerType)
-                .append("numberMonthsFromApprDate", numberMonthsFromApprDate)
+                .append("totalWcTmb", totalWcTmb)
+                .append("totalWcDebit", totalWcDebit)
+                .append("totalLoanWCTMB", totalLoanWCTMB)
+                .append("totalPropose", totalPropose)
+                .append("totalProposeLoanDBR", totalProposeLoanDBR)
+                .append("totalProposeNonLoanDBR", totalProposeNonLoanDBR)
+                .append("totalCommercial", totalCommercial)
+                .append("totalCommercialAndOBOD", totalCommercialAndOBOD)
+                .append("totalExposure", totalExposure)
+                .append("totalNumberOfNewOD", totalNumberOfNewOD)
+                .append("totalNumberProposeCreditFac", totalNumberProposeCreditFac)
+                .append("totalNumberContingenPropose", totalNumberContingenPropose)
+                .append("totalGuaranteeAmount", totalGuaranteeAmount)
                 .append("totalNumberOfCoreAsset", totalNumberOfCoreAsset)
                 .append("totalNumberOfNonCoreAsset", totalNumberOfNonCoreAsset)
                 .append("totalMortgageValue", totalMortgageValue)
                 .append("totalTCGGuaranteeAmount", totalTCGGuaranteeAmount)
                 .append("totalIndvGuaranteeAmount", totalIndvGuaranteeAmount)
                 .append("totalJurisGuaranteeAmount", totalJurisGuaranteeAmount)
-                .append("totalLoanWCTMB", totalLoanWCTMB)
+                .append("totalApproveCredit", totalApproveCredit)
+                .append("totalApproveCommercial", totalApproveCommercial)
+                .append("totalApproveComAndOBOD", totalApproveComAndOBOD)
+                .append("totalApproveExposure", totalApproveExposure)
+                .append("totalApproveNumOfNewOD", totalApproveNumOfNewOD)
+                .append("totalApproveNumProposeCreditFac", totalApproveNumProposeCreditFac)
+                .append("totalApproveNumContingenPropose", totalApproveNumContingenPropose)
+                .append("totalApproveNumOfCoreAsset", totalApproveNumOfCoreAsset)
+                .append("totalApproveNumOfNonCoreAsset", totalApproveNumOfNonCoreAsset)
+                .append("totalApproveGuaranteeAmt", totalApproveGuaranteeAmt)
+                .append("totalApproveTCGGuaranteeAmt", totalApproveTCGGuaranteeAmt)
+                .append("totalApproveIndiGuaranteeAmt", totalApproveIndiGuaranteeAmt)
+                .append("totalApproveJurisGuaranteeAmt", totalApproveJurisGuaranteeAmt)
                 .append("loanRequestType", loanRequestType)
                 .append("investedCountry", investedCountry)
                 .append("createDate", createDate)

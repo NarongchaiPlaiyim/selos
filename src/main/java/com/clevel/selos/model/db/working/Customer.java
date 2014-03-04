@@ -1,10 +1,13 @@
 package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.util.Util;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -170,9 +173,6 @@ public class Customer implements Serializable {
     @Column(name="juristic_id")
     private long juristicId;
 
-    @Column(name="age_months", nullable=false, columnDefinition="int default 0")
-    private int ageMonths;
-
     @OneToOne
     @JoinColumn (name = "customer_obl_info_id")
     CustomerOblInfo customerOblInfo;
@@ -180,6 +180,22 @@ public class Customer implements Serializable {
     @Column(name="shares", nullable=false, columnDefinition="int default 0")
     private BigDecimal shares;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_date")
+    private Date createDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modify_date")
+    private Date modifyDate;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "create_user_id")
+    private User createBy;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "modify_user_id")
+    private User modifyBy;
+    
     public Customer() {
     }
 
@@ -567,14 +583,6 @@ public class Customer implements Serializable {
         this.title = title;
     }
 
-    public int getAgeMonths() {
-        return ageMonths;
-    }
-
-    public void setAgeMonths(int ageMonths) {
-        this.ageMonths = ageMonths;
-    }
-
     public CustomerOblInfo getCustomerOblInfo() {
         return customerOblInfo;
     }
@@ -590,6 +598,38 @@ public class Customer implements Serializable {
     public void setShares(BigDecimal shares) {
         this.shares = shares;
     }
+    
+    public Date getCreateDate() {
+  		return createDate;
+  	}
+
+  	public void setCreateDate(Date createDate) {
+  		this.createDate = createDate;
+  	}
+
+  	public Date getModifyDate() {
+  		return modifyDate;
+  	}
+
+  	public void setModifyDate(Date modifyDate) {
+  		this.modifyDate = modifyDate;
+  	}
+
+  	public User getCreateBy() {
+  		return createBy;
+  	}
+
+  	public void setCreateBy(User createBy) {
+  		this.createBy = createBy;
+  	}
+
+  	public User getModifyBy() {
+  		return modifyBy;
+  	}
+
+  	public void setModifyBy(User modifyBy) {
+  		this.modifyBy = modifyBy;
+  	}
 
     @Override
     public String toString() {
@@ -643,5 +683,15 @@ public class Customer implements Serializable {
                 append("isCommittee", isCommittee).
                 append("juristicId", juristicId).
                 toString();
+    }
+    
+    public String getDisplayName() {
+    	StringBuilder builder = new StringBuilder();
+    	if (getTitle() != null)
+    		builder.append(getTitle().getTitleTh()).append(' ');
+    	builder.append(getNameTh());
+    	if (!Util.isEmpty(getLastNameTh()))
+    		builder.append(" ").append(getLastNameTh());
+    	return builder.toString();
     }
 }

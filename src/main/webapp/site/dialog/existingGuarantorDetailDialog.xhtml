@@ -23,6 +23,7 @@
                                            var="guarantorList"
                                            itemLabel="#{guarantorList.firstNameTh}"
                                            itemValue="#{guarantorList.id}"/>
+                            <p:ajax event="change" update="@this"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -79,7 +80,7 @@
                                 <p:outputLabel  value="#{creditTypeBorrower.limit}" />
                             </p:column>
                             <p:column styleClass="right">
-                                <p:inputText value="#{creditTypeBorrower.guaranteeAmount}" style="text-align:right">
+                                <p:inputText value="#{creditTypeBorrower.guaranteeAmount}" style="text-align:right" maxlength="16">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                     <p:ajax event="blur" update="@this"/>
                                 </p:inputText>
@@ -90,7 +91,7 @@
                 <tr>
                     <td colspan="2" class="center">
                         <p:commandButton
-                                id="saveGuarantor"
+                                id="saveGuarantor" disabled="#{not creditFacExisting.canSaveGarantor}"
                                 value="#{msg.get('app.credit.facility.propose.okButton')}"
                                 binding="#{addGuarantorDlg}"
                                 styleClass="small"

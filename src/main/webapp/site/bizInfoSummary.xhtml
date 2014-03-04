@@ -96,12 +96,15 @@
                                         <td colspan="3">
                                             <table style="border-spacing: 0;">
                                                 <tr>
-                                                    <td class="left title" style="min-width: 115px; width: 115px; max-width: 115px;"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressNo')}" /> : </td>
-                                                    <td class="left" colspan="3"><p:inputText styleClass="medium" style="width: 140px;" id="addressNo" onkeydown="return onKeyDownHomeNo(event);"
-                                                                                              onkeypress="return onKeyPressHomeNo(event);" value="#{bizInfoSummary.bizInfoSummaryView.addressNo}"
-                                                                                              required="#{not empty param[addBizInfoSummary.clientId]}">
-                                                                                             <p:ajax event="blur" update=":frmMain:addressMoo"/>
-                                                                                 </p:inputText>
+                                                    <td class="left title" style="min-width: 115px; width: 115px; max-width: 115px;">
+                                                        <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressNo')}" /> :
+                                                    </td>
+                                                    <td class="left" colspan="3">
+                                                        <p:inputText styleClass="medium" style="width: 140px;" id="addressNo" onkeydown="return onKeyDownHomeNo(event);"
+                                                             onkeypress="return onKeyPressHomeNo(event);" value="#{bizInfoSummary.bizInfoSummaryView.addressNo}"
+                                                            required="#{not empty param[addBizInfoSummary.clientId]}">
+                                                            <p:ajax event="blur" update=":frmMain:addressMoo,:frmMain:addressNo"/>
+                                                        </p:inputText>
                                                         <p:spacer width="35" height="5" />
                                                         <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressMoo')} :" styleClass="title" for="addressMoo"/>
                                                         <p:spacer width="5" height="5"/>
@@ -131,13 +134,13 @@
                                                     <td>
                                                         <p:selectOneMenu id="provinceCode" size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                                                                          value="#{bizInfoSummary.bizInfoSummaryView.province.code}"
-                                                                         required="#{bizInfoSummary.bizInfoSummaryView.addressStreet != null and not empty param[addBizInfoSummary.clientId]}" >
+                                                                         required="#{not empty param[addBizInfoSummary.clientId]}" >
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.provinceList}"
                                                                            var="province"
                                                                            itemLabel="#{province.name}"
                                                                            itemValue="#{province.code}"/>
-                                                            <p:ajax process="@form" update=":frmMain" listener="#{bizInfoSummary.onChangeProvince}"/>
+                                                            <p:ajax process="@form" update=":frmMain:provinceCode,:frmMain:districtCode,:frmMain:subDistrictCode" listener="#{bizInfoSummary.onChangeProvince}"/>
                                                         </p:selectOneMenu>
                                                     </td>
                                                     <td>
@@ -149,7 +152,7 @@
                                                                            var="district"
                                                                            itemLabel="#{district.name}"
                                                                            itemValue="#{district.id}"/>
-                                                            <p:ajax process="@form" update=":frmMain" listener="#{bizInfoSummary.onChangeDistrict()}" />
+                                                            <p:ajax process="@form" update=":frmMain:districtCode,:frmMain:subDistrictCode" listener="#{bizInfoSummary.onChangeDistrict()}" />
                                                         </p:selectOneMenu>
                                                     </td>
                                                     <td>
@@ -161,7 +164,7 @@
                                                                            var="subDis"
                                                                            itemLabel="#{subDis.name}"
                                                                            itemValue="#{subDis.code}"/>
-                                                            <p:ajax event="change" process="@form" update=":frmMain"/>
+                                                            <p:ajax event="change" process="@form" update=":frmMain:subDistrictCode"/>
                                                         </p:selectOneMenu>
                                                     </td>
                                                 </tr>

@@ -29,6 +29,7 @@
             <ui:include src="include/menubar.xhtml" />
            
             <!-- End Menu -->
+			<h:panelGroup id="full_main_container" layout="block">
             <div id="content_container">
                 <div id="content_name">#{msg.get('app.mortgageSummary.subtitle')}</div>
                 <div id="content">
@@ -84,7 +85,7 @@
                         				value="#{msg.get('app.mortgageSummary.agreement.loanDate')}" />	
                         		</td>
                         		<td>
-                        			<clv:BECalendar id='loan_contractdate' value="#{mortgageSummary.mortgageSummaryView.loanContractDate}"
+                        			<clv:BECalendar id='loan_contractdate' value="#{mortgageSummary.agreementInfoView.loanContractDate}"
                         					pattern="dd/MM/yyyy" showOn="button"
                                        		mindate="#{mortgageSummary.minDate}"
                                        		autocomplete="false" locale="th_TH"
@@ -99,7 +100,7 @@
                         		</td>
                         		<td>
              			            <p:selectOneRadio id='signcontract_type' widgetVar="p_signcontract_type"
-             			            	value="#{mortgageSummary.mortgageSummaryView.signingLocation}"
+             			            	value="#{mortgageSummary.agreementInfoView.signingLocation}"
              			            	required="true" requiredMessage="#{msg.get('app.mortgageSummary.signContract.validate')}"
              			            	>
              			            	<p:ajax update="signcontract_loc" 
@@ -113,7 +114,7 @@
                         		<td></td>
                         		<td>
                         			<p:selectOneMenu id='signcontract_loc' widgetVar="p_signcontract_loc"
-                        				value="#{mortgageSummary.mortgageSummaryView.updLocation}"
+                        				value="#{mortgageSummary.agreementInfoView.updLocation}"
                         				disabled="#{not mortgageSummary.enableSignContractLocation}"
                         				 style="width:160px">
                         				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -128,7 +129,7 @@
                         		</td>
                         		<td>
                         			<p:inputText id='coms_no' styleClass="largest"
-                        				value="#{mortgageSummary.mortgageSummaryView.comsNumber}"
+                        				value="#{mortgageSummary.agreementInfoView.comsNumber}"
                         				required="true" requiredMessage="#{msg.get('app.mortgageSummary.comsNo.validate')}"
                         				/>
                         		</td>
@@ -314,7 +315,9 @@
 	                             <td colspan="100%" class="center">
 	                                 <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
 	                                 	styleClass="medium"
-	                                 	oncomplete="p_saveMortgageSummaryDlg.show();"
+										onstart="handleOnStartOpenCfmDlg();"
+										oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveMortgageSummaryDlg);"
+										update=":frmMain:full_main_container,:result_dialog"
 	                                 	 />
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"
@@ -331,22 +334,18 @@
             <!-- Start Footer -->
             <ui:include src="include/footer.xhtml" />
             <!-- End Footer -->
+            </h:panelGroup>
             </div>
-           	
-           	<p:blockUI widgetVar="p_blockUI" block=":frmMain" trigger='saveBtn,cancelBtn'>
-           		LOADING<br />
-                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-             </p:blockUI>
         </h:form>
     </p:panel>
-    
+    <ui:include src="dialog/postLoadingAndErrorDialog.xhtml" />
     <ui:include src="dialog/confirmEditDlg.xhtml">
 		<ui:param name="id" value="saveMortgageSummaryDlg"/>
 		<ui:param name="name" value="p_saveMortgageSummaryDlg"/>
 		<ui:param name="formId" value="saveMortgageSummaryFrm"/>
 		<ui:param name="controller" value="#{mortgageSummary}"/>
 		<ui:param name="action" value="onSaveMortgageSummary"/>
-		<ui:param name="update" value=":frmMain"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
 </h:body>
 </f:view>

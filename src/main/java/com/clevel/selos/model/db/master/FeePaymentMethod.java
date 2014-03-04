@@ -1,5 +1,7 @@
 package com.clevel.selos.model.db.master;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -10,9 +12,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "mst_fee_payment_method")
-public class FeePaymentMethod {
+public class FeePaymentMethod implements Serializable{
 
-    @Id
+    private static final long serialVersionUID = -3283807845532052122L;
+
+	@Id
     @Column(name = "id")
     private int id;
 
@@ -24,7 +28,13 @@ public class FeePaymentMethod {
 
     @Column (name = "active")
     private int active;
-
+    
+    @Column (name="include_in_agreementsign",columnDefinition="int default 0")
+    private boolean includeInAgreementSign;
+    
+    @Column (name="debit_from_customer",columnDefinition="int default 0")
+    private boolean debitFromCustomer;
+    
     public FeePaymentMethod(){
     }
 
@@ -59,7 +69,19 @@ public class FeePaymentMethod {
     public void setActive(int active) {
         this.active = active;
     }
-
+    
+    public boolean isIncludeInAgreementSign() {
+		return includeInAgreementSign;
+	}
+    public void setIncludeInAgreementSign(boolean includeInAgreementSign) {
+		this.includeInAgreementSign = includeInAgreementSign;
+	}
+    public boolean isDebitFromCustomer() {
+		return debitFromCustomer;
+	}
+    public void setDebitFromCustomer(boolean debitFromCustomer) {
+		this.debitFromCustomer = debitFromCustomer;
+	}
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -67,6 +89,8 @@ public class FeePaymentMethod {
                 .append("brmsCode", brmsCode)
                 .append("description", description)
                 .append("active", active)
+                .append("includeInAgreementSign",includeInAgreementSign)
+                .append("debitFromCustomer",debitFromCustomer)
                 .toString();
     }
 }

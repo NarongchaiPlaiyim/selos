@@ -1,12 +1,10 @@
 package com.clevel.selos.model.view;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import com.sun.xml.internal.xsom.impl.scd.Iterators.Map;
 
 public class PreDisbursementView implements Serializable {
     private int approvedType = 0;

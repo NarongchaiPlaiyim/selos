@@ -1,8 +1,6 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.DecisionType;
-import com.clevel.selos.model.db.master.Action;
-import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.DateTime;
@@ -20,6 +18,15 @@ public class ApprovalHistoryView implements Serializable {
     private int isSubmit;
 
     public ApprovalHistoryView() {
+        reset();
+    }
+
+    public void reset() {
+        this.stepView = new StepView();
+        this.userView = new UserView();
+        this.submitDate = DateTime.now().toDate();
+        this.comments = "";
+        this.uwDecision = DecisionType.NO_DECISION;
     }
 
     public long getId() {

@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,6 +19,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.clevel.selos.model.MortgageConfirmedType;
 import com.clevel.selos.model.db.master.User;
 
 @Entity
@@ -32,6 +35,10 @@ public class MortgageSummary implements Serializable {
     @OneToOne
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
+    
+    @Column(name="confirmed",columnDefinition="int default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private MortgageConfirmedType confirmed;
     
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -95,6 +102,14 @@ public class MortgageSummary implements Serializable {
 
 	public void setModifyBy(User modifyBy) {
 		this.modifyBy = modifyBy;
+	}
+	
+	public MortgageConfirmedType getConfirmed() {
+		return confirmed;
+	}
+	
+	public void setConfirmed(MortgageConfirmedType confirmed) {
+		this.confirmed = confirmed;
 	}
     
 }

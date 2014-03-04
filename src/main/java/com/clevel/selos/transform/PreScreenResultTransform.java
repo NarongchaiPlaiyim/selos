@@ -1,7 +1,6 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.integration.brms.model.RuleColorResult;
-import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
@@ -23,12 +22,6 @@ public class PreScreenResultTransform extends Transform {
     @Inject
     public PreScreenResultTransform() {
 
-    }
-
-    public PreScreenRequest transformToRequest(List<CustomerInfoView> customerInfoViewList) {
-        PreScreenRequest preScreenRequest = new PreScreenRequest();
-        //TODO Transform to preScreenRequest
-        return preScreenRequest;
     }
 
     public List<PreScreenResponseView> transformResponseToView(List<PreScreenResponse> presCreenResponses) {

@@ -17,10 +17,12 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
+import com.clevel.selos.businesscontrol.ApproveDetailInformationControl;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.view.ApproveDetailInformationView;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -36,13 +38,16 @@ public class ApproveDetailInformation implements Serializable {
 	@Inject
 	private BasicInfoControl basicInfoControl;
 	
+	@Inject
+	private ApproveDetailInformationControl approveDetailInformationControl;
+	
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
 	private User user;
 	private BasicInfoView basicInfoView;
-	
+	private ApproveDetailInformationView approveDetailInformationView;
 	//Property
 	
 	public ApproveDetailInformation() {
@@ -77,6 +82,7 @@ public class ApproveDetailInformation implements Serializable {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 			user = (User) session.getAttribute("user");
+			this.setApproveDetailInformationView(approveDetailInformationControl.getApproveDetailInformationView(workCaseId));
 		}
 		_loadInitData();
 	}
@@ -124,5 +130,13 @@ public class ApproveDetailInformation implements Serializable {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
 		
+	}
+
+	public ApproveDetailInformationView getApproveDetailInformationView() {
+		return approveDetailInformationView;
+	}
+
+	public void setApproveDetailInformationView(ApproveDetailInformationView approveDetailInformationView) {
+		this.approveDetailInformationView = approveDetailInformationView;
 	}
 }

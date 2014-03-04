@@ -1,6 +1,7 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.GuarantorCategory;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -19,6 +20,8 @@ public class NewGuarantorDetailView implements Serializable {
     private BigDecimal totalLimitGuaranteeAmount;
     private ProposeType proposeType;
     private DecisionType uwDecision;
+    private GuarantorCategory guarantorCategory;
+
 
     private List<ProposeCreditDetailView> proposeCreditDetailViewList;
 
@@ -38,6 +41,7 @@ public class NewGuarantorDetailView implements Serializable {
         this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
         this.proposeType = ProposeType.P;
         this.uwDecision = DecisionType.NO_DECISION;
+
     }
 
     public long getId() {
@@ -126,6 +130,14 @@ public class NewGuarantorDetailView implements Serializable {
 
     public void setProposeCreditDetailViewList(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
         this.proposeCreditDetailViewList = proposeCreditDetailViewList;
+    }
+
+    public GuarantorCategory getGuarantorCategory() {
+        return guarantorCategory;
+    }
+
+    public void setGuarantorCategory(GuarantorCategory guarantorCategory) {
+        this.guarantorCategory = guarantorCategory;
     }
 
     @Override

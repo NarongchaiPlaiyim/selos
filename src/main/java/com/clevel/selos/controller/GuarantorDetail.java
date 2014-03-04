@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -46,7 +45,6 @@ public class GuarantorDetail implements Serializable {
 	private long workCaseId = -1;
 	private long stepId = -1;
 	private long guarantorId = -1;
-	private String fromPage;
 	private BasicInfoView basicInfoView;
 	
 	//Property
@@ -91,7 +89,6 @@ public class GuarantorDetail implements Serializable {
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 		}
 		Map<String,Object> params =  FacesUtil.getParamMapFromFlash("guarantorParams");
-		fromPage = (String)params.get("fromPage");
 		guarantorId = Util.parseLong(params.get("guarantorId"),-1);
 		_loadInitData();
 	}
@@ -127,20 +124,14 @@ public class GuarantorDetail implements Serializable {
 	}
 	
 	
-	public String clickCustomerInfo(long id) {
-		//TODO Clear what it is
-		Map<String, Object> map = new HashMap<String, Object>();
-		/*
-        map.put("isFromSummaryParam",true);
-        map.put("isFromJuristicParam",false);
-        map.put("isFromIndividualParam",false);
-        map.put("isEditFromJuristic", false);
-        CustomerInfoView cusView = new CustomerInfoView();
-        cusView.reset();
-        map.put("customerInfoView", cusView);
-        */
-        map.put("customerId", id);
-		return "customerInfoIndividual?faces-redirect=true";
+	public String clickCustomerInfo(long id,boolean juristic) {
+		FacesUtil.getFlash().put("customerId", id);
+		if (juristic) {
+			return "postCustomerInfoJuris?faces-redirect=true";
+		} else {
+			// Individual
+			return "postCustomerInfoIndv?faces-redirect=true";
+		}
 	}
 	
 	public void onSaveGuarantorDetail() {
@@ -160,5 +151,14 @@ public class GuarantorDetail implements Serializable {
 		}
 		
 		guarantorInfoView = guarantorDetailControl.getGuarantorInfoFull(guarantorId);
+		if (guarantorInfoView.getId() <= 0 || guarantorInfoView.getWorkCaseId() != workCaseId) {
+			String redirectPage = "/site/mortgageSummary.jsf";
+			try {
+				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+				ec.redirect(ec.getRequestContextPath()+redirectPage);
+			} catch (IOException e) {
+				log.error("Fail to redirect screen to "+redirectPage,e);
+			}
+		}
 	}
 }

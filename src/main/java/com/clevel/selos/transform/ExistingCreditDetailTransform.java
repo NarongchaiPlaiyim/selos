@@ -1,5 +1,6 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.model.CalLimitType;
 import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.db.master.BankAccountStatus;
 import com.clevel.selos.model.db.master.User;
@@ -115,6 +116,13 @@ public class ExistingCreditDetailTransform extends Transform {
                 existingCreditDetailView.setCreditCategory(CreditCategory.RETAIL);
             } else if(existingCreditDetail.getCreditCategory()==CreditCategory.RLOS_APP_IN.value()){
                 existingCreditDetailView.setCreditCategory(CreditCategory.RLOS_APP_IN);
+            }
+
+            existingCreditDetailView.setUsePCE(false);
+            if(existingCreditDetailView.getExistCreditTypeView()!=null && existingCreditDetailView.getExistCreditTypeView().getId()!=0){
+                if(CalLimitType.getCalLimitType(existingCreditDetailView.getExistCreditTypeView().getCalLimitType()) == CalLimitType.PCE){
+                    existingCreditDetailView.setUsePCE(true);
+                }
             }
 
 

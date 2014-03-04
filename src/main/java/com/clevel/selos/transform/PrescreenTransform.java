@@ -59,13 +59,23 @@ public class PrescreenTransform extends Transform {
         } else {
             prescreen.setReferredExperience(null);
         }
-        prescreen.setRefinance(prescreenView.getRefinance());
+
         prescreen.setTcg(prescreenView.getTcg());
-        if (prescreenView.getRefinanceBank() != null && prescreenView.getRefinanceBank().getCode() != 0) {
-            prescreen.setRefinanceBank(bankDAO.findById(prescreenView.getRefinanceBank().getCode()));
+
+        prescreen.setRefinanceIN(prescreenView.getRefinanceIn());
+        if(prescreenView.getRefinanceInBank() != null && prescreenView.getRefinanceInBank().getCode() != 0){
+            prescreen.setRefinanceInValue(bankDAO.findById(prescreenView.getRefinanceInBank().getCode()));
         } else {
-            prescreen.setRefinanceBank(null);
+            prescreen.setRefinanceInValue(null);
         }
+
+        prescreen.setRefinanceOUT(prescreenView.getRefinanceOut());
+        if(prescreenView.getRefinanceOutBank() != null && prescreenView.getRefinanceOutBank().getCode() != 0){
+            prescreen.setRefinanceOutValue(bankDAO.findById(prescreenView.getRefinanceOutBank().getCode()));
+        } else {
+            prescreen.setRefinanceOutValue(null);
+        }
+
         prescreen.setBorrowingType(prescreenView.getBorrowingType());
         if (prescreenView.getBorrowingType() != null && prescreenView.getBorrowingType().getId() != 0) {
             prescreen.setBorrowingType(borrowingTypeDAO.findById(prescreenView.getBorrowingType().getId()));
@@ -97,12 +107,21 @@ public class PrescreenTransform extends Transform {
         if (prescreenView.getReferredExperience() == null) {
             prescreenView.setReferredExperience(new ReferredExperience());
         }
-        prescreenView.setRefinance(prescreen.getRefinance());
+
         prescreenView.setTcg(prescreen.getTcg());
-        prescreenView.setRefinanceBank(prescreen.getRefinanceBank());
-        if (prescreenView.getRefinanceBank() == null) {
-            prescreenView.setRefinanceBank(new Bank());
+
+        prescreenView.setRefinanceIn(prescreen.getRefinanceIN());
+        prescreenView.setRefinanceInBank(prescreen.getRefinanceInValue());
+        if (prescreen.getRefinanceInValue() == null){
+            prescreenView.setRefinanceInBank(new Bank());
         }
+
+        prescreenView.setRefinanceOut(prescreen.getRefinanceOUT());
+        prescreenView.setRefinanceOutBank(prescreen.getRefinanceOutValue());
+        if (prescreen.getRefinanceOutValue() == null){
+            prescreenView.setRefinanceOutBank(new Bank());
+        }
+
         prescreenView.setBorrowingType(prescreen.getBorrowingType());
         if (prescreenView.getBorrowingType() == null) {
             prescreenView.setBorrowingType(new BorrowingType());

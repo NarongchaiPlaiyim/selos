@@ -29,6 +29,7 @@
             <ui:include src="include/menubar.xhtml" />
            
             <!-- End Menu -->
+			<h:panelGroup id="full_main_container" layout="block">
             <div id="content_container">
                 <div id="content_name">#{msg.get('app.pledgeDetail.subtitle')}</div>
                 <div id="content">
@@ -80,14 +81,15 @@
                         	</tr>
                         	<tr>
                         		<td class="title" style="width: 180px">
-                        			<p:outputLabel  for="pleadge_signingdate"
+                        			<p:outputLabel  for="pledge_signingdate"
                         				value="#{msg.get('app.pledgeDetail.detail.signingDate')}" />	
                         		</td>
                         		<td>
-                        			<p:calendar id='pleadge_signingdate' 
+                        			<clv:BECalendar id='pledge_signingdate'
+                        					value="#{pledgeDetail.pledgeInfoView.signingDate}"
                         					pattern="dd/MM/yyyy" showOn="button"
                                        		mindate="#{pledgeDetail.minDate}"
-                                       		autocomplete="false"
+                                       		autocomplete="false" locale="th_TH"
                                        		/>
                         		</td>
                         	</tr>
@@ -97,7 +99,7 @@
                         				value="#{msg.get('app.pledgeDetail.detail.pledgeType')}" />			
                         		</td>
                         		<td>
-                        			<h:outputText value="PLEDGE TYPE" />
+                        			<h:outputText value="#{pledgeDetail.pledgeInfoView.pledgeType}" />
                         		</td>                     		
                         	</tr>
                         	<tr>
@@ -106,7 +108,7 @@
                         				value="#{msg.get('app.pledgeDetail.detail.pledgeAmount')}" />						
                         		</td>
                         		<td>
-                        			<h:outputText value="0" >
+                        			<h:outputText value="#{pledgeDetail.pledgeInfoView.pledgeAmount}" >
                         				<f:convertNumber pattern="#,##0.00"/>
                         			</h:outputText>
                         		</td>
@@ -117,24 +119,43 @@
                         				value="#{msg.get('app.pledgeDetail.detail.creditType')}" />						
                         		</td>
                         		<td>
-                        			<p:dataTable styleClass="full_table" rowIndexVar="rowIdx">
-                        				<p:column style="width:30px">
+                        			<p:dataTable value="#{pledgeDetail.pledgeInfoView.credits}" var="credit" 
+                        				styleClass="full_table" rowIndexVar="rowIdx">
+                        				<p:column style="width:30px" styleClass="center">
                         					#{rowIdx+1}
                         				</p:column>
                         				<p:column
-                        					headerText="#{msg.get('app.pledgeDetail.detail.creditType.table.account')}">
+                        					headerText="#{msg.get('app.pledgeDetail.detail.creditType.table.account')}"
+                        					style="line-height: 1.5em;">
+                        					<h:panelGroup layout="block" rendered="#{credit.hasAccountInfo}" style="padding : 5px 0;">
+                        					#{credit.accountName} <br />
+                        					#{msg.get('app.creditType.account.accountNo')} #{credit.accountNo} <br/>
+                        					#{msg.get('app.creditType.account.accountStatus')} #{credit.accountStatus}
+                        					</h:panelGroup>
+                        					<h:outputText value="-" rendered="#{not credit.hasAccountInfo}" />
                         				</p:column>
                         				<p:column style="width:100px"
                         					headerText="#{msg.get('app.pledgeDetail.detail.creditType.table.type')}">
+                        					<h:outputText value="#{msg.get('app.collateral.creditType.radio.new')}"
+                        						rendered="#{credit.newCredit}" 
+                        						/>
+                        					<h:outputText value="#{msg.get('app.collateral.creditType.radio.exist')}"
+                        						rendered="#{not credit.newCredit}" 
+                        						/>
                         				</p:column>
                         				<p:column style="width:200px"
                         					headerText="#{msg.get('app.pledgeDetail.detail.creditType.table.productProgram')}">
+                        					#{credit.productProgram}
                         				</p:column>
                         				<p:column style="width:175px"
                         					headerText="#{msg.get('app.pledgeDetail.detail.creditType.table.creditFacility')}">
+                        					#{credit.creditFacility}
                         				</p:column>
                         				<p:column style="width:120px" styleClass="right"
                         					headerText="#{msg.get('app.pledgeDetail.detail.creditType.table.limit')}">
+                        					<h:outputText value="#{credit.limit}">
+                        						<f:convertNumber pattern="#,##0.00"/>
+                        					</h:outputText>
                         				</p:column>
                         			</p:dataTable>
                         		</td>
@@ -154,7 +175,7 @@
                         				value="#{msg.get('app.pledgeDetail.pledgeAC.accountNumber')}" />						
                         		</td>
                         		<td>
-                        			<p:inputText 
+                        			<p:inputText value="#{pledgeDetail.pledgeInfoView.accountNo}"
                         				styleClass="readonly large" readonly="true" 
                         				/>
                         		</td>
@@ -203,15 +224,14 @@
                         				<p:column style="width:50px" styleClass="center">
 	                        				<p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
                            						process="@this"
-                           						onstart="p_blockUI.show()"
-                           						oncomplete="p_blockUI.hide();p_pledgeACDepDlg.show();"
+                           						oncomplete="p_pledgeACDepDlg.show();"
                            						action="#{pledgeDetail.onOpenUpdatePledgeACDepDialog()}"
                            						update=":pledgeACDepDlg"
                            						style="margin-right:0px !important"
                            						rendered="#{pledgeAC.updatable}"
                            						>
+                           						<f:setPropertyActionListener target="#{pledgeDetail.selectedRowId}" value="#{rowIdx}" />
                            						<p:resetInput target=":pledgeACDepDlg" />
-                           						<f:setPropertyActionListener target="#{pledgeDetail.pledgeACDepView}" value="#{pledgeAC}" />
                            					</p:commandButton>
                                             
                                             <p:commandButton icon="ui-icon-trash"  title="#{msg.get('app.button.delete')}"
@@ -220,7 +240,7 @@
                            						style="margin-right:0px !important"
                            						rendered="#{pledgeAC.deletable}"
                                             	>
-                                            	<f:setPropertyActionListener target="#{pledgeDetail.deletedRowId}" value="#{rowIdx}" />
+                                            	<f:setPropertyActionListener target="#{pledgeDetail.selectedRowId}" value="#{rowIdx}" />
                                             </p:commandButton>
                         				</p:column>
                         				
@@ -254,26 +274,30 @@
                         	<tr>
                         		<td></td>
                         		<td>
-	                        		<p:dataTable rowIndexVar="rowIdx">
+	                        		<p:dataTable value="#{pledgeDetail.pledgeInfoView.customers}" var="customer" 
+	                        			rowIndexVar="rowIdx">
 	                        				<p:column style="width:30px" styleClass="center">
 	                        					#{rowIdx+1}
 	                        				</p:column>
 	                        				<p:column style="width:200px" 
 	                        					headerText="#{msg.get('app.pledgeDetail.collateral.table.customerName')}"
 	                        					>
-	                        					
+	                        					#{customer.customerName}
 	                        				</p:column>
 	                        				<p:column style="width:200px"
 	                        					headerText="#{msg.get('app.pledgeDetail.collateral.table.citizen')}"
 	                        					>
+	                        					#{customer.citizenId}
 	                        				</p:column>
 	                        				<p:column style="width:150px"
 	                        					headerText="#{msg.get('app.pledgeDetail.collateral.table.customerId')}"
 	                        					>
+	                        					#{customer.tmbCustomerId}
 	                        				</p:column>
 	                        				<p:column style="width:250px"
 	                        					headerText="#{msg.get('app.pledgeDetail.collateral.table.relationship')}"
 	                        					>
+	                        					#{customer.relation}
 	                        				</p:column>
 	                        			</p:dataTable>
                         		</td>
@@ -291,7 +315,9 @@
 	                             <td colspan="100%" class="center">
 	                                 <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
 	                                 	styleClass="medium"
-	                                 	oncomplete="p_savePledgeDetailDlg.show()"
+										onstart="handleOnStartOpenCfmDlg();"
+										oncomplete="handleOnCompleteOpenCfmDlg(args,p_savePledgeDetailDlg);"
+										update=":frmMain:full_main_container,:result_dialog"
 	                                 	 />
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"
@@ -308,15 +334,11 @@
             <!-- Start Footer -->
             <ui:include src="include/footer.xhtml" />
             <!-- End Footer -->
+            </h:panelGroup>
             </div>
-           	
-           	<p:blockUI widgetVar="p_blockUI" block=":frmMain" trigger='saveBtn,cancelBtn,addBtn'>
-           		LOADING<br />
-                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-             </p:blockUI>
         </h:form>
     </p:panel>
-    
+    <ui:include src="dialog/postLoadingAndErrorDialog.xhtml" />
     <p:dialog id='pledgeACDepDlg' widgetVar="p_pledgeACDepDlg"
 		header="#{msg.get('app.pledgeDetail.pledgeAC.dialog.title')}" 
 		onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()' resizable="false"
@@ -339,7 +361,7 @@
 		<ui:param name="formId" value="savePledgeDetailFrm"/>
 		<ui:param name="controller" value="#{pledgeDetail}"/>
 		<ui:param name="action" value="onSavePledgeDetail"/>
-		<ui:param name="update" value=":frmMain"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
 </h:body>
 </f:view>

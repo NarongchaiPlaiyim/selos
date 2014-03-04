@@ -19,7 +19,7 @@
                                      required="#{not empty param[saveSubCollButton.clientId]}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                        <f:selectItems value="#{decision.subCollateralTypeList}"
+                        <f:selectItems value="#{decision.subCollateralTypeViewList}"
                                        var="subCollateralTypeItem"
                                        itemLabel="#{subCollateralTypeItem.description}"
                                        itemValue="#{subCollateralTypeItem.id}"/>
@@ -92,7 +92,7 @@
                                         styleClass="smaller"
                                         action="#{decision.onAddCollateralOwnerUW()}"
                                         process="@this"
-                                        update=":subCollateralDlgForm">
+                                        update=":subCollateralDlgForm:collOwnerUWTable">
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -102,7 +102,7 @@
             <tr>
                 <td class="title"></td>
                 <td class="left">
-                    <p:dataTable id="CollOwnerUWTb"
+                    <p:dataTable id="collOwnerUWTable"
                                  value="#{decision.selectedApproveSubColl.collateralOwnerUWList}"
                                  var="collateralOwnerUWItem"
                                  rowKey="#{collateralOwnerUWItem.id}"
@@ -131,7 +131,7 @@
                                              icon="ui-icon-trash"
                                              process="@this"
                                              actionListener="#{decision.onDeleteCollateralOwnerUW(rowIndex)}"
-                                             update=":subCollateralDlgForm">
+                                             update=":subCollateralDlgForm:collOwnerUWTable">
                             </p:commandButton>
                         </p:column>
             
@@ -151,7 +151,7 @@
                                                  value="#{decision.selectedApproveSubColl.mortgageType.id}"
                                                  style="min-width: 200px; width: 200px; max-width: 200px; margin-left: -2px;">
                                     <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                                    <f:selectItems value="#{decision.mortgageTypeList}"
+                                    <f:selectItems value="#{decision.mortgageTypeViewList}"
                                                    var="mortgageTypeItem"
                                                    itemLabel="#{mortgageTypeItem.mortgage}"
                                                    itemValue="#{mortgageTypeItem.id}"/>
@@ -164,7 +164,7 @@
                                         styleClass="smaller"
                                         actionListener="#{decision.onAddMortgageType()}"
                                         process="@form"
-                                        update=":subCollateralDlgForm">
+                                        update=":subCollateralDlgForm:mortgageTable">
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -174,7 +174,7 @@
             <tr>
                 <td class="title"></td>
                 <td class="left">
-                    <p:dataTable id="MortgageTb"
+                    <p:dataTable id="mortgageTable"
                                  value="#{decision.selectedApproveSubColl.mortgageList}"
                                  var="mortgageItem"
                                  rowKey="#{mortgageItem.id}"
@@ -203,7 +203,7 @@
                                              icon="ui-icon-trash"
                                              process="@this"
                                              actionListener="#{decision.onDeleteMortgageType(rowIndex)}"
-                                             update=":subCollateralDlgForm">
+                                             update=":subCollateralDlgForm:mortgageTable">
                             </p:commandButton>
                         </p:column>
             
@@ -236,7 +236,7 @@
                                         styleClass="smaller"
                                         action="#{decision.onAddRelatedWith()}"
                                         process="@this"
-                                        update=":subCollateralDlgForm">
+                                        update=":subCollateralDlgForm:relatedWithTable">
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -246,7 +246,7 @@
             <tr>
                 <td class="title"></td>
                 <td class="left">
-                    <p:dataTable id="RelatedWithTb"
+                    <p:dataTable id="relatedWithTable"
                                  value="#{decision.selectedApproveSubColl.relatedWithList}"
                                  var="relatedWith"
                                  rowKey="#{relatedWith.id}"
@@ -275,7 +275,7 @@
                                              icon="ui-icon-trash"
                                              process="@this"
                                              actionListener="#{decision.onDeleteRelatedWith(rowIndex)}"
-                                             update=":subCollateralDlgForm">
+                                             update=":subCollateralDlgForm:relatedWithTable">
                             </p:commandButton>
                         </p:column>
             
@@ -331,7 +331,7 @@
             <tr>
                 <td class="center" colspan="2">
                     <p:commandButton
-                            id="saveSubColl"
+                            id="btnSaveSubColl"
                             value="#{msg.get('app.button.ok')}"
                             styleClass="small"
                             binding="#{saveSubCollButton}"
@@ -354,7 +354,7 @@
 </p:panel>
 
 <p:blockUI widgetVar="blockSubCollateralDlg" block="subCollateralDlgPanel"
-           trigger=":subCollateralDlgForm:saveSubColl">
+           trigger=":subCollateralDlgForm:btnSaveSubColl">
     LOADING<br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>

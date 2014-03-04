@@ -1,149 +1,154 @@
 package com.clevel.selos.controller;
 
 
+import com.clevel.selos.businesscontrol.AccountInfoControl;
+import com.clevel.selos.businesscontrol.BankStmtControl;
+import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.DisbursementControl;
+import com.clevel.selos.dao.master.BankBranchDAO;
 import com.clevel.selos.dao.master.BankDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.db.master.Bank;
+import com.clevel.selos.model.db.master.BankBranch;
+import com.clevel.selos.model.db.master.CrossType;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "disbursementInfo")
 public class DisbursementInfo implements Serializable {
 
-    @Inject
-    @SELOS
-    Logger log;
-
-    @Inject
-    BankDAO bankDAO;
-
+	@Inject @SELOS
+	private Logger log;
+	@Inject @NormalMessage
+	private Message message;
+	@Inject
+	private BasicInfoControl basicInfoControl;
+	
+	//Private variable
+	private boolean preRenderCheck = false;
+	private long workCaseId = -1;
+	private long stepId = -1;
+	private BasicInfoView basicInfoView;
+   
     enum ModeForButton {ADD, EDIT}
 
     private ModeForButton modeForButton;
     private int selectRowNumber;
 
-    DisbursementInfoView disbursementInfoView;
-
-    DisbursementMcDetailView disbursementMcDetailView;
-    DisbursementMcDetailView newDisbursementMcDetailView;
-    List<DisbursementMcDetailView> disbursementMcList;
-
-    DisbursementDepositBaDetailView disbursementDepositDetailView;
-    DisbursementDepositBaDetailView newDisbursementDepositDetailView;
-    List<DisbursementDepositBaDetailView> disbursementDepositList;
-
-    DisbursementBahtnetDetailView disbursementBahtnetDetailView;
-    DisbursementBahtnetDetailView newDisbursementBahtnetDetailView;
-    List<DisbursementBahtnetDetailView> disbursementBahtnetList;
-
-
-    private List<Bank> bankList;
-
-
+    private DisbursementInfoView disbursementInfoView;
+    
+    private DisbursementMcDetailView disbursementMcDetailView = new DisbursementMcDetailView();
+    
+    private DisbursementDepositBaDetailView disbursementDepositDetailView = new DisbursementDepositBaDetailView();
+    
+    private DisbursementBahtnetDetailView disbursementBahtnetDetailView = new DisbursementBahtnetDetailView();
+    
+    
+    private List<SelectItem> bankList;
+    
+    private List<SelectItem> crossTypeList;    
+    
+    private List<SelectItem> bankBranchList;
+    
+    private HashMap<Integer, String> bankMap;
+    private HashMap<Integer, String> crossTypeMap;
+    private HashMap<Integer, String> bankBranchMap;
+    
+    private List<Long> disbursementMcDeleteList = new ArrayList<Long>();
+    
+    private List<Long> disbursementDepositDeleteList = new ArrayList<Long>();
+    
+    private List<Long> disbursementBahtnetDeleteList = new ArrayList<Long>();
+    
+    private HashMap<Long, BigDecimal> totalDisburseMCAmount = new HashMap<Long, BigDecimal>();
+    private HashMap<Long, BigDecimal> totalDisburseTRAmount  = new HashMap<Long, BigDecimal>();
+    private HashMap<Long, BigDecimal> totalDisburseBAAmount  = new HashMap<Long, BigDecimal>();
+    
+    @Inject
+    DisbursementControl disbursementControl;
+    
     @PostConstruct
     public void onCreate() {
-
-        disbursementInfoView = new DisbursementInfoView();
-        disbursementMcDetailView = new DisbursementMcDetailView();
-        disbursementMcList = new ArrayList<DisbursementMcDetailView>();
-
-        disbursementDepositDetailView = new DisbursementDepositBaDetailView();
-        disbursementDepositList = new ArrayList<DisbursementDepositBaDetailView>();
-
-        disbursementBahtnetDetailView = new DisbursementBahtnetDetailView();
-        disbursementBahtnetList = new ArrayList<DisbursementBahtnetDetailView>();
-
-        //init Disbursement Summary
-        List<DisbursementSummaryView> disburseSumList = new ArrayList<DisbursementSummaryView>();
-        DisbursementSummaryView disbursementSummaryView = null;
-        disbursementSummaryView = new DisbursementSummaryView();
-        disbursementSummaryView.setProductProgram("SmartBiz");
-        disbursementSummaryView.setCreditFacility("Loan");
-        disbursementSummaryView.setProductCode("-");
-        disbursementSummaryView.setProjectCode("-");
-        disbursementSummaryView.setRefinance("No");
-        disbursementSummaryView.setApprovedLimit(BigDecimal.valueOf(300000));
-        disbursementSummaryView.setHoldAmount(BigDecimal.valueOf(100000));
-        disbursementSummaryView.setDisburseAmount(BigDecimal.valueOf(1900000));
-        disbursementSummaryView.setDiffAmount(BigDecimal.valueOf(100000));
-        disburseSumList.add(disbursementSummaryView);
-        disbursementSummaryView = new DisbursementSummaryView();
-        disbursementSummaryView.setProductProgram("SmartBiz");
-        disbursementSummaryView.setCreditFacility("OD");
-        disbursementSummaryView.setProductCode("-");
-        disbursementSummaryView.setProjectCode("-");
-        disbursementSummaryView.setRefinance("Yes");
-        disbursementSummaryView.setApprovedLimit(BigDecimal.valueOf(5000000));
-        disbursementSummaryView.setHoldAmount(BigDecimal.valueOf(2500000));
-        disbursementSummaryView.setDisburseAmount(BigDecimal.valueOf(250000));
-        disbursementSummaryView.setDiffAmount(BigDecimal.ZERO);
-        disburseSumList.add(disbursementSummaryView);
-        disbursementInfoView.setDisburse(disburseSumList);
-
-        //init Ba Summary
-
-        List<DisbursementDepositBaDetailView> disbursementBaList = new ArrayList<DisbursementDepositBaDetailView>();
-        DisbursementDepositBaDetailView depositDetailView1 = new DisbursementDepositBaDetailView();
-        depositDetailView1.setAccountName("บริษัท FWD");
-        depositDetailView1.setAccountNumber("111-2-33333-4");
-        depositDetailView1.setTotalAmount(BigDecimal.valueOf(1000000));
-        disbursementBaList.add(depositDetailView1);
-        DisbursementDepositBaDetailView depositDetailView2 = new DisbursementDepositBaDetailView();
-        depositDetailView2.setAccountName("บริษัท FWD");
-        depositDetailView2.setAccountNumber("111-2-33333-4");
-        depositDetailView2.setTotalAmount(BigDecimal.valueOf(1000000));
-        disbursementBaList.add(depositDetailView2);
-        disbursementInfoView.setDisbursementBaList(disbursementBaList);
-        calculationSummaryTotalBa();
-
-        disbursementInfoView.setNumberOfCheque(0);
-        disbursementInfoView.setNumberOfDeposit(0);
-        disbursementInfoView.setNumberOfBahtnet(0);
-        disbursementInfoView.setTotalBahtnetDisburse(BigDecimal.ZERO);
-        disbursementInfoView.setTotalMCDisburse(BigDecimal.ZERO);
-        disbursementInfoView.setTotalDepositDisburse(BigDecimal.ZERO);
-
+    	_loadDropdown();
+    	_loadData();
+    	HttpSession session = FacesUtil.getSession(false);
+		if (session != null) {
+			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
+			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+		}
+		this.disbursementInfoView = disbursementControl.getDisbursementInfoView(workCaseId);
+		calculationSummaryTotalMc();
+		calculationSummaryTotalDeposit();
+		calculationSummaryTotalBahtnet();
+		calculationSummary();
+		calculationSummaryTotalBa();
     }
-
-    private List<CreditTypeDetailView> initCreditTypeList() {
-
-        List<CreditTypeDetailView> creditTypeDetailViewList = new ArrayList<CreditTypeDetailView>();
-        CreditTypeDetailView creditTypeDetailView = null;
-        creditTypeDetailView = new CreditTypeDetailView();
-        creditTypeDetailView.setProductProgram("SmartBiz");
-        creditTypeDetailView.setCreditFacility("Loan");
-        creditTypeDetailView.setLimit(BigDecimal.valueOf(100000));
-        creditTypeDetailView.setComponentFlag(true);
-        creditTypeDetailView.setPurpose("คุ้มครองวงเงิน Loan");
-        creditTypeDetailViewList.add(creditTypeDetailView);
-        creditTypeDetailView = new CreditTypeDetailView();
-        creditTypeDetailView.setProductProgram("SmartBiz");
-        creditTypeDetailView.setCreditFacility("OD");
-        creditTypeDetailView.setLimit(BigDecimal.valueOf(100000));
-        creditTypeDetailView.setComponentFlag(true);
-        creditTypeDetailView.setPurpose("คุ้มครองวงเงิน OD");
-        creditTypeDetailViewList.add(creditTypeDetailView);
-        return creditTypeDetailViewList;
+    
+    private void _loadDropdown() {
+    	bankList = disbursementControl.getBanks();
+    	crossTypeList = disbursementControl.getCrossTypes();
+    	bankBranchList = disbursementControl.getBankBranches();
     }
+    
+    private void _loadData() {
+    	bankMap = disbursementControl.getBankMap();
+    	crossTypeMap = disbursementControl.getCrossTypeMap();
+    	bankBranchMap = disbursementControl.getBankBranchMap();
+    }
+    
+    public Date getLastUpdateDateTime() {
+		return disbursementInfoView.getModifyDate();
+	}
+	public String getLastUpdateBy() {
+		if (disbursementInfoView.getModifyBy() != null)
+			return disbursementInfoView.getModifyBy().getDisplayName();
+		else
+			return null;
+	}
+	public ApproveType getApproveType() {
+		if (basicInfoView == null)
+			return ApproveType.NA;
+		else
+			return basicInfoView.getApproveType();
+	}
 
     public void onOpenAddMcDialog() {
         log.debug("onOpenAddMcDialog()");
 
         modeForButton = ModeForButton.ADD;
         disbursementMcDetailView = new DisbursementMcDetailView();
-        disbursementMcDetailView.setCreditType(initCreditTypeList());
+        List<DisbursementCreditTypeView> creditTypeViewList = new ArrayList<DisbursementCreditTypeView>();
+        for (DisbursementSummaryView disbursementSummaryView : this.disbursementInfoView.getDisburse()){
+        	DisbursementCreditTypeView disbursementCreditTypeView = new DisbursementCreditTypeView();
+        	disbursementCreditTypeView.setNewCreditDetailId(disbursementSummaryView.getNewCreditDetailID());
+        	disbursementCreditTypeView.setProductProgram(disbursementSummaryView.getProductProgram());
+        	disbursementCreditTypeView.setCreditFacility(disbursementSummaryView.getCreditFacility());
+        	disbursementCreditTypeView.setLimitAmount(disbursementSummaryView.getApprovedLimit());
+        	creditTypeViewList.add(disbursementCreditTypeView);
+        }
+        disbursementMcDetailView.setDisbursementCreditTypeView(creditTypeViewList);
 
     }
 
@@ -151,16 +156,13 @@ public class DisbursementInfo implements Serializable {
         log.debug("onOpenEditMcDialog()");
         modeForButton = ModeForButton.EDIT;
 
-
-        disbursementMcDetailView = new DisbursementMcDetailView();
-        disbursementMcDetailView.setIssuedBy(newDisbursementMcDetailView.getIssuedBy());
-        disbursementMcDetailView.setIssuedDate(newDisbursementMcDetailView.getIssuedDate());
-        disbursementMcDetailView.setPayeeName(newDisbursementMcDetailView.getPayeeName());
-        disbursementMcDetailView.setPayeeSubname(newDisbursementMcDetailView.getPayeeSubname());
-        disbursementMcDetailView.setCrossType(newDisbursementMcDetailView.getCrossType());
-        disbursementMcDetailView.setCreditType(cloneCreditTypeList(newDisbursementMcDetailView.getCreditType()));
-
-
+        //disbursementMcDetailView = new DisbursementMcDetailView();
+        //disbursementMcDetailView.setIssuedBy(newDisbursementMcDetailView.getIssuedBy());
+        //disbursementMcDetailView.setIssuedDate(newDisbursementMcDetailView.getIssuedDate());
+        //disbursementMcDetailView.setPayeeName(newDisbursementMcDetailView.getPayeeName());
+        //disbursementMcDetailView.setPayeeSubname(newDisbursementMcDetailView.getPayeeSubname());
+        //disbursementMcDetailView.setCrossType(newDisbursementMcDetailView.getCrossType());
+        //disbursementMcDetailView.setCreditType(cloneCreditTypeList(newDisbursementMcDetailView.getCreditType()));
     }
 
     public void onOpenAddDepositDialog() {
@@ -168,39 +170,57 @@ public class DisbursementInfo implements Serializable {
 
         modeForButton = ModeForButton.ADD;
         disbursementDepositDetailView = new DisbursementDepositBaDetailView();
-        disbursementDepositDetailView.setCreditType(initCreditTypeList());
+        List<DisbursementCreditTypeView> creditTypeViewList = new ArrayList<DisbursementCreditTypeView>();
+        for (DisbursementSummaryView disbursementSummaryView : this.disbursementInfoView.getDisburse()){
+        	DisbursementCreditTypeView disbursementCreditTypeView = new DisbursementCreditTypeView();
+        	disbursementCreditTypeView.setNewCreditDetailId(disbursementSummaryView.getNewCreditDetailID());
+        	disbursementCreditTypeView.setProductProgram(disbursementSummaryView.getProductProgram());
+        	disbursementCreditTypeView.setCreditFacility(disbursementSummaryView.getCreditFacility());
+        	disbursementCreditTypeView.setLimitAmount(disbursementSummaryView.getApprovedLimit());
+        	creditTypeViewList.add(disbursementCreditTypeView);
+        }
+        disbursementDepositDetailView.setDisbursementCreditTypeView(creditTypeViewList);
+        //disbursementDepositDetailView.setCreditType(initCreditTypeList());
     }
 
     public void onOpenEditDepositDialog() {
         log.debug("onOpenEditDepositDialog()");
 
         modeForButton = ModeForButton.EDIT;
-        disbursementDepositDetailView = new DisbursementDepositBaDetailView();
+        //disbursementDepositDetailView = new DisbursementDepositBaDetailView();
 
-        disbursementDepositDetailView.setAccountNumber(newDisbursementDepositDetailView.getAccountNumber());
-        disbursementDepositDetailView.setAccountName(newDisbursementDepositDetailView.getAccountName());
-        disbursementDepositDetailView.setCreditType(cloneCreditTypeList(newDisbursementDepositDetailView.getCreditType()));
+        //disbursementDepositDetailView.setAccountNumber(newDisbursementDepositDetailView.getAccountNumber());
+        //disbursementDepositDetailView.setAccountName(newDisbursementDepositDetailView.getAccountName());
+        //disbursementDepositDetailView.setCreditType(cloneCreditTypeList(newDisbursementDepositDetailView.getCreditType()));
 
     }
 
     public void onOpenAddBahtnetDialog() {
         log.debug("onOpenAddBahtnetDialog()");
-        bankList = bankDAO.findAll();
+        //bankList = bankDAO.findAll();
         modeForButton = ModeForButton.ADD;
         disbursementBahtnetDetailView = new DisbursementBahtnetDetailView();
-        disbursementBahtnetDetailView.setCreditType(initCreditTypeList());
-
+        List<DisbursementCreditTypeView> creditTypeViewList = new ArrayList<DisbursementCreditTypeView>();
+        for (DisbursementSummaryView disbursementSummaryView : this.disbursementInfoView.getDisburse()){
+        	DisbursementCreditTypeView disbursementCreditTypeView = new DisbursementCreditTypeView();
+        	disbursementCreditTypeView.setNewCreditDetailId(disbursementSummaryView.getNewCreditDetailID());
+        	disbursementCreditTypeView.setProductProgram(disbursementSummaryView.getProductProgram());
+        	disbursementCreditTypeView.setCreditFacility(disbursementSummaryView.getCreditFacility());
+        	disbursementCreditTypeView.setLimitAmount(disbursementSummaryView.getApprovedLimit());
+        	creditTypeViewList.add(disbursementCreditTypeView);
+        }
+        disbursementBahtnetDetailView.setDisbursementCreditTypeView(creditTypeViewList);
     }
 
     public void onOpenEditBahtnetDialog() {
         log.debug("onOpenEditBahtnetDialog()");
-        bankList = bankDAO.findAll();
+        //bankList = bankDAO.findAll();
         modeForButton = ModeForButton.EDIT;
-        disbursementBahtnetDetailView = new DisbursementBahtnetDetailView();
-        disbursementBahtnetDetailView.setCreditType(cloneCreditTypeList(newDisbursementBahtnetDetailView.getCreditType()));
-        disbursementBahtnetDetailView.setBankCode(newDisbursementBahtnetDetailView.getBankCode());
-        disbursementBahtnetDetailView.setAccountNumber(newDisbursementBahtnetDetailView.getAccountNumber());
-        disbursementBahtnetDetailView.setBenefitName(newDisbursementBahtnetDetailView.getBenefitName());
+        //disbursementBahtnetDetailView = new DisbursementBahtnetDetailView();
+        //disbursementBahtnetDetailView.setCreditType(cloneCreditTypeList(newDisbursementBahtnetDetailView.getCreditType()));
+        //disbursementBahtnetDetailView.setBankCode(newDisbursementBahtnetDetailView.getBankCode());
+        //disbursementBahtnetDetailView.setAccountNumber(newDisbursementBahtnetDetailView.getAccountNumber());
+        //disbursementBahtnetDetailView.setBenefitName(newDisbursementBahtnetDetailView.getBenefitName());
 
 
     }
@@ -230,55 +250,56 @@ public class DisbursementInfo implements Serializable {
         int falseCount = 0;
         if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
 
-            if (disbursementMcDetailView != null || disbursementMcDetailView.getCreditType() != null) {
+            if (disbursementMcDetailView != null || disbursementMcDetailView.getDisbursementCreditTypeView() != null) {
 
-                for (int i = 0; i < disbursementMcDetailView.getCreditType().size(); i++) {
-                    if (disbursementMcDetailView.getCreditType().get(i).getDisburseAmount().compareTo(disbursementMcDetailView.getCreditType().get(i).getLimit()) > 0) {
-                        disbursementMcDetailView.getCreditType().get(i).setComponentFlag(false);
+                for (int i = 0; i < disbursementMcDetailView.getDisbursementCreditTypeView().size(); i++) {
+                    if (disbursementMcDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount().compareTo(disbursementMcDetailView.getDisbursementCreditTypeView().get(i).getLimitAmount()) > 0) {
+                        disbursementMcDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(false);
                         falseCount++;
                     } else {
-                        disbursementMcDetailView.getCreditType().get(i).setComponentFlag(true);
+                        disbursementMcDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(true);
                     }
-                    totalAmount = totalAmount.add(disbursementMcDetailView.getCreditType().get(i).getDisburseAmount());
+                    totalAmount = totalAmount.add(disbursementMcDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount());
                 }
 
                 if (falseCount == 0) {
                     disbursementMcDetailView.setTotalAmount(totalAmount);
-                    disbursementMcDetailView.setPayeeName(disbursementMcDetailView.getPayeeName() + " " + disbursementMcDetailView.getPayeeSubname());
-                    disbursementMcList.add(disbursementMcDetailView);
-                    disbursementInfoView.setDisburseMcList(disbursementMcList);
+                    disbursementMcDetailView.setPayeeName(disbursementMcDetailView.getPayeeName());
+                    this.disbursementInfoView.getDisburseMcList().add(disbursementMcDetailView);
+                    //disbursementInfoView.setDisburseMcList(disbursementMcList);
                     complete = true;
                 }
             }
         }
         if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
 
-            if (disbursementMcDetailView != null || disbursementMcDetailView.getCreditType() != null) {
+            if (disbursementMcDetailView != null || disbursementMcDetailView.getDisbursementCreditTypeView() != null) {
 
-                for (int i = 0; i < disbursementMcDetailView.getCreditType().size(); i++) {
-                    if (disbursementMcDetailView.getCreditType().get(i).getDisburseAmount().compareTo(disbursementMcDetailView.getCreditType().get(i).getLimit()) > 0) {
-                        disbursementMcDetailView.getCreditType().get(i).setComponentFlag(false);
+                for (int i = 0; i < disbursementMcDetailView.getDisbursementCreditTypeView().size(); i++) {
+                    if (disbursementMcDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount().compareTo(disbursementMcDetailView.getDisbursementCreditTypeView().get(i).getLimitAmount()) > 0) {
+                        disbursementMcDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(false);
                         falseCount++;
                     } else {
-                        disbursementMcDetailView.getCreditType().get(i).setComponentFlag(true);
+                        disbursementMcDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(true);
                     }
-                    totalAmount = totalAmount.add(disbursementMcDetailView.getCreditType().get(i).getDisburseAmount());
+                    totalAmount = totalAmount.add(disbursementMcDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount());
                 }
 
                 if (falseCount == 0) {
-                    disbursementMcList.get(selectRowNumber).setIssuedBy(disbursementMcDetailView.getIssuedBy());
-                    disbursementMcList.get(selectRowNumber).setIssuedDate(disbursementMcDetailView.getIssuedDate());
-                    disbursementMcList.get(selectRowNumber).setPayeeName(disbursementMcDetailView.getPayeeName());
-                    disbursementMcList.get(selectRowNumber).setPayeeSubname(disbursementMcDetailView.getPayeeSubname());
-                    disbursementMcList.get(selectRowNumber).setCrossType(disbursementMcDetailView.getCrossType());
-                    disbursementMcList.get(selectRowNumber).setCreditType(disbursementMcDetailView.getCreditType());
-                    disbursementMcList.get(selectRowNumber).setTotalAmount(totalAmount);
+                	this.disbursementInfoView.getDisburseMcList().get(selectRowNumber).setIssuedBy(disbursementMcDetailView.getIssuedBy());
+                	this.disbursementInfoView.getDisburseMcList().get(selectRowNumber).setIssuedDate(disbursementMcDetailView.getIssuedDate());
+                	this.disbursementInfoView.getDisburseMcList().get(selectRowNumber).setPayeeName(disbursementMcDetailView.getPayeeName());
+                	this.disbursementInfoView.getDisburseMcList().get(selectRowNumber).setPayeeSubname(disbursementMcDetailView.getPayeeSubname());
+                	this.disbursementInfoView.getDisburseMcList().get(selectRowNumber).setCrossType(disbursementMcDetailView.getCrossType());
+                	this.disbursementInfoView.getDisburseMcList().get(selectRowNumber).setDisbursementCreditTypeView(disbursementMcDetailView.getDisbursementCreditTypeView());
+                	this.disbursementInfoView.getDisburseMcList().get(selectRowNumber).setTotalAmount(totalAmount);
                     complete = true;
                 }
             }
         }
 
         calculationSummaryTotalMc();
+        calculationSummary();
         context.addCallbackParam("functionComplete", complete);
     }
 
@@ -293,53 +314,52 @@ public class DisbursementInfo implements Serializable {
 
         if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
 
-            if (disbursementDepositDetailView != null || disbursementDepositDetailView.getCreditType() != null) {
+            if (disbursementDepositDetailView != null || disbursementDepositDetailView.getDisbursementCreditTypeView() != null) {
 
-                for (int i = 0; i < disbursementDepositDetailView.getCreditType().size(); i++) {
-                    if (disbursementDepositDetailView.getCreditType().get(i).getDisburseAmount().compareTo(disbursementDepositDetailView.getCreditType().get(i).getLimit()) > 0) {
+                for (int i = 0; i < disbursementDepositDetailView.getDisbursementCreditTypeView().size(); i++) {
+                    if (disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount().compareTo(disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).getLimitAmount()) > 0) {
 
-                        disbursementDepositDetailView.getCreditType().get(i).setComponentFlag(false);
+                        disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(false);
                         falseCount++;
                     } else {
-                        disbursementDepositDetailView.getCreditType().get(i).setComponentFlag(true);
+                        disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(true);
                     }
-                    totalAmount = totalAmount.add(disbursementDepositDetailView.getCreditType().get(i).getDisburseAmount());
+                    totalAmount = totalAmount.add(disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount());
                 }
                 if (falseCount == 0) {
                     disbursementDepositDetailView.setTotalAmount(totalAmount);
-                    disbursementDepositList.add(disbursementDepositDetailView);
-                    disbursementInfoView.setDisburseDepositList(disbursementDepositList);
+                    this.disbursementInfoView.getDisburseDepositList().add(disbursementDepositDetailView);
                     complete = true;
                 }
             }
         }
         if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
 
-            if (disbursementDepositDetailView != null || disbursementDepositDetailView.getCreditType() != null) {
+            if (disbursementDepositDetailView != null || disbursementDepositDetailView.getDisbursementCreditTypeView() != null) {
 
-                for (int i = 0; i < disbursementDepositDetailView.getCreditType().size(); i++) {
-                    if (disbursementDepositDetailView.getCreditType().get(i).getDisburseAmount().compareTo(disbursementDepositDetailView.getCreditType().get(i).getLimit()) > 0) {
+                for (int i = 0; i < disbursementDepositDetailView.getDisbursementCreditTypeView().size(); i++) {
+                    if (disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount().compareTo(disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).getLimitAmount()) > 0) {
 
-                        disbursementDepositDetailView.getCreditType().get(i).setComponentFlag(false);
+                        disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(false);
                         falseCount++;
                     } else {
-                        disbursementDepositDetailView.getCreditType().get(i).setComponentFlag(true);
+                        disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(true);
                     }
-                    totalAmount = totalAmount.add(disbursementDepositDetailView.getCreditType().get(i).getDisburseAmount());
+                    totalAmount = totalAmount.add(disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount());
                 }
 
                 if (falseCount == 0) {
-                    disbursementDepositList.get(selectRowNumber).setAccountNumber(disbursementDepositDetailView.getAccountNumber());
-                    disbursementDepositList.get(selectRowNumber).setAccountName(disbursementDepositDetailView.getAccountName());
-                    disbursementDepositList.get(selectRowNumber).setCreditType(disbursementDepositDetailView.getCreditType());
-                    disbursementDepositList.get(selectRowNumber).setTotalAmount(totalAmount);
-
+                	this.disbursementInfoView.getDisburseDepositList().get(selectRowNumber).setAccountNumber(disbursementDepositDetailView.getAccountNumber());
+                	this.disbursementInfoView.getDisburseDepositList().get(selectRowNumber).setAccountName(disbursementDepositDetailView.getAccountName());
+                	this.disbursementInfoView.getDisburseDepositList().get(selectRowNumber).setDisbursementCreditTypeView(disbursementDepositDetailView.getDisbursementCreditTypeView());
+                	this.disbursementInfoView.getDisburseDepositList().get(selectRowNumber).setTotalAmount(totalAmount);
                     complete = true;
                 }
             }
         }
 
         calculationSummaryTotalDeposit();
+        calculationSummary();
         context.addCallbackParam("functionComplete", complete);
     }
 
@@ -354,160 +374,188 @@ public class DisbursementInfo implements Serializable {
         int falseCount = 0;
         if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
 
-            if (disbursementBahtnetDetailView != null || disbursementBahtnetDetailView.getCreditType() != null) {
+            if (disbursementBahtnetDetailView != null || disbursementBahtnetDetailView.getDisbursementCreditTypeView() != null) {
 
-                for (int i = 0; i < disbursementBahtnetDetailView.getCreditType().size(); i++) {
-                    if (disbursementBahtnetDetailView.getCreditType().get(i).getDisburseAmount().compareTo(disbursementBahtnetDetailView.getCreditType().get(i).getLimit()) > 0) {
-                        disbursementBahtnetDetailView.getCreditType().get(i).setComponentFlag(false);
+                for (int i = 0; i < disbursementBahtnetDetailView.getDisbursementCreditTypeView().size(); i++) {
+                    if (disbursementBahtnetDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount().compareTo(disbursementBahtnetDetailView.getDisbursementCreditTypeView().get(i).getLimitAmount()) > 0) {
+                        disbursementBahtnetDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(false);
                         falseCount++;
                     } else {
-                        disbursementBahtnetDetailView.getCreditType().get(i).setComponentFlag(true);
+                        disbursementBahtnetDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(true);
                     }
-                    totalAmount = totalAmount.add(disbursementBahtnetDetailView.getCreditType().get(i).getDisburseAmount());
+                    totalAmount = totalAmount.add(disbursementBahtnetDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount());
                 }
                 if (falseCount == 0) {
-                    disbursementBahtnetDetailView.setBankName(bankDAO.findById(disbursementBahtnetDetailView.getBankCode()));
                     disbursementBahtnetDetailView.setBankCode(disbursementBahtnetDetailView.getBankCode());
                     disbursementBahtnetDetailView.setTotalAmount(totalAmount);
-                    disbursementBahtnetList.add(disbursementBahtnetDetailView);
-                    disbursementInfoView.setDisbursementBahtnetList(disbursementBahtnetList);
+                    this.disbursementInfoView.getDisbursementBahtnetList().add(disbursementBahtnetDetailView);
+                    //disbursementInfoView.setDisbursementBahtnetList(disbursementBahtnetList);
                     complete=true;
                 }
             }
         }
         if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
 
-            if (disbursementBahtnetDetailView != null || disbursementBahtnetDetailView.getCreditType() != null) {
+            if (disbursementBahtnetDetailView != null || disbursementBahtnetDetailView.getDisbursementCreditTypeView() != null) {
 
-                for (int i = 0; i < disbursementBahtnetDetailView.getCreditType().size(); i++) {
-                    if (disbursementBahtnetDetailView.getCreditType().get(i).getDisburseAmount().compareTo(disbursementBahtnetDetailView.getCreditType().get(i).getLimit()) > 0) {
+                for (int i = 0; i < disbursementBahtnetDetailView.getDisbursementCreditTypeView().size(); i++) {
+                    if (disbursementBahtnetDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount().compareTo(disbursementBahtnetDetailView.getDisbursementCreditTypeView().get(i).getLimitAmount()) > 0) {
 
-                        disbursementBahtnetDetailView.getCreditType().get(i).setComponentFlag(false);
+                        disbursementBahtnetDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(false);
                         falseCount++;
                     } else {
-                        disbursementBahtnetDetailView.getCreditType().get(i).setComponentFlag(true);
+                        disbursementBahtnetDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(true);
 
                     }
-                    totalAmount = totalAmount.add(disbursementBahtnetDetailView.getCreditType().get(i).getDisburseAmount());
+                    totalAmount = totalAmount.add(disbursementBahtnetDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount());
                 }
 
                 if (falseCount == 0) {
-                    disbursementBahtnetList.get(selectRowNumber).setBankName(bankDAO.findById(disbursementBahtnetDetailView.getBankCode()));
-                    disbursementBahtnetList.get(selectRowNumber).setBankCode(disbursementBahtnetDetailView.getBankCode());
-                    disbursementBahtnetList.get(selectRowNumber).setBenefitName(disbursementBahtnetDetailView.getBenefitName());
-                    disbursementBahtnetList.get(selectRowNumber).setAccountNumber(disbursementBahtnetDetailView.getAccountNumber());
-                    disbursementBahtnetList.get(selectRowNumber).setBranchName(disbursementBahtnetDetailView.getBranchName());
-                    disbursementBahtnetList.get(selectRowNumber).setCreditType(disbursementBahtnetDetailView.getCreditType());
-                    disbursementBahtnetList.get(selectRowNumber).setTotalAmount(totalAmount);
+                	this.disbursementInfoView.getDisbursementBahtnetList().get(selectRowNumber).setBankCode(disbursementBahtnetDetailView.getBankCode());
+                	this.disbursementInfoView.getDisbursementBahtnetList().get(selectRowNumber).setBenefitName(disbursementBahtnetDetailView.getBenefitName());
+                	this.disbursementInfoView.getDisbursementBahtnetList().get(selectRowNumber).setAccountNumber(disbursementBahtnetDetailView.getAccountNumber());
+                	this.disbursementInfoView.getDisbursementBahtnetList().get(selectRowNumber).setBranchName(disbursementBahtnetDetailView.getBranchName());
+                	this.disbursementInfoView.getDisbursementBahtnetList().get(selectRowNumber).setDisbursementCreditTypeView(disbursementBahtnetDetailView.getDisbursementCreditTypeView());
+                	this.disbursementInfoView.getDisbursementBahtnetList().get(selectRowNumber).setTotalAmount(totalAmount);
                     complete = true;
                 }
             }
         }
         calculationSummaryTotalBahtnet();
+        calculationSummary();
         context.addCallbackParam("functionComplete", complete);
     }
 
     public void onDeleteDisbursementMcList() {
         log.debug("onDeleteDisbursementMcList()");
-        disbursementMcList.remove(selectRowNumber);
+        if ( this.disbursementInfoView.getDisburseMcList().get(selectRowNumber).getId() > 0)
+        	this.disbursementMcDeleteList.add(this.disbursementInfoView.getDisburseMcList().get(selectRowNumber).getId());
+        this.disbursementInfoView.getDisburseMcList().remove(selectRowNumber);
         calculationSummaryTotalMc();
+        calculationSummary();
     }
 
     public void onDeleteDisbursementDepositList() {
         log.debug("onDeleteDisbursementDepositList()");
-        disbursementDepositList.remove(selectRowNumber);
+        if ( this.disbursementInfoView.getDisburseDepositList().get(selectRowNumber).getId() > 0)
+        	this.disbursementDepositDeleteList.add(this.disbursementInfoView.getDisburseDepositList().get(selectRowNumber).getId());
+        this.disbursementInfoView.getDisburseDepositList().remove(selectRowNumber);
         calculationSummaryTotalDeposit();
+        calculationSummary();
     }
 
     public void onDeleteDisbursementBahtnetList() {
         log.debug("onDeleteDisbursementBahtnetList()");
-        disbursementBahtnetList.remove(selectRowNumber);
+        if ( this.disbursementInfoView.getDisbursementBahtnetList().get(selectRowNumber).getId() > 0)
+        	this.disbursementBahtnetDeleteList.add(this.disbursementInfoView.getDisbursementBahtnetList().get(selectRowNumber).getId());
+        this.disbursementInfoView.getDisbursementBahtnetList().remove(selectRowNumber);
         calculationSummaryTotalBahtnet();
+        calculationSummary();
+    }
+    
+    private void calculationSummary(){
+    	BigDecimal totalDisburse = BigDecimal.ZERO;
+    	for (DisbursementSummaryView disbursementSummaryView : this.disbursementInfoView.getDisburse()){
+    		long newCreditDetailId = disbursementSummaryView.getNewCreditDetailID();
+    		BigDecimal disburseMCAmount = this.totalDisburseMCAmount.get(newCreditDetailId);
+    		if (disburseMCAmount != null)
+    			totalDisburse = totalDisburse.add(disburseMCAmount);
+    		BigDecimal disburseTRAmount = this.totalDisburseTRAmount.get(newCreditDetailId);
+    		if (disburseTRAmount != null)
+    			totalDisburse = totalDisburse.add(disburseTRAmount);
+    		BigDecimal disburseBAAmount = this.totalDisburseBAAmount.get(newCreditDetailId);
+    		if (disburseBAAmount != null)
+    			totalDisburse = totalDisburse.add(disburseBAAmount);	
+    		
+    		disbursementSummaryView.setDisburseAmount(totalDisburse);
+    		disbursementSummaryView.setDiffAmount(disbursementSummaryView.getApprovedLimit().subtract(disbursementSummaryView.getHoldAmount()).subtract(totalDisburse));
+    	}
     }
 
     private void calculationSummaryTotalMc() {
+    	this.totalDisburseMCAmount.clear();
         log.debug("calculationSummaryTotalMc()");
         BigDecimal totalMcDisbursement = BigDecimal.ZERO;
-        int listSize = disbursementInfoView.getDisburseMcList().size();
-        if (disbursementInfoView.getDisburseMcList() != null) {
+        int listSize = getDisbursementInfoView().getDisburseMcList().size();
+        if (getDisbursementInfoView().getDisburseMcList() != null) {
             for (int i = 0; i < listSize; i++) {
-                totalMcDisbursement = totalMcDisbursement.add(disbursementInfoView.getDisburseMcList().get(i).getTotalAmount());
+            	for ( DisbursementCreditTypeView disbursementCreditTypeView : getDisbursementInfoView().getDisburseMcList().get(i).getDisbursementCreditTypeView()){
+	            	long newCreditDetailId = disbursementCreditTypeView.getNewCreditDetailId();
+	            	BigDecimal disburseAmount = disbursementCreditTypeView.getDisburseAmount();
+	            	if (this.totalDisburseMCAmount.get(newCreditDetailId) != null)
+	            		this.totalDisburseMCAmount.put(newCreditDetailId,disburseAmount.add(this.totalDisburseMCAmount.get(newCreditDetailId)));
+	            	else
+	            		this.totalDisburseMCAmount.put(newCreditDetailId,disburseAmount);
+            	}    	
+            	totalMcDisbursement = totalMcDisbursement.add(getDisbursementInfoView().getDisburseMcList().get(i).getTotalAmount());
             }
         }
-        disbursementInfoView.setTotalMCDisburse(totalMcDisbursement);
-        disbursementInfoView.setNumberOfCheque(listSize);
+        getDisbursementInfoView().setTotalMCDisburse(totalMcDisbursement);
+        getDisbursementInfoView().setNumberOfCheque(listSize);
     }
 
     private void calculationSummaryTotalDeposit() {
         log.debug("calculationSummaryTotalDeposit()");
+        this.totalDisburseTRAmount.clear();
         BigDecimal totalDepositDisbursement = BigDecimal.ZERO;
-        int listSize = disbursementInfoView.getDisburseDepositList().size();
-        if (disbursementInfoView.getDisburseDepositList() != null) {
+        int listSize = getDisbursementInfoView().getDisburseDepositList().size();
+        if (getDisbursementInfoView().getDisburseDepositList() != null) {
             for (int i = 0; i < listSize; i++) {
-                totalDepositDisbursement = totalDepositDisbursement.add(disbursementInfoView.getDisburseDepositList().get(i).getTotalAmount());
+            	for ( DisbursementCreditTypeView disbursementCreditTypeView : getDisbursementInfoView().getDisburseDepositList().get(i).getDisbursementCreditTypeView()){
+	            	long newCreditDetailId = disbursementCreditTypeView.getNewCreditDetailId();
+	            	BigDecimal disburseAmount = disbursementCreditTypeView.getDisburseAmount();
+	            	if (this.totalDisburseTRAmount.get(newCreditDetailId) != null)
+	            		this.totalDisburseTRAmount.put(newCreditDetailId,disburseAmount.add(this.totalDisburseTRAmount.get(newCreditDetailId)));
+	            	else
+	            		this.totalDisburseTRAmount.put(newCreditDetailId,disburseAmount);
+            	}
+                totalDepositDisbursement = totalDepositDisbursement.add(getDisbursementInfoView().getDisburseDepositList().get(i).getTotalAmount());
             }
         }
-        disbursementInfoView.setTotalDepositDisburse(totalDepositDisbursement);
-        disbursementInfoView.setNumberOfDeposit(listSize);
+        getDisbursementInfoView().setTotalDepositDisburse(totalDepositDisbursement);
+        getDisbursementInfoView().setNumberOfDeposit(listSize);
     }
 
     private void calculationSummaryTotalBahtnet() {
         log.debug("calculationSummaryTotalBahtnet()");
+        this.totalDisburseBAAmount.clear();
         BigDecimal totalBahtnetDisbursement = BigDecimal.ZERO;
-        int listSize = Util.safetyList(disbursementInfoView.getDisbursementBahtnetList()).size();
-        if (disbursementInfoView.getDisbursementBahtnetList() != null) {
+        int listSize = Util.safetyList(getDisbursementInfoView().getDisbursementBahtnetList()).size();
+        if (getDisbursementInfoView().getDisbursementBahtnetList() != null) {
             for (int i = 0; i < listSize; i++) {
-                totalBahtnetDisbursement = totalBahtnetDisbursement.add(disbursementInfoView.getDisbursementBahtnetList().get(i).getTotalAmount());
+            	for ( DisbursementCreditTypeView disbursementCreditTypeView : getDisbursementInfoView().getDisbursementBahtnetList().get(i).getDisbursementCreditTypeView()){
+	            	long newCreditDetailId = disbursementCreditTypeView.getNewCreditDetailId();
+	            	BigDecimal disburseAmount = disbursementCreditTypeView.getDisburseAmount();
+	            	if (this.totalDisburseBAAmount.get(newCreditDetailId) != null)
+	            		this.totalDisburseBAAmount.put(newCreditDetailId,disburseAmount.add(this.totalDisburseBAAmount.get(newCreditDetailId)));
+	            	else
+	            		this.totalDisburseBAAmount.put(newCreditDetailId,disburseAmount);
+            	}
+                totalBahtnetDisbursement = totalBahtnetDisbursement.add(getDisbursementInfoView().getDisbursementBahtnetList().get(i).getTotalAmount());
             }
         }
-        disbursementInfoView.setTotalBahtnetDisburse(totalBahtnetDisbursement);
-        disbursementInfoView.setNumberOfBahtnet(listSize);
+        getDisbursementInfoView().setTotalBahtnetDisburse(totalBahtnetDisbursement);
+        getDisbursementInfoView().setNumberOfBahtnet(listSize);
     }
 
     private void calculationSummaryTotalBa() {
         log.debug("calculationSummaryTotalBa()");
         BigDecimal totalBaDisbursement = BigDecimal.ZERO;
-        int listSize = disbursementInfoView.getDisbursementBaList().size();
-        if (disbursementInfoView.getDisbursementBaList() != null) {
+        int listSize = getDisbursementInfoView().getDisbursementBaList().size();
+        if (getDisbursementInfoView().getDisbursementBaList() != null) {
             for (int i = 0; i < listSize; i++) {
-                totalBaDisbursement = totalBaDisbursement.add(disbursementInfoView.getDisbursementBaList().get(i).getTotalAmount());
+                totalBaDisbursement = totalBaDisbursement.add(getDisbursementInfoView().getDisbursementBaList().get(i).getTotalAmount());
             }
         }
-        disbursementInfoView.setTotalBADisburse(totalBaDisbursement);
-        disbursementInfoView.setNumberOfBA(listSize);
+        getDisbursementInfoView().setTotalBADisburse(totalBaDisbursement);
+        getDisbursementInfoView().setNumberOfBA(listSize);
     }
-
-
-    public DisbursementMcDetailView getNewDisbursementMcDetailView() {
-        return newDisbursementMcDetailView;
-    }
-
-    public void setNewDisbursementMcDetailView(DisbursementMcDetailView newDisbursementMcDetailView) {
-        this.newDisbursementMcDetailView = newDisbursementMcDetailView;
-    }
-
-    public List<DisbursementMcDetailView> getDisbursementMcList() {
-        return disbursementMcList;
-    }
-
-    public void setDisbursementMcList(List<DisbursementMcDetailView> disbursementMcList) {
-        this.disbursementMcList = disbursementMcList;
-    }
-
-    public DisbursementInfoView getDisbursementInfoView() {
-        return disbursementInfoView;
-    }
-
-    public void setDisbursementInfoView(DisbursementInfoView disbursementInfoView) {
-        this.disbursementInfoView = disbursementInfoView;
-    }
-
-    public DisbursementMcDetailView getDisbursementMcDetailView() {
-        return disbursementMcDetailView;
-    }
-
-    public void setDisbursementMcDetailView(DisbursementMcDetailView disbursementMcDetailView) {
-        this.disbursementMcDetailView = disbursementMcDetailView;
+    
+    public void save(){
+    	log.debug("save()");
+    	disbursementControl.saveDisbursement(workCaseId, disbursementInfoView);
+    	disbursementControl.deleteDisbursementDetail(disbursementMcDeleteList, disbursementDepositDeleteList, disbursementBahtnetDeleteList);
+    	onCreate();
     }
 
     public int getSelectRowNumber() {
@@ -518,59 +566,84 @@ public class DisbursementInfo implements Serializable {
         this.selectRowNumber = selectRowNumber;
     }
 
-    public DisbursementDepositBaDetailView getDisbursementDepositDetailView() {
-        return disbursementDepositDetailView;
-    }
+	public DisbursementInfoView getDisbursementInfoView() {
+		return disbursementInfoView;
+	}
 
-    public void setDisbursementDepositDetailView(DisbursementDepositBaDetailView disbursementDepositDetailView) {
-        this.disbursementDepositDetailView = disbursementDepositDetailView;
-    }
+	public void setDisbursementInfoView(DisbursementInfoView disbursementInfoView) {
+		this.disbursementInfoView = disbursementInfoView;
+	}
 
-    public DisbursementDepositBaDetailView getNewDisbursementDepositDetailView() {
-        return newDisbursementDepositDetailView;
-    }
+	public List<SelectItem> getBankBranchList() {
+		return bankBranchList;
+	}
 
-    public void setNewDisbursementDepositDetailView(DisbursementDepositBaDetailView newDisbursementDepositDetailView) {
-        this.newDisbursementDepositDetailView = newDisbursementDepositDetailView;
-    }
+	public void setBankBranchList(List<SelectItem> bankBranchList) {
+		this.bankBranchList = bankBranchList;
+	}
 
-    public List<DisbursementDepositBaDetailView> getDisbursementDepositList() {
-        return disbursementDepositList;
-    }
+	public List<SelectItem> getBankList() {
+		return bankList;
+	}
 
-    public void setDisbursementDepositList(List<DisbursementDepositBaDetailView> disbursementDepositList) {
-        this.disbursementDepositList = disbursementDepositList;
-    }
+	public void setBankList(List<SelectItem> bankList) {
+		this.bankList = bankList;
+	}
 
-    public DisbursementBahtnetDetailView getDisbursementBahtnetDetailView() {
-        return disbursementBahtnetDetailView;
-    }
+	public List<SelectItem> getCrossTypeList() {
+		return crossTypeList;
+	}
 
-    public void setDisbursementBahtnetDetailView(DisbursementBahtnetDetailView disbursementBahtnetDetailView) {
-        this.disbursementBahtnetDetailView = disbursementBahtnetDetailView;
-    }
+	public void setCrossTypeList(List<SelectItem> crossTypeList) {
+		this.crossTypeList = crossTypeList;
+	}
 
-    public DisbursementBahtnetDetailView getNewDisbursementBahtnetDetailView() {
-        return newDisbursementBahtnetDetailView;
-    }
+	public DisbursementMcDetailView getDisbursementMcDetailView() {
+		return disbursementMcDetailView;
+	}
 
-    public void setNewDisbursementBahtnetDetailView(DisbursementBahtnetDetailView newDisbursementBahtnetDetailView) {
-        this.newDisbursementBahtnetDetailView = newDisbursementBahtnetDetailView;
-    }
+	public void setDisbursementMcDetailView(DisbursementMcDetailView disbursementMcDetailView) {
+		this.disbursementMcDetailView = disbursementMcDetailView;
+	}
 
-    public List<DisbursementBahtnetDetailView> getDisbursementBahtnetList() {
-        return disbursementBahtnetList;
-    }
+	public DisbursementDepositBaDetailView getDisbursementDepositDetailView() {
+		return disbursementDepositDetailView;
+	}
 
-    public void setDisbursementBahtnetList(List<DisbursementBahtnetDetailView> disbursementBahtnetList) {
-        this.disbursementBahtnetList = disbursementBahtnetList;
-    }
+	public void setDisbursementDepositDetailView(DisbursementDepositBaDetailView disbursementDepositDetailView) {
+		this.disbursementDepositDetailView = disbursementDepositDetailView;
+	}
 
-    public List<Bank> getBankList() {
-        return bankList;
-    }
+	public DisbursementBahtnetDetailView getDisbursementBahtnetDetailView() {
+		return disbursementBahtnetDetailView;
+	}
 
-    public void setBankList(List<Bank> bankList) {
-        this.bankList = bankList;
-    }
+	public void setDisbursementBahtnetDetailView(DisbursementBahtnetDetailView disbursementBahtnetDetailView) {
+		this.disbursementBahtnetDetailView = disbursementBahtnetDetailView;
+	}
+
+	public HashMap<Integer, String> getBankMap() {
+		return bankMap;
+	}
+
+	public void setBankMap(HashMap<Integer, String> bankMap) {
+		this.bankMap = bankMap;
+	}
+
+	public HashMap<Integer, String> getCrossTypeMap() {
+		return crossTypeMap;
+	}
+
+	public void setCrossTypeMap(HashMap<Integer, String> crossTypeMap) {
+		this.crossTypeMap = crossTypeMap;
+	}
+
+	public HashMap<Integer, String> getBankBranchMap() {
+		return bankBranchMap;
+	}
+
+	public void setBankBranchMap(HashMap<Integer, String> bankBranchMap) {
+		this.bankBranchMap = bankBranchMap;
+	}
+
 }

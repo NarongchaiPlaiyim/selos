@@ -9,6 +9,7 @@ public class CustomerInfoSimpleView implements Serializable {
 	private String citizenId;
 	private String tmbCustomerId;
 	private String relation;
+	private boolean juristic;
 	
 	public CustomerInfoSimpleView() {
 		
@@ -54,4 +55,10 @@ public class CustomerInfoSimpleView implements Serializable {
 		this.relation = relation;
 	}
 	
+	public boolean isJuristic() {
+		return juristic;
+	}
+	public void setJuristic(boolean juristic) {
+		this.juristic = juristic;
+	}
 }

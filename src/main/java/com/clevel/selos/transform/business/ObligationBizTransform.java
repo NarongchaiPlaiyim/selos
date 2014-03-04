@@ -66,6 +66,9 @@ public class ObligationBizTransform extends BusinessTransform {
     ProductProgramDAO productProgramDAO;
 
     @Inject
+    CreditTypeDAO creditTypeDAO;
+
+    @Inject
     public ObligationBizTransform() {
 
     }
@@ -104,7 +107,15 @@ public class ObligationBizTransform extends BusinessTransform {
 
         //get ProductProgram
         ExistingProductFormula existingProductFormula = existingProductFormulaDAO.findProductFormula(obligation.getProductCode(), obligation.getProjectCode(), obligation.getTmbExtProductTypeCD());
-        if(existingProductFormula!=null){
+        if(existingProductFormula==null || (existingProductFormula!=null && existingProductFormula.getId()==0)){
+            existingProductFormula = new ExistingProductFormula();
+            List<ExistingProductFormula> existingProductFormulas = existingProductFormulaDAO.findProductFormula(obligation.getProductCode(), obligation.getProjectCode());
+            if(existingProductFormulas!=null && existingProductFormulas.size()>0){
+                existingProductFormula = existingProductFormulas.get(0);
+            }
+        }
+
+        if(existingProductFormula!=null && existingProductFormula.getId()!=0){
             existingCreditDetailView.setExistProductProgramView(productTransform.transformToView(existingProductFormula.getProductProgram()));
             existingCreditDetailView.setExistCreditTypeView(productTransform.transformToView(existingProductFormula.getCreditType()));
             existingCreditDetailView.setProductSegment(existingProductFormula.getProductSegment());
@@ -228,8 +239,10 @@ public class ObligationBizTransform extends BusinessTransform {
     public List<ExistingCreditDetail> getExistingCreditDetail(List<ExistingCreditDetailView> existingCreditDetailViewList, ExistingCreditFacility existingCreditFacility, User user) {
         List<ExistingCreditDetail> existingCreditDetailList = new ArrayList<ExistingCreditDetail>();
         if (existingCreditDetailViewList != null) {
+            int no = 0;
             for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViewList) {
                 ExistingCreditDetail existingCreditDetail = null;
+                no = no+1;
                 Date now = new Date();
                 if (existingCreditDetailView.getId() != 0) {
                     existingCreditDetail = existingCreditDetailDAO.findById(existingCreditDetailView.getId());
@@ -256,6 +269,17 @@ public class ObligationBizTransform extends BusinessTransform {
                 }else{
                     existingCreditDetail.setAccountstatus(null);
                 }
+
+                if(existingCreditDetailView.getExistCreditTypeView()!=null && existingCreditDetailView.getExistCreditTypeView().getId()!=0){
+                    CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
+                    existingCreditDetail.setExistCreditType(creditType);
+                }
+
+                if(existingCreditDetailView.getExistProductProgramView()!=null && existingCreditDetailView.getExistProductProgramView().getId()!=0){
+                    ProductProgram productProgram = productProgramDAO.findById(existingCreditDetailView.getExistProductProgramView().getId());
+                    existingCreditDetail.setExistProductProgram(productProgram);
+                }
+
                 existingCreditDetail.setInstallment(existingCreditDetailView.getInstallment());
                 existingCreditDetail.setExistingCreditFacility(existingCreditFacility);
                 existingCreditDetail.setCreditCategory(existingCreditDetailView.getCreditCategory().value());
@@ -266,6 +290,12 @@ public class ObligationBizTransform extends BusinessTransform {
                 existingCreditDetail.setIntFee(existingCreditDetailView.getIntFeePercent());
 
                 existingCreditDetail.setTenor(existingCreditDetailView.getTenor());
+
+                existingCreditDetail.setBorrowerType(existingCreditDetailView.getBorrowerType());
+                existingCreditDetail.setAccountSuf(existingCreditDetailView.getAccountSuf());
+                existingCreditDetail.setProductCode(existingCreditDetailView.getProductCode());
+                existingCreditDetail.setProjectCode(existingCreditDetailView.getProjectCode());
+                existingCreditDetail.setNo(no);
                 existingCreditDetailList.add(existingCreditDetail);
                 log.debug("transform ExistingCreditTransform ::: existingCreditDetailList : {}", existingCreditDetail);
             }
@@ -324,6 +354,65 @@ public class ObligationBizTransform extends BusinessTransform {
             existingCreditFacilityView.setRelatedComExistingCredit(_relatedComList);
             existingCreditFacilityView.setRelatedRetailExistingCredit(_relatedRetList);
             existingCreditFacilityView.setRelatedAppInRLOSCredit(_relatedRLOSList);
+
+
+            //Set for prescreen
+            //Set Existing Credit for PreScreen
+            List<ExistingCreditDetailView> borrowerComExistingCredit = existingCreditFacilityView.getBorrowerComExistingCredit();
+            List<ExistingCreditDetailView> borrowerRetailExistingCredit = existingCreditFacilityView.getBorrowerRetailExistingCredit();
+            List<ExistingCreditDetailView> relatedComExistingCredit = existingCreditFacilityView.getRelatedComExistingCredit();
+            List<ExistingCreditDetailView> relatedRetailExistingCredit = existingCreditFacilityView.getRelatedRetailExistingCredit();
+            BigDecimal totalBorrowerComLimit = existingCreditFacilityView.getTotalBorrowerComLimit();
+            BigDecimal totalBorrowerRetailLimit = existingCreditFacilityView.getTotalBorrowerRetailLimit();
+            BigDecimal totalRelatedComLimit = existingCreditFacilityView.getTotalRelatedComLimit();
+            BigDecimal totalRelatedRetailLimit = existingCreditFacilityView.getTotalRelatedRetailLimit();
+
+            List<ExistingCreditDetailView> borrowerExistingCreditPreScreen = new ArrayList<ExistingCreditDetailView>();
+            List<ExistingCreditDetailView> relateExistingCreditPresScreen = new ArrayList<ExistingCreditDetailView>();
+            BigDecimal totalBorrowerLimitPreScreen = BigDecimal.ZERO;
+            BigDecimal totalRelatedLimitPreScreen = BigDecimal.ZERO;
+
+            if(borrowerComExistingCredit!=null && borrowerComExistingCredit.size()>0){
+                for(ExistingCreditDetailView existingCreditDetailView : borrowerComExistingCredit) {
+                    borrowerExistingCreditPreScreen.add(existingCreditDetailView);
+                }
+            }
+            if(borrowerRetailExistingCredit!=null && borrowerRetailExistingCredit.size()>0){
+                for(ExistingCreditDetailView existingCreditDetailView : borrowerRetailExistingCredit) {
+                    borrowerExistingCreditPreScreen.add(existingCreditDetailView);
+                }
+            }
+
+            if(relatedComExistingCredit!=null && relatedComExistingCredit.size()>0){
+                for(ExistingCreditDetailView existingCreditDetailView : relatedComExistingCredit) {
+                    relateExistingCreditPresScreen.add(existingCreditDetailView);
+                }
+            }
+            if(relatedRetailExistingCredit!=null && relatedRetailExistingCredit.size()>0){
+                for(ExistingCreditDetailView existingCreditDetailView : relatedRetailExistingCredit) {
+                    relateExistingCreditPresScreen.add(existingCreditDetailView);
+                }
+            }
+
+            //add total
+            if(totalBorrowerComLimit!=null && totalBorrowerComLimit.compareTo(BigDecimal.ZERO)>0){
+                totalBorrowerLimitPreScreen = totalBorrowerLimitPreScreen.add(totalBorrowerComLimit);
+            }
+            if(totalBorrowerRetailLimit!=null && totalBorrowerRetailLimit.compareTo(BigDecimal.ZERO)>0){
+                totalBorrowerLimitPreScreen = totalBorrowerLimitPreScreen.add(totalBorrowerRetailLimit);
+            }
+
+            if(totalRelatedComLimit!=null && totalRelatedComLimit.compareTo(BigDecimal.ZERO)>0){
+                totalRelatedLimitPreScreen = totalRelatedLimitPreScreen.add(totalRelatedComLimit);
+            }
+            if(totalRelatedRetailLimit!=null && totalRelatedRetailLimit.compareTo(BigDecimal.ZERO)>0){
+                totalRelatedRetailLimit = totalRelatedRetailLimit.add(totalRelatedRetailLimit);
+            }
+
+            existingCreditFacilityView.setBorrowerExistingCreditPreScreen(borrowerExistingCreditPreScreen);
+            existingCreditFacilityView.setRelateExistingCreditPresScreen(relateExistingCreditPresScreen);
+            existingCreditFacilityView.setTotalBorrowerLimitPreScreen(totalBorrowerLimitPreScreen);
+            existingCreditFacilityView.setTotalRelatedLimitPreScreen(totalRelatedRetailLimit);
         }
 
         return existingCreditFacilityView;
@@ -337,6 +426,8 @@ public class ObligationBizTransform extends BusinessTransform {
         existingCreditDetailView.setAccountName(existingCreditDetail.getAccountName());
         existingCreditDetailView.setProductCode(existingCreditDetail.getProductCode());
         existingCreditDetailView.setAccountNumber(existingCreditDetail.getAccountNumber());
+        existingCreditDetailView.setExistProductProgramView(productTransform.transformToView(existingCreditDetail.getExistProductProgram()));
+        existingCreditDetailView.setExistCreditTypeView(productTransform.transformToView(existingCreditDetail.getExistCreditType()));
 
         //existingCreditDetailView.setAccountStatus();
         log.debug("getExistingCreditDetailView ::: getAccountstatus : {}", existingCreditDetail.getAccountstatus());
