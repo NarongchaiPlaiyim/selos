@@ -139,6 +139,12 @@ public class NewCollateralTransform extends Transform {
         collateralHeaderDetail.setModifyDate(newCollateralHeadView.getModifyDate());
 
         if (newCollateralHeadView.getNewCollateralSubViewList().size() > 0) {
+            if (newCollateralHeadView.getNewCollateralSubDeleteList().size() > 0) {
+                List<NewCollateralSub> newCollSubDelList = transformCollateralSubToModel(newCollateralHeadView, collateralHeaderDetail, user ,workCase);
+                log.info("newCollSubDelList :: {}",newCollSubDelList.size());
+                newCollateralSubDAO.delete(newCollSubDelList);
+            }
+
             List<NewCollateralSub> newCollateralSubList = transformCollateralSubToModel(newCollateralHeadView, collateralHeaderDetail, user ,workCase);
             collateralHeaderDetail.setNewCollateralSubList(newCollateralSubList);
         }

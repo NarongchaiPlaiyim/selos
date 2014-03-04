@@ -486,7 +486,7 @@
                 </td>
                 <td class="left">
                     <p:inputText value="#{creditFacPropose.newCreditFacilityView.existingSMELimit}"
-                                 maxlength="18"
+                                 maxlength="17"
                                  onclick="this.select()"
                                  required="#{not empty param[onsaveNewFacility.clientId]}"
                                  style="width:200px;text-align: right"
@@ -504,7 +504,7 @@
                     <p:spacer width="5" height="0"/>
                     <p:inputText value="#{creditFacPropose.newCreditFacilityView.maximumSMELimit}"
                                  required="#{not empty param[onsaveNewFacility.clientId]}"
-                                 maxlength="18"
+                                 maxlength="17"
                                  onclick="this.select()"
                                  style="width:200px;text-align: right"
                                  onkeydown="return onKeyDownMoney(event);"
@@ -1045,7 +1045,7 @@
                 </td>
                 <td class="left" style="width: 190px;">
                     <p:inputText value="#{creditFacPropose.newCreditFacilityView.guarantorBA}"
-                                 maxlength="18"
+                                 maxlength="17"
                                  onclick="this.select()"
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);"
@@ -1438,7 +1438,7 @@
                 <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.headcoll.insuranceCompany')}"/>
             </td>
             <td class="left">
-                <p:selectOneRadio value="#{CollateralHeaderDetailView.insuranceCompany}">
+                <p:selectOneRadio value="#{CollateralHeaderDetailView.insuranceCompany}" disabled="true">
                     <f:selectItem itemLabel="#{msg.get('app.button.partner')}" itemValue="2"/>
                     <f:selectItem itemLabel="#{msg.get('app.button.nonPartner')}" itemValue="1"/>
                 </p:selectOneRadio>
@@ -1694,7 +1694,7 @@
                                  oncomplete="guarantorInfoDlg.show();">
                     <f:setPropertyActionListener value="#{newGuarantorDetailView}"
                                                  target="#{creditFacPropose.newGuarantorDetailViewItem}"/>
-                    <f:setPropertyActionListener value="#{g.index}"
+                    <f:setPropertyActionListener value="#{rowIndex}"
                                                  target="#{creditFacPropose.rowIndexGuarantor}"/>
 
                     <p:resetInput target=":guarantorDlgForm"/>

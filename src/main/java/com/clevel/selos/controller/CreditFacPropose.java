@@ -133,6 +133,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private List<NewCollateralSubView> newCollateralSubViewList;
     private NewCollateralSubView relatedWithSelected;
     private CustomerInfoView collateralOwnerUW;
+    private List<NewCollateralView> newCollateralViewDelList;
     private boolean flagComs;
     private boolean flagButtonCollateral;
     private boolean editProposeColl;
@@ -281,11 +282,11 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
                     log.debug("[List for select in Collateral] :: proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
 
-                    /*for (int i = 0; i < proposeCreditDetailViewList.size(); i++) {
+                    for (int i = 0; i < proposeCreditDetailViewList.size(); i++) {
                         if (proposeCreditDetailViewList.get(i).getTypeOfStep().equals("N")) {
                             hashSeqCredit.put(i, proposeCreditDetailViewList.get(i).getUseCount());
                         }
-                    }*/
+                    }
                     notRetrivePricing = false;
                 }
 
@@ -451,7 +452,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
             if (flag) {
                 try {
-//                  AppraisalDataResult appraisalDataResult = creditFacProposeControl.toCallComsInterface(jobId);
                     AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(user.getId(), jobId);
 
                     if (!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())) {
@@ -647,10 +647,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         }
     }
 
-    public void onRequestReducePrice() {
-        log.info("reducePrice ::: {}", reducePrice);
-    }
-
     public void onCalInstallment(NewCreditDetailView newCreditDetailView) {
         log.info("onCalInstallment :: ");
         creditFacProposeControl.calculateInstallment(newCreditDetailView);
@@ -682,6 +678,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         newCreditDetailView = cloner.deepClone(newCreditDetailSelected);
 
         onChangeRequestType();
+
+        prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(newCreditDetailView.getProductProgramView());
         creditFacProposeControl.calculateInstallment(newCreditDetailView);
 
         if (newCreditDetailView.getRequestType() == RequestTypes.NEW.value()) {
@@ -745,6 +743,10 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 creditDetailAdd.setHoldLimitAmount(newCreditDetailView.getHoldLimitAmount());
                 creditDetailAdd.setNewCreditTierDetailViewList(newCreditDetailView.getNewCreditTierDetailViewList());
                 creditDetailAdd.setSeq(seq);
+
+                if (modeForDB == ModeForDB.EDIT_DB) {
+                    creditDetailAdd.setModeSaved(true);
+                }
 
                 creditFacProposeControl.calculateInstallment(creditDetailAdd);
                 log.info("creditDetailAdd :getInstallment: {}", creditDetailAdd.getInstallment());
@@ -841,7 +843,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //
 //        if (used == 0) {
 //            log.info("used ::: {} ", used);
-        newCreditFacilityView.getNewCreditDetailViewList().remove(rowIndex);
+
+        newCreditFacilityView.getNewCreditViewDelList().add(newCreditDetailSelected);
+        newCreditFacilityView.getNewCreditDetailViewList().remove(newCreditDetailSelected);
 //        } else {
 //            log.info("used::: {}", used);
 //            messageHeader = msg.get("app.propose.exception");
@@ -1278,13 +1282,13 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                             checkPlus = false;
                         }
                     }
-                    if (checkPlus) {
-                        hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
-                    }
+//                    if (checkPlus) {
+//                        hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
+//                    }
                 } else if (proposeCreditDetailListTemp.get(i).isNoFlag() == false) {
-                    if (Integer.parseInt(hashSeqCredit.get(i).toString()) > 0) {
-                        hashSeqCredit.put(i, Integer.parseInt(hashSeqCredit.get(i).toString()) - 1);
-                    }
+//                    if (Integer.parseInt(hashSeqCredit.get(i).toString()) > 0) {
+//                        hashSeqCredit.put(i, Integer.parseInt(hashSeqCredit.get(i).toString()) - 1);
+//                    }
                 }
             }
             newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setProposeCreditDetailViewList(newCollateralView.getProposeCreditDetailViewList());
@@ -1308,7 +1312,10 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 hashSeqCredit.put(i, Integer.parseInt(hashSeqCredit.get(i).toString()) - 1);
             }
         }
+        newCreditFacilityView.getNewCollateralViewDelList().add(selectCollateralDetailView);
         newCreditFacilityView.getNewCollateralViewList().remove(selectCollateralDetailView);
+
+        log.info("onDeleteProposeCollInfo :: newCreditFacilityView.getNewCollateralViewDelList() :: {}",newCreditFacilityView.getNewCollateralViewDelList().size());
     }
 
     // ****************************************************Start Add SUB Collateral****************************************************//
@@ -1402,6 +1409,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onDeleteSubCollateral() {
         log.debug("onDeleteSubCollateral :: ");
+        newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubDeleteList().add(subCollateralDetailItem);
         newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().remove(subCollateralDetailItem);
         log.debug("rowCollHeadIndex :: ");
     }
@@ -1508,7 +1516,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     }
 
     public void onEditGuarantorInfo() {
-        log.debug("onEditGuarantorInfo ::: {}", rowIndexGuarantor);
+        log.info("onEditGuarantorInfo ::: {}", rowIndexGuarantor);
         modeForButton = ModeForButton.EDIT;
         int tempSeq = 0;
         newGuarantorDetailView = new NewGuarantorDetailView();
@@ -1603,7 +1611,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setTotalLimitGuaranteeAmount(summary);
 
                 for (int i = 0; i < proposeCreditDetailListTemp.size(); i++) {
-                    if (proposeCreditDetailListTemp.get(i).isNoFlag() == true) {
+                    if (proposeCreditDetailListTemp.get(i).isNoFlag()==true) {
                         newCollateralView.getProposeCreditDetailViewList().add(proposeCreditDetailListTemp.get(i));
                         seqTemp = proposeCreditDetailListTemp.get(i).getSeq();
                         checkPlus = true;
@@ -1646,7 +1654,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //                hashSeqCredit.put(i, Integer.parseInt(hashSeqCredit.get(i).toString()) - 1);
 //            }
         }
-
+        newCreditFacilityView.getNewGuarantorViewDelList().add(newGuarantorDetailViewItem);
         newCreditFacilityView.getNewGuarantorDetailViewList().remove(newGuarantorDetailViewItem);
         log.debug("delete success");
         newCreditFacilityView.setTotalGuaranteeAmount(creditFacProposeControl.calTotalGuaranteeAmount(newCreditFacilityView.getNewGuarantorDetailViewList()));
@@ -1688,6 +1696,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onDeleteConditionInfo() {
         log.debug("onDeleteConditionInfo :: ");
+        newCreditFacilityView.getNewConditionViewDelList().add(selectConditionItem);
         newCreditFacilityView.getNewConditionDetailViewList().remove(selectConditionItem);
     }
 

@@ -241,7 +241,7 @@
     </td>
     <td class="left" colspan="3">
         <p:inputText value="#{CollateralHeaderDetailView.existingCredit}"
-                     maxlength="18"
+                     maxlength="17"
                      onclick="this.select()"
                      onkeydown="return onKeyDownMoney(event);"
                      onkeypress="return onKeyPressMoney(event);"
@@ -284,7 +284,7 @@
     </td>
     <td class="left" colspan="3">
         <p:inputText value="#{CollateralHeaderDetailView.appraisalValue}"
-                     maxlength="18"
+                     maxlength="17"
                      onclick="this.select()"
                      onkeydown="return onKeyDownMoney(event);"
                      onkeypress="return onKeyPressMoney(event);"
@@ -433,7 +433,8 @@
             </p:column>
 
             <p:column styleClass="right top">
-                <h:outputText value="#{newCollateralSubView.appraisalValue}">
+                <h:outputText value="#{newCollateralSubView.appraisalValue}"
+                              maxlength="17" >
                     <f:convertNumber pattern="#,##0.##"
                                      minFractionDigits="2"
                                      maxFractionDigits="2"
@@ -442,7 +443,8 @@
             </p:column>
 
             <p:column styleClass="right top">
-                <h:outputText value="#{newCollateralSubView.mortgageValue}">
+                <h:outputText value="#{newCollateralSubView.mortgageValue}"
+                              maxlength="17" >
                     <f:convertNumber pattern="#,##0.##"
                                      minFractionDigits="2"
                                      maxFractionDigits="2"
