@@ -37,7 +37,7 @@ public class NewGuarantorDetailTransform extends Transform {
     NewGuarantorCreditTransform newGuarantorCreditTransform;
 
 
-    public List<NewGuarantorDetail> transformToModel(List<NewGuarantorDetailView> newGuarantorDetailViewList, NewCreditFacility newCreditFacility, User user) {
+    public List<NewGuarantorDetail> transformToModel(List<NewGuarantorDetailView> newGuarantorDetailViewList, NewCreditFacility newCreditFacility, User user, ProposeType proposeType) {
 
         List<NewGuarantorDetail> newGuarantorDetailList = new ArrayList<NewGuarantorDetail>();
         NewGuarantorDetail newGuarantorDetail;
@@ -53,7 +53,7 @@ public class NewGuarantorDetailTransform extends Transform {
                 newGuarantorDetail.setCreateDate(new Date());
                 newGuarantorDetail.setCreateBy(user);
             }
-            newGuarantorDetail.setProposeType(ProposeType.P);
+            newGuarantorDetail.setProposeType(proposeType);
             Customer guarantor = customerDAO.findById(newGuarantorDetailView.getGuarantorName().getId());
             newGuarantorDetail.setGuarantorName(guarantor);
             newGuarantorDetail.setGuarantorCategory(newGuarantorDetailView.getGuarantorCategory());
@@ -177,8 +177,6 @@ public class NewGuarantorDetailTransform extends Transform {
             }
 
             proposeCreditDetailViewList.add(proposeCreditDetailView);
-
-
 
             rowCount++;
         }

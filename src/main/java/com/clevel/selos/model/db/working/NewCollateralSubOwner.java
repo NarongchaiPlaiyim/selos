@@ -1,5 +1,7 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.ProposeType;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -19,12 +21,37 @@ public class NewCollateralSubOwner implements Serializable {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @ManyToOne
+    @JoinColumn(name = "workcase_id")
+    private WorkCase workCase;
+
+    @Column(name = "propose_type")
+    @Enumerated(EnumType.ORDINAL)
+    private ProposeType proposeType;
+
+
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public WorkCase getWorkCase() {
+        return workCase;
+    }
+
+    public void setWorkCase(WorkCase workCase) {
+        this.workCase = workCase;
+    }
+
+    public ProposeType getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(ProposeType proposeType) {
+        this.proposeType = proposeType;
     }
 
     public NewCollateralSub getNewCollateralSub() {

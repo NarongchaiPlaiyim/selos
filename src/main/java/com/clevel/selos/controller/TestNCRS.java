@@ -284,7 +284,7 @@ public class TestNCRS implements Serializable {
     public void onClickCallComS(){
 
         try{                                                                           //10001
-            AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(userIdForComS, jobId);
+             AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(userIdForComS, jobId);
             if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())){
                 newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
                 result = newCollateralView.toString();

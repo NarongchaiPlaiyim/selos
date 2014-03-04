@@ -2,7 +2,10 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.ProposeType;
+import com.clevel.selos.model.db.working.NewCollateralSub;
+import com.clevel.selos.model.db.working.NewCollateralSubOwner;
+import com.clevel.selos.model.db.working.WorkCase;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
@@ -34,6 +37,7 @@ public class NewCollateralSubOwnerDAO extends GenericDAO<NewCollateralSubOwner, 
         return newCollateralSubCustomerList;
 
     }
+/*
 
     public List<NewCollateralSubOwner> getListByWorkCase(WorkCase workCase){
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
@@ -51,6 +55,16 @@ public class NewCollateralSubOwnerDAO extends GenericDAO<NewCollateralSubOwner, 
         criteria.setFetchMode("customer", FetchMode.LAZY);
         List<NewCollateralSubOwner> newCollateralSubOwnerList = criteria.list();
 
+        return newCollateralSubOwnerList;
+    }
+*/
+
+    public List<NewCollateralSubOwner> getListByWorkCase(WorkCase workCase,ProposeType proposeType){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase", workCase));
+        criteria.add(Restrictions.eq("proposeType", proposeType));
+        criteria.setFetchMode("customer", FetchMode.LAZY);
+        List<NewCollateralSubOwner> newCollateralSubOwnerList = criteria.list();
         return newCollateralSubOwnerList;
     }
 

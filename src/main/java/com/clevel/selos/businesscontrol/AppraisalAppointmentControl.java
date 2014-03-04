@@ -6,20 +6,15 @@ import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.AppraisalContactDetailView;
-import com.clevel.selos.model.view.AppraisalDetailView;
-import com.clevel.selos.model.view.AppraisalView;
-import com.clevel.selos.model.view.ContactRecordDetailView;
-import com.clevel.selos.transform.AppraisalContactDetailTransform;
-import com.clevel.selos.transform.AppraisalDetailTransform;
-import com.clevel.selos.transform.AppraisalTransform;
-import com.clevel.selos.transform.ContactRecordDetailTransform;
+import com.clevel.selos.model.view.*;
+import com.clevel.selos.transform.*;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -55,6 +50,10 @@ public class AppraisalAppointmentControl extends BusinessControl {
     private NewCollateralHeadDAO newCollateralHeadDAO;
     @Inject
     private NewCollateralSubDAO newCollateralSubDAO;
+    @Inject
+    private CustomerAcceptanceTransform customerAcceptanceTransform;
+    @Inject
+    private CustomerAcceptanceDAO customerAcceptanceDAO;
 
     private Appraisal appraisal;
     private AppraisalView appraisalView;
@@ -119,7 +118,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
         }
     }
 
-    public void onSaveAppraisalAppointment(final AppraisalView appraisalView,final long workCaseId, final long workCasePreScreenId){
+    public void onSaveAppraisalAppointment(final AppraisalView appraisalView,final long workCaseId, final long workCasePreScreenId, final List<ContactRecordDetailView> contactRecordDetailViewList, final CustomerAcceptanceView cusAcceptView){
         log.info("-- onSaveAppraisalAppointment");
         if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
             workCase = workCaseDAO.findById(workCaseId);
@@ -143,12 +142,50 @@ public class AppraisalAppointmentControl extends BusinessControl {
             appraisalDAO.persist(appraisal);
             log.debug("onSaveAppraisalAppointment ::: after persist appraisal : {}", appraisal);
 
+
+
             if(Util.isNull(newCreditFacility)){
                 newCreditFacility = new NewCreditFacility();
                 newCreditFacility.setWorkCasePrescreen(workCasePrescreen);
                 newCreditFacility.setWorkCase(workCase);
             }
             log.debug("-- NewCreditFacility.id[{}]", newCreditFacility.getId());
+
+
+
+            //From P'LK CustomerAcceptanceControl
+
+            CustomerAcceptance cusAccept = null;
+            if (cusAcceptView.getId() <= 0) { //new
+                cusAccept = customerAcceptanceTransform.transformToNewModel(cusAcceptView, workCase, getCurrentUser());
+                customerAcceptanceDAO.save(cusAccept);
+            } else {
+                cusAccept = customerAcceptanceDAO.findById(cusAcceptView.getId());
+                cusAccept.setModifyBy(getCurrentUser());
+                cusAccept.setModifyDate(new Date());
+                customerAcceptanceDAO.persist(cusAccept);
+            }
+
+            //Add and update first
+            for (ContactRecordDetailView view : contactRecordDetailViewList) {
+                if (view.isNew()) {
+                    ContactRecordDetail model = contactRecordDetailTransform.transformToNewModel(view, getCurrentUser(), cusAccept);
+                    contactRecordDetailDAO.save(model);
+                } else if (view.isNeedUpdate()) {
+                    //get from db
+                    ContactRecordDetail model = contactRecordDetailDAO.findById(view.getId());
+                    contactRecordDetailTransform.updateModelFromView(model, view, getCurrentUser());
+                    contactRecordDetailDAO.persist(model);
+                }
+            }
+
+            //Delete
+            for (ContactRecordDetailView view : contactRecordDetailViewList) {
+                if (view.isNew())
+                    continue;
+                contactRecordDetailDAO.deleteById(view.getId());
+            }
+
 
 
             appraisalDetailViewList = Util.safetyList(appraisalView.getAppraisalDetailViewList());
@@ -160,6 +197,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
             }else{
                 newCollateralList = new ArrayList<NewCollateral>();
             }
+
             //set flag 0 for all collateral
             log.debug("onSaveAppraisalAppointment ::: newCollateralList from database : {}", newCollateralList);
             for(NewCollateral newCollateral : newCollateralList){

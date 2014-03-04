@@ -42,6 +42,9 @@ public class AppraisalView implements Serializable {
     private User createBy;
     private User modifyBy;
 
+    private User aadCommittee;
+    private User aadAdmin;
+
     public AppraisalView(){
         init();
     }
@@ -281,6 +284,22 @@ public class AppraisalView implements Serializable {
 
     public void setAppraisalContactDetailView(AppraisalContactDetailView appraisalContactDetailView) {
         this.appraisalContactDetailView = appraisalContactDetailView;
+    }
+
+    public User getAadCommittee() {
+        return aadCommittee;
+    }
+
+    public void setAadCommittee(User aadCommittee) {
+        this.aadCommittee = aadCommittee;
+    }
+
+    public User getAadAdmin() {
+        return aadAdmin;
+    }
+
+    public void setAadAdmin(User aadAdmin) {
+        this.aadAdmin = aadAdmin;
     }
 
     @Override

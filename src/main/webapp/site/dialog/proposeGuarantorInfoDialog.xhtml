@@ -20,7 +20,7 @@
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{creditFacPropose.guarantorList}"
                                        var="guarantor"
-                                       itemLabel="#{guarantor.firstNameTh} #{guarantor.lastNameTh}"
+                                       itemLabel="#{guarantor.titleTh.titleTh} #{guarantor.firstNameTh} #{guarantor.lastNameTh}"
                                        itemValue="#{guarantor.id}"/>
                         <p:ajax event="change"
                                 process="@this"
@@ -140,7 +140,7 @@
                             action="#{creditFacPropose.onSaveGuarantorInfoDlg}"
                             process=":guarantorDlgForm"
                             update=":guarantorDlgForm,:frmMain,:msgBoxSystemMessagePanel"
-                            oncomplete="handleGuarantorInfoRequest(xhr, status, args)"/>
+                            oncomplete="handleDialogRequest(xhr, status, args, 'guarantorInfoDlg')"/>
                     <p:spacer width="10" height="0"/>
                     <p:commandButton
                             value="#{msg.get('app.credit.facility.propose.cancelButton')}"

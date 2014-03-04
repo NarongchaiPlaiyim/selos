@@ -35,7 +35,11 @@
     </td>
     <td class="left">
         <p:inputText value="#{creditFacPropose.newCollateralSubView.titleDeed}"
-                     required="#{not empty param[addSubCollDlg.clientId]}"/>
+                     required="#{not empty param[addSubCollDlg.clientId]}">
+        <p:ajax event="change"
+                process="@this"
+                update="@this"/>
+        </p:inputText>
     </td>
 </tr>
 
@@ -46,7 +50,11 @@
     <td class="left">
         <p:inputText value="#{creditFacPropose.newCollateralSubView.address}"
                      style="width: 300px;"
-                     required="#{not empty param[addSubCollDlg.clientId]}"/>
+                     required="#{not empty param[addSubCollDlg.clientId]}">
+            <p:ajax event="change"
+                    process="@this"
+                    update="@this"/>
+        </p:inputText>
     </td>
 </tr>
 
@@ -56,7 +64,11 @@
     </td>
     <td class="left">
         <p:inputText value="#{creditFacPropose.newCollateralSubView.landOffice}"
-                     required="#{not empty param[addSubCollDlg.clientId]}"/>
+                     required="#{not empty param[addSubCollDlg.clientId]}">
+            <p:ajax event="change"
+                    process="@this"
+                    update="@this"/>
+        </p:inputText>
     </td>
 </tr>
 
@@ -66,7 +78,11 @@
     </td>
     <td class="left">
         <p:inputText value="#{creditFacPropose.newCollateralSubView.collateralOwnerAAD}"
-                     required="#{not empty param[addSubCollDlg.clientId]}"/>
+                     required="#{not empty param[addSubCollDlg.clientId]}">
+            <p:ajax event="change"
+                    process="@this"
+                    update="@this"/>
+        </p:inputText>
     </td>
 </tr>
 
@@ -85,7 +101,7 @@
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{creditFacPropose.collateralOwnerUwAllList}"
                                        var="collateralOwnerUWItem"
-                                       itemLabel="#{collateralOwnerUWItem.firstNameTh} #{collateralOwnerUWItem.lastNameTh}"
+                                       itemLabel="#{collateralOwnerUWItem.titleTh.titleTh} #{collateralOwnerUWItem.firstNameTh} #{collateralOwnerUWItem.lastNameTh}"
                                        itemValue="#{collateralOwnerUWItem.id}"/>
                         <p:ajax event="change"
                                 process="@this"
@@ -132,7 +148,7 @@
             </p:column>
 
             <p:column styleClass="left">
-                <h:outputText value="#{collateralOwnerUWItem.firstNameTh} #{collateralOwnerUWItem.lastNameTh}"/>
+                <h:outputText value="#{collateralOwnerUWItem.titleTh.titleTh} #{collateralOwnerUWItem.firstNameTh} #{collateralOwnerUWItem.lastNameTh}"/>
             </p:column>
 
             <p:column styleClass="center">

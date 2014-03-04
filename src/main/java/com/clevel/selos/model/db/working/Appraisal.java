@@ -106,6 +106,14 @@ public class Appraisal implements Serializable {
     @JoinColumn(name="modify_user_id")
     private User modifyBy;
 
+    @OneToOne
+    @JoinColumn(name = "aad_committee_id")
+    private User aadCommittee;
+
+    @OneToOne
+    @JoinColumn(name = "aad_admin_id")
+    private User aadAdmin;
+
     public Appraisal(){
 
     }
@@ -316,6 +324,22 @@ public class Appraisal implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public User getAadCommittee() {
+        return aadCommittee;
+    }
+
+    public void setAadCommittee(User aadCommittee) {
+        this.aadCommittee = aadCommittee;
+    }
+
+    public User getAadAdmin() {
+        return aadAdmin;
+    }
+
+    public void setAadAdmin(User aadAdmin) {
+        this.aadAdmin = aadAdmin;
     }
 
     @Override

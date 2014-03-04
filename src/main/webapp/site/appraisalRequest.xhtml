@@ -115,6 +115,8 @@
                                         <p:column styleClass="right">
                                             <p:outputLabel value="#{appraisalDetailViewItem.numberOfDocuments}"/>
                                         </p:column>
+
+
                                         <p:column styleClass="center" >
                                             <p:commandButton icon="ui-icon-pencil"
                                                              process="@this"
@@ -136,6 +138,8 @@
                                                                              target="#{appraisalRequest.rowIndex}"/>
                                             </p:commandButton>
                                         </p:column>
+
+
                                     </p:dataTable>
                                 </td>
                             </tr>
@@ -261,6 +265,7 @@
             </div>
             </h:form>
     </p:panel>
+
     <p:dialog id="appraisalDetailDialog" header="Appraisal Detail Information" widgetVar="appraisalDetailViewDlg" resizable="false"
               modal="true" width="420" height="220" >
         <ui:include src="dialog/appraisalDetailDialog.xhtml"/>
