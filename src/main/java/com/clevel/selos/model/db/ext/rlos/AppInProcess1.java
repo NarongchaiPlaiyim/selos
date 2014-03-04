@@ -67,6 +67,9 @@ public class AppInProcess1 implements Serializable {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "dt_snt_stp")
+    private String dateSentSTP;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "appInProcess1")
     private List<CustomerDetail1> customerDetail1s;
 
@@ -253,6 +256,14 @@ public class AppInProcess1 implements Serializable {
         this.status = status;
     }
 
+    public String getDateSentSTP() {
+        return dateSentSTP;
+    }
+
+    public void setDateSentSTP(String dateSentSTP) {
+        this.dateSentSTP = dateSentSTP;
+    }
+
     public List<CustomerDetail1> getCustomerDetail1s() {
         return customerDetail1s;
     }
@@ -282,6 +293,7 @@ public class AppInProcess1 implements Serializable {
                 .append("finalLimit2", finalLimit2)
                 .append("finalInstallment2", finalInstallment2)
                 .append("status", status)
+                .append("dateSentSTP", dateSentSTP)
                 .append("customerDetail1s", customerDetail1s)
                 .toString();
     }

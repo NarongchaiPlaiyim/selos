@@ -7,6 +7,7 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BAPaymentMethodValue;
+import com.clevel.selos.model.MessageDialogSeverity;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -516,19 +517,19 @@ public class BasicInfo extends MandatoryFieldsControl {
     public void onSave(){
         try{
             basicInfoControl.saveBasicInfo(basicInfoView, workCaseId);
-            messageHeader = "Information.";
+            messageHeader = msg.get("app.messageHeader.info");
             message = "Save data in basic information success.";
-            severity = "info";
+            severity = MessageDialogSeverity.INFO.severity();
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
-            messageHeader = "Error.";
+            messageHeader = msg.get("app.messageHeader.error");
             if(ex.getCause() != null){
                 message = "Save basic info data failed. Cause : " + ex.getCause().toString();
             } else {
                 message = "Save basic info data failed. Cause : " + ex.getMessage();
             }
-            severity = "alert";
+            severity = MessageDialogSeverity.ALERT.severity();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             onCreation();
         }
@@ -750,15 +751,15 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void onDuplicateApplication(){
         try{
-            messageHeader = "Information.";
+            messageHeader = msg.get("app.messageHeader.info");
             message = "Waiting for this function.";
-            severity = "info";
+            severity = MessageDialogSeverity.INFO.severity();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             log.debug("duplicateApplication Exception : {}", ex);
-            messageHeader = "Error.";
+            messageHeader = msg.get("app.messageHeader.error");
             message = ex.getMessage();
-            severity = "alert";
+            severity = MessageDialogSeverity.ALERT.severity();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }

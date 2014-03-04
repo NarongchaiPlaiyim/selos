@@ -435,9 +435,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         standardBasePriceDlg = new BaseRate();
         standardInterestDlg = BigDecimal.ZERO;
 
-        prdGroupToPrdProgramViewAll = productControl.getPrdGroupToPrdProgramProposeAll();
+        prdGroupToPrdProgramViewAll = productControl.getPrdGroupToPrdProgramFromAllPrdProgram();
         prdGroupToPrdProgramViewByGroup = productControl.getPrdGroupToPrdProgramProposeByGroup(productGroup);
-
     }
 
 
@@ -2227,5 +2226,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     public void setSubCollateralTypeViewList(List<SubCollateralTypeView> subCollateralTypeViewList) {
         this.subCollateralTypeViewList = subCollateralTypeViewList;
     }
+
 }
 

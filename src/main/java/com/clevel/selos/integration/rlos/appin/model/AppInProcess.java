@@ -4,11 +4,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class AppInProcess implements Serializable {
     private String appNumber;
     private String status;
+    private Date dateSentSTP;
     private List<CreditDetail> creditDetailList;
     private List<CustomerDetail> customerDetailList;
 
@@ -26,6 +28,14 @@ public class AppInProcess implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Date getDateSentSTP() {
+        return dateSentSTP;
+    }
+
+    public void setDateSentSTP(Date dateSentSTP) {
+        this.dateSentSTP = dateSentSTP;
     }
 
     public List<CreditDetail> getCreditDetailList() {

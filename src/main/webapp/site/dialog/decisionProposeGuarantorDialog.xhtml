@@ -37,7 +37,7 @@
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{decision.guarantorList}"
                                        var="guarantorDlg"
-                                       itemLabel="#{guarantorDlg.firstNameTh} #{guarantorDlg.lastNameTh}"
+                                       itemLabel="#{not empty guarantorDlg.titleTh ? guarantorDlg.titleTh.titleTh : ''}#{guarantorDlg.firstNameTh} #{guarantorDlg.lastNameTh}"
                                        itemValue="#{guarantorDlg.id}"/>
                     </p:selectOneMenu>
                 </td>
