@@ -37,11 +37,15 @@ public class PledgeDetailControl extends BusinessControl {
 	
 	public PledgeInfoFullView getPledgeInfoFull(long pledgeInfoId) {
 		PledgeInfo result = null;
+		long workCaseId = 0;
 		try {
-			if (pledgeInfoId > 0)
+			if (pledgeInfoId > 0) {
 				result = pledgeInfoDAO.findById(pledgeInfoId);
+				if (result != null && result.getWorkCase() !=null)
+					workCaseId = result.getWorkCase().getId();
+			}
 		} catch (Throwable e) {}
-		return pledgeInfoTransform.transformToFullView(result,result.getWorkCase().getId());
+		return pledgeInfoTransform.transformToFullView(result,workCaseId);
 	}
 	public List<PledgeACDepView> getPledgeACList(long pledgeInfoId) {
 		PledgeInfo result = null;

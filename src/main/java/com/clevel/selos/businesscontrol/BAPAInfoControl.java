@@ -267,6 +267,7 @@ public class BAPAInfoControl extends BusinessControl {
 			 BAPAInfoCreditToSelectView view = new BAPAInfoCreditToSelectView();
 			 view.setId(credit.getId());
 			 view.setProductProgram(credit.getProductProgram().getName());
+			 view.setTopupBA(credit.getProductProgram().isBa());
 			 view.setCreditType(credit.getCreditType().getName());
 			 view.setLoanPurpose(credit.getLoanPurpose().getDescription());
 			 view.setLimit(credit.getLimit());

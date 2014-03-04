@@ -84,7 +84,7 @@
                         				value="#{msg.get('app.agreement.complete')}" />			
                         		</td>
                         		<td>
-             			            <p:selectOneRadio id="iscomplete" 
+             			            <p:selectOneRadio id="iscomplete" value="#{agreementSignContract.agreement.confirmed}"
              			            	>
              			               <f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="radio"
 	                                       	itemLabel="#{msg.get(radio.msgKey)}" 
@@ -98,7 +98,7 @@
                         				value="#{msg.get('app.agreement.remark')}" />			
                         		</td>
                         		<td>
-             			            <p:inputTextarea id="remark" 
+             			            <p:inputTextarea id="remark" value="#{agreementSignContract.agreement.remark}" 
              			            	rows="3" cols="130" />
                         		</td>                     		
                         	</tr>

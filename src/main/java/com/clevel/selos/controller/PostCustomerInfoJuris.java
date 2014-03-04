@@ -51,7 +51,11 @@ public class PostCustomerInfoJuris  implements Serializable {
 	private long workCaseId = -1;
 	private long stepId = -1;
 	private BasicInfoView basicInfoView;
+	
 	private long customerId = -1;
+	private boolean fromSubScreen = false;
+	private long fromCustomerId = -1;
+	private boolean fromJuristic = false;
 	
 	//Dropdown list
 	private List<SelectItem> titles;
@@ -69,16 +73,10 @@ public class PostCustomerInfoJuris  implements Serializable {
 		
 	}
 	public Date getLastUpdateDateTime() {
-		if (basicInfoView == null)
-			return null;
-		else
-			return basicInfoView.getModifyDate();
+		return customer.getModifyDate();
 	}
 	public String getLastUpdateBy() {
-		if (basicInfoView != null && basicInfoView.getModifyBy() != null)
-			return basicInfoView.getModifyBy().getDisplayName();
-		else
-			return null;
+		return customer.getModifyUser();
 	}
 	public ApproveType getApproveType() {
 		if (basicInfoView == null)
@@ -132,6 +130,9 @@ public class PostCustomerInfoJuris  implements Serializable {
 		}
 		
 		customerId = Util.parseLong(FacesUtil.getFlash().get("customerId"),-1L);
+		fromSubScreen = "true".equals(FacesUtil.getFlash().get("customer_fromsub"));
+		fromCustomerId = Util.parseLong(FacesUtil.getFlash().get("customer_fromid"),-1L);
+		fromJuristic = "true".equals(FacesUtil.getFlash().get("customer_fromjuris"));
 		
 		canUpdateInfo = true; //TODO
 		
@@ -203,6 +204,9 @@ public class PostCustomerInfoJuris  implements Serializable {
 		if (selectedCustomer == null)
 			return "";
 		FacesUtil.getFlash().put("customerId", selectedCustomer.getId());
+		FacesUtil.getFlash().put("customer_fromsub", "true");
+		FacesUtil.getFlash().put("customer_fromjuris", "true");
+		FacesUtil.getFlash().put("customer_fromid",customer.getId());
 		if (selectedCustomer.getCustomerEntity().getId() == 1) {
 			// Individual
 			return "postCustomerInfoIndv?faces-redirect=true";
@@ -218,6 +222,19 @@ public class PostCustomerInfoJuris  implements Serializable {
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
+	public String onCancelCustomerInfo() {
+		if (fromSubScreen && fromCustomerId > 0) {
+			FacesUtil.getFlash().put("customerId", fromCustomerId);
+			FacesUtil.getFlash().put("customer_fromsub", "false");
+			if (fromJuristic) {
+				return "postCustomerInfoJuris?faces-redirect=true";
+			} else {
+				// Individual
+				return "postCustomerInfoIndv?faces-redirect=true";
+			}
+		}
+		return "postCustomerInfoSummary?faces-redirect=true";
+	}
 	
 	/*
 	 * Private method
@@ -227,7 +244,22 @@ public class PostCustomerInfoJuris  implements Serializable {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
 		customer = postCustomerInfoJurisControl.getCustomer(customerId);
-		if (customer.getJuristicId() <= 0 || customer.getWorkCaseId() != workCaseId) {
+		
+		boolean back = false;
+		if (customer.getJuristicId() <= 0) {
+			back = true;
+		} else {
+			if (customer.getWorkCaseId() != workCaseId) {
+				if (fromSubScreen) {
+					log.info("Request from another post customer screen but workcase id this isn't match then mark as read only [CustomerId=" + customerId+", workcase="+customer.getWorkCaseId()+"]");
+					canUpdateInfo = false;
+				} else {
+					back = true;
+				}
+			}
+		}
+			
+		if (back) {
 			String redirectPage = "/site/postCustomerInfoSummary.jsf";
 			try {
 				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
