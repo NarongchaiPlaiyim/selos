@@ -10,6 +10,7 @@ import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.view.CheckMandatoryDocView;
 import com.clevel.selos.model.view.CheckOptionalDocView;
 import com.clevel.selos.model.view.CheckOtherDocView;
+import com.clevel.selos.system.Config;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -29,6 +30,16 @@ public class CheckMandateDoc implements Serializable {
     @Inject
     @SELOS
     Logger log;
+
+    @Inject
+    @Config(name = "interface.bpm.ce.uri")
+    private String ceURI;
+
+    @Inject
+    @Config(name = "interface.bpm.objectStore")
+    private String objectStore;
+
+    private final String URL = "https://www.google.co.th";
 
     private List<CheckMandatoryDocView> mandatoryDocumentsList;
     private List<CheckOptionalDocView> optionalDocumentsList;
@@ -114,10 +125,12 @@ public class CheckMandateDoc implements Serializable {
                     checkOtherDocView.setDocumentType(ecmDetail.getTypeNameTH());
                     checkOtherDocView.setOwners(ecmDetail.getTypeCode());
                     checkOtherDocView.setFileName(ecmDetail.getOrgFileName());
+                    checkOtherDocView.setLink(URL);
                     checkOtherDocView.setComplete(2);
                     checkOtherDocView.setIndistinct(true);
                     checkOtherDocView.setExpire(true);
                     checkOtherDocView.setRemark("test");
+                    log.debug("-- Link[{}]", getURLByFNId(ecmDetail.getFnDocId(), "token"));
                     otherDocumentsList.add(checkOtherDocView);
                 }
                 result = ecmDetailList.toString();
@@ -140,6 +153,18 @@ public class CheckMandateDoc implements Serializable {
     public void onCancelCheckMandateDoc(){
 
     }
+
+
+    private String getURLByFNId(final String FNId, final String token){
+        if(!Util.isNull(FNId) && !Util.isZero(FNId.length()) && !Util.isNull(token) && !Util.isZero(token.length() )){
+            //workPlaceURL                         //objStore        //encIds                          //encToken
+            return ceURI + "/getContent?objectStoreName="+objectStore+"&id="+FNId+"&objectType=document&ut=" + token;
+        } else {
+            log.debug("-- FN_ID or Token is null");
+            return null;
+        }
+    }
+
 
     public List<CheckMandatoryDocView> getMandatoryDocumentsList() {
         return mandatoryDocumentsList;
