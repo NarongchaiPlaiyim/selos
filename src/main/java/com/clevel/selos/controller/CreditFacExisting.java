@@ -1493,7 +1493,7 @@ public class CreditFacExisting implements Serializable {
                             borrowerCollateralDetailViewRow.getExistingCreditTypeDetailViewList().add(existingCreditTypeDetailViewList.get(i));
                         } else if (existingCreditTypeDetailViewList.get(i).isNoFlag() == false) {
                             seqBorrowerTemp = existingCreditTypeDetailViewList.get(i).getNo();
-                            if (Integer.parseInt(hashBorrower.get(seqBorrowerTemp).toString()) > 0) {
+                            if (hashBorrower.containsKey(seqBorrowerTemp) && Integer.parseInt(hashBorrower.get(seqBorrowerTemp).toString()) > 0) {
                                 hashBorrower.put(seqBorrowerTemp, 0);
                             }
                         }
@@ -1552,7 +1552,7 @@ public class CreditFacExisting implements Serializable {
                             relatedCollateralDetailViewRow.getExistingCreditTypeDetailViewList().add(existingCreditTypeDetailViewList.get(i));
 
                         } else if (existingCreditTypeDetailViewList.get(i).isNoFlag() == false) {
-                            if (Integer.parseInt(hashRelated.get(seqRelatedTemp).toString()) > 0) {
+                            if (hashRelated.containsKey(seqRelatedTemp) && Integer.parseInt(hashRelated.get(seqRelatedTemp).toString()) > 0) {
                                 hashRelated.put(seqRelatedTemp, 0);
                             }
                         }
@@ -1627,7 +1627,8 @@ public class CreditFacExisting implements Serializable {
 
             for(int j=0;j<borrowerCollateralDetailViewDel.getExistingCreditTypeDetailViewList().size();j++){
                 int seqBowForDel = borrowerCollateralDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo();
-                if(Integer.parseInt(hashBorrower.get(borrowerCollateralDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()).toString())>0){
+                if(hashBorrower.containsKey(borrowerCollateralDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()) &&
+                        Integer.parseInt(hashBorrower.get(borrowerCollateralDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()).toString())>0){
                     hashBorrower.put(seqBowForDel,0);
                 }
             }
@@ -1647,8 +1648,9 @@ public class CreditFacExisting implements Serializable {
 
             for(int j=0;j<relatedCollateralDetailViewDel.getExistingCreditTypeDetailViewList().size();j++){
                 int seqRelatedForDel = relatedCollateralDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo();
-                if(Integer.parseInt(hashBorrower.get(relatedCollateralDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()).toString())>0){
-                    hashRelated.put(seqRelatedForDel, Integer.parseInt(hashRelated.get(seqRelatedForDel).toString()) - 1);
+                if(hashBorrower.containsKey(relatedCollateralDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()) &&
+                        Integer.parseInt(hashBorrower.get(relatedCollateralDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()).toString())>0){
+                    hashRelated.put(seqRelatedForDel, 0);
                 }
             }
 
@@ -1806,7 +1808,7 @@ public class CreditFacExisting implements Serializable {
                         }
                         existingGuarantorDetailViewOnRow.getExistingCreditTypeDetailViewList().add(existingCreditTypeDetailViewList.get(i));
                     } else if (existingCreditTypeDetailViewList.get(i).isNoFlag() == false) {
-                        if (Integer.parseInt(hashBorrower.get(seqBorrowerTemp).toString()) > 0) {
+                        if (hashBorrower.containsKey(seqBorrowerTemp) && Integer.parseInt(hashBorrower.get(seqBorrowerTemp).toString()) > 0) {
                             hashBorrower.put(seqBorrowerTemp, 0);
                         }
                     }
@@ -1861,7 +1863,8 @@ public class CreditFacExisting implements Serializable {
 
             log.info("seq in seqBowForDel :  "+ seqBowForDel +" use feq is " + hashBorrower.get(seqBowForDel).toString());
 
-            if(Integer.parseInt(hashBorrower.get(guarantorDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()).toString())>0){
+            if(hashBorrower.containsKey(guarantorDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()) &&
+                    Integer.parseInt(hashBorrower.get(guarantorDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()).toString())>0){
                 hashBorrower.put(seqBowForDel, 0);
             }
         }
@@ -1881,7 +1884,10 @@ public class CreditFacExisting implements Serializable {
         if(existingCreditFacilityView.getBorrowerComExistingCredit()!=null && existingCreditFacilityView.getBorrowerComExistingCredit().size()>0){
             for(int i = 0; i < existingCreditFacilityView.getBorrowerComExistingCredit().size(); i++) {
                 seq = existingCreditFacilityView.getBorrowerComExistingCredit().get(i).getNo();
-                inUsed = Integer.parseInt(hashBorrower.get(seq).toString());
+                inUsed = 0;
+                if(hashBorrower.containsKey(seq)) {
+                    inUsed = Integer.parseInt(hashBorrower.get(seq).toString());
+                }
                 existingCreditFacilityView.getBorrowerComExistingCredit().get(i).setInUsed(inUsed);
             }
         }
@@ -1889,7 +1895,10 @@ public class CreditFacExisting implements Serializable {
         if(existingCreditFacilityView.getRelatedComExistingCredit()!=null && existingCreditFacilityView.getRelatedComExistingCredit().size()>0){
             for (int i = 0; i < existingCreditFacilityView.getRelatedComExistingCredit().size(); i++) {
                 seq = existingCreditFacilityView.getRelatedComExistingCredit().get(i).getNo();
-                inUsed = Integer.parseInt(hashRelated.get(seq).toString());
+                inUsed = 0;
+                if(hashRelated.containsKey(seq)) {
+                    inUsed = Integer.parseInt(hashRelated.get(seq).toString());
+                }
                 existingCreditFacilityView.getRelatedComExistingCredit().get(i).setInUsed(inUsed);
             }
         }
