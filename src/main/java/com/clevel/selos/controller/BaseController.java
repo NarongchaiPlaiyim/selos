@@ -158,7 +158,7 @@ public class BaseController implements Serializable {
 
         if(session.getAttribute("workCaseId") != null){
             try{
-                workCaseId = (Long)session.getAttribute("workCaseId");
+                workCaseId = Long.parseLong((String)session.getAttribute("workCaseId"));
             } catch (ClassCastException ex){
                 log.error("Exception :", ex);
             }

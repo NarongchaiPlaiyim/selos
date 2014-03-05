@@ -1,13 +1,16 @@
 package com.clevel.selos.security;
 
 import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.dao.relation.UserToAuthorizationDOADAO;
 import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.LDAPInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Language;
 import com.clevel.selos.model.UserStatus;
+import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.relation.UserToAuthorizationDOA;
 import com.clevel.selos.security.encryption.EncryptionService;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SecurityAuditor;
@@ -30,14 +33,13 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.List;
 
 @ManagedBean(name = "loginBean")
 @RequestScoped
@@ -47,6 +49,12 @@ public class LoginBean {
     Logger log;
     @Inject
     UserDAO userDAO;
+    @Inject
+    UserToAuthorizationDOADAO userToAuthorizationDOADAO ;
+
+    @Inject
+    UserToAuthorizationDOA authorizationDOA;
+
 
     @Inject
     SecurityAuditor securityAuditor;
@@ -77,35 +85,52 @@ public class LoginBean {
     private SimpleAuthenticationManager authenticationManager;
     @ManagedProperty(value = "#{sessionRegistry}")
     private SessionRegistry sessionRegistry;
-    @ManagedProperty(value = "#{concurrentSessionControlStrategy}")
-    ConcurrentSessionControlStrategy concurrentSessionControlStrategy;
 
     @PostConstruct
     public void onCreation(){
         if(SecurityContextHolder.getContext().getAuthentication() != null){
             UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            if(userDetail != null){
-                FacesUtil.redirect("/site/inbox.jsf");
+            if(userDetail != null)
+            {
+                log.info("loginbean class oncreation method");
+                // FacesUtil.redirect("/site/inbox.jsf");
+
+                //FacesUtil.redirect("/site/PEDBInbox.jsf");
             }
         }
     }
 
-    public String login() {
+    public String login()
+    {
         log.info("SessionRegistry principle size: {}", sessionRegistry.getAllPrincipals().size());
+
+        log.info("controler in login method of loginbean class");
 
         loginExceptionMessage = "";
 
         // make authentication with AD first
-        if (Util.isTrue(ldapEnable)) {
+        if (Util.isTrue(ldapEnable))
+        {
             log.info("LDAP authentication enabled.");
-            try {
+
+            try
+            {
                 ldapInterface.authenticate(userName, password);
-            } catch (ApplicationRuntimeException e) {
-                try {
+            }
+            catch (ApplicationRuntimeException e)
+            {
+                try
+                {
                     log.info("LDAP authentication failed! (user: {})", userName.trim());
+
                     securityAuditor.addFailed(userName.trim(), "Login", "", e.getMessage());
+
                     loginExceptionMessage = e.getMessage();
-                } catch (Exception ex) {
+
+                    log.info("error message is {}",e.getMessage());
+                }
+                catch (Exception ex)
+                {
                     loginExceptionMessage = ex.getCause().getMessage();
                 }
                 return "failed";
@@ -114,15 +139,29 @@ public class LoginBean {
 
         // find user profile in database
         User user = userDAO.findById(userName.trim());
+
+        log.info("user id :{} ",user.getId());
+
+
+        log.info("user name  : {}",user.getDisplayName());
+
         UserDetail userDetail = null;
-        if (Util.isTrue(encryptionEnable)) {
+
+        if (Util.isTrue(encryptionEnable))
+        {
             password = Base64.encodeBase64String(encryptionService.encrypt(password.trim()));
-        } else {
+        }
+        else
+        {
             password = password.trim();
         }
-        try {
-            userDetail = new UserDetail(user.getId(), password, user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name());
-        } catch (EntityNotFoundException e) {
+        try
+        {
+            log.info("team id is ::: {}",user.getTeam().getId());
+            userDetail = new UserDetail(user.getId(), password, user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name(),user.getRole().getId(),user.getTeam().getId());
+        }
+        catch (EntityNotFoundException e)
+        {
             String message = msg.get(ExceptionMapping.USER_NOT_FOUND, userName.trim());
             log.debug("{}", message);
             securityAuditor.addFailed(userName.trim(), "Login", "", message);
@@ -131,7 +170,8 @@ public class LoginBean {
         }
 
 
-        if (user.getActive() != 1) {
+        if (user.getActive() != 1)
+        {
             String message = msg.get(ExceptionMapping.USER_NOT_ACTIVE, userName.trim());
             log.debug("{}", message);
             securityAuditor.addFailed(userName.trim(), "Login", "", message);
@@ -141,13 +181,17 @@ public class LoginBean {
 
         // handle user status here
         UserStatus userStatus = user.getUserStatus();
-        if (UserStatus.DISABLED == userStatus) {
+
+        if (UserStatus.DISABLED == userStatus)
+        {
             String message = msg.get(ExceptionMapping.USER_STATUS_DISABLED, userName.trim());
             log.debug("{}", message);
             securityAuditor.addFailed(userName.trim(), "Login", "", message);
             loginExceptionMessage = message;
             return "failed";
-        } else if (UserStatus.MARK_AS_DELETED == userStatus) {
+        }
+        else if (UserStatus.MARK_AS_DELETED == userStatus)
+        {
             String message = msg.get(ExceptionMapping.USER_STATUS_DELETED, userName.trim());
             log.debug("{}", message);
             securityAuditor.addFailed(userName.trim(), "Login", "", message);
@@ -155,39 +199,70 @@ public class LoginBean {
             return "failed";
         }
 
-        try {
+        try
+        {
             HttpServletRequest httpServletRequest = FacesUtil.getRequest();
+
             HttpServletResponse httpServletResponse = FacesUtil.getResponse();
+
             UsernamePasswordAuthenticationToken request = new UsernamePasswordAuthenticationToken(userDetail, this.getPassword());
+
             request.setDetails(new WebAuthenticationDetails(httpServletRequest));
 
             Authentication result = authenticationManager.authenticate(request);
+
             log.debug("authentication result: {}", result);
+
             SecurityContextHolder.getContext().setAuthentication(result);
+
             log.debug("login successful. ({})", userDetail);
 
+            ConcurrentSessionControlStrategy concurrentSessionControlStrategy = new ConcurrentSessionControlStrategy(sessionRegistry);
+
             concurrentSessionControlStrategy.onAuthentication(request, httpServletRequest, httpServletResponse);
+
             HttpSession httpSession = FacesUtil.getSession(false);
+
             httpSession.setAttribute("user", null);
+
             httpSession.setAttribute("language", Language.EN);
 
             securityAuditor.addSucceed(userDetail.getUserName(), "Login", "", new Date());
 
+            log.info("retrun type in logiinbean class is : {}",user.getRole().getRoleType().getRoleTypeName().name());
+
             return user.getRole().getRoleType().getRoleTypeName().name();
-        } catch (ApplicationRuntimeException e) {
+
+        }
+        catch (ApplicationRuntimeException e)
+        {
             securityAuditor.addException(userName.trim(), "Login", "", e.getMessage());
+
             log.debug("login failed!. ({})", e.getMessage());
+
             loginExceptionMessage = e.getMessage();
-        } catch (AuthenticationException e) {
+
+        }
+        catch (AuthenticationException e)
+        {
             securityAuditor.addException(userName.trim(), "Login", "", e.getMessage());
+
             log.debug("login failed!. ({})", e.getMessage());
+
             loginExceptionMessage = e.getMessage();
+
         }
 //        securityAuditor.addFailed(userName.trim(), "Login", "", "Authentication failed!");
         return "failed";
     }
+    public void validationsendtootherpage()
+    {
+        log.info("controler in validationsendtootherpage method of loginbean.java class");
+        FacesUtil.redirect("/site/SignInPage.jsf");
+    }
 
-    public UserDetail getUserDetail() {
+    public UserDetail getUserDetail()
+    {
         return (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
@@ -195,9 +270,6 @@ public class LoginBean {
         log.debug("logging out.");
         HttpSession httpSession = FacesUtil.getSession(false);
         httpSession.setAttribute("user", null);
-        httpSession.setAttribute("workCaseId", null);
-        httpSession.setAttribute("workCasePreScreenId", null);
-        httpSession.setAttribute("stepId", null);
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SecurityContextHolder.clearContext();
         securityAuditor.addSucceed(userDetail.getUserName(), "Logout", "", new Date());
@@ -242,14 +314,6 @@ public class LoginBean {
 
     public void setSessionRegistry(SessionRegistry sessionRegistry) {
         this.sessionRegistry = sessionRegistry;
-    }
-
-    public ConcurrentSessionControlStrategy getConcurrentSessionControlStrategy() {
-        return concurrentSessionControlStrategy;
-    }
-
-    public void setConcurrentSessionControlStrategy(ConcurrentSessionControlStrategy concurrentSessionControlStrategy) {
-        this.concurrentSessionControlStrategy = concurrentSessionControlStrategy;
     }
 
     public String getLoginExceptionMessage() {

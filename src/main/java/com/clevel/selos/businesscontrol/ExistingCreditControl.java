@@ -85,7 +85,7 @@ public class ExistingCreditControl extends BusinessControl {
         List<String> tmbCusIDList = new ArrayList<String>();
         List<String> _borrowerTMBCusID = new ArrayList<String>();
         for (CustomerInfoView customerInfoView : customerInfoViewList) {
-            if (!Util.isEmpty(customerInfoView.getTmbCustomerId())) {
+             if (!Util.isEmpty(customerInfoView.getTmbCustomerId())) {
                 log.info("get tmbCusId {}", customerInfoView.getTmbCustomerId());
                 Reference reference = customerInfoView.getReference();
                 if (Util.isTrue(reference.getSll())) {
