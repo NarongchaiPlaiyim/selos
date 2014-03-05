@@ -245,7 +245,7 @@ public class BaseController implements Serializable {
         } else {
             messageHeader = "Exception.";
             message = "Can not find Pricing DOA Level. Please check value for calculate DOA Level";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessagePanel.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
     }
 
