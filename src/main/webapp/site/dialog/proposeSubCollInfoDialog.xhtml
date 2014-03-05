@@ -115,7 +115,7 @@
                             value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
                             styleClass="smaller"
                             action="#{creditFacPropose.onAddCollateralOwnerUW()}"
-                            process="@form"
+                            process=":subCollateralDlgForm"
                             update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
                     </p:commandButton>
                 </td>
@@ -154,7 +154,7 @@
             <p:column styleClass="center">
                 <p:commandButton title="#{msg.get('app.button.delete')}"
                                  icon="ui-icon-trash"
-                                 process="@form"
+                                 process=":subCollateralDlgForm"
                                  actionListener="#{creditFacPropose.onDeleteCollateralOwnerUW(rowIndex)}"
                                  update=":subCollateralDlgForm">
                 </p:commandButton>
@@ -177,7 +177,7 @@
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
                                      required="#{not empty param[addMortgageType.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                        <f:selectItems value="#{creditFacPropose.mortgageTypeList}"
+                        <f:selectItems value="#{creditFacPropose.mortgageTypeViewList}"
                                        var="mortgageTypeItem"
                                        itemLabel="#{mortgageTypeItem.mortgage}"
                                        itemValue="#{mortgageTypeItem.id}"/>
@@ -193,7 +193,7 @@
                             value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
                             styleClass="smaller"
                             actionListener="#{creditFacPropose.onAddMortgageType()}"
-                            process="@form"
+                            process=":subCollateralDlgForm"
                             update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
                     </p:commandButton>
                 </td>
@@ -232,7 +232,7 @@
             <p:column styleClass="center">
                 <p:commandButton title="#{msg.get('app.button.delete')}"
                                  icon="ui-icon-trash"
-                                 process="@form"
+                                 process=":subCollateralDlgForm"
                                  actionListener="#{creditFacPropose.onDeleteMortgageType(rowIndex)}"
                                  update=":subCollateralDlgForm">
                 </p:commandButton>
@@ -270,9 +270,8 @@
                             value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
                             styleClass="smaller"
                             action="#{creditFacPropose.onAddRelatedWith()}"
-                            process="@form"
-                            update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
-                            disabled="true">
+                            process=":subCollateralDlgForm"
+                            update=":subCollateralDlgForm,:msgBoxSystemMessagePanel" >
                     </p:commandButton>
                 </td>
             </tr>
@@ -310,7 +309,7 @@
             <p:column styleClass="center">
                 <p:commandButton title="#{msg.get('app.button.delete')}"
                                  icon="ui-icon-trash"
-                                 process="@form"
+                                 process=":subCollateralDlgForm"
                                  actionListener="#{creditFacPropose.onDeleteRelatedWith(rowIndex)}"
                                  update=":subCollateralDlgForm">
                 </p:commandButton>
@@ -326,7 +325,7 @@
     </td>
     <td class="left">
         <p:inputText value="#{creditFacPropose.newCollateralSubView.appraisalValue}"
-                     maxlength="18"
+                     maxlength="17"
                      onclick="this.select()"
                      onkeydown="return onKeyDownNegMoney(event);"
                      onkeypress="return onKeyPressNegMoney(event);"
@@ -345,7 +344,7 @@
     </td>
     <td class="left">
         <p:inputText value="#{creditFacPropose.newCollateralSubView.mortgageValue}"
-                     maxlength="18"
+                     maxlength="17"
                      onclick="this.select()"
                      onkeydown="return onKeyDownNegMoney(event);"
                      onkeypress="return onKeyPressNegMoney(event);"
@@ -371,7 +370,7 @@
                 actionListener="#{creditFacPropose.onSaveSubCollateral()}"
                 process=":subCollateralDlgForm"
                 update=":subCollateralDlgForm,:collateralDlgForm,:msgBoxSystemMessagePanel"
-                oncomplete="handleSubCollateralInfoRequest(xhr, status, args)"/>
+                oncomplete="handleDialogRequest(xhr, status, args, 'subCollateralInfoDlg')"/>
         <p:spacer width="10" height="0"/>
         <p:commandButton
                 value="#{msg.get('app.credit.facility.propose.cancelButton')}"

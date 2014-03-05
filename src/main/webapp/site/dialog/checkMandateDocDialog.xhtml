@@ -8,7 +8,7 @@
 <h:head>
     <title>Check Mandate Doc</title>
     <h:outputStylesheet name="css/style.css" />
-    <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
+     <!--<script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
     <h:outputScript library="js" name="custom.js" />
 </h:head>
 <h:body>
@@ -148,7 +148,9 @@
                         <p:outputLabel value="#{otherItem.owners}"/>
                     </td>
                     <td >
-                        <p:outputLabel value="#{otherItem.fileName}"/>
+                        <a href="#{otherItem.link}" target="_blank">
+                            <p:outputLabel value="#{otherItem.fileName}"/>
+                        </a>
                     </td>
                     <td class="center">
                         <p:selectOneRadio layout="grid" value="#{otherItem.complete}" disabled="#{otherItem.disabledCompleteFlag}" columns="1">

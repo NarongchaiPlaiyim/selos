@@ -22,7 +22,7 @@ public class PledgeInfoView implements Serializable {
 	private Date modifyDate;
 	
 	private RadioValue confirmed;
-	
+	private long workCaseId;
 	public PledgeInfoView() {
 		confirmed = RadioValue.NA;
 	}
@@ -99,5 +99,11 @@ public class PledgeInfoView implements Serializable {
 	}
 	public void setConfirmed(RadioValue confirmed) {
 		this.confirmed = confirmed;
+	}
+	public long getWorkCaseId() {
+		return workCaseId;
+	}
+	public void setWorkCaseId(long workCaseId) {
+		this.workCaseId = workCaseId;
 	}
 }

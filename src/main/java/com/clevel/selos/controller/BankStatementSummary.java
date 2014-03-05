@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.MessageDialogSeverity;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.view.*;
@@ -102,6 +103,7 @@ public class BankStatementSummary implements Serializable {
     // Variables for messages dialog
     private String messageHeader;
     private String message;
+    private String severity;
     private String confirmMessageHeader;
     private String confirmMessage;
 
@@ -231,8 +233,9 @@ public class BankStatementSummary implements Serializable {
                 ActionStatusView actionStatusView = actionStatusViewList.get(0);
                 if (ActionResult.FAILED == actionStatusView.getStatusCode()) {
                     dwhIsDown = true;
-                    messageHeader = "Connection to DWH is down!";
-                    message = actionStatusView.getStatusDesc();
+                    messageHeader = msg.get("app.messageHeader.error");
+                    message = "Connection to DWH is down!. " + actionStatusView.getStatusDesc();
+                    severity = MessageDialogSeverity.ALERT.severity();
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
             }
@@ -296,11 +299,13 @@ public class BankStatementSummary implements Serializable {
             // delete previous TMB Bank statement after retrieve from DWH
             bankStmtControl.deleteBankStmtList(TMBBankStmtDeleteList);
 
-            messageHeader = "Save Bank Statement Summary Success.";
+            messageHeader = msg.get("app.messageHeader.info");
             message = "Save Bank Statement Summary data success.";
+            severity = MessageDialogSeverity.INFO.severity();
         }
         catch (Exception e) {
-            messageHeader = "Save Bank Statement Summary Failed.";
+            messageHeader = msg.get("app.messageHeader.error");
+            severity = MessageDialogSeverity.ALERT.severity();
             if (e.getCause() != null) {
                 message = "Save Bank Statement Summary data failed. Cause : " + e.getCause().toString();
             } else {
@@ -334,11 +339,13 @@ public class BankStatementSummary implements Serializable {
             exSummaryControl.calForBankStmtSummary(workCaseId);
             bizInfoSummaryControl.calByBankStatement(workCaseId);
 
-            messageHeader = "Delete Bank Statement Success.";
+            messageHeader = msg.get("app.messageHeader.info");
             message = "Delete Bank Statement success.";
+            severity = MessageDialogSeverity.INFO.severity();
         }
         catch (Exception e) {
-            messageHeader = "Delete Bank Statement Failed.";
+            messageHeader = msg.get("app.messageHeader.error");
+            severity = MessageDialogSeverity.ALERT.severity();
             if (e.getCause() != null) {
                 message = "Delete Bank Statement failed. Cause : " + e.getCause().toString();
             } else {
@@ -414,8 +421,9 @@ public class BankStatementSummary implements Serializable {
     private boolean checkSelectSeasonalFlag() {
         log.debug("checkSelectSeasonalFlag()");
         if (RadioValue.NOT_SELECTED.value() == seasonalFlag) {
-            messageHeader = "Message dialog";
+            messageHeader = msg.get("app.messageHeader.info");
             message = "Please, select the Seasonal";
+            severity = MessageDialogSeverity.INFO.severity();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             log.debug("result: false");
             return false;
@@ -599,5 +607,13 @@ public class BankStatementSummary implements Serializable {
 
     public void setYesValue(int yesValue) {
         this.yesValue = yesValue;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
     }
 }

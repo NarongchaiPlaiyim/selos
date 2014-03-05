@@ -1,18 +1,24 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.FeeLevel;
 import com.clevel.selos.model.db.master.FeePaymentMethod;
 import com.clevel.selos.model.db.master.FeeType;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "wrk_fee_detail")
-public class FeeDetail {
+public class FeeDetail implements Serializable {
 
-    @Id
+    private static final long serialVersionUID = 1819884749144921628L;
+
+	@Id
     @SequenceGenerator(name="SEQ_WRK_FEE_DETAIL_ID", sequenceName="SEQ_WRK_FEE_DETAIL_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_FEE_DETAIL_ID")
     private long id;
@@ -29,14 +35,21 @@ public class FeeDetail {
     private BigDecimal percentFee;
 
     @Column(name = "fee_percent_after_discount")
-    private BigDecimal percent_fee_after;
+    private BigDecimal percentFeeAfter;
 
     @Column(name = "fee_year")
     private BigDecimal feeYear;
 
     @Column(name = "fee_amount", length = 10, scale = 2)
     private BigDecimal amount;
-
+    
+    @Column(name="fee_level",columnDefinition="int default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private FeeLevel feeLevel;
+    
+    @Column(name="description")
+    private String description;
+    
     @OneToOne
     @JoinColumn(name = "new_credit_detail_id")
     private NewCreditDetail newCreditDetail;
@@ -77,14 +90,13 @@ public class FeeDetail {
         this.percentFee = percentFee;
     }
 
-    public BigDecimal getPercent_fee_after() {
-        return percent_fee_after;
-    }
-
-    public void setPercent_fee_after(BigDecimal percent_fee_after) {
-        this.percent_fee_after = percent_fee_after;
-    }
-
+    public BigDecimal getPercentFeeAfter() {
+		return percentFeeAfter;
+	}
+    public void setPercentFeeAfter(BigDecimal percentFeeAfter) {
+		this.percentFeeAfter = percentFeeAfter;
+	}
+    
     public BigDecimal getFeeYear() {
         return feeYear;
     }
@@ -101,6 +113,30 @@ public class FeeDetail {
         this.amount = amount;
     }
 
+    public String getDescription() {
+		return description;
+	}
+    public void setDescription(String description) {
+		this.description = description;
+	}
+    public FeeLevel getFeeLevel() {
+		return feeLevel;
+	}
+    public void setFeeLevel(FeeLevel feeLevel) {
+		this.feeLevel = feeLevel;
+	}
+    public NewCreditDetail getNewCreditDetail() {
+		return newCreditDetail;
+	}
+    public void setNewCreditDetail(NewCreditDetail newCreditDetail) {
+		this.newCreditDetail = newCreditDetail;
+	}
+    public WorkCase getWorkCase() {
+		return workCase;
+	}
+    public void setWorkCase(WorkCase workCase) {
+		this.workCase = workCase;
+	}
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -108,9 +144,11 @@ public class FeeDetail {
                 .append("paymentMethod", paymentMethod)
                 .append("feeType", feeType)
                 .append("percentFee", percentFee)
-                .append("percent_fee_after", percent_fee_after)
+                .append("percentFeeAfter", percentFeeAfter)
                 .append("feeYear", feeYear)
                 .append("amount", amount)
+                .append("feeLevel", feeLevel)
+                .append("description", description)
                 .toString();
     }
 }

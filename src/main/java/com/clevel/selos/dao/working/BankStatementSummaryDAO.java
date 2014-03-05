@@ -55,11 +55,11 @@ public class BankStatementSummaryDAO extends GenericDAO<BankStatementSummary, Lo
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
         criteria.addOrder(Order.asc("id"));
-//        bankStatementSummary = (BankStatementSummary) criteria.uniqueResult();
-        List list = criteria.list();
+        bankStatementSummary = (BankStatementSummary) criteria.uniqueResult();
+        /*List list = criteria.list();
         if (list != null && list.size() > 0) {
             bankStatementSummary = (BankStatementSummary) list.get(0);
-        }
+        }*/
         return bankStatementSummary;
     }
 }

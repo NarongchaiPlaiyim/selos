@@ -85,7 +85,7 @@
                         				value="#{msg.get('app.mortgageSummary.agreement.loanDate')}" />	
                         		</td>
                         		<td>
-                        			<clv:BECalendar id='loan_contractdate' value="#{mortgageSummary.mortgageSummaryView.loanContractDate}"
+                        			<clv:BECalendar id='loan_contractdate' value="#{mortgageSummary.agreementInfoView.loanContractDate}"
                         					pattern="dd/MM/yyyy" showOn="button"
                                        		mindate="#{mortgageSummary.minDate}"
                                        		autocomplete="false" locale="th_TH"
@@ -100,7 +100,7 @@
                         		</td>
                         		<td>
              			            <p:selectOneRadio id='signcontract_type' widgetVar="p_signcontract_type"
-             			            	value="#{mortgageSummary.mortgageSummaryView.signingLocation}"
+             			            	value="#{mortgageSummary.agreementInfoView.signingLocation}"
              			            	required="true" requiredMessage="#{msg.get('app.mortgageSummary.signContract.validate')}"
              			            	>
              			            	<p:ajax update="signcontract_loc" 
@@ -114,7 +114,7 @@
                         		<td></td>
                         		<td>
                         			<p:selectOneMenu id='signcontract_loc' widgetVar="p_signcontract_loc"
-                        				value="#{mortgageSummary.mortgageSummaryView.updLocation}"
+                        				value="#{mortgageSummary.agreementInfoView.updLocation}"
                         				disabled="#{not mortgageSummary.enableSignContractLocation}"
                         				 style="width:160px">
                         				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -129,7 +129,7 @@
                         		</td>
                         		<td>
                         			<p:inputText id='coms_no' styleClass="largest"
-                        				value="#{mortgageSummary.mortgageSummaryView.comsNumber}"
+                        				value="#{mortgageSummary.agreementInfoView.comsNumber}"
                         				required="true" requiredMessage="#{msg.get('app.mortgageSummary.comsNo.validate')}"
                         				/>
                         		</td>

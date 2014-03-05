@@ -22,6 +22,11 @@ public class BankAccountPurpose implements Serializable {
     private int active;
     @Column(name="pledge_default",columnDefinition="int default 0")
     private boolean pledgeDefault;
+    
+    @Column(name="for_od",columnDefinition="int default 0")
+    private boolean forOD;
+    @Column(name="for_tcg",columnDefinition="int default 0")
+    private boolean forTCG;
 
     public BankAccountPurpose() {
     }
@@ -56,6 +61,18 @@ public class BankAccountPurpose implements Serializable {
     public void setPledgeDefault(boolean pledgeDefault) {
 		this.pledgeDefault = pledgeDefault;
 	}
+    public boolean isForOD() {
+		return forOD;
+	}
+    public void setForOD(boolean forOD) {
+		this.forOD = forOD;
+	}
+    public boolean isForTCG() {
+		return forTCG;
+	}
+    public void setForTCG(boolean forTCG) {
+		this.forTCG = forTCG;
+	}
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -63,6 +80,8 @@ public class BankAccountPurpose implements Serializable {
                 append("name", name).
                 append("active", active).
                 append("pledgeDefault", pledgeDefault).
+                append("forOD", forOD).
+                append("forTCG", forTCG).
                 toString();
     }
 }

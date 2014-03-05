@@ -29,6 +29,7 @@ public class MortgageInfoView implements Serializable {
 	private long customerAttorneyId;
 	
 	private MortgageConfirmedType confirmed;
+	private long workCaseId;
 	
 	public MortgageInfoView() {
 		
@@ -144,5 +145,11 @@ public class MortgageInfoView implements Serializable {
 	}
 	public void setConfirmed(MortgageConfirmedType confirmed) {
 		this.confirmed = confirmed;
+	}
+	public long getWorkCaseId() {
+		return workCaseId;
+	}
+	public void setWorkCaseId(long workCaseId) {
+		this.workCaseId = workCaseId;
 	}
 }

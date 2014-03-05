@@ -259,7 +259,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         if(relatedComExistingCredit!=null && relatedComExistingCredit.size()>0){
             for(ExistingCreditDetailView existingCreditDetailView : relatedComExistingCredit) {
-                borrowerExistingCreditPreScreen.add(existingCreditDetailView);
+                relateExistingCreditPresScreen.add(existingCreditDetailView);
             }
         }
         if(relatedRetailExistingCredit!=null && relatedRetailExistingCredit.size()>0){
@@ -1045,11 +1045,19 @@ public class PrescreenBusinessControl extends BusinessControl {
             if(tmpPrescreenView.getTcg() != currentPrescreenView.getTcg()){
                 modifyCount = modifyCount + 1;
             }
-            if(tmpPrescreenView.getRefinance() != currentPrescreenView.getRefinance()){
+            if(tmpPrescreenView.getRefinanceIn() != currentPrescreenView.getRefinanceIn()){
                 modifyCount = modifyCount + 1;
             }
-            if(tmpPrescreenView.getRefinanceBank() != null && currentPrescreenView.getRefinanceBank() != null){
-                if(tmpPrescreenView.getRefinanceBank().getCode() != currentPrescreenView.getRefinanceBank().getCode()){
+            if(tmpPrescreenView.getRefinanceInBank() != null && currentPrescreenView.getRefinanceInBank() != null){
+                if(tmpPrescreenView.getRefinanceInBank().getCode() != currentPrescreenView.getRefinanceInBank().getCode()){
+                    modifyCount = modifyCount + 1;
+                }
+            }
+            if(tmpPrescreenView.getRefinanceOut() != currentPrescreenView.getRefinanceOut()){
+                modifyCount = modifyCount + 1;
+            }
+            if(tmpPrescreenView.getRefinanceOutBank() != null && currentPrescreenView.getRefinanceOutBank() != null){
+                if(tmpPrescreenView.getRefinanceOutBank().getCode() != currentPrescreenView.getRefinanceOutBank().getCode()){
                     modifyCount = modifyCount + 1;
                 }
             }

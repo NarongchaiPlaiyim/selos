@@ -20,8 +20,8 @@
             <h:form id="userTableData">
             <div id="main_container">
 
-                <ui:include src="site/include/header_logo.xhtml"/>
-                <ui:include src="site/include/menubar_isa.xhtml"/>
+                <ui:include src="../site/include/header_logo.xhtml"/>
+                <ui:include src="../site/include/menubar_isa.xhtml"/>
                 <div id="content_container">
                     <!-- L pane-->
                     <div class="body_lpane">
@@ -212,7 +212,7 @@
     <p:dialog id="manageUserDialog" widgetVar="manageUserDlg" header="Manage User !"
                                    onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
                                    modal="true" width="600" height="450">
-        <ui:include src="site/dialog/isaManageDialog.xhtml"/>
+        <ui:include src="../site/dialog/isaManageDialog.xhtml"/>
     </p:dialog>
 
 
@@ -228,7 +228,7 @@
         </p:panel>
 
 
-        <ui:include src="site/dialog/confirmDeleteDlg.xhtml">
+        <ui:include src="../site/dialog/confirmDeleteDlg.xhtml">
             <ui:param name="id" value="confirmDeleteUserDialog"/>
             <ui:param name="name" value="confirmDeleteUserDlg"/>
             <ui:param name="formId" value="frmConfirmDeleteUser"/>
@@ -237,7 +237,7 @@
             <ui:param name="update" value=":userTableData"/>
         </ui:include>
 
-        <ui:include src="site/dialog/confirmDeleteDlg.xhtml">
+        <ui:include src="../site/dialog/confirmDeleteDlg.xhtml">
             <ui:param name="id" value="confirmDeleteUserListDialog"/>
             <ui:param name="name" value="confirmDeleteUserListDlg"/>
             <ui:param name="formId" value="frmConfirmDeleteUserList"/>
@@ -246,7 +246,7 @@
             <ui:param name="update" value=":userTableData"/>
         </ui:include>
 
-        <ui:include src="site/dialog/confirmEditDlg.xhtml">
+        <ui:include src="../site/dialog/confirmEditDlg.xhtml">
             <ui:param name="id" value="confirmEditUserDialog"/>
             <ui:param name="name" value="confirmEditUserDlg"/>
             <ui:param name="formId" value="frmConfirmEditUser"/>
@@ -255,7 +255,7 @@
             <ui:param name="update" value=":userTableData"/>
         </ui:include>
 
-        <ui:include src="site/dialog/confirmEditDlg.xhtml">
+        <ui:include src="../site/dialog/confirmEditDlg.xhtml">
             <ui:param name="id" value="confirmEditUserActiveDialog"/>
             <ui:param name="name" value="confirmEditUserActiveDlg"/>
             <ui:param name="formId" value="frmConfirmEditUserActive"/>

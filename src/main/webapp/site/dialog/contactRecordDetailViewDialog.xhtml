@@ -3,7 +3,8 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 <h:form id="contactRecordViewDlgFrm">   
     <p:panel styleClass="panel-dialog" rendered="#{not empty customerAcceptance.contactRecord}">
     	<p:messages/>
@@ -58,15 +59,15 @@
                 		/>
                 </td>
                 <td>
-                	 <p:calendar id='nextcalling_datetime' 
+                	 <clv:BECalendar id='nextcalling_datetime' 
                          pattern="dd/MM/yyyy HH:mm" 
                          showOn="button" 
                          value="#{customerAcceptance.contactRecord.nextCallingDate}"
                          locale='th_TH'
                          mindate="#{customerAcceptance.minDate}"
                          autocomplete="false"
-                        	>
-                       </p:calendar>
+                        />
+                       
                 </td>
             </tr>
             <tr>

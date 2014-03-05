@@ -52,21 +52,21 @@ public class BRMSTransform extends Transform{
     public BRMSNCBAccountInfo getBRMSNCBAccountInfo(NCBDetail ncbDetail, boolean isIndividual, Date checkDate){
         BRMSNCBAccountInfo ncbAccountInfo = new BRMSNCBAccountInfo();
         if(isIndividual)
-            ncbAccountInfo.setLoanAccountStatus(ncbDetail.getAccountStatus().getNcbCodeInd());
+            ncbAccountInfo.setLoanAccountStatus(ncbDetail.getAccountStatus() == null ? "" : ncbDetail.getAccountStatus().getNcbCodeInd());
         else
-            ncbAccountInfo.setLoanAccountStatus(ncbDetail.getAccountStatus().getNcbCodeJur());
-        ncbAccountInfo.setLoanAccountType(ncbDetail.getAccountType().getNcbCode());
+            ncbAccountInfo.setLoanAccountStatus(ncbDetail.getAccountStatus() == null ? "" : ncbDetail.getAccountStatus().getNcbCodeJur());
+        ncbAccountInfo.setLoanAccountType(ncbDetail.getAccountType() == null ? "" : ncbDetail.getAccountType().getNcbCode());
         ncbAccountInfo.setTmbFlag(isActive(ncbDetail.getAccountTMBFlag()));
         ncbAccountInfo.setNplFlag(isActive(ncbDetail.getNplFlag()));
         ncbAccountInfo.setCreditAmtAtNPLDate(ncbDetail.getNplCreditAmount());
         ncbAccountInfo.setTdrFlag(isActive(ncbDetail.getTdrFlag()));
-        ncbAccountInfo.setCurrentPaymentType(ncbDetail.getCurrentPayment().getNcbCode());
-        ncbAccountInfo.setSixMonthPaymentType(ncbDetail.getHistorySixPayment().getNcbCode());
-        ncbAccountInfo.setTwelveMonthPaymentType(ncbDetail.getHistoryTwelvePayment().getNcbCode());
+        ncbAccountInfo.setCurrentPaymentType(ncbDetail.getCurrentPayment() == null ? "" : ncbDetail.getCurrentPayment().getNcbCode());
+        ncbAccountInfo.setSixMonthPaymentType(ncbDetail.getHistorySixPayment() == null ? "" : ncbDetail.getHistorySixPayment().getNcbCode());
+        ncbAccountInfo.setTwelveMonthPaymentType(ncbDetail.getHistoryTwelvePayment() == null ? "" : ncbDetail.getHistoryTwelvePayment().getNcbCode());
         ncbAccountInfo.setNumberOfOverDue(ncbDetail.getOutstandingIn12Month());
         ncbAccountInfo.setNumberOfOverLimit(ncbDetail.getOverLimit());
         if(ncbDetail.getAccountCloseDate() != null)
-            ncbAccountInfo.setAccountCloseDateMonths(String.valueOf(DateTimeUtil.monthBetween2Dates(ncbDetail.getAccountCloseDate(), checkDate)));
+            ncbAccountInfo.setAccountCloseDateMonths(String.valueOf(ncbDetail.getAccountCloseDate() == null ? "" : DateTimeUtil.monthBetween2Dates(ncbDetail.getAccountCloseDate(), checkDate)));
         else
             ncbAccountInfo.setAccountCloseDateMonths(String.valueOf(0));
         return ncbAccountInfo;
@@ -112,7 +112,7 @@ public class BRMSTransform extends Transform{
             customerInfo.setNextReviewDateFlag(customerOblInfo.getNextReviewDate() == null? Boolean.FALSE: Boolean.TRUE);
             customerInfo.setExtendedReviewDate(customerOblInfo.getExtendedReviewDate());
             customerInfo.setExtendedReviewDateFlag(customerOblInfo.getExtendedReviewDate() == null? Boolean.FALSE: Boolean.TRUE);
-            customerInfo.setRatingFinal(String.valueOf(customerOblInfo.getRatingFinal().getScore()));
+            customerInfo.setRatingFinal(String.valueOf(customerOblInfo.getRatingFinal() == null? "" : customerOblInfo.getRatingFinal().getScore()));
             customerInfo.setUnpaidFeeInsurance(customerOblInfo.getUnpaidFeeInsurance().compareTo(BigDecimal.ZERO) != 0);
             customerInfo.setPendingClaimLG(customerOblInfo.getPendingClaimLG().compareTo(BigDecimal.ZERO) != 0);
         }
@@ -130,13 +130,14 @@ public class BRMSTransform extends Transform{
             customerInfo.setMarriageStatus(individual.getMaritalStatus().getCode());
 
             if(isActive(customer.getSpouse())){
-                Customer spouse = customerDAO.findSpouseById(customer.getSpouseId());
+                Customer spouse = customerDAO.findMainCustomerBySpouseId(customer.getId());
                 Individual spouseIndv = spouse.getIndividual();
                 customerInfo.setSpousePersonalID(spouseIndv.getCitizenId());
                 customerInfo.setRelation(spouse.getRelation().getBrmsCode());
             } else {
                 if(isActive(individual.getMaritalStatus().getSpouseFlag())) {
-                    Customer spouse = customerDAO.findMainCustomerBySpouseId(customer.getId());
+                    //Customer spouse = customerDAO.findMainCustomerBySpouseId(customer.getId());
+                    Customer spouse = customerDAO.findById(customer.getSpouseId());
                     Individual spouseIndv = spouse.getIndividual();
                     customerInfo.setSpousePersonalID(spouseIndv.getCitizenId());
                     customerInfo.setRelation(spouse.getRelation().getBrmsCode());
@@ -144,35 +145,38 @@ public class BRMSTransform extends Transform{
             }
         }
 
-        NCB ncb = customer.getNcb();
-        customerInfo.setNumberOfNCBCheckIn6Months(ncb.getCheckIn6Month());
-        customerInfo.setNumberOfDayLastNCBCheck(new BigDecimal(DateTimeUtil.daysBetween2Dates(ncb.getCheckingDate(), checkDate)));
+        if(customer.getRelation().getId() == RelationValue.BORROWER.value()){
+            NCB ncb = customer.getNcb();
+            customerInfo.setNumberOfNCBCheckIn6Months(ncb.getCheckIn6Month());
+            customerInfo.setNumberOfDayLastNCBCheck(new BigDecimal(DateTimeUtil.daysBetween2Dates(ncb.getCheckingDate(), checkDate)));
 
-        List<NCBDetail> ncbDetailList = ncb.getNcbDetailList();
-        if(ncbDetailList == null || ncbDetailList.size() == 0){
-            customerInfo.setNcbFlag(Boolean.FALSE);
-        } else {
-            customerInfo.setNcbFlag(Boolean.TRUE);
-            List<BRMSNCBAccountInfo> ncbAccountInfoList = new ArrayList<BRMSNCBAccountInfo>();
-            for(NCBDetail ncbDetail : ncbDetailList){
-                ncbAccountInfoList.add(getBRMSNCBAccountInfo(ncbDetail, customerInfo.isIndividual(), checkDate));
-            }
-            customerInfo.setNcbAccountInfoList(ncbAccountInfoList);
-        }
-
-        List<String> warningFullMatchList = new ArrayList<String>();
-        List<String> warningSomeMatchList = new ArrayList<String>();
-        List<CustomerCSI> customerCSIList = customerCSIDAO.findCustomerCSIByCustomerId(customer.getId());
-        for(CustomerCSI customerCSI : customerCSIList){
-            if(customerCSI.getMatchedType().equals(CSIMatchedType.F.name())){
-                warningFullMatchList.add(customerCSI.getWarningCode().getCode());
+            List<NCBDetail> ncbDetailList = ncb.getNcbDetailList();
+            if(ncbDetailList == null || ncbDetailList.size() == 0){
+                customerInfo.setNcbFlag(Boolean.FALSE);
             } else {
-                warningSomeMatchList.add(customerCSI.getWarningCode().getCode());
+                customerInfo.setNcbFlag(Boolean.TRUE);
+                List<BRMSNCBAccountInfo> ncbAccountInfoList = new ArrayList<BRMSNCBAccountInfo>();
+                for(NCBDetail ncbDetail : ncbDetailList){
+                    ncbAccountInfoList.add(getBRMSNCBAccountInfo(ncbDetail, customerInfo.isIndividual(), checkDate));
+                }
+                customerInfo.setNcbAccountInfoList(ncbAccountInfoList);
             }
+
+            List<String> warningFullMatchList = new ArrayList<String>();
+            List<String> warningSomeMatchList = new ArrayList<String>();
+            List<CustomerCSI> customerCSIList = customerCSIDAO.findCustomerCSIByCustomerId(customer.getId());
+            for(CustomerCSI customerCSI : customerCSIList){
+                if(customerCSI.getMatchedType().equals(CSIMatchedType.F.name())){
+                    warningFullMatchList.add(customerCSI.getWarningCode().getCode());
+                } else {
+                    warningSomeMatchList.add(customerCSI.getWarningCode().getCode());
+                }
+            }
+            customerInfo.setCsiFullyMatchCode(warningFullMatchList);
+            customerInfo.setCsiSomeMatchCode(warningSomeMatchList);
+            customerInfo.setQualitativeClass("P");
         }
-        customerInfo.setCsiFullyMatchCode(warningFullMatchList);
-        customerInfo.setCsiSomeMatchCode(warningSomeMatchList);
-        customerInfo.setQualitativeClass("P");
+
         borrowerGroupIncome = borrowerGroupIncome.add(customer.getApproxIncome());
 
             /*Start setting TMB Account for each customer*/

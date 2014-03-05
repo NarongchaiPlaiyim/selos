@@ -217,6 +217,25 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
         exSummaryView.getDeviateCode().remove(selectDeviate);
     }
 
+    public void onChangeRM008(){
+        if(exSummaryView.getRm008Code() == 0){
+            exSummaryView.setRm008Remark("");
+        }
+    }
+
+    public void onChangeRM204(){
+        if(exSummaryView.getRm204Code() == 0){
+            exSummaryView.setRm204Remark("");
+        }
+    }
+
+    public void onChangeRM020(){
+        if(exSummaryView.getRm020Code() == 0){
+            exSummaryView.setRm020Remark("");
+        }
+    }
+
+    //GET SET
     public String getMessage() {
         return message;
     }
