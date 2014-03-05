@@ -24,6 +24,8 @@ public class PrescreenTransform extends Transform {
     BankDAO bankDAO;
     @Inject
     BorrowingTypeDAO borrowingTypeDAO;
+    @Inject
+    CountryDAO countryDAO;
 
     @Inject
     PrescreenDAO prescreenDAO;
@@ -85,6 +87,12 @@ public class PrescreenTransform extends Transform {
         prescreen.setModifyDate(DateTime.now().toDate());
         prescreen.setModifyBy(user);
         prescreen.setModifyFlag(prescreenView.getModifyFlag());
+
+        if (prescreenView.getCountryOfRegister() != null && prescreenView.getCountryOfRegister().getId() != 0){
+            prescreen.setCountryOfRegister(countryDAO.findById(prescreenView.getCountryOfRegister().getId()));
+        } else {
+            prescreen.setCountryOfRegister(null);
+        }
         return prescreen;
     }
 
@@ -134,6 +142,11 @@ public class PrescreenTransform extends Transform {
         prescreenView.setModifyDate(prescreen.getModifyDate());
         prescreenView.setModifyBy(prescreen.getModifyBy());
         prescreenView.setModifyFlag(prescreen.getModifyFlag());
+
+        prescreenView.setCountryOfRegister(prescreen.getCountryOfRegister());
+        if(prescreen.getCountryOfRegister() == null){
+            prescreenView.setCountryOfRegister(new Country());
+        }
 
         return prescreenView;
     }
