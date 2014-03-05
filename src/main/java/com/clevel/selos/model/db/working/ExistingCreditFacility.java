@@ -36,11 +36,11 @@ public class ExistingCreditFacility implements Serializable{
     @Column(name = "total_borrower_exposure")
     private BigDecimal totalBorrowerExposure;
 
+    @Column(name = "total_borrower_od_limit")
+    private BigDecimal totalBorrowerODLimit;
+
     @Column(name = "total_borrower_number_od")
     private BigDecimal totalBorrowerNumberOfExistingOD;
-
-    @Column(name = "total_borrower_od_limit")
-    private BigDecimal totalBorrowerExistingODLimit;
 
     @Column(name = "total_related_com_limit")
     private BigDecimal totalRelatedComLimit;
@@ -59,6 +59,9 @@ public class ExistingCreditFacility implements Serializable{
 
     @Column(name = "total_related_exposure")
     private BigDecimal totalRelatedExposure;
+    
+    @Column(name = "total_related_number_od")
+    private BigDecimal totalRelatedNumberOfExistingOD;
 
     @Column(name = "total_group_com_limit")
     private BigDecimal totalGroupCom;
@@ -184,14 +187,6 @@ public class ExistingCreditFacility implements Serializable{
         this.totalBorrowerNumberOfExistingOD = totalBorrowerNumberOfExistingOD;
     }
 
-    public BigDecimal getTotalBorrowerExistingODLimit() {
-        return totalBorrowerExistingODLimit;
-    }
-
-    public void setTotalBorrowerExistingODLimit(BigDecimal totalBorrowerExistingODLimit) {
-        this.totalBorrowerExistingODLimit = totalBorrowerExistingODLimit;
-    }
-
     public BigDecimal getTotalRelatedComLimit() {
         return totalRelatedComLimit;
     }
@@ -238,6 +233,22 @@ public class ExistingCreditFacility implements Serializable{
 
     public void setTotalRelatedExposure(BigDecimal totalRelatedExposure) {
         this.totalRelatedExposure = totalRelatedExposure;
+    }
+
+    public BigDecimal getTotalBorrowerODLimit() {
+        return totalBorrowerODLimit;
+    }
+
+    public void setTotalBorrowerODLimit(BigDecimal totalBorrowerODLimit) {
+        this.totalBorrowerODLimit = totalBorrowerODLimit;
+    }
+
+    public BigDecimal getTotalRelatedNumberOfExistingOD() {
+        return totalRelatedNumberOfExistingOD;
+    }
+
+    public void setTotalRelatedNumberOfExistingOD(BigDecimal totalRelatedNumberOfExistingOD) {
+        this.totalRelatedNumberOfExistingOD = totalRelatedNumberOfExistingOD;
     }
 
     public BigDecimal getTotalGroupCom() {
@@ -392,10 +403,10 @@ public class ExistingCreditFacility implements Serializable{
                 .append("totalBorrowerRetailLimit", totalBorrowerRetailLimit)
                 .append("totalBorrowerAppInRLOSLimit", totalBorrowerAppInRLOSLimit)
                 .append("totalBorrowerNumberOfExistingOD", totalBorrowerNumberOfExistingOD)
-                .append("totalBorrowerExistingODLimit", totalBorrowerExistingODLimit)
                 .append("totalRelatedComLimit", totalRelatedComLimit)
                 .append("totalRelatedRetailLimit", totalRelatedRetailLimit)
                 .append("totalRelatedAppInRLOSLimit", totalRelatedAppInRLOSLimit)
+                .append("totalRelatedNumberOfExistingOD", totalRelatedNumberOfExistingOD)
                 .append("totalGroupCom", totalGroupCom)
                 .append("totalGroupComOBOD", totalGroupComOBOD)
                 .append("totalGroupExposure", totalGroupExposure)
