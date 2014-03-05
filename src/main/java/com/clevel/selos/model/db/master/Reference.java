@@ -20,6 +20,8 @@ public class Reference implements Serializable {
     private CustomerEntity customerEntity;
     @Column(name = "description")
     private String description;
+    @Column(name = "brms_code")
+    private String brmsCode;
     @OneToOne
     @JoinColumn(name = "borrower_type_id")
     private CustomerEntity borrowerType;
@@ -51,7 +53,9 @@ public class Reference implements Serializable {
     private int unpaidInsurance;
     @Column(name = "pending_claim_lg", nullable = false, columnDefinition = "int default 0")
     private int pendingClaimLG;
-
+    @Column(name = "can_sign_contract",columnDefinition="int default 0")
+    private boolean canSignContract;
+    
     public Reference() {
     }
 
@@ -85,6 +89,14 @@ public class Reference implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getBrmsCode() {
+        return brmsCode;
+    }
+
+    public void setBrmsCode(String brmsCode) {
+        this.brmsCode = brmsCode;
     }
 
     public CustomerEntity getBorrowerType() {
@@ -206,6 +218,14 @@ public class Reference implements Serializable {
     public void setPendingClaimLG(int pendingClaimLG) {
         this.pendingClaimLG = pendingClaimLG;
     }
+    
+    public boolean isCanSignContract() {
+		return canSignContract;
+	}
+    
+    public void setCanSignContact(boolean canSignContract) {
+		this.canSignContract = canSignContract;
+	}
 
     @Override
     public String toString() {
@@ -229,6 +249,7 @@ public class Reference implements Serializable {
                 .append("relationType", relationType)
                 .append("unpaidInsurance", unpaidInsurance)
                 .append("pendingClaimLG", pendingClaimLG)
+                .append("canSignContract", canSignContract)
                 .toString();
     }
 }

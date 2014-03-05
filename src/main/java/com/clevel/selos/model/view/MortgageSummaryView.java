@@ -3,20 +3,14 @@ package com.clevel.selos.model.view;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.clevel.selos.model.MortgageSignLocationType;
+import com.clevel.selos.model.MortgageConfirmedType;
 import com.clevel.selos.model.db.master.User;
 
 public class MortgageSummaryView implements Serializable {
     private static final long serialVersionUID = 5116739393766192381L;
 	
     private long id;
-    private long agreementId;
-    private Date loanContractDate;
-    private MortgageSignLocationType signingLocation;
-    private String comsNumber;
-    
-    private int updLocation;
-    
+    private MortgageConfirmedType confirmed;
     private Date modifyDate;
     private User modifyBy;
     
@@ -29,41 +23,6 @@ public class MortgageSummaryView implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public long getAgreementId() {
-		return agreementId;
-	}
-
-	public void setAgreementId(long agreementId) {
-		this.agreementId = agreementId;
-	}
-
-	public Date getLoanContractDate() {
-		return loanContractDate;
-	}
-
-	public void setLoanContractDate(Date loanContractDate) {
-		this.loanContractDate = loanContractDate;
-	}
-
-	public MortgageSignLocationType getSigningLocation() {
-		if (signingLocation == null)
-			return MortgageSignLocationType.NA;
-		else
-			return signingLocation;
-	}
-
-	public void setSigningLocation(MortgageSignLocationType signingLocation) {
-		this.signingLocation = signingLocation;
-	}
-
-	public String getComsNumber() {
-		return comsNumber;
-	}
-
-	public void setComsNumber(String comsNumber) {
-		this.comsNumber = comsNumber;
 	}
 
 	public Date getModifyDate() {
@@ -81,12 +40,12 @@ public class MortgageSummaryView implements Serializable {
 	public void setModifyBy(User modifyBy) {
 		this.modifyBy = modifyBy;
 	}
-	
-	public int getUpdLocation() {
-		return updLocation;
+	public MortgageConfirmedType getConfirmed() {
+		if (confirmed == null)
+			confirmed = MortgageConfirmedType.NA;
+		return confirmed;
 	}
-	
-	public void setUpdLocation(int updLocation) {
-		this.updLocation = updLocation;
+	public void setConfirmed(MortgageConfirmedType confirmed) {
+		this.confirmed = confirmed;
 	}
 }

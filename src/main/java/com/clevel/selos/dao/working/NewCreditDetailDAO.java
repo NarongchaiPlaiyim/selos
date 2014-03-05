@@ -21,6 +21,7 @@ public class NewCreditDetailDAO extends GenericDAO<NewCreditDetail, Long> {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     public NewCreditDetailDAO() {}
 
@@ -51,10 +52,25 @@ public class NewCreditDetailDAO extends GenericDAO<NewCreditDetail, Long> {
         criteria.add(Restrictions.eq("uwDecision",DecisionType.APPROVED));
         criteria.createAlias("productProgram", "product_program")
         	.add(Restrictions.eq("product_program.ba",isTopUpBA));
-        
-        //TODO Add restriction for listing in BA/PA
-        
-       
+        criteria.addOrder(Order.asc("id"));
+        List<NewCreditDetail> newCreditDetailList = (List<NewCreditDetail>) criteria.list();
+        return newCreditDetailList;
+    }
+
+    public List<NewCreditDetail> findApprovedNewCreditDetail(long workCaseId) {
+    	 Criteria criteria = createCriteria();
+         criteria.add(Restrictions.eq("workCase.id", workCaseId));
+         criteria.add(Restrictions.eq("proposeType",ProposeType.A));
+         criteria.add(Restrictions.eq("uwDecision",DecisionType.APPROVED));
+         criteria.addOrder(Order.asc("id"));
+         List<NewCreditDetail> newCreditDetailList = (List<NewCreditDetail>) criteria.list();
+         return newCreditDetailList;
+    }
+
+    public List<NewCreditDetail> findNewCreditDetail(long workCaseId, ProposeType proposeType){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.eq("proposeType", proposeType));
         List<NewCreditDetail> newCreditDetailList = (List<NewCreditDetail>) criteria.list();
         return newCreditDetailList;
     }

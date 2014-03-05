@@ -1,5 +1,6 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.model.CalLimitType;
 import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.db.master.BankAccountStatus;
 import com.clevel.selos.model.db.master.User;
@@ -16,6 +17,9 @@ public class ExistingCreditDetailTransform extends Transform {
 
     @Inject
     ProductTransform productTransform;
+
+    @Inject
+    BankAccountStatusTransform bankAccountStatusTransform;
 
     @Inject
     public ExistingCreditDetailTransform() {
@@ -53,7 +57,7 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetail.setAccountNumber(existingCreditDetailView.getAccountNumber());
             existingCreditDetail.setAccountName(existingCreditDetailView.getAccountName());
             existingCreditDetail.setAccountSuf(existingCreditDetailView.getAccountSuf());
-            existingCreditDetail.setExistAccountStatus(existingCreditDetailView.getExistAccountStatus());
+            existingCreditDetail.setExistAccountStatus(bankAccountStatusTransform.getBankAccountStatus(existingCreditDetailView.getExistAccountStatusView()));
             existingCreditDetail.setExistProductProgram(productTransform.transformToModel(existingCreditDetailView.getExistProductProgramView()));
             existingCreditDetail.setExistCreditType(productTransform.transformToModel(existingCreditDetailView.getExistCreditTypeView()));
             existingCreditDetail.setProductProgram(existingCreditDetailView.getProductProgram());
@@ -95,7 +99,7 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetailView.setAccountNumber(existingCreditDetail.getAccountNumber());
             existingCreditDetailView.setAccountName(existingCreditDetail.getAccountName());
             existingCreditDetailView.setAccountSuf(existingCreditDetail.getAccountSuf());
-            existingCreditDetailView.setExistAccountStatus(existingCreditDetail.getExistAccountStatus());
+            existingCreditDetailView.setExistAccountStatusView(bankAccountStatusTransform.getBankAccountStatusView(existingCreditDetail.getExistAccountStatus()));
             existingCreditDetailView.setExistProductProgramView(productTransform.transformToView(existingCreditDetail.getExistProductProgram()));
             existingCreditDetailView.setExistCreditTypeView(productTransform.transformToView(existingCreditDetail.getExistCreditType()));
             existingCreditDetailView.setProductProgram(existingCreditDetail.getProductProgram());
@@ -115,6 +119,13 @@ public class ExistingCreditDetailTransform extends Transform {
                 existingCreditDetailView.setCreditCategory(CreditCategory.RETAIL);
             } else if(existingCreditDetail.getCreditCategory()==CreditCategory.RLOS_APP_IN.value()){
                 existingCreditDetailView.setCreditCategory(CreditCategory.RLOS_APP_IN);
+            }
+
+            existingCreditDetailView.setUsePCE(false);
+            if(existingCreditDetailView.getExistCreditTypeView()!=null && existingCreditDetailView.getExistCreditTypeView().getId()!=0){
+                if(CalLimitType.getCalLimitType(existingCreditDetailView.getExistCreditTypeView().getCalLimitType()) == CalLimitType.PCE){
+                    existingCreditDetailView.setUsePCE(true);
+                }
             }
 
 

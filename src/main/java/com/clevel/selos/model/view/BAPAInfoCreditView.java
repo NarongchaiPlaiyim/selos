@@ -23,6 +23,7 @@ public class BAPAInfoCreditView implements Serializable,Comparable<BAPAInfoCredi
 	private boolean fromCredit;
 	private BigDecimal limit;
 	private BigDecimal premiumAmount;
+	private BigDecimal expenseAmount;
 	
 	private boolean needUpdate;
 	
@@ -147,21 +148,10 @@ public class BAPAInfoCreditView implements Serializable,Comparable<BAPAInfoCredi
 
 
 	public BigDecimal getExpenseAmount() {
-		if (type == null)
-			return getPremiumAmount();
-		switch (type) {
-			case BA:
-				if (limit != null && premiumAmount != null)
-					return limit.subtract(premiumAmount);
-				else if (limit != null) 
-					return limit;
-				else if (premiumAmount != null)
-					return premiumAmount;
-				else
-					return new BigDecimal(0);
-			default :
-				return getPremiumAmount();
-		}
+		return expenseAmount;
+	}
+	public void setExpenseAmount(BigDecimal expenseAmount) {
+		this.expenseAmount = expenseAmount;
 	}
 	
 	@Override
@@ -175,8 +165,23 @@ public class BAPAInfoCreditView implements Serializable,Comparable<BAPAInfoCredi
 			if (this.fromCredit)
 				return -1;
 			else
-				return 0;
+				return 1;
 		}
 		return Util.compareLong(id, obj.id);
+	}
+	
+	public void updateValue(BAPAInfoCreditView view) {
+		id = view.id;
+		type = view.type;
+		creditId = view.creditId;
+		productProgram = view.productProgram;
+		creditType = view.creditType;
+		loanPurpose = view.loanPurpose;
+		payByCustomer = view.payByCustomer;
+		fromCredit = view.fromCredit;
+		limit = view.limit;
+		premiumAmount = view.premiumAmount;
+		expenseAmount = view.expenseAmount;
+		needUpdate = view.needUpdate;
 	}
 }

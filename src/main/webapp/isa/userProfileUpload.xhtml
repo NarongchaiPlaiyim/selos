@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Isa Report</title>
+        <h:outputStylesheet name="css/style.css" />
+        <h:outputScript library="js" name="custom.js" />
+    </h:head>
+    <h:body>
+        <p:panel id="pnl_maincontainer">
+            <div id="main_container">
+                <ui:include src="../site/include/header_logo.xhtml"/>
+                <ui:include src="../site/include/menubar_isa.xhtml"/>
+                <div id="content_container">
+                    <h:form id="useruploadForm" >
+                        <div class="body_lpane">
+                            <div><label class="subject">Manage User</label></div>
+                            <a class="step_border" href="manageUser.jsf">User Profile</a>
+                            <a class="step_border_select" href="userProfileUpload.jsf">Upload User Profile</a>
+                        </div>
+                        <div class="body_rpane">
+                            <label class="subject">Upload User Profile</label>
+                            <p:fieldset legend="" style="width: 700px">
+
+                                <p:panelGrid columns="3">
+                                <h:outputText value="เลือก File ข้อมูลผู้ใช้ระบบ:"/>
+                                <p:fileUpload fileUploadListener="#{isaUpload.uploadUserFile}"
+                                              mode="advanced"
+                                              showButtons="false"
+                                              update=":useruploadForm"
+                                              allowTypes="/(\.|\/)(csv)$/"
+                                              sizeLimit="5000000"
+                                        />
+
+                                    <!--<p:commandButton value="Submit"-->
+                                                     <!--ajax="false"-->
+                                                     <!--actionListener="#{isaUpload.uploadUserFile}"/>-->
+                                </p:panelGrid>
+
+                            </p:fieldset>
+
+                            <p:dataTable value="#{isaUpload.userUploadViews}" var="o" widgetVar="okl" style="width: 700px">
+                                <p:column>
+                                   Upload Time:
+                                </p:column>
+                                <p:column>
+                                       #{o.uploadTime}
+                                </p:column>
+                                <p:column>
+                                       Result File:
+                                </p:column>
+                                <p:column>
+                                      <p:commandLink value="#{o.resultFile}"  ajax="false" update=":useruploadForm">
+                                          <f:setPropertyActionListener value="#{o.resultFile}" target="#{isaUpload.downloadFilePart}"  />
+                                          <p:fileDownload value="#{isaUpload.file}"/>
+                                      </p:commandLink>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </p:panel>
+    </h:body>
+</f:view>
+</html>

@@ -46,8 +46,6 @@ public class ExSummaryControl extends BusinessControl {
     @Inject
     private DBRDAO dbrDAO;
     @Inject
-    private DecisionDAO decisionDAO;
-    @Inject
     private NewCreditFacilityDAO newCreditFacilityDAO;
     @Inject
     private RiskTypeDAO riskTypeDAO;
@@ -271,6 +269,8 @@ public class ExSummaryControl extends BusinessControl {
             } else {
                 exSumCharacteristicView.setCustomer("-");
             }
+        } else {
+            exSumCharacteristicView.setCustomer("-");
         }
 
         exSumCharacteristicView.setIncome(exSummary.getIncome());

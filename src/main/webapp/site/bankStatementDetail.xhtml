@@ -655,6 +655,7 @@
                     <td colspan="2" style="height:28px;"></td>
                 </tr>
 
+                <!-- Average Section -->
                 <tr>
                     <td class="title" >
                         <h:outputText value="#{msg.get('app.bankStmtDetail.label.avgIncomeGross')}"/>
@@ -904,6 +905,7 @@
 
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                     severity="#{bankStatementDetail.severity}"
                      header="#{bankStatementDetail.messageHeader}" message="#{bankStatementDetail.message}">
         <p:commandButton value="OK"
                          process="@this"

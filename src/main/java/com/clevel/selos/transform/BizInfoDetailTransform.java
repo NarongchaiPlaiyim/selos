@@ -187,4 +187,13 @@ public class BizInfoDetailTransform extends Transform {
         return bizInfoDetailList;
     }
 
+    public List<BizInfoDetailView> transformToViewList(List<BizInfoDetail> bizInfoDetails){
+        List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
+
+        for(BizInfoDetail item : bizInfoDetails){
+            BizInfoDetailView bizInfoDetailView = transformToView(item);
+            bizInfoDetailViewList.add(bizInfoDetailView);
+        }
+        return bizInfoDetailViewList;
+    }
 }

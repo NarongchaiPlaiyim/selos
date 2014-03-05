@@ -12,7 +12,7 @@ public class DisbursementCredit {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_DISBURSEMENT_SUM_REQ")
     private long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "disbursement_id")
     private Disbursement disbursement;
 
@@ -25,4 +25,44 @@ public class DisbursementCredit {
 
     @Column(name = "diff_amount")
     private BigDecimal diffAmount;
+
+	public Disbursement getDisbursement() {
+		return disbursement;
+	}
+
+	public void setDisbursement(Disbursement disbursement) {
+		this.disbursement = disbursement;
+	}
+
+	public NewCreditDetail getCreditDetail() {
+		return creditDetail;
+	}
+
+	public void setCreditDetail(NewCreditDetail creditDetail) {
+		this.creditDetail = creditDetail;
+	}
+
+	public BigDecimal getDisburseAmount() {
+		return disburseAmount;
+	}
+
+	public void setDisburseAmount(BigDecimal disburseAmount) {
+		this.disburseAmount = disburseAmount;
+	}
+
+	public BigDecimal getDiffAmount() {
+		return diffAmount;
+	}
+
+	public void setDiffAmount(BigDecimal diffAmount) {
+		this.diffAmount = diffAmount;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 }

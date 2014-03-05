@@ -29,6 +29,7 @@
             <ui:include src="include/menubar.xhtml" />
            
             <!-- End Menu -->
+			<h:panelGroup id="full_main_container" layout="block">
             <div id="content_container">
                 <div id="content_name">#{msg.get('app.baInfo.subtitle')}</div>
                 <div id="content">
@@ -149,8 +150,7 @@
 	                           					id='upd_baCustomer' 
 	                           					icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
                            						process="@this"
-                           						onstart="p_blockUI.show()"
-                           						oncomplete="p_blockUI.hide();p_baApplyInfoDlg.show();"
+                           						oncomplete="p_baApplyInfoDlg.show();"
                            						actionListener="#{baInfo.onOpenApplyInformationDialog(customer)}"
                            						style="margin-right:0px !important"
                            						update=":baApplyInfoDlgForm"
@@ -249,8 +249,7 @@
 	                           			<p:column styleClass="center" style="width:50px;">
 	                           				<p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
                            						process="@this"
-	                           						onstart="p_blockUI.show()"
-	                           						oncomplete="p_blockUI.hide();p_bapaApplyInfoDlg.show();"
+	                           						oncomplete="p_bapaApplyInfoDlg.show();"
 	                           						actionListener="#{baInfo.onOpenUpdateBAPAInformaionDialog(credit)}"
 	                           						update=":bapaApplyInfoDlg"
 	                           						style="margin-right:0px !important"
@@ -356,8 +355,10 @@
 	                             <td colspan="100%" class="center">
 	                                 <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
 	                                 	styleClass="medium"
-	                                 	oncomplete="p_saveBAInformationDlg.show();"
-	                                 	 />
+										onstart="handleOnStartOpenCfmDlg();"
+										oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveBAInformationDlg);"
+										update=":frmMain:full_main_container,:result_dialog"
+										/>
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"
 										/>
@@ -373,14 +374,11 @@
             <!-- Start Footer -->
             <ui:include src="include/footer.xhtml" />
             <!-- End Footer -->
+            </h:panelGroup>
             </div>
-           	
-           	<p:blockUI widgetVar="p_blockUI" block=":frmMain" trigger='saveBtn,cancelBtn,addBtn'>
-           		LOADING<br />
-                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-             </p:blockUI>
         </h:form>
     </p:panel>
+    <ui:include src="dialog/postLoadingAndErrorDialog.xhtml" />
     <p:dialog id='baApplyInfoDlg' widgetVar="p_baApplyInfoDlg"
 		header="#{msg.get('app.baInfo.ba.dialog.title')}" 
 		onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()' resizable="false"
@@ -410,7 +408,7 @@
 		<ui:param name="formId" value="saveBAInformationFrm"/>
 		<ui:param name="controller" value="#{baInfo}"/>
 		<ui:param name="action" value="onSaveBAInformation"/>
-		<ui:param name="update" value=":frmMain"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
 </h:body>
 </f:view>

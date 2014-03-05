@@ -31,7 +31,6 @@ public class NewCreditFacilityTransform extends Transform {
         newCreditFacility.setWorkCase(workCase);
 
         if (newCreditFacilityView.getId() != 0) {
-            //newCreditFacility.setId(newCreditFacilityView.getId());
             newCreditFacility = newCreditFacilityDAO.findById(newCreditFacilityView.getId());
             newCreditFacility.setModifyDate(newCreditFacilityView.getModifyDate());
             newCreditFacility.setModifyBy(newCreditFacilityView.getModifyBy());
@@ -83,13 +82,6 @@ public class NewCreditFacilityTransform extends Transform {
         newCreditFacility.setGuarantorBA(newCreditFacilityView.getGuarantorBA());
         newCreditFacility.setReasonForReduction(newCreditFacilityView.getReasonForReduction());
         newCreditFacility.setCreditCustomerType(newCreditFacilityView.getCreditCustomerType());
-        newCreditFacility.setNumberMonthsFromApprDate(newCreditFacilityView.getNumberMonthsFromApprDate());
-        newCreditFacility.setTotalNumberOfCoreAsset(newCreditFacilityView.getTotalNumberOfCoreAsset());
-        newCreditFacility.setTotalNumberOfNonCoreAsset(newCreditFacilityView.getTotalNumberOfNonCoreAsset());
-        newCreditFacility.setTotalMortgageValue(newCreditFacilityView.getTotalMortgageValue());
-        newCreditFacility.setTotalTCGGuaranteeAmount(newCreditFacilityView.getTotalTCGGuaranteeAmount());
-        newCreditFacility.setTotalIndvGuaranteeAmount(newCreditFacilityView.getTotalIndvGuaranteeAmount());
-        newCreditFacility.setTotalJurisGuaranteeAmount(newCreditFacilityView.getTotalJurisGuaranteeAmount());
 
         if (newCreditFacilityView.getLoanRequestType().getId() != 0) {
             CreditRequestType creditRequestType = creditRequestTypeDAO.findById(newCreditFacilityView.getLoanRequestType().getId());
@@ -106,6 +98,29 @@ public class NewCreditFacilityTransform extends Transform {
         newCreditFacility.setTwentyFivePercentShareRelatedTMBLending(newCreditFacilityView.getTwentyFivePercentShareRelatedTMBLending());
         newCreditFacility.setSingleLendingLimit(newCreditFacilityView.getSingleLendingLimit());
         newCreditFacility.setTotalLoanWCTMB(newCreditFacilityView.getTotalLoanWCTMB());
+        newCreditFacility.setIntFeeDOA(newCreditFacilityView.getIntFeeDOA());
+        newCreditFacility.setTotalNumberOfCoreAsset(newCreditFacilityView.getTotalNumberOfCoreAsset());
+        newCreditFacility.setTotalNumberOfNonCoreAsset(newCreditFacilityView.getTotalNumberOfNonCoreAsset());
+        newCreditFacility.setTotalTCGGuaranteeAmount(newCreditFacilityView.getTotalTCGGuaranteeAmount());
+        newCreditFacility.setTotalIndvGuaranteeAmount(newCreditFacilityView.getTotalIndvGuaranteeAmount());
+        newCreditFacility.setTotalJurisGuaranteeAmount(newCreditFacilityView.getTotalJurisGuaranteeAmount());
+        newCreditFacility.setTotalMortgageValue(newCreditFacilityView.getTotalMortgageValue());
+
+        // Approve
+        newCreditFacility.setTotalApproveCredit(newCreditFacilityView.getTotalApproveCredit());
+        newCreditFacility.setTotalApproveCommercial(newCreditFacilityView.getTotalApproveCommercial());
+        newCreditFacility.setTotalApproveComAndOBOD(newCreditFacilityView.getTotalApproveComAndOBOD());
+        newCreditFacility.setTotalApproveExposure(newCreditFacilityView.getTotalApproveExposure());
+        newCreditFacility.setTotalApproveNumOfNewOD(newCreditFacilityView.getTotalApproveNumOfNewOD());
+        newCreditFacility.setTotalApproveNumProposeCreditFac(newCreditFacilityView.getTotalApproveNumProposeCreditFac());
+        newCreditFacility.setTotalApproveNumContingenPropose(newCreditFacilityView.getTotalApproveNumContingenPropose());
+        newCreditFacility.setTotalApproveNumOfCoreAsset(newCreditFacilityView.getTotalApproveNumOfCoreAsset());
+        newCreditFacility.setTotalApproveNumOfNonCoreAsset(newCreditFacilityView.getTotalApproveNumOfNonCoreAsset());
+        newCreditFacility.setTotalApproveGuaranteeAmt(newCreditFacilityView.getTotalApproveGuaranteeAmt());
+        newCreditFacility.setTotalApproveTCGGuaranteeAmt(newCreditFacilityView.getTotalApproveTCGGuaranteeAmt());
+        newCreditFacility.setTotalApproveIndiGuaranteeAmt(newCreditFacilityView.getTotalApproveIndiGuaranteeAmt());
+        newCreditFacility.setTotalApproveJurisGuaranteeAmt(newCreditFacilityView.getTotalApproveJurisGuaranteeAmt());
+
         return newCreditFacility;
     }
 
@@ -173,14 +188,30 @@ public class NewCreditFacilityTransform extends Transform {
         newCreditFacilityView.setRelatedTMBLending(newCreditFacility.getRelatedTMBLending());
         newCreditFacilityView.setTwentyFivePercentShareRelatedTMBLending(newCreditFacility.getTwentyFivePercentShareRelatedTMBLending());
         newCreditFacilityView.setSingleLendingLimit(newCreditFacility.getSingleLendingLimit());
-        newCreditFacilityView.setNumberMonthsFromApprDate(newCreditFacility.getNumberMonthsFromApprDate());
+        newCreditFacilityView.setTotalLoanWCTMB(newCreditFacility.getTotalLoanWCTMB());
+        newCreditFacilityView.setIntFeeDOA(newCreditFacility.getIntFeeDOA());
         newCreditFacilityView.setTotalNumberOfCoreAsset(newCreditFacility.getTotalNumberOfCoreAsset());
         newCreditFacilityView.setTotalNumberOfNonCoreAsset(newCreditFacility.getTotalNumberOfNonCoreAsset());
-        newCreditFacilityView.setTotalMortgageValue(newCreditFacility.getTotalMortgageValue());
         newCreditFacilityView.setTotalTCGGuaranteeAmount(newCreditFacility.getTotalTCGGuaranteeAmount());
         newCreditFacilityView.setTotalIndvGuaranteeAmount(newCreditFacility.getTotalIndvGuaranteeAmount());
         newCreditFacilityView.setTotalJurisGuaranteeAmount(newCreditFacility.getTotalJurisGuaranteeAmount());
-        newCreditFacilityView.setTotalLoanWCTMB(newCreditFacility.getTotalLoanWCTMB());
+        newCreditFacilityView.setTotalMortgageValue(newCreditFacility.getTotalMortgageValue());
+
+        // Approve
+        newCreditFacilityView.setTotalApproveCredit(newCreditFacility.getTotalApproveCredit());
+        newCreditFacilityView.setTotalApproveCommercial(newCreditFacility.getTotalApproveCommercial());
+        newCreditFacilityView.setTotalApproveComAndOBOD(newCreditFacility.getTotalApproveComAndOBOD());
+        newCreditFacilityView.setTotalApproveExposure(newCreditFacility.getTotalApproveExposure());
+        newCreditFacilityView.setTotalApproveNumOfNewOD(newCreditFacility.getTotalApproveNumOfNewOD());
+        newCreditFacilityView.setTotalApproveNumProposeCreditFac(newCreditFacility.getTotalApproveNumProposeCreditFac());
+        newCreditFacilityView.setTotalApproveNumContingenPropose(newCreditFacility.getTotalApproveNumContingenPropose());
+        newCreditFacilityView.setTotalApproveNumOfCoreAsset(newCreditFacility.getTotalApproveNumOfCoreAsset());
+        newCreditFacilityView.setTotalApproveNumOfNonCoreAsset(newCreditFacility.getTotalApproveNumOfNonCoreAsset());
+        newCreditFacilityView.setTotalApproveGuaranteeAmt(newCreditFacility.getTotalApproveGuaranteeAmt());
+        newCreditFacilityView.setTotalApproveTCGGuaranteeAmt(newCreditFacility.getTotalApproveTCGGuaranteeAmt());
+        newCreditFacilityView.setTotalApproveIndiGuaranteeAmt(newCreditFacility.getTotalApproveIndiGuaranteeAmt());
+        newCreditFacilityView.setTotalApproveJurisGuaranteeAmt(newCreditFacility.getTotalApproveJurisGuaranteeAmt());
+
         return newCreditFacilityView;
     }
 

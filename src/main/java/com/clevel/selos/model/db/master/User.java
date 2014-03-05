@@ -50,6 +50,9 @@ public class User implements Serializable {
     @OneToOne
     @JoinColumn(name = "division_id")
     private UserDivision division;
+    @OneToOne
+    @JoinColumn(name = "position_id")
+    private UserPosition position;
     @Column(name = "active")
     private int active;
     @Column(name = "status", nullable = false)

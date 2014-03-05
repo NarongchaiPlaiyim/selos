@@ -20,8 +20,11 @@
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{creditFacPropose.guarantorList}"
                                        var="guarantor"
-                                       itemLabel="#{guarantor.firstNameTh} #{guarantor.lastNameTh}"
+                                       itemLabel="#{guarantor.titleTh.titleTh} #{guarantor.firstNameTh} #{guarantor.lastNameTh}"
                                        itemValue="#{guarantor.id}"/>
+                        <p:ajax event="change"
+                                process="@this"
+                                update="@this"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -51,15 +54,6 @@
                                  style="width: 100%;">
 
                         <p:columnGroup type="header">
-                            <!--<p:row>-->
-                                <!--<p:column style="width: 30px; padding: 5px 10px !important;"/>-->
-                                <!--<p:column style="width: 300px; padding: 5px 10px !important;" headerText="#{msg.get('app.credit.facility.propose.label.collateral.account')}"/>-->
-                                <!--<p:column style="width: 80px; padding: 5px 10px !important;" headerText="#{msg.get('app.credit.facility.propose.label.collateral.requestCreditType')}"/>-->
-                                <!--<p:column style="width: 80px; padding: 5px 10px !important;" headerText="#{msg.get('app.credit.facility.propose.label.collateral.productProgram')}"/>-->
-                                <!--<p:column style="width: 80px; padding: 5px 10px !important;" headerText="#{msg.get('app.credit.facility.propose.label.collateral.creditFacility')}"/>-->
-                                <!--<p:column style="width: 130px; padding: 5px 10px !important;" headerText="#{msg.get('app.credit.facility.propose.label.collateral.limit')}"/>-->
-                                <!--<p:column style="width: 130px; padding: 5px 10px !important;" headerText="#{msg.get('app.credit.facility.propose.label.guarantor.guaranteeAmount')}"/>-->
-                            <!--</p:row>-->
                             <p:row>
                                 <p:column style="width: 5%; padding: 5px 10px !important;"/>
                                 <p:column style="width: 25%; padding: 5px 10px !important;"
@@ -70,7 +64,7 @@
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.productProgram')}"/>
                                 <p:column style="width: 10%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.creditFacility')}"/>
-                                <p:column style="width: 15%; padding: 5px 10px !important;"
+                                <p:column style="width: 20%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.limit')}"/>
                                 <p:column style="width: 20%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.guarantor.guaranteeAmount')}"/>
@@ -110,7 +104,7 @@
 
                         <p:column styleClass="center top">
                             <p:inputText value="#{creditTypeItem.guaranteeAmount}"
-                                         maxlength="18"
+                                         maxlength="17"
                                          onclick="this.select()"
                                          onkeydown="return onKeyDownMoney(event);"
                                          onkeypress="return onKeyPressMoney(event);"
@@ -137,7 +131,7 @@
                             action="#{creditFacPropose.onSaveGuarantorInfoDlg}"
                             process=":guarantorDlgForm"
                             update=":guarantorDlgForm,:frmMain,:msgBoxSystemMessagePanel"
-                            oncomplete="handleGuarantorInfoRequest(xhr, status, args)"/>
+                            oncomplete="handleDialogRequest(xhr, status, args, 'guarantorInfoDlg')"/>
                     <p:spacer width="10" height="0"/>
                     <p:commandButton
                             value="#{msg.get('app.credit.facility.propose.cancelButton')}"

@@ -25,10 +25,7 @@ public class ExistingCreditDetailView implements Serializable {
     private String accountSuf;
     private String accountNumber;
     private int accountStatusID;
-
-    private BankAccountStatusView accountStatus;
-
-    private BankAccountStatus existAccountStatus;
+    private BankAccountStatusView existAccountStatusView;
     private String productProgram;
     private ProductProgramView existProductProgramView;
     private String creditType;
@@ -54,6 +51,8 @@ public class ExistingCreditDetailView implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
+
+    private boolean isUsePCE;
 
     private List<ExistingCreditTierDetailView> existingCreditTierDetailViewList;
     private List<ExistingSplitLineDetailView> existingSplitLineDetailViewList;
@@ -154,20 +153,12 @@ public class ExistingCreditDetailView implements Serializable {
         this.accountStatusID = accountStatusID;
     }
 
-    public BankAccountStatusView getAccountStatus() {
-        return accountStatus;
+    public BankAccountStatusView getExistAccountStatusView() {
+        return existAccountStatusView;
     }
 
-    public void setAccountStatus(BankAccountStatusView accountStatus) {
-        this.accountStatus = accountStatus;
-    }
-
-    public BankAccountStatus getExistAccountStatus() {
-        return existAccountStatus;
-    }
-
-    public void setExistAccountStatus(BankAccountStatus existAccountStatus) {
-        this.existAccountStatus = existAccountStatus;
+    public void setExistAccountStatusView(BankAccountStatusView existAccountStatusView) {
+        this.existAccountStatusView = existAccountStatusView;
     }
 
     public String getProductProgram() {
@@ -354,6 +345,14 @@ public class ExistingCreditDetailView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    public boolean isUsePCE() {
+        return isUsePCE;
+    }
+
+    public void setUsePCE(boolean usePCE) {
+        isUsePCE = usePCE;
+    }
+
     public List<ExistingCreditTierDetailView> getExistingCreditTierDetailViewList() {
         return existingCreditTierDetailViewList;
     }
@@ -381,8 +380,7 @@ public class ExistingCreditDetailView implements Serializable {
                 .append("accountSuf", accountSuf)
                 .append("accountNumber", accountNumber)
                 .append("accountStatusID", accountStatusID)
-                .append("accountStatus", accountStatus)
-                .append("existAccountStatus", existAccountStatus)
+                .append("existAccountStatusView", existAccountStatusView)
                 .append("productProgram", productProgram)
                 .append("existProductProgramView", existProductProgramView)
                 .append("creditType", creditType)
@@ -401,6 +399,7 @@ public class ExistingCreditDetailView implements Serializable {
                 .append("source", source)
                 .append("tenor", tenor)
                 .append("accountRef", accountRef)
+                .append("isUsePCE", isUsePCE)
                 .append("existingCreditTierDetailViewList", existingCreditTierDetailViewList)
                 .append("existingSplitLineDetailViewList", existingSplitLineDetailViewList)
                 .append("productSegment", productSegment)

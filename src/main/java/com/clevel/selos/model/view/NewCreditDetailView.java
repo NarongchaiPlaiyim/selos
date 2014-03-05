@@ -4,7 +4,7 @@ import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -24,6 +24,7 @@ public class NewCreditDetailView implements Serializable {
     private int useCount;
     private int seq;
     private int requestType;
+    private int isSetupCompleted;
     private int isRefinance;
     private ProductProgramView productProgramView;
     private CreditTypeView creditTypeView;
@@ -52,12 +53,14 @@ public class NewCreditDetailView implements Serializable {
     private User modifyBy;
     private List<NewCreditTierDetailView> newCreditTierDetailViewList;
     private ProposeType proposeType;
+    private boolean modeSaved;
 
     public NewCreditDetailView() {
         reset();
     }
 
     public void reset() {
+        this.modeSaved=false;
         this.noFlag = false;
         this.guaranteeAmount = BigDecimal.ZERO;
         this.accountName = "";
@@ -97,6 +100,14 @@ public class NewCreditDetailView implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public boolean isModeSaved() {
+        return modeSaved;
+    }
+
+    public void setModeSaved(boolean modeSaved) {
+        this.modeSaved = modeSaved;
     }
 
     public Date getCreateDate() {
@@ -424,4 +435,12 @@ public class NewCreditDetailView implements Serializable {
                 .append("newCreditTierDetailViewList", newCreditTierDetailViewList)
                 .toString();
     }
+
+	public int getIsSetupCompleted() {
+		return isSetupCompleted;
+	}
+
+	public void setIsSetupCompleted(int isSetupCompleted) {
+		this.isSetupCompleted = isSetupCompleted;
+	}
 }

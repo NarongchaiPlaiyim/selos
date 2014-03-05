@@ -43,6 +43,8 @@ public class Obligation implements Serializable {
     private String tdrFlag;
     private BigDecimal numMonthIntPastDue;
     private BigDecimal numMonthIntPastDueTDRAcc;
+    private BigDecimal tmbDelPriDay;
+    private BigDecimal tmbDelIntDay;
     private BigDecimal tmbInstallmentAmt;
     private String covenantFlag;
     private String reviewFlag;
@@ -331,6 +333,22 @@ public class Obligation implements Serializable {
 
     public void setNumMonthIntPastDueTDRAcc(BigDecimal numMonthIntPastDueTDRAcc) {
         this.numMonthIntPastDueTDRAcc = numMonthIntPastDueTDRAcc;
+    }
+
+    public BigDecimal getTmbDelPriDay() {
+        return tmbDelPriDay;
+    }
+
+    public void setTmbDelPriDay(BigDecimal tmbDelPriDay) {
+        this.tmbDelPriDay = tmbDelPriDay;
+    }
+
+    public BigDecimal getTmbDelIntDay() {
+        return tmbDelIntDay;
+    }
+
+    public void setTmbDelIntDay(BigDecimal tmbDelIntDay) {
+        this.tmbDelIntDay = tmbDelIntDay;
     }
 
     public BigDecimal getTmbInstallmentAmt() {

@@ -2,14 +2,16 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.ProposeType;
+import com.clevel.selos.model.db.working.NewCollateralSub;
+import com.clevel.selos.model.db.working.NewCollateralSubOwner;
+import com.clevel.selos.model.db.working.WorkCase;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Order;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 
 public class NewCollateralSubOwnerDAO extends GenericDAO<NewCollateralSubOwner, Long> {
@@ -21,21 +23,21 @@ public class NewCollateralSubOwnerDAO extends GenericDAO<NewCollateralSubOwner, 
     NewCreditFacilityDAO newCreditFacilityDAO;
 
     @Inject
-    public NewCollateralSubOwnerDAO() {
-    }
+    public NewCollateralSubOwnerDAO() {}
 
     @SuppressWarnings("unchecked")
     public List<NewCollateralSubOwner> getListNewCollateralSubCustomer(NewCollateralSub newCollateralSub) {
         log.info("getListNewCollateralSubCustomer. (newCollateralSub: {})", newCollateralSub);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCollateralSub", newCollateralSub));
-        criteria.addOrder(Order.asc("newCollateralSub.id"));
+        criteria.setFetchMode("customer", FetchMode.LAZY);
         List<NewCollateralSubOwner> newCollateralSubCustomerList = (List<NewCollateralSubOwner>)criteria.list();
         log.info("getList. (result size: {})", newCollateralSubCustomerList.size());
 
         return newCollateralSubCustomerList;
 
     }
+/*
 
     public List<NewCollateralSubOwner> getListByWorkCase(WorkCase workCase){
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
@@ -46,11 +48,23 @@ public class NewCollateralSubOwnerDAO extends GenericDAO<NewCollateralSubOwner, 
                     for(NewCollateralSub newCollateralSub : newCollateralHead.getNewCollateralSubList()){
                         criteria.add(Restrictions.eq("newCollateralSub", newCollateralSub));
                     }
+
                 }
             }
         }
+        criteria.setFetchMode("customer", FetchMode.LAZY);
         List<NewCollateralSubOwner> newCollateralSubOwnerList = criteria.list();
 
+        return newCollateralSubOwnerList;
+    }
+*/
+
+    public List<NewCollateralSubOwner> getListByWorkCase(WorkCase workCase,ProposeType proposeType){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase", workCase));
+        criteria.add(Restrictions.eq("proposeType", proposeType));
+        criteria.setFetchMode("customer", FetchMode.LAZY);
+        List<NewCollateralSubOwner> newCollateralSubOwnerList = criteria.list();
         return newCollateralSubOwnerList;
     }
 

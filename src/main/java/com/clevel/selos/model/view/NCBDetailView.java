@@ -22,7 +22,7 @@ public class NCBDetailView implements Serializable {
     private BigDecimal outstanding;
     private BigDecimal installment;
     private Date dateOfDebtRestructuring;
-    private BigDecimal noOfOutstandingPaymentIn12months;
+    private int noOfOutstandingPaymentIn12months;
     private int noOfOverLimit;
     private AccountType accountType;
     private AccountStatus accountStatus;
@@ -43,6 +43,13 @@ public class NCBDetailView implements Serializable {
     private LoanAccountTypeView loanAccountTypeView;
     private BigDecimal debtForCalculate;
 
+    //ADD NEW COLUMN FOR BRMS
+    private SettlementStatus historySixPayment;
+    private SettlementStatus historyTwelvePayment;
+    private int nplFlag;
+    private BigDecimal nplCreditAmount;
+    private int tdrFlag;
+
     public NCBDetailView() {
         reset();
     }
@@ -54,7 +61,7 @@ public class NCBDetailView implements Serializable {
         this.outstanding = BigDecimal.ZERO;
         this.installment = BigDecimal.ZERO;
         this.dateOfDebtRestructuring = new Date();
-        this.noOfOutstandingPaymentIn12months = BigDecimal.ZERO;
+        this.noOfOutstandingPaymentIn12months = 0;
         this.noOfOverLimit = 0;
         this.accountType = new AccountType();
         this.accountStatus = new AccountStatus();
@@ -65,6 +72,12 @@ public class NCBDetailView implements Serializable {
         this.monthFlagPage = false;
         this.loanAccountTypeView = new LoanAccountTypeView();
         this.accountName = "";
+
+        this.historySixPayment = new SettlementStatus();
+        this.historyTwelvePayment = new SettlementStatus();
+        this.nplFlag = 0;
+        this.nplCreditAmount = BigDecimal.ZERO;
+        this.tdrFlag = 0;
     }
 
     public long getId() {
@@ -147,11 +160,11 @@ public class NCBDetailView implements Serializable {
         this.dateOfDebtRestructuring = dateOfDebtRestructuring;
     }
 
-    public BigDecimal getNoOfOutstandingPaymentIn12months() {
+    public int getNoOfOutstandingPaymentIn12months() {
         return noOfOutstandingPaymentIn12months;
     }
 
-    public void setNoOfOutstandingPaymentIn12months(BigDecimal noOfOutstandingPaymentIn12months) {
+    public void setNoOfOutstandingPaymentIn12months(int noOfOutstandingPaymentIn12months) {
         this.noOfOutstandingPaymentIn12months = noOfOutstandingPaymentIn12months;
     }
 
@@ -273,6 +286,46 @@ public class NCBDetailView implements Serializable {
 
     public void setDebtForCalculate(BigDecimal debtForCalculate) {
         this.debtForCalculate = debtForCalculate;
+    }
+
+    public SettlementStatus getHistorySixPayment() {
+        return historySixPayment;
+    }
+
+    public void setHistorySixPayment(SettlementStatus historySixPayment) {
+        this.historySixPayment = historySixPayment;
+    }
+
+    public SettlementStatus getHistoryTwelvePayment() {
+        return historyTwelvePayment;
+    }
+
+    public void setHistoryTwelvePayment(SettlementStatus historyTwelvePayment) {
+        this.historyTwelvePayment = historyTwelvePayment;
+    }
+
+    public int getNplFlag() {
+        return nplFlag;
+    }
+
+    public void setNplFlag(int nplFlag) {
+        this.nplFlag = nplFlag;
+    }
+
+    public BigDecimal getNplCreditAmount() {
+        return nplCreditAmount;
+    }
+
+    public void setNplCreditAmount(BigDecimal nplCreditAmount) {
+        this.nplCreditAmount = nplCreditAmount;
+    }
+
+    public int getTdrFlag() {
+        return tdrFlag;
+    }
+
+    public void setTdrFlag(int tdrFlag) {
+        this.tdrFlag = tdrFlag;
     }
 
     @Override

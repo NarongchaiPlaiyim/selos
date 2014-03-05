@@ -39,6 +39,10 @@ public class Prescreen implements Serializable {
     @JoinColumn(name = "business_location_id")
     private Province businessLocation;
 
+    @OneToOne
+    @JoinColumn(name = "registration_country")
+    private Country countryOfRegister;
+
     @Temporal(TemporalType.DATE)
     @Column(name = "register_date")
     private Date registerDate;
@@ -54,12 +58,22 @@ public class Prescreen implements Serializable {
     @Column(name = "tcg")
     private int tcg;
 
-    @Column(name = "refinance")
-    private int refinance;
+    @Column(name = "refinance_in", length = 1, nullable = false, columnDefinition = "int default -1")
+    private int refinanceIN;
 
     @OneToOne
-    @JoinColumn(name = "refinance_bank_id")
-    private Bank refinanceBank;
+    @JoinColumn(name = "refinance_in_id")
+    private Bank refinanceInValue;
+
+    @Column(name = "refinance_out", length = 1, nullable = false, columnDefinition = "int default -1")
+    private int refinanceOUT;
+
+    @OneToOne
+    @JoinColumn(name = "refinance_out_id")
+    private Bank refinanceOutValue;
+
+    @Column(name = "existing_sme_customer", length = 1, nullable = false, columnDefinition = "int default -1")
+    private int existingSMECustomer;
 
     @OneToOne
     @JoinColumn(name = "borrowing_type_id")
@@ -148,6 +162,14 @@ public class Prescreen implements Serializable {
         this.businessLocation = businessLocation;
     }
 
+    public Country getCountryOfRegister() {
+        return countryOfRegister;
+    }
+
+    public void setCountryOfRegister(Country country) {
+        this.countryOfRegister = country;
+    }
+
     public Date getRegisterDate() {
         return registerDate;
     }
@@ -178,22 +200,6 @@ public class Prescreen implements Serializable {
 
     public void setTcg(int tcg) {
         this.tcg = tcg;
-    }
-
-    public int getRefinance() {
-        return refinance;
-    }
-
-    public void setRefinance(int refinance) {
-        this.refinance = refinance;
-    }
-
-    public Bank getRefinanceBank() {
-        return refinanceBank;
-    }
-
-    public void setRefinanceBank(Bank refinanceBank) {
-        this.refinanceBank = refinanceBank;
     }
 
     public User getBdmChecker() {
@@ -252,6 +258,46 @@ public class Prescreen implements Serializable {
         this.modifyFlag = modifyFlag;
     }
 
+    public int getRefinanceIN() {
+        return refinanceIN;
+    }
+
+    public void setRefinanceIN(int refinanceIN) {
+        this.refinanceIN = refinanceIN;
+    }
+
+    public Bank getRefinanceInValue() {
+        return refinanceInValue;
+    }
+
+    public void setRefinanceInValue(Bank refinanceInValue) {
+        this.refinanceInValue = refinanceInValue;
+    }
+
+    public int getRefinanceOUT() {
+        return refinanceOUT;
+    }
+
+    public void setRefinanceOUT(int refinanceOUT) {
+        this.refinanceOUT = refinanceOUT;
+    }
+
+    public Bank getRefinanceOutValue() {
+        return refinanceOutValue;
+    }
+
+    public void setRefinanceOutValue(Bank refinanceOutValue) {
+        this.refinanceOutValue = refinanceOutValue;
+    }
+
+    public int getExistingSMECustomer() {
+        return existingSMECustomer;
+    }
+
+    public void setExistingSMECustomer(int existingSMECustomer) {
+        this.existingSMECustomer = existingSMECustomer;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -266,14 +312,18 @@ public class Prescreen implements Serializable {
                 .append("referredDate", referredDate)
                 .append("referredExperience", referredExperience)
                 .append("tcg", tcg)
-                .append("refinance", refinance)
-                .append("refinanceBank", refinanceBank)
+                .append("refinanceIN", refinanceIN)
+                .append("refinanceInValue", refinanceInValue)
+                .append("refinanceOUT", refinanceOUT)
+                .append("refinanceOutValue", refinanceOutValue)
+                .append("existingSMECustomer", existingSMECustomer)
                 .append("borrowingType", borrowingType)
                 .append("bdmChecker", bdmChecker)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("modifyFlag", modifyFlag)
                 .toString();
     }
 }

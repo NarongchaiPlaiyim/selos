@@ -1,10 +1,16 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.BRMSControl;
 import com.clevel.selos.businesscontrol.FullApplicationControl;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
+import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.brms.BRMSInterfaceImpl;
+import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ManageButton;
+import com.clevel.selos.model.PricingDOAValue;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
@@ -22,7 +28,6 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @ViewScoped
@@ -31,28 +36,43 @@ public class BaseController implements Serializable {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     UserDAO userDAO;
     @Inject
     BasicInfoDAO basicInfoDAO;
+
     @Inject
     FullApplicationControl fullApplicationControl;
+
+    @Inject
+    BRMSControl brmsControl;
 
     private ManageButton manageButton;
     private AppHeaderView appHeaderView;
     private long stepId;
+    private int requestAppraisal;
     private int qualitativeType;
+    private int pricingDOALevel;
     private List<User> abdmUserList;
     private List<User> zmUserList;
+    private List<User> rmUserList;
+    private List<User> ghUserList;
 
     private User user;
     //private User abdm;
+
+    private String aadCommitteeId;
 
     private String abdmUserId;
     private String assignRemark;
 
     private String zmEndorseUserId;
     private String zmEndorseRemark;
+
+    private String zmPriceUserId;
+    private String rmPriceUserId;
+    private String ghPriceUserId;
 
     private String messageHeader;
     private String message;
@@ -68,12 +88,19 @@ public class BaseController implements Serializable {
         long workCasePreScreenId = 0;
         long workCaseId = 0;
         stepId = 0;
+        requestAppraisal = 0;
 
-        if (session.getAttribute("workCasePreScreenId") != null) {
+        if (!Util.isNull(session.getAttribute("workCasePreScreenId"))) {
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
         }
-        if (session.getAttribute("stepId") != null) {
+        if (!Util.isNull(session.getAttribute("stepId"))) {
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
+        }
+        if (!Util.isNull(session.getAttribute("requestAppraisal"))){
+            requestAppraisal = Integer.valueOf(session.getAttribute("requestAppraisal").toString());
+            if((stepId == StepValue.REQUEST_APPRAISAL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) && requestAppraisal == 2){
+                requestAppraisal = 1;
+            }
         }
         log.info("BaseController ::: getSession : workcase = {}, stepid = {}", workCasePreScreenId, stepId);
 
@@ -86,19 +113,44 @@ public class BaseController implements Serializable {
             manageButton.setCheckNCBButton(true);
             manageButton.setReturnToMakerButton(true);
         } else if (stepId == StepValue.PRESCREEN_MAKER.value()) {
-            manageButton.setCancelCAButton(true);
-            manageButton.setCloseSaleButton(true);
-            manageButton.setCheckBRMSButton(true);
-            manageButton.setCheckMandateDocButton(true);
-            manageButton.setRequestAppraisalButton(true);
+            if(Util.getCurrentPage().equals("prescreenMaker.jsf") || Util.getCurrentPage().equals("prescreenResult.jsf")){
+                manageButton.setCancelCAButton(true);
+                manageButton.setCloseSaleButton(true);
+                manageButton.setCheckBRMSButton(true);
+                manageButton.setCheckMandateDocButton(true);
+                if(requestAppraisal == 0){
+                    manageButton.setRequestAppraisalButton(true);
+                }
+            }else if(Util.getCurrentPage().equals("appraisalRequest.jsf")){
+                manageButton.setCheckMandateDocButton(true);
+                manageButton.setCancelAppraisalButton(true);
+                manageButton.setSubmitAppraisalButton(true);
+            }
         } else if (stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()) {
-            manageButton.setViewRelatedCA(true);
-            manageButton.setRequestAppraisalButton(true);
+            if(Util.getCurrentPage().equals("/site/appraisalRequest.jsf")){
+                manageButton.setCheckMandateDocButton(true);
+                manageButton.setCancelAppraisalButton(true);
+                manageButton.setSubmitAppraisalButton(true);
+            }else{
+                manageButton.setViewRelatedCA(true);
+                if(requestAppraisal == 0){
+                    manageButton.setRequestAppraisalButton(true);
+                }
+                manageButton.setCheckMandateDocButton(true);
+                manageButton.setCheckCriteriaButton(true);
+                manageButton.setAssignToABDMButton(true);
+                //manageButton.setCancelCAButton(true);
+                manageButton.setSubmitCAButton(true);
+            }
+        } else if (stepId == StepValue.REQUEST_APPRAISAL.value()) {
+            //Step at AAD Admin (Appraisal Appointment)
             manageButton.setCheckMandateDocButton(true);
-            manageButton.setCheckCriteriaButton(true);
-            manageButton.setAssignToABDMButton(true);
-            //manageButton.setCancelCAButton(true);
-            manageButton.setSubmitCAButton(true);
+            manageButton.setReturnBDMButton(true);
+            manageButton.setSubmitAADCommitteeButton(true);
+        } else if (stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()){
+            //Step at AAD Committee (Appraisal Result)
+            manageButton.setReturnAADAdminButton(true);
+            manageButton.setSubmitAppraisalButton(true);
         }
 
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
@@ -167,10 +219,34 @@ public class BaseController implements Serializable {
 
     public void onOpenSubmitZM(){
         log.debug("onOpenSubmitZM ::: starting...");
-        zmEndorseUserId = "";
-        zmEndorseRemark = "";
-        zmUserList = fullApplicationControl.getZMUserList();
-        log.debug("onOpenSubmitZM ::: zmUserList size : {}", zmUserList.size());
+        log.debug("onOpenSubmitZM ::: find Pricing DOA Level");
+        HttpSession session = FacesUtil.getSession(true);
+        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        PricingDOAValue pricingDOA = fullApplicationControl.calculatePricingDOA(workCaseId);
+        if(!Util.isNull(pricingDOA)){
+            pricingDOALevel = pricingDOA.value();
+            zmEndorseUserId = "";
+            zmEndorseRemark = "";
+
+            zmUserList = fullApplicationControl.getZMUserList();
+
+            if(pricingDOA.value() >= PricingDOAValue.RGM_DOA.value()){
+                rmPriceUserId = "";
+                rmUserList = fullApplicationControl.getRMUserList();
+            }
+
+            if(pricingDOA.value() >= PricingDOAValue.GH_DOA.value()){
+                ghPriceUserId = "";
+                ghUserList = fullApplicationControl.getHeadUserList();
+            }
+
+            log.debug("onOpenSubmitZM ::: zmUserList size : {}", zmUserList.size());
+            RequestContext.getCurrentInstance().execute("submitZMDialog.show()");
+        } else {
+            messageHeader = "Exception.";
+            message = "Can not find Pricing DOA Level. Please check value for calculate DOA Level";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessagePanel.show()");
+        }
     }
 
     public void onSubmitZM(){
@@ -207,6 +283,26 @@ public class BaseController implements Serializable {
     }
 
     public void onRequestAppraisal(){
+        log.debug("onRequestAppraisal ( bdm input data for aad admin )");
+        long workCasePreScreenId = 0;
+        long workCaseId = 0;
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+
+            fullApplicationControl.requestAppraisalBDM(workCasePreScreenId, workCaseId);
+            FacesUtil.redirect("/site/appraisalRequest.jsf");
+
+        } catch (Exception ex){
+            log.error("exception while request appraisal : ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
+    }
+
+    public void onSubmitAppraisalAdmin(){
         log.debug("onRequestAppraisal ( submit to aad admin )");
         long workCasePreScreenId = 0;
         long workCaseId = 0;
@@ -226,6 +322,58 @@ public class BaseController implements Serializable {
             message = Util.getMessageException(ex);
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
+    }
+
+    public void onSubmitAppraisalCommittee(){
+        log.debug("onSubmitAppraisalCommittee ( submit to aad committee )");
+        long workCasePreScreenId = 0;
+        long workCaseId = 0;
+        String queueName = "";
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            if(!Util.isNull(session.getAttribute("workCaseId"))){
+                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            }
+            if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
+                workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+            }
+            if(!Util.isNull(session.getAttribute("queueName"))){
+                queueName = session.getAttribute("queueName").toString();
+            }
+
+            //TODO Save AADCommittee user id to appraisal
+            fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName);
+
+            //fullApplicationControl.submitToAADCommittee(workCaseId, workCasePreScreenId, queueName);
+
+            messageHeader = "Information.";
+            message = "Request for appraisal success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+        } catch (Exception ex){
+            log.error("exception while request appraisal : ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
+
+    }
+
+    public void onCheckPreScreen(){
+        long workCasePreScreenId = 0;
+        HttpSession session = FacesUtil.getSession(true);
+        if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
+            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+            UWRulesResponse uwRulesResponse = brmsControl.getPrescreenResult(workCasePreScreenId);
+            log.debug("onCheckPreScreen uwRulesResponse : {}", uwRulesResponse);
+            if(uwRulesResponse != null){
+                if(uwRulesResponse.getActionResult().equals(ActionResult.SUCCEED)){
+
+                }else if(uwRulesResponse.getActionResult().equals(ActionResult.FAILED)){
+
+                }
+            }
+        }
+
     }
 
     public void onGoToInbox(){
@@ -320,6 +468,30 @@ public class BaseController implements Serializable {
         this.assignRemark = assignRemark;
     }
 
+    public String getZmPriceUserId() {
+        return zmPriceUserId;
+    }
+
+    public void setZmPriceUserId(String zmPriceUserId) {
+        this.zmPriceUserId = zmPriceUserId;
+    }
+
+    public String getRmPriceUserId() {
+        return rmPriceUserId;
+    }
+
+    public void setRmPriceUserId(String rmPriceUserId) {
+        this.rmPriceUserId = rmPriceUserId;
+    }
+
+    public String getGhPriceUserId() {
+        return ghPriceUserId;
+    }
+
+    public void setGhPriceUserId(String ghPriceUserId) {
+        this.ghPriceUserId = ghPriceUserId;
+    }
+
     public String getZmEndorseUserId() {
         return zmEndorseUserId;
     }
@@ -342,5 +514,45 @@ public class BaseController implements Serializable {
 
     public void setZmUserList(List<User> zmUserList) {
         this.zmUserList = zmUserList;
+    }
+
+    public int getRequestAppraisal() {
+        return requestAppraisal;
+    }
+
+    public void setRequestAppraisal(int requestAppraisal) {
+        this.requestAppraisal = requestAppraisal;
+    }
+
+    public List<User> getRmUserList() {
+        return rmUserList;
+    }
+
+    public void setRmUserList(List<User> rmUserList) {
+        this.rmUserList = rmUserList;
+    }
+
+    public List<User> getGhUserList() {
+        return ghUserList;
+    }
+
+    public void setGhUserList(List<User> ghUserList) {
+        this.ghUserList = ghUserList;
+    }
+
+    public String getAadCommitteeId() {
+        return aadCommitteeId;
+    }
+
+    public void setAadCommitteeId(String aadCommitteeId) {
+        this.aadCommitteeId = aadCommitteeId;
+    }
+
+    public int getPricingDOALevel() {
+        return pricingDOALevel;
+    }
+
+    public void setPricingDOALevel(int pricingDOALevel) {
+        this.pricingDOALevel = pricingDOALevel;
     }
 }

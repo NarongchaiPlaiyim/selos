@@ -172,6 +172,7 @@ public class Inbox implements Serializable {
 
         session.setAttribute("stepId", inboxViewSelectItem.getStepId());
         session.setAttribute("queueName", inboxViewSelectItem.getQueueName());
+        session.setAttribute("requestAppraisal", inboxViewSelectItem.getRequestAppraisal());
 
         //*** Get Information for Header ***//
         AppHeaderView appHeaderView = inboxControl.getHeaderInformation(inboxViewSelectItem.getWorkCasePreScreenId(), inboxViewSelectItem.getWorkCaseId());

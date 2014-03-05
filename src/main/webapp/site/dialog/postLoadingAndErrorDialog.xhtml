@@ -1,0 +1,28 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+   <p:dialog widgetVar='p_loading_dialog' id='loading_dialog' modal='true' 
+		closable='false' resizable='false' draggable="false"
+		onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()'
+		appendTo="@(body)" styleClass="dialog_noheader"
+		>
+		<div class="center">
+			LOADING<br />
+		 	<p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+	 	</div>
+	</p:dialog>
+	<p:dialog widgetVar='p_result_dialog' id='result_dialog' modal='true'
+		resizable='false' draggable="false" closeOnEscape="true" 
+		onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()'
+		appendTo="@(body)" header='ผลลัพธ์การทำงาน'
+		>
+		<p:messages />
+		<p:commandButton style="clear: both;float: right;"
+			type='button' onclick="p_result_dialog.hide()"
+			widgetVar="p_result_dialog_btn"
+			value="OK"/>
+	</p:dialog>  
+</ui:composition>        

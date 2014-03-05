@@ -11,7 +11,7 @@ import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.NewCreditTierDetail;
 import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.view.NewCreditDetailSimpleView;
+import com.clevel.selos.model.view.CreditDetailSimpleView;
 import com.clevel.selos.model.view.NewCreditDetailView;
 import com.clevel.selos.model.view.NewCreditTierDetailView;
 import com.clevel.selos.util.Util;
@@ -44,7 +44,7 @@ public class NewCreditDetailTransform extends Transform {
     @Inject
     BaseRateDAO baseRateDAO;
 
-    public List<NewCreditDetail> transformToModel(List<NewCreditDetailView> newCreditDetailViews, NewCreditFacility newCreditFacility ,User user , WorkCase workCase) {
+    public List<NewCreditDetail> transformToModel(List<NewCreditDetailView> newCreditDetailViews, NewCreditFacility newCreditFacility ,User user , WorkCase workCase, ProposeType proposeType) {
         List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
         NewCreditDetail newCreditDetail;
 
@@ -62,7 +62,7 @@ public class NewCreditDetailTransform extends Transform {
                 newCreditDetail.setCreateBy(user);
             }
 
-            newCreditDetail.setProposeType(ProposeType.P);
+            newCreditDetail.setProposeType(proposeType);
             newCreditDetail.setWorkCase(workCase);
             newCreditDetail.setSeq(newCreditDetailView.getSeq());
             newCreditDetail.setGuaranteeAmount(newCreditDetailView.getGuaranteeAmount());
@@ -93,6 +93,7 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetail.setRemark(newCreditDetailView.getRemark());
             newCreditDetail.setUseCount(newCreditDetailView.getUseCount());
             newCreditDetail.setNewCreditFacility(newCreditFacility);
+            newCreditDetail.setSetupCompleted(newCreditDetailView.getIsSetupCompleted());
 
             if(Util.safetyList(newCreditDetailView.getNewCreditTierDetailViewList()).size() > 0){
                 log.debug("Start.. transformToModel for newCreditTierDetailViewList : {}", newCreditDetailView.getNewCreditTierDetailViewList());
@@ -152,6 +153,7 @@ public class NewCreditDetailTransform extends Transform {
          newCreditDetailView.setReducePriceFlag(Util.isTrue(newCreditDetail.getReducePriceFlag()));
          newCreditDetailView.setRemark(newCreditDetail.getRemark());
          newCreditDetailView.setUseCount(newCreditDetail.getUseCount());
+         newCreditDetailView.setIsSetupCompleted(newCreditDetail.getSetupCompleted());
 
          List<NewCreditTierDetail> newCreditTierDetailList = newCreditTierDetailDAO.findByNewCreditDetail(newCreditDetail);
 
@@ -176,22 +178,4 @@ public class NewCreditDetailTransform extends Transform {
         log.info("priceToShow :: {}",priceToShow);
        return priceToShow;
    }
-   
-   public NewCreditDetailSimpleView transformToSimpleView(NewCreditDetail model) {
-	   NewCreditDetailSimpleView view = new NewCreditDetailSimpleView();
-	   view.setId(model.getId());
-	   
-	   view.setAccountName(model.getAccountName());
-	   view.setAccountNo(model.getAccountNumber());
-	   view.setAccountStatus(model.getAccountSuf());
-	   //TODO Check about type of credit table
-	   view.setType(null);
-	   view.setProductProgram(model.getProductProgram().getName());
-	   view.setCreditFacility(model.getCreditType().getName());
-	   view.setLimit(model.getLimit());
-	   boolean hasAccountInfo = !(Util.isEmpty(model.getAccountName()) || Util.isEmpty(model.getAccountNumber()) );
-	   view.setHasAccountInfo(hasAccountInfo);
-	   return view;
-   }
-
 }

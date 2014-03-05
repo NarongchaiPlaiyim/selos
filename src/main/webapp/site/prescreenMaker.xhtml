@@ -417,12 +417,27 @@
                                 <td class="title">Business Location :</td>
                                 <td>
                                     <p:selectOneMenu value="#{prescreenMaker.prescreenView.businessLocation.code}"
+                                                     required="#{not empty param[savePreMakerButton.clientId]}"
                                                      size="1" style="width: 200px;">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{prescreenMaker.businessLocationList}"
                                                        var="businessLocationItem"
                                                        itemLabel="#{businessLocationItem.name}"
                                                        itemValue="#{businessLocationItem.code}"/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">Country of register</td>
+                                <td>
+                                    <p:selectOneMenu value="#{prescreenMaker.prescreenView.countryOfRegister.id}"
+                                                     required="#{not empty param[savePreMakerButton.clientId]}"
+                                                     size="1" style="width: 200px;">
+                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                        <f:selectItems value="#{prescreenMaker.countryOfRegisterList}"
+                                                       var="countryOfRegisterItem"
+                                                       itemLabel="#{countryOfRegisterItem.name}"
+                                                       itemValue="#{countryOfRegisterItem.id}"/>
                                     </p:selectOneMenu>
                                 </td>
                             </tr>
@@ -487,26 +502,53 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="title">Refinance :</td>
+                                <td class="title">Refinance In:</td>
                                 <td>
                                     <table class="content_table_form" style="border-spacing: 0;">
                                         <tr>
                                             <td style="width:100px;">
-                                                <p:selectOneRadio value="#{prescreenMaker.prescreenView.refinance}" required="#{not empty param[savePreMakerButton.clientId]}">
+                                                <p:selectOneRadio value="#{prescreenMaker.prescreenView.refinanceIn}" required="#{not empty param[savePreMakerButton.clientId]}">
                                                     <f:selectItems value="#{app.getRadioValues('NO|YES')}"
-                                                                   var="refinanceVar" itemLabel="#{refinanceVar.shortName()}" itemValue="#{refinanceVar.value()}"/>
-                                                    <p:ajax event="change" process="@form" update=":frmMain:selRefinanceBank" />
+                                                                   var="refinanceInVar" itemLabel="#{refinanceInVar.shortName()}" itemValue="#{refinanceInVar.value()}"/>
+                                                    <p:ajax event="change" process="@form" update=":frmMain:selRefinanceInBank" />
                                                 </p:selectOneRadio>
                                             </td>
                                             <td>
-                                                <p:selectOneMenu id="selRefinanceBank" value="#{prescreenMaker.prescreenView.refinanceBank.code}"
-                                                                 disabled="#{prescreenMaker.prescreenView.refinance == 1 || prescreenMaker.prescreenView.refinance == 0}"
+                                                <p:selectOneMenu id="selRefinanceInBank" value="#{prescreenMaker.prescreenView.refinanceInBank.code}"
+                                                                 disabled="#{prescreenMaker.prescreenView.refinanceIn == 1 || prescreenMaker.prescreenView.refinanceIn == 0}"
                                                                  size="1" style="width: 200px;">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                     <f:selectItems value="#{prescreenMaker.refinanceList}"
-                                                                   var="refinanceBankItem"
-                                                                   itemLabel="#{refinanceBankItem.shortName}"
-                                                                   itemValue="#{refinanceBankItem.code}"/>
+                                                                   var="refinanceInBankItem"
+                                                                   itemLabel="#{refinanceInBankItem.shortName}"
+                                                                   itemValue="#{refinanceInBankItem.code}"/>
+                                                </p:selectOneMenu>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">Refinance Out:</td>
+                                <td>
+                                    <table class="content_table_form" style="border-spacing: 0;">
+                                        <tr>
+                                            <td style="width:100px;">
+                                                <p:selectOneRadio value="#{prescreenMaker.prescreenView.refinanceOut}" required="#{not empty param[savePreMakerButton.clientId]}">
+                                                    <f:selectItems value="#{app.getRadioValues('NO|YES')}"
+                                                                   var="refinanceOutVar" itemLabel="#{refinanceOutVar.shortName()}" itemValue="#{refinanceOutVar.value()}"/>
+                                                    <p:ajax event="change" process="@form" update=":frmMain:selRefinanceOutBank" />
+                                                </p:selectOneRadio>
+                                            </td>
+                                            <td>
+                                                <p:selectOneMenu id="selRefinanceOutBank" value="#{prescreenMaker.prescreenView.refinanceOutBank.code}"
+                                                                 disabled="#{prescreenMaker.prescreenView.refinanceOut == 1 || prescreenMaker.prescreenView.refinanceOut == 0}"
+                                                                 size="1" style="width: 200px;">
+                                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                    <f:selectItems value="#{prescreenMaker.refinanceList}"
+                                                                   var="refinanceOutBankItem"
+                                                                   itemLabel="#{refinanceOutBankItem.shortName}"
+                                                                   itemValue="#{refinanceOutBankItem.code}"/>
                                                 </p:selectOneMenu>
                                             </td>
                                         </tr>

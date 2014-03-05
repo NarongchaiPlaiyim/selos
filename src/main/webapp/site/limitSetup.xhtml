@@ -29,6 +29,7 @@
             <ui:include src="include/menubar.xhtml" />
            
             <!-- End Menu -->
+			<h:panelGroup id="full_main_container" layout="block">
             <div id="content_container">
                 <div id="content_name">#{msg.get('app.limitSetup.subtitle')}</div>
                 <div id="content">
@@ -52,6 +53,8 @@
                    		<p:spacer height="18"/>
                         <!-- start content -->
                         <p:dataTable styleClass="content_table_form full_table" 
+                        	value="#{limitSetup.limitSetupView.newCreditDetailViewList}"
+                        	var="item"
                         	style="width:90%;margin:0 auto" 
                         	rowIndexVar="rowIdx" 
                         	>
@@ -62,7 +65,7 @@
                         	<p:column style="width:150px" styleClass="center"
 								headerText="#{msg.get('app.limitSetup.table.setupcomplete')}"
                         		>
-                        		<p:selectOneRadio>
+                        		<p:selectOneRadio value="#{item.isSetupCompleted}">
                                      <f:selectItem
                                      	itemLabel="#{msg.get('app.button.yes')}" 
                                      	itemValue="2"/>
@@ -74,55 +77,63 @@
                         	<p:column style="width:70px" styleClass="center"
 								headerText="#{msg.get('app.limitSetup.table.type')}"
                         		>
+                        		<h:outputText value="#{item.requestType}" />
                         	</p:column>
                         	<p:column style="width:150px" 
 								headerText="#{msg.get('app.limitSetup.table.productProgram')}"
                         		>
+                        		<h:outputText value="#{item.productProgramView.name}" />
                         	</p:column>
                         	<p:column style="width:150px"
 								headerText="#{msg.get('app.limitSetup.table.creditType')}"
                         		>
+                        		<h:outputText value="#{item.creditTypeView.name}" />
                         	</p:column>
                         	
                         	<p:column style="width:100px" styleClass="center"
 								headerText="#{msg.get('app.limitSetup.table.productCode')}"
                         		>
-                        		
+                        		<h:outputText value="#{item.productCode}" />
                         	</p:column>
                         	<p:column style="width:100px" styleClass="center"
 								headerText="#{msg.get('app.limitSetup.table.projectCode')}"
                         		>
-                        		
+                        		<h:outputText value="#{item.projectCode}" />
                         	</p:column>
                         	<p:column style="width:100px" styleClass="right"
                         		headerText="#{msg.get('app.limitSetup.table.limit')}"
                         		>
-                        		<h:outputText value="0">
+                        		<h:outputText value="#{item.limit}">
                         			<f:convertNumber pattern="#,##0.00"/>
                         		</h:outputText>
                         	</p:column>
                         	<p:column style="width:100px" styleClass="right"
                         		headerText="#{msg.get('app.limitSetup.table.installment')}"
                         		>
-                        		<h:outputText value="0">
+                        		<h:outputText value="#{item.installment}">
                         			<f:convertNumber pattern="#,##0.00"/>
                         		</h:outputText>
                         	</p:column>
                         	<p:column style="width:80px" styleClass="right"
                         		headerText="#{msg.get('app.limitSetup.table.tenor')}"
                         		>
-                        		<h:outputText value="0">
+                        		<h:outputText value="#{item.tenor}">
                         			<f:convertNumber pattern="0"/>
                         		</h:outputText>
                         	</p:column>
+                        	
+                        	
+                        	
                         </p:dataTable>
                         <p:spacer height="18"/>
                         <p:separator/>
                         
                         <div style="margin:40px auto 0;" class="medium">
                         	<p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
-                             	styleClass="medium"
-                             	oncomplete="p_saveLimitSetupDlg.show();"
+                                styleClass="medium"
+								onstart="handleOnStartOpenCfmDlg();"
+								oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveLimitSetupDlg);"
+								update=":frmMain:full_main_container,:result_dialog"
                              	 />
                         </div>
                     </div>
@@ -134,22 +145,19 @@
             <!-- Start Footer -->
             <ui:include src="include/footer.xhtml" />
             <!-- End Footer -->
+            </h:panelGroup>
             </div>
-           	
-           	<p:blockUI widgetVar="p_blockUI" block=":frmMain" trigger='saveBtn'>
-           		LOADING<br />
-                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-             </p:blockUI>
+ 
         </h:form>
     </p:panel>
-
+	<ui:include src="dialog/postLoadingAndErrorDialog.xhtml" />
 	<ui:include src="dialog/confirmEditDlg.xhtml">
 		<ui:param name="id" value="saveLimitSetupDlg"/>
 		<ui:param name="name" value="p_saveLimitSetupDlg"/>
 		<ui:param name="formId" value="saveLimitSetupFrm"/>
 		<ui:param name="controller" value="#{limitSetup}"/>
 		<ui:param name="action" value="onSaveLimitSetup"/>
-		<ui:param name="update" value=":frmMain"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
 </h:body>
 </f:view>

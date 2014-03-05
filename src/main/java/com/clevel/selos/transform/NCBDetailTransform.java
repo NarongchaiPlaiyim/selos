@@ -52,9 +52,9 @@ public class NCBDetailTransform extends Transform {
             }
 
             if (ncbDetailViewItem.getHistoryPayment() != null && ncbDetailViewItem.getHistoryPayment().getId() != 0) {
-                ncbDetail.setHistoryPayment(settlementStatusDAO.findById(ncbDetailViewItem.getHistoryPayment().getId()));
+                //ncbDetail.setHistoryPayment(settlementStatusDAO.findById(ncbDetailViewItem.getHistoryPayment().getId()));
             } else {
-                ncbDetail.setHistoryPayment(null);
+                //ncbDetail.setHistoryPayment(null);
             }
 
             ncbDetail.setAsOfDate(ncbDetailViewItem.getDateOfInfo());
@@ -67,6 +67,9 @@ public class NCBDetailTransform extends Transform {
             ncbDetail.setWcFlag(ncbDetailViewItem.getWcFlag());
             ncbDetail.setOverLimit(ncbDetailViewItem.getNoOfOverLimit());
             ncbDetail.setCanToEdit(ncbDetailViewItem.isCanToEdit());
+
+            //Add new 2 flag for BRMS//
+            ncbDetail.setTdrFlag(ncb.getTdrFlag());
 
             ncbDetailList.add(ncbDetail);
         }
@@ -83,7 +86,7 @@ public class NCBDetailTransform extends Transform {
         ncbDetailView.setAccountOpenDate(ncbDetail.getAccountOpenDate());
         ncbDetailView.setTMBAccount(ncbDetail.getAccountTMBFlag());
         ncbDetailView.setCurrentPayment(ncbDetail.getCurrentPayment());
-        ncbDetailView.setHistoryPayment(ncbDetail.getHistoryPayment());
+        //ncbDetailView.setHistoryPayment(ncbDetail.getHistoryPayment());
         ncbDetailView.setDateOfInfo(ncbDetail.getAsOfDate());
         ncbDetailView.setDateOfDebtRestructuring(ncbDetail.getLastReStructureDate());
         ncbDetailView.setInstallment(ncbDetail.getInstallment());

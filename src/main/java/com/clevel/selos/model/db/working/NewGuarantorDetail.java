@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.GuarantorCategory;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -33,7 +34,12 @@ public class NewGuarantorDetail implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "customer_id")
-    private Customer  guarantorName;
+    private Customer guarantorName;
+
+
+    @Column(name = "guarantor_category", columnDefinition = "int default 0", length = 1)
+    @Enumerated(EnumType.ORDINAL)
+    private GuarantorCategory GuarantorCategory;
 
     @Column(name = "tcg_lg_no")
     private String tcgLgNo;
@@ -64,6 +70,7 @@ public class NewGuarantorDetail implements Serializable {
     @OneToMany(mappedBy = "newGuarantorDetail", cascade = CascadeType.ALL)
     private List<NewGuarantorCredit> newGuarantorCreditList;
 
+
     public long getId() {
         return id;
     }
@@ -86,6 +93,14 @@ public class NewGuarantorDetail implements Serializable {
 
     public void setGuarantorName(Customer guarantorName) {
         this.guarantorName = guarantorName;
+    }
+
+    public GuarantorCategory getGuarantorCategory() {
+        return GuarantorCategory;
+    }
+
+    public void setGuarantorCategory(GuarantorCategory guarantorCategory) {
+        GuarantorCategory = guarantorCategory;
     }
 
     public String getTcgLgNo() {

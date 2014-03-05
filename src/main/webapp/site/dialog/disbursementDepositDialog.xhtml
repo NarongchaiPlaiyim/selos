@@ -22,7 +22,7 @@
             <tr>
                 <td><p:outputLabel for="creditType" value="#{msg.get('app.disbursement.detail.deposit.dialog.creditType')}"/></td>
                 <td>
-                    <p:dataTable id="creditType" value="#{disbursementInfo.disbursementDepositDetailView.creditType}" rowIndexVar="rowIndex" var="item">
+                    <p:dataTable id="creditType" value="#{disbursementInfo.disbursementDepositDetailView.disbursementCreditTypeView}" rowIndexVar="rowIndex" var="item">
                         <p:column headerText="#{msg.get('app.disbursement.detail.deposit.dialog.tb.productProgram')}">
                             <h:outputText value="#{item.productProgram}"/>
                         </p:column>
@@ -30,7 +30,7 @@
                             <h:outputText value="#{item.creditFacility}"/>
                         </p:column>
                         <p:column headerText="#{msg.get('app.disbursement.detail.deposit.dialog.tb.limit')}">
-                            <h:outputText value="#{item.limit}">
+                            <h:outputText value="#{item.limitAmount}">
                                 <f:convertNumber pattern="#,##0"
                                                  minFractionDigits="2"
                                                  maxFractionDigits="2"
@@ -46,11 +46,11 @@
             <tr>
                 <td colspan="100%" style="text-align: center">
                     <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
-                                     actionListener="#{disbursementInfo.onSubmitDisbursementDeposit()}"
+                                     actionListener="#{disbursementInfo.onSubmitDisbursementDeposit}"
                                      styleClass="smaller"
                                      update=":disbursementForm ,:disbursementDepositForm"
                                      oncomplete="handleDisbursementDepositDialogRequest(xhr, status, args)"/>
-                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller"
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller" type="button"
                                      onclick="depositDisbursementDialog.hide()"
                                      update=":disbursementForm"/>
                 </td>

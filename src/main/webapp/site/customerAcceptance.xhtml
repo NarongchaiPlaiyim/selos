@@ -29,6 +29,7 @@
             <ui:include src="include/menubar.xhtml" />
            
             <!-- End Menu -->
+			<h:panelGroup id="full_main_container" layout="block">
             <div id="content_container">
                 <div id="content_name">#{msg.get('app.cusaccept.subtitle')}</div>
                 <div id="content">
@@ -121,10 +122,10 @@
 	                                        </td>
 	                                        <td class="left" colspan="5">
 	                                        
-	                                        	<p:calendar pattern="dd/MM/yyyy" showOn="button"
+	                                        	<clv:BECalendar pattern="dd/MM/yyyy" showOn="button"
 	                                        		value="#{customerAcceptance.tcgInfoView.payinSlipSendDate}"
 	                                        		mindate="#{customerAcceptance.minTCGPayinSlipSendDate}"
-	                                        		autocomplete="false"
+	                                        		autocomplete="false"  locale="th_TH"
 	                                        		/>
 	                                         </td>
 	                                    </tr>
@@ -228,8 +229,7 @@
 	                           				<h:panelGroup rendered="#{customerAcceptance.isContactUpdatable(detail)}">
 	                           					<p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
 	                           						process="@this"
-	                           						onstart="p_blockUI.show()"
-	                           						oncomplete="p_blockUI.hide();p_contactRecordDlg.show();"
+	                           						oncomplete="p_contactRecordDlg.show();"
 	                           						action="#{customerAcceptance.onOpenUpdateContactRecordDialog()}"
 	                           						update=":contactRecordDlg"
 	                           						style="margin-right:0px !important"
@@ -264,7 +264,9 @@
 	                             <td colspan="100%" class="center">
 	                                 <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
 	                                 	styleClass="medium"
-	                                 	oncomplete="p_saveCusAcceptanceDlg.show();"
+										onstart="handleOnStartOpenCfmDlg();"
+										oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveCusAcceptanceDlg);"
+										update=":frmMain:full_main_container,:result_dialog"
 	                                 	 />
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"
@@ -281,15 +283,11 @@
             <!-- Start Footer -->
             <ui:include src="include/footer.xhtml" />
             <!-- End Footer -->
+            </h:panelGroup>
             </div>
-           	
-           	<p:blockUI widgetVar="p_blockUI" block=":frmMain" trigger='saveBtn,cancelBtn,addBtn'>
-           		LOADING<br />
-                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-             </p:blockUI>
         </h:form>
     </p:panel>
-
+	<ui:include src="dialog/postLoadingAndErrorDialog.xhtml" />
 	<p:dialog id='contactRecordDlg' widgetVar="p_contactRecordDlg"
 		header="#{msg.get('app.cusaccept.dialog.contactRecord.title')}" 
 		onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()' resizable="false"
@@ -312,7 +310,7 @@
 		<ui:param name="formId" value="saveCusAcceptanceFrm"/>
 		<ui:param name="controller" value="#{customerAcceptance}"/>
 		<ui:param name="action" value="onSaveCustomerAcceptance"/>
-		<ui:param name="update" value=":frmMain"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
 </h:body>
 </f:view>

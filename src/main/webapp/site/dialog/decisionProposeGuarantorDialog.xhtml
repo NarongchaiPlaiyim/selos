@@ -14,20 +14,20 @@
         <table class="content_form content_table_form">
             <tr>
                 <td class="title" style="width: 20%">
-                    #{msg.get('app.decision.header')} :
+                    <h:outputText value="#{msg.get('app.decision.header')} :"/>
                 </td>
                 <td class="left" style="width: 80%">
                     <p:selectOneRadio id="dlgGuarantorRadioApprove"
                                       value="#{decision.selectedApproveGuarantor.uwDecision}"
                                       required="#{not empty param[saveGuarantorButton.clientId]}">
-                        <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionType[0]}"/>
-                        <f:selectItem itemLabel="#{msg.get('app.button.notApprove')}" itemValue="#{decision.decisionType[1]}"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.notApprove')}" itemValue="#{decision.decisionREJECTED}"/>
                     </p:selectOneRadio>
                 </td>
             </tr>
             <tr>
                 <td class="title">
-                    #{msg.get('app.credit.facility.propose.label.guarantorDlg.guarantorName')}
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.guarantorName')}"/>
                 </td>
                 <td class="left">
                     <p:selectOneMenu id="dlgGuarantorName"
@@ -36,15 +36,15 @@
                                      required="#{not empty param[saveGuarantorButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{decision.guarantorList}"
-                                       var="guarantorList"
-                                       itemLabel="#{guarantorList.firstNameTh} #{guarantorList.lastNameTh}"
-                                       itemValue="#{guarantorList.id}"/>
+                                       var="guarantorDlg"
+                                       itemLabel="#{not empty guarantorDlg.titleTh ? guarantorDlg.titleTh.titleTh : ''}#{guarantorDlg.firstNameTh} #{guarantorDlg.lastNameTh}"
+                                       itemValue="#{guarantorDlg.id}"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
             <tr>
                 <td class="title">
-                    <p:outputLabel for="dlgTcgLgNo" value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.TCGLGNo')}"/>
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.TCGLGNo')}"/>
                 </td>
                 <td class="left">
                     <p:inputMask id="dlgTcgLgNo" value="#{decision.selectedApproveGuarantor.tcgLgNo}"
@@ -53,8 +53,7 @@
             </tr>
             <tr>
                 <td class="title" colspan="2">
-                    <p:outputLabel for="dlgGuarantorCreditTypeTable"
-                                   value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.creditType')}"/>
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.creditType')}"/>
                 </td>
             </tr>
             <tr>

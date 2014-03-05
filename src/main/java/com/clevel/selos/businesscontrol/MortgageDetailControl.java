@@ -25,28 +25,27 @@ import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.MortgageLandOffice;
 import com.clevel.selos.model.db.master.MortgageOSCompany;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.Address;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.CustomerAttorney;
 import com.clevel.selos.model.db.working.MortgageInfo;
 import com.clevel.selos.model.db.working.MortgageInfoCollOwner;
 import com.clevel.selos.model.db.working.MortgageInfoCollSub;
 import com.clevel.selos.model.db.working.MortgageInfoCredit;
+import com.clevel.selos.model.db.working.NewCollateralCredit;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.CreditDetailSimpleView;
+import com.clevel.selos.model.view.CustomerAttorneySelectView;
 import com.clevel.selos.model.view.CustomerAttorneyView;
 import com.clevel.selos.model.view.CustomerInfoView;
-import com.clevel.selos.model.view.MortgageInfoAttorneySelectView;
 import com.clevel.selos.model.view.MortgageInfoCollOwnerView;
 import com.clevel.selos.model.view.MortgageInfoCollSubView;
 import com.clevel.selos.model.view.MortgageInfoView;
-import com.clevel.selos.model.view.NewCreditDetailSimpleView;
+import com.clevel.selos.transform.CreditDetailSimpleTransform;
 import com.clevel.selos.transform.CustomerAttorneyTransform;
 import com.clevel.selos.transform.CustomerTransform;
-import com.clevel.selos.transform.MortgageInfoAttorneySelectTransform;
 import com.clevel.selos.transform.MortgageInfoCollOwnerTransform;
 import com.clevel.selos.transform.MortgageInfoCollSubTransform;
 import com.clevel.selos.transform.MortgageInfoTransform;
-import com.clevel.selos.transform.NewCreditDetailTransform;
 
 @Stateless
 public class MortgageDetailControl extends BusinessControl {
@@ -69,9 +68,8 @@ public class MortgageDetailControl extends BusinessControl {
 	 @Inject private MortgageInfoTransform mortgageInfoTransform;
 	 @Inject private MortgageInfoCollSubTransform mortgageInfoCollSubTransform;
 	 @Inject private MortgageInfoCollOwnerTransform mortgageInfoCollOwnerTransform;
-	 @Inject private MortgageInfoAttorneySelectTransform mortgageInfoAttorneySelectTransform;
 	 @Inject private CustomerAttorneyTransform customerAttorneyTransform;
-	 @Inject private NewCreditDetailTransform newCreditDetailTransform;
+	 @Inject private CreditDetailSimpleTransform creditDetailSimpleTransform;
 	 
 	 public MortgageDetailControl() {
 	 }
@@ -107,11 +105,15 @@ public class MortgageDetailControl extends BusinessControl {
 	 
 	 public MortgageInfoView getMortgageInfo(long mortgageInfoId) {
 		 MortgageInfo result = null;
+		 long workCaseId = 0;
 		 try {
-			 if (mortgageInfoId > 0)
+			 if (mortgageInfoId > 0) {
 				 result = mortgageInfoDAO.findById(mortgageInfoId);
+				 if (result != null && result.getWorkCase() !=null)
+					workCaseId = result.getWorkCase().getId();
+			 }
 		 } catch (Throwable e) {}
-		 return mortgageInfoTransform.transformToView(result);
+		 return mortgageInfoTransform.transformToView(result,workCaseId);
 	 }
 	 
 	 public List<CustomerInfoView> getCustomerCanBePOAList(long workCaseId) {
@@ -131,15 +133,22 @@ public class MortgageDetailControl extends BusinessControl {
 		 }
 		 return rtnDatas;
 	 }
-	 public List<NewCreditDetailSimpleView> getMortgageInfoCreditList(long mortgageInfoId) {
+	 public List<CreditDetailSimpleView> getMortgageInfoCreditList(long mortgageInfoId) {
 		 if (mortgageInfoId <=0)
 			 return Collections.emptyList();
 		 List<MortgageInfoCredit> credits = mortgageInfoCreditDAO.findAllByMortgageInfoId(mortgageInfoId);
-		 ArrayList<NewCreditDetailSimpleView> rtnDatas = new ArrayList<NewCreditDetailSimpleView>();
+		 ArrayList<CreditDetailSimpleView> rtnDatas = new ArrayList<CreditDetailSimpleView>();
 		 for (MortgageInfoCredit credit : credits) {
-			 if (credit.getNewCreditDetail() == null)
+			 CreditDetailSimpleView view = null;
+			 NewCollateralCredit collCredit = credit.getNewCollateralCredit();
+			 if (collCredit.getExistingCreditDetail() != null) {
+				 view = creditDetailSimpleTransform.transformToSimpleView(collCredit.getExistingCreditDetail());
+			 } else if (collCredit.getNewCreditDetail() != null) {
+				 view = creditDetailSimpleTransform.transformToSimpleView(collCredit.getNewCreditDetail());
+			 } else {
 				 continue;
-			 rtnDatas.add(newCreditDetailTransform.transformToSimpleView(credit.getNewCreditDetail()));
+			 }
+			 rtnDatas.add(view);
 		 }
 		 return rtnDatas;
 	 }
@@ -161,28 +170,31 @@ public class MortgageDetailControl extends BusinessControl {
 		 } catch (Throwable e) {}
 		 return customerAttorneyTransform.transformToView(model);
 	 }
-	 public List<MortgageInfoAttorneySelectView> getAttorneySelectList(long workCaseId) {
+	 public CustomerAttorneyView getCustomerAttorneyViewFromCustomer(long customerId) {
+		 Customer model = null;
+		 try {
+			 if (customerId > 0)
+				 model = customerDAO.findById(customerId);
+		 } catch (Throwable e) {}
+		 return customerAttorneyTransform.transformToView(model);
+		 
+	 }
+	 public List<CustomerAttorneySelectView> getAttorneySelectList(long workCaseId) {
 		 if (workCaseId <=0)
 			 return Collections.emptyList();
 		 List<Customer> customers = customerDAO.findCustomerCanBePOA(workCaseId);
-		 List<MortgageInfoAttorneySelectView> rtnDatas = new ArrayList<MortgageInfoAttorneySelectView>();
+		 List<CustomerAttorneySelectView> rtnDatas = new ArrayList<CustomerAttorneySelectView>();
 		 for (Customer customer : customers) {
-			 List<Address> addresses = customer.getAddressesList();
-			 //TODO Hardcode for address by registration (ที่อยู่ทะเบียนบ้าน = 2)
-			 Address address = null;
-			 for (Address check : addresses) {
-				 if (check.getAddressType() != null && check.getAddressType().getId() == 2) {
-					 address = check;
-					 break;
-				 }
-			 }
-			 rtnDatas.add(mortgageInfoAttorneySelectTransform.transformToView(customer, address));
+			 rtnDatas.add(customerAttorneyTransform.transformAttorneySelectToView(customer));
 		 }
 		 return rtnDatas;
 	 }
 	 
 	 public long saveMortgageDetail(long workCaseId,MortgageInfoView info,
 			 	List<MortgageInfoCollOwnerView> collOwners, CustomerAttorneyView attorney) {
+		 if (info.getId() <= 0)
+			 return 0;
+		 
 		 User user = getCurrentUser();
 		 
 		 WorkCase workCase = workCaseDAO.findRefById(workCaseId);
@@ -200,23 +212,15 @@ public class MortgageDetailControl extends BusinessControl {
 				 customerAttorneyDAO.save(attorneyModel);
 			 }
 		 } else {
-			 //TODO do it need to remove current attorney ?
 			 if (info.getCustomerAttorneyId() > 0)
 				 customerAttorneyDAO.deleteById(info.getCustomerAttorneyId());
 		 }
 		 
 		 //Process mortgage info
-		 MortgageInfo infoModel = null;
-		 if (info.getId() > 0) { //update
-			 infoModel = mortgageInfoDAO.findById(info.getId());
-			 mortgageInfoTransform.updateModelFromView(infoModel, info, user);
-			 infoModel.setCustomerAttorney(attorneyModel);
-			 mortgageInfoDAO.persist(infoModel);
-		 } else {
-			 infoModel = mortgageInfoTransform.createNewModel(info, user, workCase);
-			 infoModel.setCustomerAttorney(attorneyModel);
-			 mortgageInfoDAO.save(infoModel);
-		 }
+		 MortgageInfo infoModel = mortgageInfoDAO.findById(info.getId());
+		 mortgageInfoTransform.updateModelFromView(infoModel, info, user);
+		 infoModel.setCustomerAttorney(attorneyModel);
+		 mortgageInfoDAO.persist(infoModel);
 		 
 		 //Process mortgage coll owner
 		 for (MortgageInfoCollOwnerView collOwner : collOwners) {

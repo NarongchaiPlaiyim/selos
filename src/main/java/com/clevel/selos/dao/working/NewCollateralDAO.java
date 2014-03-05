@@ -2,20 +2,16 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.working.NewCollateral;
 import com.clevel.selos.model.db.working.NewCreditFacility;
-
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-
 import java.util.List;
 
 public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
@@ -25,7 +21,6 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
 
     @Inject
     public NewCollateralDAO() {
-
     }
 
     public void persistProposeTypeA(final List<NewCollateral> newCollateralList){
@@ -75,7 +70,7 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
         log.info("-- findNewCollateralByTypeA ::: {}", newCreditFacility.toString());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
-        criteria.add(Restrictions.eq("proposeType", "A"));
+        criteria.add(Restrictions.eq("proposeType", ProposeType.A));
         criteria.addOrder(Order.asc("id"));
         List<NewCollateral> newCollateralDetailList = (List<NewCollateral>) criteria.list();
         log.info("-- List<NewCollateral> ::: size : {}", newCollateralDetailList.size());
@@ -97,8 +92,6 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
         }
     }
 
-
-
     public void updateAppraisalFlag(final NewCollateral newCollateral) {
         log.debug("-- updateAppraisalFlag()");
         long id = newCollateral.getId();
@@ -109,7 +102,6 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
             log.debug("-- NewCollateral(id : {}) has Updated", id);
         }
     }
-
 
     public List<NewCollateral> findNewCollateralByWorkCaseId(long workCaseId) {
         log.info("-- findNewCollateralByWorkCaseId ::: {}", workCaseId);
@@ -126,6 +118,17 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
     	Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.add(Restrictions.eq("proposeType", ProposeType.A));
+        criteria.addOrder(Order.asc("id"));
+        List<NewCollateral> newCollateralDetailList = (List<NewCollateral>) criteria.list();
+        log.info("-- List<NewCollateral> ::: size : {}", newCollateralDetailList.size());
+        return newCollateralDetailList;
+    }
+
+    public List<NewCollateral> findNewCollateral(long workCaseId, ProposeType proposeType){
+        log.info("-- findNewCollateralByWorkCaseId ::: {}", workCaseId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.eq("proposeType", proposeType));
         criteria.addOrder(Order.asc("id"));
         List<NewCollateral> newCollateralDetailList = (List<NewCollateral>) criteria.list();
         log.info("-- List<NewCollateral> ::: size : {}", newCollateralDetailList.size());

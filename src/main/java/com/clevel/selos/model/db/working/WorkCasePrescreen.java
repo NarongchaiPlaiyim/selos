@@ -34,6 +34,9 @@ public class WorkCasePrescreen extends AbstractWorkCase {
     @JoinColumn(name = "step_owner")
     private User stepOwner;
 
+    @Column(name = "request_appraisal", columnDefinition = "int default 0")
+    private int requestAppraisal;
+
     public WorkCasePrescreen() {
 
     }
@@ -84,5 +87,13 @@ public class WorkCasePrescreen extends AbstractWorkCase {
 
     public void setStepOwner(User stepOwner) {
         this.stepOwner = stepOwner;
+    }
+
+    public int getRequestAppraisal() {
+        return requestAppraisal;
+    }
+
+    public void setRequestAppraisal(int requestAppraisal) {
+        this.requestAppraisal = requestAppraisal;
     }
 }

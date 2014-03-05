@@ -1,13 +1,29 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.MortgageSignLocationType;
-import com.clevel.selos.model.db.master.BankBranch;
-import com.clevel.selos.model.db.master.UserZone;
-
-import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.clevel.selos.model.MortgageSignLocationType;
+import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.db.master.BankBranch;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.UserZone;
 
 @Entity
 @Table(name = "wrk_agreement_info")
@@ -49,6 +65,29 @@ public class AgreementInfo implements Serializable {
     @OneToOne
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
+    
+    @Column(name="confirmed",columnDefinition="int default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private RadioValue confirmed;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_date")
+    private Date createDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modify_date")
+    private Date modifyDate;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "create_user_id")
+    private User createBy;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "modify_user_id")
+    private User modifyBy;
+    
+    @Column(name="remark")
+    private String remark;
     
     public AgreementInfo() {
     	
@@ -126,4 +165,52 @@ public class AgreementInfo implements Serializable {
 		this.workCase = workCase;
 	}
 
+	public RadioValue getConfirmed() {
+		return confirmed;
+	}
+	public void setConfirmed(RadioValue confirmed) {
+		this.confirmed = confirmed;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Date getModifyDate() {
+		return modifyDate;
+	}
+
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
+	}
+
+	public User getCreateBy() {
+		return createBy;
+	}
+
+	public void setCreateBy(User createBy) {
+		this.createBy = createBy;
+	}
+
+	public User getModifyBy() {
+		return modifyBy;
+	}
+
+	public void setModifyBy(User modifyBy) {
+		this.modifyBy = modifyBy;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	
+	
 }

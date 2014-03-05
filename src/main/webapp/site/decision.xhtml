@@ -58,12 +58,7 @@
                 <div id="content_info">
                     <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
                     <div id="content_lastupdate">Last update by
-                        <h:outputText value="#{decision.decisionView.modifyBy.userName}"
-                                      rendered="#{not empty decision.decisionView.modifyBy}"/>,
-                        <h:outputText value="#{decision.decisionView.modifyDate}"
-                                      rendered="#{not empty decision.decisionView.modifyDate}">
-                            <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy HH:mm:ss"/>
-                        </h:outputText>
+                        <!-- TODO: Show last update in Decision -->
                     </div>
                 </div>
                 <!-- start content -->
@@ -1619,12 +1614,12 @@
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                        #{proposeCredit.productProgramView.name}
+                                                        #{not empty proposeCredit.productProgramView ? proposeCredit.productProgramView.name : ''}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                        #{proposeCredit.creditTypeView.name}
+                                                        #{not empty proposeCredit.creditTypeView ? proposeCredit.creditTypeView.name : ''}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -1685,6 +1680,7 @@
                                                 </tr>
 
                                                 <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
+                                                <h:panelGroup rendered="#{fn:length(proposeCredit.newCreditTierDetailViewList) gt 1}">
                                                 <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
                                                     <tr>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
@@ -1708,6 +1704,7 @@
                                                         </td>
                                                     </tr>
                                                 </ui:repeat>
+                                                </h:panelGroup>
                                                 <!-- END: Credit Tier Detail [1]->[N-1] -->
 
                                                 <tr>
@@ -1718,15 +1715,17 @@
                                                                     #{msg.get('app.decision.tb.td.label.requestType')}
                                                                 </td>
                                                                 <td class="left" style="border-style: none !important;">
-                                                                    #{proposeCredit.requestType == 2 ? msg.get('app.label.new') :
-                                                                    proposeCredit.requestType == 1 ? msg.get('app.label.change') : ''}
+                                                                    #{proposeCredit.requestType == decision.requestTypeNEW.value ? msg.get('app.label.new')
+                                                                    : proposeCredit.requestType == decision.requestTypeCHANGE.value ? msg.get('app.label.change')
+                                                                    : ''}
                                                                 </td>
                                                                 <td class="title" style="border-style: none !important;">
                                                                     #{msg.get('app.decision.tb.td.label.refinance')}
                                                                 </td>
                                                                 <td class="left" style="border-style: none !important;">
-                                                                    #{proposeCredit.refinance == 2 ? msg.get('app.label.yes') :
-                                                                    proposeCredit.refinance == 1 ? msg.get('app.label.no') : ''}
+                                                                    #{proposeCredit.refinance == decision.yesValue ? msg.get('app.label.yes')
+                                                                    : proposeCredit.refinance == decision.noValue ? msg.get('app.label.no')
+                                                                    : ''}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -1734,7 +1733,7 @@
                                                                     #{msg.get('app.decision.tb.td.label.purpose')}
                                                                 </td>
                                                                 <td class="left" colspan="3" style="border-style: none !important;">
-                                                                    #{proposeCredit.loanPurposeView.description}
+                                                                    #{not empty proposeCredit.loanPurposeView ? proposeCredit.loanPurposeView.description : ''}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -1749,7 +1748,7 @@
                                                                     #{msg.get('app.decision.tb.td.label.disbursement')}
                                                                 </td>
                                                                 <td class="left" style="border-style: none !important;">
-                                                                    #{proposeCredit.disbursementTypeView.disbursement}
+                                                                    #{not empty proposeCredit.disbursementTypeView ? proposeCredit.disbursementTypeView.disbursement : ''}
                                                                 </td>
                                                                 <td class="title" style="border-style: none !important;">
                                                                     #{msg.get('app.decision.tb.td.label.holdAmount')}
@@ -1769,7 +1768,7 @@
 
                                             <h:panelGroup rendered="#{empty decision.decisionView.proposeCreditList}">
                                                 <tr>
-                                                    <td colspan="11">No records found.</td>
+                                                    <td colspan="11">#{msg.get('app.label.noRecordsFound')}</td>
                                                 </tr>
                                             </h:panelGroup>
 
@@ -1813,9 +1812,10 @@
                         </tr>
                         <tr>
                             <td class="left" colspan="2">
-                                <p:selectOneRadio value="#{decision.creditCustomerType}">
-                                    <f:selectItem itemLabel="#{msg.get('app.button.normal')}" itemValue="#{decision.creditCustomerTypes[0]}"/>
-                                    <f:selectItem itemLabel="#{msg.get('app.button.prime')}" itemValue="#{decision.creditCustomerTypes[1]}"/>
+                                <p:selectOneRadio value="#{decision.decisionView.creditCustomerType}"
+                                                  disabled="true">
+                                    <f:selectItem itemLabel="#{msg.get('app.button.normal')}" itemValue="#{decision.creditCusTypeNORMAL}"/>
+                                    <f:selectItem itemLabel="#{msg.get('app.button.prime')}" itemValue="#{decision.creditCusTypePRIME}"/>
                                 </p:selectOneRadio>
                             </td>
                         </tr>
@@ -1825,11 +1825,12 @@
                                     <tr>
                                         <td class="title"><h:outputText value="#{msg.get('app.decision.label.typeOfLoan')}"/></td>
                                         <td class="left">
-                                            <p:selectOneMenu value="#{decision.creditRequestType.id}"
+                                            <p:selectOneMenu value="#{decision.decisionView.loanRequestType.id}"
+                                                             disabled="true"
                                                              style="width: 200px">
                                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
-                                                <f:selectItems value="#{decision.creditRequestTypeList}" var="crdRequestType"
-                                                               itemLabel="#{crdRequestType.description}" itemValue="#{crdRequestType.id}"/>
+                                                <f:selectItems value="#{decision.creditRequestTypeViewList}" var="crdRequestType"
+                                                               itemLabel="#{crdRequestType.name}" itemValue="#{crdRequestType.id}"/>
                                             </p:selectOneMenu>
                                         </td>
                                     </tr>
@@ -1842,11 +1843,11 @@
                                     <tr>
                                         <td class="title"><h:outputText value="#{msg.get('app.decision.label.investedCountry')}"/></td>
                                         <td class="left">
-                                            <p:selectOneMenu value="#{decision.country.id}"
-                                                             style="width: 200px"
-                                                             disabled="true">
+                                            <p:selectOneMenu value="#{decision.decisionView.investedCountry.id}"
+                                                             disabled="true"
+                                                             style="width: 200px">
                                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
-                                                <f:selectItems value="#{decision.countryList}" var="country"
+                                                <f:selectItems value="#{decision.countryViewList}" var="country"
                                                                itemLabel="#{country.name}" itemValue="#{country.id}"/>
                                             </p:selectOneMenu>
                                         </td>
@@ -1859,41 +1860,41 @@
                             <!-- Existing SME (Limit & Max Limit) -->
                             <tr>
                                 <td class="left" colspan="2">
-                                        <table border="0">
-                                            <tr>
-                                                <td class="left">
-                                                    <h:outputText value="#{msg.get('app.decision.label.existingSMELimit')}"
-                                                                  styleClass="title" style="margin-right: 5px"/>
-                                                    <p:inputText value="#{decision.decisionView.existingSMELimit}"
-                                                                 onclick="this.select()"
-                                                                 onkeydown="return onKeyDownMoney(event);"
-                                                                 onkeypress="return onKeyPressMoney(event);"
-                                                                 readonly="true"
-                                                                 styleClass="left">
-                                                        <f:convertNumber pattern="#,##0.##"
-                                                                         minFractionDigits="2" maxFractionDigits="2"
-                                                                         maxIntegerDigits="14"/>
-                                                        <p:ajax event="blur" update="@this"/>
-                                                    </p:inputText>
+                                    <table border="0">
+                                        <tr>
+                                            <td class="left">
+                                                <h:outputText value="#{msg.get('app.decision.label.existingSMELimit')}"
+                                                              styleClass="title" style="margin-right: 5px"/>
+                                                <p:inputText value="#{decision.decisionView.existingSMELimit}"
+                                                             onclick="this.select()"
+                                                             onkeydown="return onKeyDownMoney(event);"
+                                                             onkeypress="return onKeyPressMoney(event);"
+                                                             readonly="true"
+                                                             styleClass="left">
+                                                    <f:convertNumber pattern="#,##0.##"
+                                                                     minFractionDigits="2" maxFractionDigits="2"
+                                                                     maxIntegerDigits="14"/>
+                                                    <p:ajax event="blur" update="@this"/>
+                                                </p:inputText>
 
-                                                    <p:spacer width="10" height="0"/>
+                                                <p:spacer width="10" height="0"/>
 
-                                                    <h:outputText value="#{msg.get('app.decision.label.maxExistingSMELimit')}"
-                                                                  styleClass="title" style="margin-right: 5px"/>
-                                                    <p:inputText value="#{decision.decisionView.maximumSMELimit}"
-                                                                 onclick="this.select()"
-                                                                 onkeydown="return onKeyDownMoney(event);"
-                                                                 onkeypress="return onKeyPressMoney(event);"
-                                                                 readonly="true"
-                                                                 styleClass="left">
-                                                        <f:convertNumber pattern="#,##0.##"
-                                                                         minFractionDigits="2" maxFractionDigits="2"
-                                                                         maxIntegerDigits="14"/>
-                                                        <p:ajax event="blur" update="@this"/>
-                                                    </p:inputText>
-                                                </td>
-                                            </tr>
-                                        </table>
+                                                <h:outputText value="#{msg.get('app.decision.label.maxExistingSMELimit')}"
+                                                              styleClass="title" style="margin-right: 5px"/>
+                                                <p:inputText value="#{decision.decisionView.maximumSMELimit}"
+                                                             onclick="this.select()"
+                                                             onkeydown="return onKeyDownMoney(event);"
+                                                             onkeypress="return onKeyPressMoney(event);"
+                                                             readonly="true"
+                                                             styleClass="left">
+                                                    <f:convertNumber pattern="#,##0.##"
+                                                                     minFractionDigits="2" maxFractionDigits="2"
+                                                                     maxIntegerDigits="14"/>
+                                                    <p:ajax event="blur" update="@this"/>
+                                                </p:inputText>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </td>
                             </tr>
                         </h:panelGroup>
@@ -1959,7 +1960,9 @@
                                                         <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                     fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
-                                                            #{proposeCredit.uwDecision.value eq 2 ? msg.get('app.label.approved') : proposeCredit.uwDecision.value eq 1 ? msg.get('app.label.rejected') : ''}
+                                                            #{proposeCredit.uwDecision eq 'APPROVED' ? msg.get('app.label.approved')
+                                                            : proposeCredit.uwDecision eq 'REJECTED' ? msg.get('app.label.rejected')
+                                                            : ''}
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -2057,9 +2060,8 @@
                                                     </tr>
 
                                                     <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
-                                                    <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}"
-                                                               var="creditTierDetail" varStatus="j"
-                                                               offset="1">
+                                                    <h:panelGroup rendered="#{fn:length(proposeCredit.newCreditTierDetailViewList) gt 1}">
+                                                    <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
                                                         <tr>
                                                             <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                                 <h:outputText value="#{creditTierDetail.standardPriceLabel}"/>
@@ -2082,6 +2084,7 @@
                                                             </td>
                                                         </tr>
                                                     </ui:repeat>
+                                                    </h:panelGroup>
                                                     <!-- END: Credit Tier Detail [1]->[N-1] -->
 
                                                     <tr>
@@ -2264,26 +2267,26 @@
                                                 <tr>
                                                     <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
+                                                                    fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
                                                         #{i.index + 1}
                                                     </td>
                                                     <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
-                                                        #{proposeCredit.approved eq 2 ? msg.get('app.label.approved') :
-                                                          proposeCredit.approved eq 1 ? msg.get('app.label.rejected') : ''}
+                                                                    fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
+                                                        #{proposeCredit.uwDecision eq 'APPROVED' ? msg.get('app.label.approved') :
+                                                          proposeCredit.uwDecision eq 'REJECTED' ? msg.get('app.label.rejected') : ''}
+                                                    </td>
+                                                    <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
+                                                        #{not empty proposeCredit.productProgramView ?
+                                                          proposeCredit.productProgramView.description : ''}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                             fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                        #{not empty proposeCredit.productProgram ?
-                                                          proposeCredit.productProgram.description : ''}
-                                                    </td>
-                                                    <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                        #{not empty proposeCredit.creditType ?
-                                                          proposeCredit.creditType.description : ''}
+                                                        #{not empty proposeCredit.creditTypeView ?
+                                                          proposeCredit.creditTypeView.description : ''}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -2344,9 +2347,8 @@
                                                 </tr>
 
                                                 <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
-                                                <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}"
-                                                           var="creditTierDetail" varStatus="j"
-                                                           offset="1">
+                                                <h:panelGroup rendered="#{fn:length(proposeCredit.newCreditTierDetailViewList) gt 1}">
+                                                <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
                                                     <tr>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{creditTierDetail.standardPriceLabel}"/>
@@ -2369,6 +2371,7 @@
                                                         </td>
                                                     </tr>
                                                 </ui:repeat>
+                                                </h:panelGroup>
                                                 <!-- END: Credit Tier Detail [1]->[N-1] -->
 
                                                 <tr>
@@ -2395,8 +2398,8 @@
                                                                     #{msg.get('app.decision.tb.td.label.purpose')}
                                                                 </td>
                                                                 <td class="left" colspan="3" style="border-style: none !important;">
-                                                                    #{not empty proposeCredit.loanPurpose ?
-                                                                      proposeCredit.loanPurpose.description : ''}
+                                                                    #{not empty proposeCredit.loanPurposeView ?
+                                                                      proposeCredit.loanPurposeView.description : ''}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -2412,8 +2415,8 @@
                                                                     #{msg.get('app.decision.tb.td.label.disbursement')}
                                                                 </td>
                                                                 <td class="left" style="border-style: none !important;">
-                                                                    #{not empty proposeCredit.disbursement ?
-                                                                      proposeCredit.disbursement.disbursement : ''}
+                                                                    #{not empty proposeCredit.disbursementTypeView ?
+                                                                      proposeCredit.disbursementTypeView.disbursement : ''}
                                                                 </td>
                                                                 <td class="title" style="border-style: none !important;">
                                                                     #{msg.get('app.decision.tb.td.label.holdAmount')}
@@ -2638,19 +2641,19 @@
                                                 </p:column>
 
                                                 <p:column styleClass="left top">
-                                                    #{collCrdType.requestType == 2 ? msg.get('app.label.new')
-                                                    : collCrdType.requestType == 1 ? msg.get('app.label.change')
+                                                    #{collCrdType.requestType == decision.requestTypeNEW.value ? msg.get('app.label.new')
+                                                    : collCrdType.requestType == decision.requestTypeCHANGE.value ? msg.get('app.label.change')
                                                     : ''}
                                                 </p:column>
 
                                                 <p:column styleClass="left top">
-                                                    <h:outputText value="#{collCrdType.productProgram.name}"
-                                                                  rendered="#{not empty collCrdType.productProgram}"/>
+                                                    <h:outputText value="#{collCrdType.productProgramView.name}"
+                                                                  rendered="#{not empty collCrdType.productProgramView}"/>
                                                 </p:column>
 
                                                 <p:column styleClass="left top">
-                                                    <h:outputText value="#{collCrdType.creditFacility.name}"
-                                                                  rendered="#{not empty collCrdType.creditFacility}"/>
+                                                    <h:outputText value="#{collCrdType.creditFacilityView.name}"
+                                                                  rendered="#{not empty collCrdType.creditFacilityView}"/>
                                                 </p:column>
 
                                                 <p:column styleClass="right top">
@@ -2728,12 +2731,8 @@
                                         <tr>
                                             <td class="title">#{msg.get('app.decision.label.insuranceCompany')}</td>
                                             <td class="left" colspan="3">
-                                                <!--<p:selectOneRadio value="#{collHeader.insuranceCompany}">-->
-                                                    <!--<f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.partner')}" itemValue="2"/>-->
-                                                    <!--<f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.nonPartner')}" itemValue="1"/>-->
-                                                <!--</p:selectOneRadio>-->
-                                                #{collHead.insuranceCompany eq 2 ? msg.get('app.button.partner')
-                                                : collHead.insuranceCompany eq 1 ? msg.get('app.button.nonPartner')
+                                                #{collHead.insuranceCompany eq decision.yesValue ? msg.get('app.button.partner')
+                                                : collHead.insuranceCompany eq decision.noValue ? msg.get('app.button.nonPartner')
                                                 : ''}
                                             </td>
                                         </tr>
@@ -2776,6 +2775,7 @@
                                                     <p:column styleClass="left top">
                                                         <ui:repeat value="#{subColl.collateralOwnerUWList}"
                                                                    var="collOwnerUW" varStatus="i">
+                                                            #{not empty collOwnerUW.titleTh ? collOwnerUW.titleTh.titleTh : ''}
                                                             #{collOwnerUW.firstNameTh} #{collOwnerUW.lastNameTh}#{!i.last ? ', ' : ''}
                                                         </ui:repeat>
                                                     </p:column>
@@ -2859,7 +2859,7 @@
                                         <p:commandButton id="btnEditApprovedCollateral"
                                                          rendered="#{decision.roleUW}"
                                                          value="#{msg.get('app.button.edit')}"
-                                                         action="#{decision.onEditAppProposeCollateral()}"
+                                                         action="#{decision.onEditApproveCollateral()}"
                                                          update=":collateralDlgForm"
                                                          oncomplete="proposeCollateralDlg.show()"
                                                          styleClass="smaller">
@@ -2914,13 +2914,8 @@
                                             <tr>
                                                 <td class="title">#{msg.get('app.decision.label.approved')}</td>
                                                 <td class="left">
-                                                    <!--<p:selectOneRadio value="#{proposeColl.approved}"-->
-                                                                      <!--disabled="true">-->
-                                                        <!--<f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>-->
-                                                        <!--<f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>-->
-                                                    <!--</p:selectOneRadio>-->
-                                                    #{proposeColl.uwDecision eq 2 ? msg.get('app.button.yes')
-                                                    : proposeColl.uwDecision eq 1 ? msg.get('app.button.no')
+                                                    #{proposeColl.uwDecision eq 'APPROVED' ? msg.get('app.button.yes')
+                                                    : proposeColl.uwDecision eq 'REJECTED' ? msg.get('app.button.no')
                                                     : ''}
                                                 </td>
                                             </tr>
@@ -2964,19 +2959,19 @@
                                             </p:column>
 
                                             <p:column styleClass="left top">
-                                                #{collCrdType.requestType == 2 ? msg.get('app.label.new')
-                                                : collCrdType.requestType == 1 ? msg.get('app.label.change')
+                                                #{collCrdType.requestType == decision.requestTypeNEW.value ? msg.get('app.label.new')
+                                                : collCrdType.requestType == decision.requestTypeCHANGE.value ? msg.get('app.label.change')
                                                 : ''}
                                             </p:column>
 
                                             <p:column styleClass="left top">
-                                                <h:outputText value="#{collCrdType.productProgram.name}"
-                                                              rendered="#{not empty collCrdType.productProgram}"/>
+                                                <h:outputText value="#{collCrdType.productProgramView.name}"
+                                                              rendered="#{not empty collCrdType.productProgramView}"/>
                                             </p:column>
 
                                             <p:column styleClass="left top">
-                                                <h:outputText value="#{collCrdType.creditFacility.name}"
-                                                              rendered="#{not empty collCrdType.creditFacility}"/>
+                                                <h:outputText value="#{collCrdType.creditFacilityView.name}"
+                                                              rendered="#{not empty collCrdType.creditFacilityView}"/>
                                             </p:column>
 
                                             <p:column styleClass="right top">
@@ -3054,12 +3049,8 @@
                                     <tr>
                                         <td class="title ">#{msg.get('app.decision.label.insuranceCompany')}</td>
                                         <td class="left" colspan="3">
-                                            <!--<p:selectOneRadio value="#{collHeader.insuranceCompany}" disabled="true">-->
-                                                <!--<f:selectItem itemLabel="#{msg.get('app.button.partner')}" itemValue="2"/>-->
-                                                <!--<f:selectItem itemLabel="#{msg.get('app.button.nonPartner')}" itemValue="1"/>-->
-                                            <!--</p:selectOneRadio>-->
-                                            #{collHeader.insuranceCompany eq 2 ? msg.get('app.button.partner')
-                                            : collHeader.insuranceCompany eq 1 ? msg.get('app.button.nonPartner')
+                                            #{collHeader.insuranceCompany eq decision.yesValue ? msg.get('app.button.partner')
+                                            : collHeader.insuranceCompany eq decision.noValue ? msg.get('app.button.nonPartner')
                                             : ''}
                                         </td>
                                     </tr>
@@ -3102,6 +3093,7 @@
                                                 <p:column styleClass="left top">
                                                     <ui:repeat value="#{subColl.collateralOwnerUWList}"
                                                                var="collOwnerUW" varStatus="i">
+                                                        #{not empty collOwnerUW.titleTh ? collOwnerUW.titleTh.titleTh : ''}
                                                         #{collOwnerUW.firstNameTh} #{collOwnerUW.lastNameTh}#{!i.last ? ', ' : ''}
                                                     </ui:repeat>
                                                 </p:column>
@@ -3196,6 +3188,8 @@
                                     <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                     <p:column styleClass="left top">
+                                        <h:outputText value="#{guarantor.guarantorName.titleTh.titleTh}"
+                                                      rendered="#{not empty guarantor.guarantorName and not empty guarantor.guarantorName.titleTh}"/>
                                         <h:outputText value="#{guarantor.guarantorName.firstNameTh} #{guarantor.guarantorName.lastNameTh}"
                                                       rendered="#{not empty guarantor.guarantorName}"/>
                                     </p:column>
@@ -3204,7 +3198,8 @@
 
                                     <p:column styleClass="left top">
                                         <table border="0" style="margin:-1px 0 -1px -10px; width: 100%">
-                                            <ui:repeat value="#{guarantor.proposeCreditDetailViewList}" var="creditType">
+                                            <ui:repeat value="#{guarantor.proposeCreditDetailViewList}"
+                                                       var="creditType">
                                                 <tr>
                                                     <td class="left top" style="border-style: none !important;">
                                                         #{creditType.accountName}
@@ -3214,7 +3209,8 @@
                                                     </td>
                                                     <td class="center top" style="border-style: none !important;">
                                                         <h:outputText value="#{not empty creditType.productProgramView ?
-                                                                       creditType.productProgramView.name : ''}"/><br/>
+                                                                       creditType.productProgramView.name : ''}"/>
+                                                        <br/>
                                                         <h:outputText value="#{not empty creditType.creditFacilityView ?
                                                                        creditType.creditFacilityView.name : ''}"/>
                                                     </td>
@@ -3281,7 +3277,6 @@
                             </td>
                         </tr>
 
-                        <h:panelGroup rendered="#{decision.roleZM_RGM or decision.roleUW}">
                         <tr>
                             <td class="left" colspan="2">
                                 <p:commandButton id="btnAddApprovedGuarantor"
@@ -3296,7 +3291,6 @@
                                 </p:commandButton>
                             </td>
                         </tr>
-                        </h:panelGroup>
 
                         <tr>
                             <td class="left" colspan="2">
@@ -3321,12 +3315,14 @@
                                         <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                         <p:column styleClass="center top">
-                                            #{guarantor.uwDecision.name eq decision.decisionType[0].name ? msg.get('app.label.approved')
-                                            : guarantor.uwDecision.name eq decision.decisionType[1].name ? msg.get('app.label.rejected')
+                                            #{guarantor.uwDecision eq 'APPROVED' ? msg.get('app.label.approved')
+                                            : guarantor.uwDecision eq 'REJECTED' ? msg.get('app.label.rejected')
                                             : ''}
                                         </p:column>
 
                                         <p:column styleClass="left top">
+                                            <h:outputText value="#{guarantor.guarantorName.titleTh.titleTh}"
+                                                          rendered="#{not empty guarantor.guarantorName and not empty guarantor.guarantorName.titleTh}"/>
                                             <h:outputText value="#{guarantor.guarantorName.firstNameTh} #{guarantor.guarantorName.lastNameTh}"
                                                           rendered="#{not empty guarantor.guarantorName}"/>
                                         </p:column>
@@ -3335,7 +3331,8 @@
 
                                         <p:column styleClass="left top">
                                             <table border="0" style="margin:-1px 0 -1px -10px; width: 100%">
-                                                <ui:repeat value="#{guarantor.proposeCreditDetailViewList}" var="creditType">
+                                                <ui:repeat value="#{guarantor.proposeCreditDetailViewList}"
+                                                           var="creditType">
                                                     <tr>
                                                         <td class="left top" style="border-style: none !important;">
                                                             #{creditType.accountName}
@@ -3379,11 +3376,11 @@
                                             </h:outputText>
                                         </p:column>
 
-                                        <p:column styleClass="center top"
+                                        <p:column styleClass="center top" style="white-space: nowrap !important;"
                                                   rendered="#{decision.roleUW}">
                                             <p:commandButton title="#{msg.get('app.button.edit')}"
                                                              icon="ui-icon-pencil"
-                                                             disabled="#{not decision.roleUW or not decision.roleZM_RGM}"
+                                                             disabled="#{decision.roleBDM}"
                                                              action="#{decision.onEditApproveGuarantor()}"
                                                              update=":guarantorDlgForm"
                                                              oncomplete="proposeGuarantorDlg.show()">
@@ -3396,7 +3393,7 @@
 
                                             <p:commandButton title="#{msg.get('app.button.delete')}"
                                                              icon="ui-icon-trash"
-                                                             disabled="#{not decision.roleUW or not decision.roleZM_RGM}"
+                                                             disabled="#{decision.roleBDM}"
                                                              oncomplete="confirmDeleteAppGuarantorDlg.show()">
                                                 <f:setPropertyActionListener value="#{guarantor}"
                                                                              target="#{decision.selectedApproveGuarantor}"/>
@@ -3454,13 +3451,13 @@
                                 <table border="0">
                                     <tr>
                                         <td class="left" style="border-style: none !important;">
-                                            <p:selectOneMenu value="#{decision.followUpConditionView.condition}"
+                                            <p:selectOneMenu value="#{decision.decisionFollowConditionView.conditionView.id}"
                                                              disabled="#{not decision.roleUW}"
-                                                             style="width: 400px">
+                                                             style="width: 400px"
+                                                             required="#{not empty param[addFollowUpCondButton.clientId]}">
                                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                                                <f:selectItem itemLabel="Example Condition" itemValue="Example Condition"/>
-                                                <!-- todo: getList conditions for FollowUpCondition -->
-                                                <!--<f:selectItems value="" var="" itemLabel="" itemValue=""/>-->
+                                                <f:selectItems value="#{decision.followConditionViewList}" var="followCondition"
+                                                               itemLabel="#{followCondition.name}" itemValue="#{followCondition.id}"/>
                                             </p:selectOneMenu>
                                          </td>
                                          <td class="left" style="border-style: none !important; padding-left: 5px">
@@ -3470,7 +3467,7 @@
                                                              value="#{msg.get('app.button.add')}"
                                                              action="#{decision.onAddFollowUpCondition()}"
                                                              process="@form"
-                                                             update=":frmMain:dtFollowUpCondition"
+                                                             update=":frmMain,:msgBoxSystemMessagePanel"
                                                              styleClass="smaller"/>
                                         </td>
                                     </tr>
@@ -3482,7 +3479,7 @@
                                 <table border="0">
                                     <tr>
                                         <td class="left" style="border-style: none !important;">
-                                            <p:inputText value="#{decision.followUpConditionView.detailOfFollowUp}"
+                                            <p:inputText value="#{decision.decisionFollowConditionView.detail}"
                                                          readonly="#{not decision.roleUW}"
                                                          style="width: 400px"/>
 
@@ -3491,9 +3488,9 @@
                                             <clv:BECalendar showOn="both" showButtonPanel="true" navigator="true"
                                                             yearRange="1950:2100"
                                                             disabled="#{not decision.roleUW}"
-                                                            defaultdate="#{decision.followUpConditionView.dateOfFollowUp}"
+                                                            defaultdate="#{decision.decisionFollowConditionView.followDate}"
                                                             pattern="dd/MM/yyyy"
-                                                            value="#{decision.followUpConditionView.dateOfFollowUp}"
+                                                            value="#{decision.decisionFollowConditionView.followDate}"
                                                             locale="th_TH"
                                                             readonlyInput="true"
                                                             styleClass="calendar_right">
@@ -3506,30 +3503,36 @@
                         <tr>
                             <td class="left" colspan="2">
                                 <p:dataTable id="dtFollowUpCondition"
-                                             var="followUpCondition" value="#{decision.decisionView.followUpConditionList}"
+                                             var="followUpCondition" value="#{decision.decisionView.decisionFollowConditionViewList}"
                                              paginator="false" rowKey="#{followUpCondition}" rowIndexVar="rowIndex"
                                              style="width: 100%">
 
                                     <p:columnGroup type="header">
                                         <p:row>
-                                            <p:column style="width: 10%"/>
-                                            <p:column style="width: 40%" headerText="#{msg.get('app.decision.tb.th.topic')}"/>
-                                            <p:column style="width: #{decision.roleUW ? '30%' : '40%'}"
+                                            <p:column style="width: 5%"/>
+                                            <p:column style="width: 50%" headerText="#{msg.get('app.decision.tb.th.topic')}"/>
+                                            <p:column style="width: #{decision.roleUW ? '30%' : '35%'}"
                                                       headerText="#{msg.get('app.decision.tb.th.detail')}"/>
                                             <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.date')}"/>
-                                            <p:column style="width: 10%"
+                                            <p:column style="width: 5%"
                                                       rendered="#{decision.roleUW}"/>
                                         </p:row>
                                     </p:columnGroup>
 
-                                    <p:column styleClass="center top">#{rowIndex + 1}</p:column>
+                                    <p:column styleClass="center top">
+                                        <h:outputText value="#{rowIndex + 1}"/>
+                                    </p:column>
 
-                                    <p:column styleClass="center top">#{followUpCondition.condition}</p:column>
+                                    <p:column styleClass="left top">
+                                        <h:outputText value="#{followUpCondition.conditionView.name}" rendered="#{not empty followUpCondition.conditionView}"/>
+                                    </p:column>
 
-                                    <p:column styleClass="left top">#{followUpCondition.detailOfFollowUp}</p:column>
+                                    <p:column styleClass="left top">
+                                        <h:outputText value="#{followUpCondition.detail}"/>
+                                    </p:column>
 
                                     <p:column styleClass="center top">
-                                        <h:outputText value="#{followUpCondition.dateOfFollowUp}">
+                                        <h:outputText value="#{followUpCondition.followDate}">
                                             <f:convertDateTime pattern="dd/MM/yyyy" locale="en"/>
                                         </h:outputText>
                                     </p:column>
@@ -3540,7 +3543,7 @@
                                                          icon="ui-icon-trash"
                                                          oncomplete="confirmDeleteFollowUpCondDlg.show()">
                                             <f:setPropertyActionListener value="#{rowIndex}"
-                                                                         target="#{decision.rowIndexFollowUpCondition}"/>
+                                                                         target="#{decision.rowIndexDecisionFollowCondition}"/>
                                         </p:commandButton>
                                     </p:column>
 
@@ -3629,7 +3632,7 @@
                                         <td class="left" style="width: 250px;">
                                             #{msg.get('app.decision.tb.td.label.reasonForReduction')}
                                         </td>
-                                        <td class="left middle" colspan="5">
+                                        <td class="left middle" colspan="5" style="padding-top: 10px;">
                                             <p:inputTextarea value="#{decision.decisionView.reasonForReduction}"
                                                              rows="3" cols="150"
                                                              readonly="true" autoResize="false"/>
@@ -3673,34 +3676,39 @@
                                         </p:row>
                                     </p:columnGroup>
 
-                                    <p:column styleClass="center top">#{rowIndex + 1}</p:column>
-
-                                    <p:column styleClass="left top">#{approvalHistory.action}</p:column>
-
-                                    <p:column styleClass="left top">
-                                        <h:outputText value="#{approvalHistory.approver.userName}"
-                                                      rendered="#{not empty approvalHistory.approver}"/>
+                                    <p:column styleClass="center top">
+                                        <h:outputText value="#{rowIndex + 1}"/>
                                     </p:column>
 
                                     <p:column styleClass="left top">
-                                        <h:outputText value="#{approvalHistory.approver.role.description}"
-                                                      rendered="#{not empty approvalHistory.approver and not empty approvalHistory.approver.role}"/>
+                                        <h:outputText value="#{approvalHistory.stepView.description}"
+                                                      rendered="#{not empty approvalHistory.stepView}"/>
                                     </p:column>
 
                                     <p:column styleClass="left top">
-                                        <h:outputText value="#{approvalHistory.approver.title.name}"
-                                                      rendered="#{not empty approvalHistory.approver and not empty approvalHistory.approver.title}"/>
+                                        <h:outputText value="#{approvalHistory.userView.userName}"
+                                                      rendered="#{not empty approvalHistory.userView}"/>
+                                    </p:column>
+
+                                    <p:column styleClass="left top">
+                                        <h:outputText value="#{approvalHistory.userView.roleDescription}"
+                                                      rendered="#{not empty approvalHistory.userView}"/>
+                                    </p:column>
+
+                                    <p:column styleClass="left top">
+                                        <h:outputText value="#{approvalHistory.userView.titleName}"
+                                                      rendered="#{not empty approvalHistory.userView}"/>
                                     </p:column>
 
                                     <p:column styleClass="center top">
-                                        <h:outputText value="#{approvalHistory.approveDate}">
+                                        <h:outputText value="#{approvalHistory.submitDate}">
                                             <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
                                         </h:outputText>
                                     </p:column>
 
                                     <p:column styleClass="left top">
-                                        #{approvalHistory.comment}
-                                        <h:outputText value="-" rendered="#{empty approvalHistory.comment}"/>
+                                        <h:outputText value="#{approvalHistory.comments}"/>
+                                        <h:outputText value="-" rendered="#{empty approvalHistory.comments}"/>
                                     </p:column>
 
                                 </p:dataTable>
@@ -3711,17 +3719,20 @@
                         </tr>
 
                         <h:panelGroup rendered="#{decision.roleUW}">
+                            <!-- UW - (Comment , Approve) -->
                             <tr>
                                 <td class="center" colspan="2">
-                                    <!-- UW - (Comment , Approve) -->
                                     <div class="ui-datatable ui-widget">
                                         <div class="ui-datatable-tablewrapper">
                                             <table style="margin: 0 auto; width: 500px !important;">
                                                 <thead>
                                                     <tr>
                                                         <th class="ui-state-default">
-                                                            <!--#{decision.approvalHistory.approver.userName} - #{decision.approvalHistory.action}-->
-                                                            UW#1 - Approve CA
+                                                            <h:outputText value="#{decision.approvalHistoryView.userView.userName}"
+                                                                          rendered="#{not empty decision.approvalHistoryView.userView}"/>
+                                                            <h:outputText value=" - "/>
+                                                            <h:outputText value="#{decision.approvalHistoryView.stepView.description}"
+                                                                          rendered="#{not empty decision.approvalHistoryView.stepView}"/>
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -3737,7 +3748,7 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td class="center" style="border-style: none !important;">
-                                                                        <p:inputTextarea value="#{decision.approvalHistory.comment}"
+                                                                        <p:inputTextarea value="#{decision.approvalHistoryView.comments}"
                                                                                          rows="5"
                                                                                          style="font-size: 12px !important; width: 450px"/>
                                                                     </td>
@@ -3747,10 +3758,11 @@
                                                     </tr>
                                                     <tr>
                                                         <td class="center">
-                                                            <p:selectOneRadio value="#{decision.approvalHistory.approveDecision}"
+                                                            <p:selectOneRadio value="#{decision.approvalHistoryView.uwDecision}"
+                                                                              required="#{decision.roleUW and not empty param[saveDecisionBtn.clientId]}"
                                                                               styleClass="ovr-border">
-                                                                <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="2"/>
-                                                                <f:selectItem itemLabel="#{msg.get('app.button.reject')}" itemValue="1"/>
+                                                                <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
+                                                                <f:selectItem itemLabel="#{msg.get('app.button.reject')}" itemValue="#{decision.decisionREJECTED}"/>
                                                             </p:selectOneRadio>
                                                         </td>
                                                     </tr>
@@ -3762,9 +3774,8 @@
                                                                         #{msg.get('app.decision.tb.td.label.approvalName')}
                                                                     </td>
                                                                     <td class="left" style="border-style: none !important;">
-                                                                        <!--#{decision.approvalHistory.approver.title.name}-->
-                                                                        <!--#{decision.approvalHistory.approver.userName}-->
-                                                                        Mr.UW#1
+                                                                        <h:outputText value="#{decision.approvalHistoryView.userView.userName}"
+                                                                                      rendered="#{not empty decision.approvalHistoryView.userView}"/>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -3772,8 +3783,8 @@
                                                                         #{msg.get('app.decision.tb.td.label.position')}
                                                                     </td>
                                                                     <td class="left" style="border-style: none !important;">
-                                                                        <!-- todo: getPosition of Approver -->
-                                                                        Example Position
+                                                                        <h:outputText value="#{decision.approvalHistoryView.userView.titleName}"
+                                                                                      rendered="#{not empty decision.approvalHistoryView.userView}"/>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -3781,7 +3792,7 @@
                                                                         #{msg.get('app.decision.tb.td.label.date')}
                                                                     </td>
                                                                     <td class="left" style="border-style:none !important;">
-                                                                        <h:outputText value="#{decision.approvalHistory.approveDate}">
+                                                                        <h:outputText value="#{decision.approvalHistoryView.submitDate}">
                                                                             <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
                                                                         </h:outputText>
                                                                     </td>
@@ -3822,13 +3833,14 @@
                         <tr>
                             <td colspan="2" class="center">
                                 <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
-                                                 action="#{decision.onSave()}"
+                                                 binding="#{saveDecisionBtn}"
+                                                 action="#{decision.onSaveDecision()}"
                                                  process="@form"
-                                                 update=":frmMain, :msgBoxSystemMessagePanel"
+                                                 update=":frmMain,:msgBoxSystemMessagePanel"
                                                  styleClass="smaller"/>
                                 <p:spacer width="10" height="0"/>
                                 <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
-                                                 action="#{decision.onCancel()}"
+                                                 action="#{decision.onCancelDecision()}"
                                                  process="@form"
                                                  update=":frmMain"
                                                  styleClass="smaller"/>
@@ -3891,7 +3903,7 @@
     <ui:param name="name" value="confirmDeleteAppProCollateralDlg"/>
     <ui:param name="formId" value="frmConfirmDeleteAppProCollateral"/>
     <ui:param name="controller" value="#{decision}"/>
-    <ui:param name="action" value="onDeleteAppProposeCollateral"/>
+    <ui:param name="action" value="onDeleteApproveCollateral"/>
     <ui:param name="update" value=":frmMain"/>
 </ui:include>
 
@@ -3942,6 +3954,7 @@
 
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                     severity="#{decision.severity}"
                      header="#{decision.messageHeader}" message="#{decision.message}">
         <p:commandButton value="OK"
                          process="@this"

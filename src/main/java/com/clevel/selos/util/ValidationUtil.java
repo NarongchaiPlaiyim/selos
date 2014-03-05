@@ -99,43 +99,45 @@ public class ValidationUtil implements Serializable {
         return value.compareTo(min) >= 0 && value.compareTo(max) <= 0;
     }
 
-    public static boolean isValueGreaterThanZero(BigDecimal value) {
-        return value.compareTo(BigDecimal.ZERO) > 0;
+    public static enum CompareMode{GREATER_THAN,GREATER_THAN_OR_EQUAL,EQUAL,LESS_THAN,LESS_THAN_OR_EQUAL}
+    public static boolean isFirstCompareToSecond(BigDecimal first,BigDecimal second,CompareMode compareMode) {
+        if (first==null || second==null ) {
+            return false;
+        }
+        switch (compareMode) {
+            case GREATER_THAN:
+                return first.compareTo(second) == 1;
+            case GREATER_THAN_OR_EQUAL:
+                return first.compareTo(second) >= 0;
+            case EQUAL:
+                return first.compareTo(second) == 0;
+            case LESS_THAN:
+                return first.compareTo(second) == -1;
+            case LESS_THAN_OR_EQUAL:
+                return first.compareTo(second) <= 0;
+            default:
+                return false;
+        }
     }
 
-    public static boolean isValueGreaterEqualZero(BigDecimal value) {
-        return value.compareTo(BigDecimal.ZERO) >= 0;
+    public static boolean isValueCompareToZero(BigDecimal value,CompareMode compareMode) {
+        if (value==null) {
+            return false;
+        }
+        switch (compareMode) {
+            case GREATER_THAN:
+                return value.compareTo(BigDecimal.ZERO) == 1;
+            case GREATER_THAN_OR_EQUAL:
+                return value.compareTo(BigDecimal.ZERO) >= 0;
+            case EQUAL:
+                return value.compareTo(BigDecimal.ZERO) == 0;
+            case LESS_THAN:
+                return value.compareTo(BigDecimal.ZERO) == -1;
+            case LESS_THAN_OR_EQUAL:
+                return value.compareTo(BigDecimal.ZERO) <= 0;
+            default:
+                return false;
+        }
     }
 
-    public static boolean isValueLessThanZero(BigDecimal value) {
-        return value.compareTo(BigDecimal.ZERO) < 0;
-    }
-
-    public static boolean isValueLessEqualZero(BigDecimal value) {
-        return value.compareTo(BigDecimal.ZERO) <= 0;
-    }
-
-    public static boolean isValueEqualZero(BigDecimal value) {
-        return BigDecimal.ZERO.compareTo(value) == 0;
-    }
-
-    public static boolean isValueEqual(BigDecimal value1, BigDecimal value2) {
-        return value1.compareTo(value2) == 0;
-    }
-
-    public static boolean isGreaterThan(BigDecimal value, BigDecimal target) {
-        return value.compareTo(target) > 0;
-    }
-
-    public static boolean isGreaterEqual(BigDecimal value, BigDecimal target) {
-        return value.compareTo(target) >= 0;
-    }
-
-    public static boolean isLessThan(BigDecimal value, BigDecimal target) {
-        return value.compareTo(target) < 0;
-    }
-
-    public static boolean isLessEqual(BigDecimal value, BigDecimal target) {
-        return value.compareTo(target) <= 0;
-    }
 }

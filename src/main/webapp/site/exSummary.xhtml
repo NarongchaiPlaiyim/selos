@@ -18,6 +18,7 @@
 </h:head>
 
 <h:body>
+    <f:event type="preRenderView" listener="#{executiveSummary.preRender()}" />
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
             <div id="main_container">
@@ -150,7 +151,7 @@
                                                           style="min-width: 130px; max-width: 130px; width: 130px;"/>
                                         </p:column>
 
-                                        <p:column styleClass="left">
+                                        <p:column styleClass="center">
                                             <h:outputText value="#{item.relation.description}"
                                                           style="min-width: 110px; max-width: 110px; width: 110px;"/>
                                         </p:column>
@@ -1177,6 +1178,7 @@
                                     <h:selectOneRadio id="RM008" value="#{executiveSummary.exSummaryView.rm008Code}">
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.answer')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.notAnswer')}" itemValue="0"/>
+                                        <p:ajax update="RM008,rm008remark" listener="#{executiveSummary.onChangeRM008()}" event="click"/>
                                     </h:selectOneRadio>
                                 </td>
                                 <td></td>
@@ -1184,7 +1186,8 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <h:inputTextarea cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm008Remark}"
+                                    <h:inputTextarea id="rm008remark" cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm008Remark}"
+                                                     disabled="#{executiveSummary.exSummaryView.rm008Code == 0}"
                                                      onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
                                                      onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
                                 </td>
@@ -1198,6 +1201,7 @@
                                     <h:selectOneRadio id="RM204" value="#{executiveSummary.exSummaryView.rm204Code}">
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.answer')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.notAnswer')}" itemValue="0"/>
+                                        <p:ajax update="RM204,rm204remark" listener="#{executiveSummary.onChangeRM204()}" event="click"/>
                                     </h:selectOneRadio>
                                 </td>
                                 <td></td>
@@ -1205,7 +1209,8 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <h:inputTextarea cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm204Remark}"
+                                    <h:inputTextarea id="rm204remark" cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm204Remark}"
+                                                     disabled="#{executiveSummary.exSummaryView.rm204Code == 0}"
                                                      onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
                                                      onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
                                 </td>
@@ -1219,6 +1224,7 @@
                                     <h:selectOneRadio id="RM020" value="#{executiveSummary.exSummaryView.rm020Code}">
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.answer')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.notAnswer')}" itemValue="0"/>
+                                        <p:ajax update="RM020,rm020remark" listener="#{executiveSummary.onChangeRM020()}" event="click"/>
                                     </h:selectOneRadio>
                                 </td>
                                 <td></td>
@@ -1226,7 +1232,8 @@
 
                             <tr>
                                 <td colspan="4" style="text-align: left; width: 100%">
-                                    <h:inputTextarea cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm020Remark}"
+                                    <h:inputTextarea id="rm020remark" cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm020Remark}"
+                                                     disabled="#{executiveSummary.exSummaryView.rm020Code == 0}"
                                                      onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
                                                      onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
                                 </td>

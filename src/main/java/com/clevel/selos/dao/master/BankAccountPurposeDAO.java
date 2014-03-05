@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class BankAccountPurposeDAO extends GenericDAO<BankAccountPurpose, Integer> {
+public class BankAccountPurposeDAO extends GenericDAO<BankAccountPurpose, Long> {
     @Inject
     @SELOS
     Logger log;
@@ -24,5 +24,17 @@ public class BankAccountPurposeDAO extends GenericDAO<BankAccountPurpose, Intege
                 .add(Restrictions.eq("active", 1));
         List<BankAccountPurpose> list = criteria.list();
         return list;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public BankAccountPurpose getDefaultProposeForPledge() {
+    	Criteria criteria = createCriteria()
+	        .add(Restrictions.eq("active", 1))
+	        .add(Restrictions.eq("pledgeDefault", true));
+    	List<BankAccountPurpose> purposes= criteria.list();
+    	if (purposes != null && !purposes.isEmpty())
+    		return purposes.get(0);
+    	else
+    		return null;
     }
 }

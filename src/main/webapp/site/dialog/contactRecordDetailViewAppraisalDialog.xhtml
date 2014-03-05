@@ -6,83 +6,133 @@
         xmlns:p="http://primefaces.org/ui"
         xmlns:clv="http://clevel.com/ui">
 
-    <p:panel id="contactRecordDlgPanel" styleClass="panel-dialog">
     <h:form id="contactRecordViewDlgForm">
-        <table class="content_form">
-            <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.callingDate')}"/>
-                    <h:outputLabel value="*" styleClass="require-field"/></td>
-                <td>
-                    <clv:BECalendar id="callingDate" showOn="button" navigator="true"
-                                value="#{appraisalAppointment.contactRecordDetailView.callingDate}"
-                                locale="th_TH"
-                                yearRange="1950:2100">
-                    </clv:BECalendar>
-                </td>
-            </tr>
-            <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.callingResult')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
-                <td>
+        <p:panel styleClass="panel-dialog" id="contactRecordViewDlgPanel" rendered="#{not empty appraisalAppointment.contactRecord}">
+            <p:messages/>
+            <table class="content_form">
+                <tr>
+                    <td class="title">
+                        <p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.callDateTime')}"
+                                       for='calling_datetime'
+                                />
+                    </td>
+                    <td>
+                        <p:inputText id='calling_datetime' readonly="true"
+                                     value="#{appraisalAppointment.contactRecord.callingDate}"
+                                     styleClass="readonly"
+                                >
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
+                        </p:inputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.callResult')}"
+                                       for='calling_result'
+                                />
+                    </td>
+                    <td>
+                        <p:selectOneRadio id="calling_result" value="#{appraisalAppointment.contactRecord.callingResult}"
+                                          required="true" requiredMessage="#{msg.get('app.cusaccept.validate.callResult')}"
+                                >
+                            <f:selectItem itemLabel="#{msg.get('app.cusaccept.callResult.radio.cancontact')}"  itemValue="2" />
+                            <f:selectItem itemLabel="#{msg.get('app.cusaccept.callResult.radio.cannotcontact')}" itemValue="1" />
+                        </p:selectOneRadio>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.acceptResult')}"
+                                       for='accept_result'
+                                />
+                    </td>
+                    <td>
+                        <p:selectOneRadio id="accept_result" value="#{appraisalAppointment.contactRecord.acceptResult}">
+                            <f:selectItem itemLabel="#{msg.get('app.cusaccept.acceptResult.radio.accept')}"  itemValue="2" />
+                            <f:selectItem itemLabel="#{msg.get('app.cusaccept.acceptResult.radio.notaccept')}" itemValue="1" />
+                        </p:selectOneRadio>
+                    </td>
+                </tr>
 
-                    <p:selectOneRadio id="callingResultRadio" value="#{appraisalAppointment.contactRecordDetailView.callingResult}">
-                        <f:selectItem itemLabel="#{msg.get('app.contactRecordDetail.radio.label.callingResult.canContact')}"  itemValue="1" />
-                        <f:selectItem itemLabel="#{msg.get('app.contactRecordDetail.radio.label.callingResult.cannotContact')}" itemValue="0" />
-                    </p:selectOneRadio>
-                </td>
-            </tr>
-            <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.nextCallingDate')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
-                <td>
-                    <clv:BECalendar id="nextCallingDate" showOn="button" navigator="true"
-                                value="#{appraisalAppointment.contactRecordDetailView.nextCallingDate}"
-                                locale="th_TH"
-                                yearRange="1950:2100">
-                        <f:convertDateTime pattern="dd/MM/yyyy"/>
-                    </clv:BECalendar>
-                </td>
-            </tr>
-            <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.reason')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
-                <td>
-                    <p:selectOneMenu style="width: 180px" value="#{appraisalAppointment.contactRecordDetailView.reason}" id="reason">
-                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItem itemLabel="#{msg.get('app.contactRecordDetail.radio.label.reason.accept')}" itemValue="1"/>
-                        <f:selectItem itemLabel="#{msg.get('app.contactRecordDetail.radio.label.reason.notAccept')}" itemValue="2"/>
-                        <f:selectItem itemLabel="#{msg.get('app.contactRecordDetail.radio.label.reason.needToConsider')}" itemValue="3"/>
 
-                    </p:selectOneMenu>
-                </td>
-            </tr>
-            <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.remark')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
-                <td>
-                    <p:inputTextarea value="#{appraisalAppointment.contactRecordDetailView.remark}" rows="3" cols="30" />
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <p:spacer></p:spacer>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" class="center">
-                    <p:commandButton
-                            id="btnSaveContactRecord"
-                            binding="#{saveContactRecord}"
-                            value="#{msg.get('app.button.ok')}"
-                            action="#{appraisalAppointment.onSaveContactRecordDetailView()}"
-                            process=":contactRecordViewDlgForm"
-                            update=":frmMain:contactRecordDetailViewTable"
-                            oncomplete="handleContactRecordRequest(xhr, status, args)"/>
-                    <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="contactRecordDetailViewDlg.hide()"/>
-                </td>
-            </tr>
-        </table>
+                <tr>
+                    <td class="title">
+                        <p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.nextCallDateTime')}"
+                                       for='nextcalling_datetime'
+                                />
+                    </td>
+                    <td>
+                        <clv:BECalendar id="nextcalling_datetime" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
+                                        value="#{appraisalAppointment.contactRecord.nextCallingDate}"
+                                        pattern="dd/MM/yyyy"
+                                        defaultdate="#{appraisalAppointment.contactRecord.nextCallingDate}"
+                                        mindate="#{appraisalAppointment.contactRecord.nextCallingDate}"
+                                        yearRange="1950:2100">
+                            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                        </clv:BECalendar>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td class="title">
+                        <p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.reason')}"
+                                       for='reason'
+                                />
+                    </td>
+                    <td>
+                        <p:selectOneMenu id='reason' value='#{appraisalAppointment.contactRecord.updReasonId}'
+                                         required="true"  requiredMessage="#{msg.get('app.cusaccept.validate.reason')}"
+                                >
+                            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                            <f:selectItems value="#{appraisalAppointment.reasons}" var="contactReason"
+                                           itemLabel="#{contactReason.description}" itemValue="#{contactReason.id}"
+                                    />
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="title">
+                        <p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.remark')}"
+                                       for='remark'
+                                />
+                    </td>
+                    <td>
+                        <p:inputTextarea id='remark'
+                                         value="#{appraisalAppointment.contactRecord.remark}"
+                                         autoResize="false"
+                                         rows="3" cols="40" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p:spacer></p:spacer>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="center">
+                        <p:commandButton
+                                id="btnSaveContactRecord"
+                                value="#{msg.get('app.button.ok')}"
+                                actionListener="#{appraisalAppointment.onSaveContactRecordDetailView()}"
+                                process="@form"
+                                update=":contactRecordViewDlgForm, :frmMain:contact_record_tbl"
+                                oncomplete="handleAppraisalContactDetailRequest(xhr, status, args)"
+                                styleClass="small" />
+                        <p:commandButton
+                                type='button' styleClass="small"
+                                value="#{msg.get('app.button.cancel')}" onclick="contactRecordViewDlg.hide()"/>
+
+                    </td>
+                </tr>
+            </table>
+        </p:panel>
+
+        <p:blockUI widgetVar="blockContactRecordViewDlgForm" block="contactRecordViewDlgPanel" trigger=":contactRecordViewDlgForm:btnSaveContactRecord">
+            LOADING<br />
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
+
     </h:form>
-</p:panel>
-<p:blockUI widgetVar="blockContactRecordDlg" block="contactRecordDlgPanel" trigger=":contactRecordViewDlgForm:btnSaveContactRecord">
-    LOADING<br />
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
-
 </ui:composition>

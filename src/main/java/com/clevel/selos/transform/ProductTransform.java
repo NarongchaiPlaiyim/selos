@@ -28,6 +28,16 @@ public class ProductTransform extends Transform{
         return prdGroupToPrdProgramView;
     }
 
+    public List<PrdGroupToPrdProgramView> transformToViewList(List<PrdGroupToPrdProgram> prdGroupToPrdProgramList) {
+        List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewList = new ArrayList<PrdGroupToPrdProgramView>();
+        if (prdGroupToPrdProgramList != null && !prdGroupToPrdProgramList.isEmpty()) {
+            for (PrdGroupToPrdProgram prdGroupToPrdProgram : prdGroupToPrdProgramList) {
+                prdGroupToPrdProgramViewList.add(transformToView(prdGroupToPrdProgram));
+            }
+        }
+        return prdGroupToPrdProgramViewList;
+    }
+
     public ProductProgramView transformToView(ProductProgram productProgram){
         ProductProgramView productProgramView = new ProductProgramView();
         if(productProgram != null){
@@ -105,13 +115,16 @@ public class ProductTransform extends Transform{
             creditTypeView.setComsIntType(creditType.getComsIntType());
             creditTypeView.setDescription(creditType.getDescription());
             creditTypeView.setName(creditType.getName());
+            creditTypeView.setCanSplit(creditType.getCanSplit());
+            creditTypeView.setCalLimitType(creditType.getCalLimitType());
+            creditTypeView.setCreditGroup(creditType.getCreditGroup());
         }
         return creditTypeView;
     }
 
     public CreditType transformToModel(CreditTypeView creditTypeView){
         log.debug("begin transformToModel(CreditTypeView {})", creditTypeView);
-        if(creditTypeView.getId() != 0){
+        if(creditTypeView!=null && creditTypeView.getId() != 0){
             try{
                 CreditType creditType = creditTypeDAO.findById(creditTypeView.getId());
                 return creditType;
@@ -124,7 +137,7 @@ public class ProductTransform extends Transform{
 
     public ProductProgram transformToModel(ProductProgramView productProgramView){
         log.debug("begin transformToModel(productProgramView {})", productProgramView);
-        if(productProgramView.getId() != 0){
+        if(productProgramView!=null && productProgramView.getId() != 0){
             try{
                 ProductProgram productProgram = productProgramDAO.findById(productProgramView.getId());
                 return productProgram;
@@ -137,13 +150,15 @@ public class ProductTransform extends Transform{
 
     public List<ProductProgramView> transformToView(List<ProductProgram> productProgramList) {
         try {
-            log.debug("begin transformToView(productProgramList size : {})", productProgramList.size());
-            List<ProductProgramView> productProgramViewList = new ArrayList<ProductProgramView>();
-            for(ProductProgram productProgram : productProgramList) {
-                ProductProgramView productProgramView = transformToView(productProgram);
-                productProgramViewList.add(productProgramView);
+            if(productProgramList!=null && productProgramList.size()>0) {
+                log.debug("begin transformToView(productProgramList size : {})", productProgramList.size());
+                List<ProductProgramView> productProgramViewList = new ArrayList<ProductProgramView>();
+                for(ProductProgram productProgram : productProgramList) {
+                    ProductProgramView productProgramView = transformToView(productProgram);
+                    productProgramViewList.add(productProgramView);
+                }
+                return productProgramViewList;
             }
-            return productProgramViewList;
         } catch (Exception ex) {
             log.error("",ex);
         }

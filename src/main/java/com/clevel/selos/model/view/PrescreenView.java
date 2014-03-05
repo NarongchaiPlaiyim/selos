@@ -22,8 +22,10 @@ public class PrescreenView implements Serializable {
     private Date referDate;
     private ReferredExperience referredExperience;
     private int tcg;
-    private int refinance;
-    private Bank refinanceBank;
+    private int refinanceIn;
+    private Bank refinanceInBank;
+    private int refinanceOut;
+    private Bank refinanceOutBank;
     private BorrowingType borrowingType;
     private String checkerId;
     private String remark;
@@ -32,6 +34,8 @@ public class PrescreenView implements Serializable {
     private User createBy;
     private User modifyBy;
     private int modifyFlag;
+
+    private Country countryOfRegister;
 
     public PrescreenView() {
 
@@ -43,8 +47,10 @@ public class PrescreenView implements Serializable {
         this.businessLocation = new Province();
         this.registerDate = null;
         this.tcg = 0;
-        this.refinance = 0;
-        this.refinanceBank = new Bank();
+        this.refinanceIn = 0;
+        this.refinanceInBank = new Bank();
+        this.refinanceOut = 0;
+        this.refinanceOutBank = new Bank();
         this.referredExperience = new ReferredExperience();
         this.borrowingType = new BorrowingType();
     }
@@ -145,22 +151,6 @@ public class PrescreenView implements Serializable {
         this.tcg = tcg;
     }
 
-    public int getRefinance() {
-        return refinance;
-    }
-
-    public void setRefinance(int refinance) {
-        this.refinance = refinance;
-    }
-
-    public Bank getRefinanceBank() {
-        return refinanceBank;
-    }
-
-    public void setRefinanceBank(Bank refinanceBank) {
-        this.refinanceBank = refinanceBank;
-    }
-
     public String getCheckerId() {
         return checkerId;
     }
@@ -225,6 +215,46 @@ public class PrescreenView implements Serializable {
         this.modifyFlag = modifyFlag;
     }
 
+    public int getRefinanceIn() {
+        return refinanceIn;
+    }
+
+    public void setRefinanceIn(int refinanceIn) {
+        this.refinanceIn = refinanceIn;
+    }
+
+    public Bank getRefinanceInBank() {
+        return refinanceInBank;
+    }
+
+    public void setRefinanceInBank(Bank refinanceInBank) {
+        this.refinanceInBank = refinanceInBank;
+    }
+
+    public int getRefinanceOut() {
+        return refinanceOut;
+    }
+
+    public void setRefinanceOut(int refinanceOut) {
+        this.refinanceOut = refinanceOut;
+    }
+
+    public Bank getRefinanceOutBank() {
+        return refinanceOutBank;
+    }
+
+    public void setRefinanceOutBank(Bank refinanceOutBank) {
+        this.refinanceOutBank = refinanceOutBank;
+    }
+
+    public Country getCountryOfRegister() {
+        return countryOfRegister;
+    }
+
+    public void setCountryOfRegister(Country countryOfRegister) {
+        this.countryOfRegister = countryOfRegister;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -233,13 +263,17 @@ public class PrescreenView implements Serializable {
                 .append("searchBy", searchBy)
                 .append("searchId", searchId)
                 .append("expectedSubmitDate", expectedSubmitDate)
+                .append("groupExposure", groupExposure)
+                .append("groupIncome", groupIncome)
                 .append("businessLocation", businessLocation)
                 .append("registerDate", registerDate)
                 .append("referDate", referDate)
                 .append("referredExperience", referredExperience)
                 .append("tcg", tcg)
-                .append("refinance", refinance)
-                .append("refinanceBank", refinanceBank)
+                .append("refinanceIn", refinanceIn)
+                .append("refinanceInBank", refinanceInBank)
+                .append("refinanceOut", refinanceOut)
+                .append("refinanceOutBank", refinanceOutBank)
                 .append("borrowingType", borrowingType)
                 .append("checkerId", checkerId)
                 .append("remark", remark)
@@ -247,6 +281,7 @@ public class PrescreenView implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("modifyFlag", modifyFlag)
                 .toString();
     }
 }

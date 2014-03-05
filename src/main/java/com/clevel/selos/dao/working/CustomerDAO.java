@@ -6,6 +6,8 @@ import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.working.Customer;
 
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -58,6 +60,17 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         log.info("findByWorkCasePreScreenId : {}", workCasePreScreenId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
+        criteria.add(Restrictions.eq("isSpouse", 0));
+        criteria.addOrder(Order.asc("id"));
+        List<Customer> customerList = (List<Customer>) criteria.list();
+
+        return customerList;
+    }
+
+    public List<Customer> findCustomerByWorkCaseId(long workCaseId) {
+        log.info("findCustomerByWorkCaseId : {}", workCaseId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.add(Restrictions.eq("isSpouse", 0));
         criteria.addOrder(Order.asc("id"));
         List<Customer> customerList = (List<Customer>) criteria.list();
@@ -167,4 +180,15 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         criteria.add(Restrictions.eq("r.canBePOA",true));
         return criteria.list();
     }
+
+	@SuppressWarnings("unchecked")
+	public List<Customer> findCustomerCanBeAttorneyRight(long workCaseId) {
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("workCase.id", workCaseId));
+		criteria.add(Restrictions.eq("customerEntity.id", 1)); // Individual only
+		
+		criteria.createAlias("relation", "r");
+		criteria.add(Restrictions.eq("r.canBeAttorney", true));
+		return criteria.list();
+	}
 }

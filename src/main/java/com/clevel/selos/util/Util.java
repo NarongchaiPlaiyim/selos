@@ -1,13 +1,24 @@
 package com.clevel.selos.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.*;
-import java.util.*;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Util implements Serializable {
     private static Logger log = LoggerFactory.getLogger(Util.class);
@@ -204,25 +215,20 @@ public class Util implements Serializable {
     }
 
     public static int calAge(Date date) {
-        /*int resultDay = 0;
-        Calendar nowDay = Calendar.getInstance();
-        Calendar birthDay = Calendar.getInstance();
-        birthDay.setTime(date);
-        if (birthDay.after(nowDay))
-            return resultDay;
-
-        resultDay = (nowDay.get(Calendar.YEAR) - birthDay.get(Calendar.YEAR));
-        return resultDay;*/
-        int age = 0;
-        Calendar dob = Calendar.getInstance();
-        dob.setTime(date);
-        Calendar today = Calendar.getInstance();
-        if(dob.after(today))
+        if(date != null){
+            int age = 0;
+            Calendar dob = Calendar.getInstance();
+            dob.setTime(date);
+            Calendar today = Calendar.getInstance();
+            if(dob.after(today))
+                return age;
+            age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+            if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR))
+                age--;
             return age;
-        age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
-        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR))
-            age--;
-        return age;
+        } else {
+            return 0;
+        }
     }
 
     public static String[] splitSpace(String str) {
@@ -299,6 +305,21 @@ public class Util implements Serializable {
             return value.multiply(multiplier);
         } catch (Exception e){
             return null;
+        }
+    }
+
+    public static BigDecimal compareToFindLower(BigDecimal b1, BigDecimal b2) {
+        if (b1 == null) {
+            b1 = BigDecimal.ZERO;
+        }
+        if (b2 == null) {
+            b2 = BigDecimal.ZERO;
+        }
+
+        if (b1.compareTo(b2) > 0) {
+            return b2;
+        } else {
+            return b1;
         }
     }
 
@@ -416,4 +437,12 @@ public class Util implements Serializable {
     	else
     		return 0;
     }
+
+    public static String getStringNotNull(String string){
+        if(string==null){
+            return "";
+        }
+        return string;
+    }
+   
 }

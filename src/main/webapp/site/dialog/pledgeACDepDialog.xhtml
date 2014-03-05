@@ -18,6 +18,9 @@
                 	<p:inputText id='dep'
                 	     value="#{pledgeDetail.pledgeACDepView.dep}"
                 	     required="true" requiredMessage="#{msg.get('app.pledgeDetail.dep.validate')}"
+                	     onkeydown="return onKeyDownNumber(event)"
+                	     onkeypress="return onKeyPressNumber(event)"
+                    	 maxlength="2"
                 	     />
                 </td>
             </tr>
@@ -32,6 +35,8 @@
                 		required="true" requiredMessage="#{msg.get('app.pledgeDetail.holdAmount.validate')}"
                 		converterMessage="#{msg.get('app.pledgeDetail.holdAmount.validate')}"
                 		validatorMessage="#{msg.get('app.pledgeDetail.holdAmount.validate')}"
+                		onkeydown="return onKeyDownMoney(event)"
+                	    onkeypress="return onKeyPressMoney(event)"
                 	>
                 		<f:convertNumber pattern="#,##0.00"/>
                 		<f:validateDoubleRange minimum="0"/>

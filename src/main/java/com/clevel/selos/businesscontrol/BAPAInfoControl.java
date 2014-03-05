@@ -25,6 +25,7 @@ import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.BAResultHC;
 import com.clevel.selos.model.db.master.InsuranceCompany;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.Address;
 import com.clevel.selos.model.db.working.BAPAInfo;
 import com.clevel.selos.model.db.working.BAPAInfoCredit;
 import com.clevel.selos.model.db.working.BAPAInfoCustomer;
@@ -194,7 +195,7 @@ public class BAPAInfoControl extends BusinessControl {
 		 ArrayList<BAPAInfoCustomerView> rtnDatas = new ArrayList<BAPAInfoCustomerView>();
 		 for (Customer customer : customers) {
 			 BAPAInfoCustomerView view = new BAPAInfoCustomerView();
-			 String customerName = _getCustomerName(customer);
+			 String customerName = customer.getDisplayName();
 			 String contractNo = _getCustomerContractNo(customer);
 			 
 			 BAPAInfoCustomer bapaCus = bapaHash.get(customer.getId());
@@ -231,18 +232,31 @@ public class BAPAInfoControl extends BusinessControl {
 		 return rtnDatas;
 	 }
 	 
-	 private String _getCustomerName(Customer customer) {
-		 StringBuilder builder = new StringBuilder();
-		 if (customer.getTitle() != null)
-			 builder.append(customer.getTitle().getTitleTh()).append(' ');
-		 builder.append(customer.getNameTh());
-		 if (!Util.isEmpty(customer.getLastNameTh()))
-			 builder.append(" ").append(customer.getLastNameTh());
-		 return builder.toString();
-	 }
+	
 	 private String _getCustomerContractNo(Customer customer) {
-		 //TODO Check contract no
-		 return customer.getMobileNumber();
+		 List<Address> addresses = customer.getAddressesList();
+		 if (addresses != null && !addresses.isEmpty()) {
+			 StringBuilder builder  = new StringBuilder();
+			 //Using address 1 or 4
+			 Address toUseAddr = null;
+			 for (Address address : addresses) {
+				 if (address.getAddressType().getId() == 1 || address.getAddressType().getId() == 4) {
+					 toUseAddr = address;
+					 break;
+				 }
+			 }
+			 if (toUseAddr == null)
+				 toUseAddr = addresses.get(0);
+			 if (!Util.isEmpty(toUseAddr.getPhoneNumber())) {
+				 builder.append(toUseAddr.getPhoneNumber());
+				 if (!Util.isEmpty(toUseAddr.getExtension())) {
+					 builder.append(" Ext ");
+					 builder.append(toUseAddr.getExtension());
+				 }
+			 }
+			 return builder.toString();
+		 }
+		 return null;
 	 }
 	 public List<BAPAInfoCreditToSelectView> getBAPAInfoCreditToSelectView(long workCaseId) {
 		 if (workCaseId <= 0)
@@ -253,6 +267,7 @@ public class BAPAInfoControl extends BusinessControl {
 			 BAPAInfoCreditToSelectView view = new BAPAInfoCreditToSelectView();
 			 view.setId(credit.getId());
 			 view.setProductProgram(credit.getProductProgram().getName());
+			 view.setTopupBA(credit.getProductProgram().isBa());
 			 view.setCreditType(credit.getCreditType().getName());
 			 view.setLoanPurpose(credit.getLoanPurpose().getDescription());
 			 view.setLimit(credit.getLimit());
@@ -293,6 +308,7 @@ public class BAPAInfoControl extends BusinessControl {
 			 view.setFromCredit(bapaCredit.isFromCredit());
 			 view.setLimit(bapaCredit.getLimit());
 			 view.setPremiumAmount(bapaCredit.getPremiumAmount());
+			 view.setExpenseAmount(bapaCredit.getExpenseAmount());
 			 
 			 if (bapaCredit.getCreditDetail() != null) {
 				 NewCreditDetail credit = creditHash.get(bapaCredit.getCreditDetail().getId());
@@ -318,6 +334,7 @@ public class BAPAInfoControl extends BusinessControl {
 				 view.setFromCredit(true);
 				 view.setLimit(credit.getLimit());
 				 view.setPremiumAmount(new BigDecimal(0));
+				 view.setExpenseAmount(credit.getLimit());
 				 rtnDatas.add(view);
 			 }
 		 }

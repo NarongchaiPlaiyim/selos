@@ -83,9 +83,9 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
     public ExecutiveSummary() {
     }
 
-    @PostConstruct
-    public void onCreation() {
-        log.info("onCreation.");
+
+    public void preRender(){
+        log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCaseId") != null){
@@ -94,10 +94,36 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
             log.debug("onCreation ::: workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
-                return;
             }catch (Exception ex){
                 log.error("Exception :: {}",ex);
             }
+        }
+    }
+
+    @PostConstruct
+    public void onCreation() {
+        log.debug("onCreation");
+
+        HttpSession session = FacesUtil.getSession(true);
+
+        if(session.getAttribute("workCaseId") != null){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            if(workCaseId == 0){
+                try{
+                    FacesUtil.redirect("/site/inbox.jsf");
+                }catch (Exception ex){
+                    log.error("Exception :: {}",ex);
+                }
+                return;
+            }
+        }else{
+            log.debug("onCreation ::: workCaseId is null.");
+            try{
+                FacesUtil.redirect("/site/inbox.jsf");
+            }catch (Exception ex){
+                log.error("Exception :: {}",ex);
+            }
+            return;
         }
 
         reasonList = new ArrayList<Reason>();
@@ -191,6 +217,25 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
         exSummaryView.getDeviateCode().remove(selectDeviate);
     }
 
+    public void onChangeRM008(){
+        if(exSummaryView.getRm008Code() == 0){
+            exSummaryView.setRm008Remark("");
+        }
+    }
+
+    public void onChangeRM204(){
+        if(exSummaryView.getRm204Code() == 0){
+            exSummaryView.setRm204Remark("");
+        }
+    }
+
+    public void onChangeRM020(){
+        if(exSummaryView.getRm020Code() == 0){
+            exSummaryView.setRm020Remark("");
+        }
+    }
+
+    //GET SET
     public String getMessage() {
         return message;
     }

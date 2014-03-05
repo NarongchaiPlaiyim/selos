@@ -2,15 +2,13 @@ package com.clevel.selos.controller;
 
 
 import com.clevel.selos.businesscontrol.AppraisalAppointmentControl;
+import com.clevel.selos.businesscontrol.CustomerAcceptanceControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.AppraisalContactDetailView;
-import com.clevel.selos.model.view.AppraisalDetailView;
-import com.clevel.selos.model.view.AppraisalView;
-import com.clevel.selos.model.view.ContactRecordDetailView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -19,9 +17,7 @@ import com.clevel.selos.transform.AppraisalDetailTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import com.rits.cloning.Cloner;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeConstants;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -33,9 +29,11 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 @ViewScoped
@@ -101,9 +99,6 @@ public class AppraisalAppointment implements Serializable {
     private List<AppraisalContactDetailView> appraisalContactDetailViewList;
     private AppraisalContactDetailView selectAppraisalContactDetailView;
 
-    private List<ContactRecordDetailView> contactRecordDetailViewList;
-    private ContactRecordDetailView contactRecordDetailView;
-
     private ContactRecordDetailView selectContactRecordDetail;
     private ContactRecordDetailView contactRecordDetailViewTemp;
     private List<AppraisalCompany> appraisalCompanyList;
@@ -123,6 +118,21 @@ public class AppraisalAppointment implements Serializable {
     private boolean contactFlag2;
     private boolean contactFlag3;
 
+    private List<ContactRecordDetailView> contactRecordDetailViewList;
+    private ContactRecordDetailView contactRecordDetailView;
+    private List<ContactRecordDetailView> deleteList;
+    private ContactRecordDetailView contactRecord;
+    private int deletedRowId;
+    private List<Reason> reasons;
+    private boolean addDialog;
+    private Status workCaseStatus;
+    private User user;
+    @Inject
+    private CustomerAcceptanceControl customerAcceptanceControl;
+    @Inject
+    private ReasonDAO reasonDAO;
+    private CustomerAcceptanceView customerAcceptanceView;
+    @Inject
     public AppraisalAppointment() {
 
     }
@@ -135,7 +145,7 @@ public class AppraisalAppointment implements Serializable {
         appraisalContactDetailViewList = new ArrayList<AppraisalContactDetailView>();
         contactRecordDetailView = new ContactRecordDetailView();
         contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
-
+        customerAcceptanceView = new CustomerAcceptanceView();
         modeForButton = ModeForButton.ADD;
         appraisalCompanyList = appraisalCompanyDAO.findAll();
         appraisalDivisionList= appraisalDivisionDAO.findAll();
@@ -158,17 +168,9 @@ public class AppraisalAppointment implements Serializable {
             stepId = Long.valueOf(""+session.getAttribute("stepId"));
             log.debug("-- stepId[{}]", stepId);
 
-            if(stepId != StepValue.PRESCREEN_MAKER.value() && stepId != StepValue.FULLAPP_BDM_SSO_ABDM.value()){
+            if(stepId != StepValue.REQUEST_APPRAISAL.value()){
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
-            } else {
-                if(stepId == StepValue.PRESCREEN_MAKER.value()){
-                    workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePrescreenId"));
-                    log.debug("-- workCasePreScreenId : [{}]", workCasePreScreenId);
-                }else if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){
-                    workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-                    log.debug("-- workCaseId[{}]", workCaseId);
-                }
             }
         } else {
             log.debug("preRender ::: workCaseId is null.");
@@ -180,31 +182,47 @@ public class AppraisalAppointment implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("-- onCreation.");
-        preRender();
-        init();
-        appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId, workCasePreScreenId);
-        if(!Util.isNull(appraisalView)){
-            appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
-            if(Util.isZero(appraisalDetailViewList.size())){
-                appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
-            }
-            appraisalContactDetailView = appraisalView.getAppraisalContactDetailView();
-            if(Util.isNull(appraisalContactDetailView)){
-                appraisalContactDetailView = new AppraisalContactDetailView();
-            }
+        //preRender();
+        HttpSession session = FacesUtil.getSession(true);
+        boolean canRender = false;
+        user = (User) session.getAttribute("user");
+        if(!Util.isNull(session.getAttribute("workCaseId")) && Long.valueOf(""+session.getAttribute("workCaseId")) != 0){
+            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+            canRender = true;
+        }else if(!Util.isNull(session.getAttribute("workCasePreScreenId")) && Long.valueOf(""+session.getAttribute("workCasePreScreenId")) != 0){
+            workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
+            canRender = true;
+        }
 
-//                contactRecordDetailViewList = appraisalView.getContactRecordDetailViewList();
-//                for(ContactRecordDetailView view : contactRecordDetailViewList){
-//                    log.debug("-- ContactRecordDetailView.id[{}]", view.getId());
-//                }
-            updateContractFlag(appraisalContactDetailView);
-        } else {
-            appraisalView = new AppraisalView();
-            log.debug("-- AppraisalView[New] created");
-            appraisalContactDetailView = new AppraisalContactDetailView();
-            log.debug("-- AppraisalContactDetailView[New] created");
-            appraisalContactDetailView = new AppraisalContactDetailView();
-            log.debug("-- AppraisalContactDetailView[New] created");
+        contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
+
+        if(canRender){
+            init();
+            appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId, workCasePreScreenId);
+            workCaseStatus = customerAcceptanceControl.getWorkCaseStatus(workCaseId);
+
+            if(!Util.isNull(appraisalView)){
+                appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
+                if(Util.isZero(appraisalDetailViewList.size())){
+                    appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+                }
+                appraisalContactDetailView = appraisalView.getAppraisalContactDetailView();
+                if(Util.isNull(appraisalContactDetailView)){
+                    appraisalContactDetailView = new AppraisalContactDetailView();
+                }
+
+                customerAcceptanceView = customerAcceptanceControl.getCustomerAcceptanceView(workCaseId);
+                contactRecordDetailViewList = Util.safetyList(customerAcceptanceControl.getContactRecordDetails(customerAcceptanceView.getId()));
+
+                updateContractFlag(appraisalContactDetailView);
+            } else {
+                appraisalView = new AppraisalView();
+                log.debug("-- AppraisalView[New] created");
+                appraisalContactDetailView = new AppraisalContactDetailView();
+                log.debug("-- AppraisalContactDetailView[New] created");
+                appraisalContactDetailView = new AppraisalContactDetailView();
+                log.debug("-- AppraisalContactDetailView[New] created");
+            }
         }
     }
 
@@ -249,135 +267,18 @@ public class AppraisalAppointment implements Serializable {
         }
     }
 
-
-    private void setStrOnDataTable(){
-    	/*
-        ContactRecordDetailView contactRecordDetailViewForStr;
-        for(int i=0;i<contactRecordDetailViewList.size();i++){
-
-            contactRecordDetailViewForStr =  contactRecordDetailViewList.get(i);
-            if(contactRecordDetailViewForStr.getCallingResult()==0){
-                contactRecordDetailViewForStr.setCallingResultStr(msg.get("app.contactRecordDetail.radio.label.callingResult.cannotContact"));
-            }else if(contactRecordDetailViewForStr.getCallingResult()==1){
-                contactRecordDetailViewForStr.setCallingResultStr(msg.get("app.contactRecordDetail.radio.label.callingResult.canContact"));
-            }else{
-                contactRecordDetailViewForStr.setCallingResultStr(msg.get("app.contactRecordDetail.radio.label.callingResult.etc"));
-            }
-
-            if(contactRecordDetailViewForStr.getAcceptResult()==0){
-                contactRecordDetailViewForStr.setAcceptResultStr(msg.get("app.contactRecordDetail.radio.label.acceptResult.notAccept"));
-            }else if(contactRecordDetailViewForStr.getAcceptResult()==1){
-                contactRecordDetailViewForStr.setAcceptResultStr(msg.get("app.contactRecordDetail.radio.label.acceptResult.accept"));
-            }else{
-                contactRecordDetailViewForStr.setAcceptResultStr(msg.get("app.contactRecordDetail.radio.label.acceptResult.etc"));
-            }
-
-//            if(contactRecordDetailViewForStr.getReason()==0){
-//                contactRecordDetailViewForStr.setReasonStr(msg.get("app.contactRecordDetail.radio.label.reason.accept"));
-//            }else if(contactRecordDetailViewForStr.getReason()==1){
-//                contactRecordDetailViewForStr.setReasonStr(msg.get("app.contactRecordDetail.radio.label.reason.notAccept"));
-//            }else if(contactRecordDetailViewForStr.getReason()==2){
-//                contactRecordDetailViewForStr.setReasonStr(msg.get("app.contactRecordDetail.radio.label.reason.needToConsider"));
-//            }else{
-//                contactRecordDetailViewForStr.setReasonStr(msg.get("app.contactRecordDetail.radio.label.reason.etc"));
-//            }
-        }
-        */
-    }
-
     public void onSaveContactRecordDetailView(){
-        boolean complete = false;
+        log.debug("-- onSaveContactRecordDetailView() flag = {}", modeForButton);
+        boolean complete = true;
         RequestContext context = RequestContext.getCurrentInstance();
-/*
-        if(true){
-            complete = true;
-            if(ModeForButton.ADD.equals(modeForButton)){
-                log.info("onSaveContactRecordDetailView add >>> begin ");
-                log.info("contactRecordDetailViewList size >>> is " + contactRecordDetailViewList.size());
-
-                contactRecordDetailView.setNo(contactRecordDetailViewList.size()+1);
-                log.info("onSaveContactRecordDetailView contactRecordDetailView >>> " + contactRecordDetailView);
-
-                contactRecordDetailViewList.add(contactRecordDetailView);
-
-                log.info("onSaveContactRecordDetailView add >>> end ");
-
-            }else if(ModeForButton.EDIT.equals(modeForButton)){
-                log.info("onSaveContactRecordDetailView edit >>> begin ");
-                ContactRecordDetailView contactRecordDetailViewRow;
-                contactRecordDetailViewRow = contactRecordDetailViewList.get(rowIndex);
-
-                contactRecordDetailViewRow.setCallingDate(contactRecordDetailView.getCallingDate());
-                contactRecordDetailViewRow.setCallingTime(contactRecordDetailView.getCallingTime());
-                contactRecordDetailViewRow.setCallingResult(contactRecordDetailView.getCallingResult());
-                contactRecordDetailViewRow.setAcceptResult(contactRecordDetailView.getAcceptResult());
-                contactRecordDetailViewRow.setNextCallingDate(contactRecordDetailView.getNextCallingDate());
-                contactRecordDetailViewRow.setNextCallingTime(contactRecordDetailView.getNextCallingTime());
-
-
-                contactRecordDetailViewRow.setReason(contactRecordDetailView.getReason());
-                contactRecordDetailViewRow.setRemark(contactRecordDetailView.getRemark());
-
-                contactRecordDetailView = new ContactRecordDetailView();
-                log.info("onSaveContactRecordDetailView edit >>> end ");
-            }
+        if(ModeForButton.ADD.equals(modeForButton)){
+            contactRecordDetailViewList.add(contactRecord);
+        }else if(ModeForButton.EDIT.equals(modeForButton)){
+            log.debug("-- RowIndex[{}]", rowIndex);
+            contactRecordDetailViewList.set(rowIndex, contactRecord);
         }
-        setStrOnDataTable();
-        */
         context.addCallbackParam("functionComplete", complete);
-    }
 
-    public void onEditContactRecordDetailView(){
-        log.info( " onEditContactRecordDetailView " + selectContactRecordDetail.getRemark());
-        modeForButton = ModeForButton.EDIT;
-        contactRecordDetailView = new ContactRecordDetailView();
-       
-        //*** Check list size ***//
-        /*
-        if( rowIndex < contactRecordDetailViewList.size() ) {
-            contactRecordDetailView.setCallingDate(selectContactRecordDetail.getCallingDate());
-            contactRecordDetailView.setCallingTime(selectContactRecordDetail.getCallingTime());
-            contactRecordDetailView.setCallingResult(selectContactRecordDetail.getCallingResult());
-            contactRecordDetailView.setAcceptResult(selectContactRecordDetail.getAcceptResult());
-            contactRecordDetailView.setNextCallingDate(selectContactRecordDetail.getNextCallingDate());
-            contactRecordDetailView.setNextCallingTime(selectContactRecordDetail.getNextCallingTime());
-            contactRecordDetailView.setReason(selectContactRecordDetail.getReason());
-            contactRecordDetailView.setRemark(selectContactRecordDetail.getRemark());
-        }
-        contactRecordDetailViewTemp = new ContactRecordDetailView();
-        contactRecordDetailViewTemp.setCallingDate(selectContactRecordDetail.getCallingDate());
-        contactRecordDetailViewTemp.setCallingTime(selectContactRecordDetail.getCallingTime());
-        contactRecordDetailViewTemp.setCallingResult(selectContactRecordDetail.getCallingResult());
-        contactRecordDetailViewTemp.setAcceptResult(selectContactRecordDetail.getAcceptResult());
-        contactRecordDetailViewTemp.setNextCallingDate(selectContactRecordDetail.getNextCallingDate());
-        contactRecordDetailViewTemp.setNextCallingTime(selectContactRecordDetail.getNextCallingTime());
-        contactRecordDetailViewTemp.setReason(selectContactRecordDetail.getReason());
-        contactRecordDetailViewTemp.setRemark(selectContactRecordDetail.getRemark());
-        */
-        setStrOnDataTable();
-    }
-
-    public void onAddContactRecordDetailView(){
-        log.info("onAddContactRecordView >>> begin ");
-        contactRecordDetailView = new ContactRecordDetailView();
-        modeForButton = ModeForButton.ADD;
-    }
-
-    public void onDeleteContactRecordDetailView() {
-        log.info( " onDeleteContactRecordDetailView getRemark is " + selectContactRecordDetail.getRemark());
-        contactRecordDetailViewList.remove(selectContactRecordDetail);
-        onSetRowNoContactRecordDetailView();
-        log.info( " onDeleteContactRecordDetailView end ");
-    }
-
-    public void onSetRowNoContactRecordDetailView(){
-    	/*
-        ContactRecordDetailView contactRecordDetailViewRow;
-        for(int i=0;i< contactRecordDetailViewList.size();i++){
-            contactRecordDetailViewRow = contactRecordDetailViewList.get(i);
-            contactRecordDetailViewRow.setNo(i+1);
-        }
-        */
     }
 
     private void setStringOnAppraisalTable(){
@@ -516,8 +417,12 @@ public class AppraisalAppointment implements Serializable {
     }
 
     public void onAddAppraisalContactDetailView(){
-        log.info("onAddAppraisalContactDetailView >>> begin ");
-        appraisalContactDetailView = new AppraisalContactDetailView();
+        log.info("-- onAddAppraisalContactDetailView() ModeForButton[ADD]");
+        contactRecord = new ContactRecordDetailView();
+        if (Util.isNull(reasons) || Util.isZero(reasons.size())){
+            reasons = customerAcceptanceControl.getContactRecordReasons();
+        }
+        contactRecord.setCallingDate(getCurrentDate());
         modeForButton = ModeForButton.ADD;
     }
 
@@ -528,6 +433,12 @@ public class AppraisalAppointment implements Serializable {
         log.info( "-- AppraisalDetailViewList[{}] deleted", rowIndex);
     }
 
+    public void onDeleteAppraisalContactDetailView() {
+        log.info( "-- onDeleteAppraisalContactDetailView RowIndex[{}]", rowIndex);
+        contactRecordDetailViewList.remove(rowIndex);
+        log.info( "-- onDeleteAppraisalContactDetailView[{}] deleted", rowIndex);
+    }
+
     public void onSetRowNoAppraisalDetailView(){
         AppraisalDetailView appraisalDetailViewRow;
         for(int i=0;i< appraisalDetailViewList.size();i++){
@@ -535,13 +446,7 @@ public class AppraisalAppointment implements Serializable {
             appraisalDetailViewRow.setNo(i+1);
         }
     }
-    
-    public void onDeleteAppraisalContactDetailView() {
-        log.info( " onDeleteAppraisalContactDetailView " + selectAppraisalContactDetailView);
-        appraisalContactDetailViewList.remove(selectAppraisalContactDetailView);
-        onSetRowNoAppraisalContactDetailView();
-        log.info( " onDeleteAppraisalContactDetailView end ");
-    }
+
 
     public void onSetRowNoAppraisalContactDetailView(){
         AppraisalContactDetailView appraisalContactDetailViewRow;
@@ -555,7 +460,7 @@ public class AppraisalAppointment implements Serializable {
         log.info("-- onSaveAppraisalAppointment::::");
         try{
             appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
-            appraisalAppointmentControl.onSaveAppraisalAppointment(appraisalView, workCaseId, workCasePreScreenId);
+            appraisalAppointmentControl.onSaveAppraisalAppointment(appraisalView, workCaseId, workCasePreScreenId, contactRecordDetailViewList, customerAcceptanceView);
             messageHeader = msg.get("app.appraisal.request.message.header.save.success");
             message = msg.get("app.appraisal.request.message.body.save.success");
             onCreation();
@@ -586,7 +491,7 @@ public class AppraisalAppointment implements Serializable {
 //            appraisalView.setAppraisalContactDetailViewList(appraisalContactDetailViewList);
             appraisalView.setContactRecordDetailViewList(contactRecordDetailViewList);
 
-            appraisalAppointmentControl.onSaveAppraisalAppointment(appraisalView, workCaseId, workCasePreScreenId);
+            appraisalAppointmentControl.onSaveAppraisalAppointment(appraisalView, workCaseId, workCasePreScreenId, contactRecordDetailViewList, customerAcceptanceView);
             messageHeader = msg.get("app.appraisal.appointment.message.header.save.success");
             message = msg.get("app.appraisal.appointment.message.body.save.success");
             onCreation();
@@ -658,8 +563,54 @@ public class AppraisalAppointment implements Serializable {
         appraisalView.setAppointmentDate(appraisalView.getAppraisalDate());
     }
 
+    public void onOpenAddContactRecordDialog() {
+        log.info("Open Contact Record Dialog");
+        contactRecord = new ContactRecordDetailView();
+        contactRecord.setId(0);
+        contactRecord.setCallingDate(new Date());
+        contactRecord.setCreateBy(user);
+        contactRecord.setStatus(workCaseStatus);
+        if (reasons == null) {
+            reasons = customerAcceptanceControl.getContactRecordReasons();
+        }
+        addDialog = true;
+    }
+
+    public void onOpenUpdateContactRecordDialog() {
+        log.info("Open Update Contact Record Dialog");
+        if (reasons == null) {
+            reasons = customerAcceptanceControl.getContactRecordReasons();
+        }
+        addDialog = false;
+    }
+
     public void onChangeReceivedTaskDate(){
 
+    }
+
+
+    public boolean isAddDialog() {
+        return addDialog;
+    }
+
+    public void setAddDialog(boolean addDialog) {
+        this.addDialog = addDialog;
+    }
+
+    public int getDeletedRowId() {
+        return deletedRowId;
+    }
+
+    public void setDeletedRowId(int deletedRowId) {
+        this.deletedRowId = deletedRowId;
+    }
+
+    public List<Reason> getReasons() {
+        return reasons;
+    }
+
+    public void setReasons(List<Reason> reasons) {
+        this.reasons = reasons;
     }
 
     public AppraisalContactDetailView getSelectAppraisalContactDetailView() {
@@ -886,5 +837,18 @@ public class AppraisalAppointment implements Serializable {
 
     public void setNumberOfDocumentsFlag(boolean numberOfDocumentsFlag) {
         this.numberOfDocumentsFlag = numberOfDocumentsFlag;
+    }
+
+    public ContactRecordDetailView getContactRecord() {
+        return contactRecord;
+    }
+
+    public void setContactRecord(ContactRecordDetailView contactRecord) {
+        this.contactRecord = contactRecord;
+    }
+
+    public String getMinDate() {
+        SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+        return dFmt.format(new Date());
     }
 }

@@ -15,6 +15,7 @@ public class GuarantorInfoView implements Serializable {
 	private String guarantorType;
 	private BigDecimal guarantorAmount;
 	
+	private long workCaseId;
 	private User modifyBy;
 	private Date modifyDate;
 	
@@ -74,5 +75,11 @@ public class GuarantorInfoView implements Serializable {
 	}
 	public void setGuarantorName(String guarantorName) {
 		this.guarantorName = guarantorName;
+	}
+	public long getWorkCaseId() {
+		return workCaseId;
+	}
+	public void setWorkCaseId(long workCaseId) {
+		this.workCaseId = workCaseId;
 	}
 }

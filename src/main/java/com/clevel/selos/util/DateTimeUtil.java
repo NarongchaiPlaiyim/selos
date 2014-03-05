@@ -94,6 +94,17 @@ public class DateTimeUtil implements Serializable {
         return dateConvert;
     }
 
+    public static Date convertStringToDate(String date, String dateFormat){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+        Date dateConvert = new Date();
+        try {
+            dateConvert = simpleDateFormat.parse(date);
+        } catch (ParseException e) {
+            log.error("Error to parsing date. {}", date);
+        }
+        return dateConvert;
+    }
+
     public static String convertDateToString(Date date, Locale locale, String dateFormat){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, locale);
         String dateConvert = "";
@@ -154,6 +165,10 @@ public class DateTimeUtil implements Serializable {
 
     public static int monthBetween2DatesWithNoDate(Date date1, Date date2) {
         return Months.monthsBetween(new DateTime(date1).withDayOfMonth(1), new DateTime(date2).withDayOfMonth(1)).getMonths();
+    }
+
+    public static int monthBetween2Dates(Date date1, Date date2){
+        return Months.monthsBetween(new DateTime(date1), new DateTime(date2)).getMonths();
     }
 
     public static int checkDateDelete(Date startDate,Date endDate){

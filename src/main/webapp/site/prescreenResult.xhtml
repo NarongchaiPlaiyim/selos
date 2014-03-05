@@ -78,7 +78,7 @@
                             <td class="title top"><h:outputText value="#{msg.get('app.prescreen.result.borrower')}"/></td>
                             <td>
                                 <p:dataTable id="resultBorrowerCOMFacility" var="creditItem"
-                                             value="#{prescreenResult.prescreenResultView.existingCreditFacilityView.borrowerComExistingCredit}"
+                                             value="#{prescreenResult.prescreenResultView.existingCreditFacilityView.borrowerExistingCreditPreScreen}"
                                              paginator="false" rowKey="#{creditItem.id}" rowIndexVar="rowIndex">
                                     <p:columnGroup type="header">
                                         <p:row>
@@ -105,15 +105,17 @@
                                             value="#{msg.get('app.creditfact.table.account.suf')}"/><h:outputText
                                             value="#{creditItem.accountSuf}"/><br/>
                                         <h:outputText value="#{msg.get('app.creditfact.table.account.status')}"/><h:outputText
-                                            value="#{creditItem.accountStatus.code}"/> - <h:outputText value="#{creditItem.accountStatus.description}"/>
+                                            value="#{creditItem.existAccountStatusView.code}"/> - <h:outputText value="#{creditItem.existAccountStatusView.description}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" styleClass="center"
                                               style="width: 150px;">
-                                        <h:outputText value="#{creditItem.existProductProgram.name}"/>
+                                        <!--<h:outputText value="#{creditItem.existProductProgram.name}"/>-->
+                                        <h:outputText value="#{creditItem.existProductProgramView.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.creditType')}" styleClass="center"
                                               style="width: 120px;">
-                                        <h:outputText value="#{creditItem.existCreditType.name}"/>
+                                        <!--<h:outputText value="#{creditItem.existCreditType.name}"/>-->
+                                        <h:outputText value="#{creditItem.existCreditTypeView.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.limit')}" styleClass="right" style="width: 130px;">
                                         <h:outputText value="#{creditItem.limit}">
@@ -144,7 +146,7 @@
                                             <p:column style="background-color:#f4f8b6; text-align: right">
                                                 <f:facet name="footer">
                                                     <h:outputText
-                                                            value="#{prescreenResult.prescreenResultView.existingCreditFacilityView.totalBorrowerComLimit}"
+                                                            value="#{prescreenResult.prescreenResultView.existingCreditFacilityView.totalBorrowerLimitPreScreen}"
                                                             style="text-align: right">
                                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </h:outputText>
@@ -188,13 +190,13 @@
                                         <h:outputText value="#{msg.get('app.creditfact.table.app.no')}"/><h:outputText
                                             value="#{creditItem.accountNumber}"/><br/>
                                         <h:outputText value="#{msg.get('app.creditfact.table.app.status')}"/><h:outputText
-                                            value="#{creditItem.accountStatus.code}"/> - <h:outputText value="#{creditItem.accountStatus.description}"/>
+                                            value="#{creditItem.existAccountStatusView.code}"/> - <h:outputText value="#{creditItem.existAccountStatusView.description}"/>
                                     </p:column>
                                     <p:column styleClass="center" style="width: 150px;">
-                                        <h:outputText value="#{creditItem.existProductProgram.name}"/>
+                                        <h:outputText value="#{creditItem.existProductProgramView.name}"/>
                                     </p:column>
                                     <p:column styleClass="center" style="width: 120px;">
-                                        <h:outputText value="#{creditItem.existCreditType.name}"/>
+                                        <h:outputText value="#{creditItem.existCreditTypeView.name}"/>
                                     </p:column>
                                     <p:column styleClass="right" style="width: 130px;">
                                         <h:outputText value="#{creditItem.limit}">
@@ -249,7 +251,7 @@
                             <td class="title top"><h:outputText value="#{msg.get('app.prescreen.result.related')}"/></td>
                             <td>
                                 <p:dataTable id="resultRelatedCOMFacility" var="creditItem"
-                                             value="#{prescreenResult.prescreenResultView.existingCreditFacilityView.relatedComExistingCredit}"
+                                             value="#{prescreenResult.prescreenResultView.existingCreditFacilityView.relateExistingCreditPresScreen}"
                                              paginator="false" rowKey="#{creditItem.id}" rowIndexVar="rowIndex">
                                     <p:columnGroup type="header">
                                         <p:row>
@@ -276,15 +278,15 @@
                                             value="#{msg.get('app.creditfact.table.account.suf')}"/><h:outputText
                                             value="#{creditItem.accountSuf}"/><br/>
                                         <h:outputText value="#{msg.get('app.creditfact.table.account.status')}"/><h:outputText
-                                            value="#{creditItem.accountStatus.code}"/> - <h:outputText value="#{creditItem.accountStatus.description}"/>
+                                            value="#{creditItem.existAccountStatusView.code}"/> - <h:outputText value="#{creditItem.existAccountStatusView.description}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" styleClass="center"
                                               style="width: 150px;">
-                                        <h:outputText value="#{creditItem.existProductProgram.name}"/>
+                                        <h:outputText value="#{creditItem.existProductProgramView.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.creditType')}" styleClass="center"
                                               style="width: 120px;">
-                                        <h:outputText value="#{creditItem.existCreditType.name}"/>
+                                        <h:outputText value="#{creditItem.existCreditTypeView.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.limit')}" styleClass="right" style="width: 130px;">
                                         <h:outputText value="#{creditItem.limit}">
@@ -315,7 +317,7 @@
                                             <p:column style="background-color:#f4f8b6; text-align: right">
                                                 <f:facet name="footer">
                                                     <h:outputText
-                                                            value="#{prescreenResult.prescreenResultView.existingCreditFacilityView.totalRelatedComLimit}"
+                                                            value="#{prescreenResult.prescreenResultView.existingCreditFacilityView.totalRelatedLimitPreScreen}"
                                                             style="text-align: right">
                                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </h:outputText>
@@ -359,15 +361,15 @@
                                         <h:outputText value="#{msg.get('app.creditfact.table.app.no')}"/><h:outputText
                                             value="#{creditItem.accountNumber}"/><br/>
                                         <h:outputText value="#{msg.get('app.creditfact.table.app.status')}"/><h:outputText
-                                            value="#{creditItem.accountStatus.code}"/> - <h:outputText value="#{creditItem.accountStatus.description}"/>
+                                            value="#{creditItem.existAccountStatusView.code}"/> - <h:outputText value="#{creditItem.existAccountStatusView.description}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" styleClass="center"
                                               style="width: 150px;">
-                                        <h:outputText value="#{creditItem.existProductProgram.name}"/>
+                                        <h:outputText value="#{creditItem.existProductProgramView.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.creditType')}" styleClass="center"
                                               style="width: 120px;">
-                                        <h:outputText value="#{creditItem.existCreditType.name}"/>
+                                        <h:outputText value="#{creditItem.existCreditTypeView.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.limit')}" styleClass="right" style="width: 130px;">
                                         <h:outputText value="#{creditItem.limit}">

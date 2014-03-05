@@ -11,6 +11,7 @@
     <title>#{msg.get('app.guarantorDetail.title')}</title>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
+   
 </h:head>
 
 <h:body>
@@ -29,6 +30,7 @@
             <ui:include src="include/menubar.xhtml" />
            
             <!-- End Menu -->
+			<h:panelGroup id="full_main_container" layout="block">
             <div id="content_container">
                 <div id="content_name">#{msg.get('app.guarantorDetail.subtitle')}</div>
                 <div id="content">
@@ -84,10 +86,11 @@
                         				value="#{msg.get('app.guarantorDetail.detail.signingDate')}" />	
                         		</td>
                         		<td>
-                        			<p:calendar id='guarantor_signingdate' 
+                        		    <clv:BECalendar id='guarantor_signingdate'
+                        					value="#{guarantorDetail.guarantorInfoView.signingDate}"
                         					pattern="dd/MM/yyyy" showOn="button"
                                        		mindate="#{guarantorDetail.minDate}"
-                                       		autocomplete="false"
+                                       		autocomplete="false" locale="th_TH"
                                        		/>
                         		</td>
                         	</tr>
@@ -97,7 +100,7 @@
                         				value="#{msg.get('app.guarantorDetail.detail.guarantorType')}" />			
                         		</td>
                         		<td>
-                        			<h:outputText value="GUARANTOR TYPE" />
+                        			<h:outputText value="#{guarantorDetail.guarantorInfoView.guarantorType}" />
                         		</td>                     		
                         	</tr>
                         	<tr>
@@ -106,7 +109,7 @@
                         				value="#{msg.get('app.guarantorDetail.detail.guarantorAmount')}" />						
                         		</td>
                         		<td>
-                        			<h:outputText value="0" >
+                        			<h:outputText value="#{guarantorDetail.guarantorInfoView.guarantorAmount}" >
                         				<f:convertNumber pattern="#,##0.00"/>
                         			</h:outputText>
                         		</td>
@@ -117,24 +120,43 @@
                         				value="#{msg.get('app.guarantorDetail.detail.creditType')}" />						
                         		</td>
                         		<td>
-                        			<p:dataTable styleClass="full_table" rowIndexVar="rowIdx">
-                        				<p:column style="width:30px">
+                        			<p:dataTable value="#{guarantorDetail.guarantorInfoView.credits}" var="credit" 
+                        				styleClass="full_table" rowIndexVar="rowIdx">
+                        				<p:column style="width:30px" styleClass="center">
                         					#{rowIdx+1}
                         				</p:column>
                         				<p:column
-                        					headerText="#{msg.get('app.guarantorDetail.detail.creditType.table.account')}">
+                        					headerText="#{msg.get('app.guarantorDetail.detail.creditType.table.account')}"
+                        					style="line-height: 1.5em;">
+                        					<h:panelGroup layout="block" rendered="#{credit.hasAccountInfo}" style="padding : 5px 0;">
+                        					#{credit.accountName} <br />
+                        					#{msg.get('app.creditType.account.accountNo')} #{credit.accountNo} <br/>
+                        					#{msg.get('app.creditType.account.accountStatus')} #{credit.accountStatus}
+                        					</h:panelGroup>
+                        					<h:outputText value="-" rendered="#{not credit.hasAccountInfo}" />
                         				</p:column>
                         				<p:column style="width:100px"
                         					headerText="#{msg.get('app.guarantorDetail.detail.creditType.table.type')}">
+                        					<h:outputText value="#{msg.get('app.collateral.creditType.radio.new')}"
+                        						rendered="#{credit.newCredit}" 
+                        						/>
+                        					<h:outputText value="#{msg.get('app.collateral.creditType.radio.exist')}"
+                        						rendered="#{not credit.newCredit}" 
+                        						/>
                         				</p:column>
                         				<p:column style="width:200px"
                         					headerText="#{msg.get('app.guarantorDetail.detail.creditType.table.productProgram')}">
+                        					#{credit.productProgram}
                         				</p:column>
                         				<p:column style="width:175px"
                         					headerText="#{msg.get('app.guarantorDetail.detail.creditType.table.creditFacility')}">
+                        					#{credit.creditFacility}
                         				</p:column>
                         				<p:column style="width:120px" styleClass="right"
                         					headerText="#{msg.get('app.guarantorDetail.detail.creditType.table.limit')}">
+                        					<h:outputText value="#{credit.limit}">
+                        						<f:convertNumber pattern="#,##0.00"/>
+                        					</h:outputText>
                         				</p:column>
                         			</p:dataTable>
                         		</td>
@@ -151,30 +173,35 @@
                         	<tr>
                         		<td></td>
                         		<td>
-	                        		<p:dataTable rowIndexVar="rowIdx">
+	                        		<p:dataTable rowIndexVar="rowIdx" value="#{guarantorDetail.guarantorInfoView.customers}"
+	                        			var="customer"
+	                        				>
 	                        				<p:column style="width:30px" styleClass="center">
 	                        					#{rowIdx+1}
 	                        				</p:column>
 	                        				<p:column style="width:200px" 
 	                        					headerText="#{msg.get('app.guarantorDetail.guarantor.table.customerName')}"
 	                        					>
-	                        					
+	                        					#{customer.customerName}	
 	                        				</p:column>
 	                        				<p:column style="width:200px"
 	                        					headerText="#{msg.get('app.guarantorDetail.guarantor.table.citizen')}"
 	                        					>
+	                        					#{customer.citizenId}
 	                        				</p:column>
 	                        				<p:column style="width:150px"
 	                        					headerText="#{msg.get('app.guarantorDetail.guarantor.table.customerId')}"
 	                        					>
+	                        					#{customer.tmbCustomerId}
 	                        				</p:column>
 	                        				<p:column style="width:250px"
 	                        					headerText="#{msg.get('app.guarantorDetail.guarantor.table.relationship')}"
 	                        					>
+	                        					#{customer.relation}
 	                        				</p:column>
 	                        				<p:column style="width:30px">
 	                        					<p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
-	                           						action="#{guarantorDetail.clickCustomerInfo(0)}"
+	                           						action="#{guarantorDetail.clickCustomerInfo(customer.id)}"
 	                           						ajax="false"
 	                           						process="@this"
 	                           						style="margin-right:0px !important"
@@ -196,7 +223,9 @@
 	                             <td colspan="100%" class="center">
 	                                 <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
 	                                 	styleClass="medium"
-	                                 	oncomplete="p_saveGuarantorDetailDlg.show()"
+										onstart="handleOnStartOpenCfmDlg();"
+										oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveGuarantorDetailDlg);"
+										update=":frmMain:full_main_container,:result_dialog"
 	                                 	 />
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"
@@ -213,22 +242,19 @@
             <!-- Start Footer -->
             <ui:include src="include/footer.xhtml" />
             <!-- End Footer -->
+            </h:panelGroup>
             </div>
-           	
-           	<p:blockUI widgetVar="p_blockUI" block=":frmMain" trigger='saveBtn,cancelBtn'>
-           		LOADING<br />
-                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-             </p:blockUI>
+           
         </h:form>
     </p:panel>
-   
+    <ui:include src="dialog/postLoadingAndErrorDialog.xhtml" />
     <ui:include src="dialog/confirmEditDlg.xhtml">
 		<ui:param name="id" value="saveGuarantorDetailDlg"/>
 		<ui:param name="name" value="p_saveGuarantorDetailDlg"/>
 		<ui:param name="formId" value="saveGuarantorDetailFrm"/>
 		<ui:param name="controller" value="#{guarantorDetail}"/>
 		<ui:param name="action" value="onSaveGuarantorDetail"/>
-		<ui:param name="update" value=":frmMain"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
 </h:body>
 </f:view>

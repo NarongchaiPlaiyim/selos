@@ -8,7 +8,7 @@ import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.MessageDialogSeverity;
 import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -23,19 +23,13 @@ import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
-import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.context.Flash;
-import javax.faces.event.ValueChangeListener;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.swing.*;
 import java.io.Serializable;
@@ -110,6 +104,7 @@ public class BankStatementDetail implements Serializable {
     //Messages Dialog
     private String messageHeader;
     private String message;
+    private String severity;
 
     //Session
     private long workCaseId;
@@ -188,29 +183,19 @@ public class BankStatementDetail implements Serializable {
 
     private void initViewFormAndSelectItems() {
         if (bankStmtView == null) {
-            // add new Bank statement
+            // ADD NEW - Click Add New from Summary page
             bankStmtView = new BankStmtView();
             bankStmtView.setBankStmtDetailViewList(generateBankStmtDetail());
-            modeForButton = ModeForButton.ADD;
-        } else {
-            // edit Bank statement
-            numberOfMonths = Util.safetyList(bankStmtView.getBankStmtDetailViewList()).size();
-
-//            bankStmtControl.sortAsOfDateBankStmtDetails(bankStmtView.getBankStmtDetailViewList(), SortOrder.ASCENDING);
-//            Date lastMonth = bankStmtView.getBankStmtDetailViewList().get(bankStmtView.getBankStmtDetailViewList().size() - 1).getAsOfDate();
-//            int monthsDetail = bankStmtView.getBankStmtDetailViewList().size();
-//            int monthsDiff = numberOfMonths - monthsDetail;
-//            if (monthsDetail < numberOfMonths) {
-//                // add 6 new details
-//                Date date;
-//                for (int i=1; i <= monthsDiff; i++) {
-//                    BankStmtDetailView bankStmtDetailView = new BankStmtDetailView();
-//                    date = DateTimeUtil.getOnlyDatePlusMonth(lastMonth, i);
-//                    bankStmtDetailView.setAsOfDate(date);
-//                    bankStmtView.getBankStmtDetailViewList().add(bankStmtDetailView);
-//                }
-//            }
-            modeForButton = ModeForButton.EDIT;
+        }
+        else {
+            // Click Edit from Summary page
+            // - Edit already exist Bank statement from Database
+            // - Edit Bank statement from DWH (NOT EXIST from Database) will be generate detail from
+            if (bankStmtView.getBankStmtDetailViewList() != null && bankStmtView.getBankStmtDetailViewList().size() > 0) {
+                numberOfMonths = Util.safetyList(bankStmtView.getBankStmtDetailViewList()).size();
+            } else {
+                bankStmtView.setBankStmtDetailViewList(generateBankStmtDetail());
+            }
         }
 
         bankStmtControl.sortAsOfDateBankStmtDetails(bankStmtView.getBankStmtDetailViewList(), SortOrder.ASCENDING);
@@ -314,21 +299,22 @@ public class BankStatementDetail implements Serializable {
             // update related parts
             dbrControl.updateValueOfDBR(workCaseId);
             exSummaryControl.calForBankStmtSummary(workCaseId);
-            bizInfoSummaryControl.calGrdTotalIncomeByBankStatement(workCaseId);
+            bizInfoSummaryControl.calByBankStatement(workCaseId);
 
-            messageHeader = "Save Bank Statement Detail Success.";
+            messageHeader = msg.get("app.messageHeader.info");
             message = "Save Bank Statement Detail data success.";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-
-        } catch (Exception e) {
-            messageHeader = "Save Bank Statement Detail Failed.";
+            severity = MessageDialogSeverity.INFO.severity();
+        }
+        catch (Exception e) {
+            messageHeader = msg.get("app.messageHeader.error");
+            severity = MessageDialogSeverity.ALERT.severity();
             if (e.getCause() != null) {
                 message = "Save Bank Statement Detail data failed. Cause : " + e.getCause().toString();
             } else {
                 message = "Save Bank Statement Detail data failed. Cause : " + e.getMessage();
             }
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
     public void onCancel() {
@@ -458,5 +444,13 @@ public class BankStatementDetail implements Serializable {
 
     public void setRoleUW(boolean roleUW) {
         this.roleUW = roleUW;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
     }
 }

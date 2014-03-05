@@ -23,8 +23,13 @@ public class Relation implements Serializable {
     private int priority;
     @Column(name = "active")
     private int active;
+    @Column(name = "brms_code", length = 2)
+    private String brmsCode;
     @Column(name="canbe_poa",columnDefinition="int default 0")
     private boolean canBePOA;
+    
+    @Column(name="canbe_attorney",columnDefinition="int default 0")
+    private boolean canBeAttorney;
    
     public Relation() {
     }
@@ -68,7 +73,19 @@ public class Relation implements Serializable {
 		this.canBePOA = canBePOA;
 	}
 
+    public String getBrmsCode() {
+        return brmsCode;
+    }
 
+    public void setBrmsCode(String brmsCode) {
+        this.brmsCode = brmsCode;
+    }
+	public boolean isCanBeAttorney() {
+		return canBeAttorney;
+	}
+	public void setCanBeAttorney(boolean canBeAttorney) {
+		this.canBeAttorney = canBeAttorney;
+	}
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -77,6 +94,7 @@ public class Relation implements Serializable {
                 append("active", active).
                 append("priority",priority).
                 append("canBePOA",canBePOA).
+                append("canBeAttorney",canBeAttorney).
                 toString();
     }
 }

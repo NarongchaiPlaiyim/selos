@@ -12,26 +12,28 @@
                 <tr>
                     <td class="title" style="width:145px;">#{msg.get('app.credit.facility.existing.tb.label.collateralType.potential')}</td>
                     <td>
-                        <p:selectOneMenu id="potentialCollateral" value="#{creditFacExisting.existingCollateralDetailView.potentialCollateral.id}"
+                        <p:selectOneMenu id="potentialCollateral" value="#{creditFacExisting.existingCollateralDetailView.potentialCollateral.id}" required="#{not empty param[saveRelatedCollateral.clientId]}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{creditFacExisting.potentialCollateralList}"
                                            var="potentialColl"
                                            itemLabel="#{potentialColl.name}"
                                            itemValue="#{potentialColl.id}"/>
+                            <p:ajax event="change" update="@this"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
                 <tr>
                     <td class="title" style="width:145px;">#{msg.get('app.credit.facility.existing.tb.label.collateralType.collateralType')}</td>
                     <td>
-                        <p:selectOneMenu id="collateralType" value="#{creditFacExisting.existingCollateralDetailView.collateralType.id}"
+                        <p:selectOneMenu id="collateralType" value="#{creditFacExisting.existingCollateralDetailView.collateralType.id}" required="#{not empty param[saveRelatedCollateral.clientId]}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{creditFacExisting.collateralTypeList}"
                                            var="collateralType"
                                            itemLabel="#{collateralType.description}"
                                            itemValue="#{collateralType.id}"/>
+                            <p:ajax event="change" update="@this"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -44,27 +46,30 @@
                 <tr>
                     <td class="title" style="width:145px;">#{msg.get('app.credit.facility.existing.tb.label.collateralType.relationship')}</td>
                     <td>
-                        <p:selectOneMenu id="relation" value="#{creditFacExisting.existingCollateralDetailView.relation.id}"
+                        <p:selectOneMenu id="relation" value="#{creditFacExisting.existingCollateralDetailView.relation.id}" required="#{not empty param[saveRelatedCollateral.clientId]}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{creditFacExisting.relationList}"
                                            var="relation"
                                            itemLabel="#{relation.description}"
                                            itemValue="#{relation.id}"/>
+                            <p:ajax event="change" update="@this"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
                 <tr>
                     <td class="title" style="width:145px;">#{msg.get('app.credit.facility.existing.tb.label.collateralType.appraisalDate')}</td>
                     <td>
-                        <clv:BECalendar id="appraisalDate" showOn="button" navigator="true" locale="th_TH"
-                                        value="#{creditFacExisting.existingCollateralDetailView.appraisalDate}"
-                                        yearRange="1950:2100"
+                        <clv:BECalendar value="#{creditFacExisting.existingCollateralDetailView.appraisalDate}"
+                                        id="dateOfInfo"
+                                        showOn="button"
                                         pattern="dd/MM/yyyy"
-                                        showButtonPanel="true"
-                                        defaultdate="#{creditFacExisting.currentDateDDMMYY}"
+                                        maxdate="#{creditFacExisting.currentDateDDMMYY}"
+                                        yearRange="1950:2100"
                                         mindate="01/01/1950"
-                                        maxdate="#{creditFacExisting.currentDateDDMMYY}">
+                                        navigator="true"
+                                        locale="th_TH"
+                                        showButtonPanel="true">
                         </clv:BECalendar>
                     </td>
                 </tr>
@@ -131,38 +136,39 @@
                 <tr>
                     <td class="title" style="width:145px;">ประเภท :</td>
                     <td>
-                        <p:selectOneMenu id="mortgageType" value="#{creditFacExisting.existingCollateralDetailView.mortgageType.id}" required="#{not empty param[saveBorrowerCollateral.clientId]}"
+                        <p:selectOneMenu id="mortgageType" value="#{creditFacExisting.existingCollateralDetailView.mortgageType.id}" required="#{not empty param[saveRelatedCollateral.clientId]}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{creditFacExisting.mortgageTypeList}"
                                            var="mortgage"
                                            itemLabel="#{mortgage.mortgage}"
                                            itemValue="#{mortgage.id}"/>
+                            <p:ajax event="change" update="@this"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
                 <tr>
                     <td class="title" style="width:145px;">ราคาประเมิน :</td>
                     <td>
-                        <p:inputText id="appraisalValue"  value="#{creditFacExisting.existingCollateralDetailView.appraisalValue}" >
+                        <p:inputText id="appraisalValue"  value="#{creditFacExisting.existingCollateralDetailView.appraisalValue}"  maxlength="16" >
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
-                            <p:ajax event="blur" update=":existingCollateralBorrowerDlgForm:appraisalValue"/>
+                            <p:ajax event="blur" update=":existingCollateralRelatedDlgForm:appraisalValue"/>
                         </p:inputText>
                     </td>
                 </tr>
                 <tr>
                     <td class="title" style="width:145px;">จำนอง :</td>
                     <td>
-                        <p:inputText id="mortgageValue" value="#{creditFacExisting.existingCollateralDetailView.mortgageValue}" >
+                        <p:inputText id="mortgageValue" value="#{creditFacExisting.existingCollateralDetailView.mortgageValue}" maxlength="16">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
-                            <p:ajax event="blur" update=":existingCollateralBorrowerDlgForm:mortgageValue"/>
+                            <p:ajax event="blur" update=":existingCollateralRelatedDlgForm:mortgageValue"/>
                         </p:inputText>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2" class="center">
                         <p:commandButton
-                                id="saveRelatedCollateral"
+                                id="saveRelatedCollateral" disabled="#{not creditFacExisting.canSaveRelatedCol}"
                                 value="#{msg.get('app.tcg.dlg.button.ok')}"
                                 binding="#{saveRelatedCollateral}"
                                 actionListener="#{creditFacExisting.onSaveExistingCollateral()}"

@@ -20,7 +20,7 @@ public class LoanPurpose implements Serializable {
     private String description;
 
     @Column(name = "brms_code")
-    private int brmsCode;
+    private String brmsCode;
 
     @Column(name = "active")
     private int active;
@@ -43,11 +43,11 @@ public class LoanPurpose implements Serializable {
         this.description = description;
     }
 
-    public int getBrmsCode() {
+    public String getBrmsCode() {
         return brmsCode;
     }
 
-    public void setBrmsCode(int brmsCode) {
+    public void setBrmsCode(String brmsCode) {
         this.brmsCode = brmsCode;
     }
 

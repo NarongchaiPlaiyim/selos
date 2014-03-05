@@ -1,6 +1,7 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.working.BizInfoSummaryDAO;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.view.BizInfoSummaryView;
@@ -12,15 +13,17 @@ import java.math.BigDecimal;
 public class BizInfoSummaryTransform extends Transform {
 
     @Inject
-    ProvinceDAO provinceDAO;
+    private ProvinceDAO provinceDAO;
     @Inject
-    DistrictDAO districtDAO;
+    private DistrictDAO districtDAO;
     @Inject
-    SubDistrictDAO subDistrictDAO;
+    private SubDistrictDAO subDistrictDAO;
     @Inject
-    CountryDAO countryDAO;
+    private CountryDAO countryDAO;
     @Inject
-    ReferredExperienceDAO referredExperienceDAO;
+    private ReferredExperienceDAO referredExperienceDAO;
+    @Inject
+    private BizInfoSummaryDAO bizInfoSummaryDAO;
 
     private Province province;
     private District district;
@@ -36,7 +39,7 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummary = new BizInfoSummary();
 
         if (bizInfoSummaryView.getId() != 0) {
-            bizInfoSummary.setId(bizInfoSummaryView.getId());
+            bizInfoSummary = bizInfoSummaryDAO.findById(bizInfoSummaryView.getId());
         } else if (bizInfoSummaryView.getId() == 0) {
             bizInfoSummary.setCreateBy(bizInfoSummaryView.getCreateBy());
             bizInfoSummary.setCreateDate(DateTime.now().toDate());
@@ -242,6 +245,8 @@ public class BizInfoSummaryTransform extends Transform {
     }
 
     public BizInfoSummaryView transformToView(BizInfoSummary bizInfoSummary) {
+        log.debug("find transformToView begin");
+        log.debug("bizInfoSummary : {}", bizInfoSummary);
         BizInfoSummaryView bizInfoSummaryView;
 
         bizInfoSummaryView = new BizInfoSummaryView();
@@ -258,24 +263,22 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummaryView.setAddressBuilding(bizInfoSummary.getAddressBuilding());
         bizInfoSummaryView.setAddressStreet(bizInfoSummary.getAddressStreet());
 
-        if(bizInfoSummary.getProvince() != null){
+        log.debug("Province : {}",bizInfoSummary.getProvince());
+        if(bizInfoSummary.getProvince() != null && bizInfoSummary.getProvince().getCode() != 0){
             bizInfoSummaryView.setProvince(bizInfoSummary.getProvince());
         } else {
             bizInfoSummaryView.setProvince(new Province());
         }
 
-        log.debug("find bizInfoSummary.getDistrict");
-
-        if(bizInfoSummary.getDistrict() != null){
-            log.debug( "bizInfoSummary.getDistrict is {}",bizInfoSummary.getDistrict().getId()) ;
+        log.debug("District : {}",bizInfoSummary.getDistrict());
+        if(bizInfoSummary.getDistrict() != null && bizInfoSummary.getDistrict().getId() != 0){
             bizInfoSummaryView.setDistrict(bizInfoSummary.getDistrict());
         } else {
             bizInfoSummaryView.setDistrict(new District());
         }
-        log.debug("find bizInfoSummary.setSubDistrict");
 
-        if(bizInfoSummary.getSubDistrict() != null){
-            log.debug( "bizInfoSummary.setSubDistrict is {}",bizInfoSummary.getSubDistrict().getCode());
+        log.debug("Sub District : {}",bizInfoSummary.getSubDistrict());
+        if(bizInfoSummary.getSubDistrict() != null && bizInfoSummary.getSubDistrict().getCode() != 0){
             bizInfoSummaryView.setSubDistrict(bizInfoSummary.getSubDistrict());
         } else {
             bizInfoSummaryView.setSubDistrict(new SubDistrict());
@@ -335,8 +338,6 @@ public class BizInfoSummaryTransform extends Transform {
 
         bizInfoSummaryView.setNoOfEmployee(bizInfoSummary.getNoOfEmployee());
 
-        bizInfoSummaryView.setSubDistrict(bizInfoSummary.getSubDistrict());
-
         bizInfoSummaryView.setSumIncomeAmount(bizInfoSummary.getSumIncomeAmount());
         bizInfoSummaryView.setSumIncomePercent(bizInfoSummary.getSumIncomePercent());
         bizInfoSummaryView.setSumWeightAR(bizInfoSummary.getSumWeightAR());
@@ -344,10 +345,6 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummaryView.setSumWeightINV(bizInfoSummary.getSumWeightINV());
         bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(bizInfoSummary.getSumWeightInterviewedIncomeFactorPercent());
         bizInfoSummaryView.setWeightIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
-
-
-        System.out.println("getWeightIncomeFactor"+bizInfoSummary.getWeightIncomeFactor());
-
 
         return bizInfoSummaryView;
     }

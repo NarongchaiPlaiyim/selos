@@ -9,7 +9,7 @@ import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.bpm.model.BPMInbox;
 import com.clevel.selos.integration.bpm.model.FieldName;
 import com.clevel.selos.integration.bpm.model.OrderType;
-import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
+import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.brms.service.EndPoint;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
@@ -147,8 +147,8 @@ public class WelcomePage implements Serializable {
 
     public void testBRMS() {
         try {
-            List<PreScreenResponse> preScreenResponseList = brms.checkPreScreenRule(new PreScreenRequest());
-            log.debug("{}", preScreenResponseList);
+            //List<PreScreenResponse> preScreenResponseList = brms.checkPreScreenRule(new BRMSApplicationInfo());
+            //log.debug("{}", preScreenResponseList);
         } catch (Exception e) {
             log.error("", e);
         }

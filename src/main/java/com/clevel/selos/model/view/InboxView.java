@@ -19,6 +19,7 @@ public class InboxView implements Serializable {
     private long workCaseId;
     private long stepId;
     private long statusCode;
+    private int requestAppraisal;
 
     public long getStatusCode() {
         return statusCode;
@@ -124,9 +125,18 @@ public class InboxView implements Serializable {
         this.stepId = stepId;
     }
 
+    public int getRequestAppraisal() {
+        return requestAppraisal;
+    }
+
+    public void setRequestAppraisal(int requestAppraisal) {
+        this.requestAppraisal = requestAppraisal;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("listKey", listKey)
                 .append("caNo", caNo)
                 .append("bdmId", bdmId)
                 .append("fnWobNum", fnWobNum)
@@ -138,6 +148,7 @@ public class InboxView implements Serializable {
                 .append("workCasePreScreenId", workCasePreScreenId)
                 .append("workCaseId", workCaseId)
                 .append("stepId", stepId)
+                .append("requestAppraisal", requestAppraisal)
                 .toString();
     }
 }
