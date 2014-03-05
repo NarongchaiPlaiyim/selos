@@ -188,7 +188,7 @@ public class PESQLAllBoxes implements Serializable
             session.setAttribute("workCaseId", 0);
         }*/
 
-        session.setAttribute("stepId", inboxViewSelectItem.getStep());
+        session.setAttribute("stepId", inboxViewSelectItem.getStepId());
         if(inboxViewSelectItem.getQueuename() == null)
         {
             session.setAttribute("queueName","0");
@@ -199,11 +199,11 @@ public class PESQLAllBoxes implements Serializable
             session.setAttribute("queueName",inboxViewSelectItem.getQueuename());
         }
 
-        AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(inboxViewSelectItem.getStep(), inboxViewSelectItem.getFwobnumber());
+        AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(inboxViewSelectItem.getStepId(), inboxViewSelectItem.getFwobnumber());
         session.setAttribute("appHeaderInfo", appHeaderView);
 
 
-        long selectedStepId = Long.parseLong(inboxViewSelectItem.getStep());
+        long selectedStepId = inboxViewSelectItem.getStepId();
         String landingPage = pedbExecute.getLandingPage(selectedStepId);
 
         if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
