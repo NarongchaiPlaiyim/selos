@@ -7,7 +7,7 @@
         xmlns:p="http://primefaces.org/ui">
 
     <h:head>
-        <title>SE-LOS : Inbox</title>
+        <title>SE-LOS : Inbox Dev</title>
         <!--<h:outputStylesheet name="css/style.css" />-->
         <h:outputStylesheet name="css/style.css" />
         <h:outputScript library="js" name="custom.js" />
@@ -28,13 +28,13 @@
                                 <table class="content_table_form">
                                     <tr>
                                         <td>
-                                            <p:dataTable id="resultInbox" var="item" value="#{inbox.inboxViewList}"
-                                                         selection="#{inbox.inboxViewSelectItem}" selectionMode="single"
+                                            <p:dataTable id="resultInbox" var="item" value="#{inboxdev.inboxViewList}"
+                                                         selection="#{inboxdev.inboxViewSelectItem}" selectionMode="single"
                                                          paginator="false" rowKey="#{item.listKey}"
                                                          rowIndexVar="rowIndex">
 
                                                 <p:ajax event="rowSelect" update=":frmMain:resultInbox"
-                                                        listener="#{inbox.onSelectInbox}" onstart="blockInbox.show()"/>
+                                                        listener="#{inboxdev.onSelectInbox}" onstart="blockInbox.show()"/>
 
                                                 <p:column headerText="" styleClass="center" style="width:22px;">
                                                     <h:outputText value="#{rowIndex+1}"/>
@@ -81,15 +81,15 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <h:outputText value="Pool Box" styleClass="title" rendered="#{inbox.renderedPool}"/>
-                                            <p:dataTable id="resultPoolInbox" var="itemPool" value="#{inbox.inboxPoolViewList}"
-                                                         selection="#{inbox.inboxViewSelectItem}" selectionMode="single"
+                                            <h:outputText value="Pool Box" styleClass="title" rendered="#{inboxdev.renderedPool}"/>
+                                            <p:dataTable id="resultPoolInbox" var="itemPool" value="#{inboxdev.inboxPoolViewList}"
+                                                         selection="#{inboxdev.inboxViewSelectItem}" selectionMode="single"
                                                          paginator="false" rowKey="#{itemPool.listKey}"
-                                                         rendered="#{inbox.renderedPool}"
+                                                         rendered="#{inboxdev.renderedPool}"
                                                          rowIndexVar="rowIndex">
 
                                                 <p:ajax event="rowSelect" update=":frmMain:resultInbox"
-                                                        listener="#{inbox.onSelectInbox}" onstart="blockInbox.show()"/>
+                                                        listener="#{inboxdev.onSelectInbox}" onstart="blockInbox.show()"/>
 
                                                 <p:column headerText="" styleClass="center" style="width:22px;">
                                                     <h:outputText value="#{rowIndex+1}"/>

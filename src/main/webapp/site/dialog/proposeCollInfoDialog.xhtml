@@ -4,6 +4,7 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions"
         xmlns:clv="http://clevel.com/ui">
 
 <p:panel id="collateralDlgPanel" styleClass="panel-dialog">
@@ -203,7 +204,7 @@
                          required="#{not empty param[btnSaveCollateral.clientId]}">
             <!-- disabled="#{creditFacPropose.flagComs}"-->
             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-            <f:selectItems value="#{creditFacPropose.potentialCollateralList}"
+            <f:selectItems value="#{creditFacPropose.potentialCollViewList}"
                            var="potentialItem"
                            itemLabel="#{potentialItem.description}"
                            itemValue="#{potentialItem.id}"/>
@@ -224,7 +225,7 @@
                          required="#{not empty param[btnSaveCollateral.clientId]}">
            <!-- disabled="#{creditFacPropose.flagComs}"-->
             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-            <f:selectItems value="#{creditFacPropose.collateralTypeList}"
+            <f:selectItems value="#{creditFacPropose.collTypeViewList}"
                            var="collTypePercentItem"
                            itemLabel="#{collTypePercentItem.description}"
                            itemValue="#{collTypePercentItem.id}"/>
@@ -308,7 +309,7 @@
                          required="#{not empty param[btnSaveCollateral.clientId]}"
                          disabled="true">
             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-            <f:selectItems value="#{creditFacPropose.headCollateralTypeList}"
+            <f:selectItems value="#{creditFacPropose.headCollTypeViewList}"
                            var="headCollateralTypeItem"
                            itemLabel="#{headCollateralTypeItem.description}"
                            itemValue="#{headCollateralTypeItem.id}"/>

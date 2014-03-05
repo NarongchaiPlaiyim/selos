@@ -34,14 +34,14 @@ public class BankAccountStatusTransform extends Transform {
     }
 
     public BankAccountStatus getBankAccountStatus(BankAccountStatusView bankAccountStatusView){
-        BankAccountStatus bankAccountStatus = new BankAccountStatus();
         log.debug("getBankAccountStatus ::: bankAccountStatusView : {}", bankAccountStatusView);
         if(bankAccountStatusView != null){
             if(bankAccountStatusView.getId() != 0){
-                bankAccountStatus = bankAccountStatusDAO.findById(bankAccountStatusView.getId());
+                BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findById(bankAccountStatusView.getId());
                 log.debug("getBankAccountStatus ::: bankAccountStatus : {}", bankAccountStatus);
+                return bankAccountStatus;
             }
         }
-        return bankAccountStatus;
+        return null;
     }
 }
