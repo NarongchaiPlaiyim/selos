@@ -569,7 +569,7 @@ public class CreditFacExistingControl extends BusinessControl {
 
     public List<CustomerInfoView> getCustomerListByWorkCaseId(long workCaseId){
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
-        List<Customer> customerList = customerDAO.findBorrowerByWorkCaseId(workCaseId);
+        List<Customer> customerList = customerDAO.findCustomerByWorkCaseId(workCaseId);
 
         CustomerInfoView customerInfoView;
         CustomerInfoView spouseInfoView;

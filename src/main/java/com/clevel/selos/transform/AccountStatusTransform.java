@@ -1,5 +1,6 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.view.AccountStatusView;
 
@@ -8,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountStatusTransform extends Transform {
+
+    @Inject
+    AccountStatusDAO accountStatusDAO;
 
     @Inject
     public AccountStatusTransform() {
@@ -36,5 +40,18 @@ public class AccountStatusTransform extends Transform {
             accountStatusViews.add(transformToView(accountStatus));
         }
         return accountStatusViews;
+    }
+
+    public AccountStatus transformToModel(AccountStatusView accountStatusView){
+        log.debug("begin transformToModel(accountStatusView {})", accountStatusView);
+        if(accountStatusView!=null && accountStatusView.getId() != null && !accountStatusView.getId().equalsIgnoreCase("0")){
+            try{
+                AccountStatus accountStatus = accountStatusDAO.findById(Integer.parseInt(accountStatusView.getId()));
+                return accountStatus;
+            } catch (Exception ex){
+                log.info("cannot transform accountStatus for {}", accountStatusView);
+            }
+        }
+        return null;
     }
 }

@@ -25,10 +25,7 @@ public class ExistingCreditDetailView implements Serializable {
     private String accountSuf;
     private String accountNumber;
     private int accountStatusID;
-
-    private BankAccountStatusView accountStatus;
-
-    private BankAccountStatus existAccountStatus;
+    private BankAccountStatusView existAccountStatusView;
     private String productProgram;
     private ProductProgramView existProductProgramView;
     private String creditType;
@@ -156,20 +153,12 @@ public class ExistingCreditDetailView implements Serializable {
         this.accountStatusID = accountStatusID;
     }
 
-    public BankAccountStatusView getAccountStatus() {
-        return accountStatus;
+    public BankAccountStatusView getExistAccountStatusView() {
+        return existAccountStatusView;
     }
 
-    public void setAccountStatus(BankAccountStatusView accountStatus) {
-        this.accountStatus = accountStatus;
-    }
-
-    public BankAccountStatus getExistAccountStatus() {
-        return existAccountStatus;
-    }
-
-    public void setExistAccountStatus(BankAccountStatus existAccountStatus) {
-        this.existAccountStatus = existAccountStatus;
+    public void setExistAccountStatusView(BankAccountStatusView existAccountStatusView) {
+        this.existAccountStatusView = existAccountStatusView;
     }
 
     public String getProductProgram() {
@@ -391,8 +380,7 @@ public class ExistingCreditDetailView implements Serializable {
                 .append("accountSuf", accountSuf)
                 .append("accountNumber", accountNumber)
                 .append("accountStatusID", accountStatusID)
-                .append("accountStatus", accountStatus)
-                .append("existAccountStatus", existAccountStatus)
+                .append("existAccountStatusView", existAccountStatusView)
                 .append("productProgram", productProgram)
                 .append("existProductProgramView", existProductProgramView)
                 .append("creditType", creditType)
