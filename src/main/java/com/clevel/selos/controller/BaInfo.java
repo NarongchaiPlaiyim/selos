@@ -1,374 +1,450 @@
 package com.clevel.selos.controller;
 
-
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.BaPaType;
-import com.clevel.selos.model.view.ApplyBaInfoView;
-import com.clevel.selos.model.view.BaPaInfoAddView;
-import com.clevel.selos.model.view.BaPaInfoView;
-import com.clevel.selos.model.view.CreditTypeDetailView;
-import com.clevel.selos.util.DateTimeUtil;
-import org.joda.time.DateTime;
-import org.primefaces.context.RequestContext;
-import org.slf4j.Logger;
+import java.io.IOException;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import javax.servlet.http.HttpSession;
+
+import org.primefaces.context.RequestContext;
+import org.primefaces.model.SelectableDataModel;
+import org.slf4j.Logger;
+
+import com.clevel.selos.businesscontrol.BAPAInfoControl;
+import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.BAPAType;
+import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.db.master.BAResultHC;
+import com.clevel.selos.model.db.master.InsuranceCompany;
+import com.clevel.selos.model.view.BAPAInfoCreditToSelectView;
+import com.clevel.selos.model.view.BAPAInfoCreditView;
+import com.clevel.selos.model.view.BAPAInfoCustomerView;
+import com.clevel.selos.model.view.BAPAInfoView;
+import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 
 @ViewScoped
-@ManagedBean(name ="baInfo")
-public class BaInfo implements Serializable {
-
-    /*@Inject
-    @SELOS
-    Logger log;
-
-    int selectRowNumber;
-
-    List<CreditTypeDetailView> creditTypeDetailList;
-    List<ApplyBaInfoView> applyBaInfoList;
-
-    BaPaInfoView baPaInfoView;
-    BaPaInfoAddView baPaInfoAddView;
-    BaPaInfoAddView newBaPaInfoAddViewItem;
-    ApplyBaInfoView applyBaInfoView;
-    ApplyBaInfoView newApplyBaInfoView;
-
-    ArrayList<BaPaInfoAddView> listBaPa ;
-
-    enum ModeForButton{ ADD, EDIT }
-    enum HealthCheckList {ตรวจ,ขอข้อมูลสุขภาพ}
-
-    private ModeForButton modeForButton;
-
-    public BaInfo(){
-
-    }
-
-    @PostConstruct
-    public void onCreate(){
-
-        baPaInfoView =new BaPaInfoView();
-        listBaPa=new ArrayList<BaPaInfoAddView>();
-        baPaInfoAddView=new BaPaInfoAddView();
-        creditTypeDetailList=new ArrayList<CreditTypeDetailView>();
-        applyBaInfoList=new ArrayList<ApplyBaInfoView>();
-        applyBaInfoView =new ApplyBaInfoView();
-
-        ApplyBaInfoView applyBaInfoView=new ApplyBaInfoView();
-        applyBaInfoView.setChecked(false);
-        applyBaInfoView.setCusName("Mr. A Example");
-        applyBaInfoView.setContactNumber("08-1-111-2222");
-        applyBaInfoView.setRelationship("Borrower");
-        applyBaInfoView.setResultHealtcheck("ตรวจ");
-        applyBaInfoView.setCheckDate(new Date());
-
-        applyBaInfoList.add(applyBaInfoView);
-        applyBaInfoView=new ApplyBaInfoView();
-        applyBaInfoView.setChecked(false);
-        applyBaInfoView.setCusName("Mr. B Example");
-        applyBaInfoView.setContactNumber("08-1-111-2223");
-        applyBaInfoView.setRelationship("Borrower");
-        applyBaInfoView.setResultHealtcheck("ขอข้อมูลสุขภาพ");
-        applyBaInfoView.setCheckDate(new Date());
-        applyBaInfoList.add(applyBaInfoView);
-
-        baPaInfoView.setBa(applyBaInfoList);
-
-        CreditTypeDetailView creditTypeDetailView=new CreditTypeDetailView();
-        creditTypeDetailView.setProductProgram("SmartBiz");
-        creditTypeDetailView.setCreditFacility("Loan");
-        creditTypeDetailView.setPurpose("คุ้มครองวงเงิน");
-        creditTypeDetailView.setLimit(BigDecimal.valueOf(50000L));
-        creditTypeDetailView.setNoFlag(false);
-        creditTypeDetailList.add(creditTypeDetailView);
-
-        creditTypeDetailView=new CreditTypeDetailView();
-        creditTypeDetailView.setProductProgram("SmartBiz");
-        creditTypeDetailView.setCreditFacility("OD");
-        creditTypeDetailView.setPurpose("คุ้มครองวงเงิน O/D");
-        creditTypeDetailView.setLimit(BigDecimal.valueOf(2000000L));
-        creditTypeDetailView.setNoFlag(false);
-        creditTypeDetailList.add(creditTypeDetailView);
-
-
-
-    }
-
-    public void onOpenApplyBaDialog(){
-        log.debug("onOpenApplyBaDialog()");
-
-        modeForButton = ModeForButton.EDIT;
-        applyBaInfoView = new ApplyBaInfoView();
-        applyBaInfoView.setCusName(newApplyBaInfoView.getCusName());
-        applyBaInfoView.setContactNumber(newApplyBaInfoView.getContactNumber());
-        applyBaInfoView.setRelationship(newApplyBaInfoView.getRelationship());
-        applyBaInfoView.setResultHealtcheck(newApplyBaInfoView.getResultHealtcheck());
-
-        applyBaInfoView.setCheckDate(newApplyBaInfoView.getCheckDate());
-
-
-    }
-    public void openAddDialog(){
-        log.debug("openAddDialog()");
-        modeForButton=ModeForButton.ADD;
-        baPaInfoAddView =new BaPaInfoAddView();
-
-        if(creditTypeDetailList!=null){
-           for(int i=0;i<creditTypeDetailList.size();i++){
-               creditTypeDetailList.get(i).setNoFlag(false);
-           }
-        }
-    }
-
-    public void openEditBaPaDialog(){
-        log.debug("openEditBaPaDialog()");
-        modeForButton=ModeForButton.EDIT;
-
-        System.out.println(baPaInfoView.getBapa().get(selectRowNumber).toString());
-        baPaInfoAddView=new BaPaInfoAddView();
-        baPaInfoAddView.setType(newBaPaInfoAddViewItem.getType());
-        baPaInfoAddView.setMorePay(newBaPaInfoAddViewItem.getMorePay());
-        baPaInfoAddView.setLimit(newBaPaInfoAddViewItem.getLimit());
-        baPaInfoAddView.setPremium(newBaPaInfoAddViewItem.getPremium());
-
-        for(int i=0;i<creditTypeDetailList.size();i++){
-                creditTypeDetailList.get(i).setNoFlag(false);
-            for(int j=0 ;j<baPaInfoView.getBapa().get(selectRowNumber).getCreditType().size();j++){
-                    if(baPaInfoView.getBapa().get(selectRowNumber).getCreditType().get(j).getSeq()==i){
-                        creditTypeDetailList.get(i).setNoFlag(true);
-                    }
-            }
-        }
-
-
-    }
-
-    public void onSubmitApplyBaDialog(){
-         log.debug("onSubmitApplyBaDialog()");
-
-        boolean complete =false;
-        if(modeForButton !=null && modeForButton.equals(ModeForButton.EDIT)) {
-
-        applyBaInfoList.get(selectRowNumber).setCusName(applyBaInfoView.getCusName());
-        applyBaInfoList.get(selectRowNumber).setContactNumber(applyBaInfoView.getContactNumber());
-        applyBaInfoList.get(selectRowNumber).setRelationship(applyBaInfoView.getRelationship());
-        applyBaInfoList.get(selectRowNumber).setResultHealtcheck(applyBaInfoView.getResultHealtcheck());
-        applyBaInfoList.get(selectRowNumber).setCheckDate(applyBaInfoView.getCheckDate());
-
-
-        complete=true;
-        }
-
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete",complete);
-
-    }
-
-
-    public void onSubmitBaPaInfoDialog(){
-        log.debug("submitBaPaInfoDialog()");
-        log.info("modeForButton ::: {}", modeForButton);
-
-        boolean complete=false;
-        RequestContext context=RequestContext.getCurrentInstance();
-
-
-        List<CreditTypeDetailView> listSelect=new ArrayList<CreditTypeDetailView>();
-        CreditTypeDetailView creditTypeDetailView;
-        BigDecimal limit =BigDecimal.ZERO;
-        for(int i=0;i<creditTypeDetailList.size();i++){
-            if(creditTypeDetailList.get(i).isNoFlag()){
-                creditTypeDetailView=new CreditTypeDetailView();
-                creditTypeDetailView.setProductProgram(creditTypeDetailList.get(i).getProductProgram());
-                creditTypeDetailView.setCreditFacility(creditTypeDetailList.get(i).getCreditFacility());
-                creditTypeDetailView.setPurpose(creditTypeDetailList.get(i).getPurpose());
-                creditTypeDetailView.setSeq(i);
-                limit =limit.add(creditTypeDetailList.get(i).getLimit());
-                listSelect.add(creditTypeDetailView);
-            }
-
-        }
-        if(baPaInfoAddView.getType().equals(BaPaType.BA)){
-          baPaInfoAddView.setCustomerPay("No");
-        }
-        if(baPaInfoAddView.getType().equals(BaPaType.PA)){
-          baPaInfoAddView.setCustomerPay("Yes");
-        }
-        baPaInfoAddView.setLimit(limit);
-        baPaInfoAddView.setCreditType(listSelect);
-
-
-        if(modeForButton !=null && modeForButton.equals(ModeForButton.ADD)){
-            listBaPa.add(baPaInfoAddView);
-            complete=true;
-
-            baPaInfoView.setBapa(listBaPa);
-        }
-
-        if(modeForButton !=null && modeForButton.equals(ModeForButton.EDIT)){
-            listBaPa.get(selectRowNumber).setPremium(baPaInfoAddView.getPremium());
-            listBaPa.get(selectRowNumber).setMorePay(baPaInfoAddView.getMorePay());
-            listBaPa.get(selectRowNumber).setType(baPaInfoAddView.getType());
-            listBaPa.get(selectRowNumber).setCustomerPay(baPaInfoAddView.getCustomerPay());
-            listBaPa.get(selectRowNumber).setCreditType(listSelect);
-            complete=true;
-
-            baPaInfoView.setBapa(listBaPa);
-        }
-
-        deleteButtonFlag();
-        calculationSummaryBaPa();
-        context.addCallbackParam("functionComplete",complete);
-    }
-
-
-    public void save(){
-        log.debug("save()");
-
-//        List<ApplyBaInfoView> listSelect= new ArrayList<ApplyBaInfoView>();
-//        for(int i =0;i<applyBaInfoList.size();i++){
-//            if(applyBaInfoList.get(i).isChecked()==true){
-//                applyBaInfoView =new ApplyBaInfoView();
-//                applyBaInfoView.setCusName(applyBaInfoList.get(i).getCusName());
-//                applyBaInfoView.setContactNumber(applyBaInfoList.get(i).getContactNumber());
-//                applyBaInfoView.setRelationship(applyBaInfoList.get(i).getRelationship());
-//                applyBaInfoView.setResultHealtcheck(applyBaInfoList.get(i).getResultHealtcheck());
-//                applyBaInfoView.setCheckDate(applyBaInfoList.get(i).getCheckDate());
-//                listSelect.add(applyBaInfoView);
-//            }
-//        }
-//        baPaInfoView.setBa(listSelect   );
-        System.out.println(baPaInfoView.getBa().size());
-        System.out.println(baPaInfoView.toString());
-    }
-
-
-    public void onRemoveBaPaList(){
-        log.debug("onRemoveBaPaList()");
-
-        baPaInfoView.getBapa().remove(selectRowNumber);
-        calculationSummaryBaPa();
-        deleteButtonFlag();
-
-    }
-
-    ////////////////////////////////////////////////////////
-
-    private void calculationSummaryBaPa(){
-        log.debug("calculationSummaryBaPa()");
-        BigDecimal totalLimit = BigDecimal.ZERO;
-        BigDecimal totalPremium = BigDecimal.ZERO;
-        BigDecimal totalMorePay = BigDecimal.ZERO;
-
-        for(int i=0;i<baPaInfoView.getBapa().size();i++){
-            if(baPaInfoView.getBapa().get(i).getLimit()!=null){
-                totalLimit = totalLimit.add(baPaInfoView.getBapa().get(i).getLimit());
-            }
-            if(baPaInfoView.getBapa().get(i).getPremium()!=null){
-                totalPremium = totalPremium.add(baPaInfoView.getBapa().get(i).getPremium());
-            }
-            if(baPaInfoView.getBapa().get(i).getMorePay()!=null){
-                totalMorePay = totalMorePay.add(baPaInfoView.getBapa().get(i).getMorePay());
-            }
-
-        }
-        baPaInfoView.setTotalLimit(totalLimit);
-        baPaInfoView.setTotalPremium(totalPremium);
-        baPaInfoView.setTotalMorePay(totalMorePay);
-
-    }
-
-    private void deleteButtonFlag(){
-        for(int i=0;i<listBaPa.size();i++){
-            if(i==listBaPa.size()-1){
-                listBaPa.get(i).setDeleteFlag(true);
-            }else{
-                listBaPa.get(i).setDeleteFlag(false);
-            }
-        }
-    }
-
-
-     // enumList
-
-    public BaPaType[] getbapaType(){
-        return BaPaType.values();
-    }
-    public HealthCheckList[] getHealCheckList(){
-        return HealthCheckList.values();
-    }
-
-
-    // get set
-
-    public List<CreditTypeDetailView> getCreditTypeDetailList() {
-        return creditTypeDetailList;
-    }
-
-    public void setCreditTypeDetailList(List<CreditTypeDetailView> creditTypeDetailView) {
-        this.creditTypeDetailList = creditTypeDetailView;
-    }
-
-    public BaPaInfoAddView getBaPaInfoAddView() {
-        return baPaInfoAddView;
-    }
-
-    public void setBaPaInfoAddView(BaPaInfoAddView baPaInfoAddView) {
-        this.baPaInfoAddView = baPaInfoAddView;
-    }
-
-    public BaPaInfoView getBaPaInfoView() {
-        return baPaInfoView;
-    }
-
-    public void setBaPaInfoView(BaPaInfoView baPaInfoView) {
-        this.baPaInfoView = baPaInfoView;
-    }
-
-    public int getSelectRowNumber() {
-        return selectRowNumber;
-    }
-
-    public void setSelectRowNumber(int selectRowNumber) {
-        this.selectRowNumber = selectRowNumber;
-    }
-
-    public BaPaInfoAddView getNewBaPaInfoAddViewItem() {
-        return newBaPaInfoAddViewItem;
-    }
-
-    public void setNewBaPaInfoAddViewItem(BaPaInfoAddView newBaPaInfoAddViewItem) {
-        this.newBaPaInfoAddViewItem = newBaPaInfoAddViewItem;
-    }
-
-    public ApplyBaInfoView getApplyBaInfoView() {
-        return applyBaInfoView;
-    }
-
-    public void setApplyBaInfoView(ApplyBaInfoView applyBaInfoView) {
-        this.applyBaInfoView = applyBaInfoView;
-    }
-
-    public ApplyBaInfoView getNewApplyBaInfoView() {
-        return newApplyBaInfoView;
-    }
-
-    public void setNewApplyBaInfoView(ApplyBaInfoView newApplyBaInfoView) {
-        this.newApplyBaInfoView = newApplyBaInfoView;
-    }
-
-    public List<ApplyBaInfoView> getApplyBaInfoList() {
-        return applyBaInfoList;
-    }
-
-    public void setApplyBaInfoList(List<ApplyBaInfoView> applyBaInfoList) {
-        this.applyBaInfoList = applyBaInfoList;
-    }*/
+@ManagedBean(name="baInfo")
+public class BAInfo implements Serializable {
+	private static final long serialVersionUID = -6678163555513002049L;
+
+	@Inject @SELOS
+	private Logger log;
+	
+	@Inject
+	private BasicInfoControl basicInfoControl;
+	
+	@Inject
+	private BAPAInfoControl bapaInfoControl;
+	
+	//Private variable
+	private boolean preRenderCheck = false;
+	private long workCaseId = -1;
+	private long stepId = -1;
+	private BasicInfoView basicInfoView;
+	private List<BAPAInfoCreditView> deleteCreditList;
+	private List<BAPAInfoCreditToSelectView> toSelectCredits;
+	private BAPAInfoCreditView toUpdCreditView;
+	
+	//Property
+	private CreditSelectedDataModel creditDataModel;
+	private BAPAInfoView bapaInfoView;
+	private List<InsuranceCompany> insuranceCompanies;
+	private List<BAResultHC> baResultHCs;
+	
+	private List<BAPAInfoCustomerView> bapaInfoCustomers;
+	private List<BAPAInfoCreditView> bapaInfoCredits;
+	private BAPAInfoCustomerView bapaInfoCustomerView;
+	private int deleteCreditRowId;
+	private BAPAInfoCreditView bapaInfoCreditView;
+	
+	private boolean addCreditDialog;
+	private BAPAInfoCreditToSelectView selectedCredit;
+	
+	private BigDecimal totalLimit;
+	private BigDecimal totalPremium;
+	private BigDecimal totalExpense;
+	
+	public BAInfo() {
+	}
+	
+	public Date getLastUpdateDateTime() {
+		return bapaInfoView.getModifyDate();
+	}
+	public String getLastUpdateBy() {
+		if (bapaInfoView.getModifyBy() == null)
+			return "";
+		else
+			return bapaInfoView.getModifyBy().getDisplayName();
+	}
+	public ApproveType getApproveType() {
+		if (basicInfoView == null)
+			return ApproveType.NA;
+		else
+			return basicInfoView.getApproveType();
+	}
+	public String getMinCheckDate() {
+		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+		return dFmt.format(new Date());
+	}
+	public String getMaxCheckDate() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DAY_OF_YEAR, 90);
+		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+		return dFmt.format(calendar.getTime());
+	}
+	
+	public BAPAInfoView getBapaInfoView() {
+		return bapaInfoView;
+	}
+	public List<InsuranceCompany> getInsuranceCompanies() {
+		return insuranceCompanies;
+	}
+	public List<BAResultHC> getBaResultHCs() {
+		return baResultHCs;
+	}
+	public String getInsuranceAccount() {
+		if (bapaInfoView.getUpdInsuranceCompany() > 0) {
+			for (InsuranceCompany company : insuranceCompanies) {
+				if (company.getId() == bapaInfoView.getUpdInsuranceCompany())
+					return company.getAccountNumber();
+			}
+		}
+		return null;
+	}
+	public List<BAPAInfoCustomerView> getBapaInfoCustomers() {
+		return bapaInfoCustomers;
+	}
+	
+	public boolean canUpdateBAInfoTable() {
+		return RadioValue.YES.equals(bapaInfoView.getApplyBA());
+	}
+	public BAPAInfoCustomerView getBapaInfoCustomerView() {
+		return bapaInfoCustomerView;
+	}
+	public void setBapaInfoCustomerView(BAPAInfoCustomerView bapaInfoCustomerView) {
+		this.bapaInfoCustomerView = bapaInfoCustomerView;
+	}
+	public String getDisplayResultHealthCheck(BAPAInfoCustomerView view) {
+		if (view == null || view.getUpdBAResultHC() <= 0 || baResultHCs == null)
+			return "";
+		for (BAResultHC hc : baResultHCs) {
+			if (hc.getId() == view.getUpdBAResultHC())
+				return hc.getName();
+		}
+		return "";
+	}
+	public List<BAPAInfoCreditView> getBapaInfoCredits() {
+		return bapaInfoCredits;
+	}
+	public BAPAInfoCreditView getBapaInfoCreditView() {
+		return bapaInfoCreditView;
+	}
+	
+	public boolean isAddCreditDialog() {
+		return addCreditDialog;
+	}
+	public int getDeleteCreditRowId() {
+		return deleteCreditRowId;
+	}
+	public void setDeleteCreditRowId(int deleteCreditRowId) {
+		this.deleteCreditRowId = deleteCreditRowId;
+	}
+	public BigDecimal getTotalExpense() {
+		return totalExpense;
+	}
+	public BigDecimal getTotalLimit() {
+		return totalLimit;
+	}
+	public BigDecimal getTotalPremium() {
+		return totalPremium;
+	}
+	public CreditSelectedDataModel getCreditDataModel() {
+		return creditDataModel;
+	}
+	public BAPAInfoCreditToSelectView getSelectedCredit() {
+		return selectedCredit;
+	}
+	public void setSelectedCredit(BAPAInfoCreditToSelectView selectedCredit) {
+		this.selectedCredit = selectedCredit;
+	}
+	
+	public boolean isEnableCheckDate() {
+		if (bapaInfoCustomerView == null)
+			return false;
+		int id = bapaInfoCustomerView.getUpdBAResultHC();
+		if (id <= 0)
+			return false;
+		for (BAResultHC data : baResultHCs) {
+			if (data.getId() == id)
+				return data.isRequiredCheckDate();
+		}
+		return false;
+	}
+	/*
+	 * Action
+	 */
+	@PostConstruct
+	private void init() {
+		log.info("Construct");
+		HttpSession session = FacesUtil.getSession(false);
+		if (session != null) {
+			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
+			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+		}
+		insuranceCompanies = bapaInfoControl.getInsuranceCompanies();
+		baResultHCs = bapaInfoControl.getBAResultHCs();
+		toSelectCredits = bapaInfoControl.getBAPAInfoCreditToSelectView(workCaseId);
+		creditDataModel = new CreditSelectedDataModel();
+		creditDataModel.setWrappedData(toSelectCredits);
+		_loadInitData();
+	}
+	
+	public void preRender() {
+		if (preRenderCheck)
+			return;
+		preRenderCheck = true;
+		
+		String redirectPage = null;
+		if (workCaseId > 0) {
+			//TODO Validate step 
+			if (stepId <= 0) {
+				redirectPage = "/site/inbox.jsf";
+			} else {
+				return;
+			}
+		}
+		try {
+			if (redirectPage == null) {
+				redirectPage = "/site/inbox.jsf";
+			}
+			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+			ec.redirect(ec.getRequestContextPath()+redirectPage);
+		} catch (IOException e) {
+			log.error("Fail to redirect screen to "+redirectPage,e);
+		}
+	}
+	public void onChangeApplyToBA() {
+		if (!RadioValue.YES.equals(bapaInfoView.getApplyBA())) {
+			for (BAPAInfoCustomerView customer : bapaInfoCustomers) {
+				customer.setApplyBA(false);
+			}
+		}
+	}
+	public void onOpenApplyInformationDialog(BAPAInfoCustomerView selected) {
+		bapaInfoCustomerView = selected;
+		
+	}
+	public void onApplyBAInformation() {
+		bapaInfoCustomerView.setNeedUpdate(true);
+		bapaInfoCustomerView = null;
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onOpenAddBAPAInformationDialog() {
+		bapaInfoCreditView = new BAPAInfoCreditView();
+		bapaInfoCreditView.setId(0);
+		bapaInfoCreditView.setType(BAPAType.NA);
+		bapaInfoCreditView.setPayByCustomer(true);
+		bapaInfoCreditView.setFromCredit(false);
+		bapaInfoCreditView.setLimit(new BigDecimal(0));
+		
+		
+		selectedCredit = null;
+		addCreditDialog = true;
+	}
+	public void onAddBAPAInformation() {
+		if (selectedCredit != null) {
+			//fill in credit info
+			bapaInfoCreditView.setCreditId(selectedCredit.getId());
+			bapaInfoCreditView.setProductProgram(selectedCredit.getProductProgram());
+			bapaInfoCreditView.setCreditType(selectedCredit.getCreditType());
+			bapaInfoCreditView.setLoanPurpose(selectedCredit.getLoanPurpose());
+		} else {
+			bapaInfoCreditView.setProductProgram("-");
+			bapaInfoCreditView.setCreditType("-");
+			bapaInfoCreditView.setLoanPurpose("-");
+		}
+		bapaInfoCredits.add(bapaInfoCreditView);
+		bapaInfoCreditView = null;
+		selectedCredit = null;
+		
+		_calculateTotal();
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onOpenUpdateBAPAInformaionDialog(BAPAInfoCreditView selected) {
+		log.info("Open Update BAPA INfo "+selected);
+		toUpdCreditView = selected;
+		bapaInfoCreditView = new BAPAInfoCreditView();
+		bapaInfoCreditView.updateValue(toUpdCreditView);
+		
+		long creditId = bapaInfoCreditView.getCreditId();
+		selectedCredit = null;
+		if (creditId > 0) {
+			for (BAPAInfoCreditToSelectView credit : toSelectCredits) {
+				if (credit.getId() == creditId) {
+					selectedCredit = credit;
+					break;
+				}
+			}
+		}
+		addCreditDialog = false;
+	}
+	public void onUpdateBAPAInformation() {
+		if (!bapaInfoCreditView.isFromCredit()) {
+			if (selectedCredit != null) {
+				bapaInfoCreditView.setCreditId(selectedCredit.getId());
+				bapaInfoCreditView.setProductProgram(selectedCredit.getProductProgram());
+				bapaInfoCreditView.setCreditType(selectedCredit.getCreditType());
+				bapaInfoCreditView.setLoanPurpose(selectedCredit.getLoanPurpose());
+			} else {
+				bapaInfoCreditView.setCreditId(0);
+				bapaInfoCreditView.setProductProgram("-");
+				bapaInfoCreditView.setCreditType("-");
+				bapaInfoCreditView.setLoanPurpose("-");
+			}
+		}
+		
+		bapaInfoCreditView.setNeedUpdate(true);
+		
+		toUpdCreditView.updateValue(bapaInfoCreditView);
+		
+		bapaInfoCreditView = null;
+		toUpdCreditView = null;
+		selectedCredit = null;
+		
+		_calculateTotal();
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onDeleteBAPAInformation() {
+		if (deleteCreditRowId < 0 || deleteCreditRowId > bapaInfoCredits.size())
+			return;
+		BAPAInfoCreditView delete  = bapaInfoCredits.remove(deleteCreditRowId);
+		if (delete != null) {
+			deleteCreditList.add(delete);
+		}
+		deleteCreditRowId = -1;
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onSaveBAInformation() {
+		bapaInfoView.setTotalExpense(totalExpense);
+		bapaInfoView.setTotalPremium(totalPremium);
+		bapaInfoView.setTotalLimit(totalLimit);
+		
+		bapaInfoControl.saveBAPAInfo(workCaseId, bapaInfoView, bapaInfoCustomers, bapaInfoCredits, deleteCreditList);
+		
+		_loadInitData();
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	
+	public void onCalculateExpense() {
+		if (bapaInfoCreditView == null)
+			return;
+		BigDecimal expense = BigDecimal.ZERO;
+		BAPAType type = bapaInfoCreditView.getType();
+		if (type != null) {
+			switch (type) {
+			case BA:
+				BigDecimal premium = bapaInfoCreditView.getPremiumAmount();
+				BigDecimal limit = null;
+				if (bapaInfoCreditView.isFromCredit()) {
+					limit = bapaInfoCreditView.getLimit();
+				} else {
+					if (selectedCredit != null && selectedCredit.isTopupBA())
+						limit = selectedCredit.getLimit(); 
+				}
+				if (limit != null && premium != null)
+					expense = limit.subtract(premium);
+				else if (limit != null) 
+					expense = limit;
+				else if (premium != null)
+					expense = premium;
+				break;
+			default :
+				expense = bapaInfoCreditView.getPremiumAmount();
+			}
+		}
+		bapaInfoCreditView.setExpenseAmount(expense);
+	}
+	/*
+	 * Private method
+	 */
+	private void _loadInitData() {
+		preRenderCheck = false;
+		bapaInfoView = bapaInfoControl.getBAPAInfoView(workCaseId);
+		
+		if (workCaseId > 0) {
+			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+			bapaInfoCustomers = bapaInfoControl.getBAPAInfoCustomerView(workCaseId, bapaInfoView.getId());
+			bapaInfoCredits = new ArrayList<BAPAInfoCreditView>(bapaInfoControl.getBAPAInfoCreditView(workCaseId, bapaInfoView.getId()));
+		} else {
+			bapaInfoCredits = new ArrayList<BAPAInfoCreditView>();
+		}
+		bapaInfoCustomerView = null;
+		bapaInfoCreditView = null;
+		deleteCreditList = new ArrayList<BAPAInfoCreditView>();
+		deleteCreditRowId = -1;
+		
+		_calculateTotal();
+	}
+	private void _calculateTotal() {
+		totalExpense = new BigDecimal(0);
+		totalPremium = new BigDecimal(0);
+		totalLimit = new BigDecimal(0);
+		
+		if (bapaInfoCredits == null)
+			return;
+		for (BAPAInfoCreditView credit : bapaInfoCredits) {
+			if (credit.getExpenseAmount() != null)
+				totalExpense = totalExpense.add(credit.getExpenseAmount());
+			if (credit.getPremiumAmount() != null)
+				totalPremium = totalPremium.add(credit.getPremiumAmount());
+			if (credit.getLimit() != null)
+				totalLimit = totalLimit.add(credit.getLimit());
+		}
+	}
+	
+	public class CreditSelectedDataModel extends ListDataModel<BAPAInfoCreditToSelectView> implements SelectableDataModel<BAPAInfoCreditToSelectView> {
+		public CreditSelectedDataModel() {
+			
+		}
+		@SuppressWarnings("unchecked")
+		@Override
+		public BAPAInfoCreditToSelectView getRowData(String key) {
+			long id = Util.parseLong(key, -1);
+			if (id <= 0)
+				return null;
+			List<BAPAInfoCreditToSelectView> datas = (List<BAPAInfoCreditToSelectView>)getWrappedData();
+			if (datas == null || datas.isEmpty())
+				return null;
+			for (BAPAInfoCreditToSelectView data : datas) {
+				if (data.getId() == id)
+					return data;
+			}
+			return null;
+		}
+		@Override
+		public Object getRowKey(BAPAInfoCreditToSelectView data) {
+			return data.getId();
+		}
+		
+	}
 }
+
+
