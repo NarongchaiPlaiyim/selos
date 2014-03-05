@@ -6,6 +6,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.ecm.ECMInterfaceImpl;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.model.ECMDataResult;
+import com.clevel.selos.integration.filenet.ce.connection.CESessionToken;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.view.CheckMandatoryDocView;
 import com.clevel.selos.model.view.CheckOptionalDocView;
@@ -38,6 +39,15 @@ public class CheckMandateDoc implements Serializable {
     @Inject
     @Config(name = "interface.bpm.objectStore")
     private String objectStore;
+
+    @Inject
+    private CESessionToken CESessionToken;
+    @Inject
+    @Config(name = "interface.bpm.username")
+    String bpmUsername;
+    @Inject
+    @Config(name = "interface.bpm.password")
+    String bpmPassword;
 
     private final String URL = "https://www.google.co.th";
 
@@ -107,6 +117,8 @@ public class CheckMandateDoc implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("-- onCreation.");
+        log.debug("-- BPMUser[{}]", bpmUsername);
+        log.debug("-- BPMPass[{}]", bpmPassword);
 
         //if found the documents matched in ECM completed = Y and will not allow user to change it;
         //if not found the documents matched in ECM completed = N and it will be changed to Yes when user upload the document into ECM;
@@ -125,12 +137,12 @@ public class CheckMandateDoc implements Serializable {
                     checkOtherDocView.setDocumentType(ecmDetail.getTypeNameTH());
                     checkOtherDocView.setOwners(ecmDetail.getTypeCode());
                     checkOtherDocView.setFileName(ecmDetail.getOrgFileName());
-                    checkOtherDocView.setLink(URL);
+                    checkOtherDocView.setLink(getURLByFNId(ecmDetail.getFnDocId(), CESessionToken.getTokenFromSession(bpmUsername, bpmPassword)));
                     checkOtherDocView.setComplete(2);
                     checkOtherDocView.setIndistinct(true);
                     checkOtherDocView.setExpire(true);
                     checkOtherDocView.setRemark("test");
-                    log.debug("-- Link[{}]", getURLByFNId(ecmDetail.getFnDocId(), "token"));
+                    log.debug("-- Link[{}]", getURLByFNId(ecmDetail.getFnDocId(), CESessionToken.getTokenFromSession(bpmUsername, bpmPassword)));
                     otherDocumentsList.add(checkOtherDocView);
                 }
                 result = ecmDetailList.toString();
