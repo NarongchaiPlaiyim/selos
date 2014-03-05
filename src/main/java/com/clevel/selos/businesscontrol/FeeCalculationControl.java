@@ -233,14 +233,17 @@ public class FeeCalculationControl extends BusinessControl {
 				continue;
 			
 			BigDecimal totalODCredit = BigDecimal.ZERO;
+			//TODO Clear more about fee account type
 			FeeAccountType feeAccountType = (foundOD) ? FeeAccountType.NEW_OD : FeeAccountType.EXCEED;
 			
 			List<OpenAccountCredit> credits = account.getOpenAccountCreditList();
 			for (OpenAccountCredit credit : credits) {
-				if (credit.getNewCreditDetail() == null)
+				if (credit.getNewCreditDetail() == null && credit.getNewCreditDetail().getNewCreditFacility() != null)
 					continue;
-				//TODO calculate fee type and total od
-//				credit.getNewCreditDetail().getNewCreditFacility().getTotal
+				BigDecimal odLimit = credit.getNewCreditDetail().getNewCreditFacility().getTotalApprovedODLimit();
+				if (odLimit == null)
+					continue;
+				totalODCredit = totalODCredit.add(odLimit);
 			}
 			FeeCollectionAccount feeAcc = new FeeCollectionAccount();
 			feeAcc.setFeeAccountType(feeAccountType);
