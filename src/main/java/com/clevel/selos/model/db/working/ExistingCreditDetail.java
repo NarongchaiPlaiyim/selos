@@ -117,10 +117,6 @@ public class ExistingCreditDetail implements Serializable {
     @JoinColumn(name = "existing_credit_facility_id")
     private ExistingCreditFacility existingCreditFacility;
 
-    @OneToOne
-    @JoinColumn(name = "account_status_id")
-    private BankAccountStatus accountstatus;
-
     @OneToMany(mappedBy = "existingCreditDetail", cascade = CascadeType.ALL)
     private List<ExistingCreditTierDetail> existingCreditTierDetailList;
 
@@ -373,14 +369,6 @@ public class ExistingCreditDetail implements Serializable {
 
     public void setExistingCreditFacility(ExistingCreditFacility existingCreditFacility) {
         this.existingCreditFacility = existingCreditFacility;
-    }
-
-    public BankAccountStatus getAccountstatus() {
-        return accountstatus;
-    }
-
-    public void setAccountstatus(BankAccountStatus accountstatus) {
-        this.accountstatus = accountstatus;
     }
 
     public List<ExistingCreditTierDetail> getExistingCreditTierDetailList() {
