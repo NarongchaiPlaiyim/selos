@@ -247,6 +247,7 @@ public class CreditFacExisting implements Serializable {
 
             existProductProgramView = new ProductProgramView();
             existCreditTypeView = new CreditTypeView();
+            existAccountStatusView = new BankAccountStatusView();
 
             existingCreditDetailView.setExistAccountStatusView(existAccountStatusView);
             existingCreditDetailView.setExistProductProgramView(existProductProgramView);
