@@ -104,7 +104,7 @@ public class BankStmtTransform extends Transform {
             bankStmtDetailView.setOverLimitDays(DateTimeUtil.daysBetween2Dates(dwhBankStatement.getStartODDate(), dwhBankStatement.getEndODDate()));
             bankStmtDetailView.setOverLimitTimes(dwhBankStatement.getNumberOfTimesOD());
         }
-        log.info("Return BankStmtView : {}", bankStmtDetailView);
+        log.info("Return BankStmtDetailView : {}", bankStmtDetailView);
         return bankStmtDetailView;
     }
 
