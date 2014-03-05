@@ -385,10 +385,10 @@
             </p:column>
 
             <p:column styleClass="left top">
-                <h:outputText value="#{newCollateralSubView.subCollateralType.description}"
+                <h:outputText value="#{msg.get('app.credit.facility.propose.label.subcoll.subcollTypeCaption')} #{newCollateralSubView.subCollateralType.description}"
                               rendered="#{not empty newCollateralSubView.subCollateralType}"/><br/>
-                <h:outputText value="#{newCollateralSubView.address}"/><br/>
-                <h:outputText value="#{newCollateralSubView.landOffice}"/>
+                <h:outputText value="#{msg.get('app.credit.facility.propose.label.subcoll.titleDeed')} #{newCollateralSubView.address}"/><br/>
+                <h:outputText value="#{msg.get('app.credit.facility.propose.label.subcoll.collateralOwner.AAD')} #{newCollateralSubView.landOffice}"/>
             </p:column>
 
             <p:column styleClass="left top">
