@@ -1091,8 +1091,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     if (proposeCollateralInfoAdd.getProposeCreditDetailViewList().size() > 0) {
                         complete3 = true;
                     } else {
-                        messageHeader = msg.get("app.propose.exception");
-                    }else{
                         messageHeader = msg.get("app.messageHeader.error");
                         message = msg.get("app.propose.desc.add.data");
                         severity = MessageDialogSeverity.ALERT.severity();
@@ -1100,9 +1098,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                         complete3 = false;
                     }
                 } else {
-                    messageHeader = msg.get("app.propose.exception");
+                    messageHeader = msg.get("app.messageHeader.error");
                     message = msg.get("app.propose.desc.add.data");
-                    messageErr = true;
+                    severity = MessageDialogSeverity.ALERT.severity();
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     complete3 = false;
                 }
@@ -1164,9 +1162,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                         editProposeColl = false;
                         complete = true;
                     } else {
-                        messageHeader = msg.get("app.propose.exception");
+                        messageHeader = msg.get("app.messageHeader.error");
                         message = msg.get("app.propose.desc.add.data");
-                        messageErr = true;
+                        severity = MessageDialogSeverity.ALERT.severity();
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                         complete = false;
                     }
