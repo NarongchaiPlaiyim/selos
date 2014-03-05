@@ -522,42 +522,44 @@ public class CustomerInfoIndividual implements Serializable {
 
         //////////////////////////////////////////////////////////////////
 
-        if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
-            if(customerInfoView.getSpouse().getRegisterAddress().getAddressTypeFlag() == 0){
-                if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress()) == 1){
-                    customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(1);
-                } else {
-                    customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(3);
+        if(customerInfoView.getSpouse() != null){
+            if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
+                if(customerInfoView.getSpouse().getRegisterAddress().getAddressTypeFlag() == 0){
+                    if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress()) == 1){
+                        customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(1);
+                    } else {
+                        customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(3);
+                    }
                 }
             }
-        }
-        if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getWorkAddress() != null){
-            if(customerInfoView.getSpouse().getWorkAddress().getAddressTypeFlag() == 0){
-                if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getWorkAddress()) == 1){
-                    customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(1);
-                } else if(customerInfoView.getSpouse().getRegisterAddress() != null){
-                    if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getRegisterAddress(),customerInfoView.getSpouse().getWorkAddress()) == 1){
-                        customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(2);
+            if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getWorkAddress() != null){
+                if(customerInfoView.getSpouse().getWorkAddress().getAddressTypeFlag() == 0){
+                    if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getWorkAddress()) == 1){
+                        customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(1);
+                    } else if(customerInfoView.getSpouse().getRegisterAddress() != null){
+                        if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getRegisterAddress(),customerInfoView.getSpouse().getWorkAddress()) == 1){
+                            customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(2);
+                        } else {
+                            customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
+                        }
                     } else {
                         customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
                     }
-                } else {
-                    customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
                 }
             }
-        }
 
-        //if address is null
-        if(customerInfoView.getSpouse().getCurrentAddress() == null){
-            customerInfoView.getSpouse().setCurrentAddress(new AddressView());
-        }
-        if(customerInfoView.getSpouse().getRegisterAddress() == null){
-            customerInfoView.getSpouse().setRegisterAddress(new AddressView());
-            customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(3);
-        }
-        if(customerInfoView.getSpouse().getWorkAddress() == null){
-            customerInfoView.getSpouse().setWorkAddress(new AddressView());
-            customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
+            //if address is null
+            if(customerInfoView.getSpouse().getCurrentAddress() == null){
+                customerInfoView.getSpouse().setCurrentAddress(new AddressView());
+            }
+            if(customerInfoView.getSpouse().getRegisterAddress() == null){
+                customerInfoView.getSpouse().setRegisterAddress(new AddressView());
+                customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(3);
+            }
+            if(customerInfoView.getSpouse().getWorkAddress() == null){
+                customerInfoView.getSpouse().setWorkAddress(new AddressView());
+                customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
+            }
         }
 
         //////////////////////////////////////////////////////////////////

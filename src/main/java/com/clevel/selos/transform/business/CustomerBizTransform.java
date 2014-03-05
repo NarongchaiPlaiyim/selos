@@ -57,6 +57,7 @@ public class CustomerBizTransform extends BusinessTransform {
     RMTitleDAO rmTitleDAO;
 
     public CustomerInfoResultView tranformIndividual(IndividualResult individualResult) {
+        log.debug("tranformIndividual - individualResult :: {}",individualResult);
         CustomerInfoResultView customerInfoResultView = null;
         if (individualResult != null) {
             customerInfoResultView = new CustomerInfoResultView();
@@ -69,8 +70,10 @@ public class CustomerBizTransform extends BusinessTransform {
 
                     customerInfoView.reset();
 
+                    log.debug("tranformIndividual - individualModel :: {}",individualModel);
                     customerInfoView.setCitizenId(individualModel.getCitizenID());
                     RMTitle rmTitle = rmTitleDAO.findOneByCriteria(Restrictions.eq("rmTitle", individualModel.getTitleTH()));
+                    log.debug("tranformIndividual - rmTitle :: {}",rmTitle);
                     if (rmTitle != null && rmTitle.getTitle() != null) {
                         customerInfoView.setTitleTh(rmTitle.getTitle());
                     }
@@ -80,6 +83,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     }
 
                     RMTitle rmTitleEn = rmTitleDAO.findOneByCriteria(Restrictions.eq("rmTitle", individualModel.getTitleEN()));
+                    log.debug("tranformIndividual - rmTitleEn :: {}",rmTitleEn);
                     if (rmTitleEn != null && rmTitleEn.getTitle() != null) {
                         customerInfoView.setTitleEn(rmTitleEn.getTitle());
                     }
@@ -87,6 +91,8 @@ public class CustomerBizTransform extends BusinessTransform {
                     if (customerInfoView.getTitleEn() == null) {
                         customerInfoView.setTitleEn(new Title());
                     }
+
+                    log.debug("tranformIndividual - customerInfoView :: {}",customerInfoView);
 
                     customerInfoView.setFirstNameTh(individualModel.getFirstname());
                     customerInfoView.setLastNameTh(individualModel.getLastname());
