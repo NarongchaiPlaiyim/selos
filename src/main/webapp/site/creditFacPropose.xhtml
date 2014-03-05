@@ -535,7 +535,7 @@
 
         <p:commandButton value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
                          styleClass="largest"
-                         disabled="#{creditFacPropose.notRetrivePricing}"
+                         disabled="#{creditFacPropose.notRetrievePricing}"
                          process="@this"
                          update=":frmMain,:msgBoxSystemMessagePanel"
                          action="#{creditFacPropose.onRetrievePricingFee}"/>
@@ -2038,6 +2038,7 @@
 <!-- Control  All Page-->
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                     severity="#{creditFacPropose.severity}"
                      header="#{creditFacPropose.messageHeader}" message="#{creditFacPropose.message}">
         <p:commandButton value="OK"
                          process="@this"
