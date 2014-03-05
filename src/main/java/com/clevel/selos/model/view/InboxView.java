@@ -18,6 +18,15 @@ public class InboxView implements Serializable {
     private long workCasePreScreenId;
     private long workCaseId;
     private long stepId;
+    private long statusCode;
+
+    public long getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(long statusCode) {
+        this.statusCode = statusCode;
+    }
 
     public int getListKey() {
         return listKey;

@@ -1,9 +1,11 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.InboxControl;
+import com.clevel.selos.dao.master.RoleInboxDAO;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.db.master.InboxType;
+import com.clevel.selos.model.db.relation.RelRoleBasedInbox;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.InboxView;
 import com.clevel.selos.security.UserDetail;
@@ -15,7 +17,6 @@ import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -50,43 +51,105 @@ public class Inbox implements Serializable {
     InboxControl inboxControl;
 
     private UserDetail userDetail;
+
     private List<InboxView> inboxViewList;
-    private List<InboxView> inboxPoolViewList;
-    private boolean renderedPool;
+
+
+    List<String> inboxTypeList;
 
     private InboxView inboxViewSelectItem;
+
+
+    @Inject
+    InboxType inboxType;
+    @Inject
+    RoleInboxDAO roleInboxDAO;
+
+    @Inject
+    RelRoleBasedInbox relRoleBasedInbox;
+
+    List<RelRoleBasedInbox> relReturnInboxList;
+    List<String> stringInboxList = null;
+    List<Integer> inboxValue;
+
+    public ArrayList<InboxType> getInboxTypeArrayList() {
+        return inboxTypeArrayList;
+    }
+
+    public void setInboxTypeArrayList(ArrayList<InboxType> inboxTypeArrayList) {
+        this.inboxTypeArrayList = inboxTypeArrayList;
+    }
+
+    private ArrayList<InboxType> inboxTypeArrayList;
+
+
 
     public Inbox() {
 
     }
 
     @PostConstruct
-    public void onCreation() {
+    public void onCreation()
+    {
+        inboxTypeArrayList = new ArrayList<InboxType>();
         // *** Get user from Session *** //
         userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        log.info("controler in oncreation method of inbox.java class ");
+
         log.info("onCreation ::: userDetail : {}", userDetail);
-        try {
-            inboxViewList = inboxControl.getInboxFromBPM(userDetail);
-            inboxPoolViewList = new ArrayList<InboxView>();
-            if(userDetail.getRole().equals("ROLE_UW") || userDetail.getRole().equals("ROLE_AAD")){
-                inboxPoolViewList = inboxControl.getInboxPoolFromBPM(userDetail);
-                renderedPool = true;
-            } else {
-                renderedPool = false;
-            }
-            HttpSession httpSession = FacesUtil.getSession(true);
-            httpSession.setAttribute("workCaseId", null);
-            httpSession.setAttribute("workCasePreScreenId", null);
-            httpSession.setAttribute("stepId", null);
+
+
+        int roleId = userDetail.getRoleId();
+
+        log.info("onCreation ::: userDetail : {}", roleId);
+
+        relRoleBasedInbox.setRoleId(roleId);
+
+        log.info("relRoleBasedInbox ::: {}", relRoleBasedInbox.getRoleId());
+
+
+        int inboxRoleId =   relRoleBasedInbox.getRoleId();
+        int inboxId = relRoleBasedInbox.getInboxId();
+        log.info("inboxId ::::::: {}"+inboxId);
+
+        relReturnInboxList = new ArrayList<RelRoleBasedInbox>();
+
+        inboxTypeList = new ArrayList<String>();
+
+
+        inboxTypeList = roleInboxDAO.getUserBasedRole(inboxRoleId,relRoleBasedInbox,inboxType);
+        log.info("inboxTypeList:::::::::::::::::::::::"+inboxTypeList);
+        for(int inboxNameNo=0; inboxNameNo < inboxTypeList.size(); inboxNameNo++)
+        {
+            InboxType inboxType = new InboxType();
+            inboxType.setInbox_name(inboxTypeList.get(inboxNameNo));
+            inboxTypeArrayList.add(inboxType);
+            inboxType = null;
+        }
+        log.info("inboxTypeArrayList ::::::: {}"+inboxTypeArrayList);
+
+
+
+        try
+        {
+            //inboxViewList = inboxControl.getInboxFromBPM(userDetail);
+
             log.debug("onCreation ::: inboxViewList : {}", inboxViewList);
-        } catch (Exception e) {
+
+        }
+        catch (Exception e)
+        {
             log.error("Exception while getInbox : ", e);
         }
     }
 
     public void onSelectInbox() {
 
+
         userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        log.info("userDetails  : "+userDetail);
 
         if(userDetail == null){
             FacesUtil.redirect("/login.jsf");
@@ -150,22 +213,6 @@ public class Inbox implements Serializable {
         this.inboxViewList = inboxViewList;
     }
 
-    public List<InboxView> getInboxPoolViewList() {
-        return inboxPoolViewList;
-    }
-
-    public void setInboxPoolViewList(List<InboxView> inboxPoolViewList) {
-        this.inboxPoolViewList = inboxPoolViewList;
-    }
-
-    public boolean getRenderedPool() {
-        return renderedPool;
-    }
-
-    public void setRenderedPool(boolean renderedPool) {
-        this.renderedPool = renderedPool;
-    }
-
     public InboxView getInboxViewSelectItem() {
         return inboxViewSelectItem;
     }
@@ -173,4 +220,5 @@ public class Inbox implements Serializable {
     public void setInboxViewSelectItem(InboxView inboxViewSelectItem) {
         this.inboxViewSelectItem = inboxViewSelectItem;
     }
+
 }

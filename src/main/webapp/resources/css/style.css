@@ -870,3 +870,9 @@ table tbody tr.grandtotal_summary td {
 .normal_checkbox.ui-chkbox {
 	vertical-align : middle;
 }
+
+
+.red {background-color:red;}
+.yellow {background-color:yellow;}
+.default {background-color:white;}
+

@@ -89,7 +89,7 @@
                                 <td></td>
                                 <td>
                                     <p:dataTable id="resultTableFacility" var="item" value="#{prescreenMaker.facilityViewList}"
-                                                 paginator="false" rowKey="#{item.facility}" rowIndexVar="rowIndex">
+                                                 paginator="false" rowKey="#{item.facility}" rowIndexVar="rowIndex" rows="10" >
 
                                         <p:column headerText="" styleClass="center" style="width:22px;">
                                             <h:outputText value="#{rowIndex+1}"/>

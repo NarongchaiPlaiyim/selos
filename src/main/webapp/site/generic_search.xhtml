@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>SE-LOS : Search</title>
+        <h:outputStylesheet name="css/style.css" />
+    </h:head>
+    <h:body>
+        <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="include/header_logo.xhtml"/>
+            <ui:include src="include/menubar_inbox.xhtml"/>
+
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">Search</div>
+                <div id="content">
+                    <table id="content_form">
+                        <tr><td colspan="100%" style="padding-right: 10px;"><p:spacer width="5"></p:spacer></td></tr>
+                        <tr>
+                            <td style="width: 20px;"></td>
+                            <td><table>
+                                <tr>
+                                    <td class="title">Application No. :</td>
+                                    <td><input type="text" class="largest" name="appNo"/></td>
+                                    <td colspan="2"></td>
+                                </tr>
+                                <tr>
+                                    <td class="title" style="width: 150px;">User ID :</td>
+                                    <td colspan="3"><input type="text" class="largest" name="name"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="title" style="width: 150px;">Step :</td>
+                                    <td><select class="largest">
+                                        <option>- Please Select-</option>
+                                        <option>Complete Full App</option>
+                                    </select></td>
+                                    <td class="title" style="width: 150px;">Status :</td>
+                                    <td><select class="largest">
+                                        <option>- Please Select-</option>
+                                        <option>Complete Full App by BDM</option>
+                                    </select></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 160px;line-height: 15px;">Citizen ID / Registration ID / Passport No. :</td>
+                                    <td colspan="3"><input type="text" class="largest" name="personalID"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="title" style="width: 150px;">First Name :</td>
+                                    <td><input type="text" class="largest" name="name"/></td>
+                                    <td class="title" style="width: 150px;">Last Name :</td>
+                                    <td><input type="text" class="largest" name="name"/></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title">App in date From :</td>
+                                    <td style="width: 350px;"><p:calendar pattern="dd/MM/yyyy" value="#{calendarBean.date3}" styleClass="large" id="formDate" showOn="button" /></td>
+                                    <td class="title">To :</td>
+                                    <td><p:calendar pattern="dd/MM/yyyy" value="#{calendarBean.date3}" styleClass="large" id="toDate" showOn="button" /></td>
+                                </tr>
+                            </table></td>
+                            </tr>
+                            <tr>
+                                    <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="100%"><p:separator/></td>
+                                </tr>
+                        <tr>
+                        <td style="width: 20px;"></td>
+                        <td><table style="width: 100%">
+                                <tr>
+                                    <td class="title" style="width: 160px;">Sort by Column :</td>
+                                    <td colspan="3"><select class="largest">
+                                        <option>- Please Select-</option>
+                                        <option>Received Date</option>
+                                        <option>Application No.</option>
+                                        <option>Appointment Date/Time</option>
+                                    </select></td>
+
+                                </tr>
+                                <tr>
+                                    <td class="title" style="width: 150px;">Sort Order :</td>
+                                    <td colspan="3"><select class="largest">
+                                        <option>- Please Select-</option>
+                                        <option>Ascending</option>
+                                        <option>Descending</option>
+                                    </select><p:spacer width="15px"/></td>
+                                </tr>
+                                <tr>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="100%" class="center"><p:commandButton value="Search" styleClass="medium"/><p:commandButton value="Reset" styleClass="medium"/></td>
+                                </tr>
+                            </table>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="100%" style="line-height: 15px;"><p:spacer width="2px"/></td>
+                        </tr>
+                        <tr>
+                            <td class="top" colspan="100%">
+                                <table class="table_content" cellpadding="0" cellspacing="0" style="width: 100%">
+                                    <tr>
+                                        <th style="width: 25px;"></th>
+                                        <th style="width:90px;line-height: 15px;">Received Date</th>
+                                        <th style="width:110px">At User team</th>
+                                        <th style="width:210px;line-height: 15px;">Application No.</th>
+                                        <th style="width:150px;line-height: 15px;">Name</th>
+                                        <th style="width:140px;line-height: 15px;">Product Group</th>
+                                        <th style="width:110px;line-height: 15px;">Request Type</th>
+                                        <th style="width:140px;line-height: 15px;">Step</th>
+                                        <th style="width:110px;line-height: 15px;">Status</th>
+                                        <th style="width:110px;line-height: 15px;">At User</th>
+                                        <!--th style="width:100px;line-height: 15px;">Remaining hours</th-->
+                                        <th style="width:90px;line-height: 15px;">SLA end date</th>
+                                        <th style="width:100px;line-height: 15px;">Total time at user</th>
+                                        <th style="width:100px;line-height: 15px;">Total time at process</th>
+                                        <th style="width: 50px;line-height: 15px;"></th>
+                                    </tr>
+                                    <tr  style="cursor: pointer">
+                                        <td class="center">1</td>
+                                        <td class="left" style="line-height: 15px;">dd/MM/yyyy HH:mm:ss</td>
+                                        <td style="width:110px">Zone1</td>
+                                        <td class="left" style="line-height: 15px;"><div style="display: inline-block">App No.: 0420131101000101</div>
+                                            <br/>Ref App No.: -</td>
+                                        <td class="left">Mr.A Example</td>
+                                        <td class="left" style="line-height: 15px;">TMB SME SmartBiz</td>
+                                        <td class="left" style="line-height: 15px;">New</td>
+                                        <td class="left" style="line-height: 15px;">Complete Full App</td>
+                                        <td class="left" style="line-height: 15px;">Prepare Full App by BDM</td>
+                                        <td class="left" style="line-height: 15px;">10001 - BDM 1</td>
+                                        <!--td class="center" style="line-height: 15px;">15</td-->
+                                        <td class="left" style="line-height: 15px;">dd/MM/yyyy HH:mm:ss</td>
+                                        <td class="center">4</td>
+                                        <td class="center">15</td>
+                                        <td class="option"><p:commandButton icon="ui-icon-search" title="View"/></td>
+                                    </tr>
+                                    <tr  style="cursor: pointer;background-color: #e6e6e6;">
+                                        <td class="center">2</td>
+                                        <td class="left" style="line-height: 15px;">dd/MM/yyyy HH:mm:ss</td>
+                                        <td style="width:110px">Zone1</td>
+                                        <td class="left" style="line-height: 15px;"><div style="display: inline-block">App No.: 0420131101000201</div>
+                                            <br/>Ref App No.: -</td>
+                                        <td class="left">Mr.A Example</td>
+                                        <td class="left" style="line-height: 15px;">TMB SME SmartBiz</td>
+                                        <td class="left" style="line-height: 15px;">New</td>
+                                        <td class="left" style="line-height: 15px;">Complete Full App</td>
+                                        <td class="left" style="line-height: 15px;">Request correct info/doc - BU</td>
+                                        <td class="left" style="line-height: 15px;">10001 - BDM 1</td>
+                                        <!--td class="center" style="line-height: 15px;">15</td-->
+                                        <td class="left" style="line-height: 15px;">dd/MM/yyyy HH:mm:ss</td>
+                                        <td class="center">4</td>
+                                        <td class="center">15</td>
+                                        <td class="option"><p:commandButton icon="ui-icon-search" title="View"/></td>
+                                    </tr>
+                                    <tr  style="cursor: pointer">
+                                        <td class="center">3</td>
+                                        <td class="left" style="line-height: 15px;">dd/MM/yyyy HH:mm:ss</td>
+                                        <td style="width:110px">LAR</td>
+                                        <td class="left" style="line-height: 15px;"><div style="display: inline-block">App No.: 0420131101000101</div>
+                                            <br/>Ref App No.: -</td>
+                                        <td class="left">Mr.A Example</td>
+                                        <td class="left" style="line-height: 15px;">TMB SME SmartBiz</td>
+                                        <td class="left" style="line-height: 15px;">New</td>
+                                        <td class="left" style="line-height: 15px;">Generate Agreement</td>
+                                        <td class="left" style="line-height: 15px;">Customer accepted the final Approval</td>
+                                        <td class="left" style="line-height: 15px;">10006 - LAR/BC 1</td>
+                                        <!--td class="center" style="line-height: 15px;">15</td-->
+                                        <td class="left" style="line-height: 15px;">dd/MM/yyyy HH:mm:ss</td>
+                                        <td class="center">4</td>
+                                        <td class="center">15</td>
+                                        <td class="center">
+                                            <p:commandButton icon="ui-icon-search" title="View"/>
+                                        </td>
+                                    </tr>
+                                    <tr style="cursor: pointer;background-color: #e6e6e6;">
+                                        <td class="center">4</td>
+                                        <td class="left" style="line-height: 15px;">dd/MM/yyyy HH:mm:ss</td>
+                                        <td style="width:110px">LAR</td>
+                                        <td class="left" style="line-height: 15px;"><div style="display: inline-block">App No.: 0420131101000101</div>
+                                            <br/>Ref App No.: -</td>
+                                        <td class="left">Mr.A Example</td>
+                                        <td class="left" style="line-height: 15px;">TMB SME SmartBiz</td>
+                                        <td class="left" style="line-height: 15px;">New</td>
+                                        <td class="left" style="line-height: 15px;">Generate Agreement</td>
+                                        <td class="left" style="line-height: 15px;">Customer accepted the final Approval</td>
+                                        <td class="left" style="line-height: 15px;">10005 - LAR/BC 1</td>
+                                        <!--td class="center" style="line-height: 15px;">15</td-->
+                                        <td class="left" style="line-height: 15px;">dd/MM/yyyy HH:mm:ss</td>
+                                        <td class="center">4</td>
+                                        <td class="center">15</td>
+                                        <td class="center">
+                                            <p:commandButton icon="ui-icon-search" title="View"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr><td colspan="100%"><p:spacer width="2"/></td></tr>
+
+                    </table>
+                </div>
+                <div class="bottom_line"><!-- --></div>
+            </div>
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="include/footer_inbox.xhtml" />
+            <!-- End Footer -->
+        </div>
+    </h:body>
+</f:view>
+</html>
