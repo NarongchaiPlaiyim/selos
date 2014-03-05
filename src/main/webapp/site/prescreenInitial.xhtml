@@ -247,6 +247,7 @@
 </p:panel>
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
+                     closable="false"
                      header="#{prescreenMaker.messageHeader}">
         <f:facet name="message">
             <h:outputText value="#{prescreenMaker.message}" escape="false"/>
@@ -259,6 +260,7 @@
 </p:panel>
 <p:panel id="msgBoxRedirectPanel" styleClass="panel">
     <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
+                     closable="false"
                      header="#{prescreenMaker.messageHeader}">
         <f:facet name="message">
             <h:outputText value="#{prescreenMaker.message}" escape="false"/>

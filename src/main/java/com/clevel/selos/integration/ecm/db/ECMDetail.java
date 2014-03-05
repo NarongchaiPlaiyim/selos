@@ -6,9 +6,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 
 public class ECMDetail implements Serializable{
-    private String ecmDocId;//ECM_DOC_ID
+    private String ecmDocId;//ECM_DOC_ID   ---
     private String caNumber;//CA_NUMBER
-    private String fnDocId;//FN_DOC_ID
+    private String fnDocId;//FN_DOC_ID     ---
     private String orgFileName;//ORG_FILENAME
     private String typeCode;//TYPE_CODE
     private String typeNameTH;//TYPE_NAME_TH

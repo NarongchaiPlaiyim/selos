@@ -104,7 +104,7 @@ public class BankStmtTransform extends Transform {
             bankStmtDetailView.setOverLimitDays(DateTimeUtil.daysBetween2Dates(dwhBankStatement.getStartODDate(), dwhBankStatement.getEndODDate()));
             bankStmtDetailView.setOverLimitTimes(dwhBankStatement.getNumberOfTimesOD());
         }
-        log.info("Return BankStmtView : {}", bankStmtDetailView);
+        log.info("Return BankStmtDetailView : {}", bankStmtDetailView);
         return bankStmtDetailView;
     }
 
@@ -331,8 +331,11 @@ public class BankStmtTransform extends Transform {
             bankStatement.setModifyBy(user);
             bankStatement.setModifyDate(now);
             bankStatement.setNotCountIncome(bankStmtView.getNotCountIncome());
-            bankStatement.setBank(bankStmtView.getBankView().getCode() != 0 ?
-                    bankDAO.findById(bankStmtView.getBankView().getCode()) : null);
+            if (bankStmtView.getBankView().getCode() != 0 ) {
+                bankStatement.setBank(bankDAO.findById(bankStmtView.getBankView().getCode()));
+            } else {
+                bankStatement.setBank(null);
+            }
             bankStatement.setBranch(bankStmtView.getBranchName());
 //            if(bankStmtView.getBankAccountTypeView() != null
 //                    && !Util.isNull(Integer.toString(bankStmtView.getBankAccountTypeView().getId()))
@@ -343,6 +346,8 @@ public class BankStmtTransform extends Transform {
 //            }
             if (bankStmtView.getBankAccountTypeId() != 0) {
                 bankStatement.setBankAccountType(bankAccountTypeDAO.findById(bankStmtView.getBankAccountTypeId()));
+            } else {
+                bankStatement.setBankAccountType(null);
             }
             bankStatement.setAccountNo(Util.removeNonDigit(bankStmtView.getAccountNumber()));
             bankStatement.setAccountName(bankStmtView.getAccountName());
@@ -404,8 +409,7 @@ public class BankStmtTransform extends Transform {
             bankStatement.setModifyBy(user);
             bankStatement.setModifyDate(now);
             bankStatement.setNotCountIncome(bankStmtView.getNotCountIncome());
-            bankStatement.setBank(bankStmtView.getBankView().getCode() != 0 ?
-                    bankDAO.findById(bankStmtView.getBankView().getCode()) : null);
+            bankStatement.setBank(bankStmtView.getBankView().getCode() != 0 ? bankDAO.findById(bankStmtView.getBankView().getCode()) : null);
             bankStatement.setBranch(bankStmtView.getBranchName());
 //            if(bankStmtView.getBankAccountTypeView() != null
 //                    && !Util.isNull(Integer.toString(bankStmtView.getBankAccountTypeView().getId()))
@@ -416,6 +420,8 @@ public class BankStmtTransform extends Transform {
 //            }
             if (bankStmtView.getBankAccountTypeId() != 0) {
                 bankStatement.setBankAccountType(bankAccountTypeDAO.findById(bankStmtView.getBankAccountTypeId()));
+            } else {
+                bankStatement.setBankAccountType(null);
             }
             bankStatement.setAccountNo(Util.removeNonDigit(bankStmtView.getAccountNumber()));
             bankStatement.setAccountName(bankStmtView.getAccountName());

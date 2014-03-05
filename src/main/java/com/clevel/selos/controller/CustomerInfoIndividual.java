@@ -607,7 +607,7 @@ public class CustomerInfoIndividual implements Serializable {
         }
 
 //        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getRelation().getId() == RelationValue.BORROWER.value()){
-        if(customerInfoView.getSpouse() != null && referenceSpouseCusId == RelationValue.BORROWER.value()){
+        if(customerInfoView.getSpouse() != null && relationSpouseCusId == RelationValue.BORROWER.value()){
             isEditSpouseBorrower = true;
             relationSpouseList = relationCustomerDAO.getListRelation(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
         }else{
