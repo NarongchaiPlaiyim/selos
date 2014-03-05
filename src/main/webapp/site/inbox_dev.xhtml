@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>SE-LOS : Inbox</title>
+        <!--<h:outputStylesheet name="css/style.css" />-->
+        <h:outputStylesheet name="css/style.css" />
+        <h:outputScript library="js" name="custom.js" />
+    </h:head>
+
+    <h:body>
+        <p:panel id="pnl_maincontainer">
+            <h:form id="frmMain" style="position: relative; min-height: 100%; height: 100%;">
+                <div id="main_container">
+                    <!-- Start Header Logo -->
+                    <ui:include src="include/header_logo.xhtml"/>
+
+                    <div id="content_container">
+                        <div id="content_name" style="margin-top: 5px;">Inbox</div>
+                        <div id="content_inbox">
+                            <div id="content_form">
+                                <!-- start content -->
+                                <table class="content_table_form">
+                                    <tr>
+                                        <td>
+                                            <p:dataTable id="resultInbox" var="item" value="#{inbox.inboxViewList}"
+                                                         selection="#{inbox.inboxViewSelectItem}" selectionMode="single"
+                                                         paginator="false" rowKey="#{item.listKey}"
+                                                         rowIndexVar="rowIndex">
+
+                                                <p:ajax event="rowSelect" update=":frmMain:resultInbox"
+                                                        listener="#{inbox.onSelectInbox}" onstart="blockInbox.show()"/>
+
+                                                <p:column headerText="" styleClass="center" style="width:22px;">
+                                                    <h:outputText value="#{rowIndex+1}"/>
+                                                </p:column>
+
+                                                <p:column headerText="CA No." styleClass="center" style="width: 130px;">
+                                                    <h:outputText value="#{item.caNo}"/>
+                                                </p:column>
+
+                                                <p:column headerText="FN_WobNum" styleClass="center"
+                                                          style="width: 130px;">
+                                                    <h:outputText value="#{item.fnWobNum}"/>
+                                                </p:column>
+
+                                                <p:column headerText="FN_StepName" styleClass="center"
+                                                          style="width: 110px;">
+                                                    <h:outputText value="#{item.fnStepName}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Step_Code" style="width: 120px;">
+                                                    <h:outputText value="#{item.stepCode}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Step_Id" style="width: 120px;">
+                                                    <h:outputText value="#{item.stepId}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Lock_Status" styleClass="center"
+                                                          style="width: 110px;">
+                                                    <h:outputText value="#{item.lockStatus}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Locked_User" styleClass="center"
+                                                          style="width: 110px;">
+                                                    <h:outputText value="#{item.lockedUser}"/>
+                                                </p:column>
+
+                                                <p:column headerText="QUEUE_NAME" styleClass="center"
+                                                          style="width: 110px;">
+                                                    <h:outputText value="#{item.queueName}"/>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <h:outputText value="Pool Box" styleClass="title" rendered="#{inbox.renderedPool}"/>
+                                            <p:dataTable id="resultPoolInbox" var="itemPool" value="#{inbox.inboxPoolViewList}"
+                                                         selection="#{inbox.inboxViewSelectItem}" selectionMode="single"
+                                                         paginator="false" rowKey="#{itemPool.listKey}"
+                                                         rendered="#{inbox.renderedPool}"
+                                                         rowIndexVar="rowIndex">
+
+                                                <p:ajax event="rowSelect" update=":frmMain:resultInbox"
+                                                        listener="#{inbox.onSelectInbox}" onstart="blockInbox.show()"/>
+
+                                                <p:column headerText="" styleClass="center" style="width:22px;">
+                                                    <h:outputText value="#{rowIndex+1}"/>
+                                                </p:column>
+
+                                                <p:column headerText="CA No." styleClass="center" style="width: 130px;">
+                                                    <h:outputText value="#{itemPool.caNo}"/>
+                                                </p:column>
+
+                                                <p:column headerText="FN_WobNum" styleClass="center"
+                                                          style="width: 130px;">
+                                                    <h:outputText value="#{itemPool.fnWobNum}"/>
+                                                </p:column>
+
+                                                <p:column headerText="FN_StepName" styleClass="center"
+                                                          style="width: 110px;">
+                                                    <h:outputText value="#{itemPool.fnStepName}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Step_Code" style="width: 120px;">
+                                                    <h:outputText value="#{itemPool.stepCode}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Step_Id" style="width: 120px;">
+                                                    <h:outputText value="#{itemPool.stepId}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Lock_Status" styleClass="center"
+                                                          style="width: 110px;">
+                                                    <h:outputText value="#{itemPool.lockStatus}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Locked_User" styleClass="center"
+                                                          style="width: 110px;">
+                                                    <h:outputText value="#{itemPool.lockedUser}"/>
+                                                </p:column>
+
+                                                <p:column headerText="QUEUE_NAME" styleClass="center"
+                                                          style="width: 110px;">
+                                                    <h:outputText value="#{itemPool.queueName}"/>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Start Footer -->
+                    <ui:include src="include/footer_inbox.xhtml"/>
+                    <!-- End Footer -->
+                    <h:inputHidden id="pagename" value="mnuprescreen"/>
+                    <h:inputHidden id="subpagename" value="submnuprescreen"/>
+                </div>
+            </h:form>
+        </p:panel>
+        <p:blockUI widgetVar="blockInbox" block=":frmMain">
+            LOADING<br/>
+            <!--<p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>-->
+            <h:graphicImage library="images" name="shared/ajax-loader.gif" />
+        </p:blockUI>
+    </h:body>
+</f:view>
+</html>

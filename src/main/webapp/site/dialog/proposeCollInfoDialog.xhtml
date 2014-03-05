@@ -387,8 +387,8 @@
             <p:column styleClass="left top">
                 <h:outputText value="#{newCollateralSubView.subCollateralType.description}"
                               rendered="#{not empty newCollateralSubView.subCollateralType}"/><br/>
-                <h:outputText value="#{newCollateralSubView.address}"/><br/>
-                <h:outputText value="#{newCollateralSubView.landOffice}"/>
+                <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.address')} : #{newCollateralSubView.address}"/><br/>
+                <h:outputText value="#{msg.get('app.credit.facility.propose.label.subcoll.titleDeed')}: #{newCollateralSubView.landOffice}"/>
             </p:column>
 
             <p:column styleClass="left top">

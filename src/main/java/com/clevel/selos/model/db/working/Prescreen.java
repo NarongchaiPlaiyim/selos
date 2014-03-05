@@ -41,7 +41,7 @@ public class Prescreen implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "registration_country")
-    private Country country;
+    private Country countryOfRegister;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "register_date")
@@ -162,12 +162,12 @@ public class Prescreen implements Serializable {
         this.businessLocation = businessLocation;
     }
 
-    public Country getCountry() {
-        return country;
+    public Country getCountryOfRegister() {
+        return countryOfRegister;
     }
 
-    public void setCountry(Country country) {
-        this.country = country;
+    public void setCountryOfRegister(Country country) {
+        this.countryOfRegister = country;
     }
 
     public Date getRegisterDate() {
