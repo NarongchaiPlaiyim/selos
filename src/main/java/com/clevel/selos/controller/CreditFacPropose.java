@@ -358,7 +358,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
         if (newCreditDetailView == null) {
             newCreditDetailView = new NewCreditDetailView();
-            seq = 0;
+            seq = 1;
         }
 
         // change to view model
@@ -1712,7 +1712,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("app.propose.response.save.success");
             exSummaryControl.calForCreditFacility(workCaseId);
-//            onCreation();
+            onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             notRetrivePricing = false;
 //            } else {
