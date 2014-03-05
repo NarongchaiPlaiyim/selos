@@ -32,21 +32,37 @@
             <div id="content_container">
                 <div id="content_name">#{msg.get('app.perfectionReview.subtitle')}</div>
                 <div id="content">
+                 	<div id="content_info">
+                        <div id="content_trackchange">
+                        	[
+                        	<h:outputLink value="#">
+                        		<h:outputText value="#{msg.get('app.viewTrackChange')}" />
+                        	</h:outputLink>
+                        	]
+                        </div>
+                        <div id="content_lastupdate">
+                        	<h:outputText value="#{msg.get('app.lastUpdateBy')} "/>
+                        	<h:outputText value="#{perfectionReview.lastUpdateBy}"/>, 
+                        	<h:outputText value="#{perfectionReview.lastUpdateDateTime}">
+                        		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="th_TH"/>
+                        	</h:outputText>
+                        </div>
+                    </div>
                     <div id="content_form">
                     	<p:spacer height="18"/>
                         <!-- start content -->
                         <p:dataTable styleClass="content_table_form full_table" 
                         	style="width:90%;margin:0 auto" 
-                        	rowIndexVar="rowIdx" value="#{perfectionReview.perfectionReviewList}"
+                        	rowIndexVar="rowIdx" value="#{perfectionReview.perfectionReviews}"
                         	var="review"
                         	>
                         	<p:column style="width:30px" styleClass="center">
                         		#{rowIdx +1}
                         	</p:column>
-                        	<p:column style="width:200px" styleClass="title"
+                        	<p:column style="width:250px" styleClass="title"
 								headerText="#{msg.get('app.perfectionReview.table.type')}"
                         		>
-                        		#{review.type}
+                        		#{msg.get(review.type.msgKey)}
                         	</p:column>
                         	<p:column style="width:120px" styleClass="center"
 								headerText="#{msg.get('app.perfectionReview.table.date')}"
@@ -58,14 +74,14 @@
                         	<p:column style="width:120px" styleClass="center"
                         		headerText="#{msg.get('app.perfectionReview.table.completeddate')}"
                         		>
-                        		<h:outputText value="#{review.completeDate}">
+                        		<h:outputText value="#{review.completedDate}">
                         			<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                         		</h:outputText>
                         	</p:column>
                         	<p:column style="width:130px" styleClass="center"
                         		headerText="#{msg.get('app.perfectionReview.table.status')}"
                         		>
-                        		#{review.status}
+                        		#{msg.get(review.status.msgKey)}
                         	</p:column>
                         	<p:column
                         		headerText="#{msg.get('app.perfectionReview.table.remark')}"

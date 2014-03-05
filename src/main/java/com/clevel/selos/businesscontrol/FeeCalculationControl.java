@@ -233,12 +233,14 @@ public class FeeCalculationControl extends BusinessControl {
 				continue;
 			
 			BigDecimal totalODCredit = BigDecimal.ZERO;
-			FeeAccountType feeAccountType = FeeAccountType.NA;
+			FeeAccountType feeAccountType = (foundOD) ? FeeAccountType.NEW_OD : FeeAccountType.EXCEED;
+			
 			List<OpenAccountCredit> credits = account.getOpenAccountCreditList();
 			for (OpenAccountCredit credit : credits) {
 				if (credit.getNewCreditDetail() == null)
 					continue;
 				//TODO calculate fee type and total od
+//				credit.getNewCreditDetail().getNewCreditFacility().getTotal
 			}
 			FeeCollectionAccount feeAcc = new FeeCollectionAccount();
 			feeAcc.setFeeAccountType(feeAccountType);
@@ -261,13 +263,8 @@ public class FeeCalculationControl extends BusinessControl {
 					}
 				}
 			} else{
-				if (FeeAccountType.EXCEED.equals(feeAccountType)) {
-					feeAcc.setAmount(totalDebitFee);
-					feeAcc.setDisplayAccountNo(account.getAccountNumber());
-				} else {
-					feeAcc.setAmount(BigDecimal.ZERO);
-					feeAcc.setDisplayAccountNo(null);
-				}
+				feeAcc.setAmount(totalDebitFee);
+				feeAcc.setDisplayAccountNo(account.getAccountNumber());
 			}
 			map.put(account.getId(), feeAcc);
 		}
