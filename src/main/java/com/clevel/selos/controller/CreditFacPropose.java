@@ -1105,13 +1105,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.debug("onEditProposeCollInfo :: {}", selectCollateralDetailView.getId());
         log.debug("onEditProposeCollInfo ::rowIndexCollateral  {}", rowIndexCollateral);
 
-        if(selectCollateralDetailView.getProposeCreditDetailViewList().size()>0){
-            for (ProposeCreditDetailView proposeCreditDetailView:selectCollateralDetailView.getProposeCreditDetailViewList()) {
-                log.info("proposeCreditDetailView :::: {}",proposeCreditDetailView.isNoFlag());
-                log.info("proposeCreditDetailView :::: {}",proposeCreditDetailView.getSeq());
-            }
-        }
-
         modeForButton = ModeForButton.EDIT;
         editProposeColl = true;
         newCollateralView = new NewCollateralView();
@@ -1130,25 +1123,19 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailListTemp);
         }
 
-
-
-        /*if (collCreditDetailListSelect.size() > 0) {
-            for (int i = 0; i < newCollateralView.getProposeCreditDetailViewList().size(); i++) {
-                for (int j = tempSeq; j < proposeCreditDetailListTemp.size(); j++) {
-                    log.debug("creditType at " + j + " id is     " + proposeCreditDetailListTemp.get(j).getId());
-
-                    if (collCreditDetailListSelect.get(i).getSeq() == proposeCreditDetailListTemp.get(j).getSeq()) {
-                        if(collCreditDetailListSelect.get(i).isNoFlag()){
-                            proposeCreditDetailListTemp.get(j).setNoFlag(true);
-//                        newCollateralView.getProposeCreditDetailViewList().get(i).setNoFlag(true);
-//                        tempSeq = j;
-                        }
+        if (newCollateralView.getProposeCreditDetailViewList().size() > 0) {
+            for (int i = 0; i < proposeCreditDetailViewList.size(); i++) {
+                for (ProposeCreditDetailView proposeCreditDetailView : newCollateralView.getProposeCreditDetailViewList()) {
+                    log.info("proposeCreditDetailView proposeCreditDetailViewList.get(i) :::: {}", proposeCreditDetailViewList.get(i).isNoFlag());
+                    log.info("proposeCreditDetailView :::: {}", proposeCreditDetailView.getSeq());
+                    log.info("proposeCreditDetailView :::: {}", proposeCreditDetailView.getId());
+                    if(proposeCreditDetailViewList.get(i).getId()==proposeCreditDetailView.getId()){
+                       log.info("checked ::: ");
+                        proposeCreditDetailView.setNoFlag(true);
                     }
-                    continue;
                 }
             }
-            newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailListTemp);
-        }*/
+        }
 
     }
 
@@ -1236,14 +1223,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                     if (proposeCollateralInfoAdd.getProposeCreditDetailViewList().size() > 0) {
                         complete3 = true;
-                    }else{
+                    } else {
                         messageHeader = msg.get("app.propose.exception");
                         message = msg.get("app.propose.desc.add.data");
                         messageErr = true;
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                         complete3 = false;
                     }
-                }else{
+                } else {
                     messageHeader = msg.get("app.propose.exception");
                     message = msg.get("app.propose.desc.add.data");
                     messageErr = true;
@@ -1291,7 +1278,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 newCollateralView.setComs(false);
                 flagButtonCollateral = false;
                 complete = true;
-            } else  if (flagComs == false) {
+            } else if (flagComs == false) {
                 newCollateralView.setComs(true);
                 flagButtonCollateral = true;
                 if (newCollateralView.getProposeCreditDetailViewList().size() > 0) { //if this is data from COMS it 's not have List of ProposeCreditType
@@ -1307,7 +1294,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                         newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setProposeCreditDetailViewList(newCollateralView.getProposeCreditDetailViewList());
                         editProposeColl = false;
                         complete = true;
-                    }else{
+                    } else {
                         messageHeader = msg.get("app.propose.exception");
                         message = msg.get("app.propose.desc.add.data");
                         messageErr = true;
