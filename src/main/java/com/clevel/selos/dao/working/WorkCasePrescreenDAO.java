@@ -23,8 +23,10 @@ public class WorkCasePrescreenDAO extends GenericDAO<WorkCasePrescreen, Long> {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("wobNumber", wobNumber));
         WorkCasePrescreen workCasePrescreen = (WorkCasePrescreen) criteria.uniqueResult();
+        log.info("workcaseprescreen object : {}",workCasePrescreen);
         if (workCasePrescreen != null) {
             workCasePreScreenId = workCasePrescreen.getId();
+            log.info("findIdByWobNum : {}", workCasePreScreenId);
         }
 
         return workCasePreScreenId;

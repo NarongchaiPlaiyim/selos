@@ -92,7 +92,7 @@
                                         styleClass="smaller"
                                         action="#{decision.onAddCollateralOwnerUW()}"
                                         process="@this"
-                                        update=":subCollateralDlgForm:collOwnerUWTable">
+                                        update=":subCollateralDlgForm:collOwnerUWTable,:msgBoxSystemMessagePanel">
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -164,7 +164,7 @@
                                         styleClass="smaller"
                                         actionListener="#{decision.onAddMortgageType()}"
                                         process="@form"
-                                        update=":subCollateralDlgForm:mortgageTable">
+                                        update=":subCollateralDlgForm:mortgageTable,:msgBoxSystemMessagePanel">
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -236,7 +236,7 @@
                                         styleClass="smaller"
                                         action="#{decision.onAddRelatedWith()}"
                                         process="@this"
-                                        update=":subCollateralDlgForm:relatedWithTable">
+                                        update=":subCollateralDlgForm:relatedWithTable,:msgBoxSystemMessagePanel">
                                 </p:commandButton>
                             </td>
                         </tr>
