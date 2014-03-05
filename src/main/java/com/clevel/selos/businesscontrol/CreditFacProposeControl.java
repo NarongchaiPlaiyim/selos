@@ -178,14 +178,14 @@ public class CreditFacProposeControl extends BusinessControl {
                         newCreditFacilityView.setNewCollateralViewList(newCollateralViewList);
                     }
 
-                    //error when saved and find data from table by newCreditFacility
-//                    List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
-//                    if (newGuarantorDetails.size() > 0) {
-//                        log.debug("newGuarantorDetails:: {}", newGuarantorDetails.size());
-//                        List<NewGuarantorDetailView> newGuarantorDetailViewList = newGuarantorDetailTransform.transformToView(newGuarantorDetails);
-//                        log.debug("newGuarantorDetailViewList : {}", newGuarantorDetailViewList);
-//                        newCreditFacilityView.setNewGuarantorDetailViewList(newGuarantorDetailViewList);
-//                    }
+//                    error when saved and find data from table by newCreditFacility
+                    List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
+                    if (newGuarantorDetails.size() > 0) {
+                        log.debug("newGuarantorDetails:: {}", newGuarantorDetails.size());
+                        List<NewGuarantorDetailView> newGuarantorDetailViewList = newGuarantorDetailTransform.transformToView(newGuarantorDetails);
+                        log.debug("newGuarantorDetailViewList : {}", newGuarantorDetailViewList);
+                        newCreditFacilityView.setNewGuarantorDetailViewList(newGuarantorDetailViewList);
+                    }
 
                     List<NewConditionDetail> newConditionDetailList = newConditionDetailDAO.findByNewCreditFacility(newCreditFacility);
                     if (newConditionDetailList.size() > 0) {
@@ -710,10 +710,10 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
-//            if(Util.safetyList(newCreditFacilityView.getNewGuarantorViewDelList()).size()>0){
-//                List<NewGuarantorDetail> listDel = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorViewDelList(), newCreditFacility, currentUser,ProposeType.P);
-//                newGuarantorDetailDAO.delete(listDel);
-//            }
+            if(Util.safetyList(newCreditFacilityView.getNewGuarantorViewDelList()).size()>0){
+                List<NewGuarantorDetail> listDel = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorViewDelList(), newCreditFacility, currentUser,ProposeType.P);
+                newGuarantorDetailDAO.delete(listDel);
+            }
             log.debug("saveCreditFacility ::: newGuarantorDetailViewList : {}", newCreditFacilityView.getNewGuarantorDetailViewList());
             List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser,ProposeType.P);
             newCreditFacility.setNewGuarantorDetailList(newGuarantorDetailList);
