@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -18,9 +19,11 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
+import com.clevel.selos.businesscontrol.FeeCalculationControl;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.view.FeeCalculationDetail;
+import com.clevel.selos.model.view.FeeCollectionAccountView;
+import com.clevel.selos.model.view.FeeCollectionDetailView;
+import com.clevel.selos.model.view.FeeSummaryView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
@@ -33,45 +36,58 @@ public class FeeCalculation implements Serializable {
 	@Inject @SELOS
 	private Logger log;
 	
+	@Inject
+	private FeeCalculationControl feeCalculationControl;
+	
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
-	private User user;
 	
+	private List<BigDecimal> totalAgreementList;
+	private List<BigDecimal> totalNonAgreementList;
 	//Property
-	private List<FeeCalculationDetail> debitFromCustomerList;
-	private List<FeeCalculationDetail> informCustomerList;
-	private List<FeeCalculationDetail> penaltyFeeList;
-	private BigDecimal totalDebitFromCustomer;
-	private BigDecimal totalInformCustomer;
-	private BigDecimal grandTotalAgreement;
-	private BigDecimal totalPenaltyFee;
+	private FeeSummaryView summary;
+	private List<FeeCollectionAccountView> accounts;
+	private List<List<FeeCollectionDetailView>> detailsAgreement;
 	
+	private BigDecimal grandTotalAgreement;
+	private List<List<FeeCollectionDetailView>> detailsNonAgreement;
 	
 	public FeeCalculation() {
 	}
-	
-	public List<FeeCalculationDetail> getDebitFromCustomerList() {
-		return debitFromCustomerList;
+	public Date getLastUpdateDateTime() {
+		return summary.getModifyDate();
 	}
-	public List<FeeCalculationDetail> getInformCustomerList() {
-		return informCustomerList;
+	public String getLastUpdateBy() {
+		return summary.getModifyUser();
 	}
-	public List<FeeCalculationDetail> getPenaltyFeeList() {
-		return penaltyFeeList;
+	public FeeSummaryView getSummary() {
+		return summary;
 	}
-	public BigDecimal getTotalDebitFromCustomer() {
-		return totalDebitFromCustomer;
+	public List<FeeCollectionAccountView> getAccounts() {
+		return accounts;
+	}
+	public List<List<FeeCollectionDetailView>> getDetailsAgreement() {
+		return detailsAgreement;
+	}
+	public List<List<FeeCollectionDetailView>> getDetailsNonAgreement() {
+		return detailsNonAgreement;
 	}
 	public BigDecimal getGrandTotalAgreement() {
 		return grandTotalAgreement;
 	}
-	public BigDecimal getTotalInformCustomer() {
-		return totalInformCustomer;
+	public BigDecimal getTotalAgreement(int index) {
+		if (index >= 0 && index <= totalAgreementList.size()) 
+			return totalAgreementList.get(index);
+		else
+			return BigDecimal.ZERO;
 	}
-	public BigDecimal getTotalPenaltyFee() {
-		return totalPenaltyFee;
+	public BigDecimal getTotalNonAgreement(int index) {
+		if (index >= 0 && index <= totalNonAgreementList.size()) 
+			return totalNonAgreementList.get(index);
+		else
+			return BigDecimal.ZERO;
 	}
 
 	/*
@@ -79,14 +95,12 @@ public class FeeCalculation implements Serializable {
 	 */
 	@PostConstruct
 	private void init() {
-		log.info("Construct");
 		HttpSession session = FacesUtil.getSession(false);
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
-			user = (User) session.getAttribute("user");
 		}
-		_loadInitData();
+		_loadInitData(false);
 	}
 	
 	public void preRender() {
@@ -115,109 +129,65 @@ public class FeeCalculation implements Serializable {
 	}
 	
 	public void onSaveFeeCalculation() {
+		feeCalculationControl.saveFeeConfirm(summary);
 		
+		_loadInitData(true);
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
 	
 	/*
 	 * Private method
 	 */
-	private void _loadInitData() {
+	private void _loadInitData(boolean ignoreRecalculate) {
 		preRenderCheck = false;
-		//Calculate fee
-		debitFromCustomerList = new ArrayList<FeeCalculationDetail>();
-		informCustomerList = new ArrayList<FeeCalculationDetail>();
-		penaltyFeeList = new ArrayList<FeeCalculationDetail>();
 		
-		_retriveDebitFromCustomer();
-		_retriveInformCustomer();
-		_retrivePenaltyFee();
-		
-		totalDebitFromCustomer = _calculateTotal(debitFromCustomerList);
-		totalInformCustomer = _calculateTotal(informCustomerList);
-		totalPenaltyFee = _calculateTotal(penaltyFeeList);
-		grandTotalAgreement = totalDebitFromCustomer.add(totalInformCustomer);
-	}
-	
-	private void _retriveDebitFromCustomer() {
-		FeeCalculationDetail detail = new FeeCalculationDetail();
-		detail.setFeeType("Duty Stamp");
-		detail.setFormula("");
-		detail.setAmount(new BigDecimal(2550));
-		debitFromCustomerList.add(detail);
-		
-		detail = new FeeCalculationDetail();
-		detail.setFeeType("Front End Fee");
-		detail.setFormula("วงเงินสินเชื่อ * 2/100 (แต่ละวงเงิน)");
-		detail.setAmount(new BigDecimal(15000));
-		debitFromCustomerList.add(detail);
-		
-		detail = new FeeCalculationDetail();
-		detail.setFeeType("Mortgage Service");
-		detail.setFormula("");
-		detail.setAmount(new BigDecimal(15000));
-		debitFromCustomerList.add(detail);
-		
-		detail = new FeeCalculationDetail();
-		detail.setFeeType("Insurance");
-		detail.setFormula("");
-		detail.setAmount(new BigDecimal(15000));
-		debitFromCustomerList.add(detail);
-		
-		detail = new FeeCalculationDetail();
-		detail.setFeeType("BA ส่วนต่าง/PA");
-		detail.setFormula("");
-		detail.setAmount(new BigDecimal(15000));
-		debitFromCustomerList.add(detail);
-	}
-	
-	private void _retriveInformCustomer() {
-		FeeCalculationDetail detail = new FeeCalculationDetail();
-		detail.setFeeType("ค่าจำนองที่กรมที่ดิน");
-		detail.setFormula("");
-		detail.setAmount(new BigDecimal(100000));
-		informCustomerList.add(detail);
-		
-		detail = new FeeCalculationDetail();
-		detail.setFeeType("TCG Fee");
-		detail.setFormula("");
-		detail.setAmount(new BigDecimal(175000));
-		informCustomerList.add(detail);
-	}
-	
-	private void _retrivePenaltyFee() {
-		FeeCalculationDetail detail = new FeeCalculationDetail();
-		detail.setFeeType("Prepayment Fee");
-		detail.setFormula("");
-		detail.setAmount(new BigDecimal(0));
-		penaltyFeeList.add(detail);
-		
-		detail = new FeeCalculationDetail();
-		detail.setFeeType("Commitment Fee");
-		detail.setFormula("");
-		detail.setAmount(null);
-		penaltyFeeList.add(detail);
-		
-		detail = new FeeCalculationDetail();
-		detail.setFeeType("Extension Fee");
-		detail.setFormula("");
-		detail.setAmount(null);
-		penaltyFeeList.add(detail);
-		
-		detail = new FeeCalculationDetail();
-		detail.setFeeType("Cancellation Fee");
-		detail.setFormula("");
-		detail.setAmount(null);
-		penaltyFeeList.add(detail);
-	}
-	
-	private BigDecimal _calculateTotal(List<FeeCalculationDetail> list) {
-		BigDecimal summ = new BigDecimal(0);
-		for (FeeCalculationDetail detail : list) {
-			if (detail.getAmount() == null)
-				continue;
-			summ = summ.add(detail.getAmount());
+		if (workCaseId <= 0) {
+			summary = new FeeSummaryView();
+			accounts = Collections.emptyList();
+			detailsAgreement = Collections.emptyList();
+			totalAgreementList = Collections.emptyList();
+			grandTotalAgreement = BigDecimal.ZERO;
+			detailsNonAgreement = Collections.emptyList();
+			totalNonAgreementList = Collections.emptyList();
+			return;
 		}
-		return summ;
+		
+		summary = feeCalculationControl.getFeeSummary(workCaseId);
+		if (!ignoreRecalculate) {
+			if ("true".equals(FacesUtil.getParameter("force")) || summary.getId() <= 0) {
+				summary = feeCalculationControl.calculateFeeCollection( workCaseId);
+			}
+		}
+		accounts = feeCalculationControl.getFeeCollectionAccounts(workCaseId);
+		
+		List<List<FeeCollectionDetailView>> details = feeCalculationControl.getFeeCollectionDetails(workCaseId);
+		
+		detailsAgreement = new ArrayList<List<FeeCollectionDetailView>>();
+		totalAgreementList = new ArrayList<BigDecimal>();
+		grandTotalAgreement = BigDecimal.ZERO;
+		
+		detailsNonAgreement = new ArrayList<List<FeeCollectionDetailView>>();
+		totalNonAgreementList = new ArrayList<BigDecimal>();
+		
+		for (List<FeeCollectionDetailView> detailList : details) {
+			if (detailList.isEmpty())
+				continue;
+			FeeCollectionDetailView firstView = detailList.get(0);
+			BigDecimal total = (firstView.getAmount() != null) ? firstView.getAmount() : BigDecimal.ZERO;
+			for (int i=1;i<detailList.size();i++) {
+				FeeCollectionDetailView view = detailList.get(i);
+				view.setPaymentMethod(""); //set to blank
+				if (view.getAmount() != null)
+					total = total.add(view.getAmount());
+			}
+			if (firstView.isAgreementSign()) {
+				detailsAgreement.add(detailList);
+				totalAgreementList.add(total);
+				grandTotalAgreement = grandTotalAgreement.add(total);
+			} else {
+				detailsNonAgreement.add(detailList);
+				totalNonAgreementList.add(total);
+			}
+		}
 	}
 }

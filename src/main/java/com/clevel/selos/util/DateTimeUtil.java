@@ -94,6 +94,17 @@ public class DateTimeUtil implements Serializable {
         return dateConvert;
     }
 
+    public static Date convertStringToDate(String date, String dateFormat){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+        Date dateConvert = new Date();
+        try {
+            dateConvert = simpleDateFormat.parse(date);
+        } catch (ParseException e) {
+            log.error("Error to parsing date. {}", date);
+        }
+        return dateConvert;
+    }
+
     public static String convertDateToString(Date date, Locale locale, String dateFormat){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, locale);
         String dateConvert = "";

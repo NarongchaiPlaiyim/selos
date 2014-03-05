@@ -178,6 +178,7 @@ public class CreditFacProposeControl extends BusinessControl {
                         newCreditFacilityView.setNewCollateralViewList(newCollateralViewList);
                     }
 
+//                    error when saved and find data from table by newCreditFacility
                     List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
                     if (newGuarantorDetails.size() > 0) {
                         log.debug("newGuarantorDetails:: {}", newGuarantorDetails.size());
@@ -653,7 +654,7 @@ public class CreditFacProposeControl extends BusinessControl {
         }
     }
 
-    public void saveCreditFacility(NewCreditFacilityView newCreditFacilityView, long workCaseId) {
+    public NewCreditFacilityView saveCreditFacility(NewCreditFacilityView newCreditFacilityView, long workCaseId) {
         log.debug("Starting saveCreditFacility...");
         log.debug("saveCreditFacility ::: workCaseId : {}", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
@@ -686,7 +687,9 @@ public class CreditFacProposeControl extends BusinessControl {
             log.debug("saveCreditFacility ::: before persist newConditionDetailList : {}", newConditionDetailList);
             newCreditFacility.setNewConditionDetailList(newConditionDetailList);
             newConditionDetailDAO.persist(newConditionDetailList);
-            log.debug("saveCreditFacility ::: after persist newConditionDetailList : {}", newConditionDetailList);
+//            List<NewConditionDetail> newConditionDetailList = newConditionDetailDAO.persistAndReturn(newConditionDetailTransform.transformToModel(newCreditFacilityView.getNewConditionDetailViewList(),newCreditFacility, currentUser));
+//            newCreditFacilityView.setNewConditionDetailViewList(newConditionDetailTransform.transformToView(newConditionDetailList));
+//            log.debug("saveCreditFacility ::: persist newCreditDetailList : {}", newConditionDetailList);
         }
 
         //--- Save to NewCreditDetail
@@ -699,19 +702,25 @@ public class CreditFacProposeControl extends BusinessControl {
             List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, currentUser, workCase, ProposeType.P);
             newCreditFacility.setNewCreditDetailList(newCreditDetailList);
             newCreditDetailDAO.persist(newCreditDetailList);
-            log.debug("saveCreditFacility ::: persist newCreditDetailList : {}", newCreditDetailList);
+//            List<NewCreditDetail> newCreditDetailList = newCreditDetailDAO.persistAndReturn(newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, currentUser, workCase, ProposeType.P));
+//            newCreditFacility.setNewCreditDetailList(newCreditDetailList);
+//            newCreditFacilityView.setNewCreditDetailViewList(newCreditDetailTransform.transformToView(newCreditDetailList));
+//            log.debug("saveCreditFacility ::: persist newCreditDetailList : {}", newCreditDetailList);
         }
 
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
-//            if(Util.safetyList(newCreditFacilityView.getNewGuarantorViewDelList()).size()>0){
-//                List<NewGuarantorDetail> listDel = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorViewDelList(), newCreditFacility, currentUser,ProposeType.P);
-//                newGuarantorDetailDAO.delete(listDel);
-//            }
+            if(Util.safetyList(newCreditFacilityView.getNewGuarantorViewDelList()).size()>0){
+                List<NewGuarantorDetail> listDel = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorViewDelList(), newCreditFacility, currentUser,ProposeType.P);
+                newGuarantorDetailDAO.delete(listDel);
+            }
             log.debug("saveCreditFacility ::: newGuarantorDetailViewList : {}", newCreditFacilityView.getNewGuarantorDetailViewList());
             List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser,ProposeType.P);
             newCreditFacility.setNewGuarantorDetailList(newGuarantorDetailList);
             newGuarantorDetailDAO.persist(newGuarantorDetailList);
+//            List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailDAO.persistAndReturn(newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser, ProposeType.P));
+//            newCreditFacility.setNewGuarantorDetailList(newGuarantorDetailList);
+//            newCreditFacilityView.setNewGuarantorDetailViewList(newGuarantorDetailTransform.transformToView(newGuarantorDetailList));
             log.debug("saveCreditFacility ::: persist newGuarantorDetailList : {}", newGuarantorDetailList);
         }
 
@@ -743,8 +752,13 @@ public class CreditFacProposeControl extends BusinessControl {
             List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, currentUser, workCase,ProposeType.P);
             newCreditFacility.setNewCollateralDetailList(newCollateralList);
             newCollateralDetailDAO.persist(newCollateralList);
+//            List<NewCollateral> newCollateralList = newCollateralDAO.persistAndReturn(newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, currentUser, workCase, ProposeType.P));
+//            log.debug("After persist - newCollateralList: {}", newCollateralList);
+//            newCreditFacility.setNewCollateralDetailList(newCollateralList);
+//            newCreditFacilityView.setNewCollateralViewList(newCollateralTransform.transformsCollateralToView(newCollateralList));
             log.debug("saveCreditFacility ::: persist newCollateralList : {}", newCollateralList);
         }
+        return newCreditFacilityView;
     }
 
     // Call COMSInterface

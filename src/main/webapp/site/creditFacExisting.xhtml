@@ -136,7 +136,7 @@
                                                                 fn:length(borrowerCredit.existingSplitLineDetailViewList)+1 : '1'}">
                                                             #{borrowerCredit.accountName} <br/>
                                                             Acc No.: #{borrowerCredit.accountNumber} Suf. #{borrowerCredit.accountSuf}<br/>
-                                                            Acc Status: #{borrowerCredit.existAccountStatus.description}
+                                                            Acc Status: #{borrowerCredit.existAccountStatusView.description}
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
@@ -437,7 +437,7 @@
                                                 <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{borrowerRetailCredit.accountName}"/><br/>
                                                     <p:outputLabel value="Acc No.: #{borrowerRetailCredit.accountNumber}"/> Suff. <p:outputLabel value="#{borrowerRetailCredit.accountSuf}"/><br/>
-                                                    <p:outputLabel value="Acc Status: #{borrowerRetailCredit.existAccountStatus.description}" />
+                                                    <p:outputLabel value="Acc Status: #{borrowerRetailCredit.existAccountStatusView.description}" />
                                                 </p:column>
 
                                                 <p:column headerText="" styleClass="left top">
@@ -554,7 +554,7 @@
                                                 <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{borrowerRLOSCredit.accountName}"/><br/>
                                                     <p:outputLabel value="Acc No.: #{borrowerRLOSCredit.accountNumber}"/> Suff. <p:outputLabel value="#{borrowerRLOSCredit.accountSuf}"/><br/>
-                                                    <p:outputLabel value="Acc Status: #{borrowerRLOSCredit.accountStatus.description}" />
+                                                    <p:outputLabel value="Acc Status: #{borrowerRLOSCredit.existAccountStatusView.description}" />
                                                 </p:column>
 
                                                 <p:column headerText="" styleClass="left top">
@@ -771,7 +771,7 @@
                                                                             fn:length(relatedCredit.existingSplitLineDetailViewList)+1 : '1'}">
                                                                         #{relatedCredit.accountName} <br/>
                                                                         Acc No.: #{relatedCredit.accountNumber} Suff. #{relatedCredit.accountSuf}<br/>
-                                                                        Acc Status: #{relatedCredit.existAccountStatus.description}
+                                                                        Acc Status: #{relatedCredit.existAccountStatusView.description}
                                                                     </td>
                                                                     <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                         rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
@@ -1001,7 +1001,7 @@
                                                 <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{relatedRetailCredit.accountName}"/><br/>
                                                     <p:outputLabel value="Acc No.: #{relatedRetailCredit.accountNumber}"/> Suff. <p:outputLabel value="#{relatedRetailCredit.accountSuf}"/><br/>
-                                                    <p:outputLabel value="Acc Status: #{relatedRetailCredit.accountStatus.description}" />
+                                                    <p:outputLabel value="Acc Status: #{relatedRetailCredit.existAccountStatusView.description}" />
                                                 </p:column>
 
                                                 <p:column headerText="" styleClass="left top">
@@ -1116,7 +1116,7 @@
                                                 <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{relatedRLOSCredit.accountName}"/><br/>
                                                     <p:outputLabel value="Acc No.: #{relatedRLOSCredit.accountNumber}"/> Suff. <p:outputLabel value="#{relatedRLOSCredit.accountSuf}"/><br/>
-                                                    <p:outputLabel value="Acc Status: #{relatedRLOSCredit.accountStatus.description}" />
+                                                    <p:outputLabel value="Acc Status: #{relatedRLOSCredit.existAccountStatusView.description}" />
                                                 </p:column>
 
                                                 <p:column headerText="" styleClass="left top">

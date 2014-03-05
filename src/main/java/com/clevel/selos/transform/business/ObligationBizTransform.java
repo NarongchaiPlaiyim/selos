@@ -77,6 +77,7 @@ public class ObligationBizTransform extends BusinessTransform {
         ExistingCreditDetailView existingCreditDetailView = new ExistingCreditDetailView();
         existingCreditDetailView.setAccountName(obligation.getAccountName());
         //existingCreditDetailView.setAccountStatus(obligation.getAccountStatus());   //code
+        existingCreditDetailView.setExistAccountStatusView(new BankAccountStatusView());
         //use dataSource to find bankAccountType
         if(!Util.isEmpty(obligation.getDataSource())){
             DWHBankDataSource dwhBankDataSource = dwhBankDataSourceDAO.findByDataSource(obligation.getDataSource().trim());
@@ -85,15 +86,14 @@ public class ObligationBizTransform extends BusinessTransform {
                 BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findByCodeAndType(code, dwhBankDataSource.getBankAccountType().getId());
                 if(bankAccountStatus != null){
                     BankAccountStatusView bankAccountStatusView = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
-                    existingCreditDetailView.setAccountStatus(bankAccountStatusView);
+                    existingCreditDetailView.setExistAccountStatusView(bankAccountStatusView);
                 } else {
-                    existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
+                    existingCreditDetailView.setExistAccountStatusView(new BankAccountStatusView());
                 }
             } else {
-                existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
+                existingCreditDetailView.setExistAccountStatusView(new BankAccountStatusView());
             }
         }
-        existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
         existingCreditDetailView.setAccountNumber(obligation.getAccountNumber());
         existingCreditDetailView.setAccountSuf(obligation.getAccountSuffix());
         existingCreditDetailView.setProductCode(obligation.getProductCode());
@@ -169,14 +169,15 @@ public class ObligationBizTransform extends BusinessTransform {
                 existingCreditDetailView.setAccountName(accountName.toString());
                 existingCreditDetailView.setAccountNumber(appInProcess.getAppNumber());
                 //existingCreditDetailView.setAccountStatus(appInProcess.getStatus());  delete
+                existingCreditDetailView.setExistAccountStatusView(new BankAccountStatusView());
                 if(!Util.isEmpty(appInProcess.getStatus())){
                     BankAccountType bankAccountType = bankAccountTypeDAO.getAccountTypeRLOS();
                     if(bankAccountType != null){
                         BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findByCodeAndType(appInProcess.getStatus(), bankAccountType.getId());
                         BankAccountStatusView bankAccountStatusView = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
-                        existingCreditDetailView.setAccountStatus(bankAccountStatusView);
+                        existingCreditDetailView.setExistAccountStatusView(bankAccountStatusView);
                     } else {
-                        existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
+                        existingCreditDetailView.setExistAccountStatusView(new BankAccountStatusView());
                     }
                 }
                 existingCreditDetailView.setAccountSuf("-");
@@ -257,17 +258,17 @@ public class ObligationBizTransform extends BusinessTransform {
                 }
                 existingCreditDetail.setAccountName(existingCreditDetailView.getAccountName());
                 existingCreditDetail.setAccountNumber(existingCreditDetailView.getAccountNumber());
-                log.debug("transform ExistingCreditTransform ::: getAccountStatus {}", existingCreditDetailView.getAccountStatus());
-                if(existingCreditDetailView.getAccountStatus() != null){
-                    BankAccountStatus bankAccountStatus = bankAccountStatusTransform.getBankAccountStatus(existingCreditDetailView.getAccountStatus());
+                log.debug("transform ExistingCreditTransform ::: getAccountStatus {}", existingCreditDetailView.getExistAccountStatusView());
+                if(existingCreditDetailView.getExistAccountStatusView() != null){
+                    BankAccountStatus bankAccountStatus = bankAccountStatusTransform.getBankAccountStatus(existingCreditDetailView.getExistAccountStatusView());
                     log.debug("transform ExistingCreditTransform ::: bankAccountStatus : {}", bankAccountStatus);
                     if(bankAccountStatus.getId() != 0){
-                        existingCreditDetail.setAccountstatus(bankAccountStatus);
+                        existingCreditDetail.setExistAccountStatus(bankAccountStatus);
                     }else{
-                        existingCreditDetail.setAccountstatus(null);
+                        existingCreditDetail.setExistAccountStatus(null);
                     }
                 }else{
-                    existingCreditDetail.setAccountstatus(null);
+                    existingCreditDetail.setExistAccountStatus(null);
                 }
 
                 if(existingCreditDetailView.getExistCreditTypeView()!=null && existingCreditDetailView.getExistCreditTypeView().getId()!=0){
@@ -385,7 +386,7 @@ public class ObligationBizTransform extends BusinessTransform {
 
             if(relatedComExistingCredit!=null && relatedComExistingCredit.size()>0){
                 for(ExistingCreditDetailView existingCreditDetailView : relatedComExistingCredit) {
-                    borrowerExistingCreditPreScreen.add(existingCreditDetailView);
+                    relateExistingCreditPresScreen.add(existingCreditDetailView);
                 }
             }
             if(relatedRetailExistingCredit!=null && relatedRetailExistingCredit.size()>0){
@@ -430,8 +431,8 @@ public class ObligationBizTransform extends BusinessTransform {
         existingCreditDetailView.setExistCreditTypeView(productTransform.transformToView(existingCreditDetail.getExistCreditType()));
 
         //existingCreditDetailView.setAccountStatus();
-        log.debug("getExistingCreditDetailView ::: getAccountstatus : {}", existingCreditDetail.getAccountstatus());
-        existingCreditDetailView.setAccountStatus(bankAccountStatusTransform.getBankAccountStatusView(existingCreditDetail.getAccountstatus()));
+        log.debug("getExistingCreditDetailView ::: getAccountstatus : {}", existingCreditDetail.getExistAccountStatus());
+        existingCreditDetailView.setExistAccountStatusView(bankAccountStatusTransform.getBankAccountStatusView(existingCreditDetail.getExistAccountStatus()));
         existingCreditDetailView.setTenor(existingCreditDetail.getTenor());
         //existingCreditDetailView.setAccountStatus(new BankAccountStatusView());     //TODO Remove this line
         existingCreditDetailView.setAccountSuf(existingCreditDetail.getAccountSuf());
