@@ -6,6 +6,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionCode;
+import com.clevel.selos.model.PricingDOAValue;
 import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.master.RequestType;
@@ -235,8 +236,8 @@ public class FullApplicationControl extends BusinessControl {
 
     }
 
-    public void calculatePricingDOA(long workCaseId){
-        String pricingDOALevel = "";
+    public PricingDOAValue calculatePricingDOA(long workCaseId){
+        PricingDOAValue pricingDOALevel = null;
         //List of Credit detail
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
         List<NewCreditDetail> newCreditDetailList = newCreditFacility.getNewCreditDetailList();
@@ -248,9 +249,11 @@ public class FullApplicationControl extends BusinessControl {
             //Do not Check for exceptional flow
             if(priceReduceDOA.compareTo(BigDecimal.ZERO) == 0 || frontEndFeeReduceDOA.compareTo(new BigDecimal("0.75")) <= 0){
                 //DOA Level equals ZM
+                pricingDOALevel = PricingDOAValue.ZM_DOA;
                 log.debug("calculatePricingDOA Level [ZONE MANAGER] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
             }else if(priceReduceDOA.compareTo(BigDecimal.ONE) > 0 || frontEndFeeReduceDOA.compareTo(BigDecimal.ONE) > 0){
                 //DOA Level equal CSSO
+                pricingDOALevel = PricingDOAValue.CSSO_DOA;
                 log.debug("calculatePricingDOA Level [CSSO] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
             }
         } else {
@@ -291,7 +294,7 @@ public class FullApplicationControl extends BusinessControl {
                         if(priceReduceDOA.compareTo(BigDecimal.ZERO) > 0 && priceReduceDOA.compareTo(BigDecimal.ONE) <= 0){
                             if(finalPrice.compareTo(suggestPrice) < 0){
                                 //DOA is CSSO only
-
+                                pricingDOALevel = PricingDOAValue.CSSO_DOA;
                             }
                         }
                     }
@@ -306,5 +309,6 @@ public class FullApplicationControl extends BusinessControl {
                 }
             }
         }
+        return pricingDOALevel;
     }
 }

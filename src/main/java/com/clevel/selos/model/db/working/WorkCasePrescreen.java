@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.CustomerEntity;
+import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.User;
 
 import javax.persistence.*;

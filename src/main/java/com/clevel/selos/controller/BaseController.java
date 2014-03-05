@@ -10,6 +10,7 @@ import com.clevel.selos.integration.brms.BRMSInterfaceImpl;
 import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ManageButton;
+import com.clevel.selos.model.PricingDOAValue;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
@@ -52,6 +53,7 @@ public class BaseController implements Serializable {
     private long stepId;
     private int requestAppraisal;
     private int qualitativeType;
+    private int pricingDOALevel;
     private List<User> abdmUserList;
     private List<User> zmUserList;
     private List<User> rmUserList;
@@ -156,7 +158,7 @@ public class BaseController implements Serializable {
 
         if(session.getAttribute("workCaseId") != null){
             try{
-                workCaseId = (Long)session.getAttribute("workCaseId");
+                workCaseId = Long.parseLong((String)session.getAttribute("workCaseId"));
             } catch (ClassCastException ex){
                 log.error("Exception :", ex);
             }
@@ -217,12 +219,34 @@ public class BaseController implements Serializable {
 
     public void onOpenSubmitZM(){
         log.debug("onOpenSubmitZM ::: starting...");
-        zmEndorseUserId = "";
-        zmEndorseRemark = "";
-        zmUserList = fullApplicationControl.getZMUserList();
-        rmUserList = fullApplicationControl.getRMUserList();
-        ghUserList = fullApplicationControl.getHeadUserList();
-        log.debug("onOpenSubmitZM ::: zmUserList size : {}", zmUserList.size());
+        log.debug("onOpenSubmitZM ::: find Pricing DOA Level");
+        HttpSession session = FacesUtil.getSession(true);
+        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        PricingDOAValue pricingDOA = fullApplicationControl.calculatePricingDOA(workCaseId);
+        if(!Util.isNull(pricingDOA)){
+            pricingDOALevel = pricingDOA.value();
+            zmEndorseUserId = "";
+            zmEndorseRemark = "";
+
+            zmUserList = fullApplicationControl.getZMUserList();
+
+            if(pricingDOA.value() >= PricingDOAValue.RGM_DOA.value()){
+                rmPriceUserId = "";
+                rmUserList = fullApplicationControl.getRMUserList();
+            }
+
+            if(pricingDOA.value() >= PricingDOAValue.GH_DOA.value()){
+                ghPriceUserId = "";
+                ghUserList = fullApplicationControl.getHeadUserList();
+            }
+
+            log.debug("onOpenSubmitZM ::: zmUserList size : {}", zmUserList.size());
+            RequestContext.getCurrentInstance().execute("submitZMDialog.show()");
+        } else {
+            messageHeader = "Exception.";
+            message = "Can not find Pricing DOA Level. Please check value for calculate DOA Level";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessagePanel.show()");
+        }
     }
 
     public void onSubmitZM(){
@@ -524,5 +548,11 @@ public class BaseController implements Serializable {
         this.aadCommitteeId = aadCommitteeId;
     }
 
+    public int getPricingDOALevel() {
+        return pricingDOALevel;
+    }
 
+    public void setPricingDOALevel(int pricingDOALevel) {
+        this.pricingDOALevel = pricingDOALevel;
+    }
 }
