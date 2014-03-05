@@ -250,6 +250,7 @@ public class RMService implements Serializable {
                     //personal detail session
                     individualModel.setTmbCusID(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustNbr());
                     individualModel.setTitleTH(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTitle());
+
                     //spilt Name
                     if (resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getName() != null) {
                         String name[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getName().split(" ");

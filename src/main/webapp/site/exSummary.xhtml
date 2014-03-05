@@ -1178,6 +1178,7 @@
                                     <h:selectOneRadio id="RM008" value="#{executiveSummary.exSummaryView.rm008Code}">
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.answer')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.notAnswer')}" itemValue="0"/>
+                                        <p:ajax update="rm008remark" event="click"/>
                                     </h:selectOneRadio>
                                 </td>
                                 <td></td>
@@ -1185,7 +1186,7 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <h:inputTextarea cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm008Remark}"
+                                    <h:inputTextarea id="rm008remark" cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm008Remark}"
                                                      disabled="#{executiveSummary.exSummaryView.rm008Code == 0}"
                                                      onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
                                                      onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
@@ -1200,6 +1201,7 @@
                                     <h:selectOneRadio id="RM204" value="#{executiveSummary.exSummaryView.rm204Code}">
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.answer')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.notAnswer')}" itemValue="0"/>
+                                        <p:ajax update="rm204remark" event="click"/>
                                     </h:selectOneRadio>
                                 </td>
                                 <td></td>
@@ -1207,7 +1209,7 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <h:inputTextarea cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm204Remark}"
+                                    <h:inputTextarea id="rm204remark" cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm204Remark}"
                                                      disabled="#{executiveSummary.exSummaryView.rm204Code == 0}"
                                                      onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
                                                      onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
@@ -1222,6 +1224,7 @@
                                     <h:selectOneRadio id="RM020" value="#{executiveSummary.exSummaryView.rm020Code}">
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.answer')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.notAnswer')}" itemValue="0"/>
+                                        <p:ajax update="rm020remark" event="click"/>
                                     </h:selectOneRadio>
                                 </td>
                                 <td></td>
@@ -1229,7 +1232,7 @@
 
                             <tr>
                                 <td colspan="4" style="text-align: left; width: 100%">
-                                    <h:inputTextarea cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm020Remark}"
+                                    <h:inputTextarea id="rm020remark" cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm020Remark}"
                                                      disabled="#{executiveSummary.exSummaryView.rm020Remark == 0}"
                                                      onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
                                                      onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
