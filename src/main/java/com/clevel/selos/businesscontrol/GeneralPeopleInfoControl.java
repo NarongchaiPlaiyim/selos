@@ -23,6 +23,7 @@ import com.clevel.selos.dao.master.RaceDAO;
 import com.clevel.selos.dao.master.RelationDAO;
 import com.clevel.selos.dao.master.SubDistrictDAO;
 import com.clevel.selos.dao.master.TitleDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Language;
 import com.clevel.selos.model.db.master.AddressType;
@@ -37,6 +38,8 @@ import com.clevel.selos.model.db.master.Race;
 import com.clevel.selos.model.db.master.Relation;
 import com.clevel.selos.model.db.master.SubDistrict;
 import com.clevel.selos.model.db.master.Title;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.LastUpdateDataView;
 
 
 @Stateless
@@ -58,6 +61,7 @@ public class GeneralPeopleInfoControl extends BusinessControl {
 	 @Inject private CountryDAO countryDAO;
 	 @Inject private AddressTypeDAO addressTypeDAO;
 	 @Inject private BusinessTypeDAO businessTypeDAO;
+	 @Inject private WorkCaseDAO workCaseDAO;
 	 
 	 public GeneralPeopleInfoControl() {
 	 }
@@ -297,4 +301,20 @@ public class GeneralPeopleInfoControl extends BusinessControl {
 		 return rtnDatas; 
 	 }
 	 
+	 public LastUpdateDataView getWorkCaseLastUpdate(long workCaseId) {
+		 LastUpdateDataView view = new LastUpdateDataView();
+		 if (workCaseId <= 0)
+			 return view;
+		 
+		 WorkCase workCase = null;
+		 try {
+			 workCase = workCaseDAO.findById(workCaseId);
+		 } catch (Throwable e) {}
+		 if (workCase != null) {
+			 view.setModifyDate(workCase.getModifyDate());
+			 if (workCase.getModifyBy() != null)
+				 view.setModifyUser(workCase.getModifyBy().getDisplayName());
+		 }
+		 return view;
+	 }
 }

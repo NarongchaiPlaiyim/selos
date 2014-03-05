@@ -225,7 +225,7 @@ public class BRMSControl extends BusinessControl {
 
         applicationInfo.setBizLocation(String.valueOf(prescreen.getBusinessLocation().getCode()));
         applicationInfo.setYearInBusinessMonth(new BigDecimal(DateTimeUtil.monthBetween2Dates(prescreen.getRegisterDate(), now)));
-        applicationInfo.setCountryOfRegistration(prescreen.getCountry().getCode2());
+        applicationInfo.setCountryOfRegistration(prescreen.getCountryOfRegister().getCode2());
 
         BigDecimal borrowerGroupIncome = BigDecimal.ZERO;
 

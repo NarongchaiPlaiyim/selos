@@ -101,10 +101,10 @@ public class BankStmtControl extends BusinessControl {
                                 BankStmtView bankStmtView = null;
                                 List<BankStmtDetailView> bankStmtDetailViewList = new ArrayList<BankStmtDetailView>();
                                 for (DWHBankStatement dwhBankStatement : dwhBankStatementList) {
-                                    BankStmtDetailView bankStmtDetailView = bankStmtTransform.getBankStmtDetailView(dwhBankStatement);
                                     if (bankStmtView == null) {
                                         bankStmtView = bankStmtTransform.getBankStmtView(dwhBankStatement);
                                     }
+                                    BankStmtDetailView bankStmtDetailView = bankStmtTransform.getBankStmtDetailView(dwhBankStatement);
                                     bankStmtDetailViewList.add(bankStmtDetailView);
                                 }
                                 bankStmtView.setBankStmtDetailViewList(bankStmtDetailViewList);
@@ -119,9 +119,12 @@ public class BankStmtControl extends BusinessControl {
                 }
             }
         }
+
+        log.debug("Result action status list: {}", actionStatusViewList);
+        log.debug("Result TMB Bank statement list: {}", bankStmtViewList);
         bankStmtSummaryView.setActionStatusViewList(actionStatusViewList);
         bankStmtSummaryView.setTmbBankStmtViewList(bankStmtViewList);
-        //todo: set Other bank statement list
+        log.info("End retrieveBankStmtInterface...");
         return bankStmtSummaryView;
     }
 

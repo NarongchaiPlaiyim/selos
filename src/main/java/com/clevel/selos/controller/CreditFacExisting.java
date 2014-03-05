@@ -79,7 +79,7 @@ public class CreditFacExisting implements Serializable {
     private List<ExistingSplitLineDetailView> existingSplitLineDetailViewList;
     private ProductProgramView existProductProgramView;
     private CreditTypeView existCreditTypeView;
-    private AccountStatus existAccountStatus ;
+    private BankAccountStatusView existAccountStatusView ;
     private List<BaseRate> baseRateList;
     private ExistingCreditDetailView  existingCreditDetailView;
 
@@ -247,11 +247,11 @@ public class CreditFacExisting implements Serializable {
 
             existProductProgramView = new ProductProgramView();
             existCreditTypeView = new CreditTypeView();
+            existAccountStatusView = new BankAccountStatusView();
 
-            existingCreditDetailView.setExistAccountStatus(new BankAccountStatus());
+            existingCreditDetailView.setExistAccountStatusView(existAccountStatusView);
             existingCreditDetailView.setExistProductProgramView(existProductProgramView);
             existingCreditDetailView.setExistCreditTypeView(existCreditTypeView);
-            existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
 
             existingSplitLineDetailView = new ExistingSplitLineDetailView();
             productProgram = new ProductProgram();
@@ -497,12 +497,11 @@ public class CreditFacExisting implements Serializable {
     public void onAddCommercialCredit() {
         log.info("onAddCommercialCredit ::: ");
         existingCreditDetailView = new ExistingCreditDetailView();
-        existAccountStatus = new AccountStatus();
+        existAccountStatusView = new BankAccountStatusView();
         existProductProgramView = new ProductProgramView();
         existCreditTypeView = new CreditTypeView();
 
-        existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
-        existingCreditDetailView.setExistAccountStatus(new BankAccountStatus());
+        existingCreditDetailView.setExistAccountStatusView(existAccountStatusView);
         existingCreditDetailView.setExistProductProgramView(existProductProgramView);
         existingCreditDetailView.setExistCreditTypeView(existCreditTypeView);
 
@@ -757,12 +756,11 @@ public class CreditFacExisting implements Serializable {
             //ProductProgram  productProgram = productProgramDAO.findById(existingCreditDetailView.getExistProductProgramView().getId());
             CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
             //AccountStatus accountStatus = accountStatusDAO.findById( existingCreditDetailView.getExistAccountStatus().getId());
-            BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findById( existingCreditDetailView.getExistAccountStatus().getId());
+            BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findById(existingCreditDetailView.getExistAccountStatusView().getId());
 
-            BankAccountStatusView bankAccountStatusV = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
             existingCreditDetailView.setExistProductProgramView(productTransform.transformToView(productProgramDAO.findById(existingCreditDetailView.getExistProductProgramView().getId())));
             existingCreditDetailView.setExistCreditTypeView(productTransform.transformToView(creditType));
-            existingCreditDetailView.setExistAccountStatus(bankAccountStatus);
+            existingCreditDetailView.setExistAccountStatusView(bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus));
 
             if(CalLimitType.getCalLimitType(creditType.getCalLimitType()) == CalLimitType.PCE){
                 existingCreditDetailView.setUsePCE(true);
@@ -843,8 +841,7 @@ public class CreditFacExisting implements Serializable {
 
             //ProductProgram  productProgram = productProgramDAO.findById(existingCreditDetailView.getExistProductProgram().getId());
             //AccountStatus accountStatus = accountStatusDAO.findById( existingCreditDetailView.getExistAccountStatus().getId());
-            BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findById(existingCreditDetailView.getExistAccountStatus().getId());
-            BankAccountStatusView bankAccountStatusV = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
+            BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findById(existingCreditDetailView.getExistAccountStatusView().getId());
             CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
 
             if(CalLimitType.getCalLimitType(creditType.getCalLimitType()) == CalLimitType.PCE){
@@ -855,11 +852,10 @@ public class CreditFacExisting implements Serializable {
 
             existingCreditDetailViewRow.setExistProductProgramView(productTransform.transformToView(productProgramDAO.findById(existingCreditDetailView.getExistProductProgramView().getId())));
             existingCreditDetailViewRow.setExistCreditTypeView(productTransform.transformToView(creditType));
-            existingCreditDetailViewRow.setAccountStatus(bankAccountStatusV);
             existingCreditDetailViewRow.setAccountName(existingCreditDetailView.getAccountName());
             existingCreditDetailViewRow.setAccountNumber(existingCreditDetailView.getAccountNumber());
             existingCreditDetailViewRow.setAccountSuf(existingCreditDetailView.getAccountSuf());
-            existingCreditDetailViewRow.setExistAccountStatus(bankAccountStatus);
+            existingCreditDetailViewRow.setExistAccountStatusView(bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus));
 
             existingCreditDetailViewRow.setLimit(existingCreditDetailView.getLimit());
             existingCreditDetailViewRow.setProductCode(existingCreditDetailView.getProductCode());
@@ -1497,7 +1493,7 @@ public class CreditFacExisting implements Serializable {
                             borrowerCollateralDetailViewRow.getExistingCreditTypeDetailViewList().add(existingCreditTypeDetailViewList.get(i));
                         } else if (existingCreditTypeDetailViewList.get(i).isNoFlag() == false) {
                             seqBorrowerTemp = existingCreditTypeDetailViewList.get(i).getNo();
-                            if (Integer.parseInt(hashBorrower.get(seqBorrowerTemp).toString()) > 0) {
+                            if (hashBorrower.containsKey(seqBorrowerTemp) && Integer.parseInt(hashBorrower.get(seqBorrowerTemp).toString()) > 0) {
                                 hashBorrower.put(seqBorrowerTemp, 0);
                             }
                         }
@@ -1556,7 +1552,7 @@ public class CreditFacExisting implements Serializable {
                             relatedCollateralDetailViewRow.getExistingCreditTypeDetailViewList().add(existingCreditTypeDetailViewList.get(i));
 
                         } else if (existingCreditTypeDetailViewList.get(i).isNoFlag() == false) {
-                            if (Integer.parseInt(hashRelated.get(seqRelatedTemp).toString()) > 0) {
+                            if (hashRelated.containsKey(seqRelatedTemp) && Integer.parseInt(hashRelated.get(seqRelatedTemp).toString()) > 0) {
                                 hashRelated.put(seqRelatedTemp, 0);
                             }
                         }
@@ -1631,7 +1627,8 @@ public class CreditFacExisting implements Serializable {
 
             for(int j=0;j<borrowerCollateralDetailViewDel.getExistingCreditTypeDetailViewList().size();j++){
                 int seqBowForDel = borrowerCollateralDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo();
-                if(Integer.parseInt(hashBorrower.get(borrowerCollateralDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()).toString())>0){
+                if(hashBorrower.containsKey(borrowerCollateralDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()) &&
+                        Integer.parseInt(hashBorrower.get(borrowerCollateralDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()).toString())>0){
                     hashBorrower.put(seqBowForDel,0);
                 }
             }
@@ -1651,8 +1648,9 @@ public class CreditFacExisting implements Serializable {
 
             for(int j=0;j<relatedCollateralDetailViewDel.getExistingCreditTypeDetailViewList().size();j++){
                 int seqRelatedForDel = relatedCollateralDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo();
-                if(Integer.parseInt(hashBorrower.get(relatedCollateralDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()).toString())>0){
-                    hashRelated.put(seqRelatedForDel, Integer.parseInt(hashRelated.get(seqRelatedForDel).toString()) - 1);
+                if(hashBorrower.containsKey(relatedCollateralDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()) &&
+                        Integer.parseInt(hashBorrower.get(relatedCollateralDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()).toString())>0){
+                    hashRelated.put(seqRelatedForDel, 0);
                 }
             }
 
@@ -1810,7 +1808,7 @@ public class CreditFacExisting implements Serializable {
                         }
                         existingGuarantorDetailViewOnRow.getExistingCreditTypeDetailViewList().add(existingCreditTypeDetailViewList.get(i));
                     } else if (existingCreditTypeDetailViewList.get(i).isNoFlag() == false) {
-                        if (Integer.parseInt(hashBorrower.get(seqBorrowerTemp).toString()) > 0) {
+                        if (hashBorrower.containsKey(seqBorrowerTemp) && Integer.parseInt(hashBorrower.get(seqBorrowerTemp).toString()) > 0) {
                             hashBorrower.put(seqBorrowerTemp, 0);
                         }
                     }
@@ -1865,7 +1863,8 @@ public class CreditFacExisting implements Serializable {
 
             log.info("seq in seqBowForDel :  "+ seqBowForDel +" use feq is " + hashBorrower.get(seqBowForDel).toString());
 
-            if(Integer.parseInt(hashBorrower.get(guarantorDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()).toString())>0){
+            if(hashBorrower.containsKey(guarantorDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()) &&
+                    Integer.parseInt(hashBorrower.get(guarantorDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()).toString())>0){
                 hashBorrower.put(seqBowForDel, 0);
             }
         }
@@ -1885,7 +1884,10 @@ public class CreditFacExisting implements Serializable {
         if(existingCreditFacilityView.getBorrowerComExistingCredit()!=null && existingCreditFacilityView.getBorrowerComExistingCredit().size()>0){
             for(int i = 0; i < existingCreditFacilityView.getBorrowerComExistingCredit().size(); i++) {
                 seq = existingCreditFacilityView.getBorrowerComExistingCredit().get(i).getNo();
-                inUsed = Integer.parseInt(hashBorrower.get(seq).toString());
+                inUsed = 0;
+                if(hashBorrower.containsKey(seq)) {
+                    inUsed = Integer.parseInt(hashBorrower.get(seq).toString());
+                }
                 existingCreditFacilityView.getBorrowerComExistingCredit().get(i).setInUsed(inUsed);
             }
         }
@@ -1893,7 +1895,10 @@ public class CreditFacExisting implements Serializable {
         if(existingCreditFacilityView.getRelatedComExistingCredit()!=null && existingCreditFacilityView.getRelatedComExistingCredit().size()>0){
             for (int i = 0; i < existingCreditFacilityView.getRelatedComExistingCredit().size(); i++) {
                 seq = existingCreditFacilityView.getRelatedComExistingCredit().get(i).getNo();
-                inUsed = Integer.parseInt(hashRelated.get(seq).toString());
+                inUsed = 0;
+                if(hashRelated.containsKey(seq)) {
+                    inUsed = Integer.parseInt(hashRelated.get(seq).toString());
+                }
                 existingCreditFacilityView.getRelatedComExistingCredit().get(i).setInUsed(inUsed);
             }
         }
@@ -1995,11 +2000,11 @@ public class CreditFacExisting implements Serializable {
         existingCreditDetailView = new ExistingCreditDetailView();
         existProductProgramView = new ProductProgramView();
         existCreditTypeView = new CreditTypeView();
+        existAccountStatusView = new BankAccountStatusView();
 
-        existingCreditDetailView.setExistAccountStatus(new BankAccountStatus());
+        existingCreditDetailView.setExistAccountStatusView(existAccountStatusView);
         existingCreditDetailView.setExistProductProgramView(existProductProgramView);
         existingCreditDetailView.setExistCreditTypeView(existCreditTypeView);
-        existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
 
         existingSplitLineDetailView = new ExistingSplitLineDetailView();
         productProgram = new ProductProgram();

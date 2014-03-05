@@ -8,7 +8,7 @@ import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.MessageDialogSeverity;
 import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -23,19 +23,13 @@ import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
-import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.context.Flash;
-import javax.faces.event.ValueChangeListener;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.swing.*;
 import java.io.Serializable;
@@ -110,6 +104,7 @@ public class BankStatementDetail implements Serializable {
     //Messages Dialog
     private String messageHeader;
     private String message;
+    private String severity;
 
     //Session
     private long workCaseId;
@@ -306,12 +301,13 @@ public class BankStatementDetail implements Serializable {
             exSummaryControl.calForBankStmtSummary(workCaseId);
             bizInfoSummaryControl.calByBankStatement(workCaseId);
 
-            messageHeader = "Save Bank Statement Detail Success.";
+            messageHeader = msg.get("app.messageHeader.info");
             message = "Save Bank Statement Detail data success.";
-
+            severity = MessageDialogSeverity.INFO.severity();
         }
         catch (Exception e) {
-            messageHeader = "Save Bank Statement Detail Failed.";
+            messageHeader = msg.get("app.messageHeader.error");
+            severity = MessageDialogSeverity.ALERT.severity();
             if (e.getCause() != null) {
                 message = "Save Bank Statement Detail data failed. Cause : " + e.getCause().toString();
             } else {
@@ -448,5 +444,13 @@ public class BankStatementDetail implements Serializable {
 
     public void setRoleUW(boolean roleUW) {
         this.roleUW = roleUW;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
     }
 }

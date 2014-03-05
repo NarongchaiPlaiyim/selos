@@ -68,6 +68,9 @@ public class NCBDetailTransform extends Transform {
             ncbDetail.setOverLimit(ncbDetailViewItem.getNoOfOverLimit());
             ncbDetail.setCanToEdit(ncbDetailViewItem.isCanToEdit());
 
+            //Add new 2 flag for BRMS//
+            ncbDetail.setTdrFlag(ncb.getTdrFlag());
+
             ncbDetailList.add(ncbDetail);
         }
         return ncbDetailList;

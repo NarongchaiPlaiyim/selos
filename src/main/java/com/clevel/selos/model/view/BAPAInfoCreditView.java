@@ -169,4 +169,19 @@ public class BAPAInfoCreditView implements Serializable,Comparable<BAPAInfoCredi
 		}
 		return Util.compareLong(id, obj.id);
 	}
+	
+	public void updateValue(BAPAInfoCreditView view) {
+		id = view.id;
+		type = view.type;
+		creditId = view.creditId;
+		productProgram = view.productProgram;
+		creditType = view.creditType;
+		loanPurpose = view.loanPurpose;
+		payByCustomer = view.payByCustomer;
+		fromCredit = view.fromCredit;
+		limit = view.limit;
+		premiumAmount = view.premiumAmount;
+		expenseAmount = view.expenseAmount;
+		needUpdate = view.needUpdate;
+	}
 }

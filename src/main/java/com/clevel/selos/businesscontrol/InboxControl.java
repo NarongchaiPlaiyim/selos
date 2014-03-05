@@ -68,7 +68,6 @@ public class InboxControl extends BusinessControl {
         //For WebSphere//
         //List<CaseDTO> caseDTOList = bpmInterface.getInboxList();
 
-
         List<CaseDTO> caseDTOList = new ArrayList<CaseDTO>();
         List<WorkCasePrescreen> workCasePrescreenList = getWorkCasePreScreen();
 
@@ -76,6 +75,7 @@ public class InboxControl extends BusinessControl {
             CaseDTO caseDTO = new CaseDTO();
             HashMap<String, String> caseData = new HashMap<String, String>();
             caseData.put("F_WobNum", workCasePrescreen.getWobNumber());
+            log.info("******** "+workCasePrescreen.getWobNumber());
             caseData.put("F_StepName", "PS1001");
             caseData.put("Step_Code", Long.toString(workCasePrescreen.getStep().getId()));
             caseData.put("Lock_Status", "0");
@@ -103,7 +103,6 @@ public class InboxControl extends BusinessControl {
 
             caseDTOList.add(caseDTO);
         }
-
 
         log.info("CaseDTO : caseDTOList : {}", caseDTOList);
         inboxViewList = inboxBizTransform.transformToView(caseDTOList);
@@ -151,6 +150,17 @@ public class InboxControl extends BusinessControl {
         }
         return landingPage;
     }
+
+    /*public String getLandingPage(long stepId, long statusCode){
+        StepLandingPage stepLandingPage = stepLandingPageDAO.findByStepId(stepId, statusCode);
+        String landingPage = "";
+        if(stepLandingPage != null){
+            landingPage = stepLandingPage.getPageName();
+        } else {
+            landingPage = "LANDING_PAGE_NOT_FOUND";
+        }
+        return landingPage;
+    }*/
 
     //TODO:: To review Application Header.
     public AppHeaderView getHeaderInformation(long workCasePreScreenId, long workCaseId) {

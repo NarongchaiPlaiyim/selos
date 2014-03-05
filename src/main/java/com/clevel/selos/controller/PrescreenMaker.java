@@ -93,6 +93,8 @@ public class PrescreenMaker implements Serializable {
 
     private List<Province> businessLocationList;
 
+    private List<Country> countryOfRegisterList;
+
     private List<Bank> refinanceList;
 
     private List<ReferredExperience> referredExperienceList;
@@ -221,9 +223,10 @@ public class PrescreenMaker implements Serializable {
     private BorrowingTypeDAO borrowingTypeDAO;
     @Inject
     private PotentialCollateralDAO potentialCollateralDAO;
-
     @Inject
     private IndividualDAO individualDAO;
+    @Inject
+    private CountryDAO countryDAO;
 
     @Inject
     private PrescreenTransform prescreenTransform;
@@ -360,8 +363,12 @@ public class PrescreenMaker implements Serializable {
                 prescreenView.setBusinessLocation(new Province());
             }
 
-            if(prescreenView.getRefinanceBank() == null){
-                prescreenView.setRefinanceBank(new Bank());
+            if(prescreenView.getRefinanceInBank() == null){
+                prescreenView.setRefinanceInBank(new Bank());
+            }
+
+            if(prescreenView.getRefinanceOutBank() == null){
+                prescreenView.setRefinanceOutBank(new Bank());
             }
 
             if(prescreenView.getReferredExperience() == null){
@@ -532,6 +539,9 @@ public class PrescreenMaker implements Serializable {
             //borrowingTypeList = borrowingTypeDAO.findAll();
             borrowingTypeList = borrowingTypeDAO.findByCustomerEntityId(caseBorrowerTypeId);
             log.debug("onLoadSelectList ::: borrowingTypeList size : {}", borrowingTypeList.size());
+
+            countryOfRegisterList = countryDAO.findAll();
+            log.debug("onLoadSelectList ::: countryOfRegisterList size : {}", countryOfRegisterList.size());
         }
 
         //*** List for Customer ***//
@@ -1045,7 +1055,7 @@ public class PrescreenMaker implements Serializable {
                     //---- Validate CitizenId ----//
                     boolean validateCitizen = true;
 
-                    if(borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getId() != 0 && borrowerInfo.getMaritalStatus().getId() == 2){
+                    if(borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getSpouseFlag() == 1){
                         if(borrowerInfo.getSpouse() != null){
                             log.debug("Borrower Citizen : {} , Spouse Citizen : {}", borrowerInfo.getCitizenId(), borrowerInfo.getSpouse().getCitizenId());
                             if(borrowerInfo.getCitizenId().equals(borrowerInfo.getSpouse().getCitizenId())){
@@ -1058,12 +1068,6 @@ public class PrescreenMaker implements Serializable {
 
                     if(validateCitizen){
                         for(CustomerInfoView customerInfoView : customerInfoViewList ){
-                        /*if(borrowerInfo.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
-                            validateCitizen = false;
-                            messageHeader = "Save customer failed.";
-                            message = "Duplicate citizen id.";
-                            break;
-                        }*/
                             //Case when update customer and change citizen id to same another.
                             if(borrowerInfo.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
                                 validateCitizen = false;
@@ -1175,7 +1179,8 @@ public class PrescreenMaker implements Serializable {
                         if(complete){
                             //--- Spouse ---
                             log.debug("onSaveCustomerInfo ::: SpouseInfo : {}", borrowerInfo.getSpouse());
-                            if(borrowerInfo.getMaritalStatus().getId() != 1 && borrowerInfo.getMaritalStatus().getId() != 4 && borrowerInfo.getMaritalStatus().getId() != 5){
+                            //if(borrowerInfo.getMaritalStatus().getId() != 1 && borrowerInfo.getMaritalStatus().getId() != 4 && borrowerInfo.getMaritalStatus().getId() != 5){
+                            if(borrowerInfo.getMaritalStatus().getSpouseFlag() == 1){
                                 if(borrowerInfo.getSpouse().getRelation() != null && borrowerInfo.getSpouse().getRelation().getId() != 0){
                                     CustomerInfoView spouseInfo = borrowerInfo.getSpouse();
                                     spouseInfo.setIsSpouse(1);
@@ -1186,6 +1191,7 @@ public class PrescreenMaker implements Serializable {
                                     if(spouseInfo.getTitleTh().getId() != 0){
                                         spouseInfo.setTitleTh(titleDAO.findById(spouseInfo.getTitleTh().getId()));
                                     }
+                                    spouseInfo.setMaritalStatus(borrowerInfo.getMaritalStatus());
                                     log.debug("onSaveCustomerInfo ::: Spouse - relation : {}", spouseInfo.getRelation());
                                     if(spouseInfo.getRelation().getId() == RelationValue.BORROWER.value()) {
                                         //Spouse - Borrower
@@ -1307,7 +1313,7 @@ public class PrescreenMaker implements Serializable {
                         }
 
                         //Case when update customer add change citizen id (spouse) same another.
-                        if(borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getId() != 0 && borrowerInfo.getMaritalStatus().getId() == 2){
+                        if(borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getSpouseFlag() == 1){
                             if(borrowerInfo.getSpouse() != null && customerInfoView.getSpouse() != null){
                                 if(borrowerInfo.getSpouse().getListIndex() != 0){
                                     //Update old spouse check with out old index
@@ -1475,6 +1481,7 @@ public class PrescreenMaker implements Serializable {
                             CustomerEntity spouseCustomerEntity = new CustomerEntity();
                             spouseCustomerEntity = customerEntityDAO.findById(1);
                             newSpouse.setCustomerEntity(spouseCustomerEntity);
+                            newSpouse.setMaritalStatus(borrowerInfo.getMaritalStatus());
                             if(newSpouse.getTitleTh().getId() != 0){
                                 newSpouse.setTitleTh(titleDAO.findById(newSpouse.getTitleTh().getId()));
                             }
@@ -1533,6 +1540,7 @@ public class PrescreenMaker implements Serializable {
                                 //Add new spouse to list
                                 newSpouse.setListIndex(customerListIndex);
                                 newSpouse.setIsSpouse(1);
+                                newSpouse.setMaritalStatus(borrowerInfo.getMaritalStatus());
                                 if(newSpouse.getRelation() != null && newSpouse.getRelation().getId() == RelationValue.BORROWER.value()){
                                     newSpouse.setListName("BORROWER");
                                     newSpouse.setSubIndex(borrowerInfoViewList.size());
@@ -1782,15 +1790,15 @@ public class PrescreenMaker implements Serializable {
                 deleteCustomerInfoViewList.add(customerInfoView);
             }
 
-            if(selectCustomerInfoItem.getRelation().getId() == 1){
+            if(selectCustomerInfoItem.getRelation().getId() == RelationValue.BORROWER.value()){
                 //Remove Borrower List
                 borrowerInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.BORROWER);
-            } else if(selectCustomerInfoItem.getRelation().getId() == 2){
+            } else if(selectCustomerInfoItem.getRelation().getId() == RelationValue.GUARANTOR.value()){
                 //Remove Guarantor List
                 guarantorInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.GUARANTOR);
-            } else if(selectCustomerInfoItem.getRelation().getId() == 3 || selectCustomerInfoItem.getRelation().getId() == 4){
+            } else if(selectCustomerInfoItem.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value() || selectCustomerInfoItem.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                 //Remove Related List
                 relatedInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.RELATED);
@@ -1809,15 +1817,15 @@ public class PrescreenMaker implements Serializable {
                             deleteCustomerInfoViewList.add(spouse);
                         }
                         //Remove Spouse List
-                        if(spouse.getRelation().getId() == 1){
+                        if(spouse.getRelation().getId() == RelationValue.BORROWER.value()){
                             //Remove Borrower List
                             borrowerInfoViewList.remove(spouse);
                             reIndexCustomerList(ListCustomerName.BORROWER);
-                        } else if(spouse.getRelation().getId() == 2){
+                        } else if(spouse.getRelation().getId() == RelationValue.GUARANTOR.value()){
                             //Remove Guarantor List
                             guarantorInfoViewList.remove(spouse);
                             reIndexCustomerList(ListCustomerName.GUARANTOR);
-                        } else if(spouse.getRelation().getId() == 3 || spouse.getRelation().getId() == 4){
+                        } else if(spouse.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value() || spouse.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                             //Remove Related List
                             relatedInfoViewList.remove(spouse);
                             reIndexCustomerList(ListCustomerName.RELATED);
@@ -2281,7 +2289,8 @@ public class PrescreenMaker implements Serializable {
             prescreenView.setBusinessLocation(null);
             prescreenView.setBorrowingType(null);
             prescreenView.setReferredExperience(null);
-            prescreenView.setRefinanceBank(null);
+            prescreenView.setRefinanceInBank(null);
+            prescreenView.setRefinanceOutBank(null);
             prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, deleteCustomerInfoViewList, workCasePreScreenId, caseBorrowerTypeId, user);
 
             //TODO show messageBox success
@@ -3108,5 +3117,13 @@ public class PrescreenMaker implements Serializable {
 
     public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
         this.currentDateDDMMYY = currentDateDDMMYY;
+    }
+
+    public List<Country> getCountryOfRegisterList() {
+        return countryOfRegisterList;
+    }
+
+    public void setCountryOfRegisterList(List<Country> countryOfRegisterList) {
+        this.countryOfRegisterList = countryOfRegisterList;
     }
 }

@@ -223,6 +223,7 @@
 			                                        icon="ui-icon-pencil"
 			                                        style="margin-right:0px !important"
 			                                        action="#{postCustomerInfoSummary.onClickLink()}"
+			                                        onstart="p_loading_dialog.show()"
 			                                        process="@this"
 			                                        >
 			                                        <f:setPropertyActionListener value="#{item}" target="#{postCustomerInfoSummary.selectedCustomer}"/>
@@ -246,6 +247,7 @@
             </div>
         </h:form>
     </p:panel>
+    <ui:include src="dialog/postLoadingAndErrorDialog.xhtml" />
 </h:body>
 </f:view>
 </html>
