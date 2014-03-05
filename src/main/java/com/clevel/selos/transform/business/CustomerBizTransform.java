@@ -78,6 +78,16 @@ public class CustomerBizTransform extends BusinessTransform {
                     if (customerInfoView.getTitleTh() == null) {
                         customerInfoView.setTitleTh(new Title());
                     }
+
+                    RMTitle rmTitleEn = rmTitleDAO.findOneByCriteria(Restrictions.eq("rmTitle", individualModel.getTitleEN()));
+                    if (rmTitleEn != null && rmTitleEn.getTitle() != null) {
+                        customerInfoView.setTitleEn(rmTitleEn.getTitle());
+                    }
+
+                    if (customerInfoView.getTitleEn() == null) {
+                        customerInfoView.setTitleEn(new Title());
+                    }
+
                     customerInfoView.setFirstNameTh(individualModel.getFirstname());
                     customerInfoView.setLastNameTh(individualModel.getLastname());
                     customerInfoView.setFirstNameEn(individualModel.getFirstnameEN()); //add en name
