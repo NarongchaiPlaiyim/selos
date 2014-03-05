@@ -483,19 +483,17 @@ public class PEDBExecute extends BusinessControl
     }
 
     //TODO:: To review Application Header.
-    public AppHeaderView getHeaderInformation(String stepId, String wobNumber) {
+    public AppHeaderView getHeaderInformation(long stepId, String wobNumber) {
         log.info("getHeaderInformation ::: StepId : {} , WOBNumber : {}", stepId, wobNumber);
         AppHeaderView appHeaderView = new AppHeaderView();
         appHeaderView.setBorrowerHeaderViewList(new ArrayList<AppBorrowerHeaderView>());
         String bdmUserId;
         String uwUserId = "";
 
-        int intStepId = Integer.parseInt(stepId);
-
         List<Customer> customerList = new ArrayList<Customer>();
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
 
-        if(intStepId == StepValue.PRESCREEN_INITIAL.value() || intStepId == StepValue.PRESCREEN_CHECKER.value() || intStepId == StepValue.PRESCREEN_MAKER.value())
+        if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value())
         {
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByWobNumber(wobNumber);
             log.info("getHeaderInformation ::: workCasePreScreen : {}", workCasePrescreen);
