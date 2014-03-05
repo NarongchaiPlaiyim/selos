@@ -35,6 +35,8 @@ public class PrescreenView implements Serializable {
     private User modifyBy;
     private int modifyFlag;
 
+    private Country countryOfRegister;
+
     public PrescreenView() {
 
     }
@@ -243,6 +245,14 @@ public class PrescreenView implements Serializable {
 
     public void setRefinanceOutBank(Bank refinanceOutBank) {
         this.refinanceOutBank = refinanceOutBank;
+    }
+
+    public Country getCountryOfRegister() {
+        return countryOfRegister;
+    }
+
+    public void setCountryOfRegister(Country countryOfRegister) {
+        this.countryOfRegister = countryOfRegister;
     }
 
     @Override

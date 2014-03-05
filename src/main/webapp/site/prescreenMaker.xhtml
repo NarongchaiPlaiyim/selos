@@ -417,12 +417,27 @@
                                 <td class="title">Business Location :</td>
                                 <td>
                                     <p:selectOneMenu value="#{prescreenMaker.prescreenView.businessLocation.code}"
+                                                     required="#{not empty param[savePreMakerButton.clientId]}"
                                                      size="1" style="width: 200px;">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{prescreenMaker.businessLocationList}"
                                                        var="businessLocationItem"
                                                        itemLabel="#{businessLocationItem.name}"
                                                        itemValue="#{businessLocationItem.code}"/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">Country of register</td>
+                                <td>
+                                    <p:selectOneMenu value="#{prescreenMaker.prescreenView.countryOfRegister.id}"
+                                                     required="#{not empty param[savePreMakerButton.clientId]}"
+                                                     size="1" style="width: 200px;">
+                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                        <f:selectItems value="#{prescreenMaker.countryOfRegisterList}"
+                                                       var="countryOfRegisterItem"
+                                                       itemLabel="#{countryOfRegisterItem.name}"
+                                                       itemValue="#{countryOfRegisterItem.id}"/>
                                     </p:selectOneMenu>
                                 </td>
                             </tr>
