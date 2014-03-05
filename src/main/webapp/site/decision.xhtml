@@ -3467,7 +3467,7 @@
                                                              value="#{msg.get('app.button.add')}"
                                                              action="#{decision.onAddFollowUpCondition()}"
                                                              process="@form"
-                                                             update=":frmMain"
+                                                             update=":frmMain,:msgBoxSystemMessagePanel"
                                                              styleClass="smaller"/>
                                         </td>
                                     </tr>
@@ -3836,7 +3836,7 @@
                                                  binding="#{saveDecisionBtn}"
                                                  action="#{decision.onSaveDecision()}"
                                                  process="@form"
-                                                 update=":frmMain, :msgBoxSystemMessagePanel"
+                                                 update=":frmMain,:msgBoxSystemMessagePanel"
                                                  styleClass="smaller"/>
                                 <p:spacer width="10" height="0"/>
                                 <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"

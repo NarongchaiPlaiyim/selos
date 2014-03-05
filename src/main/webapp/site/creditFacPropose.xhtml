@@ -1157,7 +1157,7 @@
                 id="btnAddCollateralInfo"
                 value="#{msg.get('app.addButton')}"
                 styleClass="smaller"
-                process="@this"
+                process="@form"
                 actionListener="#{creditFacPropose.onAddProposeCollInfo}"
                 update=":collateralDlgForm"
                 oncomplete="collateralInfoDlg.show();">
@@ -1188,7 +1188,7 @@
         <p:commandButton value="Edit"
                          action="#{creditFacPropose.onEditProposeCollInfo()}"
                          update=":collateralDlgForm"
-                         process="@this"
+                         process="@form"
                          oncomplete="collateralInfoDlg.show();">
             <f:setPropertyActionListener value="#{newCollateralView}"
                                          target="#{creditFacPropose.selectCollateralDetailView}"/>
@@ -1198,7 +1198,7 @@
         </p:commandButton>
         <p:spacer width="10" height="0"/>
         <p:commandButton value="Remove"
-                         process="@this"
+                         process="@form"
                          oncomplete="confirmDeleteCollateralInfoDlg.show()">
             <f:setPropertyActionListener value="#{newCollateralView}"
                                          target="#{creditFacPropose.selectCollateralDetailView}"/>
@@ -1690,7 +1690,7 @@
                 <p:commandButton icon="ui-icon-pencil"
                                  action="#{creditFacPropose.onEditGuarantorInfo()}"
                                  update=":guarantorDlgForm"
-                                 process="@this"
+                                 process="@form"
                                  oncomplete="guarantorInfoDlg.show();">
                     <f:setPropertyActionListener value="#{newGuarantorDetailView}"
                                                  target="#{creditFacPropose.newGuarantorDetailViewItem}"/>
@@ -1700,7 +1700,7 @@
                     <p:resetInput target=":guarantorDlgForm"/>
                 </p:commandButton>
                 <p:commandButton icon="ui-icon-trash"
-                                 process="@this"
+                                 process="@form"
                                  oncomplete="confirmDeleteGuarantorInfoDlg.show()">
                     <f:setPropertyActionListener value="#{newGuarantorDetailView}"
                                                  target="#{creditFacPropose.newGuarantorDetailViewItem}"/>
