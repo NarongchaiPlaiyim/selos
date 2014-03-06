@@ -25,7 +25,7 @@ public class BankAccountStatusTransform extends Transform {
             bankAccountStatusView.setId(bankAccountStatus.getId());
             bankAccountStatusView.setCode(bankAccountStatus.getCode());
             bankAccountStatusView.setDescription(bankAccountStatus.getDescription());
-            bankAccountStatusView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountStatus.getBankAccountType()));
+            bankAccountStatusView.setDataSource(bankAccountStatus.getDataSource());
             bankAccountStatusView.setActive(bankAccountStatus.getActive());
             log.debug("bankAccountStatusView ::: {}", bankAccountStatusView);
             return bankAccountStatusView;

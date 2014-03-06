@@ -131,8 +131,8 @@ public class CreditFacProposeControl extends BusinessControl {
     ExistingCollateralDetailDAO existingCollateralDetailDAO;
     @Inject
     private COMSInterface comsInterface;
-//    @Inject
-//    BRMSControl brmsControl;
+    /*@Inject
+    BRMSControl brmsControl;*/ 
     @Inject
     NewCollateralDAO newCollateralDAO;
     @Inject
@@ -511,14 +511,18 @@ public class CreditFacProposeControl extends BusinessControl {
             weightAP = bizInfoSummaryView.getSumWeightAP();
             weightINV = bizInfoSummaryView.getSumWeightINV();
             //      Sum(weight cost of goods sold * businessProportion)
-            if (bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0) {
-                log.debug("onGetBizInfoSummaryByWorkCase :: bizInfoSummaryView.getBizInfoDetailViewList() : {}", bizInfoSummaryView.getBizInfoDetailViewList());
-                for (BizInfoDetailView bidv : bizInfoSummaryView.getBizInfoDetailViewList()) {
-                    BigDecimal cog = BigDecimal.ZERO;
-                    if (bidv.getBizDesc() != null) {
-                        cog = bidv.getBizDesc().getCog();
+            List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
+            if(bizInfoSummaryView.getId() != 0){
+                bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryView.getId());
+                if (bizInfoDetailViewList != null && bizInfoDetailViewList.size() > 0) {
+                    log.debug("bizInfoDetailViewList : {}", bizInfoDetailViewList);
+                    for (BizInfoDetailView bidv : bizInfoDetailViewList) {
+                        BigDecimal cog = BigDecimal.ZERO;
+                        if (bidv.getBizDesc() != null) {
+                            cog = bidv.getBizDesc().getCog();
+                        }
+                        aaaValue = Util.add(aaaValue, Util.multiply(cog, bidv.getPercentBiz()));
                     }
-                    aaaValue = Util.add(aaaValue, Util.multiply(cog, bidv.getPercentBiz()));
                 }
             }
         }
