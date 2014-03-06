@@ -835,10 +835,10 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
-            if(Util.safetyList(newCreditFacilityView.getNewGuarantorViewDelList()).size()>0){
-                List<NewGuarantorDetail> listDel = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorViewDelList(), newCreditFacility, currentUser,ProposeType.P);
-                newGuarantorDetailDAO.delete(listDel);
-            }
+//            if(Util.safetyList(newCreditFacilityView.getNewGuarantorViewDelList()).size()>0){
+//                List<NewGuarantorDetail> listDel = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorViewDelList(), newCreditFacility, currentUser,ProposeType.P);
+//                newGuarantorDetailDAO.delete(listDel);
+//            }
             log.debug("saveCreditFacility ::: newGuarantorDetailViewList : {}", newCreditFacilityView.getNewGuarantorDetailViewList());
             List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser,ProposeType.P);
             newCreditFacility.setNewGuarantorDetailList(newGuarantorDetailList);

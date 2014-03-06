@@ -951,6 +951,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         if (selectCollateralDetailView.getProposeCreditDetailViewList() != null && selectCollateralDetailView.getProposeCreditDetailViewList().size() > 0) {
             // set selected credit type items (check/uncheck)
             selectedCollateralCrdTypeItems = selectCollateralDetailView.getProposeCreditDetailViewList();
+            newCollateralView.setProposeCreditDetailViewList(selectedCollateralCrdTypeItems);
         }
 
     }
@@ -1338,6 +1339,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         newGuarantorDetailView = new NewGuarantorDetailView();
         newGuarantorDetailView.setGuarantorName(newGuarantorDetailViewItem.getGuarantorName());
         newGuarantorDetailView.setTcgLgNo(newGuarantorDetailViewItem.getTcgLgNo());
+        newGuarantorDetailView.setGuarantorCategory(newGuarantorDetailViewItem.getGuarantorCategory());
         selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
 
         proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
@@ -1363,10 +1365,18 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 log.debug("modeForButton ::: {}", modeForButton);
                 CustomerInfoView customerInfoView = customerInfoControl.getCustomerById(newGuarantorDetailView.getGuarantorName());
                 NewGuarantorDetailView guarantorDetailAdd = new NewGuarantorDetailView();
+
                 guarantorDetailAdd.setGuarantorName(customerInfoView);
-                /*if(customerInfoView.get){
-                }*/
-                guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
+                if(customerInfoView.getIndividualId()==GuarantorCategory.INDIVIDUAL.value()){
+                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
+                }else if (customerInfoView.getIndividualId()==GuarantorCategory.JURISTIC.value()){
+                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
+                }else if (customerInfoView.getIndividualId()==GuarantorCategory.TCG.value()){
+                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.TCG);
+                }else{
+                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.NA);
+                }
+
                 guarantorDetailAdd.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
                 if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
 
@@ -1394,7 +1404,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setGuarantorName(customerInfoEdit);
                 newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
                 newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
-
+                newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setGuarantorCategory(newGuarantorDetailView.getGuarantorCategory());
                 if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
 
                     for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
