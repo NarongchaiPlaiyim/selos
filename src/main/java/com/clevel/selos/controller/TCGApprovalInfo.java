@@ -93,8 +93,7 @@ public class TCGApprovalInfo implements Serializable {
     public void onSaveTcgInfo() {
         log.info("onSaveTcgInfo ::: workCaseId  {}", workCaseId);
         log.info("onSaveTcgInfo ::: stepId  {}", stepId);
-        this.tcgInfoControl.onSaveTCGInfo(tcgInfoView, workCaseId, user);
-       
+        this.tcgInfoControl.onSaveTCGInfo(tcgInfoView, workCaseId, user);       
     }
 
 

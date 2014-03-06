@@ -360,7 +360,7 @@ public class CreditFacProposeControl extends BusinessControl {
         if ((!Util.isNull(newCreditDetailViewList)) && newCreditDetailViewList.size() > 0) {
             proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
             for (NewCreditDetailView tmp : newCreditDetailViewList) {
-                if(tmp.isModeSaved()==false){
+//                if(tmp.isModeSaved()==false){
                     proposeCreditDetailView = new ProposeCreditDetailView();
                     proposeCreditDetailView.setSeq(tmp.getSeq());
                     proposeCreditDetailView.setId(rowCount);
@@ -377,7 +377,7 @@ public class CreditFacProposeControl extends BusinessControl {
                     proposeCreditDetailView.setNoFlag(tmp.isNoFlag());
                     proposeCreditDetailViewList.add(proposeCreditDetailView);
                     rowCount++;
-                }
+//                }
             }
         }
 

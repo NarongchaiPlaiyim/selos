@@ -36,6 +36,9 @@ public class ExistingCreditFacility implements Serializable{
     @Column(name = "total_borrower_exposure")
     private BigDecimal totalBorrowerExposure;
 
+    @Column(name = "total_borrower_od_limit")
+    private BigDecimal totalBorrowerODLimit;
+
     @Column(name = "total_borrower_number_od")
     private BigDecimal totalBorrowerNumberOfExistingOD;
 
@@ -230,6 +233,14 @@ public class ExistingCreditFacility implements Serializable{
 
     public void setTotalRelatedExposure(BigDecimal totalRelatedExposure) {
         this.totalRelatedExposure = totalRelatedExposure;
+    }
+
+    public BigDecimal getTotalBorrowerODLimit() {
+        return totalBorrowerODLimit;
+    }
+
+    public void setTotalBorrowerODLimit(BigDecimal totalBorrowerODLimit) {
+        this.totalBorrowerODLimit = totalBorrowerODLimit;
     }
 
     public BigDecimal getTotalRelatedNumberOfExistingOD() {

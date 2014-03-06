@@ -36,7 +36,7 @@ public class PledgeConfirm implements Serializable {
 	
 	@Inject
 	private PledgeConfirmControl pledgeConfirmControl;
-	
+
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;

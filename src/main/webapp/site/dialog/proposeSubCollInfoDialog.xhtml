@@ -271,7 +271,8 @@
                             styleClass="smaller"
                             action="#{creditFacPropose.onAddRelatedWith()}"
                             process=":subCollateralDlgForm"
-                            update=":subCollateralDlgForm,:msgBoxSystemMessagePanel" >
+                            update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
+                            disabled="true">
                     </p:commandButton>
                 </td>
             </tr>
@@ -325,7 +326,7 @@
     </td>
     <td class="left">
         <p:inputText value="#{creditFacPropose.newCollateralSubView.appraisalValue}"
-                     maxlength="17"
+                     maxlength="14"
                      onclick="this.select()"
                      onkeydown="return onKeyDownNegMoney(event);"
                      onkeypress="return onKeyPressNegMoney(event);"
@@ -344,7 +345,7 @@
     </td>
     <td class="left">
         <p:inputText value="#{creditFacPropose.newCollateralSubView.mortgageValue}"
-                     maxlength="17"
+                     maxlength="14"
                      onclick="this.select()"
                      onkeydown="return onKeyDownNegMoney(event);"
                      onkeypress="return onKeyPressNegMoney(event);"
