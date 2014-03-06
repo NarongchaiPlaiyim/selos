@@ -436,7 +436,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         prdGroupToPrdProgramViewByGroup = productControl.getPrdGroupToPrdProgramProposeByGroup(productGroup);
     }
 
-
     //TODO call coms for retrieve data of Collateral
     public void onCallRetrieveAppraisalReportInfo() {
         String jobId = newCollateralView.getJobID();
@@ -766,7 +765,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.debug("delete :: rowIndex :: {}", rowIndex);
         newCreditFacilityView.getNewCreditViewDelList().add(newCreditDetailSelected);
         newCreditFacilityView.getNewCreditDetailViewList().remove(newCreditDetailSelected);
-
     }
 
     private void onSetInUsedProposeCreditDetail() {
@@ -1182,7 +1180,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.debug("rowCollHeadIndex :: ");
     }
 
-    // for sub collateral Owner  <List>
     public void onAddCollateralOwnerUW() {
         log.debug("onAddCollateralOwnerUW() collateralOwnerUW.id: {}", newCollateralSubView.getCollateralOwnerUW().getId());
         if (newCollateralSubView.getCollateralOwnerUW() != null

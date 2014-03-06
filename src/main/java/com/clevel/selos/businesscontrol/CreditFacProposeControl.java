@@ -365,7 +365,7 @@ public class CreditFacProposeControl extends BusinessControl {
                     proposeCreditDetailView = new ProposeCreditDetailView();
                     proposeCreditDetailView.setSeq(tmp.getSeq());
                     proposeCreditDetailView.setId(rowCount);
-                    proposeCreditDetailView.setTypeOfStep("N");
+                    proposeCreditDetailView.setTypeOfStep(CreditTypeOfStep.NEW.type());
                     proposeCreditDetailView.setAccountName(tmp.getAccountName());
                     proposeCreditDetailView.setAccountNumber(tmp.getAccountNumber());
                     proposeCreditDetailView.setAccountSuf(tmp.getAccountSuf());
@@ -385,14 +385,14 @@ public class CreditFacProposeControl extends BusinessControl {
         rowCount = newCreditDetailViewList.size() > 0 ? newCreditDetailViewList.size() + 1 : rowCount;
 
         // find existingCreditType >>> Borrower Commercial in this workCase
-        ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId); //call business control  to find Existing  and transform to view
+        List<ExistingCreditDetailView> existingCreditDetailViewList = creditFacExistingControl.onFindBorrowerExistingCreditFacility(workCaseId);
 
-        if ((!Util.isNull(existingCreditFacilityView)) && existingCreditFacilityView.getBorrowerComExistingCredit().size() > 0) {
-            for (ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getBorrowerComExistingCredit()) {
+        if ((!Util.isNull(existingCreditDetailViewList)) && existingCreditDetailViewList.size() > 0) {
+            for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViewList) {
                 proposeCreditDetailView = new ProposeCreditDetailView();
                 proposeCreditDetailView.setSeq((int)existingCreditDetailView.getId());  // id form DB
                 proposeCreditDetailView.setId(rowCount);
-                proposeCreditDetailView.setTypeOfStep("E");
+                proposeCreditDetailView.setTypeOfStep(CreditTypeOfStep.EXISTING.type());
                 proposeCreditDetailView.setAccountName(existingCreditDetailView.getAccountName());
                 proposeCreditDetailView.setAccountNumber(existingCreditDetailView.getAccountNumber());
                 proposeCreditDetailView.setAccountSuf(existingCreditDetailView.getAccountSuf());
@@ -407,16 +407,15 @@ public class CreditFacProposeControl extends BusinessControl {
         return proposeCreditDetailViewList;
     }
 
-    public List<ProposeCreditDetailView> findAndGenerateSeqProposeCredits(List<NewCreditDetailView> newCreditDetailViewList, long workCaseId) {
-        log.debug("findProposeCreditDetail() :: ", workCaseId);
+    public List<ProposeCreditDetailView> findAndGenerateSeqProposeCredits(List<NewCreditDetailView> newCreditDetailViewList, List<ExistingCreditDetailView> borrowerExistingCreditDetailViewList, long workCaseId) {
+        log.debug("findAndGenerateSeqProposeCredits() workCaseId: {}", workCaseId);
         // Generate Sequence Number [1 - N] from "Propose Credit" and "Existing Credit" for the first time
         int sequenceNumber = 1;
+        log.debug("Start sequence number = {}", sequenceNumber);
         List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
 
         if (newCreditDetailViewList != null && newCreditDetailViewList.size() > 0) {
-
             ProposeCreditDetailView proposeCreditFromNew;
-
             for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
                 proposeCreditFromNew = new ProposeCreditDetailView();
                 proposeCreditFromNew.setSeq(sequenceNumber);
@@ -436,17 +435,19 @@ public class CreditFacProposeControl extends BusinessControl {
                 sequenceNumber++;
             }
         }
+        log.debug("End of 'NewCreditDetailList' sequence number = {}", sequenceNumber);
 
-        // find existingCreditType >>> Borrower Commercial in this workCase
-        ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
+        List<ExistingCreditDetailView> _existingCreditDetailViewList;
+        if (borrowerExistingCreditDetailViewList != null && borrowerExistingCreditDetailViewList.size() > 0) {
+            _existingCreditDetailViewList = borrowerExistingCreditDetailViewList;
+        } else {
+            // find Borrower Existing Credit
+            _existingCreditDetailViewList = creditFacExistingControl.onFindBorrowerExistingCreditFacility(workCaseId);
+        }
 
-        if (existingCreditFacilityView != null
-            && existingCreditFacilityView.getBorrowerComExistingCredit() != null
-            && existingCreditFacilityView.getBorrowerComExistingCredit().size() > 0) {
-
+        if (_existingCreditDetailViewList != null && _existingCreditDetailViewList.size() > 0) {
             ProposeCreditDetailView proposeCreditFromExisting;
-
-            for (ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getBorrowerComExistingCredit()) {
+            for (ExistingCreditDetailView existingCreditDetailView : _existingCreditDetailViewList) {
                 proposeCreditFromExisting = new ProposeCreditDetailView();
                 proposeCreditFromExisting.setSeq(sequenceNumber);
                 proposeCreditFromExisting.setId(existingCreditDetailView.getId());
@@ -461,6 +462,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 sequenceNumber++;
             }
         }
+        log.debug("End of 'ExistingCreditDetailList' sequence number = {}", sequenceNumber);
 
         return proposeCreditDetailViewList;
     }
