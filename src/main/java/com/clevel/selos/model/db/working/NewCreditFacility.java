@@ -203,6 +203,9 @@ public class NewCreditFacility implements Serializable {
     @Column(name = "total_approve_exposure")
     private BigDecimal totalApproveExposure;
 
+    @Column(name = "total_approve_od_limit")
+    private BigDecimal totalApprovedODLimit;
+
     @Column(name = "total_approve_num_new_od")
     private BigDecimal totalApproveNumOfNewOD;
 
@@ -836,6 +839,14 @@ public class NewCreditFacility implements Serializable {
 
     public void setTotalApproveExposure(BigDecimal totalApproveExposure) {
         this.totalApproveExposure = totalApproveExposure;
+    }
+
+    public BigDecimal getTotalApprovedODLimit() {
+        return totalApprovedODLimit;
+    }
+
+    public void setTotalApprovedODLimit(BigDecimal totalApprovedODLimit) {
+        this.totalApprovedODLimit = totalApprovedODLimit;
     }
 
     public BigDecimal getTotalApproveNumOfNewOD() {

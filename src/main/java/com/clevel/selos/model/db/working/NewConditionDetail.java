@@ -45,6 +45,8 @@ public class NewConditionDetail implements Serializable {
     @JoinColumn(name = "new_credit_facility_id")
     private NewCreditFacility newCreditFacility;
 
+
+
     public long getId() {
         return id;
     }

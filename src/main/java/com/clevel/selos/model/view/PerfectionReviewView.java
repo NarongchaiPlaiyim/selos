@@ -3,26 +3,21 @@ package com.clevel.selos.model.view;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import com.clevel.selos.model.PerfectReviewStatus;
+import com.clevel.selos.model.PerfectReviewType;
 
 public class PerfectionReviewView implements Serializable {
 	private static final long serialVersionUID = -50884450485089001L;
-	private String type;
+	private long id;
+	private PerfectReviewType type;
 	private Date date;
-	private Date completeDate;
-	private String status;
+	private Date completedDate;
+	private PerfectReviewStatus status;
 	private String remark;
+	private String modifyUser;
+	private Date modifyDate;
 
 	public PerfectionReviewView() {
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 
 	public Date getDate() {
@@ -33,20 +28,11 @@ public class PerfectionReviewView implements Serializable {
 		this.date = date;
 	}
 
-	public Date getCompleteDate() {
-		return completeDate;
+	public Date getCompletedDate() {
+		return completedDate;
 	}
-
-	public void setCompleteDate(Date completeDate) {
-		this.completeDate = completeDate;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
+	public void setCompletedDate(Date completedDate) {
+		this.completedDate = completedDate;
 	}
 
 	public String getRemark() {
@@ -56,15 +42,48 @@ public class PerfectionReviewView implements Serializable {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-	
-	@Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("type", type)
-                .append("date", date)
-                .append("completeDate", completeDate)
-                .append("status", status)
-                .append("remark", remark)
-                .toString();
-    }
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public PerfectReviewType getType() {
+		if (type == null)
+			type = PerfectReviewType.NA;
+		return type;
+	}
+
+	public void setType(PerfectReviewType type) {
+		this.type = type;
+	}
+
+	public PerfectReviewStatus getStatus() {
+		if (status == null)
+			status = PerfectReviewStatus.NA;
+		return status;
+	}
+
+	public void setStatus(PerfectReviewStatus status) {
+		this.status = status;
+	}
+
+	public String getModifyUser() {
+		return modifyUser;
+	}
+
+	public void setModifyUser(String modifyUser) {
+		this.modifyUser = modifyUser;
+	}
+
+	public Date getModifyDate() {
+		return modifyDate;
+	}
+
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
+	}
 }
