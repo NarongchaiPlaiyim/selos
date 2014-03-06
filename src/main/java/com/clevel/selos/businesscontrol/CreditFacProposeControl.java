@@ -362,8 +362,8 @@ public class CreditFacProposeControl extends BusinessControl {
             for (NewCreditDetailView tmp : newCreditDetailViewList) {
 //                if(tmp.isModeSaved()==false){
                     proposeCreditDetailView = new ProposeCreditDetailView();
-                    proposeCreditDetailView.setSeq(tmp.getSeq());
-                    proposeCreditDetailView.setId(rowCount);
+                    proposeCreditDetailView.setSeq(rowCount);
+                    proposeCreditDetailView.setId((int)tmp.getId());
                     proposeCreditDetailView.setTypeOfStep("N");
                     proposeCreditDetailView.setAccountName(tmp.getAccountName());
                     proposeCreditDetailView.setAccountNumber(tmp.getAccountNumber());
@@ -389,8 +389,8 @@ public class CreditFacProposeControl extends BusinessControl {
         if ((!Util.isNull(existingCreditFacilityView)) && existingCreditFacilityView.getBorrowerComExistingCredit().size() > 0) {
             for (ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getBorrowerComExistingCredit()) {
                 proposeCreditDetailView = new ProposeCreditDetailView();
-                proposeCreditDetailView.setSeq((int)existingCreditDetailView.getId());  // id form DB
-                proposeCreditDetailView.setId(rowCount);
+                proposeCreditDetailView.setSeq(rowCount);  // id form DB
+                proposeCreditDetailView.setId((int)existingCreditDetailView.getId());
                 proposeCreditDetailView.setTypeOfStep("E");
                 proposeCreditDetailView.setAccountName(existingCreditDetailView.getAccountName());
                 proposeCreditDetailView.setAccountNumber(existingCreditDetailView.getAccountNumber());
