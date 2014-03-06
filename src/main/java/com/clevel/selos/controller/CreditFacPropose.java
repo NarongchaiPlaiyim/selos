@@ -307,6 +307,23 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //                        }
 //                    }
                     notRetrievePricing = false;
+                } else { // for show on add new only !!
+                    newCreditFacilityView.setWCNeed(BigDecimal.ZERO);
+                    newCreditFacilityView.setTotalWcDebit(BigDecimal.ZERO);
+                    newCreditFacilityView.setTotalWcTmb(BigDecimal.ZERO);
+                    newCreditFacilityView.setWCNeedDiffer(BigDecimal.ZERO);
+                    newCreditFacilityView.setCase1WcLimit(BigDecimal.ZERO);
+                    newCreditFacilityView.setCase1WcMinLimit(BigDecimal.ZERO);
+                    newCreditFacilityView.setCase1Wc50CoreWc(BigDecimal.ZERO);
+                    newCreditFacilityView.setCase1WcDebitCoreWc(BigDecimal.ZERO);
+                    newCreditFacilityView.setCase2WcLimit(BigDecimal.ZERO);
+                    newCreditFacilityView.setCase2WcMinLimit(BigDecimal.ZERO);
+                    newCreditFacilityView.setCase2Wc50CoreWc(BigDecimal.ZERO);
+                    newCreditFacilityView.setCase2WcDebitCoreWc(BigDecimal.ZERO);
+                    newCreditFacilityView.setCase3WcLimit(BigDecimal.ZERO);
+                    newCreditFacilityView.setCase3WcMinLimit(BigDecimal.ZERO);
+                    newCreditFacilityView.setCase3Wc50CoreWc(BigDecimal.ZERO);
+                    newCreditFacilityView.setCase3WcDebitCoreWc(BigDecimal.ZERO);
                 }
 
             } catch (Exception ex) {
