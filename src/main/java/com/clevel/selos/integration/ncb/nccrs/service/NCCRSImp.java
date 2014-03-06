@@ -517,7 +517,7 @@ public class NCCRSImp implements NCCRS, Serializable {
         exportModel.setJuristicType(juristicType);
         exportModel.setCustomerId(registId);
 
-        exportModel.setCountryCode("01");
+        exportModel.setCountryCode("TH");
 
         exportModel.setTitleCode(null);
         exportModel.setFirstName(null);
