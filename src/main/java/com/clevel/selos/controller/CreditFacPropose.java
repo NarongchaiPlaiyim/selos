@@ -1347,8 +1347,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             // set selected credit type items (check/uncheck)
             selectedGuarantorCrdTypeItems = newGuarantorDetailViewItem.getProposeCreditDetailViewList();
             log.debug("newGuarantorDetailViewItem.getProposeCreditDetailViewList():: amount ::  {}",newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(0).getGuaranteeAmount());
+            newGuarantorDetailView.setProposeCreditDetailViewList(selectedGuarantorCrdTypeItems);
         }
-
     }
 
     public void onSaveGuarantorInfoDlg() {
