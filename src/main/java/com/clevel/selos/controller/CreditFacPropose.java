@@ -307,6 +307,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //                    }
                     notRetrievePricing = false;
                 } else { // for show on add new only !!
+                    newCreditFacilityView = new NewCreditFacilityView();
                     newCreditFacilityView.setWCNeed(BigDecimal.ZERO);
                     newCreditFacilityView.setTotalWcDebit(BigDecimal.ZERO);
                     newCreditFacilityView.setTotalWcTmb(BigDecimal.ZERO);
@@ -1233,8 +1234,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onAddCollateralOwnerUW() {
         log.debug("onAddCollateralOwnerUW() collateralOwnerUW.id: {}", newCollateralSubView.getCollateralOwnerUW().getId());
-        if (newCollateralSubView.getCollateralOwnerUW() != null
-                && newCollateralSubView.getCollateralOwnerUW().getId() != 0) {
+        if (newCollateralSubView.getCollateralOwnerUW() != null && newCollateralSubView.getCollateralOwnerUW().getId() != 0) {
 
             // Validate duplicate select
             if (newCollateralSubView.getCollateralOwnerUWList().size() > 0) {
@@ -1262,8 +1262,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onAddMortgageType() {
         log.debug("onAddMortgageType() mortgageType.id: {}", newCollateralSubView.getMortgageType().getId());
-        if (newCollateralSubView.getMortgageType() != null
-                && newCollateralSubView.getMortgageType().getId() == 0) {
+        if (newCollateralSubView.getMortgageType() != null && newCollateralSubView.getMortgageType().getId() != 0) {
 
             // Validate duplicate select
             if (newCollateralSubView.getMortgageList().size() > 0) {
