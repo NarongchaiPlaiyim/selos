@@ -80,16 +80,15 @@ public class ObligationBizTransform extends BusinessTransform {
         existingCreditDetailView.setExistAccountStatusView(new BankAccountStatusView());
         //use dataSource to find bankAccountType
         if(!Util.isEmpty(obligation.getDataSource())){
-            DWHBankDataSource dwhBankDataSource = dwhBankDataSourceDAO.findByDataSource(obligation.getDataSource().trim());
-            if(dwhBankDataSource != null){
-                String code = obligation.getAccountStatus();
-                BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findByCodeAndType(code, dwhBankDataSource.getBankAccountType().getId());
-                if(bankAccountStatus != null){
-                    BankAccountStatusView bankAccountStatusView = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
-                    existingCreditDetailView.setExistAccountStatusView(bankAccountStatusView);
-                } else {
-                    existingCreditDetailView.setExistAccountStatusView(new BankAccountStatusView());
-                }
+            String dataSource = null;
+            if(obligation.getDataSource()!=null) {
+                dataSource = obligation.getDataSource().trim();
+            }
+            String code = obligation.getAccountStatus();
+            BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findByCodeAndDataSource(code,dataSource);
+            if(bankAccountStatus != null){
+                BankAccountStatusView bankAccountStatusView = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
+                existingCreditDetailView.setExistAccountStatusView(bankAccountStatusView);
             } else {
                 existingCreditDetailView.setExistAccountStatusView(new BankAccountStatusView());
             }
@@ -171,9 +170,10 @@ public class ObligationBizTransform extends BusinessTransform {
                 //existingCreditDetailView.setAccountStatus(appInProcess.getStatus());  delete
                 existingCreditDetailView.setExistAccountStatusView(new BankAccountStatusView());
                 if(!Util.isEmpty(appInProcess.getStatus())){
-                    BankAccountType bankAccountType = bankAccountTypeDAO.getAccountTypeRLOS();
-                    if(bankAccountType != null){
-                        BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findByCodeAndType(appInProcess.getStatus(), bankAccountType.getId());
+                    String dataSource = "RLOS"; //TODO: change to master or enum
+                    String code = appInProcess.getStatus();
+                    BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findByCodeAndDataSource(code,dataSource);
+                    if(bankAccountStatus != null){
                         BankAccountStatusView bankAccountStatusView = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
                         existingCreditDetailView.setExistAccountStatusView(bankAccountStatusView);
                     } else {

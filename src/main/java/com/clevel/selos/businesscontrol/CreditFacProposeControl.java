@@ -134,8 +134,8 @@ public class CreditFacProposeControl extends BusinessControl {
     ExistingCollateralDetailDAO existingCollateralDetailDAO;
     @Inject
     private COMSInterface comsInterface;
-    @Inject
-    BRMSControl brmsControl;
+    /*@Inject
+    BRMSControl brmsControl;*/ 
     @Inject
     NewCollateralDAO newCollateralDAO;
     @Inject
@@ -911,7 +911,7 @@ public class CreditFacProposeControl extends BusinessControl {
         log.debug("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
         StandardPricingResponse standardPricingResponse  = null;
         try {
-            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
+//            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
 
             if (standardPricingResponse != null) {
                 log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult());

@@ -18,27 +18,26 @@ public class BankAccountStatusDAO extends GenericDAO<BankAccountStatus, Integer>
     BankAccountStatusDAO(){
     }
 
-    public BankAccountStatus findByCodeAndType(String code, int type){
-        log.info("findByCodeAndType. (code: {}, type: {})", code.trim(), type);
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("code", code.trim()));
-        criteria.add(Restrictions.eq("bankAccountType.id", type));
-        BankAccountStatus bankAccountStatus = (BankAccountStatus)criteria.uniqueResult();
+    public BankAccountStatus findByCodeAndDataSource(String code, String dataSource){
+        if(code!=null && dataSource!=null){
+            log.info("findByCodeAndType. (code: {}, dataSource: {})", code.trim(), dataSource);
+            Criteria criteria = createCriteria();
+            criteria.add(Restrictions.eq("code", code.trim()));
+            criteria.add(Restrictions.eq("dataSource", dataSource));
+            BankAccountStatus bankAccountStatus = (BankAccountStatus)criteria.uniqueResult();
 
-        log.info("findByCodeAndType. bankAccountStatus : {}", bankAccountStatus);
+            log.info("findByCodeAndType. bankAccountStatus : {}", bankAccountStatus);
 
-        return bankAccountStatus;
+            return bankAccountStatus;
+        }
+        return null;
     }
 
-    public List<BankAccountStatus> findByBankAccountType(int type){
-        log.info("findByBankAccountType. ( type: {})", type);
+    public List<BankAccountStatus> findAllExceptDataSource(List<String> dataSources){
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("bankAccountType.id", type));
-        List<BankAccountStatus> list = criteria.list();
-
-        log.info("getList. (result size: {})", list.size());
-        return list;
-
+        criteria.add(Restrictions.not(Restrictions.in("dataSource",dataSources)));
+        List<BankAccountStatus> bankAccountStatusList =  criteria.list();
+        return bankAccountStatusList;
     }
 
 }

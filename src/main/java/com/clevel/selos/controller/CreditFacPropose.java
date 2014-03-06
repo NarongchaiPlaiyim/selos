@@ -136,6 +136,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private CustomerInfoView collateralOwnerUW;
     private List<NewCollateralView> newCollateralViewDelList;
     private boolean flagComs;
+    private boolean disableComs;
     private boolean flagButtonCollateral;
     private boolean editProposeColl;
     private List<Long> deleteCollIdList;
@@ -235,7 +236,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private PotentialCollateralTransform potentialCollateralTransform;
     @Inject
     private CollateralTypeTransform collateralTypeTransform;
-
     @Inject
     private BasicInfoControl basicInfoControl;
     @Inject
@@ -252,9 +252,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private LoanPurposeControl loanPurposeControl;
     @Inject
     private DisbursementTypeControl disbursementTypeControl;
-
     @Inject
-    SpecialProgramTransform specialProgramTransform;
+    private SpecialProgramTransform specialProgramTransform;
     @Inject
     private COMSInterface comsInterface;
 
@@ -460,19 +459,26 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                         messageHeader = msg.get("app.messageHeader.error");
                         message = appraisalDataResult.getReason();
                         severity = MessageDialogSeverity.ALERT.severity();
+                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     }
+
+                    proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
+                    newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
+
                 } catch (COMSInterfaceException e) {
                     log.info("COMSInterfaceException :: ");
                     messageHeader = msg.get("app.messageHeader.error");
                     message = e.getMessage();
                     severity = MessageDialogSeverity.ALERT.severity();
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
             } else {
                 messageHeader = msg.get("app.messageHeader.error");
                 message = msg.get("app.credit.facility.propose.coms.err");
                 severity = MessageDialogSeverity.ALERT.severity();
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
         }
 
         log.info("onCallRetrieveAppraisalReportInfo End");
@@ -900,12 +906,10 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.debug("onAddProposeCollInfo ::: {}", newCreditFacilityView.getNewCollateralViewList().size());
         modeForButton = ModeForButton.ADD;
         newCollateralView = new NewCollateralView();
-        Cloner cloner = new Cloner();
-        proposeCreditDetailListTemp = cloner.deepClone(proposeCreditDetailViewList);
-        newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailListTemp);
         newCollateralView.getNewCollateralHeadViewList().add(new NewCollateralHeadView());
         selectedCollateralCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
-        proposeCreditDetailListTemp = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
+        proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
+        newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
         flagButtonCollateral = true;
         flagComs = false;
         editProposeColl = false;
@@ -917,126 +921,116 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         modeForButton = ModeForButton.EDIT;
         editProposeColl = true;
         newCollateralView = new NewCollateralView();
-
+        newCollateralView.setJobID(selectCollateralDetailView.getJobID());
+        newCollateralView.setAppraisalDate(selectCollateralDetailView.getAppraisalDate());
+        newCollateralView.setAadDecision(selectCollateralDetailView.getAadDecision());
+        newCollateralView.setAadDecisionReason(selectCollateralDetailView.getAadDecisionReason());
+        newCollateralView.setAadDecisionReasonDetail(selectCollateralDetailView.getAadDecisionReasonDetail());
+        newCollateralView.setUsage(selectCollateralDetailView.getUsage());
+        newCollateralView.setTypeOfUsage(selectCollateralDetailView.getTypeOfUsage());
+        newCollateralView.setUwDecision(selectCollateralDetailView.getUwDecision());
+        newCollateralView.setUwRemark(selectCollateralDetailView.getUwRemark());
+        newCollateralView.setBdmComments(selectCollateralDetailView.getBdmComments());
+        newCollateralView.setMortgageCondition(selectCollateralDetailView.getMortgageCondition());
+        newCollateralView.setMortgageConditionDetail(selectCollateralDetailView.getMortgageConditionDetail());
+        newCollateralView.setComs(selectCollateralDetailView.isComs());
+        newCollateralView.setNewCollateralHeadViewList(selectCollateralDetailView.getNewCollateralHeadViewList());
         flagComs = false;
+        selectedCollateralCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
+        proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
+        newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
+
         log.info("selectCollateralDetailView.isComs() ::: {}", newCollateralView.isComs());
         if (newCollateralView.isComs()) { //ถ้าเป็น data  ที่ได้จาก coms  set rendered false (ไม่แสดงปุ่ม edit)
             flagButtonCollateral = false;
             flagComs = true;
         } else {
             flagButtonCollateral = true;
-            proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
         }
         if (selectCollateralDetailView.getProposeCreditDetailViewList() != null && selectCollateralDetailView.getProposeCreditDetailViewList().size() > 0) {
             // set selected credit type items (check/uncheck)
             selectedCollateralCrdTypeItems = selectCollateralDetailView.getProposeCreditDetailViewList();
         }
 
-
-
-       /* if (selectCollateralDetailView.getProposeCreditDetailViewList().size() > 0) {
-            for (int i = 0; i < proposeCreditDetailViewList.size(); i++) {
-                for (ProposeCreditDetailView proposeCreditDetailView : selectCollateralDetailView.getProposeCreditDetailViewList()) {
-                    if(proposeCreditDetailViewList.get(i).getId()==proposeCreditDetailView.getId()){
-                        log.info("proposeCreditDetailView :::: {}", proposeCreditDetailView.getSeq());
-                        log.info("proposeCreditDetailView :::: {}", proposeCreditDetailView.getId());
-                        proposeCreditDetailView.setNoFlag(true);
-                    }
-                }
-            }
-        }*/
-
     }
 
     public void onSaveProposeCollInfo() {
-        log.debug("onSaveProposeCollInfo ::: mode : {}", modeForButton);
+        log.info("rowIndexCollateral :: {}, mode : {}", rowIndexCollateral, modeForButton);
         boolean complete = false;
         boolean complete1 = false;
         boolean complete2 = false;
         boolean complete3 = false;
         RequestContext context = RequestContext.getCurrentInstance();
 
-        NewCollateralView proposeCollateralInfo;
-        if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
-            log.debug("===> Edit - Collateral: {}", selectCollateralDetailView);
-            proposeCollateralInfo = newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral);
-        } else {
-            log.debug("===> Add New - Collateral: {}", selectCollateralDetailView);
-            proposeCollateralInfo = new NewCollateralView();
-        }
+        if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
+            NewCollateralView proposeCollateralInfoAdd = new NewCollateralView();
+            proposeCollateralInfoAdd.setJobID(newCollateralView.getJobID());
+            proposeCollateralInfoAdd.setAppraisalDate(newCollateralView.getAppraisalDate());
+            proposeCollateralInfoAdd.setAadDecision(newCollateralView.getAadDecision());
+            proposeCollateralInfoAdd.setAadDecisionReason(newCollateralView.getAadDecisionReason());
+            proposeCollateralInfoAdd.setAadDecisionReasonDetail(newCollateralView.getAadDecisionReasonDetail());
+            proposeCollateralInfoAdd.setUsage(newCollateralView.getUsage());
+            proposeCollateralInfoAdd.setTypeOfUsage(newCollateralView.getTypeOfUsage());
+            proposeCollateralInfoAdd.setUwDecision(newCollateralView.getUwDecision());
+            proposeCollateralInfoAdd.setUwRemark(newCollateralView.getUwRemark());
+            proposeCollateralInfoAdd.setBdmComments(newCollateralView.getBdmComments());
+            proposeCollateralInfoAdd.setMortgageCondition(newCollateralView.getMortgageCondition());
+            proposeCollateralInfoAdd.setMortgageConditionDetail(newCollateralView.getMortgageConditionDetail());
+            proposeCollateralInfoAdd.setComs(newCollateralView.isComs());
+            newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
 
-        proposeCollateralInfo.setJobID(selectCollateralDetailView.getJobID());
-        proposeCollateralInfo.setAppraisalDate(selectCollateralDetailView.getAppraisalDate());
-        proposeCollateralInfo.setAadDecision(selectCollateralDetailView.getAadDecision());
-        proposeCollateralInfo.setAadDecisionReason(selectCollateralDetailView.getAadDecisionReason());
-        proposeCollateralInfo.setAadDecisionReasonDetail(selectCollateralDetailView.getAadDecisionReasonDetail());
-        proposeCollateralInfo.setUsage(selectCollateralDetailView.getUsage());
-        proposeCollateralInfo.setTypeOfUsage(selectCollateralDetailView.getTypeOfUsage());
-        proposeCollateralInfo.setUwDecision(selectCollateralDetailView.getUwDecision());
-        proposeCollateralInfo.setUwRemark(selectCollateralDetailView.getUwRemark());
-        proposeCollateralInfo.setBdmComments(selectCollateralDetailView.getBdmComments());
-        proposeCollateralInfo.setMortgageCondition(selectCollateralDetailView.getMortgageCondition());
-        proposeCollateralInfo.setMortgageConditionDetail(selectCollateralDetailView.getMortgageConditionDetail());
-        proposeCollateralInfo.setComs(selectCollateralDetailView.isComs());
-        newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
+            if (newCollateralView.getNewCollateralHeadViewList().size() > 0) {
+                for (NewCollateralHeadView newCollateralHeadView : newCollateralView.getNewCollateralHeadViewList()) {
+                    PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(newCollateralHeadView.getPotentialCollateral().getId());
+                    CollateralType collTypePercentLTV = collateralTypeDAO.findById(newCollateralHeadView.getCollTypePercentLTV().getId());
+                    CollateralType headCollType = collateralTypeDAO.findById(newCollateralHeadView.getHeadCollType().getId());
 
-        if (selectCollateralDetailView.getNewCollateralHeadViewList().size() > 0) {
-            for (NewCollateralHeadView newCollateralHeadView : selectCollateralDetailView.getNewCollateralHeadViewList()) {
-                PotentialCollateral potentialCollateral = getPotentialCollateralById(newCollateralHeadView.getPotentialCollateral().getId());
-                CollateralType collTypePercentLTV = getCollateralTypeById(newCollateralHeadView.getCollTypePercentLTV().getId());
-                CollateralType headCollType = getCollateralTypeById(newCollateralHeadView.getHeadCollType().getId());
+                    NewCollateralHeadView newCollateralHeadDetailAdd = new NewCollateralHeadView();
+                    newCollateralHeadDetailAdd.setPotentialCollateral(potentialCollateral);
+                    newCollateralHeadDetailAdd.setCollTypePercentLTV(collTypePercentLTV);
+                    newCollateralHeadDetailAdd.setExistingCredit(newCollateralHeadView.getExistingCredit());
+                    newCollateralHeadDetailAdd.setTitleDeed(newCollateralHeadView.getTitleDeed());
+                    newCollateralHeadDetailAdd.setCollateralLocation(newCollateralHeadView.getCollateralLocation());
+                    newCollateralHeadDetailAdd.setAppraisalValue(newCollateralHeadView.getAppraisalValue());
+                    newCollateralHeadDetailAdd.setHeadCollType(headCollType);
+                    newCollateralHeadDetailAdd.setInsuranceCompany(newCollateralHeadView.getInsuranceCompany());
 
-                NewCollateralHeadView newCollateralHeadDetailAdd = new NewCollateralHeadView();
-                newCollateralHeadDetailAdd.setPotentialCollateral(potentialCollateral);
-                newCollateralHeadDetailAdd.setCollTypePercentLTV(collTypePercentLTV);
-                newCollateralHeadDetailAdd.setExistingCredit(newCollateralHeadView.getExistingCredit());
-                newCollateralHeadDetailAdd.setTitleDeed(newCollateralHeadView.getTitleDeed());
-                newCollateralHeadDetailAdd.setCollateralLocation(newCollateralHeadView.getCollateralLocation());
-                newCollateralHeadDetailAdd.setAppraisalValue(newCollateralHeadView.getAppraisalValue());
-                newCollateralHeadDetailAdd.setHeadCollType(headCollType);
-                newCollateralHeadDetailAdd.setInsuranceCompany(newCollateralHeadView.getInsuranceCompany());
-
-                if (newCollateralHeadView.getNewCollateralSubViewList().size() > 0) {
-                    newCollateralHeadDetailAdd.setNewCollateralSubViewList(newCollateralHeadView.getNewCollateralSubViewList());
-                    newCollateralHeadViewList.add(newCollateralHeadDetailAdd);
-                    complete1 = true;
-                    proposeCollateralInfo.setNewCollateralHeadViewList(newCollateralHeadViewList);
-                    complete2 = true;
-                } else {
-                    messageHeader = msg.get("app.messageHeader.error");
-                    message = msg.get("app.propose.desc.add.sub.data");
-                    severity = MessageDialogSeverity.ALERT.severity();
-                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                    complete1 = false;
+                    if (newCollateralHeadView.getNewCollateralSubViewList().size() > 0) {
+                        newCollateralHeadDetailAdd.setNewCollateralSubViewList(newCollateralHeadView.getNewCollateralSubViewList());
+                        newCollateralHeadViewList.add(newCollateralHeadDetailAdd);
+                        complete1 = true;
+                        proposeCollateralInfoAdd.setNewCollateralHeadViewList(newCollateralHeadViewList);
+                        complete2 = true;
+                    } else {
+                        messageHeader = msg.get("app.messageHeader.error");
+                        message = msg.get("app.propose.desc.add.sub.data");
+                        severity = MessageDialogSeverity.ALERT.severity();
+                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                        complete1 = false;
+                    }
                 }
-
-                log.info("  complete1 >>>>  :  {}", complete1);
+            } else {
+                messageHeader = msg.get("app.messageHeader.error");
+                message = msg.get("app.propose.desc.add.head.data");
+                severity = MessageDialogSeverity.ALERT.severity();
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                complete2 = false;
             }
 
-        } else {
-            messageHeader = msg.get("app.messageHeader.error");
-            message = msg.get("app.propose.desc.add.head.data");
-            severity = MessageDialogSeverity.ALERT.severity();
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            complete2 = false;
-        }
+            log.info("  complete2 >>>>  :  {}", complete2);
+            log.info("flagComs ::; {}", flagComs);
 
-        log.info("  complete2 >>>>  :  {}", complete2);
-        log.info("flagComs ::; {}", flagComs);
+//            if (flagComs == false) {
 
-        if (flagComs == false) {
+                if (selectedCollateralCrdTypeItems != null && selectedCollateralCrdTypeItems.size() > 0) {
 
-            if (selectedCollateralCrdTypeItems != null && selectedCollateralCrdTypeItems.size() > 0) {
-
-                List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
-                for (ProposeCreditDetailView creditTypeItem : selectedCollateralCrdTypeItems) {
-                    proposeCreditDetailViewList.add(creditTypeItem);
-
-                }
-                proposeCollateralInfo.setProposeCreditDetailViewList(proposeCreditDetailViewList);
-
-                if (proposeCollateralInfo.getProposeCreditDetailViewList().size() > 0) {
+                    List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
+                    for (ProposeCreditDetailView creditTypeItem : selectedCollateralCrdTypeItems) {
+                        proposeCreditDetailViewList.add(creditTypeItem);
+                    }
+                    proposeCollateralInfoAdd.setProposeCreditDetailViewList(proposeCreditDetailViewList);
                     complete3 = true;
+
                 } else {
                     messageHeader = msg.get("app.propose.exception");
                     message = msg.get("app.propose.desc.add.data");
@@ -1044,29 +1038,86 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     complete3 = false;
                 }
+//            } else {
+//                complete3 = true;
+//            }
+
+            log.info("newCreditFacilityView.getNewCollateralViewList() {}", newCreditFacilityView.getNewCollateralViewList().size());
+            log.info("  complete3 >>>>  :  {}", complete3);
+
+            if (complete1 && complete2 && complete3) {
+                newCreditFacilityView.getNewCollateralViewList().add(proposeCollateralInfoAdd);
+                complete = true;
+                flagComs = false;
             } else {
+                complete = false;
+            }
+
+            log.debug("  complete >>>>  :  {}", complete);
+            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+
+    } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
+            log.debug("modeForButton:: {} ", modeForButton);
+
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setJobID(newCollateralView.getJobID());
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setAppraisalDate(newCollateralView.getAppraisalDate());
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setAadDecision(newCollateralView.getAadDecision());
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setAadDecisionReason(newCollateralView.getAadDecisionReason());
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setAadDecisionReasonDetail(newCollateralView.getAadDecisionReasonDetail());
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setUsage(newCollateralView.getUsage());
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setTypeOfUsage(newCollateralView.getTypeOfUsage());
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setUwDecision(newCollateralView.getUwDecision());
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setUwRemark(newCollateralView.getUwRemark());
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setBdmComments(newCollateralView.getBdmComments());
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setMortgageCondition(newCollateralView.getMortgageCondition());
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setMortgageConditionDetail(newCollateralView.getMortgageConditionDetail());
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setComs(newCollateralView.isComs());
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
+
+            if (newCollateralView.getNewCollateralHeadViewList().size() > 0) {
+                for (int i=0;i<newCollateralView.getNewCollateralHeadViewList().size();i++) {
+                    PotentialCollateral potentialCollateralEdit = potentialCollateralDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(i).getPotentialCollateral().getId());
+                    CollateralType collTypePercentLTVEdit = collateralTypeDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(i).getCollTypePercentLTV().getId());
+                    CollateralType headCollTypeEdit = collateralTypeDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(i).getHeadCollType().getId());
+
+                    newCollateralView.getNewCollateralHeadViewList().get(i).setPotentialCollateral(potentialCollateralEdit);
+                    newCollateralView.getNewCollateralHeadViewList().get(i).setHeadCollType(headCollTypeEdit);
+                    newCollateralView.getNewCollateralHeadViewList().get(i).setCollTypePercentLTV(collTypePercentLTVEdit);
+                }
+            }
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setNewCollateralHeadViewList(newCollateralHeadViewList);
+
+
+            if (flagComs) {
+                newCollateralView.setComs(false);
+                flagButtonCollateral = false;
+            } else {
+                newCollateralView.setComs(true);
+                flagButtonCollateral = true;
+            }
+
+            if (selectedCollateralCrdTypeItems != null && selectedCollateralCrdTypeItems.size() > 0) {
+
+                List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
+                for (ProposeCreditDetailView creditTypeItem : selectedCollateralCrdTypeItems) {
+                    proposeCreditDetailViewList.add(creditTypeItem);
+                }
+                newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setProposeCreditDetailViewList(proposeCreditDetailViewList);
+                editProposeColl = false;
+                complete = true;
+            }else {
                 messageHeader = msg.get("app.propose.exception");
                 message = msg.get("app.propose.desc.add.data");
                 severity = MessageDialogSeverity.ALERT.severity();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                complete3 = false;
+                complete = false;
             }
-        } else {
-            complete3 = true;
-        }
 
-        log.info("newCreditFacilityView.getNewCollateralViewList() {}", newCreditFacilityView.getNewCollateralViewList().size());
-        log.info("  complete3 >>>>  :  {}", complete3);
-
-        if (complete1 && complete2 && complete3) {
-            newCreditFacilityView.getNewCollateralViewList().add(proposeCollateralInfo);
-            complete = true;
         } else {
+            log.debug("onSaveSubCollateral ::: Undefined modeForButton !!");
             complete = false;
         }
 
-
-        flagComs = false;
         log.debug("  complete >>>>  :  {}", complete);
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
@@ -1227,7 +1278,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 }
             }
             // Add to list
-            MortgageType mortgageType = getMortgageTypeById(newCollateralSubView.getMortgageType().getId());
+            MortgageType mortgageType =  mortgageTypeDAO.findById(newCollateralSubView.getMortgageType().getId());
             log.debug("onAddMortgageType :: {} ", newCollateralSubView.getMortgageType());
             newCollateralSubView.getMortgageList().add(mortgageType);
         }
@@ -1278,7 +1329,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         modeForButton = ModeForButton.ADD;
         selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
         guarantorCreditTypeList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
-
+        newGuarantorDetailView.setProposeCreditDetailViewList(guarantorCreditTypeList);
     }
 
     public void onEditGuarantorInfo() {
@@ -1288,25 +1339,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         newGuarantorDetailView = new NewGuarantorDetailView();
         newGuarantorDetailView.setGuarantorName(newGuarantorDetailViewItem.getGuarantorName());
         newGuarantorDetailView.setTcgLgNo(newGuarantorDetailViewItem.getTcgLgNo());
-        newGuarantorDetailView.setProposeCreditDetailViewList(guarantorCreditTypeList);
+        selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
 
-        if (newGuarantorDetailViewItem != null) {
-
-            guarantorCreditTypeList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
-
-            if (newGuarantorDetailViewItem.getProposeCreditDetailViewList() != null && newGuarantorDetailViewItem.getProposeCreditDetailViewList().size() > 0) {
-                // set selected credit type items (check/uncheck)
-                selectedGuarantorCrdTypeItems = newGuarantorDetailViewItem.getProposeCreditDetailViewList();
-                // update Guarantee Amount before render dialog
-                for (ProposeCreditDetailView creditTypeFromAll : guarantorCreditTypeList) {
-                    for (ProposeCreditDetailView creditTypeFromSelected : newGuarantorDetailViewItem.getProposeCreditDetailViewList()) {
-                        if (creditTypeFromAll.getSeq() == creditTypeFromSelected.getSeq()) {
-                            creditTypeFromAll.setGuaranteeAmount(creditTypeFromSelected.getGuaranteeAmount());
-                        }
-                    }
-                }
-            }
-
+        proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
+        newGuarantorDetailView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
+//        }
+        if (newGuarantorDetailViewItem.getProposeCreditDetailViewList() != null && newGuarantorDetailViewItem.getProposeCreditDetailViewList().size() > 0) {
+            // set selected credit type items (check/uncheck)
+            selectedGuarantorCrdTypeItems = newGuarantorDetailViewItem.getProposeCreditDetailViewList();
         }
 
     }
@@ -1325,7 +1365,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 NewGuarantorDetailView guarantorDetailAdd = new NewGuarantorDetailView();
                 guarantorDetailAdd.setGuarantorName(customerInfoView);
                 /*if(customerInfoView.get){
-
                 }*/
                 guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
                 guarantorDetailAdd.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
@@ -1334,40 +1373,29 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     List<ProposeCreditDetailView> newCreditTypeItems = new ArrayList<ProposeCreditDetailView>();
                     for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
                         newCreditTypeItems.add(creditTypeItem);
+                        log.info("creditTypeItem.getGuaranteeAmount() :: {}",creditTypeItem.getGuaranteeAmount());
                         summary = Util.add(summary, creditTypeItem.getGuaranteeAmount());
                         log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
                         log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
                     }
                     guarantorDetailAdd.setProposeCreditDetailViewList(newCreditTypeItems);
                     guarantorDetailAdd.setTotalLimitGuaranteeAmount(summary);
-
-                }
-
-                guarantorDetailAdd.setTotalLimitGuaranteeAmount(summary);
-
-                if (guarantorDetailAdd.getProposeCreditDetailViewList().size() > 0) {
                     newCreditFacilityView.getNewGuarantorDetailViewList().add(guarantorDetailAdd);
                     complete = true;
-                } else {
-                    messageHeader = msg.get("app.messageHeader.error");
+                }else {
+                    messageHeader = msg.get("app.propose.exception");
                     message = msg.get("app.propose.desc.add.data");
                     severity = MessageDialogSeverity.ALERT.severity();
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
-
-
             } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
                 log.debug("modeForButton ::: {}", modeForButton);
                 CustomerInfoView customerInfoEdit = customerInfoControl.getCustomerById(newGuarantorDetailView.getGuarantorName());
                 newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setGuarantorName(customerInfoEdit);
                 newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
-                boolean checkPlus;
+                newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
 
                 if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
-
-                    if (newGuarantorDetailView.getProposeCreditDetailViewList() == null) {
-                        newGuarantorDetailView.setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
-                    }
 
                     for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
                         newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().add(creditTypeItem);
@@ -1375,17 +1403,13 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                         log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
                         log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
                     }
-
                     newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setTotalLimitGuaranteeAmount(summary);
-
-                    if ( newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().size() > 0) {
-                         complete = true;
-                    } else {
-                        messageHeader = msg.get("app.messageHeader.error");
-                        message = msg.get("app.propose.desc.add.data");
-                        severity = MessageDialogSeverity.ALERT.severity();
-                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                    }
+                    complete = true;
+                }else {
+                    messageHeader = msg.get("app.propose.exception");
+                    message = msg.get("app.propose.desc.add.data");
+                    severity = MessageDialogSeverity.ALERT.severity();
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
             } else {
                 log.debug("onSaveGuarantorInfoDlg ::: Undefined modeForButton !!");
@@ -1458,7 +1482,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //        onSetInUsedProposeCreditDetail();
         try {
             if ((newCreditFacilityView.getInvestedCountry().getId() != 0)
-                    && (newCreditFacilityView.getLoanRequestType().getId() != 0) ){
+                    && (newCreditFacilityView.getLoanRequestType().getId() != 0)) {
 //                    && (newCreditFacilityView.getNewCreditDetailViewList().size() > 0)
 //                    && (newCreditFacilityView.getNewCollateralViewList().size() > 0)
 //                    && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0)

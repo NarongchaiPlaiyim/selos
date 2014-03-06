@@ -391,7 +391,8 @@
                              onclick="this.select()"
                              onkeydown="return onKeyDownMoney(event);"
                              onkeypress="return onKeyPressMoney(event);"
-                             styleClass="right" readonly="true">
+                             style="width:200px;text-align: right"
+                             readonly="true">
                     <!--readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">-->
                     <f:convertNumber pattern="#,##0.##"
                                      minFractionDigits="2"

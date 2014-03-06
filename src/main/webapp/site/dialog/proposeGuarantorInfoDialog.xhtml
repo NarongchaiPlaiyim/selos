@@ -35,6 +35,7 @@
                 </td>
                 <td class="left">
                     <p:inputMask id="tcgLgNo" value="#{creditFacPropose.newGuarantorDetailView.tcgLgNo}"
+                                 required="true"
                                  mask="99-9999"/>
                 </td>
             </tr>
@@ -72,7 +73,7 @@
                             </p:row>
                         </p:columnGroup>
 
-                        <p:column styleClass="center" selectionMode="multiple"/>
+                        <p:column styleClass="center center" selectionMode="multiple"/>
 
                         <p:column styleClass="left top">
                             #{creditTypeItem.accountName}<br/>
