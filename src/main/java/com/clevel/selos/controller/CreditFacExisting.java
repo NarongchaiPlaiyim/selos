@@ -208,7 +208,9 @@ public class CreditFacExisting implements Serializable {
         creditTypeList = creditTypeDAO.findAll();
         accountStatusList = accountStatusDAO.findAll();
         log.info("preRender ::: 1.2 ");
-        bankAccountStatusList = bankAccountStatusDAO.findByBankAccountType(2);
+        List<String> dataSourceExcept = new ArrayList<String>();
+        dataSourceExcept.add("RLOS"); // TODO: Change get RLOS from master or enum
+        bankAccountStatusList = bankAccountStatusDAO.findAllExceptDataSource(dataSourceExcept);
         log.info("preRender ::: 1.3 ");
         relationList = relationDAO.findAll();
         log.info("preRender ::: 1.4 ");

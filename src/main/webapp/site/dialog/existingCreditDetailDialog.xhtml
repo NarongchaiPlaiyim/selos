@@ -42,7 +42,7 @@
                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                 <f:selectItems value="#{creditFacExisting.bankAccountStatusList}"
                                var="accountStatus"
-                               itemLabel="#{accountStatus.description}"
+                               itemLabel="#{accountStatus.code} - #{accountStatus.description}"
                                itemValue="#{accountStatus.id}"/>
                 <p:ajax event="change" update="@this"/>
 
