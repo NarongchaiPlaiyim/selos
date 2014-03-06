@@ -286,13 +286,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                     modeForDB = ModeForDB.EDIT_DB;
                     proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
-                    log.debug("[List for select in Collateral] :: proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
-
-//                    for (int i = 0; i < proposeCreditDetailViewList.size(); i++) {
-//                        if (proposeCreditDetailViewList.get(i).getTypeOfStep().equals("N")) {
-//                            hashSeqCredit.put(i, proposeCreditDetailViewList.get(i).getUseCount());
-//                        }
-//                    }
                     notRetrievePricing = false;
                 }
 
@@ -352,20 +345,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             cannotEditStandard = true;
         }
 
-        if (creditRequestTypeViewList == null) {
-            creditRequestTypeViewList = new ArrayList<CreditRequestTypeView>();
-        }
-
-
-
         if (newCreditDetailView == null) {
             newCreditDetailView = new NewCreditDetailView();
             seq = 1;
-        }
-
-        // change to view model
-        if (disbursementTypeViewList == null) {
-            disbursementTypeViewList = new ArrayList<DisbursementTypeView>();
         }
 
         if (newConditionDetailView == null) {
@@ -579,19 +561,15 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 log.info("productFormula.getReduceFrontEndFee() ::: {}", productFormulaView.getReduceFrontEndFee());
                 log.info("productFormula.getReducePricing() ::: {}", productFormulaView.getReducePricing());
 
-                modeEditReducePricing = flagForModeDisable(productFormulaView.getReducePricing());
-                modeEditReduceFront = flagForModeDisable(productFormulaView.getReduceFrontEndFee());
+                // 1:N(true) Cannot edit , 2:Y(false) Can Edit
+                modeEditReducePricing = productFormulaView.getReducePricing() == 1;
+                modeEditReduceFront = productFormulaView.getReduceFrontEndFee() == 1;
 
                 //reducePricePanelRendered = (modeEditReducePricing == true) ? true : false;
                 reducePricePanelRendered = modeEditReducePricing;
                 log.info("reducePricePanelRendered:: {}", reducePricePanelRendered);
             }
         }
-    }
-
-    // 2:Y(false)can to edit , 1:N(true) cannot to edit
-    public static boolean flagForModeDisable(int value) {
-        return (value == 1) ? true : false;
     }
 
     public void onChangeRequestType() {

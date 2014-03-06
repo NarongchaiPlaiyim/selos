@@ -8,6 +8,7 @@ import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
+import com.clevel.selos.model.CreditTypeOfStep;
 import com.clevel.selos.model.DBRMethod;
 import com.clevel.selos.model.ExposureMethod;
 import com.clevel.selos.model.ProposeType;
@@ -26,6 +27,8 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Stateless
@@ -138,8 +141,6 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     NewCollateralSubRelatedDAO newCollateralSubRelatedDAO;
 
-    private ExistingCreditFacilityView existingCreditFacilityView;
-
     @Inject
     public CreditFacProposeControl() {}
 
@@ -237,7 +238,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
                 BigDecimal sumTotalNonLoanDbr = BigDecimal.ZERO;
 
-                if ((newCreditFacility != null) && (basicInfoView.getSpecialProgram() != null) && (tcgView != null)) {
+                if (basicInfoView.getSpecialProgram() != null && tcgView != null) {
                     List<NewCreditDetail> newCreditDetailList = newCreditFacility.getNewCreditDetailList();
 
                     if (newCreditDetailList != null && newCreditDetailList.size() != 0) {
@@ -299,7 +300,7 @@ public class CreditFacProposeControl extends BusinessControl {
                         newCreditFacility.setTotalProposeLoanDBR(sumTotalLoanDbr);//sumTotalLoanDbr
                         newCreditFacility.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr); //sumTotalNonLoanDbr
 
-                        existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
+                        ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
 
                         if (existingCreditFacilityView != null) {
                             log.info("existingCreditFacilityView.getTotalBorrowerComLimit() ::; {}", existingCreditFacilityView.getTotalBorrowerComLimit() != null ? existingCreditFacilityView.getTotalBorrowerComLimit() : "null");
@@ -384,7 +385,7 @@ public class CreditFacProposeControl extends BusinessControl {
         rowCount = newCreditDetailViewList.size() > 0 ? newCreditDetailViewList.size() + 1 : rowCount;
 
         // find existingCreditType >>> Borrower Commercial in this workCase
-        existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId); //call business control  to find Existing  and transform to view
+        ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId); //call business control  to find Existing  and transform to view
 
         if ((!Util.isNull(existingCreditFacilityView)) && existingCreditFacilityView.getBorrowerComExistingCredit().size() > 0) {
             for (ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getBorrowerComExistingCredit()) {
@@ -404,6 +405,124 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         return proposeCreditDetailViewList;
+    }
+
+    public List<ProposeCreditDetailView> findAndGenerateSeqProposeCredits(List<NewCreditDetailView> newCreditDetailViewList, long workCaseId) {
+        log.debug("findProposeCreditDetail() :: ", workCaseId);
+        // Generate Sequence Number [1 - N] from "Propose Credit" and "Existing Credit" for the first time
+        int sequenceNumber = 1;
+        List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
+
+        if (newCreditDetailViewList != null && newCreditDetailViewList.size() > 0) {
+
+            ProposeCreditDetailView proposeCreditFromNew;
+
+            for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
+                proposeCreditFromNew = new ProposeCreditDetailView();
+                proposeCreditFromNew.setSeq(sequenceNumber);
+                proposeCreditFromNew.setId(newCreditDetailView.getId());
+                proposeCreditFromNew.setTypeOfStep(CreditTypeOfStep.NEW.type());
+                proposeCreditFromNew.setAccountName(newCreditDetailView.getAccountName());
+                proposeCreditFromNew.setAccountNumber(newCreditDetailView.getAccountNumber());
+                proposeCreditFromNew.setAccountSuf(newCreditDetailView.getAccountSuf());
+                proposeCreditFromNew.setRequestType(newCreditDetailView.getRequestType());
+                proposeCreditFromNew.setProductProgramView(newCreditDetailView.getProductProgramView());
+                proposeCreditFromNew.setCreditFacilityView(newCreditDetailView.getCreditTypeView());
+                proposeCreditFromNew.setLimit(newCreditDetailView.getLimit());
+                proposeCreditFromNew.setGuaranteeAmount(newCreditDetailView.getGuaranteeAmount());
+                proposeCreditFromNew.setUseCount(newCreditDetailView.getUseCount());
+                proposeCreditFromNew.setNoFlag(newCreditDetailView.isNoFlag());
+                proposeCreditDetailViewList.add(proposeCreditFromNew);
+                sequenceNumber++;
+            }
+        }
+
+        // find existingCreditType >>> Borrower Commercial in this workCase
+        ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
+
+        if (existingCreditFacilityView != null
+            && existingCreditFacilityView.getBorrowerComExistingCredit() != null
+            && existingCreditFacilityView.getBorrowerComExistingCredit().size() > 0) {
+
+            ProposeCreditDetailView proposeCreditFromExisting;
+
+            for (ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getBorrowerComExistingCredit()) {
+                proposeCreditFromExisting = new ProposeCreditDetailView();
+                proposeCreditFromExisting.setSeq(sequenceNumber);
+                proposeCreditFromExisting.setId(existingCreditDetailView.getId());
+                proposeCreditFromExisting.setTypeOfStep(CreditTypeOfStep.EXISTING.type());
+                proposeCreditFromExisting.setAccountName(existingCreditDetailView.getAccountName());
+                proposeCreditFromExisting.setAccountNumber(existingCreditDetailView.getAccountNumber());
+                proposeCreditFromExisting.setAccountSuf(existingCreditDetailView.getAccountSuf());
+                proposeCreditFromExisting.setProductProgramView(existingCreditDetailView.getExistProductProgramView());
+                proposeCreditFromExisting.setCreditFacilityView(existingCreditDetailView.getExistCreditTypeView());
+                proposeCreditFromExisting.setLimit(existingCreditDetailView.getLimit());
+                proposeCreditDetailViewList.add(proposeCreditFromExisting);
+                sequenceNumber++;
+            }
+        }
+
+        return proposeCreditDetailViewList;
+    }
+
+    public int getMaxSeqFromProposeCreditList(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
+        int maxSeq = 1;
+        if (proposeCreditDetailViewList != null && proposeCreditDetailViewList.size() > 0) {
+            int size = proposeCreditDetailViewList.size();
+            for (int i=0; i<size; i++) {
+                ProposeCreditDetailView proposeCreditDetailView = proposeCreditDetailViewList.get(i);
+                if (proposeCreditDetailView.getSeq() > maxSeq) {
+                    maxSeq = proposeCreditDetailView.getSeq();
+                }
+            }
+        }
+        return maxSeq;
+    }
+
+    public void groupTypeOfStepAndOrderBySeq(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
+        log.debug("groupTypeOfStepAndOrderBySeq()");
+        if (proposeCreditDetailViewList != null && proposeCreditDetailViewList.size() > 0) {
+            log.debug("Start Grouping by Type of Step (N -> E)");
+            List<ProposeCreditDetailView> groupNewCredits = new ArrayList<ProposeCreditDetailView>();
+            List<ProposeCreditDetailView> groupExistingCredits = new ArrayList<ProposeCreditDetailView>();
+            // Grouping by Type of Step
+            int size = proposeCreditDetailViewList.size();
+            for (int i=0; i<size; i++) {
+                ProposeCreditDetailView creditDetailView = proposeCreditDetailViewList.get(i);
+                if (CreditTypeOfStep.NEW.type().equalsIgnoreCase(creditDetailView.getTypeOfStep())) {
+                    groupNewCredits.add(creditDetailView);
+                }
+                else if (CreditTypeOfStep.EXISTING.type().equalsIgnoreCase(creditDetailView.getTypeOfStep())) {
+                    groupExistingCredits.add(creditDetailView);
+                }
+            }
+            log.debug("End Grouping by Type of Step...");
+            log.debug("NewCredit Group : {}", groupNewCredits);
+            log.debug("ExistingCredit Group : {}", groupExistingCredits);
+
+            // Order by Seq (ASC)
+            Comparator<ProposeCreditDetailView> comparator = new Comparator<ProposeCreditDetailView>() {
+                @Override
+                public int compare(ProposeCreditDetailView credit1, ProposeCreditDetailView credit2) {
+                    return credit1.getSeq() - credit2.getSeq();
+                }
+            };
+
+            log.debug("Start Order by Seq (ASC)");
+            if (groupNewCredits.size() > 0) {
+                Collections.sort(groupNewCredits, comparator);
+            }
+
+            if (groupExistingCredits.size() > 0) {
+                Collections.sort(groupExistingCredits, comparator);
+            }
+            log.debug("End Order by Seq (ASC)...");
+
+            proposeCreditDetailViewList.clear();
+            proposeCreditDetailViewList.addAll(groupNewCredits);
+            proposeCreditDetailViewList.addAll(groupExistingCredits);
+            log.debug("Result : ", proposeCreditDetailViewList);
+        }
     }
 
     public List<NewCollateralSubView> findNewCollateralSubView(List<NewCollateralView> newCollateralViewList) {
