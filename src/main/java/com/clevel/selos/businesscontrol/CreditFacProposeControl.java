@@ -390,9 +390,6 @@ public class CreditFacProposeControl extends BusinessControl {
         if ((!Util.isNull(existingCreditDetailViewList)) && existingCreditDetailViewList.size() > 0) {
             for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViewList) {
                 proposeCreditDetailView = new ProposeCreditDetailView();
-                proposeCreditDetailView.setSeq(rowCount);  // id form DB
-                proposeCreditDetailView.setId((int)existingCreditDetailView.getId());
-                proposeCreditDetailView.setTypeOfStep("E");
                 proposeCreditDetailView.setSeq((int)existingCreditDetailView.getId());  // id form DB
                 proposeCreditDetailView.setId(rowCount);
                 proposeCreditDetailView.setTypeOfStep(CreditTypeOfStep.EXISTING.type());

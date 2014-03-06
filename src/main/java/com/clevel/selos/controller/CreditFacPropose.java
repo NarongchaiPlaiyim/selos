@@ -1346,6 +1346,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         if (newGuarantorDetailViewItem.getProposeCreditDetailViewList() != null && newGuarantorDetailViewItem.getProposeCreditDetailViewList().size() > 0) {
             // set selected credit type items (check/uncheck)
             selectedGuarantorCrdTypeItems = newGuarantorDetailViewItem.getProposeCreditDetailViewList();
+            log.info("newGuarantorDetailViewItem.getProposeCreditDetailViewList():: amount ::  {}",newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(0).getGuaranteeAmount());
         }
 
     }
@@ -1398,6 +1399,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                     for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
                         newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().add(creditTypeItem);
+                       log.info(" newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().get(0).getGuaranteeAmount(); :: {}", newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().get(0).getGuaranteeAmount());
                         summary = Util.add(summary, creditTypeItem.getGuaranteeAmount());
                         log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
                         log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
@@ -1489,7 +1491,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
                 newCreditFacilityView = creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
                 creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
-                exSummaryControl.calForCreditFacility(workCaseId);
+//                exSummaryControl.calForCreditFacility(workCaseId);
                 onCreation();
                 notRetrievePricing = false;
                 messageHeader = msg.get("app.messageHeader.info");
