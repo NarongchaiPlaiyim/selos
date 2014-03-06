@@ -23,6 +23,7 @@ public class ExistingCreditFacilityView implements Serializable {
     private BigDecimal totalBorrowerComOBOD;
     private BigDecimal totalBorrowerExposure;
     private BigDecimal totalBorrowerNumberOfExistingOD;
+    private BigDecimal totalBorrowerExistingODLimit;
     private BigDecimal totalBorrowerLimitPreScreen;
 
     private BigDecimal totalRelatedComLimit;
@@ -31,7 +32,6 @@ public class ExistingCreditFacilityView implements Serializable {
     private BigDecimal totalRelatedCom;
     private BigDecimal totalRelatedComOBOD;
     private BigDecimal totalRelatedExposure;
-    private BigDecimal totalRelatedNumberOfExistingOD;
     private BigDecimal totalRelatedLimitPreScreen;
 
     private BigDecimal totalGroupCom;
@@ -155,6 +155,14 @@ public class ExistingCreditFacilityView implements Serializable {
         this.totalBorrowerNumberOfExistingOD = totalBorrowerNumberOfExistingOD;
     }
 
+    public BigDecimal getTotalBorrowerExistingODLimit() {
+        return totalBorrowerExistingODLimit;
+    }
+
+    public void setTotalBorrowerExistingODLimit(BigDecimal totalBorrowerExistingODLimit) {
+        this.totalBorrowerExistingODLimit = totalBorrowerExistingODLimit;
+    }
+
     public BigDecimal getTotalRelatedComLimit() {
         return totalRelatedComLimit;
     }
@@ -201,14 +209,6 @@ public class ExistingCreditFacilityView implements Serializable {
 
     public void setTotalRelatedExposure(BigDecimal totalRelatedExposure) {
         this.totalRelatedExposure = totalRelatedExposure;
-    }
-
-    public BigDecimal getTotalRelatedNumberOfExistingOD() {
-        return totalRelatedNumberOfExistingOD;
-    }
-
-    public void setTotalRelatedNumberOfExistingOD(BigDecimal totalRelatedNumberOfExistingOD) {
-        this.totalRelatedNumberOfExistingOD = totalRelatedNumberOfExistingOD;
     }
 
     public BigDecimal getTotalGroupCom() {
@@ -433,13 +433,13 @@ public class ExistingCreditFacilityView implements Serializable {
                 .append("totalBorrowerComOBOD", totalBorrowerComOBOD)
                 .append("totalBorrowerExposure", totalBorrowerExposure)
                 .append("totalBorrowerNumberOfExistingOD", totalBorrowerNumberOfExistingOD)
+                .append("totalBorrowerExistingODLimit", totalBorrowerExistingODLimit)
                 .append("totalRelatedComLimit", totalRelatedComLimit)
                 .append("totalRelatedRetailLimit", totalRelatedRetailLimit)
                 .append("totalRelatedAppInRLOSLimit", totalRelatedAppInRLOSLimit)
                 .append("totalRelatedCom", totalRelatedCom)
                 .append("totalRelatedComOBOD", totalRelatedComOBOD)
                 .append("totalRelatedExposure", totalRelatedExposure)
-                .append("totalRelatedNumberOfExistingOD", totalRelatedNumberOfExistingOD)
                 .append("totalGroupCom", totalGroupCom)
                 .append("totalGroupComOBOD", totalGroupComOBOD)
                 .append("totalGroupExposure", totalGroupExposure)
