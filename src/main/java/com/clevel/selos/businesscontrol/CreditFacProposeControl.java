@@ -361,7 +361,7 @@ public class CreditFacProposeControl extends BusinessControl {
         if ((!Util.isNull(newCreditDetailViewList)) && newCreditDetailViewList.size() > 0) {
             proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
             for (NewCreditDetailView tmp : newCreditDetailViewList) {
-                if(tmp.isModeSaved()==false){
+//                if(tmp.isModeSaved()==false){
                     proposeCreditDetailView = new ProposeCreditDetailView();
                     proposeCreditDetailView.setSeq(tmp.getSeq());
                     proposeCreditDetailView.setId(rowCount);
@@ -378,7 +378,7 @@ public class CreditFacProposeControl extends BusinessControl {
                     proposeCreditDetailView.setNoFlag(tmp.isNoFlag());
                     proposeCreditDetailViewList.add(proposeCreditDetailView);
                     rowCount++;
-                }
+//                }
             }
         }
 
@@ -630,14 +630,18 @@ public class CreditFacProposeControl extends BusinessControl {
             weightAP = bizInfoSummaryView.getSumWeightAP();
             weightINV = bizInfoSummaryView.getSumWeightINV();
             //      Sum(weight cost of goods sold * businessProportion)
-            if (bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0) {
-                log.debug("onGetBizInfoSummaryByWorkCase :: bizInfoSummaryView.getBizInfoDetailViewList() : {}", bizInfoSummaryView.getBizInfoDetailViewList());
-                for (BizInfoDetailView bidv : bizInfoSummaryView.getBizInfoDetailViewList()) {
-                    BigDecimal cog = BigDecimal.ZERO;
-                    if (bidv.getBizDesc() != null) {
-                        cog = bidv.getBizDesc().getCog();
+            List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
+            if(bizInfoSummaryView.getId() != 0){
+                bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryView.getId());
+                if (bizInfoDetailViewList != null && bizInfoDetailViewList.size() > 0) {
+                    log.debug("bizInfoDetailViewList : {}", bizInfoDetailViewList);
+                    for (BizInfoDetailView bidv : bizInfoDetailViewList) {
+                        BigDecimal cog = BigDecimal.ZERO;
+                        if (bidv.getBizDesc() != null) {
+                            cog = bidv.getBizDesc().getCog();
+                        }
+                        aaaValue = Util.add(aaaValue, Util.multiply(cog, bidv.getPercentBiz()));
                     }
-                    aaaValue = Util.add(aaaValue, Util.multiply(cog, bidv.getPercentBiz()));
                 }
             }
         }
