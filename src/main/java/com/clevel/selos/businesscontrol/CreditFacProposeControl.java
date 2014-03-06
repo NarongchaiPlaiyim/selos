@@ -833,6 +833,9 @@ public class CreditFacProposeControl extends BusinessControl {
 //            log.debug("saveCreditFacility ::: persist newCreditDetailList : {}", newCreditDetailList);
         }
 
+        //--- Remove all Relation of Guarantor vs Credit
+        List<NewGuarantorCredit> newGuarantorCreditRemoveList = newGuarantorRelationDAO.getListByCreditFacility(newCreditFacility, ProposeType.P);
+        newGuarantorRelationDAO.delete(newGuarantorCreditRemoveList);
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
             if(Util.safetyList(newCreditFacilityView.getNewGuarantorViewDelList()).size()>0){

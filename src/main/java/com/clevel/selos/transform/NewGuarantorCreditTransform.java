@@ -2,11 +2,9 @@ package com.clevel.selos.transform;
 
 
 import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.ExistingCreditDetail;
-import com.clevel.selos.model.db.working.NewCreditDetail;
-import com.clevel.selos.model.db.working.NewGuarantorCredit;
-import com.clevel.selos.model.db.working.NewGuarantorDetail;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.ProposeCreditDetailView;
 import org.joda.time.DateTime;
 
@@ -23,7 +21,7 @@ public class NewGuarantorCreditTransform extends Transform {
     @Inject
     ExistingCreditDetailDAO existingCreditDetailDAO;
 
-    public List<NewGuarantorCredit> transformsToModelForGuarantor(List<ProposeCreditDetailView> newCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewGuarantorDetail newGuarantorDetail, User user) {
+    public List<NewGuarantorCredit> transformsToModelForGuarantor(List<ProposeCreditDetailView> newCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewGuarantorDetail newGuarantorDetail, NewCreditFacility newCreditFacility, ProposeType proposeType, User user) {
         log.info("newCreditDetailList  ::: {}", newCreditDetailList.size());
         List<NewGuarantorCredit> newGuarantorCreditList = new ArrayList<NewGuarantorCredit>();
         NewGuarantorCredit newGuarantorCredit;
@@ -36,6 +34,8 @@ public class NewGuarantorCreditTransform extends Transform {
                 newGuarantorCredit.setCreateBy(user);
                 newGuarantorCredit.setModifyDate(DateTime.now().toDate());
                 newGuarantorCredit.setModifyBy(user);
+                newGuarantorCredit.setNewCreditFacility(newCreditFacility);
+                newGuarantorCredit.setProposeType(proposeType);
 
                 log.info("proposeCreditDetailView::: getTypeOfStep :: {}", proposeCreditDetailView.getTypeOfStep());
 
