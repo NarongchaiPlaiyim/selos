@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.controller.ExecutiveSummary;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.SELOS;
@@ -73,6 +74,11 @@ public class BRMSControl extends BusinessControl {
     private WorkCaseAppraisalDAO workCaseAppraisalDAO;
     @Inject
     private DBRDAO dbrdao;
+
+    @Inject
+    private ExSummaryDAO exSummaryDAO;
+    @Inject
+    private ExSummaryControl exSummaryControl;
 
     @Inject
     BRMSTransform brmsTransform;
@@ -340,35 +346,31 @@ public class BRMSControl extends BusinessControl {
         }
         applicationInfo.setBizInfoList(brmsBizInfoList);
 
-
-        //4. Set credit facility info
+        //4. Set TMB Account Request
         NewCreditFacility newCreditFacility = creditFacilityDAO.findByWorkCaseId(workCaseId);
         BigDecimal discountFrontEndFeeRate = newCreditFacility.getFrontendFeeDOA();
         if(workCase.getStep().getProposeType() == ProposeType.P){
             applicationInfo.setLoanRequestType(newCreditFacility.getLoanRequestType().getBrmsCode());
-            applicationInfo.setFinalGroupExposure(newCreditFacility.getTotalExposure());
         }
         else if(workCase.getStep().getProposeType().equals(ProposeType.A)){
 
-            //TODO: To set Loan Request Type when Decision is complete.
+            applicationInfo.setLoanRequestType(newCreditFacility.getLoanRequestType().getBrmsCode());
+            applicationInfo.setFinalGroupExposure(newCreditFacility.getTotalApproveExposure());
         }
 
-        //5. Set TMB Account Request
-        BigDecimal totalApprovedCredit = BigDecimal.ZERO;
         List<NewCreditDetail> newCreditDetailList = newCreditDetailDAO.findNewCreditDetail(workCaseId, workCase.getStep().getProposeType());
         List<BRMSAccountRequested> accountRequestedList = new ArrayList();
         for(NewCreditDetail newCreditDetail : newCreditDetailList){
             if(newCreditDetail.getRequestType() == RequestTypes.NEW.value()){
                 accountRequestedList.add(brmsTransform.getBRMSAccountRequested(newCreditDetail, discountFrontEndFeeRate));
-                if(!newCreditDetail.getProductProgram().isBa())
-                    totalApprovedCredit = totalApprovedCredit.add(newCreditDetail.getLimit());
             }
         }
         applicationInfo.setAccountRequestedList(accountRequestedList);
 
-        //6. Set TMB Coll Level
+        //5. Set TMB Coll Level
         List<NewCollateral> newCollateralList = newCollateralDAO.findNewCollateral(workCaseId, workCase.getStep().getProposeType());
         List<BRMSCollateralInfo> collateralInfoList = new ArrayList<BRMSCollateralInfo>();
+
         for(NewCollateral newCollateral : newCollateralList){
             List<NewCollateralHead> newCollateralHeadList = newCollateral.getNewCollateralHeadList();
             for(NewCollateralHead newCollateralHead : newCollateralHeadList){
@@ -403,10 +405,8 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setCollateralInfoList(collateralInfoList);
 
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-        WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByWorkcaseId(workCaseId);
         TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
         DBR dbr = dbrdao.findByWorkCaseId(workCaseId);
-        ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
         applicationInfo.setApplicationNo(workCase.getAppNumber());
         applicationInfo.setProcessDate(checkDate);
         applicationInfo.setBdmSubmitDate(basicInfo.getBdmSubmitDate());
@@ -416,26 +416,71 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setRefinanceIN(getRadioBoolean(basicInfo.getRefinanceIN()));
         applicationInfo.setRefinanceOUT(getRadioBoolean(basicInfo.getRefinanceOUT()));
         applicationInfo.setRequestTCG(getRadioBoolean(tcg.getTcgFlag()));
-        //TODO: To pickup the value from workcaseAppraisal to transform this value;
-        applicationInfo.setPassAppraisalProcess(Boolean.FALSE);
+
+        WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByWorkcaseId(workCaseId);
+        AppraisalStatus appraisalStatus = AppraisalStatus.lookup(workCaseAppraisal.getAppraisalResult());
+        applicationInfo.setPassAppraisalProcess(appraisalStatus.booleanValue());
         applicationInfo.setStepCode(workCase.getStep().getCode());
 
         applicationInfo.setNumberOfYearFinancialStmt(new BigDecimal(DateTimeUtil.getYearOfDate(checkDate) - latestFinancialStmtYear));
         applicationInfo.setShareHolderRatio(shareHolderRatio);
         applicationInfo.setFinalDBR(dbr.getFinalDBR());
         applicationInfo.setNetMonthlyIncome(dbr.getNetMonthlyIncome());
-        applicationInfo.setBorrowerGroupIncome(BigDecimal.ZERO);
-        applicationInfo.setTotalGroupIncome(BigDecimal.ZERO);
+
+        ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        if(exSummary == null){
+            exSummaryControl.calGroupExposureBorrowerCharacteristic(workCaseId);
+            exSummaryControl.calGroupSaleBorrowerCharacteristic(workCaseId);
+            exSummaryControl.calYearInBusinessBorrowerCharacteristic(workCaseId);
+        }
+        if(ProposeType.P.equals(workCase.getStep().getProposeType())){
+            applicationInfo.setBorrowerGroupIncome(bankStatementSummary.getGrdTotalIncomeNetBDM());
+            applicationInfo.setTotalGroupIncome(exSummary.getGroupSaleBDM());
+        } else if(ProposeType.A.equals(workCase.getStep().getProposeType())){
+            applicationInfo.setBorrowerGroupIncome(bankStatementSummary.getGrdTotalBorrowerIncomeNetUW());
+            applicationInfo.setTotalGroupIncome(exSummary.getGroupSaleUW());
+        } else {
+            applicationInfo.setBorrowerGroupIncome(BigDecimal.ZERO);
+            applicationInfo.setTotalGroupIncome(BigDecimal.ZERO);
+        }
+        applicationInfo.setYearInBusinessMonth(new BigDecimal(exSummary.getYearInBusinessMonth()));
+
+        ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
         applicationInfo.setExistingGroupExposure(existingCreditFacility.getTotalGroupExposure());
+        applicationInfo.setTotalExistingODLimit(existingCreditFacility.getTotalBorrowerODLimit());
+        applicationInfo.setTotalNumberOfExistingOD(existingCreditFacility.getTotalBorrowerNumberOfExistingOD());
+
+        applicationInfo.setTotalApprovedCredit(newCreditFacility.getTotalApproveCredit());
+        applicationInfo.setTotalNumberContingenPropose(newCreditFacility.getTotalNumberContingenPropose());
+        applicationInfo.setTotalNumberProposeCredit(newCreditFacility.getTotalNumberProposeCreditFac());
+        applicationInfo.setTotalNumberOfRequestedOD(newCreditFacility.getTotalNumberOfNewOD());
+
+        applicationInfo.setTotalNumberOfCoreAsset(newCreditFacility.getTotalNumberOfCoreAsset());
+        applicationInfo.setTotalNumberOfNonCoreAsset(newCreditFacility.getTotalNumberOfNonCoreAsset());
+
         applicationInfo.setAbleToGettingGuarantorJob(getRadioBoolean(basicInfo.getAbleToGettingGuarantorJob()));
         applicationInfo.setNoClaimLGHistory(getRadioBoolean(basicInfo.getNoClaimLGHistory()));
         applicationInfo.setNoRevokedLicense(getRadioBoolean(basicInfo.getNoRevokedLicense()));
         applicationInfo.setNoLateWorkDelivery(getRadioBoolean(basicInfo.getNoLateWorkDelivery()));
         applicationInfo.setAdequateOfCapital(getRadioBoolean(basicInfo.getAdequateOfCapitalResource()));
 
-        //TODO: To convert some business logic
-        //applicationInfo.setCreditCusType(newCreditFacility.getCreditCustomerType());
+        applicationInfo.setCollateralPercent(tcg.getCollateralRuleResult());
+        applicationInfo.setWcNeed(newCreditFacility.getWcNeed());
+        applicationInfo.setCase1WCminLimit(newCreditFacility.getCase1WcMinLimit());
+        applicationInfo.setCase2WCminLimit(newCreditFacility.getCase2WcMinLimit());
+        applicationInfo.setCase3WCminLimit(newCreditFacility.getCase3WcLimit());
+        applicationInfo.setTotalWCTMB(newCreditFacility.getTotalWcTmb());
+        applicationInfo.setTotalLoanWCTMB(newCreditFacility.getTotalLoanWCTMB());
 
+        applicationInfo.setBizLocation(String.valueOf(bizInfoSummary.getProvince().getCode()));
+        applicationInfo.setCountryOfRegistration(bizInfoSummary.getCountry().getCode2());
+        applicationInfo.setTradeChequeReturnPercent(bankStatementSummary.getGrdTotalTDChqRetPercent());
+        applicationInfo.setProductGroup(basicInfo.getProductGroup().getBrmsCode());
+        applicationInfo.setMaximumSMELimit(newCreditFacility.getMaximumSMELimit());
+        applicationInfo.setTotalApprovedCredit(newCreditFacility.getTotalApproveCredit());
+        applicationInfo.setReferredDocType(bizInfoSummary.getReferredExperience().getBrmsCode());
+
+        applicationInfo.setNetFixAsset(bizInfoSummary.getNetFixAsset());
 
         UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
 

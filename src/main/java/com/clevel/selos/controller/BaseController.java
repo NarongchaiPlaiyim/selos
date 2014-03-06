@@ -555,4 +555,8 @@ public class BaseController implements Serializable {
     public void setPricingDOALevel(int pricingDOALevel) {
         this.pricingDOALevel = pricingDOALevel;
     }
+    
+    public boolean isStep3Screen() {
+    	return (stepId/1000 == 3); // 3XXX 
+    }
 }

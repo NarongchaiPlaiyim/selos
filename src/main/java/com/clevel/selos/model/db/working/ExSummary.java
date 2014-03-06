@@ -257,7 +257,7 @@ public class ExSummary implements Serializable {
 
     //To Send to BRMS - calculate months from yearInBusiness fields.
     @Column(name ="year_business_month")
-    private String yearInBusinessMonth;
+    private int yearInBusinessMonth;
     ///////////////////////////////////////////////////////////////
 
     public long getId() {
@@ -428,11 +428,11 @@ public class ExSummary implements Serializable {
         this.deviateCode = deviateCode;
     }
 
-    public String getYearInBusinessMonth() {
+    public int getYearInBusinessMonth() {
         return yearInBusinessMonth;
     }
 
-    public void setYearInBusinessMonth(String yearInBusinessMonth) {
+    public void setYearInBusinessMonth(int yearInBusinessMonth) {
         this.yearInBusinessMonth = yearInBusinessMonth;
     }
 
