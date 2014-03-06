@@ -750,6 +750,7 @@ public class ExSummaryControl extends BusinessControl {
             exSummary.setWorkCase(workCase);
         }
         exSummary.setYearInBusiness(year);
+        exSummary.setYearInBusinessMonth(month);
 
         exSummaryDAO.persist(exSummary);
     }
