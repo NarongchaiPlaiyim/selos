@@ -419,7 +419,7 @@ public class CreditFacExistingControl extends BusinessControl {
         borrowerCreditDetailViewList = new ArrayList<ExistingCreditDetailView>();
 
         if(existingCreditFacility != null){
-            List<ExistingCreditDetail> borrowerCreditDetailList = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,1, CreditCategory.COMMERCIAL);
+            List<ExistingCreditDetail> borrowerCreditDetailList = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,RelationValue.BORROWER.value(), CreditCategory.COMMERCIAL);
             borrowerCreditDetailViewList = existingCreditDetailTransform.transformsToView(borrowerCreditDetailList);
             log.info("find :: borrowerCreditDetailViewList ...");
         }

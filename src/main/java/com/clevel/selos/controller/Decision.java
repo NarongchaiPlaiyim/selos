@@ -150,8 +150,9 @@ public class Decision implements Serializable {
     private SpecialProgramView specialProgramView;
     private int applyTCG;
     private ProductGroup productGroup;
-    private int seq;
-    private HashMap<Integer, Integer> hashSeqCredit;
+    //private int seq;
+    private Map<Integer, Integer> hashSeqCredit;
+    private List<ProposeCreditDetailView> commonProposeCreditList;
 
     // Retrieve Price/Fee
     private List<CreditRequestTypeView> creditRequestTypeViewList;
@@ -262,12 +263,16 @@ public class Decision implements Serializable {
 
         Map<String, Object> mapValue = decisionControl.getDecisionMapValue(workCaseId);
         decisionView = (DecisionView) mapValue.get("decisionView");
-        // For delete on save
+
+        // delete list on save
         deleteCreditIdList = (List<Long>) mapValue.get("deleteCreditIdList");
         deleteCollIdList = (List<Long>) mapValue.get("deleteCollIdList");
         deleteGuarantorIdList = (List<Long>) mapValue.get("deleteGuarantorIdList");
         deleteSubCollIdList = new ArrayList<Long>();
         deleteConditionIdList = new ArrayList<Long>();
+
+        // load and generate seq for ProposeCreditDetail
+        commonProposeCreditList = creditFacProposeControl.findAndGenerateSeqProposeCredits(decisionView.getApproveCreditList(), decisionView.getExtBorrowerComCreditList(), workCaseId);
 
         BasicInfoView basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
         if (basicInfoView != null) {
@@ -288,7 +293,6 @@ public class Decision implements Serializable {
         creditRequestTypeViewList = creditRequestTypeTransform.transformToView(creditRequestTypeDAO.findAll());
         countryViewList = countryTransform.transformToView(countryDAO.findAll());
         // ================================================== //
-
 
         // ========== Approve Credit Dialog ========== //
         selectedApproveCredit = new NewCreditDetailView();
@@ -342,8 +346,6 @@ public class Decision implements Serializable {
             approvalHistoryView = decisionControl.getApprovalHistoryView(stepId);
         }
 
-        // Initial sequence number credit
-        seq = 1;
         hashSeqCredit = new HashMap<Integer, Integer>();
     }
 
@@ -376,8 +378,6 @@ public class Decision implements Serializable {
         onChangeRequestType();
 
         prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(selectedApproveCredit.getProductProgramView());
-
-        //onChangeCreditType();
 
         creditFacProposeControl.calculateInstallment(selectedApproveCredit);
 
@@ -475,8 +475,8 @@ public class Decision implements Serializable {
                 creditDetailAdd.setDisbursementTypeView(disbursementTypeView);
                 creditDetailAdd.setHoldLimitAmount(selectedApproveCredit.getHoldLimitAmount());
                 creditDetailAdd.setNewCreditTierDetailViewList(selectedApproveCredit.getNewCreditTierDetailViewList());
-                creditDetailAdd.setSeq(seq);
-
+//                creditDetailAdd.setSeq(seq);
+                //todo: set seq
                 if (decisionView.getApproveCreditList() != null) {
                     decisionView.getApproveCreditList().add(creditDetailAdd);
                 } else {
@@ -488,9 +488,6 @@ public class Decision implements Serializable {
                 success = true;
             }
 
-            hashSeqCredit.put(seq, 0);
-            seq++;
-            log.debug("seq++ of credit after add complete Approve Propose Credit :: {}", seq);
         }
 
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", success);
