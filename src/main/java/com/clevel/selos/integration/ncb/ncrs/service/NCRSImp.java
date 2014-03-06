@@ -604,11 +604,13 @@ public class NCRSImp implements NCRS, Serializable {
         exportModel.setCustomerType("01");//01
         exportModel.setJuristicType(null);
         exportModel.setCustomerDocumentType(customerDocmentType);
+
         if (!"01".equals(customerDocmentType)) {
             exportModel.setCountryCode(countryCode);
         } else {
             exportModel.setCountryCode("TH");
         }
+
         exportModel.setTitleCode(titleNameCode);
         exportModel.setCustomerId(customerId);
         exportModel.setFirstName(firstName);
