@@ -69,7 +69,6 @@ public class NewGuarantorCreditTransform extends Transform {
         return newGuarantorCreditList;
     }
 
-
     public NewCreditDetail findNewCreditDetail(List<NewCreditDetail> newCreditDetailList, ProposeCreditDetailView proposeCreditDetailView) {
         NewCreditDetail newCreditDetailReturn = null;
 
