@@ -52,4 +52,15 @@ public class NewGuarantorDetailDAO extends GenericDAO<NewGuarantorDetail, Long> 
         criteria.addOrder(Order.asc("id"));
         return criteria.list();
     }
+
+
+   /* @Override
+    public NewGuarantorDetail findById(long newGuarantorId) {
+        log.info("findById ::: {}", newGuarantorId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("id",newGuarantorId));
+        criteria.setFetchMode("guarantorName", FetchMode.LAZY);
+        NewGuarantorDetail newGuarantorDetail = (NewGuarantorDetail) criteria.uniqueResult();
+        return newGuarantorDetail;
+    }*/
 }

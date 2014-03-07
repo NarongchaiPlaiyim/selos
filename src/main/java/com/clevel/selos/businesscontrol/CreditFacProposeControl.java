@@ -290,11 +290,11 @@ public class CreditFacProposeControl extends BusinessControl {
                                                 log.debug("INSTALLMENT :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
                                                 sumTotalLoanDbr = sumTotalLoanDbr.add(newCreditDetail.getInstallment());
                                             } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
-                                                log.info("INT_YEAR :: productFormula.getDbrMethod() :: {}, productFormula.getDbrSpread() :::{}", productFormula.getDbrMethod(), productFormula.getDbrSpread());
+                                                log.debug("INT_YEAR :: productFormula.getDbrMethod() :: {}, productFormula.getDbrSpread() :::{}", productFormula.getDbrMethod(), productFormula.getDbrSpread());
                                                 sumTotalLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYear(newCreditDetail, productFormula.getDbrSpread()));
                                             }
                                         }
-                                        log.info("sumTotalLoanDbr :: {}", sumTotalLoanDbr);
+                                        log.debug("sumTotalLoanDbr :: {}", sumTotalLoanDbr);
 
                                     }
                                 }
@@ -838,24 +838,24 @@ public class CreditFacProposeControl extends BusinessControl {
 
       //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
         List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase, ProposeType.P);
-        log.info("before :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
+        log.debug("before :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
         newSubCollMortgageDAO.delete(newCollateralSubMortgages);
-        log.info("after :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
+        log.debug("after :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
         //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
         List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase, ProposeType.P);
-        log.info("before :: newCollateralSubOwnerList :: size :: {}",newCollateralSubOwnerList.size());
+        log.debug("before :: newCollateralSubOwnerList :: size :: {}",newCollateralSubOwnerList.size());
         newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
-        log.info("before :: newCollateralSubOwnerList :: size :: {}",newCollateralSubOwnerList.size());
+        log.debug("before :: newCollateralSubOwnerList :: size :: {}",newCollateralSubOwnerList.size());
         //--- Need to Delete SubOwner from newCollateralSubRelatedList before Insert new
         List<NewCollateralSubRelated> newCollateralSubRelatedList = newCollateralSubRelatedDAO.getListByWorkCase(workCase, ProposeType.P);
-        log.info("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
+        log.debug("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
         newCollateralSubRelatedDAO.delete(newCollateralSubRelatedList);
-        log.info("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
+        log.debug("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
 
         if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
 
             if(Util.safetyList(newCreditFacilityView.getNewCollateralViewDelList()).size() > 0) {
-                log.info("newCreditFacilityView.getNewCollateralViewDelList() :: {}",newCreditFacilityView.getNewCollateralViewDelList().size());
+                log.debug("newCreditFacilityView.getNewCollateralViewDelList() :: {}",newCreditFacilityView.getNewCollateralViewDelList().size());
                 List<NewCollateral> deleteList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewDelList(), newCreditFacility, currentUser, workCase,ProposeType.P);
                 newCollateralDetailDAO.delete(deleteList);
             }

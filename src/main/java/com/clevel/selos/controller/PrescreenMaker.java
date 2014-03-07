@@ -2065,9 +2065,9 @@ public class PrescreenMaker implements Serializable {
         log.debug("onChangeRelation ::: relationId : {}", relationId);
 
         if(caseBorrowerTypeId == 0){
-            referenceList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), borrowerInfo.getCustomerEntity().getId(), relationId, 1, 0);
+            referenceList = referenceDAO.findReferenceByFlag(borrowerInfo.getCustomerEntity().getId(), borrowerInfo.getCustomerEntity().getId(), relationId, 1, 0);
         } else {
-            referenceList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationId, 1, 0);
+            referenceList = referenceDAO.findReferenceByFlag(borrowerInfo.getCustomerEntity().getId(), caseBorrowerTypeId, relationId, 1, 0);
         }
 
         if(relationId != 0 && borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
