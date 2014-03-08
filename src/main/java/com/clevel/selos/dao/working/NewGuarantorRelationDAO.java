@@ -11,7 +11,6 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 
 public class NewGuarantorRelationDAO extends GenericDAO<NewGuarantorCredit, Long> {
@@ -34,22 +33,20 @@ public class NewGuarantorRelationDAO extends GenericDAO<NewGuarantorCredit, Long
         List<NewGuarantorCredit> newGuarantorCreditList = (List<NewGuarantorCredit>) criteria.list();
         log.info("getList. (result size: {})", newGuarantorCreditList.size());
 
-        return criteria.list();
+        return newGuarantorCreditList;
 
     }
+
 
     public List<NewGuarantorCredit> getListByNewCreditFacility(NewCreditFacility newCreditFacility) {
         Criteria criteria = createCriteria();
-        List<NewGuarantorCredit> newGuarantorCreditList = new ArrayList<NewGuarantorCredit>();
-        if (newCreditFacility != null && newCreditFacility.getNewGuarantorDetailList() != null && newCreditFacility.getNewGuarantorDetailList().size() > 0) {
-
-            String query = "SELECT newGuarantorCredit FROM NewGuarantorCredit newGuarantorCredit WHERE newCreditFacility.id  = " + newCreditFacility.getId();
-            newGuarantorCreditList = getSession().createQuery(query).list();
-            criteria.setFetchMode("newGuarantorDetail", FetchMode.LAZY);
-            newGuarantorCreditList = criteria.list();
-        }
+        criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
+        criteria.setFetchMode("newGuarantorDetail", FetchMode.LAZY);
+        List<NewGuarantorCredit> newGuarantorCreditList = (List<NewGuarantorCredit>) criteria.list();
+        log.info("getList. (result size: {})", newGuarantorCreditList.size());
 
         return newGuarantorCreditList;
     }
+
 
 }

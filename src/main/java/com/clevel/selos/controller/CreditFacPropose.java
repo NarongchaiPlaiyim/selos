@@ -1346,7 +1346,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         modeForButton = ModeForButton.ADD;
         selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
 //        guarantorCreditTypeList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
-        newGuarantorDetailView.setProposeCreditDetailViewList(guarantorCreditTypeList);
+        newGuarantorDetailView.setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
+        newGuarantorDetailView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
     }
 
     public void onEditGuarantorInfo() {
@@ -1475,7 +1476,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     }
     //****************************************************END Guarantor ****************************************************//
 
-//****************************************************END Guarantor ****************************************************//
 
     //****************************************************Start Condition Information ***************************************************//
     public void onAddConditionInfo() {
