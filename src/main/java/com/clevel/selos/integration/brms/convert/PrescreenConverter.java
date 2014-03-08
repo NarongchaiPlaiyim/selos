@@ -202,21 +202,24 @@ public class PrescreenConverter extends Converter{
 
             List<AccountType> accountTypeList = borrowerType.getAccount();
             List<BRMSTMBAccountInfo> tmbAccountInfoList = customerInfo.getTmbAccountInfoList();
-            for(BRMSTMBAccountInfo tmbAccountInfo : tmbAccountInfoList){
-                AccountType accountType = new AccountType();
-                List<AttributeType> tmbAccAttributeList = accountType.getAttribute();
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_ACTIVE_FLAG, tmbAccountInfo.isActiveFlag()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.DATA_SOURCE, tmbAccountInfo.getDataSource()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_REFERENCE, tmbAccountInfo.getAccountRef()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CUST_TO_ACCOUNT_RELATIONSHIP, tmbAccountInfo.getCustToAccountRelationCD()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_TDR_FLAG, tmbAccountInfo.isTmbTDRFlag()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE, tmbAccountInfo.getNumMonthIntPastDue()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE_OF_TDR_ACCOUNT, tmbAccountInfo.getNumMonthIntPastDueTDRAcc()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_PRINCIPAL_PAST_DUE, tmbAccountInfo.getTmbDelPriDay()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_INTEREST_PAST_DUE, tmbAccountInfo.getTmbDelIntDay()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CARD_BLOCK_CODE, tmbAccountInfo.getTmbBlockCode()));
+            //TODO Check condition with BRMS Sheet...
+            if(customerInfo.isNcbFlag()){
+                for(BRMSTMBAccountInfo tmbAccountInfo : tmbAccountInfoList){
+                    AccountType accountType = new AccountType();
+                    List<AttributeType> tmbAccAttributeList = accountType.getAttribute();
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_ACTIVE_FLAG, tmbAccountInfo.isActiveFlag()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.DATA_SOURCE, tmbAccountInfo.getDataSource()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_REFERENCE, tmbAccountInfo.getAccountRef()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CUST_TO_ACCOUNT_RELATIONSHIP, tmbAccountInfo.getCustToAccountRelationCD()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_TDR_FLAG, tmbAccountInfo.isTmbTDRFlag()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE, tmbAccountInfo.getNumMonthIntPastDue()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE_OF_TDR_ACCOUNT, tmbAccountInfo.getNumMonthIntPastDueTDRAcc()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_PRINCIPAL_PAST_DUE, tmbAccountInfo.getTmbDelPriDay()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_INTEREST_PAST_DUE, tmbAccountInfo.getTmbDelIntDay()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CARD_BLOCK_CODE, tmbAccountInfo.getTmbBlockCode()));
 
-                accountTypeList.add(accountType);
+                    accountTypeList.add(accountType);
+                }
             }
 
             borrowerTypeList.add(borrowerType);

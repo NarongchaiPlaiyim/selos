@@ -143,6 +143,7 @@ public class BRMSTransform extends Transform{
             }
         }
 
+        customerInfo.setNcbFlag(Boolean.FALSE);
         if(customer.getRelation().getId() == RelationValue.BORROWER.value()){
             NCB ncb = customer.getNcb();
             customerInfo.setNumberOfNCBCheckIn6Months(ncb.getCheckIn6Month());
@@ -174,8 +175,6 @@ public class BRMSTransform extends Transform{
             customerInfo.setCsiSomeMatchCode(warningSomeMatchList);
             customerInfo.setQualitativeClass("P");
         }
-
-        borrowerGroupIncome = borrowerGroupIncome.add(customer.getApproxIncome());
 
             /*Start setting TMB Account for each customer*/
         List<CustomerOblAccountInfo> oblAccountInfoList = customerOblAccountInfoDAO.findByCustomerId(customer.getId());

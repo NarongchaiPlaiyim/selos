@@ -323,6 +323,8 @@ public class BRMSCustomerInfo implements Serializable{
                 .append("numberOfDaysOverAnnualReview", numberOfDaysOverAnnualReview)
                 .append("csiFullyMatchCode", csiFullyMatchCode)
                 .append("csiSomeMatchCode", csiSomeMatchCode)
+                .append("tmbAccountInfoList", tmbAccountInfoList)
+                .append("ncbAccountInfoList", ncbAccountInfoList)
                 .toString();
     }
 }
