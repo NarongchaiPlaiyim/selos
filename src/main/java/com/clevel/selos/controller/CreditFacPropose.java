@@ -306,7 +306,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     // find existingCreditType >>> Borrower Commercial in this workCase
 //                    List<ExistingCreditDetailView> existingCreditDetailViewList = creditFacExistingControl.onFindBorrowerExistingCreditFacility(workCaseId);
 
-                    proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(),existingCreditDetailViewList, workCaseId);
+//                    proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(),existingCreditDetailViewList, workCaseId);
                     log.debug("[List for select in Collateral] :: proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
 
 //                    for (int i = 0; i < proposeCreditDetailViewList.size(); i++) {
