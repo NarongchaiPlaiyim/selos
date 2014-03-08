@@ -172,7 +172,7 @@ li.sfHover > a > .sf-sub-indicator {
 /*** adding the class sf-navbar in addition to sf-menu creates an all-horizontal nav-bar menu ***/
 .sf-navbar {
     /*background:		#0995F2;*/
-    background: url(../images/shared/menu_bar.jpg) repeat-x;
+    background: url("#{resource['images/shared/menu_bar.jpg']}") repeat-x;
     height: 2.5em;
     padding-bottom: 2.5em;
     position: relative;

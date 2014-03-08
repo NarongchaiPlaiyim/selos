@@ -949,7 +949,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         //Add all Customer from customer list
         for(CustomerInfoView customerInfoView : customerInfoViewList){
             Customer customer = new Customer();
-            customer = customerTransform.transformToModel(customerInfoView, workCasePrescreen, null);
+            customer = customerTransform.transformToModel(customerInfoView, workCasePrescreen, null, getCurrentUser());
             customer.setIsSpouse(0);
             customer.setSpouseId(0);
             if(customer.getCustomerOblInfo() != null){
@@ -972,7 +972,7 @@ public class PrescreenBusinessControl extends BusinessControl {
             if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
                 if(customer.getIndividual().getMaritalStatus() != null && customer.getIndividual().getMaritalStatus().getSpouseFlag() == 1){
                     Customer spouse;
-                    spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), workCasePrescreen, null);
+                    spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), workCasePrescreen, null, getCurrentUser());
                     spouse.setIsSpouse(1);
                     spouse.setSpouseId(0);
                     if(spouse.getCustomerOblInfo() != null){

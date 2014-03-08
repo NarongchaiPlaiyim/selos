@@ -24,6 +24,8 @@ import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -854,19 +856,19 @@ public class CreditFacProposeControl extends BusinessControl {
 
       //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
         List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase, ProposeType.P);
-        log.debug("before :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
+        log.debug("before :: newCollateralSubMortgages :: size :: {}", newCollateralSubMortgages.size());
         newSubCollMortgageDAO.delete(newCollateralSubMortgages);
-        log.debug("after :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
+        log.debug("after :: newCollateralSubMortgages :: size :: {}", newCollateralSubMortgages.size());
         //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
         List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase, ProposeType.P);
-        log.debug("before :: newCollateralSubOwnerList :: size :: {}",newCollateralSubOwnerList.size());
+        log.debug("before :: newCollateralSubOwnerList :: size :: {}", newCollateralSubOwnerList.size());
         newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
-        log.debug("before :: newCollateralSubOwnerList :: size :: {}",newCollateralSubOwnerList.size());
+        log.debug("before :: newCollateralSubOwnerList :: size :: {}", newCollateralSubOwnerList.size());
         //--- Need to Delete SubOwner from newCollateralSubRelatedList before Insert new
         List<NewCollateralSubRelated> newCollateralSubRelatedList = newCollateralSubRelatedDAO.getListByWorkCase(workCase, ProposeType.P);
-        log.debug("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
+        log.debug("before :: newCollateralSubRelatedList :: size :: {}", newCollateralSubRelatedList.size());
         newCollateralSubRelatedDAO.delete(newCollateralSubRelatedList);
-        log.debug("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
+        log.debug("before :: newCollateralSubRelatedList :: size :: {}", newCollateralSubRelatedList.size());
 
         if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
 
@@ -887,6 +889,11 @@ public class CreditFacProposeControl extends BusinessControl {
             log.debug("saveCreditFacility ::: persist newCollateralList : {}", newCollateralList);
         }
         return newCreditFacilityView;
+    }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void testRemvoe(List<NewCollateralSubMortgage> newCollateralSubMortgages){
+        newSubCollMortgageDAO.delete(newCollateralSubMortgages);
     }
 
     // Call COMSInterface

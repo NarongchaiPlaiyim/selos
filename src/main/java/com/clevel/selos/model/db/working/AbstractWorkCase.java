@@ -82,6 +82,10 @@ public class AbstractWorkCase implements Serializable{
     protected User createBy;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "complete_date")
+    protected Date completeDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modify_date")
     protected Date modifyDate;
 
@@ -268,4 +272,11 @@ public class AbstractWorkCase implements Serializable{
         this.bpmActive = bpmActive;
     }
 
+    public Date getCompleteDate() {
+        return completeDate;
+    }
+
+    public void setCompleteDate(Date completeDate) {
+        this.completeDate = completeDate;
+    }
 }
