@@ -6,6 +6,7 @@ public class ManageButton implements Serializable {
     private boolean assignToCheckerButton;
     private boolean assignToABDMButton;
     private boolean cancelCAButton;
+    private boolean cancelCAFullAppButton;
     private boolean checkNCBButton;
     private boolean checkBRMSButton;
     private boolean checkMandateDocButton;
@@ -52,6 +53,14 @@ public class ManageButton implements Serializable {
 
     public void setCancelCAButton(boolean cancelCAButton) {
         this.cancelCAButton = cancelCAButton;
+    }
+
+    public boolean isCancelCAFullAppButton() {
+        return cancelCAFullAppButton;
+    }
+
+    public void setCancelCAFullAppButton(boolean cancelCAFullAppButton) {
+        this.cancelCAFullAppButton = cancelCAFullAppButton;
     }
 
     public boolean isAssignToCheckerButton() {
