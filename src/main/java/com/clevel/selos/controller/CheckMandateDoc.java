@@ -33,11 +33,11 @@ public class CheckMandateDoc implements Serializable {
     Logger log;
 
     @Inject
-    @Config(name = "interface.bpm.ce.uri")
-    private String ceURI;
+    @Config(name = "interface.mandate.doc.address")
+    private String address;
 
     @Inject
-    @Config(name = "interface.bpm.objectStore")
+    @Config(name = "interface.mandate.doc.objectStore")
     private String objectStore;
 
     @Inject
@@ -169,8 +169,12 @@ public class CheckMandateDoc implements Serializable {
 
     private String getURLByFNId(final String FNId, final String token){
         if(!Util.isNull(FNId) && !Util.isZero(FNId.length()) && !Util.isNull(token) && !Util.isZero(token.length() )){
+
+            //http://10.200.230.74:9080/Workplace/getContent?objectStoreName=ECMWBGDEV&id={9517B502-D700-4D35-9EBE-2053912DBC28}&objectType=document
+
             //workPlaceURL                         //objStore        //encIds                          //encToken
-            return ceURI + "/getContent?objectStoreName="+objectStore+"&id="+FNId+"&objectType=document&ut=" + token;
+//            return ceURI + "/getContent?objectStoreName="+objectStore+"&id="+FNId+"&objectType=document&ut=" + token;
+            return address+"/getContent?objectStoreName="+objectStore+"&id="+FNId+"&objectType=document&ut=" + token;
         } else {
             log.debug("-- FN_ID or Token is null");
             return null;
