@@ -58,7 +58,7 @@ public class EndPoint implements Serializable {
         DecisionServiceResponse response = null;
         try {
             URL url = new URL("http://stmbrmsred1:9080/DecisionService/ws/SE_Prescreen_UWS_RuleApp/1.0/SE_Prescreen_UWS_Flow?wsdl");
-            QName qname = new QName("http://stmbrmsred1:9080/DecisionService/ws/SE_Prescreen_UWS_RuleApp/1.0/SE_Prescreen_UWS_Flow", "DecisionServiceSE_Prescreen_UWS_Flow");
+            QName qname = new QName("http://www.ilog.com/rules/DecisionService", "DecisionServiceSE_Prescreen_UWS_Flow");
 
             service = new DecisionServiceSEPrescreenUWSFlow_Service(url, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
@@ -117,7 +117,7 @@ public class EndPoint implements Serializable {
         DecisionServiceResponse response = null;
         try {
             URL url = new URL("http://stmbrmsred1:9080/DecisionService/ws/SE_Standard_Pricing_Interest_RuleApp/1.0/SE_Standard_Pricing_Interest_Flow?wsdl");
-            QName qname = new QName("http://stmbrmsred1:9080/DecisionService/ws/SE_Standard_Pricing_Interest_RuleApp/1.0/SE_Standard_Pricing_Interest_Flow", "DecisionServiceSE_Standard_Pricing_Interest_Flow");
+            QName qname = new QName("http://www.ilog.com/rules/DecisionService", "DecisionServiceSE_Standard_Pricing_Interest_Flow");
 
             service = new DecisionServiceSEStandardPricingInterestFlow_Service(url, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
@@ -148,7 +148,7 @@ public class EndPoint implements Serializable {
         DecisionServiceResponse response = null;
         try {
             URL url = new URL("http://stmbrmsred1:9080/DecisionService/ws/SE_Standard_Pricing_Fee_RuleApp/1.0/SE_Standard_Pricing_Fee_Flow?wsdl");
-            QName qname = new QName("http://stmbrmsred1:9080/DecisionService/ws/SE_Standard_Pricing_Fee_RuleApp/1.0/SE_Standard_Pricing_Fee_Flow", "DecisionServiceSE_Standard_Pricing_Fee_Flow");
+            QName qname = new QName("http://www.ilog.com/rules/DecisionService", "DecisionServiceSE_Standard_Pricing_Fee_Flow");
 
             service = new DecisionServiceSEStandardPricingFeeFlow_Service(url, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
