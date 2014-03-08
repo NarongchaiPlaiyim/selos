@@ -1522,7 +1522,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //                    && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0)
 //                    && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
                 //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
-//                creditFacProposeControl.deleteAllProposeByIdList(deleteCreditIdList,deleteCollIdList,deleteGuarantorIdList,deleteConditionIdList);
+                creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList,deleteCollIdList,deleteGuarantorIdList,deleteConditionIdList);
                 newCreditFacilityView = creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
                 creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
                 exSummaryControl.calForCreditFacility(workCaseId);
