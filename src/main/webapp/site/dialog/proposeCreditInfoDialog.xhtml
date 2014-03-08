@@ -129,7 +129,7 @@
     </td>
     <td class="left">
         <p:inputText id="limit" value="#{creditFacPropose.newCreditDetailView.limit}"
-                     maxlength="17"
+                     maxlength="14"
                      onclick="this.select()"
                      onkeydown="return onKeyDownMoney(event);"
                      onkeypress="return onKeyPressMoney(event);"
@@ -172,7 +172,7 @@
     </td>
     <td class="left">
         <p:inputText value="#{creditFacPropose.newCreditDetailView.PCEAmount}"
-                     maxlength="17"
+                     maxlength="14"
                      onclick="this.select()"
                      onkeydown="return onKeyDownMoney(event);"
                      onkeypress="return onKeyPressMoney(event);"
@@ -387,11 +387,12 @@
 
             <p:column styleClass="center top">
                 <p:inputText id="installment" value="#{item.installment}"
-                             maxlength="17"
+                             maxlength="14"
                              onclick="this.select()"
                              onkeydown="return onKeyDownMoney(event);"
                              onkeypress="return onKeyPressMoney(event);"
-                             styleClass="right" readonly="true">
+                             style="width:200px;text-align: right"
+                             readonly="true">
                     <!--readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">-->
                     <f:convertNumber pattern="#,##0.##"
                                      minFractionDigits="2"
@@ -495,7 +496,7 @@
     </td>
     <td class="left">
         <p:inputText value="#{creditFacPropose.newCreditDetailView.holdLimitAmount}"
-                     maxlength="17"
+                     maxlength="14"
                      onclick="this.select()"
                      onkeydown="return onKeyDownMoney(event);"
                      onkeypress="return onKeyPressMoney(event);"

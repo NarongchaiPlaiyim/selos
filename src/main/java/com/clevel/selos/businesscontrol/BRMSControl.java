@@ -1,6 +1,5 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.controller.ExecutiveSummary;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.SELOS;

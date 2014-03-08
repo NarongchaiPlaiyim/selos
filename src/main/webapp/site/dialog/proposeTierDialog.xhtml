@@ -60,7 +60,7 @@
                                      id="installment"
                                      value="#{creditFacPropose.newCreditTierDetailView.installment}"
                                      required="#{not empty param[addDlgTier.clientId]}"
-                                     maxlength="18"
+                                     maxlength="14"
                                      style="width:150px;text-align: right">
                             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                             <p:ajax event="blur" update="@this"/>

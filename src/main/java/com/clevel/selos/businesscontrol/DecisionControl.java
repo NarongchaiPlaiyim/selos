@@ -201,71 +201,18 @@ public class DecisionControl extends BusinessControl {
             decisionView.setGuarantorBA(newCreditFacilityView.getGuarantorBA());
             decisionView.setReasonForReduction(newCreditFacilityView.getReasonForReduction());
 
-            Cloner cloner = new Cloner();
+            // Duplicate Data from Propose
             // Approve Credit
-            decisionView.setApproveCreditList(cloner.deepClone(newCreditFacilityView.getNewCreditDetailViewList()));
+            decisionView.setApproveCreditList(newCreditDetailTransform.copyToNewViews(newCreditFacilityView.getNewCreditDetailViewList(), ProposeType.A, true));
             decisionView.setApproveTotalCreditLimit(newCreditFacilityView.getTotalPropose());
             decisionView.setApproveBrwTotalCommercial(newCreditFacilityView.getTotalCommercial());
             decisionView.setApproveBrwTotalComAndOBOD(newCreditFacilityView.getTotalCommercialAndOBOD());
             decisionView.setApproveTotalExposure(newCreditFacilityView.getTotalExposure());
             // Approve Collateral
-            decisionView.setApproveCollateralList(cloner.deepClone(newCreditFacilityView.getNewCollateralViewList()));
+            decisionView.setApproveCollateralList(newCollateralTransform.copyToNewViews(newCreditFacilityView.getNewCollateralViewList(), ProposeType.A, true));
             // Approve Guarantor
-            decisionView.setApproveGuarantorList(cloner.deepClone(newCreditFacilityView.getNewGuarantorDetailViewList()));
+            decisionView.setApproveGuarantorList(newGuarantorDetailTransform.copyToNewViews(newCreditFacilityView.getNewGuarantorDetailViewList(), ProposeType.A, true));
             decisionView.setApproveTotalGuaranteeAmt(newCreditFacilityView.getTotalGuaranteeAmount());
-
-            // Set "id = 0" & "Type = Approve" to all data from Propose
-            if (decisionView.getApproveCreditList() != null && decisionView.getApproveCreditList().size() > 0) {
-                List<NewCreditDetailView> approveCreditList = decisionView.getApproveCreditList();
-                int size = approveCreditList.size();
-                for (int i=0; i<size; i++) {
-                    NewCreditDetailView creditDetailView = approveCreditList.get(i);
-                    creditDetailView.setId(0);
-                    creditDetailView.setProposeType(ProposeType.A);
-                }
-            }
-
-            if (decisionView.getApproveCollateralList() != null && decisionView.getApproveCollateralList().size() > 0) {
-                List<NewCollateralView> approveCollList = decisionView.getApproveCollateralList();
-                int collSize = approveCollList.size();
-                for (int i=0; i<collSize; i++) {
-                    NewCollateralView collateralView = approveCollList.get(i);
-                    collateralView.setId(0);
-                    collateralView.setProposeType(ProposeType.A);
-
-                    // todo: credit type from credit info
-
-                    // Coll Head
-                    if (collateralView.getNewCollateralHeadViewList() != null && collateralView.getNewCollateralHeadViewList().size() > 0) {
-                        List<NewCollateralHeadView> collHeadList = collateralView.getNewCollateralHeadViewList();
-                        int collHeadSize = collHeadList.size();
-                        for (int j=0; j<collHeadSize; j++) {
-                            NewCollateralHeadView collHeadView = collHeadList.get(j);
-                            collHeadView.setId(0);
-
-                            // Sub Coll
-                            if (collHeadView.getNewCollateralSubViewList() != null && collHeadView.getNewCollateralSubViewList().size() > 0) {
-                                List<NewCollateralSubView> collSubList = collHeadView.getNewCollateralSubViewList();
-                                int collSubSize = collSubList.size();
-                                for (int k=0; k<collSubSize; k++) {
-                                    NewCollateralSubView collSubView = collSubList.get(k);
-                                    collSubView.setId(0);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (decisionView.getApproveGuarantorList() != null && decisionView.getApproveGuarantorList().size() > 0) {
-                List<NewGuarantorDetailView> approveGuarantorList = decisionView.getApproveGuarantorList();
-                int size = approveGuarantorList.size();
-                for (int i=0; i<size; i++) {
-                    NewGuarantorDetailView guarantorDetailView = approveGuarantorList.get(i);
-                    guarantorDetailView.setId(0);
-                    guarantorDetailView.setProposeType(ProposeType.A);
-                }
-            }
 
             // Hidden Fields
 //            decisionView.setApproveTotalNumOfNewOD(newCreditFacilityView.getTotalApproveNumOfNewOD());

@@ -30,7 +30,7 @@ public class NewGuarantorCreditTransform extends Transform {
         NewCreditDetail newCreditDetailAdd;
 
         for (ProposeCreditDetailView proposeCreditDetailView : newCreditDetailViewList) {
-            if (proposeCreditDetailView.isNoFlag()) {
+
                 newGuarantorCredit = new NewGuarantorCredit();
                 newGuarantorCredit.setCreateDate(DateTime.now().toDate());
                 newGuarantorCredit.setCreateBy(user);
@@ -62,13 +62,11 @@ public class NewGuarantorCreditTransform extends Transform {
                 newGuarantorCredit.setNewGuarantorDetail(newGuarantorDetail);
                 newGuarantorCreditList.add(newGuarantorCredit);
 
-            }
 
         }
 
         return newGuarantorCreditList;
     }
-
 
     public NewCreditDetail findNewCreditDetail(List<NewCreditDetail> newCreditDetailList, ProposeCreditDetailView proposeCreditDetailView) {
         NewCreditDetail newCreditDetailReturn = null;

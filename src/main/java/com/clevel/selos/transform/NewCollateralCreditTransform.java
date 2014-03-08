@@ -24,7 +24,6 @@ public class NewCollateralCreditTransform extends Transform {
     @Inject
     NewCollateralCreditDAO newCollateralRelationDAO;
 
-
     public List<NewCollateralCredit> transformsToModelForCollateral(List<ProposeCreditDetailView> proposeCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewCollateral newCollateralDetail, User user) {
 
         List<NewCollateralCredit> newCollateralCreditList = new ArrayList<NewCollateralCredit>();
@@ -33,7 +32,7 @@ public class NewCollateralCreditTransform extends Transform {
 
         for (ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViewList) {
             log.debug("Start... transformToModelForCollateral : proposeCreditDetailView : {}", proposeCreditDetailView);
-            if (proposeCreditDetailView.isNoFlag()) {
+
                 newCollateralRelCredit = new NewCollateralCredit();
                 newCollateralRelCredit.setModifyDate(DateTime.now().toDate());
                 newCollateralRelCredit.setModifyBy(user);
@@ -51,8 +50,9 @@ public class NewCollateralCreditTransform extends Transform {
                     }
                 } else if ("E".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
                     ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById((long) proposeCreditDetailView.getSeq());
-                    if (existingCreditDetail.getId() == (long) proposeCreditDetailView.getSeq()) {
-                        log.info("guarantor choose seq  is :: {}", proposeCreditDetailView.getSeq());
+                    if (existingCreditDetail.getId() ==  proposeCreditDetailView.getId()) {
+                        log.debug("guarantor choose id  is :: {}", proposeCreditDetailView.getId());
+                        log.debug("guarantor choose seq  is :: {}", proposeCreditDetailView.getSeq());
                         newCollateralRelCredit.setExistingCreditDetail(existingCreditDetail);
                         log.info("newCollateralRelCredit existingCreditDetail id toSet is " + newCollateralRelCredit.getExistingCreditDetail().getId());
                     }
@@ -61,7 +61,7 @@ public class NewCollateralCreditTransform extends Transform {
 
                 newCollateralRelCredit.setNewCollateral(newCollateralDetail);
                 newCollateralCreditList.add(newCollateralRelCredit);
-            }
+
         }
 
         return newCollateralCreditList;
