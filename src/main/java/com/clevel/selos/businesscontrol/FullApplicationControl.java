@@ -1,6 +1,8 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
+import com.clevel.selos.dao.master.ReasonDAO;
+import com.clevel.selos.dao.master.ReasonTypeDAO;
 import com.clevel.selos.dao.master.RoleDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
@@ -8,10 +10,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionCode;
 import com.clevel.selos.model.PricingDOAValue;
 import com.clevel.selos.model.RoleValue;
-import com.clevel.selos.model.db.master.ProductGroup;
-import com.clevel.selos.model.db.master.RequestType;
-import com.clevel.selos.model.db.master.Role;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
@@ -48,6 +47,10 @@ public class FullApplicationControl extends BusinessControl {
     NewCreditFacilityDAO newCreditFacilityDAO;
     @Inject
     NewCreditDetailDAO newCreditDetailDAO;
+    @Inject
+    ReasonDAO reasonDAO;
+    @Inject
+    ReasonTypeDAO reasonTypeDAO;
 
     @Inject
     BPMExecutor bpmExecutor;
@@ -313,5 +316,25 @@ public class FullApplicationControl extends BusinessControl {
         }
 
         return pricingDOALevel;
+    }
+
+    public List<Reason> getCancelReasonList(){
+        List<Reason> reasons = reasonDAO.getCancelList();
+        if(reasons == null){
+            reasons = new ArrayList<Reason>();
+        }
+
+        return reasons;
+    }
+
+    public void cancelCAFullApp(long workCaseId, String queueName, int reasonId, String remark) throws Exception {
+        String reasonTxt = "";
+        if(reasonId!=0){
+            Reason reason = reasonDAO.findById(reasonId);
+            if(reason!=null && reason.getId()!=0){
+                reasonTxt = reason.getCode().concat(" - ").concat(reason.getDescription());
+            }
+        }
+        bpmExecutor.cancelCase(0, workCaseId, queueName, ActionCode.CANCEL_CA.getVal(), reasonTxt, remark);
     }
 }
