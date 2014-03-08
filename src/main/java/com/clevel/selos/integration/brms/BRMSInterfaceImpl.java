@@ -3,6 +3,7 @@ package com.clevel.selos.integration.brms;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.BRMSInterface;
+import com.clevel.selos.integration.brms.convert.FullApplicationConverter;
 import com.clevel.selos.integration.brms.convert.PrescreenConverter;
 import com.clevel.selos.integration.brms.convert.StandardPricingFeeConverter;
 import com.clevel.selos.integration.brms.convert.StandardPricingIntConverter;
@@ -35,6 +36,8 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
     StandardPricingIntConverter standardPricingIntConverter;
     @Inject
     PrescreenConverter prescreenConverter;
+    @Inject
+    FullApplicationConverter fullApplicationConverter;
 
     @Inject
     public BRMSInterfaceImpl() {
@@ -64,14 +67,25 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
     }
 
     @Override
-    public List<FullApplicationResponse> checkFullApplicationRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
+    public UWRulesResponse checkFullApplicationRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
         logger.debug("checkFullApplicationRule : applicationInfo {}", applicationInfo);
         if (applicationInfo == null) {
             logger.error("fullApplicationRequest is null for request");
             throw new ValidationException("002");
         }
 
-        return new ArrayList<FullApplicationResponse>();
+        UWRulesResponse uwRulesResponse = null;
+
+        try {
+            DecisionServiceResponse decisionServiceResponse = endpoint.callPrescreenUnderwritingRulesService(fullApplicationConverter.getDecisionServiceRequest(applicationInfo));
+            uwRulesResponse = fullApplicationConverter.getUWRulesResponse(decisionServiceResponse);
+            uwRulesResponse.setActionResult(ActionResult.SUCCESS);
+        }catch (Exception ex) {
+            uwRulesResponse = new UWRulesResponse();
+            uwRulesResponse.setActionResult(ActionResult.FAILED);
+            uwRulesResponse.setReason(ex.getMessage());
+        }
+        return uwRulesResponse;
     }
 
     @Override
