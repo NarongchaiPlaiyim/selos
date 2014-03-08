@@ -102,9 +102,10 @@ public class StandardPricingIntConverter extends Converter {
     }
 
     public StandardPricingResponse getStandardPricingResponse(DecisionServiceResponse decisionServiceResponse){
+        logger.debug("-- start convert getStandardPricingResponse from decisionServiceResponse");
         StandardPricingResponse standardPricingIntResponse = new StandardPricingResponse();
         if(decisionServiceResponse != null){
-
+            logger.debug("response is not null");
 
             UnderwritingRequest underwritingRequest = decisionServiceResponse.getUnderwritingRequest();
             UnderwritingApprovalRequestType approvalRequestType = underwritingRequest.getUnderwritingApprovalRequest();
@@ -152,7 +153,7 @@ public class StandardPricingIntConverter extends Converter {
             standardPricingIntResponse.setApplicationNo(applicationType.getApplicationNumber());
 
         }
-
+        logger.debug("-- end convert response return getStandardPricingResponse{} ", standardPricingIntResponse);
         return standardPricingIntResponse;
     }
 }

@@ -44,7 +44,7 @@ public class Converter implements Serializable {
             gregorianCalendar.setTime(value);
             attributeType.setDateTimeValue(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
         } catch (Exception ex){
-            logger.error("Cannot convert XML");
+            logger.error("Cannot convert Date {}",value, ex);
         }
         return attributeType;
     }

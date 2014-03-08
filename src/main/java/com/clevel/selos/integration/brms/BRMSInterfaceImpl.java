@@ -108,6 +108,7 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
         }catch (Exception ex){
             standardPricingResponse.setActionResult(ActionResult.FAILED);
             standardPricingResponse.setReason(ex.getMessage());
+            logger.error("calling exception or convert exception", ex);
         }
 
         return standardPricingResponse;
@@ -130,6 +131,7 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
         }catch (Exception ex){
             standardPricingResponse.setActionResult(ActionResult.FAILED);
             standardPricingResponse.setReason(ex.getMessage());
+            logger.error("calling exception or convert exception", ex);
         }
 
         return standardPricingResponse;
