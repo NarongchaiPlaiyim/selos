@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -267,4 +270,17 @@ public class B2ModelRiskScoringType {
         this.versionDate = value;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("startTime", startTime)
+                .append("endTime", endTime)
+                .append("b2ModelTransaction", b2ModelTransaction)
+                .append("message", message)
+                .append("passFlag", passFlag)
+                .append("versionNumber", versionNumber)
+                .append("versionDate", versionDate)
+                .toString();
+    }
 }

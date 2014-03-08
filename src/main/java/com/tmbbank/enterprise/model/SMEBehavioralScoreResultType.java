@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -313,4 +316,19 @@ public class SMEBehavioralScoreResultType {
         return this.message;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("timeOfResult", timeOfResult)
+                .append("totalScore", totalScore)
+                .append("riskClass", riskClass)
+                .append("probabilityOfDefault", probabilityOfDefault)
+                .append("masterScale", masterScale)
+                .append("color", color)
+                .append("result", result)
+                .append("validFrom", validFrom)
+                .append("validTo", validTo)
+                .append("message", message)
+                .toString();
+    }
 }

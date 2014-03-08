@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -202,4 +205,15 @@ public class GuarantorType {
         return this.attribute;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("collateral", collateral)
+                .append("borrowerRelationship", borrowerRelationship)
+                .append("businessOwnerFlag", businessOwnerFlag)
+                .append("familyRelativeOwnerFlag", familyRelativeOwnerFlag)
+                .append("attribute", attribute)
+                .toString();
+    }
 }

@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -502,4 +505,26 @@ public class NCBGenericIndividualBureauScoreType {
         return this.attribute;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("scoreName", scoreName)
+                .append("scoreVersion", scoreVersion)
+                .append("scoreSegment", scoreSegment)
+                .append("recaliberationVersion", recaliberationVersion)
+                .append("scoreDate", scoreDate)
+                .append("score", score)
+                .append("scoreGrade", scoreGrade)
+                .append("odds", odds)
+                .append("reasonCode1", reasonCode1)
+                .append("reasonCode2", reasonCode2)
+                .append("reasonCode3", reasonCode3)
+                .append("reasonCode4", reasonCode4)
+                .append("reasonCode5", reasonCode5)
+                .append("errorCode", errorCode)
+                .append("enquiryControlNumber", enquiryControlNumber)
+                .append("attribute", attribute)
+                .toString();
+    }
 }

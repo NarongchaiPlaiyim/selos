@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -177,4 +180,14 @@ public class LitigationDetailType {
         return this.attribute;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("date", date)
+                .append("fullIdentityMatchedFlag", fullIdentityMatchedFlag)
+                .append("partialIdentityMatchedFlag", partialIdentityMatchedFlag)
+                .append("attribute", attribute)
+                .toString();
+    }
 }

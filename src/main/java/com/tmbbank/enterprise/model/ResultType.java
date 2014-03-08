@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -499,4 +502,26 @@ public class ResultType {
         this.rejectGroupCode = value;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("code", code)
+                .append("type", type)
+                .append("description", description)
+                .append("severity", severity)
+                .append("checkingCriteria", checkingCriteria)
+                .append("screen", screen)
+                .append("field", field)
+                .append("messageDisplay", messageDisplay)
+                .append("underwritingAction", underwritingAction)
+                .append("stringValue", stringValue)
+                .append("numericValue", numericValue)
+                .append("color", color)
+                .append("ruleName", ruleName)
+                .append("attribute", attribute)
+                .append("deviationFlag", deviationFlag)
+                .append("rejectGroupCode", rejectGroupCode)
+                .toString();
+    }
 }

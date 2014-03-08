@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -899,4 +902,39 @@ public class ApplicationType {
         return this.account;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("applicationNumber", applicationNumber)
+                .append("bookingChannel", bookingChannel)
+                .append("segment", segment)
+                .append("projectCode", projectCode)
+                .append("pricingMode", pricingMode)
+                .append("dateOfApplication", dateOfApplication)
+                .append("loanLimitAmount", loanLimitAmount)
+                .append("loanCategory", loanCategory)
+                .append("totalMonthlyIncomeMainBorrower", totalMonthlyIncomeMainBorrower)
+                .append("totalMonthlyIncomeCoBorrowers", totalMonthlyIncomeCoBorrowers)
+                .append("totalMonthlyIncome", totalMonthlyIncome)
+                .append("aggregatedCreditLimit", aggregatedCreditLimit)
+                .append("aggregatedCreditExposureLimit", aggregatedCreditExposureLimit)
+                .append("remainingDebtToIncome", remainingDebtToIncome)
+                .append("maxDebtToIncome", maxDebtToIncome)
+                .append("existingDebtToIncome", existingDebtToIncome)
+                .append("underwritingAction", underwritingAction)
+                .append("maxNumOfBorrowers", maxNumOfBorrowers)
+                .append("status", status)
+                .append("borrower", borrower)
+                .append("product", product)
+                .append("riskModel", riskModel)
+                .append("thirdPartyPledgor", thirdPartyPledgor)
+                .append("score", score)
+                .append("attribute", attribute)
+                .append("requiredDocumentSet", requiredDocumentSet)
+                .append("fee", fee)
+                .append("business", business)
+                .append("account", account)
+                .toString();
+    }
 }

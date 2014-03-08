@@ -107,7 +107,7 @@ public class EndPoint implements Serializable {
             log.debug("callPrescreenUnderwritingRulesService() Done...{}", response);
             return response;
         } catch (Exception e) {
-            log.error("callPrescreenUnderwritingRulesService() Error : {}", e);
+            log.error("callPrescreenUnderwritingRulesService() Error :", e);
             throw e;
         }
     }

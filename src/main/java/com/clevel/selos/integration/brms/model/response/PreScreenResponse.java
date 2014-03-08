@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.brms.model.response;
 
 import com.clevel.selos.integration.brms.model.RuleColorResult;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class PreScreenResponse {
     public String ruleName;
@@ -78,5 +80,18 @@ public class PreScreenResponse {
 
     public void setRejectGroupCode(String rejectGroupCode) {
         this.rejectGroupCode = rejectGroupCode;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("ruleName", ruleName)
+                .append("ruleOrder", ruleOrder)
+                .append("type", type)
+                .append("personalId", personalId)
+                .append("color", color)
+                .append("deviationFlag", deviationFlag)
+                .append("rejectGroupCode", rejectGroupCode)
+                .toString();
     }
 }

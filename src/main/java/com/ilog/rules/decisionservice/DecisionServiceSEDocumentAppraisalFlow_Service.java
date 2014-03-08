@@ -68,4 +68,6 @@ public class DecisionServiceSEDocumentAppraisalFlow_Service
         return super.getPort(new QName("http://www.ilog.com/rules/DecisionService", "DecisionServiceSOAPstmbrmsred1"), DecisionServiceSEDocumentAppraisalFlow.class, features);
     }
 
+
+
 }

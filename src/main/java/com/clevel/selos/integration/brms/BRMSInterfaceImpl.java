@@ -13,6 +13,7 @@ import com.clevel.selos.integration.brms.model.response.*;
 
 import com.clevel.selos.integration.brms.service.EndPoint;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.util.Util;
 import com.ilog.rules.decisionservice.DecisionServiceResponse;
 import org.slf4j.Logger;
 
@@ -62,7 +63,8 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
         }catch (Exception ex) {
             uwRulesResponse = new UWRulesResponse();
             uwRulesResponse.setActionResult(ActionResult.FAILED);
-            uwRulesResponse.setReason(ex.getMessage());
+            uwRulesResponse.setReason(Util.getMessageException(ex));
+            logger.error("checkPreScreenRule calling exception/convert exception", ex);
         }
 
         return uwRulesResponse;
@@ -85,7 +87,8 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
         }catch (Exception ex) {
             uwRulesResponse = new UWRulesResponse();
             uwRulesResponse.setActionResult(ActionResult.FAILED);
-            uwRulesResponse.setReason(ex.getMessage());
+            uwRulesResponse.setReason(Util.getMessageException(ex));
+            logger.error("checkFullApplicationRule calling exception/convert exception", ex);
         }
         return uwRulesResponse;
     }
@@ -107,8 +110,8 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
 
         }catch (Exception ex){
             standardPricingResponse.setActionResult(ActionResult.FAILED);
-            standardPricingResponse.setReason(ex.getMessage());
-            logger.error("calling exception or convert exception", ex);
+            standardPricingResponse.setReason(Util.getMessageException(ex));
+            logger.error("checkStandardPricingIntRule calling exception/convert exception", ex);
         }
 
         return standardPricingResponse;
@@ -130,8 +133,8 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
 
         }catch (Exception ex){
             standardPricingResponse.setActionResult(ActionResult.FAILED);
-            standardPricingResponse.setReason(ex.getMessage());
-            logger.error("calling exception or convert exception", ex);
+            standardPricingResponse.setReason(Util.getMessageException(ex));
+            logger.error("checkStandardPricingFeeRule calling exception or convert exception", ex);
         }
 
         return standardPricingResponse;
