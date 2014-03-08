@@ -98,7 +98,7 @@ public class NewCollateralTransform extends Transform {
             newCollateral.setPremiumAmount(newCollateralView.getPremiumAmount());
 
             if (Util.safetyList(newCollateralView.getProposeCreditDetailViewList()).size() > 0) {
-                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralView.getProposeCreditDetailViewList(), newCreditFacility.getNewCreditDetailList(), newCollateral, user);
+                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralView.getProposeCreditDetailViewList(), newCreditFacility.getNewCreditDetailList(), newCollateral,newCreditFacility, user);
                 newCollateral.setNewCollateralCreditList(newCollateralCreditList);
             }
 

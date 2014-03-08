@@ -62,7 +62,9 @@ public class NewCollateralSubRelatedDAO extends GenericDAO<NewCollateralSubRelat
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase", workCase));
         criteria.add(Restrictions.eq("proposeType", proposeType));
-        criteria.setFetchMode("customer", FetchMode.LAZY);
+        criteria.setFetchMode("newCollateralHead", FetchMode.LAZY);
+        criteria.setFetchMode("newCollateralSubMortgageList", FetchMode.LAZY);
+        criteria.setFetchMode("newCollateralSubOwnerList", FetchMode.LAZY);
         List<NewCollateralSubRelated> newCollateralSubRelatedList = criteria.list();
         return newCollateralSubRelatedList;
     }

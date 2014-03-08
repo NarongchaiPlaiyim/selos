@@ -30,6 +30,11 @@ public class NewGuarantorCredit implements Serializable {
     @Column(name = "guarantee_amount")
     private BigDecimal guaranteeAmount;
 
+    @ManyToOne
+    @JoinColumn(name = "new_credit_facility_id")
+    private NewCreditFacility newCreditFacility;
+
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
     private Date createDate;
@@ -52,6 +57,14 @@ public class NewGuarantorCredit implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public NewCreditFacility getNewCreditFacility() {
+        return newCreditFacility;
+    }
+
+    public void setNewCreditFacility(NewCreditFacility newCreditFacility) {
+        this.newCreditFacility = newCreditFacility;
     }
 
     public NewGuarantorDetail getNewGuarantorDetail() {

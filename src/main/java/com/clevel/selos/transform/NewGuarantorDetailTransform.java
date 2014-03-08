@@ -49,7 +49,7 @@ public class NewGuarantorDetailTransform extends Transform {
             newGuarantorDetail = new NewGuarantorDetail();
             if (newGuarantorDetailView.getId() != 0) {
                 log.info("Start..  newGuarantorDetail :: view :: {}", newGuarantorDetailView.getId());
-                newGuarantorDetail = newGuarantorDetailDAO.findById(newGuarantorDetailView.getId());
+                newGuarantorDetail = newGuarantorDetailDAO.findGuarantorById(newGuarantorDetailView.getId());
                 log.info("Start..  newGuarantorDetail :: DB :: {}", newGuarantorDetail.getId());
                 newGuarantorDetail.setModifyDate(DateTime.now().toDate());
                 newGuarantorDetail.setModifyBy(user);
@@ -68,7 +68,7 @@ public class NewGuarantorDetailTransform extends Transform {
 
             if (Util.safetyList(newGuarantorDetailView.getProposeCreditDetailViewList()).size() > 0) {
                 log.debug("Start.. transformToModel proposeCreditDetailViewList : {}", newGuarantorDetailView.getProposeCreditDetailViewList());
-                List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorCreditTransform.transformsToModelForGuarantor(newGuarantorDetailView.getProposeCreditDetailViewList(), newCreditFacility.getNewCreditDetailList(), newGuarantorDetail, user);
+                List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorCreditTransform.transformsToModelForGuarantor(newGuarantorDetailView.getProposeCreditDetailViewList(), newCreditFacility.getNewCreditDetailList(), newGuarantorDetail,newCreditFacility, user);
                 log.debug("End.. transformToModel newGuarantorCreditList size :: {}", newGuarantorCreditList.size());
                 newGuarantorDetail.setNewGuarantorCreditList(newGuarantorCreditList);
             }

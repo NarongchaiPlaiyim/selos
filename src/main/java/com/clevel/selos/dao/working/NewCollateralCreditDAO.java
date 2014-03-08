@@ -54,5 +54,13 @@ public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long
         return newCollateralCreditList;
     }
 
+    public List<NewCollateralCredit> getListByNewCreditFacility(NewCreditFacility newCreditFacility) {
+        Criteria criteria = createCriteria();
+        String query = "SELECT newCollateralCredit FROM NewCollateralCredit newCollateralCredit WHERE newCreditFacility.id  = " + newCreditFacility.getId();
+        List<NewCollateralCredit>  newCollateralCreditList = getSession().createQuery(query).list();
+        criteria.setFetchMode("newGuarantorDetail", FetchMode.LAZY);
+
+        return newCollateralCreditList;
+    }
 
 }
