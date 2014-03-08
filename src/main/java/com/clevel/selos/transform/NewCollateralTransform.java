@@ -54,7 +54,10 @@ public class NewCollateralTransform extends Transform {
     @Inject
     private NewCollateralCreditTransform newCollateralCreditTransform;
     @Inject
-    ExistingCreditDetailTransform existingCreditDetailTransform;
+    private ExistingCreditDetailTransform existingCreditDetailTransform;
+    @Inject
+    private ProposeCreditDetailTransform proposeCreditDetailTransform;
+
     @Inject
     private NewCollateralDAO newCollateralDAO;
     private List<NewCollateral> newCollateralList;
@@ -95,7 +98,7 @@ public class NewCollateralTransform extends Transform {
             newCollateral.setPremiumAmount(newCollateralView.getPremiumAmount());
 
             if (Util.safetyList(newCollateralView.getProposeCreditDetailViewList()).size() > 0) {
-                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralView.getProposeCreditDetailViewList(), newCreditFacility.getNewCreditDetailList(), newCollateral, user);
+                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralView.getProposeCreditDetailViewList(), newCreditFacility.getNewCreditDetailList(), newCollateral,newCreditFacility, user);
                 newCollateral.setNewCollateralCreditList(newCollateralCreditList);
             }
 
@@ -242,14 +245,14 @@ public class NewCollateralTransform extends Transform {
 
         for (NewCollateral newCollateralDetail1 : newCollateralList) {
             newCollateralView = new NewCollateralView();
+            newCollateralView.setId(newCollateralDetail1.getId());
+            newCollateralView.setJobID(newCollateralDetail1.getJobID());
             newCollateralView.setProposeType(newCollateralDetail1.getProposeType());
             newCollateralView.setComs(Util.isTrue(newCollateralDetail1.getComs()));
-            newCollateralView.setId(newCollateralDetail1.getId());
             newCollateralView.setCreateDate(newCollateralDetail1.getCreateDate());
             newCollateralView.setCreateBy(newCollateralDetail1.getCreateBy());
-            newCollateralView.setCreateDate(newCollateralDetail1.getCreateDate());
-            newCollateralView.setCreateBy(newCollateralDetail1.getCreateBy());
-            newCollateralView.setJobID(newCollateralDetail1.getJobID());
+            newCollateralView.setModifyDate(newCollateralDetail1.getModifyDate());
+            newCollateralView.setModifyBy(newCollateralDetail1.getModifyBy());
             newCollateralView.setAadDecision(newCollateralDetail1.getAadDecision());
             newCollateralView.setAadDecisionReason(newCollateralDetail1.getAadDecisionReason());
             newCollateralView.setAadDecisionReasonDetail(newCollateralDetail1.getAadDecisionReasonDetail());
@@ -640,6 +643,46 @@ public class NewCollateralTransform extends Transform {
         }
         log.debug("--[RETURNED] NewCollateralViewList.size[{}]", newCollateralViewList.size());
         return newCollateralViewList;
+    }
+
+    public NewCollateralView copyToNewView(NewCollateralView originalCollateralView, ProposeType proposeType, boolean isNewId) {
+        NewCollateralView newCollateralView = new NewCollateralView();
+        if (originalCollateralView != null) {
+            newCollateralView = new NewCollateralView();
+            newCollateralView.setId(isNewId ? 0 : originalCollateralView.getId());
+            newCollateralView.setJobID(originalCollateralView.getJobID());
+            newCollateralView.setProposeType(proposeType);
+            newCollateralView.setAppraisalDate(originalCollateralView.getAppraisalDate());
+            newCollateralView.setAadDecision(originalCollateralView.getAadDecision());
+            newCollateralView.setAadDecisionReason(originalCollateralView.getAadDecisionReason());
+            newCollateralView.setAadDecisionReasonDetail(originalCollateralView.getAadDecisionReasonDetail());
+            newCollateralView.setUsage(originalCollateralView.getUsage());
+            newCollateralView.setTypeOfUsage(originalCollateralView.getTypeOfUsage());
+            newCollateralView.setUwDecision(originalCollateralView.getUwDecision());
+            newCollateralView.setUwRemark(originalCollateralView.getUwRemark());
+            newCollateralView.setMortgageCondition(originalCollateralView.getMortgageCondition());
+            newCollateralView.setMortgageConditionDetail(originalCollateralView.getMortgageConditionDetail());
+            newCollateralView.setBdmComments(originalCollateralView.getBdmComments());
+            newCollateralView.setCreateDate(originalCollateralView.getCreateDate());
+            newCollateralView.setCreateBy(originalCollateralView.getCreateBy());
+            newCollateralView.setModifyDate(originalCollateralView.getModifyDate());
+            newCollateralView.setModifyBy(originalCollateralView.getModifyBy());
+            newCollateralView.setPremiumAmount(originalCollateralView.getPremiumAmount());
+            newCollateralView.setComs(originalCollateralView.isComs());
+            newCollateralView.setNewCollateralHeadViewList(newCollateralHeadTransform.copyToNewViews(originalCollateralView.getNewCollateralHeadViewList(), isNewId));
+            newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailTransform.copyToNewViews(originalCollateralView.getProposeCreditDetailViewList(), isNewId));
+        }
+        return newCollateralView;
+    }
+
+    public List<NewCollateralView> copyToNewViews(List<NewCollateralView> originalNewCollateralViews, ProposeType proposeType, boolean isNewId) {
+        List<NewCollateralView> _newCollateralViewList = new ArrayList<NewCollateralView>();
+        if (originalNewCollateralViews != null && originalNewCollateralViews.size() > 0) {
+            for (NewCollateralView newCollateralView : originalNewCollateralViews) {
+                _newCollateralViewList.add(copyToNewView(newCollateralView, proposeType, isNewId));
+            }
+        }
+        return _newCollateralViewList;
     }
 
 }

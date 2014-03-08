@@ -3,14 +3,17 @@ package com.clevel.selos.integration.brms;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.BRMSInterface;
+import com.clevel.selos.integration.brms.convert.FullApplicationConverter;
 import com.clevel.selos.integration.brms.convert.PrescreenConverter;
 import com.clevel.selos.integration.brms.convert.StandardPricingFeeConverter;
 import com.clevel.selos.integration.brms.convert.StandardPricingIntConverter;
 import com.clevel.selos.integration.brms.model.RuleColorResult;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.*;
+
 import com.clevel.selos.integration.brms.service.EndPoint;
 import com.clevel.selos.model.ActionResult;
+import com.ilog.rules.decisionservice.DecisionServiceResponse;
 import org.slf4j.Logger;
 
 import javax.enterprise.inject.Default;
@@ -33,6 +36,8 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
     StandardPricingIntConverter standardPricingIntConverter;
     @Inject
     PrescreenConverter prescreenConverter;
+    @Inject
+    FullApplicationConverter fullApplicationConverter;
 
     @Inject
     public BRMSInterfaceImpl() {
@@ -49,7 +54,7 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
         UWRulesResponse uwRulesResponse = null;
 
         try {
-            com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceResponse decisionServiceResponse = endpoint.callPrescreenUnderwritingRulesService(prescreenConverter.getDecisionServiceRequest(applicationInfo));
+            DecisionServiceResponse decisionServiceResponse = endpoint.callPrescreenUnderwritingRulesService(prescreenConverter.getDecisionServiceRequest(applicationInfo));
             uwRulesResponse = prescreenConverter.getUWRulesResponse(decisionServiceResponse);
             uwRulesResponse.setActionResult(ActionResult.SUCCESS);
         }catch (Exception ex) {
@@ -62,14 +67,25 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
     }
 
     @Override
-    public List<FullApplicationResponse> checkFullApplicationRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
+    public UWRulesResponse checkFullApplicationRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
         logger.debug("checkFullApplicationRule : applicationInfo {}", applicationInfo);
         if (applicationInfo == null) {
             logger.error("fullApplicationRequest is null for request");
             throw new ValidationException("002");
         }
 
-        return new ArrayList<FullApplicationResponse>();
+        UWRulesResponse uwRulesResponse = null;
+
+        try {
+            DecisionServiceResponse decisionServiceResponse = endpoint.callPrescreenUnderwritingRulesService(fullApplicationConverter.getDecisionServiceRequest(applicationInfo));
+            uwRulesResponse = fullApplicationConverter.getUWRulesResponse(decisionServiceResponse);
+            uwRulesResponse.setActionResult(ActionResult.SUCCESS);
+        }catch (Exception ex) {
+            uwRulesResponse = new UWRulesResponse();
+            uwRulesResponse.setActionResult(ActionResult.FAILED);
+            uwRulesResponse.setReason(ex.getMessage());
+        }
+        return uwRulesResponse;
     }
 
     @Override
@@ -83,7 +99,7 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
         StandardPricingResponse standardPricingResponse = new StandardPricingResponse();
 
         try{
-            com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceResponse decisionServiceResponse = endpoint.callStandardPricingInterestRulesService(standardPricingIntConverter.getDecisionServiceRequest(applicationInfo));
+            DecisionServiceResponse decisionServiceResponse = endpoint.callStandardPricingInterestRulesService(standardPricingIntConverter.getDecisionServiceRequest(applicationInfo));
             standardPricingResponse = standardPricingIntConverter.getStandardPricingResponse(decisionServiceResponse);
             standardPricingResponse.setActionResult(ActionResult.SUCCESS);
 
@@ -105,7 +121,7 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
 
         StandardPricingResponse standardPricingResponse = new StandardPricingResponse();
         try{
-            com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceResponse decisionServiceResponse = endpoint.callStandardPricingFeeRulesService(standardPricingFeeConverter.getDecisionServiceRequest(applicationInfo));
+            DecisionServiceResponse decisionServiceResponse = endpoint.callStandardPricingFeeRulesService(standardPricingFeeConverter.getDecisionServiceRequest(applicationInfo));
             standardPricingResponse = standardPricingFeeConverter.getStandardPricingResponse(decisionServiceResponse);
             standardPricingResponse.setActionResult(ActionResult.SUCCESS);
 

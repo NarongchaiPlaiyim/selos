@@ -55,6 +55,9 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     NewCreditTierTransform newCreditTierTransform;
     @Inject
+    ProposeCreditDetailTransform proposeCreditDetailTransform;
+
+    @Inject
     SubCollateralTypeDAO subCollateralTypeDAO;
     @Inject
     CollateralTypeDAO collateralTypeDAO;
@@ -134,8 +137,8 @@ public class CreditFacProposeControl extends BusinessControl {
     ExistingCollateralDetailDAO existingCollateralDetailDAO;
     @Inject
     private COMSInterface comsInterface;
-    /*@Inject
-    BRMSControl brmsControl;*/ 
+//    @Inject
+//    BRMSControl brmsControl;
     @Inject
     NewCollateralDAO newCollateralDAO;
     @Inject
@@ -417,20 +420,10 @@ public class CreditFacProposeControl extends BusinessControl {
         if (newCreditDetailViewList != null && newCreditDetailViewList.size() > 0) {
             ProposeCreditDetailView proposeCreditFromNew;
             for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
-                proposeCreditFromNew = new ProposeCreditDetailView();
-                proposeCreditFromNew.setSeq(sequenceNumber);
-                proposeCreditFromNew.setId(newCreditDetailView.getId());
-                proposeCreditFromNew.setTypeOfStep(CreditTypeOfStep.NEW.type());
-                proposeCreditFromNew.setAccountName(newCreditDetailView.getAccountName());
-                proposeCreditFromNew.setAccountNumber(newCreditDetailView.getAccountNumber());
-                proposeCreditFromNew.setAccountSuf(newCreditDetailView.getAccountSuf());
-                proposeCreditFromNew.setRequestType(newCreditDetailView.getRequestType());
-                proposeCreditFromNew.setProductProgramView(newCreditDetailView.getProductProgramView());
-                proposeCreditFromNew.setCreditFacilityView(newCreditDetailView.getCreditTypeView());
-                proposeCreditFromNew.setLimit(newCreditDetailView.getLimit());
-                proposeCreditFromNew.setGuaranteeAmount(newCreditDetailView.getGuaranteeAmount());
-                proposeCreditFromNew.setUseCount(newCreditDetailView.getUseCount());
-                proposeCreditFromNew.setNoFlag(newCreditDetailView.isNoFlag());
+                // set seq to NewCreditDetail
+                newCreditDetailView.setSeq(sequenceNumber);
+                // create and set seq to new ProposeCredit
+                proposeCreditFromNew = proposeCreditDetailTransform.convertNewCreditToProposeCredit(newCreditDetailView, sequenceNumber);
                 proposeCreditDetailViewList.add(proposeCreditFromNew);
                 sequenceNumber++;
             }
@@ -448,16 +441,8 @@ public class CreditFacProposeControl extends BusinessControl {
         if (_existingCreditDetailViewList != null && _existingCreditDetailViewList.size() > 0) {
             ProposeCreditDetailView proposeCreditFromExisting;
             for (ExistingCreditDetailView existingCreditDetailView : _existingCreditDetailViewList) {
-                proposeCreditFromExisting = new ProposeCreditDetailView();
-                proposeCreditFromExisting.setSeq(sequenceNumber);
-                proposeCreditFromExisting.setId(existingCreditDetailView.getId());
-                proposeCreditFromExisting.setTypeOfStep(CreditTypeOfStep.EXISTING.type());
-                proposeCreditFromExisting.setAccountName(existingCreditDetailView.getAccountName());
-                proposeCreditFromExisting.setAccountNumber(existingCreditDetailView.getAccountNumber());
-                proposeCreditFromExisting.setAccountSuf(existingCreditDetailView.getAccountSuf());
-                proposeCreditFromExisting.setProductProgramView(existingCreditDetailView.getExistProductProgramView());
-                proposeCreditFromExisting.setCreditFacilityView(existingCreditDetailView.getExistCreditTypeView());
-                proposeCreditFromExisting.setLimit(existingCreditDetailView.getLimit());
+                existingCreditDetailView.setSeq(sequenceNumber);
+                proposeCreditFromExisting = proposeCreditDetailTransform.convertExistingCreditToProposeCredit(existingCreditDetailView, sequenceNumber);
                 proposeCreditDetailViewList.add(proposeCreditFromExisting);
                 sequenceNumber++;
             }
@@ -467,18 +452,18 @@ public class CreditFacProposeControl extends BusinessControl {
         return proposeCreditDetailViewList;
     }
 
-    public int getMaxSeqFromProposeCreditList(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
-        int maxSeq = 1;
+    public int getLastSeqNumberFromProposeCredit(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
+        int lastSeqNumber = 1;
         if (proposeCreditDetailViewList != null && proposeCreditDetailViewList.size() > 0) {
             int size = proposeCreditDetailViewList.size();
             for (int i=0; i<size; i++) {
                 ProposeCreditDetailView proposeCreditDetailView = proposeCreditDetailViewList.get(i);
-                if (proposeCreditDetailView.getSeq() > maxSeq) {
-                    maxSeq = proposeCreditDetailView.getSeq();
+                if (proposeCreditDetailView.getSeq() > lastSeqNumber) {
+                    lastSeqNumber = proposeCreditDetailView.getSeq();
                 }
             }
         }
-        return maxSeq;
+        return lastSeqNumber;
     }
 
     public void groupTypeOfStepAndOrderBySeq(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
@@ -835,10 +820,10 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
-            if(Util.safetyList(newCreditFacilityView.getNewGuarantorViewDelList()).size()>0){
-                List<NewGuarantorDetail> listDel = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorViewDelList(), newCreditFacility, currentUser,ProposeType.P);
-                newGuarantorDetailDAO.delete(listDel);
-            }
+//            if(Util.safetyList(newCreditFacilityView.getNewGuarantorViewDelList()).size()>0){
+//                List<NewGuarantorDetail> listDel = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorViewDelList(), newCreditFacility, currentUser,ProposeType.P);
+//                newGuarantorDetailDAO.delete(listDel);
+//            }
             log.debug("saveCreditFacility ::: newGuarantorDetailViewList : {}", newCreditFacilityView.getNewGuarantorDetailViewList());
             List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser,ProposeType.P);
             newCreditFacility.setNewGuarantorDetailList(newGuarantorDetailList);

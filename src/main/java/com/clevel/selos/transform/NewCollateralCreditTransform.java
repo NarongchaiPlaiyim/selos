@@ -4,10 +4,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
 import com.clevel.selos.dao.working.NewCollateralCreditDAO;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.ExistingCreditDetail;
-import com.clevel.selos.model.db.working.NewCollateral;
-import com.clevel.selos.model.db.working.NewCollateralCredit;
-import com.clevel.selos.model.db.working.NewCreditDetail;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.ProposeCreditDetailView;
 import org.joda.time.DateTime;
 
@@ -25,8 +22,8 @@ public class NewCollateralCreditTransform extends Transform {
     NewCollateralCreditDAO newCollateralRelationDAO;
 
 
-    public List<NewCollateralCredit> transformsToModelForCollateral(List<ProposeCreditDetailView> proposeCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewCollateral newCollateralDetail, User user) {
-
+    public List<NewCollateralCredit> transformsToModelForCollateral(List<ProposeCreditDetailView> proposeCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewCollateral newCollateralDetail,NewCreditFacility newCreditFacility, User user) {
+    
         List<NewCollateralCredit> newCollateralCreditList = new ArrayList<NewCollateralCredit>();
         NewCollateralCredit newCollateralRelCredit;
         NewCreditDetail newCreditDetailAdd;
@@ -59,7 +56,7 @@ public class NewCollateralCreditTransform extends Transform {
                     }
                 }
 
-
+                newCollateralRelCredit.setNewCreditFacility(newCreditFacility);
                 newCollateralRelCredit.setNewCollateral(newCollateralDetail);
                 newCollateralCreditList.add(newCollateralRelCredit);
 

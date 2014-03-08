@@ -10,7 +10,7 @@ import java.util.List;
 public interface BRMSInterface {
     public UWRulesResponse checkPreScreenRule(BRMSApplicationInfo applicationInfo) throws ValidationException;
 
-    public List<FullApplicationResponse> checkFullApplicationRule(BRMSApplicationInfo applicationInfo) throws ValidationException;
+    public UWRulesResponse checkFullApplicationRule(BRMSApplicationInfo applicationInfo) throws ValidationException;
 
     public StandardPricingResponse checkStandardPricingIntRule(BRMSApplicationInfo applicationInfo) throws ValidationException;
 

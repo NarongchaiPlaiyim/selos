@@ -5,7 +5,12 @@ import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.integration.brms.model.response.UWRulesResult;
-import com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.*;
+import com.tmbbank.enterprise.model.*;
+import com.ilog.rules.decisionservice.DecisionServiceRequest;
+import com.ilog.rules.decisionservice.DecisionServiceResponse;
+import com.ilog.rules.param.UnderwritingRequest;
+import com.ilog.rules.param.UnderwritingResult;
+
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -349,40 +354,5 @@ public class FullApplicationConverter extends Converter{
             uwRulesResponse.setUwRulesResultMap(uwRulesResultMap);
         }
         return uwRulesResponse;
-    }
-
-    private AttributeType getAttributeType(BRMSFieldAttributes field, Date value){
-        AttributeType attributeType = new AttributeType();
-
-        try{
-            attributeType.setName(field.value());
-            GregorianCalendar gregorianCalendar = new GregorianCalendar();
-            gregorianCalendar.setTime(value);
-            attributeType.setDateTimeValue(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
-        } catch (Exception ex){
-            logger.error("Cannot convert XML");
-        }
-        return attributeType;
-    }
-
-    private AttributeType getAttributeType(BRMSFieldAttributes field, String value){
-        AttributeType attributeType = new AttributeType();
-        attributeType.setName(field.value());
-        attributeType.setStringValue(value);
-        return attributeType;
-    }
-
-    private AttributeType getAttributeType(BRMSFieldAttributes field, BigDecimal value){
-        AttributeType attributeType = new AttributeType();
-        attributeType.setName(field.value());
-        attributeType.setNumericValue(value);
-        return attributeType;
-    }
-
-    private AttributeType getAttributeType(BRMSFieldAttributes field, boolean existingSMECustomer){
-        AttributeType attributeType = new AttributeType();
-        attributeType.setName(field.value());
-        attributeType.setBooleanValue(existingSMECustomer);
-        return attributeType;
     }
 }
