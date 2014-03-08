@@ -36,6 +36,7 @@ import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.business.CollateralBizTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
+import com.ilog.rules.decisionservice.DecisionServiceResponse;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -383,7 +384,7 @@ public class WelcomePage implements Serializable {
     public void onActionBRMS() {
         brmsLog.debug("test BRMS log. ({})", new Date());
         try {
-            com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceResponse response = endPointImp.callStandardPricingInterestRulesService(null);
+            DecisionServiceResponse response = endPointImp.callStandardPricingInterestRulesService(null);
             if (null != response) {
                 brmsLog.debug("Response in not null");
             } else {
