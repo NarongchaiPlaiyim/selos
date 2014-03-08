@@ -110,9 +110,10 @@ public class StandardPricingFeeConverter extends Converter{
     }
 
     public StandardPricingResponse getStandardPricingResponse(DecisionServiceResponse decisionServiceResponse){
+        logger.debug("-- start convert getStandardPricingResponse from decisionServiceResponse");
         StandardPricingResponse standardPricingResponse = new StandardPricingResponse();
         if(decisionServiceResponse != null){
-
+            logger.debug("response is not null");
             standardPricingResponse.setDecisionID(decisionServiceResponse.getDecisionID());
             UnderwritingRequest underwritingRequest = decisionServiceResponse.getUnderwritingRequest();
             UnderwritingApprovalRequestType underwritingApprovalRequestType = underwritingRequest.getUnderwritingApprovalRequest();
@@ -141,6 +142,7 @@ public class StandardPricingFeeConverter extends Converter{
             standardPricingResponse.setPricingFeeList(pricingFeeList);
 
         }
+        logger.debug("-- end convert response return StandardPricingResponse{} ", standardPricingResponse);
         return standardPricingResponse;
     }
 
