@@ -137,8 +137,8 @@ public class CreditFacProposeControl extends BusinessControl {
     ExistingCollateralDetailDAO existingCollateralDetailDAO;
     @Inject
     private COMSInterface comsInterface;
-    /*@Inject
-    BRMSControl brmsControl;*/ 
+//    @Inject
+//    BRMSControl brmsControl;
     @Inject
     NewCollateralDAO newCollateralDAO;
     @Inject
