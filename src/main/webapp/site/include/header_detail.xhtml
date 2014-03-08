@@ -89,6 +89,14 @@
                     <p:commandButton value="No" type="button" onclick="confirmCancelCA.hide()"
                                      styleClass="ui-confirmdialog-no"/>
                 </p:confirmDialog>
+            <!--Cancel CA FullApp-->
+            <p:commandButton id="btnCancelCAFullApp" value="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
+                             rendered="#{baseController.manageButton.cancelCAFullAppButton}"
+                             actionListener="#{baseController.onOpenCancelCAFullApp()}"
+                             oncomplete="cancelCAFullAppDlg.show()"
+                             update=":frmMain:cancelCAFullAppPanel">
+                <p:resetInput target=":frmMain:cancelCAFullAppPanel"/>
+            </p:commandButton>
             <!--Submit Case-->
             <p:commandButton id="btnSubmitCase" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
                              action="#{baseController.onOpenSubmitZM}"
@@ -301,6 +309,14 @@
                   onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
                   modal="true" width="550" height="360">
             <ui:include src="/site/dialog/submitCaseDialog.xhtml"/>
+        </p:dialog>
+    </p:panel>
+
+    <p:panel id="cancelCAFullAppPanel" styleClass="panel">
+        <p:dialog id="cancelCAFullAppDialog" widgetVar="cancelCAFullAppDlg" header="Cancel CA"
+                  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+                  modal="true" width="460" height="160">
+            <ui:include src="/site/dialog/cancelCAFullAppDialog.xhtml"/>
         </p:dialog>
     </p:panel>
 

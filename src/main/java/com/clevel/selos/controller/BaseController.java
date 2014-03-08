@@ -12,6 +12,8 @@ import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ManageButton;
 import com.clevel.selos.model.PricingDOAValue;
 import com.clevel.selos.model.StepValue;
+import com.clevel.selos.model.db.master.Reason;
+import com.clevel.selos.model.db.master.ReasonType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.view.AppHeaderView;
@@ -73,6 +75,11 @@ public class BaseController implements Serializable {
     private String zmPriceUserId;
     private String rmPriceUserId;
     private String ghPriceUserId;
+
+    //Cancel CA FullApp
+    private List<Reason> cancelReason;
+    private String cancalCARemark;
+    private int reasonId;
 
     private String messageHeader;
     private String message;
@@ -139,7 +146,7 @@ public class BaseController implements Serializable {
                 manageButton.setCheckMandateDocButton(true);
                 manageButton.setCheckCriteriaButton(true);
                 manageButton.setAssignToABDMButton(true);
-                //manageButton.setCancelCAButton(true);
+                manageButton.setCancelCAFullAppButton(true);
                 manageButton.setSubmitCAButton(true);
             }
         } else if (stepId == StepValue.REQUEST_APPRAISAL.value()) {
@@ -158,7 +165,7 @@ public class BaseController implements Serializable {
 
         if(session.getAttribute("workCaseId") != null){
             try{
-                workCaseId = Long.parseLong((String)session.getAttribute("workCaseId"));
+                workCaseId = (Long)session.getAttribute("workCaseId");
             } catch (ClassCastException ex){
                 log.error("Exception :", ex);
             }
@@ -213,6 +220,37 @@ public class BaseController implements Serializable {
                 complete = false;
                 log.error("onAssignToABDM ::: exception occurred : ", ex);
             }
+        }
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
+    public void onOpenCancelCAFullApp(){
+        log.debug("onOpenCancelCAFullApp ::: starting...");
+        cancalCARemark = "";
+        reasonId = 0;
+        cancelReason = fullApplicationControl.getCancelReasonList();
+        log.debug("onOpenCancelCAFullApp ::: cancelReason size : {}", cancelReason.size());
+    }
+
+    public void onCancelCAFullApp(){
+        log.debug("onCancelCAFullApp ::: starting...");
+        boolean complete = false;
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            String queueName = session.getAttribute("queueName").toString();
+            fullApplicationControl.cancelCAFullApp(workCaseId, queueName, reasonId, cancalCARemark);
+            messageHeader = "Information.";
+            message = "Cancel CA success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            complete = true;
+            log.debug("onCancelCAFullApp ::: success.");
+        } catch (Exception ex){
+            messageHeader = "Information.";
+            message = "Cancel CA failed, cause : " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            complete = false;
+            log.error("onCancelCAFullApp ::: exception occurred : ", ex);
         }
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
@@ -558,5 +596,29 @@ public class BaseController implements Serializable {
     
     public boolean isStep3Screen() {
     	return (stepId/1000 == 3); // 3XXX 
+    }
+
+    public List<Reason> getCancelReason() {
+        return cancelReason;
+    }
+
+    public void setCancelReason(List<Reason> cancelReason) {
+        this.cancelReason = cancelReason;
+    }
+
+    public String getCancalCARemark() {
+        return cancalCARemark;
+    }
+
+    public void setCancalCARemark(String cancalCARemark) {
+        this.cancalCARemark = cancalCARemark;
+    }
+
+    public int getReasonId() {
+        return reasonId;
+    }
+
+    public void setReasonId(int reasonId) {
+        this.reasonId = reasonId;
     }
 }

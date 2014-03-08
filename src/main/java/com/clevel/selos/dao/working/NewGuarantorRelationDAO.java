@@ -34,7 +34,7 @@ public class NewGuarantorRelationDAO extends GenericDAO<NewGuarantorCredit, Long
         List<NewGuarantorCredit> newGuarantorCreditList = (List<NewGuarantorCredit>) criteria.list();
         log.info("getList. (result size: {})", newGuarantorCreditList.size());
 
-        return criteria.list();
+        return newGuarantorCreditList;
 
     }
 
@@ -42,11 +42,13 @@ public class NewGuarantorRelationDAO extends GenericDAO<NewGuarantorCredit, Long
         Criteria criteria = createCriteria();
         List<NewGuarantorCredit> newGuarantorCreditList = new ArrayList<NewGuarantorCredit>();
         if (newCreditFacility != null && newCreditFacility.getNewGuarantorDetailList() != null && newCreditFacility.getNewGuarantorDetailList().size() > 0) {
-
-            String query = "SELECT newGuarantorCredit FROM NewGuarantorCredit newGuarantorCredit WHERE newCreditFacility.id  = " + newCreditFacility.getId();
-            newGuarantorCreditList = getSession().createQuery(query).list();
+//            for (NewGuarantorDetail newGuarantorDetail : newCreditFacility.getNewGuarantorDetailList()) {
+//              criteria.add(Restrictions.eq("newGuarantorDetail", newGuarantorDetail));
+                String query = "SELECT newGuarantorCredit FROM NewGuarantorCredit newGuarantorCredit WHERE newCreditFacility.id  = " + newCreditFacility.getId();
+                newGuarantorCreditList = getSession().createQuery(query).list();
+//            }
             criteria.setFetchMode("newGuarantorDetail", FetchMode.LAZY);
-            newGuarantorCreditList = criteria.list();
+//            newGuarantorCreditList = criteria.list();
         }
 
         return newGuarantorCreditList;

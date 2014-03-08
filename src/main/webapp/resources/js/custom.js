@@ -581,6 +581,12 @@ function handleAssignABDMDialogRequest(xhr, status, args) {
     }
 }
 
+function handleCancelFullAppDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        cancelCAFullAppDlg.hide();
+    }
+}
+
 function handleDisbursementMcDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
         mcDisbursementDialog.hide();
