@@ -48,6 +48,7 @@ public class StandardPricingFeeConverter extends Converter{
             }
 
             List<AttributeType> attributeTypeList = applicationType.getAttribute();
+
             attributeTypeList.add(getAttributeType(BRMSFieldAttributes.APP_IN_DATE, applicationInfo.getBdmSubmitDate()));
             attributeTypeList.add(getAttributeType(BRMSFieldAttributes.GUARANTEE_TYPE, applicationInfo.getLoanRequestType()));
             attributeTypeList.add(getAttributeType(BRMSFieldAttributes.TOTAL_TCG_GUARANTEE_AMOUNT, applicationInfo.getTotalTCGGuaranteeAmount()));
