@@ -52,11 +52,6 @@ public class NewGuarantorCredit implements Serializable {
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
-    //Add for remove list
-    @OneToOne
-    @JoinColumn(name = "new_creditfacility_id")
-    private NewCreditFacility newCreditFacility;
-
     @Column(name = "propose_type")
     @Enumerated(EnumType.ORDINAL)
     private ProposeType proposeType;
@@ -140,14 +135,6 @@ public class NewGuarantorCredit implements Serializable {
 
     public void setExistingCreditDetail(ExistingCreditDetail existingCreditDetail) {
         this.existingCreditDetail = existingCreditDetail;
-    }
-
-    public NewCreditFacility getNewCreditFacility() {
-        return newCreditFacility;
-    }
-
-    public void setNewCreditFacility(NewCreditFacility newCreditFacility) {
-        this.newCreditFacility = newCreditFacility;
     }
 
     public ProposeType getProposeType() {

@@ -295,7 +295,7 @@ public class BaseController implements Serializable {
                 HttpSession session = FacesUtil.getSession(true);
                 long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
                 String queueName = session.getAttribute("queueName").toString();
-                fullApplicationControl.submitToZM(zmEndorseUserId, queueName, workCaseId);
+                //fullApplicationControl.submitToZM(zmEndorseUserId, queueName, workCaseId);
                 messageHeader = "Information.";
                 message = "Submit to Zone Manager success.";
                 RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");

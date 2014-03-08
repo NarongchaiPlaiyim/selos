@@ -917,7 +917,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     public void saveCustomerData(List<CustomerInfoView> customerInfoDeleteList, List<CustomerInfoView> customerInfoViewList, WorkCasePrescreen workCasePrescreen){
         //Remove all Customer before add new
-        List<Customer> customerDeleteList = customerTransform.transformToModelList(customerInfoDeleteList, workCasePrescreen, null);
+        List<Customer> customerDeleteList = customerTransform.transformToModelList(customerInfoDeleteList, workCasePrescreen, null, getCurrentUser());
         /*log.info("saveCustomer ::: customerDeleteList size : {}", customerDeleteList.size());
         for(Customer customer : customerDeleteList){
             addressDAO.delete(customer.getAddressesList());
@@ -1095,7 +1095,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     public void savePreScreenChecker(List<CustomerInfoView> customerInfoViews, List<NcbView> ncbViewList, int customerEntityId, long workCasePreScreenId){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-        List<Customer> customerList = customerTransform.transformToModelList(customerInfoViews, workCasePrescreen, null);
+        List<Customer> customerList = customerTransform.transformToModelList(customerInfoViews, workCasePrescreen, null, getCurrentUser());
 
         log.info("saveCustomer ::: customerList size : {}", customerList.size());
         for(Customer customer : customerList){
@@ -1175,7 +1175,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     public void savePreScreenCheckerOnlyCSI(List<CustomerInfoView> customerInfoViews, int customerEntityId, long workCasePreScreenId){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-        List<Customer> customerList = customerTransform.transformToModelList(customerInfoViews, workCasePrescreen, null);
+        List<Customer> customerList = customerTransform.transformToModelList(customerInfoViews, workCasePrescreen, null, getCurrentUser());
 
         log.info("saveCustomer ::: customerList : {}", customerList);
         for(Customer customer : customerList){
