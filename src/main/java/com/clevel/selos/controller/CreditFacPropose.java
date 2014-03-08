@@ -1295,7 +1295,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 }
             }
             // Add to list
-            MortgageType mortgageType =  mortgageTypeDAO.findById(newCollateralSubView.getMortgageType().getId());
+            MortgageType mortgageType =  getMortgageTypeById(newCollateralSubView.getMortgageType().getId());
             log.debug("onAddMortgageType :: {} ", newCollateralSubView.getMortgageType());
             newCollateralSubView.getMortgageList().add(mortgageType);
         }
