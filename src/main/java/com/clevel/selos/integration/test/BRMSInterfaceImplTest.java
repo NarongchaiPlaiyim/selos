@@ -58,14 +58,14 @@ public class BRMSInterfaceImplTest implements BRMSInterface {
     }
 
     @Override
-    public List<FullApplicationResponse> checkFullApplicationRule(BRMSApplicationInfo fullApplicationRequest) throws ValidationException {
+    public UWRulesResponse checkFullApplicationRule(BRMSApplicationInfo fullApplicationRequest) throws ValidationException {
         log.debug("checkFullApplicationRule : fullApplicationRequest {}", fullApplicationRequest);
         if (fullApplicationRequest == null) {
             log.error("fullApplicationRequest is null for request");
             throw new ValidationException("002");
         }
         //todo call service
-        return new ArrayList<FullApplicationResponse>();
+        return new UWRulesResponse();
     }
 
     @Override
