@@ -28,7 +28,7 @@ public class PrescreenConverter extends Converter{
     public PrescreenConverter(){}
 
     public DecisionServiceRequest getDecisionServiceRequest(BRMSApplicationInfo applicationInfo){
-
+        logger.debug("-- start convert getDecisionServiceRequest from BRMSApplicationInfo");
         ApplicationType applicationType = new ApplicationType();
 
         applicationType.setApplicationNumber(applicationInfo.getApplicationNo());
@@ -248,10 +248,12 @@ public class PrescreenConverter extends Converter{
         decisionServiceRequest.setDecisionID(getDecisionID(applicationInfo.getApplicationNo(), applicationInfo.getStatusCode()));
         decisionServiceRequest.setUnderwritingRequest(underwritingRequest);
 
+        logger.debug("-- end convert getDecisionServiceRequest from BRMSApplicationInfo return {}", decisionServiceRequest);
         return decisionServiceRequest;
     }
 
     public UWRulesResponse getUWRulesResponse(DecisionServiceResponse decisionServiceResponse){
+        logger.debug("-- start convert getUWRulesResponse from DecisionServiceResponse {}", decisionServiceResponse);
 
         UWRulesResponse uwRulesResponse = new UWRulesResponse();
 
@@ -292,6 +294,8 @@ public class PrescreenConverter extends Converter{
             }
             uwRulesResponse.setUwRulesResultMap(uwRulesResultMap);
         }
+
+        logger.debug("-- end convert getUWRulesResponse from DecisionServiceResponse return {}", uwRulesResponse);
         return uwRulesResponse;
     }
 }
