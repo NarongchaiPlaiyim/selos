@@ -149,16 +149,16 @@ public class BRMSTransform extends Transform{
             customerInfo.setNumberOfDayLastNCBCheck(new BigDecimal(DateTimeUtil.daysBetween2Dates(ncb.getCheckingDate(), checkDate)));
 
             List<NCBDetail> ncbDetailList = ncb.getNcbDetailList();
+            List<BRMSNCBAccountInfo> ncbAccountInfoList = new ArrayList<BRMSNCBAccountInfo>();
             if(ncbDetailList == null || ncbDetailList.size() == 0){
                 customerInfo.setNcbFlag(Boolean.FALSE);
             } else {
                 customerInfo.setNcbFlag(Boolean.TRUE);
-                List<BRMSNCBAccountInfo> ncbAccountInfoList = new ArrayList<BRMSNCBAccountInfo>();
                 for(NCBDetail ncbDetail : ncbDetailList){
                     ncbAccountInfoList.add(getBRMSNCBAccountInfo(ncbDetail, customerInfo.isIndividual(), checkDate));
                 }
-                customerInfo.setNcbAccountInfoList(ncbAccountInfoList);
             }
+            customerInfo.setNcbAccountInfoList(ncbAccountInfoList);
 
             List<String> warningFullMatchList = new ArrayList<String>();
             List<String> warningSomeMatchList = new ArrayList<String>();
