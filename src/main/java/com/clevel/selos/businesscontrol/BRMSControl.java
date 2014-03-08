@@ -76,8 +76,6 @@ public class BRMSControl extends BusinessControl {
 
     @Inject
     private ExSummaryDAO exSummaryDAO;
-    @Inject
-    private ExSummaryControl exSummaryControl;
 
     @Inject
     BRMSTransform brmsTransform;
@@ -427,11 +425,7 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setNetMonthlyIncome(dbr.getNetMonthlyIncome());
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
-        if(exSummary == null){
-            exSummaryControl.calGroupExposureBorrowerCharacteristic(workCaseId);
-            exSummaryControl.calGroupSaleBorrowerCharacteristic(workCaseId);
-            exSummaryControl.calYearInBusinessBorrowerCharacteristic(workCaseId);
-        }
+
         if(ProposeType.P.equals(workCase.getStep().getProposeType())){
             applicationInfo.setBorrowerGroupIncome(bankStatementSummary.getGrdTotalIncomeNetBDM());
             applicationInfo.setTotalGroupIncome(exSummary.getGroupSaleBDM());
