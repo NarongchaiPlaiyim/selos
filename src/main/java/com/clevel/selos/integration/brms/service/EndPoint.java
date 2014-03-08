@@ -1,14 +1,17 @@
 package com.clevel.selos.integration.brms.service;
 
 import com.clevel.selos.integration.BRMS;
+import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.system.Config;
 import com.ilog.rules.decisionservice.*;
 import com.sun.xml.internal.ws.client.BindingProviderProperties;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import java.io.Serializable;
+import java.net.URL;
 
 public class EndPoint implements Serializable {
     @Inject
@@ -54,7 +57,10 @@ public class EndPoint implements Serializable {
         DecisionServiceSEPrescreenUWSFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEPrescreenUWSFlow_Service();
+            URL url = new URL("http://stmbrmsred1:9080/DecisionService/ws/SE_Prescreen_UWS_RuleApp/1.0/SE_Prescreen_UWS_Flow?wsdl");
+            QName qname = new QName("http://stmbrmsred1:9080/DecisionService/ws/SE_Prescreen_UWS_RuleApp/1.0/SE_Prescreen_UWS_Flow", "DecisionServiceSE_Prescreen_UWS_Flow");
+
+            service = new DecisionServiceSEPrescreenUWSFlow_Service(url, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
             int timeout = 60000;
             try{
@@ -110,7 +116,10 @@ public class EndPoint implements Serializable {
         DecisionServiceSEStandardPricingInterestFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEStandardPricingInterestFlow_Service();
+            URL url = new URL("http://stmbrmsred1:9080/DecisionService/ws/SE_Standard_Pricing_Interest_RuleApp/1.0/SE_Standard_Pricing_Interest_Flow?wsdl");
+            QName qname = new QName("http://stmbrmsred1:9080/DecisionService/ws/SE_Standard_Pricing_Interest_RuleApp/1.0/SE_Standard_Pricing_Interest_Flow", "DecisionServiceSE_Standard_Pricing_Interest_Flow");
+
+            service = new DecisionServiceSEStandardPricingInterestFlow_Service(url, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
             int timeout = 60000;
             try{
@@ -138,8 +147,10 @@ public class EndPoint implements Serializable {
         DecisionServiceSEStandardPricingFeeFlow port = null;
         DecisionServiceResponse response = null;
         try {
+            URL url = new URL("http://stmbrmsred1:9080/DecisionService/ws/SE_Standard_Pricing_Fee_RuleApp/1.0/SE_Standard_Pricing_Fee_Flow?wsdl");
+            QName qname = new QName("http://stmbrmsred1:9080/DecisionService/ws/SE_Standard_Pricing_Fee_RuleApp/1.0/SE_Standard_Pricing_Fee_Flow", "DecisionServiceSE_Standard_Pricing_Fee_Flow");
 
-            service = new DecisionServiceSEStandardPricingFeeFlow_Service();
+            service = new DecisionServiceSEStandardPricingFeeFlow_Service(url, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
             int timeout = 60000;
             try{

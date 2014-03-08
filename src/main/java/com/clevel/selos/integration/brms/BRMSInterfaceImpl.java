@@ -18,7 +18,9 @@ import org.slf4j.Logger;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
+import javax.xml.namespace.QName;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,24 +136,24 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
     }
 
     @Override
-    public List<DocCustomerResponse> checkDocCustomerRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
+    public DocCustomerResponse checkDocCustomerRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
         logger.debug("checkDocCustomerRule : applicationInfo {}", applicationInfo);
         if (applicationInfo == null) {
             logger.error("docCustomerRequest is null for request");
             throw new ValidationException("002");
         }
         //todo call service
-        return new ArrayList<DocCustomerResponse>();
+        return new DocCustomerResponse();
     }
 
     @Override
-    public List<DocAppraisalResponse> checkDocAppraisalRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
+    public DocAppraisalResponse checkDocAppraisalRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
         logger.debug("checkDocAppraisalRule : applicationInfo {}", applicationInfo);
         if (applicationInfo == null) {
             logger.error("docAppraisalRequest is null for request");
             throw new ValidationException("002");
         }
         //todo call service
-        return new ArrayList<DocAppraisalResponse>();
+        return new DocAppraisalResponse();
     }
 }

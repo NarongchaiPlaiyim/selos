@@ -91,24 +91,24 @@ public class BRMSInterfaceImplTest implements BRMSInterface {
     }
 
     @Override
-    public List<DocCustomerResponse> checkDocCustomerRule(BRMSApplicationInfo docCustomerRequest) throws ValidationException {
+    public DocCustomerResponse checkDocCustomerRule(BRMSApplicationInfo docCustomerRequest) throws ValidationException {
         log.debug("checkDocCustomerRule : docCustomerRequest {}", docCustomerRequest);
         if (docCustomerRequest == null) {
             log.error("docCustomerRequest is null for request");
             throw new ValidationException("002");
         }
         //todo call service
-        return new ArrayList<DocCustomerResponse>();
+        return new DocCustomerResponse();
     }
 
     @Override
-    public List<DocAppraisalResponse> checkDocAppraisalRule(BRMSApplicationInfo docAppraisalRequest) throws ValidationException {
+    public DocAppraisalResponse checkDocAppraisalRule(BRMSApplicationInfo docAppraisalRequest) throws ValidationException {
         log.debug("checkDocAppraisalRule : docAppraisalRequest {}", docAppraisalRequest);
         if (docAppraisalRequest == null) {
             log.error("docAppraisalRequest is null for request");
             throw new ValidationException("002");
         }
         //todo call service
-        return new ArrayList<DocAppraisalResponse>();
+        return new DocAppraisalResponse();
     }
 }
