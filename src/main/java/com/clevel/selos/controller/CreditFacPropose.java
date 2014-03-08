@@ -1241,7 +1241,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onDeleteSubCollateral() {
         log.debug("onDeleteSubCollateral :: ");
-        newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubDeleteList().add(subCollateralDetailItem);
+//        newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubDeleteList().add(subCollateralDetailItem);
         newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().remove(subCollateralDetailItem);
         log.debug("rowCollHeadIndex :: ");
     }
@@ -1461,7 +1461,10 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //                hashSeqCredit.put(i, Integer.parseInt(hashSeqCredit.get(i).toString()) - 1);
 //            }
         }
-        newCreditFacilityView.getNewGuarantorViewDelList().add(newGuarantorDetailViewItem);
+        if (newCreditFacilityView.getNewGuarantorViewDelList().get(rowIndexGuarantor).getId() != 0) {
+            deleteGuarantorIdList.add(newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getId());
+        }
+//        newCreditFacilityView.getNewGuarantorViewDelList().add(newGuarantorDetailViewItem);
         newCreditFacilityView.getNewGuarantorDetailViewList().remove(newGuarantorDetailViewItem);
         log.debug("delete success");
         newCreditFacilityView.setTotalGuaranteeAmount(creditFacProposeControl.calTotalGuaranteeAmount(newCreditFacilityView.getNewGuarantorDetailViewList()));
