@@ -3,10 +3,10 @@ apply plugin: 'war'
 sourceCompatibility = 1.6
 
 project.ext {
-    projectRoot='E:/C-Level_Projects/selos'
+    projectRoot='C:/Work/TMB/SELOS/Workspace/selos_update/selos'
     beanXML= projectRoot+'/src/main/webapp/WEB-INF/beans.xml'
     persistenceXML = projectRoot+'/src/main/resources/META-INF/persistence.bank.xml'
-    selosLib='E:/C-Level Files/TMB SE-LOS/Gradle/_selos_lib_compile'
+    selosLib='C:/Work/TMB/SELOS/Server/Gradle/gradle-build-lib/library'
     versionString = ''
     versionNumber = 'vvv'
     buildNumber = '0'
@@ -143,6 +143,8 @@ task buildLibrary(dependsOn: classes, type: Jar) {
 
     //************* TMB Services ***********************
     include 'com/tmb/**/*'
+	include 'com/tmbbank/**/*'
+	include 'com/ilog/**/*'
 }
 
 task buildEJB(dependsOn:'buildLibrary', type: Jar) {
@@ -228,6 +230,8 @@ war {
 
     //************* TMB Services ***********************
     war.rootSpec.exclude 'com/tmb'
+	war.rootSpec.exclude 'com/tmbbank'
+	war.rootSpec.exclude 'com/ilog'
 
     // ************* EJB ************
     war.rootSpec.exclude 'com/clevel/selos/businesscontrol'
