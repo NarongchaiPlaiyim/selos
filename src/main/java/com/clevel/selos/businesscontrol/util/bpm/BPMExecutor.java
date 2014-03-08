@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -198,7 +199,7 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void submitZM(long workCaseId, String queueName, String zmUserId, long actionCode) throws Exception{
+    public void submitZM(long workCaseId, String queueName, String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, BigDecimal totalCommercial, BigDecimal totalRetail, String resultCode,  long actionCode) throws Exception{
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         Action action = actionDAO.findById(actionCode);
         if(action != null){
@@ -206,6 +207,15 @@ public class BPMExecutor implements Serializable {
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
             fields.put("ZMUserName", zmUserId);
+            if(!Util.isEmpty(rgmUserId)){
+                fields.put("RGMUserName", rgmUserId);
+            }
+            if(!Util.isEmpty(ghUserId)){
+                fields.put("GHUserName", ghUserId);
+            }
+            if(!Util.isEmpty(cssoUserId)){
+                fields.put("CSSOUserName", cssoUserId);
+            }
 
             log.debug("dispatch case for [Submit ZM]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 

@@ -105,8 +105,8 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.assignToABDM(workCaseId, queueName, abdmUserId, ActionCode.ASSIGN_TO_ABDM.getVal());
     }
 
-    public void submitToZM(String zmUserId, String queueName, long workCaseId) throws Exception {
-        bpmExecutor.submitZM(workCaseId, queueName, zmUserId, ActionCode.SUBMIT_TO_ZM.getVal());
+    public void submitToZM(String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, BigDecimal totalCommercial, BigDecimal totalRetail, String resultCode, String queueName, long workCaseId) throws Exception {
+        bpmExecutor.submitZM(workCaseId, queueName, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, ActionCode.SUBMIT_TO_ZM.getVal());
     }
 
     public void requestAppraisalBDM(long workCasePreScreenId, long workCaseId) throws Exception{
