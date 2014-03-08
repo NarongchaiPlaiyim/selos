@@ -174,7 +174,7 @@ public class CheckMandateDoc implements Serializable {
 
             //workPlaceURL                         //objStore        //encIds                          //encToken
 //            return ceURI + "/getContent?objectStoreName="+objectStore+"&id="+FNId+"&objectType=document&ut=" + token;
-            return address+"/getContent?objectStoreName="+objectStore+"&id="+"{9517B502-D700-4D35-9EBE-2053912DBC28}"+"&objectType=document&ut=" + token;
+            return address+"/getContent?objectStoreName="+objectStore+"&id="+FNId+"&objectType=document&ut=" + token;
         } else {
             log.debug("-- FN_ID or Token is null");
             return null;
