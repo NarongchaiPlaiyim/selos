@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -310,4 +313,19 @@ public class TMBAccountsReportType {
         return this.attribute;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("maxNumTMBCreditCards", maxNumTMBCreditCards)
+                .append("maxNumTMBAccounts", maxNumTMBAccounts)
+                .append("maxNumTMBHomeLoans", maxNumTMBHomeLoans)
+                .append("accountsNoDelinqFlag", accountsNoDelinqFlag)
+                .append("num31DpdLast6Mths", num31DpdLast6Mths)
+                .append("neverBeenNPLFlag", neverBeenNPLFlag)
+                .append("tdrFlag", tdrFlag)
+                .append("neverBeenWriteOffFlag", neverBeenWriteOffFlag)
+                .append("attribute", attribute)
+                .toString();
+    }
 }

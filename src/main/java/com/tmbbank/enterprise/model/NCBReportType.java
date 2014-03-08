@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -211,4 +214,15 @@ public class NCBReportType {
         return this.attribute;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("maxNumHouseMortgageLoans", maxNumHouseMortgageLoans)
+                .append("ncbGenericIndividualBureauScore", ncbGenericIndividualBureauScore)
+                .append("ncbAccount", ncbAccount)
+                .append("ncbEnquiry", ncbEnquiry)
+                .append("attribute", attribute)
+                .toString();
+    }
 }

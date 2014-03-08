@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -1440,4 +1443,60 @@ public class NCBAccountType {
         return this.attribute;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("memberShortName", memberShortName)
+                .append("ownershipIndicator", ownershipIndicator)
+                .append("accountNumber", accountNumber)
+                .append("dateOpened", dateOpened)
+                .append("dateClosed", dateClosed)
+                .append("lastPaymentDate", lastPaymentDate)
+                .append("asOfDate", asOfDate)
+                .append("creditLimit", creditLimit)
+                .append("outstandingBalance", outstandingBalance)
+                .append("amountPastDue", amountPastDue)
+                .append("defaultDate", defaultDate)
+                .append("installmentFrequency", installmentFrequency)
+                .append("installmentAmount", installmentAmount)
+                .append("installmentNumPayments", installmentNumPayments)
+                .append("paymentHistory1", paymentHistory1)
+                .append("paymentHistory2", paymentHistory2)
+                .append("paymentHistoryStartDate", paymentHistoryStartDate)
+                .append("paymentHistoryEndDate", paymentHistoryEndDate)
+                .append("loanObjective", loanObjective)
+                .append("percentPayment", percentPayment)
+                .append("creditCardType", creditCardType)
+                .append("numCoBorrowers", numCoBorrowers)
+                .append("creditType", creditType)
+                .append("overdueMonths", overdueMonths)
+                .append("tdrFlag", tdrFlag)
+                .append("ncbAccountStatus", ncbAccountStatus)
+                .append("dateOfLastDebtRestructure", dateOfLastDebtRestructure)
+                .append("accountType", accountType)
+                .append("delinquencyCode", delinquencyCode)
+                .append("paymentPattern", paymentPattern)
+                .append("overdueCountInLast6Months", overdueCountInLast6Months)
+                .append("overdue31DTo60DLast6MthsCount", overdue31DTo60DLast6MthsCount)
+                .append("overdue61DLast12MthsCount", overdue61DLast12MthsCount)
+                .append("overdueOver90DCount", overdueOver90DCount)
+                .append("overdue31DTo60DCount", overdue31DTo60DCount)
+                .append("overdue61DTo90DCount", overdue61DTo90DCount)
+                .append("overdue91DTo120DCount", overdue91DTo120DCount)
+                .append("overdue121DTo150DCount", overdue121DTo150DCount)
+                .append("overdue151DTo180DCount", overdue151DTo180DCount)
+                .append("overdue181DTo210DCount", overdue181DTo210DCount)
+                .append("overdue211DTo240DCount", overdue211DTo240DCount)
+                .append("overdue241DTo270DCount", overdue241DTo270DCount)
+                .append("overdue271DTo300DCount", overdue271DTo300DCount)
+                .append("overdueOver301DCount", overdueOver301DCount)
+                .append("overLimitLast6MthsCount", overLimitLast6MthsCount)
+                .append("overLimitLast12MthsCount", overLimitLast12MthsCount)
+                .append("undefinedDelqCodeLast6MthsCount", undefinedDelqCodeLast6MthsCount)
+                .append("undefinedDelqCodeLast12MthsCount", undefinedDelqCodeLast12MthsCount)
+                .append("ncbRecord", ncbRecord)
+                .append("attribute", attribute)
+                .toString();
+    }
 }

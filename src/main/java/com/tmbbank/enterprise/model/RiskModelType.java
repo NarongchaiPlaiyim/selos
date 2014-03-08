@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -372,4 +375,21 @@ public class RiskModelType {
         return this.attribute;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("modelID", modelID)
+                .append("name", name)
+                .append("riskClass", riskClass)
+                .append("pd", pd)
+                .append("tmbMasterScale", tmbMasterScale)
+                .append("color", color)
+                .append("result", result)
+                .append("percentNotCured", percentNotCured)
+                .append("dateOfScore", dateOfScore)
+                .append("score", score)
+                .append("attribute", attribute)
+                .toString();
+    }
 }

@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -337,4 +340,20 @@ public class ProductProgramType {
         this.maxTenor = value;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("businessType", businessType)
+                .append("maxAge", maxAge)
+                .append("minCreditLimit", minCreditLimit)
+                .append("maxCreditLimit", maxCreditLimit)
+                .append("minNumTimesOfGMI", minNumTimesOfGMI)
+                .append("maxNumTimesOfGMI", maxNumTimesOfGMI)
+                .append("attribute", attribute)
+                .append("minTenor", minTenor)
+                .append("maxTenor", maxTenor)
+                .toString();
+    }
 }
