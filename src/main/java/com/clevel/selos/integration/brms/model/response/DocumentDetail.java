@@ -17,6 +17,7 @@ public class DocumentDetail implements Serializable{
     private String showFlag;
     private String operStep;
     private String operShowFlag;
+    private boolean operMandateFlag;
 
     public String getDocumentGroup() {
         return documentGroup;
@@ -96,6 +97,14 @@ public class DocumentDetail implements Serializable{
 
     public void setOperStep(String operStep) {
         this.operStep = operStep;
+    }
+
+    public boolean isOperMandateFlag() {
+        return operMandateFlag;
+    }
+
+    public void setOperMandateFlag(boolean operMandateFlag) {
+        this.operMandateFlag = operMandateFlag;
     }
 
     @Override

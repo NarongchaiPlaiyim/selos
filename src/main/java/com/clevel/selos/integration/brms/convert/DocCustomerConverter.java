@@ -146,9 +146,10 @@ public class DocCustomerConverter extends Converter{
             for (BorrowerType borrowerType : borrowerTypeList){
                 List<DocumentSetType> documentSetTypeList = borrowerType.getRequiredDocumentSet();
                 for(DocumentSetType documentSetType : documentSetTypeList){
-                    DocumentDetail documentDetail = new DocumentDetail();
                     List<DocumentType> documentTypeList = documentSetType.getDocument();
                     for(DocumentType documentType : documentTypeList){
+                        DocumentDetail documentDetail = new DocumentDetail();
+                        documentDetail.setId(documentType.getID());
                         documentDetail.setDescription(documentType.getDescription());
                         documentDetail.setMandateFlag(documentType.isMandatoryFlag());
 
@@ -166,11 +167,23 @@ public class DocCustomerConverter extends Converter{
                                 documentDetail.setOperStep(attributeType.getStringValue());
                             } else if(BRMSFieldAttributes.OPER_SHOW_FLAG.value().equals(attributeType.getName())){
                                 documentDetail.setOperShowFlag(attributeType.getStringValue());
+                            } else if(BRMSFieldAttributes.OPER_MANDATORY_Flag.value().equals(attributeType.getName())){
+                                documentDetail.setOperMandateFlag(attributeType.isBooleanValue());
                             }
                         }
+                        documentDetailList.add(documentDetail);
                     }
                 }
             }
+
+//
+//            List<Doc> applicationType.getRequiredDocumentSet();
+//            List<DocumentDetai
+//            for(){
+//
+//            }
+
+            docCustomerResponse.setDocumentDetailList(documentDetailList);
 
         }
 
