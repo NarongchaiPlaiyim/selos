@@ -353,64 +353,6 @@ public class CreditFacProposeControl extends BusinessControl {
         log.info("calTotalProposeLoanDBRForIntYear end ::: sumTotalLoanDbr ::: {}", sumTotalLoanDbr);
         return sumTotalLoanDbr;
     }
-/*
-
-    public List<ProposeCreditDetailView> findProposeCreditDetail(List<NewCreditDetailView> newCreditDetailViewList, long workCaseId) {
-        log.debug("findProposeCreditDetail :: ", workCaseId);
-        // todo: find credit existing and propose in this workCase
-        List<ProposeCreditDetailView> proposeCreditDetailViewList = null;
-        ProposeCreditDetailView proposeCreditDetailView;
-        int rowCount = 1;       // seq of Model
-
-        if ((!Util.isNull(newCreditDetailViewList)) && newCreditDetailViewList.size() > 0) {
-            proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
-            for (NewCreditDetailView tmp : newCreditDetailViewList) {
-//                if(tmp.isModeSaved()==false){
-                    proposeCreditDetailView = new ProposeCreditDetailView();
-                    proposeCreditDetailView.setSeq(tmp.getSeq());
-                    proposeCreditDetailView.setId(rowCount);
-                    proposeCreditDetailView.setTypeOfStep(CreditTypeOfStep.NEW.type());
-                    proposeCreditDetailView.setAccountName(tmp.getAccountName());
-                    proposeCreditDetailView.setAccountNumber(tmp.getAccountNumber());
-                    proposeCreditDetailView.setAccountSuf(tmp.getAccountSuf());
-                    proposeCreditDetailView.setRequestType(tmp.getRequestType());
-                    proposeCreditDetailView.setProductProgramView(tmp.getProductProgramView());
-                    proposeCreditDetailView.setCreditFacilityView(tmp.getCreditTypeView());
-                    proposeCreditDetailView.setLimit(tmp.getLimit());
-                    proposeCreditDetailView.setGuaranteeAmount(tmp.getGuaranteeAmount());
-                    proposeCreditDetailView.setUseCount(tmp.getUseCount());
-                    proposeCreditDetailView.setNoFlag(tmp.isNoFlag());
-                    proposeCreditDetailViewList.add(proposeCreditDetailView);
-                    rowCount++;
-//                }
-            }
-        }
-
-        rowCount = newCreditDetailViewList.size() > 0 ? newCreditDetailViewList.size() + 1 : rowCount;
-
-        // find existingCreditType >>> Borrower Commercial in this workCase
-        List<ExistingCreditDetailView> existingCreditDetailViewList = creditFacExistingControl.onFindBorrowerExistingCreditFacility(workCaseId);
-
-        if ((!Util.isNull(existingCreditDetailViewList)) && existingCreditDetailViewList.size() > 0) {
-            for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViewList) {
-                proposeCreditDetailView = new ProposeCreditDetailView();
-                proposeCreditDetailView.setSeq((int)existingCreditDetailView.getId());  // id form DB
-                proposeCreditDetailView.setId(rowCount);
-                proposeCreditDetailView.setTypeOfStep(CreditTypeOfStep.EXISTING.type());
-                proposeCreditDetailView.setAccountName(existingCreditDetailView.getAccountName());
-                proposeCreditDetailView.setAccountNumber(existingCreditDetailView.getAccountNumber());
-                proposeCreditDetailView.setAccountSuf(existingCreditDetailView.getAccountSuf());
-                proposeCreditDetailView.setProductProgramView(existingCreditDetailView.getExistProductProgramView());
-                proposeCreditDetailView.setCreditFacilityView(existingCreditDetailView.getExistCreditTypeView());
-                proposeCreditDetailView.setLimit(existingCreditDetailView.getLimit());
-                proposeCreditDetailViewList.add(proposeCreditDetailView);
-                rowCount++;
-            }
-        }
-
-        return proposeCreditDetailViewList;
-    }
-*/
 
     public List<ProposeCreditDetailView> findAndGenerateSeqProposeCredits(List<NewCreditDetailView> newCreditDetailViewList, List<ExistingCreditDetailView> borrowerExistingCreditDetailViewList, long workCaseId) {
         log.debug("findAndGenerateSeqProposeCredits() workCaseId: {}", workCaseId);
