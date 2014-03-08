@@ -36,7 +36,6 @@ public class CreditFacProposeControl extends BusinessControl {
     @SELOS
     @Inject
     Logger log;
-
     @Inject
     CustomerTransform customerTransform;
     @Inject
@@ -55,12 +54,6 @@ public class CreditFacProposeControl extends BusinessControl {
     NewConditionDetailTransform newConditionDetailTransform;
     @Inject
     NewCreditTierTransform newCreditTierTransform;
-    @Inject
-    NewCollateralCreditTransform newCollateralCreditTransform;
-    @Inject
-    NewGuarantorCreditTransform newGuarantorCreditTransform;
-    @Inject
-    ProductTransform productTransform;
     @Inject
     ProposeCreditDetailTransform proposeCreditDetailTransform;
 
@@ -97,9 +90,17 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     ExistingCreditFacilityDAO existingCreditFacilityDAO;
     @Inject
+    CreditFacExistingControl creditFacExistingControl;
+    @Inject
     ProductFormulaDAO productFormulaDAO;
     @Inject
     PrdProgramToCreditTypeDAO prdProgramToCreditTypeDAO;
+    @Inject
+    BasicInfoControl basicInfoControl;
+    @Inject
+    CustomerInfoControl customerInfoControl;
+    @Inject
+    TCGInfoControl tcgInfoControl;
     @Inject
     ProductProgramDAO productProgramDAO;
     @Inject
@@ -121,20 +122,11 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     NewCollateralSubOwnerDAO newCollateralSubOwnerDAO;
     @Inject
-    ExistingCollateralDetailDAO existingCollateralDetailDAO;
+    NewCollateralCreditTransform newCollateralCreditTransform;
     @Inject
-    NewCollateralDAO newCollateralDAO;
+    NewGuarantorCreditTransform newGuarantorCreditTransform;
     @Inject
-    NewCollateralSubRelatedDAO newCollateralSubRelatedDAO;
-
-    @Inject
-    CreditFacExistingControl creditFacExistingControl;
-    @Inject
-    BasicInfoControl basicInfoControl;
-    @Inject
-    CustomerInfoControl customerInfoControl;
-    @Inject
-    TCGInfoControl tcgInfoControl;
+    ProductTransform productTransform;
     @Inject
     DBRControl dbrControl;
     @Inject
@@ -142,9 +134,15 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     NCBInfoControl ncbInfoControl;
     @Inject
+    ExistingCollateralDetailDAO existingCollateralDetailDAO;
+    @Inject
     private COMSInterface comsInterface;
-    /*@Inject
-    BRMSControl brmsControl;*/
+//    @Inject
+//    BRMSControl brmsControl;
+    @Inject
+    NewCollateralDAO newCollateralDAO;
+    @Inject
+    NewCollateralSubRelatedDAO newCollateralSubRelatedDAO;
 
     @Inject
     public CreditFacProposeControl() {}
@@ -822,10 +820,10 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
-            if(Util.safetyList(newCreditFacilityView.getNewGuarantorViewDelList()).size()>0){
-                List<NewGuarantorDetail> listDel = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorViewDelList(), newCreditFacility, currentUser,ProposeType.P);
-                newGuarantorDetailDAO.delete(listDel);
-            }
+//            if(Util.safetyList(newCreditFacilityView.getNewGuarantorViewDelList()).size()>0){
+//                List<NewGuarantorDetail> listDel = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorViewDelList(), newCreditFacility, currentUser,ProposeType.P);
+//                newGuarantorDetailDAO.delete(listDel);
+//            }
             log.debug("saveCreditFacility ::: newGuarantorDetailViewList : {}", newCreditFacilityView.getNewGuarantorDetailViewList());
             List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser,ProposeType.P);
             newCreditFacility.setNewGuarantorDetailList(newGuarantorDetailList);

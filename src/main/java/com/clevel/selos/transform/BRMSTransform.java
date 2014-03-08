@@ -1,11 +1,9 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.controller.PrescreenResult;
 import com.clevel.selos.dao.working.CustomerCSIDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.CustomerOblAccountInfoDAO;
 import com.clevel.selos.integration.brms.model.request.*;
-import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.CSIMatchedType;
 import com.clevel.selos.model.RadioValue;

@@ -7,7 +7,10 @@ import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.PricingIntTier;
 import com.clevel.selos.integration.brms.model.response.PricingInterest;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
-import com.clevel.selos.integration.brms.service.standardpricing.interestrules.*;
+import com.tmbbank.enterprise.model.*;
+import com.ilog.rules.decisionservice.DecisionServiceRequest;
+import com.ilog.rules.decisionservice.DecisionServiceResponse;
+import com.ilog.rules.param.UnderwritingRequest;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -152,37 +155,4 @@ public class StandardPricingIntConverter extends Converter {
 
         return standardPricingIntResponse;
     }
-
-    private AttributeType getAttributeType(BRMSFieldAttributes field, Date value){
-        logger.debug("-- getAttributeType()");
-        AttributeType attributeType = new AttributeType();
-        try{
-            attributeType.setName(field.value());
-            logger.debug("-- field.value()[{}]", field.value());
-            GregorianCalendar gregorianCalendar = new GregorianCalendar();
-            gregorianCalendar.setTime(value);
-            logger.debug("-- value()[{}]", value);
-            attributeType.setDateTimeValue(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
-        } catch (Exception ex){
-            logger.error("Cannot convert XML");
-            logger.error("-- Exception : {}", ex.getMessage());
-        }
-        return attributeType;
-    }
-
-    private AttributeType getAttributeType(BRMSFieldAttributes field, String value){
-        AttributeType attributeType = new AttributeType();
-        attributeType.setName(field.value());
-        attributeType.setStringValue(value);
-        return attributeType;
-    }
-
-    private AttributeType getAttributeType(BRMSFieldAttributes field, BigDecimal value){
-        AttributeType attributeType = new AttributeType();
-        attributeType.setName(field.value());
-        attributeType.setNumericValue(value);
-
-        return attributeType;
-    }
-
 }
