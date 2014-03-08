@@ -238,9 +238,8 @@ public class BaseController implements Serializable {
         try{
             HttpSession session = FacesUtil.getSession(true);
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            long workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             String queueName = session.getAttribute("queueName").toString();
-            fullApplicationControl.cancelCAFullApp(workCasePreScreenId, workCaseId, queueName);
+            fullApplicationControl.cancelCAFullApp(workCaseId, queueName, reasonId, cancalCARemark);
             messageHeader = "Information.";
             message = "Cancel CA success.";
             RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");

@@ -115,7 +115,7 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void cancelCase(long workCasePreScreenId, long workCaseId, String queueName, long actionCode) throws Exception{
+    public void cancelCase(long workCasePreScreenId, long workCaseId, String queueName, long actionCode, String reason, String remark) throws Exception{
         String wobNumber = "";
         if(Long.toString(workCasePreScreenId) != null && workCasePreScreenId != 0){
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
@@ -133,14 +133,16 @@ public class BPMExecutor implements Serializable {
             }
         }
 
-        if(wobNumber != null && wobNumber != ""){
+        if(wobNumber != null && !wobNumber.equalsIgnoreCase("")){
             Action action = actionDAO.findById(actionCode);
             if(action != null){
                 HashMap<String,String> fields = new HashMap<String, String>();
                 fields.put("Action_Code", Long.toString(action.getId()));
                 fields.put("Action_Name", action.getDescription());
+                fields.put("Remarks", remark);
+                fields.put("Reason", reason);
 
-                log.debug("dispatch case for [Cancel Case]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+                log.debug("dispatch case for [Cancel Case]..., Action_Code : {}, Action_Name : {}, Remark : {}, Reason : {}", action.getId(), action.getName(), remark, reason);
 
                 execute(queueName, wobNumber, fields);
             } else {

@@ -327,7 +327,14 @@ public class FullApplicationControl extends BusinessControl {
         return reasons;
     }
 
-    public void cancelCAFullApp(long workCaseIdPrescreen, long workCaseId, String queueName) throws Exception {
-        bpmExecutor.cancelCase(workCaseIdPrescreen, workCaseId, queueName, ActionCode.CANCEL_CA_FULLAPP.getVal());
+    public void cancelCAFullApp(long workCaseId, String queueName, int reasonId, String remark) throws Exception {
+        String reasonTxt = "";
+        if(reasonId!=0){
+            Reason reason = reasonDAO.findById(reasonId);
+            if(reason!=null && reason.getId()!=0){
+                reasonTxt = reason.getCode().concat(" - ").concat(reason.getDescription());
+            }
+        }
+        bpmExecutor.cancelCase(0, workCaseId, queueName, ActionCode.CANCEL_CA.getVal(), reasonTxt, remark);
     }
 }
