@@ -353,6 +353,7 @@ public class CreditFacProposeControl extends BusinessControl {
         log.info("calTotalProposeLoanDBRForIntYear end ::: sumTotalLoanDbr ::: {}", sumTotalLoanDbr);
         return sumTotalLoanDbr;
     }
+/*
 
     public List<ProposeCreditDetailView> findProposeCreditDetail(List<NewCreditDetailView> newCreditDetailViewList, long workCaseId) {
         log.debug("findProposeCreditDetail :: ", workCaseId);
@@ -409,6 +410,7 @@ public class CreditFacProposeControl extends BusinessControl {
 
         return proposeCreditDetailViewList;
     }
+*/
 
     public List<ProposeCreditDetailView> findAndGenerateSeqProposeCredits(List<NewCreditDetailView> newCreditDetailViewList, List<ExistingCreditDetailView> borrowerExistingCreditDetailViewList, long workCaseId) {
         log.debug("findAndGenerateSeqProposeCredits() workCaseId: {}", workCaseId);

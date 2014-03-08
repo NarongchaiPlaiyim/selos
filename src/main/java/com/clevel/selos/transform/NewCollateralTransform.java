@@ -217,17 +217,17 @@ public class NewCollateralTransform extends Transform {
                 List<NewCollateralSubRelated> newCollateralSubRelatedList = new ArrayList<NewCollateralSubRelated>();
                 newCollateralSub.setNewCollateralSubRelatedList(newCollateralSubRelatedList);
                 NewCollateralSubRelated newCollateralSubRelate;
-                for (NewCollateralSubView relatedView : newCollateralSubView.getRelatedWithList()) {
-                    log.debug("relatedView.getId() ::: {} ", relatedView.getId());
-                    NewCollateralSub relatedDetail = newCollateralSubDAO.findById(relatedView.getId());
-                    log.debug("relatedDetail.getId() ::: {} ", relatedDetail.getId());
-                    newCollateralSubRelate = new NewCollateralSubRelated();
-                    newCollateralSubRelate.setNewCollateralSubRelated(relatedDetail);
-                    newCollateralSubRelate.setNewCollateralSub(newCollateralSub);
-                    newCollateralSubRelate.setWorkCase(workCase);
-                    newCollateralSubRelate.setProposeType(ProposeType.P);
-                    newCollateralSubRelatedList.add(newCollateralSubRelate);
-                }
+//                for (NewCollateralSubView relatedView : newCollateralSubView.getRelatedWithList()) {
+//                    log.debug("relatedView.getId() ::: {} ", relatedView.getId());
+//                    NewCollateralSub relatedDetail = newCollateralSubDAO.findById(relatedView.getId());
+//                    log.debug("relatedDetail.getId() ::: {} ", relatedDetail.getId());
+//                    newCollateralSubRelate = new NewCollateralSubRelated();
+//                    newCollateralSubRelate.setNewCollateralSubRelated(relatedDetail);
+//                    newCollateralSubRelate.setNewCollateralSub(newCollateralSub);
+//                    newCollateralSubRelate.setWorkCase(workCase);
+//                    newCollateralSubRelate.setProposeType(ProposeType.P);
+//                    newCollateralSubRelatedList.add(newCollateralSubRelate);
+//                }
 
                 newCollateralSub.setNewCollateralSubRelatedList(newCollateralSubRelatedList);
             }
