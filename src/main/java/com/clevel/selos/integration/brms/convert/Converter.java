@@ -2,8 +2,6 @@ package com.clevel.selos.integration.brms.convert;
 
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
-import com.clevel.selos.integration.brms.model.request.*;
-import com.clevel.selos.integration.brms.model.request.data.*;
 import com.tmbbank.enterprise.model.AttributeType;
 import org.slf4j.Logger;
 
