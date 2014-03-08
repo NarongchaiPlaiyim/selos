@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -610,4 +613,30 @@ public class IndividualType {
         this.citizenID = value;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("totalNumOfDependents", totalNumOfDependents)
+                .append("gender", gender)
+                .append("maritalStatus", maritalStatus)
+                .append("employmentStatus", employmentStatus)
+                .append("conditionOfEmployment", conditionOfEmployment)
+                .append("occupation", occupation)
+                .append("occupationGroup", occupationGroup)
+                .append("natureOfBusiness", natureOfBusiness)
+                .append("residentialStatus", residentialStatus)
+                .append("nationality", nationality)
+                .append("dateOfBirth", dateOfBirth)
+                .append("age", age)
+                .append("segment", segment)
+                .append("totalMonthlyIncome", totalMonthlyIncome)
+                .append("grossMonthlyIncome", grossMonthlyIncome)
+                .append("highestEducationAttained", highestEducationAttained)
+                .append("keyDirectoryFlag", keyDirectoryFlag)
+                .append("attribute", attribute)
+                .append("citizenID", citizenID)
+                .toString();
+    }
 }

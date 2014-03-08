@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -332,4 +335,19 @@ public class EGTServiceType {
         return this.attribute;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("processDate", processDate)
+                .append("botID", botID)
+                .append("passFlag", passFlag)
+                .append("versionNumber", versionNumber)
+                .append("account", account)
+                .append("borrower", borrower)
+                .append("message", message)
+                .append("result", result)
+                .append("attribute", attribute)
+                .toString();
+    }
 }

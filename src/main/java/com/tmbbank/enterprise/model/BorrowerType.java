@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -1934,4 +1937,76 @@ public class BorrowerType {
         return this.warningCodePartialMatched;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("rmNumber", rmNumber)
+                .append("botID", botID)
+                .append("botName", botName)
+                .append("botClass", botClass)
+                .append("legalEntity", legalEntity)
+                .append("individual", individual)
+                .append("postCode", postCode)
+                .append("areaOfMailPostcode", areaOfMailPostcode)
+                .append("provinceAreaOfMailPostcode", provinceAreaOfMailPostcode)
+                .append("type", type)
+                .append("businessType", businessType)
+                .append("tgBusinessType", tgBusinessType)
+                .append("businessSegment", businessSegment)
+                .append("tgBusinessCustomerSegment", tgBusinessCustomerSegment)
+                .append("customerSince", customerSince)
+                .append("characterIssueFlag", characterIssueFlag)
+                .append("sourceOfCashIdentifiedFlag", sourceOfCashIdentifiedFlag)
+                .append("sourceOfRepaymentVerifiedFlag", sourceOfRepaymentVerifiedFlag)
+                .append("coreAssetCollateralFlag", coreAssetCollateralFlag)
+                .append("obligorCreditLimitExceededFlag", obligorCreditLimitExceededFlag)
+                .append("riskCustomerType", riskCustomerType)
+                .append("kycRiskLevel", kycRiskLevel)
+                .append("nationality", nationality)
+                .append("preScoredFlag", preScoredFlag)
+                .append("s48FullMatchedFlag", s48FullMatchedFlag)
+                .append("s48PartialMatchedFlag", s48PartialMatchedFlag)
+                .append("s49CategoryFlag", s49CategoryFlag)
+                .append("relationshipWithMainBorrower", relationshipWithMainBorrower)
+                .append("cardHolderType", cardHolderType)
+                .append("benefitPlusGroup", benefitPlusGroup)
+                .append("aggregatedCreditExposure", aggregatedCreditExposure)
+                .append("aggregatedCreditExposureLimit", aggregatedCreditExposureLimit)
+                .append("aggregatedCreditExposureOutstanding", aggregatedCreditExposureOutstanding)
+                .append("debtToIncomeRatio", debtToIncomeRatio)
+                .append("existTMBHomeLoanOutstandAmt", existTMBHomeLoanOutstandAmt)
+                .append("existTMBHomeLoanRepayAmt", existTMBHomeLoanRepayAmt)
+                .append("remainingDebtToIncome", remainingDebtToIncome)
+                .append("maxDebtToIncome", maxDebtToIncome)
+                .append("existingDebtToIncome", existingDebtToIncome)
+                .append("debtServiceRatio", debtServiceRatio)
+                .append("maxDebtServiceRatio", maxDebtServiceRatio)
+                .append("loanToValueRatio", loanToValueRatio)
+                .append("paymentCapacity", paymentCapacity)
+                .append("totalCreditLimit", totalCreditLimit)
+                .append("limitSize", limitSize)
+                .append("tdrFlag", tdrFlag)
+                .append("employment", employment)
+                .append("account", account)
+                .append("income", income)
+                .append("debt", debt)
+                .append("product", product)
+                .append("fraudDetail", fraudDetail)
+                .append("litigationDetail", litigationDetail)
+                .append("bankruptcyDetail", bankruptcyDetail)
+                .append("score", score)
+                .append("ncbReport", ncbReport)
+                .append("tmbAccountsReport", tmbAccountsReport)
+                .append("attribute", attribute)
+                .append("requiredDocumentSet", requiredDocumentSet)
+                .append("guarantor", guarantor)
+                .append("dateBehaviorScore", dateBehaviorScore)
+                .append("riskModel", riskModel)
+                .append("delinquency", delinquency)
+                .append("otherLoanStatus", otherLoanStatus)
+                .append("warningCodeFullMatched", warningCodeFullMatched)
+                .append("warningCodePartialMatched", warningCodePartialMatched)
+                .toString();
+    }
 }

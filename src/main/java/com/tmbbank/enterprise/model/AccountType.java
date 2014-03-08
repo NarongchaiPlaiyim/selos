@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -1482,4 +1485,61 @@ public class AccountType {
         this.delinquency = value;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("accountNumber", accountNumber)
+                .append("accountType", accountType)
+                .append("lendingType", lendingType)
+                .append("productType", productType)
+                .append("subProductType", subProductType)
+                .append("openDate", openDate)
+                .append("closedDate", closedDate)
+                .append("status", status)
+                .append("monthsOnBook", monthsOnBook)
+                .append("loanOutstanding", loanOutstanding)
+                .append("currMinPayment", currMinPayment)
+                .append("lastPaymentDate", lastPaymentDate)
+                .append("paidAmount", paidAmount)
+                .append("creditLimit", creditLimit)
+                .append("outstandingBalance", outstandingBalance)
+                .append("availableBalance", availableBalance)
+                .append("tenor", tenor)
+                .append("monthlyRepaymentAmt", monthlyRepaymentAmt)
+                .append("numMthsSinceLastPayment", numMthsSinceLastPayment)
+                .append("maxDelinq7To12", maxDelinq7To12)
+                .append("maxConsecMthsDelinq1To12", maxConsecMthsDelinq1To12)
+                .append("maxNumMthsConsecDelinqChange7To12", maxNumMthsConsecDelinqChange7To12)
+                .append("numMthsSinceDelinq1To12", numMthsSinceDelinq1To12)
+                .append("avgBalance6To8", avgBalance6To8)
+                .append("avgBalance7To12", avgBalance7To12)
+                .append("avgBalalnce9To11", avgBalalnce9To11)
+                .append("avgBalPercentCreditLimit7To12", avgBalPercentCreditLimit7To12)
+                .append("avgBalPercentCreditLimit9To116To8", avgBalPercentCreditLimit9To116To8)
+                .append("currBalPercentCreditLimit", currBalPercentCreditLimit)
+                .append("delinquencyCode", delinquencyCode)
+                .append("tdrFlag", tdrFlag)
+                .append("overdueCountInLast6Months", overdueCountInLast6Months)
+                .append("overdue30DLast6MthsCount", overdue30DLast6MthsCount)
+                .append("overdue60DLast12MthsCount", overdue60DLast12MthsCount)
+                .append("overdue90DFlag", overdue90DFlag)
+                .append("overdueOver90DCount", overdueOver90DCount)
+                .append("overdue31DTo60DCount", overdue31DTo60DCount)
+                .append("overdue61DTo90DCount", overdue61DTo90DCount)
+                .append("overdue91DTo120DCount", overdue91DTo120DCount)
+                .append("overdue121DTo150DCount", overdue121DTo150DCount)
+                .append("overdue151DTo180DCount", overdue151DTo180DCount)
+                .append("overdue181DTo210DCount", overdue181DTo210DCount)
+                .append("overdue211DTo240DCount", overdue211DTo240DCount)
+                .append("overdue241DTo270DCount", overdue241DTo270DCount)
+                .append("overdue271DTo300DCount", overdue271DTo300DCount)
+                .append("overdueOver301DCount", overdueOver301DCount)
+                .append("overLimitLast6MthsCount", overLimitLast6MthsCount)
+                .append("attribute", attribute)
+                .append("score", score)
+                .append("riskModel", riskModel)
+                .append("delinquency", delinquency)
+                .toString();
+    }
 }

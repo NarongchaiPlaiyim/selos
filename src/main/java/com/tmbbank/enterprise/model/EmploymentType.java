@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -611,4 +614,30 @@ public class EmploymentType {
         return this.attribute;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("nameOfEmployer", nameOfEmployer)
+                .append("startDate", startDate)
+                .append("endDate", endDate)
+                .append("timeOnJob", timeOnJob)
+                .append("occupationType", occupationType)
+                .append("position", position)
+                .append("businessType", businessType)
+                .append("businessTypeRiskLevel", businessTypeRiskLevel)
+                .append("monthlySalary", monthlySalary)
+                .append("monthlyResidualIncome", monthlyResidualIncome)
+                .append("appointedAtCurrentPostFlag", appointedAtCurrentPostFlag)
+                .append("passedProbationFlag", passedProbationFlag)
+                .append("occupationTypeRiskLevel", occupationTypeRiskLevel)
+                .append("thaiMilitaryFlag", thaiMilitaryFlag)
+                .append("thaiMilitaryRank", thaiMilitaryRank)
+                .append("countryOfEmployment", countryOfEmployment)
+                .append("contractPeriod", contractPeriod)
+                .append("lengthOfEmployment", lengthOfEmployment)
+                .append("natureOfBusiness", natureOfBusiness)
+                .append("attribute", attribute)
+                .toString();
+    }
 }
