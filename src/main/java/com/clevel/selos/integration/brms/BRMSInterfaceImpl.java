@@ -63,6 +63,7 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
             uwRulesResponse = new UWRulesResponse();
             uwRulesResponse.setActionResult(ActionResult.FAILED);
             uwRulesResponse.setReason(ex.getMessage());
+            logger.error("Calling BRMS error", ex);
         }
 
         return uwRulesResponse;
