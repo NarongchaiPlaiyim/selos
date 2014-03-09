@@ -715,8 +715,7 @@ public class CreditFacProposeControl extends BusinessControl {
         User currentUser = getCurrentUser();
 
         log.debug("saveCreditFacility ::: newCreditFacilityView : {}", newCreditFacilityView);
-        NewCreditFacility newCreditFacility = newCreditFacilityTransform.transformToModelDB(newCreditFacilityView, workCase, currentUser);
-        newCreditFacilityDAO.persist(newCreditFacility);
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.persist(newCreditFacilityTransform.transformToModelDB(newCreditFacilityView, workCase, currentUser));
         log.debug("saveCreditFacility ::: persist newCreditFacility : {}", newCreditFacility);
 
         //--- Save to NewFeeCredit
@@ -807,7 +806,9 @@ public class CreditFacProposeControl extends BusinessControl {
             newCollateralDetailDAO.persist(newCollateralList);
             log.debug("saveCreditFacility ::: persist newCollateralList : {}", newCollateralList);
         }
-        return newCreditFacilityView;
+
+        NewCreditFacilityView returnNewCreditFacView = newCreditFacilityTransform.transformToView(newCreditFacility);
+        return returnNewCreditFacView;
     }
 
     // Call COMSInterface

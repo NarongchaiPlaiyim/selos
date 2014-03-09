@@ -5,6 +5,7 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.ProposeType;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
@@ -126,9 +127,8 @@ public class DecisionControl extends BusinessControl {
         return approvalHistoryView;
     }
 
-    public Map<String, Object> getDecisionMapValue(long workCaseId) {
-        log.debug("getDecisionMapValue() workCaseId: {}", workCaseId);
-        Map<String, Object> mapValue = new HashMap<String, Object>();
+    public DecisionView getDecisionView(long workCaseId) {
+        log.debug("getDecisionView() workCaseId: {}", workCaseId);
         DecisionView decisionView = new DecisionView();
         // Credit Facility Existing
         ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
@@ -175,6 +175,15 @@ public class DecisionControl extends BusinessControl {
         }
 
         // Credit Facility Propose
+        List<NewCreditDetailView> approveCreditDetailViews = new ArrayList<NewCreditDetailView>();
+        List<NewCollateralView> approveCollViews = new ArrayList<NewCollateralView>();
+        List<NewGuarantorDetailView> approveGuarantorViews = new ArrayList<NewGuarantorDetailView>();
+        BigDecimal approveTotalCreditLimit = BigDecimal.ZERO;
+        BigDecimal approveTotalCommercial = BigDecimal.ZERO;
+        BigDecimal approveTotalComAndOBOD = BigDecimal.ZERO;
+        BigDecimal approveTotalExposure = BigDecimal.ZERO;
+        BigDecimal approveTotalGuaranteeAmt = BigDecimal.ZERO;
+
         NewCreditFacilityView newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
         if (newCreditFacilityView != null && newCreditFacilityView.getId() != 0) {
             decisionView.setCreditCustomerType(
@@ -201,18 +210,17 @@ public class DecisionControl extends BusinessControl {
             decisionView.setGuarantorBA(newCreditFacilityView.getGuarantorBA());
             decisionView.setReasonForReduction(newCreditFacilityView.getReasonForReduction());
 
-            // Duplicate Data from Propose
             // Approve Credit
-            decisionView.setApproveCreditList(newCreditDetailTransform.copyToNewViews(newCreditFacilityView.getNewCreditDetailViewList(), ProposeType.A, true));
-            decisionView.setApproveTotalCreditLimit(newCreditFacilityView.getTotalPropose());
-            decisionView.setApproveBrwTotalCommercial(newCreditFacilityView.getTotalCommercial());
-            decisionView.setApproveBrwTotalComAndOBOD(newCreditFacilityView.getTotalCommercialAndOBOD());
-            decisionView.setApproveTotalExposure(newCreditFacilityView.getTotalExposure());
+            approveCreditDetailViews = newCreditDetailTransform.copyToNewViews(newCreditFacilityView.getNewCreditDetailViewList(), ProposeType.A, true);
+            approveTotalCreditLimit = newCreditFacilityView.getTotalPropose();
+            approveTotalCommercial = newCreditFacilityView.getTotalCommercial();
+            approveTotalComAndOBOD = newCreditFacilityView.getTotalCommercialAndOBOD();
+            approveTotalExposure = newCreditFacilityView.getTotalExposure();
             // Approve Collateral
-            decisionView.setApproveCollateralList(newCollateralTransform.copyToNewViews(newCreditFacilityView.getNewCollateralViewList(), ProposeType.A, true));
+            approveCollViews = newCollateralTransform.copyToNewViews(newCreditFacilityView.getNewCollateralViewList(), ProposeType.A, true);
             // Approve Guarantor
-            decisionView.setApproveGuarantorList(newGuarantorDetailTransform.copyToNewViews(newCreditFacilityView.getNewGuarantorDetailViewList(), ProposeType.A, true));
-            decisionView.setApproveTotalGuaranteeAmt(newCreditFacilityView.getTotalGuaranteeAmount());
+            approveGuarantorViews = newGuarantorDetailTransform.copyToNewViews(newCreditFacilityView.getNewGuarantorDetailViewList(), ProposeType.A, true);
+            approveTotalGuaranteeAmt = newCreditFacilityView.getTotalGuaranteeAmount();
 
             // Hidden Fields
 //            decisionView.setApproveTotalNumOfNewOD(newCreditFacilityView.getTotalApproveNumOfNewOD());
@@ -231,35 +239,20 @@ public class DecisionControl extends BusinessControl {
             decisionView.setInvestedCountry(new CountryView());
         }
 
-        // Approve (Credit, Collateral, Guarantor) already exist from database for delete on save decision
-        List<Long> deleteCreditIdList = new ArrayList<Long>();
-        List<NewCreditDetail> existApproveCreditList = newCreditDetailDAO.findNewCreditDetail(workCaseId, ProposeType.A);
-        if (existApproveCreditList != null && existApproveCreditList.size() > 0) {
-            for (NewCreditDetail approveCredit : existApproveCreditList) {
-                deleteCreditIdList.add(approveCredit.getId());
-            }
-        }
-        log.debug("deleteCreditIdList: {}", deleteCreditIdList);
+        if (RoleValue.UW.id() == getUserRoleId()) {
 
-        List<Long> deleteCollIdList = new ArrayList<Long>();
-        List<NewCollateral> existApproveCollateralList = newCollateralDAO.findNewCollateral(workCaseId, ProposeType.A);
-        if (existApproveCollateralList != null && existApproveCollateralList.size() > 0) {
-            for (NewCollateral approveCollateral : existApproveCollateralList) {
-                deleteCollIdList.add(approveCollateral.getId());
-            }
         }
-        log.debug("deleteCollIdList: {}", deleteCollIdList);
-
-        List<Long> deleteGuarantorIdList = new ArrayList<Long>();
-        if (newCreditFacilityView != null && newCreditFacilityView.getId() != 0) {
-            List<NewGuarantorDetail> existApproveGuarantorList = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacId(newCreditFacilityView.getId(), ProposeType.A);
-            if (existApproveGuarantorList != null && existApproveGuarantorList.size() > 0) {
-                for (NewGuarantorDetail approveGuarantor : existApproveGuarantorList) {
-                    deleteGuarantorIdList.add(approveGuarantor.getId());
-                }
-            }
+        else {
+            // BDM, ABDM (Show duplicate data from propose only)
+            decisionView.setApproveCreditList(approveCreditDetailViews);
+            decisionView.setApproveCollateralList(approveCollViews);
+            decisionView.setApproveGuarantorList(approveGuarantorViews);
+            decisionView.setApproveTotalCreditLimit(approveTotalCreditLimit);
+            decisionView.setApproveBrwTotalCommercial(approveTotalCommercial);
+            decisionView.setApproveBrwTotalComAndOBOD(approveTotalComAndOBOD);
+            decisionView.setApproveTotalExposure(approveTotalExposure);
+            decisionView.setApproveTotalGuaranteeAmt(approveTotalGuaranteeAmt);
         }
-        log.debug("deleteGuarantorIdList: {}", deleteGuarantorIdList);
 
         // Decision FollowUp Condition
         List<DecisionFollowCondition> decisionFollowConditionList = decisionFollowConditionDAO.findByWorkCase(workCaseId);
@@ -269,11 +262,7 @@ public class DecisionControl extends BusinessControl {
         List<ApprovalHistory> submittedApprovalHistories = approvalHistoryDAO.findByWorkCase(workCaseId, true);
         decisionView.setApprovalHistoryList(approvalHistoryTransform.transformToView(submittedApprovalHistories));
 
-        mapValue.put("decisionView", decisionView);
-        mapValue.put("deleteCreditIdList", deleteCreditIdList);
-        mapValue.put("deleteCollIdList", deleteCollIdList);
-        mapValue.put("deleteGuarantorIdList", deleteGuarantorIdList);
-        return mapValue;
+        return decisionView;
     }
 
     public void deleteAllApproveByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {

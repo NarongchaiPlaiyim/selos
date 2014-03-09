@@ -56,21 +56,6 @@ public class NewCreditFacilityView implements Serializable {
     private BigDecimal totalIndvGuaranteeAmount;
     private BigDecimal totalJurisGuaranteeAmount;
 
-    // Approve
-    private BigDecimal totalApproveCredit;
-    private BigDecimal totalApproveCommercial;
-    private BigDecimal totalApproveComAndOBOD;
-    private BigDecimal totalApproveExposure;
-    private BigDecimal totalApproveNumOfNewOD;
-    private BigDecimal totalApproveNumProposeCreditFac;
-    private BigDecimal totalApproveNumContingenPropose;
-    private BigDecimal totalApproveNumOfCoreAsset;
-    private BigDecimal totalApproveNumOfNonCoreAsset;
-    private BigDecimal totalApproveGuaranteeAmt;
-    private BigDecimal totalApproveTCGGuaranteeAmt;
-    private BigDecimal totalApproveIndiGuaranteeAmt;
-    private BigDecimal totalApproveJurisGuaranteeAmt;
-
     private String contactName;
     private String contactPhoneNo;
     private String interService;
@@ -151,20 +136,6 @@ public class NewCreditFacilityView implements Serializable {
         this.totalTCGGuaranteeAmount = BigDecimal.ZERO;
         this.totalIndvGuaranteeAmount = BigDecimal.ZERO;
         this.totalJurisGuaranteeAmount = BigDecimal.ZERO;
-
-        this.totalApproveCredit = BigDecimal.ZERO;
-        this.totalApproveCommercial = BigDecimal.ZERO;
-        this.totalApproveComAndOBOD = BigDecimal.ZERO;
-        this.totalApproveExposure = BigDecimal.ZERO;
-        this.totalApproveNumOfNewOD = BigDecimal.ZERO;
-        this.totalApproveNumProposeCreditFac = BigDecimal.ZERO;
-        this.totalApproveNumContingenPropose = BigDecimal.ZERO;
-        this.totalApproveNumOfCoreAsset = BigDecimal.ZERO;
-        this.totalApproveNumOfNonCoreAsset = BigDecimal.ZERO;
-        this.totalApproveGuaranteeAmt = BigDecimal.ZERO;
-        this.totalApproveTCGGuaranteeAmt = BigDecimal.ZERO;
-        this.totalApproveIndiGuaranteeAmt = BigDecimal.ZERO;
-        this.totalApproveJurisGuaranteeAmt = BigDecimal.ZERO;
 
         this.contactName = "";
         this.contactPhoneNo = "";
@@ -491,110 +462,6 @@ public class NewCreditFacilityView implements Serializable {
         this.totalJurisGuaranteeAmount = totalJurisGuaranteeAmount;
     }
 
-    public BigDecimal getTotalApproveCredit() {
-        return totalApproveCredit;
-    }
-
-    public void setTotalApproveCredit(BigDecimal totalApproveCredit) {
-        this.totalApproveCredit = totalApproveCredit;
-    }
-
-    public BigDecimal getTotalApproveCommercial() {
-        return totalApproveCommercial;
-    }
-
-    public void setTotalApproveCommercial(BigDecimal totalApproveCommercial) {
-        this.totalApproveCommercial = totalApproveCommercial;
-    }
-
-    public BigDecimal getTotalApproveComAndOBOD() {
-        return totalApproveComAndOBOD;
-    }
-
-    public void setTotalApproveComAndOBOD(BigDecimal totalApproveComAndOBOD) {
-        this.totalApproveComAndOBOD = totalApproveComAndOBOD;
-    }
-
-    public BigDecimal getTotalApproveExposure() {
-        return totalApproveExposure;
-    }
-
-    public void setTotalApproveExposure(BigDecimal totalApproveExposure) {
-        this.totalApproveExposure = totalApproveExposure;
-    }
-
-    public BigDecimal getTotalApproveNumOfNewOD() {
-        return totalApproveNumOfNewOD;
-    }
-
-    public void setTotalApproveNumOfNewOD(BigDecimal totalApproveNumOfNewOD) {
-        this.totalApproveNumOfNewOD = totalApproveNumOfNewOD;
-    }
-
-    public BigDecimal getTotalApproveNumProposeCreditFac() {
-        return totalApproveNumProposeCreditFac;
-    }
-
-    public void setTotalApproveNumProposeCreditFac(BigDecimal totalApproveNumProposeCreditFac) {
-        this.totalApproveNumProposeCreditFac = totalApproveNumProposeCreditFac;
-    }
-
-    public BigDecimal getTotalApproveNumContingenPropose() {
-        return totalApproveNumContingenPropose;
-    }
-
-    public void setTotalApproveNumContingenPropose(BigDecimal totalApproveNumContingenPropose) {
-        this.totalApproveNumContingenPropose = totalApproveNumContingenPropose;
-    }
-
-    public BigDecimal getTotalApproveNumOfCoreAsset() {
-        return totalApproveNumOfCoreAsset;
-    }
-
-    public void setTotalApproveNumOfCoreAsset(BigDecimal totalApproveNumOfCoreAsset) {
-        this.totalApproveNumOfCoreAsset = totalApproveNumOfCoreAsset;
-    }
-
-    public BigDecimal getTotalApproveNumOfNonCoreAsset() {
-        return totalApproveNumOfNonCoreAsset;
-    }
-
-    public void setTotalApproveNumOfNonCoreAsset(BigDecimal totalApproveNumOfNonCoreAsset) {
-        this.totalApproveNumOfNonCoreAsset = totalApproveNumOfNonCoreAsset;
-    }
-
-    public BigDecimal getTotalApproveGuaranteeAmt() {
-        return totalApproveGuaranteeAmt;
-    }
-
-    public void setTotalApproveGuaranteeAmt(BigDecimal totalApproveGuaranteeAmt) {
-        this.totalApproveGuaranteeAmt = totalApproveGuaranteeAmt;
-    }
-
-    public BigDecimal getTotalApproveTCGGuaranteeAmt() {
-        return totalApproveTCGGuaranteeAmt;
-    }
-
-    public void setTotalApproveTCGGuaranteeAmt(BigDecimal totalApproveTCGGuaranteeAmt) {
-        this.totalApproveTCGGuaranteeAmt = totalApproveTCGGuaranteeAmt;
-    }
-
-    public BigDecimal getTotalApproveIndiGuaranteeAmt() {
-        return totalApproveIndiGuaranteeAmt;
-    }
-
-    public void setTotalApproveIndiGuaranteeAmt(BigDecimal totalApproveIndiGuaranteeAmt) {
-        this.totalApproveIndiGuaranteeAmt = totalApproveIndiGuaranteeAmt;
-    }
-
-    public BigDecimal getTotalApproveJurisGuaranteeAmt() {
-        return totalApproveJurisGuaranteeAmt;
-    }
-
-    public void setTotalApproveJurisGuaranteeAmt(BigDecimal totalApproveJurisGuaranteeAmt) {
-        this.totalApproveJurisGuaranteeAmt = totalApproveJurisGuaranteeAmt;
-    }
-
     public String getContactName() {
         return contactName;
     }
@@ -898,19 +765,6 @@ public class NewCreditFacilityView implements Serializable {
                 .append("totalTCGGuaranteeAmount", totalTCGGuaranteeAmount)
                 .append("totalIndvGuaranteeAmount", totalIndvGuaranteeAmount)
                 .append("totalJurisGuaranteeAmount", totalJurisGuaranteeAmount)
-                .append("totalApproveCredit", totalApproveCredit)
-                .append("totalApproveCommercial", totalApproveCommercial)
-                .append("totalApproveComAndOBOD", totalApproveComAndOBOD)
-                .append("totalApproveExposure", totalApproveExposure)
-                .append("totalApproveNumOfNewOD", totalApproveNumOfNewOD)
-                .append("totalApproveNumProposeCreditFac", totalApproveNumProposeCreditFac)
-                .append("totalApproveNumContingenPropose", totalApproveNumContingenPropose)
-                .append("totalApproveNumOfCoreAsset", totalApproveNumOfCoreAsset)
-                .append("totalApproveNumOfNonCoreAsset", totalApproveNumOfNonCoreAsset)
-                .append("totalApproveGuaranteeAmt", totalApproveGuaranteeAmt)
-                .append("totalApproveTCGGuaranteeAmt", totalApproveTCGGuaranteeAmt)
-                .append("totalApproveIndiGuaranteeAmt", totalApproveIndiGuaranteeAmt)
-                .append("totalApproveJurisGuaranteeAmt", totalApproveJurisGuaranteeAmt)
                 .append("contactName", contactName)
                 .append("contactPhoneNo", contactPhoneNo)
                 .append("interService", interService)
@@ -936,6 +790,10 @@ public class NewCreditFacilityView implements Serializable {
                 .append("newCollateralViewList", newCollateralViewList)
                 .append("newGuarantorDetailViewList", newGuarantorDetailViewList)
                 .append("newConditionDetailViewList", newConditionDetailViewList)
+                .append("newCollateralViewDelList", newCollateralViewDelList)
+                .append("newCreditViewDelList", newCreditViewDelList)
+                .append("newGuarantorViewDelList", newGuarantorViewDelList)
+                .append("newConditionViewDelList", newConditionViewDelList)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)

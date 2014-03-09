@@ -1899,30 +1899,34 @@
                             </tr>
                         </h:panelGroup>
 
-                        <tr>
-                            <td class="left" colspan="2">
-                                <p:commandButton id="btnAddApprovedCredit"
-                                                 value="#{msg.get('app.button.add')}"
-                                                 disabled="#{decision.roleBDM}"
-                                                 actionListener="#{decision.onAddApproveCredit()}"
-                                                 process="@form"
-                                                 update=":proposeCreditDlgForm,:msgBoxSystemMessagePanel"
-                                                 oncomplete="handleDialogOpen(xhr, status, args, 'proposeCreditDlg')"
-                                                 styleClass="smaller">
-                                    <p:resetInput target=":proposeCreditDlgForm"/>
-                                </p:commandButton>
+                        <h:panelGroup rendered="#{decision.roleUW}">
+                            <!-- Add Approve Credit & Retrieve Pricing/Fee Button -->
+                            <tr>
+                                <td class="left" colspan="2">
+                                    <p:commandButton id="btnAddApprovedCredit"
+                                                     value="#{msg.get('app.button.add')}"
+                                                     disabled="#{not decision.roleUW}"
+                                                     actionListener="#{decision.onAddApproveCredit()}"
+                                                     process="@form"
+                                                     update=":proposeCreditDlgForm,:msgBoxSystemMessagePanel"
+                                                     oncomplete="handleDialogOpen(xhr, status, args, 'proposeCreditDlg')"
+                                                     styleClass="smaller">
+                                        <p:resetInput target=":proposeCreditDlgForm"/>
+                                    </p:commandButton>
 
-                                <p:spacer width="10" height="0"/>
+                                    <p:spacer width="10" height="0"/>
 
-                                <p:commandButton id="btnRetrievePricingFee"
-                                                 value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
-                                                 rendered="#{decision.roleUW}"
-                                                 actionListener="#{decision.onRetrievePricingFee()}"
-                                                 process="@form"
-                                                 update=":frmMain"
-                                                 styleClass="largest"/>
-                            </td>
-                        </tr>
+                                    <p:commandButton id="btnRetrievePricingFee"
+                                                     value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
+                                                     disabled="#{not decision.roleUW}"
+                                                     actionListener="#{decision.onRetrievePricingFee()}"
+                                                     process="@form"
+                                                     update=":frmMain"
+                                                     styleClass="largest"/>
+                                </td>
+                            </tr>
+                        </h:panelGroup>
+
                         <tr>
                             <td class="left" colspan="2">
                                 <h:panelGroup rendered="#{decision.roleUW}">
@@ -2578,6 +2582,7 @@
                             <td class="left" colspan="2">
                                 <!-- Proposed Collateral -->
                                 <table border="0" style="width: 100%">
+                                    <!-- BEGIN: Collateral -->
                                     <ui:repeat value="#{decision.decisionView.proposeCollateralList}"
                                                var="proposeColl" varStatus="collIndex">
                                     <tr>
@@ -2676,7 +2681,7 @@
                                         </td>
                                     </tr>
 
-                                    <!-- BEGIN: Collateral Header -->
+                                    <!-- BEGIN: Coll Head -->
                                     <ui:repeat value="#{proposeColl.newCollateralHeadViewList}"
                                                var="collHead" varStatus="collHeadIndex">
                                         <tr>
@@ -2822,7 +2827,7 @@
                                             </tr>
                                         </h:panelGroup>
                                     </ui:repeat>
-                                    <!-- END: Collateral Header -->
+                                    <!-- END: Coll Head -->
 
                                         <h:panelGroup rendered="#{!collIndex.last}">
                                             <tr>
@@ -2849,307 +2854,309 @@
                             <td class="left" colspan="2">
                                 <!-- Approved Collateral -->
                                 <table border="0" style="width: 100%">
-                                <ui:repeat value="#{decision.decisionView.approveCollateralList}"
-                                           var="proposeColl" varStatus="collIndex">
-                                <tr>
-                                    <td class="title" style="width: 150px">#{msg.get('app.decision.label.jobId')}</td>
-                                    <td class="left">#{proposeColl.jobID}</td>
-                                    <td class="right" colspan="2">
-                                        <!-- Approved Collateral (Edit/Delete) Button -->
-                                        <p:commandButton id="btnEditApprovedCollateral"
-                                                         rendered="#{decision.roleUW}"
-                                                         value="#{msg.get('app.button.edit')}"
-                                                         action="#{decision.onEditApproveCollateral()}"
-                                                         update=":collateralDlgForm"
-                                                         oncomplete="proposeCollateralDlg.show()"
-                                                         styleClass="smaller">
-                                            <f:setPropertyActionListener value="#{proposeColl}"
-                                                                         target="#{decision.selectedApproveCollateral}"/>
-                                            <f:setPropertyActionListener value="#{i.index}"
-                                                                         target="#{decision.rowIndexCollateral}"/>
-                                        </p:commandButton>
-
-                                        <p:spacer width="10" height=""/>
-
-                                        <p:commandButton id="btnDelApprovedCollateral"
-                                                         rendered="#{decision.roleUW}"
-                                                         value="#{msg.get('app.button.delete')}"
-                                                         oncomplete="confirmDeleteAppProCollateralDlg.show()"
-                                                         styleClass="smaller">
-                                            <f:setPropertyActionListener value="#{proposeColl}"
-                                                                         target="#{decision.selectedApproveCollateral}"/>
-                                            <f:setPropertyActionListener value="#{i.index}"
-                                                                         target="#{decision.rowIndexCollateral}"/>
-                                        </p:commandButton>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="title">#{msg.get('app.decision.label.appraisalDate')}</td>
-                                    <td class="left" colspan="3">
-                                        <h:outputText value="#{proposeColl.appraisalDate}">
-                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
-                                        </h:outputText>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="title">#{msg.get('app.decision.label.AADDecision')}</td>
-                                    <td class="left" colspan="3">#{proposeColl.aadDecision}</td>
-                                </tr>
-                                <tr>
-                                    <td class="title">#{msg.get('app.decision.label.AADDecisionReason')}</td>
-                                    <td class="left">#{proposeColl.aadDecisionReason}</td>
-                                    <td class="title">#{msg.get('app.decision.label.AADDecisionReasonDetail')}</td>
-                                    <td class="left">#{proposeColl.aadDecisionReasonDetail}</td>
-                                </tr>
-                                <tr>
-                                    <td class="title">#{msg.get('app.decision.label.usage')}</td>
-                                    <td class="left">#{proposeColl.usage}</td>
-                                    <td class="title">#{msg.get('app.decision.label.typeOfUsage')}</td>
-                                    <td class="left">#{proposeColl.typeOfUsage}</td>
-                                </tr>
-                                <tr>
-                                    <td class="title left large">#{msg.get('app.decision.label.UWDecision')}</td>
-                                    <td class="left" colspan="3">
-                                        <table border="0">
-                                            <tr>
-                                                <td class="title">#{msg.get('app.decision.label.approved')}</td>
-                                                <td class="left">
-                                                    #{proposeColl.uwDecision eq 'APPROVED' ? msg.get('app.button.yes')
-                                                    : proposeColl.uwDecision eq 'REJECTED' ? msg.get('app.button.no')
-                                                    : ''}
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="title">#{msg.get('app.decision.label.UWRemark')}</td>
-                                    <td class="left" colspan="3">#{proposeColl.uwRemark}</td>
-                                </tr>
-                                <tr>
-                                    <td class="title">#{msg.get('app.decision.label.mortgageCondition')}</td>
-                                    <td class="left">#{proposeColl.mortgageCondition}</td>
-                                    <td class="title">#{msg.get('app.decision.label.mortgageConditionDetail')}</td>
-                                    <td class="left">#{proposeColl.mortgageConditionDetail}</td>
-                                </tr>
-                                <tr>
-                                    <td class="title">#{msg.get('app.decision.label.creditType')}</td>
-                                    <td class="left" colspan="3">
-                                        <p:dataTable var="collCrdType" value="#{proposeColl.proposeCreditDetailViewList}"
-                                                     paginator="false" rowKey="#{collCrdType}" rowIndexVar="rowIndex"
-                                                     style="width: 100%">
-
-                                            <p:columnGroup type="header">
-                                                <p:row>
-                                                    <p:column style="width: 5%"/>
-                                                    <p:column style="width: 40%" headerText="#{msg.get('app.decision.tb.th.account')}"/>
-                                                    <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.type')}"/>
-                                                    <p:column style="width: 15%" headerText="#{msg.get('app.decision.tb.th.productProgram')}"/>
-                                                    <p:column style="width: 15%" headerText="#{msg.get('app.decision.tb.th.creditFacility')}"/>
-                                                    <p:column style="width: 15%" headerText="#{msg.get('app.decision.tb.th.limit')}"/>
-                                                </p:row>
-                                            </p:columnGroup>
-
-                                            <p:column styleClass="center top">#{rowIndex + 1}</p:column>
-
-                                            <p:column styleClass="left top">
-                                                #{collCrdType.accountName}<br/>
-                                                #{msg.get('app.decision.tb.td.label.accNo')} #{collCrdType.accountNumber},
-                                                #{msg.get('app.decision.tb.td.label.suf')} #{collCrdType.accountSuf}
-                                            </p:column>
-
-                                            <p:column styleClass="left top">
-                                                #{collCrdType.requestType == decision.requestTypeNEW.value ? msg.get('app.label.new')
-                                                : collCrdType.requestType == decision.requestTypeCHANGE.value ? msg.get('app.label.change')
-                                                : ''}
-                                            </p:column>
-
-                                            <p:column styleClass="left top">
-                                                <h:outputText value="#{collCrdType.productProgramView.name}"
-                                                              rendered="#{not empty collCrdType.productProgramView}"/>
-                                            </p:column>
-
-                                            <p:column styleClass="left top">
-                                                <h:outputText value="#{collCrdType.creditFacilityView.name}"
-                                                              rendered="#{not empty collCrdType.creditFacilityView}"/>
-                                            </p:column>
-
-                                            <p:column styleClass="right top">
-                                                <h:outputText value="#{collCrdType.limit}">
-                                                    <f:convertNumber pattern="#,##0.##"
-                                                                     minFractionDigits="2" maxFractionDigits="2"
-                                                                     maxIntegerDigits="14"/>
-                                                </h:outputText>
-                                            </p:column>
-                                        </p:dataTable>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="title">#{msg.get('app.decision.label.BDMComments')}</td>
-                                    <td class="left" colspan="3">#{proposeColl.bdmComments}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4">
-                                        <div class="separate"><!-- --></div>
-                                    </td>
-                                </tr>
-
-                                <!-- BEGIN: Collateral Header -->
-                                <ui:repeat value="#{proposeColl.newCollateralHeadViewList}"
-                                           var="collHeader" varStatus="collHeadIndex">
+                                    <!-- BEGIN: Collateral -->
+                                    <ui:repeat value="#{decision.decisionView.approveCollateralList}"
+                                               var="proposeColl" varStatus="collIndex">
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.potential')}</td>
-                                        <td class="left" colspan="3">
-                                            <h:outputText value="#{collHeader.potentialCollateral.description}"
-                                                          rendered="#{not empty collHeader.potentialCollateral}"/>
+                                        <td class="title" style="width: 150px">#{msg.get('app.decision.label.jobId')}</td>
+                                        <td class="left">#{proposeColl.jobID}</td>
+                                        <td class="right" colspan="2">
+                                            <!-- Approved Collateral (Edit/Delete) Button -->
+                                            <p:commandButton id="btnEditApprovedCollateral"
+                                                             rendered="#{decision.roleUW}"
+                                                             value="#{msg.get('app.button.edit')}"
+                                                             action="#{decision.onEditApproveCollateral()}"
+                                                             update=":collateralDlgForm"
+                                                             oncomplete="proposeCollateralDlg.show()"
+                                                             styleClass="smaller">
+                                                <f:setPropertyActionListener value="#{proposeColl}"
+                                                                             target="#{decision.selectedApproveCollateral}"/>
+                                                <f:setPropertyActionListener value="#{i.index}"
+                                                                             target="#{decision.rowIndexCollateral}"/>
+                                            </p:commandButton>
+
+                                            <p:spacer width="10" height=""/>
+
+                                            <p:commandButton id="btnDelApprovedCollateral"
+                                                             rendered="#{decision.roleUW}"
+                                                             value="#{msg.get('app.button.delete')}"
+                                                             oncomplete="confirmDeleteAppProCollateralDlg.show()"
+                                                             styleClass="smaller">
+                                                <f:setPropertyActionListener value="#{proposeColl}"
+                                                                             target="#{decision.selectedApproveCollateral}"/>
+                                                <f:setPropertyActionListener value="#{i.index}"
+                                                                             target="#{decision.rowIndexCollateral}"/>
+                                            </p:commandButton>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.collTypePercentLTV')}</td>
+                                        <td class="title">#{msg.get('app.decision.label.appraisalDate')}</td>
                                         <td class="left" colspan="3">
-                                            <h:outputText value="#{collHeader.collTypePercentLTV.description}"
-                                                          rendered="#{not empty collHeader.collTypePercentLTV}"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title">#{msg.get('app.decision.label.existingCredit')}</td>
-                                        <td class="left" colspan="3">
-                                            <h:outputText value="#{collHeader.existingCredit}">
-                                                <f:convertNumber pattern="#,##0.##"
-                                                                 minFractionDigits="2" maxFractionDigits="2"
-                                                                 maxIntegerDigits="14"/>
+                                            <h:outputText value="#{proposeColl.appraisalDate}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
                                             </h:outputText>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.titleDeed')}</td>
-                                        <td class="left" colspan="3">#{collHeader.titleDeed}</td>
+                                        <td class="title">#{msg.get('app.decision.label.AADDecision')}</td>
+                                        <td class="left" colspan="3">#{proposeColl.aadDecision}</td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.collateralLocation')}</td>
-                                        <td class="left" colspan="3">#{collHeader.collateralLocation}</td>
+                                        <td class="title">#{msg.get('app.decision.label.AADDecisionReason')}</td>
+                                        <td class="left">#{proposeColl.aadDecisionReason}</td>
+                                        <td class="title">#{msg.get('app.decision.label.AADDecisionReasonDetail')}</td>
+                                        <td class="left">#{proposeColl.aadDecisionReasonDetail}</td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.headCollAppraisalValue')}</td>
+                                        <td class="title">#{msg.get('app.decision.label.usage')}</td>
+                                        <td class="left">#{proposeColl.usage}</td>
+                                        <td class="title">#{msg.get('app.decision.label.typeOfUsage')}</td>
+                                        <td class="left">#{proposeColl.typeOfUsage}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title left large">#{msg.get('app.decision.label.UWDecision')}</td>
                                         <td class="left" colspan="3">
-                                            <h:outputText value="#{collHeader.appraisalValue}">
-                                                <f:convertNumber pattern="#,##0.##"
-                                                                 minFractionDigits="2" maxFractionDigits="2"
-                                                                 maxIntegerDigits="14"/>
-                                            </h:outputText>
+                                            <table border="0">
+                                                <tr>
+                                                    <td class="title">#{msg.get('app.decision.label.approved')}</td>
+                                                    <td class="left">
+                                                        #{proposeColl.uwDecision eq 'APPROVED' ? msg.get('app.button.yes')
+                                                        : proposeColl.uwDecision eq 'REJECTED' ? msg.get('app.button.no')
+                                                        : ''}
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.headCollType')}</td>
-                                        <td class="left" colspan="3">
-                                            <h:outputText value="#{collHeader.headCollType.description}"
-                                                          rendered="#{not empty collHeader.headCollType}"/>
-                                        </td>
+                                        <td class="title">#{msg.get('app.decision.label.UWRemark')}</td>
+                                        <td class="left" colspan="3">#{proposeColl.uwRemark}</td>
                                     </tr>
                                     <tr>
-                                        <td class="title ">#{msg.get('app.decision.label.insuranceCompany')}</td>
-                                        <td class="left" colspan="3">
-                                            #{collHeader.insuranceCompany eq decision.yesValue ? msg.get('app.button.partner')
-                                            : collHeader.insuranceCompany eq decision.noValue ? msg.get('app.button.nonPartner')
-                                            : ''}
-                                        </td>
+                                        <td class="title">#{msg.get('app.decision.label.mortgageCondition')}</td>
+                                        <td class="left">#{proposeColl.mortgageCondition}</td>
+                                        <td class="title">#{msg.get('app.decision.label.mortgageConditionDetail')}</td>
+                                        <td class="left">#{proposeColl.mortgageConditionDetail}</td>
                                     </tr>
                                     <tr>
-                                        <td class="left" colspan="4">
-                                            <!-- Sub Collateral -->
-                                            <p:dataTable var="subColl" value="#{collHeader.newCollateralSubViewList}"
-                                                         paginator="false" rowKey="#{subColl}" rowIndexVar="rowIndex"
+                                        <td class="title">#{msg.get('app.decision.label.creditType')}</td>
+                                        <td class="left" colspan="3">
+                                            <p:dataTable var="collCrdType" value="#{proposeColl.proposeCreditDetailViewList}"
+                                                         paginator="false" rowKey="#{collCrdType}" rowIndexVar="rowIndex"
                                                          style="width: 100%">
 
                                                 <p:columnGroup type="header">
                                                     <p:row>
-                                                        <p:column style="width: 3%"/>
-                                                        <p:column style="width: 30%" headerText="#{msg.get('app.decision.tb.th.subCollType')}"/>
-                                                        <p:column style="width: 7%" headerText="#{msg.get('app.decision.tb.th.titleDeed')}"/>
-                                                        <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.collateralOwner.add')}"/>
-                                                        <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.collateralOwner.uw')}"/>
-                                                        <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.mortgageType')}"/>
-                                                        <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.relatedWith')}"/>
-                                                        <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.appraisalValue')}"/>
-                                                        <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.mortgageValue')}"/>
+                                                        <p:column style="width: 5%"/>
+                                                        <p:column style="width: 40%" headerText="#{msg.get('app.decision.tb.th.account')}"/>
+                                                        <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.type')}"/>
+                                                        <p:column style="width: 15%" headerText="#{msg.get('app.decision.tb.th.productProgram')}"/>
+                                                        <p:column style="width: 15%" headerText="#{msg.get('app.decision.tb.th.creditFacility')}"/>
+                                                        <p:column style="width: 15%" headerText="#{msg.get('app.decision.tb.th.limit')}"/>
                                                     </p:row>
                                                 </p:columnGroup>
 
                                                 <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                                 <p:column styleClass="left top">
-                                                    <h:outputText value="#{subColl.subCollateralType.description}"
-                                                                  rendered="#{not empty subColl.subCollateralType}"/>
-                                                    <br/>
-                                                    #{msg.get('app.decision.tb.td.label.address')} #{subColl.address}
-                                                    <br/>
-                                                    #{msg.get('app.decision.tb.td.label.landOffice')} #{subColl.landOffice}
-                                                </p:column>
-
-                                                <p:column styleClass="left top">#{subColl.titleDeed}</p:column>
-
-                                                <p:column styleClass="left top">#{subColl.collateralOwnerAAD}</p:column>
-
-                                                <p:column styleClass="left top">
-                                                    <ui:repeat value="#{subColl.collateralOwnerUWList}"
-                                                               var="collOwnerUW" varStatus="i">
-                                                        #{not empty collOwnerUW.titleTh ? collOwnerUW.titleTh.titleTh : ''}
-                                                        #{collOwnerUW.firstNameTh} #{collOwnerUW.lastNameTh}#{!i.last ? ', ' : ''}
-                                                    </ui:repeat>
+                                                    #{collCrdType.accountName}<br/>
+                                                    #{msg.get('app.decision.tb.td.label.accNo')} #{collCrdType.accountNumber},
+                                                    #{msg.get('app.decision.tb.td.label.suf')} #{collCrdType.accountSuf}
                                                 </p:column>
 
                                                 <p:column styleClass="left top">
-                                                    <ui:repeat value="#{subColl.mortgageList}"
-                                                               var="mortgageType" varStatus="j">
-                                                        #{mortgageType.mortgage}#{!j.last ? ', ' : ''}
-                                                    </ui:repeat>
+                                                    #{collCrdType.requestType == decision.requestTypeNEW.value ? msg.get('app.label.new')
+                                                    : collCrdType.requestType == decision.requestTypeCHANGE.value ? msg.get('app.label.change')
+                                                    : ''}
                                                 </p:column>
 
                                                 <p:column styleClass="left top">
-                                                    <ui:repeat value="#{subColl.relatedWithList}"
-                                                               var="relatedWith" varStatus="k">
-                                                        #{relatedWith.titleDeed}#{!k.last ? ', ' : ''}
-                                                    </ui:repeat>
+                                                    <h:outputText value="#{collCrdType.productProgramView.name}"
+                                                                  rendered="#{not empty collCrdType.productProgramView}"/>
+                                                </p:column>
+
+                                                <p:column styleClass="left top">
+                                                    <h:outputText value="#{collCrdType.creditFacilityView.name}"
+                                                                  rendered="#{not empty collCrdType.creditFacilityView}"/>
                                                 </p:column>
 
                                                 <p:column styleClass="right top">
-                                                    <h:outputText value="#{subColl.appraisalValue}">
+                                                    <h:outputText value="#{collCrdType.limit}">
                                                         <f:convertNumber pattern="#,##0.##"
                                                                          minFractionDigits="2" maxFractionDigits="2"
                                                                          maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </p:column>
-
-                                                <p:column styleClass="right top">
-                                                    <h:outputText value="#{subColl.mortgageValue}">
-                                                        <f:convertNumber pattern="#,##0.##"
-                                                                         minFractionDigits="2" maxFractionDigits="2"
-                                                                         maxIntegerDigits="14"/>
-                                                    </h:outputText>
-                                                </p:column>
-
                                             </p:dataTable>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td class="title">#{msg.get('app.decision.label.BDMComments')}</td>
+                                        <td class="left" colspan="3">#{proposeColl.bdmComments}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <div class="separate"><!-- --></div>
+                                        </td>
+                                    </tr>
 
-                                    <h:panelGroup rendered="#{!collHeadIndex.last}">
+                                    <!-- BEGIN: Coll Head -->
+                                    <ui:repeat value="#{proposeColl.newCollateralHeadViewList}"
+                                               var="collHeader" varStatus="collHeadIndex">
                                         <tr>
-                                            <td colspan="4">
-                                                <div class="separate"><!-- --></div>
+                                            <td class="title">#{msg.get('app.decision.label.potential')}</td>
+                                            <td class="left" colspan="3">
+                                                <h:outputText value="#{collHeader.potentialCollateral.description}"
+                                                              rendered="#{not empty collHeader.potentialCollateral}"/>
                                             </td>
                                         </tr>
-                                    </h:panelGroup>
-                                </ui:repeat>
-                                <!-- END: Collateral Header -->
-
-                                    <h:panelGroup rendered="#{!collIndex.last}">
                                         <tr>
-                                            <td colspan="4">
-                                                <div class="separate"><!-- --></div>
+                                            <td class="title">#{msg.get('app.decision.label.collTypePercentLTV')}</td>
+                                            <td class="left" colspan="3">
+                                                <h:outputText value="#{collHeader.collTypePercentLTV.description}"
+                                                              rendered="#{not empty collHeader.collTypePercentLTV}"/>
                                             </td>
                                         </tr>
-                                    </h:panelGroup>
-                                </ui:repeat>
+                                        <tr>
+                                            <td class="title">#{msg.get('app.decision.label.existingCredit')}</td>
+                                            <td class="left" colspan="3">
+                                                <h:outputText value="#{collHeader.existingCredit}">
+                                                    <f:convertNumber pattern="#,##0.##"
+                                                                     minFractionDigits="2" maxFractionDigits="2"
+                                                                     maxIntegerDigits="14"/>
+                                                </h:outputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title">#{msg.get('app.decision.label.titleDeed')}</td>
+                                            <td class="left" colspan="3">#{collHeader.titleDeed}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title">#{msg.get('app.decision.label.collateralLocation')}</td>
+                                            <td class="left" colspan="3">#{collHeader.collateralLocation}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title">#{msg.get('app.decision.label.headCollAppraisalValue')}</td>
+                                            <td class="left" colspan="3">
+                                                <h:outputText value="#{collHeader.appraisalValue}">
+                                                    <f:convertNumber pattern="#,##0.##"
+                                                                     minFractionDigits="2" maxFractionDigits="2"
+                                                                     maxIntegerDigits="14"/>
+                                                </h:outputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title">#{msg.get('app.decision.label.headCollType')}</td>
+                                            <td class="left" colspan="3">
+                                                <h:outputText value="#{collHeader.headCollType.description}"
+                                                              rendered="#{not empty collHeader.headCollType}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title ">#{msg.get('app.decision.label.insuranceCompany')}</td>
+                                            <td class="left" colspan="3">
+                                                #{collHeader.insuranceCompany eq decision.yesValue ? msg.get('app.button.partner')
+                                                : collHeader.insuranceCompany eq decision.noValue ? msg.get('app.button.nonPartner')
+                                                : ''}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="left" colspan="4">
+                                                <!-- Sub Collateral -->
+                                                <p:dataTable var="subColl" value="#{collHeader.newCollateralSubViewList}"
+                                                             paginator="false" rowKey="#{subColl}" rowIndexVar="rowIndex"
+                                                             style="width: 100%">
+
+                                                    <p:columnGroup type="header">
+                                                        <p:row>
+                                                            <p:column style="width: 3%"/>
+                                                            <p:column style="width: 30%" headerText="#{msg.get('app.decision.tb.th.subCollType')}"/>
+                                                            <p:column style="width: 7%" headerText="#{msg.get('app.decision.tb.th.titleDeed')}"/>
+                                                            <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.collateralOwner.add')}"/>
+                                                            <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.collateralOwner.uw')}"/>
+                                                            <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.mortgageType')}"/>
+                                                            <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.relatedWith')}"/>
+                                                            <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.appraisalValue')}"/>
+                                                            <p:column style="width: 10%" headerText="#{msg.get('app.decision.tb.th.mortgageValue')}"/>
+                                                        </p:row>
+                                                    </p:columnGroup>
+
+                                                    <p:column styleClass="center top">#{rowIndex + 1}</p:column>
+
+                                                    <p:column styleClass="left top">
+                                                        <h:outputText value="#{subColl.subCollateralType.description}"
+                                                                      rendered="#{not empty subColl.subCollateralType}"/>
+                                                        <br/>
+                                                        #{msg.get('app.decision.tb.td.label.address')} #{subColl.address}
+                                                        <br/>
+                                                        #{msg.get('app.decision.tb.td.label.landOffice')} #{subColl.landOffice}
+                                                    </p:column>
+
+                                                    <p:column styleClass="left top">#{subColl.titleDeed}</p:column>
+
+                                                    <p:column styleClass="left top">#{subColl.collateralOwnerAAD}</p:column>
+
+                                                    <p:column styleClass="left top">
+                                                        <ui:repeat value="#{subColl.collateralOwnerUWList}"
+                                                                   var="collOwnerUW" varStatus="i">
+                                                            #{not empty collOwnerUW.titleTh ? collOwnerUW.titleTh.titleTh : ''}
+                                                            #{collOwnerUW.firstNameTh} #{collOwnerUW.lastNameTh}#{!i.last ? ', ' : ''}
+                                                        </ui:repeat>
+                                                    </p:column>
+
+                                                    <p:column styleClass="left top">
+                                                        <ui:repeat value="#{subColl.mortgageList}"
+                                                                   var="mortgageType" varStatus="j">
+                                                            #{mortgageType.mortgage}#{!j.last ? ', ' : ''}
+                                                        </ui:repeat>
+                                                    </p:column>
+
+                                                    <p:column styleClass="left top">
+                                                        <ui:repeat value="#{subColl.relatedWithList}"
+                                                                   var="relatedWith" varStatus="k">
+                                                            #{relatedWith.titleDeed}#{!k.last ? ', ' : ''}
+                                                        </ui:repeat>
+                                                    </p:column>
+
+                                                    <p:column styleClass="right top">
+                                                        <h:outputText value="#{subColl.appraisalValue}">
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </p:column>
+
+                                                    <p:column styleClass="right top">
+                                                        <h:outputText value="#{subColl.mortgageValue}">
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </p:column>
+
+                                                </p:dataTable>
+                                            </td>
+                                        </tr>
+
+                                        <h:panelGroup rendered="#{!collHeadIndex.last}">
+                                            <tr>
+                                                <td colspan="4">
+                                                    <div class="separate"><!-- --></div>
+                                                </td>
+                                            </tr>
+                                        </h:panelGroup>
+                                    </ui:repeat>
+                                    <!-- END: Coll Head -->
+
+                                        <h:panelGroup rendered="#{!collIndex.last}">
+                                            <tr>
+                                                <td colspan="4">
+                                                    <div class="separate"><!-- --></div>
+                                                </td>
+                                            </tr>
+                                        </h:panelGroup>
+                                    </ui:repeat>
+                                    <!-- END: Collateral -->
                                 </table>
                             </td>
                         </tr>
@@ -3162,6 +3169,7 @@
                             </td>
                         </tr>
 
+                        <!-- Proposed Guarantor -->
                         <tr>
                             <td class="title" colspan="2">
                                 <h:outputText value="#{msg.get('app.decision.proposedGuarantor')}"/>
@@ -3169,7 +3177,6 @@
                         </tr>
                         <tr>
                             <td class="left" colspan="2">
-                                <!-- Proposed Guarantor -->
                                 <p:dataTable id="dtProposedGuarantor"
                                              var="guarantor" value="#{decision.decisionView.proposeGuarantorList}"
                                              paginator="false" rowKey="#{guarantor}" rowIndexVar="rowIndex"
@@ -3277,11 +3284,12 @@
                             </td>
                         </tr>
 
+                        <h:panelGroup rendered="#{decision.roleUW}">
                         <tr>
                             <td class="left" colspan="2">
                                 <p:commandButton id="btnAddApprovedGuarantor"
                                                  value="#{msg.get('app.button.add')}"
-                                                 disabled="#{decision.roleBDM}"
+                                                 disabled="#{not decision.roleUW}"
                                                  actionListener="#{decision.onAddApproveGuarantor()}"
                                                  process="@this"
                                                  update=":guarantorDlgForm"
@@ -3291,6 +3299,7 @@
                                 </p:commandButton>
                             </td>
                         </tr>
+                        </h:panelGroup>
 
                         <tr>
                             <td class="left" colspan="2">
@@ -3380,7 +3389,7 @@
                                                   rendered="#{decision.roleUW}">
                                             <p:commandButton title="#{msg.get('app.button.edit')}"
                                                              icon="ui-icon-pencil"
-                                                             disabled="#{decision.roleBDM}"
+                                                             disabled="#{not decision.roleUW}"
                                                              action="#{decision.onEditApproveGuarantor()}"
                                                              update=":guarantorDlgForm"
                                                              oncomplete="proposeGuarantorDlg.show()">
@@ -3393,7 +3402,7 @@
 
                                             <p:commandButton title="#{msg.get('app.button.delete')}"
                                                              icon="ui-icon-trash"
-                                                             disabled="#{decision.roleBDM}"
+                                                             disabled="#{not decision.roleUW}"
                                                              oncomplete="confirmDeleteAppGuarantorDlg.show()">
                                                 <f:setPropertyActionListener value="#{guarantor}"
                                                                              target="#{decision.selectedApproveGuarantor}"/>
@@ -3574,17 +3583,11 @@
                                         </td>
                                         <td class="left" style="width: 190px;">
                                             <p:inputText value="#{decision.decisionView.intFeeDOA}"
-                                                         maxlength="6"
-                                                         onclick="this.select()"
-                                                         onkeydown="return onKeyDownMoney(event);"
-                                                         onkeypress="return onKeyPressMoney(event);"
                                                          readonly="true"
                                                          styleClass="right">
                                                 <f:convertNumber pattern="##0.##"
                                                                  minFractionDigits="2" maxFractionDigits="2"
                                                                  maxIntegerDigits="3"/>
-                                                <f:validateDoubleRange maximum="100"/>
-                                                <p:ajax event="blur" update="@this"/>
                                             </p:inputText>
                                             <h:outputText value=" %"/>
                                         </td>
@@ -3594,17 +3597,11 @@
                                         </td>
                                         <td class="left" style="width: 190px;">
                                             <p:inputText value="#{decision.decisionView.frontendFeeDOA}"
-                                                         maxlength="6"
-                                                         onclick="this.select()"
-                                                         onkeydown="return onKeyDownMoney(event);"
-                                                         onkeypress="return onKeyPressMoney(event);"
                                                          readonly="true"
                                                          styleClass="right">
                                                 <f:convertNumber pattern="##0.##"
                                                                  minFractionDigits="2" maxFractionDigits="2"
                                                                  maxIntegerDigits="3"/>
-                                                <f:validateDoubleRange maximum="100"/>
-                                                <p:ajax event="blur" update="@this"/>
                                             </p:inputText>
                                             <h:outputText value=" %"/>
                                         </td>
@@ -3614,16 +3611,11 @@
                                         </td>
                                         <td class="left" style="width: 190px;">
                                             <p:inputText value="#{decision.decisionView.guarantorBA}"
-                                                         maxlength="18"
-                                                         onclick="this.select()"
-                                                         onkeydown="return onKeyDownMoney(event);"
-                                                         onkeypress="return onKeyPressMoney(event);"
                                                          readonly="true"
                                                          styleClass="right">
                                                 <f:convertNumber pattern="#,##0.##"
                                                                  minFractionDigits="2" maxFractionDigits="2"
                                                                  maxIntegerDigits="14"/>
-                                                <p:ajax event="blur" update="@this"/>
                                             </p:inputText>
                                         </td>
                                     </tr>
@@ -3639,7 +3631,6 @@
                                         </td>
                                     </tr>
                                 </table>
-
                             </td>
                         </tr>
                         <tr>

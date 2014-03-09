@@ -264,13 +264,12 @@ public class Decision implements Serializable {
     public void onCreation() {
         preRender();
 
-        Map<String, Object> mapValue = decisionControl.getDecisionMapValue(workCaseId);
-        decisionView = (DecisionView) mapValue.get("decisionView");
+        decisionView = decisionControl.getDecisionView(workCaseId);
 
         // delete list on save
-        deleteCreditIdList = (List<Long>) mapValue.get("deleteCreditIdList");
-        deleteCollIdList = (List<Long>) mapValue.get("deleteCollIdList");
-        deleteGuarantorIdList = (List<Long>) mapValue.get("deleteGuarantorIdList");
+        deleteCreditIdList = new ArrayList<Long>();
+        deleteCollIdList = new ArrayList<Long>();
+        deleteGuarantorIdList = new ArrayList<Long>();
         deleteSubCollIdList = new ArrayList<Long>();
         deleteConditionIdList = new ArrayList<Long>();
 
@@ -1104,17 +1103,18 @@ public class Decision implements Serializable {
         log.debug("onSaveDecision()");
 
         try {
-            // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
-            decisionView = decisionControl.saveDecision(decisionView, workCaseId);
-            // todo: calculate Total Approve and Hidden field for NewCreditFacility
-            // Save Approval History for UW
-            if (roleUW) {
-                approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCaseId);
-            }
-            // Delete List
-            decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
 
-            //exSummaryControl.calForDecision(workCaseId);
+            if (roleUW) {
+                // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
+                decisionView = decisionControl.saveDecision(decisionView, workCaseId);
+                // todo: calculate Total Approve and Hidden field for NewCreditFacility
+                // Save Approval History for UW
+                approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCaseId);
+                // Delete List
+                decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
+                //exSummaryControl.calForDecision(workCaseId);
+            }
+
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save Decision data success.";
             severity = MessageDialogSeverity.INFO.severity();
