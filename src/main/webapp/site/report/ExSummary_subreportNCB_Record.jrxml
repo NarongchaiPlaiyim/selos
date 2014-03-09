@@ -23,6 +23,30 @@ FROM
 WHERE
      WRK_CUSTOMER."WORKCASE_ID" = 147]]>
 	</queryString>
+	<field name="ncbCusName" class="java.lang.String">
+		<fieldDescription><![CDATA[ncbCusName]]></fieldDescription>
+	</field>
+	<field name="checkIn6Month" class="java.lang.Integer">
+		<fieldDescription><![CDATA[checkIn6Month]]></fieldDescription>
+	</field>
+	<field name="currentPaymentType" class="java.lang.String">
+		<fieldDescription><![CDATA[currentPaymentType]]></fieldDescription>
+	</field>
+	<field name="historyPaymentType" class="java.lang.String">
+		<fieldDescription><![CDATA[historyPaymentType]]></fieldDescription>
+	</field>
+	<field name="nplFlagText" class="java.lang.String">
+		<fieldDescription><![CDATA[nplFlagText]]></fieldDescription>
+	</field>
+	<field name="tdrFlagText" class="java.lang.String">
+		<fieldDescription><![CDATA[tdrFlagText]]></fieldDescription>
+	</field>
+	<field name="description" class="java.lang.String">
+		<fieldDescription><![CDATA[description]]></fieldDescription>
+	</field>
+	<field name="paymentClass" class="java.lang.String">
+		<fieldDescription><![CDATA[paymentClass]]></fieldDescription>
+	</field>
 	<columnHeader>
 		<band height="17">
 			<frame>
@@ -37,7 +61,7 @@ WHERE
 						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="6" isBold="true"/>
+						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[Customer Name]]></text>
 				</staticText>
@@ -51,7 +75,7 @@ WHERE
 						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="6" isBold="true"/>
+						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[จำนวนการสืบค้นข้อมูล]]></text>
 				</staticText>
@@ -65,7 +89,7 @@ WHERE
 						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="6" isBold="true"/>
+						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[การชำระหนี้ ณ ปัจจุบัน]]></text>
 				</staticText>
@@ -79,7 +103,7 @@ WHERE
 						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="6" isBold="true"/>
+						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[ประวัติการชำระหนี้]]></text>
 				</staticText>
@@ -93,7 +117,7 @@ WHERE
 						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="6" isBold="true"/>
+						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[ประวัติการเป็นหนี้ NPL]]></text>
 				</staticText>
@@ -107,7 +131,7 @@ WHERE
 						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="6" isBold="true"/>
+						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[ประวัติการเป็นหนี้ TDR]]></text>
 				</staticText>
@@ -121,7 +145,7 @@ WHERE
 						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="6" isBold="true"/>
+						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[เงื่อนไขการชำระหนี้ TDR]]></text>
 				</staticText>
@@ -135,7 +159,7 @@ WHERE
 						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="6" isBold="true"/>
+						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[การจัดชั้นหนี้ตาม NCB]]></text>
 				</staticText>
@@ -155,9 +179,10 @@ WHERE
 						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
 					</box>
-					<textElement textAlignment="Center">
-						<font size="5"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
+					<textFieldExpression><![CDATA[$F{ncbCusName}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement uuid="c638a41e-5d46-4fab-a385-f30cf4d58d9d" mode="Opaque" x="74" y="0" width="55" height="20" forecolor="#000000"/>
@@ -168,11 +193,12 @@ WHERE
 						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
 					</box>
-					<textElement textAlignment="Center">
-						<font size="5"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
+					<textFieldExpression><![CDATA[$F{checkIn6Month}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement uuid="36249ee7-d863-4768-9678-b54574eefda2" mode="Opaque" x="129" y="0" width="74" height="20" forecolor="#000000"/>
 					<box>
 						<pen lineColor="#CCCCCC"/>
@@ -181,11 +207,12 @@ WHERE
 						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
 					</box>
-					<textElement textAlignment="Center">
-						<font size="5"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
+					<textFieldExpression><![CDATA[$F{currentPaymentType}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement uuid="865f098a-2e41-4bdd-9381-0d2ffa6fcc5e" mode="Opaque" x="203" y="0" width="79" height="20" forecolor="#000000"/>
 					<box>
 						<pen lineColor="#CCCCCC"/>
@@ -194,9 +221,10 @@ WHERE
 						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
 					</box>
-					<textElement textAlignment="Center">
-						<font size="5"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
+					<textFieldExpression><![CDATA[$F{historyPaymentType}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement uuid="1501078d-4e0e-46a3-b3e7-9fabc0849cd2" mode="Opaque" x="282" y="0" width="63" height="20" forecolor="#000000"/>
@@ -207,9 +235,10 @@ WHERE
 						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
 					</box>
-					<textElement textAlignment="Center">
-						<font size="5"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
+					<textFieldExpression><![CDATA[$F{nplFlagText}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement uuid="6c5839c9-b21f-4dbd-8d38-900ea768e4b5" mode="Opaque" x="345" y="0" width="61" height="20" forecolor="#000000"/>
@@ -220,11 +249,12 @@ WHERE
 						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
 					</box>
-					<textElement textAlignment="Center">
-						<font size="5"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
+					<textFieldExpression><![CDATA[$F{tdrFlagText}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement uuid="bb6bdb78-4936-4c7c-80da-d703f029cc20" mode="Opaque" x="406" y="0" width="74" height="20" forecolor="#000000"/>
 					<box>
 						<pen lineColor="#CCCCCC"/>
@@ -233,11 +263,12 @@ WHERE
 						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
 					</box>
-					<textElement textAlignment="Center">
-						<font size="5"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
+					<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement uuid="3c181391-a20a-4207-af35-20e8d04ec1cf" mode="Opaque" x="480" y="0" width="74" height="20" forecolor="#000000"/>
 					<box>
 						<pen lineColor="#CCCCCC"/>
@@ -246,9 +277,10 @@ WHERE
 						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
 					</box>
-					<textElement textAlignment="Center">
-						<font size="5"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
+					<textFieldExpression><![CDATA[$F{paymentClass}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

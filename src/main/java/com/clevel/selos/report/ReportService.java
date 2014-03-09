@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.Enumeration;
 import java.util.Map;
 
 public class ReportService implements Serializable {
@@ -26,20 +27,17 @@ public class ReportService implements Serializable {
 
     }
 
-    public void generatePDF(String fileName, Map<String,Object> parameters, JRBeanCollectionDataSource jrBeanCollectionDataSource) throws JRException, IOException {
+    public void generatePDF(String fileName, Map<String,Object> parameters) throws JRException, IOException {
         log.debug("generate pdf.");
-
-        log.debug("-- File [{}]", fileName);
         JasperReport jasperReport = JasperCompileManager.compileReport(fileName);
-        log.debug("-- jasperReport [{}]", jasperReport);
         JasperPrint print ;
-        if(jrBeanCollectionDataSource != null)
-            print = JasperFillManager.fillReport(jasperReport, parameters, jrBeanCollectionDataSource);
-        else
-           print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+
+        log.info("parameters: {}",parameters);
+
+        print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+
 
         try {
-            log.debug("report template: {}",reportTemplate);
             HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
             response.addHeader("Content-disposition", "attachment; filename=report.pdf");
             ServletOutputStream servletOutputStream=response.getOutputStream();
@@ -51,10 +49,4 @@ public class ReportService implements Serializable {
             log.error("Error generating pdf report!", e);
         }
     }
-
-    public void printReportByPFD(String fileName, Map<String,Object> parameters, JRBeanCollectionDataSource jrBeanCollectionDataSource,String outputFileName) {
-
-    }
-
-
 }

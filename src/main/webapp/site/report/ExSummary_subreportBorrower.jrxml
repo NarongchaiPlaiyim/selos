@@ -1,43 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary_subreportBorrower" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="d35917ad-7591-46b8-9a51-3285103fd69e">
-	<property name="ireport.zoom" value="1.771561000000011"/>
+	<property name="ireport.zoom" value="1.7715610000000044"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<queryString>
-		<![CDATA[SELECT
-     MST_TITLE."TITLE_TH" AS MST_TITLE_TITLE_TH,
-     WRK_CUSTOMER."NAME_TH" AS WRK_CUSTOMER_NAME_TH,
-     WRK_CUSTOMER."LASTNAME_TH" AS WRK_CUSTOMER_LASTNAME_TH,
-     MST_RELATION."DESCRIPTION" AS Type,
-     WRK_CUSTOMER."COLLATERAL_OWNER" AS Coll_Owner,
-     MST_REFERENCE."DESCRIPTION" AS Ind_Level,
-     WRK_CUSTOMER."PERCENT_SHARE" AS PERCENT_SHARE,
-     WRK_CUSTOMER."AGE" AS AGE,
-     MST_WARNING_CODE."CODE" AS CSI,
-     WRK_CUSTOMER."WORTHINESS" AS WORTHINESS,
-     WRK_CUSTOMER."IS_COMMITTEE" AS WRK_CUSTOMER_IS_COMMITTEE,
-     WRK_CUSTOMER."REFERENCE_ID" AS WRK_CUSTOMER_REFERENCE_ID,
-     WRK_CUSTOMER."IS_SPOUSE" AS WRK_CUSTOMER_IS_SPOUSE,
-     WRK_CUSTOMER."KYCLEVEL_ID" AS WRK_CUSTOMER_KYCLEVEL_ID,
-     MST_CUSTOMER_ENTITY."ID" AS MST_CUSTOMER_ENTITY_ID,
-     WRK_INDIVIDUAL."ID" AS WRK_INDIVIDUAL_ID,
-     WRK_INDIVIDUAL."CITIZEN_ID" AS WRK_INDIVIDUAL_CITIZEN_ID,
-     WRK_CUSTOMER."TMB_CUSTOMER_ID" AS WRK_CUSTOMER_TMB_CUSTOMER_ID
-FROM
-     "SLOS"."MST_TITLE" MST_TITLE INNER JOIN "SLOS"."WRK_CUSTOMER" WRK_CUSTOMER ON MST_TITLE."ID" = WRK_CUSTOMER."TITLE_ID"
-     INNER JOIN "SLOS"."MST_RELATION" MST_RELATION ON WRK_CUSTOMER."RELATION_ID" = MST_RELATION."ID"
-     INNER JOIN "SLOS"."MST_REFERENCE" MST_REFERENCE ON WRK_CUSTOMER."REFERENCE_ID" = MST_REFERENCE."ID"
-     LEFT OUTER JOIN "SLOS"."WRK_CUSTOMER_CSI" WRK_CUSTOMER_CSI ON WRK_CUSTOMER."ID" = WRK_CUSTOMER_CSI."CUSTOMER_ID"
-     INNER JOIN "SLOS"."MST_CUSTOMER_ENTITY" MST_CUSTOMER_ENTITY ON WRK_CUSTOMER."CUSTOMERENTITY_ID" = MST_CUSTOMER_ENTITY."ID"
-     LEFT OUTER JOIN "SLOS"."WRK_INDIVIDUAL" WRK_INDIVIDUAL ON WRK_CUSTOMER."ID" = WRK_INDIVIDUAL."CUSTOMER_ID"
-     AND MST_CUSTOMER_ENTITY."ID" = MST_REFERENCE."BORROWER_TYPE_ID"
-     AND MST_CUSTOMER_ENTITY."ID" = MST_REFERENCE."CUSTOMER_ENTITY_ID"
-     AND MST_CUSTOMER_ENTITY."ID" = MST_TITLE."CUSTOMERENTITY_ID"
-     AND MST_RELATION."ID" = MST_REFERENCE."RELATION_ID"
-     LEFT OUTER JOIN "SLOS"."MST_WARNING_CODE" MST_WARNING_CODE ON WRK_CUSTOMER_CSI."WARNING_ID" = MST_WARNING_CODE."ID"
-WHERE
-     WRK_CUSTOMER."WORKCASE_ID" = 147]]>
-	</queryString>
+	<style name="header" forecolor="#FFFFFF" backcolor="#555555" fill="Solid" hAlign="Center" vAlign="Middle" fontSize="6" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="detail" forecolor="#FFFFFF" backcolor="#555555" hAlign="Center" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<subDataset name="dataset1" uuid="8cb9da3b-c3d9-4651-af48-a748bc5b208e"/>
+	<field name="titleTh" class="java.lang.Object">
+		<fieldDescription><![CDATA[titleTh]]></fieldDescription>
+	</field>
+	<field name="firstNameTh" class="java.lang.String">
+		<fieldDescription><![CDATA[firstNameTh]]></fieldDescription>
+	</field>
+	<field name="lastNameTh" class="java.lang.String">
+		<fieldDescription><![CDATA[lastNameTh]]></fieldDescription>
+	</field>
+	<field name="citizenId" class="java.lang.String">
+		<fieldDescription><![CDATA[citizenId]]></fieldDescription>
+	</field>
+	<field name="registrationId" class="java.lang.String">
+		<fieldDescription><![CDATA[registrationId]]></fieldDescription>
+	</field>
+	<field name="tmbCustomerId" class="java.lang.String">
+		<fieldDescription><![CDATA[tmbCustomerId]]></fieldDescription>
+	</field>
+	<field name="relation" class="java.lang.Object">
+		<fieldDescription><![CDATA[relation]]></fieldDescription>
+	</field>
+	<field name="collateralOwner" class="java.lang.String">
+		<fieldDescription><![CDATA[collateralOwner]]></fieldDescription>
+	</field>
+	<field name="indLv" class="java.lang.String"/>
+	<field name="jurLv" class="java.lang.String">
+		<fieldDescription><![CDATA[jurLv]]></fieldDescription>
+	</field>
+	<field name="percentShare" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[percentShare]]></fieldDescription>
+	</field>
+	<field name="age" class="java.lang.Integer">
+		<fieldDescription><![CDATA[age]]></fieldDescription>
+	</field>
+	<field name="kycLevel" class="java.lang.Object">
+		<fieldDescription><![CDATA[kycLevel]]></fieldDescription>
+	</field>
+	<field name="worthiness" class="java.lang.String">
+		<fieldDescription><![CDATA[worthiness]]></fieldDescription>
+	</field>
+	<field name="customerCSIList" class="java.lang.String">
+		<fieldDescription><![CDATA[customerCSIList]]></fieldDescription>
+	</field>
+	<field name="no" class="java.lang.Integer">
+		<fieldDescription><![CDATA[no]]></fieldDescription>
+	</field>
 	<columnHeader>
 		<band height="28">
 			<frame>
@@ -283,7 +311,7 @@ WHERE
 				<frame>
 					<reportElement uuid="f9c7e67f-15ac-4101-936a-f095d0a63c12" x="0" y="0" width="555" height="20"/>
 					<textField>
-						<reportElement uuid="62eca502-906d-4360-987a-b01a27430e36" x="0" y="0" width="21" height="20"/>
+						<reportElement uuid="62eca502-906d-4360-987a-b01a27430e36" mode="Transparent" x="0" y="0" width="21" height="20" forecolor="#000000"/>
 						<box>
 							<pen lineColor="#CCCCCC"/>
 							<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
@@ -294,9 +322,10 @@ WHERE
 						<textElement textAlignment="Center">
 							<font size="5"/>
 						</textElement>
+						<textFieldExpression><![CDATA[$F{no}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement uuid="af660d18-bc75-4e3b-903d-ce27af8ae2e8" x="21" y="0" width="88" height="20"/>
+						<reportElement uuid="af660d18-bc75-4e3b-903d-ce27af8ae2e8" mode="Transparent" x="21" y="0" width="88" height="20" forecolor="#000000"/>
 						<box>
 							<pen lineColor="#CCCCCC"/>
 							<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
@@ -305,11 +334,12 @@ WHERE
 							<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
 						</box>
 						<textElement>
-							<font size="5"/>
+							<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						</textElement>
+						<textFieldExpression><![CDATA[$F{titleTh}+$F{firstNameTh}+" "+$F{firstNameTh}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement uuid="2bd5fef9-84c9-4c84-b90e-ed9cf0d2bfcc" x="109" y="0" width="69" height="20"/>
+						<reportElement uuid="2bd5fef9-84c9-4c84-b90e-ed9cf0d2bfcc" mode="Transparent" x="109" y="0" width="69" height="20"/>
 						<box>
 							<pen lineColor="#CCCCCC"/>
 							<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
@@ -320,9 +350,10 @@ WHERE
 						<textElement textAlignment="Center">
 							<font size="5"/>
 						</textElement>
+						<textFieldExpression><![CDATA[$F{citizenId}]]></textFieldExpression>
 					</textField>
-					<textField>
-						<reportElement uuid="d4dae217-2e3d-42ab-bf9a-c50857a61fae" x="178" y="0" width="66" height="20"/>
+					<textField isBlankWhenNull="true">
+						<reportElement uuid="d4dae217-2e3d-42ab-bf9a-c50857a61fae" mode="Transparent" x="178" y="0" width="66" height="20"/>
 						<box>
 							<pen lineColor="#CCCCCC"/>
 							<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
@@ -333,9 +364,24 @@ WHERE
 						<textElement textAlignment="Center">
 							<font size="5"/>
 						</textElement>
+						<textFieldExpression><![CDATA[$F{tmbCustomerId}]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement uuid="ae58835b-8b7f-4443-8065-a468da86a46b" mode="Transparent" x="244" y="0" width="43" height="20"/>
+						<box>
+							<pen lineColor="#CCCCCC"/>
+							<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+							<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+							<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+							<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						</box>
+						<textElement textAlignment="Center">
+							<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{relation}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement uuid="53fc1a20-87cc-44c6-9738-6550aebd3387" x="244" y="0" width="43" height="20"/>
+						<reportElement uuid="6f4212d7-d5e5-43ee-b3e0-f5f4680af84a" mode="Transparent" x="287" y="0" width="23" height="20"/>
 						<box>
 							<pen lineColor="#CCCCCC"/>
 							<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
@@ -346,9 +392,38 @@ WHERE
 						<textElement textAlignment="Center">
 							<font size="5"/>
 						</textElement>
+						<textFieldExpression><![CDATA[$F{collateralOwner}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement uuid="6f4212d7-d5e5-43ee-b3e0-f5f4680af84a" x="287" y="0" width="23" height="20"/>
+						<reportElement uuid="3a9617a4-f367-4c07-a872-ae29ae91d987" mode="Transparent" x="310" y="0" width="57" height="20"/>
+						<box>
+							<pen lineColor="#CCCCCC"/>
+							<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+							<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+							<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+							<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						</box>
+						<textElement textAlignment="Center">
+							<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{indLv}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement uuid="c1c4e1a3-fe26-4e93-b60b-bfde587a662d" mode="Transparent" x="367" y="0" width="44" height="20"/>
+						<box>
+							<pen lineColor="#CCCCCC"/>
+							<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+							<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+							<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+							<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						</box>
+						<textElement textAlignment="Center">
+							<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{jurLv}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement uuid="9330b7be-531b-4b95-9af9-4d9d2706850e" mode="Transparent" x="411" y="0" width="21" height="20"/>
 						<box>
 							<pen lineColor="#CCCCCC"/>
 							<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
@@ -359,9 +434,10 @@ WHERE
 						<textElement textAlignment="Center">
 							<font size="5"/>
 						</textElement>
+						<textFieldExpression><![CDATA[$F{percentShare}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement uuid="3a9617a4-f367-4c07-a872-ae29ae91d987" x="310" y="0" width="57" height="20"/>
+						<reportElement uuid="9c7dea81-5f7e-4f49-84c3-6791cb229810" mode="Transparent" x="458" y="0" width="26" height="20"/>
 						<box>
 							<pen lineColor="#CCCCCC"/>
 							<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
@@ -372,9 +448,24 @@ WHERE
 						<textElement textAlignment="Center">
 							<font size="5"/>
 						</textElement>
+						<textFieldExpression><![CDATA[$F{kycLevel}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement uuid="c1c4e1a3-fe26-4e93-b60b-bfde587a662d" x="367" y="0" width="44" height="20"/>
+						<reportElement uuid="a709bc60-3385-4869-b347-8b7d47d51c68" mode="Transparent" x="432" y="0" width="26" height="20"/>
+						<box>
+							<pen lineColor="#CCCCCC"/>
+							<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+							<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
+							<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+							<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						</box>
+						<textElement textAlignment="Center">
+							<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{age}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement uuid="0c28ca4c-1313-42cb-8ce3-d4ecb6126d0d" mode="Transparent" x="521" y="0" width="34" height="20"/>
 						<box>
 							<pen lineColor="#CCCCCC"/>
 							<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
@@ -385,11 +476,11 @@ WHERE
 						<textElement textAlignment="Center">
 							<font size="5"/>
 						</textElement>
+						<textFieldExpression><![CDATA[$F{worthiness}]]></textFieldExpression>
 					</textField>
-					<textField>
-						<reportElement uuid="9330b7be-531b-4b95-9af9-4d9d2706850e" x="411" y="0" width="21" height="20"/>
+					<textField isBlankWhenNull="true">
+						<reportElement uuid="e35209ea-b3e9-49e2-9a45-1bc9a80e5c06" x="484" y="0" width="37" height="20"/>
 						<box>
-							<pen lineColor="#CCCCCC"/>
 							<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
 							<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
 							<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
@@ -398,58 +489,7 @@ WHERE
 						<textElement textAlignment="Center">
 							<font size="5"/>
 						</textElement>
-					</textField>
-					<textField>
-						<reportElement uuid="9c7dea81-5f7e-4f49-84c3-6791cb229810" x="458" y="0" width="26" height="20"/>
-						<box>
-							<pen lineColor="#CCCCCC"/>
-							<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-							<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-							<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-							<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						</box>
-						<textElement textAlignment="Center">
-							<font size="5"/>
-						</textElement>
-					</textField>
-					<textField>
-						<reportElement uuid="a709bc60-3385-4869-b347-8b7d47d51c68" x="432" y="0" width="26" height="20"/>
-						<box>
-							<pen lineColor="#CCCCCC"/>
-							<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-							<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-							<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-							<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						</box>
-						<textElement textAlignment="Center">
-							<font size="5"/>
-						</textElement>
-					</textField>
-					<textField>
-						<reportElement uuid="f790316b-4973-49e6-9ee1-a160eb560f89" x="484" y="0" width="37" height="20"/>
-						<box>
-							<pen lineColor="#CCCCCC"/>
-							<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-							<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-							<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-							<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						</box>
-						<textElement textAlignment="Center">
-							<font size="5"/>
-						</textElement>
-					</textField>
-					<textField>
-						<reportElement uuid="0c28ca4c-1313-42cb-8ce3-d4ecb6126d0d" x="521" y="0" width="34" height="20"/>
-						<box>
-							<pen lineColor="#CCCCCC"/>
-							<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-							<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-							<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-							<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						</box>
-						<textElement textAlignment="Center">
-							<font size="5"/>
-						</textElement>
+						<textFieldExpression><![CDATA[$F{customerCSIList}]]></textFieldExpression>
 					</textField>
 				</frame>
 			</frame>
