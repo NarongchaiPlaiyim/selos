@@ -1,5 +1,6 @@
 package com.clevel.selos.integration.brms.model.response;
 
+import com.clevel.selos.model.DocLevel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -18,6 +19,8 @@ public class DocumentDetail implements Serializable{
     private String operStep;
     private String operShowFlag;
     private boolean operMandateFlag;
+    private DocLevel docLevel;
+    private String docOwner;
 
     public String getDocumentGroup() {
         return documentGroup;
@@ -107,11 +110,28 @@ public class DocumentDetail implements Serializable{
         this.operMandateFlag = operMandateFlag;
     }
 
+    public DocLevel getDocLevel() {
+        return docLevel;
+    }
+
+    public void setDocLevel(DocLevel docLevel) {
+        this.docLevel = docLevel;
+    }
+
+    public String getDocOwner() {
+        return docOwner;
+    }
+
+    public void setDocOwner(String docOwner) {
+        this.docOwner = docOwner;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("documentGroup", documentGroup)
                 .append("id", id)
+                .append("type", type)
                 .append("description", description)
                 .append("condition", condition)
                 .append("mandateFlag", mandateFlag)
@@ -119,6 +139,9 @@ public class DocumentDetail implements Serializable{
                 .append("showFlag", showFlag)
                 .append("operStep", operStep)
                 .append("operShowFlag", operShowFlag)
+                .append("operMandateFlag", operMandateFlag)
+                .append("docLevel", docLevel)
+                .append("docOwner", docOwner)
                 .toString();
     }
 }

@@ -1,11 +1,11 @@
 package com.clevel.selos.model;
 
-public enum FeeLevel {
-    NA(0), APP_LEVEL(1), CREDIT_LEVEL(2);
+public enum DocLevel {
+    NA(0), APP_LEVEL(1), CUS_LEVEL(2);
 
     private final int value;
 
-    private FeeLevel(int value){
+    private DocLevel(int value){
         this.value = value;
     }
 

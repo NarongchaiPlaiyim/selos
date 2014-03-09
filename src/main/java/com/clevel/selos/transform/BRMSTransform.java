@@ -95,9 +95,6 @@ public class BRMSTransform extends Transform{
         customerInfo.setCustomerEntity(customer.getCustomerEntity().getBrmsCode());
         customerInfo.setReference(customer.getReference().getBrmsCode());
 
-        boolean appExistingSMECustomer = Boolean.TRUE;
-        BigDecimal borrowerGroupIncome = BigDecimal.ZERO;
-
         CustomerOblInfo customerOblInfo = customer.getCustomerOblInfo();
 
         if(customerOblInfo == null) {
@@ -188,8 +185,51 @@ public class BRMSTransform extends Transform{
         return customerInfo;
     }
 
+    public BRMSCustomerInfo getCustomerInfoWithoutCreditAccount(Customer customer, Date checkDate){
+        BRMSCustomerInfo customerInfo = new BRMSCustomerInfo();
+        customerInfo.setRelation(customer.getRelation().getBrmsCode());
+        customerInfo.setCustomerEntity(customer.getCustomerEntity().getBrmsCode());
+        customerInfo.setReference(customer.getReference().getBrmsCode());
+
+        CustomerOblInfo customerOblInfo = customer.getCustomerOblInfo();
+
+        if(customerOblInfo == null) {
+            customerInfo.setExistingSMECustomer(Boolean.FALSE);
+        } else {
+            customerInfo.setExistingSMECustomer(getRadioBoolean(customerOblInfo.getExistingSMECustomer()));
+        }
+
+        if(customer.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
+            Juristic juristic = customer.getJuristic();
+            customerInfo.setIndividual(Boolean.FALSE);
+            customerInfo.setPersonalID(juristic.getRegistrationId());
+        } else if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+            Individual individual = customer.getIndividual();
+            customerInfo.setIndividual(Boolean.TRUE);
+            customerInfo.setPersonalID(individual.getCitizenId());
+            customerInfo.setAgeMonths(DateTimeUtil.monthBetween2Dates(individual.getBirthDate(), checkDate));
+            customerInfo.setNationality(individual.getNationality().getCode());
+            customerInfo.setMarriageStatus(individual.getMaritalStatus().getCode());
+
+            if(isActive(customer.getSpouse())){
+                Customer spouse = customerDAO.findMainCustomerBySpouseId(customer.getId());
+                Individual spouseIndv = spouse.getIndividual();
+                customerInfo.setSpousePersonalID(spouseIndv.getCitizenId());
+                customerInfo.setRelation(spouse.getRelation().getBrmsCode());
+            } else {
+                if(isActive(individual.getMaritalStatus().getSpouseFlag())) {
+                    Customer spouse = customerDAO.findById(customer.getSpouseId());
+                    Individual spouseIndv = spouse.getIndividual();
+                    customerInfo.setSpousePersonalID(spouseIndv.getCitizenId());
+                    customerInfo.setRelation(spouse.getRelation().getBrmsCode());
+                }
+            }
+        }
+        return customerInfo;
+    }
+
     public BRMSAccountRequested getBRMSAccountRequested(NewCreditDetail newCreditDetail, BigDecimal discountFrontEndFeeRate){
-        log.debug("-- getBRMSAccountRequested with newCreditDetail {}, discountFrontEndFeeRate", newCreditDetail, discountFrontEndFeeRate);
+        log.debug("-- getBRMSAccountRequested with newCreditDetail {}, discountFrontEndFeeRate {}", newCreditDetail, discountFrontEndFeeRate);
         if(newCreditDetail == null){
             log.debug("getBRMSAccountRequested return null");
             return null;
@@ -212,10 +252,14 @@ public class BRMSTransform extends Transform{
         }
         accountRequested.setLoanPurpose(newCreditDetail.getLoanPurpose().getBrmsCode());
 
-        if(getRadioBoolean(newCreditDetail.getReduceFrontEndFee()))
-            accountRequested.setFontEndFeeDiscountRate(discountFrontEndFeeRate);
-        else
+        if(discountFrontEndFeeRate != null) {
+            if(getRadioBoolean(newCreditDetail.getReduceFrontEndFee()))
+                accountRequested.setFontEndFeeDiscountRate(discountFrontEndFeeRate);
+            else
+                accountRequested.setFontEndFeeDiscountRate(BigDecimal.ZERO);
+        } else {
             accountRequested.setFontEndFeeDiscountRate(BigDecimal.ZERO);
+        }
 
         return accountRequested;
     }
