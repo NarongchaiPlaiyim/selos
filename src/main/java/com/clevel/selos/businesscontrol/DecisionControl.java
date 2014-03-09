@@ -44,6 +44,8 @@ public class DecisionControl extends BusinessControl {
     private ApprovalHistoryDAO approvalHistoryDAO;
     @Inject
     private StepDAO stepDAO;
+    @Inject
+    private DecisionDAO decisionDAO;
 
     //Transform
     @Inject
@@ -111,6 +113,8 @@ public class DecisionControl extends BusinessControl {
                 log.debug("After persist - DecisionFollowConditions: {}", returnConditionList);
                 decisionView.setDecisionFollowConditionViewList(decisionFollowConditionTransform.transformToView(returnConditionList));
             }
+
+            // Calculation business logic
         }
         return decisionView;
     }
@@ -211,26 +215,17 @@ public class DecisionControl extends BusinessControl {
             decisionView.setReasonForReduction(newCreditFacilityView.getReasonForReduction());
 
             // Approve Credit
-            approveCreditDetailViews = newCreditDetailTransform.copyToNewViews(newCreditFacilityView.getNewCreditDetailViewList(), ProposeType.A, true);
+            approveCreditDetailViews = newCreditFacilityView.getNewCreditDetailViewList();
             approveTotalCreditLimit = newCreditFacilityView.getTotalPropose();
             approveTotalCommercial = newCreditFacilityView.getTotalCommercial();
             approveTotalComAndOBOD = newCreditFacilityView.getTotalCommercialAndOBOD();
             approveTotalExposure = newCreditFacilityView.getTotalExposure();
             // Approve Collateral
-            approveCollViews = newCollateralTransform.copyToNewViews(newCreditFacilityView.getNewCollateralViewList(), ProposeType.A, true);
+            approveCollViews = newCreditFacilityView.getNewCollateralViewList();
             // Approve Guarantor
-            approveGuarantorViews = newGuarantorDetailTransform.copyToNewViews(newCreditFacilityView.getNewGuarantorDetailViewList(), ProposeType.A, true);
+            approveGuarantorViews = newCreditFacilityView.getNewGuarantorDetailViewList();
             approveTotalGuaranteeAmt = newCreditFacilityView.getTotalGuaranteeAmount();
 
-            // Hidden Fields
-//            decisionView.setApproveTotalNumOfNewOD(newCreditFacilityView.getTotalApproveNumOfNewOD());
-//            decisionView.setApproveTotalNumProposeCreditFac(newCreditFacilityView.getTotalApproveNumProposeCreditFac());
-//            decisionView.setApproveTotalNumContingentPropose(newCreditFacilityView.getTotalApproveNumContingenPropose());
-//            decisionView.setGrandTotalNumOfCoreAsset(newCreditFacilityView.getTotalApproveNumOfCoreAsset());
-//            decisionView.setGrandTotalNumOfNonCoreAsset(newCreditFacilityView.getTotalApproveNumOfNonCoreAsset());
-//            decisionView.setApproveTotalTCGGuaranteeAmt(newCreditFacilityView.getTotalApproveTCGGuaranteeAmt());
-//            decisionView.setApproveTotalIndvGuaranteeAmt(newCreditFacilityView.getTotalApproveIndiGuaranteeAmt());
-//            decisionView.setApproveTotalJurisGuaranteeAmt(newCreditFacilityView.getTotalApproveJurisGuaranteeAmt());
         }
         else {
             //if credit facility propose is not found
@@ -240,13 +235,55 @@ public class DecisionControl extends BusinessControl {
         }
 
         if (RoleValue.UW.id() == getUserRoleId()) {
+            Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
+            if (decision != null && decision.getId() != 0 && decision.getSaveFlag() == 1) {
+                // Approve data already been recorded
+                List<NewCreditDetail> approveCreditList = newCreditDetailDAO.findNewCreditDetail(workCaseId, ProposeType.A);
+                decisionView.setApproveCreditList(newCreditDetailTransform.transformToView(approveCreditList));
 
+                List<NewCollateral> approveCollateralList = newCollateralDAO.findNewCollateral(workCaseId, ProposeType.A);
+                decisionView.setApproveCollateralList(newCollateralTransform.transformsCollateralToView(approveCollateralList));
+
+                List<NewGuarantorDetail> approveGuarantorList = newGuarantorDetailDAO.findGuarantorByProposeType(workCaseId, ProposeType.A);
+                decisionView.setApproveGuarantorList(newGuarantorDetailTransform.transformToView(approveGuarantorList));
+
+                decisionView.setApproveTotalCreditLimit(decision.getTotalApproveCredit());
+                decisionView.setApproveBrwTotalCommercial(decision.getTotalApproveCommercial());
+                decisionView.setApproveBrwTotalComAndOBOD(decision.getTotalApproveComAndOBOD());
+                decisionView.setApproveTotalExposure(decision.getTotalApproveExposure());
+                decisionView.setApproveTotalGuaranteeAmt(decision.getTotalApproveGuaranteeAmt());
+
+                // Hidden field
+                decisionView.setApproveTotalODLimit(decision.getTotalApprovedODLimit());
+                decisionView.setApproveTotalNumOfNewOD(decision.getTotalApproveNumOfNewOD());
+                decisionView.setApproveTotalNumProposeCreditFac(decision.getTotalApproveNumProposeCreditFac());
+                decisionView.setApproveTotalNumContingentPropose(decision.getTotalApproveNumContingentPropose());
+                decisionView.setGrandTotalNumOfCoreAsset(decision.getTotalApproveNumOfCoreAsset());
+                decisionView.setGrandTotalNumOfNonCoreAsset(decision.getTotalApproveNumOfNonCoreAsset());
+                decisionView.setApproveTotalTCGGuaranteeAmt(decision.getTotalApproveTCGGuaranteeAmt());
+                decisionView.setApproveTotalIndvGuaranteeAmt(decision.getTotalApproveIndiGuaranteeAmt());
+                decisionView.setApproveTotalJurisGuaranteeAmt(decision.getTotalApproveJuriGuaranteeAmt());
+            }
+            else {
+                // Approve data is not recorded
+                // Duplicate from propose, set all id = 0 and all type is "Approve"
+                decisionView.setApproveCreditList(newCreditDetailTransform.copyToNewViews(approveCreditDetailViews, ProposeType.A, true));
+                decisionView.setApproveCollateralList(newCollateralTransform.copyToNewViews(approveCollViews, ProposeType.A, true));
+                decisionView.setApproveGuarantorList(newGuarantorDetailTransform.copyToNewViews(approveGuarantorViews, ProposeType.A, true));
+
+                decisionView.setApproveTotalCreditLimit(approveTotalCreditLimit);
+                decisionView.setApproveBrwTotalCommercial(approveTotalCommercial);
+                decisionView.setApproveBrwTotalComAndOBOD(approveTotalComAndOBOD);
+                decisionView.setApproveTotalExposure(approveTotalExposure);
+                decisionView.setApproveTotalGuaranteeAmt(approveTotalGuaranteeAmt);
+            }
         }
         else {
             // BDM, ABDM (Show duplicate data from propose only)
             decisionView.setApproveCreditList(approveCreditDetailViews);
             decisionView.setApproveCollateralList(approveCollViews);
             decisionView.setApproveGuarantorList(approveGuarantorViews);
+
             decisionView.setApproveTotalCreditLimit(approveTotalCreditLimit);
             decisionView.setApproveBrwTotalCommercial(approveTotalCommercial);
             decisionView.setApproveBrwTotalComAndOBOD(approveTotalComAndOBOD);
