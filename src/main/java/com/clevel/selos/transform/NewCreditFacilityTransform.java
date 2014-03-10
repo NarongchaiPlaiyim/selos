@@ -3,12 +3,9 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.master.CountryDAO;
 import com.clevel.selos.dao.master.CreditRequestTypeDAO;
 import com.clevel.selos.dao.working.NewCreditFacilityDAO;
-import com.clevel.selos.model.db.master.Country;
-import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.view.CountryView;
 import com.clevel.selos.model.view.NewCreditFacilityView;
 
 import javax.inject.Inject;
@@ -23,8 +20,11 @@ public class NewCreditFacilityTransform extends Transform {
     private CountryDAO countryDAO;
     @Inject
     private NewCreditFacilityDAO newCreditFacilityDAO;
+
     @Inject
     private CountryTransform countryTransform;
+    @Inject
+    private CreditRequestTypeTransform creditRequestTypeTransform;
 
     public NewCreditFacility transformToModelDB(NewCreditFacilityView newCreditFacilityView, WorkCase workCase, User user) {
 
@@ -34,8 +34,6 @@ public class NewCreditFacilityTransform extends Transform {
 
         if (newCreditFacilityView.getId() != 0) {
             newCreditFacility = newCreditFacilityDAO.findById(newCreditFacilityView.getId());
-            newCreditFacility.setModifyDate(newCreditFacilityView.getModifyDate());
-            newCreditFacility.setModifyBy(newCreditFacilityView.getModifyBy());
         } else { // id = 0 create new
             newCreditFacility.setCreateDate(new Date());
             newCreditFacility.setCreateBy(user);
@@ -86,13 +84,15 @@ public class NewCreditFacilityTransform extends Transform {
         newCreditFacility.setCreditCustomerType(newCreditFacilityView.getCreditCustomerType());
 
         if (newCreditFacilityView.getLoanRequestType().getId() != 0) {
-            CreditRequestType creditRequestType = creditRequestTypeDAO.findById(newCreditFacilityView.getLoanRequestType().getId());
-            newCreditFacility.setLoanRequestType(creditRequestType);
+            newCreditFacility.setLoanRequestType(creditRequestTypeDAO.findById(newCreditFacilityView.getLoanRequestType().getId()));
+        } else {
+            newCreditFacility.setLoanRequestType(null);
         }
 
         if (newCreditFacilityView.getInvestedCountry().getId() != 0) {
-            Country country = countryDAO.findById(newCreditFacilityView.getInvestedCountry().getId());
-            newCreditFacility.setInvestedCountry(country);
+            newCreditFacility.setInvestedCountry(countryDAO.findById(newCreditFacilityView.getInvestedCountry().getId()));
+        } else {
+            newCreditFacility.setInvestedCountry(null);
         }
 
         newCreditFacility.setTotalGuaranteeAmount(newCreditFacilityView.getTotalGuaranteeAmount());
@@ -113,76 +113,69 @@ public class NewCreditFacilityTransform extends Transform {
 
     public NewCreditFacilityView transformToView(NewCreditFacility newCreditFacility) {
         NewCreditFacilityView newCreditFacilityView = new NewCreditFacilityView();
+        if (newCreditFacility != null) {
+            newCreditFacilityView.setId(newCreditFacility.getId());
+            newCreditFacilityView.setCreateDate(newCreditFacility.getCreateDate());
+            newCreditFacilityView.setCreateBy(newCreditFacility.getCreateBy());
+            newCreditFacilityView.setModifyDate(newCreditFacility.getModifyDate());
+            newCreditFacilityView.setModifyBy(newCreditFacility.getModifyBy());
+            newCreditFacilityView.setWCNeed(newCreditFacility.getWcNeed());
+            newCreditFacilityView.setTotalWcTmb(newCreditFacility.getTotalWcTmb());
+            newCreditFacilityView.setWCNeedDiffer(newCreditFacility.getWCNeedDiffer());
+            newCreditFacilityView.setTotalWcDebit(newCreditFacility.getTotalWcDebit());
+            newCreditFacilityView.setCase1WcLimit(newCreditFacility.getCase1WcLimit());
+            newCreditFacilityView.setCase1WcMinLimit(newCreditFacility.getCase1WcMinLimit());
+            newCreditFacilityView.setCase1Wc50CoreWc(newCreditFacility.getCase1Wc50CoreWc());
+            newCreditFacilityView.setCase1WcDebitCoreWc(newCreditFacility.getCase1WcDebitCoreWc());
+            newCreditFacilityView.setCase2WcLimit(newCreditFacility.getCase2WcLimit());
+            newCreditFacilityView.setCase2WcMinLimit(newCreditFacility.getCase2WcMinLimit());
+            newCreditFacilityView.setCase2Wc50CoreWc(newCreditFacility.getCase2Wc50CoreWc());
+            newCreditFacilityView.setCase2WcDebitCoreWc(newCreditFacility.getCase2WcDebitCoreWc());
+            newCreditFacilityView.setCase3WcLimit(newCreditFacility.getCase3WcLimit());
+            newCreditFacilityView.setCase3WcMinLimit(newCreditFacility.getCase3WcMinLimit());
+            newCreditFacilityView.setCase3Wc50CoreWc(newCreditFacility.getCase3Wc50CoreWc());
+            newCreditFacilityView.setCase3WcDebitCoreWc(newCreditFacility.getCase3WcDebitCoreWc());
+            newCreditFacilityView.setExistingSMELimit(newCreditFacility.getExistingSMELimit());
+            newCreditFacilityView.setMaximumSMELimit(newCreditFacility.getMaximumSMELimit());
+            newCreditFacilityView.setTotalPropose(newCreditFacility.getTotalPropose());
+            newCreditFacilityView.setTotalProposeLoanDBR(newCreditFacility.getTotalProposeLoanDBR());
+            newCreditFacilityView.setTotalProposeNonLoanDBR(newCreditFacility.getTotalProposeNonLoanDBR());
+            newCreditFacilityView.setTotalCommercial(newCreditFacility.getTotalCommercial());
+            newCreditFacilityView.setTotalCommercialAndOBOD(newCreditFacility.getTotalCommercialAndOBOD());
+            newCreditFacilityView.setTotalExposure(newCreditFacility.getTotalExposure());
+            newCreditFacilityView.setTotalNumberOfNewOD(newCreditFacility.getTotalNumberOfNewOD());
+            newCreditFacilityView.setTotalNumberContingenPropose(newCreditFacility.getTotalNumberContingenPropose());
+            newCreditFacilityView.setTotalNumberProposeCreditFac(newCreditFacility.getTotalNumberProposeCreditFac());
+            newCreditFacilityView.setContactName(newCreditFacility.getContactName());
+            newCreditFacilityView.setContactPhoneNo(newCreditFacility.getContactPhoneNo());
+            newCreditFacilityView.setInterService(newCreditFacility.getInterService());
+            newCreditFacilityView.setCurrentAddress(newCreditFacility.getCurrentAddress());
+            newCreditFacilityView.setRegisteredAddress(newCreditFacility.getRegisteredAddress());
+            newCreditFacilityView.setEmailAddress(newCreditFacility.getEmailAddress());
+            newCreditFacilityView.setImportMail(newCreditFacility.getImportMail());
+            newCreditFacilityView.setExportMail(newCreditFacility.getExportMail());
+            newCreditFacilityView.setDepositBranchCode(newCreditFacility.getDepositBranchCode());
+            newCreditFacilityView.setOwnerBranchCode(newCreditFacility.getOwnerBranchCode());
+            newCreditFacilityView.setFrontendFeeDOA(newCreditFacility.getFrontendFeeDOA());
+            newCreditFacilityView.setGuarantorBA(newCreditFacility.getGuarantorBA());
+            newCreditFacilityView.setReasonForReduction(newCreditFacility.getReasonForReduction());
+            newCreditFacilityView.setCreditCustomerType(newCreditFacility.getCreditCustomerType());
+            newCreditFacilityView.setLoanRequestType(creditRequestTypeTransform.transformToView(newCreditFacility.getLoanRequestType()));
+            newCreditFacilityView.setInvestedCountry(countryTransform.transformToView(newCreditFacility.getInvestedCountry()));
 
-        newCreditFacilityView.setId(newCreditFacility.getId());
-        newCreditFacilityView.setCreateDate(newCreditFacility.getCreateDate());
-        newCreditFacilityView.setCreateBy(newCreditFacility.getCreateBy());
-        newCreditFacilityView.setModifyDate(newCreditFacility.getModifyDate());
-        newCreditFacilityView.setModifyBy(newCreditFacility.getModifyBy());
-        newCreditFacilityView.setWCNeed(newCreditFacility.getWcNeed());
-        newCreditFacilityView.setTotalWcTmb(newCreditFacility.getTotalWcTmb());
-        newCreditFacilityView.setWCNeedDiffer(newCreditFacility.getWCNeedDiffer());
-        newCreditFacilityView.setTotalWcDebit(newCreditFacility.getTotalWcDebit());
-        newCreditFacilityView.setCase1WcLimit(newCreditFacility.getCase1WcLimit());
-        newCreditFacilityView.setCase1WcMinLimit(newCreditFacility.getCase1WcMinLimit());
-        newCreditFacilityView.setCase1Wc50CoreWc(newCreditFacility.getCase1Wc50CoreWc());
-        newCreditFacilityView.setCase1WcDebitCoreWc(newCreditFacility.getCase1WcDebitCoreWc());
-        newCreditFacilityView.setCase2WcLimit(newCreditFacility.getCase2WcLimit());
-        newCreditFacilityView.setCase2WcMinLimit(newCreditFacility.getCase2WcMinLimit());
-        newCreditFacilityView.setCase2Wc50CoreWc(newCreditFacility.getCase2Wc50CoreWc());
-        newCreditFacilityView.setCase2WcDebitCoreWc(newCreditFacility.getCase2WcDebitCoreWc());
-        newCreditFacilityView.setCase3WcLimit(newCreditFacility.getCase3WcLimit());
-        newCreditFacilityView.setCase3WcMinLimit(newCreditFacility.getCase3WcMinLimit());
-        newCreditFacilityView.setCase3Wc50CoreWc(newCreditFacility.getCase3Wc50CoreWc());
-        newCreditFacilityView.setCase3WcDebitCoreWc(newCreditFacility.getCase3WcDebitCoreWc());
-        newCreditFacilityView.setExistingSMELimit(newCreditFacility.getExistingSMELimit());
-        newCreditFacilityView.setMaximumSMELimit(newCreditFacility.getMaximumSMELimit());
-        newCreditFacilityView.setTotalPropose(newCreditFacility.getTotalPropose());
-        newCreditFacilityView.setTotalProposeLoanDBR(newCreditFacility.getTotalProposeLoanDBR());
-        newCreditFacilityView.setTotalProposeNonLoanDBR(newCreditFacility.getTotalProposeNonLoanDBR());
-        newCreditFacilityView.setTotalCommercial(newCreditFacility.getTotalCommercial());
-        newCreditFacilityView.setTotalCommercialAndOBOD(newCreditFacility.getTotalCommercialAndOBOD());
-        newCreditFacilityView.setTotalExposure(newCreditFacility.getTotalExposure());
-        newCreditFacilityView.setTotalNumberOfNewOD(newCreditFacility.getTotalNumberOfNewOD());
-        newCreditFacilityView.setTotalNumberContingenPropose(newCreditFacility.getTotalNumberContingenPropose());
-        newCreditFacilityView.setTotalNumberProposeCreditFac(newCreditFacility.getTotalNumberProposeCreditFac());
-        newCreditFacilityView.setContactName(newCreditFacility.getContactName());
-        newCreditFacilityView.setContactPhoneNo(newCreditFacility.getContactPhoneNo());
-        newCreditFacilityView.setInterService(newCreditFacility.getInterService());
-        newCreditFacilityView.setCurrentAddress(newCreditFacility.getCurrentAddress());
-        newCreditFacilityView.setRegisteredAddress(newCreditFacility.getRegisteredAddress());
-        newCreditFacilityView.setEmailAddress(newCreditFacility.getEmailAddress());
-        newCreditFacilityView.setImportMail(newCreditFacility.getImportMail());
-        newCreditFacilityView.setExportMail(newCreditFacility.getExportMail());
-        newCreditFacilityView.setDepositBranchCode(newCreditFacility.getDepositBranchCode());
-        newCreditFacilityView.setOwnerBranchCode(newCreditFacility.getOwnerBranchCode());
-        newCreditFacilityView.setFrontendFeeDOA(newCreditFacility.getFrontendFeeDOA());
-        newCreditFacilityView.setGuarantorBA(newCreditFacility.getGuarantorBA());
-        newCreditFacilityView.setReasonForReduction(newCreditFacility.getReasonForReduction());
-        newCreditFacilityView.setCreditCustomerType(newCreditFacility.getCreditCustomerType());
-
-        newCreditFacilityView.setLoanRequestType(newCreditFacility.getLoanRequestType());
-        if(newCreditFacilityView.getLoanRequestType() == null){
-            newCreditFacilityView.setLoanRequestType(new CreditRequestType());
+            newCreditFacilityView.setTotalGuaranteeAmount(newCreditFacility.getTotalGuaranteeAmount());
+            newCreditFacilityView.setRelatedTMBLending(newCreditFacility.getRelatedTMBLending());
+            newCreditFacilityView.setTwentyFivePercentShareRelatedTMBLending(newCreditFacility.getTwentyFivePercentShareRelatedTMBLending());
+            newCreditFacilityView.setSingleLendingLimit(newCreditFacility.getSingleLendingLimit());
+            newCreditFacilityView.setTotalLoanWCTMB(newCreditFacility.getTotalLoanWCTMB());
+            newCreditFacilityView.setIntFeeDOA(newCreditFacility.getIntFeeDOA());
+            newCreditFacilityView.setTotalNumberOfCoreAsset(newCreditFacility.getTotalNumberOfCoreAsset());
+            newCreditFacilityView.setTotalNumberOfNonCoreAsset(newCreditFacility.getTotalNumberOfNonCoreAsset());
+            newCreditFacilityView.setTotalTCGGuaranteeAmount(newCreditFacility.getTotalTCGGuaranteeAmount());
+            newCreditFacilityView.setTotalIndvGuaranteeAmount(newCreditFacility.getTotalIndvGuaranteeAmount());
+            newCreditFacilityView.setTotalJurisGuaranteeAmount(newCreditFacility.getTotalJurisGuaranteeAmount());
+            newCreditFacilityView.setTotalMortgageValue(newCreditFacility.getTotalMortgageValue());
         }
-        CountryView countryView = countryTransform.transformToView(countryDAO.findById(newCreditFacility.getInvestedCountry().getId()));
-        newCreditFacilityView.setInvestedCountry(countryView);
-        if(newCreditFacilityView.getInvestedCountry() == null){
-            newCreditFacilityView.setInvestedCountry(new CountryView());
-        }
-
-        newCreditFacilityView.setTotalGuaranteeAmount(newCreditFacility.getTotalGuaranteeAmount());
-        newCreditFacilityView.setRelatedTMBLending(newCreditFacility.getRelatedTMBLending());
-        newCreditFacilityView.setTwentyFivePercentShareRelatedTMBLending(newCreditFacility.getTwentyFivePercentShareRelatedTMBLending());
-        newCreditFacilityView.setSingleLendingLimit(newCreditFacility.getSingleLendingLimit());
-        newCreditFacilityView.setTotalLoanWCTMB(newCreditFacility.getTotalLoanWCTMB());
-        newCreditFacilityView.setIntFeeDOA(newCreditFacility.getIntFeeDOA());
-        newCreditFacilityView.setTotalNumberOfCoreAsset(newCreditFacility.getTotalNumberOfCoreAsset());
-        newCreditFacilityView.setTotalNumberOfNonCoreAsset(newCreditFacility.getTotalNumberOfNonCoreAsset());
-        newCreditFacilityView.setTotalTCGGuaranteeAmount(newCreditFacility.getTotalTCGGuaranteeAmount());
-        newCreditFacilityView.setTotalIndvGuaranteeAmount(newCreditFacility.getTotalIndvGuaranteeAmount());
-        newCreditFacilityView.setTotalJurisGuaranteeAmount(newCreditFacility.getTotalJurisGuaranteeAmount());
-        newCreditFacilityView.setTotalMortgageValue(newCreditFacility.getTotalMortgageValue());
 
         return newCreditFacilityView;
     }

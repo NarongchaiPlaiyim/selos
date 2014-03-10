@@ -71,7 +71,7 @@ public class NewCreditFacilityView implements Serializable {
     private BigDecimal guarantorBA;
     private String reasonForReduction;
     private int creditCustomerType;
-    private CreditRequestType  loanRequestType;
+    private CreditRequestTypeView loanRequestType;
     private CountryView investedCountry;
 
     private int relatedTMBLending;
@@ -161,7 +161,7 @@ public class NewCreditFacilityView implements Serializable {
         this.twentyFivePercentShareRelatedTMBLending = 0;
         this.singleLendingLimit = 0;
 
-        this.loanRequestType = new CreditRequestType();
+        this.loanRequestType = new CreditRequestTypeView();
         this.investedCountry = new CountryView();
         this.creditCustomerType = CreditCustomerType.NOT_SELECTED.value();
 
@@ -581,11 +581,11 @@ public class NewCreditFacilityView implements Serializable {
         this.creditCustomerType = creditCustomerType;
     }
 
-    public CreditRequestType getLoanRequestType() {
+    public CreditRequestTypeView getLoanRequestType() {
         return loanRequestType;
     }
 
-    public void setLoanRequestType(CreditRequestType loanRequestType) {
+    public void setLoanRequestType(CreditRequestTypeView loanRequestType) {
         this.loanRequestType = loanRequestType;
     }
 
