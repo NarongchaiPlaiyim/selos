@@ -450,17 +450,19 @@ public class BankStatementSummary implements Serializable {
             bankStmtControl.sortAsOfDateBankStmtDetails(detailViewList, SortOrder.ASCENDING);
             Date dateFromTMB = detailViewList.get(numberOfMonthsFromTMB - 1).getAsOfDate();
             Date dateFromView = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
-            int lastMonthTMB = DateTimeUtil.getMonthOfDate(dateFromTMB);
-            int lastMonthFromView = DateTimeUtil.getMonthOfDate(dateFromView);
-            int yearOfLastMonthTMB = DateTimeUtil.getYearOfDate(dateFromTMB);
-            int yearOfLastMonthView = DateTimeUtil.getYearOfDate(dateFromView);
-            // Check last month Bank Statement
-            if (lastMonthTMB != lastMonthFromView || yearOfLastMonthTMB != yearOfLastMonthView) {
-                confirmMessageHeader = "Confirm message dialog";
-                confirmMessage = "The last of month is not mapped with TMB Bank Statement!";
-                RequestContext.getCurrentInstance().execute("confirmChangeScreenBankStmtDlg.show()");
-                log.debug("result: false");
-                return false;
+            if (dateFromTMB != null && dateFromView != null) {
+                int lastMonthTMB = DateTimeUtil.getMonthOfDate(dateFromTMB);
+                int lastMonthFromView = DateTimeUtil.getMonthOfDate(dateFromView);
+                int yearOfLastMonthTMB = DateTimeUtil.getYearOfDate(dateFromTMB);
+                int yearOfLastMonthView = DateTimeUtil.getYearOfDate(dateFromView);
+                // Check last month Bank Statement
+                if (lastMonthTMB != lastMonthFromView || yearOfLastMonthTMB != yearOfLastMonthView) {
+                    confirmMessageHeader = "Confirm message dialog";
+                    confirmMessage = "The last of month is not mapped with TMB Bank Statement!";
+                    RequestContext.getCurrentInstance().execute("confirmChangeScreenBankStmtDlg.show()");
+                    log.debug("result: false");
+                    return false;
+                }
             }
         }
         log.debug("result: true");

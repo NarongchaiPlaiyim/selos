@@ -240,6 +240,7 @@ public class FeeCalculationControl extends BusinessControl {
 			for (OpenAccountCredit credit : credits) {
 				if (credit.getNewCreditDetail() == null && credit.getNewCreditDetail().getNewCreditFacility() != null)
 					continue;
+                //TODO Get totalApprovedODLimit from Decision
 				BigDecimal odLimit = credit.getNewCreditDetail().getNewCreditFacility().getTotalApprovedODLimit();
 				if (odLimit == null)
 					continue;

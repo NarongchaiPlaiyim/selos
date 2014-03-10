@@ -1,8 +1,6 @@
 package com.clevel.selos.integration.brms.convert;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -12,15 +10,10 @@ import com.clevel.selos.integration.brms.model.request.BRMSAccountRequested;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.PricingFee;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
-import com.clevel.selos.integration.brms.service.standardpricing.feerules.*;
-import com.clevel.selos.integration.brms.service.standardpricing.feerules.ApplicationType;
-import com.clevel.selos.integration.brms.service.standardpricing.feerules.AttributeType;
-import com.clevel.selos.integration.brms.service.standardpricing.feerules.CreditFacilityType;
-import com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceRequest;
-import com.clevel.selos.integration.brms.service.standardpricing.feerules.ProductType;
-import com.clevel.selos.integration.brms.service.standardpricing.feerules.SELOSProductProgramType;
-import com.clevel.selos.integration.brms.service.standardpricing.feerules.UnderwritingApprovalRequestType;
-import com.clevel.selos.integration.brms.service.standardpricing.feerules.UnderwritingRequest;
+import com.tmbbank.enterprise.model.*;
+import com.ilog.rules.decisionservice.DecisionServiceRequest;
+import com.ilog.rules.decisionservice.DecisionServiceResponse;
+import com.ilog.rules.param.UnderwritingRequest;
 import com.clevel.selos.model.FeeLevel;
 import org.slf4j.Logger;
 
@@ -55,6 +48,7 @@ public class StandardPricingFeeConverter extends Converter{
             }
 
             List<AttributeType> attributeTypeList = applicationType.getAttribute();
+
             attributeTypeList.add(getAttributeType(BRMSFieldAttributes.APP_IN_DATE, applicationInfo.getBdmSubmitDate()));
             attributeTypeList.add(getAttributeType(BRMSFieldAttributes.GUARANTEE_TYPE, applicationInfo.getLoanRequestType()));
             attributeTypeList.add(getAttributeType(BRMSFieldAttributes.TOTAL_TCG_GUARANTEE_AMOUNT, applicationInfo.getTotalTCGGuaranteeAmount()));
@@ -116,9 +110,10 @@ public class StandardPricingFeeConverter extends Converter{
     }
 
     public StandardPricingResponse getStandardPricingResponse(DecisionServiceResponse decisionServiceResponse){
+        logger.debug("-- start convert getStandardPricingResponse from decisionServiceResponse");
         StandardPricingResponse standardPricingResponse = new StandardPricingResponse();
         if(decisionServiceResponse != null){
-
+            logger.debug("response is not null");
             standardPricingResponse.setDecisionID(decisionServiceResponse.getDecisionID());
             UnderwritingRequest underwritingRequest = decisionServiceResponse.getUnderwritingRequest();
             UnderwritingApprovalRequestType underwritingApprovalRequestType = underwritingRequest.getUnderwritingApprovalRequest();
@@ -147,39 +142,8 @@ public class StandardPricingFeeConverter extends Converter{
             standardPricingResponse.setPricingFeeList(pricingFeeList);
 
         }
+        logger.debug("-- end convert response return StandardPricingResponse{} ", standardPricingResponse);
         return standardPricingResponse;
-    }
-
-    private AttributeType getAttributeType(BRMSFieldAttributes field, Date value){
-        logger.debug("-- getAttributeType()");
-        AttributeType attributeType = new AttributeType();
-        try{
-            attributeType.setName(field.value());
-            logger.debug("-- field.value()[{}]", field.value());
-            GregorianCalendar gregorianCalendar = new GregorianCalendar();
-            gregorianCalendar.setTime(value);
-            logger.debug("-- value()[{}]", value);
-            attributeType.setDateTimeValue(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
-        } catch (Exception ex){
-            logger.error("Cannot convert XML");
-            logger.error("-- Exception : {}", ex.getMessage());
-        }
-        return attributeType;
-    }
-
-    private AttributeType getAttributeType(BRMSFieldAttributes field, String value){
-        AttributeType attributeType = new AttributeType();
-        attributeType.setName(field.value());
-        attributeType.setStringValue(value);
-        return attributeType;
-    }
-
-    private AttributeType getAttributeType(BRMSFieldAttributes field, BigDecimal value){
-        AttributeType attributeType = new AttributeType();
-        attributeType.setName(field.value());
-        attributeType.setNumericValue(value);
-
-        return attributeType;
     }
 
     private PricingFee getPricingFee(FeeType feeType, String creditTypeId){

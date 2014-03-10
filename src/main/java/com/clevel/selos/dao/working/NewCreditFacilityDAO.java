@@ -23,18 +23,14 @@ public class NewCreditFacilityDAO extends GenericDAO<NewCreditFacility, Long> {
         log.info("-- findNewCreditFacilityByWorkCaseId : {}", workCaseId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
-        NewCreditFacility newCreditFacility = (NewCreditFacility)criteria.uniqueResult();
-
-        return newCreditFacility;
+        return (NewCreditFacility)criteria.uniqueResult();
     }
 
     public NewCreditFacility findByWorkCasePreScreenId(long workCasePreScreenId){
         log.info("-- findByWorkCasePreScreenId : {}", workCasePreScreenId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
-        NewCreditFacility newCreditFacility = (NewCreditFacility) criteria.uniqueResult();
-
-        return newCreditFacility;
+        return (NewCreditFacility)criteria.uniqueResult();
     }
 
     public NewCreditFacility findByWorkCase(WorkCase workCase) {
@@ -42,8 +38,6 @@ public class NewCreditFacilityDAO extends GenericDAO<NewCreditFacility, Long> {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase", workCase));
         criteria.addOrder(Order.asc("id"));
-        NewCreditFacility newCreditFacility = (NewCreditFacility)criteria.uniqueResult();
-
-        return newCreditFacility;
+        return (NewCreditFacility)criteria.uniqueResult();
     }
 }
