@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -154,4 +157,13 @@ public class CureModelRiskScoringType {
         return this.message;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("cureTransaction", cureTransaction)
+                .append("start", start)
+                .append("end", end)
+                .append("message", message)
+                .toString();
+    }
 }

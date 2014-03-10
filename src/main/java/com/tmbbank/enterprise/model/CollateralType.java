@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -838,4 +841,38 @@ public class CollateralType {
         return this.requiredDocumentSet;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("collateralType", collateralType)
+                .append("eligibleFlag", eligibleFlag)
+                .append("coreAssetFlag", coreAssetFlag)
+                .append("propertyType", propertyType)
+                .append("buildingType", buildingType)
+                .append("collateralBuildingType", collateralBuildingType)
+                .append("description", description)
+                .append("pledgedPercentage", pledgedPercentage)
+                .append("project", project)
+                .append("spaceType", spaceType)
+                .append("spaceValue", spaceValue)
+                .append("document", document)
+                .append("mainBorrowerOwnerFlag", mainBorrowerOwnerFlag)
+                .append("coBorrowerOwnerFlag", coBorrowerOwnerFlag)
+                .append("buildingMaterialType", buildingMaterialType)
+                .append("propertyGrade", propertyGrade)
+                .append("propertyStatus", propertyStatus)
+                .append("value", value)
+                .append("marketValue", marketValue)
+                .append("haircutValue", haircutValue)
+                .append("purchasedValue", purchasedValue)
+                .append("appraisedValue", appraisedValue)
+                .append("province", province)
+                .append("appraisal", appraisal)
+                .append("developer", developer)
+                .append("attribute", attribute)
+                .append("requiredDocumentSet", requiredDocumentSet)
+                .toString();
+    }
 }

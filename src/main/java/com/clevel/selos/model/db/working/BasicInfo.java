@@ -166,6 +166,10 @@ public class BasicInfo implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     private ApproveResult approveResult;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "limit_setup_expiry_date")
+    private Date limitSetupExpiryDate;
+
     public long getId() {
         return id;
     }
@@ -508,6 +512,15 @@ public class BasicInfo implements Serializable {
 	public void setApproveType(ApproveType approveType) {
 		this.approveType = approveType;
 	}
+
+    public Date getLimitSetupExpiryDate() {
+        return limitSetupExpiryDate;
+    }
+
+    public void setLimitSetupExpiryDate(Date limitSetupExpiryDate) {
+        this.limitSetupExpiryDate = limitSetupExpiryDate;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).

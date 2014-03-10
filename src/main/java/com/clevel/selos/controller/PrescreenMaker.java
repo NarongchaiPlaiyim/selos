@@ -2421,7 +2421,8 @@ public class PrescreenMaker implements Serializable {
 
     public void onCancelCA(){
         try{
-            prescreenBusinessControl.cancelCase(workCasePreScreenId, queueName, ActionCode.CANCEL_CA_PRESCREEN.getVal());
+            //TODO : set reason and remark from screen.
+            prescreenBusinessControl.cancelCase(workCasePreScreenId, queueName, ActionCode.CANCEL_CA.getVal(), "", "");
             messageHeader = "Information.";
             message = "Cancel CA Complete.";
 

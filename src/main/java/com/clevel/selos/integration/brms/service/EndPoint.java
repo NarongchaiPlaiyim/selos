@@ -7,8 +7,10 @@ import com.sun.xml.internal.ws.client.BindingProviderProperties;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import java.io.Serializable;
+import java.net.URL;
 
 public class EndPoint implements Serializable {
     @Inject
@@ -18,6 +20,38 @@ public class EndPoint implements Serializable {
     @Inject
     @Config(name = "interface.brms.request.timeout")
     private String brmsRequestTimeout;
+
+    @Inject
+    @Config(name = "interface.brms.wsdl.url")
+    private String brmsWSDLURL;
+
+    @Inject
+    @Config(name = "interface.brms.service.url")
+    private String brmsServiceURL;
+
+    @Inject
+    @Config(name = "interface.brms.prescreen.service.name")
+    private String prescreenServiceName;
+
+    @Inject
+    @Config(name = "interface.brms.fullapp.service.name")
+    private String fullAppServiceName;
+
+    @Inject
+    @Config(name = "interface.brms.standard.paricing.interest.service.name")
+    private String interestServiceName;
+
+    @Inject
+    @Config(name = "interface.brms.standard.paricing.fee.service.name")
+    private String feeServiceName;
+
+    @Inject
+    @Config(name = "interface.brms.customer.service.name")
+    private String customerServiceName;
+
+    @Inject
+    @Config(name = "interface.brms.appraisal.service.name")
+    private String appraisalServiceName;
 
     @Inject
     @Config(name = "interface.brms.prescreen.address")
@@ -54,7 +88,10 @@ public class EndPoint implements Serializable {
         DecisionServiceSEPrescreenUWSFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEPrescreenUWSFlow_Service();
+            URL url = new URL("http://stmbrmsred1:9080/DecisionService/ws/SE_Prescreen_UWS_RuleApp/1.0/SE_Prescreen_UWS_Flow?wsdl");
+            QName qname = new QName("http://www.ilog.com/rules/DecisionService", "DecisionServiceSE_Prescreen_UWS_Flow");
+
+            service = new DecisionServiceSEPrescreenUWSFlow_Service(url, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
             int timeout = 60000;
             try{
@@ -65,12 +102,12 @@ public class EndPoint implements Serializable {
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, prescreenAddress);
-            log.debug("callPrescreenUnderwritingRulesService() Calling...");
+            log.debug("callPrescreenUnderwritingRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callPrescreenUnderwritingRulesService() Done...");
+            log.debug("callPrescreenUnderwritingRulesService() Done...{}", response);
             return response;
         } catch (Exception e) {
-            log.error("callPrescreenUnderwritingRulesService() Error : {}", e);
+            log.error("callPrescreenUnderwritingRulesService() Error :", e);
             throw e;
         }
     }
@@ -93,9 +130,9 @@ public class EndPoint implements Serializable {
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, fullAppAddress);
-            log.debug("callFullApplicationUnderwritingRulesService() Calling...");
+            log.debug("callFullApplicationUnderwritingRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callFullApplicationUnderwritingRulesService() Done...");
+            log.debug("callFullApplicationUnderwritingRulesService() Done...{}", response);
             return response;
         } catch (Exception e) {
             log.error("callFullApplicationUnderwritingRulesService() Error : {}", e);
@@ -110,7 +147,10 @@ public class EndPoint implements Serializable {
         DecisionServiceSEStandardPricingInterestFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEStandardPricingInterestFlow_Service();
+            URL url = new URL("http://stmbrmsred1:9080/DecisionService/ws/SE_Standard_Pricing_Interest_RuleApp/1.0/SE_Standard_Pricing_Interest_Flow?wsdl");
+            QName qname = new QName("http://www.ilog.com/rules/DecisionService", "DecisionServiceSE_Standard_Pricing_Interest_Flow");
+
+            service = new DecisionServiceSEStandardPricingInterestFlow_Service(url, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
             int timeout = 60000;
             try{
@@ -121,9 +161,9 @@ public class EndPoint implements Serializable {
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, interestAddress);
-            log.debug("callStandardPricingInterestRulesService() Calling...");
+            log.debug("callStandardPricingInterestRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callStandardPricingFeeRulesService() Done...");
+            log.debug("callStandardPricingFeeRulesService() Done...{}", response);
             return response;
         } catch (Exception e) {
             log.error("callStandardPricingInterestRulesService() Error : {}", e);
@@ -138,8 +178,10 @@ public class EndPoint implements Serializable {
         DecisionServiceSEStandardPricingFeeFlow port = null;
         DecisionServiceResponse response = null;
         try {
+            URL url = new URL("http://stmbrmsred1:9080/DecisionService/ws/SE_Standard_Pricing_Fee_RuleApp/1.0/SE_Standard_Pricing_Fee_Flow?wsdl");
+            QName qname = new QName("http://www.ilog.com/rules/DecisionService", "DecisionServiceSE_Standard_Pricing_Fee_Flow");
 
-            service = new DecisionServiceSEStandardPricingFeeFlow_Service();
+            service = new DecisionServiceSEStandardPricingFeeFlow_Service(url, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
             int timeout = 60000;
             try{
@@ -150,9 +192,9 @@ public class EndPoint implements Serializable {
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, feeAddress);
-            log.debug("callStandardPricingFeeRulesService() Calling...");
+            log.debug("callStandardPricingFeeRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callStandardPricingFeeRulesService() Done...");
+            log.debug("callStandardPricingFeeRulesService() Done... {}", response);
             return response;
         } catch (Exception e) {
             log.error("callStandardPricingFeeRulesService() Error : {}", e);
@@ -178,9 +220,9 @@ public class EndPoint implements Serializable {
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, customerAddress);
-            log.debug("callDocumentCustomerRulesService() Calling...");
+            log.debug("callDocumentCustomerRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callDocumentCustomerRulesService() Done...");
+            log.debug("callStandardPricingFeeRulesService() Done... {}", response);
             return response;
         } catch (Exception e) {
             log.error("callDocumentCustomerRulesService() Error : {}", e);
@@ -206,9 +248,9 @@ public class EndPoint implements Serializable {
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, appraisalAddress);
-            log.debug("callDocumentAppraisalRulesService() Calling...");
+            log.debug("callDocumentAppraisalRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callDocumentAppraisalRulesService() Done...");
+            log.debug("callStandardPricingFeeRulesService() Done... {}", response);
             return response;
         } catch (Exception e) {
             log.error("callDocumentAppraisalRulesService() Error : {}", e);

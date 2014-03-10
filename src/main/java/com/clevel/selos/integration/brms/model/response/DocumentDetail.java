@@ -5,10 +5,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-public class DocumentList implements Serializable{
+public class DocumentDetail implements Serializable{
 
     private String documentGroup;
     private String id;
+    private String type;
     private String description;
     private String condition;
     private boolean mandateFlag;
@@ -16,6 +17,7 @@ public class DocumentList implements Serializable{
     private String showFlag;
     private String operStep;
     private String operShowFlag;
+    private boolean operMandateFlag;
 
     public String getDocumentGroup() {
         return documentGroup;
@@ -31,6 +33,14 @@ public class DocumentList implements Serializable{
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getDescription() {
@@ -73,6 +83,14 @@ public class DocumentList implements Serializable{
         this.showFlag = showFlag;
     }
 
+    public String getOperShowFlag() {
+        return operShowFlag;
+    }
+
+    public void setOperShowFlag(String operShowFlag) {
+        this.operShowFlag = operShowFlag;
+    }
+
     public String getOperStep() {
         return operStep;
     }
@@ -81,12 +99,12 @@ public class DocumentList implements Serializable{
         this.operStep = operStep;
     }
 
-    public String getOperShowFlag() {
-        return operShowFlag;
+    public boolean isOperMandateFlag() {
+        return operMandateFlag;
     }
 
-    public void setOperShowFlag(String operShowFlag) {
-        this.operShowFlag = operShowFlag;
+    public void setOperMandateFlag(boolean operMandateFlag) {
+        this.operMandateFlag = operMandateFlag;
     }
 
     @Override

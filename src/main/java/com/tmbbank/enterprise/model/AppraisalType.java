@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -340,4 +343,20 @@ public class AppraisalType {
         return this.attribute;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("type", type)
+                .append("company", company)
+                .append("collateralGrading", collateralGrading)
+                .append("acceptableFlag", acceptableFlag)
+                .append("appraisalValue", appraisalValue)
+                .append("buildingValue", buildingValue)
+                .append("landValue", landValue)
+                .append("landAndBuildingValue", landAndBuildingValue)
+                .append("dateOfAppraisal", dateOfAppraisal)
+                .append("attribute", attribute)
+                .toString();
+    }
 }

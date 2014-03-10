@@ -8,6 +8,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import com.ilog.rules.param.UnderwritingRequest;
 import com.ilog.rules.param.UnderwritingResult;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 
 /**
@@ -167,4 +169,14 @@ public class DecisionServiceResponse {
         this.underwritingResult = value;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("ilogRulesOutputString", ilogRulesOutputString)
+                .append("ilogRulesFiredRulesCount", ilogRulesFiredRulesCount)
+                .append("decisionID", decisionID)
+                .append("underwritingRequest", underwritingRequest)
+                .append("underwritingResult", underwritingResult)
+                .toString();
+    }
 }

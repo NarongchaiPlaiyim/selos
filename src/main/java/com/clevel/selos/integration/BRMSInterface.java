@@ -16,7 +16,7 @@ public interface BRMSInterface {
 
     public StandardPricingResponse checkStandardPricingFeeRule(BRMSApplicationInfo applicationInfo) throws ValidationException;
 
-    public List<DocCustomerResponse> checkDocCustomerRule(BRMSApplicationInfo applicationInfo) throws ValidationException;
+    public DocCustomerResponse checkDocCustomerRule(BRMSApplicationInfo applicationInfo) throws ValidationException;
 
-    public List<DocAppraisalResponse> checkDocAppraisalRule(BRMSApplicationInfo applicationInfo) throws ValidationException;
+    public DocAppraisalResponse checkDocAppraisalRule(BRMSApplicationInfo applicationInfo) throws ValidationException;
 }

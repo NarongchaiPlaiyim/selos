@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -643,4 +646,31 @@ public class IBNRModelTransactionType {
         return this.attribute;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("asOfDate", asOfDate)
+                .append("processingDate", processingDate)
+                .append("flagNonK", flagNonK)
+                .append("sumPDHL", sumPDHL)
+                .append("numberPDHL", numberPDHL)
+                .append("sumPDPL", sumPDPL)
+                .append("numberPDPL", numberPDPL)
+                .append("sumPDOD", sumPDOD)
+                .append("numberPDOD", numberPDOD)
+                .append("sumPDTDR", sumPDTDR)
+                .append("numberPDTDR", numberPDTDR)
+                .append("sumPDOT", sumPDOT)
+                .append("numberPDOT", numberPDOT)
+                .append("sumPDNonKAccount", sumPDNonKAccount)
+                .append("numberNonKAccount", numberNonKAccount)
+                .append("account", account)
+                .append("borrower", borrower)
+                .append("product", product)
+                .append("riskModel", riskModel)
+                .append("score", score)
+                .append("attribute", attribute)
+                .toString();
+    }
 }

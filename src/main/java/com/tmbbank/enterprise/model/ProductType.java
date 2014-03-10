@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -1251,4 +1254,53 @@ public class ProductType {
         return this.selosProductProgram;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("lendingType", lendingType)
+                .append("productType", productType)
+                .append("productCode", productCode)
+                .append("productProgram", productProgram)
+                .append("productName", productName)
+                .append("loanLimitAmount", loanLimitAmount)
+                .append("pricingMode", pricingMode)
+                .append("pricing", pricing)
+                .append("loanToValueRatio", loanToValueRatio)
+                .append("mrtaFlag", mrtaFlag)
+                .append("mrtaAmount", mrtaAmount)
+                .append("postponeRegistrationMode", postponeRegistrationMode)
+                .append("maxCreditLimitByDSR", maxCreditLimitByDSR)
+                .append("maxCreditLimitByDTI", maxCreditLimitByDTI)
+                .append("maxCreditLimitByMaxLTV", maxCreditLimitByMaxLTV)
+                .append("maxCreditLimitByProductProgram", maxCreditLimitByProductProgram)
+                .append("maxCreditLimitByBOTRegulation", maxCreditLimitByBOTRegulation)
+                .append("requestedCreditLimit", requestedCreditLimit)
+                .append("recommendedCreditLimit", recommendedCreditLimit)
+                .append("creditLimit", creditLimit)
+                .append("requestedCardType", requestedCardType)
+                .append("cardType", cardType)
+                .append("dateOfFinishTenor", dateOfFinishTenor)
+                .append("requestedTenor", requestedTenor)
+                .append("tenor", tenor)
+                .append("minTenor", minTenor)
+                .append("maxTenor", maxTenor)
+                .append("topUpAccountNumber", topUpAccountNumber)
+                .append("topUpAmount", topUpAmount)
+                .append("loanType", loanType)
+                .append("outstandAmtOfRefinancedLoan", outstandAmtOfRefinancedLoan)
+                .append("loanLimit", loanLimit)
+                .append("odLimit", odLimit)
+                .append("comboLimit", comboLimit)
+                .append("campaign", campaign)
+                .append("monthlyInstallment", monthlyInstallment)
+                .append("recommendedMonthlyInstallment", recommendedMonthlyInstallment)
+                .append("debtFactor", debtFactor)
+                .append("collateral", collateral)
+                .append("attribute", attribute)
+                .append("score", score)
+                .append("fee", fee)
+                .append("selosProductProgram", selosProductProgram)
+                .toString();
+    }
 }

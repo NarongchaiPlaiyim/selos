@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import com.tmbbank.enterprise.model.UnderwritingApprovalResultType;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 
 /**
@@ -62,4 +64,10 @@ public class UnderwritingResult {
         this.underwritingApprovalResult = value;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("underwritingApprovalResult", underwritingApprovalResult)
+                .toString();
+    }
 }

@@ -1,6 +1,9 @@
 
 package com.tmbbank.enterprise.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -178,4 +181,14 @@ public class DelinquencyType {
         return this.attribute;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("delinquencyCurrentMth", delinquencyCurrentMth)
+                .append("numberOfDelinquencyL6M", numberOfDelinquencyL6M)
+                .append("maxDelinquencyL6M", maxDelinquencyL6M)
+                .append("attribute", attribute)
+                .toString();
+    }
 }

@@ -13,12 +13,15 @@ import com.clevel.selos.integration.brms.model.response.*;
 
 import com.clevel.selos.integration.brms.service.EndPoint;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.util.Util;
 import com.ilog.rules.decisionservice.DecisionServiceResponse;
 import org.slf4j.Logger;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
+import javax.xml.namespace.QName;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +63,8 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
         }catch (Exception ex) {
             uwRulesResponse = new UWRulesResponse();
             uwRulesResponse.setActionResult(ActionResult.FAILED);
-            uwRulesResponse.setReason(ex.getMessage());
+            uwRulesResponse.setReason(Util.getMessageException(ex));
+            logger.error("checkPreScreenRule calling exception/convert exception", ex);
         }
 
         return uwRulesResponse;
@@ -83,7 +87,8 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
         }catch (Exception ex) {
             uwRulesResponse = new UWRulesResponse();
             uwRulesResponse.setActionResult(ActionResult.FAILED);
-            uwRulesResponse.setReason(ex.getMessage());
+            uwRulesResponse.setReason(Util.getMessageException(ex));
+            logger.error("checkFullApplicationRule calling exception/convert exception", ex);
         }
         return uwRulesResponse;
     }
@@ -105,7 +110,8 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
 
         }catch (Exception ex){
             standardPricingResponse.setActionResult(ActionResult.FAILED);
-            standardPricingResponse.setReason(ex.getMessage());
+            standardPricingResponse.setReason(Util.getMessageException(ex));
+            logger.error("checkStandardPricingIntRule calling exception/convert exception", ex);
         }
 
         return standardPricingResponse;
@@ -127,31 +133,32 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
 
         }catch (Exception ex){
             standardPricingResponse.setActionResult(ActionResult.FAILED);
-            standardPricingResponse.setReason(ex.getMessage());
+            standardPricingResponse.setReason(Util.getMessageException(ex));
+            logger.error("checkStandardPricingFeeRule calling exception or convert exception", ex);
         }
 
         return standardPricingResponse;
     }
 
     @Override
-    public List<DocCustomerResponse> checkDocCustomerRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
+    public DocCustomerResponse checkDocCustomerRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
         logger.debug("checkDocCustomerRule : applicationInfo {}", applicationInfo);
         if (applicationInfo == null) {
             logger.error("docCustomerRequest is null for request");
             throw new ValidationException("002");
         }
         //todo call service
-        return new ArrayList<DocCustomerResponse>();
+        return new DocCustomerResponse();
     }
 
     @Override
-    public List<DocAppraisalResponse> checkDocAppraisalRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
+    public DocAppraisalResponse checkDocAppraisalRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
         logger.debug("checkDocAppraisalRule : applicationInfo {}", applicationInfo);
         if (applicationInfo == null) {
             logger.error("docAppraisalRequest is null for request");
             throw new ValidationException("002");
         }
         //todo call service
-        return new ArrayList<DocAppraisalResponse>();
+        return new DocAppraisalResponse();
     }
 }

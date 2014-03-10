@@ -1,6 +1,9 @@
 
 package com.ilog.rules.decisionservice;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.xml.ws.WebFault;
 
 
@@ -51,4 +54,10 @@ public class DecisionServiceSoapFault
         return faultInfo;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("faultInfo", faultInfo)
+                .toString();
+    }
 }
