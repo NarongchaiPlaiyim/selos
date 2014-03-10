@@ -19,7 +19,6 @@ import com.clevel.selos.dao.working.FeeSummaryDAO;
 import com.clevel.selos.dao.working.OpenAccountDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.FeeAccountType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.FeePaymentMethod;
 import com.clevel.selos.model.db.master.FeeType;
@@ -29,7 +28,6 @@ import com.clevel.selos.model.db.working.FeeCollectionDetail;
 import com.clevel.selos.model.db.working.FeeDetail;
 import com.clevel.selos.model.db.working.FeeSummary;
 import com.clevel.selos.model.db.working.OpenAccount;
-import com.clevel.selos.model.db.working.OpenAccountCredit;
 import com.clevel.selos.model.db.working.OpenAccountPurpose;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.FeeCollectionAccountView;
@@ -101,7 +99,7 @@ public class FeeCalculationControl extends BusinessControl {
 			view.setId(account.getId());
 			view.setAccountNo(account.getDisplayAccountNo());
 			view.setAmount(account.getAmount());
-			view.setFeeAccountType(account.getFeeAccountType());
+			view.setBankAccountType(account.getOpenAccount().getBankAccountType().getName());
 			rtnDatas.add(view);
 		}
 		return rtnDatas;
@@ -219,58 +217,20 @@ public class FeeCalculationControl extends BusinessControl {
 		HashMap<Long,FeeCollectionAccount> map = new HashMap<Long, FeeCollectionAccount>();
 		for (OpenAccount account : accounts) {
 			boolean foundOD= false;
-			boolean foundTCG = false;
 			List<OpenAccountPurpose> purposes = account.getOpenAccountPurposeList();
 			for (OpenAccountPurpose purpose : purposes) {
 				if (purpose.getAccountPurpose().isForOD()) {
 					foundOD = true;
-				}
-				if (purpose.getAccountPurpose().isForTCG()) {
-					foundTCG = true;
+					break;
 				}
 			}
-			if (!foundTCG)
+			if (!foundOD)
 				continue;
 			
-			BigDecimal totalODCredit = BigDecimal.ZERO;
-			//TODO Clear more about fee account type
-			FeeAccountType feeAccountType = (foundOD) ? FeeAccountType.NEW_OD : FeeAccountType.EXCEED;
-			
-			List<OpenAccountCredit> credits = account.getOpenAccountCreditList();
-			for (OpenAccountCredit credit : credits) {
-				if (credit.getNewCreditDetail() == null && credit.getNewCreditDetail().getNewCreditFacility() != null)
-					continue;
-                //TODO Get totalApprovedODLimit from Decision
-				BigDecimal odLimit = credit.getNewCreditDetail().getNewCreditFacility().getTotalApprovedODLimit();
-				if (odLimit == null)
-					continue;
-				totalODCredit = totalODCredit.add(odLimit);
-				
-			}
 			FeeCollectionAccount feeAcc = new FeeCollectionAccount();
-			feeAcc.setFeeAccountType(feeAccountType);
+			feeAcc.setDisplayAccountNo(account.getAccountNumber());
+			feeAcc.setAmount(totalDebitFee);
 			feeAcc.setOpenAccount(account);
-			if (foundOD) {
-				if (totalODCredit.compareTo(totalDebitFee) >= 0) {
-					if (FeeAccountType.NEW_OD.equals(feeAccountType)) {
-						feeAcc.setDisplayAccountNo(account.getAccountNumber());
-						feeAcc.setAmount(totalDebitFee);
-					} else {
-						feeAcc.setAmount(BigDecimal.ZERO);
-						feeAcc.setDisplayAccountNo(null);
-					}
-				} else {
-					feeAcc.setDisplayAccountNo(account.getAccountNumber());
-					if (FeeAccountType.EXCEED.equals(feeAccountType)) {
-						feeAcc.setAmount(totalDebitFee.subtract(totalODCredit));
-					} else {
-						feeAcc.setAmount(totalODCredit);
-					}
-				}
-			} else{
-				feeAcc.setAmount(totalDebitFee);
-				feeAcc.setDisplayAccountNo(account.getAccountNumber());
-			}
 			map.put(account.getId(), feeAcc);
 		}
 		
@@ -284,7 +244,6 @@ public class FeeCalculationControl extends BusinessControl {
 				continue;
 			} 
 			//update
-			currAcc.setFeeAccountType(newAcc.getFeeAccountType());
 			currAcc.setDisplayAccountNo(newAcc.getDisplayAccountNo());
 			currAcc.setAmount(newAcc.getAmount());
 			feeCollectionAccountDAO.persist(currAcc);
