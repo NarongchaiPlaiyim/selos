@@ -364,19 +364,11 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 applyTCG = tcgView.getTCG();
             }
 
-
             guarantorList = customerInfoControl.getGuarantorByWorkCase(workCaseId);
-
             log.debug("guarantorList size :: {}", guarantorList.size());
-            if (guarantorList == null) {
-                guarantorList = new ArrayList<CustomerInfoView>();
-            }
 
             collateralOwnerUwAllList = customerInfoControl.getCollateralOwnerUWByWorkCase(workCaseId);
             log.debug("collateralOwnerUwAllList size :: {}", collateralOwnerUwAllList.size());
-            if (collateralOwnerUwAllList == null) {
-                collateralOwnerUwAllList = new ArrayList<CustomerInfoView>();
-            }
         }
 
         if (collateralOwnerUW == null) {
@@ -389,18 +381,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             cannotEditStandard = true;
         }
 
-        if (creditRequestTypeViewList == null) {
-            creditRequestTypeViewList = new ArrayList<CreditRequestTypeView>();
-        }
-
-
         if (newCreditDetailView == null) {
             newCreditDetailView = new NewCreditDetailView();
-        }
-
-        // change to view model
-        if (disbursementTypeViewList == null) {
-            disbursementTypeViewList = new ArrayList<DisbursementTypeView>();
         }
 
         if (newConditionDetailView == null) {
@@ -560,6 +542,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             ProductFormulaView productFormulaView = productControl.getProductFormulaView(newCreditDetailView.getCreditTypeView().getId(),
                     newCreditDetailView.getProductProgramView().getId(),
                     newCreditFacilityView.getCreditCustomerType(), specialProgramView.getId(), applyTCG);
+
             if (productFormulaView != null) {
                 log.debug("onChangeCreditType :::: productFormula : {}", productFormulaView.getId());
                 newCreditDetailView.setProductCode(productFormulaView.getProductCode());
@@ -584,6 +567,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onChangeRequestType() {
         log.debug("newCreditDetailView.getRequestType() :: {}", newCreditDetailView.getRequestType());
+        newCreditDetailView.setProductProgramView(new ProductProgramView());
+        newCreditDetailView.setCreditTypeView(new CreditTypeView());
+
         prdGroupToPrdProgramViewList = new ArrayList<PrdGroupToPrdProgramView>();
         prdProgramToCreditTypeViewList = new ArrayList<PrdProgramToCreditTypeView>();
 

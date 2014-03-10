@@ -15,6 +15,7 @@ public class CountryDAO extends GenericDAO<Country, Integer> {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     public CountryDAO() {
     }
