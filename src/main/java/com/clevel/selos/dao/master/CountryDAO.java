@@ -16,17 +16,17 @@ public class CountryDAO extends GenericDAO<Country, Integer> {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     public CountryDAO() {
     }
 
     @Override
     public List<Country> findAll(){
-        List<Country> countryList = new ArrayList<Country>();
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("active", 1));
         criteria.addOrder(Order.asc("name"));
-        return countryList;
+        return criteria.list();
     }
 
 }
