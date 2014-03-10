@@ -43,20 +43,18 @@ public class NewGuarantorCreditTransform extends Transform {
                     if (newCreditDetailAdd != null) {
                         newGuarantorCredit.setNewCreditDetail(newCreditDetailAdd);
                         log.info("newGuarantorCredit newCreditDetailAdd id toSet is " + newGuarantorCredit.getNewCreditDetail().getId());
-                        newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
                     }
                 } else if ("E".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
                     log.info(" Existing ::  proposeCreditDetailView.getSeq() ::: {}", proposeCreditDetailView.getSeq());
-                    ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById((long) proposeCreditDetailView.getSeq());
-//                    log.info(" existingCreditDetail id ::: {}",existingCreditDetail.getId());
+                    ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById(proposeCreditDetailView.getId());
+                    log.info(" existingCreditDetail id ::: {}",existingCreditDetail.getId());
                     if (existingCreditDetail != null) {
                         newGuarantorCredit.setExistingCreditDetail(existingCreditDetail);
                         log.info("newGuarantorCredit existingCreditDetail id toSet is " + newGuarantorCredit.getExistingCreditDetail().getId());
+
                     }
-                    newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
-
                 }
-
+                newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
                 newGuarantorCredit.setNewGuarantorDetail(newGuarantorDetail);
                 newGuarantorCredit.setNewCreditFacility(newCreditFacility);
                 newGuarantorCredit.setProposeType(proposeType);
@@ -72,7 +70,6 @@ public class NewGuarantorCreditTransform extends Transform {
         NewCreditDetail newCreditDetailReturn = null;
 
         for (NewCreditDetail newCreditDetailAdd : newCreditDetailList) {
-            log.info("newCreditDetailAdd id is  :: {}", newCreditDetailAdd.getId());
             log.info("newCreditDetailAdd seq is :: {}", newCreditDetailAdd.getSeq());
             log.info("guarantor choose seq is {}", proposeCreditDetailView.getSeq());
             if (proposeCreditDetailView.getSeq() == newCreditDetailAdd.getSeq()) {

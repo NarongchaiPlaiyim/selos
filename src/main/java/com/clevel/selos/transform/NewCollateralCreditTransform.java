@@ -24,7 +24,7 @@ public class NewCollateralCreditTransform extends Transform {
 
 
     public List<NewCollateralCredit> transformsToModelForCollateral(List<ProposeCreditDetailView> proposeCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewCollateral newCollateralDetail,NewCreditFacility newCreditFacility,ProposeType proposeType, User user) {
-    
+       log.info("proposeCreditDetailViewList size :: {}",proposeCreditDetailViewList.size());
         List<NewCollateralCredit> newCollateralCreditList = new ArrayList<NewCollateralCredit>();
         NewCollateralCredit newCollateralRelCredit;
         NewCreditDetail newCreditDetailAdd;
@@ -48,7 +48,7 @@ public class NewCollateralCreditTransform extends Transform {
                         log.info("newCollateralRelCredit newCreditDetailAdd id toSet is " + newCollateralRelCredit.getNewCreditDetail().getId());
                     }
                 } else if ("E".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
-                    ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById((long) proposeCreditDetailView.getSeq());
+                    ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById(proposeCreditDetailView.getId());
                     if (existingCreditDetail.getId() ==  proposeCreditDetailView.getId()) {
                         log.debug("guarantor choose id  is :: {}", proposeCreditDetailView.getId());
                         log.debug("guarantor choose seq  is :: {}", proposeCreditDetailView.getSeq());
@@ -71,7 +71,6 @@ public class NewCollateralCreditTransform extends Transform {
         NewCreditDetail newCreditDetailReturn = null;
 
         for (NewCreditDetail newCreditDetailAdd : newCreditDetailList) {
-            log.info("newCreditDetailAdd id is  :: {}", newCreditDetailAdd.getId());
             log.info("newCreditDetailAdd seq is :: {}", newCreditDetailAdd.getSeq());
             log.info("guarantor choose seq is {}", proposeCreditDetailView.getSeq());
             if (proposeCreditDetailView.getSeq() == newCreditDetailAdd.getSeq()) {
