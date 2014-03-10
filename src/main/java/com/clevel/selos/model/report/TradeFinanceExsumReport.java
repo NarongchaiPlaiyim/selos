@@ -1,6 +1,10 @@
 package com.clevel.selos.model.report;
 
-public class TradeFinanceExsumReport {
+import com.clevel.selos.report.ReportModel;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+public class TradeFinanceExsumReport extends ReportModel{
 
     private String contactName;
     private String contactPhoneNo;

@@ -1,11 +1,15 @@
 package com.clevel.selos.model.report;
 
+import com.clevel.selos.report.ReportModel;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 
-public class BorrowerExsumReport {
+public class BorrowerExsumReport extends ReportModel{
     private int no;
     private String titleTh;
-    private String  firstNameTh;
+    private String firstNameTh;
     private String lastNameTh;
     private String citizenId;
     private String registrationId;
@@ -25,6 +29,26 @@ public class BorrowerExsumReport {
     private String owner;
 
     public BorrowerExsumReport() {
+        this.titleTh = getDefaultString();
+        this.firstNameTh = getDefaultString();
+        this.lastNameTh = getDefaultString();
+        this.lastNameTh = getDefaultString();
+        this.citizenId = getDefaultString();
+        this.registrationId = getDefaultString();
+        this.tmbCustomerId = getDefaultString();
+        this.relation = getDefaultString();
+        this.collateralOwner = getDefaultString();
+        this.indLv = getDefaultString();
+        this.jurLv = getDefaultString();
+        this.percentShare = getDefaultBigDecimal();
+        this.age = getDefaultInteger();
+        this.kycLevel = getDefaultInteger();
+        this.worthiness = getDefaultString();
+        this.customerCSIList = getDefaultString();
+        this.businessLocationName = getDefaultString();
+        this.businessLocationAddress = getDefaultString();
+        this.businessLocationAddressEN = getDefaultString();
+        this.owner = getDefaultString();
     }
 
     public int getNo() {
@@ -189,27 +213,26 @@ public class BorrowerExsumReport {
 
     @Override
     public String toString() {
-        return "BorrowerExsumReport{" +
-                "no=" + no +
-                ", titleTh='" + titleTh + '\'' +
-                ", firstNameTh='" + firstNameTh + '\'' +
-                ", lastNameTh='" + lastNameTh + '\'' +
-                ", citizenId='" + citizenId + '\'' +
-                ", registrationId='" + registrationId + '\'' +
-                ", tmbCustomerId='" + tmbCustomerId + '\'' +
-                ", relation='" + relation + '\'' +
-                ", collateralOwner='" + collateralOwner + '\'' +
-                ", indLv='" + indLv + '\'' +
-                ", jurLv='" + jurLv + '\'' +
-                ", percentShare=" + percentShare +
-                ", age=" + age +
-                ", kycLevel=" + kycLevel +
-                ", worthiness='" + worthiness + '\'' +
-                ", customerCSIList='" + customerCSIList + '\'' +
-                ", businessLocationName='" + businessLocationName + '\'' +
-                ", businessLocationAddress='" + businessLocationAddress + '\'' +
-                ", businessLocationAddressEN='" + businessLocationAddressEN + '\'' +
-                ", owner='" + owner + '\'' +
-                '}';
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("titleTh", titleTh).
+                append("firstNameTh", firstNameTh).
+                append("lastNameTh", lastNameTh).
+                append("citizenId", citizenId).
+                append("registrationId", registrationId).
+                append("tmbCustomerId", tmbCustomerId).
+                append("relation", relation).
+                append("collateralOwner", collateralOwner).
+                append("indLv", indLv).
+                append("jurLv", jurLv).
+                append("percentShare", percentShare).
+                append("age", age).
+                append("kycLevel", kycLevel).
+                append("worthiness", worthiness).
+                append("customerCSIList", customerCSIList).
+                append("businessLocationName", businessLocationName).
+                append("businessLocationAddress", businessLocationAddress).
+                append("businessLocationAddressEN", businessLocationAddressEN).
+                append("owner", owner).
+                toString();
     }
 }

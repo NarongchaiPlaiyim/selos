@@ -64,8 +64,18 @@ public class ReportExSummary extends ReportService {
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
         map.put("borrower",pdfAction.fillBorrowerRelatedProfile());
+        map.put("businessLocation",pdfAction.fillBorrower());
         map.put("tradeFinance", pdfAction.fillTradeFinance());
+        map.put("borrowerCharacteristic",pdfAction.fillBorrowerCharacteristic());
         map.put("ncbRecord",pdfAction.fillNCBRecord());
+        map.put("accountMovement",pdfAction.fillAccountMovement());
+        map.put("collateral",pdfAction.fillCollateral());
+        map.put("creditRisk",pdfAction.fillBorrowerRelatedProfile());
+        map.put("bizSupport",pdfAction.fillBizSupport());
+        map.put("uwDecision",pdfAction.fillUWDecision());
+        map.put("creditRisk",pdfAction.fillCreditRisk());
+        map.put("decision",pdfAction.fillDecision());
+
 
         List<String> list = new ArrayList<String>();
 

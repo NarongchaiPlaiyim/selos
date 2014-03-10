@@ -29,6 +29,7 @@ public class ReportService implements Serializable {
 
     public void generatePDF(String fileName, Map<String,Object> parameters) throws JRException, IOException {
         log.debug("generate pdf.");
+        System.out.println("fileName: "+fileName);
         JasperReport jasperReport = JasperCompileManager.compileReport(fileName);
         JasperPrint print ;
 
