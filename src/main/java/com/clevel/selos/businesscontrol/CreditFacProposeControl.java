@@ -546,7 +546,7 @@ public class CreditFacProposeControl extends BusinessControl {
                         if (bidv.getBizDesc() != null) {
                             cog = bidv.getBizDesc().getCog();
                         }
-                        aaaValue = Util.add(aaaValue, Util.multiply(cog, bidv.getPercentBiz()));
+                        aaaValue = Util.add(aaaValue, Util.divide(Util.multiply(cog, bidv.getPercentBiz()),oneHundred));
                     }
                 }
             }
