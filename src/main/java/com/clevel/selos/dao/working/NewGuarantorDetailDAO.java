@@ -57,12 +57,15 @@ public class NewGuarantorDetailDAO extends GenericDAO<NewGuarantorDetail, Long> 
 
 
 
-    public NewGuarantorDetail findGuarantorById(long newGuarantorId) {
+    public NewGuarantorDetail findGuarantorById(long newGuarantorId,ProposeType proposeType) {
         log.info("findById ::: {}", newGuarantorId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("id",newGuarantorId));
+        criteria.add(Restrictions.eq("proposeType",proposeType));
         criteria.setFetchMode("guarantorName", FetchMode.LAZY);
         NewGuarantorDetail newGuarantorDetail = (NewGuarantorDetail) criteria.uniqueResult();
         return newGuarantorDetail;
     }
+
+
 }

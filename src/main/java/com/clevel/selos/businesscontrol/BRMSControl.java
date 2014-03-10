@@ -78,6 +78,9 @@ public class BRMSControl extends BusinessControl {
     private ExSummaryDAO exSummaryDAO;
 
     @Inject
+    private DecisionDAO decisionDAO;
+
+    @Inject
     BRMSTransform brmsTransform;
 
     @Inject
@@ -346,17 +349,18 @@ public class BRMSControl extends BusinessControl {
         //4. Set TMB Account Request
         NewCreditFacility newCreditFacility = creditFacilityDAO.findByWorkCaseId(workCaseId);
         BigDecimal discountFrontEndFeeRate = newCreditFacility.getFrontendFeeDOA();
+        Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
         if(workCase.getStep().getProposeType() == ProposeType.P){
             applicationInfo.setLoanRequestType(newCreditFacility.getLoanRequestType().getBrmsCode());
         }
         else if(workCase.getStep().getProposeType().equals(ProposeType.A)){
 
             applicationInfo.setLoanRequestType(newCreditFacility.getLoanRequestType().getBrmsCode());
-            applicationInfo.setFinalGroupExposure(newCreditFacility.getTotalApproveExposure());
+            applicationInfo.setFinalGroupExposure(decision.getTotalApproveExposure());
         }
 
         List<NewCreditDetail> newCreditDetailList = newCreditDetailDAO.findNewCreditDetail(workCaseId, workCase.getStep().getProposeType());
-        List<BRMSAccountRequested> accountRequestedList = new ArrayList();
+        List<BRMSAccountRequested> accountRequestedList = new ArrayList<BRMSAccountRequested>();
         for(NewCreditDetail newCreditDetail : newCreditDetailList){
             if(newCreditDetail.getRequestType() == RequestTypes.NEW.value()){
                 accountRequestedList.add(brmsTransform.getBRMSAccountRequested(newCreditDetail, discountFrontEndFeeRate));
@@ -443,7 +447,7 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setTotalExistingODLimit(existingCreditFacility.getTotalBorrowerODLimit());
         applicationInfo.setTotalNumberOfExistingOD(existingCreditFacility.getTotalBorrowerNumberOfExistingOD());
 
-        applicationInfo.setTotalApprovedCredit(newCreditFacility.getTotalApproveCredit());
+        applicationInfo.setTotalApprovedCredit(decision.getTotalApproveCredit());
         applicationInfo.setTotalNumberContingenPropose(newCreditFacility.getTotalNumberContingenPropose());
         applicationInfo.setTotalNumberProposeCredit(newCreditFacility.getTotalNumberProposeCreditFac());
         applicationInfo.setTotalNumberOfRequestedOD(newCreditFacility.getTotalNumberOfNewOD());
@@ -470,7 +474,6 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setTradeChequeReturnPercent(bankStatementSummary.getGrdTotalTDChqRetPercent());
         applicationInfo.setProductGroup(basicInfo.getProductGroup().getBrmsCode());
         applicationInfo.setMaximumSMELimit(newCreditFacility.getMaximumSMELimit());
-        applicationInfo.setTotalApprovedCredit(newCreditFacility.getTotalApproveCredit());
         applicationInfo.setReferredDocType(bizInfoSummary.getReferredExperience().getBrmsCode());
 
         applicationInfo.setNetFixAsset(bizInfoSummary.getNetFixAsset());

@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.exception.ECMInterfaceException;
 import com.clevel.selos.integration.ECMInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.integration.ecm.ECMInterfaceImpl;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.model.ECMDataResult;
@@ -11,8 +12,10 @@ import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.view.CheckMandatoryDocView;
 import com.clevel.selos.model.view.CheckOptionalDocView;
 import com.clevel.selos.model.view.CheckOtherDocView;
+import com.clevel.selos.security.encryption.EncryptionService;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.Util;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -33,21 +36,25 @@ public class CheckMandateDoc implements Serializable {
     Logger log;
 
     @Inject
-    @Config(name = "interface.mandate.doc.address")
+    @Config(name = "interface.workplace.address")
     private String address;
-
     @Inject
     @Config(name = "interface.mandate.doc.objectStore")
     private String objectStore;
-
+    @Inject
+    @Config(name = "interface.workplace.username")
+    private String username;
+    @Inject
+    @Config(name = "interface.workplace.password")
+    private String password;
+    @Inject
+    @Config(name = "system.encryption.enable")
+    private String encryptionEnable;
+    @Inject
+    private EncryptionService encryptionService;
     @Inject
     private CESessionToken CESessionToken;
-    @Inject
-    @Config(name = "interface.bpm.username")
-    String bpmUsername;
-    @Inject
-    @Config(name = "interface.bpm.password")
-    String bpmPassword;
+    private String passwordEncrypt;
 
     private final String URL = "https://www.google.co.th";
 
@@ -61,6 +68,8 @@ public class CheckMandateDoc implements Serializable {
 
     @Inject
     private ECMInterface ecmInterface;
+    @Inject
+    private BPMInterfaceImpl bpmInterface;
 
     public CheckMandateDoc() {
         init();
@@ -117,13 +126,19 @@ public class CheckMandateDoc implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("-- onCreation.");
-        log.debug("-- BPMUser[{}]", bpmUsername);
-        log.debug("-- BPMPass[{}]", bpmPassword);
+        if (Util.isTrue(encryptionEnable)) {
+            passwordEncrypt = encryptionService.decrypt(Base64.decodeBase64(password));
+        } else {
+            passwordEncrypt = password;
+        }
+        bpmInterface.authenticate(username, passwordEncrypt);
 
         //if found the documents matched in ECM completed = Y and will not allow user to change it;
         //if not found the documents matched in ECM completed = N and it will be changed to Yes when user upload the document into ECM;
 
         //query ECM for list of documents uploaded by user via ECM linkage by Application number.
+
+
 
         otherDocumentsList = new ArrayList<CheckOtherDocView>();
         String result = null;
@@ -137,12 +152,14 @@ public class CheckMandateDoc implements Serializable {
                     checkOtherDocView.setDocumentType(ecmDetail.getTypeNameTH());
                     checkOtherDocView.setOwners(ecmDetail.getTypeCode());
                     checkOtherDocView.setFileName(ecmDetail.getOrgFileName());
-                    checkOtherDocView.setLink(getURLByFNId(ecmDetail.getFnDocId(), CESessionToken.getTokenFromSession(bpmUsername, bpmPassword)));
+                                                                                  //Must be logon
+                    result = getURLByFNId(ecmDetail.getFnDocId(), CESessionToken.getTokenFromSession(username, passwordEncrypt));
+                    checkOtherDocView.setLink(result);
                     checkOtherDocView.setComplete(2);
                     checkOtherDocView.setIndistinct(true);
                     checkOtherDocView.setExpire(true);
                     checkOtherDocView.setRemark("test");
-                    log.debug("-- Link[{}]", getURLByFNId(ecmDetail.getFnDocId(), CESessionToken.getTokenFromSession(bpmUsername, bpmPassword)));
+                    log.debug("-- Link[{}]", result);
                     otherDocumentsList.add(checkOtherDocView);
                 }
                 result = ecmDetailList.toString();
@@ -174,7 +191,7 @@ public class CheckMandateDoc implements Serializable {
 
             //workPlaceURL                         //objStore        //encIds                          //encToken
 //            return ceURI + "/getContent?objectStoreName="+objectStore+"&id="+FNId+"&objectType=document&ut=" + token;
-            return address+"/getContent?objectStoreName="+objectStore+"&id="+FNId+"&objectType=document&ut=" + token;
+            return address+"/getContent?objectStoreName="+objectStore+"&id={9517B502-D700-4D35-9EBE-2053912DBC28}&objectType=document&ut=" + token;
         } else {
             log.debug("-- FN_ID or Token is null");
             return null;
