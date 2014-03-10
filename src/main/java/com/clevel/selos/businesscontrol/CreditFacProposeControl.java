@@ -839,9 +839,11 @@ public class CreditFacProposeControl extends BusinessControl {
         StandardPricingResponse standardPricingResponse  = null;
         try {
             standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
-
             if (standardPricingResponse != null) {
-                log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult());
+                log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult().toString());
+                log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
+                log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().toString());
+                log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
             }
 
             return standardPricingResponse;
@@ -869,7 +871,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 deleteCreditDetailList.add(newCreditDetail);
                 newCollateralCreditDelList = newCollateralCreditDAO.getListCollRelationByNewCreditDetail(newCreditDetail,ProposeType.P);
                 newCollateralCreditDAO.delete(newCollateralCreditDelList);
-                newGuarantorCreditList = newGuarantorRelationDAO.getListByNewCreditDetail(newCreditDetail,ProposeType.P);
+                newGuarantorCreditList = newGuarantorRelationDAO.getListByNewCreditDetail(newCreditDetail, ProposeType.P);
                 newGuarantorRelationDAO.delete(newGuarantorCreditList);
             }
             newCreditDetailDAO.delete(deleteCreditDetailList);
