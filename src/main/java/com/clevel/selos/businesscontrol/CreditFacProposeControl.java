@@ -839,12 +839,12 @@ public class CreditFacProposeControl extends BusinessControl {
         StandardPricingResponse standardPricingResponse  = null;
         try {
             standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
-            if (standardPricingResponse != null) {
+//            if (standardPricingResponse != null) {
                 log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult().toString());
                 log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
                 log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().toString());
                 log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
-            }
+//            }
 
             return standardPricingResponse;
 
