@@ -280,9 +280,10 @@ public class NewCollateralTransform extends Transform {
                     newCreditDetailList.add(newCollateralCredit.getNewCreditDetail());
                 }
             }
-            log.info("newCreditDetailList Guarantor:: {}", newCreditDetailList.size());
-            log.info("getExistingCreditDetail Guarantor:: {}", existingCreditDetailList.size());
+            log.info("newCreditDetailList collateral:: {}", newCreditDetailList.size());
+            log.info("getExistingCreditDetail collateral:: {}", existingCreditDetailList.size());
             List<ProposeCreditDetailView> proposeCreditDetailViewList = proposeCreditDetailTransform(newCreditDetailList, existingCreditDetailList);
+            log.info("newCollateralDetail1 transformToView find all relation proposeCreditDetailViewList :: {}",proposeCreditDetailViewList.size());
             newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
 
             List<NewCollateralHead> newCollateralHeadDetails = newCollateralHeadDAO.findByNewCollateral(newCollateralDetail1);
@@ -310,7 +311,7 @@ public class NewCollateralTransform extends Transform {
             for (NewCreditDetailView tmp : newCreditDetailViewList) {
                 proposeCreditDetailView = new ProposeCreditDetailView();
                 proposeCreditDetailView.setSeq(tmp.getSeq());
-                proposeCreditDetailView.setId(rowCount);
+                proposeCreditDetailView.setId(tmp.getId());
                 proposeCreditDetailView.setTypeOfStep("N");
                 proposeCreditDetailView.setAccountName(tmp.getAccountName());
                 proposeCreditDetailView.setAccountNumber(tmp.getAccountNumber());
@@ -332,7 +333,7 @@ public class NewCollateralTransform extends Transform {
         for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViewList) {
             proposeCreditDetailView = new ProposeCreditDetailView();
             proposeCreditDetailView.setSeq((int) existingCreditDetailView.getId());
-            proposeCreditDetailView.setId(rowCount);
+            proposeCreditDetailView.setId(existingCreditDetailView.getId());
             proposeCreditDetailView.setTypeOfStep("E");
             proposeCreditDetailView.setAccountName(existingCreditDetailView.getAccountName());
             proposeCreditDetailView.setAccountNumber(existingCreditDetailView.getAccountNumber());

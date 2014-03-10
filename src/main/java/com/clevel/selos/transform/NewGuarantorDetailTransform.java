@@ -117,6 +117,7 @@ public class NewGuarantorDetailTransform extends Transform {
             log.info("newCreditDetailList Guarantor:: {}", newCreditDetailList.size());
             log.info("getExistingCreditDetail Guarantor:: {}", existingCreditDetailList.size());
             List<ProposeCreditDetailView> proposeCreditDetailViewList = proposeCreditDetailTransform(newCreditDetailList, existingCreditDetailList, newGuarantorCreditList);
+            log.info("Guarantor transformToView find all relation proposeCreditDetailViewList :: {}",proposeCreditDetailViewList.size());
             newGuarantorDetailView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
 
             newGuarantorDetailViews.add(newGuarantorDetailView);
@@ -170,7 +171,7 @@ public class NewGuarantorDetailTransform extends Transform {
             for (NewCreditDetailView tmp : newCreditDetailViewList) {
                 proposeCreditDetailView = new ProposeCreditDetailView();
                 proposeCreditDetailView.setSeq(tmp.getSeq());
-                proposeCreditDetailView.setId(rowCount);
+                proposeCreditDetailView.setId(tmp.getId());
                 proposeCreditDetailView.setTypeOfStep("N");
                 proposeCreditDetailView.setAccountName(tmp.getAccountName());
                 proposeCreditDetailView.setAccountNumber(tmp.getAccountNumber());
@@ -192,8 +193,8 @@ public class NewGuarantorDetailTransform extends Transform {
 
         for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViewList) {
             proposeCreditDetailView = new ProposeCreditDetailView();
-            proposeCreditDetailView.setSeq((int) existingCreditDetailView.getId());
-            proposeCreditDetailView.setId(rowCount);
+            proposeCreditDetailView.setSeq(existingCreditDetailView.getSeq());
+            proposeCreditDetailView.setId(existingCreditDetailView.getId());
             proposeCreditDetailView.setNoFlag(true);
             proposeCreditDetailView.setTypeOfStep("E");
             proposeCreditDetailView.setAccountName(existingCreditDetailView.getAccountName());

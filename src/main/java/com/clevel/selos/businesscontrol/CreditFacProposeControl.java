@@ -762,6 +762,7 @@ public class CreditFacProposeControl extends BusinessControl {
 //            }
             List<NewGuarantorCredit> relationDeleteList = newGuarantorRelationDAO.getListByNewCreditFacility(newCreditFacility,ProposeType.P);
             if(relationDeleteList.size()>0){
+                log.info("relationDeleteList size ::: {}",relationDeleteList.size());
                 newGuarantorRelationDAO.delete(relationDeleteList);
             }
 
@@ -789,9 +790,10 @@ public class CreditFacProposeControl extends BusinessControl {
 //        log.debug("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
 
         if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
-            List<NewCollateralCredit> relationDelList = newCollateralRelationDAO.getListByNewCreditFacility(newCreditFacility,ProposeType.P);
-            if(relationDelList.size()>0){
-                newCollateralRelationDAO.delete(relationDelList);
+            List<NewCollateralCredit> relationCollDelList = newCollateralRelationDAO.getListByNewCreditFacility(newCreditFacility,ProposeType.P);
+            if(relationCollDelList.size()>0){
+                log.info("relationCollDelList size ::: {}",relationCollDelList.size());
+                newCollateralRelationDAO.delete(relationCollDelList);
             }
 
             if(Util.safetyList(newCreditFacilityView.getNewCollateralViewDelList()).size() > 0) {

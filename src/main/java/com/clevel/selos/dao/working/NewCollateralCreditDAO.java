@@ -39,7 +39,7 @@ public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long
     public List<NewCollateralCredit> getListCollRelationByNewCreditDetail(NewCreditDetail newCreditDetail,ProposeType proposeType) {
         log.info("getListCollRelationByNewCreditDetail. (newCreditDetail: {})", newCreditDetail);
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("newCreditDetail", newCreditDetail));
+        criteria.add(Restrictions.eq("newCreditDetail.id", newCreditDetail.getId()));
         criteria.add(Restrictions.eq("proposeType", proposeType));
         criteria.setFetchMode("newCollateral", FetchMode.LAZY);
         List<NewCollateralCredit> newCollateralRelCreditList = (List<NewCollateralCredit>)criteria.list();
