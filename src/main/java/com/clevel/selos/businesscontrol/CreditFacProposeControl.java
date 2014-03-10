@@ -41,8 +41,6 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     NewCreditFacilityTransform newCreditFacilityTransform;
     @Inject
-    NewFeeDetailTransform newFeeDetailTransform;
-    @Inject
     NewCreditDetailTransform newCreditDetailTransform;
     @Inject
     CreditTypeDetailTransform creditTypeDetailTransform;
@@ -143,6 +141,8 @@ public class CreditFacProposeControl extends BusinessControl {
     NewCollateralDAO newCollateralDAO;
     @Inject
     NewCollateralSubRelatedDAO newCollateralSubRelatedDAO;
+    @Inject
+    NewFeeDetailTransform newFeeDetailTransform;
 
     @Inject
     public CreditFacProposeControl() {}
@@ -837,6 +837,7 @@ public class CreditFacProposeControl extends BusinessControl {
     public StandardPricingResponse getPriceFeeInterest(final long workCaseId) {
         log.debug("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
         StandardPricingResponse standardPricingResponse  = null;
+        List<NewFeeDetailView> newFeeDetailViewList = null;
         try {
             standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
 //            if (standardPricingResponse != null) {
@@ -845,6 +846,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().toString());
                 log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
 //            }
+
 
             return standardPricingResponse;
 

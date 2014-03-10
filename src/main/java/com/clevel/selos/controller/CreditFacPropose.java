@@ -261,6 +261,10 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private CreditFacExistingControl creditFacExistingControl;
     @Inject
     private ProposeCreditDetailTransform proposeCreditDetailTransform;
+    @Inject
+    private NewFeeDetailTransform newFeeDetailTransform;
+    @Inject
+    private NewCreditTierTransform newCreditTierTransform;
 
     public CreditFacPropose() {}
 
@@ -505,15 +509,25 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
                 log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().toString());
                 log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
-                if (!Util.isNull(standardPricingResponse) && ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
-                    log.debug("standardPricingResponse ::: {}", standardPricingResponse.getPricingInterest().toString());
-                    log.debug("standardPricingResponse ::: {}", standardPricingResponse.getPricingFeeList().toString());
-                } else if (!Util.isNull(standardPricingResponse) && ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
-                    messageHeader = msg.get("app.messageHeader.error");
-                    message = " onRetrievePricingFee : Action result FAILED !!!";//standardPricingResponse.getActionResult().toString();
-                    severity = MessageDialogSeverity.ALERT.severity();
-                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
+                if(standardPricingResponse.getPricingFeeList()!=null){
+                   List<NewFeeDetailView> newFeeDetailViewList= newFeeDetailTransform.transformBRMSToView(standardPricingResponse.getPricingFeeList());
+                   newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
                 }
+
+                if(standardPricingResponse.getPricingInterest()!=null){
+                    List<NewCreditTierDetailView> newCreditTier = newCreditTierTransform.transformPricingIntTierToView(standardPricingResponse.getPricingInterest());
+                }
+
+
+//                if (!Util.isNull(standardPricingResponse) && ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
+
+//                } else if (!Util.isNull(standardPricingResponse) && ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
+//                    messageHeader = msg.get("app.messageHeader.error");
+//                    message = " onRetrievePricingFee : Action result FAILED !!!";//standardPricingResponse.getActionResult().toString();
+//                    severity = MessageDialogSeverity.ALERT.severity();
+//                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//                }
 
             } catch (Exception e) {
                 log.error("Exception while get getPriceFeeInterest data!", e);
