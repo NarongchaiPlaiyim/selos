@@ -244,6 +244,7 @@ public class FeeCalculationControl extends BusinessControl {
 				if (odLimit == null)
 					continue;
 				totalODCredit = totalODCredit.add(odLimit);
+				
 			}
 			FeeCollectionAccount feeAcc = new FeeCollectionAccount();
 			feeAcc.setFeeAccountType(feeAccountType);
