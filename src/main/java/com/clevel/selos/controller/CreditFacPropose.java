@@ -1517,7 +1517,10 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onDeleteConditionInfo() {
         log.debug("onDeleteConditionInfo :: ");
-        newCreditFacilityView.getNewConditionViewDelList().add(selectConditionItem);
+        if (selectConditionItem.getId() != 0) {
+            deleteConditionIdList.add(selectConditionItem.getId());
+        }
+//        newCreditFacilityView.getNewConditionViewDelList().add(selectConditionItem);
         newCreditFacilityView.getNewConditionDetailViewList().remove(selectConditionItem);
     }
     //***************************************END Condition Information ****************************************************//
