@@ -54,5 +54,13 @@ public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long
         return newCollateralCreditList;
     }
 
+    public List<NewCollateralCredit> getListByNewCreditFacility(NewCreditFacility newCreditFacility) {
+        log.info("getListCollRelationByNewGuarantor. (newCreditFacility: {})", newCreditFacility);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
+        criteria.setFetchMode("newCollateral", FetchMode.LAZY);
+        return  criteria.list();
+
+    }
 
 }

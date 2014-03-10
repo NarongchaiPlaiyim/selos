@@ -115,7 +115,7 @@ public class MortgageConfirm implements Serializable {
 	
 	public void onSaveMortgageConfirm() {
 		mortgageConfirmControl.saveMortgageConfirm(summary, mortgages,workCaseId);
-		
+	
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}

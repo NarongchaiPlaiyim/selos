@@ -177,7 +177,7 @@
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
                                      required="#{not empty param[addMortgageType.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                        <f:selectItems value="#{creditFacPropose.mortgageTypeList}"
+                        <f:selectItems value="#{creditFacPropose.mortgageTypeViewList}"
                                        var="mortgageTypeItem"
                                        itemLabel="#{mortgageTypeItem.mortgage}"
                                        itemValue="#{mortgageTypeItem.id}"/>
@@ -193,7 +193,7 @@
                             value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
                             styleClass="smaller"
                             actionListener="#{creditFacPropose.onAddMortgageType()}"
-                            process=":subCollateralDlgForm"
+                            process="@form"
                             update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
                     </p:commandButton>
                 </td>
@@ -271,7 +271,8 @@
                             styleClass="smaller"
                             action="#{creditFacPropose.onAddRelatedWith()}"
                             process=":subCollateralDlgForm"
-                            update=":subCollateralDlgForm,:msgBoxSystemMessagePanel" >
+                            update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
+                            disabled="true">
                     </p:commandButton>
                 </td>
             </tr>
@@ -325,7 +326,7 @@
     </td>
     <td class="left">
         <p:inputText value="#{creditFacPropose.newCollateralSubView.appraisalValue}"
-                     maxlength="17"
+                     maxlength="14"
                      onclick="this.select()"
                      onkeydown="return onKeyDownNegMoney(event);"
                      onkeypress="return onKeyPressNegMoney(event);"
@@ -344,7 +345,7 @@
     </td>
     <td class="left">
         <p:inputText value="#{creditFacPropose.newCollateralSubView.mortgageValue}"
-                     maxlength="17"
+                     maxlength="14"
                      onclick="this.select()"
                      onkeydown="return onKeyDownNegMoney(event);"
                      onkeypress="return onKeyPressNegMoney(event);"

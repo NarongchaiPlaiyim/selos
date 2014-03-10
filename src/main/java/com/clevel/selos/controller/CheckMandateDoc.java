@@ -6,10 +6,12 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.ecm.ECMInterfaceImpl;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.model.ECMDataResult;
+import com.clevel.selos.integration.filenet.ce.connection.CESessionToken;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.view.CheckMandatoryDocView;
 import com.clevel.selos.model.view.CheckOptionalDocView;
 import com.clevel.selos.model.view.CheckOtherDocView;
+import com.clevel.selos.system.Config;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -29,6 +31,25 @@ public class CheckMandateDoc implements Serializable {
     @Inject
     @SELOS
     Logger log;
+
+    @Inject
+    @Config(name = "interface.mandate.doc.address")
+    private String address;
+
+    @Inject
+    @Config(name = "interface.mandate.doc.objectStore")
+    private String objectStore;
+
+    @Inject
+    private CESessionToken CESessionToken;
+    @Inject
+    @Config(name = "interface.bpm.username")
+    String bpmUsername;
+    @Inject
+    @Config(name = "interface.bpm.password")
+    String bpmPassword;
+
+    private final String URL = "https://www.google.co.th";
 
     private List<CheckMandatoryDocView> mandatoryDocumentsList;
     private List<CheckOptionalDocView> optionalDocumentsList;
@@ -96,6 +117,8 @@ public class CheckMandateDoc implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("-- onCreation.");
+        log.debug("-- BPMUser[{}]", bpmUsername);
+        log.debug("-- BPMPass[{}]", bpmPassword);
 
         //if found the documents matched in ECM completed = Y and will not allow user to change it;
         //if not found the documents matched in ECM completed = N and it will be changed to Yes when user upload the document into ECM;
@@ -114,10 +137,12 @@ public class CheckMandateDoc implements Serializable {
                     checkOtherDocView.setDocumentType(ecmDetail.getTypeNameTH());
                     checkOtherDocView.setOwners(ecmDetail.getTypeCode());
                     checkOtherDocView.setFileName(ecmDetail.getOrgFileName());
+                    checkOtherDocView.setLink(getURLByFNId(ecmDetail.getFnDocId(), CESessionToken.getTokenFromSession(bpmUsername, bpmPassword)));
                     checkOtherDocView.setComplete(2);
                     checkOtherDocView.setIndistinct(true);
                     checkOtherDocView.setExpire(true);
                     checkOtherDocView.setRemark("test");
+                    log.debug("-- Link[{}]", getURLByFNId(ecmDetail.getFnDocId(), CESessionToken.getTokenFromSession(bpmUsername, bpmPassword)));
                     otherDocumentsList.add(checkOtherDocView);
                 }
                 result = ecmDetailList.toString();
@@ -140,6 +165,22 @@ public class CheckMandateDoc implements Serializable {
     public void onCancelCheckMandateDoc(){
 
     }
+
+
+    private String getURLByFNId(final String FNId, final String token){
+        if(!Util.isNull(FNId) && !Util.isZero(FNId.length()) && !Util.isNull(token) && !Util.isZero(token.length() )){
+
+            //http://10.200.230.74:9080/Workplace/getContent?objectStoreName=ECMWBGDEV&id={9517B502-D700-4D35-9EBE-2053912DBC28}&objectType=document
+
+            //workPlaceURL                         //objStore        //encIds                          //encToken
+//            return ceURI + "/getContent?objectStoreName="+objectStore+"&id="+FNId+"&objectType=document&ut=" + token;
+            return address+"/getContent?objectStoreName="+objectStore+"&id="+FNId+"&objectType=document&ut=" + token;
+        } else {
+            log.debug("-- FN_ID or Token is null");
+            return null;
+        }
+    }
+
 
     public List<CheckMandatoryDocView> getMandatoryDocumentsList() {
         return mandatoryDocumentsList;

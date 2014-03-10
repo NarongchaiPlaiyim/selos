@@ -1,11 +1,9 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.controller.PrescreenResult;
 import com.clevel.selos.dao.working.CustomerCSIDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.CustomerOblAccountInfoDAO;
 import com.clevel.selos.integration.brms.model.request.*;
-import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.CSIMatchedType;
 import com.clevel.selos.model.RadioValue;
@@ -145,22 +143,23 @@ public class BRMSTransform extends Transform{
             }
         }
 
+        customerInfo.setNcbFlag(Boolean.FALSE);
         if(customer.getRelation().getId() == RelationValue.BORROWER.value()){
             NCB ncb = customer.getNcb();
             customerInfo.setNumberOfNCBCheckIn6Months(ncb.getCheckIn6Month());
             customerInfo.setNumberOfDayLastNCBCheck(new BigDecimal(DateTimeUtil.daysBetween2Dates(ncb.getCheckingDate(), checkDate)));
 
             List<NCBDetail> ncbDetailList = ncb.getNcbDetailList();
+            List<BRMSNCBAccountInfo> ncbAccountInfoList = new ArrayList<BRMSNCBAccountInfo>();
             if(ncbDetailList == null || ncbDetailList.size() == 0){
                 customerInfo.setNcbFlag(Boolean.FALSE);
             } else {
                 customerInfo.setNcbFlag(Boolean.TRUE);
-                List<BRMSNCBAccountInfo> ncbAccountInfoList = new ArrayList<BRMSNCBAccountInfo>();
                 for(NCBDetail ncbDetail : ncbDetailList){
                     ncbAccountInfoList.add(getBRMSNCBAccountInfo(ncbDetail, customerInfo.isIndividual(), checkDate));
                 }
-                customerInfo.setNcbAccountInfoList(ncbAccountInfoList);
             }
+            customerInfo.setNcbAccountInfoList(ncbAccountInfoList);
 
             List<String> warningFullMatchList = new ArrayList<String>();
             List<String> warningSomeMatchList = new ArrayList<String>();
@@ -176,8 +175,6 @@ public class BRMSTransform extends Transform{
             customerInfo.setCsiSomeMatchCode(warningSomeMatchList);
             customerInfo.setQualitativeClass("P");
         }
-
-        borrowerGroupIncome = borrowerGroupIncome.add(customer.getApproxIncome());
 
             /*Start setting TMB Account for each customer*/
         List<CustomerOblAccountInfo> oblAccountInfoList = customerOblAccountInfoDAO.findByCustomerId(customer.getId());

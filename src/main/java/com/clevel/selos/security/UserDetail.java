@@ -12,12 +12,44 @@ public class UserDetail implements Serializable {
     private String password;
     private String role;
     private String roleType;
+    private int roleId;
+    private int teamid;
 
-    public UserDetail(String userName, String password, String role, String roleType) {
+
+
+    public UserDetail()
+    {
+
+    }
+
+    public int getTeamid() {
+        return teamid;
+    }
+
+    public void setTeamid(int teamid) {
+        this.teamid = teamid;
+    }
+
+
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+
+
+    public UserDetail(String userName, String password, String role, String roleType,int roleId,int teamid) {
         this.userName = userName;
         this.password = password;
         this.role = role;
         this.roleType = roleType;
+        this.roleId = roleId;
+        this.teamid = teamid;
+
     }
 
     public String getUserName() {
@@ -58,6 +90,9 @@ public class UserDetail implements Serializable {
                 append("userName", userName).
                 append("role", role).
                 append("roleType", roleType).
+                append("roleId", roleId).
+                append("teamid",teamid).
+
                 toString();
     }
 

@@ -18,13 +18,14 @@ public class NewCollateralHeadTransform extends Transform {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     private NewCollateralSubTransform newCollateralSubTransform;
     private List<NewCollateralHead> newCollateralHeadList;
     private List<NewCollateralHeadView> newCollateralHeadViewList;
+
     @Inject
     public NewCollateralHeadTransform() {
-
     }
 
     public List<NewCollateralHead> transformToModel(final List<NewCollateralHeadView> newCollateralHeadViewList, final User user){
@@ -153,5 +154,38 @@ public class NewCollateralHeadTransform extends Transform {
         }
         log.debug("----[RETURNED] NewCollateralHeadViewList.size[{}]", newCollateralHeadViewList.size());
         return newCollateralHeadViewList;
+    }
+
+    public NewCollateralHeadView copyToNewView(NewCollateralHeadView originalNewCollateralHeadView, boolean isNewId) {
+        NewCollateralHeadView newCollateralHeadView = new NewCollateralHeadView();
+        if (originalNewCollateralHeadView != null) {
+            newCollateralHeadView.setId(isNewId ? 0 : originalNewCollateralHeadView.getId());
+            newCollateralHeadView.setNo(originalNewCollateralHeadView.getNo());
+            newCollateralHeadView.setTitleDeed(originalNewCollateralHeadView.getTitleDeed());
+            newCollateralHeadView.setCollateralLocation(originalNewCollateralHeadView.getCollateralLocation());
+            newCollateralHeadView.setAppraisalValue(originalNewCollateralHeadView.getAppraisalValue());
+            newCollateralHeadView.setHeadCollType(originalNewCollateralHeadView.getHeadCollType());
+            newCollateralHeadView.setCollTypePercentLTV(originalNewCollateralHeadView.getCollTypePercentLTV());
+            newCollateralHeadView.setPotentialCollateral(originalNewCollateralHeadView.getPotentialCollateral());
+            newCollateralHeadView.setCollID(originalNewCollateralHeadView.getCollID());
+            newCollateralHeadView.setExistingCredit(originalNewCollateralHeadView.getExistingCredit());
+            newCollateralHeadView.setInsuranceCompany(originalNewCollateralHeadView.getInsuranceCompany());
+            newCollateralHeadView.setCreateDate(originalNewCollateralHeadView.getCreateDate());
+            newCollateralHeadView.setCreateBy(originalNewCollateralHeadView.getCreateBy());
+            newCollateralHeadView.setModifyDate(originalNewCollateralHeadView.getModifyDate());
+            newCollateralHeadView.setModifyBy(originalNewCollateralHeadView.getModifyBy());
+            newCollateralHeadView.setNewCollateralSubViewList(newCollateralSubTransform.copyToNewViews(originalNewCollateralHeadView.getNewCollateralSubViewList(), isNewId));
+        }
+        return newCollateralHeadView;
+    }
+
+    public List<NewCollateralHeadView> copyToNewViews(List<NewCollateralHeadView> originalNewCollHeadViews, boolean isNewId) {
+        List<NewCollateralHeadView> newCollHeadViews = new ArrayList<NewCollateralHeadView>();
+        if (originalNewCollHeadViews != null && originalNewCollHeadViews.size() > 0) {
+            for (NewCollateralHeadView originalNewCollHeadView : originalNewCollHeadViews) {
+                newCollHeadViews.add(copyToNewView(originalNewCollHeadView, isNewId));
+            }
+        }
+        return newCollHeadViews;
     }
 }

@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.brms.model.response;
 
 import com.clevel.selos.model.ActionResult;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.List;
@@ -59,5 +61,17 @@ public class StandardPricingResponse implements Serializable {
 
     public void setPricingFeeList(List<PricingFee> pricingFeeList) {
         this.pricingFeeList = pricingFeeList;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("decisionID", decisionID)
+                .append("applicationNo", applicationNo)
+                .append("actionResult", actionResult)
+                .append("reason", reason)
+                .append("pricingInterest", pricingInterest)
+                .append("pricingFeeList", pricingFeeList)
+                .toString();
     }
 }

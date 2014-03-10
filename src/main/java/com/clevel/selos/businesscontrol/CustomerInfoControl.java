@@ -111,7 +111,7 @@ public class CustomerInfoControl extends BusinessControl {
 
         customerInfoView.getCustomerEntity().setId(1);
 
-        Customer customer = customerTransform.transformToModel(customerInfoView, null, workCase);
+        Customer customer = customerTransform.transformToModel(customerInfoView, null, workCase, getCurrentUser());
 
         if(customer.getCustomerOblInfo() != null){
             customerOblInfoDAO.persist(customer.getCustomerOblInfo());
@@ -128,7 +128,7 @@ public class CustomerInfoControl extends BusinessControl {
 
             //set marital status for spouse
             customerInfoView.getSpouse().setMaritalStatus(customerInfoView.getMaritalStatus());
-            Customer spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), null, workCase);
+            Customer spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), null, workCase, getCurrentUser());
 
             if(spouse.getCustomerOblInfo() != null){
                 customerOblInfoDAO.persist(spouse.getCustomerOblInfo());
@@ -175,7 +175,7 @@ public class CustomerInfoControl extends BusinessControl {
         //calculation age for juristic
         customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfRegister()));
 
-        Customer customerJuristic = customerTransform.transformToModel(customerInfoView, null, workCase);
+        Customer customerJuristic = customerTransform.transformToModel(customerInfoView, null, workCase, getCurrentUser());
         if(customerJuristic.getReference() != null){
             if(customerJuristic.getReference().getId() != 0){
                 Reference reference = referenceDAO.findById(customerJuristic.getReference().getId());

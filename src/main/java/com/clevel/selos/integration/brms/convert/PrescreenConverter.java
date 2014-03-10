@@ -5,7 +5,12 @@ import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.integration.brms.model.response.UWRulesResult;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.*;
+import com.ilog.rules.decisionservice.DecisionServiceRequest;
+import com.ilog.rules.decisionservice.DecisionServiceResponse;
+import com.ilog.rules.param.UnderwritingRequest;
+import com.ilog.rules.param.UnderwritingResult;
+import com.tmbbank.enterprise.model.*;
+
 
 import org.slf4j.Logger;
 
@@ -23,7 +28,7 @@ public class PrescreenConverter extends Converter{
     public PrescreenConverter(){}
 
     public DecisionServiceRequest getDecisionServiceRequest(BRMSApplicationInfo applicationInfo){
-
+        logger.debug("-- start convert getDecisionServiceRequest from BRMSApplicationInfo");
         ApplicationType applicationType = new ApplicationType();
 
         applicationType.setApplicationNumber(applicationInfo.getApplicationNo());
@@ -197,21 +202,24 @@ public class PrescreenConverter extends Converter{
 
             List<AccountType> accountTypeList = borrowerType.getAccount();
             List<BRMSTMBAccountInfo> tmbAccountInfoList = customerInfo.getTmbAccountInfoList();
-            for(BRMSTMBAccountInfo tmbAccountInfo : tmbAccountInfoList){
-                AccountType accountType = new AccountType();
-                List<AttributeType> tmbAccAttributeList = accountType.getAttribute();
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_ACTIVE_FLAG, tmbAccountInfo.isActiveFlag()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.DATA_SOURCE, tmbAccountInfo.getDataSource()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_REFERENCE, tmbAccountInfo.getAccountRef()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CUST_TO_ACCOUNT_RELATIONSHIP, tmbAccountInfo.getCustToAccountRelationCD()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_TDR_FLAG, tmbAccountInfo.isTmbTDRFlag()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE, tmbAccountInfo.getNumMonthIntPastDue()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE_OF_TDR_ACCOUNT, tmbAccountInfo.getNumMonthIntPastDueTDRAcc()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_PRINCIPAL_PAST_DUE, tmbAccountInfo.getTmbDelPriDay()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_INTEREST_PAST_DUE, tmbAccountInfo.getTmbDelIntDay()));
-                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CARD_BLOCK_CODE, tmbAccountInfo.getTmbBlockCode()));
+            //TODO Check condition with BRMS Sheet...
+            if(customerInfo.isNcbFlag()){
+                for(BRMSTMBAccountInfo tmbAccountInfo : tmbAccountInfoList){
+                    AccountType accountType = new AccountType();
+                    List<AttributeType> tmbAccAttributeList = accountType.getAttribute();
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_ACTIVE_FLAG, tmbAccountInfo.isActiveFlag()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.DATA_SOURCE, tmbAccountInfo.getDataSource()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_REFERENCE, tmbAccountInfo.getAccountRef()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CUST_TO_ACCOUNT_RELATIONSHIP, tmbAccountInfo.getCustToAccountRelationCD()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_TDR_FLAG, tmbAccountInfo.isTmbTDRFlag()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE, tmbAccountInfo.getNumMonthIntPastDue()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE_OF_TDR_ACCOUNT, tmbAccountInfo.getNumMonthIntPastDueTDRAcc()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_PRINCIPAL_PAST_DUE, tmbAccountInfo.getTmbDelPriDay()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_INTEREST_PAST_DUE, tmbAccountInfo.getTmbDelIntDay()));
+                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CARD_BLOCK_CODE, tmbAccountInfo.getTmbBlockCode()));
 
-                accountTypeList.add(accountType);
+                    accountTypeList.add(accountType);
+                }
             }
 
             borrowerTypeList.add(borrowerType);
@@ -243,10 +251,12 @@ public class PrescreenConverter extends Converter{
         decisionServiceRequest.setDecisionID(getDecisionID(applicationInfo.getApplicationNo(), applicationInfo.getStatusCode()));
         decisionServiceRequest.setUnderwritingRequest(underwritingRequest);
 
+        logger.debug("-- end convert getDecisionServiceRequest from BRMSApplicationInfo return {}", decisionServiceRequest);
         return decisionServiceRequest;
     }
 
     public UWRulesResponse getUWRulesResponse(DecisionServiceResponse decisionServiceResponse){
+        logger.debug("-- start convert getUWRulesResponse from DecisionServiceResponse {}", decisionServiceResponse);
 
         UWRulesResponse uwRulesResponse = new UWRulesResponse();
 
@@ -287,41 +297,8 @@ public class PrescreenConverter extends Converter{
             }
             uwRulesResponse.setUwRulesResultMap(uwRulesResultMap);
         }
+
+        logger.debug("-- end convert getUWRulesResponse from DecisionServiceResponse return {}", uwRulesResponse);
         return uwRulesResponse;
-    }
-
-    private AttributeType getAttributeType(BRMSFieldAttributes field, Date value){
-        AttributeType attributeType = new AttributeType();
-
-        try{
-            attributeType.setName(field.value());
-            GregorianCalendar gregorianCalendar = new GregorianCalendar();
-            gregorianCalendar.setTime(value);
-            attributeType.setDateTimeValue(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
-        } catch (Exception ex){
-            logger.error("Cannot convert XML");
-        }
-        return attributeType;
-    }
-
-    private AttributeType getAttributeType(BRMSFieldAttributes field, String value){
-        AttributeType attributeType = new AttributeType();
-        attributeType.setName(field.value());
-        attributeType.setStringValue(value);
-        return attributeType;
-    }
-
-    private AttributeType getAttributeType(BRMSFieldAttributes field, BigDecimal value){
-        AttributeType attributeType = new AttributeType();
-        attributeType.setName(field.value());
-        attributeType.setNumericValue(value);
-        return attributeType;
-    }
-
-    private AttributeType getAttributeType(BRMSFieldAttributes field, boolean existingSMECustomer){
-        AttributeType attributeType = new AttributeType();
-        attributeType.setName(field.value());
-        attributeType.setBooleanValue(existingSMECustomer);
-        return attributeType;
     }
 }

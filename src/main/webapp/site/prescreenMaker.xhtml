@@ -516,6 +516,7 @@
                                             <td>
                                                 <p:selectOneMenu id="selRefinanceInBank" value="#{prescreenMaker.prescreenView.refinanceInBank.code}"
                                                                  disabled="#{prescreenMaker.prescreenView.refinanceIn == 1 || prescreenMaker.prescreenView.refinanceIn == 0}"
+                                                                 required="#{prescreenMaker.prescreenView.refinanceIn == 2 and not empty param[savePreMakerButton.clientId]}"
                                                                  size="1" style="width: 200px;">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                     <f:selectItems value="#{prescreenMaker.refinanceList}"
@@ -543,6 +544,7 @@
                                             <td>
                                                 <p:selectOneMenu id="selRefinanceOutBank" value="#{prescreenMaker.prescreenView.refinanceOutBank.code}"
                                                                  disabled="#{prescreenMaker.prescreenView.refinanceOut == 1 || prescreenMaker.prescreenView.refinanceOut == 0}"
+                                                                 required="#{prescreenMaker.prescreenView.refinanceOut == 2 and not empty param[savePreMakerButton.clientId]}"
                                                                  size="1" style="width: 200px;">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                     <f:selectItems value="#{prescreenMaker.refinanceList}"
@@ -661,6 +663,7 @@
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
         <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
+                         closable="false"
                          header="#{prescreenMaker.messageHeader}" >
             <f:facet name="message">
                 <h:outputText value="#{prescreenMaker.message}" escape="false"/>
@@ -673,6 +676,7 @@
     </p:panel>
     <p:panel id="msgBoxRedirectPanel" styleClass="panel">
         <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
+                         closable="false"
                          header="#{prescreenMaker.messageHeader}" >
             <f:facet name="message">
                 <h:outputText value="#{prescreenMaker.message}" escape="false"/>

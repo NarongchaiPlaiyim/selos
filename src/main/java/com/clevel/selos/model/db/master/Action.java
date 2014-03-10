@@ -3,10 +3,7 @@ package com.clevel.selos.model.db.master;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -23,6 +20,18 @@ public class Action implements Serializable {
     private int submitBPM;
     @Column(name = "active")
     private int active;
+
+    @OneToOne
+    @JoinColumn(name = "action_code")
+    private Relretunactions relretunactions;
+
+    public Relretunactions getRelretunactions() {
+        return relretunactions;
+    }
+
+    public void setRelretunactions(Relretunactions relretunactions) {
+        this.relretunactions = relretunactions;
+    }
 
     public Action() {
     }

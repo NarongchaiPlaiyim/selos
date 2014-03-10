@@ -17,7 +17,6 @@ import com.clevel.selos.transform.*;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import com.clevel.selos.util.ValidationUtil;
-import com.rits.cloning.Cloner;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -73,53 +72,57 @@ public class Decision implements Serializable {
 
     //DAO
     @Inject
-    CreditRequestTypeDAO creditRequestTypeDAO;
+    private CreditRequestTypeDAO creditRequestTypeDAO;
     @Inject
-    CountryDAO countryDAO;
+    private CountryDAO countryDAO;
     @Inject
-    PrdProgramToCreditTypeDAO prdProgramToCreditTypeDAO;
+    private PrdProgramToCreditTypeDAO prdProgramToCreditTypeDAO;
     @Inject
-    BaseRateDAO baseRateDAO;
+    private BaseRateDAO baseRateDAO;
     @Inject
-    CreditTypeDAO creditTypeDAO;
+    private CreditTypeDAO creditTypeDAO;
     @Inject
-    SubCollateralTypeDAO subCollateralTypeDAO;
+    private SubCollateralTypeDAO subCollateralTypeDAO;
     @Inject
-    CollateralTypeDAO collateralTypeDAO;
+    private CollateralTypeDAO collateralTypeDAO;
     @Inject
-    PotentialCollateralDAO potentialCollateralDAO;
+    private PotentialCollateralDAO potentialCollateralDAO;
     @Inject
-    MortgageTypeDAO mortgageTypeDAO;
+    private MortgageTypeDAO mortgageTypeDAO;
     @Inject
-    FollowConditionDAO followConditionDAO;
+    private FollowConditionDAO followConditionDAO;
     @Inject
-    ApprovalHistoryDAO approvalHistoryDAO;
+    private ApprovalHistoryDAO approvalHistoryDAO;
     @Inject
-    SpecialProgramDAO specialProgramDAO;
+    private SpecialProgramDAO specialProgramDAO;
 
     //Transform
     @Inject
-    CreditRequestTypeTransform creditRequestTypeTransform;
+    private CreditRequestTypeTransform creditRequestTypeTransform;
     @Inject
-    CountryTransform countryTransform;
+    private CountryTransform countryTransform;
     @Inject
-    DisbursementTypeTransform disbursementTypeTransform;
+    private DisbursementTypeTransform disbursementTypeTransform;
     @Inject
-    LoanPurposeTransform loanPurposeTransform;
+    private LoanPurposeTransform loanPurposeTransform;
     @Inject
-    FollowConditionTransform followConditionTransform;
+    private FollowConditionTransform followConditionTransform;
     @Inject
-    ApprovalHistoryTransform approvalHistoryTransform;
+    private ApprovalHistoryTransform approvalHistoryTransform;
     @Inject
-    SpecialProgramTransform specialProgramTransform;
+    private SpecialProgramTransform specialProgramTransform;
     @Inject
-    PotentialCollateralTransform potentialCollateralTransform;
+    private PotentialCollateralTransform potentialCollateralTransform;
     @Inject
-    CollateralTypeTransform collateralTypeTransform;
+    private CollateralTypeTransform collateralTypeTransform;
     @Inject
-    SubCollateralTypeTransform subCollateralTypeTransform;
+    private SubCollateralTypeTransform subCollateralTypeTransform;
     @Inject
-    MortgageTypeTransform mortgageTypeTransform;
+    private MortgageTypeTransform mortgageTypeTransform;
+    @Inject
+    private ProposeCreditDetailTransform proposeCreditDetailTransform;
+    @Inject
+    private NewCollateralSubTransform newCollateralSubTransform;
 
     // Session
     private long workCaseId;
@@ -150,8 +153,9 @@ public class Decision implements Serializable {
     private SpecialProgramView specialProgramView;
     private int applyTCG;
     private ProductGroup productGroup;
-    private int seq;
-    private HashMap<Integer, Integer> hashSeqCredit;
+    private int seqNumber;
+    private Map<Integer, Integer> hashSeqCredit;
+    private List<ProposeCreditDetailView> commonProposeCreditList;
 
     // Retrieve Price/Fee
     private List<CreditRequestTypeView> creditRequestTypeViewList;
@@ -262,12 +266,22 @@ public class Decision implements Serializable {
 
         Map<String, Object> mapValue = decisionControl.getDecisionMapValue(workCaseId);
         decisionView = (DecisionView) mapValue.get("decisionView");
-        // For delete on save
+
+        // delete list on save
         deleteCreditIdList = (List<Long>) mapValue.get("deleteCreditIdList");
         deleteCollIdList = (List<Long>) mapValue.get("deleteCollIdList");
         deleteGuarantorIdList = (List<Long>) mapValue.get("deleteGuarantorIdList");
         deleteSubCollIdList = new ArrayList<Long>();
         deleteConditionIdList = new ArrayList<Long>();
+
+        // load and generate sequence number ProposeCreditDetail
+        commonProposeCreditList = creditFacProposeControl.findAndGenerateSeqProposeCredits(decisionView.getApproveCreditList(), decisionView.getExtBorrowerComCreditList(), workCaseId);
+        int lastSeqNumber = creditFacProposeControl.getLastSeqNumberFromProposeCredit(commonProposeCreditList);
+        if (lastSeqNumber > 1) {
+            seqNumber = lastSeqNumber + 1;
+        } else {
+            seqNumber = lastSeqNumber;
+        }
 
         BasicInfoView basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
         if (basicInfoView != null) {
@@ -288,7 +302,6 @@ public class Decision implements Serializable {
         creditRequestTypeViewList = creditRequestTypeTransform.transformToView(creditRequestTypeDAO.findAll());
         countryViewList = countryTransform.transformToView(countryDAO.findAll());
         // ================================================== //
-
 
         // ========== Approve Credit Dialog ========== //
         selectedApproveCredit = new NewCreditDetailView();
@@ -342,8 +355,6 @@ public class Decision implements Serializable {
             approvalHistoryView = decisionControl.getApprovalHistoryView(stepId);
         }
 
-        // Initial sequence number credit
-        seq = 1;
         hashSeqCredit = new HashMap<Integer, Integer>();
     }
 
@@ -377,8 +388,6 @@ public class Decision implements Serializable {
 
         prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(selectedApproveCredit.getProductProgramView());
 
-        //onChangeCreditType();
-
         creditFacProposeControl.calculateInstallment(selectedApproveCredit);
 
         if (selectedApproveCredit.getRequestType() == RequestTypes.NEW.value()) {
@@ -410,6 +419,8 @@ public class Decision implements Serializable {
 
     public void onDeleteApproveCredit() {
         log.debug("onDeleteApproveCredit() rowIndexCredit: {}", rowIndexCredit);
+        // todo: validate usage credit detail by hashSeqCredit
+        // todo: delete ProposeCredit by same seqNumber from commonProposeCreditList
         // keep exist id from DB for delete on save decision
         if (decisionView.getApproveCreditList().get(rowIndexCredit).getId() != 0) {
             deleteCreditIdList.add(decisionView.getApproveCreditList().get(rowIndexCredit).getId());
@@ -421,10 +432,10 @@ public class Decision implements Serializable {
         log.debug("onSaveApproveCredit()");
         boolean success = false;
 
-        if (selectedApproveCredit.getProductProgramView().getId() != 0
-                && selectedApproveCredit.getCreditTypeView().getId() != 0
-                && selectedApproveCredit.getLoanPurposeView().getId() != 0
-                && selectedApproveCredit.getDisbursementTypeView().getId() != 0) {
+        if (selectedApproveCredit.getProductProgramView().getId() != 0 &&
+            selectedApproveCredit.getCreditTypeView().getId() != 0 &&
+            selectedApproveCredit.getLoanPurposeView().getId() != 0 &&
+            selectedApproveCredit.getDisbursementTypeView().getId() != 0) {
 
             ProductProgramView productProgramView = getProductProgramById(selectedApproveCredit.getProductProgramView().getId());
             CreditTypeView creditTypeView = getCreditTypeById(selectedApproveCredit.getCreditTypeView().getId());
@@ -475,22 +486,26 @@ public class Decision implements Serializable {
                 creditDetailAdd.setDisbursementTypeView(disbursementTypeView);
                 creditDetailAdd.setHoldLimitAmount(selectedApproveCredit.getHoldLimitAmount());
                 creditDetailAdd.setNewCreditTierDetailViewList(selectedApproveCredit.getNewCreditTierDetailViewList());
-                creditDetailAdd.setSeq(seq);
+                creditDetailAdd.setSeq(seqNumber);
 
-                if (decisionView.getApproveCreditList() != null) {
-                    decisionView.getApproveCreditList().add(creditDetailAdd);
-                } else {
-                    List<NewCreditDetailView> newApproveCreditList = new ArrayList<NewCreditDetailView>();
-                    newApproveCreditList.add(creditDetailAdd);
-                    decisionView.setApproveCreditList(newApproveCreditList);
+                if (decisionView.getApproveCreditList() == null) {
+                    decisionView.setApproveCreditList(new ArrayList<NewCreditDetailView>());
                 }
+                // Add new Credit Detail and Propose Credit the same seqNumber
+                decisionView.getApproveCreditList().add(creditDetailAdd);
+
+                ProposeCreditDetailView newProposeCredit = proposeCreditDetailTransform.convertNewCreditToProposeCredit(creditDetailAdd, seqNumber);
+                commonProposeCreditList.add(newProposeCredit);
+
+                // Grouping ProposeCredit by TypeOfStep (N -> E) and Order the seqNumber for display on "Collateral and Guarantor" dialog
+                creditFacProposeControl.groupTypeOfStepAndOrderBySeq(commonProposeCreditList);
+
+                // Next the seqNumber
+                seqNumber += 1;
 
                 success = true;
             }
 
-            hashSeqCredit.put(seq, 0);
-            seq++;
-            log.debug("seq++ of credit after add complete Approve Propose Credit :: {}", seq);
         }
 
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", success);
@@ -641,24 +656,14 @@ public class Decision implements Serializable {
     }
 
     // ==================== Approve Collateral - Actions ==================== //
-    public void onAddApproveCollateral() {
-        log.debug("onAddApproveCollateral()");
-        selectedApproveCollateral = new NewCollateralView();
-        selectedCollateralCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
-        collateralCreditTypeList = creditFacProposeControl.findProposeCreditDetail(decisionView.getApproveCreditList(), workCaseId);
-        flagComs = false;
-        modeEditCollateral = false;
-    }
-
     public void onEditApproveCollateral() {
         log.debug("onEditApproveCollateral() rowIndexCollateral: {}, selectedApproveCollateral: {}", rowIndexCollateral, selectedApproveCollateral);
         if (selectedApproveCollateral.getProposeCreditDetailViewList() != null && selectedApproveCollateral.getProposeCreditDetailViewList().size() > 0) {
             // set selected credit type items (check/uncheck)
             selectedCollateralCrdTypeItems = selectedApproveCollateral.getProposeCreditDetailViewList();
         }
-        collateralCreditTypeList = creditFacProposeControl.findProposeCreditDetail(decisionView.getApproveCreditList(), workCaseId);
+        collateralCreditTypeList = proposeCreditDetailTransform.copyToNewViews(commonProposeCreditList, false);
         flagComs = false;
-
         log.info("selectedApproveCollateral.isComs: {}", selectedApproveCollateral.isComs());
         if (selectedApproveCollateral.isComs()) {
             flagComs = true;
@@ -720,8 +725,8 @@ public class Decision implements Serializable {
                 newCollateralHeadDetailAdd.setInsuranceCompany(collateralHeadView.getInsuranceCompany());
 
                 if (collateralHeadView.getNewCollateralSubViewList() != null && collateralHeadView.getNewCollateralSubViewList().size() > 0) {
-                    Cloner cloner = new Cloner();
-                    newCollateralHeadDetailAdd.setNewCollateralSubViewList(cloner.deepClone(collateralHeadView.getNewCollateralSubViewList()));
+                    List<NewCollateralSubView> newCollateralSubViews = newCollateralSubTransform.copyToNewViews(collateralHeadView.getNewCollateralSubViewList(), false);
+                    newCollateralHeadDetailAdd.setNewCollateralSubViewList(newCollateralSubViews);
                 }
 
                 newCollateralHeadViewList.add(newCollateralHeadDetailAdd);
@@ -936,14 +941,14 @@ public class Decision implements Serializable {
         log.debug("onAddAppProposeGuarantor()");
         selectedApproveGuarantor = new NewGuarantorDetailView();
         selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
-        guarantorCreditTypeList = creditFacProposeControl.findProposeCreditDetail(decisionView.getApproveCreditList(), workCaseId);
+        guarantorCreditTypeList = proposeCreditDetailTransform.copyToNewViews(commonProposeCreditList, false);
 
         modeEditGuarantor = false;
     }
 
     public void onEditApproveGuarantor() {
         log.debug("onEditAppProposeGuarantor() selectedApproveGuarantor: {}", selectedApproveGuarantor);
-        guarantorCreditTypeList = creditFacProposeControl.findProposeCreditDetail(decisionView.getApproveCreditList(), workCaseId);
+        guarantorCreditTypeList = proposeCreditDetailTransform.copyToNewViews(commonProposeCreditList, false);
 
         if (selectedApproveGuarantor.getProposeCreditDetailViewList() != null && selectedApproveGuarantor.getProposeCreditDetailViewList().size() > 0) {
             // set selected credit type items (check/uncheck)

@@ -4,10 +4,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
 import com.clevel.selos.dao.working.NewCollateralCreditDAO;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.ExistingCreditDetail;
-import com.clevel.selos.model.db.working.NewCollateral;
-import com.clevel.selos.model.db.working.NewCollateralCredit;
-import com.clevel.selos.model.db.working.NewCreditDetail;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.ProposeCreditDetailView;
 import org.joda.time.DateTime;
 
@@ -25,15 +22,15 @@ public class NewCollateralCreditTransform extends Transform {
     NewCollateralCreditDAO newCollateralRelationDAO;
 
 
-    public List<NewCollateralCredit> transformsToModelForCollateral(List<ProposeCreditDetailView> proposeCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewCollateral newCollateralDetail, User user) {
-
+    public List<NewCollateralCredit> transformsToModelForCollateral(List<ProposeCreditDetailView> proposeCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewCollateral newCollateralDetail,NewCreditFacility newCreditFacility, User user) {
+    
         List<NewCollateralCredit> newCollateralCreditList = new ArrayList<NewCollateralCredit>();
         NewCollateralCredit newCollateralRelCredit;
         NewCreditDetail newCreditDetailAdd;
 
         for (ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViewList) {
             log.debug("Start... transformToModelForCollateral : proposeCreditDetailView : {}", proposeCreditDetailView);
-            if (proposeCreditDetailView.isNoFlag()) {
+
                 newCollateralRelCredit = new NewCollateralCredit();
                 newCollateralRelCredit.setModifyDate(DateTime.now().toDate());
                 newCollateralRelCredit.setModifyBy(user);
@@ -51,17 +48,18 @@ public class NewCollateralCreditTransform extends Transform {
                     }
                 } else if ("E".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
                     ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById((long) proposeCreditDetailView.getSeq());
-                    if (existingCreditDetail.getId() == (long) proposeCreditDetailView.getSeq()) {
-                        log.info("guarantor choose seq  is :: {}", proposeCreditDetailView.getSeq());
+                    if (existingCreditDetail.getId() ==  proposeCreditDetailView.getId()) {
+                        log.debug("guarantor choose id  is :: {}", proposeCreditDetailView.getId());
+                        log.debug("guarantor choose seq  is :: {}", proposeCreditDetailView.getSeq());
                         newCollateralRelCredit.setExistingCreditDetail(existingCreditDetail);
                         log.info("newCollateralRelCredit existingCreditDetail id toSet is " + newCollateralRelCredit.getExistingCreditDetail().getId());
                     }
                 }
 
-
+                newCollateralRelCredit.setNewCreditFacility(newCreditFacility);
                 newCollateralRelCredit.setNewCollateral(newCollateralDetail);
                 newCollateralCreditList.add(newCollateralRelCredit);
-            }
+
         }
 
         return newCollateralCreditList;

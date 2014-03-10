@@ -8,6 +8,7 @@ import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
+import com.clevel.selos.model.CreditTypeOfStep;
 import com.clevel.selos.model.DBRMethod;
 import com.clevel.selos.model.ExposureMethod;
 import com.clevel.selos.model.ProposeType;
@@ -26,6 +27,8 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Stateless
@@ -51,6 +54,9 @@ public class CreditFacProposeControl extends BusinessControl {
     NewConditionDetailTransform newConditionDetailTransform;
     @Inject
     NewCreditTierTransform newCreditTierTransform;
+    @Inject
+    ProposeCreditDetailTransform proposeCreditDetailTransform;
+
     @Inject
     SubCollateralTypeDAO subCollateralTypeDAO;
     @Inject
@@ -137,8 +143,6 @@ public class CreditFacProposeControl extends BusinessControl {
     NewCollateralDAO newCollateralDAO;
     @Inject
     NewCollateralSubRelatedDAO newCollateralSubRelatedDAO;
-
-    private ExistingCreditFacilityView existingCreditFacilityView;
 
     @Inject
     public CreditFacProposeControl() {}
@@ -237,7 +241,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
                 BigDecimal sumTotalNonLoanDbr = BigDecimal.ZERO;
 
-                if ((newCreditFacility != null) && (basicInfoView.getSpecialProgram() != null) && (tcgView != null)) {
+                if (basicInfoView.getSpecialProgram() != null && tcgView != null) {
                     List<NewCreditDetail> newCreditDetailList = newCreditFacility.getNewCreditDetailList();
 
                     if (newCreditDetailList != null && newCreditDetailList.size() != 0) {
@@ -284,11 +288,11 @@ public class CreditFacProposeControl extends BusinessControl {
                                                 log.debug("INSTALLMENT :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
                                                 sumTotalLoanDbr = sumTotalLoanDbr.add(newCreditDetail.getInstallment());
                                             } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
-                                                log.info("INT_YEAR :: productFormula.getDbrMethod() :: {}, productFormula.getDbrSpread() :::{}", productFormula.getDbrMethod(), productFormula.getDbrSpread());
+                                                log.debug("INT_YEAR :: productFormula.getDbrMethod() :: {}, productFormula.getDbrSpread() :::{}", productFormula.getDbrMethod(), productFormula.getDbrSpread());
                                                 sumTotalLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYear(newCreditDetail, productFormula.getDbrSpread()));
                                             }
                                         }
-                                        log.info("sumTotalLoanDbr :: {}", sumTotalLoanDbr);
+                                        log.debug("sumTotalLoanDbr :: {}", sumTotalLoanDbr);
 
                                     }
                                 }
@@ -299,7 +303,7 @@ public class CreditFacProposeControl extends BusinessControl {
                         newCreditFacility.setTotalProposeLoanDBR(sumTotalLoanDbr);//sumTotalLoanDbr
                         newCreditFacility.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr); //sumTotalNonLoanDbr
 
-                        existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
+                        ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
 
                         if (existingCreditFacilityView != null) {
                             log.info("existingCreditFacilityView.getTotalBorrowerComLimit() ::; {}", existingCreditFacilityView.getTotalBorrowerComLimit() != null ? existingCreditFacilityView.getTotalBorrowerComLimit() : "null");
@@ -350,60 +354,106 @@ public class CreditFacProposeControl extends BusinessControl {
         return sumTotalLoanDbr;
     }
 
-    public List<ProposeCreditDetailView> findProposeCreditDetail(List<NewCreditDetailView> newCreditDetailViewList, long workCaseId) {
-        log.debug("findProposeCreditDetail :: ", workCaseId);
-        // todo: find credit existing and propose in this workCase
-        List<ProposeCreditDetailView> proposeCreditDetailViewList = null;
-        ProposeCreditDetailView proposeCreditDetailView;
-        int rowCount = 1;       // seq of Model
+    public List<ProposeCreditDetailView> findAndGenerateSeqProposeCredits(List<NewCreditDetailView> newCreditDetailViewList, List<ExistingCreditDetailView> borrowerExistingCreditDetailViewList, long workCaseId) {
+        log.debug("findAndGenerateSeqProposeCredits() workCaseId: {}", workCaseId);
+        // Generate Sequence Number [1 - N] from "Propose Credit" and "Existing Credit" for the first time
+        int sequenceNumber = 1;
+        log.debug("Start sequence number = {}", sequenceNumber);
+        List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
 
-        if ((!Util.isNull(newCreditDetailViewList)) && newCreditDetailViewList.size() > 0) {
-            proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
-            for (NewCreditDetailView tmp : newCreditDetailViewList) {
-                if(tmp.isModeSaved()==false){
-                    proposeCreditDetailView = new ProposeCreditDetailView();
-                    proposeCreditDetailView.setSeq(tmp.getSeq());
-                    proposeCreditDetailView.setId(rowCount);
-                    proposeCreditDetailView.setTypeOfStep("N");
-                    proposeCreditDetailView.setAccountName(tmp.getAccountName());
-                    proposeCreditDetailView.setAccountNumber(tmp.getAccountNumber());
-                    proposeCreditDetailView.setAccountSuf(tmp.getAccountSuf());
-                    proposeCreditDetailView.setRequestType(tmp.getRequestType());
-                    proposeCreditDetailView.setProductProgramView(tmp.getProductProgramView());
-                    proposeCreditDetailView.setCreditFacilityView(tmp.getCreditTypeView());
-                    proposeCreditDetailView.setLimit(tmp.getLimit());
-                    proposeCreditDetailView.setGuaranteeAmount(tmp.getGuaranteeAmount());
-                    proposeCreditDetailView.setUseCount(tmp.getUseCount());
-                    proposeCreditDetailView.setNoFlag(tmp.isNoFlag());
-                    proposeCreditDetailViewList.add(proposeCreditDetailView);
-                    rowCount++;
+        if (newCreditDetailViewList != null && newCreditDetailViewList.size() > 0) {
+            ProposeCreditDetailView proposeCreditFromNew;
+            for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
+                // set seq to NewCreditDetail
+                newCreditDetailView.setSeq(sequenceNumber);
+                // create and set seq to new ProposeCredit
+                proposeCreditFromNew = proposeCreditDetailTransform.convertNewCreditToProposeCredit(newCreditDetailView, sequenceNumber);
+                proposeCreditDetailViewList.add(proposeCreditFromNew);
+                sequenceNumber++;
+            }
+        }
+        log.debug("End of 'NewCreditDetailList' sequence number = {}", sequenceNumber);
+
+        List<ExistingCreditDetailView> _existingCreditDetailViewList;
+        if (borrowerExistingCreditDetailViewList != null && borrowerExistingCreditDetailViewList.size() > 0) {
+            _existingCreditDetailViewList = borrowerExistingCreditDetailViewList;
+        } else {
+            // find Borrower Existing Credit
+            _existingCreditDetailViewList = creditFacExistingControl.onFindBorrowerExistingCreditFacility(workCaseId);
+        }
+
+        if (_existingCreditDetailViewList != null && _existingCreditDetailViewList.size() > 0) {
+            ProposeCreditDetailView proposeCreditFromExisting;
+            for (ExistingCreditDetailView existingCreditDetailView : _existingCreditDetailViewList) {
+                existingCreditDetailView.setSeq(sequenceNumber);
+                proposeCreditFromExisting = proposeCreditDetailTransform.convertExistingCreditToProposeCredit(existingCreditDetailView, sequenceNumber);
+                proposeCreditDetailViewList.add(proposeCreditFromExisting);
+                sequenceNumber++;
+            }
+        }
+        log.debug("End of 'ExistingCreditDetailList' sequence number = {}", sequenceNumber);
+
+        return proposeCreditDetailViewList;
+    }
+
+    public int getLastSeqNumberFromProposeCredit(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
+        int lastSeqNumber = 1;
+        if (proposeCreditDetailViewList != null && proposeCreditDetailViewList.size() > 0) {
+            int size = proposeCreditDetailViewList.size();
+            for (int i=0; i<size; i++) {
+                ProposeCreditDetailView proposeCreditDetailView = proposeCreditDetailViewList.get(i);
+                if (proposeCreditDetailView.getSeq() > lastSeqNumber) {
+                    lastSeqNumber = proposeCreditDetailView.getSeq();
                 }
             }
         }
+        return lastSeqNumber;
+    }
 
-        rowCount = newCreditDetailViewList.size() > 0 ? newCreditDetailViewList.size() + 1 : rowCount;
-
-        // find existingCreditType >>> Borrower Commercial in this workCase
-        existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId); //call business control  to find Existing  and transform to view
-
-        if ((!Util.isNull(existingCreditFacilityView)) && existingCreditFacilityView.getBorrowerComExistingCredit().size() > 0) {
-            for (ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getBorrowerComExistingCredit()) {
-                proposeCreditDetailView = new ProposeCreditDetailView();
-                proposeCreditDetailView.setSeq((int) existingCreditDetailView.getId());  // id form DB
-                proposeCreditDetailView.setId(rowCount);
-                proposeCreditDetailView.setTypeOfStep("E");
-                proposeCreditDetailView.setAccountName(existingCreditDetailView.getAccountName());
-                proposeCreditDetailView.setAccountNumber(existingCreditDetailView.getAccountNumber());
-                proposeCreditDetailView.setAccountSuf(existingCreditDetailView.getAccountSuf());
-                proposeCreditDetailView.setProductProgramView(existingCreditDetailView.getExistProductProgramView());
-                proposeCreditDetailView.setCreditFacilityView(existingCreditDetailView.getExistCreditTypeView());
-                proposeCreditDetailView.setLimit(existingCreditDetailView.getLimit());
-                proposeCreditDetailViewList.add(proposeCreditDetailView);
-                rowCount++;
+    public void groupTypeOfStepAndOrderBySeq(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
+        log.debug("groupTypeOfStepAndOrderBySeq()");
+        if (proposeCreditDetailViewList != null && proposeCreditDetailViewList.size() > 0) {
+            log.debug("Start Grouping by Type of Step (N -> E)");
+            List<ProposeCreditDetailView> groupNewCredits = new ArrayList<ProposeCreditDetailView>();
+            List<ProposeCreditDetailView> groupExistingCredits = new ArrayList<ProposeCreditDetailView>();
+            // Grouping by Type of Step
+            int size = proposeCreditDetailViewList.size();
+            for (int i=0; i<size; i++) {
+                ProposeCreditDetailView creditDetailView = proposeCreditDetailViewList.get(i);
+                if (CreditTypeOfStep.NEW.type().equalsIgnoreCase(creditDetailView.getTypeOfStep())) {
+                    groupNewCredits.add(creditDetailView);
+                }
+                else if (CreditTypeOfStep.EXISTING.type().equalsIgnoreCase(creditDetailView.getTypeOfStep())) {
+                    groupExistingCredits.add(creditDetailView);
+                }
             }
-        }
+            log.debug("End Grouping by Type of Step...");
+            log.debug("NewCredit Group : {}", groupNewCredits);
+            log.debug("ExistingCredit Group : {}", groupExistingCredits);
 
-        return proposeCreditDetailViewList;
+            // Order by Seq (ASC)
+            Comparator<ProposeCreditDetailView> comparator = new Comparator<ProposeCreditDetailView>() {
+                @Override
+                public int compare(ProposeCreditDetailView credit1, ProposeCreditDetailView credit2) {
+                    return credit1.getSeq() - credit2.getSeq();
+                }
+            };
+
+            log.debug("Start Order by Seq (ASC)");
+            if (groupNewCredits.size() > 0) {
+                Collections.sort(groupNewCredits, comparator);
+            }
+
+            if (groupExistingCredits.size() > 0) {
+                Collections.sort(groupExistingCredits, comparator);
+            }
+            log.debug("End Order by Seq (ASC)...");
+
+            proposeCreditDetailViewList.clear();
+            proposeCreditDetailViewList.addAll(groupNewCredits);
+            proposeCreditDetailViewList.addAll(groupExistingCredits);
+            log.debug("Result : ", proposeCreditDetailViewList);
+        }
     }
 
     public List<NewCollateralSubView> findNewCollateralSubView(List<NewCollateralView> newCollateralViewList) {
@@ -511,14 +561,18 @@ public class CreditFacProposeControl extends BusinessControl {
             weightAP = bizInfoSummaryView.getSumWeightAP();
             weightINV = bizInfoSummaryView.getSumWeightINV();
             //      Sum(weight cost of goods sold * businessProportion)
-            if (bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0) {
-                log.debug("onGetBizInfoSummaryByWorkCase :: bizInfoSummaryView.getBizInfoDetailViewList() : {}", bizInfoSummaryView.getBizInfoDetailViewList());
-                for (BizInfoDetailView bidv : bizInfoSummaryView.getBizInfoDetailViewList()) {
-                    BigDecimal cog = BigDecimal.ZERO;
-                    if (bidv.getBizDesc() != null) {
-                        cog = bidv.getBizDesc().getCog();
+            List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
+            if(bizInfoSummaryView.getId() != 0){
+                bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryView.getId());
+                if (bizInfoDetailViewList != null && bizInfoDetailViewList.size() > 0) {
+                    log.debug("bizInfoDetailViewList : {}", bizInfoDetailViewList);
+                    for (BizInfoDetailView bidv : bizInfoDetailViewList) {
+                        BigDecimal cog = BigDecimal.ZERO;
+                        if (bidv.getBizDesc() != null) {
+                            cog = bidv.getBizDesc().getCog();
+                        }
+                        aaaValue = Util.add(aaaValue, Util.multiply(cog, bidv.getPercentBiz()));
                     }
-                    aaaValue = Util.add(aaaValue, Util.multiply(cog, bidv.getPercentBiz()));
                 }
             }
         }
@@ -687,9 +741,6 @@ public class CreditFacProposeControl extends BusinessControl {
             log.debug("saveCreditFacility ::: before persist newConditionDetailList : {}", newConditionDetailList);
             newCreditFacility.setNewConditionDetailList(newConditionDetailList);
             newConditionDetailDAO.persist(newConditionDetailList);
-//            List<NewConditionDetail> newConditionDetailList = newConditionDetailDAO.persistAndReturn(newConditionDetailTransform.transformToModel(newCreditFacilityView.getNewConditionDetailViewList(),newCreditFacility, currentUser));
-//            newCreditFacilityView.setNewConditionDetailViewList(newConditionDetailTransform.transformToView(newConditionDetailList));
-//            log.debug("saveCreditFacility ::: persist newCreditDetailList : {}", newConditionDetailList);
         }
 
         //--- Save to NewCreditDetail
@@ -702,48 +753,50 @@ public class CreditFacProposeControl extends BusinessControl {
             List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, currentUser, workCase, ProposeType.P);
             newCreditFacility.setNewCreditDetailList(newCreditDetailList);
             newCreditDetailDAO.persist(newCreditDetailList);
-//            List<NewCreditDetail> newCreditDetailList = newCreditDetailDAO.persistAndReturn(newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, currentUser, workCase, ProposeType.P));
-//            newCreditFacility.setNewCreditDetailList(newCreditDetailList);
-//            newCreditFacilityView.setNewCreditDetailViewList(newCreditDetailTransform.transformToView(newCreditDetailList));
-//            log.debug("saveCreditFacility ::: persist newCreditDetailList : {}", newCreditDetailList);
         }
 
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
-            if(Util.safetyList(newCreditFacilityView.getNewGuarantorViewDelList()).size()>0){
-                List<NewGuarantorDetail> listDel = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorViewDelList(), newCreditFacility, currentUser,ProposeType.P);
-                newGuarantorDetailDAO.delete(listDel);
+//            if(Util.safetyList(newCreditFacilityView.getNewGuarantorViewDelList()).size()>0){
+//                List<NewGuarantorDetail> listDel = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorViewDelList(), newCreditFacility, currentUser,ProposeType.P);
+//                newGuarantorDetailDAO.delete(listDel);
+//            }
+            List<NewGuarantorCredit> relationDeleteList = newGuarantorRelationDAO.getListByNewCreditFacility(newCreditFacility);
+            if(relationDeleteList.size()>0){
+                newGuarantorRelationDAO.delete(relationDeleteList);
             }
+
             log.debug("saveCreditFacility ::: newGuarantorDetailViewList : {}", newCreditFacilityView.getNewGuarantorDetailViewList());
             List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser,ProposeType.P);
             newCreditFacility.setNewGuarantorDetailList(newGuarantorDetailList);
             newGuarantorDetailDAO.persist(newGuarantorDetailList);
-//            List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailDAO.persistAndReturn(newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser, ProposeType.P));
-//            newCreditFacility.setNewGuarantorDetailList(newGuarantorDetailList);
-//            newCreditFacilityView.setNewGuarantorDetailViewList(newGuarantorDetailTransform.transformToView(newGuarantorDetailList));
-            log.debug("saveCreditFacility ::: persist newGuarantorDetailList : {}", newGuarantorDetailList);
         }
 
       //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
-        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase, ProposeType.P);
-        log.info("before :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
+//        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase, ProposeType.P);
+        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.findAll();
+        log.debug("before :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
         newSubCollMortgageDAO.delete(newCollateralSubMortgages);
-        log.info("after :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
+        log.debug("after :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
         //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
         List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase, ProposeType.P);
-        log.info("before :: newCollateralSubOwnerList :: size :: {}",newCollateralSubOwnerList.size());
+        log.debug("before :: newCollateralSubOwnerList :: size :: {}",newCollateralSubOwnerList.size());
         newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
-        log.info("before :: newCollateralSubOwnerList :: size :: {}",newCollateralSubOwnerList.size());
+        log.debug("before :: newCollateralSubOwnerList :: size :: {}",newCollateralSubOwnerList.size());
         //--- Need to Delete SubOwner from newCollateralSubRelatedList before Insert new
-        List<NewCollateralSubRelated> newCollateralSubRelatedList = newCollateralSubRelatedDAO.getListByWorkCase(workCase, ProposeType.P);
-        log.info("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
-        newCollateralSubRelatedDAO.delete(newCollateralSubRelatedList);
-        log.info("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
+//        List<NewCollateralSubRelated> newCollateralSubRelatedList = newCollateralSubRelatedDAO.getListByWorkCase(workCase, ProposeType.P);
+//        log.debug("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
+//        newCollateralSubRelatedDAO.delete(newCollateralSubRelatedList);
+//        log.debug("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
 
         if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
+            List<NewCollateralCredit> relationDelList = newCollateralRelationDAO.getListByNewCreditFacility(newCreditFacility);
+            if(relationDelList.size()>0){
+                newCollateralRelationDAO.delete(relationDelList);
+            }
 
             if(Util.safetyList(newCreditFacilityView.getNewCollateralViewDelList()).size() > 0) {
-                log.info("newCreditFacilityView.getNewCollateralViewDelList() :: {}",newCreditFacilityView.getNewCollateralViewDelList().size());
+                log.debug("newCreditFacilityView.getNewCollateralViewDelList() :: {}",newCreditFacilityView.getNewCollateralViewDelList().size());
                 List<NewCollateral> deleteList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewDelList(), newCreditFacility, currentUser, workCase,ProposeType.P);
                 newCollateralDetailDAO.delete(deleteList);
             }
@@ -752,10 +805,6 @@ public class CreditFacProposeControl extends BusinessControl {
             List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, currentUser, workCase,ProposeType.P);
             newCreditFacility.setNewCollateralDetailList(newCollateralList);
             newCollateralDetailDAO.persist(newCollateralList);
-//            List<NewCollateral> newCollateralList = newCollateralDAO.persistAndReturn(newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, currentUser, workCase, ProposeType.P));
-//            log.debug("After persist - newCollateralList: {}", newCollateralList);
-//            newCreditFacility.setNewCollateralDetailList(newCollateralList);
-//            newCreditFacilityView.setNewCollateralViewList(newCollateralTransform.transformsCollateralToView(newCollateralList));
             log.debug("saveCreditFacility ::: persist newCollateralList : {}", newCollateralList);
         }
         return newCreditFacilityView;
@@ -799,5 +848,47 @@ public class CreditFacProposeControl extends BusinessControl {
         }
         return standardPricingResponse;
     }
+
+
+    public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {
+        log.debug("deleteAllApproveByIdList()");
+        log.debug("deleteCreditIdList: {}", deleteCreditIdList);
+        log.debug("deleteCollIdList: {}", deleteCollIdList);
+        log.debug("deleteGuarantorIdList: {}", deleteGuarantorIdList);
+        log.debug("deleteConditionIdList: {}", deleteConditionIdList);
+
+//        if (deleteCreditIdList != null && deleteCreditIdList.size() > 0) {
+//            List<NewCreditDetail> deleteCreditDetailList = new ArrayList<NewCreditDetail>();
+//            for (Long id : deleteCreditIdList) {
+//                deleteCreditDetailList.add(newCreditDetailDAO.findById(id));
+//            }
+//            newCreditDetailDAO.delete(deleteCreditDetailList);
+//        }
+
+        if (deleteCollIdList != null && deleteCollIdList.size() > 0) {
+            List<NewCollateral> deleteCollateralList = new ArrayList<NewCollateral>();
+            for (Long id : deleteCollIdList) {
+                deleteCollateralList.add(newCollateralDAO.findById(id));
+            }
+            newCollateralDAO.delete(deleteCollateralList);
+        }
+
+        if (deleteGuarantorIdList != null && deleteGuarantorIdList.size() > 0) {
+            List<NewGuarantorDetail> deleteGuarantorList = new ArrayList<NewGuarantorDetail>();
+            for (Long id : deleteGuarantorIdList) {
+                deleteGuarantorList.add(newGuarantorDetailDAO.findById(id));
+            }
+            newGuarantorDetailDAO.delete(deleteGuarantorList);
+        }
+
+        if (deleteConditionIdList != null && deleteConditionIdList.size() > 0) {
+            List<NewConditionDetail> deleteConditionList = new ArrayList<NewConditionDetail>();
+            for (Long id : deleteConditionIdList) {
+                deleteConditionList.add(newConditionDetailDAO.findById(id));
+            }
+            newConditionDetailDAO.delete(deleteConditionList);
+        }
+    }
+
 
 }

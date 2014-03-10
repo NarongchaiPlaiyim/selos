@@ -877,35 +877,8 @@ table tbody tr.grandtotal_summary td {
 .normal_checkbox.ui-chkbox {
 	vertical-align : middle;
 }
+.red {background-color:red;}
+.yellow {background-color:yellow;}
+.default {background-color:white;}
 
-table.ui-selectoneradio.nolabel_radio {
-    border-collapse: collapse;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-}
-table.ui-selectoneradio.nolabel_radio tr,
-table.ui-selectoneradio.nolabel_radio td {
-	border-spacing: 0;
-	padding: 0;
-}
-.dialog_noheader.ui-dialog .ui-dialog-titlebar {
-	display:none;
-}
-.div_row {
-   display: block;
-   height: 28px;
-   line-height: 28px;
-   padding: 1px;
-}
-table table.ui-selectoneradio, 
-table table.ui-selectoneradio td, 
-table table.ui-selectoneradio tr {
-    border: medium none !important;
-}
-.full_table table.ui-selectoneradio td {
-	padding : 0 10px 0 0 !important;
-}
-.full_table table.ui-selectoneradio {
-	width : auto !important;
-}
+
