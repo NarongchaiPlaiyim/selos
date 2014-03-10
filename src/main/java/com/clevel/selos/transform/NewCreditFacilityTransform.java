@@ -8,6 +8,7 @@ import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.CountryView;
 import com.clevel.selos.model.view.NewCreditFacilityView;
 
 import javax.inject.Inject;
@@ -16,13 +17,14 @@ import java.util.Date;
 public class NewCreditFacilityTransform extends Transform {
     @Inject
     public NewCreditFacilityTransform() {}
-
     @Inject
-    CreditRequestTypeDAO creditRequestTypeDAO;
+    private CreditRequestTypeDAO creditRequestTypeDAO;
     @Inject
-    CountryDAO countryDAO;
+    private CountryDAO countryDAO;
     @Inject
-    NewCreditFacilityDAO newCreditFacilityDAO;
+    private NewCreditFacilityDAO newCreditFacilityDAO;
+    @Inject
+    private CountryTransform countryTransform;
 
     public NewCreditFacility transformToModelDB(NewCreditFacilityView newCreditFacilityView, WorkCase workCase, User user) {
 
@@ -163,10 +165,10 @@ public class NewCreditFacilityTransform extends Transform {
         if(newCreditFacilityView.getLoanRequestType() == null){
             newCreditFacilityView.setLoanRequestType(new CreditRequestType());
         }
-
-        newCreditFacilityView.setInvestedCountry(newCreditFacility.getInvestedCountry());
+        CountryView countryView = countryTransform.transformToView(countryDAO.findById(newCreditFacility.getInvestedCountry().getId()));
+        newCreditFacilityView.setInvestedCountry(countryView);
         if(newCreditFacilityView.getInvestedCountry() == null){
-            newCreditFacilityView.setInvestedCountry(new Country());
+            newCreditFacilityView.setInvestedCountry(new CountryView());
         }
 
         newCreditFacilityView.setTotalGuaranteeAmount(newCreditFacility.getTotalGuaranteeAmount());

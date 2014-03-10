@@ -49,7 +49,7 @@ public class NewGuarantorDetailTransform extends Transform {
             newGuarantorDetail = new NewGuarantorDetail();
             if (newGuarantorDetailView.getId() != 0) {
                 log.info("Start..  newGuarantorDetail :: view :: {}", newGuarantorDetailView.getId());
-                newGuarantorDetail = newGuarantorDetailDAO.findGuarantorById(newGuarantorDetailView.getId());
+                newGuarantorDetail = newGuarantorDetailDAO.findGuarantorById(newGuarantorDetailView.getId(),ProposeType.P);
                 log.info("Start..  newGuarantorDetail :: DB :: {}", newGuarantorDetail.getId());
                 newGuarantorDetail.setModifyDate(DateTime.now().toDate());
                 newGuarantorDetail.setModifyBy(user);
