@@ -41,18 +41,34 @@ public class NewGuarantorRelationDAO extends GenericDAO<NewGuarantorCredit, Long
 
     public List<NewGuarantorCredit> getListByNewCreditFacility(NewCreditFacility newCreditFacility,ProposeType proposeType){
         Criteria criteria = createCriteria();
-        String query = "SELECT newGuarantorCredit FROM NewGuarantorCredit newGuarantorCredit WHERE newCreditFacility.id  = " + newCreditFacility.getId() + " AND proposeType = "+ proposeType;
-        List<NewGuarantorCredit> newGuarantorCreditList = getSession().createQuery(query).list();
+        criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
+        criteria.add(Restrictions.eq("proposeType", proposeType));
         criteria.setFetchMode("newGuarantorDetail", FetchMode.LAZY);
+        List<NewGuarantorCredit> newGuarantorCreditList = (List<NewGuarantorCredit>) criteria.list();
+        log.info("getList. (result size: {})", newGuarantorCreditList.size());
+
         return newGuarantorCreditList;
+//        Criteria criteria = createCriteria();
+//        String query = "SELECT newGuarantorCredit FROM NewGuarantorCredit newGuarantorCredit WHERE newCreditFacility.id  = " + newCreditFacility.getId() + " AND proposeType = "+ proposeType;
+//        List<NewGuarantorCredit> newGuarantorCreditList = getSession().createQuery(query).list();
+//        criteria.setFetchMode("newGuarantorDetail", FetchMode.LAZY);
+//        return newGuarantorCreditList;
     }
 
     public List<NewGuarantorCredit> getListByNewCreditDetail(NewCreditDetail newCreditDetail,ProposeType proposeType){
         Criteria criteria = createCriteria();
-        String query = "SELECT newGuarantorCredit FROM NewGuarantorCredit newGuarantorCredit WHERE newCreditDetail.id  = " + newCreditDetail.getId() + " AND proposeType = "+ proposeType;
-        List<NewGuarantorCredit> newGuarantorCreditList = getSession().createQuery(query).list();
+        criteria.add(Restrictions.eq("newCreditDetail", newCreditDetail));
+        criteria.add(Restrictions.eq("proposeType", proposeType));
         criteria.setFetchMode("newGuarantorDetail", FetchMode.LAZY);
+        List<NewGuarantorCredit> newGuarantorCreditList = (List<NewGuarantorCredit>) criteria.list();
+        log.info("getList. (result size: {})", newGuarantorCreditList.size());
+
         return newGuarantorCreditList;
+//        Criteria criteria = createCriteria();
+//        String query = "SELECT newGuarantorCredit FROM NewGuarantorCredit newGuarantorCredit WHERE newCreditDetail.id  = " + newCreditDetail.getId() + " AND proposeType = "+ proposeType;
+//        List<NewGuarantorCredit> newGuarantorCreditList = getSession().createQuery(query).list();
+//        criteria.setFetchMode("newGuarantorDetail", FetchMode.LAZY);
+//        return newGuarantorCreditList;
     }
 
 }

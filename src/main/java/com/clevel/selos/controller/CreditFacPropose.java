@@ -1470,7 +1470,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //                hashSeqCredit.put(i, Integer.parseInt(hashSeqCredit.get(i).toString()) - 1);
 //            }
         }
-        if (newCreditFacilityView.getNewGuarantorViewDelList().get(rowIndexGuarantor).getId() != 0) {
+        if (newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getId() != 0) {
             deleteGuarantorIdList.add(newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getId());
         }
 //        newCreditFacilityView.getNewGuarantorViewDelList().add(newGuarantorDetailViewItem);
