@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary_subreportNCB_Record" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="dcba34d2-b608-4991-9c80-ac1439bd7fe6">
-	<property name="ireport.zoom" value="1.464100000000005"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary_subreportNCB_Record" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="dcba34d2-b608-4991-9c80-ac1439bd7fe6">
+	<property name="ireport.zoom" value="2.1435888100000096"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
@@ -50,15 +50,15 @@ WHERE
 	<columnHeader>
 		<band height="17">
 			<frame>
-				<reportElement uuid="dfed156c-9dd5-4ed7-aff1-b25d3f9bd093" x="0" y="0" width="554" height="17"/>
+				<reportElement uuid="dfed156c-9dd5-4ed7-aff1-b25d3f9bd093" mode="Opaque" x="0" y="0" width="595" height="17"/>
 				<staticText>
 					<reportElement uuid="123eafc7-d795-43cc-9074-190e56d21de7" mode="Opaque" x="0" y="0" width="74" height="17" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
-						<pen lineColor="#CCCCCC"/>
-						<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -66,13 +66,13 @@ WHERE
 					<text><![CDATA[Customer Name]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="454ee238-f2f6-4d7f-aee3-eaa54abc3882" mode="Opaque" x="74" y="0" width="55" height="17" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="454ee238-f2f6-4d7f-aee3-eaa54abc3882" mode="Opaque" x="74" y="0" width="72" height="17" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
-						<pen lineColor="#CCCCCC"/>
-						<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -80,13 +80,13 @@ WHERE
 					<text><![CDATA[จำนวนการสืบค้นข้อมูล]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="d3686b8f-54ce-4b51-8a2d-ac6ab2beb827" mode="Opaque" x="129" y="0" width="74" height="17" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="d3686b8f-54ce-4b51-8a2d-ac6ab2beb827" mode="Opaque" x="146" y="0" width="74" height="17" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
-						<pen lineColor="#CCCCCC"/>
-						<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -94,13 +94,13 @@ WHERE
 					<text><![CDATA[การชำระหนี้ ณ ปัจจุบัน]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="5c780cf7-604e-4156-879a-189916370d8c" mode="Opaque" x="203" y="0" width="79" height="17" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="5c780cf7-604e-4156-879a-189916370d8c" mode="Opaque" x="220" y="0" width="79" height="17" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
-						<pen lineColor="#CCCCCC"/>
-						<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -108,13 +108,13 @@ WHERE
 					<text><![CDATA[ประวัติการชำระหนี้]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="ea14e7f2-d146-433c-b5bb-d7ba4dbd49af" mode="Opaque" x="282" y="0" width="63" height="17" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="ea14e7f2-d146-433c-b5bb-d7ba4dbd49af" mode="Opaque" x="299" y="0" width="75" height="17" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
-						<pen lineColor="#CCCCCC"/>
-						<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -122,13 +122,13 @@ WHERE
 					<text><![CDATA[ประวัติการเป็นหนี้ NPL]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="26ca84b8-256f-4718-b5a8-28d08fff562a" mode="Opaque" x="345" y="0" width="61" height="17" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="26ca84b8-256f-4718-b5a8-28d08fff562a" mode="Opaque" x="374" y="0" width="72" height="17" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
-						<pen lineColor="#CCCCCC"/>
-						<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -136,13 +136,13 @@ WHERE
 					<text><![CDATA[ประวัติการเป็นหนี้ TDR]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="1f0eb760-8e3b-4cae-bda6-a51b65fb29bd" mode="Opaque" x="406" y="0" width="74" height="17" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="1f0eb760-8e3b-4cae-bda6-a51b65fb29bd" mode="Opaque" x="446" y="0" width="74" height="17" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
-						<pen lineColor="#CCCCCC"/>
-						<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -150,13 +150,13 @@ WHERE
 					<text><![CDATA[เงื่อนไขการชำระหนี้ TDR]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="9d842944-a495-46bd-b30c-62b9ef166bb3" mode="Opaque" x="480" y="0" width="74" height="17" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="9d842944-a495-46bd-b30c-62b9ef166bb3" mode="Opaque" x="520" y="0" width="75" height="17" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
-						<pen lineColor="#CCCCCC"/>
-						<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -167,17 +167,17 @@ WHERE
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="21" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<frame>
-				<reportElement uuid="af9e4609-55de-4c5d-835d-cac3e6302738" mode="Opaque" x="0" y="0" width="554" height="21" backcolor="#E6E4E4"/>
+				<reportElement uuid="af9e4609-55de-4c5d-835d-cac3e6302738" mode="Opaque" x="0" y="0" width="595" height="20" backcolor="#FFFFFF"/>
 				<textField>
 					<reportElement uuid="f887abc4-fba8-4730-af81-d032558c1d14" mode="Opaque" x="0" y="0" width="74" height="20" forecolor="#000000"/>
 					<box>
-						<pen lineColor="#CCCCCC"/>
-						<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -185,13 +185,13 @@ WHERE
 					<textFieldExpression><![CDATA[$F{ncbCusName}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement uuid="c638a41e-5d46-4fab-a385-f30cf4d58d9d" mode="Opaque" x="74" y="0" width="55" height="20" forecolor="#000000"/>
+					<reportElement uuid="c638a41e-5d46-4fab-a385-f30cf4d58d9d" mode="Opaque" x="74" y="0" width="72" height="20" forecolor="#000000"/>
 					<box>
-						<pen lineColor="#CCCCCC"/>
-						<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -199,13 +199,13 @@ WHERE
 					<textFieldExpression><![CDATA[$F{checkIn6Month}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="36249ee7-d863-4768-9678-b54574eefda2" mode="Opaque" x="129" y="0" width="74" height="20" forecolor="#000000"/>
+					<reportElement uuid="36249ee7-d863-4768-9678-b54574eefda2" mode="Opaque" x="146" y="0" width="74" height="20" forecolor="#000000"/>
 					<box>
-						<pen lineColor="#CCCCCC"/>
-						<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -213,13 +213,13 @@ WHERE
 					<textFieldExpression><![CDATA[$F{currentPaymentType}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="865f098a-2e41-4bdd-9381-0d2ffa6fcc5e" mode="Opaque" x="203" y="0" width="79" height="20" forecolor="#000000"/>
+					<reportElement uuid="865f098a-2e41-4bdd-9381-0d2ffa6fcc5e" mode="Opaque" x="220" y="0" width="79" height="20" forecolor="#000000"/>
 					<box>
-						<pen lineColor="#CCCCCC"/>
-						<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -227,13 +227,13 @@ WHERE
 					<textFieldExpression><![CDATA[$F{historyPaymentType}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement uuid="1501078d-4e0e-46a3-b3e7-9fabc0849cd2" mode="Opaque" x="282" y="0" width="63" height="20" forecolor="#000000"/>
+					<reportElement uuid="1501078d-4e0e-46a3-b3e7-9fabc0849cd2" mode="Opaque" x="299" y="0" width="75" height="20" forecolor="#000000"/>
 					<box>
-						<pen lineColor="#CCCCCC"/>
-						<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -241,13 +241,13 @@ WHERE
 					<textFieldExpression><![CDATA[$F{nplFlagText}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement uuid="6c5839c9-b21f-4dbd-8d38-900ea768e4b5" mode="Opaque" x="345" y="0" width="61" height="20" forecolor="#000000"/>
+					<reportElement uuid="6c5839c9-b21f-4dbd-8d38-900ea768e4b5" mode="Opaque" x="374" y="0" width="72" height="20" forecolor="#000000"/>
 					<box>
-						<pen lineColor="#CCCCCC"/>
-						<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -255,13 +255,13 @@ WHERE
 					<textFieldExpression><![CDATA[$F{tdrFlagText}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="bb6bdb78-4936-4c7c-80da-d703f029cc20" mode="Opaque" x="406" y="0" width="74" height="20" forecolor="#000000"/>
+					<reportElement uuid="bb6bdb78-4936-4c7c-80da-d703f029cc20" mode="Opaque" x="446" y="0" width="74" height="20" forecolor="#000000"/>
 					<box>
-						<pen lineColor="#CCCCCC"/>
-						<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -269,13 +269,13 @@ WHERE
 					<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="3c181391-a20a-4207-af35-20e8d04ec1cf" mode="Opaque" x="480" y="0" width="74" height="20" forecolor="#000000"/>
+					<reportElement uuid="3c181391-a20a-4207-af35-20e8d04ec1cf" mode="Opaque" x="520" y="0" width="75" height="20" forecolor="#000000"/>
 					<box>
-						<pen lineColor="#CCCCCC"/>
-						<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="1.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>

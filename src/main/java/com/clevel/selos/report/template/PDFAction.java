@@ -10,10 +10,12 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.ExSummary;
 import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +50,9 @@ public class PDFAction implements Serializable {
     @Inject
     ExSummary exSummary;
 
-    long workCaseId = 147;
+//    long workCaseId = 147;
+
+    long workCaseId;
 
     @Inject
     public PDFAction() {
@@ -57,18 +61,18 @@ public class PDFAction implements Serializable {
     public void init(){
 
 
-//        HttpSession session = FacesUtil.getSession(true);
-//
-//        if(session.getAttribute("workCaseId") != null){
-//            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-//        }else{
-//            log.debug("onCreation ::: workCaseId is null.");
-//            try{
-//                FacesUtil.redirect("/site/inbox.jsf");
-//            }catch (Exception ex){
-//                log.error("Exception :: {}",ex);
-//            }
-//        }
+        HttpSession session = FacesUtil.getSession(true);
+
+        if(session.getAttribute("workCaseId") != null){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        }else{
+            log.debug("onCreation ::: workCaseId is null.");
+            try{
+                FacesUtil.redirect("/site/inbox.jsf");
+            }catch (Exception ex){
+                log.error("Exception :: {}",ex);
+            }
+        }
         exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         exSummaryView  = exSummaryControl.getExSummaryViewByWorkCaseId(workCaseId);
     }
@@ -119,7 +123,7 @@ public class PDFAction implements Serializable {
             reports.add(borrowerExsumReport);
         }
 
-        log.info("fillBorrowerRelatedProfile: {}",reports );
+//        log.info("fillBorrowerRelatedProfile: {}",reports );
 
         return reports;
     }
@@ -141,10 +145,9 @@ public class PDFAction implements Serializable {
             tradeFinanceExsumReport.setExportMail(facilityView.getExportMail());
             tradeFinanceExsumReport.setDepositBranchCode(facilityView.getDepositBranchCode());
             tradeFinanceExsumReport.setOwnerBranchCode(facilityView.getOwnerBranchCode());
-            System.out.println(tradeFinanceExsumReport);
             financeExsumReports.add(tradeFinanceExsumReport);
         }
-        log.info("fillTradeFinance: {}",financeExsumReports );
+//        log.info("fillTradeFinance: {}",financeExsumReports );
         return financeExsumReports;
     }
 
@@ -166,7 +169,7 @@ public class PDFAction implements Serializable {
 
             recordExsumReports.add(ncbRecordExsumReport);
         }
-        log.info("fillNCBRecord: {}",recordExsumReports );
+//        log.info("fillNCBRecord: {}",recordExsumReports );
         return recordExsumReports;
     }
 
@@ -180,7 +183,7 @@ public class PDFAction implements Serializable {
             borrowerExsumReport.setBusinessLocationAddressEN(exSummaryView.getBusinessLocationAddressEN());
             borrowerExsumReport.setOwner(exSummaryView.getOwner());
         }
-        log.info("fillBorrower: {}",borrowerExsumReport.toString());
+//        log.info("fillBorrower: {}",borrowerExsumReport.toString());
         return borrowerExsumReport;
     }
 
@@ -188,7 +191,7 @@ public class PDFAction implements Serializable {
         init();
         BorrowerCharacteristicExSumReport characteristicExSumReport = new BorrowerCharacteristicExSumReport();
         ExSumCharacteristicView exSumCharacteristicView = exSummaryView.getExSumCharacteristicView();
-        log.debug("exSumCharacteristicView: {}",exSumCharacteristicView);
+//        log.debug("exSumCharacteristicView: {}",exSumCharacteristicView);
 
         characteristicExSumReport.setCustomer(exSumCharacteristicView.getCustomer());
         characteristicExSumReport.setCurrentDBR(exSumCharacteristicView.getCurrentDBR());
@@ -206,7 +209,7 @@ public class PDFAction implements Serializable {
         characteristicExSumReport.setGroupExposureUW(exSumCharacteristicView.getGroupExposureUW());
 
         ExSumBusinessInfoView exSumBusinessInfoView = exSummaryView.getExSumBusinessInfoView();
-        log.debug("exSumBusinessInfoView: {}",exSumBusinessInfoView);
+//        log.debug("exSumBusinessInfoView: {}",exSumBusinessInfoView);
 
         characteristicExSumReport.setNetFixAsset(exSumBusinessInfoView.getNetFixAsset());
         characteristicExSumReport.setNoOfEmployee(exSumBusinessInfoView.getNoOfEmployee());
@@ -227,7 +230,7 @@ public class PDFAction implements Serializable {
         characteristicExSumReport.setBusinessPermission(exSummaryView.getBusinessPermission());
         characteristicExSumReport.setExpiryDate(exSummaryView.getExpiryDate());
 
-        log.info("fillBorrowerCharacteristic: {}",characteristicExSumReport.toString());
+//        log.info("fillBorrowerCharacteristic: {}",characteristicExSumReport.toString());
         return characteristicExSumReport;
     }
 
@@ -248,7 +251,7 @@ public class PDFAction implements Serializable {
             movementExSumReport.setTradeChequeReturnAmount(movementExSumReport.getTradeChequeReturnPercent());
             movementExSumReport.setTradeChequeReturnPercent(movementExSumReport.getTradeChequeReturnPercent());
         }
-        log.info("fillAccountMovement: {}",movementExSumReport.toString());
+//        log.info("fillAccountMovement: {}",movementExSumReport.toString());
         return movementExSumReport;
     }
 
@@ -263,7 +266,7 @@ public class PDFAction implements Serializable {
         collateralExSumReport.setLimitApprove(exSummary.getLimitApprove());
         collateralExSumReport.setPercentLTV(exSummary.getPercentLTV());
 
-        log.info("fillCollateral: {}",collateralExSumReport.toString());
+//        log.info("fillCollateral: {}",collateralExSumReport.toString());
         return collateralExSumReport;
     }
 
@@ -281,7 +284,7 @@ public class PDFAction implements Serializable {
         riskInfoExSumReport.setIndirectCountryName(exSumCreditRiskInfoView.getIndirectCountryName());
         riskInfoExSumReport.setPercentExport(exSumCreditRiskInfoView.getPercentExport());
 
-        log.info("fillCreditRisk: {}",riskInfoExSumReport.toString());
+//        log.info("fillCreditRisk: {}",riskInfoExSumReport.toString());
         return riskInfoExSumReport;
     }
 
@@ -299,7 +302,7 @@ public class PDFAction implements Serializable {
             decisionExSumReport.setDeviationReason(decisionView.getDeviationReason());
         }
 
-        log.info("fillDecision: {}",decisionExSumReport.toString());
+//        log.info("fillDecision: {}",decisionExSumReport.toString());
         return decisionExSumReport;
     }
 
@@ -318,7 +321,7 @@ public class PDFAction implements Serializable {
         bizSupportExSumReport.setRm020Code(exSummaryView.getRm020Code());
         bizSupportExSumReport.setRm020Remark(exSummaryView.getRm020Remark());
 
-        log.info("fillBizSupport: {}" ,bizSupportExSumReport.toString());
+//        log.info("fillBizSupport: {}" ,bizSupportExSumReport.toString());
         return bizSupportExSumReport;
     }
 
@@ -338,7 +341,7 @@ public class PDFAction implements Serializable {
             uwDecisionExSumReport.setDescription(sumReasonView.getDescription());
         }
 
-        log.info("fillUWDecision: {}",uwDecisionExSumReport.toString());
+//        log.info("fillUWDecision: {}",uwDecisionExSumReport.toString());
         return uwDecisionExSumReport;
     }
 }
