@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
 import com.clevel.selos.dao.working.NewCollateralCreditDAO;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.ProposeCreditDetailView;
@@ -22,7 +23,7 @@ public class NewCollateralCreditTransform extends Transform {
     NewCollateralCreditDAO newCollateralRelationDAO;
 
 
-    public List<NewCollateralCredit> transformsToModelForCollateral(List<ProposeCreditDetailView> proposeCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewCollateral newCollateralDetail,NewCreditFacility newCreditFacility, User user) {
+    public List<NewCollateralCredit> transformsToModelForCollateral(List<ProposeCreditDetailView> proposeCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewCollateral newCollateralDetail,NewCreditFacility newCreditFacility,ProposeType proposeType, User user) {
     
         List<NewCollateralCredit> newCollateralCreditList = new ArrayList<NewCollateralCredit>();
         NewCollateralCredit newCollateralRelCredit;
@@ -58,6 +59,7 @@ public class NewCollateralCreditTransform extends Transform {
 
                 newCollateralRelCredit.setNewCreditFacility(newCreditFacility);
                 newCollateralRelCredit.setNewCollateral(newCollateralDetail);
+                newCollateralRelCredit.setProposeType(proposeType);
                 newCollateralCreditList.add(newCollateralRelCredit);
 
         }

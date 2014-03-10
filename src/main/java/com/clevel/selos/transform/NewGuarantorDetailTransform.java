@@ -68,7 +68,7 @@ public class NewGuarantorDetailTransform extends Transform {
 
             if (Util.safetyList(newGuarantorDetailView.getProposeCreditDetailViewList()).size() > 0) {
                 log.debug("Start.. transformToModel proposeCreditDetailViewList : {}", newGuarantorDetailView.getProposeCreditDetailViewList());
-                List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorCreditTransform.transformsToModelForGuarantor(newGuarantorDetailView.getProposeCreditDetailViewList(), newCreditFacility.getNewCreditDetailList(), newGuarantorDetail,newCreditFacility, user);
+                List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorCreditTransform.transformsToModelForGuarantor(newGuarantorDetailView.getProposeCreditDetailViewList(), newCreditFacility.getNewCreditDetailList(), newGuarantorDetail,newCreditFacility,proposeType, user);
                 log.debug("End.. transformToModel newGuarantorCreditList size :: {}", newGuarantorCreditList.size());
                 newGuarantorDetail.setNewGuarantorCreditList(newGuarantorCreditList);
             }
