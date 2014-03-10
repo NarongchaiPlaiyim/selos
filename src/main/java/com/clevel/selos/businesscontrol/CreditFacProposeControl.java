@@ -413,45 +413,20 @@ public class CreditFacProposeControl extends BusinessControl {
     public void groupTypeOfStepAndOrderBySeq(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
         log.debug("groupTypeOfStepAndOrderBySeq()");
         if (proposeCreditDetailViewList != null && proposeCreditDetailViewList.size() > 0) {
-            log.debug("Start Grouping by Type of Step (N -> E)");
-            List<ProposeCreditDetailView> groupNewCredits = new ArrayList<ProposeCreditDetailView>();
-            List<ProposeCreditDetailView> groupExistingCredits = new ArrayList<ProposeCreditDetailView>();
-            // Grouping by Type of Step
-            int size = proposeCreditDetailViewList.size();
-            for (int i=0; i<size; i++) {
-                ProposeCreditDetailView creditDetailView = proposeCreditDetailViewList.get(i);
-                if (CreditTypeOfStep.NEW.type().equalsIgnoreCase(creditDetailView.getTypeOfStep())) {
-                    groupNewCredits.add(creditDetailView);
-                }
-                else if (CreditTypeOfStep.EXISTING.type().equalsIgnoreCase(creditDetailView.getTypeOfStep())) {
-                    groupExistingCredits.add(creditDetailView);
-                }
-            }
-            log.debug("End Grouping by Type of Step...");
-            log.debug("NewCredit Group : {}", groupNewCredits);
-            log.debug("ExistingCredit Group : {}", groupExistingCredits);
+            log.debug("Start Grouping by Type of Step (N -> E) and Sort seq (ASC)");
 
-            // Order by Seq (ASC)
             Comparator<ProposeCreditDetailView> comparator = new Comparator<ProposeCreditDetailView>() {
                 @Override
-                public int compare(ProposeCreditDetailView credit1, ProposeCreditDetailView credit2) {
-                    return credit1.getSeq() - credit2.getSeq();
+                public int compare(ProposeCreditDetailView o1, ProposeCreditDetailView o2) {
+                    int flag = o2.getTypeOfStep().compareTo(o1.getTypeOfStep());
+                    if(flag == 0)
+                        flag = o1.getSeq() - o2.getSeq();
+                    return flag;
                 }
             };
 
-            log.debug("Start Order by Seq (ASC)");
-            if (groupNewCredits.size() > 0) {
-                Collections.sort(groupNewCredits, comparator);
-            }
+            Collections.sort(proposeCreditDetailViewList, comparator);
 
-            if (groupExistingCredits.size() > 0) {
-                Collections.sort(groupExistingCredits, comparator);
-            }
-            log.debug("End Order by Seq (ASC)...");
-
-            proposeCreditDetailViewList.clear();
-            proposeCreditDetailViewList.addAll(groupNewCredits);
-            proposeCreditDetailViewList.addAll(groupExistingCredits);
             log.debug("Result : ", proposeCreditDetailViewList);
         }
     }
@@ -853,7 +828,6 @@ public class CreditFacProposeControl extends BusinessControl {
         }
         return standardPricingResponse;
     }
-
 
     public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {
         log.debug("deleteAllApproveByIdList()");
