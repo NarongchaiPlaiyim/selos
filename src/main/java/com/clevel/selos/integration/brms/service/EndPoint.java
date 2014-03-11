@@ -15,15 +15,13 @@ import java.net.URL;
 public class EndPoint implements Serializable {
     @Inject
     @BRMS
-    Logger log;
+    Logger logger;
+
+    private static final String WSDL = "?wsdl";
 
     @Inject
     @Config(name = "interface.brms.request.timeout")
     private String brmsRequestTimeout;
-
-    @Inject
-    @Config(name = "interface.brms.wsdl.url")
-    private String brmsWSDLURL;
 
     @Inject
     @Config(name = "interface.brms.service.url")
@@ -82,14 +80,16 @@ public class EndPoint implements Serializable {
     }
 
     public DecisionServiceResponse callPrescreenUnderwritingRulesService(DecisionServiceRequest request) throws Exception {
-        log.debug("callPrescreenUnderwritingRulesService()");
-        log.debug("Address : {}", prescreenAddress);
+        logger.debug("-- begin Sending Request to callPrescreenUnderwritingRulesService()");
+        logger.debug("Service URL : {}", brmsServiceURL);
+        logger.debug("Service Name : {}", prescreenServiceName);
+        logger.debug("Service Address : {}", prescreenAddress);
         DecisionServiceSEPrescreenUWSFlow_Service service = null;
         DecisionServiceSEPrescreenUWSFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            URL url = new URL("http://stmbrmsred1:9080/DecisionService/ws/SE_Prescreen_UWS_RuleApp/1.0/SE_Prescreen_UWS_Flow?wsdl");
-            QName qname = new QName("http://www.ilog.com/rules/DecisionService", "DecisionServiceSE_Prescreen_UWS_Flow");
+            URL url = new URL(prescreenAddress + WSDL);
+            QName qname = new QName(brmsServiceURL, prescreenServiceName);
 
             service = new DecisionServiceSEPrescreenUWSFlow_Service(url, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
@@ -97,58 +97,64 @@ public class EndPoint implements Serializable {
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;
             }catch (Exception e){
-                log.debug("request Service request_timeout must be a number! {Default : 60sec}");
+                logger.debug("request Service request_timeout must be a number! {Default : 60sec}");
             }
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, prescreenAddress);
-            log.debug("callPrescreenUnderwritingRulesService() Calling...{}", request);
+            logger.debug("callPrescreenUnderwritingRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callPrescreenUnderwritingRulesService() Done...{}", response);
+            logger.debug("callPrescreenUnderwritingRulesService() Done...{}", response);
             return response;
         } catch (Exception e) {
-            log.error("callPrescreenUnderwritingRulesService() Error :", e);
+            logger.error("callPrescreenUnderwritingRulesService() Error :", e);
             throw e;
         }
     }
 
     public DecisionServiceResponse callFullApplicationUnderwritingRulesService(DecisionServiceRequest request) throws Exception {
-        log.debug("callFullApplicationUnderwritingRulesService()");
-        log.debug("Address : {}", fullAppAddress);
+        logger.debug("-- begin Sending Request to callFullApplicationUnderwritingRulesService()");
+        logger.debug("Service URL : {}", brmsServiceURL);
+        logger.debug("Service Name : {}", fullAppServiceName);
+        logger.debug("Service Address : {}", fullAppAddress);
         DecisionServiceSEFullApplicationUWSFlow_Service service = null;
         DecisionServiceSEFullApplicationUWSFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEFullApplicationUWSFlow_Service();
+            URL url = new URL(fullAppAddress + WSDL);
+            QName qname = new QName(brmsServiceURL, fullAppServiceName);
+            service = new DecisionServiceSEFullApplicationUWSFlow_Service(url, qname);
+
             port = service.getDecisionServiceSOAPstmbrmsred1();
             int timeout = 60000;
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;
             }catch (Exception e){
-                log.debug("request Service request_timeout must be a number! {Default : 60sec}");
+                logger.debug("request Service request_timeout must be a number! {Default : 60sec}");
             }
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, fullAppAddress);
-            log.debug("callFullApplicationUnderwritingRulesService() Calling...{}", request);
+            logger.debug("callFullApplicationUnderwritingRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callFullApplicationUnderwritingRulesService() Done...{}", response);
+            logger.debug("callFullApplicationUnderwritingRulesService() Done...{}", response);
             return response;
         } catch (Exception e) {
-            log.error("callFullApplicationUnderwritingRulesService() Error : {}", e);
+            logger.error("callFullApplicationUnderwritingRulesService() Error : {}", e);
             throw e;
         }
     }
 
     public DecisionServiceResponse callStandardPricingInterestRulesService(DecisionServiceRequest request) throws Exception {
-        log.debug("callStandardPricingInterestRulesService()");
-        log.debug("Address : {}", interestAddress);
-        DecisionServiceSEStandardPricingInterestFlow_Service service = null;
+        logger.debug("-- begin Sending Request to callStandardPricingInterestRulesService()");
+        logger.debug("Service URL : {}", brmsServiceURL);
+        logger.debug("Service Name : {}", interestServiceName);
+        logger.debug("Service Address : {}", interestAddress);DecisionServiceSEStandardPricingInterestFlow_Service service = null;
         DecisionServiceSEStandardPricingInterestFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            URL url = new URL("http://stmbrmsred1:9080/DecisionService/ws/SE_Standard_Pricing_Interest_RuleApp/1.0/SE_Standard_Pricing_Interest_Flow?wsdl");
-            QName qname = new QName("http://www.ilog.com/rules/DecisionService", "DecisionServiceSE_Standard_Pricing_Interest_Flow");
+            URL url = new URL(interestAddress + WSDL);
+            QName qname = new QName(brmsServiceURL, interestServiceName);
 
             service = new DecisionServiceSEStandardPricingInterestFlow_Service(url, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
@@ -156,104 +162,114 @@ public class EndPoint implements Serializable {
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;
             }catch (Exception e){
-                log.debug("request Service request_timeout must be a number! {Default : 60sec}");
+                logger.debug("request Service request_timeout must be a number! {Default : 60sec}");
             }
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, interestAddress);
-            log.debug("callStandardPricingInterestRulesService() Calling...{}", request);
+            logger.debug("callStandardPricingInterestRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callStandardPricingFeeRulesService() Done...{}", response);
+            logger.debug("callStandardPricingFeeRulesService() Done...{}", response);
             return response;
         } catch (Exception e) {
-            log.error("callStandardPricingInterestRulesService() Error : {}", e);
+            logger.error("callStandardPricingInterestRulesService() Error : {}", e);
             throw e;
         }
     }
 
     public DecisionServiceResponse callStandardPricingFeeRulesService(DecisionServiceRequest request) throws Exception {
-        log.debug("callStandardPricingFeeRulesService()");
-        log.debug("Address : {}", feeAddress);
+        logger.debug("-- begin Sending Request to callStandardPricingFeeRulesService()");
+        logger.debug("Service URL : {}", brmsServiceURL);
+        logger.debug("Service Name : {}", feeServiceName);
+        logger.debug("Service Address : {}", feeAddress);
         DecisionServiceSEStandardPricingFeeFlow_Service service = null;
         DecisionServiceSEStandardPricingFeeFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            URL url = new URL("http://stmbrmsred1:9080/DecisionService/ws/SE_Standard_Pricing_Fee_RuleApp/1.0/SE_Standard_Pricing_Fee_Flow?wsdl");
-            QName qname = new QName("http://www.ilog.com/rules/DecisionService", "DecisionServiceSE_Standard_Pricing_Fee_Flow");
+            URL wsdlUrl = new URL(feeAddress + this.WSDL);
+            QName qname = new QName(brmsServiceURL, feeServiceName);
 
-            service = new DecisionServiceSEStandardPricingFeeFlow_Service(url, qname);
+            service = new DecisionServiceSEStandardPricingFeeFlow_Service(wsdlUrl, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
             int timeout = 60000;
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;
             }catch (Exception e){
-                log.debug("request Service request_timeout must be a number! {Default : 60sec}");
+                logger.debug("request Service request_timeout must be a number! {Default : 60sec}");
             }
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, feeAddress);
-            log.debug("callStandardPricingFeeRulesService() Calling...{}", request);
+            logger.debug("callStandardPricingFeeRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callStandardPricingFeeRulesService() Done... {}", response);
+            logger.debug("callStandardPricingFeeRulesService() Done... {}", response);
             return response;
         } catch (Exception e) {
-            log.error("callStandardPricingFeeRulesService() Error : {}", e);
+            logger.error("callStandardPricingFeeRulesService() Error : {}", e);
             throw e;
         }
     }
 
     public DecisionServiceResponse callDocumentCustomerRulesService(DecisionServiceRequest request) throws Exception {
-        log.debug("callDocumentCustomerRulesService()");
-        log.debug("Address : {}", customerAddress);
+        logger.debug("-- begin Sending Request to callDocumentCustomerRulesService()");
+        logger.debug("Service URL : {}", brmsServiceURL);
+        logger.debug("Service Name : {}", customerServiceName);
+        logger.debug("Service Address : {}", customerAddress);
         DecisionServiceSEDocumentCustomerFlow_Service service = null;
         DecisionServiceSEDocumentCustomerFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEDocumentCustomerFlow_Service();
+            URL wsdlUrl = new URL(customerAddress + this.WSDL);
+            QName qname = new QName(brmsServiceURL, customerServiceName);
+            service = new DecisionServiceSEDocumentCustomerFlow_Service(wsdlUrl, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
             int timeout = 60000;
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;
             }catch (Exception e){
-                log.debug("request Service request_timeout must be a number! {Default : 60sec}");
+                logger.debug("request Service request_timeout must be a number! {Default : 60sec}");
             }
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, customerAddress);
-            log.debug("callDocumentCustomerRulesService() Calling...{}", request);
+            logger.debug("callDocumentCustomerRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callStandardPricingFeeRulesService() Done... {}", response);
+            logger.debug("callStandardPricingFeeRulesService() Done... {}", response);
             return response;
         } catch (Exception e) {
-            log.error("callDocumentCustomerRulesService() Error : {}", e);
+            logger.error("callDocumentCustomerRulesService() Error : {}", e);
             throw e;
         }
     }
 
     public DecisionServiceResponse callDocumentAppraisalRulesService(DecisionServiceRequest request) throws Exception {
-        log.debug("callDocumentAppraisalRulesService()");
-        log.debug("Address : {}", appraisalAddress);
+        logger.debug("-- begin Sending Request to callDocumentAppraisalRulesService()");
+        logger.debug("Service URL : {}", brmsServiceURL);
+        logger.debug("Service Name : {}", appraisalServiceName);
+        logger.debug("Service Address : {}", appraisalAddress);
         DecisionServiceSEDocumentAppraisalFlow_Service service = null;
         DecisionServiceSEDocumentAppraisalFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEDocumentAppraisalFlow_Service();
+            URL wsdlUrl = new URL(appraisalAddress + this.WSDL);
+            QName qname = new QName(brmsServiceURL, appraisalServiceName);
+            service = new DecisionServiceSEDocumentAppraisalFlow_Service(wsdlUrl, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
             int timeout = 60000;
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;
             }catch (Exception e){
-                log.debug("request Service request_timeout must be a number! {Default : 60sec}");
+                logger.debug("request Service request_timeout must be a number! {Default : 60sec}");
             }
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, appraisalAddress);
-            log.debug("callDocumentAppraisalRulesService() Calling...{}", request);
+            logger.debug("callDocumentAppraisalRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callStandardPricingFeeRulesService() Done... {}", response);
+            logger.debug("callStandardPricingFeeRulesService() Done... {}", response);
             return response;
         } catch (Exception e) {
-            log.error("callDocumentAppraisalRulesService() Error : {}", e);
+            logger.error("callDocumentAppraisalRulesService() Error : {}", e);
             throw e;
         }
     }

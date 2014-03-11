@@ -4,6 +4,8 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.request.*;
+import com.clevel.selos.integration.brms.model.response.DocAppraisalResponse;
+import com.clevel.selos.integration.brms.model.response.DocCustomerResponse;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.model.*;
@@ -73,6 +75,8 @@ public class BRMSControl extends BusinessControl {
     private WorkCaseAppraisalDAO workCaseAppraisalDAO;
     @Inject
     private DBRDAO dbrdao;
+    @Inject
+    private BAPAInfoDAO bapaInfoDAO;
 
     @Inject
     private ExSummaryDAO exSummaryDAO;
@@ -479,8 +483,95 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setNetFixAsset(bizInfoSummary.getNetFixAsset());
 
         UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
+        logger.debug("-- end getFullApplicationResult return {}", uwRulesResponse);
 
         return uwRulesResponse;
+    }
+
+    public DocCustomerResponse getDocCustomer(long workCaseId){
+        logger.debug("getDocCustomer from workCaseId {}", workCaseId);
+        Date checkDate = Calendar.getInstance().getTime();
+        logger.debug("check at date {}", checkDate);
+
+        BRMSApplicationInfo applicationInfo = new BRMSApplicationInfo();
+
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        //1. Set Customer Info List
+        List<BRMSCustomerInfo> customerInfoList = new ArrayList<BRMSCustomerInfo>();
+        List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
+        for(Customer customer : customerList){
+            BRMSCustomerInfo brmsCustomerInfo = brmsTransform.getCustomerInfoWithoutCreditAccount(customer, checkDate);
+            customerInfoList.add(brmsCustomerInfo);
+        }
+        applicationInfo.setCustomerInfoList(customerInfoList);
+
+        //2. Set Account Requested List
+        List<NewCreditDetail> newCreditDetailList = newCreditDetailDAO.findNewCreditDetail(workCaseId, workCase.getStep().getProposeType());
+        List<BRMSAccountRequested> accountRequestedList = new ArrayList();
+        for(NewCreditDetail newCreditDetail : newCreditDetailList){
+            if(newCreditDetail.getRequestType() == RequestTypes.NEW.value()){
+                accountRequestedList.add(brmsTransform.getBRMSAccountRequested(newCreditDetail, null));
+            }
+        }
+        applicationInfo.setAccountRequestedList(accountRequestedList);
+
+        //3. Set Application Information.
+        applicationInfo.setApplicationNo(workCase.getAppNumber());
+        applicationInfo.setProcessDate(checkDate);
+        applicationInfo.setBdmSubmitDate(basicInfo.getBdmSubmitDate());
+        applicationInfo.setBorrowerType(basicInfo.getBorrowerType().getBrmsCode());
+        applicationInfo.setExistingSMECustomer(getRadioBoolean(basicInfo.getExistingSMECustomer()));
+        applicationInfo.setRequestLoanWithSameName(getRadioBoolean(basicInfo.getRequestLoanWithSameName()));
+        applicationInfo.setRefinanceIN(getRadioBoolean(basicInfo.getRefinanceIN()));
+        applicationInfo.setRefinanceOUT(getRadioBoolean(basicInfo.getRefinanceOUT()));
+
+        BAPAInfo bapaInfo = bapaInfoDAO.findByWorkCase(workCaseId);
+
+        if(bapaInfo.getApplyBA().getBoolValue()){
+            if(bapaInfo.getBaPaymentMethod().value() == BAPaymentMethodValue.DIRECT.value()){
+                applicationInfo.setApplyBAwithCash(Boolean.TRUE);
+                applicationInfo.setTopupBA(Boolean.FALSE);
+            } else if(bapaInfo.getBaPaymentMethod().value() == BAPaymentMethodValue.TOPUP.value()){
+                applicationInfo.setApplyBAwithCash(Boolean.FALSE);
+                applicationInfo.setTopupBA(Boolean.TRUE);
+            } else {
+                applicationInfo.setApplyBAwithCash(Boolean.FALSE);
+                applicationInfo.setTopupBA(Boolean.FALSE);
+            }
+        } else {
+            applicationInfo.setApplyBAwithCash(Boolean.FALSE);
+            applicationInfo.setTopupBA(Boolean.FALSE);
+        }
+
+        TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
+        applicationInfo.setRequestTCG(getRadioBoolean(tcg.getTcgFlag()));
+        applicationInfo.setStepCode(workCase.getStep().getCode());
+        applicationInfo.setProductGroup(basicInfo.getProductGroup().getBrmsCode());
+        BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findByWorkCaseId(workCaseId);
+        applicationInfo.setReferredDocType(bizInfoSummary.getReferredExperience().getBrmsCode());
+
+        DocCustomerResponse docCustomerResponse = brmsInterface.checkDocCustomerRule(applicationInfo);
+        logger.debug("-- end getDocCustomer return {}", docCustomerResponse);
+        return null;
+    }
+
+    public DocAppraisalResponse getDocAppraisal(long workCaseId){
+        logger.debug("getDocAppraisal from workCaseId {}", workCaseId);
+        Date checkDate = Calendar.getInstance().getTime();
+        logger.debug("check at date {}", checkDate);
+
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        BRMSApplicationInfo applicationInfo = new BRMSApplicationInfo();
+        applicationInfo.setApplicationNo(workCase.getAppNumber());
+        applicationInfo.setProcessDate(checkDate);
+        applicationInfo.setBdmSubmitDate(basicInfo.getBdmSubmitDate());
+        applicationInfo.setProductGroup(basicInfo.getProductGroup().getBrmsCode());
+
+        DocAppraisalResponse docAppraisalResponse = brmsInterface.checkDocAppraisalRule(applicationInfo);
+        logger.debug("-- end getDocAppraisal ", docAppraisalResponse);
+        return docAppraisalResponse;
     }
 
     private boolean getRadioBoolean(int value){
