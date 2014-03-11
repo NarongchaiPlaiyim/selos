@@ -57,7 +57,7 @@
 
                         <p:columnGroup type="header">
                             <p:row>
-                                <p:column style="width: 5%" />
+                                <p:column style="width: 5%" selectionMode="multiple"/>
                                 <p:column style="width: 25%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.account')}"/>
                                 <p:column style="width: 10%; padding: 5px 10px !important;"
@@ -73,7 +73,7 @@
                             </p:row>
                         </p:columnGroup>
 
-                        <p:column styleClass="center center" selectionMode="multiple"/>
+                        <p:column styleClass="center" selectionMode="multiple"/>
 
                         <p:column styleClass="left top">
                             #{creditTypeItem.accountName}<br/>
