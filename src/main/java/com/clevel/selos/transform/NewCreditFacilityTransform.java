@@ -10,6 +10,7 @@ import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.CountryView;
 import com.clevel.selos.model.view.NewCreditFacilityView;
+import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
 import java.util.Date;
@@ -25,6 +26,8 @@ public class NewCreditFacilityTransform extends Transform {
     private NewCreditFacilityDAO newCreditFacilityDAO;
     @Inject
     private CountryTransform countryTransform;
+    @Inject
+    private CreditRequestTypeTransform creditRequestTypeTransform;
 
     public NewCreditFacility transformToModelDB(NewCreditFacilityView newCreditFacilityView, WorkCase workCase, User user) {
 
