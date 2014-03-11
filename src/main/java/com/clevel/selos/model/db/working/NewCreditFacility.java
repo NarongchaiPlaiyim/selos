@@ -203,9 +203,8 @@ public class NewCreditFacility implements Serializable {
 //    @Column(name = "total_approve_exposure")
 //    private BigDecimal totalApproveExposure;
 //
-    // todo: remove this (get from Decision)
-    @Column(name = "total_approve_od_limit")
-    private BigDecimal totalApprovedODLimit;
+//    @Column(name = "total_approve_od_limit")
+//    private BigDecimal totalApprovedODLimit;
 //
 //    @Column(name = "total_approve_num_new_od")
 //    private BigDecimal totalApproveNumOfNewOD;
@@ -808,16 +807,6 @@ public class NewCreditFacility implements Serializable {
 
     public void setTotalMortgageValue(BigDecimal totalMortgageValue) {
         this.totalMortgageValue = totalMortgageValue;
-    }
-
-    @Deprecated
-    public BigDecimal getTotalApprovedODLimit() {
-        return totalApprovedODLimit;
-    }
-
-    @Deprecated
-    public void setTotalApprovedODLimit(BigDecimal totalApprovedODLimit) {
-        this.totalApprovedODLimit = totalApprovedODLimit;
     }
 
     @Override
