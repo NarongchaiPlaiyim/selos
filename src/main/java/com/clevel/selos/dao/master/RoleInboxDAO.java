@@ -6,6 +6,7 @@ import com.clevel.selos.model.db.master.Action;
 import com.clevel.selos.model.db.master.InboxType;
 import com.clevel.selos.model.db.master.Role;
 import com.clevel.selos.model.db.relation.RelRoleBasedInbox;
+import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
@@ -78,7 +79,7 @@ public class RoleInboxDAO extends GenericDAO<InboxType, Long> {
         Criteria criteria2 = getSession().createCriteria(InboxType.class);
 
         criteria2.setProjection(Projections.projectionList().add(Projections.property("inbox_name"), "inbox_name")).add(Restrictions.in("id", inboxList)).setResultTransformer(Transformers.aliasToBean(InboxType.class));
-        inboxTypeList = criteria2.list();
+//        inboxTypeList = Util.safetyList(criteria2.list());
 
         iterator = inboxTypeList.iterator();
 

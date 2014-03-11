@@ -192,7 +192,7 @@ public class DecisionControl extends BusinessControl {
                       newCreditFacilityView.getCreditCustomerType() == 2 ? CreditCustomerType.PRIME
                     : newCreditFacilityView.getCreditCustomerType() == 1 ? CreditCustomerType.NORMAL
                     : CreditCustomerType.NOT_SELECTED);
-            decisionView.setLoanRequestType(creditRequestTypeTransform.transformToView(newCreditFacilityView.getLoanRequestType()));
+            decisionView.setLoanRequestType(newCreditFacilityView.getLoanRequestType());
             decisionView.setInvestedCountry(newCreditFacilityView.getInvestedCountry());
             decisionView.setExistingSMELimit(newCreditFacilityView.getExistingSMELimit());
             decisionView.setMaximumSMELimit(newCreditFacilityView.getMaximumSMELimit());

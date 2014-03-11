@@ -3,10 +3,7 @@ package com.clevel.selos.integration.brms;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.BRMSInterface;
-import com.clevel.selos.integration.brms.convert.FullApplicationConverter;
-import com.clevel.selos.integration.brms.convert.PrescreenConverter;
-import com.clevel.selos.integration.brms.convert.StandardPricingFeeConverter;
-import com.clevel.selos.integration.brms.convert.StandardPricingIntConverter;
+import com.clevel.selos.integration.brms.convert.*;
 import com.clevel.selos.integration.brms.model.RuleColorResult;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.*;
@@ -41,6 +38,10 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
     PrescreenConverter prescreenConverter;
     @Inject
     FullApplicationConverter fullApplicationConverter;
+    @Inject
+    DocCustomerConverter docCustomerConverter;
+    @Inject
+    DocAppraisalConverter docAppraisalConverter;
 
     @Inject
     public BRMSInterfaceImpl() {
@@ -147,8 +148,19 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
             logger.error("docCustomerRequest is null for request");
             throw new ValidationException("002");
         }
-        //todo call service
-        return new DocCustomerResponse();
+
+        DocCustomerResponse docCustomerResponse = new DocCustomerResponse();
+        try{
+            DecisionServiceResponse decisionServiceResponse = endpoint.callDocumentCustomerRulesService(docCustomerConverter.getDecisionServiceRequest(applicationInfo));
+            docCustomerResponse = docCustomerConverter.getDocCustomerResponse(decisionServiceResponse);
+            docCustomerResponse.setActionResult(ActionResult.SUCCESS);
+
+        }catch (Exception ex){
+            docCustomerResponse.setActionResult(ActionResult.FAILED);
+            docCustomerResponse.setReason(Util.getMessageException(ex));
+            logger.error("checkDocCustomerRule calling exception or convert exception", ex);
+        }
+        return docCustomerResponse;
     }
 
     @Override
@@ -158,7 +170,18 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
             logger.error("docAppraisalRequest is null for request");
             throw new ValidationException("002");
         }
-        //todo call service
+
+        DocAppraisalResponse docAppraisalResponse = new DocAppraisalResponse();
+        try{
+            DecisionServiceResponse decisionServiceResponse = endpoint.callDocumentAppraisalRulesService(docAppraisalConverter.getDecisionServiceRequest(applicationInfo));
+            docAppraisalResponse = docAppraisalConverter.getDocAppraisalResponse(decisionServiceResponse);
+            docAppraisalResponse.setActionResult(ActionResult.SUCCESS);
+        } catch (Exception ex){
+            docAppraisalResponse.setActionResult(ActionResult.FAILED);
+            docAppraisalResponse.setReason(Util.getMessageException(ex));
+            logger.error("checkDocAppraisalRule calling exception or convert exception", ex);
+        }
+        logger.debug("-- end checkDocAppraisalRule() return {}", docAppraisalResponse);
         return new DocAppraisalResponse();
     }
 }

@@ -501,7 +501,10 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         if (!Util.isNull(workCaseId)) {
             try {
                 StandardPricingResponse standardPricingResponse = creditFacProposeControl.getPriceFeeInterest(workCaseId);
-
+                log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult().toString());
+                log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
+                log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().toString());
+                log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
                 if (!Util.isNull(standardPricingResponse) && ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
                     log.debug("standardPricingResponse ::: {}", standardPricingResponse.getPricingInterest().toString());
                     log.debug("standardPricingResponse ::: {}", standardPricingResponse.getPricingFeeList().toString());
