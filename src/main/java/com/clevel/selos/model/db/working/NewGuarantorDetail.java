@@ -67,7 +67,7 @@ public class NewGuarantorDetail implements Serializable {
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
-    @OneToMany(mappedBy = "newGuarantorDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "newGuarantorDetail")
     private List<NewGuarantorCredit> newGuarantorCreditList;
 
 

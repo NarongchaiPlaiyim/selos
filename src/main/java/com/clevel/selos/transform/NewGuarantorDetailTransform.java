@@ -103,6 +103,8 @@ public class NewGuarantorDetailTransform extends Transform {
             log.info("newGuarantorCreditList :: {}", newGuarantorCreditList.size());
             List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
             List<ExistingCreditDetail> existingCreditDetailList = new ArrayList<ExistingCreditDetail>();
+            List<ProposeCreditDetailView> proposeCreditDetailViewList;
+            newGuarantorDetailView.setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
 
             for (NewGuarantorCredit newGuarantorCredit : newGuarantorCreditList) {
                 if (newGuarantorCredit.getExistingCreditDetail() != null) {
@@ -114,9 +116,9 @@ public class NewGuarantorDetailTransform extends Transform {
                 }
             }
 
-            log.info("newCreditDetailList Guarantor:: {}", newCreditDetailList.size());
-            log.info("getExistingCreditDetail Guarantor:: {}", existingCreditDetailList.size());
-            List<ProposeCreditDetailView> proposeCreditDetailViewList = proposeCreditDetailTransform(newCreditDetailList, existingCreditDetailList, newGuarantorCreditList);
+            List<ExistingCreditDetailView> existingCreditDetailViewList = existingCreditDetailTransform.transformsToView(existingCreditDetailList);
+            List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditDetailList);
+            proposeCreditDetailViewList = proposeCreditDetailTransform(newCreditDetailViewList, existingCreditDetailViewList, newGuarantorCreditList);
             log.info("Guarantor transformToView find all relation proposeCreditDetailViewList :: {}",proposeCreditDetailViewList.size());
             newGuarantorDetailView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
 
@@ -157,11 +159,11 @@ public class NewGuarantorDetailTransform extends Transform {
         return newGuarantorDetailViewList;
     }
 
-    public List<ProposeCreditDetailView> proposeCreditDetailTransform(List<NewCreditDetail> newCreditDetailList, List<ExistingCreditDetail> existingCreditDetailList, List<NewGuarantorCredit> newGuarantorCreditList) {
-        log.info("proposeCreditDetailTransform :: newCreditDetailList size :: {}", newCreditDetailList.size());
-        log.info("proposeCreditDetailTransform :: existingCreditDetailList size :: {}", existingCreditDetailList.size());
+    public List<ProposeCreditDetailView> proposeCreditDetailTransform(List<NewCreditDetailView> newCreditDetailViewList, List<ExistingCreditDetailView> existingCreditDetailViewList, List<NewGuarantorCredit> newGuarantorCreditList) {
+        log.info("proposeCreditDetailTransform :: newCreditDetailList size :: {}", newCreditDetailViewList.size());
+        log.info("proposeCreditDetailTransform :: existingCreditDetailList size :: {}", existingCreditDetailViewList.size());
 
-        List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditDetailList);
+//        List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditDetailList);
         // todo: find credit existing and propose in this workCase
         List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
         ProposeCreditDetailView proposeCreditDetailView;
@@ -189,7 +191,7 @@ public class NewGuarantorDetailTransform extends Transform {
 
         rowCount = newCreditDetailViewList.size() > 0 ? newCreditDetailViewList.size() + 1 : rowCount;
 
-        List<ExistingCreditDetailView> existingCreditDetailViewList = existingCreditDetailTransform.transformsToView(existingCreditDetailList);
+//        List<ExistingCreditDetailView> existingCreditDetailViewList = existingCreditDetailTransform.transformsToView(existingCreditDetailList);
 
         for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViewList) {
             proposeCreditDetailView = new ProposeCreditDetailView();
