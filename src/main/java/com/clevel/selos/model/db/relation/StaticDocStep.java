@@ -4,6 +4,7 @@ import com.clevel.selos.model.db.master.StaticDocument;
 import com.clevel.selos.model.db.master.Step;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "rel_static_doc_step")
@@ -18,7 +19,7 @@ public class StaticDocStep {
 
     @OneToMany
     @JoinColumn(name = "step_id")
-    private Step step;
+    private List<Step> stepList;
 
     public long getId() {
         return id;
@@ -36,11 +37,11 @@ public class StaticDocStep {
         this.document = document;
     }
 
-    public Step getStep() {
-        return step;
+    public List<Step> getStepList() {
+        return stepList;
     }
 
-    public void setStep(Step step) {
-        this.step = step;
+    public void setStepList(List<Step> stepList) {
+        this.stepList = stepList;
     }
 }
