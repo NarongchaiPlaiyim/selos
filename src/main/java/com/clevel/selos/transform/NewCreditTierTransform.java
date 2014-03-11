@@ -2,17 +2,19 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.BaseRateDAO;
 import com.clevel.selos.dao.working.NewCreditTierDetailDAO;
+import com.clevel.selos.integration.brms.model.response.PricingIntTier;
+import com.clevel.selos.integration.brms.model.response.PricingInterest;
 import com.clevel.selos.model.db.master.BaseRate;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.NewCreditTierDetail;
 import com.clevel.selos.model.view.NewCreditTierDetailView;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class NewCreditTierTransform extends Transform {
@@ -118,6 +120,27 @@ public class NewCreditTierTransform extends Transform {
 
         return newCreditTierDetailViewList;
     }
+
+    public List<NewCreditTierDetailView> transformPricingIntTierToView(List<PricingInterest> pricingInterestList) {
+
+        List<NewCreditTierDetailView> newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
+        NewCreditTierDetailView newFeeDetailView;
+        for(PricingInterest pricingInterest : pricingInterestList){
+            if(!Util.isNull(pricingInterest.getCreditDetailId())){
+                for (PricingIntTier newPricingIntTier : pricingInterest.getPricingIntTierList()) {
+                    newFeeDetailView = new NewCreditTierDetailView();
+                    newFeeDetailView.setStandardInterest(newPricingIntTier.getMaxRateVariance());
+        //            newFeeDetailView.setStandardBasePrice();
+                    newFeeDetailView.setStandardPriceLabel(newPricingIntTier.getRateType());
+                    log.info("newPricingIntTier.getRateType() ::: {}",newPricingIntTier.getRateType());
+                    newCreditTierDetailViewList.add(newFeeDetailView);
+                }
+            }
+        }
+
+        return newCreditTierDetailViewList;
+    }
+
 
     public String toGetPricing(BaseRate baseRate ,BigDecimal price){
         String priceToShow = "";

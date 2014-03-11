@@ -13,26 +13,34 @@ import javax.persistence.Table;
 public class FeeType {
     @Id
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @Column (name = "brms_code")
     private String brmsCode;
 
-    @Column (name = "formula")
-    private String formula;
-
     @Column (name = "description", length = 200)
     private String description;
+
+    @Column (name = "frontend_fee", length = 1, columnDefinition = "int default 0")
+    private boolean frontend;
 
     @Column (name = "active")
     private int active;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public boolean isFrontend() {
+        return frontend;
+    }
+
+    public void setFrontend(boolean frontend) {
+        this.frontend = frontend;
     }
 
     public String getBrmsCode() {

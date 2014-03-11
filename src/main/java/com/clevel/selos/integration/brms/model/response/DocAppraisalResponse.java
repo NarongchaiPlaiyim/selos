@@ -11,7 +11,7 @@ public class DocAppraisalResponse {
     private String applicationNo;
     private ActionResult actionResult;
     private String reason;
-    private List<DocumentDetail> documentDetailMap;
+    private List<DocumentDetail> documentDetailList;
 
     public String getDecisionID() {
         return decisionID;
@@ -45,12 +45,12 @@ public class DocAppraisalResponse {
         this.reason = reason;
     }
 
-    public List<DocumentDetail> getDocumentDetailMap() {
-        return documentDetailMap;
+    public List<DocumentDetail> getDocumentDetailList() {
+        return documentDetailList;
     }
 
-    public void setDocumentDetailMap(List<DocumentDetail> documentDetailMap) {
-        this.documentDetailMap = documentDetailMap;
+    public void setDocumentDetailList(List<DocumentDetail> documentDetailList) {
+        this.documentDetailList = documentDetailList;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class DocAppraisalResponse {
                 .append("applicationNo", applicationNo)
                 .append("actionResult", actionResult)
                 .append("reason", reason)
-                .append("documentDetailMap", documentDetailMap)
+                .append("documentDetailList", documentDetailList)
                 .toString();
     }
 }

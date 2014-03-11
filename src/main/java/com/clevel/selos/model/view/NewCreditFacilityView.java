@@ -1,7 +1,6 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.CreditCustomerType;
-import com.clevel.selos.model.db.master.Country;
 import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -72,8 +71,8 @@ public class NewCreditFacilityView implements Serializable {
     private BigDecimal guarantorBA;
     private String reasonForReduction;
     private int creditCustomerType;
-    private CreditRequestType  loanRequestType;
-    private Country investedCountry;
+    private CreditRequestTypeView loanRequestType;
+    private CountryView investedCountry;
 
     private int relatedTMBLending;
     private int twentyFivePercentShareRelatedTMBLending;
@@ -162,8 +161,8 @@ public class NewCreditFacilityView implements Serializable {
         this.twentyFivePercentShareRelatedTMBLending = 0;
         this.singleLendingLimit = 0;
 
-        this.loanRequestType = new CreditRequestType();
-        this.investedCountry = new Country();
+        this.loanRequestType = new CreditRequestTypeView();
+        this.investedCountry = new CountryView();
         this.creditCustomerType = CreditCustomerType.NOT_SELECTED.value();
 
         this.newCollateralViewDelList = new ArrayList<NewCollateralView>();
@@ -582,19 +581,19 @@ public class NewCreditFacilityView implements Serializable {
         this.creditCustomerType = creditCustomerType;
     }
 
-    public CreditRequestType getLoanRequestType() {
+    public CreditRequestTypeView getLoanRequestType() {
         return loanRequestType;
     }
 
-    public void setLoanRequestType(CreditRequestType loanRequestType) {
+    public void setLoanRequestType(CreditRequestTypeView loanRequestType) {
         this.loanRequestType = loanRequestType;
     }
 
-    public Country getInvestedCountry() {
+    public CountryView getInvestedCountry() {
         return investedCountry;
     }
 
-    public void setInvestedCountry(Country investedCountry) {
+    public void setInvestedCountry(CountryView investedCountry) {
         this.investedCountry = investedCountry;
     }
 

@@ -3,10 +3,10 @@ apply plugin: 'war'
 sourceCompatibility = 1.6
 
 project.ext {
-    projectRoot='C:/Work/TMB/SELOS/Workspace/selos_update/selos'
+    projectRoot='E:/C-Level_Projects/selos'
     beanXML= projectRoot+'/src/main/webapp/WEB-INF/beans.xml'
     persistenceXML = projectRoot+'/src/main/resources/META-INF/persistence.bank.xml'
-    selosLib='C:/Work/TMB/SELOS/Server/Gradle/gradle-build-lib/library'
+    selosLib='E:/C-Level Files/TMB SE-LOS/Gradle/_selos_lib_compile'
     versionString = ''
     versionNumber = 'vvv'
     buildNumber = '0'
@@ -135,6 +135,7 @@ task buildLibrary(dependsOn: classes, type: Jar) {
     include 'com/clevel/selos/security/encryption/**/*'
     include 'com/clevel/selos/security/UserDetail.*'
 
+
     //************* Exceptions ***********************
     include 'com/clevel/selos/exception/**/*'
 
@@ -143,8 +144,8 @@ task buildLibrary(dependsOn: classes, type: Jar) {
 
     //************* TMB Services ***********************
     include 'com/tmb/**/*'
-	include 'com/tmbbank/**/*'
-	include 'com/ilog/**/*'
+    include 'com/tmbbank/**/*'
+    include 'com/ilog/**/*'
 }
 
 task buildEJB(dependsOn:'buildLibrary', type: Jar) {
@@ -230,8 +231,8 @@ war {
 
     //************* TMB Services ***********************
     war.rootSpec.exclude 'com/tmb'
-	war.rootSpec.exclude 'com/tmbbank'
-	war.rootSpec.exclude 'com/ilog'
+    war.rootSpec.exclude 'com/tmbbank'
+    war.rootSpec.exclude 'com/ilog'
 
     // ************* EJB ************
     war.rootSpec.exclude 'com/clevel/selos/businesscontrol'

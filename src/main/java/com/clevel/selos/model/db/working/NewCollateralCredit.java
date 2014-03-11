@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 
 import javax.persistence.*;
@@ -30,6 +31,10 @@ public class NewCollateralCredit implements Serializable {
     @JoinColumn(name = "new_credit_facility_id")
     private NewCreditFacility newCreditFacility;
 
+    @Column(name = "propose_type")
+    @Enumerated(EnumType.ORDINAL)
+    private ProposeType proposeType;
+
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -53,6 +58,14 @@ public class NewCollateralCredit implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public ProposeType getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(ProposeType proposeType) {
+        this.proposeType = proposeType;
     }
 
     public NewCreditFacility getNewCreditFacility() {

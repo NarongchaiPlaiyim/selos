@@ -8,7 +8,6 @@ import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
-import com.clevel.selos.model.CreditTypeOfStep;
 import com.clevel.selos.model.DBRMethod;
 import com.clevel.selos.model.ExposureMethod;
 import com.clevel.selos.model.ProposeType;
@@ -40,8 +39,6 @@ public class CreditFacProposeControl extends BusinessControl {
     CustomerTransform customerTransform;
     @Inject
     NewCreditFacilityTransform newCreditFacilityTransform;
-    @Inject
-    NewFeeDetailTransform newFeeDetailTransform;
     @Inject
     NewCreditDetailTransform newCreditDetailTransform;
     @Inject
@@ -143,6 +140,8 @@ public class CreditFacProposeControl extends BusinessControl {
     NewCollateralDAO newCollateralDAO;
     @Inject
     NewCollateralSubRelatedDAO newCollateralSubRelatedDAO;
+    @Inject
+    NewFeeDetailTransform newFeeDetailTransform;
 
     @Inject
     public CreditFacProposeControl() {}
@@ -413,45 +412,20 @@ public class CreditFacProposeControl extends BusinessControl {
     public void groupTypeOfStepAndOrderBySeq(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
         log.debug("groupTypeOfStepAndOrderBySeq()");
         if (proposeCreditDetailViewList != null && proposeCreditDetailViewList.size() > 0) {
-            log.debug("Start Grouping by Type of Step (N -> E)");
-            List<ProposeCreditDetailView> groupNewCredits = new ArrayList<ProposeCreditDetailView>();
-            List<ProposeCreditDetailView> groupExistingCredits = new ArrayList<ProposeCreditDetailView>();
-            // Grouping by Type of Step
-            int size = proposeCreditDetailViewList.size();
-            for (int i=0; i<size; i++) {
-                ProposeCreditDetailView creditDetailView = proposeCreditDetailViewList.get(i);
-                if (CreditTypeOfStep.NEW.type().equalsIgnoreCase(creditDetailView.getTypeOfStep())) {
-                    groupNewCredits.add(creditDetailView);
-                }
-                else if (CreditTypeOfStep.EXISTING.type().equalsIgnoreCase(creditDetailView.getTypeOfStep())) {
-                    groupExistingCredits.add(creditDetailView);
-                }
-            }
-            log.debug("End Grouping by Type of Step...");
-            log.debug("NewCredit Group : {}", groupNewCredits);
-            log.debug("ExistingCredit Group : {}", groupExistingCredits);
+            log.debug("Start Grouping by Type of Step (N -> E) and Sort seq (ASC)");
 
-            // Order by Seq (ASC)
             Comparator<ProposeCreditDetailView> comparator = new Comparator<ProposeCreditDetailView>() {
                 @Override
-                public int compare(ProposeCreditDetailView credit1, ProposeCreditDetailView credit2) {
-                    return credit1.getSeq() - credit2.getSeq();
+                public int compare(ProposeCreditDetailView o1, ProposeCreditDetailView o2) {
+                    int flag = o2.getTypeOfStep().compareTo(o1.getTypeOfStep());
+                    if(flag == 0)
+                        flag = o1.getSeq() - o2.getSeq();
+                    return flag;
                 }
             };
 
-            log.debug("Start Order by Seq (ASC)");
-            if (groupNewCredits.size() > 0) {
-                Collections.sort(groupNewCredits, comparator);
-            }
+            Collections.sort(proposeCreditDetailViewList, comparator);
 
-            if (groupExistingCredits.size() > 0) {
-                Collections.sort(groupExistingCredits, comparator);
-            }
-            log.debug("End Order by Seq (ASC)...");
-
-            proposeCreditDetailViewList.clear();
-            proposeCreditDetailViewList.addAll(groupNewCredits);
-            proposeCreditDetailViewList.addAll(groupExistingCredits);
             log.debug("Result : ", proposeCreditDetailViewList);
         }
     }
@@ -571,7 +545,7 @@ public class CreditFacProposeControl extends BusinessControl {
                         if (bidv.getBizDesc() != null) {
                             cog = bidv.getBizDesc().getCog();
                         }
-                        aaaValue = Util.add(aaaValue, Util.multiply(cog, bidv.getPercentBiz()));
+                        aaaValue = Util.add(aaaValue, Util.divide(Util.multiply(cog, bidv.getPercentBiz()),oneHundred));
                     }
                 }
             }
@@ -729,12 +703,7 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         //--- Save to NewConditionCredit
-        if (Util.safetyList(newCreditFacilityView.getNewConditionDetailViewList()).size() > 0){
-            if(Util.safetyList(newCreditFacilityView.getNewConditionViewDelList()).size()>0){
-                List<NewConditionDetail> delList = newConditionDetailTransform.transformToModel(newCreditFacilityView.getNewConditionViewDelList(), newCreditFacility, currentUser);
-                newConditionDetailDAO.delete(delList);
-            }
-
+        if (Util.safetyList(newCreditFacilityView.getNewConditionDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newConditionDetailViewList : {}", newCreditFacilityView.getNewConditionDetailViewList());
             List<NewConditionDetail> newConditionDetailList = newConditionDetailTransform.transformToModel(newCreditFacilityView.getNewConditionDetailViewList(), newCreditFacility, currentUser);
             log.debug("saveCreditFacility ::: before persist newConditionDetailList : {}", newConditionDetailList);
@@ -744,10 +713,6 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //--- Save to NewCreditDetail
         if (Util.safetyList(newCreditFacilityView.getNewCreditDetailViewList()).size() > 0) {
-            if (Util.safetyList(newCreditFacilityView.getNewCreditViewDelList()).size() > 0) {
-                List<NewCreditDetail> newCreditDelList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditViewDelList(), newCreditFacility, currentUser, workCase, ProposeType.P);
-                newCreditDetailDAO.delete(newCreditDelList);
-            }
             log.debug("saveCreditFacility ::: newCreditDetailViewList : {}", newCreditFacilityView.getNewCreditDetailViewList());
             List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, currentUser, workCase, ProposeType.P);
             newCreditFacility.setNewCreditDetailList(newCreditDetailList);
@@ -756,12 +721,9 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
-//            if(Util.safetyList(newCreditFacilityView.getNewGuarantorViewDelList()).size()>0){
-//                List<NewGuarantorDetail> listDel = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorViewDelList(), newCreditFacility, currentUser,ProposeType.P);
-//                newGuarantorDetailDAO.delete(listDel);
-//            }
-            List<NewGuarantorCredit> relationDeleteList = newGuarantorRelationDAO.getListByNewCreditFacility(newCreditFacility);
+            List<NewGuarantorCredit> relationDeleteList = newGuarantorRelationDAO.getListByNewCreditFacility(newCreditFacility,ProposeType.P);
             if(relationDeleteList.size()>0){
+                log.info("relationDeleteList size ::: {}",relationDeleteList.size());
                 newGuarantorRelationDAO.delete(relationDeleteList);
             }
 
@@ -772,16 +734,15 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
       //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
-//        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase, ProposeType.P);
-        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.findAll();
+        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase, ProposeType.P);
         log.debug("before :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
         newSubCollMortgageDAO.delete(newCollateralSubMortgages);
-        log.debug("after :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
+        log.debug("after :: newCollateralSubMortgages :: size :: {}", newCollateralSubMortgages.size());
         //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
         List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase, ProposeType.P);
         log.debug("before :: newCollateralSubOwnerList :: size :: {}",newCollateralSubOwnerList.size());
         newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
-        log.debug("before :: newCollateralSubOwnerList :: size :: {}",newCollateralSubOwnerList.size());
+        log.debug("before :: newCollateralSubOwnerList :: size :: {}", newCollateralSubOwnerList.size());
         //--- Need to Delete SubOwner from newCollateralSubRelatedList before Insert new
 //        List<NewCollateralSubRelated> newCollateralSubRelatedList = newCollateralSubRelatedDAO.getListByWorkCase(workCase, ProposeType.P);
 //        log.debug("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
@@ -789,9 +750,10 @@ public class CreditFacProposeControl extends BusinessControl {
 //        log.debug("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
 
         if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
-            List<NewCollateralCredit> relationDelList = newCollateralRelationDAO.getListByNewCreditFacility(newCreditFacility);
-            if(relationDelList.size()>0){
-                newCollateralRelationDAO.delete(relationDelList);
+            List<NewCollateralCredit> relationCollDelList = newCollateralRelationDAO.getListByNewCreditFacility(newCreditFacility,ProposeType.P);
+            if(relationCollDelList.size()>0){
+                log.info("relationCollDelList size ::: {}",relationCollDelList.size());
+                newCollateralRelationDAO.delete(relationCollDelList);
             }
 
             if(Util.safetyList(newCreditFacilityView.getNewCollateralViewDelList()).size() > 0) {
@@ -835,12 +797,16 @@ public class CreditFacProposeControl extends BusinessControl {
     public StandardPricingResponse getPriceFeeInterest(final long workCaseId) {
         log.debug("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
         StandardPricingResponse standardPricingResponse  = null;
+        List<NewFeeDetailView> newFeeDetailViewList = null;
         try {
             standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
+//            if (standardPricingResponse != null) {
+                log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult().toString());
+                log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
+                log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().toString());
+                log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
+//            }
 
-            if (standardPricingResponse != null) {
-                log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult());
-            }
 
             return standardPricingResponse;
 
@@ -850,21 +816,27 @@ public class CreditFacProposeControl extends BusinessControl {
         return standardPricingResponse;
     }
 
-
     public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {
         log.debug("deleteAllApproveByIdList()");
         log.debug("deleteCreditIdList: {}", deleteCreditIdList);
         log.debug("deleteCollIdList: {}", deleteCollIdList);
         log.debug("deleteGuarantorIdList: {}", deleteGuarantorIdList);
         log.debug("deleteConditionIdList: {}", deleteConditionIdList);
+        List<NewCollateralCredit> newCollateralCreditDelList;
+        List<NewGuarantorCredit> newGuarantorCreditList;
 
-//        if (deleteCreditIdList != null && deleteCreditIdList.size() > 0) {
-//            List<NewCreditDetail> deleteCreditDetailList = new ArrayList<NewCreditDetail>();
-//            for (Long id : deleteCreditIdList) {
-//                deleteCreditDetailList.add(newCreditDetailDAO.findById(id));
-//            }
-//            newCreditDetailDAO.delete(deleteCreditDetailList);
-//        }
+        if (deleteCreditIdList != null && deleteCreditIdList.size() > 0) {
+            List<NewCreditDetail> deleteCreditDetailList = new ArrayList<NewCreditDetail>();
+            for (Long id : deleteCreditIdList) {
+                NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(id);
+                deleteCreditDetailList.add(newCreditDetail);
+                newCollateralCreditDelList = newCollateralCreditDAO.getListCollRelationByNewCreditDetail(newCreditDetail,ProposeType.P);
+                newCollateralCreditDAO.delete(newCollateralCreditDelList);
+                newGuarantorCreditList = newGuarantorRelationDAO.getListByNewCreditDetail(newCreditDetail, ProposeType.P);
+                newGuarantorRelationDAO.delete(newGuarantorCreditList);
+            }
+            newCreditDetailDAO.delete(deleteCreditDetailList);
+        }
 
         if (deleteCollIdList != null && deleteCollIdList.size() > 0) {
             List<NewCollateral> deleteCollateralList = new ArrayList<NewCollateral>();
@@ -877,7 +849,7 @@ public class CreditFacProposeControl extends BusinessControl {
         if (deleteGuarantorIdList != null && deleteGuarantorIdList.size() > 0) {
             List<NewGuarantorDetail> deleteGuarantorList = new ArrayList<NewGuarantorDetail>();
             for (Long id : deleteGuarantorIdList) {
-                deleteGuarantorList.add(newGuarantorDetailDAO.findById(id));
+                deleteGuarantorList.add(newGuarantorDetailDAO.findGuarantorById(id,ProposeType.P));
             }
             newGuarantorDetailDAO.delete(deleteGuarantorList);
         }

@@ -22,6 +22,7 @@ public class ManageButton implements Serializable {
     private boolean returnBDMButton;
     private boolean returnAADAdminButton;
     private boolean submitAppraisalButton;
+    private boolean printReportButtom;
 
     public boolean isCheckNCBButton() {
         return checkNCBButton;
@@ -173,5 +174,13 @@ public class ManageButton implements Serializable {
 
     public void setSubmitAppraisalButton(boolean submitAppraisalButton) {
         this.submitAppraisalButton = submitAppraisalButton;
+    }
+
+    public boolean isPrintReportButtom() {
+        return printReportButtom;
+    }
+
+    public void setPrintReportButtom(boolean printReportButtom) {
+        this.printReportButtom = printReportButtom;
     }
 }

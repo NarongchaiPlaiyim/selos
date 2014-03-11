@@ -391,7 +391,7 @@
                              onclick="this.select()"
                              onkeydown="return onKeyDownMoney(event);"
                              onkeypress="return onKeyPressMoney(event);"
-                             style="width:200px;text-align: right"
+                             style="width:170px;text-align: right"
                              readonly="true">
                     <!--readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">-->
                     <f:convertNumber pattern="#,##0.##"
@@ -445,7 +445,7 @@
     <td class="left" colspan="3">
         <p:selectOneMenu id="dlgLoanPurpose"
                          value="#{creditFacPropose.newCreditDetailView.loanPurposeView.id}"
-                         style="min-width: 200px; width: 200px; max-width: 200px;"
+                         style="min-width: 400px; width: 400px; max-width: 400px;"
                          required="#{not empty param[onSaveCreditInfo.clientId]}"
                          disabled="#{creditFacPropose.modeEdit}">
             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>

@@ -6,20 +6,18 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RoleValue;
-import com.clevel.selos.model.db.master.CreditRequestType;
-import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
-import com.rits.cloning.Cloner;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Stateless
 public class DecisionControl extends BusinessControl {
@@ -194,8 +192,8 @@ public class DecisionControl extends BusinessControl {
                       newCreditFacilityView.getCreditCustomerType() == 2 ? CreditCustomerType.PRIME
                     : newCreditFacilityView.getCreditCustomerType() == 1 ? CreditCustomerType.NORMAL
                     : CreditCustomerType.NOT_SELECTED);
-            decisionView.setLoanRequestType(creditRequestTypeTransform.transformToView(newCreditFacilityView.getLoanRequestType()));
-            decisionView.setInvestedCountry(countryTransform.transformToView(newCreditFacilityView.getInvestedCountry()));
+            decisionView.setLoanRequestType(newCreditFacilityView.getLoanRequestType());
+            decisionView.setInvestedCountry(newCreditFacilityView.getInvestedCountry());
             decisionView.setExistingSMELimit(newCreditFacilityView.getExistingSMELimit());
             decisionView.setMaximumSMELimit(newCreditFacilityView.getMaximumSMELimit());
             // Propose Credit Info.

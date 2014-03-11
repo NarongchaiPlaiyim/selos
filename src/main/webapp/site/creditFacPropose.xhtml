@@ -536,7 +536,7 @@
         <p:commandButton value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
                          styleClass="largest"
                          disabled="#{creditFacPropose.notRetrievePricing}"
-                         process="@this"
+                         process="@form"
                          update=":frmMain,:msgBoxSystemMessagePanel"
                          action="#{creditFacPropose.onRetrievePricingFee}"/>
     </td>
@@ -550,8 +550,7 @@
 <thead>
 <tr>
     <th class="ui-state-default" style="width: 3%"></th>
-    <th class="ui-state-default"
-        style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.productProgram')}</th>
+    <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.productProgram')}</th>
     <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.creditType')}</th>
     <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.productCode')}</th>
     <th class="ui-state-default" style="width: 15%">#{msg.get('app.credit.facility.propose.tb.label.limit')}</th>
@@ -560,8 +559,8 @@
     <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.finalPrice')}</th>
     <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.installment')}</th>
     <th class="ui-state-default" style="width: 5%">#{msg.get('app.credit.facility.propose.tb.label.tenor')}</th>
-    <th class="ui-state-default" style="width: 5%">#{msg.get('app.credit.facility.propose.tb.label.frontEndFee')}</th>
-    <th class="ui-state-default" style="width: 10%"></th>
+    <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.frontEndFee')}</th>
+    <th class="ui-state-default" style="width: 5%"></th>
 </tr>
 </thead>
 
@@ -776,7 +775,7 @@
 
 <h:panelGroup rendered="#{empty creditFacPropose.newCreditFacilityView.newCreditDetailViewList}">
     <tr>
-        <td colspan="12">No records found.</td>
+        <td colspan="12">#{msg.get('app.label.noRecordsFound')}</td>
     </tr>
 </h:panelGroup>
 </tbody>

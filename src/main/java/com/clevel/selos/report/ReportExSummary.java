@@ -1,74 +1,71 @@
 package com.clevel.selos.report;
 
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.report.ReportService;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.slf4j.Logger;
+import com.clevel.selos.model.view.ExSummaryView;
+import com.clevel.selos.report.template.PDFExecutive_Summary;
+import com.clevel.selos.system.Config;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.view.facelets.FaceletContext;
 import javax.inject.Inject;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @ViewScoped
 @ManagedBean(name = "report")
 public class ReportExSummary extends ReportService {
+
     @Inject
-    @SELOS
-    private Logger log;
+    @Config(name = "report.exsum")
+    String path;
+
+    @Inject
+    @Config(name = "report.exsum.subreport")
+    String pathsub;
+
+    @Inject
+    private ExSummaryView exSummaryViews;
+
+    @Inject
+    PDFExecutive_Summary pdfExecutiveSummary;
 
     @Inject
     public ReportExSummary() {
 
     }
-    JasperPrint jasperPrint;
 
     public void init(){
-
+        log.debug("init() {[]}");
     }
 
     @PostConstruct
     private void onCreation(){
-        init();
         log.debug("ReportExSummary onCreation ");
+
+
     }
 
-    public void onPrintReport() throws IOException, JRException {
+    String pdfName;
+
+    public void onPrintExsumReport() throws Exception {
         log.debug("onPrintReport");
-//        try {
-//            InputStream reportFileName2 = ReportExSummary.class.getClassLoader().getResourceAsStream("ExSummary.jrxml");
-////            System.out.println(reportFileName2.);
-//        } catch (Exception e){
-//            System.out.println(e);
-//        }
 
+        HashMap map = new HashMap<String, Object>();
+        map.put("path", pathsub);
+        map.put("borrower", pdfExecutiveSummary.fillBorrowerRelatedProfile());
+        map.put("businessLocation", pdfExecutiveSummary.fillBorrower());
+        map.put("tradeFinance", pdfExecutiveSummary.fillTradeFinance());
+        map.put("borrowerCharacteristic", pdfExecutiveSummary.fillBorrowerCharacteristic());
+        map.put("ncbRecord", pdfExecutiveSummary.fillNCBRecord());
+        map.put("accountMovement", pdfExecutiveSummary.fillAccountMovement());
+        map.put("collateral", pdfExecutiveSummary.fillCollateral());
+        map.put("creditRisk", pdfExecutiveSummary.fillBorrowerRelatedProfile());
+        map.put("bizSupport", pdfExecutiveSummary.fillBizSupport());
+        map.put("uwDecision", pdfExecutiveSummary.fillUWDecision());
+        map.put("creditRisk", pdfExecutiveSummary.fillCreditRisk());
+        map.put("decision", pdfExecutiveSummary.fillDecision());
 
-        URL reportTemplate2 = this.getClass().getResource("\\com\\clevel\\selos\\report\\iReport\\ExSummary.jrxml");
-        System.out.println("reportTemplate2:"+reportTemplate2);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("user", "Ex Summary");
-        List<String> list = new ArrayList<String>();
-        list.add("sss");
-        list.add("bbb");
-        list.add("2222");
-        JRBeanCollectionDataSource jrBeanCollectionDataSource = new JRBeanCollectionDataSource(list);
-        log.info("reportTemplate: {}",reportTemplate);
-        log.info("map: {}",map);
-        log.info("jrBeanCollectionDataSource: {}",jrBeanCollectionDataSource);
+        pdfName = "Executive_Summary_Report_";
 
-        generatePDF(reportTemplate, map, jrBeanCollectionDataSource);
+        generatePDF(path, map, pdfName);
     }
-
 }

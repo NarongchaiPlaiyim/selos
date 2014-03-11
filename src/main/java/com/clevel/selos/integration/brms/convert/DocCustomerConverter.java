@@ -7,6 +7,7 @@ import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.request.BRMSCustomerInfo;
 import com.clevel.selos.integration.brms.model.response.DocCustomerResponse;
 import com.clevel.selos.integration.brms.model.response.DocumentDetail;
+import com.clevel.selos.model.DocLevel;
 import com.ilog.rules.decisionservice.DecisionServiceRequest;
 import com.ilog.rules.decisionservice.DecisionServiceResponse;
 import com.ilog.rules.param.UnderwritingRequest;
@@ -51,7 +52,7 @@ public class DocCustomerConverter extends Converter{
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.REFINANCE_IN_FLAG, applicationInfo.isRefinanceIN()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.REFINANCE_OUT_FLAG, applicationInfo.isRefinanceOUT()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.LENDING_REFER_TYPE, applicationInfo.getLoanRequestType()));
-        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.BA_FLAG, applicationInfo.isApplyBA()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.BA_FLAG, applicationInfo.isApplyBAwithCash()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.TOP_UP_BA_FLAG, applicationInfo.isTopupBA()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.TCG_FLAG, applicationInfo.isRequestTCG()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.STEP, applicationInfo.getStepCode()));
@@ -141,52 +142,26 @@ public class DocCustomerConverter extends Converter{
             ApplicationType applicationType = underwritingApprovalRequestType.getApplication();
             docCustomerResponse.setApplicationNo(applicationType.getApplicationNumber());
 
+            //Get Document Detail List in Borrower Level//
             List<BorrowerType> borrowerTypeList = applicationType.getBorrower();
             List<DocumentDetail> documentDetailList = new ArrayList<DocumentDetail>();
             for (BorrowerType borrowerType : borrowerTypeList){
-                List<DocumentSetType> documentSetTypeList = borrowerType.getRequiredDocumentSet();
-                for(DocumentSetType documentSetType : documentSetTypeList){
-                    List<DocumentType> documentTypeList = documentSetType.getDocument();
-                    for(DocumentType documentType : documentTypeList){
-                        DocumentDetail documentDetail = new DocumentDetail();
-                        documentDetail.setId(documentType.getID());
-                        documentDetail.setDescription(documentType.getDescription());
-                        documentDetail.setMandateFlag(documentType.isMandatoryFlag());
-
-                        List<AttributeType> attributeTypeList = documentSetType.getAttribute();
-                        for(AttributeType attributeType : attributeTypeList){
-                            if(BRMSFieldAttributes.DOCUMENT_GROUP.value().equals(attributeType.getName())){
-                                documentDetail.setDocumentGroup(attributeType.getStringValue());
-                            } else if(BRMSFieldAttributes.CONDITION.value().endsWith(attributeType.getName())){
-                                documentDetail.setCondition(attributeType.getStringValue());
-                            } else if(BRMSFieldAttributes.STEP.value().equals(attributeType.getName())){
-                                documentDetail.setStep(attributeType.getStringValue());
-                            } else if(BRMSFieldAttributes.SHOW_FLAG.value().equals(attributeType.getName())){
-                                documentDetail.setShowFlag(attributeType.getStringValue());
-                            } else if(BRMSFieldAttributes.OPER_STEP.value().equals(attributeType.getName())){
-                                documentDetail.setOperStep(attributeType.getStringValue());
-                            } else if(BRMSFieldAttributes.OPER_SHOW_FLAG.value().equals(attributeType.getName())){
-                                documentDetail.setOperShowFlag(attributeType.getStringValue());
-                            } else if(BRMSFieldAttributes.OPER_MANDATORY_Flag.value().equals(attributeType.getName())){
-                                documentDetail.setOperMandateFlag(attributeType.isBooleanValue());
-                            }
-                        }
-                        documentDetailList.add(documentDetail);
-                    }
+                String docOwner = null;
+                if(borrowerType.getIndividual() != null){
+                    docOwner = borrowerType.getIndividual().getCitizenID();
                 }
+                List<DocumentSetType> documentSetTypeList = borrowerType.getRequiredDocumentSet();
+                documentDetailList.addAll(getDocumentDetail(documentSetTypeList, docOwner, DocLevel.CUS_LEVEL));
             }
 
-//
-//            List<Doc> applicationType.getRequiredDocumentSet();
-//            List<DocumentDetai
-//            for(){
-//
-//            }
-
+            //Get Document Detail List in Application Level//
+            List<DocumentSetType> documentSetTypeList = applicationType.getRequiredDocumentSet();
+            documentDetailList.addAll(getDocumentDetail(documentSetTypeList, null, DocLevel.APP_LEVEL));
             docCustomerResponse.setDocumentDetailList(documentDetailList);
-
         }
 
         return docCustomerResponse;
     }
+
+
 }

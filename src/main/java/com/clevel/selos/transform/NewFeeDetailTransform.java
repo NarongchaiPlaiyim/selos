@@ -1,7 +1,7 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.working.NewFeeCreditDAO;
-import com.clevel.selos.model.ProposeType;
+import com.clevel.selos.integration.brms.model.response.PricingFee;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.NewFeeDetail;
@@ -66,6 +66,25 @@ public class NewFeeDetailTransform extends Transform {
             newFeeDetailView.setExtensionFee(newFeeDetail.getExtensionFee());
             newFeeDetailView.setPrepaymentFee(newFeeDetail.getPrepaymentFee());
             newFeeDetailView.setCancellationFee(newFeeDetail.getCancellationFee());
+            newFeeDetailViewList.add(newFeeDetailView);
+        }
+
+        return newFeeDetailViewList;
+    }
+
+    public List<NewFeeDetailView> transformBRMSToView(List<PricingFee> pricingFeeList) {
+
+        List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
+        NewFeeDetailView newFeeDetailView;
+
+        for (PricingFee pricingFee : pricingFeeList) {
+            newFeeDetailView = new NewFeeDetailView();
+            newFeeDetailView.setProductProgram(pricingFee.getCreditDetailId());
+            newFeeDetailView.setStandardFrontEndFee(pricingFee.getFeePercent().toString());
+            newFeeDetailView.setCommitmentFee(pricingFee.getFeePercentAfterDiscount().toString());
+            newFeeDetailView.setExtensionFee("ExtensionFee");
+            newFeeDetailView.setPrepaymentFee(pricingFee.getPaymentMethod());
+            newFeeDetailView.setCancellationFee("CancellationFee");
             newFeeDetailViewList.add(newFeeDetailView);
         }
 
