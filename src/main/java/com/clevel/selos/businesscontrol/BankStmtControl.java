@@ -1200,6 +1200,7 @@ public class BankStmtControl extends BusinessControl {
     public void deleteBankStmtList(List<BankStmtView> bankStmtViewList) {
         log.debug("deleteBankStmtList()");
         if (bankStmtViewList != null && bankStmtViewList.size() > 0) {
+            log.debug("start delete Bank statement list...");
             List<BankStatement> deleteList = new ArrayList<BankStatement>();
             int size = bankStmtViewList.size();
             for (int i=0; i<size; i++) {
@@ -1209,6 +1210,8 @@ public class BankStmtControl extends BusinessControl {
                 }
             }
             bankStatementDAO.delete(deleteList);
+        } else {
+            log.debug("No more data to delete");
         }
     }
 
