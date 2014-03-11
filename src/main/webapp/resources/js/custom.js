@@ -797,6 +797,13 @@ function handleGuarantorInfoRequest(xhr, status, args) {
     }
 }
 
+//Print Report Exsummary Dialog
+function handlePrintRerportDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        printReportDlg.hide();
+    }
+}
+
 function handleConditionInfoRequest(xhr, status, args) {
     if (args.functionComplete) {
         conditionDlg.hide();

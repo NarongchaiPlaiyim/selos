@@ -64,6 +64,7 @@ public class DecisionView implements Serializable {
     private BigDecimal approveBrwTotalCommercial;
     private BigDecimal approveBrwTotalComAndOBOD;
     private BigDecimal approveTotalExposure;
+    private BigDecimal approveTotalODLimit;
     private BigDecimal approveTotalNumOfNewOD;
     private BigDecimal approveTotalNumProposeCreditFac;
     private BigDecimal approveTotalNumContingentPropose;
@@ -588,5 +589,13 @@ public class DecisionView implements Serializable {
 
     public void setCreditCustomerType(CreditCustomerType creditCustomerType) {
         this.creditCustomerType = creditCustomerType;
+    }
+
+    public BigDecimal getApproveTotalODLimit() {
+        return approveTotalODLimit;
+    }
+
+    public void setApproveTotalODLimit(BigDecimal approveTotalODLimit) {
+        this.approveTotalODLimit = approveTotalODLimit;
     }
 }

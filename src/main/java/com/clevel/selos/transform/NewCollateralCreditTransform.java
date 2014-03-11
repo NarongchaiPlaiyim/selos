@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
 import com.clevel.selos.dao.working.NewCollateralCreditDAO;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.ProposeCreditDetailView;
@@ -22,8 +23,8 @@ public class NewCollateralCreditTransform extends Transform {
     NewCollateralCreditDAO newCollateralRelationDAO;
 
 
-    public List<NewCollateralCredit> transformsToModelForCollateral(List<ProposeCreditDetailView> proposeCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewCollateral newCollateralDetail,NewCreditFacility newCreditFacility, User user) {
-    
+    public List<NewCollateralCredit> transformsToModelForCollateral(List<ProposeCreditDetailView> proposeCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewCollateral newCollateralDetail,NewCreditFacility newCreditFacility,ProposeType proposeType, User user) {
+       log.info("proposeCreditDetailViewList size :: {}",proposeCreditDetailViewList.size());
         List<NewCollateralCredit> newCollateralCreditList = new ArrayList<NewCollateralCredit>();
         NewCollateralCredit newCollateralRelCredit;
         NewCreditDetail newCreditDetailAdd;
@@ -47,7 +48,7 @@ public class NewCollateralCreditTransform extends Transform {
                         log.info("newCollateralRelCredit newCreditDetailAdd id toSet is " + newCollateralRelCredit.getNewCreditDetail().getId());
                     }
                 } else if ("E".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
-                    ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById((long) proposeCreditDetailView.getSeq());
+                    ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById(proposeCreditDetailView.getId());
                     if (existingCreditDetail.getId() ==  proposeCreditDetailView.getId()) {
                         log.debug("guarantor choose id  is :: {}", proposeCreditDetailView.getId());
                         log.debug("guarantor choose seq  is :: {}", proposeCreditDetailView.getSeq());
@@ -58,6 +59,7 @@ public class NewCollateralCreditTransform extends Transform {
 
                 newCollateralRelCredit.setNewCreditFacility(newCreditFacility);
                 newCollateralRelCredit.setNewCollateral(newCollateralDetail);
+                newCollateralRelCredit.setProposeType(proposeType);
                 newCollateralCreditList.add(newCollateralRelCredit);
 
         }
@@ -69,7 +71,6 @@ public class NewCollateralCreditTransform extends Transform {
         NewCreditDetail newCreditDetailReturn = null;
 
         for (NewCreditDetail newCreditDetailAdd : newCreditDetailList) {
-            log.info("newCreditDetailAdd id is  :: {}", newCreditDetailAdd.getId());
             log.info("newCreditDetailAdd seq is :: {}", newCreditDetailAdd.getSeq());
             log.info("guarantor choose seq is {}", proposeCreditDetailView.getSeq());
             if (proposeCreditDetailView.getSeq() == newCreditDetailAdd.getSeq()) {

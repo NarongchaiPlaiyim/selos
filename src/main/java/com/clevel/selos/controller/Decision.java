@@ -512,6 +512,9 @@ public class Decision implements Serializable {
 
     public void onChangeRequestType() {
         log.debug("onChangeRequestType() requestType: {}", selectedApproveCredit.getRequestType());
+        selectedApproveCredit.setProductProgramView(new ProductProgramView());
+        selectedApproveCredit.setCreditTypeView(new CreditTypeView());
+
         prdGroupToPrdProgramViewList = new ArrayList<PrdGroupToPrdProgramView>();
         prdProgramToCreditTypeViewList = new ArrayList<PrdProgramToCreditTypeView>();
 
@@ -940,7 +943,6 @@ public class Decision implements Serializable {
         log.debug("onAddAppProposeGuarantor()");
         selectedApproveGuarantor = new NewGuarantorDetailView();
         selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
-        guarantorCreditTypeList = proposeCreditDetailTransform.copyToNewViews(commonProposeCreditList, false);
 
         modeEditGuarantor = false;
     }

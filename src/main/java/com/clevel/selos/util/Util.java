@@ -48,6 +48,10 @@ public class Util implements Serializable {
         return createDateString(date, "yyyy-MM-dd");
     }
 
+    public static String createDateTime(Date date) {
+        return createDateString(date, "yyyyMMddHHmm");
+    }
+
 
     public static Date strYYYYMMDDtoDateFormat(String dateStr) {
         Date date = new Date();

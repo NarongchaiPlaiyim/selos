@@ -155,6 +155,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private List<ProposeCreditDetailView> newCollateralCreditDetailList;
     private List<ProposeCreditDetailView> newGuarantorCreditDetailList;
     private List<ProposeCreditDetailView> proposeCreditDetailViewList;
+    private List<ExistingCreditDetailView> existingCreditDetailViewList;
+
 
     //for  control Condition Information Dialog
     private NewConditionDetailView newConditionDetailView;
@@ -306,7 +308,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                     modeForDB = ModeForDB.EDIT_DB;
                     // find existingCreditType >>> Borrower Commercial in this workCase
-                    List<ExistingCreditDetailView> existingCreditDetailViewList = creditFacExistingControl.onFindBorrowerExistingCreditFacility(workCaseId);
+                    existingCreditDetailViewList = creditFacExistingControl.onFindBorrowerExistingCreditFacility(workCaseId);
                     proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(),existingCreditDetailViewList, workCaseId);
                     log.debug("[List for select in Collateral] :: proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
                     int lastSeqNumber = creditFacProposeControl.getLastSeqNumberFromProposeCredit(proposeCreditDetailViewList);
@@ -362,19 +364,11 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 applyTCG = tcgView.getTCG();
             }
 
-
             guarantorList = customerInfoControl.getGuarantorByWorkCase(workCaseId);
-
             log.debug("guarantorList size :: {}", guarantorList.size());
-            if (guarantorList == null) {
-                guarantorList = new ArrayList<CustomerInfoView>();
-            }
 
             collateralOwnerUwAllList = customerInfoControl.getCollateralOwnerUWByWorkCase(workCaseId);
             log.debug("collateralOwnerUwAllList size :: {}", collateralOwnerUwAllList.size());
-            if (collateralOwnerUwAllList == null) {
-                collateralOwnerUwAllList = new ArrayList<CustomerInfoView>();
-            }
         }
 
         if (collateralOwnerUW == null) {
@@ -387,18 +381,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             cannotEditStandard = true;
         }
 
-        if (creditRequestTypeViewList == null) {
-            creditRequestTypeViewList = new ArrayList<CreditRequestTypeView>();
-        }
-
-
         if (newCreditDetailView == null) {
             newCreditDetailView = new NewCreditDetailView();
-        }
-
-        // change to view model
-        if (disbursementTypeViewList == null) {
-            disbursementTypeViewList = new ArrayList<DisbursementTypeView>();
         }
 
         if (newConditionDetailView == null) {
@@ -476,7 +460,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                         severity = MessageDialogSeverity.ALERT.severity();
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     }
-
+                    proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(),existingCreditDetailViewList, workCaseId);
                     newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
 
                 } catch (COMSInterfaceException e) {
@@ -517,7 +501,10 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         if (!Util.isNull(workCaseId)) {
             try {
                 StandardPricingResponse standardPricingResponse = creditFacProposeControl.getPriceFeeInterest(workCaseId);
-
+                log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult().toString());
+                log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
+                log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().toString());
+                log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
                 if (!Util.isNull(standardPricingResponse) && ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
                     log.debug("standardPricingResponse ::: {}", standardPricingResponse.getPricingInterest().toString());
                     log.debug("standardPricingResponse ::: {}", standardPricingResponse.getPricingFeeList().toString());
@@ -558,6 +545,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             ProductFormulaView productFormulaView = productControl.getProductFormulaView(newCreditDetailView.getCreditTypeView().getId(),
                     newCreditDetailView.getProductProgramView().getId(),
                     newCreditFacilityView.getCreditCustomerType(), specialProgramView.getId(), applyTCG);
+
             if (productFormulaView != null) {
                 log.debug("onChangeCreditType :::: productFormula : {}", productFormulaView.getId());
                 newCreditDetailView.setProductCode(productFormulaView.getProductCode());
@@ -582,6 +570,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onChangeRequestType() {
         log.debug("newCreditDetailView.getRequestType() :: {}", newCreditDetailView.getRequestType());
+        newCreditDetailView.setProductProgramView(new ProductProgramView());
+        newCreditDetailView.setCreditTypeView(new CreditTypeView());
+
         prdGroupToPrdProgramViewList = new ArrayList<PrdGroupToPrdProgramView>();
         prdProgramToCreditTypeViewList = new ArrayList<PrdProgramToCreditTypeView>();
 
@@ -931,6 +922,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         newCollateralView = new NewCollateralView();
         newCollateralView.getNewCollateralHeadViewList().add(new NewCollateralHeadView());
         selectedCollateralCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
+        proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(),existingCreditDetailViewList, workCaseId);
         newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
         flagButtonCollateral = true;
         flagComs = false;
@@ -959,6 +951,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         newCollateralView.setNewCollateralHeadViewList(selectCollateralDetailView.getNewCollateralHeadViewList());
         flagComs = false;
         selectedCollateralCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
+        proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(),existingCreditDetailViewList, workCaseId);
         newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
 
         log.debug("selectCollateralDetailView.isComs() ::: {}", newCollateralView.isComs());
@@ -1347,6 +1340,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
 //        guarantorCreditTypeList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
         newGuarantorDetailView.setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
+        proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(),existingCreditDetailViewList, workCaseId);
         newGuarantorDetailView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
     }
 
@@ -1359,8 +1353,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         newGuarantorDetailView.setTcgLgNo(newGuarantorDetailViewItem.getTcgLgNo());
         newGuarantorDetailView.setGuarantorCategory(newGuarantorDetailViewItem.getGuarantorCategory());
         selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
-
-//        proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
+        proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(),existingCreditDetailViewList, workCaseId);
         newGuarantorDetailView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
 //        }
         if (newGuarantorDetailViewItem.getProposeCreditDetailViewList() != null && newGuarantorDetailViewItem.getProposeCreditDetailViewList().size() > 0) {
@@ -1466,7 +1459,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //                hashSeqCredit.put(i, Integer.parseInt(hashSeqCredit.get(i).toString()) - 1);
 //            }
         }
-        if (newCreditFacilityView.getNewGuarantorViewDelList().get(rowIndexGuarantor).getId() != 0) {
+        if (newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getId() != 0) {
             deleteGuarantorIdList.add(newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getId());
         }
 //        newCreditFacilityView.getNewGuarantorViewDelList().add(newGuarantorDetailViewItem);
