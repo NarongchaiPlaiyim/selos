@@ -10,6 +10,7 @@ import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.view.FeeCollectionDetailView;
 import com.clevel.selos.util.DateTimeUtil;
 
 import javax.inject.Inject;
@@ -307,5 +308,6 @@ public class BRMSTransform extends Transform{
     private boolean toBoolean(String value){
         return "Y".equals(value)? true: false;
     }
+
 
 }
