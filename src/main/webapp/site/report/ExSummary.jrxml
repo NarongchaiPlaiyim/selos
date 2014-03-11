@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="992d94ee-ab0e-458e-a59a-046b96b4a957">
 	<property name="ireport.zoom" value="1.8150000000000273"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="255"/>
+	<property name="ireport.y" value="2655"/>
 	<style name="Frame">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2286,7 +2286,7 @@ Asset]]></text>
 					<text><![CDATA[Nature of business : ลักษณะการดำเนินธุรกิจ]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="10237218-a981-4a45-8006-d47eb989cdf4" mode="Opaque" x="0" y="39" width="548" height="60"/>
+					<reportElement uuid="10237218-a981-4a45-8006-d47eb989cdf4" mode="Opaque" x="6" y="39" width="542" height="60"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2318,7 +2318,7 @@ Asset]]></text>
 					<text><![CDATA[Historical and reason of change : ประวัติการเปลียนแปลงพร้อมอธิบายเหตุผลของการเปลี่ยนแปลง]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="14a8d141-d360-419d-b261-0df77742a4c8" mode="Opaque" x="0" y="22" width="548" height="60"/>
+					<reportElement uuid="14a8d141-d360-419d-b261-0df77742a4c8" mode="Opaque" x="6" y="22" width="542" height="60"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2357,7 +2357,7 @@ Asset]]></text>
 					<text><![CDATA[TMB credit history : ประวัติการใช้สินชื่อกับ TMB]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="60e483ba-4651-42ca-ab65-0149cc2336b5" mode="Opaque" x="0" y="20" width="548" height="60"/>
+					<reportElement uuid="60e483ba-4651-42ca-ab65-0149cc2336b5" mode="Opaque" x="6" y="20" width="542" height="60"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2396,7 +2396,7 @@ Asset]]></text>
 					<text><![CDATA[Support reason : เหตุผล/ประเด็นสนับสนุนเพิ่มเติม]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="8f2de3f5-d7e9-4d6b-ac10-95f715a03067" mode="Opaque" x="0" y="22" width="548" height="60"/>
+					<reportElement uuid="8f2de3f5-d7e9-4d6b-ac10-95f715a03067" mode="Opaque" x="6" y="22" width="542" height="60"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2482,7 +2482,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<text><![CDATA[ไม่ตอบ]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="37516a19-9ca1-4fa0-8aa8-e1b25b577ea9" mode="Opaque" x="0" y="54" width="548" height="45"/>
+					<reportElement uuid="37516a19-9ca1-4fa0-8aa8-e1b25b577ea9" mode="Opaque" x="6" y="54" width="542" height="45"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2531,7 +2531,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</image>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="9f8e3d4a-9306-42d3-87d0-34cc8640a977" mode="Opaque" x="0" y="21" width="548" height="45"/>
+					<reportElement uuid="9f8e3d4a-9306-42d3-87d0-34cc8640a977" mode="Opaque" x="6" y="21" width="542" height="45"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2609,7 +2609,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</image>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="e6d62821-1faa-469f-b26a-bc72e8b7b57f" mode="Opaque" x="0" y="21" width="548" height="45"/>
+					<reportElement uuid="e6d62821-1faa-469f-b26a-bc72e8b7b57f" mode="Opaque" x="6" y="21" width="542" height="45"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2881,7 +2881,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 				</box>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="c9b7a981-0af1-4a01-95c6-84954aeb9137" mode="Opaque" x="0" y="21" width="524" height="36"/>
+					<reportElement uuid="c9b7a981-0af1-4a01-95c6-84954aeb9137" mode="Opaque" x="6" y="21" width="518" height="36"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>

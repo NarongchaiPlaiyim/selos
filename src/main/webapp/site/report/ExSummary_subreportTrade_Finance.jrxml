@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary_subreportTrade_Finance" pageWidth="554" pageHeight="842" columnWidth="554" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="35ce81a2-ea80-4e14-87e6-43a26c0f363d">
-	<property name="ireport.zoom" value="2.357947691000037"/>
-	<property name="ireport.x" value="0"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary_subreportTrade_Finance" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="35ce81a2-ea80-4e14-87e6-43a26c0f363d">
+	<property name="ireport.zoom" value="7.400249944258282"/>
+	<property name="ireport.x" value="2951"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
@@ -46,7 +46,7 @@ WHERE
 	<columnHeader>
 		<band height="21">
 			<frame>
-				<reportElement uuid="d1419498-feac-4f71-b191-5dfc378b1f4b" x="0" y="0" width="554" height="21"/>
+				<reportElement uuid="d1419498-feac-4f71-b191-5dfc378b1f4b" x="0" y="0" width="555" height="21"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -154,7 +154,7 @@ WHERE
 ใช้บัญชีอื่นฝาก]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="92598666-6bf5-4c95-ba94-9d97ef58574c" mode="Opaque" x="479" y="0" width="75" height="21" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="92598666-6bf5-4c95-ba94-9d97ef58574c" mode="Opaque" x="479" y="0" width="76" height="21" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -272,7 +272,7 @@ WHERE
 				<textFieldExpression><![CDATA[$F{depositBranchCode}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="bcddeab6-a39c-4c70-8f38-ac116c8461b9" mode="Opaque" x="479" y="0" width="75" height="20"/>
+				<reportElement uuid="bcddeab6-a39c-4c70-8f38-ac116c8461b9" mode="Opaque" x="479" y="0" width="76" height="20"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
