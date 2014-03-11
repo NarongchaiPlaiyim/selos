@@ -64,7 +64,7 @@ public class ReportExSummary extends ReportService {
         map.put("creditRisk", pdfExecutiveSummary.fillCreditRisk());
         map.put("decision", pdfExecutiveSummary.fillDecision());
 
-        pdfName = "Executive_Summary.pdf";
+        pdfName = "Executive_Summary";
 
         generatePDF(path, map, pdfName);
     }
