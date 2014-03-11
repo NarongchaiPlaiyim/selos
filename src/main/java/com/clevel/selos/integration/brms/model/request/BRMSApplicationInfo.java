@@ -22,7 +22,7 @@ public class BRMSApplicationInfo implements Serializable{
     private boolean refinanceIN;
     private boolean refinanceOUT;
     private String loanRequestPattern;
-    private boolean applyBA;
+    private boolean applyBAwithCash;
     private boolean topupBA;
     private boolean requestTCG;
     private boolean passAppraisalProcess;
@@ -173,12 +173,13 @@ public class BRMSApplicationInfo implements Serializable{
         this.loanRequestPattern = loanRequestPattern;
     }
 
-    public boolean isApplyBA() {
-        return applyBA;
+
+    public boolean isApplyBAwithCash() {
+        return applyBAwithCash;
     }
 
-    public void setApplyBA(boolean applyBA) {
-        this.applyBA = applyBA;
+    public void setApplyBAwithCash(boolean applyBAwithCash) {
+        this.applyBAwithCash = applyBAwithCash;
     }
 
     public boolean isTopupBA() {
@@ -612,7 +613,7 @@ public class BRMSApplicationInfo implements Serializable{
                 .append("refinanceIN", refinanceIN)
                 .append("refinanceOUT", refinanceOUT)
                 .append("loanRequestPattern", loanRequestPattern)
-                .append("applyBA", applyBA)
+                .append("applyBAwithCash", applyBAwithCash)
                 .append("topupBA", topupBA)
                 .append("requestTCG", requestTCG)
                 .append("passAppraisalProcess", passAppraisalProcess)

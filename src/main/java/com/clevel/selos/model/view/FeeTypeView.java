@@ -1,30 +1,15 @@
-package com.clevel.selos.model.db.master;
+package com.clevel.selos.model.view;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.io.Serializable;
 
-@Entity
-@Table(name = "mst_fee_type")
-public class FeeType {
-    @Id
-    @Column(name = "id")
+public class FeeTypeView implements Serializable{
     private long id;
-
-    @Column (name = "brms_code")
     private String brmsCode;
-
-    @Column (name = "description", length = 200)
     private String description;
-
-    @Column (name = "frontend_fee", length = 1, columnDefinition = "int default 0")
     private boolean frontend;
-
-    @Column (name = "active")
     private int active;
 
     public long getId() {
@@ -33,14 +18,6 @@ public class FeeType {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public boolean isFrontend() {
-        return frontend;
-    }
-
-    public void setFrontend(boolean frontend) {
-        this.frontend = frontend;
     }
 
     public String getBrmsCode() {
@@ -59,6 +36,14 @@ public class FeeType {
         this.description = description;
     }
 
+    public boolean isFrontend() {
+        return frontend;
+    }
+
+    public void setFrontend(boolean frontend) {
+        this.frontend = frontend;
+    }
+
     public int getActive() {
         return active;
     }
@@ -73,6 +58,7 @@ public class FeeType {
                 .append("id", id)
                 .append("brmsCode", brmsCode)
                 .append("description", description)
+                .append("frontend", frontend)
                 .append("active", active)
                 .toString();
     }

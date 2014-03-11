@@ -3,10 +3,14 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.master.CountryDAO;
 import com.clevel.selos.dao.master.CreditRequestTypeDAO;
 import com.clevel.selos.dao.working.NewCreditFacilityDAO;
+import com.clevel.selos.model.db.master.Country;
+import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.CountryView;
 import com.clevel.selos.model.view.NewCreditFacilityView;
+import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
 import java.util.Date;
@@ -20,7 +24,6 @@ public class NewCreditFacilityTransform extends Transform {
     private CountryDAO countryDAO;
     @Inject
     private NewCreditFacilityDAO newCreditFacilityDAO;
-
     @Inject
     private CountryTransform countryTransform;
     @Inject
@@ -34,6 +37,8 @@ public class NewCreditFacilityTransform extends Transform {
 
         if (newCreditFacilityView.getId() != 0) {
             newCreditFacility = newCreditFacilityDAO.findById(newCreditFacilityView.getId());
+            newCreditFacility.setModifyDate(newCreditFacilityView.getModifyDate());
+            newCreditFacility.setModifyBy(newCreditFacilityView.getModifyBy());
         } else { // id = 0 create new
             newCreditFacility.setCreateDate(new Date());
             newCreditFacility.setCreateBy(user);
@@ -176,6 +181,29 @@ public class NewCreditFacilityTransform extends Transform {
             newCreditFacilityView.setTotalJurisGuaranteeAmount(newCreditFacility.getTotalJurisGuaranteeAmount());
             newCreditFacilityView.setTotalMortgageValue(newCreditFacility.getTotalMortgageValue());
         }
+
+        Country country = countryDAO.findById(newCreditFacility.getInvestedCountry().getId());
+        if(!Util.isNull(country)){
+            CountryView countryView = countryTransform.transformToView(country);
+            newCreditFacilityView.setInvestedCountry(countryView);
+        } else {
+            log.debug("-- Country is null while findById {}", newCreditFacility.getInvestedCountry().getId());
+            newCreditFacilityView.setInvestedCountry(new CountryView());
+        }
+
+
+        newCreditFacilityView.setTotalGuaranteeAmount(newCreditFacility.getTotalGuaranteeAmount());
+        newCreditFacilityView.setRelatedTMBLending(newCreditFacility.getRelatedTMBLending());
+        newCreditFacilityView.setTwentyFivePercentShareRelatedTMBLending(newCreditFacility.getTwentyFivePercentShareRelatedTMBLending());
+        newCreditFacilityView.setSingleLendingLimit(newCreditFacility.getSingleLendingLimit());
+        newCreditFacilityView.setTotalLoanWCTMB(newCreditFacility.getTotalLoanWCTMB());
+        newCreditFacilityView.setIntFeeDOA(newCreditFacility.getIntFeeDOA());
+        newCreditFacilityView.setTotalNumberOfCoreAsset(newCreditFacility.getTotalNumberOfCoreAsset());
+        newCreditFacilityView.setTotalNumberOfNonCoreAsset(newCreditFacility.getTotalNumberOfNonCoreAsset());
+        newCreditFacilityView.setTotalTCGGuaranteeAmount(newCreditFacility.getTotalTCGGuaranteeAmount());
+        newCreditFacilityView.setTotalIndvGuaranteeAmount(newCreditFacility.getTotalIndvGuaranteeAmount());
+        newCreditFacilityView.setTotalJurisGuaranteeAmount(newCreditFacility.getTotalJurisGuaranteeAmount());
+        newCreditFacilityView.setTotalMortgageValue(newCreditFacility.getTotalMortgageValue());
 
         return newCreditFacilityView;
     }
