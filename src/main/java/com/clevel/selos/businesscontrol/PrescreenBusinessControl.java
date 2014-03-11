@@ -198,11 +198,11 @@ public class PrescreenBusinessControl extends BusinessControl {
             customerInfoView.setCustomerEntity(customerEntity);
         }
 
-        if(customerInfoView.getCustomerEntity().getId() == 1) {
+        if(customerInfoView.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()) {
             IndividualResult individualResult = rmInterface.getIndividualInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
             log.info("getCustomerInfoFromRM ::: individualResult : {}", individualResult);
             customerInfoResultSearch = customerBizTransform.tranformIndividual(individualResult);
-        } else if(customerInfoView.getCustomerEntity().getId() == 2){
+        } else if(customerInfoView.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
             CorporateResult corporateResult = rmInterface.getCorporateInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
             log.info("getCustomerInfoFromRM ::: corporateResult : {}", corporateResult);
             customerInfoResultSearch = customerBizTransform.tranformJuristic(corporateResult);
