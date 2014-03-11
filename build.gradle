@@ -121,6 +121,9 @@ task buildLibrary(dependsOn: classes, type: Jar) {
     include 'com/clevel/selos/model/**/*'
     include 'com/clevel/selos/dao/**/*'
 
+    //************ Report ********************
+    include 'com/clevel/selos/report/**/*'
+
     //************* Transformation ****************
     include 'com/clevel/selos/transform/**/*'
 
@@ -207,6 +210,7 @@ war {
 //    war.rootSpec.exclude 'com/clevel/selos/model/db'
     war.rootSpec.exclude 'com/clevel/selos/model'
     war.rootSpec.exclude 'com/clevel/selos/dao'
+    war.rootSpec.exclude 'com/clevel/selos/report'
     war.rootSpec.exclude 'META-INF/persistence*'
 
     //************* Transformation ****************
