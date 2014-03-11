@@ -135,6 +135,7 @@ task buildLibrary(dependsOn: classes, type: Jar) {
     include 'com/clevel/selos/security/encryption/**/*'
     include 'com/clevel/selos/security/UserDetail.*'
 
+
     //************* Exceptions ***********************
     include 'com/clevel/selos/exception/**/*'
 
@@ -143,6 +144,8 @@ task buildLibrary(dependsOn: classes, type: Jar) {
 
     //************* TMB Services ***********************
     include 'com/tmb/**/*'
+    include 'com/tmbbank/**/*'
+    include 'com/ilog/**/*'
 }
 
 task buildEJB(dependsOn:'buildLibrary', type: Jar) {
@@ -228,6 +231,8 @@ war {
 
     //************* TMB Services ***********************
     war.rootSpec.exclude 'com/tmb'
+    war.rootSpec.exclude 'com/tmbbank'
+    war.rootSpec.exclude 'com/ilog'
 
     // ************* EJB ************
     war.rootSpec.exclude 'com/clevel/selos/businesscontrol'
