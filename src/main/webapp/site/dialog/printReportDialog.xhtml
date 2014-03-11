@@ -1,0 +1,32 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <p:panel id="reportDlgPanel" styleClass="panel-dialog">
+        <table class="content_form" border="0">
+            <tr>
+                <td class="title" >
+                    <p:outputLabel value="OpShect :" />
+                </td>
+                <td style="width: 200px">
+                    <p:outputLabel value="Executive Summary Report" />
+                </td>
+                <td class="right">
+                    <p:commandButton id="dlgPrintReportExsumBtn"
+                                     value="#{msg.get('app.button.print')}"
+                                     styleClass="small"
+                                     actionListener="#{report.onPrintExsumReport()}"
+                                     ajax="false"/>
+                </td>
+            </tr>
+        </table>
+    </p:panel>
+    <p:blockUI widgetVar="blockprintReportDlg" block="reportDlgPanel"
+               trigger=":frmMain:dlgSubmitAssignABDMBtn">
+        <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
+</ui:composition>

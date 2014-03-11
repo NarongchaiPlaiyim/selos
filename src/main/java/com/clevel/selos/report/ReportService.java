@@ -27,9 +27,8 @@ public class ReportService implements Serializable {
 
     }
 
-    public void generatePDF(String fileName, Map<String,Object> parameters) throws JRException, IOException {
+    public void generatePDF(String fileName, Map<String,Object> parameters,String pdfName) throws JRException, IOException {
         log.debug("generate pdf.");
-        System.out.println("fileName: "+fileName);
         JasperReport jasperReport = JasperCompileManager.compileReport(fileName);
         JasperPrint print ;
 
@@ -37,10 +36,9 @@ public class ReportService implements Serializable {
 
         print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
 
-
         try {
             HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            response.addHeader("Content-disposition", "attachment; filename=report.pdf");
+            response.addHeader("Content-disposition", "attachment; filename="+pdfName);
             ServletOutputStream servletOutputStream=response.getOutputStream();
             JasperExportManager.exportReportToPdfStream(print, servletOutputStream);
             FacesContext.getCurrentInstance().responseComplete();

@@ -10,6 +10,7 @@ import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.CountryView;
 import com.clevel.selos.model.view.NewCreditFacilityView;
+import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
 import java.util.Date;
@@ -165,11 +166,16 @@ public class NewCreditFacilityTransform extends Transform {
         if(newCreditFacilityView.getLoanRequestType() == null){
             newCreditFacilityView.setLoanRequestType(new CreditRequestType());
         }
-        CountryView countryView = countryTransform.transformToView(countryDAO.findById(newCreditFacility.getInvestedCountry().getId()));
-        newCreditFacilityView.setInvestedCountry(countryView);
-        if(newCreditFacilityView.getInvestedCountry() == null){
+
+        Country country = countryDAO.findById(newCreditFacility.getInvestedCountry().getId());
+        if(!Util.isNull(country)){
+            CountryView countryView = countryTransform.transformToView(country);
+            newCreditFacilityView.setInvestedCountry(countryView);
+        } else {
+            log.debug("-- Country is null while findById {}", newCreditFacility.getInvestedCountry().getId());
             newCreditFacilityView.setInvestedCountry(new CountryView());
         }
+
 
         newCreditFacilityView.setTotalGuaranteeAmount(newCreditFacility.getTotalGuaranteeAmount());
         newCreditFacilityView.setRelatedTMBLending(newCreditFacility.getRelatedTMBLending());

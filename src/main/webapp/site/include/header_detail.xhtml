@@ -7,6 +7,13 @@
     <div id="header_detail">
         <div id="header_collapse" class="close" onclick="collapseDetail();"><p:spacer width="2"/></div>
         <div id="header_button_bar">
+            <!--Print Report-->
+
+            <p:commandButton id="btnPrintReport" value="#{msg.get('app.header.button.printReport')}" styleClass="blueButton" title="#{msg.get('app.header.button.printReport')}"
+                             oncomplete="printReportDlg.show()"
+                             update=":frmMain:printReportPanel">
+            </p:commandButton>
+
             <!--View Relate CA-->
             <p:commandButton id="btnViewRelatedCA" value="#{msg.get('app.header.button.viewRelatedCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.viewRelatedCA')}"
                              rendered="#{baseController.manageButton.viewRelatedCA}"
@@ -294,6 +301,14 @@
                              process="@this"
                              action="#{baseController.onGoToInbox}"/>
         </p:confirmDialog>
+    </p:panel>
+
+    <p:panel id="printReportPanel" styleClass="panel">
+        <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"
+                  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+                  modal="true" width="430" height="200">
+            <ui:include src="/site/dialog/printReportDialog.xhtml"/>
+        </p:dialog>
     </p:panel>
 
     <p:panel id="assignABDMPanel" styleClass="panel">

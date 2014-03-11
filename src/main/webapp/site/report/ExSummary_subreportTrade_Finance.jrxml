@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary_subreportTrade_Finance" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="35ce81a2-ea80-4e14-87e6-43a26c0f363d">
-	<property name="ireport.zoom" value="1.9487171000000243"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary_subreportTrade_Finance" pageWidth="554" pageHeight="842" columnWidth="554" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="35ce81a2-ea80-4e14-87e6-43a26c0f363d">
+	<property name="ireport.zoom" value="2.357947691000037"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
@@ -44,9 +44,9 @@ WHERE
 		<fieldDescription><![CDATA[ownerBranchCode]]></fieldDescription>
 	</field>
 	<columnHeader>
-		<band height="15">
+		<band height="21">
 			<frame>
-				<reportElement uuid="d1419498-feac-4f71-b191-5dfc378b1f4b" x="0" y="0" width="595" height="15"/>
+				<reportElement uuid="d1419498-feac-4f71-b191-5dfc378b1f4b" x="0" y="0" width="554" height="21"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -55,13 +55,13 @@ WHERE
 					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="096bb6f2-766d-4cbd-b7bb-6c71ea5a624e" mode="Opaque" x="0" y="0" width="68" height="15" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="096bb6f2-766d-4cbd-b7bb-6c71ea5a624e" mode="Opaque" x="0" y="0" width="69" height="21" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
-						<pen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -69,13 +69,13 @@ WHERE
 					<text><![CDATA[ชื่อผู้ติดต่อ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="0e5782ff-754f-44d4-8451-4a0943acd0fa" mode="Opaque" x="68" y="0" width="51" height="15" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="0e5782ff-754f-44d4-8451-4a0943acd0fa" mode="Opaque" x="69" y="0" width="51" height="21" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
-						<pen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -83,13 +83,13 @@ WHERE
 					<text><![CDATA[โทรศัพท์]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="f9bbd4a1-49d2-4bba-9660-1958293fa9b7" mode="Opaque" x="119" y="0" width="114" height="15" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="f9bbd4a1-49d2-4bba-9660-1958293fa9b7" mode="Opaque" x="120" y="0" width="87" height="21" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
-						<pen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -97,13 +97,13 @@ WHERE
 					<text><![CDATA[ศูนย์ต่างประเทศใช้บริการ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="8f9d5ecb-2bba-4cba-b42e-e70f897e0123" mode="Opaque" x="233" y="0" width="111" height="15" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="8f9d5ecb-2bba-4cba-b42e-e70f897e0123" mode="Opaque" x="207" y="0" width="94" height="21" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
-						<pen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -111,13 +111,13 @@ WHERE
 					<text><![CDATA[ที่อยู่]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="3d2a8644-ac27-40f5-967d-ea634177e6e9" mode="Opaque" x="344" y="0" width="50" height="15" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="3d2a8644-ac27-40f5-967d-ea634177e6e9" mode="Opaque" x="301" y="0" width="50" height="21" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
-						<pen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -125,13 +125,13 @@ WHERE
 					<text><![CDATA[E-mail/Import]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="30f45caa-aa20-4b3b-8b12-5aab13930573" mode="Opaque" x="394" y="0" width="50" height="15" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="30f45caa-aa20-4b3b-8b12-5aab13930573" mode="Opaque" x="351" y="0" width="50" height="21" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
-						<pen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -139,32 +139,34 @@ WHERE
 					<text><![CDATA[E-mail/Export]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="687796f3-ec1f-4b3d-acda-670c4c5854c8" mode="Opaque" x="444" y="0" width="78" height="15" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="687796f3-ec1f-4b3d-acda-670c4c5854c8" mode="Opaque" x="401" y="0" width="78" height="21" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
-						<pen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
-					<text><![CDATA[รหัสสาขาที่ลูกค้าใช้บัญชีอื่นฝาก]]></text>
+					<text><![CDATA[รหัสสาขาที่ลูกค้า
+ใช้บัญชีอื่นฝาก]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="92598666-6bf5-4c95-ba94-9d97ef58574c" mode="Opaque" x="522" y="0" width="73" height="15" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="92598666-6bf5-4c95-ba94-9d97ef58574c" mode="Opaque" x="479" y="0" width="75" height="21" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
-						<pen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
-					<text><![CDATA[รหัสหน่วยงานที่ดูแลสาขา]]></text>
+					<text><![CDATA[รหัสหน่วยงาน
+ที่ดูแลสาขา]]></text>
 				</staticText>
 			</frame>
 		</band>
@@ -172,7 +174,7 @@ WHERE
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="22e76ecd-5b07-4e1d-a1fe-0a7e4f7b98c9" mode="Opaque" x="0" y="0" width="68" height="20"/>
+				<reportElement uuid="22e76ecd-5b07-4e1d-a1fe-0a7e4f7b98c9" mode="Opaque" x="0" y="0" width="69" height="20"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -186,7 +188,7 @@ WHERE
 				<textFieldExpression><![CDATA[$F{contactName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="54ca93cd-138f-4bc7-b63d-59c5084be24f" mode="Opaque" x="68" y="0" width="51" height="20"/>
+				<reportElement uuid="54ca93cd-138f-4bc7-b63d-59c5084be24f" mode="Opaque" x="69" y="0" width="51" height="20"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -200,7 +202,7 @@ WHERE
 				<textFieldExpression><![CDATA[$F{contactPhoneNo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="ab4f2130-bd6e-45a1-a252-0706a284a8f7" mode="Opaque" x="119" y="0" width="114" height="20"/>
+				<reportElement uuid="ab4f2130-bd6e-45a1-a252-0706a284a8f7" mode="Opaque" x="120" y="0" width="87" height="20"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -214,7 +216,7 @@ WHERE
 				<textFieldExpression><![CDATA[$F{interService}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="da5066ae-c0e7-40de-ae5b-ef32bf76d98c" mode="Opaque" x="233" y="0" width="111" height="20"/>
+				<reportElement uuid="da5066ae-c0e7-40de-ae5b-ef32bf76d98c" mode="Opaque" x="207" y="0" width="94" height="20"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -228,7 +230,7 @@ WHERE
 				<textFieldExpression><![CDATA[$F{currentAddress}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="bae0d04d-e018-43cd-a1cb-80c18ed26448" mode="Opaque" x="344" y="0" width="50" height="20"/>
+				<reportElement uuid="bae0d04d-e018-43cd-a1cb-80c18ed26448" mode="Opaque" x="301" y="0" width="50" height="20"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -242,7 +244,7 @@ WHERE
 				<textFieldExpression><![CDATA[$F{importMail}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="e5609b59-2f35-4aaf-bf70-4ca8a3f342c4" mode="Opaque" x="394" y="0" width="50" height="20"/>
+				<reportElement uuid="e5609b59-2f35-4aaf-bf70-4ca8a3f342c4" mode="Opaque" x="351" y="0" width="50" height="20"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -256,7 +258,7 @@ WHERE
 				<textFieldExpression><![CDATA[$F{exportMail}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="057eecbe-ca39-479c-8a63-243aab732093" mode="Opaque" x="444" y="0" width="78" height="20"/>
+				<reportElement uuid="057eecbe-ca39-479c-8a63-243aab732093" mode="Opaque" x="401" y="0" width="78" height="20"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -270,7 +272,7 @@ WHERE
 				<textFieldExpression><![CDATA[$F{depositBranchCode}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="bcddeab6-a39c-4c70-8f38-ac116c8461b9" mode="Opaque" x="522" y="0" width="73" height="20"/>
+				<reportElement uuid="bcddeab6-a39c-4c70-8f38-ac116c8461b9" mode="Opaque" x="479" y="0" width="75" height="20"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
