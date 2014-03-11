@@ -511,14 +511,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().toString());
                 log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
 
-                if(standardPricingResponse.getPricingFeeList()!=null){
-                   List<NewFeeDetailView> newFeeDetailViewList= newFeeDetailTransform.transformBRMSToView(standardPricingResponse.getPricingFeeList());
-                   newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
-                }
-
-                if(standardPricingResponse.getPricingInterest()!=null){
-                    List<NewCreditTierDetailView> newCreditTier = newCreditTierTransform.transformPricingIntTierToView(standardPricingResponse.getPricingInterest());
-                }
+//                if(standardPricingResponse.getPricingFeeList()!=null){
+//                   List<NewFeeDetailView> newFeeDetailViewList= newFeeDetailTransform.transformBRMSToView(standardPricingResponse.getPricingFeeList());
+//                   newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
+//                }
+//
+//                if(standardPricingResponse.getPricingInterest()!=null){
+//                    List<NewCreditTierDetailView> newCreditTier = newCreditTierTransform.transformPricingIntTierToView(standardPricingResponse.getPricingInterest());
+//                }
 
 
 //                if (!Util.isNull(standardPricingResponse) && ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
@@ -1355,8 +1355,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
 //        guarantorCreditTypeList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
         newGuarantorDetailView.setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
-        proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(),existingCreditDetailViewList, workCaseId);
-        newGuarantorDetailView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
+        guarantorCreditTypeList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(),existingCreditDetailViewList, workCaseId);
+        newGuarantorDetailView.setProposeCreditDetailViewList(guarantorCreditTypeList);
     }
 
     public void onEditGuarantorInfo() {

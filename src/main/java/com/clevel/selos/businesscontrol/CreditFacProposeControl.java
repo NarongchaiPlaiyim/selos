@@ -6,6 +6,7 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.brms.model.response.PricingFee;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.DBRMethod;
@@ -53,7 +54,6 @@ public class CreditFacProposeControl extends BusinessControl {
     NewCreditTierTransform newCreditTierTransform;
     @Inject
     ProposeCreditDetailTransform proposeCreditDetailTransform;
-
     @Inject
     SubCollateralTypeDAO subCollateralTypeDAO;
     @Inject
@@ -93,58 +93,63 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     PrdProgramToCreditTypeDAO prdProgramToCreditTypeDAO;
     @Inject
-    BasicInfoControl basicInfoControl;
+    private BasicInfoControl basicInfoControl;
     @Inject
-    CustomerInfoControl customerInfoControl;
+    private CustomerInfoControl customerInfoControl;
     @Inject
-    TCGInfoControl tcgInfoControl;
+    private TCGInfoControl tcgInfoControl;
     @Inject
-    ProductProgramDAO productProgramDAO;
+    private ProductProgramDAO productProgramDAO;
     @Inject
-    CreditTypeDAO creditTypeDAO;
+    private CreditTypeDAO creditTypeDAO;
     @Inject
-    NewGuarantorRelationDAO newGuarantorRelationDAO;
+    private NewGuarantorRelationDAO newGuarantorRelationDAO;
     @Inject
-    NewCollateralCreditDAO newCollateralRelationDAO;
+    private NewCollateralCreditDAO newCollateralRelationDAO;
     @Inject
-    CustomerDAO customerDAO;
+    private CustomerDAO customerDAO;
     @Inject
-    NewCollateralSubOwnerDAO newSubCollCustomerDAO;
+    private NewCollateralSubOwnerDAO newSubCollCustomerDAO;
     @Inject
-    NewCollateralSubMortgageDAO newSubCollMortgageDAO;
+    private NewCollateralSubMortgageDAO newSubCollMortgageDAO;
     @Inject
-    NewCollateralSubRelatedDAO newSubCollRelateDAO;
+    private NewCollateralSubRelatedDAO newSubCollRelateDAO;
     @Inject
-    MortgageTypeDAO mortgageTypeDAO;
+    private MortgageTypeDAO mortgageTypeDAO;
     @Inject
-    NewCollateralSubOwnerDAO newCollateralSubOwnerDAO;
+    private NewCollateralSubOwnerDAO newCollateralSubOwnerDAO;
     @Inject
-    NewCollateralCreditTransform newCollateralCreditTransform;
+    private NewCollateralCreditTransform newCollateralCreditTransform;
     @Inject
-    NewGuarantorCreditTransform newGuarantorCreditTransform;
+    private NewGuarantorCreditTransform newGuarantorCreditTransform;
     @Inject
-    ProductTransform productTransform;
+    private ProductTransform productTransform;
     @Inject
-    DBRControl dbrControl;
+    private DBRControl dbrControl;
     @Inject
-    BizInfoSummaryControl bizInfoSummaryControl;
+    private BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
-    NCBInfoControl ncbInfoControl;
+    private NCBInfoControl ncbInfoControl;
     @Inject
-    ExistingCollateralDetailDAO existingCollateralDetailDAO;
+    private ExistingCollateralDetailDAO existingCollateralDetailDAO;
     @Inject
     private COMSInterface comsInterface;
     @Inject
-    BRMSControl brmsControl;
+    private BRMSControl brmsControl;
     @Inject
-    NewCollateralDAO newCollateralDAO;
+    private NewCollateralDAO newCollateralDAO;
     @Inject
-    NewCollateralSubRelatedDAO newCollateralSubRelatedDAO;
+    private NewCollateralSubRelatedDAO newCollateralSubRelatedDAO;
     @Inject
-    NewFeeDetailTransform newFeeDetailTransform;
+    private NewFeeDetailTransform newFeeDetailTransform;
+    @Inject
+    private FeeTransform feeTransform;
+    @Inject
+    private FeeTypeTransform feeTypeTransform;
 
     @Inject
-    public CreditFacProposeControl() {}
+    public CreditFacProposeControl() {
+    }
 
     public NewCreditFacilityView findNewCreditFacilityByWorkCase(Long workCaseId) {
         NewCreditFacilityView newCreditFacilityView = null;
@@ -399,7 +404,7 @@ public class CreditFacProposeControl extends BusinessControl {
         int lastSeqNumber = 1;
         if (proposeCreditDetailViewList != null && proposeCreditDetailViewList.size() > 0) {
             int size = proposeCreditDetailViewList.size();
-            for (int i=0; i<size; i++) {
+            for (int i = 0; i < size; i++) {
                 ProposeCreditDetailView proposeCreditDetailView = proposeCreditDetailViewList.get(i);
                 if (proposeCreditDetailView.getSeq() > lastSeqNumber) {
                     lastSeqNumber = proposeCreditDetailView.getSeq();
@@ -418,7 +423,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 @Override
                 public int compare(ProposeCreditDetailView o1, ProposeCreditDetailView o2) {
                     int flag = o2.getTypeOfStep().compareTo(o1.getTypeOfStep());
-                    if(flag == 0)
+                    if (flag == 0)
                         flag = o1.getSeq() - o2.getSeq();
                     return flag;
                 }
@@ -536,7 +541,7 @@ public class CreditFacProposeControl extends BusinessControl {
             weightINV = bizInfoSummaryView.getSumWeightINV();
             //      Sum(weight cost of goods sold * businessProportion)
             List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
-            if(bizInfoSummaryView.getId() != 0){
+            if (bizInfoSummaryView.getId() != 0) {
                 bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryView.getId());
                 if (bizInfoDetailViewList != null && bizInfoDetailViewList.size() > 0) {
                     log.debug("bizInfoDetailViewList : {}", bizInfoDetailViewList);
@@ -545,7 +550,7 @@ public class CreditFacProposeControl extends BusinessControl {
                         if (bidv.getBizDesc() != null) {
                             cog = bidv.getBizDesc().getCog();
                         }
-                        aaaValue = Util.add(aaaValue, Util.divide(Util.multiply(cog, bidv.getPercentBiz()),oneHundred));
+                        aaaValue = Util.add(aaaValue, Util.divide(Util.multiply(cog, bidv.getPercentBiz()), oneHundred));
                     }
                 }
             }
@@ -721,26 +726,26 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
-            List<NewGuarantorCredit> relationDeleteList = newGuarantorRelationDAO.getListByNewCreditFacility(newCreditFacility,ProposeType.P);
-            if(relationDeleteList.size()>0){
-                log.info("relationDeleteList size ::: {}",relationDeleteList.size());
+            List<NewGuarantorCredit> relationDeleteList = newGuarantorRelationDAO.getListByNewCreditFacility(newCreditFacility, ProposeType.P);
+            if (relationDeleteList.size() > 0) {
+                log.info("relationDeleteList size ::: {}", relationDeleteList.size());
                 newGuarantorRelationDAO.delete(relationDeleteList);
             }
 
             log.debug("saveCreditFacility ::: newGuarantorDetailViewList : {}", newCreditFacilityView.getNewGuarantorDetailViewList());
-            List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser,ProposeType.P);
+            List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser, ProposeType.P);
             newCreditFacility.setNewGuarantorDetailList(newGuarantorDetailList);
             newGuarantorDetailDAO.persist(newGuarantorDetailList);
         }
 
-      //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
+        //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
         List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase, ProposeType.P);
-        log.debug("before :: newCollateralSubMortgages :: size :: {}",newCollateralSubMortgages.size());
+        log.debug("before :: newCollateralSubMortgages :: size :: {}", newCollateralSubMortgages.size());
         newSubCollMortgageDAO.delete(newCollateralSubMortgages);
         log.debug("after :: newCollateralSubMortgages :: size :: {}", newCollateralSubMortgages.size());
         //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
         List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase, ProposeType.P);
-        log.debug("before :: newCollateralSubOwnerList :: size :: {}",newCollateralSubOwnerList.size());
+        log.debug("before :: newCollateralSubOwnerList :: size :: {}", newCollateralSubOwnerList.size());
         newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
         log.debug("before :: newCollateralSubOwnerList :: size :: {}", newCollateralSubOwnerList.size());
         //--- Need to Delete SubOwner from newCollateralSubRelatedList before Insert new
@@ -750,20 +755,20 @@ public class CreditFacProposeControl extends BusinessControl {
 //        log.debug("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
 
         if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
-            List<NewCollateralCredit> relationCollDelList = newCollateralRelationDAO.getListByNewCreditFacility(newCreditFacility,ProposeType.P);
-            if(relationCollDelList.size()>0){
-                log.info("relationCollDelList size ::: {}",relationCollDelList.size());
+            List<NewCollateralCredit> relationCollDelList = newCollateralRelationDAO.getListByNewCreditFacility(newCreditFacility, ProposeType.P);
+            if (relationCollDelList.size() > 0) {
+                log.info("relationCollDelList size ::: {}", relationCollDelList.size());
                 newCollateralRelationDAO.delete(relationCollDelList);
             }
 
-            if(Util.safetyList(newCreditFacilityView.getNewCollateralViewDelList()).size() > 0) {
-                log.debug("newCreditFacilityView.getNewCollateralViewDelList() :: {}",newCreditFacilityView.getNewCollateralViewDelList().size());
-                List<NewCollateral> deleteList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewDelList(), newCreditFacility, currentUser, workCase,ProposeType.P);
+            if (Util.safetyList(newCreditFacilityView.getNewCollateralViewDelList()).size() > 0) {
+                log.debug("newCreditFacilityView.getNewCollateralViewDelList() :: {}", newCreditFacilityView.getNewCollateralViewDelList().size());
+                List<NewCollateral> deleteList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewDelList(), newCreditFacility, currentUser, workCase, ProposeType.P);
                 newCollateralDetailDAO.delete(deleteList);
             }
 
             log.debug("saveCreditFacility ::: newCollateralViewList : {}", newCreditFacilityView.getNewCollateralViewList());
-            List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, currentUser, workCase,ProposeType.P);
+            List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, currentUser, workCase, ProposeType.P);
             newCreditFacility.setNewCollateralDetailList(newCollateralList);
             newCollateralDetailDAO.persist(newCollateralList);
             log.debug("saveCreditFacility ::: persist newCollateralList : {}", newCollateralList);
@@ -776,7 +781,7 @@ public class CreditFacProposeControl extends BusinessControl {
     // Call COMSInterface
     public AppraisalDataResult toCallComsInterface(final String jobId) {
         log.debug("onCallRetrieveAppraisalReportInfo begin jobId is  :: {}", jobId);
-        AppraisalDataResult appraisalDataResult  = null;
+        AppraisalDataResult appraisalDataResult = null;
         try {
             appraisalDataResult = comsInterface.getAppraisalData(getCurrentUserID(), jobId);
 
@@ -796,21 +801,38 @@ public class CreditFacProposeControl extends BusinessControl {
     //call BRMS
     public StandardPricingResponse getPriceFeeInterest(final long workCaseId) {
         log.debug("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
-        StandardPricingResponse standardPricingResponse  = null;
+        StandardPricingResponse standardPricingResponse = null;
         List<NewFeeDetailView> newFeeDetailViewList = null;
+        NewFeeDetailView newFeeDetailView = new NewFeeDetailView();
         try {
             standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
 //            if (standardPricingResponse != null) {
-                log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult().toString());
-                log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
-                log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().toString());
-                log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
+            log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult().toString());
+            log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
+            log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().toString());
+            log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
 //            }
 
+            for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList())
+            {
+                FeeDetailView feeDetailView = feeTransform.transformToView(pricingFee);
+//                newFeeDetailView.setProductProgram(feeDetailView.getCreditDetailViewId());   // find productProgram
+                if (feeDetailView.getFeeTypeView().getId() == 9) {//type=9,(Front-End-Fee)
+                    newFeeDetailView.setStandardFrontEndFee(feeDetailView);
+                }else if (feeDetailView.getFeeTypeView().getId() == 15) { //type=15,(Prepayment Fee)
+                    newFeeDetailView.setPrepaymentFee(feeDetailView);
+                }else if (feeDetailView.getFeeTypeView().getId() == 20) {//type=20,(CancellationFee)
+                    newFeeDetailView.setCancellationFee(feeDetailView);
+                }else if (feeDetailView.getFeeTypeView().getId() == 21) { //type=21,(ExtensionFee)
+                    newFeeDetailView.setExtensionFee(feeDetailView);
+                }else  if(feeDetailView.getFeeTypeView().getId()==22){//type=22,(CommitmentFee)
+                    newFeeDetailView.setCommitmentFee(feeDetailView);
+                }
+            }
 
             return standardPricingResponse;
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("Exception while get getPriceFeeInterest data!", e);
         }
         return standardPricingResponse;
@@ -830,7 +852,7 @@ public class CreditFacProposeControl extends BusinessControl {
             for (Long id : deleteCreditIdList) {
                 NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(id);
                 deleteCreditDetailList.add(newCreditDetail);
-                newCollateralCreditDelList = newCollateralCreditDAO.getListCollRelationByNewCreditDetail(newCreditDetail,ProposeType.P);
+                newCollateralCreditDelList = newCollateralCreditDAO.getListCollRelationByNewCreditDetail(newCreditDetail, ProposeType.P);
                 newCollateralCreditDAO.delete(newCollateralCreditDelList);
                 newGuarantorCreditList = newGuarantorRelationDAO.getListByNewCreditDetail(newCreditDetail, ProposeType.P);
                 newGuarantorRelationDAO.delete(newGuarantorCreditList);
@@ -849,7 +871,7 @@ public class CreditFacProposeControl extends BusinessControl {
         if (deleteGuarantorIdList != null && deleteGuarantorIdList.size() > 0) {
             List<NewGuarantorDetail> deleteGuarantorList = new ArrayList<NewGuarantorDetail>();
             for (Long id : deleteGuarantorIdList) {
-                deleteGuarantorList.add(newGuarantorDetailDAO.findGuarantorById(id,ProposeType.P));
+                deleteGuarantorList.add(newGuarantorDetailDAO.findGuarantorById(id, ProposeType.P));
             }
             newGuarantorDetailDAO.delete(deleteGuarantorList);
         }

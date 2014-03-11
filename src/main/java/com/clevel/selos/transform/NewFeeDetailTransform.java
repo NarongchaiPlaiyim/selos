@@ -36,14 +36,14 @@ public class NewFeeDetailTransform extends Transform {
                 newFeeDetail.setCreateDate(new Date());
                 newFeeDetail.setCreateBy(user);
             }
-            newFeeDetail.setProductProgram(newFeeDetailView.getProductProgram());
-            newFeeDetail.setStandardFrontEndFee(newFeeDetailView.getStandardFrontEndFee());
-            newFeeDetail.setCommitmentFee(newFeeDetailView.getCommitmentFee());
-            newFeeDetail.setExtensionFee(newFeeDetailView.getExtensionFee());
-            newFeeDetail.setPrepaymentFee(newFeeDetailView.getPrepaymentFee());
-            newFeeDetail.setCancellationFee(newFeeDetailView.getCancellationFee());
-            newFeeDetail.setNewCreditFacility(creditFacilityPropose);
-            newFeeDetailList.add(newFeeDetail);
+//            newFeeDetail.setProductProgram(newFeeDetailView.getProductProgram());
+//            newFeeDetail.setStandardFrontEndFee(newFeeDetailView.getStandardFrontEndFee());
+//            newFeeDetail.setCommitmentFee(newFeeDetailView.getCommitmentFee());
+//            newFeeDetail.setExtensionFee(newFeeDetailView.getExtensionFee());
+//            newFeeDetail.setPrepaymentFee(newFeeDetailView.getPrepaymentFee());
+//            newFeeDetail.setCancellationFee(newFeeDetailView.getCancellationFee());
+//            newFeeDetail.setNewCreditFacility(creditFacilityPropose);
+//            newFeeDetailList.add(newFeeDetail);
         }
 
         return newFeeDetailList;
@@ -55,18 +55,14 @@ public class NewFeeDetailTransform extends Transform {
         NewFeeDetailView newFeeDetailView;
 
         for (NewFeeDetail newFeeDetail : newFeeDetailList) {
-            newFeeDetailView = new NewFeeDetailView();
-            newFeeDetailView.setCreateBy(newFeeDetail.getCreateBy());
-            newFeeDetailView.setCreateDate(newFeeDetail.getCreateDate());
-            newFeeDetailView.setModifyBy(newFeeDetail.getModifyBy());
-            newFeeDetailView.setModifyDate(newFeeDetail.getModifyDate());
-            newFeeDetailView.setProductProgram(newFeeDetail.getProductProgram());
-            newFeeDetailView.setStandardFrontEndFee(newFeeDetail.getStandardFrontEndFee());
-            newFeeDetailView.setCommitmentFee(newFeeDetail.getCommitmentFee());
-            newFeeDetailView.setExtensionFee(newFeeDetail.getExtensionFee());
-            newFeeDetailView.setPrepaymentFee(newFeeDetail.getPrepaymentFee());
-            newFeeDetailView.setCancellationFee(newFeeDetail.getCancellationFee());
-            newFeeDetailViewList.add(newFeeDetailView);
+//            newFeeDetailView = new NewFeeDetailView();
+//            newFeeDetailView.setProductProgram(newFeeDetail.getProductProgram());
+//            newFeeDetailView.setStandardFrontEndFee(newFeeDetail.getStandardFrontEndFee());
+//            newFeeDetailView.setCommitmentFee(newFeeDetail.getCommitmentFee());
+//            newFeeDetailView.setExtensionFee(newFeeDetail.getExtensionFee());
+//            newFeeDetailView.setPrepaymentFee(newFeeDetail.getPrepaymentFee());
+//            newFeeDetailView.setCancellationFee(newFeeDetail.getCancellationFee());
+//            newFeeDetailViewList.add(newFeeDetailView);
         }
 
         return newFeeDetailViewList;
@@ -75,18 +71,6 @@ public class NewFeeDetailTransform extends Transform {
     public List<NewFeeDetailView> transformBRMSToView(List<PricingFee> pricingFeeList) {
 
         List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
-        NewFeeDetailView newFeeDetailView;
-
-        for (PricingFee pricingFee : pricingFeeList) {
-            newFeeDetailView = new NewFeeDetailView();
-            newFeeDetailView.setProductProgram(pricingFee.getCreditDetailId());
-            newFeeDetailView.setStandardFrontEndFee(pricingFee.getFeePercent().toString());
-            newFeeDetailView.setCommitmentFee(pricingFee.getFeePercentAfterDiscount().toString());
-            newFeeDetailView.setExtensionFee("ExtensionFee");
-            newFeeDetailView.setPrepaymentFee(pricingFee.getPaymentMethod());
-            newFeeDetailView.setCancellationFee("CancellationFee");
-            newFeeDetailViewList.add(newFeeDetailView);
-        }
 
         return newFeeDetailViewList;
     }
