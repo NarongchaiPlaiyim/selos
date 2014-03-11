@@ -828,6 +828,8 @@ public class CreditFacProposeControl extends BusinessControl {
                 }else  if(feeDetailView.getFeeTypeView().getId()==22){//type=22,(CommitmentFee)
                     newFeeDetailView.setCommitmentFee(feeDetailView);
                 }
+
+                log.debug("FeePaymentMethodView():::: {}",feeDetailView.getFeePaymentMethodView().getBrmsCode());
             }
 
             return standardPricingResponse;
