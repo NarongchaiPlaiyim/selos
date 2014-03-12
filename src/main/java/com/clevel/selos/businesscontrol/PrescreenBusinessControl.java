@@ -34,6 +34,7 @@ import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -198,11 +199,11 @@ public class PrescreenBusinessControl extends BusinessControl {
             customerInfoView.setCustomerEntity(customerEntity);
         }
 
-        if(customerInfoView.getCustomerEntity().getId() == 1) {
+        if(customerInfoView.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()) {
             IndividualResult individualResult = rmInterface.getIndividualInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
             log.info("getCustomerInfoFromRM ::: individualResult : {}", individualResult);
             customerInfoResultSearch = customerBizTransform.tranformIndividual(individualResult);
-        } else if(customerInfoView.getCustomerEntity().getId() == 2){
+        } else if(customerInfoView.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
             CorporateResult corporateResult = rmInterface.getCorporateInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
             log.info("getCustomerInfoFromRM ::: corporateResult : {}", corporateResult);
             customerInfoResultSearch = customerBizTransform.tranformJuristic(corporateResult);
@@ -1248,8 +1249,9 @@ public class PrescreenBusinessControl extends BusinessControl {
         }
     }*/
 
-    public void duplicateData(long workCasePreScreenId) throws Exception{
+    public void duplicateData(long workCasePreScreenId, String queueName, long actionCode) throws Exception{
         stpExecutor.duplicateData(workCasePreScreenId);
+        closeSale(workCasePreScreenId, queueName, actionCode);
     }
 
     // *** Function for BPM *** //

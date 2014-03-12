@@ -643,8 +643,8 @@ public class PrescreenMaker implements Serializable {
     public void onCloseSale(){
         log.debug("onCloseSale ::: queueName : {}", queueName);
         try{
-            prescreenBusinessControl.duplicateData(workCasePreScreenId);
-            prescreenBusinessControl.closeSale(workCasePreScreenId, queueName, ActionCode.CLOSE_SALES.getVal());
+            prescreenBusinessControl.duplicateData(workCasePreScreenId, queueName, ActionCode.CLOSE_SALES.getVal());
+            //prescreenBusinessControl.closeSale(workCasePreScreenId, queueName, ActionCode.CLOSE_SALES.getVal());
 
             messageHeader = "Information";
             message = "Close Sales Complete.";
@@ -2013,9 +2013,16 @@ public class PrescreenMaker implements Serializable {
                 }else{
                     //enableDocumentType = false;
                     if(borrowerInfo.getSearchId() != null){
-                        if(borrowerInfo.getSearchId().length() > 12){
-                            borrowerInfo.setCitizenId(borrowerInfo.getSearchId().substring(0,13));
+                        if(borrowerInfo.getDocumentType().getId() == 1 || borrowerInfo.getDocumentType().getId() == 2){
+                            if(borrowerInfo.getSearchId().length() > 12){
+                                borrowerInfo.setCitizenId(borrowerInfo.getSearchId().substring(0,13));
+                            }
+                        } else if(borrowerInfo.getDocumentType().getId() == 3){
+                            if(borrowerInfo.getSearchId().length() > 12){
+                                borrowerInfo.setRegistrationId(borrowerInfo.getSearchId().substring(0,13));
+                            }
                         }
+
                     }
                 }
 
@@ -2037,7 +2044,17 @@ public class PrescreenMaker implements Serializable {
                 borrowerInfo.setTmbCustomerId(borrowerInfo.getSearchId());
             }else{
                 //enableDocumentType = false;
-                borrowerInfo.setCitizenId(borrowerInfo.getSearchId());
+                if(borrowerInfo.getDocumentType() != null){
+                    if(borrowerInfo.getDocumentType().getId() == 1 || borrowerInfo.getDocumentType().getId() == 2){
+                        if(borrowerInfo.getSearchId().length() > 12){
+                            borrowerInfo.setCitizenId(borrowerInfo.getSearchId().substring(0,13));
+                        }
+                    } else if(borrowerInfo.getDocumentType().getId() == 3){
+                        if(borrowerInfo.getSearchId().length() > 12){
+                            borrowerInfo.setRegistrationId(borrowerInfo.getSearchId().substring(0,13));
+                        }
+                    }
+                }
             }
 
             enableDocumentType = false;
@@ -2051,6 +2068,8 @@ public class PrescreenMaker implements Serializable {
             message = ex.getMessage();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+
+        log.debug("customerInfo : borrowerInfo : {}", borrowerInfo);
 
     }
 
