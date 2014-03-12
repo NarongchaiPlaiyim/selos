@@ -28,8 +28,6 @@ public class NewGuarantorDetailTransform extends Transform {
     @Inject
     NewGuarantorDetailDAO newGuarantorDetailDAO;
     @Inject
-    NewGuarantorRelationDAO newGuarantorRelationDAO;
-    @Inject
     NewCreditDetailTransform newCreditDetailTransform;
     @Inject
     ExistingCreditDetailTransform existingCreditDetailTransform;
@@ -37,6 +35,9 @@ public class NewGuarantorDetailTransform extends Transform {
     NewGuarantorCreditTransform newGuarantorCreditTransform;
     @Inject
     ProposeCreditDetailTransform proposeCreditDetailTransform;
+
+    @Inject
+    NewGuarantorRelationDAO newGuarantorRelationDAO;
 
 
     public List<NewGuarantorDetail> transformToModel(List<NewGuarantorDetailView> newGuarantorDetailViewList, NewCreditFacility newCreditFacility, User user, ProposeType proposeType) {
@@ -70,6 +71,7 @@ public class NewGuarantorDetailTransform extends Transform {
                 log.debug("Start.. transformToModel proposeCreditDetailViewList : {}", newGuarantorDetailView.getProposeCreditDetailViewList());
                 List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorCreditTransform.transformsToModelForGuarantor(newGuarantorDetailView.getProposeCreditDetailViewList(), newCreditFacility.getNewCreditDetailList(), newGuarantorDetail, newCreditFacility, proposeType, user);
                 log.debug("End.. transformToModel newGuarantorCreditList size :: {}", newGuarantorCreditList.size());
+
                 newGuarantorDetail.setNewGuarantorCreditList(newGuarantorCreditList);
             }
 
@@ -79,6 +81,7 @@ public class NewGuarantorDetailTransform extends Transform {
 
         return newGuarantorDetailList;
     }
+
 
     public List<NewGuarantorDetailView> transformToView(List<NewGuarantorDetail> newGuarantorDetailList) {
         List<NewGuarantorDetailView> newGuarantorDetailViews = new ArrayList<NewGuarantorDetailView>();

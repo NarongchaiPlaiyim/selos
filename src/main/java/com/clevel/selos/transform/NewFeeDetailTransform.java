@@ -1,7 +1,6 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.working.NewFeeCreditDAO;
-import com.clevel.selos.integration.brms.model.response.PricingFee;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.NewFeeDetail;
@@ -68,10 +67,5 @@ public class NewFeeDetailTransform extends Transform {
         return newFeeDetailViewList;
     }
 
-    public List<NewFeeDetailView> transformBRMSToView(List<PricingFee> pricingFeeList) {
 
-        List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
-
-        return newFeeDetailViewList;
-    }
 }
