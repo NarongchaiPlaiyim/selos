@@ -326,8 +326,13 @@ public class BaseController implements Serializable {
         long workCaseId = 0;
         try{
             HttpSession session = FacesUtil.getSession(true);
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+            if(session.getAttribute("workCaseId") != null){
+                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            }
+
+            if(session.getAttribute("workCasePreScreenId") != null){
+                workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+            }
 
             fullApplicationControl.requestAppraisalBDM(workCasePreScreenId, workCaseId);
             FacesUtil.redirect("/site/appraisalRequest.jsf");

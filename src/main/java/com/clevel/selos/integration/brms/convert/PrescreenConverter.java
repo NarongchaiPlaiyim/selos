@@ -147,30 +147,33 @@ public class PrescreenConverter extends Converter{
 
             List<NCBAccountType> ncbAccountTypeList = ncbReportType.getNcbAccount();
             List<BRMSNCBAccountInfo> ncbAccountInfoList = customerInfo.getNcbAccountInfoList();
-            for(BRMSNCBAccountInfo ncbAccountInfo : ncbAccountInfoList){
-                NCBAccountType ncbAccountType = new NCBAccountType();
-                ncbAccountType.setNcbAccountStatus(ncbAccountInfo.getLoanAccountStatus());
-                ncbAccountType.setAccountType(ncbAccountInfo.getLoanAccountType());
-                ncbAccountType.setTdrFlag(ncbAccountInfo.isTdrFlag());
-                ncbAccountType.setOverdue31DTo60DCount(ncbAccountInfo.getNumberOfOverDue());
-                ncbAccountType.setOverLimitLast6MthsCount(ncbAccountInfo.getNumberOfOverLimit());
+            //TODO CHECK WITH BRMS
+            if(customerInfo.isNcbFlag()){
+                for(BRMSNCBAccountInfo ncbAccountInfo : ncbAccountInfoList){
+                    NCBAccountType ncbAccountType = new NCBAccountType();
+                    ncbAccountType.setNcbAccountStatus(ncbAccountInfo.getLoanAccountStatus());
+                    ncbAccountType.setAccountType(ncbAccountInfo.getLoanAccountType());
+                    ncbAccountType.setTdrFlag(ncbAccountInfo.isTdrFlag());
+                    ncbAccountType.setOverdue31DTo60DCount(ncbAccountInfo.getNumberOfOverDue());
+                    ncbAccountType.setOverLimitLast6MthsCount(ncbAccountInfo.getNumberOfOverLimit());
 
-                List<AttributeType> ncbAccAttributeList = ncbAccountType.getAttribute();
-                ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_BANK_FLAG, ncbAccountInfo.isTmbFlag()));
-                ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NCB_NPL_FLAG, ncbAccountInfo.isNplFlag()));
-                ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CREDIT_AMOUNT_AT_FIRST_NPL_DATE, ncbAccountInfo.getCreditAmtAtNPLDate()));
-                if(customerInfo.isIndividual()){
-                    ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CURRENT_PAYMENT_PATTERN_INDV, ncbAccountInfo.getCurrentPaymentType()));
-                    ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.SIX_MONTHS_PAYMENT_PATTERN_INDV, ncbAccountInfo.getSixMonthPaymentType()));
-                    ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TWELVE_MONTHS_PAYMENT_PATTERN_INDV, ncbAccountInfo.getTwelveMonthPaymentType()));
-                } else {
-                    ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CURRENT_PAYMENT_PATTERN_JURIS, ncbAccountInfo.getCurrentPaymentType()));
-                    ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.SIX_MONTHS_PAYMENT_PATTERN_JURIS, ncbAccountInfo.getSixMonthPaymentType()));
-                    ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TWELVE_MONTHS_PAYMENT_PATTERN_JURIS, ncbAccountInfo.getTwelveMonthPaymentType()));
+                    List<AttributeType> ncbAccAttributeList = ncbAccountType.getAttribute();
+                    ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_BANK_FLAG, ncbAccountInfo.isTmbFlag()));
+                    ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NCB_NPL_FLAG, ncbAccountInfo.isNplFlag()));
+                    ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CREDIT_AMOUNT_AT_FIRST_NPL_DATE, ncbAccountInfo.getCreditAmtAtNPLDate()));
+                    if(customerInfo.isIndividual()){
+                        ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CURRENT_PAYMENT_PATTERN_INDV, ncbAccountInfo.getCurrentPaymentType()));
+                        ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.SIX_MONTHS_PAYMENT_PATTERN_INDV, ncbAccountInfo.getSixMonthPaymentType()));
+                        ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TWELVE_MONTHS_PAYMENT_PATTERN_INDV, ncbAccountInfo.getTwelveMonthPaymentType()));
+                    } else {
+                        ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CURRENT_PAYMENT_PATTERN_JURIS, ncbAccountInfo.getCurrentPaymentType()));
+                        ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.SIX_MONTHS_PAYMENT_PATTERN_JURIS, ncbAccountInfo.getSixMonthPaymentType()));
+                        ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TWELVE_MONTHS_PAYMENT_PATTERN_JURIS, ncbAccountInfo.getTwelveMonthPaymentType()));
+                    }
+                    ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_ACCOUNT_CLOSE_DATE, ncbAccountInfo.getAccountCloseDateMonths()));
+
+                    ncbAccountTypeList.add(ncbAccountType);
                 }
-                ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_ACCOUNT_CLOSE_DATE, ncbAccountInfo.getAccountCloseDateMonths()));
-
-                ncbAccountTypeList.add(ncbAccountType);
             }
 
             List<NCBEnquiryType> ncbEnquiryTypeList = ncbReportType.getNcbEnquiry();
