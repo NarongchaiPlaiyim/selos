@@ -92,13 +92,15 @@ public class BankStatementSummary implements Serializable {
     private long workCaseId;
     private boolean isABDM_BDM;
     private boolean isTMB;
-    private boolean hasBankStmtFromDWH;
+    private boolean isRetrieveSuccess;
+    private boolean hasDataFromRetrieve;
     private Date lastMonthDate;
     private int numberOfMonths;
     private int countRefresh;
     private static final int MAX_REFRESH_TIME = 3;
 
     private List<BankStmtView> TMBBankStmtDeleteList;
+    private List<BankStmtView> bankStmtFromDbDeleteList;
 
     // Variables for messages dialog
     private String messageHeader;
@@ -148,22 +150,18 @@ public class BankStatementSummary implements Serializable {
 
         othBankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.getOtherAccountTypeList());
 
-        initBankStmtSummary();
-
-        numberOfMonths = bankStmtControl.getNumberOfMonthsBankStmt(seasonalFlag);
-        lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
-        log.debug("numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
-
         TMBBankStmtDeleteList = new ArrayList<BankStmtView>();
-    }
+        bankStmtFromDbDeleteList = new ArrayList<BankStmtView>();
+        bankStmtSrcOfCollateralProofList = new ArrayList<BankStmtView>();
 
-    private void initBankStmtSummary() {
         summaryView = bankStmtControl.getBankStmtSummaryByWorkCaseId(workCaseId);
         if (summaryView != null && summaryView.getId() != 0) {
+            log.debug("Found Bank statement summary on workCaseId: {}", workCaseId);
+
             seasonalFlag = summaryView.getSeasonal();
             expectedSubmitDate = summaryView.getExpectedSubmitDate();
             currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(summaryView.getExpectedSubmitDate());
-            // Set Summary Colors
+
             //bankStmtControl.setSummaryColor(summaryView, workCaseId);
             Date[] threeMonthsOfSrcOfColl = bankStmtControl.getSourceOfCollateralMonths(summaryView);
             if (threeMonthsOfSrcOfColl.length == 3) {
@@ -176,14 +174,23 @@ public class BankStatementSummary implements Serializable {
                 lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -1);
                 lastThreeMonth1 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -2);
             }
+
             // provide Source of Collateral Proof from all Bank statement
-            provideSrcOfCollateralProofList();
+            for (BankStmtView tmbBankStmtView : Util.safetyList(summaryView.getTmbBankStmtViewList())) {
+                bankStmtControl.calSourceOfCollateralProof(tmbBankStmtView);
+                bankStmtSrcOfCollateralProofList.add(tmbBankStmtView);
+            }
+
+            for (BankStmtView othBankStmtView : Util.safetyList(summaryView.getOthBankStmtViewList())) {
+                bankStmtControl.calSourceOfCollateralProof(othBankStmtView);
+                bankStmtSrcOfCollateralProofList.add(othBankStmtView);
+            }
+
             // calculate total & grand total summary
             bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
 
         }
         else {
-            // Create new Bank statement summary
             log.debug("Create new Bank statement summary");
             seasonalFlag = RadioValue.NOT_SELECTED.value();
             expectedSubmitDate = getCurrentDate();
@@ -197,19 +204,11 @@ public class BankStatementSummary implements Serializable {
             lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -1);
             lastThreeMonth1 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -2);
         }
-    }
 
-    private void provideSrcOfCollateralProofList() {
-        log.debug("provideSrcOfCollateralProofList()");
-        bankStmtSrcOfCollateralProofList = new ArrayList<BankStmtView>();
-        for (BankStmtView tmbBankStmtView : Util.safetyList(summaryView.getTmbBankStmtViewList())) {
-            bankStmtControl.calSourceOfCollateralProof(tmbBankStmtView);
-            bankStmtSrcOfCollateralProofList.add(tmbBankStmtView);
-        }
-        for (BankStmtView othBankStmtView : Util.safetyList(summaryView.getOthBankStmtViewList())) {
-            bankStmtControl.calSourceOfCollateralProof(othBankStmtView);
-            bankStmtSrcOfCollateralProofList.add(othBankStmtView);
-        }
+        numberOfMonths = bankStmtControl.getNumberOfMonthsBankStmt(seasonalFlag);
+        lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
+        log.debug("numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
+
     }
 
     public void onRefresh() {
@@ -226,8 +225,8 @@ public class BankStatementSummary implements Serializable {
         if (workCaseId != 0) {
             // retrieve all for borrowers
             List<CustomerInfoView> customerInfoViewList = customerInfoControl.getBorrowerByWorkCase(workCaseId);
-            BankStmtSummaryView summaryResult = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, expectedSubmitDate, seasonalFlag);
-            List<ActionStatusView> actionStatusViewList = summaryResult.getActionStatusViewList();
+            BankStmtSummaryView retrieveResult = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, expectedSubmitDate, seasonalFlag);
+            List<ActionStatusView> actionStatusViewList = retrieveResult.getActionStatusViewList();
             boolean dwhIsDown = false;
             if (actionStatusViewList != null && actionStatusViewList.size() > 0) {
                 ActionStatusView actionStatusView = actionStatusViewList.get(0);
@@ -240,10 +239,10 @@ public class BankStatementSummary implements Serializable {
                 }
             }
 
-            if ( !dwhIsDown && (summaryResult.getTmbBankStmtViewList() != null && summaryResult.getTmbBankStmtViewList().size() > 0)) {
-                hasBankStmtFromDWH = true;
+            if ( !dwhIsDown ) {
+                isRetrieveSuccess = true;
 
-                // previous TMB Bank statement for delete on save
+                // keep previous data and will be delete on save
                 if (summaryView.getTmbBankStmtViewList() != null && summaryView.getTmbBankStmtViewList().size() > 0) {
                     int size = summaryView.getTmbBankStmtViewList().size();
                     for (int i=0; i<size; i++) {
@@ -253,13 +252,22 @@ public class BankStatementSummary implements Serializable {
                     }
                 }
 
-                // replace previous data
-                Cloner cloner = new Cloner();
-                summaryView.setTmbBankStmtViewList(cloner.deepClone(summaryResult.getTmbBankStmtViewList()));
+                if (retrieveResult.getTmbBankStmtViewList() != null && retrieveResult.getTmbBankStmtViewList().size() > 0) {
+                    hasDataFromRetrieve = true;
+                    Cloner cloner = new Cloner();
+                    // previous data will be replaced by data from the DWH
+                    summaryView.setTmbBankStmtViewList(cloner.deepClone(retrieveResult.getTmbBankStmtViewList()));
+                }
+                else {
+                    hasDataFromRetrieve = false;
+                    // if no more data from the DWH, data will be empty
+                    summaryView.setTmbBankStmtViewList(new ArrayList<BankStmtView>());
+                }
 
             }
             else {
-                hasBankStmtFromDWH = false;
+                isRetrieveSuccess = false;
+                hasDataFromRetrieve = false;
             }
 
         }
@@ -279,8 +287,9 @@ public class BankStatementSummary implements Serializable {
         lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
         log.debug("Re-calculate: numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
 
-        // if retrieve and has more data from DWH and click save summary to do re-calculation before save to database
-        if (hasBankStmtFromDWH) {
+        // re-calculation all Bank statement from DWH and total summary before save
+        if (isRetrieveSuccess && hasDataFromRetrieve) {
+
             Date[] threeMonthsOfSrcOfColl = bankStmtControl.getSourceOfCollateralMonths(summaryView);
             if (threeMonthsOfSrcOfColl.length == 3) {
                 lastThreeMonth1 = threeMonthsOfSrcOfColl[0];
@@ -292,11 +301,35 @@ public class BankStatementSummary implements Serializable {
                 lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -1);
                 lastThreeMonth1 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -2);
             }
-            // provide Source of Collateral Proof from all Bank statement
-            provideSrcOfCollateralProofList();
+
+            // remove previous Bank statement from source of collateral proof
+            int sizeSrcOfCollList = bankStmtSrcOfCollateralProofList.size();
+            int sizeOfDeleteList = TMBBankStmtDeleteList.size();
+            if (sizeSrcOfCollList > 0 && sizeOfDeleteList > 0) {
+                for (int i=0; i<sizeSrcOfCollList; i++) {
+                    BankStmtView srcOfCollBankStmt = bankStmtSrcOfCollateralProofList.get(i);
+
+                    for (int j=0; j<sizeOfDeleteList; j++) {
+                        BankStmtView deleteBankStmt = TMBBankStmtDeleteList.get(j);
+
+                        if (srcOfCollBankStmt.getId() == deleteBankStmt.getId()) {
+                            bankStmtSrcOfCollateralProofList.remove(srcOfCollBankStmt);
+                        }
+                    }
+                }
+            }
+
+            // calculate Bank statement from DWH
+            for (BankStmtView tmbBankStmtView : Util.safetyList(summaryView.getTmbBankStmtViewList())) {
+                bankStmtControl.bankStmtDetailCalculation(tmbBankStmtView, summaryView.getSeasonal());
+                bankStmtControl.calSourceOfCollateralProof(tmbBankStmtView);
+            }
+
             // calculate total summary for Borrower
             bankStmtControl.bankStmtSumTotalCalculation(summaryView, true);
         }
+
+        boolean isSaveSuccess = false;
 
         try {
             summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
@@ -308,7 +341,16 @@ public class BankStatementSummary implements Serializable {
 
             // delete previous TMB Bank statement and clear delete list
             bankStmtControl.deleteBankStmtList(TMBBankStmtDeleteList);
-            TMBBankStmtDeleteList.clear();
+            TMBBankStmtDeleteList = new ArrayList<BankStmtView>();
+
+            bankStmtControl.deleteBankStmtList(bankStmtFromDbDeleteList);
+            bankStmtFromDbDeleteList = new ArrayList<BankStmtView>();
+
+            isSaveSuccess = true;
+
+            // reset to default flag
+            isRetrieveSuccess = false;
+            hasDataFromRetrieve = false;
 
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save Bank Statement Summary data success.";
@@ -323,11 +365,26 @@ public class BankStatementSummary implements Serializable {
                 message = "Save Bank Statement Summary data failed. Cause : " + e.getMessage();
             }
         }
+
+        if (isRetrieveSuccess && hasDataFromRetrieve && isSaveSuccess) {
+            // add Bank statement has id to source of collateral proof
+            for (BankStmtView tmbBankStmtView : Util.safetyList(summaryView.getTmbBankStmtViewList())) {
+                bankStmtSrcOfCollateralProofList.add(tmbBankStmtView);
+            }
+        }
+
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
     public void onDeleteBankStmt() {
         log.debug("onDeleteBankStmt() selectedBankStmtView: {}", selectedBankStmtView);
+
+        // add Bank statement has id to delete list
+        if (selectedBankStmtView.getId() != 0) {
+            log.debug("Add selectedBankStmtView.id: {} to delete list", selectedBankStmtView.getId());
+            bankStmtFromDbDeleteList.add(selectedBankStmtView);
+        }
+
         // remove Bank statement selected from Summary
         if (summaryView.getTmbBankStmtViewList().contains(selectedBankStmtView)) {
             summaryView.getTmbBankStmtViewList().remove(selectedBankStmtView);
@@ -335,73 +392,37 @@ public class BankStatementSummary implements Serializable {
             summaryView.getOthBankStmtViewList().remove(selectedBankStmtView);
         }
 
-        // *** if is Bank statement from DWH and NO id -> Do not to calculate and save summary ***
-
-        if (selectedBankStmtView.getId() != 0) {
-            // re-provide Source of collateral proof
-            provideSrcOfCollateralProofList();
-            // re-calculate Summary
-            bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
-        }
-
-        try {
-
-            if (selectedBankStmtView.getId() != 0) {
-                // delete Bank statement selected from Database
-                bankStmtControl.deleteBankStmtById(selectedBankStmtView.getId());
-                // update Summary after re-calculated to Database
-                bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
-                // update related parts
-                dbrControl.updateValueOfDBR(workCaseId);
-                exSummaryControl.calForBankStmtSummary(workCaseId);
-                bizInfoSummaryControl.calByBankStatement(workCaseId);
-            }
-
-            messageHeader = msg.get("app.messageHeader.info");
-            message = "Delete Bank Statement success.";
-            severity = MessageDialogSeverity.INFO.severity();
-        }
-        catch (Exception e) {
-            messageHeader = msg.get("app.messageHeader.error");
-            severity = MessageDialogSeverity.ALERT.severity();
-            if (e.getCause() != null) {
-                message = "Delete Bank Statement failed. Cause : " + e.getCause().toString();
-            } else {
-                message = "Delete Bank Statement failed. Cause : " + e.getMessage();
+        // remove Bank statement from source of collateral proof
+        int sizeSrcOfCollList = bankStmtSrcOfCollateralProofList.size();
+        if (selectedBankStmtView.getId() != 0 && sizeSrcOfCollList > 0) {
+            for (int i=0; i<sizeSrcOfCollList; i++) {
+                BankStmtView srcOfCollBankStmt = bankStmtSrcOfCollateralProofList.get(i);
+                if (selectedBankStmtView.getId() == srcOfCollBankStmt.getId()) {
+                    bankStmtSrcOfCollateralProofList.remove(srcOfCollBankStmt);
+                }
             }
         }
-        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
     }
 
     public void onEditTmbBankStmt() {
         log.debug("onEditTmbBankStmt() selectedBankStmtView: {}", selectedBankStmtView);
         isTMB = true;
 
-        if (hasBankStmtFromDWH) {
+        if (isRetrieveSuccess && hasDataFromRetrieve) {
 
             if (TMBBankStmtDeleteList.size() > 0) {
-                // if retrieve and has more data from DWH and then click edit TMB bank statement
-                // delete previous data from database
+                // delete previous data (data that is already from database)
                 try {
                     bankStmtControl.deleteBankStmtList(TMBBankStmtDeleteList);
-                    TMBBankStmtDeleteList.clear();
+                    TMBBankStmtDeleteList = new ArrayList<BankStmtView>();
                 } catch (Exception e) {
                     log.error("", e);
                 }
             }
 
-            // remove other data is not selected and no id from DWH
-            List<BankStmtView> tmbBankStmtViewList = summaryView.getTmbBankStmtViewList();
-            int selectedIndex = tmbBankStmtViewList.indexOf(selectedBankStmtView);
-            int size = tmbBankStmtViewList.size();
-            for (int i=0; i<size; i++) {
-                if (i == selectedIndex) continue;
-                BankStmtView bankStmtView = tmbBankStmtViewList.get(i);
-                if (bankStmtView.getId() == 0) {
-                    tmbBankStmtViewList.remove(i);
-                }
-            }
-
+            // clear TMB Bank statement before pass to Bank statement detail page
+            summaryView.setTmbBankStmtViewList(new ArrayList<BankStmtView>());
         }
 
         onRedirectToBankStmtDetail();
@@ -411,10 +432,14 @@ public class BankStatementSummary implements Serializable {
         log.debug("onEditOthBankStmt() selectedBankStmtView: {}", selectedBankStmtView);
         isTMB = false;
 
-        if (hasBankStmtFromDWH && TMBBankStmtDeleteList.size() > 0) {
-            // if retrieve and has more data from DWH and then NOT save before edit other bank statement -> revert to previous data
-            summaryView.getTmbBankStmtViewList().clear();
-            summaryView.setTmbBankStmtViewList(TMBBankStmtDeleteList);
+        if (isRetrieveSuccess && hasDataFromRetrieve) {
+            if (TMBBankStmtDeleteList.size() > 0) {
+                // revert to previous (if has previous data) before edit
+                summaryView.setTmbBankStmtViewList(TMBBankStmtDeleteList);
+            } else {
+                // clear data from retrieve if is not save before edit
+                summaryView.setTmbBankStmtViewList(new ArrayList<BankStmtView>());
+            }
         }
 
         onRedirectToBankStmtDetail();
@@ -431,12 +456,17 @@ public class BankStatementSummary implements Serializable {
         selectedBankStmtView = null;
         isTMB = true;
 
-        if (!checkConfirmToAddBankStmt()) return;
+        if (!checkConfirmToAddBankStmt())
+            return;
 
-        if (hasBankStmtFromDWH && TMBBankStmtDeleteList.size() > 0) {
-            // if retrieve and has more data from DWH and then NOT save before add new bank statement -> revert to previous data
-            summaryView.getTmbBankStmtViewList().clear();
-            summaryView.setTmbBankStmtViewList(TMBBankStmtDeleteList);
+        if (isRetrieveSuccess && hasDataFromRetrieve) {
+            if (TMBBankStmtDeleteList.size() > 0) {
+                // revert to previous (if has previous data) before edit
+                summaryView.setTmbBankStmtViewList(TMBBankStmtDeleteList);
+            } else {
+                // clear data from retrieve if is not save before edit
+                summaryView.setTmbBankStmtViewList(new ArrayList<BankStmtView>());
+            }
         }
 
         onRedirectToBankStmtDetail();
@@ -453,11 +483,17 @@ public class BankStatementSummary implements Serializable {
         selectedBankStmtView = null;
         isTMB = false;
 
-        if (!checkConfirmToAddBankStmt()) return;
+        if (!checkConfirmToAddBankStmt())
+            return;
 
-        if (hasBankStmtFromDWH && TMBBankStmtDeleteList.size() > 0) {
-            summaryView.getTmbBankStmtViewList().clear();
-            summaryView.setTmbBankStmtViewList(TMBBankStmtDeleteList);
+        if (isRetrieveSuccess && hasDataFromRetrieve) {
+            if (TMBBankStmtDeleteList.size() > 0) {
+                // revert to previous (if has previous data) before edit
+                summaryView.setTmbBankStmtViewList(TMBBankStmtDeleteList);
+            } else {
+                // clear data from retrieve if is not save before edit
+                summaryView.setTmbBankStmtViewList(new ArrayList<BankStmtView>());
+            }
         }
 
         onRedirectToBankStmtDetail();

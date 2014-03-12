@@ -397,6 +397,7 @@ public class BankStmtControl extends BusinessControl {
     }
 
     public void updateMainAccount(List<BankStmtView> bankStmtViewList) {
+        log.debug("updateMainAccount()");
         /*
         if avgIncomeNet same, use one that has max limit., then max of debit transaction, then max of credit transaction.
         */
@@ -524,6 +525,7 @@ public class BankStmtControl extends BusinessControl {
     }
 
     public void updateHighestInflow(List<BankStmtView> bankStmtViewList) {
+        log.debug("updateHighestInflow()");
         if (bankStmtViewList != null) {
             BigDecimal maxAvgGrossInflowPerLimit = BigDecimal.ZERO;
             BankStmtView highestBankStmtView = null;
@@ -553,6 +555,7 @@ public class BankStmtControl extends BusinessControl {
     }
 
     public void updateMainAccAndHighestInflow(List<BankStmtView> bankStmtViewList) {
+
         if (bankStmtViewList != null) {
             List<BankStmtView> candidateMaxIncomeNetList = new ArrayList<BankStmtView>();
             BigDecimal maxValue = BigDecimal.ZERO;
@@ -695,11 +698,13 @@ public class BankStmtControl extends BusinessControl {
     }
 
     public void updateMainAccAndHighestInflow(BankStmtSummaryView bankStmtSummaryView) {
+        log.debug("updateMainAccAndHighestInflow()");
         updateMainAccAndHighestInflow(bankStmtSummaryView.getTmbBankStmtViewList());
         updateMainAccAndHighestInflow(bankStmtSummaryView.getOthBankStmtViewList());
     }
 
     public void bankStmtDetailCalculation(BankStmtView bankStmtView, int seasonalFlag) {
+        log.debug("bankStmtDetailCalculation() bankStmtView: {}, seasonalFlag: {}", bankStmtView, seasonalFlag);
         if (bankStmtView == null
             || bankStmtView.getBankStmtDetailViewList() == null
             || bankStmtView.getBankStmtDetailViewList().size() == 0)
@@ -908,6 +913,7 @@ public class BankStmtControl extends BusinessControl {
     }
 
     public void bankStmtSumTotalCalculation(BankStmtSummaryView bankStmtSummaryView, boolean isBorrower) {
+        log.debug("bankStmtSumTotalCalculation() bankStmtSummaryView.id: {}, isBorrower: {}", bankStmtSummaryView.getId(), isBorrower);
         if (bankStmtSummaryView == null)
             return;
 
@@ -1200,7 +1206,7 @@ public class BankStmtControl extends BusinessControl {
     public void deleteBankStmtList(List<BankStmtView> bankStmtViewList) {
         log.debug("deleteBankStmtList()");
         if (bankStmtViewList != null && bankStmtViewList.size() > 0) {
-            log.debug("start delete Bank statement list...");
+            log.debug("start delete Bank statement list, size: {}", bankStmtViewList.size());
             List<BankStatement> deleteList = new ArrayList<BankStatement>();
             int size = bankStmtViewList.size();
             for (int i=0; i<size; i++) {
@@ -1217,7 +1223,7 @@ public class BankStmtControl extends BusinessControl {
 
     // --------------- Source of Collateral Proof ---------------
     public void calSourceOfCollateralProof(BankStmtView bankStmtView) {
-        log.debug("calSourceOfCollateralProof()");
+        log.debug("calSourceOfCollateralProof() bankStmtView: {}", bankStmtView);
         List<BankStmtDetailView> lastThreeMonthBankStmtDetail = getLastThreeMonthBankStmtDetails(bankStmtView.getBankStmtDetailViewList());
         List<BankStmtSrcOfCollateralProofView> srcOfCollateralProofViewList = bankStmtView.getSrcOfCollateralProofViewList();
 
@@ -1287,10 +1293,10 @@ public class BankStmtControl extends BusinessControl {
 
     public void calSrcOfCollateral(BankStmtSummaryView summaryView) {
         // Calculate reference from CA Web Formula
-
     }
 
     public Date[] getSourceOfCollateralMonths(BankStmtSummaryView summaryView) {
+        log.debug("getSourceOfCollateralMonths() bankStmtSummary.id: {}", summaryView);
         Date[] threeMonths = new Date[3];
         if (summaryView != null &&
             ((summaryView.getTmbBankStmtViewList() != null && !summaryView.getTmbBankStmtViewList().isEmpty())
@@ -1323,7 +1329,7 @@ public class BankStmtControl extends BusinessControl {
             threeMonths[1] = DateTimeUtil.getOnlyDatePlusMonth(maxDate, -1);
             threeMonths[2] = maxDate;
         }
-        log.debug("getSourceOfCollateralMonths() threeMonths is empty!");
+        log.debug("getSourceOfCollateralMonths() result - threeMonths: {}", threeMonths);
         return threeMonths;
     }
 
