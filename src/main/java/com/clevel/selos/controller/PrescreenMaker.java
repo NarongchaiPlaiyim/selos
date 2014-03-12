@@ -643,8 +643,8 @@ public class PrescreenMaker implements Serializable {
     public void onCloseSale(){
         log.debug("onCloseSale ::: queueName : {}", queueName);
         try{
-            prescreenBusinessControl.duplicateData(workCasePreScreenId);
-            prescreenBusinessControl.closeSale(workCasePreScreenId, queueName, ActionCode.CLOSE_SALES.getVal());
+            prescreenBusinessControl.duplicateData(workCasePreScreenId, queueName, ActionCode.CLOSE_SALES.getVal());
+            //prescreenBusinessControl.closeSale(workCasePreScreenId, queueName, ActionCode.CLOSE_SALES.getVal());
 
             messageHeader = "Information";
             message = "Close Sales Complete.";

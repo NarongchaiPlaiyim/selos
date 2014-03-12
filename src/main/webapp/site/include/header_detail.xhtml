@@ -69,8 +69,18 @@
             </p:commandButton>
             <!--Request Appraisal [Submit to AAD Admin]-->
             <p:commandButton id="btnRequestAppraisalAADADmin" value="Request for Appraisal" styleClass="blueButton" title="Request for Appraisal"
-                             rendered="#{baseController.manageButton.returnBDMButton}">
-
+                             rendered="#{baseController.manageButton.submitRequestAppraisalButton}">
+                <p:confirmDialog header="Confirmation" message="Are you want to Request for Appraisal? ( Submit to AAD Admin )" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmRequestForAppraisal" global="false" showEffect="fade"
+                                 rendered="#{baseController.manageButton.submitRequestAppraisalButton}">
+                    <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{baseController.onSubmitAppraisalAdmin()}"
+                                     process="@this" oncomplete="confirmRequestForAppraisal.hide()"/>
+                    <p:commandButton value="No" type="button" onclick="confirmRequestForAppraisal.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
             </p:commandButton>
             <!--Check Criteria-->
             <p:commandButton id="btnCheckCriteria" value="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkCriteria')}"

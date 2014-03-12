@@ -34,6 +34,7 @@ import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -1248,8 +1249,9 @@ public class PrescreenBusinessControl extends BusinessControl {
         }
     }*/
 
-    public void duplicateData(long workCasePreScreenId) throws Exception{
+    public void duplicateData(long workCasePreScreenId, String queueName, long actionCode) throws Exception{
         stpExecutor.duplicateData(workCasePreScreenId);
+        closeSale(workCasePreScreenId, queueName, actionCode);
     }
 
     // *** Function for BPM *** //
