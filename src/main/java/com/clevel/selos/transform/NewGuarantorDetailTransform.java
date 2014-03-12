@@ -225,7 +225,8 @@ public class NewGuarantorDetailTransform extends Transform {
     public NewGuarantorCredit findNewGuarantorCredit(List<NewGuarantorCredit> newGuarantorCreditList, NewCreditDetailView newCreditDetail) {
         NewGuarantorCredit newGuarantorCreditReturn = new NewGuarantorCredit();
         for (NewGuarantorCredit newGuarantorCredit : newGuarantorCreditList) {
-            if (newGuarantorCredit.getNewCreditDetail().getSeq() == newCreditDetail.getSeq()) {
+            if (newGuarantorCredit.getNewCreditDetail() != null &&
+                newGuarantorCredit.getNewCreditDetail().getSeq() == newCreditDetail.getSeq()) {
                 newGuarantorCreditReturn = newGuarantorCredit;
                 break;
             }

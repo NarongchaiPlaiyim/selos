@@ -769,8 +769,7 @@ public class CreditFacProposeControl extends BusinessControl {
             log.debug("saveCreditFacility ::: persist newCollateralList : {}", newCollateralList);
         }
 
-        NewCreditFacilityView returnNewCreditFacView = newCreditFacilityTransform.transformToView(newCreditFacility);
-        return returnNewCreditFacView;
+        return newCreditFacilityTransform.transformToView(newCreditFacility);
     }
 
     // Call COMSInterface

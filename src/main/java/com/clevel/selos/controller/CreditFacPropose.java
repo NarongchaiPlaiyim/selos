@@ -304,6 +304,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             deleteGuarantorIdList  = new ArrayList<Long>();
             deleteSubCollIdList = new ArrayList<Long>();
             deleteConditionIdList = new ArrayList<Long>();
+
             try {
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
                 log.debug("onCreation ::: newCreditFacilityView : {}", newCreditFacilityView);
@@ -376,39 +377,25 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             log.debug("collateralOwnerUwAllList size :: {}", collateralOwnerUwAllList.size());
         }
 
-        if (collateralOwnerUW == null) {
-            collateralOwnerUW = new CustomerInfoView();
-        }
-
         if (newCreditFacilityView == null) {
             newCreditFacilityView = new NewCreditFacilityView();
             reducePricePanelRendered = false;
             cannotEditStandard = true;
         }
 
-        if (newCreditDetailView == null) {
-            newCreditDetailView = new NewCreditDetailView();
-        }
+        collateralOwnerUW = new CustomerInfoView();
 
-        if (newConditionDetailView == null) {
-            newConditionDetailView = new NewConditionDetailView();
-        }
+        newCreditDetailView = new NewCreditDetailView();
 
-        if (newGuarantorDetailView == null) {
-            newGuarantorDetailView = new NewGuarantorDetailView();
-        }
+        newConditionDetailView = new NewConditionDetailView();
 
-        if (newCollateralView == null) {
-            newCollateralView = new NewCollateralView();
-        }
+        newGuarantorDetailView = new NewGuarantorDetailView();
 
-        if (newCollateralSubView == null) {
-            newCollateralSubView = new NewCollateralSubView();
-        }
+        newCollateralView = new NewCollateralView();
 
-        if (subCollateralTypeList == null) {
-            subCollateralTypeList = new ArrayList<SubCollateralType>();
-        }
+        newCollateralSubView = new NewCollateralSubView();
+
+        subCollateralTypeList = new ArrayList<SubCollateralType>();
 
         flagComs = false;
         flagButtonCollateral = true;
@@ -1531,11 +1518,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //        onSetInUsedProposeCreditDetail();
         try {
             if ((newCreditFacilityView.getInvestedCountry().getId() != 0)
-                    && (newCreditFacilityView.getLoanRequestType().getId() != 0)) {
-//                    && (newCreditFacilityView.getNewCreditDetailViewList().size() > 0)
-//                    && (newCreditFacilityView.getNewCollateralViewList().size() > 0)
-//                    && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0)
-//                    && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
+                && (newCreditFacilityView.getLoanRequestType().getId() != 0)) {
                 //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
                 creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
                 newCreditFacilityView = creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);

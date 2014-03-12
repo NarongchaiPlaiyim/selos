@@ -280,6 +280,7 @@ public class NewCollateralTransform extends Transform {
                     newCreditDetailList.add(newCollateralCredit.getNewCreditDetail());
                 }
             }
+
             log.info("newCreditDetailList collateral:: {}", newCreditDetailList.size());
             log.info("getExistingCreditDetail collateral:: {}", existingCreditDetailList.size());
             List<ProposeCreditDetailView> proposeCreditDetailViewList = proposeCreditDetailTransform(newCreditDetailList, existingCreditDetailList);
