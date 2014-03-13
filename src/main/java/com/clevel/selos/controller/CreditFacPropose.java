@@ -101,6 +101,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     private NewCreditFacilityView newCreditFacilityView;
     // case from select database must to transform to view before to use continue
+    private BasicInfoView basicInfoView;
+    private TCGView tcgView;
     private int applyTCG;
     private SpecialProgramView specialProgramView;
 
@@ -355,7 +357,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
             log.debug("onCreation :: modeForDB :: {}", modeForDB);
 
-            BasicInfoView basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+            basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
             if (basicInfoView != null) {
                 if (basicInfoView.getSpProgram() == RadioValue.YES.value()) {
                     specialProgramView = specialProgramTransform.transformToView(basicInfoView.getSpecialProgram());
@@ -365,7 +367,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 productGroup = basicInfoView.getProductGroup();
             }
 
-            TCGView tcgView = tcgInfoControl.getTcgView(workCaseId);
+            tcgView = tcgInfoControl.getTcgView(workCaseId);
             if (tcgView != null) {
                 applyTCG = tcgView.getTCG();
             }
@@ -1558,26 +1560,24 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.debug("onSaveCreditFacPropose ::: ModeForDB  {}", modeForDB);
 //        onSetInUsedProposeCreditDetail();
         try {
-            if ((newCreditFacilityView.getInvestedCountry().getId() != 0)
-                && (newCreditFacilityView.getLoanRequestType().getId() != 0)) {
-                //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
-                creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
-                newCreditFacilityView = creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
-                creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
-                exSummaryControl.calForCreditFacility(workCaseId);
-                onCreation();
-                notRetrievePricing = false;
-                messageHeader = msg.get("app.messageHeader.info");
-                message = msg.get("app.propose.response.save.success");
-                severity = MessageDialogSeverity.INFO.severity();
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            }
-//            else {
-//                messageHeader = msg.get("app.propose.response.cannot.save");
-//                message = msg.get("app.propose.response.desc.cannot.save");
-//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-//            }
-        } catch (Exception ex) {
+            //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
+            creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
+            // Calculate Total Propose
+            creditFacProposeControl.calculateTotalProposeAmount(newCreditFacilityView, basicInfoView, tcgView, workCaseId);
+            // Calculate Total for BRMS
+            creditFacProposeControl.calculateTotalForBRMS(newCreditFacilityView);
+            // Save NewCreditFacility, ProposeCredit, Collateral, Guarantor
+            newCreditFacilityView = creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
+
+            exSummaryControl.calForCreditFacility(workCaseId);
+            onCreation();
+            notRetrievePricing = false;
+
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.propose.response.save.success");
+            severity = MessageDialogSeverity.INFO.severity();
+        }
+        catch (Exception ex) {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.messageHeader.error");
             severity = MessageDialogSeverity.ALERT.severity();
@@ -1586,11 +1586,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             } else {
                 message = msg.get("app.propose.response.save.failed") + ex.getMessage();
             }
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
-
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
-
 
     private BaseRate getNewBaseRate(BaseRate baseRate) {
         if (baseRate == null) {
@@ -1616,6 +1614,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     returnCusInfoView.setLastNameEn(cusInfoView.getLastNameEn());
                     returnCusInfoView.setTitleTh(cusInfoView.getTitleTh());
                     returnCusInfoView.setTitleEn(cusInfoView.getTitleEn());
+                    returnCusInfoView.setCustomerEntity(cusInfoView.getCustomerEntity());
                     break;
                 }
             }
@@ -1691,6 +1690,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     returnCreditTypeView.setDescription(programToCreditTypeView.getCreditTypeView().getDescription());
                     returnCreditTypeView.setComsIntType(programToCreditTypeView.getCreditTypeView().getComsIntType());
                     returnCreditTypeView.setBrmsCode(programToCreditTypeView.getCreditTypeView().getBrmsCode());
+                    returnCreditTypeView.setCanSplit(programToCreditTypeView.getCreditTypeView().getCanSplit());
+                    returnCreditTypeView.setCalLimitType(programToCreditTypeView.getCreditTypeView().getCalLimitType());
+                    returnCreditTypeView.setCreditGroup(programToCreditTypeView.getCreditTypeView().getCreditGroup());
                 }
             }
         }

@@ -1119,7 +1119,6 @@ public class Decision implements Serializable {
                 decisionView = decisionControl.saveApproveAndConditionData(decisionView, workCase);
                 // Calculate Total Approve
                 decisionControl.calculateTotalApprove(decisionView);
-                // todo calculate Total for BRMS
                 // Save Total Approve to Decision
                 decisionControl.saveDecision(decisionView, workCase);
                 // Save Approval History for UW
@@ -1177,14 +1176,13 @@ public class Decision implements Serializable {
         ProductProgramView returnPrdProgramView = new ProductProgramView();
         if (prdGroupToPrdProgramViewList != null && !prdGroupToPrdProgramViewList.isEmpty() && id != 0) {
             for (PrdGroupToPrdProgramView groupToProgramView : prdGroupToPrdProgramViewList) {
-                if (groupToProgramView.getProductProgramView() != null
-                    && groupToProgramView.getProductProgramView().getId() == id) {
-
-                    returnPrdProgramView.setId(groupToProgramView.getProductProgramView().getId());
-                    returnPrdProgramView.setActive(groupToProgramView.getProductProgramView().getActive());
-                    returnPrdProgramView.setName(groupToProgramView.getProductProgramView().getName());
-                    returnPrdProgramView.setDescription(groupToProgramView.getProductProgramView().getDescription());
-                    returnPrdProgramView.setBrmsCode(groupToProgramView.getProductProgramView().getBrmsCode());
+                ProductProgramView productProgramView = groupToProgramView.getProductProgramView();
+                if (productProgramView != null && productProgramView.getId() == id) {
+                    returnPrdProgramView.setId(productProgramView.getId());
+                    returnPrdProgramView.setActive(productProgramView.getActive());
+                    returnPrdProgramView.setName(productProgramView.getName());
+                    returnPrdProgramView.setDescription(productProgramView.getDescription());
+                    returnPrdProgramView.setBrmsCode(productProgramView.getBrmsCode());
                     break;
                 }
             }
@@ -1196,15 +1194,18 @@ public class Decision implements Serializable {
         CreditTypeView returnCreditTypeView = new CreditTypeView();
         if (prdProgramToCreditTypeViewList != null && !prdProgramToCreditTypeViewList.isEmpty() && id != 0) {
             for (PrdProgramToCreditTypeView programToCreditTypeView : prdProgramToCreditTypeViewList) {
-                if (programToCreditTypeView.getCreditTypeView() != null
-                    && programToCreditTypeView.getCreditTypeView().getId() == id) {
-
-                    returnCreditTypeView.setId(programToCreditTypeView.getCreditTypeView().getId());
-                    returnCreditTypeView.setActive(programToCreditTypeView.getCreditTypeView().getActive());
-                    returnCreditTypeView.setName(programToCreditTypeView.getCreditTypeView().getName());
-                    returnCreditTypeView.setDescription(programToCreditTypeView.getCreditTypeView().getDescription());
-                    returnCreditTypeView.setComsIntType(programToCreditTypeView.getCreditTypeView().getComsIntType());
-                    returnCreditTypeView.setBrmsCode(programToCreditTypeView.getCreditTypeView().getBrmsCode());
+                CreditTypeView creditTypeView = programToCreditTypeView.getCreditTypeView();
+                if (creditTypeView != null && creditTypeView.getId() == id) {
+                    returnCreditTypeView.setId(creditTypeView.getId());
+                    returnCreditTypeView.setActive(creditTypeView.getActive());
+                    returnCreditTypeView.setName(creditTypeView.getName());
+                    returnCreditTypeView.setDescription(creditTypeView.getDescription());
+                    returnCreditTypeView.setComsIntType(creditTypeView.getComsIntType());
+                    returnCreditTypeView.setBrmsCode(creditTypeView.getBrmsCode());
+                    returnCreditTypeView.setCanSplit(creditTypeView.getCanSplit());
+                    returnCreditTypeView.setCalLimitType(creditTypeView.getCalLimitType());
+                    returnCreditTypeView.setCreditGroup(creditTypeView.getCreditGroup());
+                    returnCreditTypeView.setContingentFlag(creditTypeView.isContingentFlag());
                     break;
                 }
             }
