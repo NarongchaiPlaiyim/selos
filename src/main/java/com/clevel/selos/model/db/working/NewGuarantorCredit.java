@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 
 import javax.persistence.*;
@@ -30,6 +31,11 @@ public class NewGuarantorCredit implements Serializable {
     @Column(name = "guarantee_amount")
     private BigDecimal guaranteeAmount;
 
+    @ManyToOne
+    @JoinColumn(name = "new_credit_facility_id")
+    private NewCreditFacility newCreditFacility;
+
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
     private Date createDate;
@@ -46,12 +52,25 @@ public class NewGuarantorCredit implements Serializable {
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
+    @Column(name = "propose_type")
+    @Enumerated(EnumType.ORDINAL)
+    private ProposeType proposeType;
+
+
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public NewCreditFacility getNewCreditFacility() {
+        return newCreditFacility;
+    }
+
+    public void setNewCreditFacility(NewCreditFacility newCreditFacility) {
+        this.newCreditFacility = newCreditFacility;
     }
 
     public NewGuarantorDetail getNewGuarantorDetail() {
@@ -116,5 +135,13 @@ public class NewGuarantorCredit implements Serializable {
 
     public void setExistingCreditDetail(ExistingCreditDetail existingCreditDetail) {
         this.existingCreditDetail = existingCreditDetail;
+    }
+
+    public ProposeType getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(ProposeType proposeType) {
+        this.proposeType = proposeType;
     }
 }

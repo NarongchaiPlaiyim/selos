@@ -180,6 +180,22 @@ public class Customer implements Serializable {
     @Column(name="shares", nullable=false, columnDefinition="int default 0")
     private BigDecimal shares;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_date")
+    private Date createDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modify_date")
+    private Date modifyDate;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "create_user_id")
+    private User createBy;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "modify_user_id")
+    private User modifyBy;
+    
     public Customer() {
     }
 
@@ -582,6 +598,38 @@ public class Customer implements Serializable {
     public void setShares(BigDecimal shares) {
         this.shares = shares;
     }
+    
+    public Date getCreateDate() {
+  		return createDate;
+  	}
+
+  	public void setCreateDate(Date createDate) {
+  		this.createDate = createDate;
+  	}
+
+  	public Date getModifyDate() {
+  		return modifyDate;
+  	}
+
+  	public void setModifyDate(Date modifyDate) {
+  		this.modifyDate = modifyDate;
+  	}
+
+  	public User getCreateBy() {
+  		return createBy;
+  	}
+
+  	public void setCreateBy(User createBy) {
+  		this.createBy = createBy;
+  	}
+
+  	public User getModifyBy() {
+  		return modifyBy;
+  	}
+
+  	public void setModifyBy(User modifyBy) {
+  		this.modifyBy = modifyBy;
+  	}
 
     @Override
     public String toString() {

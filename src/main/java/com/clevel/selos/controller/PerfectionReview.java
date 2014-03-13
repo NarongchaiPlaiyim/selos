@@ -2,7 +2,7 @@ package com.clevel.selos.controller;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -15,9 +15,8 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 
-import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.PerfectionReviewControl;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.PerfectionReviewView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -29,26 +28,30 @@ public class PerfectionReview implements Serializable {
 
 	@Inject @SELOS
 	private Logger log;
-	
+
 	@Inject
-	private BasicInfoControl basicInfoControl;
-	
+	private PerfectionReviewControl perfectionReviewControl;
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
-	
-	private BasicInfoView basicInfoView;
-	
+	private Date lastUpdateDateTime;
+	private String lastUpdateBy;
 	//Property
-	private List<PerfectionReviewView> perfectionReviewList;
+	private List<PerfectionReviewView> perfectionReviews;
 	
 	public PerfectionReview() {
 	}
-	
-	public List<PerfectionReviewView> getPerfectionReviewList() {
-		return perfectionReviewList;
+	public String getLastUpdateBy() {
+		return lastUpdateBy;
 	}
+	public Date getLastUpdateDateTime() {
+		return lastUpdateDateTime;
+	}
+	public List<PerfectionReviewView> getPerfectionReviews() {
+		return perfectionReviews;
+	}
+	
 	
 	/*
 	 * Action
@@ -95,49 +98,22 @@ public class PerfectionReview implements Serializable {
 	private void _loadInitData() {
 		preRenderCheck = false;
 		if (workCaseId > 0) {
-			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+			
 		}
-		//Calculate result for each type
-		perfectionReviewList = new ArrayList<PerfectionReviewView>();
-		PerfectionReviewView contractReview = new PerfectionReviewView();
-		contractReview.setType("Contract");
-		contractReview.setDate(basicInfoView.getCreateDate());
-		contractReview.setCompleteDate(null);
-		contractReview.setStatus("On Hand");
-		contractReview.setRemark("Remark");
-		perfectionReviewList.add(contractReview);
 		
-		PerfectionReviewView pledgeReview = new PerfectionReviewView();
-		pledgeReview.setType("Pledge");
-		pledgeReview.setDate(basicInfoView.getCreateDate());
-		pledgeReview.setCompleteDate(null);
-		pledgeReview.setStatus("Completed");
-		pledgeReview.setRemark("Remark");
-		perfectionReviewList.add(pledgeReview);
-		
-		PerfectionReviewView mortgageReview = new PerfectionReviewView();
-		mortgageReview.setType("Mortgage");
-		mortgageReview.setDate(basicInfoView.getCreateDate());
-		mortgageReview.setCompleteDate(null);
-		mortgageReview.setStatus("On Hand");
-		mortgageReview.setRemark("Remark");
-		perfectionReviewList.add(mortgageReview);
-		
-		PerfectionReviewView tcgReview = new PerfectionReviewView();
-		tcgReview.setType("TCG");
-		tcgReview.setDate(basicInfoView.getCreateDate());
-		tcgReview.setCompleteDate(null);
-		tcgReview.setStatus("On Hand");
-		tcgReview.setRemark("Remark");
-		perfectionReviewList.add(tcgReview);
-		
-		PerfectionReviewView feeReview = new PerfectionReviewView();
-		feeReview.setType("Fee Collection");
-		feeReview.setDate(basicInfoView.getCreateDate());
-		feeReview.setCompleteDate(null);
-		feeReview.setStatus("On Hand");
-		feeReview.setRemark("Remark");
-		perfectionReviewList.add(feeReview);
+		perfectionReviews = perfectionReviewControl.getPerfectionReviews(workCaseId);
+		lastUpdateDateTime = new Date(0);
+		lastUpdateBy = null;
+		for (PerfectionReviewView view : perfectionReviews) {
+			if (view.getModifyDate() == null)
+				continue;
+			if (lastUpdateDateTime.after(view.getModifyDate())) {
+				lastUpdateDateTime = view.getModifyDate();
+				lastUpdateBy = view.getModifyUser();
+			}
+		}
+		if (lastUpdateDateTime.getTime() == 0)
+			lastUpdateDateTime = null;
 	}
 	
 }

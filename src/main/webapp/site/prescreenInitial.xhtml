@@ -89,7 +89,7 @@
                                 <td></td>
                                 <td>
                                     <p:dataTable id="resultTableFacility" var="item" value="#{prescreenMaker.facilityViewList}"
-                                                 paginator="false" rowKey="#{item.facility}" rowIndexVar="rowIndex">
+                                                 paginator="false" rowKey="#{item.facility}" rowIndexVar="rowIndex" rows="10" >
 
                                         <p:column headerText="" styleClass="center" style="width:22px;">
                                             <h:outputText value="#{rowIndex+1}"/>
@@ -247,6 +247,7 @@
 </p:panel>
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
+                     closable="false"
                      header="#{prescreenMaker.messageHeader}">
         <f:facet name="message">
             <h:outputText value="#{prescreenMaker.message}" escape="false"/>
@@ -259,6 +260,7 @@
 </p:panel>
 <p:panel id="msgBoxRedirectPanel" styleClass="panel">
     <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
+                     closable="false"
                      header="#{prescreenMaker.messageHeader}">
         <f:facet name="message">
             <h:outputText value="#{prescreenMaker.message}" escape="false"/>

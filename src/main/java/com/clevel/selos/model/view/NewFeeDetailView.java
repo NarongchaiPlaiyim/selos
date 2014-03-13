@@ -1,29 +1,19 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 
 public class NewFeeDetailView implements Serializable {
     private long id;
     private String productProgram;
-    private String standardFrontEndFee;
-    private BigDecimal standardFrondEndFeeAmount;
-    private String commitmentFee;
-    private String commitmentFeeYears;
-    private String extensionFee;
-    private String extensionFeeYears;
-    private String prepaymentFee;
-    private String prepaymentFeeYears;
-    private String cancellationFee;
-    private Date createDate;
-    private Date modifyDate;
-    private User createBy;
-    private User modifyBy;
+    private FeeDetailView standardFrontEndFee;
+    private FeeDetailView commitmentFee;
+    private FeeDetailView extensionFee;
+    private FeeDetailView prepaymentFee;
+    private FeeDetailView cancellationFee;
+
 
     public NewFeeDetailView() {
         reset();
@@ -31,15 +21,11 @@ public class NewFeeDetailView implements Serializable {
 
     public void reset() {
         this.productProgram = "";
-        this.standardFrontEndFee = "";
-        this.commitmentFee = "";
-        this.extensionFee = "";
-        this.prepaymentFee = "";
-        this.cancellationFee = "";
-        this.standardFrondEndFeeAmount = BigDecimal.ZERO;
-        this.commitmentFeeYears = "";
-        this.extensionFeeYears = "";
-        this.prepaymentFeeYears = "";
+        this.standardFrontEndFee = new FeeDetailView();
+        this.commitmentFee = new FeeDetailView();
+        this.extensionFee = new FeeDetailView();
+        this.prepaymentFee = new FeeDetailView();
+        this.cancellationFee = new FeeDetailView();
     }
 
     public long getId() {
@@ -50,38 +36,6 @@ public class NewFeeDetailView implements Serializable {
         this.id = id;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getModifyDate() {
-        return modifyDate;
-    }
-
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
-    }
-
-    public User getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(User createBy) {
-        this.createBy = createBy;
-    }
-
-    public User getModifyBy() {
-        return modifyBy;
-    }
-
-    public void setModifyBy(User modifyBy) {
-        this.modifyBy = modifyBy;
-    }
-
     public String getProductProgram() {
         return productProgram;
     }
@@ -90,91 +44,56 @@ public class NewFeeDetailView implements Serializable {
         this.productProgram = productProgram;
     }
 
-    public String getStandardFrontEndFee() {
+    public FeeDetailView getStandardFrontEndFee() {
         return standardFrontEndFee;
     }
 
-    public void setStandardFrontEndFee(String standardFrontEndFee) {
+    public void setStandardFrontEndFee(FeeDetailView standardFrontEndFee) {
         this.standardFrontEndFee = standardFrontEndFee;
     }
 
-    public String getCommitmentFee() {
+    public FeeDetailView getCommitmentFee() {
         return commitmentFee;
     }
 
-    public void setCommitmentFee(String commitmentFee) {
+    public void setCommitmentFee(FeeDetailView commitmentFee) {
         this.commitmentFee = commitmentFee;
     }
 
-    public String getExtensionFee() {
+    public FeeDetailView getExtensionFee() {
         return extensionFee;
     }
 
-    public void setExtensionFee(String extensionFee) {
+    public void setExtensionFee(FeeDetailView extensionFee) {
         this.extensionFee = extensionFee;
     }
 
-    public String getPrepaymentFee() {
+    public FeeDetailView getPrepaymentFee() {
         return prepaymentFee;
     }
 
-    public void setPrepaymentFee(String prepaymentFee) {
+    public void setPrepaymentFee(FeeDetailView prepaymentFee) {
         this.prepaymentFee = prepaymentFee;
     }
 
-    public String getCancellationFee() {
+    public FeeDetailView getCancellationFee() {
         return cancellationFee;
     }
 
-    public void setCancellationFee(String cancellationFee) {
+    public void setCancellationFee(FeeDetailView cancellationFee) {
         this.cancellationFee = cancellationFee;
-    }
-
-    public BigDecimal getStandardFrondEndFeeAmount() {
-        return standardFrondEndFeeAmount;
-    }
-
-    public void setStandardFrondEndFeeAmount(BigDecimal standardFrondEndFeeAmount) {
-        this.standardFrondEndFeeAmount = standardFrondEndFeeAmount;
-    }
-
-    public String getCommitmentFeeYears() {
-        return commitmentFeeYears;
-    }
-
-    public void setCommitmentFeeYears(String commitmentFeeYears) {
-        this.commitmentFeeYears = commitmentFeeYears;
-    }
-
-    public String getExtensionFeeYears() {
-        return extensionFeeYears;
-    }
-
-    public void setExtensionFeeYears(String extensionFeeYears) {
-        this.extensionFeeYears = extensionFeeYears;
-    }
-
-    public String getPrepaymentFeeYears() {
-        return prepaymentFeeYears;
-    }
-
-    public void setPrepaymentFeeYears(String prepaymentFeeYears) {
-        this.prepaymentFeeYears = prepaymentFeeYears;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
                 .append("productProgram", productProgram)
                 .append("standardFrontEndFee", standardFrontEndFee)
                 .append("commitmentFee", commitmentFee)
                 .append("extensionFee", extensionFee)
                 .append("prepaymentFee", prepaymentFee)
                 .append("cancellationFee", cancellationFee)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
                 .toString();
     }
 }

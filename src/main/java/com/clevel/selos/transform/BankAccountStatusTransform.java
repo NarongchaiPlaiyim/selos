@@ -25,7 +25,7 @@ public class BankAccountStatusTransform extends Transform {
             bankAccountStatusView.setId(bankAccountStatus.getId());
             bankAccountStatusView.setCode(bankAccountStatus.getCode());
             bankAccountStatusView.setDescription(bankAccountStatus.getDescription());
-            bankAccountStatusView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountStatus.getBankAccountType()));
+            bankAccountStatusView.setDataSource(bankAccountStatus.getDataSource());
             bankAccountStatusView.setActive(bankAccountStatus.getActive());
             log.debug("bankAccountStatusView ::: {}", bankAccountStatusView);
             return bankAccountStatusView;
@@ -34,14 +34,14 @@ public class BankAccountStatusTransform extends Transform {
     }
 
     public BankAccountStatus getBankAccountStatus(BankAccountStatusView bankAccountStatusView){
-        BankAccountStatus bankAccountStatus = new BankAccountStatus();
         log.debug("getBankAccountStatus ::: bankAccountStatusView : {}", bankAccountStatusView);
         if(bankAccountStatusView != null){
             if(bankAccountStatusView.getId() != 0){
-                bankAccountStatus = bankAccountStatusDAO.findById(bankAccountStatusView.getId());
+                BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findById(bankAccountStatusView.getId());
                 log.debug("getBankAccountStatus ::: bankAccountStatus : {}", bankAccountStatus);
+                return bankAccountStatus;
             }
         }
-        return bankAccountStatus;
+        return null;
     }
 }

@@ -21,12 +21,14 @@ import com.clevel.selos.model.view.CustomerInfoSimpleView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.util.Util;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -301,6 +303,8 @@ public class CustomerTransform extends Transform {
             Individual individual = customer.getIndividual();
 
             if(individual != null){
+            	customerInfoView.setNeedAttorney(RadioValue.YES.equals(individual.getAttorneyRequired()));
+            	customerInfoView.setSignContract(customer.getReference().isCanSignContract());
                 customerInfoView.setIndividualId(individual.getId());
                 customerInfoView.setCitizenId(individual.getCitizenId());
                 customerInfoView.setGender(individual.getGender());
@@ -426,12 +430,17 @@ public class CustomerTransform extends Transform {
         return customerInfoView;
     }
 
-    public Customer transformToModel(CustomerInfoView customerInfoView, WorkCasePrescreen workCasePrescreen, WorkCase workCase){
+    public Customer transformToModel(CustomerInfoView customerInfoView, WorkCasePrescreen workCasePrescreen, WorkCase workCase, User user){
         log.info("Start - transformToModel ::: customerInfoView : {}", customerInfoView);
         Customer customer = new Customer();
         if(customerInfoView.getId() != 0){
             customer = customerDAO.findById(customerInfoView.getId());
+        }else{
+            customer.setCreateDate(DateTime.now().toDate());
+            customer.setCreateBy(user);
         }
+        customer.setModifyDate(DateTime.now().toDate());
+        customer.setModifyBy(user);
         customer.setWorkCase(workCase);
         customer.setWorkCasePrescreen(workCasePrescreen);
 
@@ -921,12 +930,12 @@ public class CustomerTransform extends Transform {
         return customerInfoViewList;
     }
 
-    public HashMap<String, Customer> transformToHashMap(List<CustomerInfoView> customerInfoViews, WorkCasePrescreen workCasePrescreen, WorkCase workCase){
+    public HashMap<String, Customer> transformToHashMap(List<CustomerInfoView> customerInfoViews, WorkCasePrescreen workCasePrescreen, WorkCase workCase, User user){
         HashMap<String, Customer> customerHashMap = new HashMap<String, Customer>();
         if(customerInfoViews != null){
             for(CustomerInfoView item : customerInfoViews){
                 log.info("transformToModelList before item : {}", item);
-                Customer customer = transformToModel(item, workCasePrescreen, workCase);
+                Customer customer = transformToModel(item, workCasePrescreen, workCase, user);
                 log.info("transformToModelList after item : {}", customer);
 
                 if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
@@ -938,7 +947,7 @@ public class CustomerTransform extends Transform {
                 if(item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2){
                     if(item.getSpouse() != null){
                         log.debug("transformToModelList before item (spouse) : {}", item.getSpouse());
-                        Customer spouse = transformToModel(item.getSpouse(), workCasePrescreen, workCase);
+                        Customer spouse = transformToModel(item.getSpouse(), workCasePrescreen, workCase, user);
                         log.debug("transformToModelList after item (spouse) : {}", spouse);
 
                         spouse.setIsSpouse(1);
@@ -951,19 +960,19 @@ public class CustomerTransform extends Transform {
         return customerHashMap;
     }
 
-    public List<Customer> transformToModelList(List<CustomerInfoView> customerInfoViews, WorkCasePrescreen workCasePrescreen, WorkCase workCase){
+    public List<Customer> transformToModelList(List<CustomerInfoView> customerInfoViews, WorkCasePrescreen workCasePrescreen, WorkCase workCase, User user){
         List<Customer> customerList = new ArrayList<Customer>();
 
         if(customerInfoViews != null){
             for(CustomerInfoView item : customerInfoViews){
                 log.info("transformToModelList before item : {}", item);
-                Customer customer = transformToModel(item, workCasePrescreen, workCase);
+                Customer customer = transformToModel(item, workCasePrescreen, workCase, user);
                 log.info("transformToModelList after item : {}", customer);
                 customerList.add(customer);
                 if(item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2){
                     if(item.getSpouse() != null){
                         log.debug("transformToModelList before item (spouse) : {}", item.getSpouse());
-                        Customer spouse = transformToModel(item.getSpouse(), workCasePrescreen, workCase);
+                        Customer spouse = transformToModel(item.getSpouse(), workCasePrescreen, workCase, user);
                         log.debug("transformToModelList after item (spouse) : {}", spouse);
                         spouse.setIsSpouse(1);
                         customerList.add(spouse);
@@ -1075,6 +1084,12 @@ public class CustomerTransform extends Transform {
     
     private void _tranformBasePostView(Customer model,CustomerInfoPostBaseView<?> view) {
     	view.setId(model.getId());
+    	if (model.getWorkCase() != null)
+    		view.setWorkCaseId(model.getWorkCase().getId());
+    	view.setModifyDate(model.getModifyDate());
+    	if (model.getModifyBy() != null)
+    		view.setModifyUser(model.getModifyBy().getDisplayName());
+    	
     	view.setTmbCustomerId(model.getTmbCustomerId());
     	if (model.getRelation() != null) {
     		view.setRelationId(model.getRelation().getId());
@@ -1170,8 +1185,8 @@ public class CustomerTransform extends Transform {
     	}
     }
     
-    public void updateModelFromPostView(Customer model,CustomerInfoPostIndvView view) {
-    	_updateModelFromBasePostView(model, view);
+    public void updateModelFromPostView(Customer model,CustomerInfoPostIndvView view,User user) {
+    	_updateModelFromBasePostView(model, view,user);
     	//Read only list (No need to update)
     	//last name
     	
@@ -1200,17 +1215,18 @@ public class CustomerTransform extends Transform {
     	
     	//For spouse this should be updated in controller
     }
-    public void updateModelFromPostView(Customer model,CustomerInfoPostJurisView view) {
-    	_updateModelFromBasePostView(model, view);
+    public void updateModelFromPostView(Customer model,CustomerInfoPostJurisView view,User user) {
+    	_updateModelFromBasePostView(model, view,user);
     	//Read only list (No need to update)
     	//regist date, contact person
     }
-    private void _updateModelFromBasePostView(Customer model,CustomerInfoPostBaseView<?> view) {
+    private void _updateModelFromBasePostView(Customer model,CustomerInfoPostBaseView<?> view,User user) {
     	//Read only list (No need to update)
     	// Relation, Collateral Owner, Document Type, Personal Id,
     	// NameTH , Mobile, Fax, Email, tmb customerId
     	
-    	
+    	model.setModifyBy(user);
+    	model.setModifyDate(new Date());
     	view.calculateAge();
     	model.setAge(view.getAge());
     	model.setTitle(titleDAO.findRefById(view.getTitleId()));

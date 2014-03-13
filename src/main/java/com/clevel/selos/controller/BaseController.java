@@ -1,11 +1,19 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.BRMSControl;
 import com.clevel.selos.businesscontrol.FullApplicationControl;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
+import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.brms.BRMSInterfaceImpl;
+import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ManageButton;
+import com.clevel.selos.model.PricingDOAValue;
 import com.clevel.selos.model.StepValue;
+import com.clevel.selos.model.db.master.Reason;
+import com.clevel.selos.model.db.master.ReasonType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.view.AppHeaderView;
@@ -30,18 +38,24 @@ public class BaseController implements Serializable {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     UserDAO userDAO;
     @Inject
     BasicInfoDAO basicInfoDAO;
+
     @Inject
     FullApplicationControl fullApplicationControl;
+
+    @Inject
+    BRMSControl brmsControl;
 
     private ManageButton manageButton;
     private AppHeaderView appHeaderView;
     private long stepId;
     private int requestAppraisal;
     private int qualitativeType;
+    private int pricingDOALevel;
     private List<User> abdmUserList;
     private List<User> zmUserList;
     private List<User> rmUserList;
@@ -61,6 +75,11 @@ public class BaseController implements Serializable {
     private String zmPriceUserId;
     private String rmPriceUserId;
     private String ghPriceUserId;
+
+    //Cancel CA FullApp
+    private List<Reason> cancelReason;
+    private String cancalCARemark;
+    private int reasonId;
 
     private String messageHeader;
     private String message;
@@ -127,7 +146,7 @@ public class BaseController implements Serializable {
                 manageButton.setCheckMandateDocButton(true);
                 manageButton.setCheckCriteriaButton(true);
                 manageButton.setAssignToABDMButton(true);
-                //manageButton.setCancelCAButton(true);
+                manageButton.setCancelCAFullAppButton(true);
                 manageButton.setSubmitCAButton(true);
             }
         } else if (stepId == StepValue.REQUEST_APPRAISAL.value()) {
@@ -205,14 +224,67 @@ public class BaseController implements Serializable {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
+    public void onOpenCancelCAFullApp(){
+        log.debug("onOpenCancelCAFullApp ::: starting...");
+        cancalCARemark = "";
+        reasonId = 0;
+        cancelReason = fullApplicationControl.getCancelReasonList();
+        log.debug("onOpenCancelCAFullApp ::: cancelReason size : {}", cancelReason.size());
+    }
+
+    public void onCancelCAFullApp(){
+        log.debug("onCancelCAFullApp ::: starting...");
+        boolean complete = false;
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            String queueName = session.getAttribute("queueName").toString();
+            fullApplicationControl.cancelCAFullApp(workCaseId, queueName, reasonId, cancalCARemark);
+            messageHeader = "Information.";
+            message = "Cancel CA success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            complete = true;
+            log.debug("onCancelCAFullApp ::: success.");
+        } catch (Exception ex){
+            messageHeader = "Information.";
+            message = "Cancel CA failed, cause : " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            complete = false;
+            log.error("onCancelCAFullApp ::: exception occurred : ", ex);
+        }
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
     public void onOpenSubmitZM(){
         log.debug("onOpenSubmitZM ::: starting...");
-        zmEndorseUserId = "";
-        zmEndorseRemark = "";
-        zmUserList = fullApplicationControl.getZMUserList();
-        rmUserList = fullApplicationControl.getRMUserList();
-        ghUserList = fullApplicationControl.getHeadUserList();
-        log.debug("onOpenSubmitZM ::: zmUserList size : {}", zmUserList.size());
+        log.debug("onOpenSubmitZM ::: find Pricing DOA Level");
+        HttpSession session = FacesUtil.getSession(true);
+        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        PricingDOAValue pricingDOA = fullApplicationControl.calculatePricingDOA(workCaseId);
+        if(!Util.isNull(pricingDOA)){
+            pricingDOALevel = pricingDOA.value();
+            zmEndorseUserId = "";
+            zmEndorseRemark = "";
+
+            zmUserList = fullApplicationControl.getZMUserList();
+
+            if(pricingDOA.value() >= PricingDOAValue.RGM_DOA.value()){
+                rmPriceUserId = "";
+                rmUserList = fullApplicationControl.getRMUserList();
+            }
+
+            if(pricingDOA.value() >= PricingDOAValue.GH_DOA.value()){
+                ghPriceUserId = "";
+                ghUserList = fullApplicationControl.getHeadUserList();
+            }
+
+            log.debug("onOpenSubmitZM ::: zmUserList size : {}", zmUserList.size());
+            RequestContext.getCurrentInstance().execute("submitZMDialog.show()");
+        } else {
+            messageHeader = "Exception.";
+            message = "Can not find Pricing DOA Level. Please check value for calculate DOA Level";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
     }
 
     public void onSubmitZM(){
@@ -223,7 +295,7 @@ public class BaseController implements Serializable {
                 HttpSession session = FacesUtil.getSession(true);
                 long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
                 String queueName = session.getAttribute("queueName").toString();
-                fullApplicationControl.submitToZM(zmEndorseUserId, queueName, workCaseId);
+                //fullApplicationControl.submitToZM(zmEndorseUserId, queueName, workCaseId);
                 messageHeader = "Information.";
                 message = "Submit to Zone Manager success.";
                 RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
@@ -254,8 +326,13 @@ public class BaseController implements Serializable {
         long workCaseId = 0;
         try{
             HttpSession session = FacesUtil.getSession(true);
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+            if(session.getAttribute("workCaseId") != null){
+                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            }
+
+            if(session.getAttribute("workCasePreScreenId") != null){
+                workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+            }
 
             fullApplicationControl.requestAppraisalBDM(workCasePreScreenId, workCaseId);
             FacesUtil.redirect("/site/appraisalRequest.jsf");
@@ -320,6 +397,24 @@ public class BaseController implements Serializable {
             messageHeader = "Exception.";
             message = Util.getMessageException(ex);
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
+
+    }
+
+    public void onCheckPreScreen(){
+        long workCasePreScreenId = 0;
+        HttpSession session = FacesUtil.getSession(true);
+        if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
+            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+            UWRulesResponse uwRulesResponse = brmsControl.getPrescreenResult(workCasePreScreenId);
+            log.debug("onCheckPreScreen uwRulesResponse : {}", uwRulesResponse);
+            if(uwRulesResponse != null){
+                if(uwRulesResponse.getActionResult().equals(ActionResult.SUCCEED)){
+
+                }else if(uwRulesResponse.getActionResult().equals(ActionResult.FAILED)){
+
+                }
+            }
         }
 
     }
@@ -496,5 +591,39 @@ public class BaseController implements Serializable {
         this.aadCommitteeId = aadCommitteeId;
     }
 
+    public int getPricingDOALevel() {
+        return pricingDOALevel;
+    }
 
+    public void setPricingDOALevel(int pricingDOALevel) {
+        this.pricingDOALevel = pricingDOALevel;
+    }
+    
+    public boolean isStep3Screen() {
+    	return (stepId/1000 == 3); // 3XXX 
+    }
+
+    public List<Reason> getCancelReason() {
+        return cancelReason;
+    }
+
+    public void setCancelReason(List<Reason> cancelReason) {
+        this.cancelReason = cancelReason;
+    }
+
+    public String getCancalCARemark() {
+        return cancalCARemark;
+    }
+
+    public void setCancalCARemark(String cancalCARemark) {
+        this.cancalCARemark = cancalCARemark;
+    }
+
+    public int getReasonId() {
+        return reasonId;
+    }
+
+    public void setReasonId(int reasonId) {
+        this.reasonId = reasonId;
+    }
 }

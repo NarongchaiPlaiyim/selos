@@ -74,4 +74,7 @@ public interface ExceptionMapping {
     public static final String ECM_CONNECT_ERROR = "802";
     public static final String ECM_GETDATA_ERROR = "803";
     public static final String ECM_DATA_NOT_FOUND = "804";
+
+    //BRMS Exception
+    public static final String BRMS_INVALID_RETURN_DATA = "901";
 }

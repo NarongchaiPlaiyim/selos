@@ -129,7 +129,7 @@
     </td>
     <td class="left">
         <p:inputText id="limit" value="#{creditFacPropose.newCreditDetailView.limit}"
-                     maxlength="18"
+                     maxlength="14"
                      onclick="this.select()"
                      onkeydown="return onKeyDownMoney(event);"
                      onkeypress="return onKeyPressMoney(event);"
@@ -172,7 +172,7 @@
     </td>
     <td class="left">
         <p:inputText value="#{creditFacPropose.newCreditDetailView.PCEAmount}"
-                     maxlength="18"
+                     maxlength="14"
                      onclick="this.select()"
                      onkeydown="return onKeyDownMoney(event);"
                      onkeypress="return onKeyPressMoney(event);"
@@ -200,25 +200,6 @@
         <p:spacer width="5" height="0"/>
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.reducePricing')}"/>
     </td>
-<!--
-    <td class="left">
-        <p:inputText value="#{creditFacPropose.reducePrice}"
-                     id="reducePrice"
-                     maxlength="18"
-                     onclick="this.select()"
-                     onkeydown="return onKeyDownMoney(event);"
-                     onkeypress="return onKeyPressMoney(event);"
-                     disabled="#{creditFacPropose.modeEditReducePricing}"
-                     style="width:200px;text-align: right">
-            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                             type="number"/>
-            <p:ajax event="blur"
-                    process="@this"
-                    listener="#{creditFacPropose.onRequestReducePrice()}"
-                    update="@this"/>
-        </p:inputText>
-    </td>
-    -->
     <td class="left" colspan="2">
         <h:selectBooleanCheckbox value="#{creditFacPropose.newCreditDetailView.reduceFrontEndFee}"
                                  id="reduceFrontEndFeeChk"
@@ -399,18 +380,19 @@
                                      integerOnly="true"
                                      maxIntegerDigits="2"/>
                     <p:ajax event="blur"
-                            listener="#{creditFacPropose.calculateInstallment(creditFacPropose.newCreditDetailView)}"
+                            listener="#{creditFacPropose.onCalInstallment(creditFacPropose.newCreditDetailView)}"
                             process=":creditInfoDlgForm" update=":creditInfoDlgForm:resultFinal:installment"/>
                 </p:inputText>
             </p:column>
 
             <p:column styleClass="center top">
                 <p:inputText id="installment" value="#{item.installment}"
-                             maxlength="18"
+                             maxlength="14"
                              onclick="this.select()"
                              onkeydown="return onKeyDownMoney(event);"
                              onkeypress="return onKeyPressMoney(event);"
-                             styleClass="right" readonly="true">
+                             style="width:170px;text-align: right"
+                             readonly="true">
                     <!--readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">-->
                     <f:convertNumber pattern="#,##0.##"
                                      minFractionDigits="2"
@@ -463,7 +445,7 @@
     <td class="left" colspan="3">
         <p:selectOneMenu id="dlgLoanPurpose"
                          value="#{creditFacPropose.newCreditDetailView.loanPurposeView.id}"
-                         style="min-width: 200px; width: 200px; max-width: 200px;"
+                         style="min-width: 400px; width: 400px; max-width: 400px;"
                          required="#{not empty param[onSaveCreditInfo.clientId]}"
                          disabled="#{creditFacPropose.modeEdit}">
             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -514,7 +496,7 @@
     </td>
     <td class="left">
         <p:inputText value="#{creditFacPropose.newCreditDetailView.holdLimitAmount}"
-                     maxlength="18"
+                     maxlength="14"
                      onclick="this.select()"
                      onkeydown="return onKeyDownMoney(event);"
                      onkeypress="return onKeyPressMoney(event);"
@@ -539,7 +521,7 @@
                          action="#{creditFacPropose.onSaveCreditInfo}"
                          process="@form"
                          update=":creditInfoDlgForm,:frmMain"
-                         oncomplete="handleDlgCreditProposeRequest(xhr, status, args)"/>
+                         oncomplete="handleDialogRequest(xhr, status, args, 'creditInfoDlg')"/>
         <p:spacer width="10" height="0"/>
         <p:commandButton value="#{msg.get('app.button.cancel')}"
                          styleClass="small"

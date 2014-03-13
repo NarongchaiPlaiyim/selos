@@ -989,6 +989,8 @@
 	                                 	 />
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"
+										onstart="p_loading_dialog.show()"
+										action="#{postCustomerInfoIndv.onCancelCustomerInfo()}"
 										/>
 	                             </td>
 	                        </tr>

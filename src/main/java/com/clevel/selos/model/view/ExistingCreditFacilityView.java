@@ -23,6 +23,8 @@ public class ExistingCreditFacilityView implements Serializable {
     private BigDecimal totalBorrowerComOBOD;
     private BigDecimal totalBorrowerExposure;
     private BigDecimal totalBorrowerNumberOfExistingOD;
+    private BigDecimal totalBorrowerExistingODLimit;
+    private BigDecimal totalBorrowerLimitPreScreen;
 
     private BigDecimal totalRelatedComLimit;
     private BigDecimal totalRelatedRetailLimit;
@@ -30,7 +32,7 @@ public class ExistingCreditFacilityView implements Serializable {
     private BigDecimal totalRelatedCom;
     private BigDecimal totalRelatedComOBOD;
     private BigDecimal totalRelatedExposure;
-    private BigDecimal totalRelatedNumberOfExistingOD;
+    private BigDecimal totalRelatedLimitPreScreen;
 
     private BigDecimal totalGroupCom;
     private BigDecimal totalGroupComOBOD;
@@ -45,12 +47,15 @@ public class ExistingCreditFacilityView implements Serializable {
     private List<ExistingCreditDetailView> borrowerComExistingCredit;
     private List<ExistingCreditDetailView> borrowerRetailExistingCredit;
     private List<ExistingCreditDetailView> borrowerAppInRLOSCredit;
+    private List<ExistingCreditDetailView> borrowerExistingCreditPreScreen;
 
     private List<ExistingConditionDetailView> existingConditionDetailViewList;
 
     private List<ExistingCreditDetailView> relatedComExistingCredit;
     private List<ExistingCreditDetailView> relatedRetailExistingCredit;
     private List<ExistingCreditDetailView> relatedAppInRLOSCredit;
+    private List<ExistingCreditDetailView> relateExistingCreditPresScreen;
+
     /* Collateral list for Decision */
     private List<ExistingCollateralDetailView> borrowerCollateralList;
     private List<ExistingCollateralDetailView> relatedCollateralList;
@@ -150,6 +155,14 @@ public class ExistingCreditFacilityView implements Serializable {
         this.totalBorrowerNumberOfExistingOD = totalBorrowerNumberOfExistingOD;
     }
 
+    public BigDecimal getTotalBorrowerExistingODLimit() {
+        return totalBorrowerExistingODLimit;
+    }
+
+    public void setTotalBorrowerExistingODLimit(BigDecimal totalBorrowerExistingODLimit) {
+        this.totalBorrowerExistingODLimit = totalBorrowerExistingODLimit;
+    }
+
     public BigDecimal getTotalRelatedComLimit() {
         return totalRelatedComLimit;
     }
@@ -196,14 +209,6 @@ public class ExistingCreditFacilityView implements Serializable {
 
     public void setTotalRelatedExposure(BigDecimal totalRelatedExposure) {
         this.totalRelatedExposure = totalRelatedExposure;
-    }
-
-    public BigDecimal getTotalRelatedNumberOfExistingOD() {
-        return totalRelatedNumberOfExistingOD;
-    }
-
-    public void setTotalRelatedNumberOfExistingOD(BigDecimal totalRelatedNumberOfExistingOD) {
-        this.totalRelatedNumberOfExistingOD = totalRelatedNumberOfExistingOD;
     }
 
     public BigDecimal getTotalGroupCom() {
@@ -382,6 +387,38 @@ public class ExistingCreditFacilityView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    public BigDecimal getTotalBorrowerLimitPreScreen() {
+        return totalBorrowerLimitPreScreen;
+    }
+
+    public void setTotalBorrowerLimitPreScreen(BigDecimal totalBorrowerLimitPreScreen) {
+        this.totalBorrowerLimitPreScreen = totalBorrowerLimitPreScreen;
+    }
+
+    public BigDecimal getTotalRelatedLimitPreScreen() {
+        return totalRelatedLimitPreScreen;
+    }
+
+    public void setTotalRelatedLimitPreScreen(BigDecimal totalRelatedLimitPreScreen) {
+        this.totalRelatedLimitPreScreen = totalRelatedLimitPreScreen;
+    }
+
+    public List<ExistingCreditDetailView> getBorrowerExistingCreditPreScreen() {
+        return borrowerExistingCreditPreScreen;
+    }
+
+    public void setBorrowerExistingCreditPreScreen(List<ExistingCreditDetailView> borrowerExistingCreditPreScreen) {
+        this.borrowerExistingCreditPreScreen = borrowerExistingCreditPreScreen;
+    }
+
+    public List<ExistingCreditDetailView> getRelateExistingCreditPresScreen() {
+        return relateExistingCreditPresScreen;
+    }
+
+    public void setRelateExistingCreditPresScreen(List<ExistingCreditDetailView> relateExistingCreditPresScreen) {
+        this.relateExistingCreditPresScreen = relateExistingCreditPresScreen;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -396,13 +433,13 @@ public class ExistingCreditFacilityView implements Serializable {
                 .append("totalBorrowerComOBOD", totalBorrowerComOBOD)
                 .append("totalBorrowerExposure", totalBorrowerExposure)
                 .append("totalBorrowerNumberOfExistingOD", totalBorrowerNumberOfExistingOD)
+                .append("totalBorrowerExistingODLimit", totalBorrowerExistingODLimit)
                 .append("totalRelatedComLimit", totalRelatedComLimit)
                 .append("totalRelatedRetailLimit", totalRelatedRetailLimit)
                 .append("totalRelatedAppInRLOSLimit", totalRelatedAppInRLOSLimit)
                 .append("totalRelatedCom", totalRelatedCom)
                 .append("totalRelatedComOBOD", totalRelatedComOBOD)
                 .append("totalRelatedExposure", totalRelatedExposure)
-                .append("totalRelatedNumberOfExistingOD", totalRelatedNumberOfExistingOD)
                 .append("totalGroupCom", totalGroupCom)
                 .append("totalGroupComOBOD", totalGroupComOBOD)
                 .append("totalGroupExposure", totalGroupExposure)

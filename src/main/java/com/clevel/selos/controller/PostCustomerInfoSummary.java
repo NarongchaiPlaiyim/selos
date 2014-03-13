@@ -18,11 +18,13 @@ import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
+import com.clevel.selos.businesscontrol.GeneralPeopleInfoControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.LastUpdateDataView;
 import com.clevel.selos.model.view.PostCustomerInfoGroupView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -37,12 +39,15 @@ public class PostCustomerInfoSummary implements Serializable {
 	private BasicInfoControl basicInfoControl;
 	@Inject
 	private CustomerInfoControl customerInfoControl;
-	
+	@Inject
+	private GeneralPeopleInfoControl generalPeopleInfoControl;
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
 	private BasicInfoView basicInfoView;
+	private LastUpdateDataView lastUpdateView;
+	
 	
 	//Property
 	private List<PostCustomerInfoGroupView> groups;
@@ -51,16 +56,10 @@ public class PostCustomerInfoSummary implements Serializable {
 	public PostCustomerInfoSummary() {
 	}
 	public Date getLastUpdateDateTime() {
-		if (basicInfoView == null)
-			return null;
-		else
-			return basicInfoView.getModifyDate();
+		return lastUpdateView.getModifyDate();
 	}
 	public String getLastUpdateBy() {
-		if (basicInfoView != null && basicInfoView.getModifyBy() != null)
-			return basicInfoView.getModifyBy().getDisplayName();
-		else
-			return null;
+		return lastUpdateView.getModifyUser();
 	}
 	public ApproveType getApproveType() {
 		if (basicInfoView == null)
@@ -137,6 +136,7 @@ public class PostCustomerInfoSummary implements Serializable {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 			summary = customerInfoControl.getCustomerInfoSummary(workCaseId);
 		}
+		lastUpdateView = generalPeopleInfoControl.getWorkCaseLastUpdate(workCaseId);
 		
 		groups = new ArrayList<PostCustomerInfoGroupView>();
 		PostCustomerInfoGroupView borrowerGroup = new PostCustomerInfoGroupView();

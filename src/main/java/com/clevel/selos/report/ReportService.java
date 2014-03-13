@@ -1,50 +1,57 @@
 package com.clevel.selos.report;
 
-/*import net.sf.jasperreports.engine.*;
-import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.util.Util;
 import net.sf.jasperreports.engine.*;
-import org.primefaces.model.DefaultStreamedContent;
+import com.clevel.selos.integration.SELOS;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.joda.time.DateTime;
 import org.primefaces.model.StreamedContent;
-import org.slf4j.Logger;*/
+import org.slf4j.Logger;
 
-/*import javax.inject.Inject;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;*/
-import java.io.Serializable;
-//import java.util.Map;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Map;
 
 public class ReportService implements Serializable {
-    /*@Inject
+    @Inject
     @SELOS
     Logger log;
     protected String reportTemplate;
     protected String reportFileName;
     protected StreamedContent reportFile;
 
-    private void generatePDF(Map<String,Object> parameters) {
+
+    public void init(){
+
+    }
+
+    public void generatePDF(String fileName, Map<String,Object> parameters,String pdfName) throws JRException, IOException {
         log.debug("generate pdf.");
+        JasperReport jasperReport = JasperCompileManager.compileReport(fileName);
+        JasperPrint print ;
 
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        byte[] pdfData = null;
+        log.info("parameters: {}",parameters);
+
+        print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+
         try {
-            log.debug("report template: {}",reportTemplate);
-            String jasperReport = JasperCompileManager.compileReportToFile(reportTemplate);
-            JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
-            JasperExportManager.exportReportToPdfStream(print, os);
 
-            pdfData = os.toByteArray();
-            InputStream is = new ByteArrayInputStream(pdfData);
-            reportFile = new DefaultStreamedContent(is, "application/pdf", reportFileName);
+            String date = Util.createDateTime(new Date());
+
+            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            response.addHeader("Content-disposition", "attachment; filename="+pdfName+date+".pdf");
+            ServletOutputStream servletOutputStream=response.getOutputStream();
+            JasperExportManager.exportReportToPdfStream(print, servletOutputStream);
+            FacesContext.getCurrentInstance().responseComplete();
             log.debug("generatePDF completed.");
+
         } catch (JRException e) {
             log.error("Error generating pdf report!", e);
         }
     }
-
-    public StreamedContent getReportFile(Map<String,Object> parameters) {
-        generatePDF(parameters);
-        return reportFile;
-    }*/
-
 }

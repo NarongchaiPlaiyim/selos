@@ -53,7 +53,9 @@ public class Reference implements Serializable {
     private int unpaidInsurance;
     @Column(name = "pending_claim_lg", nullable = false, columnDefinition = "int default 0")
     private int pendingClaimLG;
-
+    @Column(name = "can_sign_contract",columnDefinition="int default 0")
+    private boolean canSignContract;
+    
     public Reference() {
     }
 
@@ -216,6 +218,14 @@ public class Reference implements Serializable {
     public void setPendingClaimLG(int pendingClaimLG) {
         this.pendingClaimLG = pendingClaimLG;
     }
+    
+    public boolean isCanSignContract() {
+		return canSignContract;
+	}
+    
+    public void setCanSignContact(boolean canSignContract) {
+		this.canSignContract = canSignContract;
+	}
 
     @Override
     public String toString() {
@@ -239,6 +249,7 @@ public class Reference implements Serializable {
                 .append("relationType", relationType)
                 .append("unpaidInsurance", unpaidInsurance)
                 .append("pendingClaimLG", pendingClaimLG)
+                .append("canSignContract", canSignContract)
                 .toString();
     }
 }

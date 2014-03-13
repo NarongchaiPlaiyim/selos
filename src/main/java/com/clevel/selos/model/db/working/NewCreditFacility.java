@@ -191,44 +191,47 @@ public class NewCreditFacility implements Serializable {
     // *********** add *************** //
 
     // *********** Start Approve ************ //
-    @Column(name = "total_approve_credit")
-    private BigDecimal totalApproveCredit;
-
-    @Column(name = "total_approve_commercial")
-    private BigDecimal totalApproveCommercial;
-
-    @Column(name = "total_approve_com_and_obod")
-    private BigDecimal totalApproveComAndOBOD;
-
-    @Column(name = "total_approve_exposure")
-    private BigDecimal totalApproveExposure;
-
-    @Column(name = "total_approve_num_new_od")
-    private BigDecimal totalApproveNumOfNewOD;
-
-    @Column(name = "total_approve_num_propose_crd")
-    private BigDecimal totalApproveNumProposeCreditFac;
-
-    @Column(name = "total_approve_num_con_propose")
-    private BigDecimal totalApproveNumContingenPropose;
-
-    @Column(name = "tot_approve_num_core_asset")
-    private BigDecimal totalApproveNumOfCoreAsset;
-
-    @Column(name = "tot_approve_num_non_core_asset")
-    private BigDecimal totalApproveNumOfNonCoreAsset;
-
-    @Column(name = "total_approve_guarantee_amt")
-    private BigDecimal totalApproveGuaranteeAmt;
-
-    @Column(name = "tot_approve_tcg_gauarantee_amt")
-    private BigDecimal totalApproveTCGGuaranteeAmt;
-
-    @Column(name = "tot_approve_in_guarantee_amt")
-    private BigDecimal totalApproveIndiGuaranteeAmt;
-
-    @Column(name = "tot_approve_ju_guarantee_amt")
-    private BigDecimal totalApproveJurisGuaranteeAmt;
+//    @Column(name = "total_approve_credit")
+//    private BigDecimal totalApproveCredit;
+//
+//    @Column(name = "total_approve_commercial")
+//    private BigDecimal totalApproveCommercial;
+//
+//    @Column(name = "total_approve_com_and_obod")
+//    private BigDecimal totalApproveComAndOBOD;
+//
+//    @Column(name = "total_approve_exposure")
+//    private BigDecimal totalApproveExposure;
+//
+//    @Column(name = "total_approve_od_limit")
+//    private BigDecimal totalApprovedODLimit;
+//
+//    @Column(name = "total_approve_num_new_od")
+//    private BigDecimal totalApproveNumOfNewOD;
+//
+//    @Column(name = "total_approve_num_propose_crd")
+//    private BigDecimal totalApproveNumProposeCreditFac;
+//
+//    @Column(name = "total_approve_num_con_propose")
+//    private BigDecimal totalApproveNumContingenPropose;
+//
+//    @Column(name = "tot_approve_num_core_asset")
+//    private BigDecimal totalApproveNumOfCoreAsset;
+//
+//    @Column(name = "tot_approve_num_non_core_asset")
+//    private BigDecimal totalApproveNumOfNonCoreAsset;
+//
+//    @Column(name = "total_approve_guarantee_amt")
+//    private BigDecimal totalApproveGuaranteeAmt;
+//
+//    @Column(name = "tot_approve_tcg_gauarantee_amt")
+//    private BigDecimal totalApproveTCGGuaranteeAmt;
+//
+//    @Column(name = "tot_approve_in_guarantee_amt")
+//    private BigDecimal totalApproveIndiGuaranteeAmt;
+//
+//    @Column(name = "tot_approve_ju_guarantee_amt")
+//    private BigDecimal totalApproveJurisGuaranteeAmt;
     // *********** End Approve ************ //
 
     @OneToOne
@@ -300,14 +303,6 @@ public class NewCreditFacility implements Serializable {
 
     public void setWCNeedDiffer(BigDecimal WCNeedDiffer) {
         this.WCNeedDiffer = WCNeedDiffer;
-    }
-
-    public BigDecimal getTotalApproveCredit() {
-        return totalApproveCredit;
-    }
-
-    public void setTotalApproveCredit(BigDecimal totalApproveCredit) {
-        this.totalApproveCredit = totalApproveCredit;
     }
 
     public BigDecimal getTotalWcDebit() {
@@ -814,102 +809,6 @@ public class NewCreditFacility implements Serializable {
         this.totalMortgageValue = totalMortgageValue;
     }
 
-    public BigDecimal getTotalApproveCommercial() {
-        return totalApproveCommercial;
-    }
-
-    public void setTotalApproveCommercial(BigDecimal totalApproveCommercial) {
-        this.totalApproveCommercial = totalApproveCommercial;
-    }
-
-    public BigDecimal getTotalApproveComAndOBOD() {
-        return totalApproveComAndOBOD;
-    }
-
-    public void setTotalApproveComAndOBOD(BigDecimal totalApproveComAndOBOD) {
-        this.totalApproveComAndOBOD = totalApproveComAndOBOD;
-    }
-
-    public BigDecimal getTotalApproveExposure() {
-        return totalApproveExposure;
-    }
-
-    public void setTotalApproveExposure(BigDecimal totalApproveExposure) {
-        this.totalApproveExposure = totalApproveExposure;
-    }
-
-    public BigDecimal getTotalApproveNumOfNewOD() {
-        return totalApproveNumOfNewOD;
-    }
-
-    public void setTotalApproveNumOfNewOD(BigDecimal totalApproveNumOfNewOD) {
-        this.totalApproveNumOfNewOD = totalApproveNumOfNewOD;
-    }
-
-    public BigDecimal getTotalApproveNumProposeCreditFac() {
-        return totalApproveNumProposeCreditFac;
-    }
-
-    public void setTotalApproveNumProposeCreditFac(BigDecimal totalApproveNumProposeCreditFac) {
-        this.totalApproveNumProposeCreditFac = totalApproveNumProposeCreditFac;
-    }
-
-    public BigDecimal getTotalApproveNumContingenPropose() {
-        return totalApproveNumContingenPropose;
-    }
-
-    public void setTotalApproveNumContingenPropose(BigDecimal totalApproveNumContingenPropose) {
-        this.totalApproveNumContingenPropose = totalApproveNumContingenPropose;
-    }
-
-    public BigDecimal getTotalApproveNumOfCoreAsset() {
-        return totalApproveNumOfCoreAsset;
-    }
-
-    public void setTotalApproveNumOfCoreAsset(BigDecimal totalApproveNumOfCoreAsset) {
-        this.totalApproveNumOfCoreAsset = totalApproveNumOfCoreAsset;
-    }
-
-    public BigDecimal getTotalApproveNumOfNonCoreAsset() {
-        return totalApproveNumOfNonCoreAsset;
-    }
-
-    public void setTotalApproveNumOfNonCoreAsset(BigDecimal totalApproveNumOfNonCoreAsset) {
-        this.totalApproveNumOfNonCoreAsset = totalApproveNumOfNonCoreAsset;
-    }
-
-    public BigDecimal getTotalApproveGuaranteeAmt() {
-        return totalApproveGuaranteeAmt;
-    }
-
-    public void setTotalApproveGuaranteeAmt(BigDecimal totalApproveGuaranteeAmt) {
-        this.totalApproveGuaranteeAmt = totalApproveGuaranteeAmt;
-    }
-
-    public BigDecimal getTotalApproveTCGGuaranteeAmt() {
-        return totalApproveTCGGuaranteeAmt;
-    }
-
-    public void setTotalApproveTCGGuaranteeAmt(BigDecimal totalApproveTCGGuaranteeAmt) {
-        this.totalApproveTCGGuaranteeAmt = totalApproveTCGGuaranteeAmt;
-    }
-
-    public BigDecimal getTotalApproveIndiGuaranteeAmt() {
-        return totalApproveIndiGuaranteeAmt;
-    }
-
-    public void setTotalApproveIndiGuaranteeAmt(BigDecimal totalApproveIndiGuaranteeAmt) {
-        this.totalApproveIndiGuaranteeAmt = totalApproveIndiGuaranteeAmt;
-    }
-
-    public BigDecimal getTotalApproveJurisGuaranteeAmt() {
-        return totalApproveJurisGuaranteeAmt;
-    }
-
-    public void setTotalApproveJurisGuaranteeAmt(BigDecimal totalApproveJurisGuaranteeAmt) {
-        this.totalApproveJurisGuaranteeAmt = totalApproveJurisGuaranteeAmt;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -969,19 +868,6 @@ public class NewCreditFacility implements Serializable {
                 .append("totalTCGGuaranteeAmount", totalTCGGuaranteeAmount)
                 .append("totalIndvGuaranteeAmount", totalIndvGuaranteeAmount)
                 .append("totalJurisGuaranteeAmount", totalJurisGuaranteeAmount)
-                .append("totalApproveCredit", totalApproveCredit)
-                .append("totalApproveCommercial", totalApproveCommercial)
-                .append("totalApproveComAndOBOD", totalApproveComAndOBOD)
-                .append("totalApproveExposure", totalApproveExposure)
-                .append("totalApproveNumOfNewOD", totalApproveNumOfNewOD)
-                .append("totalApproveNumProposeCreditFac", totalApproveNumProposeCreditFac)
-                .append("totalApproveNumContingenPropose", totalApproveNumContingenPropose)
-                .append("totalApproveNumOfCoreAsset", totalApproveNumOfCoreAsset)
-                .append("totalApproveNumOfNonCoreAsset", totalApproveNumOfNonCoreAsset)
-                .append("totalApproveGuaranteeAmt", totalApproveGuaranteeAmt)
-                .append("totalApproveTCGGuaranteeAmt", totalApproveTCGGuaranteeAmt)
-                .append("totalApproveIndiGuaranteeAmt", totalApproveIndiGuaranteeAmt)
-                .append("totalApproveJurisGuaranteeAmt", totalApproveJurisGuaranteeAmt)
                 .append("loanRequestType", loanRequestType)
                 .append("investedCountry", investedCountry)
                 .append("createDate", createDate)

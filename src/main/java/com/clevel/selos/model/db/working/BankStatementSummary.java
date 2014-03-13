@@ -89,7 +89,7 @@ public class BankStatementSummary implements Serializable {
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 

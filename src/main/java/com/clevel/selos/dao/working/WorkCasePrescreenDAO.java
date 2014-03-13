@@ -4,6 +4,7 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -23,8 +24,10 @@ public class WorkCasePrescreenDAO extends GenericDAO<WorkCasePrescreen, Long> {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("wobNumber", wobNumber));
         WorkCasePrescreen workCasePrescreen = (WorkCasePrescreen) criteria.uniqueResult();
+        log.info("workcaseprescreen object : {}",workCasePrescreen);
         if (workCasePrescreen != null) {
             workCasePreScreenId = workCasePrescreen.getId();
+            log.info("findIdByWobNum : {}", workCasePreScreenId);
         }
 
         return workCasePreScreenId;
@@ -35,6 +38,8 @@ public class WorkCasePrescreenDAO extends GenericDAO<WorkCasePrescreen, Long> {
         WorkCasePrescreen workCasePrescreen;
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("wobNumber", wobNumber));
+
+
         workCasePrescreen = (WorkCasePrescreen) criteria.uniqueResult();
         return workCasePrescreen;
     }

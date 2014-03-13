@@ -15,12 +15,23 @@ public class StepLandingPage implements Serializable {
     @OneToOne
     @JoinColumn(name = "step_id")
     private Step step;
+    @OneToOne
+    @JoinColumn(name = "status_id")
+    private Status status;
     @Column(name= "page_name")
     private String pageName;
     @Column(name = "active")
     private int active;
 
     public StepLandingPage() {
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public long getId() {

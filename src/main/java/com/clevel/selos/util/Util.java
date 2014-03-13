@@ -48,6 +48,10 @@ public class Util implements Serializable {
         return createDateString(date, "yyyy-MM-dd");
     }
 
+    public static String createDateTime(Date date) {
+        return createDateString(date, "yyyyMMddHHmm");
+    }
+
 
     public static Date strYYYYMMDDtoDateFormat(String dateStr) {
         Date date = new Date();
@@ -215,25 +219,20 @@ public class Util implements Serializable {
     }
 
     public static int calAge(Date date) {
-        /*int resultDay = 0;
-        Calendar nowDay = Calendar.getInstance();
-        Calendar birthDay = Calendar.getInstance();
-        birthDay.setTime(date);
-        if (birthDay.after(nowDay))
-            return resultDay;
-
-        resultDay = (nowDay.get(Calendar.YEAR) - birthDay.get(Calendar.YEAR));
-        return resultDay;*/
-        int age = 0;
-        Calendar dob = Calendar.getInstance();
-        dob.setTime(date);
-        Calendar today = Calendar.getInstance();
-        if(dob.after(today))
+        if(date != null){
+            int age = 0;
+            Calendar dob = Calendar.getInstance();
+            dob.setTime(date);
+            Calendar today = Calendar.getInstance();
+            if(dob.after(today))
+                return age;
+            age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+            if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR))
+                age--;
             return age;
-        age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
-        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR))
-            age--;
-        return age;
+        } else {
+            return 0;
+        }
     }
 
     public static String[] splitSpace(String str) {

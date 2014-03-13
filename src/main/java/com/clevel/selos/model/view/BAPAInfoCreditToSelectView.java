@@ -10,6 +10,7 @@ public class BAPAInfoCreditToSelectView implements Serializable {
 	private String creditType;
 	private String loanPurpose;
 	private BigDecimal limit;
+	private boolean isTopupBA;
 	
 	public BAPAInfoCreditToSelectView() {
 		
@@ -54,5 +55,11 @@ public class BAPAInfoCreditToSelectView implements Serializable {
 	public void setLimit(BigDecimal limit) {
 		this.limit = limit;
 	}
-	
+
+	public boolean isTopupBA() {
+		return isTopupBA;
+	}
+	public void setTopupBA(boolean isTopupBA) {
+		this.isTopupBA = isTopupBA;
+	}
 }

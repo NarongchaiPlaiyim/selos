@@ -20,9 +20,9 @@ public class NewCollateralSubTransform extends Transform {
     Logger log;
     private List<NewCollateralSub> newCollateralSubList;
     private List<NewCollateralSubView> newCollateralSubViewList;
+
     @Inject
     public NewCollateralSubTransform() {
-
     }
 
     public List<NewCollateralSub> transformToModel(final List<NewCollateralSubView> newCollateralSubViewList, final User user){
@@ -144,4 +144,47 @@ public class NewCollateralSubTransform extends Transform {
         log.debug("------[RETURNED] NewCollateralSubViewList.size[{}]", newCollateralSubViewList.size());
         return newCollateralSubViewList;
     }
+
+    public NewCollateralSubView copyToNewView(NewCollateralSubView originalNewCollSubView, boolean isNewId) {
+        NewCollateralSubView newCollateralSubView = new NewCollateralSubView();
+        if (originalNewCollSubView != null) {
+            newCollateralSubView.setId(isNewId ? 0 : originalNewCollSubView.getId());
+            newCollateralSubView.setNo(originalNewCollSubView.getNo());
+            newCollateralSubView.setCollID(originalNewCollSubView.getCollID());
+            newCollateralSubView.setHeadCollID(originalNewCollSubView.getHeadCollID());
+            newCollateralSubView.setSubCollateralType(originalNewCollSubView.getSubCollateralType());
+            newCollateralSubView.setAddress(originalNewCollSubView.getAddress());
+            newCollateralSubView.setLandOffice(originalNewCollSubView.getLandOffice());
+            newCollateralSubView.setTitleDeed(originalNewCollSubView.getTitleDeed());
+            newCollateralSubView.setCollateralOwner(originalNewCollSubView.getCollateralOwner());
+            newCollateralSubView.setCollateralOwnerAAD(originalNewCollSubView.getCollateralOwnerAAD());
+            newCollateralSubView.setCollateralOwnerUW(originalNewCollSubView.getCollateralOwnerUW());
+            newCollateralSubView.setCollateralOwnerUWList(originalNewCollSubView.getCollateralOwnerUWList());
+            newCollateralSubView.setMortgageType(originalNewCollSubView.getMortgageType());
+            newCollateralSubView.setMortgageList(originalNewCollSubView.getMortgageList());
+            newCollateralSubView.setRelatedWithId(originalNewCollSubView.getRelatedWithId());
+            newCollateralSubView.setRelatedWithList(originalNewCollSubView.getRelatedWithList());
+            newCollateralSubView.setAppraisalValue(originalNewCollSubView.getAppraisalValue());
+            newCollateralSubView.setMortgageValue(originalNewCollSubView.getMortgageValue());
+            newCollateralSubView.setCreateDate(originalNewCollSubView.getCreateDate());
+            newCollateralSubView.setCreateBy(originalNewCollSubView.getCreateBy());
+            newCollateralSubView.setModifyDate(originalNewCollSubView.getModifyDate());
+            newCollateralSubView.setModifyBy(originalNewCollSubView.getModifyBy());
+            newCollateralSubView.setUsage(originalNewCollSubView.getUsage());
+            newCollateralSubView.setTypeOfUsage(originalNewCollSubView.getTypeOfUsage());
+            newCollateralSubView.setLineNo(originalNewCollSubView.getLineNo());
+        }
+        return newCollateralSubView;
+    }
+
+    public List<NewCollateralSubView> copyToNewViews(List<NewCollateralSubView> originalNewCollSubViews, boolean isNewId) {
+        List<NewCollateralSubView> newCollateralSubViews = new ArrayList<NewCollateralSubView>();
+        if (originalNewCollSubViews != null && originalNewCollSubViews.size() > 0) {
+            for (NewCollateralSubView originalNewCollSubView : originalNewCollSubViews) {
+                newCollateralSubViews.add(copyToNewView(originalNewCollSubView, isNewId));
+            }
+        }
+        return newCollateralSubViews;
+    }
+
 }
