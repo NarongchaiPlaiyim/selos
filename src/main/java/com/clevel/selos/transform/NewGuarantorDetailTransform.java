@@ -66,7 +66,6 @@ public class NewGuarantorDetailTransform extends Transform {
             newGuarantorDetail.setNewCreditFacility(newCreditFacility);
             newGuarantorDetail.setTotalLimitGuaranteeAmount(newGuarantorDetailView.getTotalLimitGuaranteeAmount());
             newGuarantorDetail.setUwDecision(newGuarantorDetailView.getUwDecision());
-            newGuarantorDetail.setNewGuarantorCreditList(new ArrayList<NewGuarantorCredit>());
 
             if (Util.safetyList(newGuarantorDetailView.getProposeCreditDetailViewList()).size() > 0) {
                 log.debug("Start.. transformToModel proposeCreditDetailViewList : {}", newGuarantorDetailView.getProposeCreditDetailViewList());

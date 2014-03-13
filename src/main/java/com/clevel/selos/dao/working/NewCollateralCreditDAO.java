@@ -5,6 +5,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.working.*;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -27,7 +28,7 @@ public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long
         log.info("getListCollRelationByNewCollateral. (newCollateral: {})", newCollateral);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCollateral", newCollateral));
-//        criteria.setFetchMode("newCollateral", FetchMode.LAZY);
+        criteria.setFetchMode("newCollateral", FetchMode.SELECT);
         List<NewCollateralCredit> newCollateralRelCreditList = (List<NewCollateralCredit>)criteria.list();
         log.info("getList. (result size: {})", newCollateralRelCreditList.size());
 
@@ -40,7 +41,7 @@ public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCreditDetail.id", newCreditDetail.getId()));
         criteria.add(Restrictions.eq("proposeType", proposeType));
-//        criteria.setFetchMode("newCollateral", FetchMode.LAZY);
+        criteria.setFetchMode("newCollateral", FetchMode.SELECT);
         List<NewCollateralCredit> newCollateralRelCreditList = (List<NewCollateralCredit>)criteria.list();
         log.info("getList. (result size: {})", newCollateralRelCreditList.size());
 
@@ -58,7 +59,7 @@ public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long
             for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
                 criteria.add(Restrictions.eq("newCollateral", newCollateral));
             }
-//            criteria.setFetchMode("newCollateral", FetchMode.LAZY);
+            criteria.setFetchMode("newCollateral", FetchMode.SELECT);
             newCollateralCreditList = criteria.list();
         }
 
@@ -70,7 +71,7 @@ public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
         criteria.add(Restrictions.eq("proposeType", proposeType));
-//        criteria.setFetchMode("newCollateral", FetchMode.LAZY);
+        criteria.setFetchMode("newCollateral", FetchMode.SELECT);
         return  criteria.list();
 
     }
