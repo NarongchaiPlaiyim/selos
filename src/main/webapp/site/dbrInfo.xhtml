@@ -57,11 +57,13 @@
                                             <td class="title">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.dbrInterest')}" styleClass="center"/>
                                             </td>
-                                            <td>
+                                            <td >
                                                 <p:inputText id="dbrInterest" value="#{dbrInfo.dbr.dbrInterest}" style="text-align: right" readonly="true">
                                                     <f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
-
                                                 </p:inputText>
+                                            </td>
+                                            <td class="title">
+                                                    <p:outputLabel value="#{msg.get('app.dbr.label.dbrInterest.MRR')}" styleClass="center"/>
                                             </td>
                                         </tr>
                                         <tr>
