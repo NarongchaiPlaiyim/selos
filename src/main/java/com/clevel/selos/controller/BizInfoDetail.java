@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.BizInfoDetailControl;
 import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
 import com.clevel.selos.businesscontrol.CreditFacProposeControl;
+import com.clevel.selos.businesscontrol.DBRControl;
 import com.clevel.selos.dao.master.BusinessActivityDAO;
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
@@ -120,6 +121,8 @@ public class BizInfoDetail implements Serializable {
     private BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
     CreditFacProposeControl creditFacProposeControl;
+    @Inject
+    private DBRControl dbrControl;
 
     public BizInfoDetail(){
 
@@ -695,6 +698,7 @@ public class BizInfoDetail implements Serializable {
                 bizInfoDetailView.setSupplierDetailList(supplierDetailList);
                 bizInfoDetailView.setBuyerDetailList(buyerDetailList);
                 bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId, workCaseId);
+                dbrControl.updateValueOfDBR(workCaseId);
                 messageHeader = msg.get("app.bizInfoDetail.message.header.save.success");
                 message = msg.get("app.bizInfoDetail.message.body.save.success");
 
