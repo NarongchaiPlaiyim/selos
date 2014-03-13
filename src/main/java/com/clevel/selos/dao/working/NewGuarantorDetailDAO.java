@@ -7,7 +7,6 @@ import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.NewGuarantorDetail;
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -27,7 +26,7 @@ public class NewGuarantorDetailDAO extends GenericDAO<NewGuarantorDetail, Long> 
         log.info("findNewGuarantorByNewCreditFacility ::: {}", newCreditFacility.getId());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
-        criteria.setFetchMode("guarantorName", FetchMode.LAZY);
+//        criteria.setFetchMode("guarantorName", FetchMode.LAZY);
         List<NewGuarantorDetail> newGuarantorDetails = (List<NewGuarantorDetail>)criteria.list();
         log.info("newGuarantorDetails ::: size : {}", newGuarantorDetails.size());
         return newGuarantorDetails;
@@ -62,7 +61,7 @@ public class NewGuarantorDetailDAO extends GenericDAO<NewGuarantorDetail, Long> 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("id",newGuarantorId));
         criteria.add(Restrictions.eq("proposeType",proposeType));
-        criteria.setFetchMode("guarantorName", FetchMode.LAZY);
+//        criteria.setFetchMode("guarantorName", FetchMode.LAZY);
         NewGuarantorDetail newGuarantorDetail = (NewGuarantorDetail) criteria.uniqueResult();
         return newGuarantorDetail;
     }

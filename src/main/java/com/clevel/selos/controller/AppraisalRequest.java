@@ -98,8 +98,6 @@ public class AppraisalRequest implements Serializable {
         log.debug("-- init()");
         modeForButton = ModeForButton.ADD;
         appraisalDetailView = new AppraisalDetailView();
-        appraisalContactDetailView = new AppraisalContactDetailView();
-        appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
         appraisalDetailViewDialog = new AppraisalDetailView();
         appraisalDetailViewSelected = new AppraisalDetailView();
         titleDeedFlag = false;
@@ -159,6 +157,8 @@ public class AppraisalRequest implements Serializable {
             log.debug("-- AppraisalView[New] created");
             appraisalContactDetailView = new AppraisalContactDetailView();
             log.debug("-- AppraisalContactDetailView[New] created");
+            appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+            log.debug("-- AppraisalDetailViewList[New] created");
         }
     }
 
@@ -191,6 +191,9 @@ public class AppraisalRequest implements Serializable {
     public void onAddAppraisalDetailView(){
         log.info("-- onAddAppraisalDetailView() ModeForButton[ADD]");
         appraisalDetailViewDialog = new AppraisalDetailView();
+        titleDeedFlag = false;
+        purposeFlag = false;
+        numberOfDocumentsFlag = false;
         modeForButton = ModeForButton.ADD;
     }
 
@@ -226,12 +229,14 @@ public class AppraisalRequest implements Serializable {
                 }
             } else {
                 messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-                message = "Please add a customer contact information";
+//                message = "Please add a customer contact information";
+                message = "กรุณากรอก รายชื่อผู้ติดต่ออย่างน้อย 1 ชื่อ";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {
             messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-            message = "Please add a detail of karn pra mern song raka na ja jub jub";
+//            message = "Please add a detail of karn pra mern song raka na ja jub jub";
+            message = "กรุณากรอก รายละเอียดส่งประเมินราคา";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 

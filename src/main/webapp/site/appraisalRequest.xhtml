@@ -214,7 +214,7 @@
                                     <p:outputLabel styleClass="title"  value="#{msg.get('app.appraisal.label.bdmRemark')}"/>
                                 </td>
                                 <td>
-                                    <p:inputTextarea value="#{appraisalRequest.appraisalView.bdmRemark}"  rows="3" cols="150"/>
+                                    <p:inputTextarea value="#{appraisalRequest.appraisalView.bdmRemark}"  rows="3" cols="90"/>
                                 </td>
                             </tr>
                             <tr>
@@ -249,7 +249,7 @@
     </p:panel>
 
     <p:dialog id="appraisalDetailDialog" header="Appraisal Detail Information" widgetVar="appraisalDetailViewDlg" resizable="false"
-              modal="true" width="420" height="220" >
+              modal="true" width="500" height="200" >
         <ui:include src="dialog/appraisalDetailDialog.xhtml"/>
     </p:dialog>
 

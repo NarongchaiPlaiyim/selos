@@ -499,7 +499,6 @@ public class AppraisalAppointment implements Serializable {
         } catch(Exception ex){
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.appraisal.appointment.message.header.save.fail");
-
             if(ex.getCause() != null){
                 message = msg.get("app.appraisal.appointment.message.body.save.fail") + " cause : "+ ex.getCause().toString();
             } else {
@@ -525,7 +524,7 @@ public class AppraisalAppointment implements Serializable {
         DateTime addedDate  = new DateTime(appraisalView.getAppraisalDate());
         int nowDay = dueDateTime.getDayOfWeek();
 
-        log.info ("dueDateTime dayOfWeek before plus is " + dueDateTime.getDayOfWeek());
+        log.info ("dueDateTime dayOfWeek before plus is {}", dueDateTime.getDayOfWeek());
 
         if(locate == 1){
             log.info("in locate 1 ");
@@ -556,7 +555,7 @@ public class AppraisalAppointment implements Serializable {
             }
         }
 
-        log.info ("dueDateTime dayOfWeek after plus is " + dueDateTime.getDayOfWeek());
+        log.info ("dueDateTime dayOfWeek after plus is {}", dueDateTime.getDayOfWeek());
 
         dueDate = addedDate.toDate();
         appraisalView.setDueDate(dueDate);

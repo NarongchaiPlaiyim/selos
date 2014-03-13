@@ -163,6 +163,7 @@ public class NCBInfoControl extends BusinessControl {
         log.debug("ncbDetails size:{}", ncbDetails.size());
         AccountType accountType;
         AccountStatus accountStatus;
+        StringBuilder accountName = new StringBuilder();
             for(NCBDetail ncbDetail : Util.safetyList(ncbDetails)){
                 Customer customer = ncbDetail.getNcb().getCustomer();
                 accountType = ncbDetail.getAccountType();
@@ -199,7 +200,7 @@ public class NCBInfoControl extends BusinessControl {
                             break;
                     }
                 ncbDetailView.setDebtForCalculate(debtForCalculate);
-                StringBuilder accountName = new StringBuilder();
+                accountName.setLength(0);
                 accountName.append(customer.getTitle().getTitleTh())
                         .append(" ").append(StringUtils.defaultString(customer.getNameTh()))
                         .append(" ").append(StringUtils.defaultString(customer.getLastNameTh()));
