@@ -1900,13 +1900,13 @@
                                                 <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
                                                     <tr>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{creditTierDetail.standardPriceLabel}"/>
+                                                            <h:outputText value="#{creditTierDetail.standardPrice}"/>
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{creditTierDetail.suggestPriceLabel}"/>
+                                                            <h:outputText value="#{creditTierDetail.suggestPrice}"/>
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{creditTierDetail.finalPriceLabel}"/>
+                                                            <h:outputText value="#{creditTierDetail.finalPriceRate}"/>
                                                         </td>
                                                         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{creditTierDetail.installment}">
@@ -1927,7 +1927,7 @@
                                                     <td class="left top" colspan="10" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <table border="0" style="margin:-1px 0 -1px -10px; width: 600px !important;">
                                                             <tr>
-                                                                <td class="title" style="border-style: none !important;">
+                                                                <td class="title" style="border-style: none !important; width: 110px;">
                                                                     #{msg.get('app.decision.tb.td.label.requestType')}
                                                                 </td>
                                                                 <td class="left" style="border-style: none !important;">
@@ -1935,7 +1935,7 @@
                                                                     : proposeCredit.requestType == decision.requestTypeCHANGE.value ? msg.get('app.label.change')
                                                                     : ''}
                                                                 </td>
-                                                                <td class="title" style="border-style: none !important;">
+                                                                <td class="title" style="border-style: none !important; width: 110px;">
                                                                     #{msg.get('app.decision.tb.td.label.refinance')}
                                                                 </td>
                                                                 <td class="left" style="border-style: none !important;">
@@ -2044,7 +2044,7 @@
                                             <p:selectOneMenu value="#{decision.decisionView.loanRequestType.id}"
                                                              disabled="true"
                                                              style="width: 200px">
-                                                <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
+                                                <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                                 <f:selectItems value="#{decision.creditRequestTypeViewList}" var="crdRequestType"
                                                                itemLabel="#{crdRequestType.name}" itemValue="#{crdRequestType.id}"/>
                                             </p:selectOneMenu>
@@ -2062,7 +2062,7 @@
                                             <p:selectOneMenu value="#{decision.decisionView.investedCountry.id}"
                                                              disabled="true"
                                                              style="width: 200px">
-                                                <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
+                                                <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                                 <f:selectItems value="#{decision.countryViewList}" var="country"
                                                                itemLabel="#{country.name}" itemValue="#{country.id}"/>
                                             </p:selectOneMenu>
@@ -2187,12 +2187,12 @@
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                     fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                            #{not empty proposeCredit.productProgramView ? proposeCredit.productProgramView.description : ''}
+                                                            #{not empty proposeCredit.productProgramView ? proposeCredit.productProgramView.name : ''}
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                     fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                            #{not empty proposeCredit.creditTypeView ? proposeCredit.creditTypeView.description : ''}
+                                                            #{not empty proposeCredit.creditTypeView ? proposeCredit.creditTypeView.name : ''}
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -2311,14 +2311,14 @@
                                                         <td class="left top" colspan="10" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <table border="0" style="margin:-1px 0 -1px -10px; width: 600px !important;">
                                                                 <tr>
-                                                                    <td class="title" style="border-style: none !important;">
+                                                                    <td class="title" style="border-style: none !important; width: 110px;">
                                                                         #{msg.get('app.decision.tb.td.label.requestType')}
                                                                     </td>
                                                                     <td class="left" style="border-style: none !important;">
                                                                         #{proposeCredit.requestType == 2 ? msg.get('app.label.new') :
                                                                           proposeCredit.requestType == 1 ? msg.get('app.label.change') : ''}
                                                                     </td>
-                                                                    <td class="title" style="border-style: none !important;">
+                                                                    <td class="title" style="border-style: none !important; width: 110px;">
                                                                         #{msg.get('app.decision.tb.td.label.refinance')}
                                                                     </td>
                                                                     <td class="left" style="border-style: none !important;">
@@ -2369,7 +2369,7 @@
 
                                                 <h:panelGroup rendered="#{empty decision.decisionView.approveCreditList}">
                                                     <tr>
-                                                        <td colspan="13">No records found.</td>
+                                                        <td colspan="13">#{msg.get('app.label.noRecordsFound')}</td>
                                                     </tr>
                                                 </h:panelGroup>
                                                 </tbody>
@@ -2499,14 +2499,12 @@
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                        #{not empty proposeCredit.productProgramView ?
-                                                          proposeCredit.productProgramView.description : ''}
+                                                        #{not empty proposeCredit.productProgramView ? proposeCredit.productProgramView.name : ''}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                             fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                        #{not empty proposeCredit.creditTypeView ?
-                                                          proposeCredit.creditTypeView.description : ''}
+                                                        #{not empty proposeCredit.creditTypeView ? proposeCredit.creditTypeView.name : ''}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -2550,7 +2548,7 @@
                                                     </td>
                                                     <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                                        proposeCredit.newCreditTierDetailViewList[0].tenor : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].tenor : ''}">
                                                         </h:outputText>
                                                     </td>
                                                     <!-- END: Credit Tier Detail [0] -->
@@ -2598,14 +2596,14 @@
                                                     <td class="left top" colspan="10" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <table border="0" style="margin:-1px 0 -1px -10px; width: 600px !important;">
                                                             <tr>
-                                                                <td class="title" style="border-style: none !important;">
+                                                                <td class="title" style="border-style: none !important; width: 110px;">
                                                                     #{msg.get('app.decision.tb.td.label.requestType')}
                                                                 </td>
                                                                 <td class="left" style="border-style: none !important;">
                                                                     #{proposeCredit.requestType == 2 ? msg.get('app.label.new') :
                                                                       proposeCredit.requestType == 1 ? msg.get('app.label.change') : ''}
                                                                 </td>
-                                                                <td class="title" style="border-style: none !important;">
+                                                                <td class="title" style="border-style: none !important; width: 110px;">
                                                                     #{msg.get('app.decision.tb.td.label.refinance')}
                                                                 </td>
                                                                 <td class="left" style="border-style: none !important;">
@@ -2656,7 +2654,7 @@
 
                                             <h:panelGroup rendered="#{empty decision.decisionView.approveCreditList}">
                                                 <tr>
-                                                    <td colspan="12">No records found.</td>
+                                                    <td colspan="12">#{msg.get('app.label.noRecordsFound')}</td>
                                                 </tr>
                                             </h:panelGroup>
                                             </tbody>
@@ -3087,7 +3085,7 @@
                                                              styleClass="smaller">
                                                 <f:setPropertyActionListener value="#{proposeColl}"
                                                                              target="#{decision.selectedApproveCollateral}"/>
-                                                <f:setPropertyActionListener value="#{i.index}"
+                                                <f:setPropertyActionListener value="#{collIndex.index}"
                                                                              target="#{decision.rowIndexCollateral}"/>
                                             </p:commandButton>
 
@@ -3100,7 +3098,7 @@
                                                              styleClass="smaller">
                                                 <f:setPropertyActionListener value="#{proposeColl}"
                                                                              target="#{decision.selectedApproveCollateral}"/>
-                                                <f:setPropertyActionListener value="#{i.index}"
+                                                <f:setPropertyActionListener value="#{collIndex.index}"
                                                                              target="#{decision.rowIndexCollateral}"/>
                                             </p:commandButton>
                                         </td>
@@ -4101,7 +4099,7 @@
           header="Approve Collateral Information"
           modal="true"
           onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"
-          width="900" height="500">
+          width="1000" height="500">
     <ui:include src="dialog/decisionProposeCollateralDialog.xhtml"/>
 </p:dialog>
 
