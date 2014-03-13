@@ -50,7 +50,6 @@
                                  onkeypress="return onKeyPressNumber(event);" onkeydown="return onKeyDownNumber(event);"
                                  value="#{appraisalRequest.appraisalDetailViewDialog.numberOfDocuments}"
                                  style = "#{appraisalRequest.numberOfDocumentsFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " >
-                        <f:convertNumber pattern="#,##0"  />
                         <p:ajax event="blur" update=":appraisalDetailDlgForm:numberOfDocuments"/>
                     </p:inputText>
                 </td>

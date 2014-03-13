@@ -191,6 +191,9 @@ public class AppraisalRequest implements Serializable {
     public void onAddAppraisalDetailView(){
         log.info("-- onAddAppraisalDetailView() ModeForButton[ADD]");
         appraisalDetailViewDialog = new AppraisalDetailView();
+        titleDeedFlag = false;
+        purposeFlag = false;
+        numberOfDocumentsFlag = false;
         modeForButton = ModeForButton.ADD;
     }
 

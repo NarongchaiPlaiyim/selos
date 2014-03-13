@@ -107,7 +107,7 @@
                                             <p:outputLabel value="#{appraisalDetailViewItem.purposeReviewAppraisalLabel}"/>
                                         </p:column>
                                         <p:column styleClass="left">
-                                            <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailViewItem.characteristic}" disabled="false">
+                                            <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailViewItem.characteristic}" disabled="true">
                                                 <f:selectItem id="characteristicRadio0" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
                                                 <f:selectItem id="characteristicRadio1" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
                                             </p:selectOneRadio>
@@ -233,7 +233,7 @@
                                     <p:outputLabel styleClass="title"  value="#{msg.get('app.appraisal.label.bdmRemark')}"/>
                                 </td>
                                 <td>
-                                    <p:inputTextarea value="#{appraisalRequest.appraisalView.bdmRemark}"  rows="3" cols="150"/>
+                                    <p:inputTextarea value="#{appraisalRequest.appraisalView.bdmRemark}"  rows="3" cols="50"/>
                                 </td>
                             </tr>
                             <tr>
