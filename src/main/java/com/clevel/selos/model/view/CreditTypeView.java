@@ -14,6 +14,7 @@ public class CreditTypeView implements Serializable {
     private int canSplit;
     private int calLimitType;
     private int creditGroup;
+    private boolean contingentFlag;
     private int active;
 
     public int getId() {
@@ -80,6 +81,14 @@ public class CreditTypeView implements Serializable {
         this.creditGroup = creditGroup;
     }
 
+    public boolean isContingentFlag() {
+        return contingentFlag;
+    }
+
+    public void setContingentFlag(boolean contingentFlag) {
+        this.contingentFlag = contingentFlag;
+    }
+
     public int getActive() {
         return active;
     }
@@ -99,6 +108,7 @@ public class CreditTypeView implements Serializable {
                 .append("canSplit", canSplit)
                 .append("calLimitType", calLimitType)
                 .append("creditGroup", creditGroup)
+                .append("contingentFlag", contingentFlag)
                 .append("active", active)
                 .toString();
     }
