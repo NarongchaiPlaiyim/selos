@@ -16,10 +16,14 @@ public class ReportExSummary extends ReportService {
 
     @Inject
     @Config(name = "report.exsum")
-    String path;
+    String pathExsum;
 
     @Inject
-    @Config(name = "report.exsum.subreport")
+    @Config(name = "report.decision")
+    String pathDecision;
+
+    @Inject
+    @Config(name = "report.subreport")
     String pathsub;
 
     @Inject
@@ -47,7 +51,7 @@ public class ReportExSummary extends ReportService {
     String pdfName;
 
     public void onPrintExsumReport() throws Exception {
-        log.debug("onPrintReport");
+        log.debug("onPrintExsumReport");
 
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
@@ -66,6 +70,17 @@ public class ReportExSummary extends ReportService {
 
         pdfName = "Executive_Summary_Report_";
 
-        generatePDF(path, map, pdfName);
+        generatePDF(pathExsum, map, pdfName);
+    }
+
+    public void onPrintDecisionReport() throws Exception {
+        log.debug("onPrintDecisionReport");
+
+        HashMap map = new HashMap<String, Object>();
+        map.put("path", pathsub);
+
+        pdfName = "Decision_Report_";
+
+        generatePDF(pathDecision, map, pdfName);
     }
 }
