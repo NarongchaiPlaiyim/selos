@@ -266,12 +266,16 @@ public class DBRControl extends BusinessControl {
     }
 
 
-    private BigDecimal calculateFinalDBR(BigDecimal totalMonthDebtBorrower, BigDecimal totalMonthDebtRelated,BigDecimal netMonthlyIncome, WorkCase workCase){
+    private BigDecimal calculateFinalDBR(BigDecimal totalMonthDebtBorrowerFinal, BigDecimal totalMonthDebtRelated,BigDecimal netMonthlyIncome, WorkCase workCase){
         BigDecimal result = BigDecimal.ZERO;
         BigDecimal totalPurposeForDBR = BigDecimal.ZERO;
         int roleId = getCurrentUser().getRole().getId();
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
         //todo non confirm
+        BigDecimal debt = BigDecimal.ZERO;
+        debt = Util.add(totalMonthDebtBorrowerFinal, totalMonthDebtRelated);
+        debt = Util.add(debt, totalPurposeForDBR);
+
         if(newCreditFacility != null && newCreditFacility.getId() > 0){
             totalPurposeForDBR = newCreditFacility.getTotalProposeLoanDBR();
             if(roleId == RoleValue.UW.id()){
@@ -279,12 +283,11 @@ public class DBRControl extends BusinessControl {
             }else if(roleId == RoleValue.BDM.id()){
 
             }
+
         }
-        BigDecimal debt = BigDecimal.ZERO;
-        debt = Util.add(totalMonthDebtBorrower, totalMonthDebtRelated);
-        debt = Util.add(debt, totalPurposeForDBR);
         result = Util.divide(debt, netMonthlyIncome);
-        return debt;
+
+        return result;
     }
 
     private BigDecimal getMonthlyIncome(BankStatementSummary bankStatementSummary){
