@@ -738,22 +738,22 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
-        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase, ProposeType.P);
-        log.debug("before :: newCollateralSubMortgages :: size :: {}", newCollateralSubMortgages.size());
-        newSubCollMortgageDAO.delete(newCollateralSubMortgages);
-        log.debug("after :: newCollateralSubMortgages :: size :: {}", newCollateralSubMortgages.size());
+//        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase, ProposeType.P);
+//        log.debug("before :: newCollateralSubMortgages :: size :: {}", newCollateralSubMortgages.size());
+//        newSubCollMortgageDAO.delete(newCollateralSubMortgages);
+//        log.debug("after :: newCollateralSubMortgages :: size :: {}", newCollateralSubMortgages.size());
         //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
-        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase, ProposeType.P);
-        log.debug("before :: newCollateralSubOwnerList :: size :: {}", newCollateralSubOwnerList.size());
-        newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
-        log.debug("before :: newCollateralSubOwnerList :: size :: {}", newCollateralSubOwnerList.size());
+//        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase, ProposeType.P);
+//        log.debug("before :: newCollateralSubOwnerList :: size :: {}", newCollateralSubOwnerList.size());
+//        newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
+//        log.debug("before :: newCollateralSubOwnerList :: size :: {}", newCollateralSubOwnerList.size());
         //--- Need to Delete SubOwner from newCollateralSubRelatedList before Insert new
 //        List<NewCollateralSubRelated> newCollateralSubRelatedList = newCollateralSubRelatedDAO.getListByWorkCase(workCase, ProposeType.P);
 //        log.debug("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
 //        newCollateralSubRelatedDAO.delete(newCollateralSubRelatedList);
 //        log.debug("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
 
-        if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
+        if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0){
             List<NewCollateralCredit> relationCollDelList = newCollateralRelationDAO.getListByNewCreditFacility(newCreditFacility, ProposeType.P);
             if (relationCollDelList.size() > 0) {
                 log.info("relationCollDelList size ::: {}", relationCollDelList.size());

@@ -776,9 +776,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     public void onDeleteCreditInfo() {
         log.debug("delete :: rowIndex :: {}", rowIndex);
         int used;
-        for (int i = 0; i < hashSeqCredit.size(); i++) {
-            log.info("hashSeqCredit.get(i) in use   :  " + i + " is   " + hashSeqCredit.get(i));
-        }
+
         log.info("onDeleteCreditInfo ::: seq is : {} " + newCreditDetailSelected.getSeq());
         log.info("onDeleteCreditInfo ::: use is : {} " + hashSeqCredit.get(newCreditDetailSelected.getSeq()));
 
@@ -1133,7 +1131,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
                 for (int i = 0; i < selectedCollateralCrdTypeItems.size(); i++) {
                     proposeCreditDetailViewList.add(selectedCollateralCrdTypeItems.get(i));
-
+                    log.info("selectedCollateralCrdTypeItems.get(i).isNoFlag() :: {}",selectedCollateralCrdTypeItems.get(i).isNoFlag());
                     if (selectedCollateralCrdTypeItems.get(i).isNoFlag() == true) {
                         seqTemp=selectedCollateralCrdTypeItems.get(i).getSeq();
                         checkPlus = true;
@@ -1451,7 +1449,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                         log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
                         log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
                     }
+
                     guarantorDetailAdd.setProposeCreditDetailViewList(newCreditTypeItems);
+
+                    for (int i=0;i<guarantorDetailAdd.getProposeCreditDetailViewList().size();i++) {
+                        seqTemp = guarantorDetailAdd.getProposeCreditDetailViewList().get(i).getSeq();
+                        hashSeqCredit.put(seqTemp,hashSeqCredit.get(i) + 1);
+                    }
+
                     guarantorDetailAdd.setTotalLimitGuaranteeAmount(summary);
                     newCreditFacilityView.getNewGuarantorDetailViewList().add(guarantorDetailAdd);
                     complete = true;
