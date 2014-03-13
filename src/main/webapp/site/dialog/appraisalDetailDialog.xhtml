@@ -52,6 +52,7 @@
                                  style = "#{appraisalRequest.numberOfDocumentsFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " >
                         <p:ajax event="blur" update=":appraisalDetailDlgForm:numberOfDocuments"/>
                     </p:inputText>
+                    <h:outputText value="     #{msg.get('app.appraisal.appraisalDetail.dialog.copy')}"/>
                 </td>
             </tr>
             <tr>
