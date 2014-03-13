@@ -813,10 +813,12 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
-            List<NewGuarantorCredit> relationDeleteList = newGuarantorRelationDAO.getListByNewCreditFacility(newCreditFacility, ProposeType.P);
-            if (relationDeleteList.size() > 0) {
-                log.info("relationDeleteList size ::: {}", relationDeleteList.size());
-                newGuarantorRelationDAO.delete(relationDeleteList);
+
+            List<NewGuarantorDetail> tmpNewGuarantorList = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
+            for(NewGuarantorDetail newGuarantorDetail : tmpNewGuarantorList){
+                newGuarantorRelationDAO.delete(newGuarantorDetail.getNewGuarantorCreditList());
+                newGuarantorDetail.setNewGuarantorCreditList(Collections.<NewGuarantorCredit>emptyList());
+                newGuarantorDetailDAO.persist(newGuarantorDetail);
             }
 
             log.debug("saveCreditFacility ::: newGuarantorDetailViewList : {}", newCreditFacilityView.getNewGuarantorDetailViewList());
@@ -843,11 +845,14 @@ public class CreditFacProposeControl extends BusinessControl {
 //        log.debug("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
 
         if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0){
-            List<NewCollateralCredit> relationCollDelList = newCollateralRelationDAO.getListByNewCreditFacility(newCreditFacility, ProposeType.P);
-            if (relationCollDelList.size() > 0) {
-                log.info("relationCollDelList size ::: {}", relationCollDelList.size());
-                newCollateralRelationDAO.delete(relationCollDelList);
+
+            List<NewCollateral> tmpNewCollateralList = newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
+            for(NewCollateral newCollateral : tmpNewCollateralList){
+                newCollateralRelationDAO.delete(newCollateral.getNewCollateralCreditList());
+                newCollateral.setNewCollateralCreditList(Collections.<NewCollateralCredit>emptyList());
+                newCollateralDAO.persist(newCollateral);
             }
+
 
             if (Util.safetyList(newCreditFacilityView.getNewCollateralViewDelList()).size() > 0) {
                 log.debug("newCreditFacilityView.getNewCollateralViewDelList() :: {}", newCreditFacilityView.getNewCollateralViewDelList().size());
