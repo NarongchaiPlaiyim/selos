@@ -4,6 +4,7 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.WorkCase;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -34,6 +35,7 @@ public class WorkCaseDAO extends GenericDAO<WorkCase, Long> {
         log.info("findIdByWobNum : {}", wobNumber);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("wobNumber", wobNumber));
+        criteria.setFetchMode("workCasePrescreen", FetchMode.SELECT);
         WorkCase workCase = (WorkCase) criteria.uniqueResult();
 
         return workCase;

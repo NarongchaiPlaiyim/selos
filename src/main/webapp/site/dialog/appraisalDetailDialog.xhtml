@@ -47,7 +47,7 @@
                 </td>
                 <td class="title" style="width: 200px;">
                     <p:inputText id="numberOfDocuments"  styleClass="right"
-                                 onkeypress="return onKeyPressNumber()" onkeydown="return onKeyDownNumber()"
+                                 onkeypress="return onKeyPressNumber(event);" onkeydown="return onKeyDownNumber(event);"
                                  value="#{appraisalRequest.appraisalDetailViewDialog.numberOfDocuments}"
                                  style = "#{appraisalRequest.numberOfDocumentsFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " >
                         <f:convertNumber pattern="#,##0"  />

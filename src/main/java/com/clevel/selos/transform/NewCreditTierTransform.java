@@ -122,7 +122,6 @@ public class NewCreditTierTransform extends Transform {
     }
 
     public List<NewCreditTierDetailView> transformPricingIntTierToView(List<PricingInterest> pricingInterestList) {
-
         List<NewCreditTierDetailView> newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
         NewCreditTierDetailView newFeeDetailView;
         for(PricingInterest pricingInterest : pricingInterestList){
@@ -137,14 +136,11 @@ public class NewCreditTierTransform extends Transform {
                 }
             }
         }
-
         return newCreditTierDetailViewList;
     }
 
-
     public String toGetPricing(BaseRate baseRate ,BigDecimal price){
         String priceToShow = "";
-
         if(price != null && baseRate != null){
             if (price.doubleValue() < 0) {
                 priceToShow = baseRate.getName() + " " + price;
@@ -152,7 +148,6 @@ public class NewCreditTierTransform extends Transform {
                 priceToShow = baseRate.getName() + " + " + price;
             }
         }
-
         return priceToShow;
     }
 }

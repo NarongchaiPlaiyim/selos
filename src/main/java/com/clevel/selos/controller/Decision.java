@@ -4,10 +4,12 @@ import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.ApprovalHistoryDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.ApprovalHistory;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -95,6 +97,8 @@ public class Decision implements Serializable {
     private ApprovalHistoryDAO approvalHistoryDAO;
     @Inject
     private SpecialProgramDAO specialProgramDAO;
+    @Inject
+    private WorkCaseDAO workCaseDAO;
 
     //Transform
     @Inject
@@ -1107,13 +1111,20 @@ public class Decision implements Serializable {
         try {
 
             if (roleUW) {
-                // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
-                decisionView = decisionControl.saveDecision(decisionView, workCaseId);
-                // todo: calculate Total Approve and Hidden field for NewCreditFacility
-                // Save Approval History for UW
-                approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCaseId);
                 // Delete List
                 decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
+
+                WorkCase workCase = workCaseDAO.findById(workCaseId);
+                // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
+                decisionView = decisionControl.saveApproveAndConditionData(decisionView, workCase);
+                // Calculate Total Approve
+                decisionControl.calculateTotalApprove(decisionView);
+                // todo calculate Total for BRMS
+                // Save Total Approve to Decision
+                decisionControl.saveDecision(decisionView, workCase);
+                // Save Approval History for UW
+                approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
+
                 //exSummaryControl.calForDecision(workCaseId);
             }
 
@@ -1131,11 +1142,6 @@ public class Decision implements Serializable {
             }
         }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-    }
-
-    public void onCancelDecision() {
-        log.debug("onCancel()");
-        // todo: cancel decision action
     }
 
     // ----------------------------------------------- get Item from Select List ----------------------------------------------- //
@@ -1321,6 +1327,7 @@ public class Decision implements Serializable {
                     returnCusInfoView.setLastNameEn(customerInfoView.getLastNameEn());
                     returnCusInfoView.setTitleTh(customerInfoView.getTitleTh());
                     returnCusInfoView.setTitleEn(customerInfoView.getTitleEn());
+                    returnCusInfoView.setCustomerEntity(customerInfoView.getCustomerEntity());
                     break;
                 }
             }
