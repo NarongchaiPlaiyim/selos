@@ -329,7 +329,7 @@ public class AppraisalResult implements Serializable {
         context.addCallbackParam("functionComplete", complete);
     }
     public void onEditCollateralDetailView(){
-        log.info("-- onEditCollateralDetailView " + newCollateralViewList.size());
+        log.info("-- onEditCollateralDetailView {}",  newCollateralViewList.size());
         modeForButton = ModeForButton.EDIT;
         newCollateralView = selectCollateralDetailView;
         if(Util.isNull(newCollateralView.getJobID()) || Util.isZero(newCollateralView.getJobID().length())){
@@ -338,6 +338,7 @@ public class AppraisalResult implements Serializable {
             flagReadOnly = true;
         }
     }
+
     public void onDeleteCollateralDetailView(){
         newCollateralViewList.remove(selectCollateralDetailView);
         log.info("-- onDeleteCollateralDetailView Job id {} deleted", selectCollateralDetailView.getJobID());

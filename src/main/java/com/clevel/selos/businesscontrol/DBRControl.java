@@ -61,36 +61,40 @@ public class DBRControl extends BusinessControl {
     }
 
     public ActionResult saveDBRInfo(DBRView dbrView, List<NCBDetailView> ncbDetailViews) {
-        WorkCase workCase = workCaseDAO.findById(dbrView.getWorkCaseId());
-        DBR dbr = calculateDBR(dbrView, workCase, ncbDetailViews);
-        List<DBRDetail> newDbrDetails = new ArrayList<DBRDetail>();  // new record
-        newDbrDetails = dbr.getDbrDetails();
-        dbr.setDbrDetails(null);
-        dbrdao.persist(dbr);
-        List<DBRDetail> oldDbrDetails = dbrDetailDAO.createCriteria().add(Restrictions.eq("dbr", dbr)).list();  // old record
-        if (newDbrDetails != null && !newDbrDetails.isEmpty()) {
-            if (oldDbrDetails == null || oldDbrDetails.isEmpty() ) {
-                dbrDetailDAO.persist(newDbrDetails); //ADD New OR Update
-            } else {
-                //delete old without new record
-                for (DBRDetail oldDbrDetail : oldDbrDetails) {
-                    boolean isDelete = true;
-                    for (DBRDetail newDbrDetail : newDbrDetails) {
-                        if (oldDbrDetail.getId() == newDbrDetail.getId()) {
-                            isDelete = false;
+        try {
+            WorkCase workCase = workCaseDAO.findById(dbrView.getWorkCaseId());
+            DBR dbr = calculateDBR(dbrView, workCase, ncbDetailViews);
+            List<DBRDetail> newDbrDetails = new ArrayList<DBRDetail>();  // new record
+            newDbrDetails = dbr.getDbrDetails();
+            dbr.setDbrDetails(null);
+            dbrdao.persist(dbr);
+            List<DBRDetail> oldDbrDetails = dbrDetailDAO.createCriteria().add(Restrictions.eq("dbr", dbr)).list();  // old record
+            if (newDbrDetails != null && !newDbrDetails.isEmpty()) {
+                if (oldDbrDetails == null || oldDbrDetails.isEmpty() ) {
+                    dbrDetailDAO.persist(newDbrDetails); //ADD New OR Update
+                } else {
+                    //delete old without new record
+                    for (DBRDetail oldDbrDetail : oldDbrDetails) {
+                        boolean isDelete = true;
+                        for (DBRDetail newDbrDetail : newDbrDetails) {
+                            if (oldDbrDetail.getId() == newDbrDetail.getId()) {
+                                isDelete = false;
+                            }
+                        }
+                        if (isDelete) {
+                            dbrDetailDAO.delete(oldDbrDetail);
                         }
                     }
-                    if (isDelete) {
-                        dbrDetailDAO.delete(oldDbrDetail);
-                    }
+                    //Add new record
+                    dbrDetailDAO.persist(newDbrDetails);
                 }
-                //Add new record
-                dbrDetailDAO.persist(newDbrDetails);
+            } else {  //Delete all record from DBR
+                if (oldDbrDetails != null && !oldDbrDetails.isEmpty()) {
+                    dbrDetailDAO.delete(oldDbrDetails);
+                }
             }
-        } else {  //Delete all record from DBR
-            if (oldDbrDetails != null && !oldDbrDetails.isEmpty()) {
-                dbrDetailDAO.delete(oldDbrDetails);
-            }
+        }catch (Exception e){
+
         }
         return ActionResult.SUCCEED;
     }
@@ -138,7 +142,8 @@ public class DBRControl extends BusinessControl {
         return dbrView;
     }
 
-    private DBR calculateDBR(DBRView dbrView, WorkCase workCase, List<NCBDetailView> ncbDetailViews){
+    private DBR calculateDBR(DBRView dbrView, WorkCase workCase, List<NCBDetailView> ncbDetailViews) throws Exception{
+
         int roleId = getCurrentUser().getRole().getId();
         DBR dbr = dbrTransform.getDBRInfoModel(dbrView, workCase, getCurrentUser());
         List<DBRDetail> dbrDetails = dbrDetailTransform.getDbrDetailModels(dbrView.getDbrDetailViews(), getCurrentUser(), dbr);
@@ -239,7 +244,12 @@ public class DBRControl extends BusinessControl {
             }
             List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
 
-            DBR dbr =  calculateDBR(dbrView, workCase, ncbDetailViews);
+            DBR dbr = null;
+            try {
+                dbr = calculateDBR(dbrView, workCase, ncbDetailViews);
+            } catch (Exception e) {
+                log.debug("", e);
+            }
             dbrdao.persist(dbr);
         }
         return ActionResult.SUCCESS;
@@ -266,25 +276,28 @@ public class DBRControl extends BusinessControl {
     }
 
 
-    private BigDecimal calculateFinalDBR(BigDecimal totalMonthDebtBorrower, BigDecimal totalMonthDebtRelated,BigDecimal netMonthlyIncome, WorkCase workCase){
+    private BigDecimal calculateFinalDBR(BigDecimal totalMonthDebtBorrowerFinal, BigDecimal totalMonthDebtRelated,BigDecimal netMonthlyIncome, WorkCase workCase){
         BigDecimal result = BigDecimal.ZERO;
         BigDecimal totalPurposeForDBR = BigDecimal.ZERO;
         int roleId = getCurrentUser().getRole().getId();
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
         //todo non confirm
-        if(newCreditFacility != null){
+        BigDecimal debt = BigDecimal.ZERO;
+        debt = Util.add(totalMonthDebtBorrowerFinal, totalMonthDebtRelated);
+        debt = Util.add(debt, totalPurposeForDBR);
+
+        if(newCreditFacility != null && newCreditFacility.getId() > 0){
             totalPurposeForDBR = newCreditFacility.getTotalProposeLoanDBR();
             if(roleId == RoleValue.UW.id()){
 
             }else if(roleId == RoleValue.BDM.id()){
 
             }
+
         }
-        BigDecimal debt = BigDecimal.ZERO;
-        debt = Util.add(totalMonthDebtBorrower, totalMonthDebtRelated);
-        debt = Util.add(debt, totalPurposeForDBR);
         result = Util.divide(debt, netMonthlyIncome);
-        return debt;
+
+        return result;
     }
 
     private BigDecimal getMonthlyIncome(BankStatementSummary bankStatementSummary){
