@@ -11,12 +11,18 @@ import com.ilog.rules.decisionservice.DecisionServiceResponse;
 import com.ilog.rules.param.UnderwritingRequest;
 import com.tmbbank.enterprise.model.*;
 
+import javax.inject.Inject;
 import javax.xml.datatype.DatatypeFactory;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 public class DocAppraisalConverter extends Converter{
+
+    @Inject
+    public DocAppraisalConverter() {
+
+    }
 
     public DecisionServiceRequest getDecisionServiceRequest(BRMSApplicationInfo applicationInfo){
         logger.debug("-- begin getDecisionServiceRequest {}", applicationInfo);
