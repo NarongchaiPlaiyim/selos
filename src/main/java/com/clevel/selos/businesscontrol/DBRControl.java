@@ -272,7 +272,7 @@ public class DBRControl extends BusinessControl {
         int roleId = getCurrentUser().getRole().getId();
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
         //todo non confirm
-        if(newCreditFacility != null){
+        if(newCreditFacility != null && newCreditFacility.getId() > 0){
             totalPurposeForDBR = newCreditFacility.getTotalProposeLoanDBR();
             if(roleId == RoleValue.UW.id()){
 
