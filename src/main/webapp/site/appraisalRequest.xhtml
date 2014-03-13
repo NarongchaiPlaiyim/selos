@@ -15,9 +15,6 @@
         .ui-datatable thead th {
             white-space: normal !important;
         }
-        .ui-datatable tbody td {
-            border-color: #868686 !important;
-        }
         .calendar_right input {
             background: #ffffff !important;
             border: 1px solid #868686 !important;
@@ -40,41 +37,27 @@
                 <div id="content_container">
                     <div id="content_name"><p:outputLabel value="#{msg.get('app.appraisalRequest.header')}" style="font-size: 18px"/></div>
                     <div id="content">
-                        <table id="table_content" border="0" style="width: 100%;" class="content_table_form">
+                        <div id="content_info">
+                            <div id="content_trackchange">[ View Track Change ]</div>
+                            <div id="content_lastupdate">Last update by <h:outputText value="#{appraisalRequest.appraisalView.modifyBy.userName}"/> , <h:outputText value="#{appraisalRequest.appraisalView.modifyDate}"><f:convertDateTime pattern="dd MMMM yyyy HH:mm:ss" locale="th_TH" /></h:outputText></div>
+                        </div>
+                        <div id="content_form">
+                            <table id="table_content" class="content_table_form">
                             <tr>
-                                <td colspan="6" class="right" style="padding-right: 1%;">
-                                    Last update by <p:outputLabel value="#{appraisalRequest.appraisalView.modifyBy.userName}"/> , <p:outputLabel value="#{appraisalRequest.appraisalView.modifyDate}"/>
-                                    <a style="cursor: pointer;" href="#">[View Track Change]</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="6"><div class="separate"><!-- --></div></td>
-                            </tr>
-
-                            <tr>
-                                <td class="left" colspan="6">
+                                <td class="left" colspan="2">
                                     <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.header')}" styleClass="title" style="font-size: 15px"/>
-                                    <p:spacer width="50" height="20"></p:spacer>
+                                    <p:spacer width="10" height="5"></p:spacer>
                                     <p:commandButton id="btnAddAppraisalDetail"
                                                      value="#{msg.get('app.button.add')}"
                                                      styleClass="smaller"
-                                                     style="width: 150px"
                                                      process="@this"
                                                      actionListener="#{appraisalRequest.onAddAppraisalDetailView()}"
                                                      update=":appraisalDetailDlgForm"
                                                      oncomplete="appraisalDetailViewDlg.show()"/>
                                 </td>
                             </tr>
-
                             <tr>
-                                <td style="width: 150px; min-width: 150px; max-width: 150px;"/>
-                                <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
-                                <td style="width: 150px; min-width: 150px; max-width: 150px;"/>
-                                <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
-                            </tr>
-
-                            <tr>
-                                <td colspan="6">
+                                <td colspan="2">
                                     <p:dataTable tableStyleClass="center"
                                                  id="appraisalDetailViewTable"
                                                  var="appraisalDetailViewItem"
@@ -91,9 +74,9 @@
                                             </p:row>
                                             <p:row>
                                                 <p:column style="min-width: 200px;width: 200px;max-width: 200px"
-                                                        headerText="#{msg.get('app.appraisal.appraisalDetail.table.characteristic')}"/>
+                                                          headerText="#{msg.get('app.appraisal.appraisalDetail.table.characteristic')}"/>
                                                 <p:column style="min-width: 200px;width: 200px;max-width: 200px"
-                                                        headerText="#{msg.get('app.appraisal.appraisalDetail.table.numberOfDocuments')}"/>
+                                                          headerText="#{msg.get('app.appraisal.appraisalDetail.table.numberOfDocuments')}"/>
                                             </p:row>
                                         </p:columnGroup>
 
@@ -107,7 +90,7 @@
                                             <p:outputLabel value="#{appraisalDetailViewItem.purposeReviewAppraisalLabel}"/>
                                         </p:column>
                                         <p:column styleClass="left">
-                                            <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailViewItem.characteristic}" disabled="false">
+                                            <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailViewItem.characteristic}" disabled="true" styleClass="radio_table">
                                                 <f:selectItem id="characteristicRadio0" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
                                                 <f:selectItem id="characteristicRadio1" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
                                             </p:selectOneRadio>
@@ -144,19 +127,18 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="6"><p:spacer/></td>
+                                <td colspan="2"><p:spacer/></td>
                             </tr>
                             <tr>
-                                <td colspan="6"><div class="separate"><!-- --></div></td>
+                                <td colspan="2"><div class="separate"><!-- --></div></td>
                             </tr>
                             <tr>
-                                <td class="left" colspan="6">
+                                <td class="left" colspan="2">
                                     <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.header')}" styleClass="title" style="font-size: 15px"/>
                                 </td>
                             </tr>
-
                             <tr>
-                                <td >
+                                <td colspan="2">
                                     <table class="table_content" border="0" style="padding: 0%" >
                                         <tr>
                                             <th style="width: 50px;" />
@@ -208,20 +190,19 @@
                                     </table>
                                 </td>
                             </tr>
-
                             <tr>
-                                <td colspan="6"><p:spacer/></td>
+                                <td colspan="2"><p:spacer/></td>
                             </tr>
                             <tr>
-                                <td colspan="6"><div class="separate"><!-- --></div></td>
+                                <td colspan="2"><div class="separate"><!-- --></div></td>
                             </tr>
                             <tr>
-                                <td class="title" colspan="6">
+                                <td class="title" colspan="2">
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.locationAppraisal')}" style="font-size: 15px"/>
                                 </td>
                             </tr>
                             <tr>
-                                <td style="min-width:180px;width:180px;max-width:180px">
+                                <td style="min-width:130px;width:130px;max-width:130px">
                                     <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.zoneLocation')}"/>
                                 </td>
                                 <td>
@@ -229,7 +210,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="min-width:180px;width:180px;max-width:180px">
+                                <td>
                                     <p:outputLabel styleClass="title"  value="#{msg.get('app.appraisal.label.bdmRemark')}"/>
                                 </td>
                                 <td>
@@ -237,7 +218,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="center" colspan="6">
+                                <td class="center" colspan="2">
                                     <p:commandButton id="btnSave"
                                                      value="#{msg.get('app.saveButton')}"
                                                      styleClass="medium"
@@ -254,7 +235,8 @@
 
                                 </td>
                             </tr>
-                        </table>
+                            </table>
+                        </div>
                     </div>
                     <div class="bottom_line"><!-- --></div>
                 </div>
