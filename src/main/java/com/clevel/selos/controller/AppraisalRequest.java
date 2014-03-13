@@ -98,8 +98,6 @@ public class AppraisalRequest implements Serializable {
         log.debug("-- init()");
         modeForButton = ModeForButton.ADD;
         appraisalDetailView = new AppraisalDetailView();
-        appraisalContactDetailView = new AppraisalContactDetailView();
-        appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
         appraisalDetailViewDialog = new AppraisalDetailView();
         appraisalDetailViewSelected = new AppraisalDetailView();
         titleDeedFlag = false;
@@ -159,6 +157,8 @@ public class AppraisalRequest implements Serializable {
             log.debug("-- AppraisalView[New] created");
             appraisalContactDetailView = new AppraisalContactDetailView();
             log.debug("-- AppraisalContactDetailView[New] created");
+            appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+            log.debug("-- AppraisalDetailViewList[New] created");
         }
     }
 
