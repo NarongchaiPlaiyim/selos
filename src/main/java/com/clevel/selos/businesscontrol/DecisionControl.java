@@ -8,6 +8,8 @@ import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
+import com.clevel.selos.model.db.master.CustomerEntity;
+import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -454,27 +456,98 @@ public class DecisionControl extends BusinessControl {
     public void calculateTotalApprove(DecisionView decisionView) {
         log.debug("calculateTotalApprove()");
         if (decisionView != null) {
-            BigDecimal totalApproveCredit = BigDecimal.ZERO;
-            BigDecimal totalApproveCommercial = BigDecimal.ZERO;
-            BigDecimal totalApproveComAndOBOD = BigDecimal.ZERO;
-            BigDecimal totalApproveExposure = BigDecimal.ZERO;
-            BigDecimal totalApproveGuaranteeAmt = BigDecimal.ZERO;
 
+            BigDecimal totalApproveCredit = BigDecimal.ZERO;
+            BigDecimal totalODLimit = BigDecimal.ZERO;
+            BigDecimal totalNumOfNewOD = BigDecimal.ZERO;
+            BigDecimal totalNumProposeCreditFac = BigDecimal.ZERO;
+            BigDecimal totalNumContingentPropose = BigDecimal.ZERO;
+            BigDecimal totalNumOfCoreAsset = BigDecimal.ZERO;
+            BigDecimal totalNumOfNonCoreAsset = BigDecimal.ZERO;
+            BigDecimal totalMortgageValue = BigDecimal.ZERO;
+            BigDecimal totalApproveGuaranteeAmt = BigDecimal.ZERO;
+            BigDecimal totalTCGGuaranteeAmt = BigDecimal.ZERO;
+            BigDecimal totalIndiGuaranteeAmt = BigDecimal.ZERO;
+            BigDecimal totalJuriGuaranteeAmt = BigDecimal.ZERO;
+
+            // Credit Detail
             List<NewCreditDetailView> approveCreditList = decisionView.getApproveCreditList();
             if (approveCreditList != null && approveCreditList.size() > 0) {
                 for (NewCreditDetailView approveCredit : approveCreditList) {
+                    // Sum total approve credit limit amount
                     totalApproveCredit = Util.add(totalApproveCredit, approveCredit.getLimit());
+                    // Count All 'New' propose credit
+                    totalNumProposeCreditFac = Util.add(totalNumProposeCreditFac, BigDecimal.ONE);
+
+                    CreditTypeView creditTypeView = approveCredit.getCreditTypeView();
+                    if (creditTypeView != null) {
+                        // Count propose credit which credit facility = 'OD'
+                        if (CreditTypeGroup.OD.value() == creditTypeView.getCreditGroup()) {
+                            totalNumOfNewOD = Util.add(totalNumOfNewOD, BigDecimal.ONE);
+                            totalODLimit = Util.add(totalODLimit, approveCredit.getLimit());
+                        }
+                        // Count the 'New' propose credit which has Contingent Flag 'Y'
+                        if (creditTypeView.isContingentFlag()) {
+                            totalNumContingentPropose = Util.add(totalNumContingentPropose, BigDecimal.ONE);
+                        }
+                    }
                 }
             }
 
-            totalApproveCommercial = Util.add(decisionView.getExtBorrowerTotalCommercial(), totalApproveCredit);
-            totalApproveComAndOBOD = Util.add(decisionView.getExtBorrowerTotalComAndOBOD(), totalApproveCredit);
-            totalApproveExposure = Util.add(decisionView.getExtBorrowerTotalExposure(), totalApproveCredit);
+            BigDecimal totalApproveCommercial = Util.add(decisionView.getExtBorrowerTotalCommercial(), totalApproveCredit);
+            BigDecimal totalApproveComAndOBOD = Util.add(decisionView.getExtBorrowerTotalComAndOBOD(), totalApproveCredit);
+            BigDecimal totalApproveExposure = Util.add(decisionView.getExtBorrowerTotalExposure(), totalApproveCredit);
 
+            List<NewCollateralView> approveCollateralList = decisionView.getApproveCollateralList();
+            if (approveCollateralList != null && approveCollateralList.size() > 0) {
+                for (NewCollateralView collateralView : approveCollateralList) {
+                    List<NewCollateralHeadView> collHeadViewList = collateralView.getNewCollateralHeadViewList();
+                    if (collHeadViewList != null && collHeadViewList.size() > 0) {
+                        for (NewCollateralHeadView collHeadView : collHeadViewList) {
+                            PotentialCollateral potentialCollateral = collHeadView.getPotentialCollateral();
+
+                            // Count core asset and none core asset
+                            if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
+                                totalNumOfCoreAsset = Util.add(totalNumOfCoreAsset, BigDecimal.ONE);
+                            }
+                            else if (PotentialCollateralValue.NONE_CORE_ASSET.id() == potentialCollateral.getId()) {
+                                totalNumOfNonCoreAsset = Util.add(totalNumOfNonCoreAsset, BigDecimal.ONE);
+                            }
+
+                            // Sum total mortgage value
+                            List<NewCollateralSubView> collSubViewList = collHeadView.getNewCollateralSubViewList();
+                            if (collSubViewList != null && collSubViewList.size() > 0) {
+                                for (NewCollateralSubView collSubView : collSubViewList) {
+                                    totalMortgageValue = Util.add(totalMortgageValue, collSubView.getMortgageValue());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Guarantor Detail
             List<NewGuarantorDetailView> approveGuarantorList = decisionView.getApproveGuarantorList();
             if (approveGuarantorList != null && approveGuarantorList.size() > 0) {
                 for (NewGuarantorDetailView approveGuarantor : approveGuarantorList) {
+                    // Sum total approve guarantee amount
                     totalApproveGuaranteeAmt = Util.add(totalApproveGuaranteeAmt, approveGuarantor.getTotalLimitGuaranteeAmount());
+                    // Sum total guarantee amount (TCG, Individual, Juristic)
+                    CustomerInfoView customerInfoView = approveGuarantor.getGuarantorName();
+                    if (customerInfoView != null) {
+                        CustomerEntity customerEntity = customerInfoView.getCustomerEntity();
+                        if (customerEntity != null) {
+                            if (GuarantorCategory.INDIVIDUAL.value() == customerEntity.getId()) {
+                                totalIndiGuaranteeAmt = Util.add(totalIndiGuaranteeAmt, approveGuarantor.getTotalLimitGuaranteeAmount());
+                            }
+                            else if (GuarantorCategory.JURISTIC.value() == customerEntity.getId()) {
+                                totalJuriGuaranteeAmt = Util.add(totalJuriGuaranteeAmt, approveGuarantor.getTotalLimitGuaranteeAmount());
+                            }
+                            else if (GuarantorCategory.TCG.value() == customerEntity.getId()) {
+                                totalTCGGuaranteeAmt = Util.add(totalTCGGuaranteeAmt, approveGuarantor.getTotalLimitGuaranteeAmount());
+                            }
+                        }
+                    }
                 }
             }
 
@@ -482,7 +555,16 @@ public class DecisionControl extends BusinessControl {
             decisionView.setApproveBrwTotalCommercial(totalApproveCommercial);
             decisionView.setApproveBrwTotalComAndOBOD(totalApproveComAndOBOD);
             decisionView.setApproveTotalExposure(totalApproveExposure);
+            decisionView.setApproveTotalODLimit(totalODLimit);
+            decisionView.setApproveTotalNumOfNewOD(totalNumOfNewOD);
+            decisionView.setApproveTotalNumProposeCreditFac(totalNumProposeCreditFac);
+            decisionView.setApproveTotalNumContingentPropose(totalNumContingentPropose);
+            decisionView.setGrandTotalNumOfCoreAsset(totalNumOfCoreAsset);
+            decisionView.setGrandTotalNumOfNonCoreAsset(totalNumOfNonCoreAsset);
             decisionView.setApproveTotalGuaranteeAmt(totalApproveGuaranteeAmt);
+            decisionView.setApproveTotalTCGGuaranteeAmt(totalTCGGuaranteeAmt);
+            decisionView.setApproveTotalIndvGuaranteeAmt(totalIndiGuaranteeAmt);
+            decisionView.setApproveTotalJurisGuaranteeAmt(totalJuriGuaranteeAmt);
         }
     }
 
