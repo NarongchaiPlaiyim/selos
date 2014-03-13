@@ -5,6 +5,8 @@ import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.model.StepValue;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.util.FacesUtil;
@@ -177,24 +179,37 @@ public class PESQLInbox implements Serializable
 
         long stepId = inboxViewSelectItem.getStepId();
 
-        long wrkCasePreScreenId;
+        long wrkCasePreScreenId = 0;
 
-        long wrkCaseId;
+        long wrkCaseId = 0;
+
+        int requestAppraisalFlag = 0;
 
         if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value())
         {
 
-            wrkCasePreScreenId = workCasePrescreenDAO.findIdByWobNumber(inboxViewSelectItem.getFwobnumber());
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByWobNumber(inboxViewSelectItem.getFwobnumber());
+            if(workCasePrescreen != null){
+                wrkCasePreScreenId = workCasePrescreen.getId();
+                requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+            }
+            //wrkCasePreScreenId = workCasePrescreenDAO.findIdByWobNumber(inboxViewSelectItem.getFwobnumber());
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
+            session.setAttribute("requestAppraisal", requestAppraisalFlag);
             //session.setAttribute("workCaseId", 0);
 
         }
 
         else
         {
-
-            wrkCaseId = workCaseDAO.findIdByWobNumber(inboxViewSelectItem.getFwobnumber());
+            WorkCase workCase = workCaseDAO.findByWobNumber(inboxViewSelectItem.getFwobnumber());
+            if(workCase != null){
+                wrkCaseId = workCase.getId();
+                requestAppraisalFlag = workCase.getRequestAppraisal();
+            }
+            //wrkCaseId = workCaseDAO.findIdByWobNumber(inboxViewSelectItem.getFwobnumber());
             session.setAttribute("workCaseId", wrkCaseId);
+            session.setAttribute("requestAppraisal", requestAppraisalFlag);
             //session.setAttribute("workCasePreScreenId", 0);
 
         }

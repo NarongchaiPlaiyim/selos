@@ -5,11 +5,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "mst_business_group")
@@ -18,10 +16,29 @@ public class BusinessGroup implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
+
     @Column(name = "name", length = 100)
     private String name;
+
     @Column(name = "description", length = 100)
     private String description;
+
+    @OneToOne
+    @JoinColumn(name = "create_by")
+    private User createBy;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_date")
+    private Date createDate;
+
+    @OneToOne
+    @JoinColumn(name = "modify_by")
+    private User modifyBy;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modify_date")
+    private Date modifyDate;
+
     @Column(name = "active")
     private int active;
 
@@ -60,13 +77,49 @@ public class BusinessGroup implements Serializable {
         this.active = active;
     }
 
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("name", name).
-                append("description", description).
-                append("active", active).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("description", description)
+                .append("createBy", createBy)
+                .append("createDate", createDate)
+                .append("modifyBy", modifyBy)
+                .append("modifyDate", modifyDate)
+                .append("active", active)
+                .toString();
     }
 }

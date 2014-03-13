@@ -16,57 +16,87 @@ public class BusinessDescription implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
+
     @OneToOne
     @JoinColumn(name = "businessgroup_id")
     private BusinessGroup businessGroup;
+
     @Column(name = "name")
     private String name;
+
     @Column(name = "tmb_Code")
     private String tmbCode;
+
     @Column(name = "income_factor")
     private BigDecimal incomeFactor;
+
     @Column(name = "isic_code")
     private String isicCode;
+
     @Column(name = "ar")
     private BigDecimal ar;
+
     @Column(name = "ap")
     private BigDecimal ap;
+
     @Column(name = "inv")
     private BigDecimal inv;
+
     @Column(name = "deviate")
     private String deviate;
+
     @Column(name = "esr")
     private String esr;
+
     @Column(name = "negative", length = 5)
     private String negative;
+
     @Column(name = "high_risk", length = 5)
     private String highRisk;
+
     @Column(name = "suspend", length = 5)
     private String suspend;
+
     @Column(name = "business_comment")
     private String comment;
+
     @Column(name = "allow_deviate", length = 100)
     private String allowDeviate;
+
     @Column(name = "deviated_by", length = 100)
     private String deviatedBy;
+
     @Column(name = "business_permission", length = 5)
     private String businessPermission;
+
     @Column(name = "business_permission_desc")
     private String businessPermissionDesc;
+
     @Column(name = "factory4", length = 500)
     private String factory4;
+
     @Column(name = "food_and_drug", length = 500)
     private String foodAndDrug;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
     private Date createDate;
+
+    @OneToOne
+    @JoinColumn(name = "create_by")
+    private User createBy;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modify_date")
     private Date modifyDate;
-    @Column(name = "modify_by")
-    private String modifyBy;
+
+    @OneToOne
+    @JoinColumn(name = "modify_by")
+    private User modifyBy;
+
     @Column(name = "active")
     private int active;
+
     @Column(name = "cog")
     private BigDecimal cog;
 
@@ -257,11 +287,19 @@ public class BusinessDescription implements Serializable {
         this.modifyDate = modifyDate;
     }
 
-    public String getModifyBy() {
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
         return modifyBy;
     }
 
-    public void setModifyBy(String modifyBy) {
+    public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
     }
 
