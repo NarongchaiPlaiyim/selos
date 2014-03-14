@@ -854,9 +854,7 @@ public class CreditFacProposeControl extends BusinessControl {
                         newCollateralSubOwnerDAO.delete(newCollateralSub.getNewCollateralSubOwnerList());
                         newCollateralSub.setNewCollateralSubMortgageList(Collections.<NewCollateralSubMortgage>emptyList());
                         newCollateralSub.setNewCollateralSubOwnerList(Collections.<NewCollateralSubOwner>emptyList());
-//                        newCollateralSubDetailDAO.persist(newCollateralSub);
                     }
-//                    newCollateralHeadDetailDAO.persist(newCollateralHead);
                 }
                 newCollateralDAO.persist(newCollateral);
             }
