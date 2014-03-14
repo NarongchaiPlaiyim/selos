@@ -16,6 +16,7 @@ public class BusinessDescriptionDAO extends GenericDAO<BusinessDescription, Inte
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     public BusinessDescriptionDAO() {
     }

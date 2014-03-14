@@ -109,7 +109,7 @@ public class AppraisalRequestControl extends BusinessControl {
             }
         } else {
             log.debug("-- Find by work case id = {} or work case preScreen id = {} appraisal is null   ", workCaseId, workCasePreScreenId);
-            return appraisalView;
+            return null;
         }
     }
 

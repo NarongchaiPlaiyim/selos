@@ -321,11 +321,15 @@ public class CreditFacProposeControl extends BusinessControl {
 
     public BigDecimal calTotalProposeLoanDBRForIntYear(NewCreditDetailView newCreditDetailView, BigDecimal dbrSpread) {
         log.debug("calTotalProposeLoanDBRForIntYear start :: newCreditDetailView and  dbrSpread ::{}", newCreditDetailView, dbrSpread);
-        log.info("limit :: {}", newCreditDetailView.getLimit());
-        log.info("newCreditTierDetailViews.size :: {}", newCreditDetailView.getNewCreditTierDetailViewList().size());
 
         BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
-        if (newCreditDetailView.getNewCreditTierDetailViewList() != null) {
+        if (newCreditDetailView != null &&
+            newCreditDetailView.getNewCreditTierDetailViewList() != null &&
+            newCreditDetailView.getNewCreditTierDetailViewList().size() > 0) {
+
+            log.info("limit :: {}", newCreditDetailView.getLimit());
+            log.info("newCreditTierDetailViews.size :: {}", newCreditDetailView.getNewCreditTierDetailViewList().size());
+
             BigDecimal oneHundred = new BigDecimal("100");
             BigDecimal twelve = new BigDecimal("12");
             BigDecimal sum = BigDecimal.ZERO;
