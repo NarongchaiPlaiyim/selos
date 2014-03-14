@@ -826,7 +826,7 @@ public class Decision implements Serializable {
         boolean success;
         SubCollateralType subCollateralType = getSubCollTypeById(selectedApproveSubColl.getSubCollateralType().getId());
         List<CustomerInfoView> _collOwnerUWList = selectedApproveSubColl.getCollateralOwnerUWList();
-        List<MortgageType> _mortgageTypeList = selectedApproveSubColl.getMortgageList();
+        List<MortgageTypeView> _mortgageTypeList = selectedApproveSubColl.getMortgageList();
         List<NewCollateralSubView> _relatedWithList = selectedApproveSubColl.getRelatedWithList();
 
         if (modeEditSubColl) {
@@ -903,11 +903,11 @@ public class Decision implements Serializable {
         log.debug("onAddMortgageType() id: {}", selectedApproveSubColl.getMortgageType().getId());
         if (selectedApproveSubColl.getMortgageType().getId() != 0) {
             if (selectedApproveSubColl.getMortgageList() == null) {
-                selectedApproveSubColl.setMortgageList(new ArrayList<MortgageType>());
+                selectedApproveSubColl.setMortgageList(new ArrayList<MortgageTypeView>());
             }
             // Validate select duplicate
             if (selectedApproveSubColl.getMortgageList().size() > 0) {
-                for (MortgageType mortgageType : selectedApproveSubColl.getMortgageList()) {
+                for (MortgageTypeView mortgageType : selectedApproveSubColl.getMortgageList()) {
                     if (mortgageType.getId() == selectedApproveSubColl.getMortgageType().getId()) {
                         messageHeader = msg.get("app.messageHeader.error");
                         message = "Can not add duplicate Mortgage type!";
@@ -1315,10 +1315,10 @@ public class Decision implements Serializable {
         return returnSubCollType;
     }
 
-    private MortgageType getMortgageTypeById(int id) {
-        MortgageType returnMortgageType = new MortgageType();
-        if (mortgageTypeList != null && !mortgageTypeList.isEmpty() && id != 0) {
-            for (MortgageType mortgageType : mortgageTypeList) {
+    private MortgageTypeView getMortgageTypeById(int id) {
+        MortgageTypeView returnMortgageType = new MortgageTypeView();
+        if (mortgageTypeViewList != null && !mortgageTypeViewList.isEmpty() && id != 0) {
+            for (MortgageTypeView mortgageType : mortgageTypeViewList) {
                 if (mortgageType.getId() == id) {
                     returnMortgageType.setId(mortgageType.getId());
                     returnMortgageType.setActive(mortgageType.getActive());
