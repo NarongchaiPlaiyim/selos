@@ -69,7 +69,11 @@ public class AppraisalRequestControl extends BusinessControl {
 
     @Inject
     public AppraisalRequestControl(){
+        init();
+    }
 
+    private void init(){
+        appraisalView = null;
     }
 	
 	public AppraisalView getAppraisalRequest(final long workCaseId, final long workCasePreScreenId){
@@ -108,8 +112,8 @@ public class AppraisalRequestControl extends BusinessControl {
                 return appraisalView;
             }
         } else {
-            log.debug("-- Find by work case id = {} or work case preScreen id = {} appraisal is null   ", workCaseId, workCasePreScreenId);
-            return null;
+            log.debug("-- Find by work case id = {} or work case preScreen id = {} appraisal is {}   ", workCaseId, workCasePreScreenId, appraisalView);
+            return appraisalView;
         }
     }
 

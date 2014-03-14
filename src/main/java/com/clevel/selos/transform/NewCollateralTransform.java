@@ -187,7 +187,7 @@ public class NewCollateralTransform extends Transform {
             newCollateralSub.setNewCollateralSubOwnerList(new ArrayList<NewCollateralSubOwner>());
             newCollateralSub.setNewCollateralSubRelatedList(new ArrayList<NewCollateralSubRelated>());
 
-           /* if (newCollateralSubView.getMortgageList() != null) {
+            if (newCollateralSubView.getMortgageList() != null) {
                 List<NewCollateralSubMortgage> newCollateralSubMortgageList = new ArrayList<NewCollateralSubMortgage>();
                 newCollateralSub.setNewCollateralSubMortgageList(newCollateralSubMortgageList);
                 NewCollateralSubMortgage newCollateralSubMortgage;
@@ -202,8 +202,8 @@ public class NewCollateralTransform extends Transform {
                 }
                 newCollateralSub.setNewCollateralSubMortgageList(newCollateralSubMortgageList);
             }
-*/
-           /* if (newCollateralSubView.getCollateralOwnerUWList() != null) {
+
+            if (newCollateralSubView.getCollateralOwnerUWList() != null) {
                 List<NewCollateralSubOwner> newCollateralSubOwnerList = new ArrayList<NewCollateralSubOwner>();
                 newCollateralSub.setNewCollateralSubOwnerList(newCollateralSubOwnerList);
                 for (CustomerInfoView customerInfoView : newCollateralSubView.getCollateralOwnerUWList()) {
@@ -216,7 +216,7 @@ public class NewCollateralTransform extends Transform {
                     newCollateralSubOwnerList.add(newCollateralSubOwner);
                 }
                 newCollateralSub.setNewCollateralSubOwnerList(newCollateralSubOwnerList);
-            }*/
+            }
 
            /* if (newCollateralSubView.getRelatedWithList() != null) {
                 List<NewCollateralSubRelated> newCollateralSubRelatedList = new ArrayList<NewCollateralSubRelated>();
