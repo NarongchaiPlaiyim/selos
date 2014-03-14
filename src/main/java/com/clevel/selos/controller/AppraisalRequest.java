@@ -234,14 +234,12 @@ public class AppraisalRequest implements Serializable {
                 }
             } else {
                 messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-//                message = "Please add a customer contact information";
-                message = "กรุณากรอก รายชื่อผู้ติดต่ออย่างน้อย 1 ชื่อ";
+                message = "Please fill in all required information(Contact Detail).";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {
             messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-//            message = "Please add a detail of karn pra mern song raka na ja jub jub";
-            message = "กรุณากรอก รายละเอียดส่งประเมินราคา";
+            message = "Please fill in all required information(Estimate Detail).";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
