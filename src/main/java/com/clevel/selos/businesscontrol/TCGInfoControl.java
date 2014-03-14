@@ -303,9 +303,8 @@ public class TCGInfoControl extends BusinessControl {
             sumAdd = num1.add(num2).add(num3).add(num4);
             log.debug("SUM After add :: {}", sumAdd);
             log.debug("tcgView.getSumAppraisalAmount() :: {}", tcgView.getSumAppraisalAmount());
-            sumAppraisalDivide = Util.divide(tcgView.getSumAppraisalAmount(), sumAdd);
+            sumAppraisalAmount = Util.divide(tcgView.getSumAppraisalAmount(), sumAdd);
 //            sumAppraisalAmount = Util.divide(sumAppraisalDivide, BigDecimal.valueOf(100));
-
             log.debug("sumAppraisalAmount ::: {} ", sumAppraisalAmount);
 
         }

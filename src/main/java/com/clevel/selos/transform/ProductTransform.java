@@ -111,13 +111,14 @@ public class ProductTransform extends Transform{
         if(creditType != null){
             creditTypeView.setId(creditType.getId());
             creditTypeView.setActive(creditType.getActive());
+            creditTypeView.setName(creditType.getName());
+            creditTypeView.setDescription(creditType.getDescription());
             creditTypeView.setBrmsCode(creditType.getBrmsCode());
             creditTypeView.setComsIntType(creditType.getComsIntType());
-            creditTypeView.setDescription(creditType.getDescription());
-            creditTypeView.setName(creditType.getName());
             creditTypeView.setCanSplit(creditType.getCanSplit());
             creditTypeView.setCalLimitType(creditType.getCalLimitType());
             creditTypeView.setCreditGroup(creditType.getCreditGroup());
+            creditTypeView.setContingentFlag(creditType.isContingentFlag());
         }
         return creditTypeView;
     }

@@ -131,13 +131,15 @@ public class BaseController implements Serializable {
             }else if(Util.getCurrentPage().equals("appraisalRequest.jsf")){
                 manageButton.setCheckMandateDocButton(true);
                 manageButton.setCancelAppraisalButton(true);
-                manageButton.setSubmitAppraisalButton(true);
+                //manageButton.setSubmitAppraisalButton(true);
+                manageButton.setSubmitRequestAppraisalButton(true);
             }
         } else if (stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()) {
             if(Util.getCurrentPage().equals("/site/appraisalRequest.jsf")){
                 manageButton.setCheckMandateDocButton(true);
                 manageButton.setCancelAppraisalButton(true);
-                manageButton.setSubmitAppraisalButton(true);
+                //manageButton.setSubmitAppraisalButton(true);
+                manageButton.setSubmitRequestAppraisalButton(true);
             }else{
                 manageButton.setViewRelatedCA(true);
                 if(requestAppraisal == 0){
