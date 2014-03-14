@@ -7,6 +7,13 @@
     <div id="header_detail">
         <div id="header_collapse" class="close" onclick="collapseDetail();"><p:spacer width="2"/></div>
         <div id="header_button_bar">
+            <!--Print Report-->
+
+            <p:commandButton id="btnPrintReport" value="#{msg.get('app.header.button.printReport')}" styleClass="blueButton" title="#{msg.get('app.header.button.printReport')}"
+                             oncomplete="printReportDlg.show()"
+                             update=":frmMain:printReportPanel">
+            </p:commandButton>
+
             <!--View Relate CA-->
             <p:commandButton id="btnViewRelatedCA" value="#{msg.get('app.header.button.viewRelatedCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.viewRelatedCA')}"
                              rendered="#{baseController.manageButton.viewRelatedCA}"
@@ -48,7 +55,7 @@
             <p:commandButton id="btnRequestAppraisal" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
                              onclick="confirmRequestAppraisal.show()" type="button"
                              rendered="#{baseController.manageButton.requestAppraisalButton}">
-                <p:confirmDialog header="Confirmation" message="Are you want to Request Appraisa?" styleClass="left"
+                <p:confirmDialog header="Confirmation" message="Are you want to Request Appraisal?" styleClass="left"
                                  icon="ui-icon-alert"
                                  widgetVar="confirmRequestAppraisal" global="false" showEffect="fade"
                                  rendered="#{baseController.manageButton.requestAppraisalButton}">
@@ -57,6 +64,21 @@
                                      actionListener="#{baseController.onRequestAppraisal()}"
                                      process="@this" oncomplete="confirmRequestAppraisal.hide()"/>
                     <p:commandButton value="No" type="button" onclick="confirmRequestAppraisal.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+            </p:commandButton>
+            <!--Request Appraisal [Submit to AAD Admin]-->
+            <p:commandButton id="btnRequestAppraisalAADADmin" value="Request for Appraisal" styleClass="blueButton" title="Request for Appraisal"
+                             rendered="#{baseController.manageButton.submitRequestAppraisalButton}">
+                <p:confirmDialog header="Confirmation" message="Are you want to Request for Appraisal? ( Submit to AAD Admin )" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmRequestForAppraisal" global="false" showEffect="fade"
+                                 rendered="#{baseController.manageButton.submitRequestAppraisalButton}">
+                    <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{baseController.onSubmitAppraisalAdmin()}"
+                                     process="@this" oncomplete="confirmRequestForAppraisal.hide()"/>
+                    <p:commandButton value="No" type="button" onclick="confirmRequestForAppraisal.hide()"
                                      styleClass="ui-confirmdialog-no"/>
                 </p:confirmDialog>
             </p:commandButton>
@@ -89,6 +111,14 @@
                     <p:commandButton value="No" type="button" onclick="confirmCancelCA.hide()"
                                      styleClass="ui-confirmdialog-no"/>
                 </p:confirmDialog>
+            <!--Cancel CA FullApp-->
+            <p:commandButton id="btnCancelCAFullApp" value="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
+                             rendered="#{baseController.manageButton.cancelCAFullAppButton}"
+                             actionListener="#{baseController.onOpenCancelCAFullApp()}"
+                             oncomplete="cancelCAFullAppDlg.show()"
+                             update=":frmMain:cancelCAFullAppPanel">
+                <p:resetInput target=":frmMain:cancelCAFullAppPanel"/>
+            </p:commandButton>
             <!--Submit Case-->
             <p:commandButton id="btnSubmitCase" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
                              action="#{baseController.onOpenSubmitZM}"
@@ -137,7 +167,7 @@
 
             </p:commandButton>
             <!-- Appraisal flow : Return to AAD Admin-->
-            <p:commandButton id="btnSubmitAADAdmin" value="Return to AAD Admin" styleClass="blueButton" title=""
+            <p:commandButton id="btnReturnAADAdmin" value="Return to AAD Admin" styleClass="blueButton" title=""
                              rendered="#{baseController.manageButton.returnAADAdminButton}">
 
             </p:commandButton>
@@ -192,7 +222,7 @@
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">CA No. :</td>
-                    <td colspan="2"><h:outputText value="#{baseController.appHeaderView.caNo}"/></td>
+                    <td colspan="2"><h:outputText value="#{baseController.appHeaderView.appNo}"/></td>
                     <td class="title right">Ref CA No. :</td>
                     <td colspan="3"><h:outputText value="#{baseController.appHeaderView.appRefNo}"/></td>
                     <td colspan="2" class="title right">Ref CA Date :</td>
@@ -288,6 +318,14 @@
         </p:confirmDialog>
     </p:panel>
 
+    <p:panel id="printReportPanel" styleClass="panel">
+        <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"
+                  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+                  modal="true" width="430" height="200">
+            <ui:include src="/site/dialog/printReportDialog.xhtml"/>
+        </p:dialog>
+    </p:panel>
+
     <p:panel id="assignABDMPanel" styleClass="panel">
         <p:dialog id="assignABDMDialog" widgetVar="assignABDMDlg" header="Assign To ABDM"
                   onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
@@ -301,6 +339,14 @@
                   onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
                   modal="true" width="550" height="360">
             <ui:include src="/site/dialog/submitCaseDialog.xhtml"/>
+        </p:dialog>
+    </p:panel>
+
+    <p:panel id="cancelCAFullAppPanel" styleClass="panel">
+        <p:dialog id="cancelCAFullAppDialog" widgetVar="cancelCAFullAppDlg" header="Cancel CA"
+                  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+                  modal="true" width="460" height="160">
+            <ui:include src="/site/dialog/cancelCAFullAppDialog.xhtml"/>
         </p:dialog>
     </p:panel>
 

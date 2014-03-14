@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -115,7 +116,7 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void cancelCase(long workCasePreScreenId, long workCaseId, String queueName, long actionCode) throws Exception{
+    public void cancelCase(long workCasePreScreenId, long workCaseId, String queueName, long actionCode, String reason, String remark) throws Exception{
         String wobNumber = "";
         if(Long.toString(workCasePreScreenId) != null && workCasePreScreenId != 0){
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
@@ -133,14 +134,16 @@ public class BPMExecutor implements Serializable {
             }
         }
 
-        if(wobNumber != null && wobNumber != ""){
+        if(wobNumber != null && !wobNumber.equalsIgnoreCase("")){
             Action action = actionDAO.findById(actionCode);
             if(action != null){
                 HashMap<String,String> fields = new HashMap<String, String>();
                 fields.put("Action_Code", Long.toString(action.getId()));
                 fields.put("Action_Name", action.getDescription());
+                fields.put("Remarks", remark);
+                fields.put("Reason", reason);
 
-                log.debug("dispatch case for [Cancel Case]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+                log.debug("dispatch case for [Cancel Case]..., Action_Code : {}, Action_Name : {}, Remark : {}, Reason : {}", action.getId(), action.getName(), remark, reason);
 
                 execute(queueName, wobNumber, fields);
             } else {
@@ -196,7 +199,7 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void submitZM(long workCaseId, String queueName, String zmUserId, long actionCode) throws Exception{
+    public void submitZM(long workCaseId, String queueName, String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, BigDecimal totalCommercial, BigDecimal totalRetail, String resultCode,  long actionCode) throws Exception{
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         Action action = actionDAO.findById(actionCode);
         if(action != null){
@@ -204,6 +207,15 @@ public class BPMExecutor implements Serializable {
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
             fields.put("ZMUserName", zmUserId);
+            if(!Util.isEmpty(rgmUserId)){
+                fields.put("RGMUserName", rgmUserId);
+            }
+            if(!Util.isEmpty(ghUserId)){
+                fields.put("GHUserName", ghUserId);
+            }
+            if(!Util.isEmpty(cssoUserId)){
+                fields.put("CSSOUserName", cssoUserId);
+            }
 
             log.debug("dispatch case for [Submit ZM]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
@@ -238,7 +250,38 @@ public class BPMExecutor implements Serializable {
             execute(queueName, wobNumber, fields);
         }
     }
+    
+    public void executeBPM(long workCaseId, String queueName, long actionCode, String reason, String remark) throws Exception {
+    	WorkCase workCase = null;
+    	if (workCaseId > 0)
+    		workCase = workCaseDAO.findById(workCaseId);
+    	if (workCase == null) {
+    		throw new Exception("An exception occurred, Can not find WorkCase.");
+    	}
+    	
+    	String wobNumber = workCase.getWobNumber();
+    	if (Util.isEmpty(wobNumber)) {
+    		throw new Exception("An exception occurred, Can not find WOB number for WorkCase.");
+    	}
+    	Action action = null;
+    	if (actionCode >= 0) 
+    		action = actionDAO.findById(actionCode);
+    	if (action == null) {
+    		throw new Exception("An exception occurred, Can not find Action.");
+    	}
+    	
+    	HashMap<String, String> fields = new HashMap<String, String>();
+    	fields.put("Action_Code", Long.toString(actionCode));
+        fields.put("Action_Name", action.getDescription());
+        if (!Util.isEmpty(remark))
+        	fields.put("Remarks", remark);
+        if (!Util.isEmpty(reason))
+        	fields.put("Reason", reason);
 
+        log.debug("dispatch case for [Cancel Case]..., Action_Code : {}, Action_Name : {}, Remark : {}, Reason : {}", action.getId(), action.getName(), remark, reason);
+        execute(queueName, wobNumber, fields);
+    }
+    
     private void execute(String queueName, String wobNumber, HashMap<String, String> fields) throws Exception{
         log.debug("BPM Execute ::: queueName : {}, wobNumber : {}, fields : {}", queueName, wobNumber, fields);
         bpmInterface.dispatchCase(queueName, wobNumber, fields);

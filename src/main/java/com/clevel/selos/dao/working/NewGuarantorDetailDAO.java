@@ -27,7 +27,7 @@ public class NewGuarantorDetailDAO extends GenericDAO<NewGuarantorDetail, Long> 
         log.info("findNewGuarantorByNewCreditFacility ::: {}", newCreditFacility.getId());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
-        criteria.setFetchMode("guarantorName", FetchMode.LAZY);
+        criteria.setFetchMode("guarantorName", FetchMode.SELECT);
         List<NewGuarantorDetail> newGuarantorDetails = (List<NewGuarantorDetail>)criteria.list();
         log.info("newGuarantorDetails ::: size : {}", newGuarantorDetails.size());
         return newGuarantorDetails;
@@ -47,9 +47,25 @@ public class NewGuarantorDetailDAO extends GenericDAO<NewGuarantorDetail, Long> 
 
     public List<NewGuarantorDetail> findNewGuarantorByNewCreditFacId(long newCreditFacId, ProposeType proposeType) {
         Criteria criteria = createCriteria();
+        criteria.createAlias("guarantorName", "cus");
+        criteria.createAlias("cus.workCase", "wrk");
         criteria.add(Restrictions.eq("newCreditFacility.id", newCreditFacId));
         criteria.add(Restrictions.eq("proposeType",proposeType));
         criteria.addOrder(Order.asc("id"));
         return criteria.list();
     }
+
+
+
+    public NewGuarantorDetail findGuarantorById(long newGuarantorId,ProposeType proposeType) {
+        log.info("findById ::: {}", newGuarantorId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("id",newGuarantorId));
+        criteria.add(Restrictions.eq("proposeType",proposeType));
+        criteria.setFetchMode("guarantorName", FetchMode.SELECT);
+        NewGuarantorDetail newGuarantorDetail = (NewGuarantorDetail) criteria.uniqueResult();
+        return newGuarantorDetail;
+    }
+
+
 }

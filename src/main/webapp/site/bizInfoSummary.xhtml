@@ -231,6 +231,7 @@
                                         </td>
                                         <td colspan="3">
                                             <clv:BECalendar id="registrationDate" showOn="button" navigator="true" locale="th_TH"
+                                                            required="#{bizInfoSummary.bizInfoSummaryView.establishDate == null and not empty param[addBizInfoSummary.clientId]}"
                                                             value="#{bizInfoSummary.bizInfoSummaryView.registrationDate}"
                                                             yearRange="1950:2100"
                                                             pattern="dd/MM/yyyy"
@@ -254,14 +255,17 @@
                                                             defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
                                                             mindate="01/01/1950"
                                                             maxdate="#{bizInfoSummary.currentDateDDMMYY}">
+                                                <p:ajax event="change"  update=":frmMain:establishDate,:frmMain:referExpId,:frmMain:registrationDate" />
+                                                <p:ajax event="dateSelect"  update=":frmMain:establishDate,:frmMain:referExpId,:frmMain:registrationDate" />
                                             </clv:BECalendar>
                                         </td>
                                         <td class="title left" style="width: 70px">
                                             <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.referredExp')}"/> :
                                         </td>
                                         <td>
-                                            <p:selectOneMenu  idsize="1"  value="#{bizInfoSummary.bizInfoSummaryView.referredExperience.id}"
-                                                              required="#{not empty param[addBizInfoSummary.clientId]}"
+                                            <p:selectOneMenu  idsize="1"
+                                                              required="#{bizInfoSummary.bizInfoSummaryView.establishDate != null and not empty param[addBizInfoSummary.clientId]}"
+                                                              value="#{bizInfoSummary.bizInfoSummaryView.referredExperience.id}"
                                                               id="referExpId">
                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                 <f:selectItems value="#{bizInfoSummary.referredExperienceList}"

@@ -1,5 +1,6 @@
 package com.clevel.selos.integration.brms.convert;
 
+import com.clevel.selos.exception.BRMSInterfaceException;
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
 import com.clevel.selos.integration.brms.model.request.BRMSAccountRequested;
@@ -7,7 +8,13 @@ import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.PricingIntTier;
 import com.clevel.selos.integration.brms.model.response.PricingInterest;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
-import com.clevel.selos.integration.brms.service.standardpricing.interestrules.*;
+import com.clevel.selos.system.message.ExceptionMapping;
+import com.clevel.selos.system.message.ExceptionMessage;
+import com.clevel.selos.system.message.Message;
+import com.tmbbank.enterprise.model.*;
+import com.ilog.rules.decisionservice.DecisionServiceRequest;
+import com.ilog.rules.decisionservice.DecisionServiceResponse;
+import com.ilog.rules.param.UnderwritingRequest;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -22,6 +29,10 @@ public class StandardPricingIntConverter extends Converter {
     @Inject
     @BRMS
     Logger logger;
+
+    @Inject
+    @ExceptionMessage
+    Message exceptionMsg;
 
     @Inject
     public StandardPricingIntConverter(){}
@@ -98,10 +109,11 @@ public class StandardPricingIntConverter extends Converter {
         return null;
     }
 
-    public StandardPricingResponse getStandardPricingResponse(DecisionServiceResponse decisionServiceResponse){
+    public StandardPricingResponse getStandardPricingResponse(DecisionServiceResponse decisionServiceResponse) {
+        logger.debug("-- start convert getStandardPricingResponse from decisionServiceResponse");
         StandardPricingResponse standardPricingIntResponse = new StandardPricingResponse();
         if(decisionServiceResponse != null){
-
+            logger.debug("response is not null");
 
             UnderwritingRequest underwritingRequest = decisionServiceResponse.getUnderwritingRequest();
             UnderwritingApprovalRequestType approvalRequestType = underwritingRequest.getUnderwritingApprovalRequest();
@@ -119,7 +131,11 @@ public class StandardPricingIntConverter extends Converter {
                     for(CreditFacilityType creditFacilityType : creditFacilityTypeList){
 
                         PricingType pricingType = creditFacilityType.getPricing();
+                        if(pricingType == null){
+                            throw new BRMSInterfaceException(null, ExceptionMapping.BRMS_INVALID_RETURN_DATA, exceptionMsg.get(ExceptionMapping.BRMS_INVALID_RETURN_DATA, "PricingType is null"));
+                        }
                         PricingInterest pricingInterest = new PricingInterest();
+
                         pricingInterest.setCreditDetailId(creditFacilityType.getID());
                         List<PricingIntTier> pricingIntTierList = new ArrayList<PricingIntTier>();
 
@@ -149,40 +165,7 @@ public class StandardPricingIntConverter extends Converter {
             standardPricingIntResponse.setApplicationNo(applicationType.getApplicationNumber());
 
         }
-
+        logger.debug("-- end convert response return getStandardPricingResponse{} ", standardPricingIntResponse);
         return standardPricingIntResponse;
     }
-
-    private AttributeType getAttributeType(BRMSFieldAttributes field, Date value){
-        logger.debug("-- getAttributeType()");
-        AttributeType attributeType = new AttributeType();
-        try{
-            attributeType.setName(field.value());
-            logger.debug("-- field.value()[{}]", field.value());
-            GregorianCalendar gregorianCalendar = new GregorianCalendar();
-            gregorianCalendar.setTime(value);
-            logger.debug("-- value()[{}]", value);
-            attributeType.setDateTimeValue(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
-        } catch (Exception ex){
-            logger.error("Cannot convert XML");
-            logger.error("-- Exception : {}", ex.getMessage());
-        }
-        return attributeType;
-    }
-
-    private AttributeType getAttributeType(BRMSFieldAttributes field, String value){
-        AttributeType attributeType = new AttributeType();
-        attributeType.setName(field.value());
-        attributeType.setStringValue(value);
-        return attributeType;
-    }
-
-    private AttributeType getAttributeType(BRMSFieldAttributes field, BigDecimal value){
-        AttributeType attributeType = new AttributeType();
-        attributeType.setName(field.value());
-        attributeType.setNumericValue(value);
-
-        return attributeType;
-    }
-
 }

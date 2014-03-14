@@ -22,9 +22,8 @@ public class BankAccountStatus implements Serializable {
     @Column(name = "active")
     private int active;
 
-    @OneToOne
-    @JoinColumn(name = "bank_account_type_id")
-    private BankAccountType bankAccountType;
+    @Column(name = "data_source")
+    private String dataSource;
 
     public int getId() {
         return id;
@@ -58,12 +57,12 @@ public class BankAccountStatus implements Serializable {
         this.active = active;
     }
 
-    public BankAccountType getBankAccountType() {
-        return bankAccountType;
+    public String getDataSource() {
+        return dataSource;
     }
 
-    public void setBankAccountType(BankAccountType bankAccountType) {
-        this.bankAccountType = bankAccountType;
+    public void setDataSource(String dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
@@ -73,7 +72,7 @@ public class BankAccountStatus implements Serializable {
                 .append("code", code)
                 .append("description", description)
                 .append("active", active)
-                .append("bankAccountType", bankAccountType)
+                .append("dataSource", dataSource)
                 .toString();
     }
 }

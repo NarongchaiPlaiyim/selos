@@ -149,7 +149,7 @@ public class CustomerAcceptance implements Serializable {
 		String redirectPage = null;
 		log.info("preRender workCase Id = "+workCaseId);
 		if (workCaseId > 0) {
-			//TODO Validate step 
+			//TODO Validate step
 			if (stepId <= 0) {
 				redirectPage = "/site/inbox.jsf";
 			} else {

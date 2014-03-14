@@ -581,6 +581,12 @@ function handleAssignABDMDialogRequest(xhr, status, args) {
     }
 }
 
+function handleCancelFullAppDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        cancelCAFullAppDlg.hide();
+    }
+}
+
 function handleDisbursementMcDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
         mcDisbursementDialog.hide();
@@ -788,6 +794,13 @@ function handleSubCollateralInfoRequest(xhr, status, args) {
 function handleGuarantorInfoRequest(xhr, status, args) {
     if (args.functionComplete) {
         guarantorInfoDlg.hide();
+    }
+}
+
+//Print Report Exsummary Dialog
+function handlePrintRerportDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        printReportDlg.hide();
     }
 }
 

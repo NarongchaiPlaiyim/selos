@@ -187,7 +187,7 @@ public class AppraisalDetailTransform extends Transform {
             stringBuilder = new StringBuilder();
             if(appraisalDetailView.isPurposeReviewAppraisalB()){
                 stringBuilder = stringBuilder.append(", ");
-                stringBuilder = stringBuilder.append(msg.get("app.appraisal.appraisalDetail.label.purposeNewAppraisal"));
+                stringBuilder = stringBuilder.append(msg.get("app.appraisal.appraisalDetail.label.purposeReviewAppraisal"));
             }
             if(appraisalDetailView.isPurposeNewAppraisalB()){
                 stringBuilder = stringBuilder.append(", ");

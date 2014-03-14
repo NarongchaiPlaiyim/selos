@@ -1,29 +1,55 @@
 package com.clevel.selos.integration.brms.service;
 
 import com.clevel.selos.integration.BRMS;
-import com.clevel.selos.integration.brms.service.document.apprisalrules.DecisionServiceSEDocumentAppraisalFlow;
-import com.clevel.selos.integration.brms.service.document.apprisalrules.DecisionServiceSEDocumentAppraisalFlow_Service;
-import com.clevel.selos.integration.brms.service.document.customerrules.DecisionServiceSEDocumentCustomerFlow;
-import com.clevel.selos.integration.brms.service.document.customerrules.DecisionServiceSEDocumentCustomerFlow_Service;
-import com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.DecisionServiceSEFullApplicationUWSFlow;
-import com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.DecisionServiceSEFullApplicationUWSFlow_Service;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceSEPrescreenUWSFlow;
-import com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceSEPrescreenUWSFlow_Service;
-import com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceSEStandardPricingFeeFlow;
-import com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceSEStandardPricingFeeFlow_Service;
-import com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceSEStandardPricingInterestFlow;
-import com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceSEStandardPricingInterestFlow_Service;
 import com.clevel.selos.system.Config;
+import com.ilog.rules.decisionservice.*;
+import com.sun.xml.internal.ws.client.BindingProviderProperties;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import javax.xml.namespace.QName;
+import javax.xml.ws.BindingProvider;
 import java.io.Serializable;
 import java.net.URL;
 
 public class EndPoint implements Serializable {
     @Inject
     @BRMS
-    Logger log;
+    Logger logger;
+
+    private static final String WSDL = "?wsdl";
+
+    @Inject
+    @Config(name = "interface.brms.request.timeout")
+    private String brmsRequestTimeout;
+
+    @Inject
+    @Config(name = "interface.brms.service.url")
+    private String brmsServiceURL;
+
+    @Inject
+    @Config(name = "interface.brms.prescreen.service.name")
+    private String prescreenServiceName;
+
+    @Inject
+    @Config(name = "interface.brms.fullapp.service.name")
+    private String fullAppServiceName;
+
+    @Inject
+    @Config(name = "interface.brms.standard.paricing.interest.service.name")
+    private String interestServiceName;
+
+    @Inject
+    @Config(name = "interface.brms.standard.paricing.fee.service.name")
+    private String feeServiceName;
+
+    @Inject
+    @Config(name = "interface.brms.customer.service.name")
+    private String customerServiceName;
+
+    @Inject
+    @Config(name = "interface.brms.appraisal.service.name")
+    private String appraisalServiceName;
 
     @Inject
     @Config(name = "interface.brms.prescreen.address")
@@ -53,116 +79,197 @@ public class EndPoint implements Serializable {
     public EndPoint() {
     }
 
-    public com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceResponse callPrescreenUnderwritingRulesService(com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceRequest request) throws Exception {
-        log.debug("callPrescreenUnderwritingRulesService()");
-        log.debug("Address : {}", prescreenAddress);
+    public DecisionServiceResponse callPrescreenUnderwritingRulesService(DecisionServiceRequest request) throws Exception {
+        logger.debug("-- begin Sending Request to callPrescreenUnderwritingRulesService()");
+        logger.debug("Service URL : {}", brmsServiceURL);
+        logger.debug("Service Name : {}", prescreenServiceName);
+        logger.debug("Service Address : {}", prescreenAddress);
         DecisionServiceSEPrescreenUWSFlow_Service service = null;
         DecisionServiceSEPrescreenUWSFlow port = null;
-        com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceResponse response = null;
+        DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEPrescreenUWSFlow_Service(new URL(prescreenAddress));
+            URL url = new URL(prescreenAddress + WSDL);
+            QName qname = new QName(brmsServiceURL, prescreenServiceName);
+
+            service = new DecisionServiceSEPrescreenUWSFlow_Service(url, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
-            log.debug("callPrescreenUnderwritingRulesService() Calling...");
+            int timeout = 60000;
+            try{
+                timeout=Integer.parseInt(brmsRequestTimeout)*1000;
+            }catch (Exception e){
+                logger.debug("request Service request_timeout must be a number! {Default : 60sec}");
+            }
+            ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
+            ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
+            ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, prescreenAddress);
+            logger.debug("callPrescreenUnderwritingRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callPrescreenUnderwritingRulesService() Done...");
+            logger.debug("callPrescreenUnderwritingRulesService() Done...{}", response);
             return response;
         } catch (Exception e) {
-            log.error("callPrescreenUnderwritingRulesService() Error : {}", e);
+            logger.error("callPrescreenUnderwritingRulesService() Error :", e);
             throw e;
         }
     }
 
-    public com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.DecisionServiceResponse callFullApplicationUnderwritingRulesService(com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.DecisionServiceRequest request) throws Exception {
-        log.debug("callFullApplicationUnderwritingRulesService()");
-        log.debug("Address : {}", fullAppAddress);
+    public DecisionServiceResponse callFullApplicationUnderwritingRulesService(DecisionServiceRequest request) throws Exception {
+        logger.debug("-- begin Sending Request to callFullApplicationUnderwritingRulesService()");
+        logger.debug("Service URL : {}", brmsServiceURL);
+        logger.debug("Service Name : {}", fullAppServiceName);
+        logger.debug("Service Address : {}", fullAppAddress);
         DecisionServiceSEFullApplicationUWSFlow_Service service = null;
         DecisionServiceSEFullApplicationUWSFlow port = null;
-        com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.DecisionServiceResponse response = null;
+        DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEFullApplicationUWSFlow_Service(new URL(fullAppAddress));
+            URL url = new URL(fullAppAddress + WSDL);
+            QName qname = new QName(brmsServiceURL, fullAppServiceName);
+            service = new DecisionServiceSEFullApplicationUWSFlow_Service(url, qname);
+
             port = service.getDecisionServiceSOAPstmbrmsred1();
-            log.debug("callFullApplicationUnderwritingRulesService() Calling...");
+            int timeout = 60000;
+            try{
+                timeout=Integer.parseInt(brmsRequestTimeout)*1000;
+            }catch (Exception e){
+                logger.debug("request Service request_timeout must be a number! {Default : 60sec}");
+            }
+            ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
+            ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
+            ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, fullAppAddress);
+            logger.debug("callFullApplicationUnderwritingRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callFullApplicationUnderwritingRulesService() Done...");
+            logger.debug("callFullApplicationUnderwritingRulesService() Done...{}", response);
             return response;
         } catch (Exception e) {
-            log.error("callFullApplicationUnderwritingRulesService() Error : {}", e);
+            logger.error("callFullApplicationUnderwritingRulesService() Error : {}", e);
             throw e;
         }
     }
 
-    public com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceResponse callStandardPricingInterestRulesService(com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceRequest request) throws Exception {
-        log.debug("callStandardPricingInterestRulesService()");
-        log.debug("Address : {}", interestAddress);
-        DecisionServiceSEStandardPricingInterestFlow_Service service = null;
+    public DecisionServiceResponse callStandardPricingInterestRulesService(DecisionServiceRequest request) throws Exception {
+        logger.debug("-- begin Sending Request to callStandardPricingInterestRulesService()");
+        logger.debug("Service URL : {}", brmsServiceURL);
+        logger.debug("Service Name : {}", interestServiceName);
+        logger.debug("Service Address : {}", interestAddress);DecisionServiceSEStandardPricingInterestFlow_Service service = null;
         DecisionServiceSEStandardPricingInterestFlow port = null;
-        com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceResponse response = null;
+        DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEStandardPricingInterestFlow_Service(new URL(interestAddress));
+            URL url = new URL(interestAddress + WSDL);
+            QName qname = new QName(brmsServiceURL, interestServiceName);
+
+            service = new DecisionServiceSEStandardPricingInterestFlow_Service(url, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
-            log.debug("callStandardPricingInterestRulesService() Calling...");
+            int timeout = 60000;
+            try{
+                timeout=Integer.parseInt(brmsRequestTimeout)*1000;
+            }catch (Exception e){
+                logger.debug("request Service request_timeout must be a number! {Default : 60sec}");
+            }
+            ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
+            ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
+            ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, interestAddress);
+            logger.debug("callStandardPricingInterestRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callStandardPricingInterestRulesService() Done...");
+            logger.debug("callStandardPricingFeeRulesService() Done...{}", response);
             return response;
         } catch (Exception e) {
-            log.error("callStandardPricingInterestRulesService() Error : {}", e);
+            logger.error("callStandardPricingInterestRulesService() Error : {}", e);
             throw e;
         }
     }
 
-    public com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceResponse callStandardPricingFeeRulesService(com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceRequest request) throws Exception {
-        log.debug("callStandardPricingFeeRulesService()");
-        log.debug("Address : {}", feeAddress);
+    public DecisionServiceResponse callStandardPricingFeeRulesService(DecisionServiceRequest request) throws Exception {
+        logger.debug("-- begin Sending Request to callStandardPricingFeeRulesService()");
+        logger.debug("Service URL : {}", brmsServiceURL);
+        logger.debug("Service Name : {}", feeServiceName);
+        logger.debug("Service Address : {}", feeAddress);
         DecisionServiceSEStandardPricingFeeFlow_Service service = null;
         DecisionServiceSEStandardPricingFeeFlow port = null;
-        com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceResponse response = null;
+        DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEStandardPricingFeeFlow_Service(new URL(feeAddress));
+            URL wsdlUrl = new URL(feeAddress + this.WSDL);
+            QName qname = new QName(brmsServiceURL, feeServiceName);
+
+            service = new DecisionServiceSEStandardPricingFeeFlow_Service(wsdlUrl, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
-            log.debug("callStandardPricingFeeRulesService() Calling...");
+            int timeout = 60000;
+            try{
+                timeout=Integer.parseInt(brmsRequestTimeout)*1000;
+            }catch (Exception e){
+                logger.debug("request Service request_timeout must be a number! {Default : 60sec}");
+            }
+            ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
+            ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
+            ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, feeAddress);
+            logger.debug("callStandardPricingFeeRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callStandardPricingFeeRulesService() Done...");
+            logger.debug("callStandardPricingFeeRulesService() Done... {}", response);
             return response;
         } catch (Exception e) {
-            log.error("callStandardPricingFeeRulesService() Error : {}", e);
+            logger.error("callStandardPricingFeeRulesService() Error : {}", e);
             throw e;
         }
     }
 
-    public com.clevel.selos.integration.brms.service.document.customerrules.DecisionServiceResponse callDocumentCustomerRulesService(com.clevel.selos.integration.brms.service.document.customerrules.DecisionServiceRequest request) throws Exception {
-        log.debug("callDocumentCustomerRulesService()");
-        log.debug("Address : {}", customerAddress);
+    public DecisionServiceResponse callDocumentCustomerRulesService(DecisionServiceRequest request) throws Exception {
+        logger.debug("-- begin Sending Request to callDocumentCustomerRulesService()");
+        logger.debug("Service URL : {}", brmsServiceURL);
+        logger.debug("Service Name : {}", customerServiceName);
+        logger.debug("Service Address : {}", customerAddress);
         DecisionServiceSEDocumentCustomerFlow_Service service = null;
         DecisionServiceSEDocumentCustomerFlow port = null;
-        com.clevel.selos.integration.brms.service.document.customerrules.DecisionServiceResponse response = null;
+        DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEDocumentCustomerFlow_Service(new URL(customerAddress));
+            URL wsdlUrl = new URL(customerAddress + this.WSDL);
+            QName qname = new QName(brmsServiceURL, customerServiceName);
+            service = new DecisionServiceSEDocumentCustomerFlow_Service(wsdlUrl, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
-            log.debug("callDocumentCustomerRulesService() Calling...");
+            int timeout = 60000;
+            try{
+                timeout=Integer.parseInt(brmsRequestTimeout)*1000;
+            }catch (Exception e){
+                logger.debug("request Service request_timeout must be a number! {Default : 60sec}");
+            }
+            ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
+            ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
+            ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, customerAddress);
+            logger.debug("callDocumentCustomerRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callDocumentCustomerRulesService() Done...");
+            logger.debug("callStandardPricingFeeRulesService() Done... {}", response);
             return response;
         } catch (Exception e) {
-            log.error("callDocumentCustomerRulesService() Error : {}", e);
+            logger.error("callDocumentCustomerRulesService() Error : {}", e);
             throw e;
         }
     }
 
-    public com.clevel.selos.integration.brms.service.document.apprisalrules.DecisionServiceResponse callDocumentAppraisalRulesService(com.clevel.selos.integration.brms.service.document.apprisalrules.DecisionServiceRequest request) throws Exception {
-        log.debug("callDocumentAppraisalRulesService()");
-        log.debug("Address : {}", appraisalAddress);
+    public DecisionServiceResponse callDocumentAppraisalRulesService(DecisionServiceRequest request) throws Exception {
+        logger.debug("-- begin Sending Request to callDocumentAppraisalRulesService()");
+        logger.debug("Service URL : {}", brmsServiceURL);
+        logger.debug("Service Name : {}", appraisalServiceName);
+        logger.debug("Service Address : {}", appraisalAddress);
         DecisionServiceSEDocumentAppraisalFlow_Service service = null;
         DecisionServiceSEDocumentAppraisalFlow port = null;
-        com.clevel.selos.integration.brms.service.document.apprisalrules.DecisionServiceResponse response = null;
+        DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEDocumentAppraisalFlow_Service(new URL(appraisalAddress));
+            URL wsdlUrl = new URL(appraisalAddress + this.WSDL);
+            QName qname = new QName(brmsServiceURL, appraisalServiceName);
+            service = new DecisionServiceSEDocumentAppraisalFlow_Service(wsdlUrl, qname);
             port = service.getDecisionServiceSOAPstmbrmsred1();
-            log.debug("callDocumentAppraisalRulesService() Calling...");
+            int timeout = 60000;
+            try{
+                timeout=Integer.parseInt(brmsRequestTimeout)*1000;
+            }catch (Exception e){
+                logger.debug("request Service request_timeout must be a number! {Default : 60sec}");
+            }
+            ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeout);
+            ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
+            ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, appraisalAddress);
+            logger.debug("callDocumentAppraisalRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
-            log.debug("callDocumentAppraisalRulesService() Done...");
+            logger.debug("callStandardPricingFeeRulesService() Done... {}", response);
             return response;
         } catch (Exception e) {
-            log.error("callDocumentAppraisalRulesService() Error : {}", e);
+            logger.error("callDocumentAppraisalRulesService() Error : {}", e);
             throw e;
         }
     }

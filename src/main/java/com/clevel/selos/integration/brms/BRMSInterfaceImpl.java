@@ -3,19 +3,22 @@ package com.clevel.selos.integration.brms;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.BRMSInterface;
-import com.clevel.selos.integration.brms.convert.PrescreenConverter;
-import com.clevel.selos.integration.brms.convert.StandardPricingFeeConverter;
-import com.clevel.selos.integration.brms.convert.StandardPricingIntConverter;
+import com.clevel.selos.integration.brms.convert.*;
 import com.clevel.selos.integration.brms.model.RuleColorResult;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.*;
+
 import com.clevel.selos.integration.brms.service.EndPoint;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.util.Util;
+import com.ilog.rules.decisionservice.DecisionServiceResponse;
 import org.slf4j.Logger;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
+import javax.xml.namespace.QName;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +36,12 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
     StandardPricingIntConverter standardPricingIntConverter;
     @Inject
     PrescreenConverter prescreenConverter;
+    @Inject
+    FullApplicationConverter fullApplicationConverter;
+    @Inject
+    DocCustomerConverter docCustomerConverter;
+    @Inject
+    DocAppraisalConverter docAppraisalConverter;
 
     @Inject
     public BRMSInterfaceImpl() {
@@ -49,27 +58,40 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
         UWRulesResponse uwRulesResponse = null;
 
         try {
-            com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceResponse decisionServiceResponse = endpoint.callPrescreenUnderwritingRulesService(prescreenConverter.getDecisionServiceRequest(applicationInfo));
+            DecisionServiceResponse decisionServiceResponse = endpoint.callPrescreenUnderwritingRulesService(prescreenConverter.getDecisionServiceRequest(applicationInfo));
             uwRulesResponse = prescreenConverter.getUWRulesResponse(decisionServiceResponse);
             uwRulesResponse.setActionResult(ActionResult.SUCCESS);
         }catch (Exception ex) {
             uwRulesResponse = new UWRulesResponse();
             uwRulesResponse.setActionResult(ActionResult.FAILED);
-            uwRulesResponse.setReason(ex.getMessage());
+            uwRulesResponse.setReason(Util.getMessageException(ex));
+            logger.error("checkPreScreenRule calling exception/convert exception", ex);
         }
 
         return uwRulesResponse;
     }
 
     @Override
-    public List<FullApplicationResponse> checkFullApplicationRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
+    public UWRulesResponse checkFullApplicationRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
         logger.debug("checkFullApplicationRule : applicationInfo {}", applicationInfo);
         if (applicationInfo == null) {
             logger.error("fullApplicationRequest is null for request");
             throw new ValidationException("002");
         }
 
-        return new ArrayList<FullApplicationResponse>();
+        UWRulesResponse uwRulesResponse = null;
+
+        try {
+            DecisionServiceResponse decisionServiceResponse = endpoint.callPrescreenUnderwritingRulesService(fullApplicationConverter.getDecisionServiceRequest(applicationInfo));
+            uwRulesResponse = fullApplicationConverter.getUWRulesResponse(decisionServiceResponse);
+            uwRulesResponse.setActionResult(ActionResult.SUCCESS);
+        }catch (Exception ex) {
+            uwRulesResponse = new UWRulesResponse();
+            uwRulesResponse.setActionResult(ActionResult.FAILED);
+            uwRulesResponse.setReason(Util.getMessageException(ex));
+            logger.error("checkFullApplicationRule calling exception/convert exception", ex);
+        }
+        return uwRulesResponse;
     }
 
     @Override
@@ -83,13 +105,14 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
         StandardPricingResponse standardPricingResponse = new StandardPricingResponse();
 
         try{
-            com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceResponse decisionServiceResponse = endpoint.callStandardPricingInterestRulesService(standardPricingIntConverter.getDecisionServiceRequest(applicationInfo));
+            DecisionServiceResponse decisionServiceResponse = endpoint.callStandardPricingInterestRulesService(standardPricingIntConverter.getDecisionServiceRequest(applicationInfo));
             standardPricingResponse = standardPricingIntConverter.getStandardPricingResponse(decisionServiceResponse);
             standardPricingResponse.setActionResult(ActionResult.SUCCESS);
 
         }catch (Exception ex){
             standardPricingResponse.setActionResult(ActionResult.FAILED);
-            standardPricingResponse.setReason(ex.getMessage());
+            standardPricingResponse.setReason(Util.getMessageException(ex));
+            logger.error("checkStandardPricingIntRule calling exception/convert exception", ex);
         }
 
         return standardPricingResponse;
@@ -105,37 +128,60 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
 
         StandardPricingResponse standardPricingResponse = new StandardPricingResponse();
         try{
-            com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceResponse decisionServiceResponse = endpoint.callStandardPricingFeeRulesService(standardPricingFeeConverter.getDecisionServiceRequest(applicationInfo));
+            DecisionServiceResponse decisionServiceResponse = endpoint.callStandardPricingFeeRulesService(standardPricingFeeConverter.getDecisionServiceRequest(applicationInfo));
             standardPricingResponse = standardPricingFeeConverter.getStandardPricingResponse(decisionServiceResponse);
             standardPricingResponse.setActionResult(ActionResult.SUCCESS);
 
         }catch (Exception ex){
             standardPricingResponse.setActionResult(ActionResult.FAILED);
-            standardPricingResponse.setReason(ex.getMessage());
+            standardPricingResponse.setReason(Util.getMessageException(ex));
+            logger.error("checkStandardPricingFeeRule calling exception or convert exception", ex);
         }
 
         return standardPricingResponse;
     }
 
     @Override
-    public List<DocCustomerResponse> checkDocCustomerRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
+    public DocCustomerResponse checkDocCustomerRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
         logger.debug("checkDocCustomerRule : applicationInfo {}", applicationInfo);
         if (applicationInfo == null) {
             logger.error("docCustomerRequest is null for request");
             throw new ValidationException("002");
         }
-        //todo call service
-        return new ArrayList<DocCustomerResponse>();
+
+        DocCustomerResponse docCustomerResponse = new DocCustomerResponse();
+        try{
+            DecisionServiceResponse decisionServiceResponse = endpoint.callDocumentCustomerRulesService(docCustomerConverter.getDecisionServiceRequest(applicationInfo));
+            docCustomerResponse = docCustomerConverter.getDocCustomerResponse(decisionServiceResponse);
+            docCustomerResponse.setActionResult(ActionResult.SUCCESS);
+
+        }catch (Exception ex){
+            docCustomerResponse.setActionResult(ActionResult.FAILED);
+            docCustomerResponse.setReason(Util.getMessageException(ex));
+            logger.error("checkDocCustomerRule calling exception or convert exception", ex);
+        }
+        return docCustomerResponse;
     }
 
     @Override
-    public List<DocAppraisalResponse> checkDocAppraisalRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
+    public DocAppraisalResponse checkDocAppraisalRule(BRMSApplicationInfo applicationInfo) throws ValidationException {
         logger.debug("checkDocAppraisalRule : applicationInfo {}", applicationInfo);
         if (applicationInfo == null) {
             logger.error("docAppraisalRequest is null for request");
             throw new ValidationException("002");
         }
-        //todo call service
-        return new ArrayList<DocAppraisalResponse>();
+
+        DocAppraisalResponse docAppraisalResponse = new DocAppraisalResponse();
+        try{
+            DecisionServiceResponse decisionServiceResponse = endpoint.callDocumentAppraisalRulesService(docAppraisalConverter.getDecisionServiceRequest(applicationInfo));
+            docAppraisalResponse = docAppraisalConverter.getDocAppraisalResponse(decisionServiceResponse);
+            docAppraisalResponse.setActionResult(ActionResult.SUCCESS);
+        } catch (Exception ex){
+            docAppraisalResponse.setActionResult(ActionResult.FAILED);
+            docAppraisalResponse.setReason(Util.getMessageException(ex));
+            logger.error("checkDocAppraisalRule calling exception or convert exception", ex);
+        }
+        logger.debug("-- end checkDocAppraisalRule() return {}", docAppraisalResponse);
+        return new DocAppraisalResponse();
     }
 }

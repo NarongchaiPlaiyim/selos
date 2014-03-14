@@ -3,7 +3,8 @@
 <f:view xmlns="http://www.w3.org/1999/xhtml"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        >
 
     <h:head>
         <title>WelcomeWelcomeWelcomeWelcomeWelcome</title>
@@ -11,6 +12,28 @@
     </h:head>
 
     <h:body>
+        <h:form id="BRMS">
+            <p:panel header="BRMSHeader">
+                <h:panelGrid columns="2">
+
+                    <h:outputText value=""/>
+                    <p:commandButton id="submitOnClickCallBRMS" value="CallBRMS" update="@form"
+                                     action="#{TestNCRS.onClickCallBRMS()}"/>
+
+                    <h:outputText value="Work Case ID : "/>
+                    <p:inputText value="#{TestNCRS.workCaseId}"/>
+
+                    <h:outputText value="Result"/>
+                    <p:inputTextarea value="#{TestNCRS.result}" rows="50" cols="100">
+
+                    </p:inputTextarea>
+
+
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+
+
 
         <p:panel id="top" header="Calculate Risk Level Request Message">
             <h:form id="NCRS">
@@ -131,9 +154,11 @@
 
                         </p:inputTextarea>
 
+
                     </h:panelGrid>
                 </p:panel>
             </h:form>
+
 
         </p:panel>
 

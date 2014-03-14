@@ -1,8 +1,10 @@
 package com.clevel.selos.report;
 
+import com.clevel.selos.util.Util;
 import net.sf.jasperreports.engine.*;
 import com.clevel.selos.integration.SELOS;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.joda.time.DateTime;
 import org.primefaces.model.StreamedContent;
 import org.slf4j.Logger;
 
@@ -11,6 +13,8 @@ import javax.inject.Inject;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.Date;
+import java.util.Enumeration;
 import java.util.Map;
 
 public class ReportService implements Serializable {
@@ -26,22 +30,21 @@ public class ReportService implements Serializable {
 
     }
 
-    public void generatePDF(String fileName, Map<String,Object> parameters, JRBeanCollectionDataSource jrBeanCollectionDataSource) throws JRException, IOException {
+    public void generatePDF(String fileName, Map<String,Object> parameters,String pdfName) throws JRException, IOException {
         log.debug("generate pdf.");
-
-        log.debug("-- File [{}]", fileName);
         JasperReport jasperReport = JasperCompileManager.compileReport(fileName);
-        log.debug("-- jasperReport [{}]", jasperReport);
         JasperPrint print ;
-        if(jrBeanCollectionDataSource != null)
-            print = JasperFillManager.fillReport(jasperReport, parameters, jrBeanCollectionDataSource);
-        else
-           print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+
+        log.info("parameters: {}",parameters);
+
+        print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
 
         try {
-            log.debug("report template: {}",reportTemplate);
+
+            String date = Util.createDateTime(new Date());
+
             HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            response.addHeader("Content-disposition", "attachment; filename=report.pdf");
+            response.addHeader("Content-disposition", "attachment; filename="+pdfName+date+".pdf");
             ServletOutputStream servletOutputStream=response.getOutputStream();
             JasperExportManager.exportReportToPdfStream(print, servletOutputStream);
             FacesContext.getCurrentInstance().responseComplete();
@@ -51,10 +54,4 @@ public class ReportService implements Serializable {
             log.error("Error generating pdf report!", e);
         }
     }
-
-    public void printReportByPFD(String fileName, Map<String,Object> parameters, JRBeanCollectionDataSource jrBeanCollectionDataSource,String outputFileName) {
-
-    }
-
-
 }

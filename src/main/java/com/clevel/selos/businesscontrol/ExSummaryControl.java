@@ -49,6 +49,8 @@ public class ExSummaryControl extends BusinessControl {
     private NewCreditFacilityDAO newCreditFacilityDAO;
     @Inject
     private RiskTypeDAO riskTypeDAO;
+    @Inject
+    private DecisionDAO decisionDAO;
 
     @Inject
     private ExSummaryTransform exSummaryTransform;
@@ -525,8 +527,13 @@ public class ExSummaryControl extends BusinessControl {
 //    Sum( วงเงินสินเชื่อหมุนเวียนที่อนุมัต)
     public void calActualWCBorrowerCharacteristic(long workCaseId){ //TODO : Decision , Pls Call me !!
         log.debug("calActualWCBorrowerCharacteristic :: workCaseId : {}",workCaseId);
-        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-        BigDecimal actualWC = newCreditFacility.getTotalApproveCredit();
+//        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+//        BigDecimal actualWC = newCreditFacility.getTotalApproveCredit();
+        Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
+        BigDecimal actualWC = null;
+        if (decision != null) {
+            actualWC = decision.getTotalApproveCredit();
+        }
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         if(exSummary == null){
@@ -706,11 +713,12 @@ public class ExSummaryControl extends BusinessControl {
     public void calGroupExposureBorrowerCharacteristic(long workCaseId){ //TODO: Decision , Credit Facility-Propose , Pls Call me !!
         log.debug("calGroupExposureBorrowerCharacteristic :: workCaseId : {}",workCaseId);
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
         BigDecimal groupExposureBDM = BigDecimal.ZERO;
         BigDecimal groupExposureUW = BigDecimal.ZERO;
-        if(newCreditFacility != null && newCreditFacility.getId() != 0){
-            groupExposureBDM = Util.add(newCreditFacility.getTotalExposure(),newCreditFacility.getTotalPropose());
-            groupExposureUW = Util.add(newCreditFacility.getTotalExposure(),newCreditFacility.getTotalApproveCredit());
+        if((newCreditFacility != null && newCreditFacility.getId() != 0) && (decision != null && decision.getId() != 0)){
+            groupExposureBDM = Util.add(newCreditFacility.getTotalExposure(), newCreditFacility.getTotalPropose());
+            groupExposureUW = Util.add(newCreditFacility.getTotalExposure(), decision.getTotalApproveCredit());
         }
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
@@ -750,6 +758,7 @@ public class ExSummaryControl extends BusinessControl {
             exSummary.setWorkCase(workCase);
         }
         exSummary.setYearInBusiness(year);
+        exSummary.setYearInBusinessMonth(month);
 
         exSummaryDAO.persist(exSummary);
     }

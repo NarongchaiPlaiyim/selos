@@ -34,6 +34,7 @@ import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -198,11 +199,11 @@ public class PrescreenBusinessControl extends BusinessControl {
             customerInfoView.setCustomerEntity(customerEntity);
         }
 
-        if(customerInfoView.getCustomerEntity().getId() == 1) {
+        if(customerInfoView.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()) {
             IndividualResult individualResult = rmInterface.getIndividualInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
             log.info("getCustomerInfoFromRM ::: individualResult : {}", individualResult);
             customerInfoResultSearch = customerBizTransform.tranformIndividual(individualResult);
-        } else if(customerInfoView.getCustomerEntity().getId() == 2){
+        } else if(customerInfoView.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
             CorporateResult corporateResult = rmInterface.getCorporateInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
             log.info("getCustomerInfoFromRM ::: corporateResult : {}", corporateResult);
             customerInfoResultSearch = customerBizTransform.tranformJuristic(corporateResult);
@@ -917,7 +918,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     public void saveCustomerData(List<CustomerInfoView> customerInfoDeleteList, List<CustomerInfoView> customerInfoViewList, WorkCasePrescreen workCasePrescreen){
         //Remove all Customer before add new
-        List<Customer> customerDeleteList = customerTransform.transformToModelList(customerInfoDeleteList, workCasePrescreen, null);
+        List<Customer> customerDeleteList = customerTransform.transformToModelList(customerInfoDeleteList, workCasePrescreen, null, getCurrentUser());
         /*log.info("saveCustomer ::: customerDeleteList size : {}", customerDeleteList.size());
         for(Customer customer : customerDeleteList){
             addressDAO.delete(customer.getAddressesList());
@@ -949,7 +950,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         //Add all Customer from customer list
         for(CustomerInfoView customerInfoView : customerInfoViewList){
             Customer customer = new Customer();
-            customer = customerTransform.transformToModel(customerInfoView, workCasePrescreen, null);
+            customer = customerTransform.transformToModel(customerInfoView, workCasePrescreen, null, getCurrentUser());
             customer.setIsSpouse(0);
             customer.setSpouseId(0);
             if(customer.getCustomerOblInfo() != null){
@@ -972,7 +973,7 @@ public class PrescreenBusinessControl extends BusinessControl {
             if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
                 if(customer.getIndividual().getMaritalStatus() != null && customer.getIndividual().getMaritalStatus().getSpouseFlag() == 1){
                     Customer spouse;
-                    spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), workCasePrescreen, null);
+                    spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), workCasePrescreen, null, getCurrentUser());
                     spouse.setIsSpouse(1);
                     spouse.setSpouseId(0);
                     if(spouse.getCustomerOblInfo() != null){
@@ -1095,7 +1096,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     public void savePreScreenChecker(List<CustomerInfoView> customerInfoViews, List<NcbView> ncbViewList, int customerEntityId, long workCasePreScreenId){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-        List<Customer> customerList = customerTransform.transformToModelList(customerInfoViews, workCasePrescreen, null);
+        List<Customer> customerList = customerTransform.transformToModelList(customerInfoViews, workCasePrescreen, null, getCurrentUser());
 
         log.info("saveCustomer ::: customerList size : {}", customerList.size());
         for(Customer customer : customerList){
@@ -1175,7 +1176,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     public void savePreScreenCheckerOnlyCSI(List<CustomerInfoView> customerInfoViews, int customerEntityId, long workCasePreScreenId){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-        List<Customer> customerList = customerTransform.transformToModelList(customerInfoViews, workCasePrescreen, null);
+        List<Customer> customerList = customerTransform.transformToModelList(customerInfoViews, workCasePrescreen, null, getCurrentUser());
 
         log.info("saveCustomer ::: customerList : {}", customerList);
         for(Customer customer : customerList){
@@ -1248,8 +1249,9 @@ public class PrescreenBusinessControl extends BusinessControl {
         }
     }*/
 
-    public void duplicateData(long workCasePreScreenId) throws Exception{
+    public void duplicateData(long workCasePreScreenId, String queueName, long actionCode) throws Exception{
         stpExecutor.duplicateData(workCasePreScreenId);
+        closeSale(workCasePreScreenId, queueName, actionCode);
     }
 
     // *** Function for BPM *** //
@@ -1257,8 +1259,8 @@ public class PrescreenBusinessControl extends BusinessControl {
         bpmExecutor.assignChecker(workCasePreScreenId, queueName, checkerId, actionCode, "");
     }
 
-    public void cancelCase(long workCasePreScreenId, String queueName, long actionCode) throws Exception {
-        bpmExecutor.cancelCase(workCasePreScreenId, 0, queueName, actionCode);
+    public void cancelCase(long workCasePreScreenId, String queueName, long actionCode, String reason, String remark) throws Exception {
+        bpmExecutor.cancelCase(workCasePreScreenId, 0, queueName, actionCode, reason, remark);
     }
 
     public void closeSale(long workCasePreScreenId, String queueName, long actionCode) throws Exception {

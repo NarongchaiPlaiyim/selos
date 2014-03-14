@@ -54,7 +54,7 @@
                         navigator="true"
                         locale="th_TH"
                         showButtonPanel="true"
-                        readonly="#{creditFacPropose.flagComs}"/>
+                        disabled="#{creditFacPropose.flagComs}"/>
     </td>
 </tr>
 
@@ -117,14 +117,17 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.creditType.caption')}"/>
     </td>
     <td class="left" colspan="3">
-        <p:dataTable var="creditTypeDetailItem"
-                     value="#{creditFacPropose.newCollateralView.proposeCreditDetailViewList}"
+        <p:dataTable value="#{creditFacPropose.proposeCreditDetailViewList}"
+                     var="creditTypeDetailItem"
+                     selection="#{creditFacPropose.selectedCollateralCrdTypeItems}"
+                     rowKey="#{creditTypeDetailItem.seq}"
+                     rowIndexVar="rowIndex"
                      style="width: 100%;"
                      editMode="#{creditFacPropose.flagComs}">
 
             <p:columnGroup type="header">
                 <p:row>
-                    <p:column style="width: 5%; padding: 5px 10px !important;"/>
+                    <p:column style="width: 5%; padding: 4px 10px !important;" selectionMode="multiple" />
                     <p:column style="width: 40%; padding: 5px 10px !important;"
                               headerText="#{msg.get('app.credit.facility.propose.label.collateral.account')}"/>
                     <p:column style="width: 10%; padding: 5px 10px !important;"
@@ -139,9 +142,7 @@
 
             </p:columnGroup>
 
-            <p:column styleClass="center">
-                <h:selectBooleanCheckbox value="#{creditTypeDetailItem.noFlag}"/>
-            </p:column>
+            <p:column styleClass="center" selectionMode="multiple"/>
 
             <p:column styleClass="left top">
                 <h:outputText value="#{creditTypeDetailItem.accountName}"/><br/>
@@ -242,7 +243,7 @@
     </td>
     <td class="left" colspan="3">
         <p:inputText value="#{CollateralHeaderDetailView.existingCredit}"
-                     maxlength="17"
+                     maxlength="14"
                      onclick="this.select()"
                      onkeydown="return onKeyDownMoney(event);"
                      onkeypress="return onKeyPressMoney(event);"
@@ -285,7 +286,7 @@
     </td>
     <td class="left" colspan="3">
         <p:inputText value="#{CollateralHeaderDetailView.appraisalValue}"
-                     maxlength="17"
+                     maxlength="14"
                      onclick="this.select()"
                      onkeydown="return onKeyDownMoney(event);"
                      onkeypress="return onKeyPressMoney(event);"
@@ -388,8 +389,8 @@
             <p:column styleClass="left top">
                 <h:outputText value="#{newCollateralSubView.subCollateralType.description}"
                               rendered="#{not empty newCollateralSubView.subCollateralType}"/><br/>
-                <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.address')} : #{newCollateralSubView.address}"/><br/>
-                <h:outputText value="#{msg.get('app.credit.facility.propose.label.subcoll.titleDeed')}: #{newCollateralSubView.landOffice}"/>
+                <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.address')}  #{newCollateralSubView.address}"/><br/>
+                <h:outputText value="#{msg.get('app.credit.facility.propose.label.subcoll.titleDeed')} #{newCollateralSubView.landOffice}"/>
             </p:column>
 
             <p:column styleClass="left top">
@@ -435,7 +436,7 @@
 
             <p:column styleClass="right top">
                 <h:outputText value="#{newCollateralSubView.appraisalValue}"
-                              maxlength="17" >
+                              maxlength="14" >
                     <f:convertNumber pattern="#,##0.##"
                                      minFractionDigits="2"
                                      maxFractionDigits="2"
@@ -445,7 +446,7 @@
 
             <p:column styleClass="right top">
                 <h:outputText value="#{newCollateralSubView.mortgageValue}"
-                              maxlength="17" >
+                              maxlength="14" >
                     <f:convertNumber pattern="#,##0.##"
                                      minFractionDigits="2"
                                      maxFractionDigits="2"
@@ -460,7 +461,6 @@
                                  process="@this"
                                  oncomplete="subCollateralInfoDlg.show();"
                                  disabled="#{creditFacPropose.flagComs}">
-                    <!--rendered="#{creditFacPropose.flagButtonCollateral}"-->
                     <f:setPropertyActionListener value="#{i.index}"
                                                  target="#{creditFacPropose.rowCollHeadIndex}"/>
                     <f:setPropertyActionListener value="#{newCollateralSubView}"

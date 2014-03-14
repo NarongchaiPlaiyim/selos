@@ -84,13 +84,13 @@ public class NewCollateralSub implements Serializable {
     @JoinColumn(name = "new_collateral_head_id")
     private NewCollateralHead newCollateralHead;
 
-    @OneToMany(mappedBy = "newCollateralSub", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "newCollateralSub",cascade=CascadeType.ALL)
     private List<NewCollateralSubMortgage> newCollateralSubMortgageList;
 
-    @OneToMany(mappedBy = "newCollateralSub", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "newCollateralSub",cascade=CascadeType.ALL)
     private List<NewCollateralSubOwner> newCollateralSubOwnerList;
 
-    @OneToMany(mappedBy = "newCollateralSub", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "newCollateralSub",cascade=CascadeType.ALL)
     private List<NewCollateralSubRelated> newCollateralSubRelatedList;
 
     public long getId() {

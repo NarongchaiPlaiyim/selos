@@ -9,7 +9,7 @@ public class BankAccountStatusView implements Serializable {
     private int id;
     private String code;
     private String description;
-    private BankAccountTypeView bankAccountTypeView;
+    private String dataSource;
     private int active;
 
     public int getId() {
@@ -36,12 +36,12 @@ public class BankAccountStatusView implements Serializable {
         this.description = description;
     }
 
-    public BankAccountTypeView getBankAccountTypeView() {
-        return bankAccountTypeView;
+    public String getDataSource() {
+        return dataSource;
     }
 
-    public void setBankAccountTypeView(BankAccountTypeView bankAccountTypeView) {
-        this.bankAccountTypeView = bankAccountTypeView;
+    public void setDataSource(String dataSource) {
+        this.dataSource = dataSource;
     }
 
     public int getActive() {
@@ -58,7 +58,7 @@ public class BankAccountStatusView implements Serializable {
                 .append("id", id)
                 .append("code", code)
                 .append("description", description)
-                .append("bankAccountTypeView", bankAccountTypeView)
+                .append("dataSource", dataSource)
                 .append("active", active)
                 .toString();
     }

@@ -607,7 +607,7 @@ public class CustomerInfoIndividual implements Serializable {
         }
 
 //        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getRelation().getId() == RelationValue.BORROWER.value()){
-        if(customerInfoView.getSpouse() != null && referenceSpouseCusId == RelationValue.BORROWER.value()){
+        if(customerInfoView.getSpouse() != null && relationSpouseCusId == RelationValue.BORROWER.value()){
             isEditSpouseBorrower = true;
             relationSpouseList = relationCustomerDAO.getListRelation(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
         }else{
@@ -1547,24 +1547,24 @@ public class CustomerInfoIndividual implements Serializable {
                         customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
                     }
 
-                    enableDocumentType = false;
-                    enableCitizenId = false;
+                    enableSpouseDocumentType = false;
+                    enableSpouseCitizenId = false;
 
                     messageHeader = "Information.";
                     message = "Search customer found.";
                     severity = "info";
                 }else{
                     log.debug("onSearchSpouseCustomerInfo ::: customer not found.");
-                    enableDocumentType = true;
-                    enableCitizenId = true;
+                    enableSpouseDocumentType = true;
+                    enableSpouseCitizenId = true;
 
                     messageHeader = "Information.";
                     message = "Search customer not found.";
                     severity = "info";
                 }
             } else {
-                enableDocumentType = true;
-                enableCitizenId = true;
+                enableSpouseDocumentType = true;
+                enableSpouseCitizenId = true;
                 messageHeader = "Information.";
                 message = customerInfoResultView.getReason();
                 severity = "info";
@@ -1584,8 +1584,8 @@ public class CustomerInfoIndividual implements Serializable {
             onChangeDistrictEditForm5();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
-            enableDocumentType = true;
-            enableCitizenId = true;
+            enableSpouseDocumentType = true;
+            enableSpouseCitizenId = true;
             CustomerInfoView cus = new CustomerInfoView();
             cus.reset();
             customerInfoView.setSpouse(cus);

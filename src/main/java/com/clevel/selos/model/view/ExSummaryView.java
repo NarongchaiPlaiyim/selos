@@ -72,7 +72,7 @@ public class ExSummaryView  implements Serializable {
     private String uwComment;
 
     //
-    private String yearInBusinessMonth;
+    private int yearInBusinessMonth;
 
     public  ExSummaryView(){}
 
@@ -367,11 +367,11 @@ public class ExSummaryView  implements Serializable {
         this.owner = owner;
     }
 
-    public String getYearInBusinessMonth() {
+    public int getYearInBusinessMonth() {
         return yearInBusinessMonth;
     }
 
-    public void setYearInBusinessMonth(String yearInBusinessMonth) {
+    public void setYearInBusinessMonth(int yearInBusinessMonth) {
         this.yearInBusinessMonth = yearInBusinessMonth;
     }
 

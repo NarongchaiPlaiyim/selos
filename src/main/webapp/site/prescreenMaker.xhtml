@@ -516,6 +516,7 @@
                                             <td>
                                                 <p:selectOneMenu id="selRefinanceInBank" value="#{prescreenMaker.prescreenView.refinanceInBank.code}"
                                                                  disabled="#{prescreenMaker.prescreenView.refinanceIn == 1 || prescreenMaker.prescreenView.refinanceIn == 0}"
+                                                                 required="#{prescreenMaker.prescreenView.refinanceIn == 2 and not empty param[savePreMakerButton.clientId]}"
                                                                  size="1" style="width: 200px;">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                     <f:selectItems value="#{prescreenMaker.refinanceList}"
@@ -543,6 +544,7 @@
                                             <td>
                                                 <p:selectOneMenu id="selRefinanceOutBank" value="#{prescreenMaker.prescreenView.refinanceOutBank.code}"
                                                                  disabled="#{prescreenMaker.prescreenView.refinanceOut == 1 || prescreenMaker.prescreenView.refinanceOut == 0}"
+                                                                 required="#{prescreenMaker.prescreenView.refinanceOut == 2 and not empty param[savePreMakerButton.clientId]}"
                                                                  size="1" style="width: 200px;">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                     <f:selectItems value="#{prescreenMaker.refinanceList}"
@@ -692,6 +694,7 @@
     </p:dialog>
     <p:dialog id="customerDialog" widgetVar="customerDlg" header="Customer Information"
               onShow="hideWindowsScrollBar();" onHide="showWindowsScrollBar()" resizable="false"
+              closable="false"
               modal="true" width="850" height="550">
         <ui:include src="dialog/prescreenCustomerDialog.xhtml"/>
     </p:dialog>

@@ -14,6 +14,7 @@ public class CheckOtherDocView implements Serializable {
     private boolean expire;
     private String remark;
     private boolean disabledCompleteFlag;
+    private String link;
 
     public CheckOtherDocView() {
         init();
@@ -25,6 +26,14 @@ public class CheckOtherDocView implements Serializable {
 
     private void init(){
 
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public boolean isDisabledCompleteFlag() {
