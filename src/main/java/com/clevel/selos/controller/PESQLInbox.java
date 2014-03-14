@@ -66,9 +66,11 @@ public class PESQLInbox implements Serializable
 
         //Clear all session before selectInbox
         HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("workCasePreScreenId", 0);
-        session.setAttribute("workCaseId", 0);
+        session.setAttribute("workCasePreScreenId", 0L);
+        session.setAttribute("workCaseId", 0L);
+        session.setAttribute("stepId", 0L);
         session.setAttribute("requestAppraisal", 0);
+        session.setAttribute("queueName","");
 
         try
         {
