@@ -259,10 +259,12 @@ public class CreditFacProposeControl extends BusinessControl {
                                     if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
                                         log.debug("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                         sumTotalPropose = sumTotalPropose.add(BigDecimal.ZERO);
-                                    } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
+                                    }
+                                    else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
                                         log.debug("LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                         sumTotalPropose = sumTotalPropose.add(newCreditDetailView.getLimit());
-                                    } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //limit * %PCE
+                                    }
+                                    else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //limit * %PCE
                                         log.debug("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                         sumTotalPropose = sumTotalPropose.add(Util.multiply(newCreditDetailView.getLimit(), newCreditDetailView.getPCEPercent()));
                                     }
@@ -272,15 +274,18 @@ public class CreditFacProposeControl extends BusinessControl {
                                     if (productFormula.getDbrCalculate() == 1) {// No
                                         log.info("NO calculate :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
                                         sumTotalNonLoanDbr = BigDecimal.ZERO;
-                                    } else if (productFormula.getDbrCalculate() == 2) {// Yes
+                                    }
+                                    else if (productFormula.getDbrCalculate() == 2) {// Yes
                                         log.debug("YES :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
                                         if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
                                             log.debug("NOT_CALCULATE :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
                                             sumTotalLoanDbr = sumTotalLoanDbr.add(BigDecimal.ZERO);
-                                        } else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
+                                        }
+                                        else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
                                             log.debug("INSTALLMENT :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
                                             sumTotalLoanDbr = sumTotalLoanDbr.add(newCreditDetailView.getInstallment());
-                                        } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
+                                        }
+                                        else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
                                             log.debug("INT_YEAR :: productFormula.getDbrMethod() :: {}, productFormula.getDbrSpread() :::{}", productFormula.getDbrMethod(), productFormula.getDbrSpread());
                                             sumTotalLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYear(newCreditDetailView, productFormula.getDbrSpread()));
                                         }
@@ -316,10 +321,13 @@ public class CreditFacProposeControl extends BusinessControl {
 
     public BigDecimal calTotalProposeLoanDBRForIntYear(NewCreditDetailView newCreditDetailView, BigDecimal dbrSpread) {
         log.debug("calTotalProposeLoanDBRForIntYear start :: newCreditDetailView and  dbrSpread ::{}", newCreditDetailView, dbrSpread);
-        log.info("limit :: {}", newCreditDetailView.getLimit());
 
         BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
-        if (newCreditDetailView.getNewCreditTierDetailViewList() != null) {
+        if (newCreditDetailView != null &&
+            newCreditDetailView.getNewCreditTierDetailViewList() != null &&
+            newCreditDetailView.getNewCreditTierDetailViewList().size() > 0) {
+
+            log.info("limit :: {}", newCreditDetailView.getLimit());
             log.info("newCreditTierDetailViews.size :: {}", newCreditDetailView.getNewCreditTierDetailViewList().size());
 
             BigDecimal oneHundred = new BigDecimal("100");
@@ -385,7 +393,8 @@ public class CreditFacProposeControl extends BusinessControl {
                             // Count core asset and none core asset
                             if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
                                 totalNumOfCoreAsset = Util.add(totalNumOfCoreAsset, BigDecimal.ONE);
-                            } else if (PotentialCollateralValue.NONE_CORE_ASSET.id() == potentialCollateral.getId()) {
+                            }
+                            else if (PotentialCollateralValue.NONE_CORE_ASSET.id() == potentialCollateral.getId()) {
                                 totalNumOfNonCoreAsset = Util.add(totalNumOfNonCoreAsset, BigDecimal.ONE);
                             }
 
@@ -414,9 +423,11 @@ public class CreditFacProposeControl extends BusinessControl {
                         if (customerEntity != null) {
                             if (GuarantorCategory.INDIVIDUAL.value() == customerEntity.getId()) {
                                 totalIndiGuaranteeAmt = Util.add(totalIndiGuaranteeAmt, guarantorDetailView.getTotalLimitGuaranteeAmount());
-                            } else if (GuarantorCategory.JURISTIC.value() == customerEntity.getId()) {
+                            }
+                            else if (GuarantorCategory.JURISTIC.value() == customerEntity.getId()) {
                                 totalJuriGuaranteeAmt = Util.add(totalJuriGuaranteeAmt, guarantorDetailView.getTotalLimitGuaranteeAmount());
-                            } else if (GuarantorCategory.TCG.value() == customerEntity.getId()) {
+                            }
+                            else if (GuarantorCategory.TCG.value() == customerEntity.getId()) {
                                 totalTCGGuaranteeAmt = Util.add(totalTCGGuaranteeAmt, guarantorDetailView.getTotalLimitGuaranteeAmount());
                             }
                         }
@@ -903,24 +914,24 @@ public class CreditFacProposeControl extends BusinessControl {
 //            }
 
 
-            for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()) {
+            for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()){
                 FeeDetailView feeDetailView = feeTransform.transformToView(pricingFee);
                 // find productProgram
-                ProductProgramView productProgramView = productTransform.transformToView(productProgramDAO.findById((int) feeDetailView.getCreditDetailViewId()));
+                ProductProgramView productProgramView = productTransform.transformToView(productProgramDAO.findById((int)feeDetailView.getCreditDetailViewId()));
                 newFeeDetailView.setProductProgram(productProgramView.getDescription());
                 if (feeDetailView.getFeeTypeView().getId() == 9) {//type=9,(Front-End-Fee)
                     newFeeDetailView.setStandardFrontEndFee(feeDetailView);
-                } else if (feeDetailView.getFeeTypeView().getId() == 15) { //type=15,(Prepayment Fee)
+                }else if (feeDetailView.getFeeTypeView().getId() == 15) { //type=15,(Prepayment Fee)
                     newFeeDetailView.setPrepaymentFee(feeDetailView);
-                } else if (feeDetailView.getFeeTypeView().getId() == 20) {//type=20,(CancellationFee)
+                }else if (feeDetailView.getFeeTypeView().getId() == 20) {//type=20,(CancellationFee)
                     newFeeDetailView.setCancellationFee(feeDetailView);
-                } else if (feeDetailView.getFeeTypeView().getId() == 21) { //type=21,(ExtensionFee)
+                }else if (feeDetailView.getFeeTypeView().getId() == 21) { //type=21,(ExtensionFee)
                     newFeeDetailView.setExtensionFee(feeDetailView);
-                } else if (feeDetailView.getFeeTypeView().getId() == 22) {//type=22,(CommitmentFee)
+                }else  if(feeDetailView.getFeeTypeView().getId()==22){//type=22,(CommitmentFee)
                     newFeeDetailView.setCommitmentFee(feeDetailView);
                 }
 
-                log.debug("FeePaymentMethodView():::: {}", feeDetailView.getFeePaymentMethodView().getBrmsCode());
+                log.debug("FeePaymentMethodView():::: {}",feeDetailView.getFeePaymentMethodView().getBrmsCode());
                 newFeeDetailViewList.add(newFeeDetailView);
             }
 

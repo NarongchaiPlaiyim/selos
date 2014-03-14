@@ -387,7 +387,29 @@ public class Decision implements Serializable {
     public void onEditApproveCredit() {
         log.debug("onEditApproveCredit() selectedApproveCredit: {}", selectedApproveCredit);
 
-        onChangeRequestType();
+        if (RequestTypes.CHANGE.value() == selectedApproveCredit.getRequestType()) {   //change
+            prdGroupToPrdProgramViewList = _prdGroupToPrdProgramAll;
+
+            cannotEditStandard = false;
+            cannotAddTier = false;
+        }
+        else if (RequestTypes.NEW.value() == selectedApproveCredit.getRequestType()) {
+            if (productGroup != null) {
+                prdGroupToPrdProgramViewList = _prdGroupToPrdProgramByGroup;
+            }
+            cannotEditStandard = true;
+
+            if (modeEditCredit) {
+                if (selectedApproveCredit.getNewCreditTierDetailViewList() == null || selectedApproveCredit.getNewCreditTierDetailViewList().isEmpty()) {
+                    cannotAddTier = true;
+                } else {
+                    cannotAddTier = false;
+                }
+            } else {
+                // on click add new
+                cannotAddTier = true;
+            }
+        }
 
         prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(selectedApproveCredit.getProductProgramView());
 
@@ -525,6 +547,7 @@ public class Decision implements Serializable {
         if (RequestTypes.CHANGE.value() == selectedApproveCredit.getRequestType()) {   //change
             prdGroupToPrdProgramViewList = _prdGroupToPrdProgramAll;
             selectedApproveCredit.setProductProgramView(new ProductProgramView());
+
             cannotEditStandard = false;
             cannotAddTier = false;
         }
@@ -1022,23 +1045,21 @@ public class Decision implements Serializable {
                     guarantorDetailAdd.setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
                 }
 
+                List<ProposeCreditDetailView> newCreditTypeItems = new ArrayList<ProposeCreditDetailView>();
                 for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
-                    guarantorDetailAdd.getProposeCreditDetailViewList().add(creditTypeItem);
+                    newCreditTypeItems.add(creditTypeItem);
                     sumGuaranteeAmtPerCrdType = sumGuaranteeAmtPerCrdType.add(creditTypeItem.getGuaranteeAmount());
 
                     log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
                     log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
                 }
-
+                guarantorDetailAdd.setProposeCreditDetailViewList(newCreditTypeItems);
                 guarantorDetailAdd.setTotalLimitGuaranteeAmount(sumGuaranteeAmtPerCrdType);
 
-                if (decisionView.getApproveGuarantorList() != null) {
-                    decisionView.getApproveGuarantorList().add(guarantorDetailAdd);
-                } else {
-                    List<NewGuarantorDetailView> newApproveGuarantorList = new ArrayList<NewGuarantorDetailView>();
-                    newApproveGuarantorList.add(guarantorDetailAdd);
-                    decisionView.setApproveGuarantorList(newApproveGuarantorList);
+                if (decisionView.getApproveGuarantorList() == null) {
+                    decisionView.setApproveGuarantorList(new ArrayList<NewGuarantorDetailView>());
                 }
+                decisionView.getApproveGuarantorList().add(guarantorDetailAdd);
 
                 success = true;
             } else {

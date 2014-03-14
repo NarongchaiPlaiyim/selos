@@ -144,14 +144,19 @@ public class AppraisalRequest implements Serializable {
         init();
         appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, workCasePreScreenId);
         if(!Util.isNull(appraisalView)){
+            log.debug("-- AppraisalView.id[{}]", appraisalView.getId());
             appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
             if(Util.isZero(appraisalDetailViewList.size())){
                 appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+            }
+            for(AppraisalDetailView view : appraisalDetailViewList){
+                log.debug("-- AppraisalDetailView.id[{}]", view.getId());
             }
             appraisalContactDetailView = appraisalView.getAppraisalContactDetailView();
             if(Util.isNull(appraisalContactDetailView)){
                 appraisalContactDetailView = new AppraisalContactDetailView();
             }
+            log.debug("-- AppraisalContactDetailView.id[{}]", appraisalContactDetailView.getId());
         } else {
             appraisalView = new AppraisalView();
             log.debug("-- AppraisalView[New] created");
@@ -168,10 +173,10 @@ public class AppraisalRequest implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         if(appraisalDetailViewMandate()){
             complete = true;
-            if(ModeForButton.ADD.equals(modeForButton)){
+            if(ModeForButton.ADD == modeForButton){
                 appraisalDetailViewList.add(appraisalDetailViewDialog);
                 appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
-            }else if(ModeForButton.EDIT.equals(modeForButton)){
+            }else if(ModeForButton.EDIT == modeForButton){
                 log.debug("-- RowIndex[{}]", rowIndex);
                 appraisalDetailViewList.set(rowIndex, appraisalDetailViewDialog);
                 appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
