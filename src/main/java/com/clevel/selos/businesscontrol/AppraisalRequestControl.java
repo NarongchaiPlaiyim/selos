@@ -69,15 +69,17 @@ public class AppraisalRequestControl extends BusinessControl {
 
     @Inject
     public AppraisalRequestControl(){
-        init();
+
     }
 
     private void init(){
+        log.debug("-- init()");
         appraisalView = null;
     }
 	
 	public AppraisalView getAppraisalRequest(final long workCaseId, final long workCasePreScreenId){
         log.info("-- getAppraisalRequest WorkCaseId : {}, workCasePreScreenId : {}, User.id[{}]", workCaseId, workCasePreScreenId, getCurrentUserID());
+        init();
         if(Long.toString(workCaseId) != null && workCaseId != 0){
             appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
         } else if(Long.toString(workCasePreScreenId) != null && workCasePreScreenId != 0){
