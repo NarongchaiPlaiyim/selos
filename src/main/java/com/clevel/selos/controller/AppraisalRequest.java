@@ -143,6 +143,7 @@ public class AppraisalRequest implements Serializable {
         preRender();
         init();
         appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, workCasePreScreenId);
+        log.debug("appraisalView : {}", appraisalView);
         if(!Util.isNull(appraisalView)){
             appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
             if(Util.isZero(appraisalDetailViewList.size())){

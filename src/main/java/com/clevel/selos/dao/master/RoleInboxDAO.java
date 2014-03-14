@@ -2,14 +2,11 @@ package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.Action;
 import com.clevel.selos.model.db.master.InboxType;
 import com.clevel.selos.model.db.master.Role;
 import com.clevel.selos.model.db.relation.RelRoleBasedInbox;
 import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
@@ -53,7 +50,7 @@ public class RoleInboxDAO extends GenericDAO<InboxType, Long> {
     String stringOfInboxValues = null;
     long inboxValues ;
 
-    public List<String> getUserBasedRole(int inboxRoleId,RelRoleBasedInbox relRoleBasedInbox,InboxType inboxType){
+    public List<String> getUserBasedRole(int inboxRoleId, RelRoleBasedInbox relRoleBasedInbox, InboxType inboxType){
 
         Criteria cr = getSession().createCriteria(RelRoleBasedInbox.class)
                 .setProjection(Projections.projectionList()
@@ -79,7 +76,7 @@ public class RoleInboxDAO extends GenericDAO<InboxType, Long> {
         Criteria criteria2 = getSession().createCriteria(InboxType.class);
 
         criteria2.setProjection(Projections.projectionList().add(Projections.property("inbox_name"), "inbox_name")).add(Restrictions.in("id", inboxList)).setResultTransformer(Transformers.aliasToBean(InboxType.class));
-//        inboxTypeList = Util.safetyList(criteria2.list());
+        inboxTypeList = Util.safetyList(criteria2.list());
 
         iterator = inboxTypeList.iterator();
 
