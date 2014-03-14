@@ -188,6 +188,9 @@ public class AppraisalRequest implements Serializable {
     }
     
     public void onEditAppraisalDetailView(){
+        titleDeedFlag = false;
+        purposeFlag = false;
+        numberOfDocumentsFlag = false;
         modeForButton = ModeForButton.EDIT;
         log.debug("-- onEditAppraisalDetailView() RowIndex[{}]", rowIndex);
         appraisalDetailViewDialog = appraisalDetailViewSelected;
