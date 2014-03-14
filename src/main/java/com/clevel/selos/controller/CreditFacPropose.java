@@ -1228,6 +1228,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             subCollateralTypeList = subCollateralTypeDAO.findByCollateralType(collateralType);
             subCollateralTypeViewList = subCollateralTypeTransform.transformToView(subCollateralTypeList);
             log.debug("subCollateralTypeViewList ::: {}", subCollateralTypeViewList.size());
+            log.debug("subCollateralTypeList ::: {}", subCollateralTypeList.size());
         }
 
         newCollateralSubView.setSubCollateralType(subCollateralDetailItem.getSubCollateralType());

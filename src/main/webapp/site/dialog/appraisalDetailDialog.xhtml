@@ -12,7 +12,10 @@
                     <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.titleDeed')}"/>
                 </td>
                 <td class="title" style="width: 200px;">
-                    <p:inputText value="#{appraisalRequest.appraisalDetailViewDialog.titleDeed}" style = "#{appraisalRequest.titleDeedFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " />
+                    <p:inputText value="#{appraisalRequest.appraisalDetailViewDialog.titleDeed}" style = "#{appraisalRequest.titleDeedFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
+                                 onkeydown="return onKeyPressName2(event);"
+                                 onkeypress="return onKeyPressName2(event);"
+                            />
                 </td>
             </tr>
             <tr>
@@ -49,7 +52,8 @@
                     <p:inputText id="numberOfDocuments"  styleClass="right"
                                  onkeypress="return onKeyPressNumber(event);" onkeydown="return onKeyDownNumber(event);"
                                  value="#{appraisalRequest.appraisalDetailViewDialog.numberOfDocuments}"
-                                 style = "#{appraisalRequest.numberOfDocumentsFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " >
+                                 style = "#{appraisalRequest.numberOfDocumentsFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
+                                maxlength="4">
                         <p:ajax event="blur" update=":appraisalDetailDlgForm:numberOfDocuments"/>
                     </p:inputText>
                     <h:outputText value="     #{msg.get('app.appraisal.appraisalDetail.dialog.copy')}"/>

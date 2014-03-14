@@ -1,18 +1,58 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
-    <h:outputStylesheet name="css/menubar.css" />
     <h:outputStylesheet name="css/jquery.menu.css" />
     <h:outputScript library="js" name="jquery.menu.js" />
 
-    <div id="menu_bar" style="height:28px; background-color: #0470bb;">
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function () {
+            selosmenu.init({
+                mainmenuid: "selosmenu", //menu DIV id
+                orientation: 'h', //Horizontal or vertical menu: Set to "h" or "v"
+                classname: 'selosmenu'//, //class added to menu's outer DIV
+            });
+        });
+        //]]>
+    </script>
+
+    <div id="selosmenu" class="selosmenu">
+        <ul>
+            <h:panelGroup id="pnl_menu_inbox" styleClass="panel">
+                <li id="mnuinbox">
+                    <a href="inbox.jsf" title="#{msg.get('app.menu.inbox')}">#{msg.get('app.menu.inbox')}</a>
+                    <ul>
+                        <ui:repeat value="#{inbox.inboxTypeArrayList}" var="inboxName">
+                                <li id="submnu_#{inboxName.inbox_name}">
+                                    <a href="generic_inbox_mybox_post.jsf?id=#{inboxName.inbox_name}" >#{inboxName.inbox_name}(<h:outputText value="#{peDBCount.PEInboxCount(inboxName.inbox_name)}"/>)</a>
+                                </li>
+                        </ui:repeat>
+                    </ul>
+                </li>
+            </h:panelGroup>
+            <h:panelGroup id="pnl_menu_search" styleClass="panel">
+                <li id="mnusearch">
+                    <a href="generic_search.jsf" title="Search">Search</a>
+                    <ul>
+                        <li id="submnu_search"><a href="generic_search.jsf" title="Search">Search</a></li>
+                        <li id="submnu_reassign"><a href="generic_reassign.jsf" title="Reassign">Reassign</a></li>
+                        <li id="submnu_changeowner"><a href="generic_changeowner.jsf" title="Change Owner">Change Owner</a></li>
+                        <li id="submnu_trackca"><a href="generic_track_ca.jsf" title="Track CA">Track CA</a></li>
+                    </ul>
+                </li>
+            </h:panelGroup>
+        </ul>
+        <br style="clear: left"/>
+    </div>
+    <div id="menu_sub" style="height: 14px;"><!-- --></div>
+    <div class="clear"></div>
+
+    <!--<div id="menu_bar" style="height:28px; background-color: #0470bb;">
         <ul id="main_menu" class="sf-menu sf-navbar">
             <li>
                 <a style="display: block" class="sf-with-ul current" href="inbox.jsf">Inbox</a>
-
                 <ul>
                     <ui:repeat value="#{inbox.inboxTypeArrayList}" var="inboxName">
                         <h:panelGroup id="pnl_menu_inbox"
@@ -36,5 +76,5 @@
         </ul>
     </div>
     <div id="menu_sub" style="height: 28px; background-color: #0995F2;"></div>
-    <div class="clear"></div>
+    <div class="clear"></div>-->
 </ui:composition>
