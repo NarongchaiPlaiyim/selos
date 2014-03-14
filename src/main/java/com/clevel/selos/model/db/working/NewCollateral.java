@@ -252,8 +252,9 @@ public class NewCollateral implements Serializable {
     }
 
     public void setNewCollateralCreditList(List<NewCollateralCredit> newCollateralCreditList) {
-        this.newCollateralCreditList.clear();
-        this.newCollateralCreditList.addAll(newCollateralCreditList);
+        this.newCollateralCreditList = newCollateralCreditList;
+//        this.newCollateralCreditList.clear();
+//        this.newCollateralCreditList.addAll(newCollateralCreditList);
     }
 
     public WorkCase getWorkCase() {

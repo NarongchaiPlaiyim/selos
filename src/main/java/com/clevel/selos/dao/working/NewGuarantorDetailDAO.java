@@ -27,6 +27,7 @@ public class NewGuarantorDetailDAO extends GenericDAO<NewGuarantorDetail, Long> 
         log.info("findNewGuarantorByNewCreditFacility ::: {}", newCreditFacility.getId());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
+        criteria.addOrder(Order.asc("id"));
         criteria.setFetchMode("guarantorName", FetchMode.SELECT);
         List<NewGuarantorDetail> newGuarantorDetails = (List<NewGuarantorDetail>)criteria.list();
         log.info("newGuarantorDetails ::: size : {}", newGuarantorDetails.size());
