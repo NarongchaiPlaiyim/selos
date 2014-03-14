@@ -1318,8 +1318,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onAddMortgageType() {
         log.debug("onAddMortgageType() mortgageType.id: {}", newCollateralSubView.getMortgageType().getId());
-        if (newCollateralSubView.getMortgageType() != null && newCollateralSubView.getMortgageType().getId() != 0) {
 
+        if (newCollateralSubView.getMortgageType() != null && newCollateralSubView.getMortgageType().getId() != 0) {
             // Validate duplicate select
             if (newCollateralSubView.getMortgageList().size() > 0) {
                 for (MortgageType mortgageType : newCollateralSubView.getMortgageList()) {
@@ -1333,9 +1333,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 }
             }
             // Add to list
-            MortgageType mortgageType =  getMortgageTypeById(newCollateralSubView.getMortgageType().getId());
-            log.debug("onAddMortgageType :: {} ", newCollateralSubView.getMortgageType());
-            newCollateralSubView.getMortgageList().add(mortgageType);
+            newCollateralSubView.getMortgageList().add(
+                    getMortgageTypeById(newCollateralSubView.getMortgageType().getId()));
         }
     }
 

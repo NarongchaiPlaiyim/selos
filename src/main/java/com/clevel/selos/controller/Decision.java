@@ -901,6 +901,7 @@ public class Decision implements Serializable {
 
     public void onAddMortgageType() {
         log.debug("onAddMortgageType() id: {}", selectedApproveSubColl.getMortgageType().getId());
+
         if (selectedApproveSubColl.getMortgageType().getId() != 0) {
             if (selectedApproveSubColl.getMortgageList() == null) {
                 selectedApproveSubColl.setMortgageList(new ArrayList<MortgageType>());
