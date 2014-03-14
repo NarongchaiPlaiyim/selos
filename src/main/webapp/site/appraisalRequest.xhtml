@@ -155,7 +155,9 @@
                                             </td>
                                             <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName1}"
-                                                             style = "#{appraisalRequest.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " />
+                                                             style = "#{appraisalRequest.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
+                                                             onkeydown="return onKeyPressName(event);"
+                                                             onkeypress="return onKeyPressName(event);"/>
                                             </td>
                                             <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo1}"
@@ -168,7 +170,9 @@
                                                 <p:outputLabel value="2"/>
                                             </td>
                                             <td class="center">
-                                                <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName2}"/>
+                                                <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName2}"
+                                                             onkeydown="return onKeyPressName(event);"
+                                                             onkeypress="return onKeyPressName(event);"/>
                                             </td>
                                             <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo2}"
@@ -180,7 +184,9 @@
                                                 <p:outputLabel value="3"/>
                                             </td>
                                             <td class="center">
-                                                <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName3}"/>
+                                                <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName3}"
+                                                             onkeydown="return onKeyPressName(event);"
+                                                             onkeypress="return onKeyPressName(event);"/>
                                             </td>
                                             <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo3}"
