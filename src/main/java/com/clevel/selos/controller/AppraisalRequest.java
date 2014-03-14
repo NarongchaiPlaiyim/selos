@@ -144,14 +144,19 @@ public class AppraisalRequest implements Serializable {
         init();
         appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, workCasePreScreenId);
         if(!Util.isNull(appraisalView)){
+            log.debug("-- AppraisalView.id[{}]", appraisalView.getId());
             appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
             if(Util.isZero(appraisalDetailViewList.size())){
                 appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+            }
+            for(AppraisalDetailView view : appraisalDetailViewList){
+                log.debug("-- AppraisalDetailView.id[{}]", view.getId());
             }
             appraisalContactDetailView = appraisalView.getAppraisalContactDetailView();
             if(Util.isNull(appraisalContactDetailView)){
                 appraisalContactDetailView = new AppraisalContactDetailView();
             }
+            log.debug("-- AppraisalContactDetailView.id[{}]", appraisalContactDetailView.getId());
         } else {
             appraisalView = new AppraisalView();
             log.debug("-- AppraisalView[New] created");
@@ -168,10 +173,10 @@ public class AppraisalRequest implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         if(appraisalDetailViewMandate()){
             complete = true;
-            if(ModeForButton.ADD.equals(modeForButton)){
+            if(ModeForButton.ADD == modeForButton){
                 appraisalDetailViewList.add(appraisalDetailViewDialog);
                 appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
-            }else if(ModeForButton.EDIT.equals(modeForButton)){
+            }else if(ModeForButton.EDIT == modeForButton){
                 log.debug("-- RowIndex[{}]", rowIndex);
                 appraisalDetailViewList.set(rowIndex, appraisalDetailViewDialog);
                 appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
@@ -183,6 +188,9 @@ public class AppraisalRequest implements Serializable {
     }
     
     public void onEditAppraisalDetailView(){
+        titleDeedFlag = false;
+        purposeFlag = false;
+        numberOfDocumentsFlag = false;
         modeForButton = ModeForButton.EDIT;
         log.debug("-- onEditAppraisalDetailView() RowIndex[{}]", rowIndex);
         appraisalDetailViewDialog = appraisalDetailViewSelected;
@@ -229,14 +237,12 @@ public class AppraisalRequest implements Serializable {
                 }
             } else {
                 messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-//                message = "Please add a customer contact information";
-                message = "กรุณากรอก รายชื่อผู้ติดต่ออย่างน้อย 1 ชื่อ";
+                message = "Please fill in all required information(Contact Detail).";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {
             messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-//            message = "Please add a detail of karn pra mern song raka na ja jub jub";
-            message = "กรุณากรอก รายละเอียดส่งประเมินราคา";
+            message = "Please fill in all required information(Estimate Detail).";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
