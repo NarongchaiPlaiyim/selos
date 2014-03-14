@@ -29,17 +29,14 @@
         <div id="content_container">
             <div id="content_name"><p:outputLabel styleClass="title" value="#{msg.get('app.appraisalRequest.header')}"/></div>
             <div id="content">
-                <table id="table_content" style="width: 100%;" class="content_table_form" border="0">
-                    <tr>
-                        <td colspan="5" class="right" style="padding-right: 1%;">
-                            Last update by <p:outputLabel value="#{appraisalResult.appraisalView.modifyBy.userName}"/> , <p:outputLabel value="#{appraisalResult.appraisalView.modifyDate}"/>
-                            <a style="cursor: pointer;" href="#">[View Track Change]</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="4"><div class="separate"><!-- --></div></td>
-                    </tr>
+                <div id="content_info">
+                    <div id="content_trackchange">[ View Track Change ]</div>
+                    <div id="content_lastupdate">Last update by <h:outputText value="#{appraisalResult.appraisalView.modifyBy.userName}"/> , <h:outputText value="#{appraisalResult.appraisalView.modifyDate}"><f:convertDateTime pattern="dd MMMM yyyy HH:mm:ss" locale="th_TH" /></h:outputText></div>
+                </div>
+                <div id="content_form">
 
+                </div>
+                <table id="table_content" style="width: 100%;" class="content_table_form" border="0">
                     <tr>
                         <td style="width: 150px; min-width: 150px; max-width: 150px;"/>
                         <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
