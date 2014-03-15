@@ -744,8 +744,8 @@ public class BankStmtControl extends BusinessControl {
                     detailView.setUtilizationPercent(BigDecimal.ZERO);
                 }
 
-                // grossInflowPerLimit = [ grossCreditBalance / limit ]
-                detailView.setGrossInflowPerLimit(Util.divide(detailView.getGrossCreditBalance(), limit));
+                // grossInflowPerLimit(%) = [ grossCreditBalance / limit ] x 100
+                detailView.setGrossInflowPerLimit(Util.multiply(Util.divide(detailView.getGrossCreditBalance(), limit), 100));
 
                 // totalTransaction = [ numberOfCreditTxn + numberOfDebitTxn ]
                 detailView.setTotalTransaction(detailView.getNumberOfCreditTxn() + detailView.getNumberOfDebitTxn());
@@ -783,8 +783,8 @@ public class BankStmtControl extends BusinessControl {
                     detailView.setUtilizationPercent(BigDecimal.ZERO);
                 }
 
-                // grossInflowPerLimit = [ grossCreditBalance / limit ]
-                detailView.setGrossInflowPerLimit(Util.divide(detailView.getGrossCreditBalance(), limit));
+                // grossInflowPerLimit(%) = [ grossCreditBalance / limit ] x 100
+                detailView.setGrossInflowPerLimit(Util.multiply(Util.divide(detailView.getGrossCreditBalance(), limit), 100));
 
                 // totalTransaction = [ numberOfCreditTxn + numberOfDebitTxn ]
                 detailView.setTotalTransaction(detailView.getNumberOfCreditTxn() + detailView.getNumberOfDebitTxn());
@@ -887,11 +887,11 @@ public class BankStmtControl extends BusinessControl {
         BigDecimal avgSwingPercent = Util.divide(sumSwingPctOfLastSixM, numMonthOvrLmtAmtOfLastSixM);
         BigDecimal avgUtilizationPercent = Util.divide(sumUtilPctOfLastSixM, numMonthOvrLmtAmtOfLastSixM);
 
-        // avgGrossInflowPerLimit = [ SUM(grossCreditBalance) / Limit ] / [ 6 - NumberOfNonODLimit]
-        BigDecimal avgGrossInflowPerLimit = Util.divide( Util.divide(sumGrossCreditBalance, limit) , 6 - numMonthNonOvrLmtAmt);
+        // avgGrossInflowPerLimit(%) = ([ SUM(grossCreditBalance) / Limit ] / [ 6 - NumberOfNonODLimit]) x 100
+        BigDecimal avgGrossInflowPerLimit = Util.multiply(Util.divide( Util.divide(sumGrossCreditBalance, limit) , 6 - numMonthNonOvrLmtAmt), 100);
 
-        // trdChequeReturnPercent = [ SUM(trdChequeReturnAmount of Last Six Months) if(count income) / SUM(NetUW of Last Six Months) ] if(UW is Blank) then use BDM instead
-        BigDecimal trdChequeReturnPercent = Util.divide( sumChqRetAmtCountIncomeOfLastSizM, (isRoleUW ? sumNetUWofLastSixM : sumNetBDMofLastSixM) );
+        // trdChequeReturnPercent = [ SUM(trdChequeReturnAmount of Last Six Months) if(count income) / SUM(Net[UW/BDM] of Last Six Months) ] x 100 *if(UW is Blank) then use BDM instead
+        BigDecimal trdChequeReturnPercent = Util.multiply(Util.divide(sumChqRetAmtCountIncomeOfLastSizM, (isRoleUW ? sumNetUWofLastSixM : sumNetBDMofLastSixM)), 100);
 
         // set summary Bank statement
         bankStmtView.setAvgIncomeGross(avgIncomeGross);
@@ -994,7 +994,7 @@ public class BankStmtControl extends BusinessControl {
         BigDecimal grdTotalIncomeGross = Util.add(tmbTotalIncomeGross, othTotalIncomeGross);
         BigDecimal grdTotalIncomeNetBDM = Util.add(tmbTotalIncomeNetBDM, othTotalIncomeNetBDM);
         BigDecimal grdTotalIncomeNetUW = Util.add(tmbTotalIncomeNetUW, othTotalIncomeNetUW);
-        BigDecimal grdTotalTrdChqRetPercent = Util.divide(sumChqRetAmtCountIncomeOfLastSizM, isRoleUW ? sumNetUWofLastSixM : sumNetBDMofLastSixM);
+        BigDecimal grdTotalTrdChqRetPercent = Util.multiply(Util.divide(sumChqRetAmtCountIncomeOfLastSizM, isRoleUW ? sumNetUWofLastSixM : sumNetBDMofLastSixM), 100);
 
         bankStmtSummaryView.setGrdTotalIncomeGross(grdTotalIncomeGross);
         bankStmtSummaryView.setGrdTotalIncomeNetBDM(grdTotalIncomeNetBDM);
