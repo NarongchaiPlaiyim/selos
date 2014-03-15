@@ -96,7 +96,7 @@ public class NewCollateral implements Serializable {
     @OneToMany(mappedBy = "newCollateral", cascade = CascadeType.ALL)
     private List<NewCollateralHead> newCollateralHeadList;
 
-    @OneToMany(mappedBy = "newCollateral", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "newCollateral",cascade=CascadeType.ALL)
     private List<NewCollateralCredit> newCollateralCreditList;
 
     /*** For Post - Insurance Premium Quote Process ***/
@@ -253,6 +253,8 @@ public class NewCollateral implements Serializable {
 
     public void setNewCollateralCreditList(List<NewCollateralCredit> newCollateralCreditList) {
         this.newCollateralCreditList = newCollateralCreditList;
+//        this.newCollateralCreditList.clear();
+//        this.newCollateralCreditList.addAll(newCollateralCreditList);
     }
 
     public WorkCase getWorkCase() {

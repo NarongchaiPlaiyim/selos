@@ -28,37 +28,36 @@ public class NewGuarantorCreditTransform extends Transform {
         NewCreditDetail newCreditDetailAdd;
 
         for (ProposeCreditDetailView proposeCreditDetailView : newCreditDetailViewList) {
+            newGuarantorCredit = new NewGuarantorCredit();
+            newGuarantorCredit.setCreateDate(DateTime.now().toDate());
+            newGuarantorCredit.setCreateBy(user);
+            newGuarantorCredit.setModifyDate(DateTime.now().toDate());
+            newGuarantorCredit.setModifyBy(user);
 
-                newGuarantorCredit = new NewGuarantorCredit();
-                newGuarantorCredit.setCreateDate(DateTime.now().toDate());
-                newGuarantorCredit.setCreateBy(user);
-                newGuarantorCredit.setModifyDate(DateTime.now().toDate());
-                newGuarantorCredit.setModifyBy(user);
+            log.info("proposeCreditDetailView::: getTypeOfStep :: {}", proposeCreditDetailView.getTypeOfStep());
 
-                log.info("proposeCreditDetailView::: getTypeOfStep :: {}", proposeCreditDetailView.getTypeOfStep());
-
-                if ("N".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
-                    log.info("guarantor choose seq  is " + proposeCreditDetailView.getSeq());
-                    newCreditDetailAdd = findNewCreditDetail(newCreditDetailList, proposeCreditDetailView);
-                    if (newCreditDetailAdd != null) {
-                        newGuarantorCredit.setNewCreditDetail(newCreditDetailAdd);
-                        log.info("newGuarantorCredit newCreditDetailAdd id toSet is " + newGuarantorCredit.getNewCreditDetail().getId());
-                    }
-                } else if ("E".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
-                    log.info(" Existing ::  proposeCreditDetailView.getSeq() ::: {}", proposeCreditDetailView.getSeq());
-                    ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById(proposeCreditDetailView.getId());
-                    log.info(" existingCreditDetail id ::: {}",existingCreditDetail.getId());
-                    if (existingCreditDetail != null) {
-                        newGuarantorCredit.setExistingCreditDetail(existingCreditDetail);
-                        log.info("newGuarantorCredit existingCreditDetail id toSet is " + newGuarantorCredit.getExistingCreditDetail().getId());
-
-                    }
+            if ("N".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
+                log.info("guarantor choose seq  is " + proposeCreditDetailView.getSeq());
+                newCreditDetailAdd = findNewCreditDetail(newCreditDetailList, proposeCreditDetailView);
+                if (newCreditDetailAdd != null) {
+                    newGuarantorCredit.setNewCreditDetail(newCreditDetailAdd);
+                    log.info("newGuarantorCredit newCreditDetailAdd id toSet is " + newGuarantorCredit.getNewCreditDetail().getId());
                 }
-                newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
-                newGuarantorCredit.setNewGuarantorDetail(newGuarantorDetail);
-                newGuarantorCredit.setNewCreditFacility(newCreditFacility);
-                newGuarantorCredit.setProposeType(proposeType);
-                newGuarantorCreditList.add(newGuarantorCredit);
+            } else if ("E".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
+                log.info(" Existing ::  proposeCreditDetailView.getSeq() ::: {}", proposeCreditDetailView.getSeq());
+                ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById(proposeCreditDetailView.getId());
+                log.info(" existingCreditDetail id ::: {}",existingCreditDetail.getId());
+                if (existingCreditDetail != null) {
+                    newGuarantorCredit.setExistingCreditDetail(existingCreditDetail);
+                    log.info("newGuarantorCredit existingCreditDetail id toSet is " + newGuarantorCredit.getExistingCreditDetail().getId());
+
+                }
+            }
+            newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
+            newGuarantorCredit.setNewGuarantorDetail(newGuarantorDetail);
+            newGuarantorCredit.setNewCreditFacility(newCreditFacility);
+            newGuarantorCredit.setProposeType(proposeType);
+            newGuarantorCreditList.add(newGuarantorCredit);
 
 
         }

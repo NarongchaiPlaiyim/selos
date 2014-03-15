@@ -21,7 +21,7 @@ public class CESessionToken {
 
     // getToken from session
     public String getTokenFromSession(String username, String password) throws Exception {
-        Session session = ObjectFactory.getSession("UserToken", null, username, password);
+        Session session = ObjectFactory.getSession("UserToken", Session.CLEAR, username, password);
         String token = session.getToken(false);
        
         String encToken = URLEncoder.encode(token, "UTF-8");

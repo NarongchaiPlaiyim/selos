@@ -172,20 +172,10 @@ public class AppraisalResult implements Serializable {
             stepId = Long.valueOf(""+session.getAttribute("stepId"));
             log.debug("-- stepId[{}]", stepId);
 
-            if(stepId != StepValue.REVIEW_APPRAISAL_REQUEST.value()){
+            /*if(stepId != StepValue.REVIEW_APPRAISAL_REQUEST.value()){
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
-            } else {
-                if(!Util.isNull(session.getAttribute("workCaseId")) && Long.valueOf(""+session.getAttribute("workCaseId")) != 0){
-                    workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-                }else if(!Util.isNull(session.getAttribute("workCasePreScreenId")) && Long.valueOf(""+session.getAttribute("workCasePreScreenId")) != 0){
-                    workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
-                }else{
-                    log.error("error while loading page, can not find workCaseId/workCasePreScreenId in session.");
-                    FacesUtil.redirect("/site/inbox.jsf");
-                    return;
-                }
-            }
+            }*/
         } else {
             log.error("error while loading page, can not find workCaseId/workCasePreScreenId in session.");
             FacesUtil.redirect("/site/inbox.jsf");
@@ -196,8 +186,20 @@ public class AppraisalResult implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("-- onCreation.");
-        preRender();
+        /*preRender();*/
+        HttpSession session = FacesUtil.getSession(true);
+        if(!Util.isNull(session.getAttribute("workCaseId")) && Long.valueOf(""+session.getAttribute("workCaseId")) != 0){
+            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+        }else if(!Util.isNull(session.getAttribute("workCasePreScreenId")) && Long.valueOf(""+session.getAttribute("workCasePreScreenId")) != 0){
+            workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
+        }else{
+            log.error("error while loading page, can not find workCaseId/workCasePreScreenId in session.");
+            FacesUtil.redirect("/site/inbox.jsf");
+            return;
+        }
+
         init();
+
         appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, workCasePreScreenId);
         if(!Util.isNull(appraisalView)){
             newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
@@ -329,7 +331,7 @@ public class AppraisalResult implements Serializable {
         context.addCallbackParam("functionComplete", complete);
     }
     public void onEditCollateralDetailView(){
-        log.info("-- onEditCollateralDetailView " + newCollateralViewList.size());
+        log.info("-- onEditCollateralDetailView {}",  newCollateralViewList.size());
         modeForButton = ModeForButton.EDIT;
         newCollateralView = selectCollateralDetailView;
         if(Util.isNull(newCollateralView.getJobID()) || Util.isZero(newCollateralView.getJobID().length())){
@@ -338,6 +340,7 @@ public class AppraisalResult implements Serializable {
             flagReadOnly = true;
         }
     }
+
     public void onDeleteCollateralDetailView(){
         newCollateralViewList.remove(selectCollateralDetailView);
         log.info("-- onDeleteCollateralDetailView Job id {} deleted", selectCollateralDetailView.getJobID());

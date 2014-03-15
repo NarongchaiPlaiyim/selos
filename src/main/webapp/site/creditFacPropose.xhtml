@@ -536,7 +536,7 @@
         <p:commandButton value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
                          styleClass="largest"
                          disabled="#{creditFacPropose.notRetrievePricing}"
-                         process="@this"
+                         process="@form"
                          update=":frmMain,:msgBoxSystemMessagePanel"
                          action="#{creditFacPropose.onRetrievePricingFee}"/>
     </td>
@@ -1105,7 +1105,10 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{tradeTableItem.standardFrontEndFee}"/>
+                <h:outputText value="#{not empty tradeTableItem.standardFrontEndFee.percentFee ?
+                                                 tradeTableItem.standardFrontEndFee.percentFee : '0.00%'},
+                                     #{not empty tradeTableItem.standardFrontEndFee.feeYear ?
+                                                 tradeTableItem.standardFrontEndFee.feeYear : '-'}"/>
             </p:column>
 
             <p:column styleClass="center">

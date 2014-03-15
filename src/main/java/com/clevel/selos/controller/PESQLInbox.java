@@ -5,6 +5,8 @@ import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.model.StepValue;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.util.FacesUtil;
@@ -37,28 +39,126 @@ public class PESQLInbox implements Serializable
     Logger log;
 
     private List<PEInbox> inboxViewList;
-
     private PEInbox inboxViewSelectItem;
-
     private UserDetail userDetail;
-
     private String columnName;
-
     private String orderType;
+    private String inboxName;
 
+    @Inject
+    WorkCasePrescreenDAO workCasePrescreenDAO;
 
+    @Inject
+    WorkCaseDAO workCaseDAO;
 
-    private String inboxname;
+    @Inject
+    PEDBExecute pedbExecute;
 
-    public String getInboxname() {
-        return inboxname;
+    @PostConstruct
+    public void onCreation()
+    {
+
+        log.info("Controller in onCreation method of PESQLInbox.java ");
+
+        userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        log.info("onCreation userDetail PESQLInbox.java : {}", userDetail);
+
+        //Clear all session before selectInbox
+        HttpSession session = FacesUtil.getSession(false);
+        session.setAttribute("workCasePreScreenId", 0L);
+        session.setAttribute("workCaseId", 0L);
+        session.setAttribute("stepId", 0L);
+        session.setAttribute("requestAppraisal", 0);
+        session.setAttribute("queueName","");
+
+        try
+        {
+            inboxName = "My Box";
+            inboxViewList =  pedbExecute.getPEInbox(inboxName);
+            log.debug("onCreation ::: inboxViewList : {}", inboxViewList);
+        }
+        catch(Exception ex)
+        {
+            log.error("Exception while getInboxPE : ", ex);
+        }
     }
 
-    public void setInboxname(String inboxname) {
-        this.inboxname = inboxname;
+
+    public void onSelectInbox() {
+
+        userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        log.info("onSelectInbox ::: userDetail  : {}", userDetail);
+
+        /*if(Util.isNull(userDetail))
+        {
+            FacesUtil.redirect("/login.jsf");
+            return;
+        }*/
+
+        HttpSession session = FacesUtil.getSession(false);
+        log.info("onSelectInbox ::: setSession ");
+        log.info("onSelectInbox ::: inboxViewSelectItem : {}", inboxViewSelectItem);
+
+        long stepId = inboxViewSelectItem.getStepId();
+        long wrkCasePreScreenId = 0;
+        long wrkCaseId = 0;
+        int requestAppraisalFlag = 0;
+
+        if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value())
+        {
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByWobNumber(inboxViewSelectItem.getFwobnumber());
+            if(workCasePrescreen != null){
+                wrkCasePreScreenId = workCasePrescreen.getId();
+                requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+            }
+            session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
+            session.setAttribute("requestAppraisal", requestAppraisalFlag);
+        }
+
+        else
+        {
+            WorkCase workCase = workCaseDAO.findByWobNumber(inboxViewSelectItem.getFwobnumber());
+            if(workCase != null){
+                wrkCaseId = workCase.getId();
+                requestAppraisalFlag = workCase.getRequestAppraisal();
+            }
+            session.setAttribute("workCaseId", wrkCaseId);
+            session.setAttribute("requestAppraisal", requestAppraisalFlag);
+        }
+
+        session.setAttribute("stepId", stepId);
+
+        String queueName = inboxViewSelectItem.getQueuename();
+        if(Util.isNull(queueName)) {
+            session.setAttribute("queueName", "0");
+        } else {
+            session.setAttribute("queueName", inboxViewSelectItem.getQueuename());
+        }
+
+        AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(stepId, inboxViewSelectItem.getFwobnumber());
+        session.setAttribute("appHeaderInfo", appHeaderView);
+
+        String landingPage = pedbExecute.getLandingPage(stepId);
+
+        log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, requestAppraisalFlag, stepId, queueName);
+
+        if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
+            FacesUtil.redirect(landingPage);
+            return;
+        } else {
+            //TODO Show dialog
+        }
     }
 
+    public String getInboxName() {
+        return inboxName;
+    }
 
+    public void setInboxName(String inboxName) {
+        this.inboxName = inboxName;
+    }
 
     public String getColumnName() {
         return columnName;
@@ -76,15 +176,6 @@ public class PESQLInbox implements Serializable
         this.orderType = orderType;
     }
 
-    @Inject
-    WorkCasePrescreenDAO workCasePrescreenDAO;
-
-    @Inject
-    WorkCaseDAO workCaseDAO;
-
-    @Inject
-    PEDBExecute pedbExecute;
-
     public List<PEInbox> getInboxViewList() {
         return inboxViewList;
     }
@@ -100,133 +191,4 @@ public class PESQLInbox implements Serializable
     public void setInboxViewSelectItem(PEInbox inboxViewSelectItem) {
         this.inboxViewSelectItem = inboxViewSelectItem;
     }
-
-    public PESQLInbox()
-    {
-    }
-
-    @PostConstruct
-    public void onCreation()
-    {
-
-        log.info("controler in onCreation method of pesqlinbox.java ");
-
-        userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        log.info("onCreation userDetail pesqlinbox.java : {}", userDetail);
-
-        try
-        {
-            String inboxname = "My Box";
-
-            inboxViewList =  pedbExecute.getPEInbox(inboxname);
-
-            log.debug("onCreation ::: inboxViewList : {}", inboxViewList);
-
-            //inboxViewList.clear();
-
-
-        }
-        catch(Exception e)
-        {
-
-        }
-        finally
-        {
-
-
-        }
-    }
-
-
-    public void onSelectInbox() {
-
-        userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        log.info("userDetails  : "+userDetail);
-
-        if(userDetail == null)
-        {
-            FacesUtil.redirect("/login.jsf");
-            return;
-        }
-
-        HttpSession session = FacesUtil.getSession(false);
-        log.info("onSelectInbox ::: setSession ");
-        log.info("onSelectInbox ::: inboxViewSelectItem : {}", inboxViewSelectItem);
-
-       /* if(!Util.isEmpty(Long.toString(inboxViewSelectItem.getWorkCasePreScreenId())))
-        {
-            session.setAttribute("workCasePreScreenId", inboxViewSelectItem.getWorkCasePreScreenId());
-        }
-
-        else
-        {
-            session.setAttribute("workCasePreScreenId", 0);
-        }
-
-        if(!Util.isEmpty(Long.toString(inboxViewSelectItem.getWorkCaseId())))
-        {
-            session.setAttribute("workCaseId", inboxViewSelectItem.getWorkCaseId());
-        }
-
-        else
-        {
-            session.setAttribute("workCaseId", 0);
-        }*/
-
-        long stepId = inboxViewSelectItem.getStepId();
-
-        long wrkCasePreScreenId;
-
-        long wrkCaseId;
-
-        if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value())
-        {
-
-            wrkCasePreScreenId = workCasePrescreenDAO.findIdByWobNumber(inboxViewSelectItem.getFwobnumber());
-            session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
-            //session.setAttribute("workCaseId", 0);
-
-        }
-
-        else
-        {
-
-            wrkCaseId = workCaseDAO.findIdByWobNumber(inboxViewSelectItem.getFwobnumber());
-            session.setAttribute("workCaseId", wrkCaseId);
-            //session.setAttribute("workCasePreScreenId", 0);
-
-        }
-
-        session.setAttribute("stepId", inboxViewSelectItem.getStepId());
-        if(inboxViewSelectItem.getQueuename() == null)
-        {
-            session.setAttribute("queueName","0");
-        }
-
-        else
-        {
-            session.setAttribute("queueName",inboxViewSelectItem.getQueuename());
-        }
-
-
-
-        //AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(inboxViewSelectItem.getWorkCasePreScreenId(), inboxViewSelectItem.getWorkCaseId());
-        AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(inboxViewSelectItem.getStepId(), inboxViewSelectItem.getFwobnumber());
-        session.setAttribute("appHeaderInfo", appHeaderView);
-
-        long selectedStepId = inboxViewSelectItem.getStepId();
-        String landingPage = pedbExecute.getLandingPage(selectedStepId);
-
-        if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
-            FacesUtil.redirect(landingPage);
-            return;
-        } else {
-            //TODO Show dialog
-        }
-
-    }
-
-
 }

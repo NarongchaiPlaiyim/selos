@@ -8,6 +8,8 @@ import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.ECMInterface;
 import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.brms.model.response.DocCustomerResponse;
+import com.clevel.selos.integration.brms.model.response.DocumentDetail;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
@@ -62,7 +64,7 @@ public class TestNCRS implements Serializable {
     private ECMInterface ecmInterface;
     @Inject
     private BRMSInterface brmsInterface;
-
+    private long workCaseId;
 
     @Inject
     private BRMSControl brmsControl;
@@ -325,25 +327,33 @@ public class TestNCRS implements Serializable {
     }
 
     public void onClickCallBRMS(){
-//        brmsInterface.checkStandardPricingIntRule();
+        System.out.println("onClickCallBRMS()");
+        System.out.println("workCaseId : "+workCaseId);
+        try{
+            DocCustomerResponse docCustomerResponse = brmsControl.getDocCustomer(workCaseId);
+            if(!Util.isNull(docCustomerResponse) && ActionResult.SUCCESS.equals(docCustomerResponse.getActionResult())){
+                List<DocumentDetail> documentDetailList =  Util.safetyList(docCustomerResponse.getDocumentDetailList());
+                for(DocumentDetail documentDetail : documentDetailList){
+                    System.out.println("-- DocumentDetail "+ documentDetail.toString());
+                }
+                result = docCustomerResponse.toString();
+            } else {
+                result = "FAILED";
+            }
+        } catch (Exception e) {
+            System.err.println("Exception = "+e.getMessage());
+            System.err.println("Exception = "+e);
+            result = e.getMessage();
+        }
     }
 
-    //call BRMS
-    public StandardPricingResponse getPriceFeeInterest() {
-        long workCaseId = 321;
-        log.info("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
-        StandardPricingResponse standardPricingResponse  = null;
-        try {
-//            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
 
-            if (standardPricingResponse != null) {
-                log.info("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult());
-            }
+    public long getWorkCaseId() {
+        return workCaseId;
+    }
 
-        }catch (Exception e) {
-            log.error("Exception while get getPriceFeeInterest data!", e);
-        }
-        return standardPricingResponse;
+    public void setWorkCaseId(long workCaseId) {
+        this.workCaseId = workCaseId;
     }
 
     public String getUserIdForComS() {

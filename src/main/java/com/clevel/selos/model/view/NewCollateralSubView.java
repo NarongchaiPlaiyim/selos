@@ -1,7 +1,5 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.CollateralType;
-import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -26,8 +24,8 @@ public class NewCollateralSubView implements Serializable {
     private String collateralOwnerAAD;
     private CustomerInfoView collateralOwnerUW;
     private List<CustomerInfoView> collateralOwnerUWList;
-    private MortgageType mortgageType;
-    private List<MortgageType> mortgageList;
+    private MortgageTypeView mortgageType;
+    private List<MortgageTypeView> mortgageList;
     private long relatedWithId;
     private List<NewCollateralSubView> relatedWithList;
     private BigDecimal appraisalValue;
@@ -53,9 +51,9 @@ public class NewCollateralSubView implements Serializable {
         this.appraisalValue = BigDecimal.ZERO;
         this.mortgageValue = BigDecimal.ZERO;
         this.subCollateralType = new SubCollateralType();
-        this.mortgageType= new MortgageType();
+        this.mortgageType= new MortgageTypeView();
         this.collateralOwnerUWList = new ArrayList<CustomerInfoView>();
-        this.mortgageList = new ArrayList<MortgageType>();
+        this.mortgageList = new ArrayList<MortgageTypeView>();
         this.relatedWithList = new ArrayList<NewCollateralSubView>();
         this.collateralOwnerUW = new CustomerInfoView();
     }
@@ -148,14 +146,21 @@ public class NewCollateralSubView implements Serializable {
         this.collateralOwnerAAD = collateralOwnerAAD;
     }
 
-    public MortgageType getMortgageType() {
+    public MortgageTypeView getMortgageType() {
         return mortgageType;
     }
 
-    public void setMortgageType(MortgageType mortgageType) {
+    public void setMortgageType(MortgageTypeView mortgageType) {
         this.mortgageType = mortgageType;
     }
 
+    public void setMortgageList(List<MortgageTypeView> mortgageList) {
+        this.mortgageList = mortgageList;
+    }
+
+    public List<MortgageTypeView> getMortgageList() {
+        return mortgageList;
+    }
 
     public BigDecimal getMortgageValue() {
         return mortgageValue;
@@ -203,14 +208,6 @@ public class NewCollateralSubView implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
-    }
-
-    public List<MortgageType> getMortgageList() {
-        return mortgageList;
-    }
-
-    public void setMortgageList(List<MortgageType> mortgageList) {
-        this.mortgageList = mortgageList;
     }
 
     public List<CustomerInfoView> getCollateralOwnerUWList() {

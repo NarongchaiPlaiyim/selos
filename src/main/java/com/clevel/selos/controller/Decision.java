@@ -4,10 +4,12 @@ import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.ApprovalHistoryDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.ApprovalHistory;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -95,6 +97,8 @@ public class Decision implements Serializable {
     private ApprovalHistoryDAO approvalHistoryDAO;
     @Inject
     private SpecialProgramDAO specialProgramDAO;
+    @Inject
+    private WorkCaseDAO workCaseDAO;
 
     //Transform
     @Inject
@@ -383,7 +387,29 @@ public class Decision implements Serializable {
     public void onEditApproveCredit() {
         log.debug("onEditApproveCredit() selectedApproveCredit: {}", selectedApproveCredit);
 
-        onChangeRequestType();
+        if (RequestTypes.CHANGE.value() == selectedApproveCredit.getRequestType()) {   //change
+            prdGroupToPrdProgramViewList = _prdGroupToPrdProgramAll;
+
+            cannotEditStandard = false;
+            cannotAddTier = false;
+        }
+        else if (RequestTypes.NEW.value() == selectedApproveCredit.getRequestType()) {
+            if (productGroup != null) {
+                prdGroupToPrdProgramViewList = _prdGroupToPrdProgramByGroup;
+            }
+            cannotEditStandard = true;
+
+            if (modeEditCredit) {
+                if (selectedApproveCredit.getNewCreditTierDetailViewList() == null || selectedApproveCredit.getNewCreditTierDetailViewList().isEmpty()) {
+                    cannotAddTier = true;
+                } else {
+                    cannotAddTier = false;
+                }
+            } else {
+                // on click add new
+                cannotAddTier = true;
+            }
+        }
 
         prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(selectedApproveCredit.getProductProgramView());
 
@@ -521,6 +547,7 @@ public class Decision implements Serializable {
         if (RequestTypes.CHANGE.value() == selectedApproveCredit.getRequestType()) {   //change
             prdGroupToPrdProgramViewList = _prdGroupToPrdProgramAll;
             selectedApproveCredit.setProductProgramView(new ProductProgramView());
+
             cannotEditStandard = false;
             cannotAddTier = false;
         }
@@ -799,7 +826,7 @@ public class Decision implements Serializable {
         boolean success;
         SubCollateralType subCollateralType = getSubCollTypeById(selectedApproveSubColl.getSubCollateralType().getId());
         List<CustomerInfoView> _collOwnerUWList = selectedApproveSubColl.getCollateralOwnerUWList();
-        List<MortgageType> _mortgageTypeList = selectedApproveSubColl.getMortgageList();
+        List<MortgageTypeView> _mortgageTypeList = selectedApproveSubColl.getMortgageList();
         List<NewCollateralSubView> _relatedWithList = selectedApproveSubColl.getRelatedWithList();
 
         if (modeEditSubColl) {
@@ -874,13 +901,14 @@ public class Decision implements Serializable {
 
     public void onAddMortgageType() {
         log.debug("onAddMortgageType() id: {}", selectedApproveSubColl.getMortgageType().getId());
+
         if (selectedApproveSubColl.getMortgageType().getId() != 0) {
             if (selectedApproveSubColl.getMortgageList() == null) {
-                selectedApproveSubColl.setMortgageList(new ArrayList<MortgageType>());
+                selectedApproveSubColl.setMortgageList(new ArrayList<MortgageTypeView>());
             }
             // Validate select duplicate
             if (selectedApproveSubColl.getMortgageList().size() > 0) {
-                for (MortgageType mortgageType : selectedApproveSubColl.getMortgageList()) {
+                for (MortgageTypeView mortgageType : selectedApproveSubColl.getMortgageList()) {
                     if (mortgageType.getId() == selectedApproveSubColl.getMortgageType().getId()) {
                         messageHeader = msg.get("app.messageHeader.error");
                         message = "Can not add duplicate Mortgage type!";
@@ -1018,23 +1046,21 @@ public class Decision implements Serializable {
                     guarantorDetailAdd.setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
                 }
 
+                List<ProposeCreditDetailView> newCreditTypeItems = new ArrayList<ProposeCreditDetailView>();
                 for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
-                    guarantorDetailAdd.getProposeCreditDetailViewList().add(creditTypeItem);
+                    newCreditTypeItems.add(creditTypeItem);
                     sumGuaranteeAmtPerCrdType = sumGuaranteeAmtPerCrdType.add(creditTypeItem.getGuaranteeAmount());
 
                     log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
                     log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
                 }
-
+                guarantorDetailAdd.setProposeCreditDetailViewList(newCreditTypeItems);
                 guarantorDetailAdd.setTotalLimitGuaranteeAmount(sumGuaranteeAmtPerCrdType);
 
-                if (decisionView.getApproveGuarantorList() != null) {
-                    decisionView.getApproveGuarantorList().add(guarantorDetailAdd);
-                } else {
-                    List<NewGuarantorDetailView> newApproveGuarantorList = new ArrayList<NewGuarantorDetailView>();
-                    newApproveGuarantorList.add(guarantorDetailAdd);
-                    decisionView.setApproveGuarantorList(newApproveGuarantorList);
+                if (decisionView.getApproveGuarantorList() == null) {
+                    decisionView.setApproveGuarantorList(new ArrayList<NewGuarantorDetailView>());
                 }
+                decisionView.getApproveGuarantorList().add(guarantorDetailAdd);
 
                 success = true;
             } else {
@@ -1107,13 +1133,19 @@ public class Decision implements Serializable {
         try {
 
             if (roleUW) {
-                // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
-                decisionView = decisionControl.saveDecision(decisionView, workCaseId);
-                // todo: calculate Total Approve and Hidden field for NewCreditFacility
-                // Save Approval History for UW
-                approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCaseId);
                 // Delete List
                 decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
+
+                WorkCase workCase = workCaseDAO.findById(workCaseId);
+                // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
+                decisionView = decisionControl.saveApproveAndConditionData(decisionView, workCase);
+                // Calculate Total Approve
+                decisionControl.calculateTotalApprove(decisionView);
+                // Save Total Approve to Decision
+                decisionControl.saveDecision(decisionView, workCase);
+                // Save Approval History for UW
+                approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
+
                 //exSummaryControl.calForDecision(workCaseId);
             }
 
@@ -1131,11 +1163,6 @@ public class Decision implements Serializable {
             }
         }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-    }
-
-    public void onCancelDecision() {
-        log.debug("onCancel()");
-        // todo: cancel decision action
     }
 
     // ----------------------------------------------- get Item from Select List ----------------------------------------------- //
@@ -1171,14 +1198,13 @@ public class Decision implements Serializable {
         ProductProgramView returnPrdProgramView = new ProductProgramView();
         if (prdGroupToPrdProgramViewList != null && !prdGroupToPrdProgramViewList.isEmpty() && id != 0) {
             for (PrdGroupToPrdProgramView groupToProgramView : prdGroupToPrdProgramViewList) {
-                if (groupToProgramView.getProductProgramView() != null
-                    && groupToProgramView.getProductProgramView().getId() == id) {
-
-                    returnPrdProgramView.setId(groupToProgramView.getProductProgramView().getId());
-                    returnPrdProgramView.setActive(groupToProgramView.getProductProgramView().getActive());
-                    returnPrdProgramView.setName(groupToProgramView.getProductProgramView().getName());
-                    returnPrdProgramView.setDescription(groupToProgramView.getProductProgramView().getDescription());
-                    returnPrdProgramView.setBrmsCode(groupToProgramView.getProductProgramView().getBrmsCode());
+                ProductProgramView productProgramView = groupToProgramView.getProductProgramView();
+                if (productProgramView != null && productProgramView.getId() == id) {
+                    returnPrdProgramView.setId(productProgramView.getId());
+                    returnPrdProgramView.setActive(productProgramView.getActive());
+                    returnPrdProgramView.setName(productProgramView.getName());
+                    returnPrdProgramView.setDescription(productProgramView.getDescription());
+                    returnPrdProgramView.setBrmsCode(productProgramView.getBrmsCode());
                     break;
                 }
             }
@@ -1190,15 +1216,18 @@ public class Decision implements Serializable {
         CreditTypeView returnCreditTypeView = new CreditTypeView();
         if (prdProgramToCreditTypeViewList != null && !prdProgramToCreditTypeViewList.isEmpty() && id != 0) {
             for (PrdProgramToCreditTypeView programToCreditTypeView : prdProgramToCreditTypeViewList) {
-                if (programToCreditTypeView.getCreditTypeView() != null
-                    && programToCreditTypeView.getCreditTypeView().getId() == id) {
-
-                    returnCreditTypeView.setId(programToCreditTypeView.getCreditTypeView().getId());
-                    returnCreditTypeView.setActive(programToCreditTypeView.getCreditTypeView().getActive());
-                    returnCreditTypeView.setName(programToCreditTypeView.getCreditTypeView().getName());
-                    returnCreditTypeView.setDescription(programToCreditTypeView.getCreditTypeView().getDescription());
-                    returnCreditTypeView.setComsIntType(programToCreditTypeView.getCreditTypeView().getComsIntType());
-                    returnCreditTypeView.setBrmsCode(programToCreditTypeView.getCreditTypeView().getBrmsCode());
+                CreditTypeView creditTypeView = programToCreditTypeView.getCreditTypeView();
+                if (creditTypeView != null && creditTypeView.getId() == id) {
+                    returnCreditTypeView.setId(creditTypeView.getId());
+                    returnCreditTypeView.setActive(creditTypeView.getActive());
+                    returnCreditTypeView.setName(creditTypeView.getName());
+                    returnCreditTypeView.setDescription(creditTypeView.getDescription());
+                    returnCreditTypeView.setComsIntType(creditTypeView.getComsIntType());
+                    returnCreditTypeView.setBrmsCode(creditTypeView.getBrmsCode());
+                    returnCreditTypeView.setCanSplit(creditTypeView.getCanSplit());
+                    returnCreditTypeView.setCalLimitType(creditTypeView.getCalLimitType());
+                    returnCreditTypeView.setCreditGroup(creditTypeView.getCreditGroup());
+                    returnCreditTypeView.setContingentFlag(creditTypeView.isContingentFlag());
                     break;
                 }
             }
@@ -1287,10 +1316,10 @@ public class Decision implements Serializable {
         return returnSubCollType;
     }
 
-    private MortgageType getMortgageTypeById(int id) {
-        MortgageType returnMortgageType = new MortgageType();
-        if (mortgageTypeList != null && !mortgageTypeList.isEmpty() && id != 0) {
-            for (MortgageType mortgageType : mortgageTypeList) {
+    private MortgageTypeView getMortgageTypeById(int id) {
+        MortgageTypeView returnMortgageType = new MortgageTypeView();
+        if (mortgageTypeViewList != null && !mortgageTypeViewList.isEmpty() && id != 0) {
+            for (MortgageTypeView mortgageType : mortgageTypeViewList) {
                 if (mortgageType.getId() == id) {
                     returnMortgageType.setId(mortgageType.getId());
                     returnMortgageType.setActive(mortgageType.getActive());
@@ -1321,6 +1350,7 @@ public class Decision implements Serializable {
                     returnCusInfoView.setLastNameEn(customerInfoView.getLastNameEn());
                     returnCusInfoView.setTitleTh(customerInfoView.getTitleTh());
                     returnCusInfoView.setTitleEn(customerInfoView.getTitleEn());
+                    returnCusInfoView.setCustomerEntity(customerInfoView.getCustomerEntity());
                     break;
                 }
             }

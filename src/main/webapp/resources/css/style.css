@@ -881,4 +881,14 @@ table tbody tr.grandtotal_summary td {
 .yellow {background-color:yellow;}
 .default {background-color:white;}
 
+.radio_table {
+    border-width: 0!important;
+    border-style: none!important;
+    border-color: transparent!important;
+}
+.radio_table td {
+    border-width: 0!important;
+    border-style: none!important;
+    border-color: transparent!important;
+}
 

@@ -55,7 +55,7 @@
             <p:commandButton id="btnRequestAppraisal" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
                              onclick="confirmRequestAppraisal.show()" type="button"
                              rendered="#{baseController.manageButton.requestAppraisalButton}">
-                <p:confirmDialog header="Confirmation" message="Are you want to Request Appraisa?" styleClass="left"
+                <p:confirmDialog header="Confirmation" message="Are you want to Request Appraisal?" styleClass="left"
                                  icon="ui-icon-alert"
                                  widgetVar="confirmRequestAppraisal" global="false" showEffect="fade"
                                  rendered="#{baseController.manageButton.requestAppraisalButton}">
@@ -64,6 +64,21 @@
                                      actionListener="#{baseController.onRequestAppraisal()}"
                                      process="@this" oncomplete="confirmRequestAppraisal.hide()"/>
                     <p:commandButton value="No" type="button" onclick="confirmRequestAppraisal.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+            </p:commandButton>
+            <!--Request Appraisal [Submit to AAD Admin]-->
+            <p:commandButton id="btnRequestAppraisalAADADmin" value="Request for Appraisal" styleClass="blueButton" title="Request for Appraisal"
+                             rendered="#{baseController.manageButton.submitRequestAppraisalButton}">
+                <p:confirmDialog header="Confirmation" message="Are you want to Request for Appraisal? ( Submit to AAD Admin )" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmRequestForAppraisal" global="false" showEffect="fade"
+                                 rendered="#{baseController.manageButton.submitRequestAppraisalButton}">
+                    <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{baseController.onSubmitAppraisalAdmin()}"
+                                     process="@this" oncomplete="confirmRequestForAppraisal.hide()"/>
+                    <p:commandButton value="No" type="button" onclick="confirmRequestForAppraisal.hide()"
                                      styleClass="ui-confirmdialog-no"/>
                 </p:confirmDialog>
             </p:commandButton>
@@ -162,7 +177,7 @@
 
             </p:commandButton>
             <!-- Appraisal flow : Return to AAD Admin-->
-            <p:commandButton id="btnSubmitAADAdmin" value="Return to AAD Admin" styleClass="blueButton" title=""
+            <p:commandButton id="btnReturnAADAdmin" value="Return to AAD Admin" styleClass="blueButton" title=""
                              rendered="#{baseController.manageButton.returnAADAdminButton}">
 
             </p:commandButton>

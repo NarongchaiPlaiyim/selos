@@ -1,13 +1,10 @@
 package com.clevel.selos.integration.bpm.tool;
 
-import com.clevel.selos.integration.COMS;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.security.encryption.EncryptionService;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
-import com.clevel.selos.util.Util;
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
