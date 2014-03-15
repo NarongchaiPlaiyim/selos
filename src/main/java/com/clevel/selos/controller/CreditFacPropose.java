@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.exception.BRMSInterfaceException;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
@@ -497,6 +498,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 List<NewFeeDetailView> newFeeDetailViewList = creditFacProposeControl.getPriceFeeInterest(workCaseId);
 
                 if(newFeeDetailViewList != null) {
+                    log.debug("newFeeDetailViewList not null ::: {}",newFeeDetailViewList.size());
                     newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
                 }
 
@@ -513,9 +515,15 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //                    severity = MessageDialogSeverity.ALERT.severity();
 //                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 //                }
+            } catch (BRMSInterfaceException e) {
+                    log.debug("BRMSInterfaceException :: ");
+                    messageHeader = msg.get("app.messageHeader.error");
+                    message = e.getMessage();
+                    severity = MessageDialogSeverity.ALERT.severity();
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
             } catch (Exception e) {
-                log.error("Exception while get getPriceFeeInterest data!", e);
+                log.error("BRMSInterfaceException while get getPriceFeeInterest data!", e);
                 messageHeader = msg.get("app.propose.exception");
                 message = e.getMessage();
                 severity = MessageDialogSeverity.ALERT.severity();
