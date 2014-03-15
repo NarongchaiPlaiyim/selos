@@ -587,6 +587,18 @@ function handleCancelFullAppDialogRequest(xhr, status, args) {
     }
 }
 
+function handleReturnBDMDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        returnBDMDlg.hide();
+    }
+}
+
+function handleReturnBDMAddDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        addReturnInfoDlg.hide();
+    }
+}
+
 function handleDisbursementMcDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
         mcDisbursementDialog.hide();

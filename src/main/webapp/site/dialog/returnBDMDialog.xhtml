@@ -1,0 +1,92 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<p:panel id="returnBDMDlgPanel" styleClass="panel-dialog">
+        <table class="content_form" style="width: 100%">
+            <tr>
+                <td>
+                    <p:commandButton id="btnReturnBDMDlg" value="Add Return Code" styleClass="larger" title="Add Return Code"
+                                     action="#{baseController.onOpenAddReturnInfo()}"
+                                     oncomplete="addReturnInfoDlg.show()"
+                                     update=":frmMain:reasonId, :frmMain:remark">
+                        <p:resetInput target=":frmMain:reasonId, :frmMain:remark"/>
+                    </p:commandButton>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p:dataTable id="returnResult" var="returnInfo"
+                                 value="#{baseController.returnInfoViewList}"
+                                 rowKey="#{returnInfo.id}" rowIndexVar="rowIndex" style="width: 100%">
+                        <p:columnGroup type="header">
+                            <p:row>
+                                <p:column style="width:15%;"
+                                          headerText="Return Code"/>
+                                <p:column style="width:25%;"
+                                          headerText="Description"/>
+                                <p:column style="width:25%;"
+                                          headerText="Reason"/>
+                                <p:column style="width:30%;"
+                                          headerText="Remark"/>
+                                <p:column style="width:5%"/>
+                            </p:row>
+                        </p:columnGroup>
+
+                        <p:column styleClass="center">
+                            <h:outputText value="#{returnInfo.returnCode}"/>
+                        </p:column>
+                        <p:column styleClass="left">
+                            <h:outputText value="#{returnInfo.description}"/>
+                        </p:column>
+                        <p:column styleClass="left">
+                            <h:outputText value="#{returnInfo.reason}"/>
+                        </p:column>
+                        <p:column styleClass="left">
+                            <h:outputText value="#{returnInfo.reasonDetail}"/>
+                        </p:column>
+                        <p:column styleClass="center">
+                            <p:commandButton title="Edit" process="@form"
+                                             icon="ui-icon-pencil"
+                                             rendered="#{returnInfo.canEdit}"
+                                             actionListener="#{baseController.onEditReturnInfo(rowIndex)}"
+                                             oncomplete="addReturnInfoDlg.show()"
+                                             update=":frmMain:reasonId, :frmMain:remark">
+                            </p:commandButton>
+                            <p:commandButton title="Remove"
+                                             icon="ui-icon-trash"
+                                             rendered="#{returnInfo.canEdit}"
+                                             oncomplete="confirmDeleteReturnInfoDlg.show()">
+                                <f:setPropertyActionListener value="#{rowIndex}"
+                                                             target="#{baseController.editRecordNo}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton id="btnSubmitReturnSummary"
+                                     binding="#{btnSubmitReturnSummary}"
+                                     value="#{msg.get('app.button.submit')}"
+                                     styleClass="small"
+                                     actionListener="#{baseController.onSumbitReturnSummary()}"
+                                     oncomplete="handleReturnBDMDialogRequest(xhr, status, args)"
+                                     process="@form"
+                                     update=":frmMain:returnBDMDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
+                                     styleClass="small" onclick="returnBDMDlg.hide()"/>
+                </td>
+            </tr>
+        </table>
+</p:panel>
+
+<p:blockUI widgetVar="blockReturnInfoDlg" block="returnBDMDlgPanel" trigger=":frmMain:btnSubmitReturnSummary">
+    LOADING<br/>
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
+
+</ui:composition>
