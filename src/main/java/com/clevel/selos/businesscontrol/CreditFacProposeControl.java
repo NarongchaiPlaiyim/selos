@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.exception.BRMSInterfaceException;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
@@ -902,14 +903,14 @@ public class CreditFacProposeControl extends BusinessControl {
         List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
         NewFeeDetailView newFeeDetailView = new NewFeeDetailView();
         try {
-            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
-//            if (standardPricingResponse != null) {
-            log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult().toString());
-            log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
-            log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().toString());
-            log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
-//            }
-
+//            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
+            log.debug("getPriceFeeInterest ::::workCase :: {}",workCaseId);
+            standardPricingResponse = brmsControl.getPriceFee(workCaseId);
+            if (standardPricingResponse != null) {
+                log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult().toString());
+                log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
+                log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().toString());
+            }
 
             for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()){
                 FeeDetailView feeDetailView = feeTransform.transformToView(pricingFee);
@@ -931,7 +932,9 @@ public class CreditFacProposeControl extends BusinessControl {
                 log.debug("FeePaymentMethodView():::: {}",feeDetailView.getFeePaymentMethodView().getBrmsCode());
                 newFeeDetailViewList.add(newFeeDetailView);
             }
-
+        } catch (BRMSInterfaceException e) {
+            log.error("Exception while get getPriceFeeInterest Appraisal data!", e);
+            throw e;
         } catch (Exception e) {
             log.error("Exception while get getPriceFeeInterest data!", e);
         }
