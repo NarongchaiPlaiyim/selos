@@ -1,18 +1,17 @@
 package com.clevel.selos.model.report;
 
+
 import com.clevel.selos.model.view.ExistingCreditTierDetailView;
 import com.clevel.selos.model.view.ExistingSplitLineDetailView;
-import com.clevel.selos.model.view.NewCreditTierDetailView;
 import com.clevel.selos.report.ReportModel;
-
-import java.math.BigDecimal;
-import java.util.List;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
-public class CreditBorrowerDecisionReport extends ReportModel{
+public class BorrowerAppInRLOSDecisionReport extends ReportModel{
 
     private int count;
     private String accountName;
@@ -33,7 +32,7 @@ public class CreditBorrowerDecisionReport extends ReportModel{
     private List<ExistingCreditTierDetailView> existingCreditTierDetailViewList;
     private List<ExistingSplitLineDetailView> existingSplitLineDetailViewList;
 
-    public CreditBorrowerDecisionReport() {
+    public BorrowerAppInRLOSDecisionReport() {
         count = getDefaultInteger();
         accountName = getDefaultString();
         accountNumber = getDefaultString();
@@ -48,6 +47,8 @@ public class CreditBorrowerDecisionReport extends ReportModel{
         pcePercent = getDefaultBigDecimal();
         pceLimit = getDefaultBigDecimal();
         outstanding = getDefaultBigDecimal();
+
+        existingCreditTierDetailViewList = new ArrayList<ExistingCreditTierDetailView>();
     }
 
 
@@ -178,6 +179,14 @@ public class CreditBorrowerDecisionReport extends ReportModel{
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public BigDecimal getFinalInterest() {
+        return finalInterest;
+    }
+
+    public void setFinalInterest(BigDecimal finalInterest) {
+        this.finalInterest = finalInterest;
     }
 
     @Override
