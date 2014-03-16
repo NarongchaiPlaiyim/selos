@@ -96,6 +96,16 @@
                              update=":frmMain:assignABDMPanel">
 
             </p:commandButton>
+
+            <!--Return to BDM -->
+            <p:commandButton id="btnReturnBDM" value="Return to BDM" styleClass="blueButton" title=""
+                             rendered="#{baseController.manageButton.returnBDMButton}"
+                             actionListener="#{baseController.onOpenReturnBDMDialog()}"
+                             oncomplete="returnBDMDlg.show()"
+                             update=":frmMain:returnBDMPanel">
+                <p:resetInput target=":frmMain:returnBDMPanel"/>
+            </p:commandButton>
+
             <!--Cancel CA-->
             <p:commandButton id="btnCancelCA" value="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
                              rendered="#{baseController.manageButton.cancelCAButton}" type="button"
@@ -158,7 +168,7 @@
             </p:commandButton>
             <!-- Appraisal flow : Return to BDM -->
             <p:commandButton id="btnReturnAppraisalBDM" value="Return to BDM" styleClass="blueButton" title=""
-                             rendered="#{baseController.manageButton.returnBDMButton}">
+                             rendered="#{baseController.manageButton.returnAppraisalBDMButton}">
 
             </p:commandButton>
             <!-- Appraisal flow : Submit to AAD Committee-->
@@ -176,6 +186,23 @@
                              rendered="#{baseController.manageButton.submitRequestAppraisalButton}">
 
             </p:commandButton>
+
+
+            <!--Save Return History-->
+            <!--<p:commandButton id="btnReturnReview" value="Submit Review" styleClass="blueButton" title="Submit Review"
+                             action="#{baseController.onSubmitReviewReturn()}"
+                             update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"
+                             rendered="true">
+
+            </p:commandButton>-->
+
+            <!--Save Return History-->
+            <!--<p:commandButton id="btnReturnReply" value="Submit Reply" styleClass="blueButton" title="Submit Reply"
+                             action="#{baseController.onSumbitReplyReturn()}"
+                             update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"
+                             rendered="true">
+
+            </p:commandButton>-->
         </div>
         <div class="clear"></div>
         <div id="header_information">
@@ -347,6 +374,22 @@
                   onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
                   modal="true" width="460" height="160">
             <ui:include src="/site/dialog/cancelCAFullAppDialog.xhtml"/>
+        </p:dialog>
+    </p:panel>
+
+    <p:panel id="returnBDMPanel" styleClass="panel">
+        <p:dialog id="returnBDMDialog" widgetVar="returnBDMDlg" header="Return Summary"
+                  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+                  modal="true" width="800" height="500" closable="false">
+            <ui:include src="/site/dialog/returnBDMDialog.xhtml"/>
+        </p:dialog>
+    </p:panel>
+
+    <p:panel id="addReturnInfoPanel" styleClass="panel">
+        <p:dialog id="addReturnInfoDialog" widgetVar="addReturnInfoDlg" header="Add Return Information"
+                  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+                  modal="true" width="460" height="160" closable="false">
+            <ui:include src="/site/dialog/addReturnInfoDialog.xhtml"/>
         </p:dialog>
     </p:panel>
 

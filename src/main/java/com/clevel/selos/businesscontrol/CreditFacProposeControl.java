@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.exception.BRMSInterfaceException;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
@@ -819,8 +820,10 @@ public class CreditFacProposeControl extends BusinessControl {
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
 
             List<NewGuarantorDetail> tmpNewGuarantorList = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
-            for(NewGuarantorDetail newGuarantorDetail : tmpNewGuarantorList){
-                newGuarantorRelationDAO.delete(newGuarantorDetail.getNewGuarantorCreditList());
+            for (NewGuarantorDetail newGuarantorDetail : tmpNewGuarantorList) {
+                if (newGuarantorDetail.getNewGuarantorCreditList() != null) {
+                    newGuarantorRelationDAO.delete(newGuarantorDetail.getNewGuarantorCreditList());
+                }
                 newGuarantorDetail.setNewGuarantorCreditList(Collections.<NewGuarantorCredit>emptyList());
                 newGuarantorDetailDAO.persist(newGuarantorDetail);
             }
@@ -832,28 +835,27 @@ public class CreditFacProposeControl extends BusinessControl {
 
         }
 
-        //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
-//        List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase, ProposeType.P);
-//        log.debug("before :: newCollateralSubMortgages :: size :: {}", newCollateralSubMortgages.size());
-//        newSubCollMortgageDAO.delete(newCollateralSubMortgages);
-//        log.debug("after :: newCollateralSubMortgages :: size :: {}", newCollateralSubMortgages.size());
-        //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
-//        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase, ProposeType.P);
-//        log.debug("before :: newCollateralSubOwnerList :: size :: {}", newCollateralSubOwnerList.size());
-//        newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
-//        log.debug("before :: newCollateralSubOwnerList :: size :: {}", newCollateralSubOwnerList.size());
-        //--- Need to Delete SubOwner from newCollateralSubRelatedList before Insert new
-//        List<NewCollateralSubRelated> newCollateralSubRelatedList = newCollateralSubRelatedDAO.getListByWorkCase(workCase, ProposeType.P);
-//        log.debug("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
-//        newCollateralSubRelatedDAO.delete(newCollateralSubRelatedList);
-//        log.debug("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
-
-        if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0){
+        if (Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0) {
 
             List<NewCollateral> tmpNewCollateralList = newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
-            for(NewCollateral newCollateral : tmpNewCollateralList){
-                newCollateralRelationDAO.delete(newCollateral.getNewCollateralCreditList());
-                newCollateral.setNewCollateralCreditList(Collections.<NewCollateralCredit>emptyList());
+            for (NewCollateral newCollateral : tmpNewCollateralList) {
+                if (newCollateral.getNewCollateralCreditList() != null) {
+                    newCollateralRelationDAO.delete(newCollateral.getNewCollateralCreditList());
+                    newCollateral.setNewCollateralCreditList(Collections.<NewCollateralCredit>emptyList());
+                }
+
+                List<NewCollateralHead> newCollateralHeadList = newCollateral.getNewCollateralHeadList();
+                for(NewCollateralHead newCollateralHead:newCollateralHeadList)
+                {
+                    List<NewCollateralSub> newCollateralSubList = newCollateralHead.getNewCollateralSubList();
+                    for(NewCollateralSub newCollateralSub:newCollateralSubList)
+                    {
+                        newSubCollMortgageDAO.delete(newCollateralSub.getNewCollateralSubMortgageList());
+                        newCollateralSubOwnerDAO.delete(newCollateralSub.getNewCollateralSubOwnerList());
+                        newCollateralSub.setNewCollateralSubMortgageList(Collections.<NewCollateralSubMortgage>emptyList());
+                        newCollateralSub.setNewCollateralSubOwnerList(Collections.<NewCollateralSubOwner>emptyList());
+                    }
+                }
                 newCollateralDAO.persist(newCollateral);
             }
 
@@ -901,14 +903,14 @@ public class CreditFacProposeControl extends BusinessControl {
         List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
         NewFeeDetailView newFeeDetailView = new NewFeeDetailView();
         try {
-            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
-//            if (standardPricingResponse != null) {
-            log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult().toString());
-            log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
-            log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().toString());
-            log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
-//            }
-
+//            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
+            log.debug("getPriceFeeInterest ::::workCase :: {}",workCaseId);
+            standardPricingResponse = brmsControl.getPriceFee(workCaseId);
+            if (standardPricingResponse != null) {
+                log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult().toString());
+                log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
+                log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().toString());
+            }
 
             for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()){
                 FeeDetailView feeDetailView = feeTransform.transformToView(pricingFee);
@@ -930,7 +932,9 @@ public class CreditFacProposeControl extends BusinessControl {
                 log.debug("FeePaymentMethodView():::: {}",feeDetailView.getFeePaymentMethodView().getBrmsCode());
                 newFeeDetailViewList.add(newFeeDetailView);
             }
-
+        } catch (BRMSInterfaceException e) {
+            log.error("Exception while get getPriceFeeInterest Appraisal data!", e);
+            throw e;
         } catch (Exception e) {
             log.error("Exception while get getPriceFeeInterest data!", e);
         }

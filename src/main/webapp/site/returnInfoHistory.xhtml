@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>SE-LOS : Return Infomation History</title>
+    <h:outputStylesheet name="css/style.css" />
+    <h:outputScript library="js" name="custom.js" />
+    <style type="text/css">
+        .normal_table {
+            border-width: 0!important;
+            border-style: none!important;
+            border-color: transparent!important;
+        }
+        .normal_table td {
+            border-width: 0!important;
+            border-style: none!important;
+            border-color: transparent!important;
+        }
+    </style>
+</h:head>
+
+<h:body>
+<f:event type="preRenderView" listener="#{returnHistory.preRender()}" />
+<p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+    <h:form id="frmMain">
+        <div id="main_container">
+        <!-- Start Header Logo -->
+        <ui:include src="include/header_logo.xhtml"/>
+        <!-- End Header Logo -->
+        <!-- Start Header Detail -->
+        <ui:include src="include/header_detail.xhtml"/>
+        <!-- End Header Detail -->
+        <!-- Start Menu -->
+        <ui:include src="include/menubar.xhtml"/>
+        <!-- End Menu -->
+        <div id="content_container">
+            <div id="content_name"><h:outputText value="#{msg.get('app.return.result.contentName')} History"/></div>
+            <div id="content">
+                <div id="content_info">
+                    <div id="content_lastupdate">Last update by <h:outputText value="#{returnHistory.modifyBy.userName}"/>, <h:outputText value="#{returnHistory.modifyDate}"><f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy HH:mm:ss"/></h:outputText></div>
+                </div>
+                <div id="content_form">
+                    <p:panel styleClass="panel" id="returnHeaderInfoPanel">
+                    <table class="content_table_form">
+                    <tr>
+                        <td>
+                            <p:commandButton value="View All"
+                                             styleClass="medium"
+                                             action="#{returnUW.onViewHistoryAll()}"
+                                             update=":frmMain"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="content_table">
+                                <p:dataTable id="resultReturnInfoHistoryList" var="returnInfoHistoryVar"
+                                             value="#{returnHistory.returnInfoHistoryViewList}"
+                                             paginator="false" rowKey="#{returnHistoryInfo.id}" rowIndexVar="returnHistoryInfo">
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column headerText="" style="width: 22px;"/>
+                                            <p:column headerText="#{msg.get('app.return.table.header.returnDate')}" style="width: 100px;"/>
+                                            <p:column headerText="#{msg.get('app.return.table.header.returnBy')}" style="width: 100px;"/>
+                                            <p:column headerText="#{msg.get('app.return.table.header.step')}" style="width: 200px;"/>
+                                            <p:column headerText="#{msg.get('app.return.table.header.returnCode')}" style="width: 100px;"/>
+                                            <p:column headerText="#{msg.get('app.return.table.header.description')}" style="width: 250px;"/>
+                                            <p:column headerText="#{msg.get('app.return.table.header.reason')}" style="width: 250px;"/>
+                                            <p:column headerText="#{msg.get('app.return.table.header.reasonDetail')}" style="width: 250px;"/>
+                                            <p:column headerText="#{msg.get('app.return.table.header.replyDate')}" style="width: 100px;"/>
+                                            <p:column headerText="#{msg.get('app.return.table.header.replyDetail')}" style="width: 250px;"/>
+                                            <p:column headerText="#{msg.get('app.return.table.header.challenge')}" style="width:150px;"/>
+                                            <p:column headerText="#{msg.get('app.return.table.header.acceptChallenge')}" style="width:150px;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column headerText="" styleClass="center" style="width:22px;">
+                                        <h:outputText value="#{returnHistoryInfo+1}"/>
+                                    </p:column>
+                                    <p:column styleClass="center top" style="width: 100px;">
+                                        <h:outputText value="#{returnInfoHistoryVar.dateOfReturn}">
+                                            <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy HH:mm:ss"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column styleClass="center top" style="width: 100px;">
+                                        <h:outputText value="#{returnInfoHistoryVar.returnFromUser.userName}"/>
+                                    </p:column>
+                                    <p:column styleClass="center top" style="width: 200px;">
+                                        <h:outputText value="#{returnInfoHistoryVar.returnFromStep.description}"/>
+                                    </p:column>
+                                    <p:column styleClass="center top" style="width: 100px;">
+                                        <h:outputText value="#{returnInfoHistoryVar.returnCode}"/>
+                                    </p:column>
+                                    <p:column styleClass="left top" style="width: 250px;">
+                                        <h:outputText value="#{returnInfoHistoryVar.description}"/>
+                                    </p:column>
+                                    <p:column styleClass="left top" style="width: 250px;">
+                                        <h:outputText value="#{returnInfoHistoryVar.reason}"/>
+                                    </p:column>
+                                    <p:column styleClass="left top" style="width: 250px;">
+                                        <h:outputText value="#{returnInfoHistoryVar.reasonDetail}"/>
+                                    </p:column>
+                                    <p:column styleClass="center top" style="width: 100px;">
+                                        <h:outputText value="#{returnInfoHistoryVar.dateOfReply}">
+                                            <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy HH:mm:ss"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column styleClass="left middle" style="width: 250px;">
+                                        <h:outputText value="#{returnInfoHistoryVar.replyDetail}"/>
+                                    </p:column>
+                                    <p:column styleClass="center top" style="width: 150px;">
+                                        <h:outputText value="#{returnInfoHistoryVar.challenge==1?'No':'Yes'}"/>
+                                    </p:column>
+                                    <p:column styleClass="center top" style="width: 150px;">
+                                        <h:outputText value="#{returnInfoHistoryVar.acceptChallenge==1?'No': returnInfoHistoryVar.acceptChallenge==2? 'Yes': '-'}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </td>
+                    </tr>
+                    </table>
+                    </p:panel>
+                </div>
+                </div>
+            <div id="bottom_line"><!-- --></div>
+        </div>
+        <div class="clear"></div>
+        <!-- Start Footer -->
+        <ui:include src="include/footer.xhtml"/>
+        <!-- End Footer -->
+    </div>
+</h:form>
+</p:panel>
+
+</h:body>
+</f:view>
+</html>

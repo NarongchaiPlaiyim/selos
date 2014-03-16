@@ -87,8 +87,6 @@ public class AppraisalAppointment implements Serializable {
     private Date currentDate;
     private String currentDateDDMMYY;
 
-
-
     private AppraisalDetailView appraisalDetailView;
     private List<AppraisalDetailView> appraisalDetailViewList;
 
@@ -105,7 +103,6 @@ public class AppraisalAppointment implements Serializable {
     private List<AppraisalDivision> appraisalDivisionList;
     private List<LocationProperty> locationPropertyList;
     private List<Province> provinceList;
-
 
     private AppraisalCompany appraisalCompany;
     private AppraisalDivision appraisalDivision;
@@ -160,13 +157,23 @@ public class AppraisalAppointment implements Serializable {
         appraisalDetailViewSelected = new AppraisalDetailView();
     }
 
-    public void preRender(){
-        log.info("-- preRender.");
+    public boolean checkSession(){
+        boolean checkSession = false;
         HttpSession session = FacesUtil.getSession(true);
-        log.debug("preRender ::: setSession ");
-        if((!Util.isNull(session.getAttribute("workCaseId")) || !Util.isNull(session.getAttribute("workCasePreScreenId")) ) && !Util.isNull(session.getAttribute("stepId"))){
-            stepId = Long.valueOf(""+session.getAttribute("stepId"));
-            log.debug("-- stepId[{}]", stepId);
+        if(( (Long)session.getAttribute("workCaseId") != 0 || (Long)session.getAttribute("workCasePreScreenId") != 0 ) &&
+                (Long)session.getAttribute("stepId") != 0){
+            checkSession = true;
+        }
+
+        return checkSession;
+    }
+
+    public void preRender(){
+        log.info("preRender ::: ");
+        HttpSession session = FacesUtil.getSession(true);
+        if(checkSession()){
+            stepId = (Long)session.getAttribute("stepId");
+            log.debug("preRender ::: stepId[{}]", stepId);
 
             if(stepId != StepValue.REQUEST_APPRAISAL.value()){
                 FacesUtil.redirect("/site/inbox.jsf");
