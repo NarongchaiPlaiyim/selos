@@ -78,6 +78,8 @@ public class PDFExecutive_Summary implements Serializable {
         if(!Util.isNull(workCaseId) && !Util.isZero(workCaseId)){
             exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
             exSummaryView  = exSummaryControl.getExSummaryViewByWorkCaseId(workCaseId);
+
+            log.debug("exSummaryView: {}",exSummaryView);
         } else {
             log.debug("workCaseId is Null. {}",workCaseId);
         }
