@@ -612,9 +612,9 @@ public class BaseController implements Serializable {
         log.debug("onEditReturnInfo ::: end");
     }
 
-    public void onDeleteReturnInfo() {
-        log.debug("onDeleteReturnInfo ::: rowOnTable : {}",editRecordNo);
-        returnInfoViewList.remove(editRecordNo);
+    public void onDeleteReturnInfo(int rowOnTable) {
+        log.debug("onDeleteReturnInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
 
         resetAddReturnInfo();
         log.debug("onDeleteReturnInfo ::: end");

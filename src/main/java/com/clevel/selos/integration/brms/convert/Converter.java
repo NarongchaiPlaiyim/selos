@@ -38,10 +38,12 @@ public class Converter implements Serializable {
 
     protected AttributeType getAttributeType(BRMSFieldAttributes field, Date value){
         AttributeType attributeType = new AttributeType();
-
         try{
             attributeType.setName(field.value());
             GregorianCalendar gregorianCalendar = new GregorianCalendar();
+            if(value == null){
+                value = Calendar.getInstance().getTime();
+            }
             gregorianCalendar.setTime(value);
             attributeType.setDateTimeValue(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
         } catch (Exception ex){
@@ -52,6 +54,10 @@ public class Converter implements Serializable {
 
     protected AttributeType getAttributeType(BRMSFieldAttributes field, String value){
         AttributeType attributeType = new AttributeType();
+        if(value == null){
+            logger.debug("attribute value {} is null", field.value());
+            value = "";
+        }
         attributeType.setName(field.value());
         attributeType.setStringValue(value);
         return attributeType;
@@ -59,6 +65,10 @@ public class Converter implements Serializable {
 
     protected AttributeType getAttributeType(BRMSFieldAttributes field, BigDecimal value){
         AttributeType attributeType = new AttributeType();
+        if(value == null){
+            logger.debug("attribute value {} is null", field.value());
+            value = BigDecimal.ZERO;
+        }
         attributeType.setName(field.value());
         attributeType.setNumericValue(value);
         return attributeType;
@@ -69,6 +79,36 @@ public class Converter implements Serializable {
         attributeType.setName(field.value());
         attributeType.setBooleanValue(existingSMECustomer);
         return attributeType;
+    }
+
+    protected BigDecimal getValueForInterface(BigDecimal value){
+        if(value == null)
+            return BigDecimal.ZERO;
+        return value;
+    }
+
+    protected Date getValueForInterface(Date value){
+        if(value == null)
+            return Calendar.getInstance().getTime();
+        return value;
+    }
+
+    protected String getValueForInterface(String value){
+        if(value == null)
+            return "";
+        return value;
+    }
+
+    protected Integer getValueForInterface(Integer value){
+        if(value == null)
+            return 0;
+        return value;
+    }
+
+    protected Boolean getValueForInterface(Boolean value){
+        if(value == null)
+            return false;
+        return value;
     }
 
     protected List<DocumentDetail> getDocumentDetail(List<DocumentSetType> documentSetTypeList, String owner, DocLevel docLevel){

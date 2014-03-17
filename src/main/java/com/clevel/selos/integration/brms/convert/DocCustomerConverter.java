@@ -34,10 +34,10 @@ public class DocCustomerConverter extends Converter{
         logger.debug("-- Start getDecisionServiceRequest {}", applicationInfo);
         ApplicationType applicationType = new ApplicationType();
 
-        applicationType.setApplicationNumber(applicationInfo.getApplicationNo());
+        applicationType.setApplicationNumber(getValueForInterface(applicationInfo.getApplicationNo()));
         try{
             GregorianCalendar gregorianCalendar = new GregorianCalendar();
-            gregorianCalendar.setTime(applicationInfo.getProcessDate());
+            gregorianCalendar.setTime(getValueForInterface(applicationInfo.getProcessDate()));
             applicationType.setDateOfApplication(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
         }catch (Exception ex){
             logger.error("Could not transform Date");
@@ -56,11 +56,17 @@ public class DocCustomerConverter extends Converter{
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.TOP_UP_BA_FLAG, applicationInfo.isTopupBA()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.TCG_FLAG, applicationInfo.isRequestTCG()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.STEP, applicationInfo.getStepCode()));
-        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.REFERENCE_DOCUMENT_TYPE, applicationInfo.getReferredDocType()));
+        if(applicationInfo.getReferredDocType() == null){
+            attributeTypeList.add(getAttributeType(BRMSFieldAttributes.REFERENCE_DOCUMENT_TYPE, ""));
+        }else{
+            attributeTypeList.add(getAttributeType(BRMSFieldAttributes.REFERENCE_DOCUMENT_TYPE, applicationInfo.getReferredDocType()));
+        }
+
+
 
         List<ProductType> productTypeList = applicationType.getProduct();
         ProductType productType = new ProductType();
-        productType.setProductType(applicationInfo.getProductGroup());
+        productType.setProductType(getValueForInterface(applicationInfo.getProductGroup()));
         productTypeList.add(productType);
 
         //1. Convert Value for Product Program - Acc/Requested//
@@ -79,7 +85,7 @@ public class DocCustomerConverter extends Converter{
                     selosProductProgramTypeList.add(selosProductProgramType);
                     selosProductProgramType = new SELOSProductProgramType();
                 }
-                selosProductProgramType.setID(accountRequested.getCreditDetailId());
+                selosProductProgramType.setID(getValueForInterface(accountRequested.getCreditDetailId()));
                 selosProductProgramType.setName(accountRequested.getProductProgram());
                 creditFacilityTypeList = selosProductProgramType.getCreditFacility();
             }
