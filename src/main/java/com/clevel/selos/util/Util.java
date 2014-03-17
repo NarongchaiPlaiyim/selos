@@ -312,6 +312,17 @@ public class Util implements Serializable {
         }
     }
 
+    public static BigDecimal multiply(BigDecimal value, int multiplier){
+        if(value == null)
+            return null;
+
+        try {
+            return value.multiply(BigDecimal.valueOf(multiplier));
+        } catch (Exception e){
+            return null;
+        }
+    }
+
     public static BigDecimal compareToFindLower(BigDecimal b1, BigDecimal b2) {
         if (b1 == null) {
             b1 = BigDecimal.ZERO;
@@ -361,7 +372,7 @@ public class Util implements Serializable {
 
     public static<T> boolean isNull(T object){
         if(object != null){
-            return !"null".equals(object.toString().toLowerCase().trim()) ? false : true;
+            return !"null".equalsIgnoreCase(object.toString().trim()) ? false : true;
         } else {
             return true;
         }

@@ -1,0 +1,59 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<p:panel id="addReturnInfoDlgPanel" styleClass="panel-dialog">
+    <table class="content_form">
+        <tr>
+            <td class="title right" style="min-width: 140px; width: 80px;">Return Code :</td>
+            <td>
+                <p:selectOneMenu id="reasonId" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
+                                 value="#{baseController.reasonId}"
+                                 required="#{not empty param[btnSubmitAddReturnInfo.clientId]}">
+                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                    <f:selectItems value="#{baseController.returnReason}"
+                                   var="reasonItem"
+                                   itemLabel="#{reasonItem.code} - #{reasonItem.description}"
+                                   itemValue="#{reasonItem.id}"/>
+                    <p:ajax event="change" update="@this"/>
+                </p:selectOneMenu>
+            </td>
+        </tr>
+        <tr>
+            <td class="title right top">Remark :</td>
+            <td>
+                <p:inputTextarea id="remark" value="#{baseController.returnRemark}" autoResize="false" cols="35"
+                                 rows="5"></p:inputTextarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" class="center">
+                <p:commandButton id="btnSubmitAddReturnInfo"
+                                 styleClass="small"
+                                 binding="#{btnSubmitAddReturnInfo}"
+                                 value="#{msg.get('app.button.save')}"
+                                 actionListener="#{baseController.onSaveReturnInfo()}"
+                                 process="@form"
+                                 update=":frmMain:returnBDMDlgPanel, :frmMain:addReturnInfoDlgPanel"
+                                 oncomplete="handleReturnBDMAddDialogRequest(xhr, status, args)"/>
+                <p:commandButton id="dlgCancelReturnInfoBtn"
+                                 value="#{msg.get('app.button.cancel')}"
+                                 styleClass="small"
+                                 action="#{baseController.resetAddReturnInfo()}"
+                                 oncomplete="addReturnInfoDlg.hide()"
+                                 process="@form"
+                                 update=":frmMain:returnBDMDlgPanel"/>
+            </td>
+        </tr>
+    </table>
+</p:panel>
+
+<p:blockUI widgetVar="blockAddReturnInfoDlg" block="addReturnInfoDlgPanel" trigger=":frmMain:btnSubmitAddReturnInfo">
+    LOADING<br/>
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
+
+</ui:composition>

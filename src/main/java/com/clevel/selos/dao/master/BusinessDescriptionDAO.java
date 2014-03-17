@@ -5,6 +5,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -15,6 +16,7 @@ public class BusinessDescriptionDAO extends GenericDAO<BusinessDescription, Inte
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     public BusinessDescriptionDAO() {
     }
@@ -23,6 +25,7 @@ public class BusinessDescriptionDAO extends GenericDAO<BusinessDescription, Inte
         log.info("getListByBusinessGroup. (businessGroup: {})", businessGroup);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("businessGroup", businessGroup));
+        criteria.addOrder(Order.asc("id"));
         List<BusinessDescription> businessDescriptions = criteria.list();
         log.info("getListByBusinessGroup. (result size: {})", businessDescriptions.size());
         return businessDescriptions;

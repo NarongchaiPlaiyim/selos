@@ -183,18 +183,14 @@ public class NewCollateralTransform extends Transform {
             newCollateralSub.setCollateralOwner(newCollateralSubView.getCollateralOwner());
             newCollateralSub.setCollateralOwnerAAD(newCollateralSubView.getCollateralOwnerAAD());
             newCollateralSub.setSubCollateralType(newCollateralSubView.getSubCollateralType());
-            newCollateralSub.setNewCollateralSubMortgageList(new ArrayList<NewCollateralSubMortgage>());
-            newCollateralSub.setNewCollateralSubOwnerList(new ArrayList<NewCollateralSubOwner>());
-            newCollateralSub.setNewCollateralSubRelatedList(new ArrayList<NewCollateralSubRelated>());
 
-           /* if (newCollateralSubView.getMortgageList() != null) {
+            if (newCollateralSubView.getMortgageList() != null) {
                 List<NewCollateralSubMortgage> newCollateralSubMortgageList = new ArrayList<NewCollateralSubMortgage>();
                 newCollateralSub.setNewCollateralSubMortgageList(newCollateralSubMortgageList);
-                NewCollateralSubMortgage newCollateralSubMortgage;
-                for (MortgageType mortgageType : newCollateralSubView.getMortgageList()) {
-                    MortgageType mortgage = mortgageTypeDAO.findById(mortgageType.getId());
-                    newCollateralSubMortgage = new NewCollateralSubMortgage();
-                    newCollateralSubMortgage.setMortgageType(mortgage);
+                List<MortgageType> mortgageTypeList = mortgageTypeTransform.transformToModel(newCollateralSubView.getMortgageList());
+                for (MortgageType mortgageType : mortgageTypeList) {
+                    NewCollateralSubMortgage newCollateralSubMortgage = new NewCollateralSubMortgage();
+                    newCollateralSubMortgage.setMortgageType(mortgageType);
                     newCollateralSubMortgage.setNewCollateralSub(newCollateralSub);
                     newCollateralSubMortgage.setWorkCase(workCase);
                     newCollateralSubMortgage.setProposeType(ProposeType.P);
@@ -202,8 +198,8 @@ public class NewCollateralTransform extends Transform {
                 }
                 newCollateralSub.setNewCollateralSubMortgageList(newCollateralSubMortgageList);
             }
-*/
-           /* if (newCollateralSubView.getCollateralOwnerUWList() != null) {
+
+            if (newCollateralSubView.getCollateralOwnerUWList() != null) {
                 List<NewCollateralSubOwner> newCollateralSubOwnerList = new ArrayList<NewCollateralSubOwner>();
                 newCollateralSub.setNewCollateralSubOwnerList(newCollateralSubOwnerList);
                 for (CustomerInfoView customerInfoView : newCollateralSubView.getCollateralOwnerUWList()) {
@@ -216,7 +212,7 @@ public class NewCollateralTransform extends Transform {
                     newCollateralSubOwnerList.add(newCollateralSubOwner);
                 }
                 newCollateralSub.setNewCollateralSubOwnerList(newCollateralSubOwnerList);
-            }*/
+            }
 
            /* if (newCollateralSubView.getRelatedWithList() != null) {
                 List<NewCollateralSubRelated> newCollateralSubRelatedList = new ArrayList<NewCollateralSubRelated>();
@@ -449,13 +445,15 @@ public class NewCollateralTransform extends Transform {
 //            }
 
             List<NewCollateralSubMortgage> newCollateralSubMortgages = newCollateralSubMortgageDAO.getListNewCollateralSubMortgage(subCollateralDetail);
-
+            List<MortgageTypeView> mortgageTypeViewList = new ArrayList<MortgageTypeView>();
             if (newCollateralSubMortgages != null) {
-                newCollateralSubView.setMortgageList(new ArrayList<MortgageType>());
+                newCollateralSubView.setMortgageList(mortgageTypeViewList);
                 for (NewCollateralSubMortgage newCollateralSubMortgage : newCollateralSubMortgages) {
                     log.info("newCollateralSubMortgage id ::{}", newCollateralSubMortgage.getId());
+                    MortgageTypeView mortgageTypeView = mortgageTypeTransform.transformToView(newCollateralSubMortgage.getMortgageType());
+                    mortgageTypeViewList.add(mortgageTypeView);
                 }
-
+                newCollateralSubView.setMortgageList(mortgageTypeViewList);
             }
 
             List<NewCollateralSubRelated> newCollateralSubRelateList = newCollateralSubRelatedDAO.getListNewCollateralSubRelate(subCollateralDetail);

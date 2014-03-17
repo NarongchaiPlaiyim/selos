@@ -6,6 +6,18 @@
     <h:outputStylesheet name="css/jquery.menu.css" />
     <h:outputScript library="js" name="jquery.menu.js" />
 
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function () {
+            selosmenu.init({
+                mainmenuid: "selosmenu", //menu DIV id
+                orientation: 'h', //Horizontal or vertical menu: Set to "h" or "v"
+                classname: 'selosmenu'//, //class added to menu's outer DIV
+            });
+        });
+        //]]>
+    </script>
+
     <div id="selosmenu" class="selosmenu">
         <ul>
             <h:panelGroup id="pnl_menu_inbox" styleClass="panel">

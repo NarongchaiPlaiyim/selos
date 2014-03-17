@@ -239,6 +239,8 @@
                                                             showButtonPanel="true"
                                                             defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
                                                             maxdate="#{bizInfoSummary.currentDateDDMMYY}">
+                                                <p:ajax event="change"  update=":frmMain:registrationDate" />
+                                                <p:ajax event="dateSelect"  update=":frmMain:registrationDate" />
                                             </clv:BECalendar>
                                         </td>
                                     </tr>
