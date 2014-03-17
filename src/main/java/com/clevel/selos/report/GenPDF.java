@@ -93,6 +93,7 @@ public class GenPDF extends ReportService {
         map.put("fillRelatedAppInRLOS",pdfDecision.fillRelatedAppInRLOS());
         map.put("fillExistingCollateralBorrower",pdfDecision.fillExistingCollateralBorrower());
         map.put("fillExistingCollateralRelated",pdfDecision.fillExistingCollateralRelated());
+        map.put("fillGuarantorBorrower",pdfDecision.fillGuarantorBorrower());
 
 //        genSubreportDecision();
 

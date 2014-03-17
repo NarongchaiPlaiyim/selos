@@ -454,8 +454,26 @@ public class PDFDecision implements Serializable {
     public List<GuarantorBorrowerDecisionReport> fillGuarantorBorrower(){
         init();
         List<GuarantorBorrowerDecisionReport> guarantorBorrowerDecisionReportList = new ArrayList<GuarantorBorrowerDecisionReport>();
+        List<ExistingGuarantorDetailView> extGuarantorList = decisionView.getExtGuarantorList();
+        int count = 1;
+        if (Util.safetyList(extGuarantorList).size() > 0){
+            log.debug("extGuarantorList by fillGuarantorBorrower. {}",extGuarantorList);
+            for (ExistingGuarantorDetailView detailView : extGuarantorList){
+                GuarantorBorrowerDecisionReport guarantorBorrowerDecisionReport = new GuarantorBorrowerDecisionReport();
+                guarantorBorrowerDecisionReport.setCount(count++);
+                guarantorBorrowerDecisionReport.setGuarantorName(detailView.getGuarantorName().getFirstNameTh()+"  "+detailView.getGuarantorName().getLastNameTh());
+                guarantorBorrowerDecisionReport.setTcgLgNo(detailView.getTcgLgNo());
+                guarantorBorrowerDecisionReport.setExistingCreditTypeDetailViewList(detailView.getExistingCreditTypeDetailViewList());
+                guarantorBorrowerDecisionReport.setTotalLimitGuaranteeAmount(detailView.getTotalLimitGuaranteeAmount());
+                guarantorBorrowerDecisionReportList.add(guarantorBorrowerDecisionReport);
+            }
+        } else {
+            log.debug("extGuarantorList is Null by fillGuarantorBorrower. {}",extGuarantorList);
+            GuarantorBorrowerDecisionReport guarantorBorrowerDecisionReport = new GuarantorBorrowerDecisionReport();
+            guarantorBorrowerDecisionReportList.add(guarantorBorrowerDecisionReport);
+        }
 
-        return null;
+        return guarantorBorrowerDecisionReportList;
     }
 
     public List<ProposedCreditDecisionReport> fillProposedCredit(){
