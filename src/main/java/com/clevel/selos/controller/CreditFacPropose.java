@@ -1196,9 +1196,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         if (newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).getId() != 0) {
             deleteCollIdList.add(newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).getId());
         }
-//        newCreditFacilityView.getNewCollateralViewDelList().add(selectCollateralDetailView);
-        newCreditFacilityView.getNewCollateralViewList().remove(selectCollateralDetailView);
 
+        newCreditFacilityView.getNewCollateralViewList().remove(selectCollateralDetailView);
         log.debug("onDeleteProposeCollInfo :: newCreditFacilityView.getNewCollateralViewList() :: {}", newCreditFacilityView.getNewCollateralViewList().size());
     }
 
