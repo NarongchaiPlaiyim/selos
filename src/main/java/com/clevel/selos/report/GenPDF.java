@@ -88,6 +88,11 @@ public class GenPDF extends ReportService {
         map.put("fillCondition",pdfDecision.fillCondition());
         map.put("fillBorrowerRetail",pdfDecision.fillBorrowerRetail());
         map.put("fillAppInRLOS",pdfDecision.fillAppInRLOS());
+        map.put("fillRelatedCommercial",pdfDecision.fillRelatedCommercial());
+        map.put("fillRelatedRetail",pdfDecision.fillRelatedRetail());
+        map.put("fillRelatedAppInRLOS",pdfDecision.fillRelatedAppInRLOS());
+        map.put("fillExistingCollateralBorrower",pdfDecision.fillExistingCollateralBorrower());
+        map.put("fillExistingCollateralRelated",pdfDecision.fillExistingCollateralRelated());
 
 //        genSubreportDecision();
 

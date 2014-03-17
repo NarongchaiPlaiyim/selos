@@ -3,10 +3,7 @@ package com.clevel.selos.report.template;
 import com.clevel.selos.businesscontrol.DecisionControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.report.*;
-import com.clevel.selos.model.view.DecisionView;
-import com.clevel.selos.model.view.ExistingConditionDetailView;
-import com.clevel.selos.model.view.ExistingCreditDetailView;
-import com.clevel.selos.model.view.NewCreditDetailView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -183,8 +180,7 @@ public class PDFDecision implements Serializable {
     public List<BorrowerAppInRLOSDecisionReport> fillAppInRLOS(){
         init();
         List<BorrowerAppInRLOSDecisionReport> borrowerAppInRLOSDecisionReportList = new ArrayList<BorrowerAppInRLOSDecisionReport>();
-        List<ExistingCreditDetailView> existingConditionDetailViews = new ArrayList<ExistingCreditDetailView>();
-        existingConditionDetailViews = decisionView.getExtBorrowerAppInRLOSList();
+        List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtBorrowerAppInRLOSList();
 
         int count = 1;
         if(Util.safetyList(existingConditionDetailViews).size() > 0){
@@ -228,6 +224,231 @@ public class PDFDecision implements Serializable {
             log.debug("existingConditionDetailViews is Null by fillAppInRLOS. {}",existingConditionDetailViews);
         }
         return borrowerAppInRLOSDecisionReportList;
+    }
+
+    public List<RelatedCommercialDecisionReport> fillRelatedCommercial(){
+        List<RelatedCommercialDecisionReport> relatedCommercialDecisionReports = new ArrayList<RelatedCommercialDecisionReport>();
+        List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtRelatedComCreditList();
+
+        int count = 1;
+        if(Util.safetyList(existingConditionDetailViews).size() > 0){
+            log.debug("existingConditionDetailViews by fillRelatedCommercial. {}",existingConditionDetailViews);
+            for (ExistingCreditDetailView detailView : existingConditionDetailViews){
+                RelatedCommercialDecisionReport relatedCommercialDecisionReport = new RelatedCommercialDecisionReport();
+                relatedCommercialDecisionReport.setCount(count++);
+                relatedCommercialDecisionReport.setAccountName(detailView.getAccountName());
+                if (Util.isNull(detailView.getAccountName())){
+                    relatedCommercialDecisionReport.setAccountName("-");
+                }
+
+                relatedCommercialDecisionReport.setAccountNumber(detailView.getAccountNumber());
+                if (Util.isNull(detailView.getAccountNumber())){
+                    relatedCommercialDecisionReport.setAccountNumber("-");
+                }
+
+                relatedCommercialDecisionReport.setAccountSuf(detailView.getAccountSuf());
+                if (Util.isNull(detailView.getAccountSuf())){
+                    relatedCommercialDecisionReport.setAccountSuf("-");
+                }
+
+                relatedCommercialDecisionReport.setDescription(detailView.getExistAccountStatusView().getDescription());
+                if (Util.isNull(detailView.getExistAccountStatusView().getDescription())){
+                    relatedCommercialDecisionReport.setDescription("-");
+                }
+                relatedCommercialDecisionReport.setProductProgramName(detailView.getExistProductProgramView().getName());
+                relatedCommercialDecisionReport.setCreditTypeName(detailView.getExistCreditTypeView().getName());
+                relatedCommercialDecisionReport.setProductCode(detailView.getProductCode());
+                relatedCommercialDecisionReport.setProjectCode(detailView.getProjectCode());
+                relatedCommercialDecisionReport.setLimit(detailView.getLimit());
+                relatedCommercialDecisionReport.setPcePercent(detailView.getPceLimit());
+                relatedCommercialDecisionReport.setPceLimit(detailView.getLimit());
+                relatedCommercialDecisionReport.setOutstanding(detailView.getOutstanding());
+                relatedCommercialDecisionReport.setExistingCreditTierDetailViewList(detailView.getExistingCreditTierDetailViewList());
+                relatedCommercialDecisionReports.add(relatedCommercialDecisionReport);
+            }
+        } else {
+            RelatedCommercialDecisionReport relatedCommercialDecisionReport = new RelatedCommercialDecisionReport();
+            relatedCommercialDecisionReports.add(relatedCommercialDecisionReport);
+            log.debug("existingConditionDetailViews is Null by fillRelatedCommercial. {}",existingConditionDetailViews);
+        }
+
+        return relatedCommercialDecisionReports;
+    }
+
+    public List<RelatedRetailDecisionReport> fillRelatedRetail(){
+        List<RelatedRetailDecisionReport> relatedRetailDecisionReportList = new ArrayList<RelatedRetailDecisionReport>();
+        List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtRelatedRetailCreditList();
+
+        int count = 1;
+        if(Util.safetyList(existingConditionDetailViews).size() > 0){
+            log.debug("existingConditionDetailViews by fillRelatedRetail. {}",existingConditionDetailViews);
+            for (ExistingCreditDetailView detailView : existingConditionDetailViews){
+                RelatedRetailDecisionReport relatedRetailDecisionReport = new RelatedRetailDecisionReport();
+                relatedRetailDecisionReport.setCount(count++);
+                relatedRetailDecisionReport.setAccountName(detailView.getAccountName());
+                if (Util.isNull(detailView.getAccountName())){
+                    relatedRetailDecisionReport.setAccountName("-");
+                }
+
+                relatedRetailDecisionReport.setAccountNumber(detailView.getAccountNumber());
+                if (Util.isNull(detailView.getAccountNumber())){
+                    relatedRetailDecisionReport.setAccountNumber("-");
+                }
+
+                relatedRetailDecisionReport.setAccountSuf(detailView.getAccountSuf());
+                if (Util.isNull(detailView.getAccountSuf())){
+                    relatedRetailDecisionReport.setAccountSuf("-");
+                }
+
+                relatedRetailDecisionReport.setDescription(detailView.getExistAccountStatusView().getDescription());
+                if (Util.isNull(detailView.getExistAccountStatusView().getDescription())){
+                    relatedRetailDecisionReport.setDescription("-");
+                }
+                relatedRetailDecisionReport.setProductProgramName(detailView.getExistProductProgramView().getName());
+                relatedRetailDecisionReport.setCreditTypeName(detailView.getExistCreditTypeView().getName());
+                relatedRetailDecisionReport.setProductCode(detailView.getProductCode());
+                relatedRetailDecisionReport.setProjectCode(detailView.getProjectCode());
+                relatedRetailDecisionReport.setLimit(detailView.getLimit());
+                relatedRetailDecisionReport.setPcePercent(detailView.getPceLimit());
+                relatedRetailDecisionReport.setPceLimit(detailView.getLimit());
+                relatedRetailDecisionReport.setOutstanding(detailView.getOutstanding());
+                relatedRetailDecisionReport.setExistingCreditTierDetailViewList(detailView.getExistingCreditTierDetailViewList());
+                relatedRetailDecisionReportList.add(relatedRetailDecisionReport);
+            }
+        } else {
+            RelatedRetailDecisionReport relatedRetailDecisionReport = new RelatedRetailDecisionReport();
+            relatedRetailDecisionReportList.add(relatedRetailDecisionReport);
+            log.debug("existingConditionDetailViews is Null by fillRelatedRetail. {}",existingConditionDetailViews);
+        }
+
+        return relatedRetailDecisionReportList;
+    }
+
+    public List<RelatedAppInRLOSDecisionReport> fillRelatedAppInRLOS(){
+        List<RelatedAppInRLOSDecisionReport> relatedAppInRLOSDecisionReportArrayList = new ArrayList<RelatedAppInRLOSDecisionReport>();
+        List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtRelatedAppInRLOSList();
+
+        int count = 1;
+        if(Util.safetyList(existingConditionDetailViews).size() > 0){
+            log.debug("existingConditionDetailViews by fillRelatedAppInRLOS. {}",existingConditionDetailViews);
+            for (ExistingCreditDetailView detailView : decisionView.getExtRelatedAppInRLOSList()){
+                RelatedAppInRLOSDecisionReport relatedAppInRLOSDecisionReport = new RelatedAppInRLOSDecisionReport();
+                relatedAppInRLOSDecisionReport.setCount(count++);
+                relatedAppInRLOSDecisionReport.setAccountName(detailView.getAccountName());
+                if (Util.isNull(detailView.getAccountName())){
+                    relatedAppInRLOSDecisionReport.setAccountName("-");
+                }
+
+                relatedAppInRLOSDecisionReport.setAccountNumber(detailView.getAccountNumber());
+                if (Util.isNull(detailView.getAccountNumber())){
+                    relatedAppInRLOSDecisionReport.setAccountNumber("-");
+                }
+
+                relatedAppInRLOSDecisionReport.setAccountSuf(detailView.getAccountSuf());
+                if (Util.isNull(detailView.getAccountSuf())){
+                    relatedAppInRLOSDecisionReport.setAccountSuf("-");
+                }
+
+                relatedAppInRLOSDecisionReport.setDescription(detailView.getExistAccountStatusView().getDescription());
+                if (Util.isNull(detailView.getExistAccountStatusView().getDescription())){
+                    relatedAppInRLOSDecisionReport.setDescription("-");
+                }
+                relatedAppInRLOSDecisionReport.setProductProgramName(detailView.getExistProductProgramView().getName());
+                relatedAppInRLOSDecisionReport.setCreditTypeName(detailView.getExistCreditTypeView().getName());
+                relatedAppInRLOSDecisionReport.setProductCode(detailView.getProductCode());
+                relatedAppInRLOSDecisionReport.setProjectCode(detailView.getProjectCode());
+                relatedAppInRLOSDecisionReport.setLimit(detailView.getLimit());
+                relatedAppInRLOSDecisionReport.setPcePercent(detailView.getPceLimit());
+                relatedAppInRLOSDecisionReport.setPceLimit(detailView.getLimit());
+                relatedAppInRLOSDecisionReport.setOutstanding(detailView.getOutstanding());
+                relatedAppInRLOSDecisionReport.setExistingCreditTierDetailViewList(detailView.getExistingCreditTierDetailViewList());
+                relatedAppInRLOSDecisionReportArrayList.add(relatedAppInRLOSDecisionReport);
+            }
+        } else {
+            RelatedAppInRLOSDecisionReport relatedAppInRLOSDecisionReport = new RelatedAppInRLOSDecisionReport();
+            relatedAppInRLOSDecisionReportArrayList.add(relatedAppInRLOSDecisionReport);
+            log.debug("existingConditionDetailViews is Null by fillRelatedAppInRLOS. {}",existingConditionDetailViews);
+        }
+
+        return relatedAppInRLOSDecisionReportArrayList;
+    }
+
+    public List<ExistingCollateralBorrowerDecisionReport> fillExistingCollateralBorrower(){
+        init();
+        List<ExistingCollateralBorrowerDecisionReport> collateralBorrowerDecisionReportList = new ArrayList<ExistingCollateralBorrowerDecisionReport>();
+        List<ExistingCollateralDetailView> conditionDetailViews = decisionView.getExtBorrowerCollateralList();
+
+        int count = 1;
+        if (Util.safetyList(conditionDetailViews).size() > 0){
+            log.debug("conditionDetailViews by fillExistingCollateralBorrower. {}",conditionDetailViews);
+            for (ExistingCollateralDetailView detailView : conditionDetailViews){
+                ExistingCollateralBorrowerDecisionReport collateralBorrowerDecisionReport = new ExistingCollateralBorrowerDecisionReport();
+                collateralBorrowerDecisionReport.setCount(count++);
+                collateralBorrowerDecisionReport.setPotentialCollateral(detailView.getPotentialCollateral().getDescription());
+                collateralBorrowerDecisionReport.setCollateralType(detailView.getCollateralType().getDescription());
+                collateralBorrowerDecisionReport.setOwner(detailView.getOwner());
+                collateralBorrowerDecisionReport.setRelation(detailView.getRelation().getDescription());
+                collateralBorrowerDecisionReport.setAppraisalDate(detailView.getAppraisalDate());
+                collateralBorrowerDecisionReport.setCollateralNumber(detailView.getCollateralNumber());
+                collateralBorrowerDecisionReport.setCollateralLocation(detailView.getCollateralLocation());
+                collateralBorrowerDecisionReport.setRemark(detailView.getRemark());
+                collateralBorrowerDecisionReport.setCusName(detailView.getCusName());
+                collateralBorrowerDecisionReport.setAccountNumber(detailView.getAccountNumber());
+                collateralBorrowerDecisionReport.setAccountSuffix(detailView.getAccountSuffix());
+                collateralBorrowerDecisionReport.setProductProgram(detailView.getProductProgram());
+                collateralBorrowerDecisionReport.setCreditFacility(detailView.getCreditFacility());
+                collateralBorrowerDecisionReport.setLimit(detailView.getLimit());
+                collateralBorrowerDecisionReport.setMortgageType(detailView.getMortgageType().getMortgage());
+                collateralBorrowerDecisionReport.setAppraisalValue(detailView.getAppraisalValue());
+                collateralBorrowerDecisionReport.setMortgageValue(detailView.getMortgageValue());
+                collateralBorrowerDecisionReportList.add(collateralBorrowerDecisionReport);
+            }
+        } else {
+            ExistingCollateralBorrowerDecisionReport collateralBorrowerDecisionReport = new ExistingCollateralBorrowerDecisionReport();
+            collateralBorrowerDecisionReportList.add(collateralBorrowerDecisionReport);
+            log.debug("conditionDetailViews is Null by fillExistingCollateralBorrower. {}",conditionDetailViews);
+        }
+
+        return collateralBorrowerDecisionReportList;
+    }
+
+    public List<ExistingCollateralRelatedDecisionReport> fillExistingCollateralRelated(){
+        init();
+        List<ExistingCollateralRelatedDecisionReport> collateralRelatedDecisionReportArrayList = new ArrayList<ExistingCollateralRelatedDecisionReport>();
+        List<ExistingCollateralDetailView> conditionDetailViews = decisionView.getExtRelatedCollateralList();
+
+        int count = 1;
+        if (Util.safetyList(conditionDetailViews).size() > 0){
+            log.debug("conditionDetailViews by fillExistingCollateralRelated. {}",conditionDetailViews);
+            for (ExistingCollateralDetailView detailView : conditionDetailViews){
+                ExistingCollateralRelatedDecisionReport collateralRelatedDecisionReport = new ExistingCollateralRelatedDecisionReport();
+                collateralRelatedDecisionReport.setCount(count++);
+                collateralRelatedDecisionReport.setPotentialCollateral(detailView.getPotentialCollateral().getDescription());
+                collateralRelatedDecisionReport.setCollateralType(detailView.getCollateralType().getDescription());
+                collateralRelatedDecisionReport.setOwner(detailView.getOwner());
+                collateralRelatedDecisionReport.setRelation(detailView.getRelation().getDescription());
+                collateralRelatedDecisionReport.setAppraisalDate(detailView.getAppraisalDate());
+                collateralRelatedDecisionReport.setCollateralNumber(detailView.getCollateralNumber());
+                collateralRelatedDecisionReport.setCollateralLocation(detailView.getCollateralLocation());
+                collateralRelatedDecisionReport.setRemark(detailView.getRemark());
+                collateralRelatedDecisionReport.setCusName(detailView.getCusName());
+                collateralRelatedDecisionReport.setAccountNumber(detailView.getAccountNumber());
+                collateralRelatedDecisionReport.setAccountSuffix(detailView.getAccountSuffix());
+                collateralRelatedDecisionReport.setProductProgram(detailView.getProductProgram());
+                collateralRelatedDecisionReport.setCreditFacility(detailView.getCreditFacility());
+                collateralRelatedDecisionReport.setLimit(detailView.getLimit());
+                collateralRelatedDecisionReport.setMortgageType(detailView.getMortgageType().getMortgage());
+                collateralRelatedDecisionReport.setAppraisalValue(detailView.getAppraisalValue());
+                collateralRelatedDecisionReport.setMortgageValue(detailView.getMortgageValue());
+                collateralRelatedDecisionReportArrayList.add(collateralRelatedDecisionReport);
+            }
+        } else {
+            ExistingCollateralRelatedDecisionReport collateralRelatedDecisionReport = new ExistingCollateralRelatedDecisionReport();
+            collateralRelatedDecisionReportArrayList.add(collateralRelatedDecisionReport);
+            log.debug("conditionDetailViews is Null by fillExistingCollateralRelated. {}",conditionDetailViews);
+        }
+
+        return collateralRelatedDecisionReportArrayList;
     }
 
     public List<ProposedCreditDecisionReport> fillProposedCredit(){
