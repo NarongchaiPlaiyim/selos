@@ -12,16 +12,26 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class GuarantorBorrowerDecisionReport extends ReportModel{
 
+    private int count;
     private String guarantorName;
     private String tcgLgNo;
     private BigDecimal totalLimitGuaranteeAmount;
     private List<ExistingCreditTypeDetailView> existingCreditTypeDetailViewList;
 
     public GuarantorBorrowerDecisionReport() {
+        count = getDefaultInteger();
         guarantorName = getDefaultString();
         tcgLgNo = getDefaultString();
         totalLimitGuaranteeAmount = getDefaultBigDecimal();
         existingCreditTypeDetailViewList = new ArrayList<ExistingCreditTypeDetailView>();
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public List<ExistingCreditTypeDetailView> getExistingCreditTypeDetailViewList() {
