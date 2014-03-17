@@ -58,8 +58,8 @@
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.dbrInterest')}" styleClass="center"/>
                                             </td>
                                             <td >
-                                                <p:inputText id="dbrInterest" value="#{dbrInfo.dbr.dbrInterest}" style="text-align: right" readonly="true">
-                                                    <f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                                                <p:inputText id="dbrInterest" maxlength="14" value="#{dbrInfo.dbr.dbrInterest}" style="text-align: right" readonly="true">
+                                                    <f:convertNumber  type="number" minFractionDigits="2" maxFractionDigits="2"/>
                                                 </p:inputText>
                                             </td>
                                             <td class="title">
@@ -71,7 +71,7 @@
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.monthlyIncome')}" styleClass="center"/>
                                             </td>
                                             <td>
-                                                <p:inputText id="monthlyIncome" value="#{dbrInfo.dbr.monthlyIncome}" style="text-align: right" readonly="true">
+                                                <p:inputText id="monthlyIncome" maxlength="14" value="#{dbrInfo.dbr.monthlyIncome}" style="text-align: right" readonly="true">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                 </p:inputText>
                                             </td>
@@ -109,7 +109,7 @@
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.netMonthlyIncome')}" styleClass="center"/>
                                             </td>
                                             <td>
-                                                <p:inputText id="netMonthlyIncome" value="#{dbrInfo.dbr.netMonthlyIncome}"   style="text-align: right" readonly="true">
+                                                <p:inputText id="netMonthlyIncome" maxlength="14" value="#{dbrInfo.dbr.netMonthlyIncome}"   style="text-align: right" readonly="true">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                 </p:inputText>
                                             </td>
@@ -118,7 +118,7 @@
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.currentDBR')}" styleClass="center"/>
                                             </td>
                                             <td>
-                                                <p:inputText id="currentDBR" value="#{dbrInfo.dbr.currentDBR}" style="text-align: right" readonly="true">
+                                                <p:inputText id="currentDBR" maxlength="14" value="#{dbrInfo.dbr.currentDBR}" style="text-align: right" readonly="true">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                 </p:inputText>
                                             </td>
@@ -130,7 +130,7 @@
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.dbrBeforeRequest')}" styleClass="center"/>
                                             </td>
                                             <td>
-                                                <p:inputText id="dbrBeforeRequest" value="#{dbrInfo.dbr.dbrBeforeRequest}" style="text-align: right" readonly="true">
+                                                <p:inputText id="dbrBeforeRequest" maxlength="14" value="#{dbrInfo.dbr.dbrBeforeRequest}" style="text-align: right" readonly="true">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     <p:ajax event="change" update=":frmMain:dbrBeforeRequest"/>
                                                 </p:inputText>
