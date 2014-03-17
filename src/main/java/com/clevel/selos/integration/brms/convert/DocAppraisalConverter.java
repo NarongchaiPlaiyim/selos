@@ -28,10 +28,10 @@ public class DocAppraisalConverter extends Converter{
         logger.debug("-- begin getDecisionServiceRequest {}", applicationInfo);
         ApplicationType applicationType = new ApplicationType();
 
-        applicationType.setApplicationNumber(applicationInfo.getApplicationNo());
+        applicationType.setApplicationNumber(getValueForInterface(applicationInfo.getApplicationNo()));
         try{
             GregorianCalendar gregorianCalendar = new GregorianCalendar();
-            gregorianCalendar.setTime(applicationInfo.getProcessDate());
+            gregorianCalendar.setTime(getValueForInterface(applicationInfo.getProcessDate()));
             applicationType.setDateOfApplication(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
         }catch (Exception ex){
             logger.error("Could not transform Date");
@@ -44,7 +44,7 @@ public class DocAppraisalConverter extends Converter{
 
         List<ProductType> productTypeList = applicationType.getProduct();
         ProductType productType = new ProductType();
-        productType.setProductType(applicationInfo.getProductGroup());
+        productType.setProductType(getValueForInterface(applicationInfo.getProductGroup()));
         productTypeList.add(productType);
 
         UnderwritingApprovalRequestType underwritingApprovalRequestType = new UnderwritingApprovalRequestType();
