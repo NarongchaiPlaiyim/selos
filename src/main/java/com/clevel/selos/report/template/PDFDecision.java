@@ -451,6 +451,13 @@ public class PDFDecision implements Serializable {
         return collateralRelatedDecisionReportArrayList;
     }
 
+    public List<GuarantorBorrowerDecisionReport> fillGuarantorBorrower(){
+        init();
+        List<GuarantorBorrowerDecisionReport> guarantorBorrowerDecisionReportList = new ArrayList<GuarantorBorrowerDecisionReport>();
+
+        return null;
+    }
+
     public List<ProposedCreditDecisionReport> fillProposedCredit(){
         log.debug("on fillProposedCredit. {}");
         init();
