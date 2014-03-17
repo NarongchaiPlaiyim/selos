@@ -239,6 +239,8 @@
                                                             showButtonPanel="true"
                                                             defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
                                                             maxdate="#{bizInfoSummary.currentDateDDMMYY}">
+                                                <p:ajax event="change"  update=":frmMain:registrationDate" />
+                                                <p:ajax event="dateSelect"  update=":frmMain:registrationDate" />
                                             </clv:BECalendar>
                                         </td>
                                     </tr>
@@ -341,7 +343,7 @@
                                                 <!--readonly="#{bizInfoSummary.readonlyInterview}"-->
                                                 <f:convertNumber pattern="##0.00"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"  />
                                                 <f:validateDoubleRange maximum="100"/>
-                                                <p:ajax event="blur" update=":frmMain:productionCostsPercentage,:frmMain:productionCostsAmount,
+                                                <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain:productionCostsPercentage,:frmMain:productionCostsAmount,
                                                 :frmMain:profitMarginAmount,:frmMain:profitMarginPercentage,frmMain:profitMarginPercentage,:frmMain:operatingExpenseAmount
                                                 :frmMain:operatingExpensePercentage,:frmMain:earningsBeforeTaxAmount,frmMain:earningsBeforeTaxPercentage,:frmMain:reduceInterestAmount
                                                 :frmMain:reduceInterestPercentage,:frmMain:reduceTaxAmount,frmMain:reduceTaxPercentage,:frmMain:netMarginAmount

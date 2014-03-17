@@ -76,7 +76,7 @@ public class RoleInboxDAO extends GenericDAO<InboxType, Long> {
         Criteria criteria2 = getSession().createCriteria(InboxType.class);
 
         criteria2.setProjection(Projections.projectionList().add(Projections.property("inbox_name"), "inbox_name")).add(Restrictions.in("id", inboxList)).setResultTransformer(Transformers.aliasToBean(InboxType.class));
-        inboxTypeList = Util.safetyList(criteria2.list());
+//        inboxTypeList = Util.safetyList(criteria2.list());
 
         iterator = inboxTypeList.iterator();
 
