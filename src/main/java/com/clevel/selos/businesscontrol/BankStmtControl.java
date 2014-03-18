@@ -1016,7 +1016,8 @@ public class BankStmtControl extends BusinessControl {
         BigDecimal grdTotalIncomeNetBDM = Util.add(tmbTotalIncomeNetBDM, othTotalIncomeNetBDM);
         BigDecimal grdTotalIncomeNetUW = Util.add(tmbTotalIncomeNetUW, othTotalIncomeNetUW);
 
-        BigDecimal grdTotalTrdChqRetPercent = Util.multiply(Util.divide(sumChqRetAmtCountIncomeOfLastSizM, isRoleUW ? sumNetUWofLastSixM : sumNetBDMofLastSixM), Util.ONE_HUNDRED);
+//        BigDecimal grdTotalTrdChqRetPercent = Util.multiply(Util.divide(sumChqRetAmtCountIncomeOfLastSizM, isRoleUW ? sumNetUWofLastSixM : sumNetBDMofLastSixM), Util.ONE_HUNDRED);
+        BigDecimal grdTotalTrdChqRetPercent = Util.multiply(Util.divide(grdTotalTrdChqRetAmount, isRoleUW ? grdTotalIncomeNetUW : grdTotalIncomeNetBDM), Util.ONE_HUNDRED);
         if (grdTotalTrdChqRetPercent != null) {
             grdTotalTrdChqRetPercent = grdTotalTrdChqRetPercent.setScale(2, RoundingMode.HALF_UP);
         }
