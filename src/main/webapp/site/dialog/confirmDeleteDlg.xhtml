@@ -5,15 +5,16 @@
 
     <p:confirmDialog id="#{id}" header="Confirm Delete" message="#{msg.get('dialog.delete.confirm.message')}"
                      showEffect="fade" hideEffect="fade" width="380" height="30"
-                     severity="alert" widgetVar="#{name}">
+                     severity="alert" widgetVar="#{name}" closable="false">
         <h:form id="#{formId}">
             <div class="onRight">
-                <p:commandButton value="#{msg.get('app.button.ok')}" update="#{update}" oncomplete="#{name}.hide()"
+                <p:commandButton value="#{msg.get('app.button.ok')}" update="#{update}" widgetVar="#{id}SaveBtn"
+                                 oncomplete="#{name}.hide();#{id}SaveBtn.enable();#{id}CancelBtn.enable()"
+                                 onclick="#{id}SaveBtn.disable();#{id}CancelBtn.disable()"
                                  action="#{controller[action]}"/>
-                <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="#{name}.hide()"/>
+                <p:commandButton widgetVar="#{id}CancelBtn"
+                        value="#{msg.get('app.button.cancel')}" onclick="#{name}.hide()"/>
             </div>
         </h:form>
     </p:confirmDialog>
-
-
 </f:view>
