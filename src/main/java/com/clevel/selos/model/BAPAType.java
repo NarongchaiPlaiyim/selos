@@ -8,6 +8,7 @@ public enum BAPAType {
     public int value() {
         return ordinal();
     }
+
     public static final BAPAType lookup(int value) {
         for (BAPAType type : BAPAType.values()) {
             if (type.ordinal() == value)

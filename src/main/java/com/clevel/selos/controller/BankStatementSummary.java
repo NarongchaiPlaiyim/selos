@@ -114,10 +114,6 @@ public class BankStatementSummary implements Serializable {
 
     private void preRender() {
         log.info("preRender ::: setSession ");
-        /*HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("workCaseId", 2);
-        session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);*/
 
         HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
@@ -287,21 +283,19 @@ public class BankStatementSummary implements Serializable {
         lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
         log.debug("Re-calculate: numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
 
-        // re-calculation all Bank statement from DWH and total summary before save
+        Date[] threeMonthsOfSrcOfColl = bankStmtControl.getSourceOfCollateralMonths(summaryView);
+        if (threeMonthsOfSrcOfColl.length == 3) {
+            lastThreeMonth1 = threeMonthsOfSrcOfColl[0];
+            lastThreeMonth2 = threeMonthsOfSrcOfColl[1];
+            lastThreeMonth3 = threeMonthsOfSrcOfColl[2];
+        }
+        else {
+            lastThreeMonth3 = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
+            lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -1);
+            lastThreeMonth1 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -2);
+        }
+
         if (isRetrieveSuccess && hasDataFromRetrieve) {
-
-            Date[] threeMonthsOfSrcOfColl = bankStmtControl.getSourceOfCollateralMonths(summaryView);
-            if (threeMonthsOfSrcOfColl.length == 3) {
-                lastThreeMonth1 = threeMonthsOfSrcOfColl[0];
-                lastThreeMonth2 = threeMonthsOfSrcOfColl[1];
-                lastThreeMonth3 = threeMonthsOfSrcOfColl[2];
-            }
-            else {
-                lastThreeMonth3 = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
-                lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -1);
-                lastThreeMonth1 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -2);
-            }
-
             // remove previous Bank statement from source of collateral proof
             int sizeSrcOfCollList = bankStmtSrcOfCollateralProofList.size();
             int sizeOfDeleteList = TMBBankStmtDeleteList.size();
@@ -324,13 +318,12 @@ public class BankStatementSummary implements Serializable {
                 bankStmtControl.bankStmtDetailCalculation(tmbBankStmtView, summaryView.getSeasonal());
                 bankStmtControl.calSourceOfCollateralProof(tmbBankStmtView);
             }
-
-            // calculate total summary for Borrower
-            bankStmtControl.bankStmtSumTotalCalculation(summaryView, true);
         }
 
-        boolean isSaveSuccess = false;
+        // calculate total summary
+        bankStmtControl.bankStmtSumTotalCalculation(summaryView, (isRetrieveSuccess && hasDataFromRetrieve));
 
+        boolean isSaveSuccess = false;
         try {
             summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
 
