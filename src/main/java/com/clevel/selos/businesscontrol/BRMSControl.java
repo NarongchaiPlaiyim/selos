@@ -262,15 +262,16 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setCustomerInfoList(customerInfoList);
 
         /** Setup Bank Statement Account **/
+        //2. Set BankStatement Info
+        List<BRMSAccountStmtInfo> accountStmtInfoList = new ArrayList<BRMSAccountStmtInfo>();
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkcasePrescreenId(workcasePrescreenId);
         if(bankStatementSummary != null){
             List<BankStatement> bankStatementList = bankStatementSummary.getBankStmtList();
-            List<BRMSAccountStmtInfo> accountStmtInfoList = new ArrayList<BRMSAccountStmtInfo>();
             for(BankStatement bankStatement : bankStatementList){
                 accountStmtInfoList.add(getBRMSAccountStmtInfo(bankStatement));
             }
-            applicationInfo.setAccountStmtInfoList(accountStmtInfoList);
         }
+        applicationInfo.setAccountStmtInfoList(accountStmtInfoList);
 
         /*Start Set Account Request - Propose Credit Facility*/
         BigDecimal proposedCreditAmount = BigDecimal.ZERO;
