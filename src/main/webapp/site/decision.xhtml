@@ -266,8 +266,8 @@
                                                 <td style="height: 10px;" colspan="10"/>
                                             </tr>
                                             <tr>
-                                                <!--<td style="text-align: left;background-color:#f4f8b6;"></td>-->
-                                                <td style="text-align: left;background-color:#f4f8b6;" colspan="5" class="title">
+                                                <td style="text-align: left;background-color:#f4f8b6;"></td>
+                                                <td style="text-align: left;background-color:#f4f8b6;" colspan="4" class="title">
                                                     <h:outputText value="#{msg.get('app.label.total')}"/>
                                                 </td>
                                                 <td style="text-align: right;background-color:#f4f8b6;" class="title">
@@ -514,8 +514,8 @@
                                                     <td style="height: 10px;" colspan="10"/>
                                                 </tr>
                                                 <tr>
-                                                    <!--<td style="text-align: left;background-color:#f4f8b6;"></td>-->
-                                                    <td style="text-align: left;background-color:#f4f8b6;" colspan="5" class="title">
+                                                    <td style="text-align: left;background-color:#f4f8b6;"></td>
+                                                    <td style="text-align: left;background-color:#f4f8b6;" colspan="4" class="title">
                                                         <h:outputText value="#{msg.get('app.label.total')}"/>
                                                     </td>
                                                     <td style="text-align: right;background-color:#f4f8b6;" class="title">
@@ -725,31 +725,91 @@
                                                     <td colspan="10">#{msg.get('app.label.noRecordsFound')}</td>
                                                 </tr>
                                             </h:panelGroup>
-                                            <tr>
-                                                <td style="height: 10px;" colspan="10"/>
-                                            </tr>
-                                            <tr>
-                                                <!--<td style="text-align: left;background-color:#f4f8b6;"></td>-->
-                                                <td style="text-align: left;background-color:#f4f8b6;" colspan="5" class="title">
-                                                    <h:outputText value="#{msg.get('app.label.total')}"/>
-                                                </td>
-                                                <td style="text-align: right;background-color:#f4f8b6;" class="title">
-                                                    <h:outputText value="#{decision.decisionView.extBorrowerTotalAppInRLOSLimit}"
-                                                                  style="text-align: right;">
-                                                        <f:convertNumber pattern="#,##0"
-                                                                         minFractionDigits="2"
-                                                                         maxFractionDigits="2"/>
-                                                    </h:outputText>
-                                                </td>
-                                                <td style="text-align: left;background-color:#f4f8b6;" colspan="4"> </td>
-                                            </tr>
 
+                                                <tr>
+                                                    <td style="height: 10px;" colspan="10"/>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align: left;background-color:#f4f8b6;"></td>
+                                                    <td style="text-align: left;background-color:#f4f8b6;" colspan="4" class="title">
+                                                        <h:outputText value="#{msg.get('app.label.total')}"/>
+                                                    </td>
+                                                    <td style="text-align: right;background-color:#f4f8b6;" class="title">
+                                                        <h:outputText value="#{decision.decisionView.extBorrowerTotalAppInRLOSLimit}"
+                                                                      style="text-align: right;">
+                                                            <f:convertNumber pattern="#,##0"
+                                                                             minFractionDigits="2"
+                                                                             maxFractionDigits="2"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td style="text-align: left;background-color:#f4f8b6;" colspan="4"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="height: 10px;" colspan="10"/>
+                                                </tr>
                                             </tbody>
+
+                                            <tfoot>
+                                                <tr>
+                                                    <td class="title" style="line-height:30px; height:30px; text-align:left;" colspan="10">
+                                                        #{msg.get('app.decision.borrower')}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="summary_column"></td>
+                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
+                                                        #{msg.get('app.decision.totalCommercial')}
+                                                    </td>
+                                                    <td class="summary_column title" style="text-align: right;">
+                                                        <h:outputText value="#{decision.decisionView.extBorrowerTotalCommercial}">
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td class="summary_column" colspan="4"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="line-height:10px; height:10px;" colspan="10"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="summary_column"></td>
+                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
+                                                        #{msg.get('app.decision.totalCommAndOBOD')}
+                                                    </td>
+                                                    <td class="summary_column title" style="text-align: right;">
+                                                        <h:outputText value="#{decision.decisionView.extBorrowerTotalComAndOBOD}">
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td class="summary_column" colspan="4"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="line-height:10px; height:10px;" colspan="10"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="summary_column"></td>
+                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
+                                                        #{msg.get('app.decision.totalExposure')}
+                                                    </td>
+                                                    <td class="summary_column title" style="text-align: right;">
+                                                        <h:outputText value="#{decision.decisionView.extBorrowerTotalExposure}">
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td class="summary_column" colspan="4"></td>
+                                                </tr>
+                                            </tfoot>
                                         </table>
                                     </div>
                                 </div>
                             </td>
                         </tr>
+
                         <tr>
                             <td colspan="2" style="height:28px;"></td>
                         </tr>
@@ -864,7 +924,7 @@
                                                             <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                                     relatedCredit.existingCreditTierDetailViewList[0].finalBasePrice.name : ''}">
                                                             </h:outputText>
-                                                            <h:outputText value="#{relatedCredit.existingCreditTierDetailViewList[0].finalInterest ge 0 ? '+' : ''}"></h:outputText>
+                                                            <h:outputText value="#{relatedCredit.existingCreditTierDetailViewList[0].finalInterest ge 0 ? '+' : ''}"/>
                                                             <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                                     relatedCredit.existingCreditTierDetailViewList[0].finalInterest : ''}">
                                                             </h:outputText>
@@ -948,8 +1008,8 @@
                                                 <td style="height: 10px;" colspan="10"/>
                                             </tr>
                                             <tr>
-                                                <!--<td style="text-align: left;background-color:#f4f8b6;"></td>-->
-                                                <td style="text-align: left;background-color:#f4f8b6;" colspan="5" class="title">
+                                                <td style="text-align: left;background-color:#f4f8b6;"></td>
+                                                <td style="text-align: left;background-color:#f4f8b6;" colspan="4" class="title">
                                                     <h:outputText value="#{msg.get('app.label.total')}"/>
                                                 </td>
                                                 <td style="text-align: right;background-color:#f4f8b6;" class="title">
@@ -1077,7 +1137,7 @@
                                                             <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                                     relatedCredit.existingCreditTierDetailViewList[0].finalBasePrice.name : ''}">
                                                             </h:outputText>
-                                                            <h:outputText value="#{relatedCredit.existingCreditTierDetailViewList[0].finalInterest ge 0 ? '+' : ''}"></h:outputText>
+                                                            <h:outputText value="#{relatedCredit.existingCreditTierDetailViewList[0].finalInterest ge 0 ? '+' : ''}"/>
                                                             <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                                     relatedCredit.existingCreditTierDetailViewList[0].finalInterest : ''}">
                                                             </h:outputText>
@@ -1161,8 +1221,8 @@
                                                 <td style="height: 10px;" colspan="10"/>
                                             </tr>
                                             <tr>
-                                                <!--<td style="text-align: left;background-color:#f4f8b6;"></td>-->
-                                                <td style="text-align: left;background-color:#f4f8b6;" colspan="5" class="title">
+                                                <td style="text-align: left;background-color:#f4f8b6;"></td>
+                                                <td style="text-align: left;background-color:#f4f8b6;" colspan="4" class="title">
                                                     <h:outputText value="#{msg.get('app.label.total')}"/>
                                                 </td>
                                                 <td style="text-align: right;background-color:#f4f8b6;" class="title">
@@ -1290,7 +1350,7 @@
                                                             <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                                             relatedCredit.existingCreditTierDetailViewList[0].finalBasePrice.name : ''}">
                                                             </h:outputText>
-                                                            <h:outputText value="#{relatedCredit.existingCreditTierDetailViewList[0].finalInterest ge 0 ? '+' : ''}"></h:outputText>
+                                                            <h:outputText value="#{relatedCredit.existingCreditTierDetailViewList[0].finalInterest ge 0 ? '+' : ''}"/>
                                                             <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                                     relatedCredit.existingCreditTierDetailViewList[0].finalInterest : ''}">
                                                             </h:outputText>
@@ -1370,25 +1430,144 @@
                                                 </tr>
                                             </h:panelGroup>
 
-                                            <tr>
-                                                <td style="height: 10px;" colspan="10"/>
-                                            </tr>
-                                            <tr>
-                                                <!--<td style="text-align: left;background-color:#f4f8b6;"></td>-->
-                                                <td style="text-align: left;background-color:#f4f8b6;" colspan="5" class="title">
-                                                    <h:outputText value="#{msg.get('app.label.total')}"/>
-                                                </td>
-                                                <td style="text-align: right;background-color:#f4f8b6;" class="title">
-                                                    <h:outputText value="#{decision.decisionView.extRelatedTotalAppInRLOSLimit}"
-                                                                  style="text-align: right;">
-                                                        <f:convertNumber pattern="#,##0"
-                                                                         minFractionDigits="2"
-                                                                         maxFractionDigits="2"/>
-                                                    </h:outputText>
-                                                </td>
-                                                <td style="text-align: left;background-color:#f4f8b6;" colspan="4"> </td>
-                                            </tr>
+                                                <tr>
+                                                    <td style="height: 10px;" colspan="10"/>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align: left;background-color:#f4f8b6;"></td>
+                                                    <td style="text-align: left;background-color:#f4f8b6;" colspan="4" class="title">
+                                                        <h:outputText value="#{msg.get('app.label.total')}"/>
+                                                    </td>
+                                                    <td style="text-align: right;background-color:#f4f8b6;" class="title">
+                                                        <h:outputText value="#{decision.decisionView.extRelatedTotalAppInRLOSLimit}"
+                                                                      style="text-align: right;">
+                                                            <f:convertNumber pattern="#,##0"
+                                                                             minFractionDigits="2"
+                                                                             maxFractionDigits="2"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td style="text-align: left;background-color:#f4f8b6;" colspan="4"> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="height: 10px;" colspan="10"/>
+                                                </tr>
                                             </tbody>
+
+                                            <tfoot>
+                                                <!-- Total Related -->
+                                                <tr>
+                                                    <td class="title" style="line-height:30px; height:30px; text-align:left;" colspan="10">
+                                                        #{msg.get('app.decision.related')}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="summary_column"></td>
+                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
+                                                        #{msg.get('app.decision.totalCommercial')}
+                                                    </td>
+                                                    <td class="summary_column title" style="text-align: right;">
+                                                        <h:outputText value="#{decision.decisionView.extRelatedTotalCommercial}">
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td class="summary_column" colspan="4"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="line-height:10px; height:10px;" colspan="10"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="summary_column"></td>
+                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
+                                                        #{msg.get('app.decision.totalCommAndOBOD')}
+                                                    </td>
+                                                    <td class="summary_column title" style="text-align: right;">
+                                                        <h:outputText value="#{decision.decisionView.extRelatedTotalComAndOBOD}">
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td class="summary_column" colspan="4"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="line-height:10px; height:10px;" colspan="10"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="summary_column"></td>
+                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
+                                                        #{msg.get('app.decision.totalExposure')}
+                                                    </td>
+                                                    <td class="summary_column title" style="text-align: right;">
+                                                        <h:outputText value="#{decision.decisionView.extRelatedTotalExposure}">
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td class="summary_column" colspan="4"></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td style="line-height:10px; height:10px;" colspan="10"></td>
+                                                </tr>
+
+                                                <!-- Total Group -->
+                                                <tr>
+                                                    <td class="title" style="line-height:30px; height:30px; text-align:left;" colspan="10">
+                                                        #{msg.get('app.decision.group')}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="summary_column"></td>
+                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
+                                                        #{msg.get('app.decision.totalCommercial')}
+                                                    </td>
+                                                    <td class="summary_column title" style="text-align: right;">
+                                                        <h:outputText value="#{decision.decisionView.extGroupTotalCommercial}">
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td class="summary_column" colspan="4"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="line-height:10px; height:10px;" colspan="10"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="summary_column"></td>
+                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
+                                                        #{msg.get('app.decision.totalCommAndOBOD')}
+                                                    </td>
+                                                    <td class="summary_column title" style="text-align: right;">
+                                                        <h:outputText value="#{decision.decisionView.extGroupTotalComAndOBOD}">
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td class="summary_column" colspan="4"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="line-height:10px; height:10px;" colspan="10"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="summary_column"></td>
+                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
+                                                        #{msg.get('app.decision.totalExposure')}
+                                                    </td>
+                                                    <td class="summary_column title" style="text-align: right;">
+                                                        <h:outputText value="#{decision.decisionView.extGroupTotalExposure}">
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td class="summary_column" colspan="4"></td>
+                                                </tr>
+                                            </tfoot>
                                         </table>
                                     </div>
                                 </div>
@@ -1437,7 +1616,7 @@
                                     <p:column styleClass="left top">
                                         <table border="0" style="margin:-1px 0 -1px -10px; width: 100%;">
                                             <tr>
-                                                <td style="border-style:none !important;">#{msg.get('app.decision.tb.td.label.potential')}</td>
+                                                <td style="border-style:none !important; width: 110px;">#{msg.get('app.decision.tb.td.label.potential')}</td>
                                                 <td style="border-style:none !important;">#{extBrwCollateral.potentialCollateral.description}</td>
                                             </tr>
                                             <tr>
