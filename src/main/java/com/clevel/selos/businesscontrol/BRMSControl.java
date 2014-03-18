@@ -613,7 +613,7 @@ public class BRMSControl extends BusinessControl {
         return mandateDocResponseView;
     }
 
-    public DocAppraisalResponse getDocAppraisal(long workCaseId){
+    public MandateDocResponseView getDocAppraisal(long workCaseId){
         logger.debug("getDocAppraisal from workCaseId {}", workCaseId);
         Date checkDate = Calendar.getInstance().getTime();
         logger.debug("check at date {}", checkDate);
@@ -641,7 +641,7 @@ public class BRMSControl extends BusinessControl {
         }
 
         logger.debug("-- end getDocCustomer return {}", mandateDocResponseView);
-        return docAppraisalResponse;
+        return mandateDocResponseView;
     }
 
     /** The following method is for BRMSControl internal used - move from brms transform**/
@@ -962,6 +962,7 @@ public class BRMSControl extends BusinessControl {
         //Transform Result from Document Customer Response//
         Map<String, MandateDocView> mandateDocViewMap = new HashMap<String, MandateDocView>();
         if(documentDetailList != null){
+            logger.debug("- documentDetailList is NOT null");
             for(DocumentDetail documentDetail : documentDetailList){
                 MandateDocView mandateDocView = mandateDocViewMap.get(documentDetail.getId());
                 if(mandateDocView == null)
@@ -996,12 +997,15 @@ public class BRMSControl extends BusinessControl {
                     }
 
                     if(customerInfoSimpleView == null){
-                        for(Customer customer : customerList){
-                            if(customer.getId() == _customerId){
-                                customerInfoSimpleView = customerTransform.transformToSimpleView(customer);
-                                customerInfoSimpleViewList.add(customerInfoSimpleView);
-                                logger.debug("Add Customer Info Simple View into Mandate Doc Customer List customerInfoSimpleView {}", customerInfoSimpleView);
-                                break;
+                        if(customerList != null) {
+                            logger.debug("Add New Customer Info");
+                            for(Customer customer : customerList){
+                                if(customer.getId() == _customerId){
+                                    customerInfoSimpleView = customerTransform.transformToSimpleView(customer);
+                                    customerInfoSimpleViewList.add(customerInfoSimpleView);
+                                    logger.debug("Add Customer Info Simple View into Mandate Doc Customer List customerInfoSimpleView {}", customerInfoSimpleView);
+                                    break;
+                                }
                             }
                         }
                     }
@@ -1014,6 +1018,7 @@ public class BRMSControl extends BusinessControl {
         return mandateDocViewMap;
     }
 
+    //For Converting Document ID
     private long getLong(String value){
         if(value == null || "".equals(value))
             return 0;
