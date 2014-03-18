@@ -980,7 +980,7 @@ public class BRMSControl extends BusinessControl {
                 mandateDocView.setBrmsDescList(brmsList);
 
                 //4. Set Document Owner - CustomerInfoSimpleView if it is Customer Level
-                if(DocLevel.APP_LEVEL.equals(documentDetail.getDocLevel())) {
+                if(DocLevel.CUS_LEVEL.equals(documentDetail.getDocLevel())) {
                     long _customerId = getLong(documentDetail.getDocOwner());
                     List<CustomerInfoSimpleView> customerInfoSimpleViewList = mandateDocView.getCustomerInfoSimpleViewList();
                     if(customerInfoSimpleViewList == null)
