@@ -1071,14 +1071,26 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 if (selectedCollateralCrdTypeItems != null && selectedCollateralCrdTypeItems.size() > 0) {
 
                     List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
-//                    for (ProposeCreditDetailView creditTypeItem : selectedCollateralCrdTypeItems) {
                     for (int i=0;i<selectedCollateralCrdTypeItems.size();i++) {
+                        selectedCollateralCrdTypeItems.get(i).setNoFlag(true);
                         proposeCreditDetailViewList.add(selectedCollateralCrdTypeItems.get(i));
                         seqTemp = selectedCollateralCrdTypeItems.get(i).getSeq();
+
                         hashSeqCredit.put(seqTemp,hashSeqCredit.get(i) + 1);
+
+
                     }
                     proposeCollateralInfoAdd.setProposeCreditDetailViewList(proposeCreditDetailViewList);
                     complete3 = true;
+
+                    for (int j=0;j<proposeCollateralInfoAdd.getProposeCreditDetailViewList().size();j++) {
+                        seqTemp = proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).getSeq();
+                        if(proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).isNoFlag()){
+                            hashSeqCredit.put(seqTemp,hashSeqCredit.get(j) + 1);
+                        }else{
+                            hashSeqCredit.put(seqTemp,hashSeqCredit.get(j) - 1);
+                        }
+                    }
 
                 } else {
                     messageHeader = msg.get("app.propose.exception");
@@ -1148,9 +1160,10 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                 List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
                 for (int i = 0; i < selectedCollateralCrdTypeItems.size(); i++) {
+                    selectedCollateralCrdTypeItems.get(i).setNoFlag(true);
                     proposeCreditDetailViewList.add(selectedCollateralCrdTypeItems.get(i));
                     log.info("selectedCollateralCrdTypeItems.get(i).isNoFlag() :: {}",selectedCollateralCrdTypeItems.get(i).isNoFlag());
-                    if (selectedCollateralCrdTypeItems.get(i).isNoFlag() == true) {
+                    /*if (selectedCollateralCrdTypeItems.get(i).isNoFlag() == true) {
                         seqTemp=selectedCollateralCrdTypeItems.get(i).getSeq();
                         checkPlus = true;
 
@@ -1169,7 +1182,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                             hashSeqCredit.put(i, hashSeqCredit.get(i) - 1);
                         }
 
-                    }
+                    }*/
 
                 }
 
