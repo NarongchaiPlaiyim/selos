@@ -3,6 +3,9 @@ package com.clevel.selos.report.template;
 import com.clevel.selos.businesscontrol.DecisionControl;
 import com.clevel.selos.controller.Decision;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.Util;
@@ -24,9 +27,6 @@ public class PDFDecision implements Serializable {
 
     @Inject
     DecisionView decisionView;
-
-    @Inject
-    Decision decision;
 
     private List<NewCreditDetailView> newCreditDetailViewList;
 
@@ -51,7 +51,7 @@ public class PDFDecision implements Serializable {
 //                log.error("Exception :: {}",ex);
 //            }
 //        }
-        long workCaseId = 147;
+        long workCaseId = 155;
 
         decisionView = decisionControl.getDecisionView(workCaseId);
 
@@ -495,9 +495,9 @@ public class PDFDecision implements Serializable {
                 proposedView.setCount(count++);
                 proposedView.setProdName(detailView.getProductProgramView().getName());
 
-                if ((detailView.getUwDecision()) == decision.getDecisionAPPROVED()){
+                if ((detailView.getUwDecision()) == DecisionType.APPROVED){
                     proposedView.setUwDecision("APPROVED");
-                } else if (detailView.getUwDecision() == decision.getDecisionREJECTED()){
+                } else if (detailView.getUwDecision() == DecisionType.REJECTED){
                     proposedView.setUwDecision("REJECTED");
                 } else {
                     proposedView.setUwDecision("");
@@ -524,15 +524,15 @@ public class PDFDecision implements Serializable {
                 proposedView.setFrontEndFee(detailView.getFrontEndFee());
                 proposedView.setNewCreditTierDetailViews(detailView.getNewCreditTierDetailViewList());
 
-                if (detailView.getRequestType() == decision.getRequestTypeNEW().value()){
+                if (detailView.getRequestType() == RequestTypes.NEW.value()){
                     proposedView.setRequestType("New");
-                } else if (detailView.getRequestType() == decision.getRequestTypeCHANGE().value()){
+                } else if (detailView.getRequestType() == RequestTypes.CHANGE.value()){
                     proposedView.setRequestType("Change");
                 }
 
-                if (detailView.getRefinance() == decision.getYesValue()){
+                if (detailView.getRefinance() == RadioValue.YES.value()){
                     proposedView.setRefinance("Yes");
-                } else if (detailView.getRefinance() == decision.getNoValue()){
+                } else if (detailView.getRefinance() == RadioValue.NO.value()){
                     proposedView.setRefinance("No");
                 }
 
@@ -622,7 +622,8 @@ public class PDFDecision implements Serializable {
                     collateralDecisionReport.setProposeCreditDetailViewList(view.getProposeCreditDetailViewList());
                 } else {
                     log.debug("getProposeCreditDetailViewList is Null. {}",view.getProposeCreditDetailViewList());
-                    collateralDecisionReport.setProposeCreditDetailViewList(collateralDecisionReport.getProposeCreditDetailViewList());
+                    List<ProposeCreditDetailView> creditDetailViews = new ArrayList<ProposeCreditDetailView>();
+                    collateralDecisionReport.setProposeCreditDetailViewList(creditDetailViews);
                 }
 
                 collateralHeadViewList = view.getNewCollateralHeadViewList();
@@ -636,9 +637,9 @@ public class PDFDecision implements Serializable {
                         collateralDecisionReport.setCollateralLocation(headView.getCollateralLocation());
                         collateralDecisionReport.setAppraisalValue(headView.getAppraisalValue());
                         collateralDecisionReport.setHeadCollTypeDescription(headView.getHeadCollType().getDescription());
-                        if (headView.getInsuranceCompany() == decision.getYesValue()){
+                        if (headView.getInsuranceCompany() == RadioValue.YES.value()){
                             collateralDecisionReport.setInsuranceCompany("Partner");
-                        } else if (headView.getInsuranceCompany() == decision.getNoValue()){
+                        } else if (headView.getInsuranceCompany() == RadioValue.NO.value()){
                             collateralDecisionReport.setInsuranceCompany("Non Partner");
                         } else {
                             collateralDecisionReport.setInsuranceCompany("");
@@ -650,7 +651,8 @@ public class PDFDecision implements Serializable {
 
                 if (Util.safetyList(view.getNewCollateralHeadViewList()).size() > 0) {
                     log.debug("getNewCollateralHeadViewList. {}",view.getNewCollateralHeadViewList());
-                    collateralDecisionReport.setNewCollateralHeadViews(view.getNewCollateralHeadViewList());
+                    List<NewCollateralHeadView> newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
+                    collateralDecisionReport.setNewCollateralHeadViews(newCollateralHeadViewList);
                 } else {
                     log.debug("getNewCollateralHeadViewList is Null. {}",view.getProposeCreditDetailViewList());
                     collateralDecisionReport.setNewCollateralHeadViews(collateralDecisionReport.getNewCollateralHeadViews());
