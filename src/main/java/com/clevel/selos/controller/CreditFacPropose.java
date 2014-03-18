@@ -1196,9 +1196,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         if (newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).getId() != 0) {
             deleteCollIdList.add(newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).getId());
         }
-//        newCreditFacilityView.getNewCollateralViewDelList().add(selectCollateralDetailView);
-        newCreditFacilityView.getNewCollateralViewList().remove(selectCollateralDetailView);
 
+        newCreditFacilityView.getNewCollateralViewList().remove(selectCollateralDetailView);
         log.debug("onDeleteProposeCollInfo :: newCreditFacilityView.getNewCollateralViewList() :: {}", newCreditFacilityView.getNewCollateralViewList().size());
     }
 
@@ -1529,7 +1528,17 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             if (hashSeqCredit.get(i) > 0) {
                 hashSeqCredit.put(i,hashSeqCredit.get(i) - 1);
             }
+
+//            int seqForDel = newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(i).getSeq();
+//            if(hashSeqCredit.containsKey(newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(i).getSeq()) &&
+//                    hashSeqCredit.get(newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(i).getSeq())>0)
+//            {
+//                hashSeqCredit.put(seqForDel,hashSeqCredit.get(i) - 1);
+//                log.info("before hashSeqCredit seq :  "+ i + " use is   " +hashSeqCredit.get(i-1));
+//            }
         }
+
+
         if (newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getId() != 0) {
             deleteGuarantorIdList.add(newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getId());
         }
