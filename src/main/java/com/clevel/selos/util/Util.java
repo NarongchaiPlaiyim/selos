@@ -24,6 +24,7 @@ public class Util implements Serializable {
     private static Logger log = LoggerFactory.getLogger(Util.class);
     private static Locale defaultLocale = new Locale("th", "EN");
     private static NumberFormat numberFormat = new DecimalFormat(",##0.00");
+    public static BigDecimal ONE_HUNDRED = new BigDecimal("100.00");
 
     public static String createDateString(Date date, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format, defaultLocale);
@@ -278,7 +279,7 @@ public class Util implements Serializable {
         }
 
         try {
-            return value.divide(divisor, 2, RoundingMode.HALF_UP);
+            return value.divide(divisor, 4, RoundingMode.HALF_UP);
         } catch (Exception e) {
             log.error("", e);
             return BigDecimal.ZERO;
@@ -294,7 +295,7 @@ public class Util implements Serializable {
             return BigDecimal.ZERO;
         }
         try {
-            return value.divide(BigDecimal.valueOf(divisor), 2, RoundingMode.HALF_UP);
+            return value.divide(BigDecimal.valueOf(divisor), 4, RoundingMode.HALF_UP);
         } catch (Exception e) {
             log.error("", e);
             return BigDecimal.ZERO;

@@ -903,13 +903,14 @@ public class CreditFacProposeControl extends BusinessControl {
         List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
         NewFeeDetailView newFeeDetailView = new NewFeeDetailView();
         try {
-//            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
+            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
             log.debug("getPriceFeeInterest ::::workCase :: {}",workCaseId);
-            standardPricingResponse = brmsControl.getPriceFee(workCaseId);
+
             if (standardPricingResponse != null) {
                 log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult().toString());
                 log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
                 log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().toString());
+                log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
             }
 
             for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()){
