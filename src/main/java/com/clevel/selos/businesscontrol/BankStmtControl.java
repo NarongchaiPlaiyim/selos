@@ -1029,9 +1029,12 @@ public class BankStmtControl extends BusinessControl {
             return;
         }
 
-        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        /*BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         if (basicInfo != null && basicInfo.getProductGroup() != null) {
-            ProductGroup productGroup = basicInfo.getProductGroup();
+            ProductGroup productGroup = basicInfo.getProductGroup();*/
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        if (workCase != null && workCase.getProductGroup() != null) {
+            ProductGroup productGroup = workCase.getProductGroup();
 
             // if Product = (TMB SmartBiz | TMB SME O/D No Asset)
             if (ProductProgramType.TMB_SME_SMARTBIZ.code().equalsIgnoreCase(productGroup.getBrmsCode())

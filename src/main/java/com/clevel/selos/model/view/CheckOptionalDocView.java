@@ -3,6 +3,7 @@ package com.clevel.selos.model.view;
 import java.io.Serializable;
 
 public class CheckOptionalDocView implements Serializable {
+    private long id;
     private String documentType;
     private String BRMSDocument;
     private String owners;
@@ -26,6 +27,14 @@ public class CheckOptionalDocView implements Serializable {
 
     private void init(){
 
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getLink() {

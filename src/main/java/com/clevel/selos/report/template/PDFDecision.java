@@ -1,6 +1,7 @@
 package com.clevel.selos.report.template;
 
 import com.clevel.selos.businesscontrol.DecisionControl;
+import com.clevel.selos.controller.Decision;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.*;
@@ -24,12 +25,15 @@ public class PDFDecision implements Serializable {
     @Inject
     DecisionView decisionView;
 
+    @Inject
+    Decision decision;
+
     private List<NewCreditDetailView> newCreditDetailViewList;
 
 
 //    long workCaseId;
 
-    long workCaseId = 147;
+
 
     public PDFDecision() {
     }
@@ -47,6 +51,7 @@ public class PDFDecision implements Serializable {
 //                log.error("Exception :: {}",ex);
 //            }
 //        }
+        long workCaseId = 147;
 
         decisionView = decisionControl.getDecisionView(workCaseId);
 
@@ -482,11 +487,21 @@ public class PDFDecision implements Serializable {
         newCreditDetailViewList = decisionView.getProposeCreditList();
         List<ProposedCreditDecisionReport> proposedCreditDecisionReportList = new ArrayList<ProposedCreditDecisionReport>();
 
+        int count = 1;
         if (Util.safetyList(newCreditDetailViewList).size() > 0){
             log.debug("newCreditDetailViewList by fillProposedCredit. {}",newCreditDetailViewList);
             for (NewCreditDetailView detailView : newCreditDetailViewList){
                 ProposedCreditDecisionReport proposedView = new ProposedCreditDecisionReport();
+                proposedView.setCount(count++);
                 proposedView.setProdName(detailView.getProductProgramView().getName());
+
+                if ((detailView.getUwDecision()) == decision.getDecisionAPPROVED()){
+                    proposedView.setUwDecision("APPROVED");
+                } else if (detailView.getUwDecision() == decision.getDecisionREJECTED()){
+                    proposedView.setUwDecision("REJECTED");
+                } else {
+                    proposedView.setUwDecision("");
+                }
 
                 if (Util.isNull(detailView.getProductProgramView().getName())){
                     proposedView.setProdName("");
@@ -508,6 +523,36 @@ public class PDFDecision implements Serializable {
                 proposedView.setLimit(detailView.getLimit());
                 proposedView.setFrontEndFee(detailView.getFrontEndFee());
                 proposedView.setNewCreditTierDetailViews(detailView.getNewCreditTierDetailViewList());
+
+                if (detailView.getRequestType() == decision.getRequestTypeNEW().value()){
+                    proposedView.setRequestType("New");
+                } else if (detailView.getRequestType() == decision.getRequestTypeCHANGE().value()){
+                    proposedView.setRequestType("Change");
+                }
+
+                if (detailView.getRefinance() == decision.getYesValue()){
+                    proposedView.setRefinance("Yes");
+                } else if (detailView.getRefinance() == decision.getNoValue()){
+                    proposedView.setRefinance("No");
+                }
+
+                if (!Util.isNull(detailView.getLoanPurposeView())){
+                    proposedView.setPurposeDescription(detailView.getLoanPurposeView().getDescription());
+                } else {
+                    proposedView.setPurposeDescription("");
+                }
+
+                if (!Util.isNull(detailView.getDisbursementTypeView())){
+                    proposedView.setDisbursement(detailView.getDisbursementTypeView().getDisbursement());
+                } else {
+                    proposedView.setDisbursement("");
+                }
+                if (!Util.isNull(detailView.getRemark())){
+
+                    proposedView.setRemark(detailView.getRemark());
+                }
+                proposedView.setHoldLimitAmount(detailView.getHoldLimitAmount());
+
                 proposedCreditDecisionReportList.add(proposedView);
             }
         } else {
@@ -516,5 +561,108 @@ public class PDFDecision implements Serializable {
             log.debug("newCreditDetailViewList is Null by fillProposedCredit. {}",newCreditDetailViewList);
         }
         return proposedCreditDecisionReportList;
+    }
+
+    public List<ProposeFeeInformationDecisionReport> fillProposeFeeInformation(){
+        init();
+        List<ProposeFeeInformationDecisionReport> proposeFeeInformationDecisionReportList = new ArrayList<ProposeFeeInformationDecisionReport>();
+        List<NewFeeDetailView> feeDetailViewList = decisionView.getProposeFeeInfoList();
+
+        int count = 1;
+        if (Util.safetyList(feeDetailViewList).size() > 0){
+            log.debug("feeDetailViewList by fillProposeFeeInformation. {}",feeDetailViewList);
+            for (NewFeeDetailView view : feeDetailViewList){
+                ProposeFeeInformationDecisionReport proposeFeeInformationDecisionReport = new ProposeFeeInformationDecisionReport();
+                proposeFeeInformationDecisionReport.setCount(count++);
+                proposeFeeInformationDecisionReport.setProductProgram(view.getProductProgram());
+                proposeFeeInformationDecisionReport.setStandardFrontEndFee(view.getStandardFrontEndFee().getFeeAmount());
+                proposeFeeInformationDecisionReport.setStandardFrontEndFee(view.getStandardFrontEndFee().getFeeYear());
+                proposeFeeInformationDecisionReport.setCommitmentFee(view.getCommitmentFee().getFeeAmount());
+                proposeFeeInformationDecisionReport.setCommitmentFeeYear(view.getCommitmentFee().getFeeYear());
+                proposeFeeInformationDecisionReport.setExtensionFee(view.getExtensionFee().getFeeAmount());
+                proposeFeeInformationDecisionReport.setExtensionFeeYear(view.getExtensionFee().getFeeYear());
+                proposeFeeInformationDecisionReport.setPrepaymentFee(view.getPrepaymentFee().getFeeAmount());
+                proposeFeeInformationDecisionReport.setPrepaymentFeeYear(view.getPrepaymentFee().getFeeYear());
+                proposeFeeInformationDecisionReport.setCancellationFee(view.getCancellationFee().getFeeAmount());
+                proposeFeeInformationDecisionReport.setCancellationFeeYear(view.getCancellationFee().getFeeYear());
+                proposeFeeInformationDecisionReportList.add(proposeFeeInformationDecisionReport);
+            }
+        } else {
+            log.debug("feeDetailViewList is Null by fillProposeFeeInformation. {}",feeDetailViewList);
+            ProposeFeeInformationDecisionReport proposeFeeInformationDecisionReport = new ProposeFeeInformationDecisionReport();
+            proposeFeeInformationDecisionReportList.add(proposeFeeInformationDecisionReport);
+        }
+
+
+        return proposeFeeInformationDecisionReportList;
+    }
+
+    public List<ProposedCollateralDecisionReport> fillProposedCollateral(){
+        init();
+        List<ProposedCollateralDecisionReport> proposedCollateralDecisionReportList = new ArrayList<ProposedCollateralDecisionReport>();
+        List<NewCollateralView> newCollateralViews = decisionView.getProposeCollateralList();
+        List<NewCollateralHeadView> collateralHeadViewList = new ArrayList<NewCollateralHeadView>();
+
+        if (Util.safetyList(newCollateralViews).size() > 0){
+            log.debug("newCollateralViews by fillProposedCollateral. {}",newCollateralViews);
+            for (NewCollateralView view : newCollateralViews){
+                ProposedCollateralDecisionReport collateralDecisionReport = new ProposedCollateralDecisionReport();
+                collateralDecisionReport.setJobID(view.getJobID());
+                collateralDecisionReport.setAppraisalDate(view.getAppraisalDate());
+                collateralDecisionReport.setAadDecision(view.getAadDecision());
+                collateralDecisionReport.setAadDecisionReason(view.getAadDecisionReason());
+                collateralDecisionReport.setAadDecisionReasonDetail(view.getAadDecisionReasonDetail());
+                collateralDecisionReport.setUsage(view.getUsage());
+                collateralDecisionReport.setTypeOfUsage(view.getTypeOfUsage());
+                collateralDecisionReport.setMortgageCondition(view.getMortgageCondition());
+                collateralDecisionReport.setMortgageConditionDetail(view.getMortgageConditionDetail());
+
+                if (Util.safetyList(view.getProposeCreditDetailViewList()).size() > 0) {
+                    log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditDetailViewList());
+                    collateralDecisionReport.setProposeCreditDetailViewList(view.getProposeCreditDetailViewList());
+                } else {
+                    log.debug("getProposeCreditDetailViewList is Null. {}",view.getProposeCreditDetailViewList());
+                    collateralDecisionReport.setProposeCreditDetailViewList(collateralDecisionReport.getProposeCreditDetailViewList());
+                }
+
+                collateralHeadViewList = view.getNewCollateralHeadViewList();
+                if (Util.safetyList(collateralHeadViewList).size() > 0){
+                    log.debug("collateralHeadViewList. {}",collateralHeadViewList);
+                    for (NewCollateralHeadView headView : collateralHeadViewList){
+                        collateralDecisionReport.setCollateralDescription(headView.getPotentialCollateral().getDescription());
+                        collateralDecisionReport.setPercentLTVDescription(headView.getCollTypePercentLTV().getDescription());
+                        collateralDecisionReport.setExistingCredit(headView.getExistingCredit());
+                        collateralDecisionReport.setTitleDeed(headView.getTitleDeed());
+                        collateralDecisionReport.setCollateralLocation(headView.getCollateralLocation());
+                        collateralDecisionReport.setAppraisalValue(headView.getAppraisalValue());
+                        collateralDecisionReport.setHeadCollTypeDescription(headView.getHeadCollType().getDescription());
+                        if (headView.getInsuranceCompany() == decision.getYesValue()){
+                            collateralDecisionReport.setInsuranceCompany("Partner");
+                        } else if (headView.getInsuranceCompany() == decision.getNoValue()){
+                            collateralDecisionReport.setInsuranceCompany("Non Partner");
+                        } else {
+                            collateralDecisionReport.setInsuranceCompany("");
+                        }
+                    }
+                } else {
+                    log.debug("collateralHeadViewList is Null. {}",collateralHeadViewList);
+                }
+
+                if (Util.safetyList(view.getNewCollateralHeadViewList()).size() > 0) {
+                    log.debug("getNewCollateralHeadViewList. {}",view.getNewCollateralHeadViewList());
+                    collateralDecisionReport.setNewCollateralHeadViews(view.getNewCollateralHeadViewList());
+                } else {
+                    log.debug("getNewCollateralHeadViewList is Null. {}",view.getProposeCreditDetailViewList());
+                    collateralDecisionReport.setNewCollateralHeadViews(collateralDecisionReport.getNewCollateralHeadViews());
+                }
+                proposedCollateralDecisionReportList.add(collateralDecisionReport);
+            }
+
+        } else {
+            log.debug("newCollateralViews is Null by fillProposedCollateral. {}",newCollateralViews);
+            ProposedCollateralDecisionReport collateralDecisionReport = new ProposedCollateralDecisionReport();
+            proposedCollateralDecisionReportList.add(collateralDecisionReport);
+        }
+        return proposedCollateralDecisionReportList;
     }
 }

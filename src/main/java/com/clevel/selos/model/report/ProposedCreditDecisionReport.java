@@ -4,6 +4,7 @@ import com.clevel.selos.model.view.NewCreditTierDetailView;
 import com.clevel.selos.report.ReportModel;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,6 +13,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class ProposedCreditDecisionReport extends ReportModel{
 
+    private int count;
     private String prodName;
     private String credittypeName;
     private String prodCode;
@@ -23,11 +25,19 @@ public class ProposedCreditDecisionReport extends ReportModel{
     private BigDecimal installment;
     private int tenor;
     private BigDecimal frontEndFee;
+    private String requestType;
+    private String refinance;
+    private String purposeDescription;
+    private String remark;
+    private String disbursement;
+    private BigDecimal holdLimitAmount;
+    private String uwDecision;
 
     private List<NewCreditTierDetailView> newCreditTierDetailViews;
 
 
     public ProposedCreditDecisionReport() {
+        count = getDefaultInteger();
         prodName = getDefaultString();
         credittypeName = getDefaultString();
         prodCode = getProjectCode();
@@ -39,6 +49,22 @@ public class ProposedCreditDecisionReport extends ReportModel{
         installment = getDefaultBigDecimal();
         tenor = getDefaultInteger();
         frontEndFee = getDefaultBigDecimal();
+        requestType = getDefaultString();
+        refinance = getDefaultString();
+        purposeDescription = getDisbursement();
+        remark = getDisbursement();
+        disbursement = getDefaultString();
+        holdLimitAmount = getDefaultBigDecimal();
+        uwDecision = getDefaultString();
+        newCreditTierDetailViews = new ArrayList<NewCreditTierDetailView>();
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public String getProdName() {
@@ -137,20 +163,84 @@ public class ProposedCreditDecisionReport extends ReportModel{
         this.newCreditTierDetailViews = newCreditTierDetailViews;
     }
 
+    public String getDisbursement() {
+        return disbursement;
+    }
+
+    public void setDisbursement(String disbursement) {
+        this.disbursement = disbursement;
+    }
+
+    public BigDecimal getHoldLimitAmount() {
+        return holdLimitAmount;
+    }
+
+    public void setHoldLimitAmount(BigDecimal holdLimitAmount) {
+        this.holdLimitAmount = holdLimitAmount;
+    }
+
+    public void setRefinance(String refinance) {
+        this.refinance = refinance;
+    }
+
+    public void setRequestType(String requestType) {
+        this.requestType = requestType;
+    }
+
+    public String getRefinance() {
+        return refinance;
+    }
+
+    public String getRequestType() {
+        return requestType;
+    }
+
+    public String getPurposeDescription() {
+        return purposeDescription;
+    }
+
+    public void setPurposeDescription(String purposeDescription) {
+        this.purposeDescription = purposeDescription;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getUwDecision() {
+        return uwDecision;
+    }
+
+    public void setUwDecision(String uwDecision) {
+        this.uwDecision = uwDecision;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("prodName", prodName).
-                append("credittypeName", credittypeName).
-                append("prodCode", prodCode).
-                append("projectCode", projectCode).
-                append("limit", limit).
-                append("standardPriceLabel", standardPriceLabel).
-                append("suggestPriceLabel", suggestPriceLabel).
-                append("finalPriceLabel", finalPriceLabel).
-                append("installment", installment).
-                append("tenor", tenor).
-                append("frontEndFee", frontEndFee).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("prodName", prodName)
+                .append("credittypeName", credittypeName)
+                .append("prodCode", prodCode)
+                .append("projectCode", projectCode)
+                .append("limit", limit)
+                .append("standardPriceLabel", standardPriceLabel)
+                .append("suggestPriceLabel", suggestPriceLabel)
+                .append("finalPriceLabel", finalPriceLabel)
+                .append("installment", installment)
+                .append("tenor", tenor)
+                .append("frontEndFee", frontEndFee)
+                .append("requestType", requestType)
+                .append("refinance", refinance)
+                .append("purposeDescription", purposeDescription)
+                .append("remark", remark)
+                .append("disbursement", disbursement)
+                .append("holdLimitAmount", holdLimitAmount)
+                .append("newCreditTierDetailViews", newCreditTierDetailViews)
+                .append("uwDecision", uwDecision)
+                .toString();
     }
 }

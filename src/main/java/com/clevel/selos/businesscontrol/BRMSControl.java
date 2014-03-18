@@ -133,7 +133,7 @@ public class BRMSControl extends BusinessControl {
 
         applicationInfo.setProcessDate(Calendar.getInstance().getTime());
         if(workCase.getProductGroup() != null)
-            applicationInfo.setProductGroup(basicInfo.getProductGroup().getBrmsCode());
+            applicationInfo.setProductGroup(workCase.getProductGroup().getBrmsCode());
 
         BigDecimal totalTCGGuaranteeAmount = BigDecimal.ZERO;
         BigDecimal numberOfIndvGuarantor = BigDecimal.ZERO;
@@ -505,8 +505,8 @@ public class BRMSControl extends BusinessControl {
 
         applicationInfo.setTradeChequeReturnPercent(bankStatementSummary.getGrdTotalTDChqRetPercent());
 
-        if(basicInfo.getProductGroup() != null)
-            applicationInfo.setProductGroup(basicInfo.getProductGroup().getBrmsCode());
+        if(workCase.getProductGroup() != null)
+            applicationInfo.setProductGroup(workCase.getProductGroup().getBrmsCode());
 
         applicationInfo.setMaximumSMELimit(newCreditFacility.getMaximumSMELimit());
 
@@ -586,8 +586,8 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setRequestTCG(getRadioBoolean(tcg.getTcgFlag()));
         if(workCase.getStep() != null)
             applicationInfo.setStepCode(workCase.getStep().getCode());
-        if(basicInfo.getProductGroup() != null)
-            applicationInfo.setProductGroup(basicInfo.getProductGroup().getBrmsCode());
+        if(workCase.getProductGroup() != null)
+            applicationInfo.setProductGroup(workCase.getProductGroup().getBrmsCode());
 
         BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findByWorkCaseId(workCaseId);
 
@@ -610,8 +610,8 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setApplicationNo(workCase.getAppNumber());
         applicationInfo.setProcessDate(checkDate);
         applicationInfo.setBdmSubmitDate(basicInfo.getBdmSubmitDate());
-        if(basicInfo.getProductGroup() != null)
-            applicationInfo.setProductGroup(basicInfo.getProductGroup().getBrmsCode());
+        if(workCase.getProductGroup() != null)
+            applicationInfo.setProductGroup(workCase.getProductGroup().getBrmsCode());
 
         DocAppraisalResponse docAppraisalResponse = brmsInterface.checkDocAppraisalRule(applicationInfo);
         logger.debug("-- end getDocAppraisal ", docAppraisalResponse);
