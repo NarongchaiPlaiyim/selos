@@ -97,9 +97,6 @@ public class AppraisalRequest implements Serializable {
     private void init(){
         log.debug("init...");
         modeForButton = ModeForButton.ADD;
-        appraisalView = new AppraisalView();
-        appraisalContactDetailView = new AppraisalContactDetailView();
-        appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
         appraisalDetailView = new AppraisalDetailView();
         appraisalDetailViewDialog = new AppraisalDetailView();
         appraisalDetailViewSelected = new AppraisalDetailView();
@@ -125,7 +122,6 @@ public class AppraisalRequest implements Serializable {
     public void preRender(){
         log.debug("preRender...");
         HttpSession session = FacesUtil.getSession(true);
-
         if(checkSession()){
             stepId = (Long)session.getAttribute("stepId");
             if(stepId != StepValue.PRESCREEN_MAKER.value() && stepId != StepValue.FULLAPP_BDM_SSO_ABDM.value()){
@@ -171,10 +167,16 @@ public class AppraisalRequest implements Serializable {
                     appraisalContactDetailView = new AppraisalContactDetailView();
                 }
                 log.debug("onCreation ::: appraisalContactDetailView.id : [{}]", appraisalContactDetailView.getId());
+            } else {
+                appraisalView = new AppraisalView();
+                log.debug("-- AppraisalView[New] created");
+                appraisalContactDetailView = new AppraisalContactDetailView();
+                log.debug("-- AppraisalContactDetailView[New] created");
+                appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+                log.debug("-- AppraisalDetailViewList[New] created");
             }
         } else {
             //TODO Show dialog for exception cannot load data from database.
-
         }
     }
 
