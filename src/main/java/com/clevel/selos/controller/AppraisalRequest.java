@@ -97,9 +97,6 @@ public class AppraisalRequest implements Serializable {
     private void init(){
         log.debug("init...");
         modeForButton = ModeForButton.ADD;
-        appraisalView = new AppraisalView();
-        appraisalContactDetailView = new AppraisalContactDetailView();
-        appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
         appraisalDetailView = new AppraisalDetailView();
         appraisalDetailViewDialog = new AppraisalDetailView();
         appraisalDetailViewSelected = new AppraisalDetailView();
@@ -125,7 +122,6 @@ public class AppraisalRequest implements Serializable {
     public void preRender(){
         log.debug("preRender...");
         HttpSession session = FacesUtil.getSession(true);
-
         if(checkSession()){
             stepId = (Long)session.getAttribute("stepId");
             if(stepId != StepValue.PRESCREEN_MAKER.value() && stepId != StepValue.FULLAPP_BDM_SSO_ABDM.value()){
