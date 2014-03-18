@@ -96,6 +96,8 @@ public class GenPDF extends ReportService {
         map.put("fillProposedCredit",pdfDecision.fillProposedCredit());
         map.put("fillProposeFeeInformation",pdfDecision.fillProposeFeeInformation());
         map.put("fillProposedCollateral",pdfDecision.fillProposedCollateral());
+        map.put("fillApprovedCollaterral",pdfDecision.fillApprovedCollaterral());
+        map.put("fillProposedGuarantor",pdfDecision.fillProposedGuarantor());
 
 
         pdfName = "Decision_Report_";

@@ -2,6 +2,7 @@ package com.clevel.selos.integration.brms.convert;
 
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
+import com.clevel.selos.integration.brms.model.BRMSYesNo;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.DocumentDetail;
 import com.clevel.selos.model.DocLevel;
@@ -74,10 +75,13 @@ public class Converter implements Serializable {
         return attributeType;
     }
 
-    protected AttributeType getAttributeType(BRMSFieldAttributes field, boolean existingSMECustomer){
+    protected AttributeType getAttributeType(BRMSFieldAttributes field, boolean value){
         AttributeType attributeType = new AttributeType();
         attributeType.setName(field.value());
-        attributeType.setBooleanValue(existingSMECustomer);
+
+        //attributeType.setBooleanValue(value);
+        attributeType.setStringValue(BRMSYesNo.lookup(value).value());
+
         return attributeType;
     }
 
