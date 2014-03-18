@@ -178,6 +178,7 @@ public class NewGuarantorDetailTransform extends Transform {
                 proposeCreditDetailView.setProductProgramView(tmp.getProductProgramView());
                 proposeCreditDetailView.setCreditFacilityView(tmp.getCreditTypeView());
                 proposeCreditDetailView.setLimit(tmp.getLimit());
+                proposeCreditDetailView.setUseCount(tmp.getUseCount());
                 log.info("newGuarantorCreditList.get(i).getNewCreditDetail() ::: {}", findNewGuarantorCredit(newGuarantorCreditList, tmp).getGuaranteeAmount());
                 proposeCreditDetailView.setGuaranteeAmount(findNewGuarantorCredit(newGuarantorCreditList, tmp).getGuaranteeAmount());
                 proposeCreditDetailViewList.add(proposeCreditDetailView);
