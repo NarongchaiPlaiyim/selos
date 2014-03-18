@@ -83,7 +83,6 @@ public class GenPDF extends ReportService {
 
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
-        map.put("fillProposedCredit",pdfDecision.fillProposedCredit());
         map.put("fillCreditBorrower",pdfDecision.fillCreditBorrower());
         map.put("fillCondition",pdfDecision.fillCondition());
         map.put("fillBorrowerRetail",pdfDecision.fillBorrowerRetail());
@@ -94,8 +93,10 @@ public class GenPDF extends ReportService {
         map.put("fillExistingCollateralBorrower",pdfDecision.fillExistingCollateralBorrower());
         map.put("fillExistingCollateralRelated",pdfDecision.fillExistingCollateralRelated());
         map.put("fillGuarantorBorrower",pdfDecision.fillGuarantorBorrower());
+        map.put("fillProposedCredit",pdfDecision.fillProposedCredit());
+        map.put("fillProposeFeeInformation",pdfDecision.fillProposeFeeInformation());
+        map.put("fillProposedCollateral",pdfDecision.fillProposedCollateral());
 
-//        genSubreportDecision();
 
         pdfName = "Decision_Report_";
 
