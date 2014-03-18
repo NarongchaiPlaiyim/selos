@@ -11,6 +11,7 @@ import java.util.List;
 public class BRMSCustomerInfo implements Serializable{
 
     private boolean individual;
+    private String customerId;
     private String customerEntity;
     private boolean existingSMECustomer;
     private String relation;
@@ -42,6 +43,14 @@ public class BRMSCustomerInfo implements Serializable{
     private List<String> csiSomeMatchCode;
     private List<BRMSTMBAccountInfo> tmbAccountInfoList;
     private List<BRMSNCBAccountInfo> ncbAccountInfoList;
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
 
     public boolean isIndividual() {
         return individual;

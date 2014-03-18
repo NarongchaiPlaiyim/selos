@@ -697,6 +697,8 @@ public class BRMSControl extends BusinessControl {
 
     private BRMSCustomerInfo getBRMSCustomerInfo(Customer customer, Date checkDate){
         BRMSCustomerInfo customerInfo = new BRMSCustomerInfo();
+
+        customerInfo.setCustomerId(String.valueOf(customer.getId()));
         if(customer.getRelation() != null)
             customerInfo.setRelation(customer.getRelation().getBrmsCode());
         if(customer.getCustomerEntity() != null)
@@ -809,6 +811,7 @@ public class BRMSControl extends BusinessControl {
 
     public BRMSCustomerInfo getCustomerInfoWithoutCreditAccount(Customer customer, Date checkDate){
         BRMSCustomerInfo customerInfo = new BRMSCustomerInfo();
+        customerInfo.setCustomerId(String.valueOf(customer.getId()));
         if(customer.getRelation() != null)
             customerInfo.setRelation(customer.getRelation().getBrmsCode());
         if(customer.getCustomerEntity() != null)
