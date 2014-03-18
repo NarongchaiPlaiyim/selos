@@ -291,7 +291,7 @@ public class TCGInfoControl extends BusinessControl {
 
     public BigDecimal toCalCollateralRuleResult(TCGView tcgView) {
         BigDecimal sumAdd = BigDecimal.ZERO;
-        BigDecimal sumAppraisalDivide = BigDecimal.ZERO;
+        BigDecimal sumAppraisalMul = BigDecimal.ZERO;
         BigDecimal sumAppraisalAmount = BigDecimal.ZERO;
 
         if (tcgView != null) {
@@ -307,7 +307,7 @@ public class TCGInfoControl extends BusinessControl {
             log.debug("SUM After add :: {}", sumAdd);
             log.debug("tcgView.getSumAppraisalAmount() :: {}", tcgView.getSumAppraisalAmount());
             sumAppraisalAmount = Util.divide(tcgView.getSumAppraisalAmount(), sumAdd);
-//            sumAppraisalAmount = Util.divide(sumAppraisalDivide, BigDecimal.valueOf(100));
+//            sumAppraisalMul = Util.multiply(sumAppraisalAmount,Util);
             log.debug("sumAppraisalAmount ::: {} ", sumAppraisalAmount);
 
         }

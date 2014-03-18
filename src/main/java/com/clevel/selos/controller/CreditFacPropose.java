@@ -12,6 +12,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -308,6 +309,13 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             deleteConditionIdList = new ArrayList<Long>();
 
             try {
+                WorkCase workCase = workCaseDAO.findById(workCaseId);
+
+                if(!Util.isNull(workCase)){
+                    productGroup = workCase.getProductGroup();
+                    log.info("productGroup :: {}",productGroup.getId());
+                }
+
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
                 log.debug("onCreation ::: newCreditFacilityView : {}", newCreditFacilityView);
                 if (newCreditFacilityView != null) {
@@ -365,7 +373,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 } else {
                     specialProgramView = specialProgramTransform.transformToView(specialProgramDAO.findById(3));
                 }
-                productGroup = basicInfoView.getProductGroup();
+//                productGroup = basicInfoView.getProductGroup();
             }
 
             tcgView = tcgInfoControl.getTcgView(workCaseId);
@@ -1457,6 +1465,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                     List<ProposeCreditDetailView> newCreditTypeItems = new ArrayList<ProposeCreditDetailView>();
                     for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
+                        creditTypeItem.setNoFlag(true);
                         newCreditTypeItems.add(creditTypeItem);
                         log.debug("creditTypeItem.getGuaranteeAmount() :: {}",creditTypeItem.getGuaranteeAmount());
                         summary = Util.add(summary, creditTypeItem.getGuaranteeAmount());
@@ -1468,7 +1477,11 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                     for (int i=0;i<guarantorDetailAdd.getProposeCreditDetailViewList().size();i++) {
                         seqTemp = guarantorDetailAdd.getProposeCreditDetailViewList().get(i).getSeq();
-                        hashSeqCredit.put(seqTemp,hashSeqCredit.get(i) + 1);
+                        if(guarantorDetailAdd.getProposeCreditDetailViewList().get(i).isNoFlag()){
+                            hashSeqCredit.put(seqTemp,hashSeqCredit.get(i) + 1);
+                        }else{
+                            hashSeqCredit.put(seqTemp,hashSeqCredit.get(i) - 1);
+                        }
                     }
 
                     guarantorDetailAdd.setTotalLimitGuaranteeAmount(summary);
@@ -1490,8 +1503,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
 
                     for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
+                        creditTypeItem.setNoFlag(true);
                         newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().add(creditTypeItem);
-                       log.debug(" newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().get(0).getGuaranteeAmount(); :: {}", newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().get(0).getGuaranteeAmount());
+                        log.debug(" newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().get(0).getGuaranteeAmount(); :: {}", newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().get(0).getGuaranteeAmount());
                         summary = Util.add(summary, creditTypeItem.getGuaranteeAmount());
                         log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
                         log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
@@ -1525,17 +1539,17 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.debug("onDeleteGuarantorInfo ::: {}", newGuarantorDetailViewItem.getTcgLgNo());
 
         for (int i = 0; i < newGuarantorDetailViewItem.getProposeCreditDetailViewList().size(); i++) {
-            if (hashSeqCredit.get(i) > 0) {
-                hashSeqCredit.put(i,hashSeqCredit.get(i) - 1);
-            }
-
-//            int seqForDel = newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(i).getSeq();
-//            if(hashSeqCredit.containsKey(newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(i).getSeq()) &&
-//                    hashSeqCredit.get(newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(i).getSeq())>0)
-//            {
-//                hashSeqCredit.put(seqForDel,hashSeqCredit.get(i) - 1);
-//                log.info("before hashSeqCredit seq :  "+ i + " use is   " +hashSeqCredit.get(i-1));
+//            if (hashSeqCredit.get(i) > 0) {
+//                hashSeqCredit.put(i,hashSeqCredit.get(i) - 1);
 //            }
+
+            int seqForDel = newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(i).getSeq();
+            if(hashSeqCredit.containsKey(newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(i).getSeq()) &&
+                    hashSeqCredit.get(newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(i).getSeq())>0)
+            {
+                hashSeqCredit.put(seqForDel,hashSeqCredit.get(i) - 1);
+                log.info("before hashSeqCredit seq :  "+ i + " use is   " +hashSeqCredit.get(i-1));
+            }
         }
 
 
