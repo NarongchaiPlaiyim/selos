@@ -245,8 +245,8 @@ public class BasicInfoControl extends BusinessControl {
         bapaInfo.setModifyDate(new Date());
         bapaInfoDAO.persist(bapaInfo);
 
-        basicInfo.setProductGroup(productGroupDAO.findById(basicInfoView.getProductGroup().getId()));
-        basicInfo.setRequestType(requestTypeDAO.findById(basicInfoView.getRequestType().getId()));
+        workCase.setProductGroup(productGroupDAO.findById(basicInfoView.getProductGroup().getId()));
+        workCase.setRequestType(requestTypeDAO.findById(basicInfoView.getRequestType().getId()));
         workCaseDAO.persist(workCase);
 
         //for new Open Account

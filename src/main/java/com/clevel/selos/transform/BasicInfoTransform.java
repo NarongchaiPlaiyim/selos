@@ -124,12 +124,12 @@ public class BasicInfoTransform extends Transform {
 
         basicInfoView.setId(basicInfo.getId());
 
-        basicInfoView.setRequestType(basicInfo.getRequestType());
+        basicInfoView.setRequestType(workCase.getRequestType());
         if(basicInfoView.getRequestType() == null){
             basicInfoView.setRequestType(new RequestType());
         }
 
-        basicInfoView.setProductGroup(basicInfo.getProductGroup());
+        basicInfoView.setProductGroup(workCase.getProductGroup());
         if(basicInfoView.getProductGroup() == null){
             basicInfoView.setProductGroup(new ProductGroup());
         }

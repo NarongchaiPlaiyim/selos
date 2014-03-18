@@ -168,9 +168,12 @@ public class TCGInfoControl extends BusinessControl {
                         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
                         log.debug("basicInfo ::: {}", basicInfo);
 
-                        if (basicInfo != null) {
-                            log.debug("basicInfo.getProductGroup ::: {}", basicInfo.getProductGroup());
-                            if (basicInfo.getProductGroup() != null && Util.isTrue(basicInfo.getProductGroup().getSpecialLTV())) {
+                        WorkCase workCase = workCaseDAO.findById(workCaseId);
+                        log.debug("workCase ::: {}", workCase);
+
+                        if (basicInfo != null && workCase != null) {
+                            log.debug("workCase.getProductGroup ::: {}", workCase.getProductGroup());
+                            if (workCase.getProductGroup() != null && Util.isTrue(workCase.getProductGroup().getSpecialLTV())) {
                                 log.debug("getRetentionLTV :::::::");
                                 if (potentialColToTCGCol.getRetentionLTV() != null) {
                                     ltvPercentBig = potentialColToTCGCol.getRetentionLTV();
