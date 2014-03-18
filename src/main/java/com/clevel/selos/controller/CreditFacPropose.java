@@ -802,7 +802,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
         log.info("before del use is  " + used);
 
-        if (used == 0) {
+        if (used <= 0) {
             log.info("used ::: {} ", used);
             if (newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId() != 0) {
                 deleteCreditIdList.add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
@@ -1515,7 +1515,11 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                     for (int i=0;i<newGuarantorDetailView.getProposeCreditDetailViewList().size();i++) {
                         seqTemp = newGuarantorDetailView.getProposeCreditDetailViewList().get(i).getSeq();
-                        hashSeqCredit.put(seqTemp,hashSeqCredit.get(i) + 1);
+                        if(newGuarantorDetailView.getProposeCreditDetailViewList().get(i).isNoFlag()){
+                            hashSeqCredit.put(seqTemp,hashSeqCredit.get(i) + 1);
+                        }else{
+                            hashSeqCredit.put(seqTemp,hashSeqCredit.get(i) - 1);
+                        }
                     }
 
                 }else {
@@ -1539,9 +1543,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.debug("onDeleteGuarantorInfo ::: {}", newGuarantorDetailViewItem.getTcgLgNo());
 
         for (int i = 0; i < newGuarantorDetailViewItem.getProposeCreditDetailViewList().size(); i++) {
-//            if (hashSeqCredit.get(i) > 0) {
-//                hashSeqCredit.put(i,hashSeqCredit.get(i) - 1);
-//            }
 
             int seqForDel = newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(i).getSeq();
             if(hashSeqCredit.containsKey(newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(i).getSeq()) &&
