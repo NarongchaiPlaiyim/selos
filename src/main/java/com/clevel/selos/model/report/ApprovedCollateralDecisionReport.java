@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ProposedCollateralDecisionReport extends ReportModel{
+public class ApprovedCollateralDecisionReport extends ReportModel{
     //Collateral
     private String jobID;
     private Date appraisalDate;
@@ -41,7 +41,7 @@ public class ProposedCollateralDecisionReport extends ReportModel{
     private List<NewCollateralSubView> subViewList;
 
 
-    public ProposedCollateralDecisionReport() {
+    public ApprovedCollateralDecisionReport() {
         jobID = getDefaultString();
         appraisalDate = getDefaultDate();
         aadDecision = getDefaultString();

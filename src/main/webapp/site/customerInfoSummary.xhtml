@@ -387,7 +387,7 @@
                                                                      target="#{custInfoSummary.selectedItemCustomerGuarantor}"/>
                                     </p:commandButton>
                                     <p:commandButton title="#{msg.get('app.button.remove')}"
-                                                     icon="ui-icon-trash"
+                                                     icon="ui-icon-trash" onclick="blockUI.show()"
                                                      oncomplete="confirmDeleteGuarantorDlg.show()"
                                                      update=":frmMain,:msgBoxSystemMessagePanel">
                                         <f:setPropertyActionListener value="#{item2}"
@@ -558,7 +558,7 @@
                                                                      target="#{custInfoSummary.selectedItemCustomerRelated}"/>
                                     </p:commandButton>
                                     <p:commandButton title="#{msg.get('app.button.remove')}"
-                                                     icon="ui-icon-trash"
+                                                     icon="ui-icon-trash" onclick="blockUI.show()"
                                                      oncomplete="confirmDeleteRelatedDlg.show()"
                                                      update=":frmMain,:msgBoxSystemMessagePanel">
                                         <f:setPropertyActionListener value="#{item3}"
@@ -608,7 +608,7 @@
 
         <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
             <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                             header="#{custInfoSummary.messageHeader}">
+                             header="#{custInfoSummary.messageHeader}" closable="false">
                 <f:facet name="message">
                     <h:outputText value="#{custInfoSummary.message}" escape="false"/>
                 </f:facet>

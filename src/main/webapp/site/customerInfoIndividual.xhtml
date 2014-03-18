@@ -136,7 +136,7 @@
                                 </td>
                                 <td>
                                     <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
-                                                     value="#{custInfoSumIndi.relationMainCusId}"
+                                                     value="#{custInfoSumIndi.relationMainCusId}" id="relation"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndRelation}"
                                                      disabled="#{custInfoSumIndi.editBorrower || not custInfoSumIndi.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -146,7 +146,7 @@
                                                        itemValue="#{relation.id}"/>
                                         <p:ajax event="change"
                                                 listener="#{custInfoSumIndi.onChangeRelation()}"
-                                                update=":frmMain:reference,:frmMain:collateral,:frmMain:relationSpouse"/>
+                                                update=":frmMain:reference,:frmMain:relation,:frmMain:collateral,:frmMain:relationSpouse"/>
                                     </p:selectOneMenu>
                                 </td>
 
@@ -155,8 +155,8 @@
                                 </td>
                                 <td colspan="3">
                                     <p:selectOneRadio id="collateral" value="#{custInfoSumIndi.customerInfoView.collateralOwner}"
-                                                      disabled="#{custInfoSumIndi.customerInfoView.relation.getId() == 3
-                                                      || custInfoSumIndi.customerInfoView.relation.getId() == 4
+                                                      disabled="#{custInfoSumIndi.relationMainCusId == 3
+                                                      || custInfoSumIndi.relationMainCusId == 4
                                                       || not custInfoSumIndi.enableAllFieldCus}">
                                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
@@ -1421,7 +1421,7 @@
                                                            itemValue="#{relation.id}"/>
                                             <p:ajax event="change"
                                                     listener="#{custInfoSumIndi.onChangeRelationSpouse()}"
-                                                    update=":frmMain:reference2"/>
+                                                    update=":frmMain:reference2,:frmMain:relationSpouse,:frmMain:collOwnerSpouse"/>
                                         </p:selectOneMenu>
                                     </td>
 
@@ -1429,9 +1429,9 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.collOwner')}"/>
                                     </td>
                                     <td colspan="3">
-                                        <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.collateralOwner}"
-                                                          disabled="#{custInfoSumIndi.customerInfoView.spouse.relation.getId() == 3
-                                                          || custInfoSumIndi.customerInfoView.spouse.relation.getId() == 4
+                                        <p:selectOneRadio id="collOwnerSpouse" value="#{custInfoSumIndi.customerInfoView.spouse.collateralOwner}"
+                                                          disabled="#{custInfoSumIndi.relationSpouseCusId == 3
+                                                          || custInfoSumIndi.relationSpouseCusId == 4
                                                           || not custInfoSumIndi.enableAllFieldCusSpouse}">
                                             <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                             <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
@@ -1748,7 +1748,7 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.occupationList}"
                                                            var="occupation"
-                                                           itemLabel="#{occupation.description}"
+                                                           itemLabel="#{occupation.code} - #{occupation.description}"
                                                            itemValue="#{occupation.id}"/>
                                         </p:selectOneMenu>
                                     </td>
