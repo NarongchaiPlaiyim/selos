@@ -122,18 +122,18 @@ public class AppraisalRequest implements Serializable {
     public void preRender(){
         log.debug("preRender...");
         HttpSession session = FacesUtil.getSession(true);
-//        if(checkSession()){
-//            stepId = (Long)session.getAttribute("stepId");
-//            if(stepId != StepValue.PRESCREEN_MAKER.value() && stepId != StepValue.FULLAPP_BDM_SSO_ABDM.value()){
-//                log.debug("preRender ::: Invalid step id : {}", stepId);
-//                FacesUtil.redirect("/site/inbox.jsf");
-//                return;
-//            }
-//        } else {
-//            log.debug("preRender ::: workCasePreScreenId, workCaseId, stepId is null.");
-//            FacesUtil.redirect("/site/inbox.jsf");
-//            return;
-//        }
+        if(checkSession()){
+            stepId = (Long)session.getAttribute("stepId");
+            if(stepId != StepValue.PRESCREEN_MAKER.value() && stepId != StepValue.FULLAPP_BDM_SSO_ABDM.value()){
+                log.debug("preRender ::: Invalid step id : {}", stepId);
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
+            }
+        } else {
+            log.debug("preRender ::: workCasePreScreenId, workCaseId, stepId is null.");
+            FacesUtil.redirect("/site/inbox.jsf");
+            return;
+        }
     }
 
     @PostConstruct
@@ -141,15 +141,15 @@ public class AppraisalRequest implements Serializable {
         log.info("onCreation...");
         init();
         HttpSession session = FacesUtil.getSession(true);
-//        if(checkSession()){
-//            stepId = (Long)session.getAttribute("stepId");
-//            if(stepId == StepValue.PRESCREEN_MAKER.value()){
-//                workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
-//                log.debug("onCreation ::: workCasePreScreenId : [{}]", workCasePreScreenId);
-//            }else if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){
-//                workCaseId = (Long)session.getAttribute("workCaseId");
-//                log.debug("onCreation ::: workCaseId : [{}]", workCaseId);
-//            }
+        if(checkSession()){
+            stepId = (Long)session.getAttribute("stepId");
+            if(stepId == StepValue.PRESCREEN_MAKER.value()){
+                workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
+                log.debug("onCreation ::: workCasePreScreenId : [{}]", workCasePreScreenId);
+            }else if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){
+                workCaseId = (Long)session.getAttribute("workCaseId");
+                log.debug("onCreation ::: workCaseId : [{}]", workCaseId);
+            }
 
             appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, workCasePreScreenId);
             log.debug("onCreation ::: appraisalView : {}", appraisalView);
@@ -175,9 +175,9 @@ public class AppraisalRequest implements Serializable {
                 appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
                 log.debug("-- AppraisalDetailViewList[New] created");
             }
-//        } else {
-//            //TODO Show dialog for exception cannot load data from database.
-//        }
+        } else {
+            //TODO Show dialog for exception cannot load data from database.
+        }
     }
 
     public void onSaveAppraisalDetailView(){

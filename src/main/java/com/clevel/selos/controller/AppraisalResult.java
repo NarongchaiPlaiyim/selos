@@ -333,7 +333,8 @@ public class AppraisalResult implements Serializable {
     public void onEditCollateralDetailView(){
         log.info("-- onEditCollateralDetailView {}",  newCollateralViewList.size());
         modeForButton = ModeForButton.EDIT;
-        newCollateralView = selectCollateralDetailView;
+        Cloner cloner = new Cloner();
+        newCollateralView = cloner.deepClone(selectCollateralDetailView);
         if(Util.isNull(newCollateralView.getJobID()) || Util.isZero(newCollateralView.getJobID().length())){
             flagReadOnly = false;
         } else {
