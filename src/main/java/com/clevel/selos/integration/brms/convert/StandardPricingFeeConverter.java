@@ -38,10 +38,10 @@ public class StandardPricingFeeConverter extends Converter{
             ApplicationType applicationType = new ApplicationType();
 
 
-            applicationType.setApplicationNumber(applicationInfo.getApplicationNo());
+            applicationType.setApplicationNumber(getValueForInterface(applicationInfo.getApplicationNo()));
             try{
                 GregorianCalendar gregorianCalendar = new GregorianCalendar();
-                gregorianCalendar.setTime(applicationInfo.getProcessDate());
+                gregorianCalendar.setTime(getValueForInterface(applicationInfo.getProcessDate()));
                 applicationType.setDateOfApplication(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
             }catch (Exception ex){
                 logger.error("Could not transform Date");
@@ -61,8 +61,8 @@ public class StandardPricingFeeConverter extends Converter{
             List<ProductType> productTypeList = applicationType.getProduct();
             List<BRMSAccountRequested> accountRequestedList = applicationInfo.getAccountRequestedList();
             ProductType productType = new ProductType();
-            productType.setProductType(applicationInfo.getProductGroup());
-            productType.setRequestedCreditLimit(applicationInfo.getTotalApprovedCredit());
+            productType.setProductType(getValueForInterface(applicationInfo.getProductGroup()));
+            productType.setRequestedCreditLimit(getValueForInterface(applicationInfo.getTotalApprovedCredit()));
 
             List<SELOSProductProgramType> selosProductProgramTypeList = productType.getSelosProductProgram();
 
@@ -74,16 +74,16 @@ public class StandardPricingFeeConverter extends Converter{
                         selosProductProgramTypeList.add(selosProductProgramType);
                         selosProductProgramType = new SELOSProductProgramType();
                     }
-                    selosProductProgramType.setID(accountRequested.getCreditDetailId());
-                    selosProductProgramType.setName(accountRequested.getProductProgram());
-                    selosProductProgramType.setFrontEndDiscount(accountRequested.getFontEndFeeDiscountRate());
+                    selosProductProgramType.setID(getValueForInterface(accountRequested.getCreditDetailId()));
+                    selosProductProgramType.setName(getValueForInterface(accountRequested.getProductProgram()));
+                    selosProductProgramType.setFrontEndDiscount(getValueForInterface(accountRequested.getFontEndFeeDiscountRate()));
                     creditFacilityTypeList = selosProductProgramType.getCreditFacility();
                 }
 
                 CreditFacilityType creditFacilityType = new CreditFacilityType();
-                creditFacilityType.setID(accountRequested.getCreditDetailId());
-                creditFacilityType.setType(accountRequested.getCreditType());
-                creditFacilityType.setCreditLimit(accountRequested.getLimit());
+                creditFacilityType.setID(getValueForInterface(accountRequested.getCreditDetailId()));
+                creditFacilityType.setType(getValueForInterface(accountRequested.getCreditType()));
+                creditFacilityType.setCreditLimit(getValueForInterface(accountRequested.getLimit()));
 
                 creditFacilityTypeList.add(creditFacilityType);
             }
