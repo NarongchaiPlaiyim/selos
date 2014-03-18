@@ -171,10 +171,16 @@ public class AppraisalRequest implements Serializable {
                     appraisalContactDetailView = new AppraisalContactDetailView();
                 }
                 log.debug("onCreation ::: appraisalContactDetailView.id : [{}]", appraisalContactDetailView.getId());
+            } else {
+                appraisalView = new AppraisalView();
+                log.debug("-- AppraisalView[New] created");
+                appraisalContactDetailView = new AppraisalContactDetailView();
+                log.debug("-- AppraisalContactDetailView[New] created");
+                appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+                log.debug("-- AppraisalDetailViewList[New] created");
             }
         } else {
             //TODO Show dialog for exception cannot load data from database.
-
         }
     }
 
