@@ -24,9 +24,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 public class ReturnControl extends BusinessControl {
@@ -50,6 +48,8 @@ public class ReturnControl extends BusinessControl {
     StepTransform stepTransform;
     @Inject
     StepDAO stepDAO;
+    @Inject
+    MandateDocDAO mandateDocDAO;
 
     @Inject
     BPMExecutor bpmExecutor;
@@ -101,6 +101,35 @@ public class ReturnControl extends BusinessControl {
             List<ReturnInfo> returnInfoList = returnInfoDAO.findByNotAcceptList(workCaseId);
             for(ReturnInfo returnInfo: returnInfoList){
                 ReturnInfoView returnInfoView = returnInfoTransform.transformToNewView(returnInfo);
+                returnInfoViews.add(returnInfoView);
+            }
+        }
+
+        return returnInfoViews;
+    }
+
+    public List<ReturnInfoView> getReturnInfoViewListFromMandateDoc(long workCaseId){
+        List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
+        List<MandateDoc> mandateDocList;
+        User user = getCurrentUser();
+        Map<String, ReturnInfoView> returnInfoViewMap = new HashMap<String, ReturnInfoView>();
+        if(workCaseId!=0 && user!=null){
+            mandateDocList = mandateDocDAO.findByWorkCaseIdAndRoleForReturn(workCaseId, user.getRole().getId());
+            if(mandateDocList!=null && mandateDocList.size()>0){
+                for(MandateDoc mandateDoc: mandateDocList){
+                    ReturnInfoView returnInfoView = returnInfoTransform.transformToNewView(mandateDoc);
+                    returnInfoViewMap.put(returnInfoView.getReturnCode(), returnInfoView);
+                }
+            }
+
+            List<ReturnInfo> returnInfoList = returnInfoDAO.findByNotAcceptList(workCaseId);
+            for(ReturnInfo returnInfo: returnInfoList){
+                ReturnInfoView returnInfoView;
+                if(returnInfoViewMap.containsKey(returnInfo.getReturnCode())){
+                    returnInfoView = returnInfoViewMap.get(returnInfo.getReturnCode());
+                } else {
+                    returnInfoView = returnInfoTransform.transformToNewView(returnInfo);
+                }
                 returnInfoViews.add(returnInfoView);
             }
         }

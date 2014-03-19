@@ -445,10 +445,8 @@ public class BaseController implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
 
-        //TODO: get return list from CheckMandate Doc
-
-        //get from not accept List
-        returnInfoViewList = returnControl.getNoAcceptReturnInfoViewList(workCaseId);
+        //get from not accept List and from CheckMandateDoc
+        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDoc(workCaseId);
 
         //set return code master
         returnReason = returnControl.getReturnReasonList();

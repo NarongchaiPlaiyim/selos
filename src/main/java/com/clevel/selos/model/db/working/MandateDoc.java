@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.Role;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -19,8 +20,18 @@ public class MandateDoc implements Serializable {
     @JoinColumn(name="workcase_id")
     private WorkCase workCase;
 
-    @Column(name = "role")
-    private String role;
+    @OneToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+    @Column(name = "ecm_doc_type")
+    private String ecmDocType;
+
+    @Column(name = "ecm_doc_type_desc")
+    private String ecmDocTypeDesc;
+
+    @Column(name = "mandate_type", columnDefinition = "int default 0")
+    private int mandateType;
 
     @Column(name = "is_completed", columnDefinition = "int default 0")
     private int isCompleted;
@@ -62,12 +73,36 @@ public class MandateDoc implements Serializable {
         this.workCase = workCase;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getEcmDocType() {
+        return ecmDocType;
+    }
+
+    public void setEcmDocType(String ecmDocType) {
+        this.ecmDocType = ecmDocType;
+    }
+
+    public String getEcmDocTypeDesc() {
+        return ecmDocTypeDesc;
+    }
+
+    public void setEcmDocTypeDesc(String ecmDocTypeDesc) {
+        this.ecmDocTypeDesc = ecmDocTypeDesc;
+    }
+
+    public int getMandateType() {
+        return mandateType;
+    }
+
+    public void setMandateType(int mandateType) {
+        this.mandateType = mandateType;
     }
 
     public int getCompleted() {
@@ -140,6 +175,9 @@ public class MandateDoc implements Serializable {
                 .append("id", id)
                 .append("workCase", workCase)
                 .append("role", role)
+                .append("ecmDocType", ecmDocType)
+                .append("ecmDocTypeDesc", ecmDocTypeDesc)
+                .append("mandateType", mandateType)
                 .append("isCompleted", isCompleted)
                 .append("remark", remark)
                 .append("reasonIncomplete", reasonIncomplete)
