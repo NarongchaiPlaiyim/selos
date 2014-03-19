@@ -95,20 +95,7 @@ public class ReturnControl extends BusinessControl {
         return returnInfoViews;
     }
 
-    public List<ReturnInfoView> getNoAcceptReturnInfoViewList(long workCaseId){
-        List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
-        if(workCaseId!=0){
-            List<ReturnInfo> returnInfoList = returnInfoDAO.findByNotAcceptList(workCaseId);
-            for(ReturnInfo returnInfo: returnInfoList){
-                ReturnInfoView returnInfoView = returnInfoTransform.transformToNewView(returnInfo);
-                returnInfoViews.add(returnInfoView);
-            }
-        }
-
-        return returnInfoViews;
-    }
-
-    public List<ReturnInfoView> getReturnInfoViewListFromMandateDoc(long workCaseId){
+    public List<ReturnInfoView> getReturnInfoViewListFromMandateDocAndNoAccept(long workCaseId){
         List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
         List<MandateDoc> mandateDocList;
         User user = getCurrentUser();
@@ -127,10 +114,20 @@ public class ReturnControl extends BusinessControl {
                 ReturnInfoView returnInfoView;
                 if(returnInfoViewMap.containsKey(returnInfo.getReturnCode())){
                     returnInfoView = returnInfoViewMap.get(returnInfo.getReturnCode());
+                    returnInfoViewMap.remove(returnInfo.getReturnCode());
                 } else {
                     returnInfoView = returnInfoTransform.transformToNewView(returnInfo);
                 }
                 returnInfoViews.add(returnInfoView);
+            }
+
+            if(returnInfoViewMap!=null && returnInfoViewMap.size()>0){
+                Iterator it = returnInfoViewMap.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry pairs = (Map.Entry)it.next();
+                    returnInfoViews.add((ReturnInfoView) pairs.getValue());
+                    it.remove(); // avoids a ConcurrentModificationException
+                }
             }
         }
 
@@ -212,7 +209,7 @@ public class ReturnControl extends BusinessControl {
         return returnInfoViews;
     }
 
-    public void submitReturnSummary(long workCaseId, String queueName, User user, long stepId, List<ReturnInfoView> returnInfoViewList) throws Exception {
+    public void submitReturnBDM(long workCaseId, String queueName, User user, long stepId, List<ReturnInfoView> returnInfoViewList) throws Exception {
         if(returnInfoViewList!=null && returnInfoViewList.size()>0){
             //Move Return Info in Working to History
             saveReturnHistory(workCaseId,user);
@@ -234,31 +231,24 @@ public class ReturnControl extends BusinessControl {
             }
 
             returnInfoDAO.persist(returnInfoList);
-
-            //TODO: execute bpm for dispatch return
-            //bpmExecutor.cancelCase(0, workCaseId, queueName, ActionCode.CANCEL_CA.getVal(), reasonTxt, remark);
+            //bpmExecutor.returnBDM(workCaseId, queueName, ActionCode.RETURN_TO_BDM_FULLAPP.getVal());
         }
     }
 
-    public void saveReplyReturn(long workCaseId, String queueName, User user, List<ReturnInfoView> returnInfoViewList) throws Exception {
+    public void saveReturnInformation(long workCaseId, String queueName, User user, List<ReturnInfoView> returnInfoViewList) throws Exception {
         if(returnInfoViewList!=null && returnInfoViewList.size()>0){
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
-            Date replyDate = new Date();
             for(ReturnInfoView returnInfoView: returnInfoViewList){
-                //returnInfoView.setDateOfReply(replyDate);
                 ReturnInfo returnInfo = returnInfoTransform.transformToModel(returnInfoView, workCase, user);
                 returnInfoList.add(returnInfo);
             }
 
             returnInfoDAO.persist(returnInfoList);
-
-            //TODO: execute bpm for dispatch return
-            //bpmExecutor.cancelCase(0, workCaseId, queueName, ActionCode.CANCEL_CA.getVal(), reasonTxt, remark);
         }
     }
 
-    public void updateReplyReturnDate(long workCaseId) throws Exception {
+    public void submitReturnUW1(long workCaseId, String queueName) throws Exception {
         List<ReturnInfo> returnInfoList = returnInfoDAO.findReturnList(workCaseId);
         if(returnInfoList!=null && returnInfoList.size()>0){
             Date replyDate = new Date();
@@ -268,5 +258,7 @@ public class ReturnControl extends BusinessControl {
 
             returnInfoDAO.persist(returnInfoList);
         }
+
+        //bpmExecutor.returnBDM(workCaseId, queueName, ActionCode.RETURN_TO_BDM_FULLAPP.getVal());
     }
 }
