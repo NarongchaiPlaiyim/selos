@@ -223,6 +223,7 @@
                                                     yearRange="1950:2100"
                                                     pattern="dd/MM/yyyy"
                                                     mindate="01/01/1950"
+                                                    readonlyInput="true"
                                                     maxdate="#{custInfoSumJuris.currentDateDDMMYY}"
                                                     value="#{custInfoSumJuris.customerInfoView.dateOfRegister}"
                                                     disabled="#{not custInfoSumJuris.enableAllFieldCus}">
@@ -239,6 +240,7 @@
                                                     yearRange="1950:2100"
                                                     pattern="dd/MM/yyyy"
                                                     mindate="01/01/1950"
+                                                    readonlyInput="true"
                                                     value="#{custInfoSumJuris.customerInfoView.documentIssueDate}"
                                                     disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                     </clv:BECalendar>
@@ -1191,7 +1193,7 @@
     </p:panel>
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" closable="false"
                          severity="#{custInfoSumJuris.severity}" header="#{custInfoSumJuris.messageHeader}">
             <f:facet name="message">
                 <h:outputText value="#{custInfoSumJuris.message}" escape="false"/>

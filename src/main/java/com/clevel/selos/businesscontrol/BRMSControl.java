@@ -13,7 +13,6 @@ import com.clevel.selos.model.view.MandateDocResponseView;
 import com.clevel.selos.model.view.MandateDocView;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.util.DateTimeUtil;
-import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -95,7 +94,8 @@ public class BRMSControl extends BusinessControl {
 
         StandardPricingResponse _tmpPricingIntResponse = brmsInterface.checkStandardPricingIntRule(applicationInfo);
         StandardPricingResponse _tmpPricingFeeResponse = brmsInterface.checkStandardPricingFeeRule(applicationInfo);
-
+        logger.debug("-- _tmpPricingIntResponse.getActionResult() {}", _tmpPricingIntResponse.getActionResult());
+        logger.debug("-- _tmpPricingFeeResponse.getActionResult() {}", _tmpPricingFeeResponse.getActionResult());
         if(_tmpPricingIntResponse.getActionResult().equals(ActionResult.SUCCESS) && _tmpPricingIntResponse.getActionResult().equals(ActionResult.SUCCESS)){
             _returnPricingResponse.setActionResult(_tmpPricingFeeResponse.getActionResult());
             _returnPricingResponse.setPricingInterest(_tmpPricingIntResponse.getPricingInterest());

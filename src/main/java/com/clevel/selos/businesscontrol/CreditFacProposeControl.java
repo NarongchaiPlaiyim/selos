@@ -7,7 +7,6 @@ import com.clevel.selos.exception.BRMSInterfaceException;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.integration.brms.model.response.PricingFee;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.*;
@@ -897,7 +896,7 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
     //call BRMS
-    public List<NewFeeDetailView> getPriceFeeInterest(final long workCaseId) {
+    public StandardPricingResponse getPriceFeeInterest(final long workCaseId) {
         log.debug("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
         StandardPricingResponse standardPricingResponse = null;
         List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
@@ -913,36 +912,13 @@ public class CreditFacProposeControl extends BusinessControl {
                 log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
             }
 
-            for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()){
-                FeeDetailView feeDetailView = feeTransform.transformToView(pricingFee);
-                log.debug("-- transformToView :: feeDetailView ::: {}", feeDetailView.toString());
-                // find productProgram
-                if(feeDetailView.getFeeLevel()==FeeLevel.CREDIT_LEVEL){
-                    ProductProgramView productProgramView = productTransform.transformToView(productProgramDAO.findById((int)feeDetailView.getCreditDetailViewId()));
-                    newFeeDetailView.setProductProgram(productProgramView.getDescription());
-                    if (feeDetailView.getFeeTypeView().getId() == 9) {//type=9,(Front-End-Fee)
-                        newFeeDetailView.setStandardFrontEndFee(feeDetailView);
-                    }else if (feeDetailView.getFeeTypeView().getId() == 15) { //type=15,(Prepayment Fee)
-                        newFeeDetailView.setPrepaymentFee(feeDetailView);
-                    }else if (feeDetailView.getFeeTypeView().getId() == 20) {//type=20,(CancellationFee)
-                        newFeeDetailView.setCancellationFee(feeDetailView);
-                    }else if (feeDetailView.getFeeTypeView().getId() == 21) { //type=21,(ExtensionFee)
-                        newFeeDetailView.setExtensionFee(feeDetailView);
-                    }else  if(feeDetailView.getFeeTypeView().getId()==22){//type=22,(CommitmentFee)
-                        newFeeDetailView.setCommitmentFee(feeDetailView);
-                    }
-
-                    log.debug("FeePaymentMethodView():::: {}",feeDetailView.getFeePaymentMethodView().getBrmsCode());
-                    newFeeDetailViewList.add(newFeeDetailView);
-                }
-            }
         } catch (BRMSInterfaceException e) {
             log.error("Exception while get getPriceFeeInterest Appraisal data!", e);
             throw e;
         } catch (Exception e) {
             log.error("Exception while get getPriceFeeInterest data!", e);
         }
-        return newFeeDetailViewList;
+        return standardPricingResponse;
     }
 
     public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {
