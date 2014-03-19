@@ -1111,6 +1111,23 @@ public class CustomerInfoIndividual implements Serializable {
                     customerInfoView.setSearchBy(customerInfoSearch.getSearchBy());
                     customerInfoView.setSearchId(customerInfoSearch.getSearchId());
                     customerInfoView.setCollateralOwner(1);
+
+                    //set default country
+                    if(customerInfoView.getCitizenCountry() != null){
+                        customerInfoView.getCitizenCountry().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.setCitizenCountry(country);
+                    }
+                    if(customerInfoView.getSourceIncome() != null){
+                        customerInfoView.getSourceIncome().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.setSourceIncome(country);
+                    }
+
                     if(customerInfoView.getDateOfBirth() != null){
                         customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
                     }
@@ -1166,6 +1183,23 @@ public class CustomerInfoIndividual implements Serializable {
                                     customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
                                     customerInfoView.getSpouse().setSearchFromRM(1);
                                     customerInfoView.getSpouse().setCollateralOwner(1);
+
+                                    //set default country
+                                    if(customerInfoView.getSpouse().getCitizenCountry() != null){
+                                        customerInfoView.getSpouse().getCitizenCountry().setId(211);
+                                    } else {
+                                        Country country = new Country();
+                                        country.setId(211);
+                                        customerInfoView.getSpouse().setCitizenCountry(country);
+                                    }
+                                    if(customerInfoView.getSpouse().getSourceIncome() != null){
+                                        customerInfoView.getSpouse().getSourceIncome().setId(211);
+                                    } else {
+                                        Country country = new Country();
+                                        country.setId(211);
+                                        customerInfoView.getSpouse().setSourceIncome(country);
+                                    }
+
                                     if(customerInfoView.getSpouse().getDateOfBirth() != null){
                                         customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
                                     }
@@ -1329,6 +1363,22 @@ public class CustomerInfoIndividual implements Serializable {
                         reference.setId(refId);
                         customerInfoView.setReference(reference);
 
+                        //set default country
+                        if(customerInfoView.getCitizenCountry() != null){
+                            customerInfoView.getCitizenCountry().setId(211);
+                        } else {
+                            Country country = new Country();
+                            country.setId(211);
+                            customerInfoView.setCitizenCountry(country);
+                        }
+                        if(customerInfoView.getSourceIncome() != null){
+                            customerInfoView.getSourceIncome().setId(211);
+                        } else {
+                            Country country = new Country();
+                            country.setId(211);
+                            customerInfoView.setSourceIncome(country);
+                        }
+
                         if(customerInfoView.getCurrentAddress() != null && customerInfoView.getRegisterAddress() != null){
                             if(customerInfoControl.checkAddress(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress()) == 1){
                                 customerInfoView.getRegisterAddress().setAddressTypeFlag(1);
@@ -1364,6 +1414,22 @@ public class CustomerInfoIndividual implements Serializable {
                                     Reference referenceSpouse = new Reference();
                                     referenceSpouse.setId(refSpoId);
                                     customerInfoView.getSpouse().setReference(referenceSpouse);
+
+                                    //set default country
+                                    if(customerInfoView.getSpouse().getCitizenCountry() != null){
+                                        customerInfoView.getSpouse().getCitizenCountry().setId(211);
+                                    } else {
+                                        Country country = new Country();
+                                        country.setId(211);
+                                        customerInfoView.getSpouse().setCitizenCountry(country);
+                                    }
+                                    if(customerInfoView.getSpouse().getSourceIncome() != null){
+                                        customerInfoView.getSpouse().getSourceIncome().setId(211);
+                                    } else {
+                                        Country country = new Country();
+                                        country.setId(211);
+                                        customerInfoView.getSpouse().setSourceIncome(country);
+                                    }
 
                                     if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
                                         if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress()) == 1){
@@ -1514,6 +1580,22 @@ public class CustomerInfoIndividual implements Serializable {
                         customerInfoView.getSpouse().setSearchFromRM(1);
                         customerInfoView.getSpouse().setSearchBy(customerInfoSearchSpouse.getSearchBy());
                         customerInfoView.getSpouse().setSearchId(customerInfoSearchSpouse.getSearchId());
+                    }
+
+                    //set default country
+                    if(customerInfoView.getSpouse().getCitizenCountry() != null){
+                        customerInfoView.getSpouse().getCitizenCountry().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.getSpouse().setCitizenCountry(country);
+                    }
+                    if(customerInfoView.getSpouse().getSourceIncome() != null){
+                        customerInfoView.getSpouse().getSourceIncome().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.getSpouse().setSourceIncome(country);
                     }
 
                     if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
