@@ -1724,26 +1724,24 @@ public class CustomerInfoIndividual implements Serializable {
         customerInfoView.setReference(mainRef);
 
         if(customerInfoView.getId() != 0){
-            boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getId());
+            boolean isExist = customerInfoControl.checkExistingAll(customerInfoView.getId());
             if(isExist){
                 if(customerInfoView.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                         || customerInfoView.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                     messageHeader = "Information.";
-                    message = "Cannot change customer type from Guarantor to Related. " +
-                            "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
+                    message = msg.get("app.message.customer.existing.error");
                     severity = "info";
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return;
                 }
             } else {
                 if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getId() != 0){
-                    boolean isExistSpouse = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getSpouse().getId());
+                    boolean isExistSpouse = customerInfoControl.checkExistingAll(customerInfoView.getSpouse().getId());
                     if(isExistSpouse){
                         if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                                 || customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                             messageHeader = "Information.";
-                            message = "Cannot change customer type from Guarantor to Related. " +
-                                    "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
+                            message = msg.get("app.message.customer.existing.error");
                             severity = "info";
                             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                             return;
@@ -1872,27 +1870,24 @@ public class CustomerInfoIndividual implements Serializable {
         customerInfoView.setReference(mainRef);
 
         if(customerInfoView.getId() != 0){
-            boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getId());
+            boolean isExist = customerInfoControl.checkExistingAll(customerInfoView.getId());
             if(isExist){
                 if(customerInfoView.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                         || customerInfoView.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                     messageHeader = "Information.";
-                    message = "Cannot change customer type from Guarantor to Related. " +
-                            "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
+                    message = msg.get("app.message.customer.existing.error");
                     severity = "info";
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return "";
                 }
             } else {
                 if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getId() != 0){
-                    boolean isExistSpouse = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getSpouse().getId());
+                    boolean isExistSpouse = customerInfoControl.checkExistingAll(customerInfoView.getSpouse().getId());
                     if(isExistSpouse){
                         if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                                 || customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                             messageHeader = "Information.";
-                            message = "Save Customer Individual Data Failed. " +
-                                    "<br/><br/> Cause : This customer is change relation from Guarantor to Related." +
-                                    "<br/>Affect on Basic Info Page.";
+                            message = msg.get("app.message.customer.existing.error");
                             severity = "info";
                             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                             return "";

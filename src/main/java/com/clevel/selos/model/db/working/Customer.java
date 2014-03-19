@@ -195,6 +195,15 @@ public class Customer implements Serializable {
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<CustomerAccount> customerAccountList;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<CustomerAccountName> customerAccountNameList;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<CustomerOblAccountInfo> customerOblAccountInfoList;
     
     public Customer() {
     }
@@ -630,6 +639,30 @@ public class Customer implements Serializable {
   	public void setModifyBy(User modifyBy) {
   		this.modifyBy = modifyBy;
   	}
+
+    public List<CustomerAccount> getCustomerAccountList() {
+        return customerAccountList;
+    }
+
+    public void setCustomerAccountList(List<CustomerAccount> customerAccountList) {
+        this.customerAccountList = customerAccountList;
+    }
+
+    public List<CustomerAccountName> getCustomerAccountNameList() {
+        return customerAccountNameList;
+    }
+
+    public void setCustomerAccountNameList(List<CustomerAccountName> customerAccountNameList) {
+        this.customerAccountNameList = customerAccountNameList;
+    }
+
+    public List<CustomerOblAccountInfo> getCustomerOblAccountInfoList() {
+        return customerOblAccountInfoList;
+    }
+
+    public void setCustomerOblAccountInfoList(List<CustomerOblAccountInfo> customerOblAccountInfoList) {
+        this.customerOblAccountInfoList = customerOblAccountInfoList;
+    }
 
     @Override
     public String toString() {
