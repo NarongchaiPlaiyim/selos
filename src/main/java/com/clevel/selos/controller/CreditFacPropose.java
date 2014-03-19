@@ -1463,12 +1463,13 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 NewGuarantorDetailView guarantorDetailAdd = new NewGuarantorDetailView();
 
                 guarantorDetailAdd.setGuarantorName(customerInfoView);
-                if(customerInfoView.getIndividualId()==GuarantorCategory.INDIVIDUAL.value()){
+                if(customerInfoView.getCustomerEntity().getId()==GuarantorCategory.INDIVIDUAL.value()){
                     guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
-                }else if (customerInfoView.getIndividualId()==GuarantorCategory.JURISTIC.value()){
-                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
-                }else if (customerInfoView.getIndividualId()==GuarantorCategory.TCG.value()){
-                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.TCG);
+                }else if (customerInfoView.getCustomerEntity().getId()==GuarantorCategory.JURISTIC.value()){
+                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.JURISTIC);
+//                todo: What is TCG ?
+//                }else if (customerInfoView.getCustomerEntity().getId()==GuarantorCategory.TCG.value()){
+//                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.TCG);
                 }else{
                     guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.NA);
                 }
