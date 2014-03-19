@@ -263,6 +263,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     @Inject
     private COMSInterface comsInterface;
     @Inject
+    private BRMSControl brmsControl;
+    @Inject
     private CreditFacExistingControl creditFacExistingControl;
     @Inject
     private ProposeCreditDetailTransform proposeCreditDetailTransform;
@@ -509,8 +511,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             try {
                 List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
                 NewFeeDetailView newFeeDetailView;
-                StandardPricingResponse standardPricingResponse = creditFacProposeControl.getPriceFeeInterest(workCaseId);
-                if (!Util.isNull(standardPricingResponse) && ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
+                StandardPricingResponse standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
+                if (ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
 
                     for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()) {
                         FeeDetailView feeDetailView = feeTransform.transformToView(pricingFee);
@@ -547,14 +549,15 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //                    List<NewCreditTierDetailView> newCreditTier = newCreditTierTransform.transformPricingIntTierToView(standardPricingResponse.getPricingInterest());
 //                }
 
-
-                } else if (!Util.isNull(standardPricingResponse) && ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
+                }
+                else if (ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
                     messageHeader = msg.get("app.messageHeader.error");
                     message = standardPricingResponse.getReason();
                     severity = MessageDialogSeverity.ALERT.severity();
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
-            } catch (BRMSInterfaceException e) {
+            }
+            catch (BRMSInterfaceException e) {
                 log.debug("BRMSInterfaceException :: ");
                 messageHeader = msg.get("app.messageHeader.error");
                 message = e.getMessage();

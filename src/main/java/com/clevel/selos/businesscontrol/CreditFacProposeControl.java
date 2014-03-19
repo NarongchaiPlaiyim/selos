@@ -3,11 +3,9 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
-import com.clevel.selos.exception.BRMSInterfaceException;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
@@ -896,30 +894,34 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
     //call BRMS
-    public StandardPricingResponse getPriceFeeInterest(final long workCaseId) {
-        log.debug("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
-        StandardPricingResponse standardPricingResponse = null;
-        List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
-        NewFeeDetailView newFeeDetailView = new NewFeeDetailView();
-        try {
-            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
-            log.debug("getPriceFeeInterest ::::workCase :: {}",workCaseId);
-
-            if (standardPricingResponse != null) {
-                log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult().toString());
-                log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
-                log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().size());
-                log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
-            }
-
-        } catch (BRMSInterfaceException e) {
-            log.error("Exception while get getPriceFeeInterest Appraisal data!", e);
-            throw e;
-        } catch (Exception e) {
-            log.error("Exception while get getPriceFeeInterest data!", e);
-        }
-        return standardPricingResponse;
-    }
+//    public StandardPricingResponse getPriceFeeInterest(final long workCaseId) {
+//        log.debug("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
+//        StandardPricingResponse standardPricingResponse = null;
+//        List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
+//        NewFeeDetailView newFeeDetailView = new NewFeeDetailView();
+//        try {
+//            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
+//            log.debug("getPriceFeeInterest ::::workCase :: {}",workCaseId);
+//
+//            if (ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
+//
+//            }
+//
+////            if (standardPricingResponse != null) {
+////                log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult().toString());
+////                log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
+////                log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().size());
+////                log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
+////            }
+//
+//        } catch (BRMSInterfaceException e) {
+//            log.error("Exception while get getPriceFeeInterest Appraisal data!", e);
+//            throw e;
+//        } catch (Exception e) {
+//            log.error("Exception while get getPriceFeeInterest data!", e);
+//        }
+//        return standardPricingResponse;
+//    }
 
     public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {
         log.info("deleteAllApproveByIdList()");

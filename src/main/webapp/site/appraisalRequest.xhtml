@@ -157,7 +157,7 @@
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName1}"
                                                              style = "#{appraisalRequest.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
                                                              onkeydown="return onKeyPressName(event);"
-                                                             onkeypress="return onKeyPressName(event);"/>
+                                                             onkeypress="return onKeyPressName(event);" maxlength="20"/>
                                             </td>
                                             <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo1}"
@@ -172,7 +172,7 @@
                                             <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName2}"
                                                              onkeydown="return onKeyPressName(event);"
-                                                             onkeypress="return onKeyPressName(event);"/>
+                                                             onkeypress="return onKeyPressName(event);" maxlength="20"/>
                                             </td>
                                             <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo2}"
@@ -186,7 +186,7 @@
                                             <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName3}"
                                                              onkeydown="return onKeyPressName(event);"
-                                                             onkeypress="return onKeyPressName(event);"/>
+                                                             onkeypress="return onKeyPressName(event);" maxlength="20"/>
                                             </td>
                                             <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo3}"
@@ -220,7 +220,8 @@
                                     <p:outputLabel styleClass="title"  value="#{msg.get('app.appraisal.label.bdmRemark')}"/>
                                 </td>
                                 <td>
-                                    <p:inputTextarea value="#{appraisalRequest.appraisalView.bdmRemark}"  rows="3" cols="90"/>
+                                    <p:inputTextarea value="#{appraisalRequest.appraisalView.bdmRemark}"  rows="3" cols="90" maxlength="200"
+                                                     counterTemplate="{0} characters remaining." autoResize="false"/>
                                 </td>
                             </tr>
                             <tr>
@@ -255,7 +256,7 @@
     </p:panel>
 
     <p:dialog id="appraisalDetailDialog" header="Appraisal Detail Information" widgetVar="appraisalDetailViewDlg" resizable="false"
-              modal="true" width="500" height="200" >
+              modal="true" width="500" height="200" closable="false" >
         <ui:include src="dialog/appraisalDetailDialog.xhtml"/>
     </p:dialog>
 

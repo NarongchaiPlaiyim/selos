@@ -39,11 +39,20 @@ public class MandateDoc implements Serializable {
     @Column(name = "remark")
     private String remark;
 
-    @OneToMany(mappedBy = "mandateDoc", cascade = CascadeType.ALL)
-    private List<MandateDocBRMS> mandateDocBRMSList;
+    @Column(name = "reason_incomplete", columnDefinition = "int default 0")
+    private int reasonIncomplete;
+
+    @Column(name = "reason_indistinct", columnDefinition = "int default 0")
+    private int reasonIndistinct;
+
+    @Column(name = "reason_incorrect", columnDefinition = "int default 0")
+    private int reasonIncorrect;
+
+    @Column(name = "reason_expire", columnDefinition = "int default 0")
+    private int reasonExpire;
 
     @OneToMany(mappedBy = "mandateDoc", cascade = CascadeType.ALL)
-    private List<MandateDocReason> mandateDocReasonList;
+    private List<MandateDocBRMS> mandateDocBRMSList;
 
     @OneToMany(mappedBy = "mandateDoc", cascade = CascadeType.ALL)
     private List<MandateDocCust> mandateDocCustList;
@@ -120,20 +129,44 @@ public class MandateDoc implements Serializable {
         this.mandateDocBRMSList = mandateDocBRMSList;
     }
 
-    public List<MandateDocReason> getMandateDocReasonList() {
-        return mandateDocReasonList;
-    }
-
-    public void setMandateDocReasonList(List<MandateDocReason> mandateDocReasonList) {
-        this.mandateDocReasonList = mandateDocReasonList;
-    }
-
     public List<MandateDocCust> getMandateDocCustList() {
         return mandateDocCustList;
     }
 
     public void setMandateDocCustList(List<MandateDocCust> mandateDocCustList) {
         this.mandateDocCustList = mandateDocCustList;
+    }
+
+    public int getReasonIncomplete() {
+        return reasonIncomplete;
+    }
+
+    public void setReasonIncomplete(int reasonIncomplete) {
+        this.reasonIncomplete = reasonIncomplete;
+    }
+
+    public int getReasonIndistinct() {
+        return reasonIndistinct;
+    }
+
+    public void setReasonIndistinct(int reasonIndistinct) {
+        this.reasonIndistinct = reasonIndistinct;
+    }
+
+    public int getReasonIncorrect() {
+        return reasonIncorrect;
+    }
+
+    public void setReasonIncorrect(int reasonIncorrect) {
+        this.reasonIncorrect = reasonIncorrect;
+    }
+
+    public int getReasonExpire() {
+        return reasonExpire;
+    }
+
+    public void setReasonExpire(int reasonExpire) {
+        this.reasonExpire = reasonExpire;
     }
 
     @Override
@@ -147,8 +180,11 @@ public class MandateDoc implements Serializable {
                 .append("mandateType", mandateType)
                 .append("isCompleted", isCompleted)
                 .append("remark", remark)
+                .append("reasonIncomplete", reasonIncomplete)
+                .append("reasonIndistinct", reasonIndistinct)
+                .append("reasonIncorrect", reasonIncorrect)
+                .append("reasonExpire", reasonExpire)
                 .append("mandateDocBRMSList", mandateDocBRMSList)
-                .append("mandateDocReasonList", mandateDocReasonList)
                 .append("mandateDocCustList", mandateDocCustList)
                 .toString();
     }
