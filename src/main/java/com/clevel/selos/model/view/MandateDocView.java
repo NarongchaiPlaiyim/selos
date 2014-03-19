@@ -1,6 +1,7 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.DocLevel;
+import com.clevel.selos.model.DocMandateType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -14,6 +15,8 @@ public class MandateDocView implements Serializable{
     private List<String> brmsDescList;
     private List<CustomerInfoSimpleView> customerInfoSimpleViewList;
     private DocLevel docLevel;
+    private int numberOfDoc;
+    private DocMandateType docMandateType;
 
     public String getEcmDocTypeId() {
         return ecmDocTypeId;
@@ -55,6 +58,22 @@ public class MandateDocView implements Serializable{
         this.docLevel = docLevel;
     }
 
+    public int getNumberOfDoc() {
+        return numberOfDoc;
+    }
+
+    public void setNumberOfDoc(int numberOfDoc) {
+        this.numberOfDoc = numberOfDoc;
+    }
+
+    public DocMandateType getDocMandateType() {
+        return docMandateType;
+    }
+
+    public void setDocMandateType(DocMandateType docMandateType) {
+        this.docMandateType = docMandateType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -63,6 +82,8 @@ public class MandateDocView implements Serializable{
                 .append("brmsDescList", brmsDescList)
                 .append("customerInfoSimpleViewList", customerInfoSimpleViewList)
                 .append("docLevel", docLevel)
+                .append("numberOfDoc", numberOfDoc)
+                .append("docMandateType", docMandateType)
                 .toString();
     }
 }
