@@ -1191,7 +1191,7 @@
     </p:panel>
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" closable="false"
                          severity="#{custInfoSumJuris.severity}" header="#{custInfoSumJuris.messageHeader}">
             <f:facet name="message">
                 <h:outputText value="#{custInfoSumJuris.message}" escape="false"/>
