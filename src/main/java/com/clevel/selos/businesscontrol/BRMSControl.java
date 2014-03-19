@@ -96,7 +96,7 @@ public class BRMSControl extends BusinessControl {
         StandardPricingResponse _tmpPricingFeeResponse = brmsInterface.checkStandardPricingFeeRule(applicationInfo);
         logger.debug("-- _tmpPricingIntResponse.getActionResult() {}", _tmpPricingIntResponse.getActionResult());
         logger.debug("-- _tmpPricingFeeResponse.getActionResult() {}", _tmpPricingFeeResponse.getActionResult());
-        if(_tmpPricingIntResponse.getActionResult().equals(ActionResult.SUCCESS) && _tmpPricingIntResponse.getActionResult().equals(ActionResult.SUCCESS)){
+        if(_tmpPricingIntResponse.getActionResult().equals(ActionResult.SUCCESS) && _tmpPricingFeeResponse.getActionResult().equals(ActionResult.SUCCESS)){
             _returnPricingResponse.setActionResult(_tmpPricingFeeResponse.getActionResult());
             _returnPricingResponse.setPricingInterest(_tmpPricingIntResponse.getPricingInterest());
             _returnPricingResponse.setPricingFeeList(_tmpPricingFeeResponse.getPricingFeeList());
