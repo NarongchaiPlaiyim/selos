@@ -176,7 +176,7 @@ public class ExSummaryControl extends BusinessControl {
                     for(CustomerInfoView cus : cusListView){
                         if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
                             if(cus.getRelation().getId() == RelationValue.BORROWER.value()){ // Borrower
-                                bizSize = cus.getSalesFromFinancialStmt();
+                                bizSize = Util.add(bizSize , cus.getSalesFromFinancialStmt());
                             }
                         }
                     }
@@ -213,7 +213,7 @@ public class ExSummaryControl extends BusinessControl {
             //if isRental = N, display ownerName. If isRental = Y, display expiryDate
             if(bizInfoSummaryView.getRental() == 1) { // 1 is yes??
                 if(bizInfoSummaryView.getExpiryDate() != null){
-                    exSummaryView.setOwner(DateTimeUtil.convertToStringDDMMYYYY(bizInfoSummaryView.getExpiryDate() , new Locale("th", "TH")));
+                    exSummaryView.setOwner("เช่า วันที่หมดอายุ : "+DateTimeUtil.convertToStringDDMMYYYY(bizInfoSummaryView.getExpiryDate() , new Locale("th", "TH")));
                 }
             } else {
                 exSummaryView.setOwner(bizInfoSummaryView.getOwnerName()); //owner name
@@ -228,14 +228,12 @@ public class ExSummaryControl extends BusinessControl {
                     } else {
                         bizPermission = bizPermission.append(bizInfoDetailViewList.get(i).getBizPermission().concat(", "));
                     }
+
+                    bizInfoDetailViewList.get(i).getPercentBiz();
                 }
             }
-//            แสดงประเภทการค้าขายของธุรกิจที่มีสัดส่วนมากที่สุด กรณีมีธุรกิจที่มีสัดส่วนมากที่สุดเท่ากันมากว่า 1 ธุรกิจให้แสดงธุรกิจแรก
-//            exSummaryView.setBusinessOperationActivity(""); //todo : todo this in find biz percent
 //            แสดง Business Permission จากทุกๆ ธุรกิจ โดยมีเครื่องหมายจุลภาค คั่น
             exSummaryView.setBusinessPermission(bizPermission.toString());
-//            แสดงวันที่ Expiration Date ของ Business Permission ที่ Update ที่สุด (หมดอายุ ช้าที่สุด)
-//            exSummaryView.setExpiryDate(bizInfoSummaryView.getExpiryDate()); //todo : this condition
         } else {
             exSummaryView.setExSumBusinessInfoView(null);
         }
@@ -249,13 +247,19 @@ public class ExSummaryControl extends BusinessControl {
             exSumCharacteristicView.setCurrentDBR(dbr.getCurrentDBR());
             exSumCharacteristicView.setFinalDBR(dbr.getFinalDBR());
         }
+
+//        "กรณีผู้กู้ = Individual
+//        ใช้ ""วันจดทะเบียนพาณิชย์"" หรือ ""วันก่อตั้งกิจการ/อ้างอิงประสบการณ์"" Whichever is longer
+//                กรณีผู้กู้ = Juristic
+//        ใช้ ""วันจดทะเบียนนิติบุคคล"" หรือ วันก่อตั้งกิจการ/อ้างอิงประสบการณ์"" Whichever is longer"
         if(bizInfoSummaryView != null && bizInfoSummaryView.getId() != 0){
-            if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){
+            if(DateTimeUtil.compareDate(bizInfoSummaryView.getRegistrationDate(),bizInfoSummaryView.getEstablishDate()) > 0){
                 exSumCharacteristicView.setStartBusinessDate(bizInfoSummaryView.getRegistrationDate());
             } else {
                 exSumCharacteristicView.setStartBusinessDate(bizInfoSummaryView.getEstablishDate());
             }
         }
+
         exSumCharacteristicView.setSalePerYearBDM(exSummary.getSalePerYearBDM());
         exSumCharacteristicView.setSalePerYearUW(exSummary.getSalePerYearUW());
         exSumCharacteristicView.setGroupSaleBDM(exSummary.getGroupSaleBDM());
@@ -308,9 +312,13 @@ public class ExSummaryControl extends BusinessControl {
         }
 
         //find highest percent biz
+//            แสดงประเภทการค้าขายของธุรกิจที่มีสัดส่วนมากที่สุด กรณีมีธุรกิจที่มีสัดส่วนมากที่สุดเท่ากันมากว่า 1 ธุรกิจให้แสดงธุรกิจแรก
+//            exSummaryView.setBusinessOperationActivity();
+//            แสดงวันที่ Expiration Date ของ Business Permission ที่ Update ที่สุด (หมดอายุ ช้าที่สุด)
+//            exSummaryView.setExpiryDate();
         if(bizInfoDetailViewList != null && bizInfoDetailViewList.size() > 1){
-            int tmpIndex = 0;
-            int tmpIndexExpire = 0;
+            int tmpIndexHighestProportion = 0;
+            int tmpIndexHighestExpire = 0;
             BigDecimal tmpHighestProportion = BigDecimal.ZERO;
             Date tmpHighestDate = new Date();
             for (int i=0 ; i < bizInfoDetailViewList.size() ; i++){ // find highest business proportion
@@ -318,7 +326,7 @@ public class ExSummaryControl extends BusinessControl {
                 currentProportion = bizInfoDetailViewList.get(i).getPercentBiz();
                 if(currentProportion.compareTo(tmpHighestProportion) > 0){
                     tmpHighestProportion = currentProportion;
-                    tmpIndex = i;
+                    tmpIndexHighestProportion = i;
                 }
 
                 if(i == 0){
@@ -327,19 +335,35 @@ public class ExSummaryControl extends BusinessControl {
                 Date currentDate = bizInfoDetailViewList.get(i).getBizDocExpiryDate();
                 if(DateTimeUtil.compareDate(tmpHighestDate,currentDate) > 0){
                     tmpHighestDate = currentDate;
-                    tmpIndexExpire = i;
+                    tmpIndexHighestExpire = i;
                 }
             }
 
-            exSumCreditRiskInfoView.setIndirectCountryName(bizInfoDetailViewList.get(tmpIndex).getExpIndCountryName());
-            exSumCreditRiskInfoView.setPercentExport(bizInfoDetailViewList.get(tmpIndex).getPercentExpIndCountryName());
-            exSummaryView.setBusinessOperationActivity(bizInfoDetailViewList.get(tmpIndex).getBizActivity().getDescription());
-            exSummaryView.setExpiryDate(bizInfoDetailViewList.get(tmpIndexExpire).getBizDocExpiryDate());
+            exSumCreditRiskInfoView.setIndirectCountryName(bizInfoDetailViewList.get(tmpIndexHighestProportion).getExpIndCountryName());
+            exSumCreditRiskInfoView.setPercentExport(bizInfoDetailViewList.get(tmpIndexHighestProportion).getPercentExpIndCountryName());
+            exSummaryView.setBusinessOperationActivity(bizInfoDetailViewList.get(tmpIndexHighestProportion).getBizActivity().getDescription());
+            exSummaryView.setExpiryDate(bizInfoDetailViewList.get(tmpIndexHighestExpire).getBizDocExpiryDate());
+
+//            ให้เอาที่ Business ที่มีสัดส่วนธุรกิจ ที่มีค่าสูงสุดมาแสดงผล
+//            แต่กรณีที่มีสัดส่วนธุรกิจ 50 - 50 จะให้เอาข้อมูล Record แรกมาแสดงแทน
+            if(exSummaryView.getExSumBusinessInfoView() != null){
+                exSummaryView.getExSumBusinessInfoView().setBizType(bizInfoDetailViewList.get(tmpIndexHighestProportion).getBizType().getDescription());
+                exSummaryView.getExSumBusinessInfoView().setBizGroup(bizInfoDetailViewList.get(tmpIndexHighestProportion).getBizGroup().getDescription());
+                exSummaryView.getExSumBusinessInfoView().setBizCode(bizInfoDetailViewList.get(tmpIndexHighestProportion).getBizCode());
+                exSummaryView.getExSumBusinessInfoView().setBizDesc(bizInfoDetailViewList.get(tmpIndexHighestProportion).getBizDesc().getName());
+            }
         } else if(bizInfoDetailViewList != null && bizInfoDetailViewList.size() == 1){
             exSumCreditRiskInfoView.setIndirectCountryName(bizInfoDetailViewList.get(0).getExpIndCountryName());
             exSumCreditRiskInfoView.setPercentExport(bizInfoDetailViewList.get(0).getPercentExpIndCountryName());
             exSummaryView.setBusinessOperationActivity(bizInfoDetailViewList.get(0).getBizActivity().getDescription());
             exSummaryView.setExpiryDate(bizInfoDetailViewList.get(0).getBizDocExpiryDate());
+
+            if(exSummaryView.getExSumBusinessInfoView() != null){
+                exSummaryView.getExSumBusinessInfoView().setBizType(bizInfoDetailViewList.get(0).getBizType().getDescription());
+                exSummaryView.getExSumBusinessInfoView().setBizGroup(bizInfoDetailViewList.get(0).getBizGroup().getDescription());
+                exSummaryView.getExSumBusinessInfoView().setBizCode(bizInfoDetailViewList.get(0).getBizCode());
+                exSummaryView.getExSumBusinessInfoView().setBizDesc(bizInfoDetailViewList.get(0).getBizDesc().getName());
+            }
         }
 
         if(exSummary != null && exSummary.getLastReviewDate() != null){
@@ -565,12 +589,16 @@ public class ExSummaryControl extends BusinessControl {
                 workCase.setId(workCaseId);
                 exSummary.setWorkCase(workCase);
             }
-            if(bankStatementSummary.getGrdTotalIncomeNetBDM() != null){
+
+            User user = getCurrentUser();
+
+            if(user.getRole().getId() != RoleValue.UW.id() && bankStatementSummary.getGrdTotalIncomeNetBDM() != null){
                 exSummary.setSalePerYearBDM(Util.multiply(bankStatementSummary.getGrdTotalIncomeNetBDM(),twelve));
             }
-            if(bankStatementSummary.getGrdTotalIncomeNetUW() != null){
+            if(user.getRole().getId() == RoleValue.UW.id() && bankStatementSummary.getGrdTotalIncomeNetUW() != null){
                 exSummary.setSalePerYearUW(Util.multiply(bankStatementSummary.getGrdTotalIncomeNetUW(),twelve));
             }
+
             exSummaryDAO.persist(exSummary);
 
         }
@@ -700,8 +728,11 @@ public class ExSummaryControl extends BusinessControl {
             groupSaleBDM = exSummary.getGroupSaleBDM();
         }
 
-        exSummary.setGroupSaleBDM(groupSaleBDM);
-        exSummary.setGroupSaleUW(groupSaleUW);
+        if(user.getRole().getId() == RoleValue.UW.id()){
+            exSummary.setGroupSaleUW(groupSaleUW);
+        } else {
+            exSummary.setGroupSaleBDM(groupSaleBDM);
+        }
 
         exSummaryDAO.persist(exSummary);
     }
@@ -728,8 +759,13 @@ public class ExSummaryControl extends BusinessControl {
             workCase.setId(workCaseId);
             exSummary.setWorkCase(workCase);
         }
-        exSummary.setGroupExposureBDM(groupExposureBDM);
-        exSummary.setGroupExposureUW(groupExposureUW);
+
+        User user = getCurrentUser();
+        if(user.getRole().getId() == RoleValue.UW.id()){
+            exSummary.setGroupExposureUW(groupExposureUW);
+        } else {
+            exSummary.setGroupExposureBDM(groupExposureBDM);
+        }
 
         exSummaryDAO.persist(exSummary);
     }
