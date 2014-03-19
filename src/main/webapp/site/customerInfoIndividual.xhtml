@@ -258,6 +258,7 @@
                                                     yearRange="1950:2100"
                                                     pattern="dd/MM/yyyy"
                                                     mindate="01/01/1950"
+                                                    readonlyInput="true"
                                                     maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
                                                     value="#{custInfoSumIndi.customerInfoView.dateOfBirth}"
                                                     required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDOB}"
@@ -292,6 +293,7 @@
                                                     yearRange="1950:2100"
                                                     pattern="dd/MM/yyyy"
                                                     mindate="01/01/1950"
+                                                    readonlyInput="true"
                                                     maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
                                                     value="#{custInfoSumIndi.customerInfoView.documentAuthorizeDate}"
                                                     required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDID}"
@@ -308,6 +310,7 @@
                                                     yearRange="1950:2100"
                                                     pattern="dd/MM/yyyy"
                                                     mindate="01/01/1950"
+                                                    readonlyInput="true"
                                                     value="#{custInfoSumIndi.customerInfoView.documentExpiredDate}"
                                                     required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDED}"
                                                     disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
@@ -1533,6 +1536,7 @@
                                                         yearRange="1950:2100"
                                                         pattern="dd/MM/yyyy"
                                                         mindate="01/01/1950"
+                                                        readonlyInput="true"
                                                         maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
                                                         value="#{custInfoSumIndi.customerInfoView.spouse.dateOfBirth}"
                                                         disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}">
@@ -1564,6 +1568,7 @@
                                                         yearRange="1950:2100"
                                                         pattern="dd/MM/yyyy"
                                                         mindate="01/01/1950"
+                                                        readonlyInput="true"
                                                         maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
                                                         value="#{custInfoSumIndi.customerInfoView.spouse.documentAuthorizeDate}"
                                                         disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}"/>
@@ -1578,6 +1583,7 @@
                                                         yearRange="1950:2100"
                                                         pattern="dd/MM/yyyy"
                                                         mindate="01/01/1950"
+                                                        readonlyInput="true"
                                                         value="#{custInfoSumIndi.customerInfoView.spouse.documentExpiredDate}"
                                                         disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}"/>
                                     </td>
