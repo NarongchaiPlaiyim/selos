@@ -250,6 +250,48 @@ public class BPMExecutor implements Serializable {
             execute(queueName, wobNumber, fields);
         }
     }
+
+    public void returnBDM(long workCaseId, String queueName, long actionCode) throws Exception{
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        Action action = actionDAO.findById(actionCode);
+
+        if(action != null){
+            HashMap<String,String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+
+            log.debug("dispatch case for [Return BDM]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            if (workCase != null) {
+                execute(queueName, workCase.getWobNumber(), fields);
+            } else {
+                throw new Exception("An exception occurred, Can not find WorkCase.");
+            }
+        } else {
+            throw new Exception("An exception occurred, Can not find Action.");
+        }
+    }
+
+    public void submitUW1(long workCaseId, String queueName, long actionCode) throws Exception{
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        Action action = actionDAO.findById(actionCode);
+
+        if(action != null){
+            HashMap<String,String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+
+            log.debug("dispatch case for [Submit BDM to UW1]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            if (workCase != null) {
+                execute(queueName, workCase.getWobNumber(), fields);
+            } else {
+                throw new Exception("An exception occurred, Can not find WorkCase.");
+            }
+        } else {
+            throw new Exception("An exception occurred, Can not find Action.");
+        }
+    }
     
     public void executeBPM(long workCaseId, String queueName, long actionCode, String reason, String remark) throws Exception {
     	WorkCase workCase = null;

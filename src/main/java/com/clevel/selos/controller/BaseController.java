@@ -6,16 +6,13 @@ import com.clevel.selos.businesscontrol.ReturnControl;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
-import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.integration.brms.BRMSInterfaceImpl;
 import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ManageButton;
 import com.clevel.selos.model.PricingDOAValue;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Reason;
-import com.clevel.selos.model.db.master.ReasonType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.view.AppHeaderView;
@@ -34,7 +31,6 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @ViewScoped
@@ -446,7 +442,7 @@ public class BaseController implements Serializable {
         long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
 
         //get from not accept List and from CheckMandateDoc
-        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDoc(workCaseId);
+        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
 
         //set return code master
         returnReason = returnControl.getReturnReasonList();
@@ -494,7 +490,7 @@ public class BaseController implements Serializable {
         log.debug("onSaveReturnInfo ::: complete. returnInfoViewList size: {}", returnInfoViewList.size());
     }
 
-    public void onSumbitReturnSummary(){
+    public void onSumbitReturnBDM(){ //Submit return from UW1 to BDM
         log.debug("onSumbitReturnSummary ::: returnInfoViewList size : {}", returnInfoViewList);
         boolean complete = false;
         if(returnInfoViewList!=null && returnInfoViewList.size()>0){
@@ -505,12 +501,22 @@ public class BaseController implements Serializable {
                 User user = (User) session.getAttribute("user");
                 long stepId = Long.parseLong(session.getAttribute("stepId").toString());
 
-                returnControl.submitReturnSummary(workCaseId, queueName, user, stepId, returnInfoViewList);
-                messageHeader = "Information.";
-                message = "Return to BDM success.";
-                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-                complete = true;
-                log.debug("onReturnBDMSubmit ::: success.");
+                List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
+
+                if(returnInfoViews!=null && returnInfoViews.size()>0){
+                    messageHeader = "Information.";
+                    message = "Submit fail. Please check return information before submit return again.";
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+                    log.error("onSubmitReviewReturn ::: fail.");
+                } else {
+                    returnControl.submitReturnBDM(workCaseId, queueName, user, stepId, returnInfoViewList);
+                    messageHeader = "Information.";
+                    message = "Return to BDM success.";
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+                    complete = true;
+                    log.debug("onReturnBDMSubmit ::: success.");
+                }
             } catch (Exception ex){
                 messageHeader = "Information.";
                 message = "Return to BDM failed, cause : " + Util.getMessageException(ex);
@@ -529,7 +535,7 @@ public class BaseController implements Serializable {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
-    public void onSumbitReplyReturn(){
+    public void onSumbitReturnUW1(){ //Submit Reply From BDM to UW1
         log.debug("onSumbitReturnReply");
 
         try{
@@ -545,11 +551,9 @@ public class BaseController implements Serializable {
                 message = "Submit Return fail. Please check return information again.";
                 RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
 
-                log.error("onReturnBDMSubmit ::: fail.");
+                log.error("onSumbitReturnReply ::: fail.");
             } else {
-                returnControl.updateReplyReturnDate(workCaseId);
-
-                //TODO: execute bpm workflow for reply return
+                returnControl.submitReturnUW1(workCaseId, queueName);
 
                 messageHeader = "Information.";
                 message = "Submit Return success";
@@ -566,8 +570,8 @@ public class BaseController implements Serializable {
         }
     }
 
-    public void onSubmitReviewReturn(){
-        log.debug("onSubmitReviewReturn begin");
+    public void onSubmitUW2(){ //Submit From UW1 (no return)
+        log.debug("onSubmitUW2 begin");
         try{
             HttpSession session = FacesUtil.getSession(true);
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
@@ -577,27 +581,37 @@ public class BaseController implements Serializable {
 
             if(returnInfoViews!=null && returnInfoViews.size()>0){
                 messageHeader = "Information.";
-                message = "Submit Review fail. Please check return information again.";
+                message = "Submit fail. Please check return information before submit again.";
                 RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
 
-                log.error("onSubmitReviewReturn ::: fail.");
+                log.error("onSubmitUW2 ::: fail.");
             } else {
-                returnControl.saveReturnHistory(workCaseId,user);
+                //check if have return not accept
+                List<ReturnInfoView> returnInfoViewsNoAccept = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
+                if(returnInfoViewsNoAccept!=null && returnInfoViewsNoAccept.size()>0){
+                    messageHeader = "Information.";
+                    message = "Submit fail. Please check return information before submit again.";
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
 
-                //TODO: execute bpm workflow for review return
+                    log.error("onSubmitUW2 ::: fail.");
+                } else {
+                    returnControl.saveReturnHistory(workCaseId,user);
 
-                messageHeader = "Information.";
-                message = "Submit Return success";
-                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+                    //TODO: execute bpm workflow for submit to UW2
 
-                log.debug("onSubmitReviewReturn ::: success.");
+                    messageHeader = "Information.";
+                    message = "Submit success";
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+
+                    log.debug("onSubmitUW2 ::: success.");
+                }
             }
         } catch (Exception ex){
             messageHeader = "Information.";
-            message = "Submit Review fail, cause : " + Util.getMessageException(ex);
+            message = "Submit fail, cause : " + Util.getMessageException(ex);
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
 
-            log.error("onSubmitReviewReturn ::: exception occurred : ", ex);
+            log.error("onSubmitUW2 ::: exception occurred : ", ex);
         }
     }
 
