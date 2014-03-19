@@ -6,6 +6,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
+import com.clevel.selos.model.db.working.NewGuarantorDetail;
 import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.Util;
@@ -767,4 +768,38 @@ public class PDFDecision implements Serializable {
         }
         return proposedGuarantorDecisionReportList;
     }
+
+    public List<ApprovedGuarantorDecisionReport> fillApprovedCollateral(){
+        init();
+        List<ApprovedGuarantorDecisionReport> approvedGuarantorDecisionReportList = new ArrayList<ApprovedGuarantorDecisionReport>();
+        List<NewGuarantorDetailView> newGuarantorDetails = decisionView.getApproveGuarantorList();
+
+        int count = 1;
+        if (Util.safetyList(newGuarantorDetails).size() > 0){
+            log.debug("newGuarantorDetails by fillApprovedCollateral. {}",newGuarantorDetails);
+            for (NewGuarantorDetailView view : newGuarantorDetails){
+                ApprovedGuarantorDecisionReport approvedGuarantorDecisionReport = new ApprovedGuarantorDecisionReport();
+                approvedGuarantorDecisionReport.setCount(count++);
+                approvedGuarantorDecisionReport.setName(view.getGuarantorName().getTitleTh().getTitleTh()+view.getGuarantorName().getFirstNameTh()+" "+view.getGuarantorName().getLastNameTh());
+                approvedGuarantorDecisionReport.setTcgLgNo(view.getTcgLgNo());
+                approvedGuarantorDecisionReport.setProposeCreditDetailViewList(view.getProposeCreditDetailViewList());
+                approvedGuarantorDecisionReport.setTotalLimitGuaranteeAmount(view.getTotalLimitGuaranteeAmount());
+                if (view.getUwDecision().equals("APPROVED")){
+                    approvedGuarantorDecisionReport.setUwDecision("Approved");
+                } else if (view.getUwDecision().equals("REJECTED")){
+                    approvedGuarantorDecisionReport.setUwDecision("Rejected");
+                } else {
+                    approvedGuarantorDecisionReport.setUwDecision("");
+                }
+                approvedGuarantorDecisionReportList.add(approvedGuarantorDecisionReport);
+            }
+        } else {
+            log.debug("newGuarantorDetails is Null by fillApprovedCollateral. {}",newGuarantorDetails);
+            ApprovedGuarantorDecisionReport approvedGuarantorDecisionReport = new ApprovedGuarantorDecisionReport();
+            approvedGuarantorDecisionReportList.add(approvedGuarantorDecisionReport);
+        }
+
+        return approvedGuarantorDecisionReportList;
+    }
+
 }

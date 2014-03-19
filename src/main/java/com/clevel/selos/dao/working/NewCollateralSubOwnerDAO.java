@@ -5,9 +5,11 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.working.NewCollateralSub;
 import com.clevel.selos.model.db.working.NewCollateralSubOwner;
+import com.clevel.selos.model.db.working.NewGuarantorDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -68,4 +70,13 @@ public class NewCollateralSubOwnerDAO extends GenericDAO<NewCollateralSubOwner, 
         return newCollateralSubOwnerList;
     }
 
+    public List<NewCollateralSubOwner> findByCustomerId(long customerId) {
+        log.info("findByCustomerId : {}", customerId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("customer.id", customerId));
+        criteria.addOrder(Order.asc("id"));
+        List<NewCollateralSubOwner> newCollateralSubOwners = criteria.list();
+
+        return newCollateralSubOwners;
+    }
 }
