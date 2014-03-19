@@ -492,6 +492,23 @@ public class CustomerInfoJuristic implements Serializable {
                     customerInfoView.setSearchBy(customerInfoSearch.getSearchBy());
                     customerInfoView.setSearchId(customerInfoSearch.getSearchId());
                     customerInfoView.setCollateralOwner(1);
+
+                    //set default country
+                    if(customerInfoView.getCitizenCountry() != null){
+                        customerInfoView.getCitizenCountry().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.setCitizenCountry(country);
+                    }
+                    if(customerInfoView.getSourceIncome() != null){
+                        customerInfoView.getSourceIncome().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.setSourceIncome(country);
+                    }
+
                     if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
                         if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
                             customerInfoView.getWorkAddress().setAddressTypeFlag(1);
@@ -579,6 +596,22 @@ public class CustomerInfoJuristic implements Serializable {
                         Reference reference = new Reference();
                         reference.setId(refId);
                         customerInfoView.setReference(reference);
+
+                        //set default country
+                        if(customerInfoView.getCitizenCountry() != null){
+                            customerInfoView.getCitizenCountry().setId(211);
+                        } else {
+                            Country country = new Country();
+                            country.setId(211);
+                            customerInfoView.setCitizenCountry(country);
+                        }
+                        if(customerInfoView.getSourceIncome() != null){
+                            customerInfoView.getSourceIncome().setId(211);
+                        } else {
+                            Country country = new Country();
+                            country.setId(211);
+                            customerInfoView.setSourceIncome(country);
+                        }
 
                         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
                             if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
