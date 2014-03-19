@@ -6,6 +6,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.ReturnInfoDAO;
 import com.clevel.selos.model.db.history.ReturnInfoHistory;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.MandateDoc;
 import com.clevel.selos.model.db.working.ReturnInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.ReturnInfoView;
@@ -200,6 +201,20 @@ public class ReturnInfoTransform extends Transform {
         returnInfoView.setCreateDate(returnInfo.getCreateDate());
         returnInfoView.setModifyBy(returnInfo.getModifyBy());
         returnInfoView.setModifyDate(returnInfo.getModifyDate());
+
+        log.info("End - transformToView ::: returnInfoView : {}", returnInfoView);
+        return returnInfoView;
+    }
+
+    public ReturnInfoView transformToNewView(MandateDoc mandateDoc){
+        log.info("Start - transformToView ::: mandateDoc : {}", mandateDoc);
+        ReturnInfoView returnInfoView = new ReturnInfoView();
+
+        returnInfoView.setReturnCode(mandateDoc.getEcmDocType());
+        returnInfoView.setDescription(mandateDoc.getEcmDocTypeDesc());
+        //returnInfoView.setReason(mandateDoc.getReason());
+        returnInfoView.setReasonDetail(mandateDoc.getRemark());
+        returnInfoView.setCanEdit(false);
 
         log.info("End - transformToView ::: returnInfoView : {}", returnInfoView);
         return returnInfoView;
