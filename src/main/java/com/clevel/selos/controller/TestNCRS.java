@@ -4,10 +4,7 @@ import com.clevel.selos.businesscontrol.AppraisalResultControl;
 import com.clevel.selos.businesscontrol.BRMSControl;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.exception.ECMInterfaceException;
-import com.clevel.selos.integration.BRMSInterface;
-import com.clevel.selos.integration.COMSInterface;
-import com.clevel.selos.integration.ECMInterface;
-import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.model.ECMDataResult;
@@ -23,6 +20,7 @@ import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
 import com.clevel.selos.integration.ncb.ncrs.service.NCRSService;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.view.CustomerInfoSimpleView;
 import com.clevel.selos.model.view.MandateDocResponseView;
 import com.clevel.selos.model.view.MandateDocView;
 import com.clevel.selos.model.view.NewCollateralView;
@@ -64,7 +62,7 @@ public class TestNCRS implements Serializable {
     private ECMInterface ecmInterface;
     @Inject
     private BRMSInterface brmsInterface;
-    private long workCaseId;
+    private long workCaseId = 481;
 
     @Inject
     private BRMSControl brmsControl;
@@ -303,7 +301,7 @@ public class TestNCRS implements Serializable {
     }
 
     public void onClickCallECM(){
-        log.debug("-- onClickCallECM");
+        log.debug("-- onClickCallECM()");
         System.out.println("-- onClickCallECM");
         try{
             ECMDataResult ecmDataResult = ecmInterface.getECMDataResult(caNumberECM);
@@ -327,22 +325,37 @@ public class TestNCRS implements Serializable {
     }
 
     public void onClickCallBRMS(){
-        System.out.println("onClickCallBRMS()");
-        System.out.println("workCaseId : "+workCaseId);
+        log.debug("-- onClickCallBRMS()");
+        log.debug("-- workCaseId is {}", workCaseId);
+        MandateDocView mandateDocView = null;
         try{
             MandateDocResponseView mandateDocResponseView = brmsControl.getDocCustomer(workCaseId);
             if(!Util.isNull(mandateDocResponseView) && ActionResult.SUCCESS.equals(mandateDocResponseView.getActionResult())){
+                log.debug("-- ActionResult = ", mandateDocResponseView.getActionResult());
                 Map<String, MandateDocView> mandateDocViewMap =  mandateDocResponseView.getMandateDocViewMap();
                 if(!Util.isNull(mandateDocViewMap)){
-                    log.debug("-- Map is not null.");
                     for ( String key : mandateDocViewMap.keySet() ) {
                         log.debug("-- Key is {}", key);
-                        log.debug("-- Got value from key {} value is {}", key, mandateDocViewMap.get("key").toString());
+                        log.debug("-- Got value from key {} value is {}", key, mandateDocViewMap.get(key).toString());
+                        mandateDocView = mandateDocViewMap.get(key);
+                        if(!Util.isNull(mandateDocView)){
+                            log.debug("-- EcmDocTypeId = {}", mandateDocView.getEcmDocTypeId());
+                            log.debug("-- DocLevel     = {}", mandateDocView.getDocLevel().value());
+                            List<String> brmsList = Util.safetyList(mandateDocView.getBrmsDescList());
+                            for(String s : brmsList){
+                                log.debug("-- BrmsDesc     = {}", s);
+                            }
+                            List<CustomerInfoSimpleView> customerInfoSimpleViewList = Util.safetyList(mandateDocView.getCustomerInfoSimpleViewList());
+                            for(CustomerInfoSimpleView customerInfoSimpleView : customerInfoSimpleViewList){
+                                log.debug("-- CustomerInfoSimpleView = {}", customerInfoSimpleView.toString());
+                            }
+                        } else {
+                            log.debug("-- MandateDocView is null");
+                        }
                     }
+                } else {
+                    log.debug("-- Map is null.");
                 }
-//                for(DocumentDetail documentDetail : documentDetailList){
-//                    System.out.println("-- DocumentDetail "+ documentDetail.toString());
-//                }
                 result = mandateDocResponseView.toString();
             } else {
                 result = "FAILED";
