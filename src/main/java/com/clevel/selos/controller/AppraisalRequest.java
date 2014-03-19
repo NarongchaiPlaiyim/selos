@@ -270,7 +270,7 @@ public class AppraisalRequest implements Serializable {
     }
 
 
-    private boolean appraisalDetailViewMandate(){
+    public boolean appraisalDetailViewMandate(){
         log.debug("-- appraisalDetailViewMandate()");
         boolean result = true;
         if(Util.isZero(appraisalDetailViewDialog.getTitleDeed().length())){

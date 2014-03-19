@@ -9,12 +9,12 @@
         <table class="content_form">
             <tr>
                 <td class="title" style="width: 200px;">
-                    <h:outputText value="#{msg.get('app.appraisal.appra     isalDetail.dialog.titleDeed')}"/>
+                    <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.titleDeed')}"/>
                 </td>
                 <td class="title" style="width: 200px;">
                     <p:inputText value="#{appraisalRequest.appraisalDetailViewDialog.titleDeed}" style = "#{appraisalRequest.titleDeedFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
                                  onkeydown="return onKeyPressName2(event);"
-                                 onkeypress="return onKeyPressName2(event);"
+                                 onkeypress="return onKeyPressName2(event);" maxlength="20"
                             />
                 </td>
             </tr>
@@ -24,20 +24,20 @@
                 </td>
                 <td id="checkBox" style = "#{appraisalRequest.purposeFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} ">
                     <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailViewDialog.purposeReviewAppraisalB}">
-                        <!--<p:ajax update="appraisalDetailDlgForm"-->
-                                <!--listener="#{appraisalRequest.onSaveAppraisalDetailView()}"/>-->
+                        <p:ajax update="appraisalDetailDlgForm"
+                                listener="#{appraisalRequest.onSaveAppraisalDetailView()}"/>
                     </h:selectBooleanCheckbox>
                     <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewAppraisal')}" />
                     <br/>
                     <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailViewDialog.purposeNewAppraisalB}">
-                        <!--<p:ajax update="appraisalDetailDlgForm"-->
-                                <!--listener="#{appraisalRequest.onSaveAppraisalDetailView()}"/>-->
+                        <p:ajax update="appraisalDetailDlgForm"
+                                listener="#{appraisalRequest.appraisalDetailViewMandate()}"/>
                     </h:selectBooleanCheckbox>
                     <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeNewAppraisal')}" />
                     <br/>
                     <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailViewDialog.purposeReviewBuildingB}" >
-                        <!--<p:ajax update="appraisalDetailDlgForm"-->
-                                <!--listener="#{appraisalRequest.onSaveAppraisalDetailView()}"/>-->
+                        <p:ajax update="appraisalDetailDlgForm"
+                                listener="#{appraisalRequest.appraisalDetailViewMandate()}"/>
                     </h:selectBooleanCheckbox>
                     <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewBuilding')}" />
                 </td>

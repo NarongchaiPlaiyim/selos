@@ -51,7 +51,7 @@
                     <p:outputLabel value="#{msg.get('app.checkmandatedoc.mandatory')}"/>
                 </td>
             </tr>
-            <ui:repeat value="#{checkMandateDoc.mandatoryDocumentsList}" var="mandatoryItem" varStatus="mandatoryItemIndex">
+            <ui:repeat value="#{checkMandateDoc.checkMandateDocView.mandatoryDocumentsList}" var="mandatoryItem" varStatus="mandatoryItemIndex">
                 <tr>
                     <td >
                         <p:outputLabel value="#{mandatoryItem.documentType}"/>
@@ -94,7 +94,7 @@
                     <p:outputLabel value="#{msg.get('app.checkmandatedoc.optional')}"/>
                 </td>
             </tr>
-            <ui:repeat value="#{checkMandateDoc.optionalDocumentsList}" var="optionalItem" varStatus="optionalItemIndex">
+            <ui:repeat value="#{checkMandateDoc.checkMandateDocView.optionalDocumentsList}" var="optionalItem" varStatus="optionalItemIndex">
                 <tr>
                     <td >
                         <p:outputLabel value="#{optionalItem.documentType}"/>
@@ -136,7 +136,7 @@
                     <p:outputLabel value="#{msg.get('app.checkmandatedoc.other')}"/>
                 </td>
             </tr>
-            <ui:repeat value="#{checkMandateDoc.otherDocumentsList}" var="otherItem" varStatus="otherItemIndex">
+            <ui:repeat value="#{checkMandateDoc.checkMandateDocView.otherDocumentsList}" var="otherItem" varStatus="otherItemIndex">
                 <tr>
                     <td >
                         <p:outputLabel value="#{otherItem.documentType}"/>
