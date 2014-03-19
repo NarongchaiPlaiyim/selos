@@ -160,6 +160,7 @@ public class Decision implements Serializable {
     private int seqNumber;
     private Map<Integer, Integer> hashSeqCredit;
     private List<ProposeCreditDetailView> commonProposeCreditList;
+    private WorkCase workCase;
 
     // Retrieve Price/Fee
     private List<CreditRequestTypeView> creditRequestTypeViewList;
@@ -286,6 +287,11 @@ public class Decision implements Serializable {
             seqNumber = lastSeqNumber;
         }
 
+        workCase = workCaseDAO.findById(workCaseId);
+        if (workCase != null) {
+            productGroup = workCase.getProductGroup();
+        }
+
         BasicInfoView basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
         if (basicInfoView != null) {
             if (basicInfoView.getSpProgram() == RadioValue.YES.value()) {
@@ -293,7 +299,6 @@ public class Decision implements Serializable {
             } else {
                 specialProgramView = specialProgramTransform.transformToView(specialProgramDAO.findById(3));
             }
-            productGroup = basicInfoView.getProductGroup();
         }
 
         TCGView tcgView = tcgInfoControl.getTcgView(workCaseId);
@@ -1135,8 +1140,6 @@ public class Decision implements Serializable {
             if (roleUW) {
                 // Delete List
                 decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
-
-                WorkCase workCase = workCaseDAO.findById(workCaseId);
                 // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
                 decisionView = decisionControl.saveApproveAndConditionData(decisionView, workCase);
                 // Calculate Total Approve

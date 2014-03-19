@@ -273,8 +273,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     @Inject
     private FeeTransform feeTransform;
 
-    public CreditFacPropose() {
-    }
+    public CreditFacPropose() {}
 
     public void preRender() {
         log.debug("preRender ::: setSession ");
@@ -307,18 +306,18 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             hashSeqCredit = new HashMap<Integer, Integer>();
             notRetrievePricing = true;
             // delete list on save
-            deleteCreditIdList = new ArrayList<Long>();
-            deleteCollIdList = new ArrayList<Long>();
-            deleteGuarantorIdList = new ArrayList<Long>();
+            deleteCreditIdList  = new ArrayList<Long>();
+            deleteCollIdList  = new ArrayList<Long>();
+            deleteGuarantorIdList  = new ArrayList<Long>();
             deleteSubCollIdList = new ArrayList<Long>();
             deleteConditionIdList = new ArrayList<Long>();
 
             try {
                 WorkCase workCase = workCaseDAO.findById(workCaseId);
 
-                if (!Util.isNull(workCase)) {
+                if(!Util.isNull(workCase)){
                     productGroup = workCase.getProductGroup();
-                    log.info("productGroup :: {}", productGroup.getId());
+                    log.info("productGroup :: {}",productGroup.getId());
                 }
 
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
@@ -468,7 +467,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                         severity = MessageDialogSeverity.ALERT.severity();
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     }
-                    proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(), existingCreditDetailViewList, workCaseId);
+                    proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(),existingCreditDetailViewList, workCaseId);
                     newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
 
                 } catch (COMSInterfaceException e) {
@@ -561,7 +560,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 message = e.getMessage();
                 severity = MessageDialogSeverity.ALERT.severity();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-
             }
         }
     }
@@ -1126,7 +1124,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 complete3 = false;
             }
 
-
             log.debug("newCreditFacilityView.getNewCollateralViewList() {}", newCreditFacilityView.getNewCollateralViewList().size());
             log.info("  complete3 >>>>  :  {}", complete3);
 
@@ -1489,13 +1486,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 NewGuarantorDetailView guarantorDetailAdd = new NewGuarantorDetailView();
 
                 guarantorDetailAdd.setGuarantorName(customerInfoView);
-                if (customerInfoView.getIndividualId() == GuarantorCategory.INDIVIDUAL.value()) {
+                if(customerInfoView.getCustomerEntity().getId()==GuarantorCategory.INDIVIDUAL.value()){
                     guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
-                } else if (customerInfoView.getIndividualId() == GuarantorCategory.JURISTIC.value()) {
-                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
-                } else if (customerInfoView.getIndividualId() == GuarantorCategory.TCG.value()) {
-                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.TCG);
-                } else {
+                }else if (customerInfoView.getCustomerEntity().getId()==GuarantorCategory.JURISTIC.value()){
+                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.JURISTIC);
+//                todo: What is TCG ?
+//                }else if (customerInfoView.getCustomerEntity().getId()==GuarantorCategory.TCG.value()){
+//                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.TCG);
+                }else{
                     guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.NA);
                 }
 
