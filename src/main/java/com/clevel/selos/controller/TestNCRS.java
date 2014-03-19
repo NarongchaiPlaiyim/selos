@@ -8,9 +8,6 @@ import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.ECMInterface;
 import com.clevel.selos.integration.NCB;
-import com.clevel.selos.integration.brms.model.response.DocCustomerResponse;
-import com.clevel.selos.integration.brms.model.response.DocumentDetail;
-import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.model.ECMDataResult;
@@ -26,6 +23,8 @@ import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
 import com.clevel.selos.integration.ncb.ncrs.service.NCRSService;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.view.MandateDocResponseView;
+import com.clevel.selos.model.view.MandateDocView;
 import com.clevel.selos.model.view.NewCollateralView;
 import com.clevel.selos.transform.business.CollateralBizTransform;
 import com.clevel.selos.util.Util;
@@ -37,6 +36,7 @@ import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @ViewScoped
 @ManagedBean(name = "TestNCRS")
@@ -330,13 +330,20 @@ public class TestNCRS implements Serializable {
         System.out.println("onClickCallBRMS()");
         System.out.println("workCaseId : "+workCaseId);
         try{
-            DocCustomerResponse docCustomerResponse = brmsControl.getDocCustomer(workCaseId);
-            if(!Util.isNull(docCustomerResponse) && ActionResult.SUCCESS.equals(docCustomerResponse.getActionResult())){
-                List<DocumentDetail> documentDetailList =  Util.safetyList(docCustomerResponse.getDocumentDetailList());
-                for(DocumentDetail documentDetail : documentDetailList){
-                    System.out.println("-- DocumentDetail "+ documentDetail.toString());
+            MandateDocResponseView mandateDocResponseView = brmsControl.getDocCustomer(workCaseId);
+            if(!Util.isNull(mandateDocResponseView) && ActionResult.SUCCESS.equals(mandateDocResponseView.getActionResult())){
+                Map<String, MandateDocView> mandateDocViewMap =  mandateDocResponseView.getMandateDocViewMap();
+                if(!Util.isNull(mandateDocViewMap)){
+                    log.debug("-- Map is not null.");
+                    for ( String key : mandateDocViewMap.keySet() ) {
+                        log.debug("-- Key is {}", key);
+                        log.debug("-- Got value from key {} value is {}", key, mandateDocViewMap.get("key").toString());
+                    }
                 }
-                result = docCustomerResponse.toString();
+//                for(DocumentDetail documentDetail : documentDetailList){
+//                    System.out.println("-- DocumentDetail "+ documentDetail.toString());
+//                }
+                result = mandateDocResponseView.toString();
             } else {
                 result = "FAILED";
             }
