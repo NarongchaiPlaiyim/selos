@@ -69,8 +69,11 @@ public class CheckMandateDocControl extends BusinessControl{
     private com.clevel.selos.integration.filenet.ce.connection.CESessionToken CESessionToken;
     private String passwordEncrypt;
 
-    private Map<String,List<ECMDetail>> listECMDetailMap;
+
     private Map<String, MandateDocView> mandateDocViewMap;
+    private MandateDocView mandateDocView;
+    private Map<String,List<ECMDetail>> listECMDetailMap;
+    private List<ECMDetail> ecmDetailList;
     @Inject
     public CheckMandateDocControl() {
         init();
@@ -86,7 +89,7 @@ public class CheckMandateDocControl extends BusinessControl{
 
     public CheckMandateDocView  getMandateDocView(final long workCaseId) throws Exception{
         log.info("-- getMandateDoc WorkCaseId : {}", workCaseId);
-         init();
+        init();
 
         //DB
         mandateDoc = mandateDocDAO.findByWorkCaseId(workCaseId);
@@ -130,21 +133,39 @@ public class CheckMandateDocControl extends BusinessControl{
             log.debug("-- Find by work case id = {} BasicInfo is {}   ", workCaseId, basicInfo);
         }
 
-
-
-
-
-
-
-
-
-
-
-        if(!Util.isNull(mandateDoc)){
-            checkMandateDocView = checkMandateDocTransform.transformToView(mandateDoc);
-
+        if(!Util.isNull(mandateDocViewMap) && !Util.isNull(listECMDetailMap)){
+            checkMap();
         } else {
-            log.debug("-- Find by work case id = {} MandateDoc is {}   ", workCaseId, checkMandateDocView);
+            log.debug("-- MandateDocViewMap is {} ListECMDetailMap is {}", mandateDocViewMap, listECMDetailMap);
+        }
+
+        return checkMandateDocView;
+
+//checkMandateDocView = checkMandateDocTransform.transformToView(mandateDoc, listECMDetailMap, mandateDocViewMap);
+    }
+
+    private CheckMandateDocView checkMap(){
+        checkMandateDocView = new CheckMandateDocView();
+        List<String> keyList = new ArrayList<String>();
+        String keyBRMS = null;
+        String keyECM = null;
+
+        for (Map.Entry<String, MandateDocView> BRMSentry : mandateDocViewMap.entrySet()) {
+            keyBRMS = BRMSentry.getKey();
+            for (Map.Entry<String, List<ECMDetail>> ECMentry : listECMDetailMap.entrySet()) {
+                keyECM = ECMentry.getKey();
+                if(keyBRMS.equals(keyECM)){
+                    mandateDocView = (MandateDocView)BRMSentry.getValue();
+                    ecmDetailList = (List<ECMDetail>)ECMentry.getValue();
+                    keyList.add(keyBRMS);
+                } else {
+                    continue;
+                }
+            }
+        }
+
+        for(String key : keyList){
+            mandateDocViewMap.remove(key);
         }
         return checkMandateDocView;
     }
