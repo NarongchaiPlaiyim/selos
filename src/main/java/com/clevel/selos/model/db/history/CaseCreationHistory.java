@@ -73,6 +73,14 @@ public class CaseCreationHistory implements Serializable {
     private String accountNo10;
     @Column(name = "appindate_uw")
     private String appInDateUW;
+    @Column(name = "ref_app_number")
+    private String refAppNumber;
+    @Column(name = "reason")
+    private String reason;
+    @Column(name = "check_ncb")
+    private String checkNCB;
+    @Column(name = "sso_id")
+    private String ssoId;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
     private Date createDate;
@@ -87,7 +95,7 @@ public class CaseCreationHistory implements Serializable {
     public CaseCreationHistory() {
     }
 
-    public CaseCreationHistory(String jobName, String caNumber, String oldCaNumber, String accountNo1, String customerId, String customerName, String citizenId, int requestType, int customerType, String bdmId, String hubCode, String regionCode, String uwId, String appInDateBDM, String finalApproved, String parallel, String pending, String caExist, String caEnd, String accountNo2, String accountNo3, String accountNo4, String accountNo5, String accountNo6, String accountNo7, String accountNo8, String accountNo9, String accountNo10, String appInDateUW, Date createDate, ActionResult status, String statusDetail, String appNumber) {
+    public CaseCreationHistory(String jobName, String caNumber, String oldCaNumber, String accountNo1, String customerId, String customerName, String citizenId, int requestType, int customerType, String bdmId, String hubCode, String regionCode, String uwId, String appInDateBDM, String finalApproved, String parallel, String pending, String caExist, String caEnd, String accountNo2, String accountNo3, String accountNo4, String accountNo5, String accountNo6, String accountNo7, String accountNo8, String accountNo9, String accountNo10, String appInDateUW, String refAppNumber, String reason, String checkNCB, String ssoId, Date createDate, ActionResult status, String statusDetail, String appNumber) {
         this.jobName = jobName;
         this.caNumber = caNumber;
         this.oldCaNumber = oldCaNumber;
@@ -117,6 +125,10 @@ public class CaseCreationHistory implements Serializable {
         this.accountNo9 = accountNo9;
         this.accountNo10 = accountNo10;
         this.appInDateUW = appInDateUW;
+        this.refAppNumber = refAppNumber;
+        this.reason = reason;
+        this.checkNCB = checkNCB;
+        this.ssoId = ssoId;
         this.createDate = createDate;
         this.status = status;
         this.statusDetail = statusDetail;
@@ -363,6 +375,38 @@ public class CaseCreationHistory implements Serializable {
         this.appInDateUW = appInDateUW;
     }
 
+    public String getRefAppNumber() {
+        return refAppNumber;
+    }
+
+    public void setRefAppNumber(String refAppNumber) {
+        this.refAppNumber = refAppNumber;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getCheckNCB() {
+        return checkNCB;
+    }
+
+    public void setCheckNCB(String checkNCB) {
+        this.checkNCB = checkNCB;
+    }
+
+    public String getSsoId() {
+        return ssoId;
+    }
+
+    public void setSsoId(String ssoId) {
+        this.ssoId = ssoId;
+    }
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -428,6 +472,10 @@ public class CaseCreationHistory implements Serializable {
                 append("accountNo9", accountNo9).
                 append("accountNo10", accountNo10).
                 append("appInDateUW", appInDateUW).
+                append("refAppNumber", refAppNumber).
+                append("reason", reason).
+                append("checkNCB", checkNCB).
+                append("ssoId", ssoId).
                 append("createDate", createDate).
                 append("status", status).
                 append("statusDetail", statusDetail).
