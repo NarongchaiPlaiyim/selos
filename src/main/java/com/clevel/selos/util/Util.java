@@ -54,7 +54,7 @@ public class Util implements Serializable {
 
 
     public static Date strYYYYMMDDtoDateFormat(String dateStr) {
-        Date date = new Date();
+        Date date = null;
         if (dateStr == null) {
             return null;
         }

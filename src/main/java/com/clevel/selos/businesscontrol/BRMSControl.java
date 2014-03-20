@@ -260,6 +260,8 @@ public class BRMSControl extends BusinessControl {
                 accountStmtInfoList.add(brmsTransform.getBRMSAccountStmtInfo(bankStatement));
             }
             applicationInfo.setAccountStmtInfoList(accountStmtInfoList);
+        } else {
+            applicationInfo.setAccountStmtInfoList(new ArrayList<BRMSAccountStmtInfo>());
         }
 
         /*Start Set Account Request - Propose Credit Facility*/

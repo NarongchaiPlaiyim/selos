@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.working.CustomerCSIDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.CustomerOblAccountInfoDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.CSIMatchedType;
@@ -12,6 +13,7 @@ import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.FeeCollectionDetailView;
 import com.clevel.selos.util.DateTimeUtil;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
@@ -20,6 +22,10 @@ import java.util.Date;
 import java.util.List;
 
 public class BRMSTransform extends Transform{
+    @SELOS
+    @Inject
+    private Logger log;
+
     @Inject
     private CustomerDAO customerDAO;
 

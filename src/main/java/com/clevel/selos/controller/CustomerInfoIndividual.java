@@ -280,19 +280,25 @@ public class CustomerInfoIndividual implements Serializable {
     public CustomerInfoIndividual(){
     }
 
+    public boolean checkSession(HttpSession session){
+        boolean checkSession = false;
+        if( (Long)session.getAttribute("workCaseId") != 0 && (Long)session.getAttribute("stepId") != 0){
+            checkSession = true;
+        }
+
+        return checkSession;
+    }
+
     public void preRender(){
         log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        if(checkSession(session)){
+            //TODO Check valid stepId
+            log.debug("preRender ::: Check valid stepId");
         }else{
-            log.debug("onCreation ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}",ex);
-            }
+            log.debug("preRender ::: No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
@@ -302,65 +308,49 @@ public class CustomerInfoIndividual implements Serializable {
 
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            if(workCaseId == 0){
-                try{
-                    FacesUtil.redirect("/site/inbox.jsf");
-                }catch (Exception ex){
-                    log.error("Exception :: {}",ex);
+        if(checkSession(session)){
+            workCaseId = (Long)session.getAttribute("workCaseId");
+
+            //default value
+            isFromJuristic = false;
+
+            enableAllFieldCus = false;
+            enableAllFieldCusSpouse = false;
+
+            onAddNewIndividual();
+
+            Flash flash = FacesUtil.getFlash();
+            Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
+            if (cusInfoParams != null) {
+                isFromSummaryParam = (Boolean) cusInfoParams.get("isFromSummaryParam");
+                isFromJuristicParam = (Boolean) cusInfoParams.get("isFromJuristicParam");
+                isEditFromJuristic = (Boolean) cusInfoParams.get("isEditFromJuristic");
+                customerId = (Long) cusInfoParams.get("customerId");
+                cusInfoJuristic = (CustomerInfoView) cusInfoParams.get("customerInfoView");
+                if(isEditFromJuristic){
+                    rowIndex = (Integer) cusInfoParams.get("rowIndex");
                 }
-                return;
             }
-        }else{
-            log.debug("onCreation ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}",ex);
+
+            //flag for show button
+            if(isFromJuristicParam){                        // add new individual from juristic
+                isFromJuristic = true;                      // for pass param return to juristic
+            }else{
+                isFromJuristic = false;                     // for save individual to DB
             }
-            return;
-        }
 
-        //default value
-        isFromJuristic = false;
-
-        enableAllFieldCus = false;
-        enableAllFieldCusSpouse = false;
-
-        onAddNewIndividual();
-
-        Flash flash = FacesUtil.getFlash();
-        Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
-        if (cusInfoParams != null) {
-            isFromSummaryParam = (Boolean) cusInfoParams.get("isFromSummaryParam");
-            isFromJuristicParam = (Boolean) cusInfoParams.get("isFromJuristicParam");
-            isEditFromJuristic = (Boolean) cusInfoParams.get("isEditFromJuristic");
-            customerId = (Long) cusInfoParams.get("customerId");
-            cusInfoJuristic = (CustomerInfoView) cusInfoParams.get("customerInfoView");
-            if(isEditFromJuristic){
-                rowIndex = (Integer) cusInfoParams.get("rowIndex");
+            if(isFromSummaryParam){                         // go to edit from summary
+                if(customerId != 0 && customerId != -1){
+                    onEditIndividual();
+                }
             }
-        }
 
-        //flag for show button
-        if(isFromJuristicParam){                        // add new individual from juristic
-            isFromJuristic = true;                      // for pass param return to juristic
-        }else{
-            isFromJuristic = false;                     // for save individual to DB
-        }
-
-        if(isFromSummaryParam){                         // go to edit from summary
-            if(customerId != 0 && customerId != -1){
-                onEditIndividual();
-            }
-        }
-
-        if(isEditFromJuristic){                          // select edit individual from juristic
-            if(cusInfoParams != null){
-                CustomerInfoView cusView = (CustomerInfoView) cusInfoParams.get("individualView");
-                customerInfoView = cusView;
-                onEditIndividual();
+            if(isEditFromJuristic){                          // select edit individual from juristic
+                if(cusInfoParams != null){
+                    CustomerInfoView cusView = (CustomerInfoView) cusInfoParams.get("individualView");
+                    customerInfoView = cusView;
+                    onEditIndividual();
+                }
             }
         }
     }

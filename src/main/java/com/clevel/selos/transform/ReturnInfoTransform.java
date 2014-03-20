@@ -4,16 +4,22 @@ import com.clevel.selos.dao.history.ReturnInfoHistoryDAO;
 import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.ReturnInfoDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.history.ReturnInfoHistory;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.ReturnInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.ReturnInfoView;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.Date;
 
 public class ReturnInfoTransform extends Transform {
+    @SELOS
+    @Inject
+    private Logger log;
+
     @Inject
     private UserTransform userTransform;
     @Inject

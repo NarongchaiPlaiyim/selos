@@ -43,6 +43,7 @@ public class InboxBizTransform extends BusinessTransform {
                     inboxView.setBdmId(((User) workCasePrescreen.getCreateBy()).getId());
                     inboxView.setStatusCode(workCasePrescreen.getStatus().getId());
                     inboxView.setRequestAppraisal(workCasePrescreen.getRequestAppraisal());
+                    inboxView.setStatusCode(workCasePrescreen.getStatus().getId());
                 } else {
                     inboxView.setWorkCasePreScreenId(0);
                     inboxView.setCaNo("");
@@ -54,6 +55,7 @@ public class InboxBizTransform extends BusinessTransform {
                     //inboxView.setCaNo(workCase.getCaNumber());
                     inboxView.setBdmId(workCase.getCreateBy().getId());
                     inboxView.setRequestAppraisal(workCase.getRequestAppraisal());
+                    inboxView.setStatusCode(workCase.getStatus().getId());
                 }
 
             }

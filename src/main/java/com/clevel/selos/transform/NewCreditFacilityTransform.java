@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.master.CountryDAO;
 import com.clevel.selos.dao.master.CreditRequestTypeDAO;
 import com.clevel.selos.dao.working.NewCreditFacilityDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Country;
 import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
@@ -11,11 +12,16 @@ import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.CountryView;
 import com.clevel.selos.model.view.NewCreditFacilityView;
 import com.clevel.selos.util.Util;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.Date;
 
 public class NewCreditFacilityTransform extends Transform {
+    @SELOS
+    @Inject
+    private Logger log;
+
     @Inject
     public NewCreditFacilityTransform() {}
     @Inject

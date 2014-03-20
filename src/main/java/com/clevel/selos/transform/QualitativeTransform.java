@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.master.QualityLevelDAO;
 import com.clevel.selos.dao.working.QualitativeADAO;
 import com.clevel.selos.dao.working.QualitativeBDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.QualityLevel;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.QualitativeA;
@@ -11,19 +12,23 @@ import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.QualitativeView;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.Date;
 
 
 public class QualitativeTransform extends Transform {
+    @SELOS
+    @Inject
+    private Logger log;
 
     @Inject
-    QualitativeBDAO qualitativeBDAO;
+    private QualitativeBDAO qualitativeBDAO;
     @Inject
-    QualitativeADAO qualitativeADAO;
+    private QualitativeADAO qualitativeADAO;
     @Inject
-    QualityLevelDAO qualityLevelDAO;
+    private QualityLevelDAO qualityLevelDAO;
 
     public QualitativeA transformQualitativeAToModel(QualitativeView qualitativeAView, WorkCase workCase, User user) {
         log.info("transformQualitativeAToModel ::: ");

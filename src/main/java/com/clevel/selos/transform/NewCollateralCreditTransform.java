@@ -3,17 +3,22 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
 import com.clevel.selos.dao.working.NewCollateralCreditDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.ProposeCreditDetailView;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NewCollateralCreditTransform extends Transform {
+    @SELOS
+    @Inject
+    private Logger log;
 
     @Inject
     public NewCollateralCreditTransform() {}

@@ -66,49 +66,59 @@ public class NCBSummary implements Serializable {
 
     public NCBSummary() {}
 
-    @PostConstruct
-    public void onCreation() {
+    public boolean checkSession(HttpSession session){
+        boolean checkSession = false;
+        if( (Long)session.getAttribute("workCaseId") != 0 && (Long)session.getAttribute("stepId") != 0){
+            checkSession = true;
+        }
 
-        log.info("onCreation.");
+        return checkSession;
+    }
 
+    public void preRender(){
+        log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            //user = (User) session.getAttribute("user");
+        if(checkSession(session)){
+            //TODO Check valid stepId
+            log.debug("preRender ::: Check valid stepId");
         }else{
-            log.info("preRender ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-                return;
-            }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+            log.debug("preRender ::: No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
+        }
+    }
+
+    @PostConstruct
+    public void onCreation() {
+        log.info("onCreation");
+        HttpSession session = FacesUtil.getSession(true);
+
+        if(checkSession(session)){
+            workCaseId = (Long)session.getAttribute("workCaseId");
+
+            date = DateTime.now().toDate();
+            ncbSumViewList = ncbInfoControl.getNCBInfoViewByWorkCaseId(workCaseId);
+            log.info("onCreation ::: ncbSumViewList : {}", ncbSumViewList);
+            if (customerView == null) {
+                customerView = new ArrayList<Customer>();
+            }
+
+            if (ncbSumViewList == null) {
+                ncbSumViewList = new ArrayList<NCBInfoView>();
             }
         }
-
-        date = DateTime.now().toDate();
-        ncbSumViewList = ncbInfoControl.getNCBInfoViewByWorkCaseId(workCaseId);
-        log.info("ncbSumViewList :: {}",ncbSumViewList.toString());
-        if (customerView == null) {
-            customerView = new ArrayList<Customer>();
-        }
-
-        if (ncbSumViewList == null) {
-            ncbSumViewList = new ArrayList<NCBInfoView>();
-        }
-
     }
 
     public void onOpenNCBInfo() {
         log.info("openNCBInfo ::: ");
 
         if (ncbSummaryViewItem != null) {
-            log.info("ncbSummaryViewItem.id {} ", ncbSummaryViewItem.getId());
-            HttpSession session = FacesUtil.getSession(true);
-            log.info("ncbSummaryViewItem.getCustomerId() :: {}",ncbSummaryViewItem.getCustomerId());
+            log.info("openNCBInfo ::: ncbSummaryViewItem :: {}",ncbSummaryViewItem);
+            HttpSession session = FacesUtil.getSession(false);
+
             session.setAttribute("customerId", ncbSummaryViewItem.getCustomerId());    // set customerId to NCB information
-            session.setAttribute("workCaseId",workCaseId);
-            log.info("ncbSummaryViewItem :: {}",ncbSummaryViewItem.toString());
+            session.setAttribute("workCaseId", workCaseId);
+
             FacesUtil.redirect("/site/NCBInfo.jsf");
             return;
         }

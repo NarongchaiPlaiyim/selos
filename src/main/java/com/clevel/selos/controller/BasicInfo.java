@@ -120,6 +120,7 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     //session
     private long workCaseId;
+    private long stepId;
 
     //for mandate
     private boolean reqApplicationNo;
@@ -211,19 +212,27 @@ public class BasicInfo extends MandatoryFieldsControl {
     public BasicInfo(){
     }
 
+    public boolean checkSession(HttpSession session){
+        boolean checkSession = false;
+        if( (Long)session.getAttribute("workCaseId") != 0 && (Long)session.getAttribute("stepId") != 0){
+            checkSession = true;
+        }
+
+        return checkSession;
+    }
+
+
     public void preRender(){
         log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        if(checkSession(session)){
+            //TODO Check valid step
+            log.debug("preRender ::: Check valid stepId");
+
         }else{
-            log.debug("onCreation ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}",ex);
-            }
+            log.debug("preRender ::: No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
@@ -233,88 +242,72 @@ public class BasicInfo extends MandatoryFieldsControl {
 
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            if(workCaseId == 0){
-                try{
-                    FacesUtil.redirect("/site/inbox.jsf");
-                }catch (Exception ex){
-                    log.error("Exception :: {}",ex);
-                }
-                return;
+        if(checkSession(session)){
+            workCaseId = (Long)session.getAttribute("workCaseId");
+            //List<FieldsControlView> fieldsControlViewList = initialCreation(Screen.BASIC_INFO);
+            //fieldsControl(fieldsControlViewList);
+            //todo: hardcode on this
+            fieldsControlHardCode();
+
+            basicInfoView = new BasicInfoView();
+
+            productGroupList = productGroupDAO.findAll();
+            specialProgramList = specialProgramDAO.findAll();
+            requestTypeList = requestTypeDAO.findAll();
+            riskTypeList = riskTypeDAO.findAll();
+            sbfScoreViewList =  sbfScoreTransform.transformToView(sbfScoreDAO.findAll());
+            bankList = bankDAO.getListRefinance();
+
+            customerInfoViewList = openAccountControl.getCustomerList(workCaseId);
+
+            bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
+            accountProductList = new ArrayList<BankAccountProduct>();
+            accountPurposeList = accountPurposeDAO.findAll();
+            accountNameList = new ArrayList<CustomerInfoView>();
+            bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
+
+            for(BankAccountPurpose oap : accountPurposeList){
+                BankAccountPurposeView purposeView = new BankAccountPurposeView();
+                purposeView.setPurpose(oap);
+                bankAccountPurposeViewList.add(purposeView);
             }
-        }else{
-            log.debug("onCreation ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}",ex);
+
+            CustomerEntity customerEntity = basicInfoControl.getCustomerEntityByWorkCaseId(workCaseId);
+
+            borrowingTypeList = borrowingTypeDAO.findByCustomerEntity(customerEntity);
+
+            basicInfoView.setSpProgram(0);
+            basicInfoView.setRefIn(0);
+            basicInfoView.setRefOut(0);
+            basicInfoView.setApplyBA(0);
+
+            tmpSpecialProgram = 0;
+            tmpRefinanceIN = 0;
+            tmpRefinanceOUT = 0;
+            tmpApplyBA = 0;
+
+            basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+
+            if(basicInfoView.getId() == 0){
+                basicInfoView.setQualitative(customerEntity.getDefaultQualitative());
             }
-            return;
+
+            disQualitativeType = false;
+            if(!customerEntity.isChangeQualtiEnable()){
+                disQualitativeType = true;
+            }
+
+            openAccountView = new OpenAccountView();
+
+            yearList = DateTimeUtil.getPreviousFiftyYearTH();
+
+            onChangeSpecialProgramInit();
+            onChangeRefInInit();
+            onChangeRefOutInit();
+            onChangeExistingSMEInit();
+            onChangeBAInit();
+            onChangeReqLGInit();
         }
-
-//        List<FieldsControlView> fieldsControlViewList = initialCreation(Screen.BASIC_INFO);
-//        fieldsControl(fieldsControlViewList);
-        //todo: hardcode on this
-        fieldsControlHardCode();
-
-        basicInfoView = new BasicInfoView();
-
-        productGroupList = productGroupDAO.findAll();
-        specialProgramList = specialProgramDAO.findAll();
-        requestTypeList = requestTypeDAO.findAll();
-        riskTypeList = riskTypeDAO.findAll();
-        sbfScoreViewList =  sbfScoreTransform.transformToView(sbfScoreDAO.findAll());
-        bankList = bankDAO.getListRefinance();
-
-        customerInfoViewList = openAccountControl.getCustomerList(workCaseId);
-
-        bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
-        accountProductList = new ArrayList<BankAccountProduct>();
-        accountPurposeList = accountPurposeDAO.findAll();
-        accountNameList = new ArrayList<CustomerInfoView>();
-        bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
-        for(BankAccountPurpose oap : accountPurposeList){
-            BankAccountPurposeView purposeView = new BankAccountPurposeView();
-            purposeView.setPurpose(oap);
-            bankAccountPurposeViewList.add(purposeView);
-        }
-
-        CustomerEntity customerEntity = basicInfoControl.getCustomerEntityByWorkCaseId(workCaseId);
-
-        borrowingTypeList = borrowingTypeDAO.findByCustomerEntity(customerEntity);
-
-        basicInfoView.setSpProgram(0);
-        basicInfoView.setRefIn(0);
-        basicInfoView.setRefOut(0);
-        basicInfoView.setApplyBA(0);
-
-        tmpSpecialProgram = 0;
-        tmpRefinanceIN = 0;
-        tmpRefinanceOUT = 0;
-        tmpApplyBA = 0;
-
-        basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
-
-        if(basicInfoView.getId() == 0){
-            basicInfoView.setQualitative(customerEntity.getDefaultQualitative());
-        }
-
-        disQualitativeType = false;
-        if(!customerEntity.isChangeQualtiEnable()){
-            disQualitativeType = true;
-        }
-
-        openAccountView = new OpenAccountView();
-
-        yearList = DateTimeUtil.getPreviousFiftyYearTH();
-
-        onChangeSpecialProgramInit();
-        onChangeRefInInit();
-        onChangeRefOutInit();
-        onChangeExistingSMEInit();
-        onChangeBAInit();
-        onChangeReqLGInit();
     }
 
     public void fieldsControl(List<FieldsControlView> fieldsControlViewList){

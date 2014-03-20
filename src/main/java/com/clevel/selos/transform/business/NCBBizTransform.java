@@ -198,6 +198,7 @@ public class NCBBizTransform extends BusinessTransform {
                                             ncbDetailView.setInstallment(new BigDecimal(subjectAccountModel.getInstallmentamount()));
                                         }
                                         //set restructure date
+                                        log.debug("subjectAccountModel.getLastrestructureddate() : {}", subjectAccountModel.getLastrestructureddate());
                                         if (!Util.isEmpty(subjectAccountModel.getLastrestructureddate())) {
                                             ncbDetailView.setDateOfDebtRestructuring(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getLastrestructureddate()));
                                             //get TDR last date
@@ -216,6 +217,9 @@ public class NCBBizTransform extends BusinessTransform {
                                                     lastTDRDateOther = getLastDateYYYYMMDD(lastTDRDateOther, subjectAccountModel.getCloseddate());
                                                 }
                                             }
+                                            log.debug("isTDRTMB : {}, isTDROther : {}, lastTDRDateTMB : {}, lastTDRDateOther : {}", isTDRTMB, isTDROther, lastTDRDateTMB, lastTDRDateOther);
+                                        } else {
+                                            ncbDetailView.setDateOfDebtRestructuring(null);
                                         }
                                         //set current payment
                                         SettlementStatus settlementStatus = new SettlementStatus();
@@ -1070,23 +1074,59 @@ public class NCBBizTransform extends BusinessTransform {
                                     }
 
                                     if (isNPLTMB || isNPLOther) {
-                                        ncbInfoView.setNplFlag(1); //true
+                                        ncbInfoView.setNplFlag(RadioValue.YES.value()); //true
                                         if (isNPLTMB) {
                                             ncbInfoView.setNplTMBFlag(true);
+                                            if(!Util.isEmpty(lastNPLDateTMB)){
+                                                if(lastNPLDateTMB.length()>=8){
+                                                    int month = Integer.parseInt(lastNPLDateTMB.substring(4,6));
+                                                    int year = Integer.parseInt(lastNPLDateTMB.substring(6,8));
+                                                    ncbInfoView.setNplTMBMonth(month);
+                                                    ncbInfoView.setNplTMBYear(year);
+                                                }
+                                            }
                                         }
                                         if (isNPLOther) {
                                             ncbInfoView.setNplOtherFlag(true);
+                                            if(!Util.isEmpty(lastNPLDateOther)){
+                                                if(lastNPLDateOther.length()>=8){
+                                                    int month = Integer.parseInt(lastNPLDateOther.substring(4,6));
+                                                    int year = Integer.parseInt(lastNPLDateOther.substring(6,8));
+                                                    ncbInfoView.setNplOtherMonth(month);
+                                                    ncbInfoView.setNplOtherYear(year);
+                                                }
+                                            }
                                         }
+                                    } else {
+                                        ncbInfoView.setNplFlag(RadioValue.NO.value());
                                     }
 
                                     if (isTDRTMB || isTDROther) {
-                                        ncbInfoView.setTdrFlag(1); //true
+                                        ncbInfoView.setTdrFlag(RadioValue.YES.value()); //true
                                         if (isTDRTMB) {
                                             ncbInfoView.setTdrTMBFlag(true);
+                                            if(!Util.isEmpty(lastTDRDateTMB)){
+                                                if(lastTDRDateTMB.length()>=8){
+                                                    int month = Integer.parseInt(lastTDRDateTMB.substring(4,6));
+                                                    int year = Integer.parseInt(lastTDRDateTMB.substring(6,8));
+                                                    ncbInfoView.setTdrTMBMonth(month);
+                                                    ncbInfoView.setTdrTMBYear(year);
+                                                }
+                                            }
                                         }
                                         if (isTDROther) {
                                             ncbInfoView.setTdrOtherFlag(true);
+                                            if(!Util.isEmpty(lastTDRDateOther)){
+                                                if(lastTDRDateOther.length()>=8){
+                                                    int month = Integer.parseInt(lastTDRDateOther.substring(4,6));
+                                                    int year = Integer.parseInt(lastTDRDateOther.substring(6,8));
+                                                    ncbInfoView.setTdrOtherMonth(month);
+                                                    ncbInfoView.setTdrOtherYear(year);
+                                                }
+                                            }
                                         }
+                                    } else {
+                                        ncbInfoView.setTdrFlag(RadioValue.NO.value());
                                     }
                                 } else {
                                     //no ncb detail
@@ -1273,7 +1313,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                     ncbDetailView.setInstallment(new BigDecimal(creditInfoModel.getInstallmentamount()));
                                                 }
                                                 //for calculate brms rules,, add npl flag and tdr flag
-                                                ncbDetailView.setNplFlag(0);
+                                                ncbDetailView.setNplFlag(RadioValue.NO.value());
                                                 //set restructure date
                                                 if (!Util.isEmpty(creditInfoModel.getRestructuredate())) {
                                                     String[] reStructureDate = Util.splitSpace(creditInfoModel.getRestructuredate());
@@ -1485,6 +1525,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                     ncbDetailView.setInstallment(new BigDecimal(creditInfoModel.getInstallmentamount()));
                                                 }
                                                 //set restructure date
+                                                log.debug("creditInfoModel.getRestructuredate() : {}", creditInfoModel.getRestructuredate());
                                                 if (!Util.isEmpty(creditInfoModel.getRestructuredate())) {
                                                     String[] reStructureDate = Util.splitSpace(creditInfoModel.getRestructuredate());
                                                     if (reStructureDate != null && reStructureDate.length > 0) {
@@ -1506,6 +1547,9 @@ public class NCBBizTransform extends BusinessTransform {
                                                             lastTDRDateOther = getLastDateYYYYMMDD(lastTDRDateOther, creditInfoModel.getCloseddate());
                                                         }
                                                     }
+                                                    log.debug("isTDRTMB : {}, isTDROther : {}, lastTDRDateTMB : {}", isTDRTMB, isTDROther, lastTDRDateTMB, lastTDRDateOther);
+                                                } else {
+                                                    ncbDetailView.setDateOfDebtRestructuring(null);
                                                 }
                                             }
 
@@ -1679,23 +1723,59 @@ public class NCBBizTransform extends BusinessTransform {
                                     }
 
                                     if (isNPLTMB || isNPLOther) {
-                                        ncbInfoView.setNplFlag(1); //true
+                                        ncbInfoView.setNplFlag(RadioValue.YES.value()); //true
                                         if (isNPLTMB) {
                                             ncbInfoView.setNplTMBFlag(true);
+                                            if(!Util.isEmpty(lastNPLDateTMB)){
+                                                if(lastNPLDateTMB.length()>=8){
+                                                    int month = Integer.parseInt(lastNPLDateTMB.substring(4,6));
+                                                    int year = Integer.parseInt(lastNPLDateTMB.substring(6,8));
+                                                    ncbInfoView.setNplTMBMonth(month);
+                                                    ncbInfoView.setNplTMBYear(year);
+                                                }
+                                            }
                                         }
                                         if (isNPLOther) {
                                             ncbInfoView.setNplOtherFlag(true);
+                                            if(!Util.isEmpty(lastNPLDateOther)){
+                                                if(lastNPLDateOther.length()>=8){
+                                                    int month = Integer.parseInt(lastNPLDateOther.substring(4,6));
+                                                    int year = Integer.parseInt(lastNPLDateOther.substring(6,8));
+                                                    ncbInfoView.setNplOtherMonth(month);
+                                                    ncbInfoView.setNplOtherYear(year);
+                                                }
+                                            }
                                         }
+                                    } else {
+                                        ncbInfoView.setNplFlag(RadioValue.NO.value()); //false
                                     }
 
                                     if (isTDRTMB || isTDROther) {
-                                        ncbInfoView.setTdrFlag(1); //true
+                                        ncbInfoView.setTdrFlag(RadioValue.YES.value()); //true
                                         if (isTDRTMB) {
                                             ncbInfoView.setTdrTMBFlag(true);
+                                            if(!Util.isEmpty(lastTDRDateTMB)){
+                                                if(lastTDRDateTMB.length()>=8){
+                                                    int month = Integer.parseInt(lastTDRDateTMB.substring(4,6));
+                                                    int year = Integer.parseInt(lastTDRDateTMB.substring(6,8));
+                                                    ncbInfoView.setTdrTMBMonth(month);
+                                                    ncbInfoView.setTdrTMBYear(year);
+                                                }
+                                            }
                                         }
                                         if (isTDROther) {
                                             ncbInfoView.setTdrOtherFlag(true);
+                                            if(!Util.isEmpty(lastTDRDateOther)){
+                                                if(lastTDRDateOther.length()>=8){
+                                                    int month = Integer.parseInt(lastTDRDateOther.substring(4,6));
+                                                    int year = Integer.parseInt(lastTDRDateOther.substring(6,8));
+                                                    ncbInfoView.setTdrOtherMonth(month);
+                                                    ncbInfoView.setTdrOtherYear(year);
+                                                }
+                                            }
                                         }
+                                    } else {
+                                        ncbInfoView.setTdrFlag(RadioValue.NO.value()); //false
                                     }
                                 } else {
                                     //no account detail data

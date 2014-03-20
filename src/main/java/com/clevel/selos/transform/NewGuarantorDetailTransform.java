@@ -3,12 +3,14 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NewGuarantorDetailDAO;
 import com.clevel.selos.dao.working.NewGuarantorRelationDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -16,28 +18,31 @@ import java.util.Date;
 import java.util.List;
 
 public class NewGuarantorDetailTransform extends Transform {
+    @SELOS
+    @Inject
+    private Logger log;
 
     @Inject
     public NewGuarantorDetailTransform() {
     }
 
     @Inject
-    CustomerDAO customerDAO;
+    private CustomerDAO customerDAO;
     @Inject
-    CustomerTransform customerTransform;
+    private CustomerTransform customerTransform;
     @Inject
-    NewGuarantorDetailDAO newGuarantorDetailDAO;
+    private NewGuarantorDetailDAO newGuarantorDetailDAO;
     @Inject
-    NewCreditDetailTransform newCreditDetailTransform;
+    private NewCreditDetailTransform newCreditDetailTransform;
     @Inject
-    ExistingCreditDetailTransform existingCreditDetailTransform;
+    private ExistingCreditDetailTransform existingCreditDetailTransform;
     @Inject
-    NewGuarantorCreditTransform newGuarantorCreditTransform;
+    private NewGuarantorCreditTransform newGuarantorCreditTransform;
     @Inject
-    ProposeCreditDetailTransform proposeCreditDetailTransform;
+    private ProposeCreditDetailTransform proposeCreditDetailTransform;
 
     @Inject
-    NewGuarantorRelationDAO newGuarantorRelationDAO;
+    private NewGuarantorRelationDAO newGuarantorRelationDAO;
 
 
     public List<NewGuarantorDetail> transformToModel(List<NewGuarantorDetailView> newGuarantorDetailViewList, NewCreditFacility newCreditFacility, User user, ProposeType proposeType) {

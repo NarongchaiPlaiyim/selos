@@ -111,9 +111,8 @@ public class AppraisalRequest implements Serializable {
         contactFlag3 = false;
     }
 
-    public boolean checkSession(){
+    public boolean checkSession(HttpSession session){
         boolean checkSession = false;
-        HttpSession session = FacesUtil.getSession(true);
         if(( (Long)session.getAttribute("workCaseId") != 0 || (Long)session.getAttribute("workCasePreScreenId") != 0 ) &&
                 (Long)session.getAttribute("stepId") != 0){
             checkSession = true;
@@ -126,7 +125,7 @@ public class AppraisalRequest implements Serializable {
         log.debug("preRender...");
         HttpSession session = FacesUtil.getSession(true);
 
-        if(checkSession()){
+        if(checkSession(session)){
             stepId = (Long)session.getAttribute("stepId");
             if(stepId != StepValue.PRESCREEN_MAKER.value() && stepId != StepValue.FULLAPP_BDM_SSO_ABDM.value()){
                 log.debug("preRender ::: Invalid step id : {}", stepId);
@@ -145,7 +144,7 @@ public class AppraisalRequest implements Serializable {
         log.info("onCreation...");
         init();
         HttpSession session = FacesUtil.getSession(true);
-        if(checkSession()){
+        if(checkSession(session)){
             stepId = (Long)session.getAttribute("stepId");
             if(stepId == StepValue.PRESCREEN_MAKER.value()){
                 workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
@@ -171,6 +170,8 @@ public class AppraisalRequest implements Serializable {
                     appraisalContactDetailView = new AppraisalContactDetailView();
                 }
                 log.debug("onCreation ::: appraisalContactDetailView.id : [{}]", appraisalContactDetailView.getId());
+            } else {
+                appraisalView = new AppraisalView();
             }
         } else {
             //TODO Show dialog for exception cannot load data from database.

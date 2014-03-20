@@ -113,8 +113,6 @@ public class AppraisalResult implements Serializable {
     //subCollateralDetailView
     private NewCollateralSubView newCollateralSubView;
 
-
-
     private AppraisalData appraisalData;
 
     private List<HeadCollateralData> headCollateralDataList;
@@ -145,6 +143,16 @@ public class AppraisalResult implements Serializable {
 
     }
 
+    public boolean checkSession(HttpSession session){
+        boolean checkSession = false;
+        if(( (Long)session.getAttribute("workCaseId") != 0 || (Long)session.getAttribute("workCasePreScreenId") != 0 ) &&
+                (Long)session.getAttribute("stepId") != 0){
+            checkSession = true;
+        }
+
+        return checkSession;
+    }
+
     private void init(){
         log.debug("-- init");
         modeForButton = ModeForButton.ADD;
@@ -163,21 +171,18 @@ public class AppraisalResult implements Serializable {
     }
 
     public void preRender(){
-        log.info("-- preRender.");
+        log.info("preRender...");
         HttpSession session = FacesUtil.getSession(true);
-        log.debug("preRender ::: setSession ");
-        log.debug("preRender ::: workCaseId : {}, workCasePreScreenId : {}", session.getAttribute("workCaseId"), session.getAttribute("workCasePreScreenId"));
+        if(checkSession(session)){
+            stepId = (Long)session.getAttribute("stepId");
 
-        if((!Util.isNull(session.getAttribute("workCaseId")) || !Util.isNull(session.getAttribute("workCasePreScreenId"))) && !Util.isNull(session.getAttribute("stepId"))){
-            stepId = Long.valueOf(""+session.getAttribute("stepId"));
-            log.debug("-- stepId[{}]", stepId);
-
-            /*if(stepId != StepValue.REVIEW_APPRAISAL_REQUEST.value()){
+            if(stepId != StepValue.REVIEW_APPRAISAL_REQUEST.value()){
+                log.debug("preRender ::: Invalid stepId");
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
-            }*/
+            }
         } else {
-            log.error("error while loading page, can not find workCaseId/workCasePreScreenId in session.");
+            log.debug("error while loading page, can not find workCaseId/workCasePreScreenId in session.");
             FacesUtil.redirect("/site/inbox.jsf");
             return;
         }
@@ -185,32 +190,31 @@ public class AppraisalResult implements Serializable {
 
     @PostConstruct
     public void onCreation() {
-        log.info("-- onCreation.");
-        /*preRender();*/
-        HttpSession session = FacesUtil.getSession(true);
-        if(!Util.isNull(session.getAttribute("workCaseId")) && Long.valueOf(""+session.getAttribute("workCaseId")) != 0){
-            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-        }else if(!Util.isNull(session.getAttribute("workCasePreScreenId")) && Long.valueOf(""+session.getAttribute("workCasePreScreenId")) != 0){
-            workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
-        }else{
-            log.error("error while loading page, can not find workCaseId/workCasePreScreenId in session.");
-            FacesUtil.redirect("/site/inbox.jsf");
-            return;
-        }
-
+        log.info("onCreation...");
         init();
-
-        appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, workCasePreScreenId);
-        if(!Util.isNull(appraisalView)){
-            newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
-            if(newCollateralViewList.size() == 0){
-                newCollateralViewList = new ArrayList<NewCollateralView>();
+        HttpSession session = FacesUtil.getSession(true);
+        if(checkSession(session)){
+            if((Long)session.getAttribute("workCaseId") != 0){
+                workCaseId = (Long)session.getAttribute("workCaseId");
+            } else if((Long)session.getAttribute("workCasePreScreenId") != 0){
+                workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
             }
-        } else {
-            appraisalView = new AppraisalView();
-            log.debug("-- AppraisalView[New] created");
+
+            appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, workCasePreScreenId);
+            log.debug("onCreation ::: appraisalView : {}", appraisalView);
+            if(!Util.isNull(appraisalView)){
+                newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
+                log.debug("onCreation ::: newCollateralViewList : {}", newCollateralViewList);
+                if(newCollateralViewList.size() == 0){
+                    newCollateralViewList = new ArrayList<NewCollateralView>();
+                }
+            } else {
+                appraisalView = new AppraisalView();
+                log.debug("-- AppraisalView[New] created");
+            }
         }
     }
+
     public void onChangePageCauseNoRequest(){
         try{
             log.info("onChangePageCauseNoRequest 1");
@@ -222,7 +226,7 @@ public class AppraisalResult implements Serializable {
             log.info("redirect to new page");
             ec.redirect(url);
         } catch(Exception ex) {
-            log.error("Exception : {}", ex);
+            log.error("Exception : ", ex);
             messageHeader = msg.get("app.appraisal.result.message.header.save.fail");
 
             if(ex.getCause() != null){

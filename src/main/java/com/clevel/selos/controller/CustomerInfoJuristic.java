@@ -190,19 +190,25 @@ public class CustomerInfoJuristic implements Serializable {
     public CustomerInfoJuristic(){
     }
 
+    public boolean checkSession(HttpSession session){
+        boolean checkSession = false;
+        if( (Long)session.getAttribute("workCaseId") != 0 && (Long)session.getAttribute("stepId") != 0){
+            checkSession = true;
+        }
+
+        return checkSession;
+    }
+
     public void preRender(){
         log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        if(checkSession(session)){
+            //TODO Check valid stepId
+            log.debug("preRender ::: Check valid stepId");
         }else{
-            log.debug("onCreation ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}",ex);
-            }
+            log.debug("preRender ::: No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
@@ -210,52 +216,35 @@ public class CustomerInfoJuristic implements Serializable {
     public void onCreation() {
         log.debug("onCreation");
 
+        initial();
+
         HttpSession session = FacesUtil.getSession(true);
+        if(checkSession(session)){
+            enableAllFieldCus = false;
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            if(workCaseId == 0){
-                try{
-                    FacesUtil.redirect("/site/inbox.jsf");
-                }catch (Exception ex){
-                    log.error("Exception :: {}",ex);
+            Flash flash = FacesUtil.getFlash();
+            Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
+            if (cusInfoParams != null) {
+                isFromSummaryParam = (Boolean) cusInfoParams.get("isFromSummaryParam");
+                isFromIndividualParam = (Boolean) cusInfoParams.get("isFromIndividualParam");
+                customerId = (Long) cusInfoParams.get("customerId");
+                if(isFromIndividualParam){
+                    customerInfoView = (CustomerInfoView) cusInfoParams.get("customerInfoView");
+                    onEditJuristic();
                 }
-                return;
             }
-        }else{
-            log.debug("onCreation ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}",ex);
+
+            if(isFromSummaryParam){                         // go to edit from summary
+                if(customerId != 0 && customerId != -1){
+                    onEditJuristic();
+                }
             }
-            return;
-        }
-
-        enableAllFieldCus = false;
-
-        onAddNewJuristic();
-
-        Flash flash = FacesUtil.getFlash();
-        Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
-        if (cusInfoParams != null) {
-            isFromSummaryParam = (Boolean) cusInfoParams.get("isFromSummaryParam");
-            isFromIndividualParam = (Boolean) cusInfoParams.get("isFromIndividualParam");
-            customerId = (Long) cusInfoParams.get("customerId");
-            if(isFromIndividualParam){
-                customerInfoView = (CustomerInfoView) cusInfoParams.get("customerInfoView");
-                onEditJuristic();
-            }
-        }
-
-        if(isFromSummaryParam){                         // go to edit from summary
-            if(customerId != 0 && customerId != -1){
-                onEditJuristic();
-            }
+        } else {
+            //TODO Show messageBox
         }
     }
 
-    public void onAddNewJuristic(){
+    public void initial(){
         isEditForm = false;
         customerInfoView = new CustomerInfoView();
         customerInfoView.reset();
@@ -682,7 +671,7 @@ public class CustomerInfoJuristic implements Serializable {
             customerId = customerInfoControl.saveCustomerInfoJuristic(customerInfoView, workCaseId);
             exSummaryControl.calForCustomerInfoJuristic(workCaseId);
             isFromSummaryParam = true;
-            onAddNewJuristic();
+            initial();
             onEditJuristic();
             messageHeader = "Information.";
             message = "Save Customer Juristic Data Success.";
