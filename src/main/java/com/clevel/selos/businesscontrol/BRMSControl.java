@@ -7,6 +7,7 @@ import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.*;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.BusinessDescription;
+import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.CustomerInfoSimpleView;
 import com.clevel.selos.model.view.MandateDocResponseView;
@@ -602,7 +603,7 @@ public class BRMSControl extends BusinessControl {
 
         MandateDocResponseView mandateDocResponseView = new MandateDocResponseView();
         if(ActionResult.SUCCESS.equals(docCustomerResponse.getActionResult())){
-            Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList);
+            Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, workCase.getStep());
             mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
             mandateDocResponseView.setMandateDocViewMap(mandateDocViewMap);
         } else {
@@ -633,7 +634,7 @@ public class BRMSControl extends BusinessControl {
 
         MandateDocResponseView mandateDocResponseView = new MandateDocResponseView();
         if(ActionResult.SUCCESS.equals(docAppraisalResponse.getActionResult())){
-            Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docAppraisalResponse.getDocumentDetailList(), null);
+            Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docAppraisalResponse.getDocumentDetailList(), null, workCase.getStep());
             mandateDocResponseView.setActionResult(docAppraisalResponse.getActionResult());
             mandateDocResponseView.setMandateDocViewMap(mandateDocViewMap);
         } else {
@@ -957,7 +958,7 @@ public class BRMSControl extends BusinessControl {
         return brmsBizInfo;
     }
 
-    private Map<String, MandateDocView> getMandateDocViewMap(List<DocumentDetail> documentDetailList, List<Customer> customerList){
+    private Map<String, MandateDocView> getMandateDocViewMap(List<DocumentDetail> documentDetailList, List<Customer> customerList, Step step){
         logger.debug("-- begin getMandateDocResponseView with documentDetailList {}, customerList {}", documentDetailList, customerList);
 
         //Transform Result from Document Customer Response//
@@ -966,8 +967,10 @@ public class BRMSControl extends BusinessControl {
             logger.debug("- documentDetailList is NOT null");
             for(DocumentDetail documentDetail : documentDetailList){
                 MandateDocView mandateDocView = mandateDocViewMap.get(documentDetail.getId());
-                if(mandateDocView == null)
+                if(mandateDocView == null){
                     mandateDocView = new MandateDocView();
+                    mandateDocView.setNumberOfDoc(0);
+                }
 
                 //1. Set ECM Document Type ID
                 mandateDocView.setEcmDocTypeId(documentDetail.getId());
@@ -1012,6 +1015,42 @@ public class BRMSControl extends BusinessControl {
                     }
                     mandateDocView.setCustomerInfoSimpleViewList(customerInfoSimpleViewList);
                 }
+
+                //5. set number of document
+                mandateDocView.setNumberOfDoc(mandateDocView.getNumberOfDoc() + 1);
+
+                //6. set mandate doc/optional doc type
+                long stepId = getLong(documentDetail.getStep());
+                if(documentDetail.isMandateFlag()){
+                    if(stepId != 0 && stepId == step.getId()){
+                        logger.debug("Document is Mandate for this step {}.", step);
+                        mandateDocView.setDocMandateType(DocMandateType.MANDATE);
+                    } else {
+                        logger.debug("Document is Mandate for this ");
+                        mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
+                    }
+                    mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getShowFlag()).boolValue());
+                } else {
+                    logger.debug("Document is NOT mandate for any steps.");
+                    mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
+                    mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getShowFlag()).boolValue());
+                }
+
+                stepId = getLong(documentDetail.getOperStep());
+                if(documentDetail.isOperMandateFlag()){
+                    if(stepId != 0 && stepId == step.getId()){
+                        logger.debug("Document is Mandate for Oper step {}.", step);
+                        mandateDocView.setDocMandateType(DocMandateType.MANDATE);
+                    } else {
+                        mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
+                    }
+                    mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
+                } else {
+                    logger.debug("Document is NOT mandate for any steps.");
+                    mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
+                    mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
+                }
+
                 mandateDocViewMap.put(documentDetail.getId(), mandateDocView);
             }
         }

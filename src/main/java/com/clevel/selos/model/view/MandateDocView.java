@@ -17,6 +17,7 @@ public class MandateDocView implements Serializable{
     private DocLevel docLevel;
     private int numberOfDoc;
     private DocMandateType docMandateType;
+    private boolean display;
 
     public String getEcmDocTypeId() {
         return ecmDocTypeId;
@@ -74,6 +75,14 @@ public class MandateDocView implements Serializable{
         this.docMandateType = docMandateType;
     }
 
+    public boolean isDisplay() {
+        return display;
+    }
+
+    public void setDisplay(boolean display) {
+        this.display = display;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -84,6 +93,7 @@ public class MandateDocView implements Serializable{
                 .append("docLevel", docLevel)
                 .append("numberOfDoc", numberOfDoc)
                 .append("docMandateType", docMandateType)
+                .append("display", display)
                 .toString();
     }
 }
