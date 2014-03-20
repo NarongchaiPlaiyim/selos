@@ -426,14 +426,14 @@ public class Util implements Serializable {
         return string;
     }
 
-    public static String checkNullStrint(String value){
+    public static String checkNullString(String value){
         if (value == null){
             return "-";
         }
         return value;
     }
 
-    public static BigDecimal converNullToZERO(BigDecimal value){
+    public static BigDecimal convertNullToZERO(BigDecimal value){
         if (value == null){
             return BigDecimal.ZERO;
         }

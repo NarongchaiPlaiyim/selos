@@ -21,9 +21,6 @@ import java.util.List;
 
 public class AppraisalTransform extends Transform {
     @Inject
-    @SELOS
-    Logger log;
-    @Inject
     private AppraisalDAO appraisalDAO;
     //private AppraisalView appraisalView;
     //private Appraisal appraisal;
@@ -35,9 +32,9 @@ public class AppraisalTransform extends Transform {
     //private AppraisalContactDetailView appraisalContactDetailView;
     @Inject
     private AppraisalContactDetailTransform appraisalContactDetailTransform;
+
     @Inject
     public AppraisalTransform() {
-
     }
 
     public Appraisal transformToModel(final AppraisalView appraisalView, final WorkCase workCase, final WorkCasePrescreen workCasePrescreen, final User user){

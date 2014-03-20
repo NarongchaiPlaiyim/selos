@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 
-public class CheckMandateDocTransform extends Transform {
+public class CheckMandateDocTransform {
     @Inject
     @NCB
     private Logger log;
