@@ -67,7 +67,7 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         }
         criteria.add(Restrictions.eq("relation.id", RelationValue.BORROWER.value()));
         criteria.addOrder(Order.asc("id"));
-        criteria.setFetchMode("workCase", FetchMode.SELECT);
+        /*criteria.setFetchMode("workCase", FetchMode.SELECT);
         criteria.setFetchMode("workCasePrescreen", FetchMode.SELECT);
         criteria.setFetchMode("documentType.customerEntity", FetchMode.SELECT);
         criteria.setFetchMode("businessType", FetchMode.SELECT);
@@ -98,7 +98,7 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         criteria.setFetchMode("ncb.customer", FetchMode.SELECT);
         criteria.setFetchMode("ncb.tdrCondition", FetchMode.SELECT);
         criteria.setFetchMode("ncb.createBy", FetchMode.SELECT);
-        criteria.setFetchMode("ncb.modifyBy", FetchMode.SELECT);
+        criteria.setFetchMode("ncb.modifyBy", FetchMode.SELECT);*/
 
         List<Customer> customerList = (List<Customer>) criteria.list();
         log.info("getBorrowerByWorkCaseId ::: size : {}", customerList.size());
@@ -225,7 +225,7 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.add(Restrictions.or(Restrictions.eq("relation.id", RelationValue.BORROWER.value()),Restrictions.eq("relation.id", RelationValue.GUARANTOR.value())));
         criteria.addOrder(Order.asc("id"));
-        criteria.setFetchMode("workCase", FetchMode.SELECT);
+        /*criteria.setFetchMode("workCase", FetchMode.SELECT);
         criteria.setFetchMode("workCasePrescreen", FetchMode.SELECT);
         criteria.setFetchMode("documentType.customerEntity", FetchMode.SELECT);
         criteria.setFetchMode("businessType", FetchMode.SELECT);
@@ -256,7 +256,7 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         criteria.setFetchMode("ncb.customer", FetchMode.SELECT);
         criteria.setFetchMode("ncb.tdrCondition", FetchMode.SELECT);
         criteria.setFetchMode("ncb.createBy", FetchMode.SELECT);
-        criteria.setFetchMode("ncb.modifyBy", FetchMode.SELECT);
+        criteria.setFetchMode("ncb.modifyBy", FetchMode.SELECT);*/
 
 
         List<Customer> customerList = (List<Customer>)criteria.list();
