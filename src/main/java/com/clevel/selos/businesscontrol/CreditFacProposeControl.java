@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -220,7 +221,7 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
     public void calculateTotalProposeAmount(NewCreditFacilityView newCreditFacilityView, BasicInfoView basicInfoView, TCGView tcgView, long workCaseId) {
-        log.debug("calculateTotalProposeAmount()");
+        log.info("calculateTotalProposeAmount()");
         if (newCreditFacilityView != null) {
 
             BigDecimal sumTotalPropose = BigDecimal.ZERO;
@@ -231,6 +232,9 @@ public class CreditFacProposeControl extends BusinessControl {
             BigDecimal sumTotalNonLoanDbr = BigDecimal.ZERO;
 
             if (basicInfoView != null && basicInfoView.getSpecialProgram() != null && tcgView != null) {
+                log.info("basicInfoView.getSpecialProgram()::{}", basicInfoView.getSpecialProgram().getId());
+                log.info("tcgView ::; {}", tcgView.getId());
+
                 List<NewCreditDetailView> newCreditDetailViewList = newCreditFacilityView.getNewCreditDetailViewList();
 
                 if (newCreditDetailViewList != null && newCreditDetailViewList.size() != 0) {
@@ -240,7 +244,7 @@ public class CreditFacProposeControl extends BusinessControl {
                     ProductFormula productFormula;
 
                     for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
-                        log.debug("newCreditDetailView.id: {}", newCreditDetailView.getId());
+                        log.info("newCreditDetailView.id: {}", newCreditDetailView.getId());
 
                         if (newCreditDetailView.getProductProgramView().getId() != 0 && newCreditDetailView.getCreditTypeView().getId() != 0) {
                             productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgramView().getId());
@@ -250,41 +254,42 @@ public class CreditFacProposeControl extends BusinessControl {
                                 prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
                                 productFormula = productFormulaDAO.findProductFormulaPropose(
                                         prdProgramToCreditType, newCreditFacilityView.getCreditCustomerType(), basicInfoView.getSpecialProgram(), tcgView.getTCG());
-
+                             log.info("productFormula :: {}",productFormula.getId());
                                 if (productFormula != null) {
-                                    log.debug("productFormula id :: {}", productFormula.getId());
+                                    log.info("productFormula id :: {}", productFormula.getId());
                                     //ExposureMethod
                                     if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
-                                        log.debug("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                        log.info("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                         sumTotalPropose = sumTotalPropose.add(BigDecimal.ZERO);
                                     }
                                     else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
-                                        log.debug("LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                        log.info("LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                         sumTotalPropose = sumTotalPropose.add(newCreditDetailView.getLimit());
                                     }
                                     else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //limit * %PCE
-                                        log.debug("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                        log.info("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                         sumTotalPropose = sumTotalPropose.add(Util.multiply(newCreditDetailView.getLimit(), newCreditDetailView.getPCEPercent()));
                                     }
-                                    log.debug("sumTotalPropose :: {}", sumTotalPropose);
+                                    log.info("sumTotalPropose :: {}", sumTotalPropose);
 
                                     //For DBR
                                     if (productFormula.getDbrCalculate() == 1) {// No
-                                        log.info("NO calculate :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
+                                        log.info("DbrCalculate NO :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
                                         sumTotalNonLoanDbr = BigDecimal.ZERO;
                                     }
                                     else if (productFormula.getDbrCalculate() == 2) {// Yes
-                                        log.debug("YES :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
+                                        log.info("DbrCalculate YES :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
                                         if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
-                                            log.debug("NOT_CALCULATE :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
-                                            sumTotalLoanDbr = sumTotalLoanDbr.add(BigDecimal.ZERO);
+                                            log.info("NOT_CALCULATE :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
+                                            sumTotalLoanDbr = BigDecimal.ZERO;
                                         }
                                         else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
-                                            log.debug("INSTALLMENT :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
+                                            log.info("INSTALLMENT :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
+                                            log.info("INSTALLMENT :: newCreditDetailView.getInstallment() :: {}", newCreditDetailView.getInstallment());
                                             sumTotalLoanDbr = sumTotalLoanDbr.add(newCreditDetailView.getInstallment());
                                         }
                                         else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
-                                            log.debug("INT_YEAR :: productFormula.getDbrMethod() :: {}, productFormula.getDbrSpread() :::{}", productFormula.getDbrMethod(), productFormula.getDbrSpread());
+                                            log.info("INT_YEAR :: productFormula.getDbrMethod() :: {}, productFormula.getDbrSpread() :::{}", productFormula.getDbrMethod(), productFormula.getDbrSpread());
                                             sumTotalLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYear(newCreditDetailView, productFormula.getDbrSpread()));
                                         }
                                     }
@@ -318,7 +323,7 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
     public BigDecimal calTotalProposeLoanDBRForIntYear(NewCreditDetailView newCreditDetailView, BigDecimal dbrSpread) {
-        log.debug("calTotalProposeLoanDBRForIntYear start :: newCreditDetailView and  dbrSpread ::{}", newCreditDetailView, dbrSpread);
+        log.info("calTotalProposeLoanDBRForIntYear start :: newCreditDetailView and  dbrSpread ::{}", newCreditDetailView, dbrSpread);
 
         BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
         if (newCreditDetailView != null &&
@@ -485,6 +490,10 @@ public class CreditFacProposeControl extends BusinessControl {
                 installment = Util.divide(Util.multiply(Util.multiply(interestPerMonth, limit), (Util.add(BigDecimal.ONE, interestPerMonth)).pow(tenor)),
                         Util.subtract(Util.add(BigDecimal.ONE, interestPerMonth).pow(tenor), BigDecimal.ONE));
                 log.info("installment : {}", installment);
+
+                if(installment!=null){
+                    installment.setScale(2, RoundingMode.HALF_UP);
+                }
 
                 newCreditTierDetailView.setInstallment(installment);
                 sumOfInstallment = Util.add(sumOfInstallment, installment);
