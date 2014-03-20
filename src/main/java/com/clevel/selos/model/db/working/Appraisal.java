@@ -20,7 +20,7 @@ public class Appraisal implements Serializable {
     @Column(name = "zone_location")
     private String zoneLocation;
 
-    @Column(name = "bdm_remark")
+    @Column(name = "bdm_remark", length = 500)
     private String bdmRemark;
 
     @Column(name = "appraisal_type")

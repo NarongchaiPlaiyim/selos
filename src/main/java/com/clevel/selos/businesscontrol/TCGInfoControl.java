@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -168,9 +169,12 @@ public class TCGInfoControl extends BusinessControl {
                         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
                         log.debug("basicInfo ::: {}", basicInfo);
 
-                        if (basicInfo != null) {
-                            log.debug("basicInfo.getProductGroup ::: {}", basicInfo.getProductGroup());
-                            if (basicInfo.getProductGroup() != null && Util.isTrue(basicInfo.getProductGroup().getSpecialLTV())) {
+                        WorkCase workCase = workCaseDAO.findById(workCaseId);
+                        log.debug("workCase ::: {}", workCase);
+
+                        if (basicInfo != null && workCase != null) {
+                            log.debug("workCase.getProductGroup ::: {}", workCase.getProductGroup());
+                            if (workCase.getProductGroup() != null && Util.isTrue(workCase.getProductGroup().getSpecialLTV())) {
                                 log.debug("getRetentionLTV :::::::");
                                 if (potentialColToTCGCol.getRetentionLTV() != null) {
                                     ltvPercentBig = potentialColToTCGCol.getRetentionLTV();
@@ -288,7 +292,7 @@ public class TCGInfoControl extends BusinessControl {
 
     public BigDecimal toCalCollateralRuleResult(TCGView tcgView) {
         BigDecimal sumAdd = BigDecimal.ZERO;
-        BigDecimal sumAppraisalDivide = BigDecimal.ZERO;
+        BigDecimal sumAppraisalMul = BigDecimal.ZERO;
         BigDecimal sumAppraisalAmount = BigDecimal.ZERO;
 
         if (tcgView != null) {
@@ -304,11 +308,14 @@ public class TCGInfoControl extends BusinessControl {
             log.debug("SUM After add :: {}", sumAdd);
             log.debug("tcgView.getSumAppraisalAmount() :: {}", tcgView.getSumAppraisalAmount());
             sumAppraisalAmount = Util.divide(tcgView.getSumAppraisalAmount(), sumAdd);
-//            sumAppraisalAmount = Util.divide(sumAppraisalDivide, BigDecimal.valueOf(100));
-            log.debug("sumAppraisalAmount ::: {} ", sumAppraisalAmount);
+            sumAppraisalMul = Util.multiply(sumAppraisalAmount,Util.ONE_HUNDRED);
+            if(sumAppraisalMul!=null){
+                sumAppraisalMul=sumAppraisalMul.setScale(2, RoundingMode.HALF_UP);
+            }
+            log.debug("sumAppraisalMul ::: {} ", sumAppraisalMul);
 
         }
-        return sumAppraisalAmount;
+        return sumAppraisalMul;
     }
 
     public BigDecimal toCalRequestTCGAmount(TCGView tcgView) {

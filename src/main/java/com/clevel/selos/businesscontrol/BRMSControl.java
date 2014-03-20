@@ -4,23 +4,22 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.request.*;
-import com.clevel.selos.integration.brms.model.response.DocAppraisalResponse;
-import com.clevel.selos.integration.brms.model.response.DocCustomerResponse;
-import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
-import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
+import com.clevel.selos.integration.brms.model.response.*;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.BusinessDescription;
+import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.view.CustomerInfoSimpleView;
+import com.clevel.selos.model.view.MandateDocResponseView;
+import com.clevel.selos.model.view.MandateDocView;
+import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 public class BRMSControl extends BusinessControl {
@@ -85,6 +84,9 @@ public class BRMSControl extends BusinessControl {
     private DecisionDAO decisionDAO;
 
     @Inject
+    private CustomerTransform customerTransform;
+
+    @Inject
     public BRMSControl(){}
 
     public StandardPricingResponse getPriceFeeInterest(long workCaseId){
@@ -93,8 +95,9 @@ public class BRMSControl extends BusinessControl {
 
         StandardPricingResponse _tmpPricingIntResponse = brmsInterface.checkStandardPricingIntRule(applicationInfo);
         StandardPricingResponse _tmpPricingFeeResponse = brmsInterface.checkStandardPricingFeeRule(applicationInfo);
-
-        if(_tmpPricingIntResponse.getActionResult().equals(ActionResult.SUCCESS) && _tmpPricingIntResponse.getActionResult().equals(ActionResult.SUCCESS)){
+        logger.debug("-- _tmpPricingIntResponse.getActionResult() {}", _tmpPricingIntResponse.getActionResult());
+        logger.debug("-- _tmpPricingFeeResponse.getActionResult() {}", _tmpPricingFeeResponse.getActionResult());
+        if(_tmpPricingIntResponse.getActionResult().equals(ActionResult.SUCCESS) && _tmpPricingFeeResponse.getActionResult().equals(ActionResult.SUCCESS)){
             _returnPricingResponse.setActionResult(_tmpPricingFeeResponse.getActionResult());
             _returnPricingResponse.setPricingInterest(_tmpPricingIntResponse.getPricingInterest());
             _returnPricingResponse.setPricingFeeList(_tmpPricingFeeResponse.getPricingFeeList());
@@ -133,7 +136,7 @@ public class BRMSControl extends BusinessControl {
 
         applicationInfo.setProcessDate(Calendar.getInstance().getTime());
         if(workCase.getProductGroup() != null)
-            applicationInfo.setProductGroup(basicInfo.getProductGroup().getBrmsCode());
+            applicationInfo.setProductGroup(workCase.getProductGroup().getBrmsCode());
 
         BigDecimal totalTCGGuaranteeAmount = BigDecimal.ZERO;
         BigDecimal numberOfIndvGuarantor = BigDecimal.ZERO;
@@ -260,15 +263,16 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setCustomerInfoList(customerInfoList);
 
         /** Setup Bank Statement Account **/
+        //2. Set BankStatement Info
+        List<BRMSAccountStmtInfo> accountStmtInfoList = new ArrayList<BRMSAccountStmtInfo>();
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkcasePrescreenId(workcasePrescreenId);
         if(bankStatementSummary != null){
             List<BankStatement> bankStatementList = bankStatementSummary.getBankStmtList();
-            List<BRMSAccountStmtInfo> accountStmtInfoList = new ArrayList<BRMSAccountStmtInfo>();
             for(BankStatement bankStatement : bankStatementList){
                 accountStmtInfoList.add(getBRMSAccountStmtInfo(bankStatement));
             }
-            applicationInfo.setAccountStmtInfoList(accountStmtInfoList);
         }
+        applicationInfo.setAccountStmtInfoList(accountStmtInfoList);
 
         /*Start Set Account Request - Propose Credit Facility*/
         BigDecimal proposedCreditAmount = BigDecimal.ZERO;
@@ -505,8 +509,8 @@ public class BRMSControl extends BusinessControl {
 
         applicationInfo.setTradeChequeReturnPercent(bankStatementSummary.getGrdTotalTDChqRetPercent());
 
-        if(basicInfo.getProductGroup() != null)
-            applicationInfo.setProductGroup(basicInfo.getProductGroup().getBrmsCode());
+        if(workCase.getProductGroup() != null)
+            applicationInfo.setProductGroup(workCase.getProductGroup().getBrmsCode());
 
         applicationInfo.setMaximumSMELimit(newCreditFacility.getMaximumSMELimit());
 
@@ -521,7 +525,7 @@ public class BRMSControl extends BusinessControl {
         return uwRulesResponse;
     }
 
-    public DocCustomerResponse getDocCustomer(long workCaseId){
+    public MandateDocResponseView getDocCustomer(long workCaseId){
         logger.debug("getDocCustomer from workCaseId {}", workCaseId);
         Date checkDate = Calendar.getInstance().getTime();
         logger.debug("check at date {}", checkDate);
@@ -586,8 +590,8 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setRequestTCG(getRadioBoolean(tcg.getTcgFlag()));
         if(workCase.getStep() != null)
             applicationInfo.setStepCode(workCase.getStep().getCode());
-        if(basicInfo.getProductGroup() != null)
-            applicationInfo.setProductGroup(basicInfo.getProductGroup().getBrmsCode());
+        if(workCase.getProductGroup() != null)
+            applicationInfo.setProductGroup(workCase.getProductGroup().getBrmsCode());
 
         BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findByWorkCaseId(workCaseId);
 
@@ -595,11 +599,23 @@ public class BRMSControl extends BusinessControl {
             applicationInfo.setReferredDocType(bizInfoSummary.getReferredExperience().getBrmsCode());
 
         DocCustomerResponse docCustomerResponse = brmsInterface.checkDocCustomerRule(applicationInfo);
-        logger.debug("-- end getDocCustomer return {}", docCustomerResponse);
-        return null;
+        logger.debug("docCustomerResponse return {}", docCustomerResponse);
+
+        MandateDocResponseView mandateDocResponseView = new MandateDocResponseView();
+        if(ActionResult.SUCCESS.equals(docCustomerResponse.getActionResult())){
+            Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, workCase.getStep());
+            mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
+            mandateDocResponseView.setMandateDocViewMap(mandateDocViewMap);
+        } else {
+            mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
+            mandateDocResponseView.setReason(docCustomerResponse.getReason());
+        }
+
+        logger.debug("-- end getDocCustomer return {}", mandateDocResponseView);
+        return mandateDocResponseView;
     }
 
-    public DocAppraisalResponse getDocAppraisal(long workCaseId){
+    public MandateDocResponseView getDocAppraisal(long workCaseId){
         logger.debug("getDocAppraisal from workCaseId {}", workCaseId);
         Date checkDate = Calendar.getInstance().getTime();
         logger.debug("check at date {}", checkDate);
@@ -610,12 +626,24 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setApplicationNo(workCase.getAppNumber());
         applicationInfo.setProcessDate(checkDate);
         applicationInfo.setBdmSubmitDate(basicInfo.getBdmSubmitDate());
-        if(basicInfo.getProductGroup() != null)
-            applicationInfo.setProductGroup(basicInfo.getProductGroup().getBrmsCode());
+        if(workCase.getProductGroup() != null)
+            applicationInfo.setProductGroup(workCase.getProductGroup().getBrmsCode());
 
         DocAppraisalResponse docAppraisalResponse = brmsInterface.checkDocAppraisalRule(applicationInfo);
         logger.debug("-- end getDocAppraisal ", docAppraisalResponse);
-        return docAppraisalResponse;
+
+        MandateDocResponseView mandateDocResponseView = new MandateDocResponseView();
+        if(ActionResult.SUCCESS.equals(docAppraisalResponse.getActionResult())){
+            Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docAppraisalResponse.getDocumentDetailList(), null, workCase.getStep());
+            mandateDocResponseView.setActionResult(docAppraisalResponse.getActionResult());
+            mandateDocResponseView.setMandateDocViewMap(mandateDocViewMap);
+        } else {
+            mandateDocResponseView.setActionResult(docAppraisalResponse.getActionResult());
+            mandateDocResponseView.setReason(docAppraisalResponse.getReason());
+        }
+
+        logger.debug("-- end getDocCustomer return {}", mandateDocResponseView);
+        return mandateDocResponseView;
     }
 
     /** The following method is for BRMSControl internal used - move from brms transform**/
@@ -697,6 +725,8 @@ public class BRMSControl extends BusinessControl {
 
     private BRMSCustomerInfo getBRMSCustomerInfo(Customer customer, Date checkDate){
         BRMSCustomerInfo customerInfo = new BRMSCustomerInfo();
+
+        customerInfo.setCustomerId(String.valueOf(customer.getId()));
         if(customer.getRelation() != null)
             customerInfo.setRelation(customer.getRelation().getBrmsCode());
         if(customer.getCustomerEntity() != null)
@@ -809,6 +839,7 @@ public class BRMSControl extends BusinessControl {
 
     public BRMSCustomerInfo getCustomerInfoWithoutCreditAccount(Customer customer, Date checkDate){
         BRMSCustomerInfo customerInfo = new BRMSCustomerInfo();
+        customerInfo.setCustomerId(String.valueOf(customer.getId()));
         if(customer.getRelation() != null)
             customerInfo.setRelation(customer.getRelation().getBrmsCode());
         if(customer.getCustomerEntity() != null)
@@ -925,5 +956,118 @@ public class BRMSControl extends BusinessControl {
         brmsBizInfo.setSuspendValue(businessDescription.getSuspend());
         brmsBizInfo.setDeviationValue(businessDescription.getSuspend());
         return brmsBizInfo;
+    }
+
+    private Map<String, MandateDocView> getMandateDocViewMap(List<DocumentDetail> documentDetailList, List<Customer> customerList, Step step){
+        logger.debug("-- begin getMandateDocResponseView with documentDetailList {}, customerList {}", documentDetailList, customerList);
+
+        //Transform Result from Document Customer Response//
+        Map<String, MandateDocView> mandateDocViewMap = new HashMap<String, MandateDocView>();
+        if(documentDetailList != null){
+            logger.debug("- documentDetailList is NOT null");
+            for(DocumentDetail documentDetail : documentDetailList){
+                MandateDocView mandateDocView = mandateDocViewMap.get(documentDetail.getId());
+                if(mandateDocView == null){
+                    mandateDocView = new MandateDocView();
+                    mandateDocView.setNumberOfDoc(0);
+                }
+
+                //1. Set ECM Document Type ID
+                mandateDocView.setEcmDocTypeId(documentDetail.getId());
+                //2. Set Doc Level (Application or Customer)
+                mandateDocView.setDocLevel(documentDetail.getDocLevel());
+
+                //3. Set BRMS Document Description
+                List<String> brmsList = mandateDocView.getBrmsDescList();
+                if(brmsList == null)
+                    brmsList = new ArrayList<String>();
+                brmsList.add(documentDetail.getDescription());
+                mandateDocView.setBrmsDescList(brmsList);
+
+                //4. Set Document Owner - CustomerInfoSimpleView if it is Customer Level
+                if(DocLevel.CUS_LEVEL.equals(documentDetail.getDocLevel())) {
+                    long _customerId = getLong(documentDetail.getDocOwner());
+                    List<CustomerInfoSimpleView> customerInfoSimpleViewList = mandateDocView.getCustomerInfoSimpleViewList();
+                    if(customerInfoSimpleViewList == null)
+                        customerInfoSimpleViewList = new ArrayList<CustomerInfoSimpleView>();
+
+                    CustomerInfoSimpleView customerInfoSimpleView = null;
+                    for(CustomerInfoSimpleView _customerInfoSimpleView : customerInfoSimpleViewList){
+                        if(_customerInfoSimpleView.getId() == _customerId){
+                            customerInfoSimpleView = _customerInfoSimpleView;
+                            logger.debug("Already Found Customer in MandateDocCustomerList {}", _customerInfoSimpleView);
+                            break;
+                        }
+                    }
+
+                    if(customerInfoSimpleView == null){
+                        if(customerList != null) {
+                            logger.debug("Add New Customer Info");
+                            for(Customer customer : customerList){
+                                if(customer.getId() == _customerId){
+                                    customerInfoSimpleView = customerTransform.transformToSimpleView(customer);
+                                    customerInfoSimpleViewList.add(customerInfoSimpleView);
+                                    logger.debug("Add Customer Info Simple View into Mandate Doc Customer List customerInfoSimpleView {}", customerInfoSimpleView);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    mandateDocView.setCustomerInfoSimpleViewList(customerInfoSimpleViewList);
+                }
+
+                //5. set number of document
+                mandateDocView.setNumberOfDoc(mandateDocView.getNumberOfDoc() + 1);
+
+                //6. set mandate doc/optional doc type
+                long stepId = getLong(documentDetail.getStep());
+                if(documentDetail.isMandateFlag()){
+                    if(stepId != 0 && stepId == step.getId()){
+                        logger.debug("Document is Mandate for this step {}.", step);
+                        mandateDocView.setDocMandateType(DocMandateType.MANDATE);
+                    } else {
+                        logger.debug("Document is Mandate for this ");
+                        mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
+                    }
+                    mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getShowFlag()).boolValue());
+                } else {
+                    logger.debug("Document is NOT mandate for any steps.");
+                    mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
+                    mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getShowFlag()).boolValue());
+                }
+
+                stepId = getLong(documentDetail.getOperStep());
+                if(documentDetail.isOperMandateFlag()){
+                    if(stepId != 0 && stepId == step.getId()){
+                        logger.debug("Document is Mandate for Oper step {}.", step);
+                        mandateDocView.setDocMandateType(DocMandateType.MANDATE);
+                    } else {
+                        mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
+                    }
+                    mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
+                } else {
+                    logger.debug("Document is NOT mandate for any steps.");
+                    mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
+                    mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
+                }
+
+                mandateDocViewMap.put(documentDetail.getId(), mandateDocView);
+            }
+        }
+        logger.debug("-- end getMandateDocViewMap return {}", mandateDocViewMap);
+        return mandateDocViewMap;
+    }
+
+    //For Converting Document ID
+    private long getLong(String value){
+        if(value == null || "".equals(value))
+            return 0;
+        else {
+            try{
+                return Long.parseLong(value);
+            } catch (Exception ex){
+                return 0;
+            }
+        }
     }
 }

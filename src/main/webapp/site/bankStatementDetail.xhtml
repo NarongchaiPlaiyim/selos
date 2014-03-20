@@ -443,7 +443,7 @@
                                                             <p:inputText value="#{item.maxBalance}"
                                                                          maxlength="18"
                                                                          onclick="this.select()"
-                                                                         onkeydown="return onKeyDownNegMoney(event);" onkeypress="return onKeyDownNegMoney(event);"
+                                                                         onkeydown="return onKeyDownNegMoney(event);" onkeypress="return onKeyPressNegMoney(event);"
                                                                          styleClass="right">
                                                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                 <p:ajax event="blur" update="@this"/>
@@ -477,7 +477,7 @@
                                                             <p:inputText value="#{item.minBalance}"
                                                                          maxlength="18"
                                                                          onclick="this.select()"
-                                                                         onkeydown="return onKeyDownNegMoney(event);" onkeypress="return onKeyDownNegMoney(event);"
+                                                                         onkeydown="return onKeyDownNegMoney(event);" onkeypress="return onKeyPressNegMoney(event);"
                                                                          styleClass="right">
                                                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                 <p:ajax event="blur" update="@this"/>

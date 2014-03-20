@@ -122,7 +122,7 @@ public class ReturnInfoBDM implements Serializable {
             String queueName = session.getAttribute("queueName").toString();
             User user = (User) session.getAttribute("user");
 
-            returnControl.saveReplyReturn(workCaseId, queueName, user, returnInfoViewList);
+            returnControl.saveReturnInformation(workCaseId, queueName, user, returnInfoViewList);
             messageHeader = "Information.";
             message = "Save Return Information Success.";
             log.debug("onReturnBDMSubmit ::: success.");

@@ -226,10 +226,8 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">
+                                        <td class="title" colspan="4">
                                             <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.registrationDate')}"/> :
-                                        </td>
-                                        <td colspan="3">
                                             <clv:BECalendar id="registrationDate" showOn="button" navigator="true" locale="th_TH"
                                                             required="#{bizInfoSummary.bizInfoSummaryView.establishDate == null and not empty param[addBizInfoSummary.clientId]}"
                                                             value="#{bizInfoSummary.bizInfoSummaryView.registrationDate}"
@@ -243,12 +241,26 @@
                                                 <p:ajax event="dateSelect"  update=":frmMain:registrationDate" />
                                             </clv:BECalendar>
                                         </td>
+                                        <!--<td colspan="2">-->
+                                            <!--<clv:BECalendar id="registrationDate" showOn="button" navigator="true" locale="th_TH"-->
+                                                            <!--required="#{bizInfoSummary.bizInfoSummaryView.establishDate == null and not empty param[addBizInfoSummary.clientId]}"-->
+                                                            <!--value="#{bizInfoSummary.bizInfoSummaryView.registrationDate}"-->
+                                                            <!--yearRange="1950:2100"-->
+                                                            <!--pattern="dd/MM/yyyy"-->
+                                                            <!--mindate="01/01/1950"-->
+                                                            <!--showButtonPanel="true"-->
+                                                            <!--defaultdate="#{bizInfoSummary.currentDateDDMMYY}"-->
+                                                            <!--maxdate="#{bizInfoSummary.currentDateDDMMYY}">-->
+                                                <!--<p:ajax event="change"  update=":frmMain:registrationDate" />-->
+                                                <!--<p:ajax event="dateSelect"  update=":frmMain:registrationDate" />-->
+                                            <!--</clv:BECalendar>-->
+                                        <!--</td>-->
                                     </tr>
                                     <tr >
                                         <td class="title">
                                             <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.establishDate')}"/> :
                                         </td>
-                                        <td style="width: 180px">
+                                        <td style="width: 275px" class="center">
                                             <clv:BECalendar id="establishDate" showOn="button" navigator="true" locale="th_TH"
                                                             value="#{bizInfoSummary.bizInfoSummaryView.establishDate}"
                                                             yearRange="1950:2100"
@@ -257,8 +269,8 @@
                                                             defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
                                                             mindate="01/01/1950"
                                                             maxdate="#{bizInfoSummary.currentDateDDMMYY}">
-                                                <p:ajax event="change"  update=":frmMain:establishDate,:frmMain:referExpId,:frmMain:registrationDate" />
-                                                <p:ajax event="dateSelect"  update=":frmMain:establishDate,:frmMain:referExpId,:frmMain:registrationDate" />
+                                                <p:ajax event="change"  update=":frmMain:establishDate,:frmMain:referExpId" />
+                                                <p:ajax event="dateSelect"  update=":frmMain:establishDate,:frmMain:referExpId" />
                                             </clv:BECalendar>
                                         </td>
                                         <td class="title left" style="width: 70px">
