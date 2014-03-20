@@ -317,10 +317,9 @@ public class ExSummaryControl extends BusinessControl {
 
         if(basicInfo != null && basicInfo.getExistingSMECustomer() == RadioValue.NO.value()){ //new customer
             if(qualitativeView != null && qualitativeView.getId() != 0){
-                //todo: BOT Class
-                exSumCreditRiskInfoView.setBotClass(qualitativeView.getQualityLevel().getDescription());
-                if(qualitativeView.getReason() != null){
-                    exSumCreditRiskInfoView.setReason(qualitativeView.getReason());
+                exSumCreditRiskInfoView.setBotClass(qualitativeView.getQualityResult());
+                if(qualitativeView.getQualityLevel().getDescription() != null){
+                    exSumCreditRiskInfoView.setReason(qualitativeView.getQualityLevel().getDescription());
                 } else {
                     exSumCreditRiskInfoView.setReason("-");
                 }
