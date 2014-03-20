@@ -29,7 +29,7 @@ public class StepToStatus implements Serializable {
     @JoinColumn(name = "action_id")
     private Action action;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_role_id")
     private Role fromRole;
 
@@ -46,7 +46,7 @@ public class StepToStatus implements Serializable {
     @Column(name = "bu_uw_flag")
     private String buUwFlag;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "next_status_id")
     private Status nextStatus;
 

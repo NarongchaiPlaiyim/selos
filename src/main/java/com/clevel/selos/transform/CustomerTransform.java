@@ -32,7 +32,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class CustomerTransform extends Transform {
+public class CustomerTransform {
     @Inject
     @SELOS
     Logger log;
@@ -1279,5 +1279,21 @@ public class CustomerTransform extends Transform {
     		address.setPhoneNumber(addressView.getPhoneNumber());
     		address.setExtension(addressView.getPhoneExt());
     	}
+    }
+
+    public List<CustomerInfoView> transformToSelectList(List<Customer> customerList){
+        List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
+        for(Customer item : customerList){
+            CustomerInfoView customerInfoView = new CustomerInfoView();
+            customerInfoView.setId(item.getId());
+            customerInfoView.setFirstNameTh(item.getNameTh());
+            if(!Util.isNull(item.getLastNameTh())){
+                customerInfoView.setLastNameTh(item.getLastNameTh());
+            }
+
+            customerInfoViewList.add(customerInfoView);
+        }
+
+        return customerInfoViewList;
     }
 }

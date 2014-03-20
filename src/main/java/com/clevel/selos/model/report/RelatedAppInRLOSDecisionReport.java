@@ -28,6 +28,7 @@ public class RelatedAppInRLOSDecisionReport extends ReportModel{
     private BigDecimal pceLimit;
     private BigDecimal outstanding;
     private BigDecimal finalInterest;
+    private String path;
 
     private List<ExistingCreditTierDetailView> existingCreditTierDetailViewList;
     private List<ExistingSplitLineDetailView> existingSplitLineDetailViewList;
@@ -187,6 +188,14 @@ public class RelatedAppInRLOSDecisionReport extends ReportModel{
 
     public void setFinalInterest(BigDecimal finalInterest) {
         this.finalInterest = finalInterest;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     @Override

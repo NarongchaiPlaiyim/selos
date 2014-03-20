@@ -60,7 +60,7 @@ public class PreDisbursementControl extends BusinessControl {
 		PreDisbursementView preDisbursementView = new PreDisbursementView();
 		PreDisbursement preDisbursement = preDisbursementDAO.findPreDisbursementByWorkcaseId(workcase_id);
 		if (preDisbursement != null) {
-			preDisbursementView = preDisbursementTransform.transfromToPreDisbursementView(preDisbursement);
+			preDisbursementView = preDisbursementTransform.transformToPreDisbursementView(preDisbursement);
 
 			// Get Detail
 			List<PreDisbursementDetail> preDisbursementDetailList = preDisbursement.getPreDisbursementDetailList();

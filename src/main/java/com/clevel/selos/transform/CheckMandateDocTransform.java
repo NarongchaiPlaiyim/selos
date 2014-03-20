@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CheckMandateDocTransform extends Transform {
+public class CheckMandateDocTransform {
     @Inject
     @NCB
     private Logger log;
@@ -26,6 +26,7 @@ public class CheckMandateDocTransform extends Transform {
     private String objectStore;
     private CheckMandateDocView checkMandateDocView;
     private MandateDoc mandateDoc;
+
     private CheckMandatoryDocView checkMandatoryDocView;
     private CheckOptionalDocView checkOptionalDocView;
     private CheckOtherDocView checkOtherDocView;

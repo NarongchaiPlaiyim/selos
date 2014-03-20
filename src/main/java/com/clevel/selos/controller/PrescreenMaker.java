@@ -2092,9 +2092,15 @@ public class PrescreenMaker implements Serializable {
         if(relationId != 0 && borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
             Relation tmpRelation = relationDAO.findById(relationId);
             spouseRelationList = prescreenBusinessControl.getRelationByStepAndBorrowerRelationId(stepId, BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, tmpRelation.getPriority());
-            spouseRelation.setId(0);
+            spouseRelation = new Relation();
             spouseReferenceList = new ArrayList<Reference>();
-            spouseReference.setId(0);
+            spouseReference = new Reference();
+            onChangeSpouseRelation();
+        } else {
+            spouseRelationList = new ArrayList<Relation>();
+            spouseRelation = new Relation();
+            spouseReferenceList = new ArrayList<Reference>();
+            spouseReference = new Reference();
         }
 
         Relation tmp1 = new Relation();

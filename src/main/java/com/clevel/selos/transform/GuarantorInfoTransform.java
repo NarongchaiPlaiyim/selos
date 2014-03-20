@@ -20,6 +20,7 @@ import com.clevel.selos.util.Util;
 
 public class GuarantorInfoTransform extends Transform {
 	private static final long serialVersionUID = 3517311808190408041L;
+
 	@Inject private CustomerTransform customerTransform;
 	@Inject private CreditDetailSimpleTransform creditDetailSimpleTransform;
 	

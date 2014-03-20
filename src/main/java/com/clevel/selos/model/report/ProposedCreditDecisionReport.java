@@ -31,6 +31,9 @@ public class ProposedCreditDecisionReport extends ReportModel{
     private String remark;
     private String disbursement;
     private BigDecimal holdLimitAmount;
+    private String path;
+
+    //Approved Credit
     private String uwDecision;
 
     private List<NewCreditTierDetailView> newCreditTierDetailViews;
@@ -217,6 +220,14 @@ public class ProposedCreditDecisionReport extends ReportModel{
 
     public void setUwDecision(String uwDecision) {
         this.uwDecision = uwDecision;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     @Override

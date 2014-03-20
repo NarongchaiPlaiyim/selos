@@ -5,6 +5,8 @@ import com.clevel.selos.dao.history.CaseCreationHistoryDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.BorrowerType;
+import com.clevel.selos.model.CaseRequestTypes;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
 import com.clevel.selos.model.db.master.User;
@@ -80,7 +82,11 @@ public class CaseCreation implements WSCaseCreation, Serializable {
                                         @WebParam(name = "accountNo8") String accountNo8,
                                         @WebParam(name = "accountNo9") String accountNo9,
                                         @WebParam(name = "accountNo10") String accountNo10,
-                                        @WebParam(name = "appInDateUW") String appInDateUW) {
+                                        @WebParam(name = "appInDateUW") String appInDateUW,
+                                        @WebParam(name = "refAppNumber") String refAppNumber,
+                                        @WebParam(name = "reason") String reason,
+                                        @WebParam(name = "checkNCB") String checkNCB,
+                                        @WebParam(name = "ssoId") String ssoId) {
 
         log.debug("newCase. (jobName: {}, caNumber: {}, oldCaNumber: {}, accountNo1: {}," +
                 " customerId: {}, customerName: {}, citizenId: {}, requestType: {}," +
@@ -88,15 +94,17 @@ public class CaseCreation implements WSCaseCreation, Serializable {
                 " appInDateBDM: {}, finalApproved: {}, parallel: {}, pending: {}, caExist: {}," +
                 " caEnd: {}, accountNo2: {}, accountNo3: {}, accountNo4: {}, accountNo5: {}," +
                 " accountNo6: {}, accountNo7: {}, accountNo8: {}, accountNo9: {}, accountNo10: {}," +
-                " appInDateUw: {})", jobName, caNumber, oldCaNumber, accountNo1, customerId, customerName,
+                " appInDateUw: {}, refAppNumber: {}, reason: {}, checkNCB: {}, ssoId: {})",
+                jobName, caNumber, oldCaNumber, accountNo1, customerId, customerName,
                 citizenId, requestType, customerType, bdmId, hubCode, regionCode, uwId, appInDateBDM,
                 finalApproved, parallel, pending, caExist, caEnd, accountNo2, accountNo3, accountNo4,
-                accountNo5, accountNo6, accountNo7, accountNo8, accountNo9, accountNo10, appInDateUW);
+                accountNo5, accountNo6, accountNo7, accountNo8, accountNo9, accountNo10, appInDateUW,
+                refAppNumber, reason, checkNCB, ssoId);
 
         Date now = new Date();
         CaseCreationHistory caseCreationHistory = new CaseCreationHistory(jobName, caNumber, oldCaNumber, accountNo1, customerId, customerName, citizenId, requestType, customerType,
                 bdmId, hubCode, regionCode, uwId, appInDateBDM, finalApproved, parallel, pending, caExist, caEnd, accountNo2, accountNo3, accountNo4,
-                accountNo5, accountNo6, accountNo7, accountNo8, accountNo9, accountNo10, appInDateUW, now, ActionResult.WAITING, "", "");
+                accountNo5, accountNo6, accountNo7, accountNo8, accountNo9, accountNo10, appInDateUW, refAppNumber, reason, checkNCB, ssoId, now, ActionResult.WAITING, "", "");
         CaseCreationResponse response = new CaseCreationResponse();
         //handle all un-expected exception
         try {
@@ -161,13 +169,13 @@ public class CaseCreation implements WSCaseCreation, Serializable {
                 log.debug("{}", response);
                 return response;
             }
-            if (requestType != 1) { //new credit
+            if (requestType != CaseRequestTypes.NEW_CASE.value() && requestType != CaseRequestTypes.APPEAL_CASE.value() && requestType != CaseRequestTypes.RESUBMIT_CASE.value()) { //new credit, appeal/resubmit
                 wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_DATA_INVALID, "(requestType)"));
                 response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.FIELD_DATA_INVALID, "(requestType)"), "");
                 log.debug("{}", response);
                 return response;
             }
-            if (customerType != 1 && customerType != 2) { //1-individual, 2-Juristic
+            if (customerType != BorrowerType.INDIVIDUAL.value() && customerType != BorrowerType.JURISTIC.value()) { //1-individual, 2-Juristic
                 wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_DATA_INVALID, "(customerType)"));
                 response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.FIELD_DATA_INVALID, "(customerType)"), "");
                 log.debug("{}", response);
@@ -184,14 +192,14 @@ public class CaseCreation implements WSCaseCreation, Serializable {
                     User user = null;
                     user = userDAO.findOneByCriteria(Restrictions.eq("id", bdmId), Restrictions.eq("userStatus", UserStatus.NORMAL));
                     if (user == null) {
-                        wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.INVALID_BDM, "(bdmId)"));
-                        response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.INVALID_BDM, "(bdmId)"), "");
+                        wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.INVALID_BDM, bdmId));
+                        response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.INVALID_BDM, bdmId), "");
                         log.debug("{}", response);
                         return response;
                     }
                 } catch (Exception ex) {
-                    wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.INVALID_BDM, "(bdmId)"));
-                    response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.INVALID_BDM, "(bdmId)"), "");
+                    wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.INVALID_BDM, bdmId));
+                    response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.INVALID_BDM, bdmId), "");
                     log.debug("{}", response);
                     return response;
                 }
@@ -208,12 +216,7 @@ public class CaseCreation implements WSCaseCreation, Serializable {
                 log.debug("{}", response);
                 return response;
             }
-            if (ValidationUtil.isNotNullAndGreaterThan(5, uwId)) { //Optional
-                wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(uwId)"));
-                response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(uwId)"), "");
-                log.debug("{}", response);
-                return response;
-            }
+
             if (ValidationUtil.isEmpty(appInDateBDM) || ValidationUtil.isGreaterThan(10, appInDateBDM)) {
                 wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(appInDateBDM)"));
                 response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(appInDateBDM)"), "");
@@ -315,6 +318,89 @@ public class CaseCreation implements WSCaseCreation, Serializable {
                 log.debug("{}", response);
                 return response;
             }
+
+            if(requestType == CaseRequestTypes.APPEAL_CASE.getValue() || requestType == CaseRequestTypes.RESUBMIT_CASE.getValue()) { //check require for Appeal/ReSubmit
+                if (ValidationUtil.isEmpty(uwId) || ValidationUtil.isGreaterThan(10, uwId)) {
+                    wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(uwId)"));
+                    response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(uwId)"), "");
+                    log.debug("{}", response);
+                    return response;
+                } else {
+                    //check for exist user
+                    try {
+                        User user = null;
+                        user = userDAO.findOneByCriteria(Restrictions.eq("id", uwId), Restrictions.eq("userStatus", UserStatus.NORMAL));
+                        if (user == null) {
+                            wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.INVALID_UW, uwId));
+                            response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.INVALID_UW, uwId), "");
+                            log.debug("{}", response);
+                            return response;
+                        }
+                    } catch (Exception ex) {
+                        wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.INVALID_UW, uwId));
+                        response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.INVALID_UW, uwId), "");
+                        log.debug("{}", response);
+                        return response;
+                    }
+                }
+                if (ValidationUtil.isEmpty(refAppNumber) || ValidationUtil.isGreaterThan(20, refAppNumber)) { //Required
+                    wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(refAppNumber)"));
+                    response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(refAppNumber)"), "");
+                    log.debug("{}", response);
+                    return response;
+                }
+                if (ValidationUtil.isEmpty(reason) || ValidationUtil.isGreaterThan(20, reason)) { //Required
+                    wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(reason)"));
+                    response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(reason)"), "");
+                    log.debug("{}", response);
+                    return response;
+                }
+                if (ValidationUtil.isEmpty(checkNCB) || ValidationUtil.isGreaterThan(1, checkNCB)) { //Required
+                    wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(checkNCB)"));
+                    response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(checkNCB)"), "");
+                    log.debug("{}", response);
+                    return response;
+                }
+
+                //TODO: validate product program
+                if (ValidationUtil.isEmpty(ssoId) || ValidationUtil.isGreaterThan(10, ssoId)) { //Required
+                    wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(ssoId)"));
+                    response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(ssoId)"), "");
+                    log.debug("{}", response);
+                    return response;
+                }
+            } /*else {
+                if (ValidationUtil.isNotNullAndGreaterThan(10, uwId)) { //Optional
+                    wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(uwId)"));
+                    response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(uwId)"), "");
+                    log.debug("{}", response);
+                    return response;
+                }
+                if (ValidationUtil.isNotNullAndGreaterThan(20, refAppNumber)) { //Optional
+                    wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(refAppNumber)"));
+                    response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(refAppNumber)"), "");
+                    log.debug("{}", response);
+                    return response;
+                }
+                if (ValidationUtil.isNotNullAndGreaterThan(20, reason)) { //Optional
+                    wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(reason)"));
+                    response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(reason)"), "");
+                    log.debug("{}", response);
+                    return response;
+                }
+                if (ValidationUtil.isNotNullAndGreaterThan(1, checkNCB)) { //Optional
+                    wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(checkNCB)"));
+                    response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(checkNCB)"), "");
+                    log.debug("{}", response);
+                    return response;
+                }
+                if (ValidationUtil.isNotNullAndGreaterThan(10, ssoId)) { //Optional , required if Appeal/ReSubmit QuickLoan
+                    wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(ssoId)"));
+                    response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(ssoId)"), "");
+                    log.debug("{}", response);
+                    return response;
+                }
+            }*/
 
             //generate ref number
             String applicationNumber = stpExecutor.getApplicationNumber("04");

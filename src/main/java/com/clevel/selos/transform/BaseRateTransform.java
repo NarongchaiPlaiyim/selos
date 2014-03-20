@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.master.BaseRateDAO;
 import com.clevel.selos.dao.working.BAPAInfoDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.BAPAInfo;
@@ -10,13 +11,18 @@ import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.BaseRateView;
 import com.clevel.selos.model.view.BasicInfoView;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.Date;
 
 public class BaseRateTransform extends Transform {
+    @SELOS
     @Inject
-    BaseRateDAO baseRateDAO;
+    private Logger log;
+
+    @Inject
+    private BaseRateDAO baseRateDAO;
 
     @Inject
     public BaseRateTransform() {
