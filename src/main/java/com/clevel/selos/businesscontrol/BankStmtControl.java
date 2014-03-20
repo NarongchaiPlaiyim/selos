@@ -898,8 +898,8 @@ public class BankStmtControl extends BusinessControl {
         }
 
         // Calculate Average from The last Six months
-        BigDecimal avgSwingPercent = Util.divide(sumSwingPctOfLastSixM, numMonthOvrLmtAmtOfLastSixM);
-        BigDecimal avgUtilizationPercent = Util.divide(sumUtilPctOfLastSixM, numMonthOvrLmtAmtOfLastSixM);
+        BigDecimal avgSwingPercent = Util.divide(sumSwingPctOfLastSixM, numMonthOvrLmtAmtOfLastSixM).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal avgUtilizationPercent = Util.divide(sumUtilPctOfLastSixM, numMonthOvrLmtAmtOfLastSixM).setScale(2, RoundingMode.HALF_UP);
 
         // avgGrossInflowPerLimit(%) = ([ SUM(grossCreditBalance) / Limit ] / [ 6 - NumberOfNonODLimit]) x 100
         BigDecimal avgGrossInflowPerLimit = Util.multiply(Util.divide( Util.divide(sumGrossCreditBalance, limit) , 6 - numMonthNonOvrLmtAmt), Util.ONE_HUNDRED);
