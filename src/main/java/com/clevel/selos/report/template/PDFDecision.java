@@ -3,6 +3,7 @@ package com.clevel.selos.report.template;
 import com.clevel.selos.businesscontrol.DecisionControl;
 import com.clevel.selos.controller.Decision;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
@@ -54,14 +55,14 @@ public class PDFDecision implements Serializable {
 //                log.error("Exception :: {}",ex);
 //            }
 //        }
-        long workCaseId = 147;
+        long workCaseId = 159;
 
         decisionView = decisionControl.getDecisionView(workCaseId);
 
         log.info("workCaseID: {}",workCaseId);
     }
 
-    public List<BorrowerCreditDecisionReport> fillCreditBorrower(){
+    public List<BorrowerCreditDecisionReport> fillCreditBorrower(String pathsub){
         log.debug("on fillCreditBorrower. {}");
         init();
         List<ExistingCreditDetailView> existingCreditDetailViews = decisionView.getExtBorrowerComCreditList();
@@ -73,6 +74,8 @@ public class PDFDecision implements Serializable {
             for (ExistingCreditDetailView detailView : existingCreditDetailViews){
                 BorrowerCreditDecisionReport decisionReport = new BorrowerCreditDecisionReport();
                 decisionReport.setCount(count++);
+                decisionReport.setPath(pathsub);
+                System.out.println("+++++++++++"+decisionReport.getPath());
                 decisionReport.setAccountName(Util.checkNullString(detailView.getAccountName()));
                 decisionReport.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
                 decisionReport.setAccountSuf(Util.checkNullString(detailView.getAccountSuf()));
@@ -90,6 +93,8 @@ public class PDFDecision implements Serializable {
             }
         } else {
             BorrowerCreditDecisionReport decisionReport = new BorrowerCreditDecisionReport();
+            decisionReport.setPath(pathsub);
+            System.out.println("+++++++++++"+decisionReport.getPath());
             borrowerCreditDecisionReportList.add(decisionReport);
             log.debug("existingCreditDetailViews is Null by fillCreditBorrower. {}",existingCreditDetailViews);
         }
@@ -120,7 +125,7 @@ public class PDFDecision implements Serializable {
         return conditionDecisionReportList;
     }
 
-    public List<BorrowerRetailDecisionReport> fillBorrowerRetail(){
+    public List<BorrowerRetailDecisionReport> fillBorrowerRetail(String pathsub){
         log.debug("on fillBorrowerRetail. {}");
         init();
         List<BorrowerRetailDecisionReport> retailDecisionReportList = new ArrayList<BorrowerRetailDecisionReport>();
@@ -132,6 +137,7 @@ public class PDFDecision implements Serializable {
             for (ExistingCreditDetailView detailView : existingConditionDetailViews){
                 BorrowerRetailDecisionReport borrowerRetailDecisionReport = new BorrowerRetailDecisionReport();
                 borrowerRetailDecisionReport.setCount(count++);
+                borrowerRetailDecisionReport.setPath(pathsub);
                 borrowerRetailDecisionReport.setAccountName(Util.checkNullString(detailView.getAccountName()));
                 borrowerRetailDecisionReport.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
                 borrowerRetailDecisionReport.setAccountSuf(Util.checkNullString(detailView.getAccountSuf()));
@@ -155,7 +161,7 @@ public class PDFDecision implements Serializable {
         return retailDecisionReportList;
     }
 
-    public List<BorrowerAppInRLOSDecisionReport> fillAppInRLOS(){
+    public List<BorrowerAppInRLOSDecisionReport> fillAppInRLOS(String pathsub){
         init();
         List<BorrowerAppInRLOSDecisionReport> borrowerAppInRLOSDecisionReportList = new ArrayList<BorrowerAppInRLOSDecisionReport>();
         List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtBorrowerAppInRLOSList();
@@ -166,6 +172,7 @@ public class PDFDecision implements Serializable {
             for (ExistingCreditDetailView detailView : existingConditionDetailViews){
                 BorrowerAppInRLOSDecisionReport borrowerAppInRLOSDecisionReport = new BorrowerAppInRLOSDecisionReport();
                 borrowerAppInRLOSDecisionReport.setCount(count++);
+                borrowerAppInRLOSDecisionReport.setPath(pathsub);
                 borrowerAppInRLOSDecisionReport.setAccountName(Util.checkNullString(detailView.getAccountName()));
                 borrowerAppInRLOSDecisionReport.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
                 borrowerAppInRLOSDecisionReport.setAccountSuf(Util.checkNullString(detailView.getAccountSuf()));
@@ -189,7 +196,7 @@ public class PDFDecision implements Serializable {
         return borrowerAppInRLOSDecisionReportList;
     }
 
-    public List<RelatedCommercialDecisionReport> fillRelatedCommercial(){
+    public List<RelatedCommercialDecisionReport> fillRelatedCommercial(String pathsub){
         List<RelatedCommercialDecisionReport> relatedCommercialDecisionReportList = new ArrayList<RelatedCommercialDecisionReport>();
         List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtRelatedComCreditList();
 
@@ -199,6 +206,7 @@ public class PDFDecision implements Serializable {
             for (ExistingCreditDetailView detailView : existingConditionDetailViews){
                 RelatedCommercialDecisionReport relatedCommercialDecisionReport = new RelatedCommercialDecisionReport();
                 relatedCommercialDecisionReport.setCount(count++);
+                relatedCommercialDecisionReport.setPath(pathsub);
                 relatedCommercialDecisionReport.setAccountName(Util.checkNullString(detailView.getAccountName()));
                 relatedCommercialDecisionReport.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
                 relatedCommercialDecisionReport.setAccountSuf(Util.checkNullString(detailView.getAccountSuf()));
@@ -223,7 +231,7 @@ public class PDFDecision implements Serializable {
         return relatedCommercialDecisionReportList;
     }
 
-    public List<RelatedRetailDecisionReport> fillRelatedRetail(){
+    public List<RelatedRetailDecisionReport> fillRelatedRetail(String pathsub){
         List<RelatedRetailDecisionReport> relatedRetailDecisionReportList = new ArrayList<RelatedRetailDecisionReport>();
         List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtRelatedRetailCreditList();
 
@@ -233,6 +241,7 @@ public class PDFDecision implements Serializable {
             for (ExistingCreditDetailView detailView : existingConditionDetailViews){
                 RelatedRetailDecisionReport relatedRetailDecisionReport = new RelatedRetailDecisionReport();
                 relatedRetailDecisionReport.setCount(count++);
+                relatedRetailDecisionReport.setPath(pathsub);
                 relatedRetailDecisionReport.setAccountName(Util.checkNullString(detailView.getAccountName()));
                 relatedRetailDecisionReport.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
                 relatedRetailDecisionReport.setAccountSuf(Util.checkNullString(detailView.getAccountSuf()));
@@ -257,7 +266,7 @@ public class PDFDecision implements Serializable {
         return relatedRetailDecisionReportList;
     }
 
-    public List<RelatedAppInRLOSDecisionReport> fillRelatedAppInRLOS(){
+    public List<RelatedAppInRLOSDecisionReport> fillRelatedAppInRLOS(String pathsub){
         List<RelatedAppInRLOSDecisionReport> relatedAppInRLOSDecisionReportArrayList = new ArrayList<RelatedAppInRLOSDecisionReport>();
         List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtRelatedAppInRLOSList();
 
@@ -267,6 +276,7 @@ public class PDFDecision implements Serializable {
             for (ExistingCreditDetailView detailView : decisionView.getExtRelatedAppInRLOSList()){
                 RelatedAppInRLOSDecisionReport relatedAppInRLOSDecisionReport = new RelatedAppInRLOSDecisionReport();
                 relatedAppInRLOSDecisionReport.setCount(count++);
+                relatedAppInRLOSDecisionReport.setPath(pathsub);
                 relatedAppInRLOSDecisionReport.setAccountName(Util.checkNullString(detailView.getAccountName()));
                 relatedAppInRLOSDecisionReport.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
                 relatedAppInRLOSDecisionReport.setAccountSuf(Util.checkNullString(detailView.getAccountSuf()));
@@ -373,7 +383,7 @@ public class PDFDecision implements Serializable {
         return collateralRelatedDecisionReportArrayList;
     }
 
-    public List<GuarantorBorrowerDecisionReport> fillGuarantorBorrower(){
+    public List<GuarantorBorrowerDecisionReport> fillGuarantorBorrower(String pathsub){
         init();
         List<GuarantorBorrowerDecisionReport> guarantorBorrowerDecisionReportList = new ArrayList<GuarantorBorrowerDecisionReport>();
         List<ExistingGuarantorDetailView> extGuarantorList = decisionView.getExtGuarantorList();
@@ -383,6 +393,7 @@ public class PDFDecision implements Serializable {
             for (ExistingGuarantorDetailView detailView : extGuarantorList){
                 GuarantorBorrowerDecisionReport guarantorBorrowerDecisionReport = new GuarantorBorrowerDecisionReport();
                 guarantorBorrowerDecisionReport.setCount(count++);
+                guarantorBorrowerDecisionReport.setPath(pathsub);
                 guarantorBorrowerDecisionReport.setGuarantorName(Util.checkNullString(detailView.getGuarantorName().getFirstNameTh()+"  "+detailView.getGuarantorName().getLastNameTh()));
                 guarantorBorrowerDecisionReport.setTcgLgNo(Util.checkNullString(detailView.getTcgLgNo()));
                 guarantorBorrowerDecisionReport.setExistingCreditTypeDetailViewList(Util.safetyList(detailView.getExistingCreditTypeDetailViewList()));
@@ -398,7 +409,7 @@ public class PDFDecision implements Serializable {
         return guarantorBorrowerDecisionReportList;
     }
 
-    public List<ProposedCreditDecisionReport> fillProposedCredit(){
+    public List<ProposedCreditDecisionReport> fillProposedCredit(String pathsub){
         log.debug("on fillProposedCredit. {}");
         init();
         newCreditDetailViewList = decisionView.getProposeCreditList();
@@ -410,6 +421,7 @@ public class PDFDecision implements Serializable {
             for (NewCreditDetailView detailView : newCreditDetailViewList){
                 ProposedCreditDecisionReport proposedView = new ProposedCreditDecisionReport();
                 proposedView.setCount(count++);
+                proposedView.setPath(pathsub);
                 proposedView.setProdName(Util.checkNullString(detailView.getProductProgramView().getName()));
 
                 if ((detailView.getUwDecision()) == DecisionType.APPROVED){
@@ -496,7 +508,7 @@ public class PDFDecision implements Serializable {
         return proposeFeeInformationDecisionReportList;
     }
 
-    public List<ProposedCollateralDecisionReport> fillProposedCollateral(){
+    public List<ProposedCollateralDecisionReport> fillProposedCollateral(String pathsub){
         init();
         List<ProposedCollateralDecisionReport> proposedCollateralDecisionReportList = new ArrayList<ProposedCollateralDecisionReport>();
         List<NewCollateralView> newCollateralViews = decisionView.getProposeCollateralList();
@@ -507,6 +519,7 @@ public class PDFDecision implements Serializable {
             for (NewCollateralView view : newCollateralViews){
                 ProposedCollateralDecisionReport collateralDecisionReport = new ProposedCollateralDecisionReport();
                 collateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
+                collateralDecisionReport.setPath(pathsub);
                 collateralDecisionReport.setAppraisalDate(view.getAppraisalDate());
                 collateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecision()));
                 collateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
@@ -566,7 +579,7 @@ public class PDFDecision implements Serializable {
         return proposedCollateralDecisionReportList;
     }
 
-    public List<ApprovedCollateralDecisionReport> fillApprovedCollaterral(){
+    public List<ApprovedCollateralDecisionReport> fillApprovedCollaterral(String pathsub){
         init();
         List<ApprovedCollateralDecisionReport> approvedCollateralDecisionReportArrayList = new ArrayList<ApprovedCollateralDecisionReport>();
         List<NewCollateralView> newCollateralViews = decisionView.getApproveCollateralList();
@@ -577,6 +590,7 @@ public class PDFDecision implements Serializable {
             for (NewCollateralView view : newCollateralViews){
                 ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
                 approvedCollateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
+                approvedCollateralDecisionReport.setPath(pathsub);
                 approvedCollateralDecisionReport.setAppraisalDate(view.getAppraisalDate());
                 approvedCollateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecision()));
                 approvedCollateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
@@ -636,7 +650,7 @@ public class PDFDecision implements Serializable {
         return approvedCollateralDecisionReportArrayList;
     }
 
-    public List<ProposedGuarantorDecisionReport> fillProposedGuarantor(){
+    public List<ProposedGuarantorDecisionReport> fillProposedGuarantor(String pathsub){
         init();
         List<ProposedGuarantorDecisionReport> proposedGuarantorDecisionReportList = new ArrayList<ProposedGuarantorDecisionReport>();
         List<NewGuarantorDetailView> detailViews = decisionView.getApproveGuarantorList();
@@ -647,6 +661,7 @@ public class PDFDecision implements Serializable {
             for (NewGuarantorDetailView view : detailViews){
                 ProposedGuarantorDecisionReport guarantorDecisionReport = new ProposedGuarantorDecisionReport();
                 guarantorDecisionReport.setCount(count++);
+                guarantorDecisionReport.setPath(pathsub);
                 guarantorDecisionReport.setName(Util.checkNullString(view.getGuarantorName().getTitleTh().getTitleTh()+view.getGuarantorName().getFirstNameTh()+" "+view.getGuarantorName().getLastNameTh()));
                 guarantorDecisionReport.setTcgLgNo(Util.checkNullString(view.getTcgLgNo()));
                 guarantorDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditDetailViewList()));
@@ -661,17 +676,18 @@ public class PDFDecision implements Serializable {
         return proposedGuarantorDecisionReportList;
     }
 
-    public List<ApprovedGuarantorDecisionReport> fillApprovedCollateral(){
+    public List<ApprovedGuarantorDecisionReport> fillApprovedGuarantor(String pathsub){
         init();
         List<ApprovedGuarantorDecisionReport> approvedGuarantorDecisionReportList = new ArrayList<ApprovedGuarantorDecisionReport>();
         List<NewGuarantorDetailView> newGuarantorDetails = decisionView.getApproveGuarantorList();
 
         int count = 1;
         if (Util.safetyList(newGuarantorDetails).size() > 0){
-            log.debug("newGuarantorDetails by fillApprovedCollateral. {}",newGuarantorDetails);
+            log.debug("newGuarantorDetails by fillApprovedGuarantor. {}",newGuarantorDetails);
             for (NewGuarantorDetailView view : newGuarantorDetails){
                 ApprovedGuarantorDecisionReport approvedGuarantorDecisionReport = new ApprovedGuarantorDecisionReport();
                 approvedGuarantorDecisionReport.setCount(count++);
+                approvedGuarantorDecisionReport.setPath(pathsub);
                 approvedGuarantorDecisionReport.setName(Util.checkNullString(view.getGuarantorName().getTitleTh().getTitleTh()+view.getGuarantorName().getFirstNameTh()+" "+view.getGuarantorName().getLastNameTh()));
                 approvedGuarantorDecisionReport.setTcgLgNo(Util.checkNullString(view.getTcgLgNo()));
                 approvedGuarantorDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditDetailViewList()));
@@ -686,7 +702,7 @@ public class PDFDecision implements Serializable {
                 approvedGuarantorDecisionReportList.add(approvedGuarantorDecisionReport);
             }
         } else {
-            log.debug("newGuarantorDetails is Null by fillApprovedCollateral. {}",newGuarantorDetails);
+            log.debug("newGuarantorDetails is Null by fillApprovedGuarantor. {}",newGuarantorDetails);
             ApprovedGuarantorDecisionReport approvedGuarantorDecisionReport = new ApprovedGuarantorDecisionReport();
             approvedGuarantorDecisionReportList.add(approvedGuarantorDecisionReport);
         }
@@ -744,5 +760,104 @@ public class PDFDecision implements Serializable {
         }
 
         return approvalHistoryDecisionReportArrayList;
+    }
+
+    public TotalDecisionReport fillTotalMasterReport(){
+        init();
+        TotalDecisionReport totalDecisionReport = new TotalDecisionReport();
+
+        //Existing Credit Borrower
+        //Commercial Credit
+        totalDecisionReport.setExtBorrowerTotalComLimit(Util.convertNullToZERO(decisionView.getExtBorrowerTotalComLimit()));
+        //Retail Credit
+        totalDecisionReport.setExtBorrowerTotalRetailLimit(Util.convertNullToZERO(decisionView.getExtBorrowerTotalRetailLimit()));
+        //App in RLOS Process
+        totalDecisionReport.setExtBorrowerTotalAppInRLOSLimit(Util.convertNullToZERO(decisionView.getExtBorrowerTotalAppInRLOSLimit()));
+        //Borrower
+        totalDecisionReport.setExtBorrowerTotalCommercial(Util.convertNullToZERO(decisionView.getExtBorrowerTotalCommercial()));
+        totalDecisionReport.setExtBorrowerTotalComAndOBOD(Util.convertNullToZERO(decisionView.getExtBorrowerTotalComAndOBOD()));
+        totalDecisionReport.setExtBorrowerTotalExposure(Util.convertNullToZERO(decisionView.getExtBorrowerTotalExposure()));
+
+        //Existing Credit Related Person
+        //Commercial Credit
+        totalDecisionReport.setExtRelatedTotalComLimit(Util.convertNullToZERO(decisionView.getExtRelatedTotalComLimit()));
+        //Retail Credit
+        totalDecisionReport.setExtRelatedTotalRetailLimit(Util.convertNullToZERO(decisionView.getExtRelatedTotalRetailLimit()));
+        //App in RLOS Process
+        totalDecisionReport.setExtRelatedTotalAppInRLOSLimit(Util.convertNullToZERO(decisionView.getExtRelatedTotalAppInRLOSLimit()));
+
+        //Total Related
+        totalDecisionReport.setExtRelatedTotalCommercial(Util.convertNullToZERO(decisionView.getExtRelatedTotalCommercial()));
+        totalDecisionReport.setExtRelatedTotalComAndOBOD(Util.convertNullToZERO(decisionView.getExtRelatedTotalComAndOBOD()));
+        totalDecisionReport.setExtRelatedTotalExposure(Util.convertNullToZERO(decisionView.getExtRelatedTotalExposure()));
+
+        //Total Group
+        totalDecisionReport.setExtGroupTotalCommercial(Util.convertNullToZERO(decisionView.getExtGroupTotalCommercial()));
+        totalDecisionReport.setExtGroupTotalComAndOBOD(Util.convertNullToZERO(decisionView.getExtGroupTotalComAndOBOD()));
+        totalDecisionReport.setExtGroupTotalExposure(Util.convertNullToZERO(decisionView.getExtGroupTotalExposure()));
+
+        //Existing Collateral Borrower
+        totalDecisionReport.setExtBorrowerTotalAppraisalValue(Util.convertNullToZERO(decisionView.getExtBorrowerTotalAppraisalValue()));
+        totalDecisionReport.setExtBorrowerTotalMortgageValue(Util.convertNullToZERO(decisionView.getExtBorrowerTotalMortgageValue()));
+
+        //Existing Related Person
+        totalDecisionReport.setExtRelatedTotalAppraisalValue(decisionView.getExtRelatedTotalAppraisalValue());
+        totalDecisionReport.setExtRelatedTotalMortgageValue(Util.convertNullToZERO(decisionView.getExtRelatedTotalMortgageValue()));
+
+        //Existing Guarantor
+        //Borrower
+        totalDecisionReport.setExtTotalGuaranteeAmount(Util.convertNullToZERO(decisionView.getExtTotalGuaranteeAmount()));
+        //Propose Credit
+        totalDecisionReport.setProposeTotalCreditLimit(Util.convertNullToZERO(decisionView.getProposeTotalCreditLimit()));
+
+        //Approved Propose Credit
+        totalDecisionReport.setApproveTotalCreditLimit(Util.convertNullToZERO(decisionView.getApproveTotalCreditLimit()));
+        if (decisionView.getCreditCustomerType() == CreditCustomerType.NORMAL){
+            totalDecisionReport.setCreditCusType(1);
+        } else if (decisionView.getCreditCustomerType() == CreditCustomerType.PRIME){
+            totalDecisionReport.setCreditCusType(2);
+        } else {
+            totalDecisionReport.setCreditCusType(0);
+        }
+        totalDecisionReport.setCrdRequestTypeName(Util.checkNullString(decisionView.getLoanRequestType().getName()));
+        totalDecisionReport.setCountryName(Util.checkNullString(decisionView.getInvestedCountry().getName()));
+        totalDecisionReport.setExistingSMELimit(Util.convertNullToZERO(decisionView.getExistingSMELimit()));
+        totalDecisionReport.setMaximumSMELimit(Util.convertNullToZERO(decisionView.getMaximumSMELimit()));
+
+        //Total Borrower
+        totalDecisionReport.setApproveBrwTotalCommercial(Util.convertNullToZERO(decisionView.getApproveBrwTotalCommercial()));
+        totalDecisionReport.setApproveBrwTotalComAndOBOD(Util.convertNullToZERO(decisionView.getApproveBrwTotalComAndOBOD()));
+        totalDecisionReport.setApproveTotalExposure(Util.convertNullToZERO(decisionView.getApproveTotalExposure()));
+
+        //Proposed Guarantor
+        totalDecisionReport.setProposeTotalGuaranteeAmt(Util.convertNullToZERO(decisionView.getProposeTotalGuaranteeAmt()));
+
+        //Approved Guarantor
+        totalDecisionReport.setApproveTotalGuaranteeAmt(Util.convertNullToZERO(decisionView.getApproveTotalGuaranteeAmt()));
+
+        return totalDecisionReport;
+    }
+
+    public FollowUpConditionDecisionReport fillFollowDetail(){
+        init();
+        FollowUpConditionDecisionReport followUpConditionDecisionReport = new FollowUpConditionDecisionReport();
+
+        for (DecisionFollowConditionView view : decisionView.getDecisionFollowConditionViewList()){
+            followUpConditionDecisionReport.setConditionView(Util.checkNullString(view.getConditionView().getName()));
+            followUpConditionDecisionReport.setDetail(Util.checkNullString(view.getDetail()));
+            followUpConditionDecisionReport.setFollwDateDetaill(view.getFollowDate());
+        }
+
+        return followUpConditionDecisionReport;
+    }
+
+    public PriceFeeDecisionReport fillPriceFee(){
+        init();
+        PriceFeeDecisionReport priceFeeDecisionReport = new PriceFeeDecisionReport();
+        priceFeeDecisionReport.setIntFeeDOA(Util.convertNullToZERO(decisionView.getIntFeeDOA()));
+        priceFeeDecisionReport.setFrontendFeeDOA(Util.convertNullToZERO(decisionView.getFrontendFeeDOA()));
+        priceFeeDecisionReport.setGuarantorBA(Util.convertNullToZERO(decisionView.getGuarantorBA()));
+        priceFeeDecisionReport.setReasonForReduction(Util.checkNullString(decisionView.getReasonForReduction()));
+        return priceFeeDecisionReport;
     }
 }
