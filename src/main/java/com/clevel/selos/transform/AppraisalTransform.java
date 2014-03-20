@@ -19,7 +19,11 @@ import javax.inject.Inject;
 import java.util.Date;
 import java.util.List;
 
-public class AppraisalTransform extends Transform {
+public class AppraisalTransform {
+    @Inject
+    @SELOS
+    Logger log;
+
     @Inject
     private AppraisalDAO appraisalDAO;
     //private AppraisalView appraisalView;

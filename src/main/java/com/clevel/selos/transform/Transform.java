@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import java.io.Serializable;
 
 public abstract class Transform implements Serializable {
-
     @Inject
     @SELOS
     Logger log;

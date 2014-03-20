@@ -14,7 +14,11 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppraisalContactDetailTransform extends Transform {
+public class AppraisalContactDetailTransform {
+    @Inject
+    @SELOS
+    Logger log;
+
     @Inject
     private AppraisalContactDetailDAO appraisalContactDetailDAO;
     private AppraisalContactDetailView appraisalContactDetailView;

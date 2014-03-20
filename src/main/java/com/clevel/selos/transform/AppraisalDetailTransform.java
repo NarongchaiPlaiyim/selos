@@ -21,7 +21,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppraisalDetailTransform extends Transform {
+public class AppraisalDetailTransform {
+    @Inject
+    @SELOS
+    Logger log;
+
     @Inject
     @NormalMessage
     private Message msg;

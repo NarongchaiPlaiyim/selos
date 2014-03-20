@@ -18,6 +18,7 @@ public class CheckMandateDocTransform {
     private Logger log;
     private CheckMandateDocView checkMandateDocView;
     private MandateDoc mandateDoc;
+
     @Inject
     public CheckMandateDocTransform() {
         init();

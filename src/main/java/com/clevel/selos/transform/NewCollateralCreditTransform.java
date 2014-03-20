@@ -22,7 +22,6 @@ public class NewCollateralCreditTransform extends Transform {
     @Inject
     NewCollateralCreditDAO newCollateralRelationDAO;
 
-
     public List<NewCollateralCredit> transformsToModelForCollateral(List<ProposeCreditDetailView> proposeCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewCollateral newCollateralDetail,NewCreditFacility newCreditFacility,ProposeType proposeType, User user) {
        log.info("proposeCreditDetailViewList size :: {}",proposeCreditDetailViewList.size());
         List<NewCollateralCredit> newCollateralCreditList = new ArrayList<NewCollateralCredit>();

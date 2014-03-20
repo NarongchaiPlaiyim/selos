@@ -16,10 +16,6 @@ import java.util.List;
 
 public class NewCollateralHeadTransform extends Transform {
     @Inject
-    @SELOS
-    Logger log;
-
-    @Inject
     private NewCollateralSubTransform newCollateralSubTransform;
     private List<NewCollateralHead> newCollateralHeadList;
     private List<NewCollateralHeadView> newCollateralHeadViewList;

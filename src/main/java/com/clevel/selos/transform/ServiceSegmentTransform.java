@@ -14,7 +14,6 @@ public class ServiceSegmentTransform  extends Transform{
 
     @Inject
     public ServiceSegmentTransform(){
-
     }
 
     public ServiceSegmentView transformToView(ServiceSegment serviceSegment){

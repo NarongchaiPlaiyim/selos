@@ -16,8 +16,6 @@ import javax.inject.Inject;
 
 
 public class NCBTransform extends Transform {
-
-
     @Inject
     LoanAccountTypeTransform loanAccountTypeTransform;
     @Inject
@@ -28,7 +26,6 @@ public class NCBTransform extends Transform {
     MaritalStatusDAO maritalStatusDAO;
     @Inject
     NCBDAO ncbDAO;
-
 
     public NCB transformToModel(NCBInfoView ncbInfoView) {
         NCB ncb = new NCB();
