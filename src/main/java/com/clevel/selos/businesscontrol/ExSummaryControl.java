@@ -249,12 +249,11 @@ public class ExSummaryControl extends BusinessControl {
                         bizPermission = bizPermission.append(bizPermissionList.get(i).concat(", "));
                     }
                 }
-                if(bizPermission != null && bizPermission.toString().trim().equalsIgnoreCase("")){
-                    exSummaryView.setBusinessPermission("-");
-                } else {
-                    exSummaryView.setBusinessPermission(bizPermission.toString());
-                }
+                exSummaryView.setBusinessPermission(bizPermission.toString());
                 exSummaryView.setExpiryDate(bizInfoDetailViewList.get(tmpIndexHighestExpire).getBizDocExpiryDate());
+            } else {
+                exSummaryView.setBusinessPermission("-");
+                exSummaryView.setExpiryDate(null);
             }
         } else {
             exSummaryView.setExSumBusinessInfoView(null);
@@ -275,7 +274,7 @@ public class ExSummaryControl extends BusinessControl {
 //                กรณีผู้กู้ = Juristic
 //        ใช้ ""วันจดทะเบียนนิติบุคคล"" หรือ วันก่อตั้งกิจการ/อ้างอิงประสบการณ์"" Whichever is longer"
         if(bizInfoSummaryView != null && bizInfoSummaryView.getId() != 0){
-            if(DateTimeUtil.compareDate(bizInfoSummaryView.getRegistrationDate(),bizInfoSummaryView.getEstablishDate()) > 0){
+            if(DateTimeUtil.compareDate(bizInfoSummaryView.getRegistrationDate(),bizInfoSummaryView.getEstablishDate()) < 0){
                 exSumCharacteristicView.setStartBusinessDate(bizInfoSummaryView.getRegistrationDate());
             } else {
                 exSumCharacteristicView.setStartBusinessDate(bizInfoSummaryView.getEstablishDate());

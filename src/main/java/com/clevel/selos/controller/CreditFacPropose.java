@@ -316,7 +316,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
             try {
                 WorkCase workCase = workCaseDAO.findById(workCaseId);
-
+                log.info("workCase :: {}",workCase.getId());
                 if(!Util.isNull(workCase)){
                     productGroup = workCase.getProductGroup();
                     log.info("productGroup :: {}",productGroup.getId());
@@ -1655,9 +1655,11 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             creditFacProposeControl.calculateTotalForBRMS(newCreditFacilityView);
             // Save NewCreditFacility, ProposeCredit, Collateral, Guarantor
             newCreditFacilityView = creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
+//            creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
+            onCreation();
 
             exSummaryControl.calForCreditFacility(workCaseId);
-            onCreation();
+
             notRetrievePricing = false;
 
             messageHeader = msg.get("app.messageHeader.info");
