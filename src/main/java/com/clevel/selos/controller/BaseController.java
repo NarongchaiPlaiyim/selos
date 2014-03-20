@@ -236,12 +236,9 @@ public class BaseController implements Serializable {
 
     public boolean checkButton(String buttonName){
         boolean check = false;
-        try{
+        if(stepStatusMap!=null && stepStatusMap.containsKey(buttonName)){
             check = Util.isTrue(stepStatusMap.get(buttonName));
-        }catch (Exception ex){
-            log.error("not found key for button at this step.");
         }
-
         return check;
     }
 
