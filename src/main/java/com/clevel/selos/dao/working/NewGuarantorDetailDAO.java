@@ -68,5 +68,13 @@ public class NewGuarantorDetailDAO extends GenericDAO<NewGuarantorDetail, Long> 
         return newGuarantorDetail;
     }
 
+    public List<NewGuarantorDetail> findByCustomerId(long customerId) {
+        log.info("findByCustomerId : {}", customerId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("customer.id", customerId));
+        criteria.addOrder(Order.asc("id"));
+        List<NewGuarantorDetail> newGuarantorDetails = criteria.list();
 
+        return newGuarantorDetails;
+    }
 }

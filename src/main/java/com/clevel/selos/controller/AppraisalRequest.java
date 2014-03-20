@@ -97,9 +97,6 @@ public class AppraisalRequest implements Serializable {
     private void init(){
         log.debug("init...");
         modeForButton = ModeForButton.ADD;
-        appraisalView = new AppraisalView();
-        appraisalContactDetailView = new AppraisalContactDetailView();
-        appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
         appraisalDetailView = new AppraisalDetailView();
         appraisalDetailViewDialog = new AppraisalDetailView();
         appraisalDetailViewSelected = new AppraisalDetailView();
@@ -124,7 +121,6 @@ public class AppraisalRequest implements Serializable {
     public void preRender(){
         log.debug("preRender...");
         HttpSession session = FacesUtil.getSession(true);
-
         if(checkSession(session)){
             stepId = (Long)session.getAttribute("stepId");
             if(stepId != StepValue.PRESCREEN_MAKER.value() && stepId != StepValue.FULLAPP_BDM_SSO_ABDM.value()){
@@ -172,10 +168,14 @@ public class AppraisalRequest implements Serializable {
                 log.debug("onCreation ::: appraisalContactDetailView.id : [{}]", appraisalContactDetailView.getId());
             } else {
                 appraisalView = new AppraisalView();
+                log.debug("-- AppraisalView[New] created");
+                appraisalContactDetailView = new AppraisalContactDetailView();
+                log.debug("-- AppraisalContactDetailView[New] created");
+                appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+                log.debug("-- AppraisalDetailViewList[New] created");
             }
         } else {
             //TODO Show dialog for exception cannot load data from database.
-
         }
     }
 
@@ -205,8 +205,11 @@ public class AppraisalRequest implements Serializable {
         numberOfDocumentsFlag = false;
         modeForButton = ModeForButton.EDIT;
         log.debug("-- onEditAppraisalDetailView() RowIndex[{}]", rowIndex);
-        appraisalDetailViewDialog = appraisalDetailViewSelected;
+        Cloner cloner = new Cloner();
+        appraisalDetailViewDialog = cloner.deepClone(appraisalDetailViewSelected);
     }
+
+
 
     public void onAddAppraisalDetailView(){
         log.info("-- onAddAppraisalDetailView() ModeForButton[ADD]");
@@ -266,7 +269,7 @@ public class AppraisalRequest implements Serializable {
     }
 
 
-    private boolean appraisalDetailViewMandate(){
+    public boolean appraisalDetailViewMandate(){
         log.debug("-- appraisalDetailViewMandate()");
         boolean result = true;
         if(Util.isZero(appraisalDetailViewDialog.getTitleDeed().length())){
@@ -295,7 +298,7 @@ public class AppraisalRequest implements Serializable {
 
         return result;
     }
-    private boolean appraisalContactDetailViewMandate(){
+    public boolean appraisalContactDetailViewMandate(){
         log.debug("-- appraisalContactDetailViewMandate()");
         //todo :  2 0 21
         boolean result = true;

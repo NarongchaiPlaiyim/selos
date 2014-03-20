@@ -21,21 +21,18 @@ public class ReportService implements Serializable {
     @Inject
     @SELOS
     Logger log;
-    protected String reportTemplate;
-    protected String reportFileName;
-    protected StreamedContent reportFile;
-
 
     public void init(){
-
     }
 
     public void generatePDF(String fileName, Map<String,Object> parameters,String pdfName) throws JRException, IOException {
         log.debug("generate pdf.");
         JasperReport jasperReport = JasperCompileManager.compileReport(fileName);
+
         JasperPrint print ;
 
         log.info("parameters: {}",parameters);
+
 
         print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
 

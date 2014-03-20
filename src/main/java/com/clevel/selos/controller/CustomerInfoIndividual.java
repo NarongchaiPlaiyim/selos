@@ -1101,6 +1101,23 @@ public class CustomerInfoIndividual implements Serializable {
                     customerInfoView.setSearchBy(customerInfoSearch.getSearchBy());
                     customerInfoView.setSearchId(customerInfoSearch.getSearchId());
                     customerInfoView.setCollateralOwner(1);
+
+                    //set default country
+                    if(customerInfoView.getCitizenCountry() != null){
+                        customerInfoView.getCitizenCountry().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.setCitizenCountry(country);
+                    }
+                    if(customerInfoView.getSourceIncome() != null){
+                        customerInfoView.getSourceIncome().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.setSourceIncome(country);
+                    }
+
                     if(customerInfoView.getDateOfBirth() != null){
                         customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
                     }
@@ -1156,6 +1173,23 @@ public class CustomerInfoIndividual implements Serializable {
                                     customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
                                     customerInfoView.getSpouse().setSearchFromRM(1);
                                     customerInfoView.getSpouse().setCollateralOwner(1);
+
+                                    //set default country
+                                    if(customerInfoView.getSpouse().getCitizenCountry() != null){
+                                        customerInfoView.getSpouse().getCitizenCountry().setId(211);
+                                    } else {
+                                        Country country = new Country();
+                                        country.setId(211);
+                                        customerInfoView.getSpouse().setCitizenCountry(country);
+                                    }
+                                    if(customerInfoView.getSpouse().getSourceIncome() != null){
+                                        customerInfoView.getSpouse().getSourceIncome().setId(211);
+                                    } else {
+                                        Country country = new Country();
+                                        country.setId(211);
+                                        customerInfoView.getSpouse().setSourceIncome(country);
+                                    }
+
                                     if(customerInfoView.getSpouse().getDateOfBirth() != null){
                                         customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
                                     }
@@ -1319,6 +1353,22 @@ public class CustomerInfoIndividual implements Serializable {
                         reference.setId(refId);
                         customerInfoView.setReference(reference);
 
+                        //set default country
+                        if(customerInfoView.getCitizenCountry() != null){
+                            customerInfoView.getCitizenCountry().setId(211);
+                        } else {
+                            Country country = new Country();
+                            country.setId(211);
+                            customerInfoView.setCitizenCountry(country);
+                        }
+                        if(customerInfoView.getSourceIncome() != null){
+                            customerInfoView.getSourceIncome().setId(211);
+                        } else {
+                            Country country = new Country();
+                            country.setId(211);
+                            customerInfoView.setSourceIncome(country);
+                        }
+
                         if(customerInfoView.getCurrentAddress() != null && customerInfoView.getRegisterAddress() != null){
                             if(customerInfoControl.checkAddress(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress()) == 1){
                                 customerInfoView.getRegisterAddress().setAddressTypeFlag(1);
@@ -1354,6 +1404,22 @@ public class CustomerInfoIndividual implements Serializable {
                                     Reference referenceSpouse = new Reference();
                                     referenceSpouse.setId(refSpoId);
                                     customerInfoView.getSpouse().setReference(referenceSpouse);
+
+                                    //set default country
+                                    if(customerInfoView.getSpouse().getCitizenCountry() != null){
+                                        customerInfoView.getSpouse().getCitizenCountry().setId(211);
+                                    } else {
+                                        Country country = new Country();
+                                        country.setId(211);
+                                        customerInfoView.getSpouse().setCitizenCountry(country);
+                                    }
+                                    if(customerInfoView.getSpouse().getSourceIncome() != null){
+                                        customerInfoView.getSpouse().getSourceIncome().setId(211);
+                                    } else {
+                                        Country country = new Country();
+                                        country.setId(211);
+                                        customerInfoView.getSpouse().setSourceIncome(country);
+                                    }
 
                                     if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
                                         if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress()) == 1){
@@ -1506,6 +1572,22 @@ public class CustomerInfoIndividual implements Serializable {
                         customerInfoView.getSpouse().setSearchId(customerInfoSearchSpouse.getSearchId());
                     }
 
+                    //set default country
+                    if(customerInfoView.getSpouse().getCitizenCountry() != null){
+                        customerInfoView.getSpouse().getCitizenCountry().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.getSpouse().setCitizenCountry(country);
+                    }
+                    if(customerInfoView.getSpouse().getSourceIncome() != null){
+                        customerInfoView.getSpouse().getSourceIncome().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.getSpouse().setSourceIncome(country);
+                    }
+
                     if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
                         if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress()) == 1){
                             customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(1);
@@ -1632,26 +1714,24 @@ public class CustomerInfoIndividual implements Serializable {
         customerInfoView.setReference(mainRef);
 
         if(customerInfoView.getId() != 0){
-            boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getId());
+            boolean isExist = customerInfoControl.checkExistingAll(customerInfoView.getId());
             if(isExist){
                 if(customerInfoView.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                         || customerInfoView.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                     messageHeader = "Information.";
-                    message = "Cannot change customer type from Guarantor to Related. " +
-                            "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
+                    message = msg.get("app.message.customer.existing.error");
                     severity = "info";
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return;
                 }
             } else {
                 if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getId() != 0){
-                    boolean isExistSpouse = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getSpouse().getId());
+                    boolean isExistSpouse = customerInfoControl.checkExistingAll(customerInfoView.getSpouse().getId());
                     if(isExistSpouse){
                         if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                                 || customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                             messageHeader = "Information.";
-                            message = "Cannot change customer type from Guarantor to Related. " +
-                                    "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
+                            message = msg.get("app.message.customer.existing.error");
                             severity = "info";
                             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                             return;
@@ -1780,27 +1860,24 @@ public class CustomerInfoIndividual implements Serializable {
         customerInfoView.setReference(mainRef);
 
         if(customerInfoView.getId() != 0){
-            boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getId());
+            boolean isExist = customerInfoControl.checkExistingAll(customerInfoView.getId());
             if(isExist){
                 if(customerInfoView.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                         || customerInfoView.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                     messageHeader = "Information.";
-                    message = "Cannot change customer type from Guarantor to Related. " +
-                            "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
+                    message = msg.get("app.message.customer.existing.error");
                     severity = "info";
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return "";
                 }
             } else {
                 if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getId() != 0){
-                    boolean isExistSpouse = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getSpouse().getId());
+                    boolean isExistSpouse = customerInfoControl.checkExistingAll(customerInfoView.getSpouse().getId());
                     if(isExistSpouse){
                         if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                                 || customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                             messageHeader = "Information.";
-                            message = "Save Customer Individual Data Failed. " +
-                                    "<br/><br/> Cause : This customer is change relation from Guarantor to Related." +
-                                    "<br/>Affect on Basic Info Page.";
+                            message = msg.get("app.message.customer.existing.error");
                             severity = "info";
                             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                             return "";

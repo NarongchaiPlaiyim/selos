@@ -37,7 +37,7 @@
                     </td>
                     <td>
                         <h:inputHidden value="#{dbrInfo.selectedItem.id}"/>
-                        <p:inputText id="limit" value="#{dbrInfo.selectedItem.limit}" required="true" styleClass="right"  onclick="this.select()"  style="width: 162px;"
+                        <p:inputText maxlength="14" id="limit" value="#{dbrInfo.selectedItem.limit}" required="true" styleClass="right"  onclick="this.select()"  style="width: 162px;"
                                      onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number"/>
@@ -50,7 +50,7 @@
                         <p:outputLabel value="#{msg.get('app.dbrDetail.label.installment')}"/>
                     </td>
                     <td>
-                        <p:inputText id="installment" value="#{dbrInfo.selectedItem.installment}" required="true" styleClass="right" onclick="this.select()"  style="width: 162px;"
+                        <p:inputText id="installment" maxlength="16" value="#{dbrInfo.selectedItem.installment}" required="true" styleClass="right" onclick="this.select()"  style="width: 162px;"
                                      onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" >
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number" />
@@ -63,7 +63,7 @@
                         <p:outputLabel value="#{msg.get('app.dbrDetail.label.debtForCalculate')}"/>
                     </td>
                     <td>
-                        <p:inputText id="debtForCalculate" value="#{dbrInfo.selectedItem.debtForCalculate}"  style="width: 162px;"
+                        <p:inputText id="debtForCalculate" maxlength="16" value="#{dbrInfo.selectedItem.debtForCalculate}"  style="width: 162px;"
                                      readonly="true" styleClass="right">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number"/>

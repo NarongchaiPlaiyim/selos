@@ -668,7 +668,7 @@
     </p:panel>
 
     <p:dialog id="basicInfoAccountDialog" header="Opening Account Information" widgetVar="basicInfoAccountDlg" resizable="false"
-              modal="true" width="580" height="320">
+              modal="true" width="580" height="320" closable="false">
         <ui:include src="dialog/basicInfoAccountDialog.xhtml"/>
     </p:dialog>
 
@@ -692,7 +692,7 @@
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
         <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" severity="#{basicInfo.severity}"
-                         header="#{basicInfo.messageHeader}" message="#{basicInfo.message}" >
+                         header="#{basicInfo.messageHeader}" message="#{basicInfo.message}" closable="false">
             <p:commandButton value="OK"
                              process="@this"
                              update="frmMain"
@@ -702,7 +702,7 @@
 
     <p:panel id="msgBoxSystemMessagePanel2" styleClass="panel">
         <p:confirmDialog id="msgBoxSystemMessageDialog2" widgetVar="msgBoxSystemMessageDlg2" severity="#{basicInfo.severity}"
-                         header="#{basicInfo.messageHeader}" message="#{basicInfo.message}" >
+                         header="#{basicInfo.messageHeader}" message="#{basicInfo.message}" closable="false">
             <p:commandButton value="OK"
                              process="@this"
                              update="msgBoxSystemMessagePanel2"

@@ -17,6 +17,7 @@ import com.clevel.selos.transform.AppraisalDetailTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import com.rits.cloning.Cloner;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -393,9 +394,8 @@ public class AppraisalAppointment implements Serializable {
     public void onEditAppraisalDetailView(){
         modeForButton = ModeForButton.EDIT;
         log.debug("-- onEditAppraisalDetailView() RowIndex[{}]", rowIndex);
-//        Cloner cloner = new Cloner();
-//        appraisalDetailViewDialog = cloner.deepClone(appraisalDetailViewSelected);
-        appraisalDetailViewDialog = appraisalDetailViewSelected;
+        Cloner cloner = new Cloner();
+        appraisalDetailViewDialog = cloner.deepClone(appraisalDetailViewSelected);
     }
 
     public void onEditAppraisalContactDetailView(){

@@ -46,61 +46,6 @@ public class ExSummaryTransform extends Transform {
         exSummary.setModifyDate(new Date());
         exSummary.setModifyBy(user);
 
-        /*//ExSumCharacteristicView
-        exSummary.setCustomer(exSummaryView.getExSumCharacteristicView().getCustomer());
-        exSummary.setCurrentDBR(exSummaryView.getExSumCharacteristicView().getCurrentDBR());
-        exSummary.setFinalDBR(exSummaryView.getExSumCharacteristicView().getFinalDBR());
-        exSummary.setIncome(exSummaryView.getExSumCharacteristicView().getIncome());
-        exSummary.setRecommendedWCNeed(exSummaryView.getExSumCharacteristicView().getRecommendedWCNeed());
-        exSummary.setActualWC(exSummaryView.getExSumCharacteristicView().getActualWC());
-        exSummary.setStartBusinessDate(exSummaryView.getExSumCharacteristicView().getStartBusinessDate());
-        exSummary.setYearInBusiness(exSummaryView.getExSumCharacteristicView().getYearInBusiness());
-        exSummary.setSalePerYearBDM(exSummaryView.getExSumCharacteristicView().getSalePerYearBDM());
-        exSummary.setSalePerYearUW(exSummaryView.getExSumCharacteristicView().getSalePerYearUW());
-        exSummary.setGroupSaleBDM(exSummaryView.getExSumCharacteristicView().getGroupSaleBDM());
-        exSummary.setGroupSaleUW(exSummaryView.getExSumCharacteristicView().getGroupSaleUW());
-        exSummary.setGroupExposureBDM(exSummaryView.getExSumCharacteristicView().getGroupExposureBDM());
-        exSummary.setGroupExposureUW(exSummaryView.getExSumCharacteristicView().getGroupExposureUW());
-        
-        //ExSumBusinessInfoView
-        exSummary.setNetFixAsset(exSummaryView.getExSumBusinessInfoView().getNetFixAsset());
-        exSummary.setNoOfEmployee(exSummaryView.getExSumBusinessInfoView().getNoOfEmployee());
-        exSummary.setBizProvince(exSummaryView.getExSumBusinessInfoView().getBizProvince());
-        exSummary.setBizType(exSummaryView.getExSumBusinessInfoView().getBizType());
-        exSummary.setBizGroup(exSummaryView.getExSumBusinessInfoView().getBizGroup());
-        exSummary.setBizCode(exSummaryView.getExSumBusinessInfoView().getBizCode());
-        exSummary.setBizDesc(exSummaryView.getExSumBusinessInfoView().getBizDesc());
-        exSummary.setQualitativeClass(exSummaryView.getExSumBusinessInfoView().getQualitativeClass());
-        exSummary.setBizSize(exSummaryView.getExSumBusinessInfoView().getBizSize());
-        exSummary.setBDM(exSummaryView.getExSumBusinessInfoView().getBDM());
-        exSummary.setUW(exSummaryView.getExSumBusinessInfoView().getUW());
-        exSummary.setAR(exSummaryView.getExSumBusinessInfoView().getAR());
-        exSummary.setAP(exSummaryView.getExSumBusinessInfoView().getAP());
-        exSummary.setINV(exSummaryView.getExSumBusinessInfoView().getINV());
-        
-        exSummary.setBusinessOperationActivity(exSummaryView.getBusinessOperationActivity());
-        exSummary.setBusinessPermission(exSummaryView.getBusinessPermission());
-        exSummary.setExpiryDate(exSummaryView.getExpiryDate());
-
-        //ExSumAccountMovementView
-        exSummary.setOdLimit(exSummaryView.getExSumAccMovementView().getOdLimit());
-        exSummary.setUtilization(exSummaryView.getExSumAccMovementView().getUtilization());
-        exSummary.setSwing(exSummaryView.getExSumAccMovementView().getSwing());
-        exSummary.setOverLimitTimes(exSummaryView.getExSumAccMovementView().getOverLimitTimes());
-        exSummary.setOverLimitDays(exSummaryView.getExSumAccMovementView().getOverLimitDays());
-        exSummary.setChequeReturn(exSummaryView.getExSumAccMovementView().getChequeReturn());
-        exSummary.setCashFlow(exSummaryView.getExSumAccMovementView().getCashFlow());
-        exSummary.setCashFlowLimit(exSummaryView.getExSumAccMovementView().getCashFlowLimit());
-        exSummary.setTradeChequeReturnAmount(exSummaryView.getExSumAccMovementView().getTradeChequeReturnAmount());
-        exSummary.setTradeChequeReturnPercent(exSummaryView.getExSumAccMovementView().getTradeChequeReturnPercent());
-
-        //ExSumCollateralView
-        exSummary.setCashCollateralValue(exSummaryView.getExSumCollateralView().getCashCollateralValue());
-        exSummary.setCoreAssetValue(exSummaryView.getExSumCollateralView().getCoreAssetValue());
-        exSummary.setNoneCoreAssetValue(exSummaryView.getExSumCollateralView().getNoneCoreAssetValue());
-        exSummary.setLimitApprove(exSummaryView.getExSumCollateralView().getLimitApprove());
-        exSummary.setPercentLTV(exSummaryView.getExSumCollateralView().getPercentLTV());*/
-
         //Business Overview and Support Decision
         exSummary.setNatureOfBusiness(exSummaryView.getNatureOfBusiness());
         exSummary.setHistoricalAndReasonOfChange(exSummaryView.getHistoricalAndReasonOfChange());
@@ -139,102 +84,6 @@ public class ExSummaryTransform extends Transform {
         exSummaryView.setCreateBy(exSummary.getCreateBy());
         exSummaryView.setModifyDate(exSummary.getModifyDate());
         exSummaryView.setModifyBy(exSummary.getModifyBy());
-
-        /*//ExSumCharacteristicView
-        ExSumCharacteristicView exSumCharacteristicView = new ExSumCharacteristicView();
-        if(exSummary.getCustomer() != null
-                || exSummary.getCurrentDBR() != null
-                || exSummary.getFinalDBR() != null
-                || exSummary.getIncome() != null
-                || exSummary.getRecommendedWCNeed() != null
-                || exSummary.getActualWC() != null
-                || exSummary.getStartBusinessDate() != null
-                || exSummary.getYearInBusiness() != null
-                || exSummary.getSalePerYearBDM() != null
-                || exSummary.getSalePerYearUW() != null
-                || exSummary.getGroupSaleBDM() != null
-                || exSummary.getGroupSaleUW() != null
-                || exSummary.getGroupExposureBDM() != null
-                || exSummary.getGroupExposureUW() != null){
-            exSumCharacteristicView.setCustomer(exSummary.getCustomer());
-            exSumCharacteristicView.setCurrentDBR(exSummary.getCurrentDBR());
-            exSumCharacteristicView.setFinalDBR(exSummary.getFinalDBR());
-            exSumCharacteristicView.setIncome(exSummary.getIncome());
-            exSumCharacteristicView.setRecommendedWCNeed(exSummary.getRecommendedWCNeed());
-            exSumCharacteristicView.setActualWC(exSummary.getActualWC());
-            exSumCharacteristicView.setStartBusinessDate(exSummary.getStartBusinessDate());
-            exSumCharacteristicView.setYearInBusiness(exSummary.getYearInBusiness());
-            exSumCharacteristicView.setSalePerYearBDM(exSummary.getSalePerYearBDM());
-            exSumCharacteristicView.setSalePerYearUW(exSummary.getSalePerYearUW());
-            exSumCharacteristicView.setGroupSaleBDM(exSummary.getGroupSaleBDM());
-            exSumCharacteristicView.setGroupSaleUW(exSummary.getGroupSaleUW());
-            exSumCharacteristicView.setGroupExposureBDM(exSummary.getGroupExposureBDM());
-            exSumCharacteristicView.setGroupExposureUW(exSummary.getGroupExposureUW());
-        } else {
-            exSumCharacteristicView = null;
-        }
-        exSummaryView.setExSumCharacteristicView(exSumCharacteristicView);
-
-        //ExSumBusinessInfoView
-        ExSumBusinessInfoView exSumBusinessInfoView = new ExSumBusinessInfoView();
-        if(exSummary.getNetFixAsset() != null
-                || exSummary.getBizProvince() != null
-                || exSummary.getBizType() != null
-                || exSummary.getBizGroup() != null
-                || exSummary.getBizCode() != null
-                || exSummary.getBizDesc() != null
-                || exSummary.getQualitativeClass() != null
-                || exSummary.getBizSize() != null
-                || exSummary.getBDM() != null
-                || exSummary.getUW() != null
-                || exSummary.getAR() != null
-                || exSummary.getAP() != null
-                || exSummary.getINV() != null){
-            exSumBusinessInfoView.setNetFixAsset(exSummary.getNetFixAsset());
-            exSumBusinessInfoView.setNoOfEmployee(exSummary.getNoOfEmployee());
-            exSumBusinessInfoView.setBizProvince(exSummary.getBizProvince());
-            exSumBusinessInfoView.setBizType(exSummary.getBizType());
-            exSumBusinessInfoView.setBizGroup(exSummary.getBizGroup());
-            exSumBusinessInfoView.setBizCode(exSummary.getBizCode());
-            exSumBusinessInfoView.setBizDesc(exSummary.getBizDesc());
-            exSumBusinessInfoView.setQualitativeClass(exSummary.getQualitativeClass());
-            exSumBusinessInfoView.setBizSize(exSummary.getBizSize());
-            exSumBusinessInfoView.setBDM(exSummary.getBDM());
-            exSumBusinessInfoView.setUW(exSummary.getUW());
-            exSumBusinessInfoView.setAR(exSummary.getAR());
-            exSumBusinessInfoView.setAP(exSummary.getAP());
-            exSumBusinessInfoView.setINV(exSummary.getINV());
-        } else {
-            exSumBusinessInfoView = null;
-        }
-        exSummaryView.setExSumBusinessInfoView(exSumBusinessInfoView);
-
-        exSummaryView.setBusinessOperationActivity(exSummary.getBusinessOperationActivity());
-        exSummaryView.setBusinessPermission(exSummary.getBusinessPermission());
-        exSummaryView.setExpiryDate(exSummary.getExpiryDate());
-
-        //ExSumAccountMovementView
-        ExSumAccountMovementView exSumAccountMovementView = new ExSumAccountMovementView();
-        exSumAccountMovementView.setOdLimit(exSummary.getOdLimit());
-        exSumAccountMovementView.setUtilization(exSummary.getUtilization());
-        exSumAccountMovementView.setSwing(exSummary.getSwing());
-        exSumAccountMovementView.setOverLimitTimes(exSummary.getOverLimitTimes());
-        exSumAccountMovementView.setOverLimitDays(exSummary.getOverLimitDays());
-        exSumAccountMovementView.setChequeReturn(exSummary.getChequeReturn());
-        exSumAccountMovementView.setCashFlow(exSummary.getCashFlow());
-        exSumAccountMovementView.setCashFlowLimit(exSummary.getCashFlowLimit());
-        exSumAccountMovementView.setTradeChequeReturnAmount(exSummary.getTradeChequeReturnAmount());
-        exSumAccountMovementView.setTradeChequeReturnPercent(exSummary.getTradeChequeReturnPercent());
-        exSummaryView.setExSumAccMovementView(exSumAccountMovementView);
-
-        //ExSumCollateralView
-        ExSumCollateralView exSumCollateralView = new ExSumCollateralView();
-        exSumCollateralView.setCashCollateralValue(exSummary.getCashCollateralValue());
-        exSumCollateralView.setCoreAssetValue(exSummary.getCoreAssetValue());
-        exSumCollateralView.setNoneCoreAssetValue(exSummary.getNoneCoreAssetValue());
-        exSumCollateralView.setLimitApprove(exSummary.getLimitApprove());
-        exSumCollateralView.setPercentLTV(exSummary.getPercentLTV());
-        exSummaryView.setExSumCollateralView(exSumCollateralView);*/
 
         //Business Overview and Support Decision
         exSummaryView.setNatureOfBusiness(exSummary.getNatureOfBusiness());
@@ -296,16 +145,13 @@ public class ExSummaryTransform extends Transform {
     }
 
     public ExSumBusinessInfoView transformBizInfoSumToExSumBizView(BizInfoSummaryView bizInfoSummaryView, QualitativeView qualitativeView, BigDecimal bizSize){
-
-
-
         ExSumBusinessInfoView exSumBusinessInfoView = new ExSumBusinessInfoView();
 
         exSumBusinessInfoView.setNetFixAsset(bizInfoSummaryView.getNetFixAsset());
         exSumBusinessInfoView.setNoOfEmployee(bizInfoSummaryView.getNoOfEmployee());
         exSumBusinessInfoView.setBizProvince(bizInfoSummaryView.getProvince().getName());
 
-        List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
+        /*List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
         if(bizInfoSummaryView.getId() != 0){
             bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryView.getId());
         }
@@ -319,7 +165,7 @@ public class ExSummaryTransform extends Transform {
                     exSumBusinessInfoView.setBizDesc(bd.getBizDesc().getName());
                 }
             }
-        }
+        }*/
 
         if(qualitativeView != null){
             exSumBusinessInfoView.setQualitativeClass(qualitativeView.getQualityResult());
@@ -331,7 +177,7 @@ public class ExSummaryTransform extends Transform {
         exSumBusinessInfoView.setBizSize(bizSize);
 
         //todo:income factor percent
-//        exSumBusinessInfoView.setBDM();
+//        exSumBusinessInfoView.setBDM(bizInfoSummaryView.getWeightIncomeFactor());
 //        exSumBusinessInfoView.setUW();
         exSumBusinessInfoView.setAR(bizInfoSummaryView.getSumWeightAR());
         exSumBusinessInfoView.setAP(bizInfoSummaryView.getSumWeightAP());

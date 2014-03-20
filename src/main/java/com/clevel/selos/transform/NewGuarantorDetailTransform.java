@@ -51,12 +51,11 @@ public class NewGuarantorDetailTransform extends Transform {
         NewGuarantorDetail newGuarantorDetail;
 
         for (NewGuarantorDetailView newGuarantorDetailView : newGuarantorDetailViewList) {
-            log.debug("Start.. transformToModel newGuarantorDetailView : {}", newGuarantorDetailView);
+            log.debug("Start.. transformToModel newGuarantorDetailView");
             newGuarantorDetail = new NewGuarantorDetail();
             if (newGuarantorDetailView.getId() != 0) {
                 log.info("Start..  newGuarantorDetail :: view :: {}", newGuarantorDetailView.getId());
                 newGuarantorDetail = newGuarantorDetailDAO.findGuarantorById(newGuarantorDetailView.getId(), ProposeType.P);
-                log.info("Start..  newGuarantorDetail :: DB :: {}", newGuarantorDetail.getId());
                 newGuarantorDetail.setModifyDate(DateTime.now().toDate());
                 newGuarantorDetail.setModifyBy(user);
             } else { // id = 0 create new
@@ -73,14 +72,11 @@ public class NewGuarantorDetailTransform extends Transform {
             newGuarantorDetail.setUwDecision(newGuarantorDetailView.getUwDecision());
 
             if (Util.safetyList(newGuarantorDetailView.getProposeCreditDetailViewList()).size() > 0) {
-                log.debug("Start.. transformToModel proposeCreditDetailViewList : {}", newGuarantorDetailView.getProposeCreditDetailViewList());
                 List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorCreditTransform.transformsToModelForGuarantor(newGuarantorDetailView.getProposeCreditDetailViewList(), newCreditFacility.getNewCreditDetailList(), newGuarantorDetail, newCreditFacility, proposeType, user);
-                log.debug("End.. transformToModel newGuarantorCreditList size :: {}", newGuarantorCreditList.size());
-
                 newGuarantorDetail.setNewGuarantorCreditList(newGuarantorCreditList);
             }
 
-            log.debug("End.. transformToModel newGuarantorDetail : {}", newGuarantorDetail);
+            log.debug("End.. transformToModel newGuarantorDetail");
             newGuarantorDetailList.add(newGuarantorDetail);
         }
 
@@ -108,7 +104,6 @@ public class NewGuarantorDetailTransform extends Transform {
             newGuarantorDetailView.setUwDecision(newGuarantorDetail.getUwDecision());
 
             List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorRelationDAO.getListGuarantorRelationByNewGuarantor(newGuarantorDetail);
-            log.info("newGuarantorCreditList :: {}", newGuarantorCreditList.size());
             List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
             List<ExistingCreditDetail> existingCreditDetailList = new ArrayList<ExistingCreditDetail>();
             List<ProposeCreditDetailView> proposeCreditDetailViewList;
@@ -124,11 +119,8 @@ public class NewGuarantorDetailTransform extends Transform {
                 }
             }
 
-//            List<ExistingCreditDetailView> existingCreditDetailViewList = existingCreditDetailTransform.transformsToView(existingCreditDetailList);
-//            List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditDetailList);
             proposeCreditDetailViewList = proposeCreditDetailTransform(newCreditDetailList, existingCreditDetailList, newGuarantorCreditList);
             if (proposeCreditDetailViewList.size() > 0) {
-                log.info("Guarantor transformToView find all relation proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
                 newGuarantorDetailView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
             }
             newGuarantorDetailViews.add(newGuarantorDetailView);
@@ -191,6 +183,7 @@ public class NewGuarantorDetailTransform extends Transform {
                 proposeCreditDetailView.setProductProgramView(tmp.getProductProgramView());
                 proposeCreditDetailView.setCreditFacilityView(tmp.getCreditTypeView());
                 proposeCreditDetailView.setLimit(tmp.getLimit());
+                proposeCreditDetailView.setUseCount(tmp.getUseCount());
                 log.info("newGuarantorCreditList.get(i).getNewCreditDetail() ::: {}", findNewGuarantorCredit(newGuarantorCreditList, tmp).getGuaranteeAmount());
                 proposeCreditDetailView.setGuaranteeAmount(findNewGuarantorCredit(newGuarantorCreditList, tmp).getGuaranteeAmount());
                 proposeCreditDetailViewList.add(proposeCreditDetailView);

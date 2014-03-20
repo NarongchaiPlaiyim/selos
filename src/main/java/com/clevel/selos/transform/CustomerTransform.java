@@ -32,7 +32,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class CustomerTransform extends Transform {
+public class CustomerTransform {
     @Inject
     @SELOS
     Logger log;

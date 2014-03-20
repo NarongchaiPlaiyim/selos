@@ -55,6 +55,12 @@ public class CustomerInfoControl extends BusinessControl {
     CustomerOblInfoDAO customerOblInfoDAO;
     @Inject
     OpenAccountNameDAO openAccountNameDAO;
+    @Inject
+    NewGuarantorDetailDAO newGuarantorDetailDAO;
+    @Inject
+    NewCollateralSubOwnerDAO newCollateralSubOwnerDAO;
+    @Inject
+    ExistingGuarantorDetailDAO existingGuarantorDetailDAO;
 
     @Inject
     ReferenceDAO referenceDAO;
@@ -674,12 +680,24 @@ public class CustomerInfoControl extends BusinessControl {
         return currentAddress;
     }
 
-    public boolean checkExistingOpenAccountCustomer(long customerId){
-        log.info("checkExistingOpenAccountCustomer ::: customerId : {}", customerId);
+    public boolean checkExistingAll(long customerId){
+        log.info("checkExistingAll ::: customerId : {}", customerId);
         boolean isExist = false;
         if(customerId != 0){
             List<OpenAccountName> openAccountNameList = openAccountNameDAO.findByCustomerId(customerId);
+            List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findByCustomerId(customerId);
+            List<NewCollateralSubOwner> newCollateralSubOwners = newCollateralSubOwnerDAO.findByCustomerId(customerId);
+            List<ExistingGuarantorDetail> existingGuarantorDetails = existingGuarantorDetailDAO.findByCustomerId(customerId);
             if(openAccountNameList != null && openAccountNameList.size() > 0){
+                isExist = true;
+                return isExist;
+            } else if(newGuarantorDetails != null && newGuarantorDetails.size() > 0) {
+                isExist = true;
+                return isExist;
+            } else if(newCollateralSubOwners != null && newCollateralSubOwners.size() > 0) {
+                isExist = true;
+                return isExist;
+            } else if(existingGuarantorDetails != null && existingGuarantorDetails.size() > 0) {
                 isExist = true;
                 return isExist;
             } else {

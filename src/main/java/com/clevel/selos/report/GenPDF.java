@@ -1,6 +1,7 @@
 package com.clevel.selos.report;
 
 import com.clevel.selos.model.view.ExSummaryView;
+import com.clevel.selos.report.template.PDFDecision;
 import com.clevel.selos.report.template.PDFExecutive_Summary;
 import com.clevel.selos.system.Config;
 
@@ -12,7 +13,7 @@ import java.util.HashMap;
 
 @ViewScoped
 @ManagedBean(name = "report")
-public class ReportExSummary extends ReportService {
+public class GenPDF extends ReportService {
 
     @Inject
     @Config(name = "report.exsum")
@@ -33,7 +34,10 @@ public class ReportExSummary extends ReportService {
     PDFExecutive_Summary pdfExecutiveSummary;
 
     @Inject
-    public ReportExSummary() {
+    PDFDecision pdfDecision;
+
+    @Inject
+    public GenPDF() {
 
     }
 
@@ -43,12 +47,13 @@ public class ReportExSummary extends ReportService {
 
     @PostConstruct
     private void onCreation(){
-        log.debug("ReportExSummary onCreation ");
+        log.debug("GenPDF onCreation ");
 
 
     }
 
     String pdfName;
+
 
     public void onPrintExsumReport() throws Exception {
         log.debug("onPrintExsumReport");
@@ -78,6 +83,25 @@ public class ReportExSummary extends ReportService {
 
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
+        map.put("fillCreditBorrower",pdfDecision.fillCreditBorrower());
+        map.put("fillCondition",pdfDecision.fillCondition());
+        map.put("fillBorrowerRetail",pdfDecision.fillBorrowerRetail());
+        map.put("fillAppInRLOS",pdfDecision.fillAppInRLOS());
+        map.put("fillRelatedCommercial",pdfDecision.fillRelatedCommercial());
+        map.put("fillRelatedRetail",pdfDecision.fillRelatedRetail());
+        map.put("fillRelatedAppInRLOS",pdfDecision.fillRelatedAppInRLOS());
+        map.put("fillExistingCollateralBorrower",pdfDecision.fillExistingCollateralBorrower());
+        map.put("fillExistingCollateralRelated",pdfDecision.fillExistingCollateralRelated());
+        map.put("fillGuarantorBorrower",pdfDecision.fillGuarantorBorrower());
+        map.put("fillProposedCredit",pdfDecision.fillProposedCredit());
+        map.put("fillProposeFeeInformation",pdfDecision.fillProposeFeeInformation());
+        map.put("fillProposedCollateral",pdfDecision.fillProposedCollateral());
+        map.put("fillApprovedCollaterral",pdfDecision.fillApprovedCollaterral());
+        map.put("fillProposedGuarantor",pdfDecision.fillProposedGuarantor());
+        map.put("fillApprovedCollateral",pdfDecision.fillApprovedCollateral());
+        map.put("fillFollowUpCondition",pdfDecision.fillFollowUpCondition());
+        map.put("fillApprovalHistory",pdfDecision.fillApprovalHistory());
+
 
         pdfName = "Decision_Report_";
 

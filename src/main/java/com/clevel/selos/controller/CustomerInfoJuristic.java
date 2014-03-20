@@ -481,6 +481,23 @@ public class CustomerInfoJuristic implements Serializable {
                     customerInfoView.setSearchBy(customerInfoSearch.getSearchBy());
                     customerInfoView.setSearchId(customerInfoSearch.getSearchId());
                     customerInfoView.setCollateralOwner(1);
+
+                    //set default country
+                    if(customerInfoView.getCitizenCountry() != null){
+                        customerInfoView.getCitizenCountry().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.setCitizenCountry(country);
+                    }
+                    if(customerInfoView.getSourceIncome() != null){
+                        customerInfoView.getSourceIncome().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.setSourceIncome(country);
+                    }
+
                     if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
                         if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
                             customerInfoView.getWorkAddress().setAddressTypeFlag(1);
@@ -569,6 +586,22 @@ public class CustomerInfoJuristic implements Serializable {
                         reference.setId(refId);
                         customerInfoView.setReference(reference);
 
+                        //set default country
+                        if(customerInfoView.getCitizenCountry() != null){
+                            customerInfoView.getCitizenCountry().setId(211);
+                        } else {
+                            Country country = new Country();
+                            country.setId(211);
+                            customerInfoView.setCitizenCountry(country);
+                        }
+                        if(customerInfoView.getSourceIncome() != null){
+                            customerInfoView.getSourceIncome().setId(211);
+                        } else {
+                            Country country = new Country();
+                            country.setId(211);
+                            customerInfoView.setSourceIncome(country);
+                        }
+
                         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
                             if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
                                 customerInfoView.getWorkAddress().setAddressTypeFlag(1);
@@ -646,13 +679,12 @@ public class CustomerInfoJuristic implements Serializable {
 
         //check using customer in basic info
         if(customerInfoView.getId() != 0){
-            boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getId());
+            boolean isExist = customerInfoControl.checkExistingAll(customerInfoView.getId());
             if(isExist){
                 if(relationId == RelationValue.DIRECTLY_RELATED.value()
                         || relationId == RelationValue.INDIRECTLY_RELATED.value()){
                     messageHeader = "Information.";
-                    message = "Cannot change customer type from Guarantor to Related. " +
-                            "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
+                    message = msg.get("app.message.customer.existing.error");
                     severity = "info";
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return;
@@ -702,10 +734,10 @@ public class CustomerInfoJuristic implements Serializable {
         try{
             //check individual using on basic info
             if(selectEditIndividual.getId() != 0){
-                boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(selectEditIndividual.getId());
+                boolean isExist = customerInfoControl.checkExistingAll(selectEditIndividual.getId());
                 if(isExist){
                     messageHeader = "Information.";
-                    message = "Cannot delete Customer Info Individual. <br/><br/>Cause : This customer is using on Opening Account Information in Basic Information menu.";
+                    message = msg.get("app.message.customer.existing.error");
                     severity = "info";
                 } else {
                     customerInfoView.getIndividualViewList().remove(selectEditIndividual);

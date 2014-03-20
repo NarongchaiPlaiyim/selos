@@ -24,7 +24,6 @@ public class ExistingCollateralCreditTransform extends Transform {
     public ExistingCollateralCreditTransform() {
     }
 
-
     public List<ExistingCollateralCredit> transformsToModelForCollateral(List<ExistingCreditTypeDetailView> existingCreditTypeDetailViewList,List<ExistingCreditDetail> existingCreditDetailList  ,ExistingCollateralDetail existingCollateralDetail,User user){
 
         List<ExistingCollateralCredit> existingCollateralCreditList = new ArrayList<ExistingCollateralCredit>();

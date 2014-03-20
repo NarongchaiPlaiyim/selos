@@ -25,6 +25,7 @@ import com.clevel.selos.model.view.OpenAccountView;
 
 public class OpenAccountTransform extends Transform {
     private static final long serialVersionUID = -709756394277635355L;
+
 	@Inject
     BankAccountTypeDAO bankAccountTypeDAO;
     @Inject

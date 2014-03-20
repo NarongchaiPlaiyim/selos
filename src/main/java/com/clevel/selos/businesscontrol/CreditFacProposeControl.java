@@ -3,12 +3,9 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
-import com.clevel.selos.exception.BRMSInterfaceException;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.integration.brms.model.response.PricingFee;
-import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
@@ -22,6 +19,7 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -223,7 +221,7 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
     public void calculateTotalProposeAmount(NewCreditFacilityView newCreditFacilityView, BasicInfoView basicInfoView, TCGView tcgView, long workCaseId) {
-        log.debug("calculateTotalProposeAmount()");
+        log.info("calculateTotalProposeAmount()");
         if (newCreditFacilityView != null) {
 
             BigDecimal sumTotalPropose = BigDecimal.ZERO;
@@ -234,6 +232,9 @@ public class CreditFacProposeControl extends BusinessControl {
             BigDecimal sumTotalNonLoanDbr = BigDecimal.ZERO;
 
             if (basicInfoView != null && basicInfoView.getSpecialProgram() != null && tcgView != null) {
+                log.info("basicInfoView.getSpecialProgram()::{}", basicInfoView.getSpecialProgram().getId());
+                log.info("tcgView ::; {}", tcgView.getId());
+
                 List<NewCreditDetailView> newCreditDetailViewList = newCreditFacilityView.getNewCreditDetailViewList();
 
                 if (newCreditDetailViewList != null && newCreditDetailViewList.size() != 0) {
@@ -243,7 +244,7 @@ public class CreditFacProposeControl extends BusinessControl {
                     ProductFormula productFormula;
 
                     for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
-                        log.debug("newCreditDetailView.id: {}", newCreditDetailView.getId());
+                        log.info("newCreditDetailView.id: {}", newCreditDetailView.getId());
 
                         if (newCreditDetailView.getProductProgramView().getId() != 0 && newCreditDetailView.getCreditTypeView().getId() != 0) {
                             productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgramView().getId());
@@ -253,41 +254,42 @@ public class CreditFacProposeControl extends BusinessControl {
                                 prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
                                 productFormula = productFormulaDAO.findProductFormulaPropose(
                                         prdProgramToCreditType, newCreditFacilityView.getCreditCustomerType(), basicInfoView.getSpecialProgram(), tcgView.getTCG());
-
+                             log.info("productFormula :: {}",productFormula.getId());
                                 if (productFormula != null) {
-                                    log.debug("productFormula id :: {}", productFormula.getId());
+                                    log.info("productFormula id :: {}", productFormula.getId());
                                     //ExposureMethod
                                     if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
-                                        log.debug("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                        log.info("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                         sumTotalPropose = sumTotalPropose.add(BigDecimal.ZERO);
                                     }
                                     else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
-                                        log.debug("LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                        log.info("LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                         sumTotalPropose = sumTotalPropose.add(newCreditDetailView.getLimit());
                                     }
                                     else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //limit * %PCE
-                                        log.debug("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                        log.info("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                         sumTotalPropose = sumTotalPropose.add(Util.multiply(newCreditDetailView.getLimit(), newCreditDetailView.getPCEPercent()));
                                     }
-                                    log.debug("sumTotalPropose :: {}", sumTotalPropose);
+                                    log.info("sumTotalPropose :: {}", sumTotalPropose);
 
                                     //For DBR
                                     if (productFormula.getDbrCalculate() == 1) {// No
-                                        log.info("NO calculate :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
+                                        log.info("DbrCalculate NO :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
                                         sumTotalNonLoanDbr = BigDecimal.ZERO;
                                     }
                                     else if (productFormula.getDbrCalculate() == 2) {// Yes
-                                        log.debug("YES :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
+                                        log.info("DbrCalculate YES :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
                                         if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
-                                            log.debug("NOT_CALCULATE :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
-                                            sumTotalLoanDbr = sumTotalLoanDbr.add(BigDecimal.ZERO);
+                                            log.info("NOT_CALCULATE :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
+                                            sumTotalLoanDbr = BigDecimal.ZERO;
                                         }
                                         else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
-                                            log.debug("INSTALLMENT :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
+                                            log.info("INSTALLMENT :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
+                                            log.info("INSTALLMENT :: newCreditDetailView.getInstallment() :: {}", newCreditDetailView.getInstallment());
                                             sumTotalLoanDbr = sumTotalLoanDbr.add(newCreditDetailView.getInstallment());
                                         }
                                         else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
-                                            log.debug("INT_YEAR :: productFormula.getDbrMethod() :: {}, productFormula.getDbrSpread() :::{}", productFormula.getDbrMethod(), productFormula.getDbrSpread());
+                                            log.info("INT_YEAR :: productFormula.getDbrMethod() :: {}, productFormula.getDbrSpread() :::{}", productFormula.getDbrMethod(), productFormula.getDbrSpread());
                                             sumTotalLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYear(newCreditDetailView, productFormula.getDbrSpread()));
                                         }
                                     }
@@ -321,7 +323,7 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
     public BigDecimal calTotalProposeLoanDBRForIntYear(NewCreditDetailView newCreditDetailView, BigDecimal dbrSpread) {
-        log.debug("calTotalProposeLoanDBRForIntYear start :: newCreditDetailView and  dbrSpread ::{}", newCreditDetailView, dbrSpread);
+        log.info("calTotalProposeLoanDBRForIntYear start :: newCreditDetailView and  dbrSpread ::{}", newCreditDetailView, dbrSpread);
 
         BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
         if (newCreditDetailView != null &&
@@ -488,6 +490,10 @@ public class CreditFacProposeControl extends BusinessControl {
                 installment = Util.divide(Util.multiply(Util.multiply(interestPerMonth, limit), (Util.add(BigDecimal.ONE, interestPerMonth)).pow(tenor)),
                         Util.subtract(Util.add(BigDecimal.ONE, interestPerMonth).pow(tenor), BigDecimal.ONE));
                 log.info("installment : {}", installment);
+
+                if(installment!=null){
+                    installment.setScale(2, RoundingMode.HALF_UP);
+                }
 
                 newCreditTierDetailView.setInstallment(installment);
                 sumOfInstallment = Util.add(sumOfInstallment, installment);
@@ -897,49 +903,34 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
     //call BRMS
-    public List<NewFeeDetailView> getPriceFeeInterest(final long workCaseId) {
-        log.debug("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
-        StandardPricingResponse standardPricingResponse = null;
-        List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
-        NewFeeDetailView newFeeDetailView = new NewFeeDetailView();
-        try {
+//    public StandardPricingResponse getPriceFeeInterest(final long workCaseId) {
+//        log.debug("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
+//        StandardPricingResponse standardPricingResponse = null;
+//        List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
+//        NewFeeDetailView newFeeDetailView = new NewFeeDetailView();
+//        try {
 //            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
-            log.debug("getPriceFeeInterest ::::workCase :: {}",workCaseId);
-            standardPricingResponse = brmsControl.getPriceFee(workCaseId);
-            if (standardPricingResponse != null) {
-                log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult().toString());
-                log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
-                log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().toString());
-            }
-
-            for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()){
-                FeeDetailView feeDetailView = feeTransform.transformToView(pricingFee);
-                // find productProgram
-                ProductProgramView productProgramView = productTransform.transformToView(productProgramDAO.findById((int)feeDetailView.getCreditDetailViewId()));
-                newFeeDetailView.setProductProgram(productProgramView.getDescription());
-                if (feeDetailView.getFeeTypeView().getId() == 9) {//type=9,(Front-End-Fee)
-                    newFeeDetailView.setStandardFrontEndFee(feeDetailView);
-                }else if (feeDetailView.getFeeTypeView().getId() == 15) { //type=15,(Prepayment Fee)
-                    newFeeDetailView.setPrepaymentFee(feeDetailView);
-                }else if (feeDetailView.getFeeTypeView().getId() == 20) {//type=20,(CancellationFee)
-                    newFeeDetailView.setCancellationFee(feeDetailView);
-                }else if (feeDetailView.getFeeTypeView().getId() == 21) { //type=21,(ExtensionFee)
-                    newFeeDetailView.setExtensionFee(feeDetailView);
-                }else  if(feeDetailView.getFeeTypeView().getId()==22){//type=22,(CommitmentFee)
-                    newFeeDetailView.setCommitmentFee(feeDetailView);
-                }
-
-                log.debug("FeePaymentMethodView():::: {}",feeDetailView.getFeePaymentMethodView().getBrmsCode());
-                newFeeDetailViewList.add(newFeeDetailView);
-            }
-        } catch (BRMSInterfaceException e) {
-            log.error("Exception while get getPriceFeeInterest Appraisal data!", e);
-            throw e;
-        } catch (Exception e) {
-            log.error("Exception while get getPriceFeeInterest data!", e);
-        }
-        return newFeeDetailViewList;
-    }
+//            log.debug("getPriceFeeInterest ::::workCase :: {}",workCaseId);
+//
+//            if (ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
+//
+//            }
+//
+////            if (standardPricingResponse != null) {
+////                log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult().toString());
+////                log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
+////                log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().size());
+////                log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
+////            }
+//
+//        } catch (BRMSInterfaceException e) {
+//            log.error("Exception while get getPriceFeeInterest Appraisal data!", e);
+//            throw e;
+//        } catch (Exception e) {
+//            log.error("Exception while get getPriceFeeInterest data!", e);
+//        }
+//        return standardPricingResponse;
+//    }
 
     public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {
         log.info("deleteAllApproveByIdList()");

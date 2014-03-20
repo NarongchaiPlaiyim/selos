@@ -34,10 +34,10 @@ public class DocCustomerConverter extends Converter{
         logger.debug("-- Start getDecisionServiceRequest {}", applicationInfo);
         ApplicationType applicationType = new ApplicationType();
 
-        applicationType.setApplicationNumber(applicationInfo.getApplicationNo());
+        applicationType.setApplicationNumber(getValueForInterface(applicationInfo.getApplicationNo()));
         try{
             GregorianCalendar gregorianCalendar = new GregorianCalendar();
-            gregorianCalendar.setTime(applicationInfo.getProcessDate());
+            gregorianCalendar.setTime(getValueForInterface(applicationInfo.getProcessDate()));
             applicationType.setDateOfApplication(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
         }catch (Exception ex){
             logger.error("Could not transform Date");
@@ -56,11 +56,17 @@ public class DocCustomerConverter extends Converter{
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.TOP_UP_BA_FLAG, applicationInfo.isTopupBA()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.TCG_FLAG, applicationInfo.isRequestTCG()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.STEP, applicationInfo.getStepCode()));
-        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.REFERENCE_DOCUMENT_TYPE, applicationInfo.getReferredDocType()));
+        if(applicationInfo.getReferredDocType() == null){
+            attributeTypeList.add(getAttributeType(BRMSFieldAttributes.REFERENCE_DOCUMENT_TYPE, ""));
+        }else{
+            attributeTypeList.add(getAttributeType(BRMSFieldAttributes.REFERENCE_DOCUMENT_TYPE, applicationInfo.getReferredDocType()));
+        }
+
+
 
         List<ProductType> productTypeList = applicationType.getProduct();
         ProductType productType = new ProductType();
-        productType.setProductType(applicationInfo.getProductGroup());
+        productType.setProductType(getValueForInterface(applicationInfo.getProductGroup()));
         productTypeList.add(productType);
 
         //1. Convert Value for Product Program - Acc/Requested//
@@ -79,14 +85,14 @@ public class DocCustomerConverter extends Converter{
                     selosProductProgramTypeList.add(selosProductProgramType);
                     selosProductProgramType = new SELOSProductProgramType();
                 }
-                selosProductProgramType.setID(accountRequested.getCreditDetailId());
-                selosProductProgramType.setName(accountRequested.getProductProgram());
+                selosProductProgramType.setID(getValueForInterface(accountRequested.getCreditDetailId()));
+                selosProductProgramType.setName(getValueForInterface(accountRequested.getProductProgram()));
                 creditFacilityTypeList = selosProductProgramType.getCreditFacility();
             }
 
             CreditFacilityType creditFacilityType = new CreditFacilityType();
-            creditFacilityType.setID(accountRequested.getCreditDetailId());
-            creditFacilityType.setType(accountRequested.getCreditType());
+            creditFacilityType.setID(getValueForInterface(accountRequested.getCreditDetailId()));
+            creditFacilityType.setType(getValueForInterface(accountRequested.getCreditType()));
 
             creditFacilityTypeList.add(creditFacilityType);
         }
@@ -96,9 +102,10 @@ public class DocCustomerConverter extends Converter{
         List<BorrowerType> borrowerTypeList = applicationType.getBorrower();
         for(BRMSCustomerInfo customerInfo : customerInfoList){
             BorrowerType borrowerType = new BorrowerType();
-            borrowerType.setNationality(customerInfo.getNationality());
-            borrowerType.setBotClass(customerInfo.getAdjustClass());
-            borrowerType.setKycRiskLevel(customerInfo.getKycLevel());
+            borrowerType.setID(getValueForInterface(customerInfo.getCustomerId()));
+            borrowerType.setNationality(getValueForInterface(customerInfo.getNationality()));
+            borrowerType.setBotClass(getValueForInterface(customerInfo.getAdjustClass()));
+            borrowerType.setKycRiskLevel(getValueForInterface(customerInfo.getKycLevel()));
 
             List<AttributeType> borrowerAttributeList = borrowerType.getAttribute();
             borrowerAttributeList.add(getAttributeType(BRMSFieldAttributes.CUSTOMER_ENTITY, customerInfo.getCustomerEntity()));
@@ -110,9 +117,9 @@ public class DocCustomerConverter extends Converter{
 
             if(customerInfo.isIndividual()){
                 IndividualType individualType = borrowerType.getIndividual();
-                individualType.setCitizenID(customerInfo.getPersonalID());
-                individualType.setAge(customerInfo.getAgeMonths());
-                individualType.setMaritalStatus(customerInfo.getMarriageStatus());
+                individualType.setCitizenID(getValueForInterface(customerInfo.getPersonalID()));
+                individualType.setAge(getValueForInterface(customerInfo.getAgeMonths()));
+                individualType.setMaritalStatus(getValueForInterface(customerInfo.getMarriageStatus()));
             }
 
             borrowerTypeList.add(borrowerType);
@@ -146,10 +153,12 @@ public class DocCustomerConverter extends Converter{
             List<BorrowerType> borrowerTypeList = applicationType.getBorrower();
             List<DocumentDetail> documentDetailList = new ArrayList<DocumentDetail>();
             for (BorrowerType borrowerType : borrowerTypeList){
-                String docOwner = null;
+                String docOwner = borrowerType.getID();
+                /*
                 if(borrowerType.getIndividual() != null){
                     docOwner = borrowerType.getIndividual().getCitizenID();
-                }
+                }*/
+                logger.debug("getting document owner from customer id {}", docOwner);
                 List<DocumentSetType> documentSetTypeList = borrowerType.getRequiredDocumentSet();
                 documentDetailList.addAll(getDocumentDetail(documentSetTypeList, docOwner, DocLevel.CUS_LEVEL));
             }

@@ -56,12 +56,11 @@
                                              oncomplete="addReturnInfoDlg.show()"
                                              update=":frmMain:reasonId, :frmMain:remark">
                             </p:commandButton>
-                            <p:commandButton title="Remove"
+                            <p:commandButton title="Remove" process="@form"
                                              icon="ui-icon-trash"
                                              rendered="#{returnInfo.canEdit}"
-                                             oncomplete="confirmDeleteReturnInfoDlg.show()">
-                                <f:setPropertyActionListener value="#{rowIndex}"
-                                                             target="#{baseController.editRecordNo}"/>
+                                             action="#{baseController.onDeleteReturnInfo(rowIndex)}"
+                                             update=":frmMain:returnBDMDlgPanel">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -73,7 +72,7 @@
                                      binding="#{btnSubmitReturnSummary}"
                                      value="#{msg.get('app.button.submit')}"
                                      styleClass="small"
-                                     actionListener="#{baseController.onSumbitReturnSummary()}"
+                                     actionListener="#{baseController.onSumbitReturnBDM()}"
                                      oncomplete="handleReturnBDMDialogRequest(xhr, status, args)"
                                      process="@form"
                                      update=":frmMain:returnBDMDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>

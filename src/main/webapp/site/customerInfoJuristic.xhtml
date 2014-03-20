@@ -130,8 +130,8 @@
                                 </td>
                                 <td colspan="3">
                                     <p:selectOneRadio id="collateral" value="#{custInfoSumJuris.customerInfoView.collateralOwner}"
-                                                      disabled="#{custInfoSumJuris.customerInfoView.relation.getId() == 3
-                                                      || custInfoSumJuris.customerInfoView.relation.getId() == 4
+                                                      disabled="#{custInfoSumJuris.relationId == 3
+                                                      || custInfoSumJuris.relationId == 4
                                                       || not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
@@ -223,6 +223,7 @@
                                                     yearRange="1950:2100"
                                                     pattern="dd/MM/yyyy"
                                                     mindate="01/01/1950"
+                                                    readonlyInput="true"
                                                     maxdate="#{custInfoSumJuris.currentDateDDMMYY}"
                                                     value="#{custInfoSumJuris.customerInfoView.dateOfRegister}"
                                                     disabled="#{not custInfoSumJuris.enableAllFieldCus}">
@@ -239,6 +240,7 @@
                                                     yearRange="1950:2100"
                                                     pattern="dd/MM/yyyy"
                                                     mindate="01/01/1950"
+                                                    readonlyInput="true"
                                                     value="#{custInfoSumJuris.customerInfoView.documentIssueDate}"
                                                     disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                     </clv:BECalendar>
@@ -393,8 +395,8 @@
                                 <td>
                                     <p:inputText id="shareHolderRatio" styleClass="right" value="#{custInfoSumJuris.customerInfoView.shareHolderRatio}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
-                                                 onkeydown="return onKeyDownMoney(event);"
-                                                 onkeypress="return onKeyPressMoney(event);"
+                                                 onkeydown="return onKeyDownNegMoney(event);"
+                                                 onkeypress="return onKeyPressNegMoney(event);"
                                                  maxlength="17" disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:shareHolderRatio"/>
@@ -1191,7 +1193,7 @@
     </p:panel>
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" closable="false"
                          severity="#{custInfoSumJuris.severity}" header="#{custInfoSumJuris.messageHeader}">
             <f:facet name="message">
                 <h:outputText value="#{custInfoSumJuris.message}" escape="false"/>

@@ -223,17 +223,17 @@
 
 
 
-            <!--Save Return History-->
-            <!--<p:commandButton id="btnReturnReview" value="Submit Review" styleClass="blueButton" title="Submit Review"
-                             action="#{baseController.onSubmitReviewReturn()}"
+            <!--Submit UW2 for test-->
+           <!-- <p:commandButton id="btnReturnReview" value="Submit" styleClass="blueButton" title="Submit Review"
+                             action="#{baseController.onSubmitUW2()}"
                              update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"
                              rendered="true">
 
             </p:commandButton>-->
 
-            <!--Save Return History-->
-            <!--<p:commandButton id="btnReturnReply" value="Submit Reply" styleClass="blueButton" title="Submit Reply"
-                             action="#{baseController.onSumbitReplyReturn()}"
+            <!--Submit Return Reply for test-->
+           <!-- <p:commandButton id="btnReturnReply" value="Submit UW1" styleClass="blueButton" title="Submit Reply"
+                             action="#{baseController.onSumbitReturnUW1()}"
                              update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"
                              rendered="true">
 
@@ -428,14 +428,5 @@
             <ui:include src="/site/dialog/addReturnInfoDialog.xhtml"/>
         </p:dialog>
     </p:panel>
-
-    <!--<ui:include src="/site/dialog/confirmDeleteDlg.xhtml">-->
-        <!--<ui:param name="id" value="confirmDeleteReturnInfoDialog"/>-->
-        <!--<ui:param name="name" value="confirmDeleteReturnInfoDlg"/>-->
-        <!--<ui:param name="formId" value="frmConfirmDeleteReturnInfo"/>-->
-        <!--<ui:param name="controller" value="#{baseController}"/>-->
-        <!--<ui:param name="action" value="onDeleteReturnInfo"/>-->
-        <!--<ui:param name="update" value=":frmMain:returnBDMDlgPanel"/>-->
-    <!--</ui:include>-->
 
 </ui:composition>

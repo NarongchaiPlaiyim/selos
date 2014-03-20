@@ -21,7 +21,7 @@ public class BusinessDescription implements Serializable {
     @JoinColumn(name = "businessgroup_id")
     private BusinessGroup businessGroup;
 
-    @Column(name = "name")
+    @Column(name = "name", length=500)
     private String name;
 
     @Column(name = "tmb_Code")
@@ -99,6 +99,9 @@ public class BusinessDescription implements Serializable {
 
     @Column(name = "cog")
     private BigDecimal cog;
+
+    @Column(name = "description", length=500)
+    private String description;
 
     public BusinessDescription() {
     }
@@ -317,6 +320,14 @@ public class BusinessDescription implements Serializable {
 
     public void setCog(BigDecimal cog) {
         this.cog = cog;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

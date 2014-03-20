@@ -212,10 +212,10 @@ public class CustomerInfoSummary implements Serializable {
 
     public void onDeleteGuarantor(){
         try{
-            boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(selectedItemCustomerGuarantor.getId());
+            boolean isExist = customerInfoControl.checkExistingAll(selectedItemCustomerGuarantor.getId());
             if(isExist){
                 messageHeader = "Information.";
-                message = "Cannot delete Guarantor Information. <br/><br/>Cause : This customer is using on Opening Account Information in Basic Information menu.";
+                message = msg.get("app.message.customer.existing.error");
                 severity = "info";
             } else {
             onDelete(selectedItemCustomerGuarantor);
