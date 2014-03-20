@@ -21,9 +21,6 @@ import java.util.List;
 
 public class NewCollateralTransform extends Transform {
     @Inject
-    @SELOS
-    Logger log;
-    @Inject
     CustomerTransform customerTransform;
     @Inject
     CustomerDAO customerDAO;

@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class MandateDocTransform extends Transform{
+public class MandateDocTransform extends Transform {
 
     @Inject
     @SELOS
