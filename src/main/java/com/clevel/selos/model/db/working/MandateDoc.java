@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.Role;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -19,8 +20,18 @@ public class MandateDoc implements Serializable {
     @JoinColumn(name="workcase_id")
     private WorkCase workCase;
 
-    @Column(name = "role")
-    private String role;
+    @OneToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+    @Column(name = "ecm_doc_type")
+    private String ecmDocType;
+
+    @Column(name = "ecm_doc_type_desc")
+    private String ecmDocTypeDesc;
+
+    @Column(name = "mandate_type", columnDefinition = "int default 0")
+    private int mandateType;
 
     @Column(name = "is_completed", columnDefinition = "int default 0")
     private int isCompleted;
@@ -28,11 +39,20 @@ public class MandateDoc implements Serializable {
     @Column(name = "remark")
     private String remark;
 
-    @OneToMany(mappedBy = "mandateDoc", cascade = CascadeType.ALL)
-    private List<MandateDocBRMS> mandateDocBRMSList;
+    @Column(name = "reason_incomplete", columnDefinition = "int default 0")
+    private int reasonIncomplete;
+
+    @Column(name = "reason_indistinct", columnDefinition = "int default 0")
+    private int reasonIndistinct;
+
+    @Column(name = "reason_incorrect", columnDefinition = "int default 0")
+    private int reasonIncorrect;
+
+    @Column(name = "reason_expire", columnDefinition = "int default 0")
+    private int reasonExpire;
 
     @OneToMany(mappedBy = "mandateDoc", cascade = CascadeType.ALL)
-    private List<MandateDocReason> mandateDocReasonList;
+    private List<MandateDocBRMS> mandateDocBRMSList;
 
     @OneToMany(mappedBy = "mandateDoc", cascade = CascadeType.ALL)
     private List<MandateDocCust> mandateDocCustList;
@@ -53,12 +73,36 @@ public class MandateDoc implements Serializable {
         this.workCase = workCase;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getEcmDocType() {
+        return ecmDocType;
+    }
+
+    public void setEcmDocType(String ecmDocType) {
+        this.ecmDocType = ecmDocType;
+    }
+
+    public String getEcmDocTypeDesc() {
+        return ecmDocTypeDesc;
+    }
+
+    public void setEcmDocTypeDesc(String ecmDocTypeDesc) {
+        this.ecmDocTypeDesc = ecmDocTypeDesc;
+    }
+
+    public int getMandateType() {
+        return mandateType;
+    }
+
+    public void setMandateType(int mandateType) {
+        this.mandateType = mandateType;
     }
 
     public int getCompleted() {
@@ -85,14 +129,6 @@ public class MandateDoc implements Serializable {
         this.mandateDocBRMSList = mandateDocBRMSList;
     }
 
-    public List<MandateDocReason> getMandateDocReasonList() {
-        return mandateDocReasonList;
-    }
-
-    public void setMandateDocReasonList(List<MandateDocReason> mandateDocReasonList) {
-        this.mandateDocReasonList = mandateDocReasonList;
-    }
-
     public List<MandateDocCust> getMandateDocCustList() {
         return mandateDocCustList;
     }
@@ -101,16 +137,54 @@ public class MandateDoc implements Serializable {
         this.mandateDocCustList = mandateDocCustList;
     }
 
+    public int getReasonIncomplete() {
+        return reasonIncomplete;
+    }
+
+    public void setReasonIncomplete(int reasonIncomplete) {
+        this.reasonIncomplete = reasonIncomplete;
+    }
+
+    public int getReasonIndistinct() {
+        return reasonIndistinct;
+    }
+
+    public void setReasonIndistinct(int reasonIndistinct) {
+        this.reasonIndistinct = reasonIndistinct;
+    }
+
+    public int getReasonIncorrect() {
+        return reasonIncorrect;
+    }
+
+    public void setReasonIncorrect(int reasonIncorrect) {
+        this.reasonIncorrect = reasonIncorrect;
+    }
+
+    public int getReasonExpire() {
+        return reasonExpire;
+    }
+
+    public void setReasonExpire(int reasonExpire) {
+        this.reasonExpire = reasonExpire;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("workCase", workCase)
                 .append("role", role)
+                .append("ecmDocType", ecmDocType)
+                .append("ecmDocTypeDesc", ecmDocTypeDesc)
+                .append("mandateType", mandateType)
                 .append("isCompleted", isCompleted)
                 .append("remark", remark)
+                .append("reasonIncomplete", reasonIncomplete)
+                .append("reasonIndistinct", reasonIndistinct)
+                .append("reasonIncorrect", reasonIncorrect)
+                .append("reasonExpire", reasonExpire)
                 .append("mandateDocBRMSList", mandateDocBRMSList)
-                .append("mandateDocReasonList", mandateDocReasonList)
                 .append("mandateDocCustList", mandateDocCustList)
                 .toString();
     }
