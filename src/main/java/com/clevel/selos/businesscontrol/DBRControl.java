@@ -61,6 +61,7 @@ public class DBRControl extends BusinessControl {
     }
 
     public ActionResult saveDBRInfo(DBRView dbrView, List<NCBDetailView> ncbDetailViews) {
+        log.debug("begin saveDBRInfo");
         try {
             WorkCase workCase = workCaseDAO.findById(dbrView.getWorkCaseId());
             DBR dbr = calculateDBR(dbrView, workCase, ncbDetailViews);
@@ -94,8 +95,9 @@ public class DBRControl extends BusinessControl {
                 }
             }
         }catch (Exception e){
-
+            log.debug("Exception saveDBRInfo", e);
         }
+        log.debug("complete saveDBRInfo");
         return ActionResult.SUCCEED;
     }
 
@@ -143,7 +145,7 @@ public class DBRControl extends BusinessControl {
     }
 
     private DBR calculateDBR(DBRView dbrView, WorkCase workCase, List<NCBDetailView> ncbDetailViews) throws Exception{
-
+        log.debug("Begin calculateDBR");
         int roleId = getCurrentUser().getRole().getId();
         DBR dbr = dbrTransform.getDBRInfoModel(dbrView, workCase, getCurrentUser());
         List<DBRDetail> dbrDetails = dbrDetailTransform.getDbrDetailModels(dbrView.getDbrDetailViews(), getCurrentUser(), dbr);
@@ -228,6 +230,7 @@ public class DBRControl extends BusinessControl {
     }
 
     public ActionResult updateValueOfDBR(long workCaseId){
+        log.debug("Begin updateValueOfDBR");
         DBRView dbrView =  getDBRByWorkCase(workCaseId);
         if(dbrView != null){
             if(dbrView.getId() == 0){
@@ -243,36 +246,41 @@ public class DBRControl extends BusinessControl {
                 dbrView.setIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
             }
             List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
-
             DBR dbr = null;
             try {
                 dbr = calculateDBR(dbrView, workCase, ncbDetailViews);
+                dbrdao.persist(dbr);
             } catch (Exception e) {
-                log.debug("", e);
+                log.debug("Exception updateValueOfDBR", e);
             }
-            dbrdao.persist(dbr);
+        log.debug("complete updateValueOfDBR");
         }
         return ActionResult.SUCCESS;
     }
 
     public void updateFinalDBR(long workCaseId){
+        log.debug("begin updateFinalDBR");
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         if(workCase == null) return;
         DBR dbr = (DBR) dbrdao.createCriteria().add(Restrictions.eq("workCase", workCase)).uniqueResult();
-        if(dbr != null){
-            BigDecimal totalMonthDebtBorrowerFinal = BigDecimal.ZERO;
-            BigDecimal totalMonthDebtRelated = BigDecimal.ZERO;
-            totalMonthDebtBorrowerFinal = dbr.getTotalMonthDebtBorrowerFinal();
-            List<DBRDetail> dbrDetails = dbr.getDbrDetails();
-            for(DBRDetail dbrDetail : Util.safetyList(dbrDetails)){
-                totalMonthDebtRelated = Util.add(totalMonthDebtRelated, dbrDetail.getDebtForCalculate());
+        try{
+            if(dbr != null){
+                BigDecimal totalMonthDebtBorrowerFinal = BigDecimal.ZERO;
+                BigDecimal totalMonthDebtRelated = BigDecimal.ZERO;
+                totalMonthDebtBorrowerFinal = dbr.getTotalMonthDebtBorrowerFinal();
+                List<DBRDetail> dbrDetails = dbr.getDbrDetails();
+                for(DBRDetail dbrDetail : Util.safetyList(dbrDetails)){
+                    totalMonthDebtRelated = Util.add(totalMonthDebtRelated, dbrDetail.getDebtForCalculate());
+                }
+                BigDecimal finalDBR = BigDecimal.ZERO;
+                finalDBR =  calculateFinalDBR(totalMonthDebtBorrowerFinal, totalMonthDebtRelated, dbr.getNetMonthlyIncome(), workCase);
+                dbr.setFinalDBR(finalDBR);
+                dbrdao.persist(dbr);
             }
-            BigDecimal finalDBR = BigDecimal.ZERO;
-            finalDBR =  calculateFinalDBR(totalMonthDebtBorrowerFinal, totalMonthDebtRelated, dbr.getNetMonthlyIncome(), workCase);
-            dbr.setFinalDBR(finalDBR);
-            dbrdao.persist(dbr);
+        }catch(Exception e){
+            log.debug("Exception updateFinalDBR", e);
         }
-
+        log.debug("complete updateFinalDBR");
     }
 
 
