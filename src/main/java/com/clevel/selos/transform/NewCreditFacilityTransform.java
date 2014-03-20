@@ -6,14 +6,15 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Country;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.db.working.NewCreditFacility;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.CountryView;
+import com.clevel.selos.model.view.NewCreditFacilityView;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.Date;
-import java.util.List;
 
 public class NewCreditFacilityTransform extends Transform {
     @SELOS
@@ -238,7 +239,7 @@ public class NewCreditFacilityTransform extends Transform {
         newCreditFacilityView.setTotalIndvGuaranteeAmount(newCreditFacility.getTotalIndvGuaranteeAmount());
         newCreditFacilityView.setTotalJurisGuaranteeAmount(newCreditFacility.getTotalJurisGuaranteeAmount());
         newCreditFacilityView.setTotalMortgageValue(newCreditFacility.getTotalMortgageValue());
-
+/*
         List<NewFeeDetail> newFeeDetailList = newFeeCreditDAO.findByNewCreditFacility(newCreditFacility);
         if (newFeeDetailList.size() > 0) {
             log.debug("newCreditFacility.getNewFeeDetailList() :: {}", newCreditFacility.getNewFeeDetailList());
@@ -263,6 +264,7 @@ public class NewCreditFacilityTransform extends Transform {
             newCreditFacilityView.setNewCollateralViewList(newCollateralViewList);
         }
 
+//                    error when saved and find data from table by newCreditFacility
         List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
         if (newGuarantorDetails.size() > 0) {
             log.debug("newGuarantorDetails:: {}", newGuarantorDetails.size());
@@ -277,7 +279,7 @@ public class NewCreditFacilityTransform extends Transform {
             List<NewConditionDetailView> newConditionDetailViewList = newConditionDetailTransform.transformToView(newConditionDetailList);
             log.debug("newConditionDetailViewList : {}", newConditionDetailViewList);
             newCreditFacilityView.setNewConditionDetailViewList(newConditionDetailViewList);
-        }
+        }*/
         return newCreditFacilityView;
     }
 
