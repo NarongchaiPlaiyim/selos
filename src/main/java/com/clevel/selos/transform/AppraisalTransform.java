@@ -83,7 +83,13 @@ public class AppraisalTransform extends Transform {
         appraisal.setAppointmentCusName(appraisalView.getAppointmentCusName());
         appraisal.setAppointmentDate(appraisalView.getAppointmentDate());
         appraisal.setAppointmentTime(appraisalView.getAppointmentTime());
-        appraisal.setBdmRemark(appraisalView.getBdmRemark());
+
+        if(!Util.isNull(appraisalView.getBdmRemark()) && appraisalView.getBdmRemark().length() < 501){
+            appraisal.setBdmRemark(appraisalView.getBdmRemark());
+        } else {
+            appraisal.setBdmRemark(appraisalView.getBdmRemark().substring(0, 499));
+        }
+
         appraisal.setCancelAppointment(appraisalView.getCancelAppointment());
         appraisal.setAppointmentRemark(appraisalView.getAppointmentRemark());
         appraisal.setZoneLocation(appraisalView.getZoneLocation());

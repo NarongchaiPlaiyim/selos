@@ -14,7 +14,8 @@
                 <td class="title" style="width: 200px;">
                     <p:inputText value="#{appraisalRequest.appraisalDetailViewDialog.titleDeed}" style = "#{appraisalRequest.titleDeedFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
                                  onkeydown="return onKeyPressName2(event);"
-                                 onkeypress="return onKeyPressName2(event);" maxlength="20"
+                                 onkeypress="return onKeyPressName2(event);" maxlength="50"
+                                 counterTemplate="{0} characters remaining." autoResize="false"
                             />
                 </td>
             </tr>
@@ -62,7 +63,7 @@
                                  onkeypress="return onKeyPressNumber(event);" onkeydown="return onKeyDownNumber(event);"
                                  value="#{appraisalRequest.appraisalDetailViewDialog.numberOfDocuments}"
                                  style = "#{appraisalRequest.numberOfDocumentsFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
-                                maxlength="4">
+                                maxlength="3">
                         <p:ajax event="blur" update=":appraisalDetailDlgForm:numberOfDocuments"/>
                     </p:inputText>
                     <h:outputText value="     #{msg.get('app.appraisal.appraisalDetail.dialog.copy')}"/>
