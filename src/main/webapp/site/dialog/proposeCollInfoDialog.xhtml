@@ -63,7 +63,7 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecision')}"/>
     </td>
     <td class="left" colspan="3">
-        <p:inputText value="#{creditFacPropose.newCollateralView.aadDecision}" readonly="true"/>
+        <p:inputText value="#{creditFacPropose.newCollateralView.aadDecision}" readonly="#{creditFacPropose.flagComs}"/>
     </td>
 </tr>
 
@@ -72,13 +72,13 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReason')}"/>
     </td>
     <td class="left">
-        <p:inputText value="#{creditFacPropose.newCollateralView.aadDecisionReason}" readonly="true"/>
+        <p:inputText value="#{creditFacPropose.newCollateralView.aadDecisionReason}" readonly="#{creditFacPropose.flagComs}"/>
     </td>
     <td class="title">
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReasonDetail')}"/>
     </td>
     <td class="left">
-        <p:inputText value="#{creditFacPropose.newCollateralView.aadDecisionReasonDetail}" readonly="true"/>
+        <p:inputText value="#{creditFacPropose.newCollateralView.aadDecisionReasonDetail}" readonly="#{creditFacPropose.flagComs}"/>
     </td>
 </tr>
 
@@ -87,13 +87,13 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.usage')}"/>
     </td>
     <td class="left">
-        <p:inputText value="#{creditFacPropose.newCollateralView.usage}" readonly="true"/>
+        <p:inputText value="#{creditFacPropose.newCollateralView.usage}" readonly="#{creditFacPropose.flagComs}"/>
     </td>
     <td class="title">
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.typeOfUsage')}"/>
     </td>
     <td class="left">
-        <p:inputText value="#{creditFacPropose.newCollateralView.typeOfUsage}" readonly="true"/>
+        <p:inputText value="#{creditFacPropose.newCollateralView.typeOfUsage}" readonly="#{creditFacPropose.flagComs}"/>
     </td>
 </tr>
 
@@ -102,13 +102,13 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageCondition')}"/>
     </td>
     <td class="left">
-        <p:inputText value="#{creditFacPropose.newCollateralView.mortgageCondition}" readonly="true"/>
+        <p:inputText value="#{creditFacPropose.newCollateralView.mortgageCondition}" readonly="#{creditFacPropose.flagComs}"/>
     </td>
     <td class="title">
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageConditionDetail')}"/>
     </td>
     <td class="left">
-        <p:inputText value="#{creditFacPropose.newCollateralView.mortgageConditionDetail}" readonly="true"/>
+        <p:inputText value="#{creditFacPropose.newCollateralView.mortgageConditionDetail}" readonly="#{creditFacPropose.flagComs}"/>
     </td>
 </tr>
 
