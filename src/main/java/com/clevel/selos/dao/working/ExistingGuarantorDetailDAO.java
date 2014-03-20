@@ -33,7 +33,7 @@ public class ExistingGuarantorDetailDAO extends GenericDAO<ExistingGuarantorDeta
     public List<ExistingGuarantorDetail> findByCustomerId(long customerId) {
         log.info("findByCustomerId : {}", customerId);
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("customer.id", customerId));
+        criteria.add(Restrictions.eq("guarantorName.id", customerId));
         criteria.addOrder(Order.asc("id"));
         List<ExistingGuarantorDetail> existingGuarantorDetails = criteria.list();
 

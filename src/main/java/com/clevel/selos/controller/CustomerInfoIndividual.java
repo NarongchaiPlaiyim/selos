@@ -1092,6 +1092,7 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onSearchCustomerInfo() {
+        updatePnl1();
         log.debug("onSearchCustomerInfo :::");
         log.debug("onSearchCustomerInfo ::: customerInfoView : {}", customerInfoSearch);
         CustomerInfoResultView customerInfoResultView;
@@ -1968,6 +1969,33 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void onChangeSpouseSearch(){
         customerInfoView.getSpouse().setSearchId("");
+    }
+
+    public void updatePnl1(){
+        RequestContext.getCurrentInstance().execute("pnl1()");
+        relationMainCusId = 3;
+        onChangeRelation();
+        customerInfoView.setCollateralOwner(2);
+    }
+
+    public void updatePnl2(){
+        System.out.println("##########################################################################");
+        System.out.println("##########################################################################");
+        System.out.println("##########################################################################");
+        System.out.println("#####################         Update Panel 2      ########################");
+        System.out.println("##########################################################################");
+        System.out.println("##########################################################################");
+        System.out.println("##########################################################################");
+    }
+
+    public void updatePnl3(){
+        System.out.println("##########################################################################");
+        System.out.println("##########################################################################");
+        System.out.println("##########################################################################");
+        System.out.println("#####################         Update Panel 3      ########################");
+        System.out.println("##########################################################################");
+        System.out.println("##########################################################################");
+        System.out.println("##########################################################################");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
