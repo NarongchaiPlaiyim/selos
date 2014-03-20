@@ -2,20 +2,18 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.CountryDAO;
 import com.clevel.selos.dao.master.CreditRequestTypeDAO;
-import com.clevel.selos.dao.working.NewCreditFacilityDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Country;
-import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.NewCreditFacility;
-import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.view.CountryView;
-import com.clevel.selos.model.view.NewCreditFacilityView;
+import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.Date;
+import java.util.List;
 
 public class NewCreditFacilityTransform extends Transform {
     @SELOS
@@ -34,6 +32,36 @@ public class NewCreditFacilityTransform extends Transform {
     private CountryTransform countryTransform;
     @Inject
     private CreditRequestTypeTransform creditRequestTypeTransform;
+    @Inject
+    NewCollateralCreditDAO newCollateralCreditDAO;
+    @Inject
+    NewFeeCreditDAO newFeeCreditDAO;
+    @Inject
+    NewConditionDetailDAO newConditionDetailDAO;
+    @Inject
+    NewCreditDetailDAO newCreditDetailDAO;
+    @Inject
+    NewCreditTierDetailDAO newCreditTierDetailDAO;
+    @Inject
+    NewGuarantorDetailDAO newGuarantorDetailDAO;
+    @Inject
+    CreditTypeDetailDAO creditTypeDetailDAO;
+    @Inject
+    NewCollateralDAO newCollateralDetailDAO;
+    @Inject
+    NewCollateralSubDAO newCollateralSubDetailDAO;
+    @Inject
+    NewCollateralHeadDAO newCollateralHeadDetailDAO;
+    @Inject
+    NewFeeDetailTransform newFeeDetailTransform;
+    @Inject
+    NewCreditDetailTransform newCreditDetailTransform;
+    @Inject
+    NewGuarantorDetailTransform newGuarantorDetailTransform;
+    @Inject
+    NewCollateralTransform newCollateralTransform;
+    @Inject
+    NewConditionDetailTransform newConditionDetailTransform;
 
     public NewCreditFacility transformToModelDB(NewCreditFacilityView newCreditFacilityView, WorkCase workCase, User user) {
 
@@ -211,6 +239,45 @@ public class NewCreditFacilityTransform extends Transform {
         newCreditFacilityView.setTotalJurisGuaranteeAmount(newCreditFacility.getTotalJurisGuaranteeAmount());
         newCreditFacilityView.setTotalMortgageValue(newCreditFacility.getTotalMortgageValue());
 
+        List<NewFeeDetail> newFeeDetailList = newFeeCreditDAO.findByNewCreditFacility(newCreditFacility);
+        if (newFeeDetailList.size() > 0) {
+            log.debug("newCreditFacility.getNewFeeDetailList() :: {}", newCreditFacility.getNewFeeDetailList());
+            List<NewFeeDetailView> newFeeDetailViewList = newFeeDetailTransform.transformToView(newFeeDetailList);
+            log.debug("newFeeDetailViewList : {}", newFeeDetailViewList);
+            newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
+        }
+
+        List<NewCreditDetail> newCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility);
+        if (newCreditList.size() > 0) {
+            log.debug("newCreditFacility.getNewCreditDetailList() :: {}", newCreditFacility.getNewCreditDetailList().size());
+            List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditList);
+            log.debug("newCreditDetailViewList : {}", newCreditDetailViewList);
+            newCreditFacilityView.setNewCreditDetailViewList(newCreditDetailViewList);
+        }
+
+        List<NewCollateral> newCollateralDetailList = newCollateralDetailDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
+        if (newCollateralDetailList.size() > 0) {
+            log.debug("newCreditFacility.getNewCollateralDetailList() :: {}", newCreditFacility.getNewCollateralDetailList().size());
+            List<NewCollateralView> newCollateralViewList = newCollateralTransform.transformsCollateralToView(newCollateralDetailList);
+            log.debug("newCollateralViewList : {}", newCollateralViewList);
+            newCreditFacilityView.setNewCollateralViewList(newCollateralViewList);
+        }
+
+        List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
+        if (newGuarantorDetails.size() > 0) {
+            log.debug("newGuarantorDetails:: {}", newGuarantorDetails.size());
+            List<NewGuarantorDetailView> newGuarantorDetailViewList = newGuarantorDetailTransform.transformToView(newGuarantorDetails);
+            log.debug("newGuarantorDetailViewList : {}", newGuarantorDetailViewList);
+            newCreditFacilityView.setNewGuarantorDetailViewList(newGuarantorDetailViewList);
+        }
+
+        List<NewConditionDetail> newConditionDetailList = newConditionDetailDAO.findByNewCreditFacility(newCreditFacility);
+        if (newConditionDetailList.size() > 0) {
+            log.debug("newConditionDetailList() :: {}", newConditionDetailList.size());
+            List<NewConditionDetailView> newConditionDetailViewList = newConditionDetailTransform.transformToView(newConditionDetailList);
+            log.debug("newConditionDetailViewList : {}", newConditionDetailViewList);
+            newCreditFacilityView.setNewConditionDetailViewList(newConditionDetailViewList);
+        }
         return newCreditFacilityView;
     }
 
