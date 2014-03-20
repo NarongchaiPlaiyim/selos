@@ -71,7 +71,7 @@ public class NewGuarantorDetailDAO extends GenericDAO<NewGuarantorDetail, Long> 
     public List<NewGuarantorDetail> findByCustomerId(long customerId) {
         log.info("findByCustomerId : {}", customerId);
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("customer.id", customerId));
+        criteria.add(Restrictions.eq("guarantorName.id", customerId));
         criteria.addOrder(Order.asc("id"));
         List<NewGuarantorDetail> newGuarantorDetails = criteria.list();
 
