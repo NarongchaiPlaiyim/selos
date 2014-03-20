@@ -219,7 +219,7 @@ public class ProposedCollateralDecisionReport extends ReportModel{
     }
 
     public List<NewCollateralSubView> getSubViewList() {
-        return subViewList;
+        return new ArrayList<NewCollateralSubView>();
     }
 
     public void setSubViewList(List<NewCollateralSubView> subViewList) {

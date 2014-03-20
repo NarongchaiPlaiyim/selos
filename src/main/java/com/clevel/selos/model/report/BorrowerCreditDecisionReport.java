@@ -2,7 +2,6 @@ package com.clevel.selos.model.report;
 
 import com.clevel.selos.model.view.ExistingCreditTierDetailView;
 import com.clevel.selos.model.view.ExistingSplitLineDetailView;
-import com.clevel.selos.model.view.NewCreditTierDetailView;
 import com.clevel.selos.report.ReportModel;
 
 import java.math.BigDecimal;

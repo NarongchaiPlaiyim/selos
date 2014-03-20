@@ -425,5 +425,18 @@ public class Util implements Serializable {
         }
         return string;
     }
-   
+
+    public static String checkNullStrint(String value){
+        if (value == null){
+            return "-";
+        }
+        return value;
+    }
+
+    public static BigDecimal converNullToZERO(BigDecimal value){
+        if (value == null){
+            return BigDecimal.ZERO;
+        }
+        return value;
+    }
 }
