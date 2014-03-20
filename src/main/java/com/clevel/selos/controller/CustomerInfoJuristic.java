@@ -216,10 +216,12 @@ public class CustomerInfoJuristic implements Serializable {
     public void onCreation() {
         log.debug("onCreation");
 
-        initial();
-
         HttpSession session = FacesUtil.getSession(true);
         if(checkSession(session)){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+
+            initial();
+
             enableAllFieldCus = false;
 
             Flash flash = FacesUtil.getFlash();
