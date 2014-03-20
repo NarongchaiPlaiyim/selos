@@ -73,7 +73,7 @@
                     <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.cancelCA')}" styleClass="left"
                                      icon="ui-icon-alert"
                                      widgetVar="confrmCancelCA" global="false" showEffect="fade"
-                                     rendered="#{baseController.manageButton.cancelCAButton}">
+                                     rendered="#{baseController.checkButton('Cancel CA') and !baseController.requestAppraisalPage}">
                         <p:commandButton value="#{msg.get('app.button.yes')}" styleClass="ui-confirmdialog-yes"
                                          process="@this"
                                          update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"
@@ -91,7 +91,7 @@
                     <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.closeSale')}" styleClass="left"
                                      icon="ui-icon-alert"
                                      widgetVar="confrmCloseSaleCA" global="false" showEffect="fade"
-                                     rendered="#{baseController.manageButton.closeSaleButton}">
+                                     rendered="#{baseController.checkButton('Close Sales') and !baseController.requestAppraisalPage}">
                         <p:commandButton value="#{msg.get('app.button.yes')}" styleClass="ui-confirmdialog-yes"
                                          process="@this"
                                          actionListener="#{prescreenMaker.onCloseSale()}"
