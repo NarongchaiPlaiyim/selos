@@ -213,7 +213,9 @@ public class ExSummaryControl extends BusinessControl {
             //if isRental = N, display ownerName. If isRental = Y, display expiryDate
             if(bizInfoSummaryView.getRental() == 1) { // 1 is yes??
                 if(bizInfoSummaryView.getExpiryDate() != null){
-                    exSummaryView.setOwner("เช่า วันที่หมดอายุ : "+DateTimeUtil.convertToStringDDMMYYYY(bizInfoSummaryView.getExpiryDate() , new Locale("th", "TH")));
+                    exSummaryView.setOwner(msg.get("app.exSummary.business.location.label.ownerExpired")
+                                            .concat(" ")
+                                            .concat(DateTimeUtil.convertToStringDDMMYYYY(bizInfoSummaryView.getExpiryDate() , new Locale("th", "TH"))));
                 }
             } else {
                 exSummaryView.setOwner(bizInfoSummaryView.getOwnerName()); //owner name
@@ -247,7 +249,11 @@ public class ExSummaryControl extends BusinessControl {
                         bizPermission = bizPermission.append(bizPermissionList.get(i).concat(", "));
                     }
                 }
-                exSummaryView.setBusinessPermission(bizPermission.toString());
+                if(bizPermission != null && bizPermission.toString().trim().equalsIgnoreCase("")){
+                    exSummaryView.setBusinessPermission("-");
+                } else {
+                    exSummaryView.setBusinessPermission(bizPermission.toString());
+                }
                 exSummaryView.setExpiryDate(bizInfoDetailViewList.get(tmpIndexHighestExpire).getBizDocExpiryDate());
             }
         } else {
