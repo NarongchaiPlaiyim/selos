@@ -25,7 +25,9 @@ import java.util.Date;
 import java.util.List;
 
 public class InsuranceInfoTransform extends Transform {
-
+    @Inject
+    @SELOS
+    Logger log;
     @Inject
     private NewCollateralTransform newCollateralTransform;
 
