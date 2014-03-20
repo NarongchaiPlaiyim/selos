@@ -1,8 +1,10 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.InboxControl;
+import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.InboxView;
 import com.clevel.selos.security.UserDetail;
@@ -47,6 +49,9 @@ public class InboxDev implements Serializable {
 
     @Inject
     InboxControl inboxControl;
+
+    @Inject
+    StepDAO stepDAO;
 
     private UserDetail userDetail;
     private List<InboxView> inboxViewList;
@@ -109,6 +114,12 @@ public class InboxDev implements Serializable {
         session.setAttribute("stepId", inboxViewSelectItem.getStepId());
         session.setAttribute("queueName", inboxViewSelectItem.getQueueName());
         session.setAttribute("requestAppraisal", inboxViewSelectItem.getRequestAppraisal());
+        session.setAttribute("statusId", inboxViewSelectItem.getStatusCode());
+
+        if(Long.toString(inboxViewSelectItem.getStepId()) != null && inboxViewSelectItem.getStepId() != 0){
+            Step step = stepDAO.findById(inboxViewSelectItem.getStepId());
+            session.setAttribute("stageId", step != null ? step.getStage().getId() : 0);
+        }
 
         //*** Get Information for Header ***//
         AppHeaderView appHeaderView = inboxControl.getHeaderInformation(inboxViewSelectItem.getWorkCasePreScreenId(), inboxViewSelectItem.getWorkCaseId());

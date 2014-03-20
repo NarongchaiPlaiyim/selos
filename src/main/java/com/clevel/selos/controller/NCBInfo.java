@@ -70,7 +70,8 @@ public class NCBInfo implements Serializable {
     private SettlementStatus dlgHistoryPayment;
     private TDRCondition tdrCondition;
 
-    private String modeForButton;
+    enum ModeForButton{ ADD, EDIT }
+    private ModeForButton modeForButton;
     private int rowIndex;
     private boolean noOfmonthsPaymentFlag;
 
@@ -87,7 +88,7 @@ public class NCBInfo implements Serializable {
     private boolean nplRendered;
     private boolean tdrRendered;
     private List<String> yearList;
-    private Customer customerInfoView;
+    private Customer customerInfo;
 
     @Inject
     private AccountStatusDAO accountStatusDAO;
@@ -119,53 +120,29 @@ public class NCBInfo implements Serializable {
         return Month.values();
     }
 
-    @PostConstruct
-    public void onCreation() {
-        log.debug("onCreation.");
-        modeForButton = "add";
-        noOfmonthsPaymentFlag = false;
-
-        HttpSession session = FacesUtil.getSession(true);
-
-        if (session.getAttribute("customerId") != null) {
-            customerId = Long.parseLong(session.getAttribute("customerId").toString());
-            log.debug("customerId :: {} ", customerId);
-
-            customerInfoView = customerDAO.findById(customerId);
-            ncbInfoView = ncbInfoControl.getNCBInfoView(customerId); // find NCB by customer
-
-            if (ncbInfoView != null) {
-                ncbDetailViewList = ncbInfoControl.getNcbDetailListView(ncbInfoView);
-                log.debug("ncbDetailViewList  :::::::::::: {} ", ncbDetailViewList.size());
-                if (ncbDetailViewList.size() > 0) {
-                    ncbInfoView.setNcbFlag("Y");
-                }
-                toControlNplFlagRendered();
-                toControlTdrFlagRendered();
-            }
-
-            if (session.getAttribute("workCaseId") != null) {
-                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-                log.info("workCaseId :: {} ", workCaseId);
-            } else {
-                log.info("onCreation ::: workCaseId is null.");
-                try {
-                    FacesUtil.redirect("/site/inbox.jsf");
-                    return;
-                } catch (Exception ex) {
-                    log.info("Exception :: {}",ex);
-                }
-            }
-        } else {
-            try {
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/NCBSummary.jsf");
-                return;
-            } catch (Exception ex) {
-                log.debug("Exception :: {}", ex);
-            }
+    public boolean checkSession(HttpSession session){
+        boolean checkSession = false;
+        if( (Long)session.getAttribute("workCaseId") != 0 && (Long)session.getAttribute("stepId") != 0){
+            checkSession = true;
         }
 
+        return checkSession;
+    }
+
+    public void preRender(){
+        log.debug("preRender");
+        HttpSession session = FacesUtil.getSession(true);
+
+        if(checkSession(session)){
+            //TODO Check valid stepId
+            log.debug("preRender ::: Check valid stepId");
+        }else{
+            log.debug("preRender ::: No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
+        }
+    }
+
+    public void initial(){
         if (ncbDetailView == null) {
             ncbDetailView = new NCBDetailView();
         }
@@ -213,25 +190,54 @@ public class NCBInfo implements Serializable {
         if (tdrCondition == null) {
             tdrCondition = new TDRCondition();
         }
+    }
 
-        accountStatusList = accountStatusDAO.findAll();
-//      accountTypeList = accountTypeDAO.findAll();
-        tdrConditionList = tdrConditionDAO.findAll();
+    @PostConstruct
+    public void onCreation() {
+        log.debug("onCreation");
+        modeForButton = ModeForButton.ADD;
+        noOfmonthsPaymentFlag = false;
 
-        if(customerInfoView != null){
-            log.debug("customerInfoView.getCustomerEntity().getId() :: {}", customerInfoView.getCustomerEntity().getId());
+        initial();
 
-            accountTypeList = accountTypeDAO.getListLoanTypeByCusEntity(customerInfoView.getCustomerEntity().getId());
-            log.debug("accountTypeList :: {}", accountTypeList.size());
+        HttpSession session = FacesUtil.getSession(true);
 
-            settlementStatusList = settlementStatusDAO.getListSettlementStatusByCusEntity(customerInfoView.getCustomerEntity().getId());
-            log.debug("settlementStatusList :: {}", settlementStatusList.size());
+        if(checkSession(session)){
+            if(session.getAttribute("customerId") != null && (Long)session.getAttribute("customerId") != 0){
+                customerId = (Long)session.getAttribute("customerId");
+                log.debug("onCreation ::: customerId : {}", customerId);
 
-            log.debug("customerInfoView : {}", customerInfoView.toString());
+                customerInfo = customerDAO.findById(customerId);
+                ncbInfoView = ncbInfoControl.getNCBInfoView(customerId); // find NCB by customer
+
+                if (ncbInfoView != null) {
+                    ncbDetailViewList = ncbInfoControl.getNcbDetailListView(ncbInfoView);
+                    log.debug("onCreation ::: ncbDetailViewList.size() : {} ", ncbDetailViewList.size());
+                    if (ncbDetailViewList.size() > 0) {
+                        ncbInfoView.setNcbFlag("Y");
+                    }
+                    toControlNplFlagRendered();
+                    toControlTdrFlagRendered();
+                }
+
+                accountStatusList = accountStatusDAO.findAll();
+                tdrConditionList = tdrConditionDAO.findAll();
+
+                if(customerInfo != null){
+                    log.debug("customerInfo.getCustomerEntity().getId() :: {}", customerInfo.getCustomerEntity().getId());
+
+                    accountTypeList = accountTypeDAO.getListLoanTypeByCusEntity(customerInfo.getCustomerEntity().getId());
+                    log.debug("accountTypeList :: {}", accountTypeList.size());
+
+                    settlementStatusList = settlementStatusDAO.getListSettlementStatusByCusEntity(customerInfo.getCustomerEntity().getId());
+                    log.debug("settlementStatusList :: {}", settlementStatusList.size());
+
+                    log.debug("customerInfo : {}", customerInfo.toString());
+                }
+
+                yearList = DateTimeUtil.getPreviousHundredYearTH();
+            }
         }
-
-        yearList = DateTimeUtil.getPreviousHundredYearTH();
-
     }
 
     public void toControlNplFlagRendered() {
@@ -262,12 +268,12 @@ public class NCBInfo implements Serializable {
         log.debug("onAddNcbRecord ::: Reset Form");
         ncbDetailView = new NCBDetailView();
         ncbDetailView.reset();
-        modeForButton = "add";
+        modeForButton = ModeForButton.ADD;
 
     }
 
     public void onEditNcbDetail() {  //copy row that choose to dialog
-        modeForButton = "edit";
+        modeForButton = ModeForButton.EDIT;
         log.debug("onEditNcbDetail ::: selectNcbRecordItem  : {}", selectNcbRecordItem.toString());
         Cloner cloner = new Cloner();
 
@@ -291,8 +297,7 @@ public class NCBInfo implements Serializable {
         List<BigDecimal> moneys;
 
         if (ncbDetailView.getAccountType().getId() != 0 && ncbDetailView.getAccountStatus().getId() != 0 && ncbDetailView.getCurrentPayment().getId() != 0 && ncbDetailView.getHistoryPayment().getId() != 0) {
-            if (modeForButton != null && modeForButton.equalsIgnoreCase("add")) {
-
+            if (modeForButton != null && modeForButton == ModeForButton.ADD) {
                 AccountType accountType = accountTypeDAO.findById(ncbDetailView.getAccountType().getId());
                 AccountStatus accountStatus = accountStatusDAO.findById(ncbDetailView.getAccountStatus().getId());
                 SettlementStatus tdrConditionCurrent = settlementStatusDAO.findById(ncbDetailView.getCurrentPayment().getId());
@@ -340,7 +345,7 @@ public class NCBInfo implements Serializable {
                 log.debug("add finish :: ncbAdd : {}", ncbAdd);
                 log.debug("add finish :: ncbDetailViewList : {}", ncbDetailViewList);
 
-            } else if (modeForButton != null && modeForButton.equalsIgnoreCase("edit")) {
+            } else if (modeForButton != null && modeForButton == ModeForButton.EDIT) {
                 log.debug("onSaveNcbRecord ::: mode : {}", modeForButton);
 
                 AccountType accountType = accountTypeDAO.findById(ncbDetailView.getAccountType().getId());
@@ -472,11 +477,11 @@ public class NCBInfo implements Serializable {
         this.rowIndex = rowIndex;
     }
 
-    public String getModeForButton() {
+    public ModeForButton getModeForButton() {
         return modeForButton;
     }
 
-    public void setModeForButton(String modeForButton) {
+    public void setModeForButton(ModeForButton modeForButton) {
         this.modeForButton = modeForButton;
     }
 

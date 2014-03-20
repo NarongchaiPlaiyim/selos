@@ -15,6 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NewCollateralSubTransform extends Transform {
+    @Inject
+    @SELOS
+    Logger log;
+
     private List<NewCollateralSub> newCollateralSubList;
     private List<NewCollateralSubView> newCollateralSubViewList;
 

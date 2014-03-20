@@ -17,6 +17,7 @@ public class GuarantorBorrowerDecisionReport extends ReportModel{
     private String tcgLgNo;
     private BigDecimal totalLimitGuaranteeAmount;
     private List<ExistingCreditTypeDetailView> existingCreditTypeDetailViewList;
+    private String path;
 
     public GuarantorBorrowerDecisionReport() {
         count = getDefaultInteger();
@@ -64,6 +65,14 @@ public class GuarantorBorrowerDecisionReport extends ReportModel{
 
     public void setTotalLimitGuaranteeAmount(BigDecimal totalLimitGuaranteeAmount) {
         this.totalLimitGuaranteeAmount = totalLimitGuaranteeAmount;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     @Override

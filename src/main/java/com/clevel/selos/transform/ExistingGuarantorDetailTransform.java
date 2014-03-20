@@ -1,6 +1,7 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;
@@ -8,6 +9,7 @@ import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.ExistingGuarantorDetail;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.ExistingGuarantorDetailView;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -15,6 +17,9 @@ import java.util.Date;
 import java.util.List;
 
 public class ExistingGuarantorDetailTransform extends Transform {
+    @SELOS
+    @Inject
+    private Logger log;
 
     @Inject
     CustomerDAO customerDAO;

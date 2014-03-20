@@ -1,8 +1,10 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.SBFScoreDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.SBFScore;
 import com.clevel.selos.model.view.SBFScoreView;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
@@ -10,7 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SBFScoreTransform extends Transform{
-
+    @SELOS
+    @Inject
+    private Logger log;
     @Inject
     private SBFScoreDAO sbfScoreDAO;
 
