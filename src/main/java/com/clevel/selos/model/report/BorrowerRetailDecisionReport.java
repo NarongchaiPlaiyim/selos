@@ -27,7 +27,7 @@ public class BorrowerRetailDecisionReport extends ReportModel{
     private BigDecimal pcePercent;
     private BigDecimal pceLimit;
     private BigDecimal outstanding;
-    private BigDecimal finalInterest;
+    private String path;
 
     private List<ExistingCreditTierDetailView> existingCreditTierDetailViewList;
     private List<ExistingSplitLineDetailView> existingSplitLineDetailViewList;
@@ -177,6 +177,14 @@ public class BorrowerRetailDecisionReport extends ReportModel{
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     @Override

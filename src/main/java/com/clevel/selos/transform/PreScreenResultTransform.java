@@ -18,10 +18,8 @@ import java.util.List;
 
 public class PreScreenResultTransform extends Transform {
 
-
     @Inject
     public PreScreenResultTransform() {
-
     }
 
     public List<PreScreenResponseView> transformResponseToView(List<PreScreenResponse> presCreenResponses) {
@@ -119,6 +117,5 @@ public class PreScreenResultTransform extends Transform {
         }
         return preScreenResponseViewList;
     }
-
 
 }

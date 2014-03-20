@@ -26,6 +26,7 @@ public class PerfectionReviewTransform extends Transform {
 			view.setModifyUser(model.getModifyBy().getDisplayName());
 		return view;
 	}
+
 	public PerfectionReview createNewModel(PerfectionReviewView view,User user,WorkCase workCase) {
 		PerfectionReview model = new PerfectionReview();
 		model.setType(view.getType());

@@ -498,7 +498,12 @@ public class ObligationBizTransform extends BusinessTransform {
 
                 //SCFScore, get worst score (Max is the worst) of final rate
                 if(obligation.getScfScoreFinalRate() != null && !"".equals(obligation.getScfScoreFinalRate().trim())){
-                    int tempSBFScore = Integer.parseInt(obligation.getScfScoreFinalRate());
+                    //TODO Change to remove scfScore to 2 length
+                    //int tempSBFScore = Integer.parseInt(obligation.getScfScoreFinalRate());
+                    int tempSBFScore = 0;
+                    if(obligation.getScfScoreFinalRate().length() > 2){
+                        tempSBFScore = Integer.parseInt(obligation.getScfScoreFinalRate().substring(obligation.getScfScoreFinalRate().length()-2, obligation.getScfScoreFinalRate().length()));
+                    }
                     log.info("tempSBFScore int score : {}", tempSBFScore);
                     if (tempSBFScore > scfScore){
                         scfScore = tempSBFScore;

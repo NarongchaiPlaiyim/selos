@@ -10,8 +10,8 @@ import java.util.List;
 public abstract class CheckMandatoryDocAbstractView implements Serializable {
     private long id;
     private String documentType;
-    private List<String> BRMSDocumentType;
-    private List<String> Owners;
+    private List<String> BRMSDocumentTypeList;
+    private List<String> ownewList;
     private List<CheckMandatoryDocFileNameView> fileNameViewList;
     private int complete;
     private boolean incomplete ;
@@ -44,20 +44,20 @@ public abstract class CheckMandatoryDocAbstractView implements Serializable {
         this.documentType = documentType;
     }
 
-    public List<String> getBRMSDocumentType() {
-        return BRMSDocumentType;
+    public List<String> getBRMSDocumentTypeList() {
+        return BRMSDocumentTypeList;
     }
 
-    public void setBRMSDocumentType(List<String> BRMSDocumentType) {
-        this.BRMSDocumentType = BRMSDocumentType;
+    public void setBRMSDocumentTypeList(List<String> BRMSDocumentTypeList) {
+        this.BRMSDocumentTypeList = BRMSDocumentTypeList;
     }
 
-    public List<String> getOwners() {
-        return Owners;
+    public List<String> getOwnewList() {
+        return ownewList;
     }
 
-    public void setOwners(List<String> owners) {
-        Owners = owners;
+    public void setOwnewList(List<String> ownewList) {
+        this.ownewList = ownewList;
     }
 
     public List<CheckMandatoryDocFileNameView> getFileNameViewList() {
@@ -121,8 +121,8 @@ public abstract class CheckMandatoryDocAbstractView implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("documentType", documentType)
-                .append("BRMSDocumentType", BRMSDocumentType)
-                .append("Owners", Owners)
+                .append("BRMSDocumentTypeList", BRMSDocumentTypeList)
+                .append("ownewList", ownewList)
                 .append("fileNameViewList", fileNameViewList)
                 .append("complete", complete)
                 .append("incomplete", incomplete)

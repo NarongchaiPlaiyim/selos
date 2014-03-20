@@ -16,8 +16,6 @@ import javax.inject.Inject;
 
 
 public class NCBTransform extends Transform {
-
-
     @Inject
     LoanAccountTypeTransform loanAccountTypeTransform;
     @Inject
@@ -28,7 +26,6 @@ public class NCBTransform extends Transform {
     MaritalStatusDAO maritalStatusDAO;
     @Inject
     NCBDAO ncbDAO;
-
 
     public NCB transformToModel(NCBInfoView ncbInfoView) {
         NCB ncb = new NCB();
@@ -51,6 +48,7 @@ public class NCBTransform extends Transform {
         ncb.setCheckingDate(ncbInfoView.getCheckingDate());
         ncb.setCurrentPaymentType(ncbInfoView.getCurrentPaymentType());
         ncb.setHistoryPaymentType(ncbInfoView.getHistoryPaymentType());
+
         ncb.setNplFlag(ncbInfoView.getNplFlag());
         ncb.setNplOtherFlag(transFormBooleanToDb(ncbInfoView.isNplOtherFlag()));
         ncb.setNplOtherMonth(ncbInfoView.getNplOtherMonth());
@@ -58,9 +56,11 @@ public class NCBTransform extends Transform {
         ncb.setNplTMBFlag(transFormBooleanToDb(ncbInfoView.isNplTMBFlag()));
         ncb.setNplTMBMonth(ncbInfoView.getNplTMBMonth());
         ncb.setNplTMBYear(ncbInfoView.getNplTMBYear());
+
         ncb.setPaymentClass(ncbInfoView.getPaymentClass());
         ncb.setPersonalId(ncbInfoView.getPersonalId());
         ncb.setRemark(ncbInfoView.getRemark());
+
         ncb.setTdrFlag(ncbInfoView.getTdrFlag());
         ncb.setTdrOhterFlag(transFormBooleanToDb(ncbInfoView.isTdrOtherFlag()));
         ncb.setTdrOtherMonth(ncbInfoView.getTdrOtherMonth());
@@ -68,6 +68,7 @@ public class NCBTransform extends Transform {
         ncb.setTdrTMBFlag(transFormBooleanToDb(ncbInfoView.isTdrTMBFlag()));
         ncb.setTdrTMBMonth(ncbInfoView.getTdrTMBMonth());
         ncb.setTdrTMBYear(ncbInfoView.getTdrTMBYear());
+
         ncb.setNcbCusName(ncbInfoView.getNcbCusName());
         ncb.setEnquiry(ncbInfoView.getEnquiry());
         ncb.setNcbCusMarriageStatus(ncbInfoView.getNcbCusMarriageStatus());
@@ -93,22 +94,28 @@ public class NCBTransform extends Transform {
         ncbInfoView.setCheckingDate(ncb.getCheckingDate());
         ncbInfoView.setCurrentPaymentType(ncb.getCurrentPaymentType());
         ncbInfoView.setHistoryPaymentType(ncb.getHistoryPaymentType());
+        //NPL Flag = NPL Radio Value
         ncbInfoView.setNplFlag(ncb.getNplFlag());
+        //NPL Other Flag & TMB Flag = Check Box Value
         ncbInfoView.setNplOtherFlag(transFormBooleanToView(ncb.getNplOtherFlag()));
-        ncbInfoView.setNplOtherMonth(ncb.getNplOtherYear());
+        ncbInfoView.setNplOtherMonth(ncb.getNplOtherMonth());
         ncbInfoView.setNplOtherYear(ncb.getNplOtherYear());
         ncbInfoView.setNplTMBFlag(transFormBooleanToView(ncb.getNplTMBFlag()));
         ncbInfoView.setNplTMBMonth(ncb.getNplTMBMonth());
         ncbInfoView.setNplTMBYear(ncb.getNplTMBYear());
-        ncbInfoView.setPaymentClass(ncb.getPaymentClass());
-        ncbInfoView.setRemark(ncb.getRemark());
+
+        //TDR Flag = TDR Radio Value
         ncbInfoView.setTdrFlag(ncb.getTdrFlag());
+        //TDR Other Flag & TMB Flag = Check Box Value
         ncbInfoView.setTdrOtherFlag(transFormBooleanToView(ncb.getTdrOhterFlag()));
         ncbInfoView.setTdrOtherMonth(ncb.getTdrOtherMonth());
         ncbInfoView.setTdrOtherYear(ncb.getTdrOtherYear());
         ncbInfoView.setTdrTMBFlag(transFormBooleanToView(ncb.getTdrTMBFlag()));
         ncbInfoView.setTdrTMBMonth(ncb.getTdrTMBMonth());
         ncbInfoView.setTdrTMBYear(ncb.getTdrTMBYear());
+
+        ncbInfoView.setPaymentClass(ncb.getPaymentClass());
+        ncbInfoView.setRemark(ncb.getRemark());
 
        if (ncb.getTdrCondition() != null && ncb.getTdrCondition().getId() != 0) {
             ncbInfoView.setTdrCondition(ncb.getTdrCondition());

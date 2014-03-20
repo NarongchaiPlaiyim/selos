@@ -40,4 +40,23 @@ public class WorkCaseDAO extends GenericDAO<WorkCase, Long> {
 
         return workCase;
     }
+
+    //Function for AppHeader
+    public WorkCase getWorkCaseById(long id){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("id", id));
+        criteria.setFetchMode("stepOwner", FetchMode.SELECT);
+        criteria.setFetchMode("workCasePrescreen", FetchMode.SELECT);
+        criteria.setFetchMode("atUserTeam", FetchMode.SELECT);
+        criteria.setFetchMode("productGroup", FetchMode.SELECT);
+        criteria.setFetchMode("requestType", FetchMode.SELECT);
+        criteria.setFetchMode("fromUser", FetchMode.SELECT);
+        criteria.setFetchMode("atUser", FetchMode.SELECT);
+        criteria.setFetchMode("authorizationDOA", FetchMode.SELECT);
+        criteria.setFetchMode("step", FetchMode.SELECT);
+        criteria.setFetchMode("modifyBy", FetchMode.SELECT);
+        WorkCase workCase = (WorkCase) criteria.uniqueResult();
+
+        return workCase;
+    }
 }

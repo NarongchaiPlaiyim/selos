@@ -23,6 +23,7 @@ public class RelationCustomerDAO extends GenericDAO<RelationCustomer, Integer> {
 
     @SuppressWarnings("unchecked")
     public List<Relation> getListRelation(int customerEntityId, int borrowerTypeId, int spouse) {
+        log.info("getListRelation. customerEntityId : {}, borrowerTypeId : {}, spouse : {}", customerEntityId, borrowerTypeId, spouse);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("customerEntity.id", customerEntityId));
         criteria.add(Restrictions.eq("borrowerType.id", borrowerTypeId));
@@ -34,12 +35,13 @@ public class RelationCustomerDAO extends GenericDAO<RelationCustomer, Integer> {
         for(RelationCustomer rc : list){
             listRelation.add(rc.getRelation());
         }
-        log.info("getList. (result size: {})", listRelation.size());
+        log.info("getListRelation. (result size: {})", listRelation.size());
 
         return listRelation;
     }
 
     public List<Relation> getListRelationWithOutBorrower(int customerEntityId, int borrowerTypeId, int spouse) {
+        log.info("getListRelationWithOutBorrower. customerEntityId : {}, borrowerTypeId : {}, spouse : {}", customerEntityId, borrowerTypeId, spouse);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("customerEntity.id", customerEntityId));
         criteria.add(Restrictions.eq("borrowerType.id", borrowerTypeId));
@@ -53,7 +55,7 @@ public class RelationCustomerDAO extends GenericDAO<RelationCustomer, Integer> {
                 listRelation.add(rc.getRelation());
             }
         }
-        log.info("getList. (result size: {})", listRelation.size());
+        log.info("getListRelationWithOutBorrower. (result size: {})", listRelation.size());
 
         return listRelation;
     }

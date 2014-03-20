@@ -22,9 +22,7 @@ public class ReportService implements Serializable {
     @SELOS
     Logger log;
 
-
     public void init(){
-
     }
 
     public void generatePDF(String fileName, Map<String,Object> parameters,String pdfName) throws JRException, IOException {

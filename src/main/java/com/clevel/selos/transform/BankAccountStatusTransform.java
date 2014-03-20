@@ -1,12 +1,17 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.BankAccountStatusDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountStatus;
 import com.clevel.selos.model.view.BankAccountStatusView;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
 public class BankAccountStatusTransform extends Transform {
+    @SELOS
+    @Inject
+    private Logger log;
 
     @Inject
     BankAccountTypeTransform bankAccountTypeTransform;
