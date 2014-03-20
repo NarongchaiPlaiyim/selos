@@ -4,6 +4,7 @@ import com.clevel.selos.businesscontrol.CheckMandateDocControl;
 import com.clevel.selos.exception.ECMInterfaceException;
 import com.clevel.selos.integration.ECM;
 import com.clevel.selos.integration.ECMInterface;
+import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.model.ECMDataResult;
@@ -33,7 +34,7 @@ import java.util.Map;
 @ManagedBean(name = "checkMandateDoc")
 public class CheckMandateDoc implements Serializable {
     @Inject
-    @ECM
+    @NCB
     private Logger log;
     @Inject
     private CheckMandateDocControl checkMandateDocControl;
@@ -41,6 +42,7 @@ public class CheckMandateDoc implements Serializable {
     private int rowIndex;
     private String messageHeader;
     private String message;
+    private long workCaseId;
 
     @Inject
     private ECMInterface ecmInterface;
@@ -52,70 +54,22 @@ public class CheckMandateDoc implements Serializable {
     }
 
     private void init(){
-        checkMandateDocView = new CheckMandateDocView();
+//        checkMandateDocView = new CheckMandateDocView();
     }
 
     @PostConstruct
     public void onCreation() {
-
         log.info("-- onCreation.");
-//        if (Util.isTrue(encryptionEnable)) {
-//            passwordEncrypt = encryptionService.decrypt(Base64.decodeBase64(password));
-//        } else {
-//            passwordEncrypt = password;
-//        }
-//        log.debug("-- User = {}", username);
-//        log.debug("-- Password = {}", password);
-//        log.debug("-- Password[Decrypt] = {}", passwordEncrypt);
-//        otherDocumentsList = new ArrayList<CheckOtherDocView>();
         String result = null;
-        String caNumber = "11111111111111111111";
-
         try{
-            //Calling ECM
-            ECMDataResult ecmDataResult = ecmInterface.getECMDataResult(caNumber);
-
-
-
-            if(!Util.isNull(ecmDataResult) && ActionResult.SUCCESS.equals(ecmDataResult.getActionResult())){
-                List<ECMDetail> ecmDetailList = Util.safetyList(ecmDataResult.getEcmDetailList());
-                CheckOtherDocView checkOtherDocView = null;
-//                String userToken = CESessionToken.getTokenFromSession(username, passwordEncrypt);
-//                log.debug("-- User Token {}", userToken);
-
-                Map<String,List<ECMDetail>> ecmMap = new HashMap<String, List<ECMDetail>>();
-
-
-                for (ECMDetail ecmDetail : ecmDetailList) {
-
-                    if(ecmMap.containsKey(ecmDetail.getEcmDocId())){
-                        List<ECMDetail> ecmListTmp = ecmMap.get(ecmDetail.getEcmDocId());
-                        ecmListTmp.add(ecmDetail);
-                        ecmMap.put(ecmDetail.getEcmDocId(),ecmListTmp);
-                    } else {
-                        List<ECMDetail> ecmListTmp = new ArrayList<ECMDetail>();
-                        ecmListTmp.add(ecmDetail);
-                        ecmMap.put(ecmDetail.getEcmDocId(),ecmListTmp);
-                    }
-
-
-
-                    checkOtherDocView = new CheckOtherDocView();
-                    checkOtherDocView.setDocumentType(ecmDetail.getTypeNameTH());
-                    checkOtherDocView.setOwners(ecmDetail.getTypeCode());
-                    checkOtherDocView.setFileName(ecmDetail.getOrgFileName());
-//                    result = getURLByFNId(ecmDetail.getFnDocId(), userToken);
-                    checkOtherDocView.setLink(result);
-                    checkOtherDocView.setComplete(2);
-                    checkOtherDocView.setIndistinct(true);
-                    checkOtherDocView.setExpire(true);
-                    checkOtherDocView.setRemark("test");
-                    log.debug("-- Link[{}]", result);
-//                    otherDocumentsList.add(checkOtherDocView);
-                }
-                result = ecmDetailList.toString();
+            workCaseId = 418L;
+            checkMandateDocView = checkMandateDocControl.getMandateDocView(workCaseId);
+            if(!Util.isNull(checkMandateDocView)){
+                log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
             } else {
-                result = "FAILED";
+                log.debug("-- Find by work case id = {} CheckMandateDocView is {}   ", workCaseId, checkMandateDocView);
+                checkMandateDocView = new CheckMandateDocView();
+                log.debug("-- CheckMandateDocView[New] created");
             }
         } catch (ECMInterfaceException e) {
             log.error("-- ECMInterfaceException : {}", e.getMessage());
@@ -124,6 +78,7 @@ public class CheckMandateDoc implements Serializable {
             log.error("-- Exception : {}", e.getMessage());
             result = e.getMessage();
         }
+
     }
 
     public void onSaveCheckMandateDoc(){
