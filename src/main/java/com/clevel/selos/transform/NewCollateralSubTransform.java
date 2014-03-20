@@ -18,6 +18,7 @@ public class NewCollateralSubTransform extends Transform {
     @Inject
     @SELOS
     Logger log;
+
     private List<NewCollateralSub> newCollateralSubList;
     private List<NewCollateralSubView> newCollateralSubViewList;
 

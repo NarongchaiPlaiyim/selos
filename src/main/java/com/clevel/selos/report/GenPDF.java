@@ -83,24 +83,27 @@ public class GenPDF extends ReportService {
 
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
-        map.put("fillCreditBorrower",pdfDecision.fillCreditBorrower());
-        map.put("fillCondition",pdfDecision.fillCondition());
-        map.put("fillBorrowerRetail",pdfDecision.fillBorrowerRetail());
-        map.put("fillAppInRLOS",pdfDecision.fillAppInRLOS());
-        map.put("fillRelatedCommercial",pdfDecision.fillRelatedCommercial());
-        map.put("fillRelatedRetail",pdfDecision.fillRelatedRetail());
-        map.put("fillRelatedAppInRLOS",pdfDecision.fillRelatedAppInRLOS());
-        map.put("fillExistingCollateralBorrower",pdfDecision.fillExistingCollateralBorrower());
-        map.put("fillExistingCollateralRelated",pdfDecision.fillExistingCollateralRelated());
-        map.put("fillGuarantorBorrower",pdfDecision.fillGuarantorBorrower());
-        map.put("fillProposedCredit",pdfDecision.fillProposedCredit());
-        map.put("fillProposeFeeInformation",pdfDecision.fillProposeFeeInformation());
-        map.put("fillProposedCollateral",pdfDecision.fillProposedCollateral());
-        map.put("fillApprovedCollaterral",pdfDecision.fillApprovedCollaterral());
-        map.put("fillProposedGuarantor",pdfDecision.fillProposedGuarantor());
-        map.put("fillApprovedCollateral",pdfDecision.fillApprovedCollateral());
-        map.put("fillFollowUpCondition",pdfDecision.fillFollowUpCondition());
-        map.put("fillApprovalHistory",pdfDecision.fillApprovalHistory());
+        map.put("fillCreditBorrower",pdfDecision.fillCreditBorrower(pathsub));
+//        map.put("fillCondition",pdfDecision.fillCondition());
+//        map.put("fillBorrowerRetail",pdfDecision.fillBorrowerRetail(pathsub));
+//        map.put("fillAppInRLOS",pdfDecision.fillAppInRLOS(pathsub));
+//        map.put("fillRelatedCommercial",pdfDecision.fillRelatedCommercial(pathsub));
+//        map.put("fillRelatedRetail",pdfDecision.fillRelatedRetail(pathsub));
+//        map.put("fillRelatedAppInRLOS",pdfDecision.fillRelatedAppInRLOS(pathsub));
+//        map.put("fillExistingCollateralBorrower",pdfDecision.fillExistingCollateralBorrower());
+//        map.put("fillExistingCollateralRelated",pdfDecision.fillExistingCollateralRelated());
+//        map.put("fillGuarantorBorrower",pdfDecision.fillGuarantorBorrower(pathsub));
+//        map.put("fillProposedCredit",pdfDecision.fillProposedCredit(pathsub));
+//        map.put("fillProposeFeeInformation",pdfDecision.fillProposeFeeInformation());
+//        map.put("fillProposedCollateral",pdfDecision.fillProposedCollateral(pathsub));
+//        map.put("fillApprovedCollaterral",pdfDecision.fillApprovedCollaterral(pathsub));
+//        map.put("fillProposedGuarantor",pdfDecision.fillProposedGuarantor(pathsub));
+//        map.put("fillApprovedCollateral",pdfDecision.fillApprovedGuarantor(pathsub));
+//        map.put("fillFollowUpCondition",pdfDecision.fillFollowUpCondition());
+//        map.put("fillApprovalHistory",pdfDecision.fillApprovalHistory());
+//        map.put("fillTotalMasterReport",pdfDecision.fillTotalMasterReport());
+//        map.put("fillFollowDetail",pdfDecision.fillFollowDetail());
+//        map.put("fillPriceFee",pdfDecision.fillPriceFee());
 
 
         pdfName = "Decision_Report_";

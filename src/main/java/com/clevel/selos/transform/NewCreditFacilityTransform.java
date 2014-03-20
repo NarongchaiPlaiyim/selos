@@ -4,21 +4,25 @@ import com.clevel.selos.dao.master.CountryDAO;
 import com.clevel.selos.dao.master.CreditRequestTypeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.model.db.master.Country;
+import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.CountryView;
 import com.clevel.selos.model.view.NewCreditFacilityView;
 import com.clevel.selos.util.Util;
+//import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.Date;
 
 public class NewCreditFacilityTransform extends Transform {
-    @Inject
-    public NewCreditFacilityTransform() {
-    }
+//    @SELOS
+//    @Inject
+//    private Logger log;
 
+    @Inject
+    public NewCreditFacilityTransform() {}
     @Inject
     private CreditRequestTypeDAO creditRequestTypeDAO;
     @Inject
@@ -59,7 +63,6 @@ public class NewCreditFacilityTransform extends Transform {
     NewCollateralTransform newCollateralTransform;
     @Inject
     NewConditionDetailTransform newConditionDetailTransform;
-
 
     public NewCreditFacility transformToModelDB(NewCreditFacilityView newCreditFacilityView, WorkCase workCase, User user) {
 
@@ -215,7 +218,7 @@ public class NewCreditFacilityTransform extends Transform {
         }
 
         Country country = countryDAO.findById(newCreditFacility.getInvestedCountry().getId());
-        if (!Util.isNull(country)) {
+        if(!Util.isNull(country)){
             CountryView countryView = countryTransform.transformToView(country);
             newCreditFacilityView.setInvestedCountry(countryView);
         } else {

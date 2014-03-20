@@ -15,6 +15,7 @@ import com.clevel.selos.integration.bpm.model.FieldName;
 import com.clevel.selos.integration.bpm.model.OrderType;
 import com.clevel.selos.integration.bpm.service.InboxService;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.CaseRequestTypes;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.security.encryption.EncryptionService;
@@ -111,6 +112,12 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         caseParameter.put("AppInDateBDM", caseCreationHistory.getAppInDateBDM());
         caseParameter.put("AppNumber", caseCreationHistory.getAppNumber());
         caseParameter.put("RefAppNumber", "");
+        if(caseCreationHistory.getRequestType()== CaseRequestTypes.APPEAL_CASE.value() || caseCreationHistory.getRequestType()== CaseRequestTypes.RESUBMIT_CASE.value()) { //Appeal/ReSubmit
+            caseParameter.put("RefAppNumber", caseCreationHistory.getRefAppNumber());
+            caseParameter.put("Reason", caseCreationHistory.getReason());
+            caseParameter.put("checkNCB", caseCreationHistory.getCheckNCB());
+            caseParameter.put("SSOUserName", caseCreationHistory.getSsoId());
+        }
 
         String linkKey = Util.getLinkKey(bpmUsername);
         try {

@@ -14,6 +14,7 @@ public class ProposedGuarantorDecisionReport extends ReportModel{
     private int count;
     private String name;
     private String tcgLgNo;
+    private String path;
 
     private List<ProposeCreditDetailView> proposeCreditDetailViewList;
 
@@ -66,6 +67,14 @@ public class ProposedGuarantorDecisionReport extends ReportModel{
 
     public void setTotalLimitGuaranteeAmount(BigDecimal totalLimitGuaranteeAmount) {
         this.totalLimitGuaranteeAmount = totalLimitGuaranteeAmount;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     @Override
