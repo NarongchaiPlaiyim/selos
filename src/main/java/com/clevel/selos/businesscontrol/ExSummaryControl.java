@@ -230,7 +230,7 @@ public class ExSummaryControl extends BusinessControl {
                         bizPermissionList.add(bizInfoDetailViewList.get(i).getBizDocPermission());
 
                         Date currentDate = bizInfoDetailViewList.get(i).getBizDocExpiryDate();
-                        if(DateTimeUtil.compareDate(tmpHighestDate,currentDate) > 0){
+                        if(DateTimeUtil.compareDate(tmpHighestDate,currentDate) < 0){
                             tmpHighestDate = currentDate;
                             tmpIndexHighestExpire = i;
                         }
