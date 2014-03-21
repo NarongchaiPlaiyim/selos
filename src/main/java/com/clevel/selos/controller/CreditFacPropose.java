@@ -665,10 +665,11 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.debug("newCreditFacilityView.creditInfoDetailViewList :: {}", newCreditFacilityView.getNewCreditDetailViewList());
         modeEdit = true;
         modeForButton = ModeForButton.EDIT;
+        onChangeRequestType();
         Cloner cloner = new Cloner();
         newCreditDetailView = cloner.deepClone(newCreditDetailSelected);
 
-        onChangeRequestType();
+
 
         prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(newCreditDetailView.getProductProgramView());
         creditFacProposeControl.calculateInstallment(newCreditDetailView);
@@ -1008,6 +1009,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         newCollateralView.setMortgageCondition(selectCollateralDetailView.getMortgageCondition());
         newCollateralView.setMortgageConditionDetail(selectCollateralDetailView.getMortgageConditionDetail());
         newCollateralView.setComs(selectCollateralDetailView.isComs());
+        newCollateralView.setNewCollateralHeadViewList(new ArrayList<NewCollateralHeadView>());
         newCollateralView.setNewCollateralHeadViewList(selectCollateralDetailView.getNewCollateralHeadViewList());
         flagComs = false;
         selectedCollateralCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
@@ -1160,18 +1162,18 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setComs(newCollateralView.isComs());
             newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
 
-            if (newCollateralView.getNewCollateralHeadViewList().size() > 0) {
-                for (int i = 0; i < newCollateralView.getNewCollateralHeadViewList().size(); i++) {
-                    PotentialCollateral potentialCollateralEdit = potentialCollateralDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(i).getPotentialCollateral().getId());
-                    CollateralType collTypePercentLTVEdit = collateralTypeDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(i).getCollTypePercentLTV().getId());
-                    CollateralType headCollTypeEdit = collateralTypeDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(i).getHeadCollType().getId());
-
-                    newCollateralView.getNewCollateralHeadViewList().get(i).setPotentialCollateral(potentialCollateralEdit);
-                    newCollateralView.getNewCollateralHeadViewList().get(i).setHeadCollType(headCollTypeEdit);
-                    newCollateralView.getNewCollateralHeadViewList().get(i).setCollTypePercentLTV(collTypePercentLTVEdit);
-                }
-            }
-            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setNewCollateralHeadViewList(newCollateralHeadViewList);
+//            if (newCollateralView.getNewCollateralHeadViewList().size() > 0) {
+//                for (int i = 0; i < newCollateralView.getNewCollateralHeadViewList().size(); i++) {
+//                    PotentialCollateral potentialCollateralEdit = potentialCollateralDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(i).getPotentialCollateral().getId());
+//                    CollateralType collTypePercentLTVEdit = collateralTypeDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(i).getCollTypePercentLTV().getId());
+//                    CollateralType headCollTypeEdit = collateralTypeDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(i).getHeadCollType().getId());
+//
+//                    newCollateralView.getNewCollateralHeadViewList().get(i).setPotentialCollateral(potentialCollateralEdit);
+//                    newCollateralView.getNewCollateralHeadViewList().get(i).setHeadCollType(headCollTypeEdit);
+//                    newCollateralView.getNewCollateralHeadViewList().get(i).setCollTypePercentLTV(collTypePercentLTVEdit);
+//                }
+//            }
+            newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setNewCollateralHeadViewList(newCollateralView.getNewCollateralHeadViewList());
 
 
             if (flagComs) {
@@ -1255,6 +1257,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         relatedWithSelected = new NewCollateralSubView();
         modeForSubColl = ModeForButton.ADD;
         log.debug(" newCreditFacilityView.getNewCollateralViewList().size ::{}", newCreditFacilityView.getNewCollateralViewList().size());
+        newCollateralSubView.setRelatedWithList(new ArrayList<NewCollateralSubView>());
         relatedWithAllList = creditFacProposeControl.findNewCollateralSubView(newCreditFacilityView.getNewCollateralViewList());
 
         if (newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId() != 0) {
@@ -1343,7 +1346,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onDeleteSubCollateral() {
         log.debug("onDeleteSubCollateral :: ");
-//        newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubDeleteList().add(subCollateralDetailItem);
+
         newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().remove(subCollateralDetailItem);
         log.debug("rowCollHeadIndex :: ");
     }
@@ -1403,9 +1406,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     }
 
     public void onAddRelatedWith() {
-        log.debug("onAddRelatedWith() relatedWithSelected.getId = {}", relatedWithSelected.getId());
+        log.info("onAddRelatedWith() relatedWithSelected.getId = {}", relatedWithSelected.getId());
         NewCollateralSubView relatedWith = getIdNewSubCollateralDetail(relatedWithSelected.getId());
-        if (relatedWithSelected.getNo() == 0) {
+        if (relatedWithSelected.getId() == 0) {
             log.debug("Can not add relatedWith because id = 0!");
             return;
         }

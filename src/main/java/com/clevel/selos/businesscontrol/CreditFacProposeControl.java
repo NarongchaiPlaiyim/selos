@@ -876,11 +876,51 @@ public class CreditFacProposeControl extends BusinessControl {
             newCreditFacility.setNewCollateralDetailList(newCollateralList);
             newCollateralDetailDAO.persist(newCollateralList);
             log.debug("saveCreditFacility ::: persist newCollateralList : {}", newCollateralList);
+
+           /* if (Util.safetyList(newCreditFacilityView.getNewCollateralViewDelList()).size() > 0) {
+               List<NewCollateralSubView> newCollSubViewList;
+               for(NewCollateralView newCollateralView:newCreditFacilityView.getNewCollateralViewDelList()){
+                   if(Util.safetyList(newCollateralView.getNewCollateralHeadViewList()).size() > 0) {
+                     for(NewCollateralHeadView newCollateralHeadView:newCollateralView.getNewCollateralHeadViewList()){
+                         if(Util.safetyList(newCollateralHeadView.getNewCollateralSubViewList()).size() > 0) {
+                             newCollSubViewList =  newCollateralHeadView.getNewCollateralSubViewList();
+                             findNewCollateralSubForPersistRelatedWith(newCollateralList,newCollSubViewList);
+                        }
+                     }
+                   }
+               }
+            }*/
+
+
         }
 
         return newCreditFacilityTransform.transformToView(newCreditFacility);
-//        NewCreditFacilityView returnNewCreditFacView = newCreditFacilityTransform.transformToView(newCreditFacility);
-//        return returnNewCreditFacView;
+
+    }
+
+
+    public void findNewCollateralSubForPersistRelatedWith(List<NewCollateral> newCollateralList,List<NewCollateralSubView> newCollateralSubViewList){
+        for(NewCollateral newCollateral:newCollateralList)
+        {
+            if(newCollateral.getNewCollateralHeadList().size()>0)
+            {
+                for(NewCollateralHead newCollateralHead:newCollateral.getNewCollateralHeadList())
+                {
+                    log.info("after saveCreditFacility ::: persist newCollateralList ::: {}, newCollateralHead.id ::: {}",newCollateralHead.getNewCollateralSubList().size(),newCollateralHead.getId());
+                    if(newCollateralHead.getNewCollateralSubList().size()>0)
+                    {
+                        for(NewCollateralSub newCollateralSub:newCollateralHead.getNewCollateralSubList()){
+                            for(NewCollateralSubView newCollateralSubView:newCollateralSubViewList){
+                                log.info("newCollateralSub::{}",newCollateralSub.getId());
+                                if(newCollateralSubView.getRelatedWithList().size()>0){
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // Call COMSInterface
