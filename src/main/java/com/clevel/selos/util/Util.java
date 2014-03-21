@@ -50,7 +50,7 @@ public class Util implements Serializable {
     }
 
     public static String createDateTime(Date date) {
-        return createDateString(date, "yyyyMMddHHmm");
+        return createDateString(date, "ddMMyyyyyHHmmss");
     }
 
 
