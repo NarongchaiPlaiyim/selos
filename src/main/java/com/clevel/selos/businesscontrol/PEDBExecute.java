@@ -3,15 +3,11 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.UserToAuthorizationDOADAO;
 import com.clevel.selos.dao.working.*;
-
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.StepValue;
-import com.clevel.selos.model.db.master.AuthorizationDOA;
-import com.clevel.selos.model.db.master.QueueNameId;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.integration.bpm.tool.SQLDBConnection;
-import com.clevel.selos.model.db.master.StepLandingPage;
-import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.Config;
@@ -22,17 +18,14 @@ import com.clevel.selos.transform.business.InboxBizTransform;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
-import com.clevel.selos.model.db.master.DoaPriorityUserNames;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Stateless
 public class PEDBExecute extends BusinessControl
@@ -69,6 +62,37 @@ public class PEDBExecute extends BusinessControl
     @Config(name = "interface.pe.sql.selectedColumnsForPeRosterQuery")
     String queryForRosterColumns;
 
+    @Inject
+    @Config(name = "interface.pe.sql.searchrosterquery")
+    String searchrosterquery;
+
+    @Inject
+    @Config(name = "interface.pe.sql.CACancelled")
+    String CACancelledStatusid;
+
+    @Inject
+    @Config(name = "interface.pe.sql.CARejectedbyUW1")
+    String CARejectedbyUW1Statusid;
+
+    @Inject
+    @Config(name = "interface.pe.sql.CAApprovedbyUW1")
+    String CAApprovedbyUW1Statusid;
+
+    @Inject
+    @Config(name = "interface.pe.sql.CARejected")
+    String CARejectedStatusid;
+
+    @Inject
+    @Config(name = "interface.pe.sql.CAApproved")
+    String CAApprovedStatusid;
+
+    @Inject
+    @Config(name = "interface.pe.sql.CAApprovedbyUW2")
+    String CAApprovedbyUW2Statusid;
+
+    @Inject
+    @Config(name = "interface.pe.sql.CARejectedbyUW2")
+    String CARejectedbyUW2Statusid;
 
     @Inject
     private UserDAO userDAO;
@@ -98,30 +122,37 @@ public class PEDBExecute extends BusinessControl
     Message msg;
 
     Connection conn = null;
-    transient ResultSet rs = null;
 
-    @Inject
-    InboxBizTransform inboxBizTransform;
+    transient ResultSet rs = null;
 
     String sqlpequery = null;
 
     private UserDetail userDetail;
+
+    String userName = null;
+
+    ArrayList<PERoster> rosterViewList = null;
+
+    String tableName = null;
+
+    String query = null;
+
+    String sqlForCreatedByMe = null;
+
+    String sqlQueryForReturnByMe = null;
+
+    PreparedStatement statement = null;
+
+    PERoster peRoster = null;
+
+    @Inject
+    InboxBizTransform inboxBizTransform;
 
     @Inject
     UserToAuthorizationDOADAO userToAuthorizationDOADAO ;
 
     @Inject
     DoaPriorityUserNamesDAO doaPriorityUserNamesDAO;
-
-
-    String userName = null;
-    ArrayList<PERoster> rosterViewList = null;
-    String tableName = null;
-    String query = null;
-    String sqlForCreatedByMe = null;
-    String sqlQueryForReturnByMe = null;
-    PreparedStatement statement = null;
-    PERoster peRoster = null;
 
     @Inject
     ActionDAO actionDAO;
@@ -134,6 +165,35 @@ public class PEDBExecute extends BusinessControl
 
     @Inject
     FetchQueueNameDAO fetchQueueNameDAO;
+
+    @Inject
+    SearchUserIdDAO searchUserIdDAO;
+
+    @Inject
+    SearchApplicationNoDAO searchApplicationNoDAO;
+
+    @Inject
+    SearchCitizenIdDAO searchCitizenIdDAO;
+
+    @Inject
+    SearchRegistrationIdDAO searchRegistrationIdDAO;
+
+    @Inject
+    SearchFirstLastNameDAO searchFirstLastNameDAO;
+
+    @Inject
+    CompletedCasesWKItemsDAO completedCasesWKItemsDAO;
+
+    @Inject
+    BPMActiveDAO bpmActiveDAO;
+
+    List<String> appnumberlistavoidduplicates = null;
+
+    List<String> SearchApplicationNumberList = null;
+
+    List<CompletedCasesWKItems> cmpltedwrkcaseitemslist = null;
+
+    List<PEInbox> searchViewList = null;
 
     @Inject
     public PEDBExecute()
@@ -422,7 +482,7 @@ public class PEDBExecute extends BusinessControl
                 peInbox.setName(rs.getString("BorrowerName"));
                 peInbox.setProductgroup(rs.getString("ProductGroup"));
                 peInbox.setRequestTypeStr(rs.getString("RequestTypeStr"));
-                peInbox.setStepId(Integer.parseInt(rs.getString("Step_Code")));
+                peInbox.setStepId(Long.parseLong(rs.getString("Step_Code")));
                 peInbox.setStatus(rs.getString("Status"));
                 peInbox.setFromuser(rs.getString("PreviousUser"));
                 peInbox.setAtuser(rs.getString("CurrentUser"));
@@ -650,12 +710,12 @@ public class PEDBExecute extends BusinessControl
                 peRoster.setStepId(Integer.parseInt(rs.getString("Step_Code")));
                 peRoster.setStatus(rs.getString("Status"));
                 peRoster.setCurrentUser(rs.getString("CurrentUser"));
-
+                peRoster.setSlastatus(rs.getString("SLAStatus"));
                 peRoster.setSLAEndTime(rs.getObject("SLAEndTime1").toString().trim());
                 peRoster.setTotalTimeAtUser(rs.getString("TotalTimeAtUser"));
                 peRoster.setTotalTimeAtProcess(rs.getString("TotalTimeAtProcess"));
                 peRoster.setF_WobNum(rs.getString("F_WobNum"));
-                peRoster.setStep(rs.getString("F_StepName"));
+
                 rosterViewList.add(peRoster);
                 peRoster = null;
             }
@@ -676,6 +736,785 @@ public class PEDBExecute extends BusinessControl
         }
 
         return rosterViewList;
+    }
+
+
+
+    public List<PEInbox> getPESearchList(String statustype,String applicationNo,String userid,String step,String status,String citizenid,String firstname,String lastname,Date date1,Date date2,Date date3,Date date4)
+    {
+        log.info(":::::::::::::controller in getPESearchList method of PEDBExecute class:::::::::::::::");
+
+        String wherecondition = null;
+
+        boolean flag = false;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+        searchViewList = new ArrayList<PEInbox>();
+
+        String stringapplicationnumbers = null;
+
+        String strappnumbers = null;
+
+        boolean appNumberCriteria=false;
+
+        List totalAppNumberList = new ArrayList();
+
+        if(statustype == "" || statustype.equalsIgnoreCase("InprocessCases"))
+        {
+            try
+            {
+                if(applicationNo != null && applicationNo.length() >0)
+                {
+                    log.info("appnumber if : {}",applicationNo);
+                    appNumberCriteria = true;
+                }
+                if(step != null && step.length() >0)
+                {
+                    log.info("step :",step);
+                    if(flag)
+                    {
+                        wherecondition += " AND Step_Code = '"+step+"' ";
+                    }
+                    else
+                    {
+
+                        wherecondition = " where Step_Code = '"+step+"' ";
+                    }
+                    flag = true;
+
+                    log.info("where condition in step :",wherecondition);
+
+                }
+                if(status != null && status.length() >0)
+                {
+                    log.info("Status :",status);
+                    if(flag)
+                    {
+                        wherecondition += " AND Status ='"+status+"' ";
+                    }
+                    else
+                    {
+
+                        wherecondition = " where Status ='"+status+"' ";
+                    }
+                    flag = true;
+
+                }
+                if(date1 != null && date2 != null)
+                {
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(date2);
+                    cal.set(Calendar.HOUR_OF_DAY,23);
+                    cal.set(Calendar.MINUTE,59);
+                    cal.set(Calendar.SECOND,59);
+                    date2 = cal.getTime();
+
+                    if(flag)
+                    {
+                        wherecondition += " AND dateadd(s,ReceivedTime,'1970-1-1') between  '" +formatter.format(date1)+ "' AND  '" +formatter.format(date2)+"'";
+                    }
+                    else
+                    {
+                        wherecondition = " where dateadd(s,ReceivedTime,'1970-1-1') between  '" +formatter.format(date1)+ "' AND  '" +formatter.format(date2)+"'";
+                    }
+                    flag = true;
+                }
+                if(userid != null && userid.length() >0 )
+                {
+                    appnumberlistavoidduplicates = new ArrayList<String>();
+
+                    appnumberlistavoidduplicates = getApplicationNumbers(userid,null,null,null,1);
+
+                    log.info("app number list :{}",appnumberlistavoidduplicates.toString());
+
+                    totalAppNumberList.addAll(appnumberlistavoidduplicates);
+
+                }
+                if(citizenid != null && citizenid.length() >0)
+                {
+                    appnumberlistavoidduplicates = new ArrayList<String>();
+
+                    appnumberlistavoidduplicates = getApplicationNumbers(null,citizenid,null,null,1);
+
+                    log.info("app number list 2:{}",appnumberlistavoidduplicates.toString());
+
+                    if(totalAppNumberList.size()>0)
+                    {
+                        totalAppNumberList.retainAll(appnumberlistavoidduplicates);
+                        appnumberlistavoidduplicates = totalAppNumberList;
+                    }
+
+                    else
+                    {
+                        totalAppNumberList.addAll(appnumberlistavoidduplicates);
+                    }
+
+                }
+                if(firstname != null && lastname != null && firstname.length() >0 && lastname.trim().length() >0)
+                {
+                    appnumberlistavoidduplicates = new ArrayList<String>();
+
+                    appnumberlistavoidduplicates = getApplicationNumbers(null,null,firstname,lastname,1);
+
+                    log.info("app number list 3:{}",appnumberlistavoidduplicates.toString());
+
+                    if(totalAppNumberList.size()>0)
+                    {
+                        totalAppNumberList.retainAll(appnumberlistavoidduplicates);
+                        appnumberlistavoidduplicates = totalAppNumberList;
+                    }
+
+                    else
+                    {
+                        totalAppNumberList.addAll(appnumberlistavoidduplicates);
+                    }
+
+                }
+
+                if (appNumberCriteria)
+                {
+                    log.info("app number in if ");
+                    if(totalAppNumberList.size()>0)
+                    {
+                        if(totalAppNumberList.contains(applicationNo))
+                        {
+
+                            if(flag)
+                            {
+                                wherecondition =  " AND where AppNumber = '" +applicationNo + "'";
+                            }
+                            else
+                            {
+                                wherecondition =  " where AppNumber = '" +applicationNo + "'";
+                            }
+
+                        }
+
+
+                        else
+                        {
+                            return searchViewList;
+                        }
+
+                        log.info("where condition :{}"+wherecondition);
+                    }
+
+                    else
+                    {
+
+                        if(flag)
+                        {
+                            wherecondition =  " AND where AppNumber = '" +applicationNo + "'";
+                        }
+                        else
+                        {
+                            wherecondition =  " where AppNumber = '" +applicationNo + "'";
+                        }
+
+                        log.info("where condition :{}"+wherecondition);
+                    }
+
+                }
+
+                else
+                {
+                    if(totalAppNumberList.size()>0)
+                    {
+
+                        stringapplicationnumbers = totalAppNumberList.toString();
+
+                        strappnumbers = stringapplicationnumbers.replace("[","").replace("]","");
+
+                        log.info("strappnumbers if not null :::::::::{}",strappnumbers);
+
+                        if(flag)
+                        {
+                            wherecondition += " AND AppNumber IN (" +strappnumbers+ ")";
+                        }
+                        else
+                        {
+                            wherecondition = " where AppNumber IN (" +strappnumbers+ ")";
+                        }
+                    }
+                    else if(!flag)
+                    {
+                       return searchViewList;
+                    }
+
+                }
+
+                log.info("where condition final :{}"+wherecondition);
+
+                String rostertableaname = actionDAO.getRosterTableName();
+
+                log.info("rostertablename in getPESearchList method is : {}",rostertableaname);
+
+                String  sqlpequery1 = "select "  +searchrosterquery+ "  from " +prefix+"." +rostertableaname;
+
+                log.info("sqlquery with our where condition is :::::::::::::{}",sqlpequery1);
+
+                sqlpequery = sqlpequery1 + wherecondition;
+
+                log.info("sqlquery in getPESearchList is ::::::::: {}",sqlpequery);
+
+                searchViewList =  getPESearchResultSetList(sqlpequery);
+
+
+            }
+            catch(Exception e)
+            {
+                log.error("Error in inprocess search : {}",e);
+            }
+            finally
+            {
+
+            }
+            return  searchViewList;
+        }
+        else if(statustype.equalsIgnoreCase("CompletedCases"))
+        {
+            log.info("controller entered in to statustype is equal to completedCases condition ");
+
+            List<String> completedCasesAppNoList = new ArrayList<String>();
+
+            List<String> completedCasesAppNoListByUserId = new ArrayList<String>();
+
+            List<String> completedCasesAppNoListByName = new ArrayList<String>();
+
+            List<String> completedCasesAppNoListByCitizenId = new ArrayList<String>();
+
+            int statuscode = 0;
+
+            flag = false;
+
+            searchViewList = new ArrayList<PEInbox>();
+
+            cmpltedwrkcaseitemslist = new ArrayList<CompletedCasesWKItems>();
+
+            try
+            {
+                if(applicationNo != "")
+                {
+                    //completedCasesAppNoList.add(applicationNo);
+
+                    flag = true;
+                }
+                if(userid != "")
+                {
+                    log.info("user id is not null in Completedcaes ");
+
+                    //completedCasesAppNoList = getApplicationNumbers(userid,null,null,null,0);
+                    completedCasesAppNoListByUserId = getApplicationNumbers(userid,null,null,null,0);
+
+                    completedCasesAppNoList.addAll(completedCasesAppNoListByUserId);
+                }
+                if(citizenid != "")
+                {
+                    log.info("citizen id is not null in Completedcaes ");
+                    //completedCasesAppNoList = getApplicationNumbers(null,citizenid,null,null,0);
+                    completedCasesAppNoListByCitizenId = getApplicationNumbers(null,citizenid,null,null,0);
+
+                    if(completedCasesAppNoList.size()>0)
+                    {
+                        completedCasesAppNoList.retainAll(completedCasesAppNoListByCitizenId);
+                    }
+
+                    else
+                    {
+                        completedCasesAppNoList.addAll(completedCasesAppNoListByCitizenId);
+                    }
+
+                }
+                if(firstname != "" && lastname != "")
+                {
+                    log.info("first name and last name is not null in Completedcaes ");
+                    //completedCasesAppNoList = getApplicationNumbers(null,null,firstname,lastname,0);
+                    completedCasesAppNoListByName = getApplicationNumbers(null,null,firstname,lastname,0);
+
+                    if(completedCasesAppNoList.size()>0)
+                    {
+                        completedCasesAppNoList.retainAll(completedCasesAppNoListByName);
+                    }
+
+                    else
+                    {
+                        completedCasesAppNoList.addAll(completedCasesAppNoListByName);
+                    }
+                }
+                if(status != "")
+                {
+                    if(status.equalsIgnoreCase("CA Cancelled"))
+                    {
+                        statuscode = Integer.parseInt(CACancelledStatusid);
+                        log.info("status code is : ",statuscode);
+                    }
+                    else if(status.equalsIgnoreCase("CA Rejected by UW1"))
+                    {
+                        statuscode = Integer.parseInt(CARejectedbyUW1Statusid);
+                        log.info("status code is : ",statuscode);
+                    }
+                    else if(status.equalsIgnoreCase("CA Approved by UW1"))
+                    {
+                        statuscode = Integer.parseInt(CAApprovedbyUW1Statusid);
+                    }
+                    else if(status.equalsIgnoreCase("CA Rejected"))
+                    {
+                        statuscode = Integer.parseInt(CARejectedStatusid);
+                    }
+                    else if(status.equalsIgnoreCase("CA Approved"))
+                    {
+                        statuscode = Integer.parseInt(CAApprovedStatusid);
+                    }
+                    else if(status.equalsIgnoreCase("CA Approved by UW2"))
+                    {
+                        statuscode = Integer.parseInt(CAApprovedbyUW2Statusid);
+                    }
+                    else if(status.equalsIgnoreCase("CA Rejected by UW2"))
+                    {
+                        statuscode = Integer.parseInt(CARejectedbyUW2Statusid);
+                    }
+
+                }
+
+                /*log.info("Before :{}",completedCasesAppNoList.size());
+
+                completedCasesAppNoList.addAll(completedCasesAppNoListByCitizenId);
+                completedCasesAppNoList.retainAll(completedCasesAppNoListByName);
+                completedCasesAppNoList.retainAll(completedCasesAppNoListByUserId);
+
+                log.info("after :{}",completedCasesAppNoList.size());*/
+
+                if(flag)
+                {
+                    if(completedCasesAppNoList.size()> 0)
+                    {
+                        if(completedCasesAppNoList.contains(applicationNo))
+                        {
+                            completedCasesAppNoList.clear();
+                            completedCasesAppNoList.add(applicationNo);
+                            cmpltedwrkcaseitemslist = completedCasesWKItemsDAO.getCompletedCasesWKItems(completedCasesAppNoList,statuscode,date1,date2,date3,date4);
+                        }
+                        else
+                        {
+                            return searchViewList;
+                        }
+
+                    }
+
+                    else
+                    {
+                        completedCasesAppNoList.clear();
+                        completedCasesAppNoList.add(applicationNo);
+                        cmpltedwrkcaseitemslist = completedCasesWKItemsDAO.getCompletedCasesWKItems(completedCasesAppNoList,statuscode,date1,date2,date3,date4);
+                    }
+
+                }
+                else
+                {
+                    cmpltedwrkcaseitemslist = completedCasesWKItemsDAO.getCompletedCasesWKItems(completedCasesAppNoList,statuscode,date1,date2,date3,date4);
+                }
+
+                //cmpltedwrkcaseitemslist = completedCasesWKItemsDAO.getCompletedCasesWKItems(completedCasesAppNoList,statuscode,date1,date2,date3,date4);
+
+                log.info("cmpletedwrkcaseitemslist is : {}",cmpltedwrkcaseitemslist.size());
+
+                Iterator itr = cmpltedwrkcaseitemslist.iterator();
+
+
+
+                while(itr.hasNext() == true)
+                {
+                    PEInbox peInbox = new PEInbox();
+
+                    CompletedCasesWKItems completedCasesWKItems = new CompletedCasesWKItems();
+
+                    completedCasesWKItems = (CompletedCasesWKItems)itr.next();
+
+                    log.info("completedCasewrkitems APPLICATION NO : {}",completedCasesWKItems.getApplicationNo());
+
+                    if(completedCasesWKItems.getReceiveddate()!=null)
+                    {
+                        peInbox.setReceiveddate(completedCasesWKItems.getReceiveddate().toString());
+                    }
+                    else
+                    {
+                        peInbox.setReceiveddate("");
+                    }
+                    if(completedCasesWKItems.getAtUserTeamId()!=null)
+                    {
+                        peInbox.setAtuserteam(String.valueOf(completedCasesWKItems.getAtUserTeamId()));
+                    }
+                    else
+                    {
+                        peInbox.setAtuserteam("");
+                    }
+                    peInbox.setApplicationno(completedCasesWKItems.getApplicationNo());
+                    peInbox.setName("");
+                    if(completedCasesWKItems.getProductgroupid()!=null)
+                    {
+                        peInbox.setProductgroup(String.valueOf(completedCasesWKItems.getProductgroupid()));
+                    }
+                    else
+                    {
+                        peInbox.setProductgroup("");
+                    }
+                    if(completedCasesWKItems.getRequesttypeid()!=null)
+                    {
+                        peInbox.setRequestTypeStr(String.valueOf(completedCasesWKItems.getRequesttypeid()));
+                    }
+                    else
+                    {
+                        peInbox.setRequestTypeStr("");
+                    }
+
+                    if(completedCasesWKItems.getStepid()!=null)
+                    {
+                        Integer a = completedCasesWKItems.getStepid();
+                        peInbox.setStepId(Long.parseLong(a.toString()));
+                    }
+                    else
+                    {
+                        peInbox.setStepId(null);
+                    }
+
+                    if(completedCasesWKItems.getStatusid()!=null)
+                    {
+                        peInbox.setStatus(String.valueOf(completedCasesWKItems.getStatusid()));
+                    }
+                    else
+                    {
+                        peInbox.setStatus("");
+                    }
+
+                    peInbox.setFromuser(completedCasesWKItems.getFromuserid());
+                    peInbox.setAtuser(completedCasesWKItems.getFromuserid());
+                    if(completedCasesWKItems.getAppointmentDate()!=null)
+                    {
+                        peInbox.setAppointmentdate(completedCasesWKItems.getAppointmentDate().toString());
+                    }
+                    else
+                    {
+                        peInbox.setAppointmentdate("");
+                    }
+                    if(completedCasesWKItems.getDoalevelid()!=null)
+                    {
+                        peInbox.setDoalevel(String.valueOf(completedCasesWKItems.getDoalevelid()));
+                    }
+                    else
+                    {
+                        peInbox.setDoalevel("");
+                    }
+                    peInbox.setAction("");
+                    peInbox.setSlastatus("");
+                    if(completedCasesWKItems.getSlaenddate()!=null)
+                    {
+                        peInbox.setSlaenddate(completedCasesWKItems.getSlaenddate().toString());
+                    }
+                    else
+                    {
+                        peInbox.setSlaenddate("");
+                    }
+                    peInbox.setTotaltimespentatprocess(completedCasesWKItems.getTotaltimeatprocess());
+                    peInbox.setTotaltimespentatuser(completedCasesWKItems.getTotaltimeatuser());
+                    peInbox.setFwobnumber(completedCasesWKItems.getWobnumber());
+
+                    log.info("resultQueryList for completed caseses in pedbexecute class is : {}",searchViewList.size());
+
+                    searchViewList.add(peInbox);
+
+                    peInbox = null;
+
+                }
+
+
+
+            }
+            catch (Exception e)
+            {
+                 log.error("Error in Completed casessearch :{}",e);
+            }
+            finally {
+
+            }
+            return  searchViewList;
+        }
+
+        return  searchViewList;
+    }
+
+    public List<PEInbox> getPESearchResultSetList(String query)
+    {
+        List<PEInbox> peSearchResultSetList = new ArrayList<PEInbox>();
+
+        userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        log.info("query in getPESearchResultSetList is :::::::::{}",query);
+
+        try
+        {
+
+            conn = dbContext.getConnection(connPE, peUser, pePassword);
+
+            PreparedStatement statement = conn.prepareStatement(query);
+
+            log.info("statement is : {}",statement);
+
+            rs = statement.executeQuery();
+
+            log.info("resultset is : {}", rs);
+
+            while (rs.next())
+            {
+                PEInbox peInbox = new PEInbox();
+
+                peInbox.setReceiveddate((rs.getObject("ReceivedDate1").toString().trim()));
+                peInbox.setAtuserteam(rs.getString("TeamName"));
+                peInbox.setApplicationno(rs.getString("AppNumber"));
+                peInbox.setName(rs.getString("BorrowerName"));
+                peInbox.setProductgroup(rs.getString("ProductGroup"));
+                peInbox.setRequestTypeStr(rs.getString("RequestTypeStr"));
+                peInbox.setStepId(Long.parseLong(rs.getString("Step_Code")));
+                peInbox.setStatus(rs.getString("Status"));
+                peInbox.setFromuser(rs.getString("PreviousUser"));
+                peInbox.setAtuser(rs.getString("CurrentUser"));
+                peInbox.setAppointmentdate((rs.getObject("AppointmentDate1").toString().trim()));
+                peInbox.setDoalevel(rs.getString("DOALevel"));
+                peInbox.setAction(rs.getString("PreviousAction"));
+                peInbox.setSlastatus(rs.getString("SLAStatus"));
+                peInbox.setSlaenddate((rs.getObject("SLAEndTime1").toString().trim()));
+                peInbox.setTotaltimespentatprocess(rs.getInt("TotalTimeAtProcess"));
+                peInbox.setTotaltimespentatuser(rs.getInt("TotalTimeAtUser"));
+                peInbox.setFwobnumber(rs.getString("F_WobNum"));
+
+                peSearchResultSetList.add(peInbox);
+
+                log.info("resultQueryList pedbexecute class is : {}",peSearchResultSetList);
+
+                peInbox = null;
+
+            }
+            rs.close();
+            conn.close();
+            conn = null;
+
+        }
+        catch (Exception e)
+        {
+            log.info("exception occurred while fetching data from pe database : {}",e);
+        }
+        finally
+        {
+            sqlpequery = null;
+        }
+
+        return peSearchResultSetList;
+    }
+
+    public List<String> getApplicationNumbers(String userid,String citizenid,String firstname,String lastname,int bpmactive)
+    {
+
+        SearchApplicationNumberList = new ArrayList<String>();
+
+        appnumberlistavoidduplicates = new ArrayList<String>();
+
+
+
+        log.info("controller in getApplicationNumbers method of pedbexecute java class");
+
+        try
+        {
+            if(userid != null)
+            {
+                log.info("controller comes to  userid is not null condition");
+
+                List<SearchUserId> searchUserIdlist = new ArrayList<SearchUserId>();
+
+                searchUserIdlist = searchUserIdDAO.getWorkCaseIdByUserId(userid);
+
+                Iterator iterator = searchUserIdlist.iterator();
+
+                while(iterator.hasNext() == true)
+                {
+                    SearchUserId searchUserId = new SearchUserId();
+
+                    searchUserId = (SearchUserId)iterator.next();
+
+                    int useridbasedworkcaseid = searchUserId.getWorkcaseid();
+
+                    List<SearchApplicationNo> applicationNoList = new ArrayList<SearchApplicationNo>();
+
+                    applicationNoList = searchApplicationNoDAO.getApplicationNoByWorkCaseId(useridbasedworkcaseid);
+
+                    Iterator iterator1 = applicationNoList.iterator();
+
+                    while(iterator1.hasNext() == true)
+                    {
+                        SearchApplicationNo searchApplicationNo = new SearchApplicationNo();
+
+                        searchApplicationNo = (SearchApplicationNo)iterator1.next();
+
+                        String applicationnumbervalue = searchApplicationNo.getApplicationNo();
+
+                        SearchApplicationNumberList.add(applicationnumbervalue);
+                    }
+                }
+            }
+            else if(citizenid != null)
+            {
+                log.info("controller comes citizenid is not null condition");
+
+                List<SearchCitizenId> searchCitizenIdList = new ArrayList<SearchCitizenId>();
+
+                List<SearchRegistrationId> searchRegistrationIdList = new ArrayList<SearchRegistrationId>();
+
+                searchCitizenIdList = searchCitizenIdDAO.getCitizenId(citizenid);
+
+                searchRegistrationIdList = searchRegistrationIdDAO.getRegistrationId(citizenid);
+
+                if(searchCitizenIdList.size() > 0)
+                {
+                    Iterator iterator = searchCitizenIdList.iterator();
+
+                    while(iterator.hasNext() == true)
+                    {
+                        SearchCitizenId searchCitizenId = new SearchCitizenId();
+
+                        searchCitizenId = (SearchCitizenId)iterator.next();
+
+                        int citizenidbasedworkcaseid = searchCitizenId.getId();
+
+                        List<SearchApplicationNo> applicationNoList = new ArrayList<SearchApplicationNo>();
+
+                        applicationNoList = searchApplicationNoDAO.getApplicationNoByWorkCaseId(citizenidbasedworkcaseid);
+
+                        Iterator iterator1 = applicationNoList.iterator();
+
+                        while(iterator1.hasNext() == true)
+                        {
+                            SearchApplicationNo searchApplicationNo = new SearchApplicationNo();
+
+                            searchApplicationNo = (SearchApplicationNo)iterator1.next();
+
+                            String applicationnumbervalue = searchApplicationNo.getApplicationNo();
+
+                            SearchApplicationNumberList.add(applicationnumbervalue);
+                        }
+
+                    }
+                }
+                else if(searchRegistrationIdList.size() > 0)
+                {
+                    Iterator iterator = searchRegistrationIdList.iterator();
+
+                    while(iterator.hasNext() == true)
+                    {
+                        SearchRegistrationId searchRegistrationId = new SearchRegistrationId();
+
+                        searchRegistrationId = (SearchRegistrationId)iterator.next();
+
+                        int registrationidbasedworkcaseid = searchRegistrationId.getId();
+
+                        List<SearchApplicationNo> applicationNoList = new ArrayList<SearchApplicationNo>();
+
+                        applicationNoList = searchApplicationNoDAO.getApplicationNoByWorkCaseId(registrationidbasedworkcaseid);
+
+                        Iterator iterator1 = applicationNoList.iterator();
+
+                        while(iterator1.hasNext() == true)
+                        {
+                            SearchApplicationNo searchApplicationNo = new SearchApplicationNo();
+
+                            searchApplicationNo = (SearchApplicationNo)iterator1.next();
+
+                            String applicationnumbervalue = searchApplicationNo.getApplicationNo();
+
+                            SearchApplicationNumberList.add(applicationnumbervalue);
+                        }
+                    }
+                }
+
+
+            }
+            else if(firstname != null && lastname != null)
+            {
+                log.info("controller comes to  firstname and lastname is not null condition");
+
+                List<SearchFirstLastName> firstlastnameworkcaseidlist = new ArrayList<SearchFirstLastName>();
+
+                firstlastnameworkcaseidlist = searchFirstLastNameDAO.getFirstLastName(firstname,lastname);
+
+                Iterator iterator = firstlastnameworkcaseidlist.iterator();
+
+                while(iterator.hasNext() == true)
+                {
+                    SearchFirstLastName searchFirstLastName = new SearchFirstLastName();
+
+                    searchFirstLastName = (SearchFirstLastName)iterator.next();
+
+                    int firstlastnamebasedworkcaseid = searchFirstLastName.getId();
+
+                    List<SearchApplicationNo> applicationNoList = new ArrayList<SearchApplicationNo>();
+
+                    applicationNoList = searchApplicationNoDAO.getApplicationNoByWorkCaseId(firstlastnamebasedworkcaseid);
+
+                    Iterator iterator1 = applicationNoList.iterator();
+
+                    while(iterator1.hasNext() == true)
+                    {
+                        SearchApplicationNo searchApplicationNo = new SearchApplicationNo();
+
+                        searchApplicationNo = (SearchApplicationNo)iterator1.next();
+
+                        String applicationnumbervalue = searchApplicationNo.getApplicationNo();
+
+                        SearchApplicationNumberList.add(applicationnumbervalue);
+                    }
+
+                }
+
+
+            }
+
+            List<BPMActive> bpmactvelist = new ArrayList<BPMActive>();
+
+            bpmactvelist = bpmActiveDAO.getBPMActiveAppNumbers(bpmactive);
+
+            log.info("bpm active list is : {}",bpmactvelist.size());
+
+            Iterator it = bpmactvelist.iterator();
+
+            while(it.hasNext() == true)
+            {
+                BPMActive bpmActive = new BPMActive();
+
+                bpmActive = (BPMActive)it.next();
+
+                String bpmappnumber = bpmActive.getApplicationnumber();
+
+                SearchApplicationNumberList.add(bpmappnumber);
+
+            }
+            log.info("appnumberlist size is :::: {}",SearchApplicationNumberList.size());
+
+            appnumberlistavoidduplicates =    new ArrayList(new HashSet(SearchApplicationNumberList));
+
+            log.info("appnumberlistavoidduplicates size is :::: {}",appnumberlistavoidduplicates.size());
+
+
+        }
+        catch (Exception e)
+        {
+
+        }
+        finally
+        {
+
+        }
+
+        return appnumberlistavoidduplicates;
+
     }
 
 }
