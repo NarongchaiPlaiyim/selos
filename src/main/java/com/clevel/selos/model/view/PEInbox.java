@@ -37,7 +37,7 @@ public class PEInbox implements Serializable
     private String fwobnumber;
     private long workCasePreScreenId;
     private long workCaseId;
-    private long stepId;
+    private Long stepId;
     private String queuename;
 
 
@@ -100,11 +100,11 @@ public class PEInbox implements Serializable
         this.workCasePreScreenId = workCasePreScreenId;
     }
 
-    public long getStepId() {
+    public Long getStepId() {
         return stepId;
     }
 
-    public void setStepId(long stepId) {
+    public void setStepId(Long stepId) {
         this.stepId = stepId;
     }
 
