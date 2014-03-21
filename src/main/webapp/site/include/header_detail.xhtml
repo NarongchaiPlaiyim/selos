@@ -11,6 +11,7 @@
 
             <p:commandButton id="btnPrintReport" value="#{msg.get('app.header.button.printReport')}" styleClass="blueButton" title="#{msg.get('app.header.button.printReport')}"
                              oncomplete="printReportDlg.show()"
+                             actionListener="#{report.setNameReport()}"
                              update=":frmMain:printReportPanel">
             </p:commandButton>
 
@@ -348,7 +349,7 @@
     <p:panel id="printReportPanel" styleClass="panel">
         <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"
                   onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-                  modal="true" width="430" height="200">
+                  modal="true" width="700" height="300">
             <ui:include src="/site/dialog/printReportDialog.xhtml"/>
         </p:dialog>
     </p:panel>

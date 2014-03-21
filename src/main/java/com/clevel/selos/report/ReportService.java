@@ -38,10 +38,10 @@ public class ReportService implements Serializable {
 
         try {
 
-            String date = Util.createDateTime(new Date());
+            System.out.println("-------------"+pdfName);
 
             HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            response.addHeader("Content-disposition", "attachment; filename="+pdfName+date+".pdf");
+            response.addHeader("Content-disposition", "attachment; filename="+pdfName+".pdf");
             ServletOutputStream servletOutputStream=response.getOutputStream();
             JasperExportManager.exportReportToPdfStream(print, servletOutputStream);
             FacesContext.getCurrentInstance().responseComplete();

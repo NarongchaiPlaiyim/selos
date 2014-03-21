@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subProposedCollateral_subSubCollateral_subcollateralOwnerUWList" pageWidth="72" pageHeight="802" columnWidth="72" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="cb9a51fd-bfb4-40b3-b4e7-600ea1524d6f">
+	<property name="ireport.zoom" value="1.331000000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="detail" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF" hAlign="Center" vAlign="Middle" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<field name="titleTh" class="java.lang.String">
+		<fieldDescription><![CDATA[titleTh.titleTh]]></fieldDescription>
+	</field>
+	<field name="firstNameTh" class="java.lang.String">
+		<fieldDescription><![CDATA[firstNameTh]]></fieldDescription>
+	</field>
+	<field name="lastNameTh" class="java.lang.String">
+		<fieldDescription><![CDATA[lastNameTh]]></fieldDescription>
+	</field>
+	<detail>
+		<band height="8" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a0eecc05-208e-45cc-9881-4dd58b1d655f" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="72" height="8"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{titleTh}.equals( null ) ? "" : $F{titleTh} +
+$F{firstNameTh} + " " +$F{lastNameTh}+"\n"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

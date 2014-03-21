@@ -44,7 +44,6 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
 
     public ApprovedCollateralDecisionReport() {
         jobID = getDefaultString();
-        appraisalDate = getDefaultDate();
         aadDecision = getDefaultString();
         aadDecisionReason = getDefaultString();
         aadDecisionReasonDetail = getDefaultString();
