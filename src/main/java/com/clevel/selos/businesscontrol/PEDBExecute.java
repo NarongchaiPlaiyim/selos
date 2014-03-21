@@ -769,7 +769,7 @@ public class PEDBExecute extends BusinessControl
                     log.info("appnumber if : {}",applicationNo);
                     appNumberCriteria = true;
                 }
-                if(step != null && step.length() >0)
+                if(step != null && step.length()>0)
                 {
                     log.info("step :",step);
                     if(flag)
@@ -801,6 +801,8 @@ public class PEDBExecute extends BusinessControl
                     flag = true;
 
                 }
+                log.info(date1.toString()+""+date2.toString());
+                log.info(wherecondition);
                 if(date1 != null && date2 != null)
                 {
 
@@ -813,11 +815,11 @@ public class PEDBExecute extends BusinessControl
 
                     if(flag)
                     {
-                        wherecondition += " AND dateadd(s,ReceivedTime,'1970-1-1') between  '" +formatter.format(date1)+ "' AND  '" +formatter.format(date2)+"'";
+                        wherecondition += " AND ReceivedTime >=  " +date1.getTime()+ " AND  ReceivedTime <=" +date2.getTime();
                     }
                     else
                     {
-                        wherecondition = " where dateadd(s,ReceivedTime,'1970-1-1') between  '" +formatter.format(date1)+ "' AND  '" +formatter.format(date2)+"'";
+                        wherecondition = " where ReceivedTime >=  " +date1.getTime()+ " AND  ReceivedTime <=" +date2.getTime();
                     }
                     flag = true;
                 }
