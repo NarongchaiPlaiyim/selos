@@ -319,7 +319,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 log.info("workCase :: {}",workCase.getId());
                 if(!Util.isNull(workCase)){
                     productGroup = workCase.getProductGroup();
-                    log.info("productGroup :: {}",productGroup.getId());
+//                    log.info("productGroup :: {}",productGroup.getId());
                 }
 
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
@@ -1103,7 +1103,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     proposeCreditDetailViewList.add(selectedCollateralCrdTypeItems.get(i));
                     seqTemp = selectedCollateralCrdTypeItems.get(i).getSeq();
 
-                    hashSeqCredit.put(seqTemp, hashSeqCredit.get(i) + 1);
+//                    hashSeqCredit.put(seqTemp, hashSeqCredit.get(i) + 1);
 
 
                 }
@@ -1112,11 +1112,11 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                 for (int j = 0; j < proposeCollateralInfoAdd.getProposeCreditDetailViewList().size(); j++) {
                     seqTemp = proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).getSeq();
-                    if (proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).isNoFlag()) {
-                        hashSeqCredit.put(seqTemp, hashSeqCredit.get(j) + 1);
-                    } else {
-                        hashSeqCredit.put(seqTemp, hashSeqCredit.get(j) - 1);
-                    }
+//                    if (proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).isNoFlag()) {
+//                        hashSeqCredit.put(seqTemp, hashSeqCredit.get(j) + 1);
+//                    } else {
+//                        hashSeqCredit.put(seqTemp, hashSeqCredit.get(j) - 1);
+//                    }
                 }
 
             } else {

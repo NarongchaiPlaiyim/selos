@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subProposeFeeInformation" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="e3bfa3ec-fe71-4452-a1cd-977f3cd95c56">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="detail" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF" hAlign="Center" vAlign="Middle" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<field name="count" class="java.lang.Integer">
+		<fieldDescription><![CDATA[count]]></fieldDescription>
+	</field>
+	<field name="productProgram" class="java.lang.String">
+		<fieldDescription><![CDATA[productProgram]]></fieldDescription>
+	</field>
+	<field name="standardFrontEndFee" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[standardFrontEndFee]]></fieldDescription>
+	</field>
+	<field name="commitmentFee" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[commitmentFee]]></fieldDescription>
+	</field>
+	<field name="extensionFee" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[extensionFee]]></fieldDescription>
+	</field>
+	<field name="prepaymentFee" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[prepaymentFee]]></fieldDescription>
+	</field>
+	<field name="cancellationFee" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[cancellationFee]]></fieldDescription>
+	</field>
+	<field name="standardFeeYear" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[standardFeeYear]]></fieldDescription>
+	</field>
+	<field name="commitmentFeeYear" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[commitmentFeeYear]]></fieldDescription>
+	</field>
+	<field name="extensionFeeYear" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[extensionFeeYear]]></fieldDescription>
+	</field>
+	<field name="prepaymentFeeYear" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[prepaymentFeeYear]]></fieldDescription>
+	</field>
+	<field name="cancellationFeeYear" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[cancellationFeeYear]]></fieldDescription>
+	</field>
+	<columnHeader>
+		<band height="20">
+			<staticText>
+				<reportElement uuid="22603440-7856-4400-afbf-809d81f08b69" style="header" x="469" y="0" width="86" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Cancellation Fee]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ef2ee625-3aef-44fb-9261-bb1c53afeed5" style="header" x="383" y="0" width="86" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Prepayment Fee]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="962b1910-248d-471d-87ee-22146170c12e" style="header" x="297" y="0" width="86" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Extension Fee]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="145be207-34ea-4602-abcf-6a53b1be75f3" style="header" x="198" y="0" width="99" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Commitment Fee]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="40176664-a8b4-4ac5-a559-d6195f534a5e" style="header" x="105" y="0" width="93" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Standard Front End Fee]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="81983764-a10e-498f-8489-e7fb66028289" style="header" x="0" y="0" width="105" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Product Program]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="a662c53f-ec22-477c-94d0-0f23a8ae719b" style="detail" x="0" y="0" width="105" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{productProgram}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="9e70b49c-5c3b-4d8b-ab25-c9565302c750" style="detail" x="105" y="0" width="93" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{standardFrontEndFee}+"%, "+$F{standardFeeYear}+" Year"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c4d5b5b4-8375-44fc-b6f1-96def137c67c" style="detail" x="198" y="0" width="99" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{commitmentFee}+"%, "+$F{commitmentFeeYear}+" Year"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b8538b83-cb44-4d6a-886d-6ada1204a598" style="detail" x="297" y="0" width="86" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{extensionFee}+"%, "+$F{extensionFeeYear}+" Year"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f7da6dbc-1d95-4310-a0ef-863445b1dc81" style="detail" x="383" y="0" width="86" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prepaymentFee}+"%, "+$F{prepaymentFeeYear}+" Year"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e7bc9ea1-fce5-4bba-9ac7-91ba4ecad5bb" style="detail" x="469" y="0" width="86" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cancellationFee}+"%, "+$F{cancellationFeeYear}+" Year"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

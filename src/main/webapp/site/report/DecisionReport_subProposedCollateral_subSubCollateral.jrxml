@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subProposedCollateral_subSubCollateral" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="6af2815e-6f55-4019-b5b0-07785600c1ac">
+	<property name="ireport.zoom" value="1.4641000000000013"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="detail" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF" hAlign="Center" vAlign="Middle" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\ProjectSLOS\\selos\\src\\main\\webapp\\site\\report\\"]]></defaultValueExpression>
+	</parameter>
+	<field name="no" class="java.lang.Integer">
+		<fieldDescription><![CDATA[no]]></fieldDescription>
+	</field>
+	<field name="subCollateralType" class="java.lang.Object">
+		<fieldDescription><![CDATA[subCollateralType.description]]></fieldDescription>
+	</field>
+	<field name="address" class="java.lang.String">
+		<fieldDescription><![CDATA[address]]></fieldDescription>
+	</field>
+	<field name="landOffice" class="java.lang.String">
+		<fieldDescription><![CDATA[landOffice]]></fieldDescription>
+	</field>
+	<field name="titleDeed" class="java.lang.String">
+		<fieldDescription><![CDATA[titleDeed]]></fieldDescription>
+	</field>
+	<field name="collateralOwnerAAD" class="java.lang.String">
+		<fieldDescription><![CDATA[collateralOwnerAAD]]></fieldDescription>
+	</field>
+	<field name="appraisalValue" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[appraisalValue]]></fieldDescription>
+	</field>
+	<field name="mortgageValue" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[mortgageValue]]></fieldDescription>
+	</field>
+	<field name="collateralOwnerUWList" class="java.util.List">
+		<fieldDescription><![CDATA[collateralOwnerUWList]]></fieldDescription>
+	</field>
+	<field name="mortgageList" class="java.util.List">
+		<fieldDescription><![CDATA[mortgageList]]></fieldDescription>
+	</field>
+	<field name="relatedWithList" class="java.util.List">
+		<fieldDescription><![CDATA[relatedWithList]]></fieldDescription>
+	</field>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="5c012342-4bdd-41e4-a213-5615117816c9" style="header" x="0" y="0" width="26" height="21"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fd9fd5a8-ce36-4713-86b2-b149c33fe686" style="header" x="25" y="0" width="125" height="21"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Sub Coll type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4f13deb1-9c1f-437e-9d99-9aeed0e2822a" style="header" x="200" y="0" width="71" height="21"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Collateral Owner
+(ADD)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f2a1f42c-4e32-4c07-bf42-9a6cf868789b" style="header" x="271" y="0" width="72" height="21"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Collateral Owner
+ (UW)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b7de87d4-854a-4389-a478-636d85646e8b" style="header" x="343" y="0" width="55" height="21"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ประเภทนิติกรรม]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5c9e8791-a1cb-4b4f-9ccc-6a6cd8c7a9e5" style="header" x="398" y="0" width="57" height="21"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Related with]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a56bf3a7-03ee-49e2-9ea4-46935f05e265" style="header" x="455" y="0" width="52" height="21"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ราคาประเมิน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="502dea7f-59eb-4259-b8c3-13741a1a29be" style="header" x="507" y="0" width="48" height="21"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[จำนำ/จำนอง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7ea613dd-ef54-43e9-a2a2-35a9dcffc4d4" style="header" x="150" y="0" width="50" height="21"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Title Deed]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="28" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="f9307cc6-ff0c-4d36-90db-f542994f8a09" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="25" height="28"/>
+				<textElement verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{no}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="68cf501a-92f9-439c-9bf3-018228e4daec" style="detail" stretchType="RelativeToBandHeight" x="25" y="0" width="125" height="28"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{subCollateralType}+"\n"+
+"Address : "+$F{address}+"\n"+
+"Land Office : "+$F{landOffice}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="e7996ed5-e2a7-4979-9c84-d8ac611cedaa" style="detail" stretchType="RelativeToBandHeight" x="150" y="0" width="50" height="28"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{titleDeed}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="9411c2b2-d298-457e-8687-773c8bd3d6ef" style="detail" stretchType="RelativeToBandHeight" x="200" y="0" width="71" height="28"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{collateralOwnerAAD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="bbb6b76d-d1f5-4abf-a999-3aa01d596390" style="detail" stretchType="RelativeToBandHeight" x="271" y="0" width="72" height="28"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="5e9677b4-4d66-4b0d-8f91-7ede2d935f36" style="detail" stretchType="RelativeToBandHeight" x="343" y="0" width="55" height="28"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="23c4fdef-9a8a-42de-93d6-286900e2d7f7" style="detail" stretchType="RelativeToBandHeight" x="398" y="0" width="57" height="28"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a5e5dd91-1399-4d32-8ea4-9cd022036751" style="detail" stretchType="RelativeToBandHeight" x="507" y="0" width="48" height="28"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mortgageValue}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="50a2d02c-3c01-4018-afab-685d664df4b3" style="detail" stretchType="RelativeToBandHeight" x="455" y="0" width="52" height="28"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{appraisalValue}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="c23ab9fa-3e29-4282-a0d9-5874cf59d34e" x="271" y="0" width="72" height="28"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{collateralOwnerUWList})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DecisionReport_subProposedCollateral_subSubCollateral_subcollateralOwnerUWList.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="3e85f6f4-7121-44af-a708-27ced3e48858" x="343" y="0" width="55" height="28"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{mortgageList})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DecisionReport_subProposedCollateral_subSubCollateral_submortgageList.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="7b8b5584-0f40-49e2-a152-0597058edf6f" x="398" y="0" width="57" height="28"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{relatedWithList})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DecisionReport_subProposedCollateral_subSubCollateral_subrelatedWithList.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

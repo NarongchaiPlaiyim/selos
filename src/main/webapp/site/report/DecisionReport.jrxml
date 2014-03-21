@@ -1,0 +1,1414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b568264b-3421-42fd-80e8-96aa4a75cbf6">
+	<property name="ireport.zoom" value="1.6105100000000323"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="2119"/>
+	<style name="Total" mode="Opaque" forecolor="#000000" backcolor="#FCFF79" hAlign="Left" vAlign="Middle" fontSize="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\ProjectSLOS\\selos\\src\\main\\webapp\\site\\report\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="path" class="java.lang.String"/>
+	<parameter name="fillProposedCredit" class="java.util.Collection"/>
+	<parameter name="fillCreditBorrower" class="java.util.Collection"/>
+	<parameter name="fillCondition" class="java.util.Collection"/>
+	<parameter name="fillBorrowerRetail" class="java.util.Collection"/>
+	<parameter name="fillAppInRLOS" class="java.util.Collection"/>
+	<parameter name="fillRelatedCommercial" class="java.util.Collection"/>
+	<parameter name="fillRelatedRetail" class="java.util.Collection"/>
+	<parameter name="fillRelatedAppInRLOS" class="java.util.Collection"/>
+	<parameter name="fillExistingCollateralBorrower" class="java.util.Collection"/>
+	<parameter name="fillExistingCollateralRelated" class="java.util.Collection"/>
+	<parameter name="fillGuarantorBorrower" class="java.util.Collection"/>
+	<parameter name="fillProposeFeeInformation" class="java.util.Collection"/>
+	<parameter name="fillProposedCollateral" class="java.util.Collection"/>
+	<parameter name="fillApprovedCollaterral" class="java.util.Collection"/>
+	<parameter name="fillProposedGuarantor" class="java.util.Collection"/>
+	<parameter name="fillApprovedCollateral" class="java.util.Collection"/>
+	<parameter name="fillFollowUpCondition" class="java.util.Collection"/>
+	<parameter name="fillApprovalHistory" class="java.util.Collection"/>
+	<parameter name="fillTotalMasterReport" class="com.clevel.selos.model.report.TotalDecisionReport"/>
+	<parameter name="fillFollowDetail" class="com.clevel.selos.model.report.FollowUpConditionDecisionReport"/>
+	<parameter name="fillPriceFee" class="com.clevel.selos.model.report.PriceFeeDecisionReport"/>
+	<title>
+		<band height="36" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="bc17712d-975b-4eb7-9f86-69414b719398" x="1" y="0" width="100" height="20"/>
+				<textElement>
+					<font isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Decision]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="e06d8142-e292-4638-9c9e-f63e76976080" x="0" y="19" width="555" height="1" forecolor="#CCCCCC"/>
+			</line>
+			<staticText>
+				<reportElement uuid="f10607d1-66f5-4acb-a539-f3cd669153a3" x="1" y="22" width="100" height="14"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Existing Credit]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="63" splitType="Stretch">
+			<frame>
+				<reportElement uuid="b2752ea6-344f-4090-ae01-2234246f6c8b" mode="Opaque" x="0" y="0" width="555" height="63"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<staticText>
+					<reportElement uuid="c3cbd3ea-7775-45f7-9011-929828de6ce8" x="1" y="0" width="100" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Borrower :]]></text>
+				</staticText>
+				<subreport>
+					<reportElement uuid="3eeac197-c6d6-431e-9d11-ebd858892477" x="0" y="15" width="555" height="48"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillCreditBorrower})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subCreditBorrower.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+		<band height="75">
+			<frame>
+				<reportElement uuid="f8e42021-9d3e-4691-b2ed-dc793f258a73" mode="Opaque" x="0" y="0" width="555" height="75"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<staticText>
+					<reportElement uuid="361a186d-99b7-480a-9bf6-d2f42ee6f75e" x="1" y="19" width="122" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Condition commercial credit]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="2629b84f-5c43-4158-9f4e-826fad68ce31" style="Total" x="23" y="0" width="332" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[  Total]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="0c3bcd5a-e5eb-4dee-8544-a0601ddef094" style="Total" x="0" y="0" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="1e7ba864-4bb6-4a1c-8e0d-f5056fa20c51" style="Total" x="389" y="0" width="166" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="120f9be7-bba6-400f-b0b9-ea125efdc506" style="Total" x="355" y="0" width="34" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtBorrowerTotalComLimit()]]></textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement uuid="d1448763-e011-421e-b712-df7af839f8dd" x="0" y="33" width="555" height="39"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillCondition})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subCreditCondition.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+		<band height="59">
+			<frame>
+				<reportElement uuid="29d9a208-d006-4678-a300-01123cab16ae" mode="Opaque" x="0" y="0" width="555" height="59"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<subreport>
+					<reportElement uuid="842567da-1283-4991-a4f0-205f1830026c" x="0" y="10" width="555" height="49"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillBorrowerRetail})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subCreditRetail.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+		<band height="74">
+			<frame>
+				<reportElement uuid="7c7e4db6-b8d8-4c73-bd82-bab4a301da95" mode="Opaque" x="0" y="0" width="555" height="74"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<staticText>
+					<reportElement uuid="8671a7a7-dfb5-4a0a-9b96-91f05c2ea1e2" style="Total" x="0" y="0" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="c922a470-e17d-4299-8877-5e3a43fc112a" style="Total" x="389" y="0" width="166" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="47aafa57-419a-4fbe-86fc-83489359d9f4" style="Total" x="23" y="0" width="332" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[  Total]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="a9a9a018-204f-476d-8d69-2409bb15d781" style="Total" x="355" y="0" width="34" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtBorrowerTotalRetailLimit()]]></textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement uuid="b6f6aa5a-2955-417f-849c-337299e34a4b" x="0" y="29" width="555" height="45"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillAppInRLOS})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subCreditAppRLOS.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+		<band height="91">
+			<frame>
+				<reportElement uuid="1264cece-44b8-4b2f-979b-482762729b96" mode="Opaque" x="0" y="0" width="555" height="91"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<break>
+					<reportElement uuid="d81c041c-f94d-451d-92d2-5d860b7026ef" x="0" y="90" width="100" height="1"/>
+				</break>
+				<staticText>
+					<reportElement uuid="a9d61163-2a0a-470f-a5fb-dfaecf117ea0" x="1" y="20" width="49" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Borrower]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="f2cf2a4b-bf1c-4414-9cf7-54cd17ce82ff" style="Total" x="23" y="33" width="242" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[    Total Commercial]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="9302d668-6766-4d40-bf5b-daecb0ad0d93" style="Total" x="265" y="33" width="59" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtBorrowerTotalCommercial()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="d91a56fc-8e46-4735-9f88-8d77ed84762c" style="Total" x="324" y="33" width="231" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="37f07f7a-df6a-4918-9f44-1e24b6a28884" style="Total" x="0" y="33" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="e7e78aba-e14e-431b-ab87-581f2f341854" style="Total" x="23" y="76" width="242" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[    Total Exposure]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="6f905176-c557-4e1a-895b-490070b3ff1c" style="Total" x="265" y="76" width="59" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtBorrowerTotalExposure()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="f978260e-374f-417f-bd5a-974bf7bcaf07" style="Total" x="324" y="76" width="231" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="85e435d8-32ff-4a84-8d30-ed75b6d46cf1" style="Total" x="0" y="76" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="cd1f8896-b395-42a7-8908-7aca19ca8081" style="Total" x="23" y="54" width="242" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[    Total Commercial and OBOD]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="34b96e14-c97f-4f8f-bbb7-3cc5be683cf1" style="Total" x="265" y="54" width="59" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtBorrowerTotalComAndOBOD()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="37d679d1-daae-47e5-af20-a0c3eecd6806" style="Total" x="324" y="54" width="231" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d1ca694d-b751-40a4-b4fe-f92b36d8a041" style="Total" x="0" y="54" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="ccbaf88e-73d2-4fbd-b9c6-bc6769ee0168" style="Total" x="389" y="0" width="166" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="ab1875e0-df16-47f1-a61d-77a9e5a1c2c9" style="Total" x="23" y="0" width="332" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[  Total]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="52cccbe4-c280-4d1d-9ff0-95ef7279d5a6" style="Total" x="355" y="0" width="34" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtBorrowerTotalAppInRLOSLimit()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="0a27243f-1e90-45fc-ab4f-35500499bc45" style="Total" x="0" y="0" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</frame>
+		</band>
+		<band height="63">
+			<frame>
+				<reportElement uuid="c4e364ec-7376-4ee6-9679-1fda8a12c608" mode="Opaque" x="0" y="0" width="555" height="63"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<staticText>
+					<reportElement uuid="2b9d3d16-5dd3-4102-b6fc-a91d48706364" x="1" y="0" width="82" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Related Person]]></text>
+				</staticText>
+				<subreport>
+					<reportElement uuid="87404799-dd3d-4b1b-8657-0d726260b487" x="0" y="13" width="555" height="50"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillRelatedCommercial})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subPersonCommercial.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+		<band height="73">
+			<frame>
+				<reportElement uuid="c7be1657-60af-4daa-a8bf-d5eb5a162d01" mode="Opaque" x="0" y="0" width="555" height="73"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<textField>
+					<reportElement uuid="c78e6489-86e4-4cd1-bf67-f0716a0bed3b" style="Total" x="355" y="0" width="34" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtRelatedTotalComLimit()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="95dc0fea-823b-4444-a9fb-e1542933ec8d" style="Total" x="23" y="0" width="332" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[  Total]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="e90159a8-972a-43da-8da2-a3914f800ad1" style="Total" x="0" y="0" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="bd1716ad-ad81-4775-99ad-c8790f57db8f" style="Total" x="389" y="0" width="166" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<subreport>
+					<reportElement uuid="79f8c277-a6c3-4bfb-be2e-7ff831ac89a1" x="0" y="25" width="555" height="48"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillRelatedRetail})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subPersonRetail.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+		<band height="75">
+			<frame>
+				<reportElement uuid="b1f8f9cc-7939-4a66-982c-2a4933960cb9" mode="Opaque" x="0" y="0" width="556" height="75"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<textField>
+					<reportElement uuid="be09122d-4bf5-42eb-b27a-009226b9f937" style="Total" x="354" y="0" width="34" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtRelatedTotalRetailLimit()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="1f7421fc-7b58-4bcb-a69e-9c7b82b08d5b" style="Total" x="23" y="0" width="331" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[  Total]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="ec6b1a97-b21f-40bd-96c2-daa55beaa28d" style="Total" x="0" y="0" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d7fa0c76-052d-4686-a8fa-cf94f5c80779" style="Total" x="388" y="0" width="167" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<subreport>
+					<reportElement uuid="ddbd96ee-9262-4453-8a81-3757d899b5cb" x="0" y="24" width="556" height="51"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillRelatedAppInRLOS})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path}+ "DecisionReport_subPersonAppRLOS.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+		<band height="90">
+			<frame>
+				<reportElement uuid="8f624b7b-bb6c-4d56-8e7d-fa5e4aae84f0" x="0" y="0" width="555" height="90"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<staticText>
+					<reportElement uuid="114027ce-3787-43cf-a7db-4acdeaa33701" x="1" y="18" width="37" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Related]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="9c0db1b0-c7b9-4ef7-9861-204742c5c6e4" style="Total" x="23" y="31" width="242" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[    Total Commercial]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="4a9334ed-32dc-4156-9bd8-508537de4db3" style="Total" x="265" y="31" width="59" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtRelatedTotalCommercial()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="773661b7-841a-4935-9cea-b02be2e8d4ec" style="Total" x="324" y="31" width="231" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="153cbf39-70c9-4252-8aa5-e5f5fb890850" style="Total" x="0" y="31" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="fc7a3f29-928a-4b28-8dd0-35691f77d273" style="Total" x="23" y="74" width="242" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[    Total Exposure]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="e047c7a7-0681-4dfa-bbe6-dfb291213842" style="Total" x="265" y="74" width="59" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtRelatedTotalExposure()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="68f2a24c-a934-490b-8339-714dc6c38e21" style="Total" x="324" y="74" width="231" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="c1e8b7a3-357c-45b0-8b4a-c986492b2c0b" style="Total" x="0" y="74" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="f952e185-f2df-408c-bca0-84001c36b5ce" style="Total" x="23" y="52" width="242" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[    Total Commercial and OBOD]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="70c6aebc-8c3a-4adb-8bf3-1d03907d9b9c" style="Total" x="265" y="52" width="59" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtRelatedTotalComAndOBOD()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="9949f6d7-b18a-4636-a8b0-2d384f1d7b0b" style="Total" x="324" y="52" width="231" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="c8044af7-6c4c-438b-8764-931f0f581e28" style="Total" x="0" y="52" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="4ef81310-1d5a-4159-98cc-666cd1d4a68b" style="Total" x="354" y="0" width="34" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtRelatedTotalAppInRLOSLimit()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="12fff4f3-0772-47a0-b2bb-ba6f50f4e47b" style="Total" x="23" y="0" width="331" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[  Total]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="a62c72a7-0d46-4ba4-8a83-32e7d9209372" style="Total" x="0" y="0" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="0cc6fe70-9fdb-42d5-94bf-5f6169269da9" style="Total" x="388" y="0" width="167" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</frame>
+		</band>
+		<band height="73">
+			<frame>
+				<reportElement uuid="eda79f73-34b8-4d4b-b3b9-6f80d81d5443" mode="Opaque" x="0" y="1" width="555" height="70"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<staticText>
+					<reportElement uuid="f76ab155-b077-42b4-8fb8-1d596937ae5f" x="1" y="0" width="37" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Group]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="b9132524-e9c8-41e8-b894-5ffacfbbec6e" style="Total" x="23" y="13" width="242" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[    Total Commercial]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="45b570cd-74b7-46e4-aed5-edf39d78df3a" style="Total" x="265" y="13" width="59" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtGroupTotalCommercial()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="2f772ed5-0fc4-4f20-8b8e-022e891dc701" style="Total" x="324" y="13" width="231" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="b9d4bc31-66ad-4603-9d78-fd756b3daabf" style="Total" x="0" y="13" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="1ec79705-5bbc-446b-bd41-41f246a0af72" style="Total" x="23" y="55" width="242" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[    Total Exposure]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="d0449729-cddc-4538-88ee-6451164aab7b" style="Total" x="265" y="55" width="59" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtGroupTotalExposure()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="73eb2ab9-3c8d-411d-80d2-381a92d64772" style="Total" x="324" y="55" width="231" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="e3519ea5-515f-4d3e-b004-0c521872deeb" style="Total" x="0" y="55" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="808ef7d2-a08c-4334-b7a6-a5eed7ea657f" style="Total" x="23" y="34" width="242" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[    Total Commercial and OBOD]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="f6e64eb4-1f2a-4603-9cef-d1a59b7ef2c5" style="Total" x="265" y="34" width="59" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtGroupTotalComAndOBOD()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="95af44e3-8ad1-4060-a967-8524f932a115" style="Total" x="324" y="34" width="231" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="80d5bb39-3ade-451e-8851-cd7aee882ba8" style="Total" x="0" y="34" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</frame>
+			<break>
+				<reportElement uuid="cd8245ca-1428-4409-b989-fe3a25656014" x="0" y="71" width="100" height="1"/>
+			</break>
+		</band>
+		<band height="81">
+			<frame>
+				<reportElement uuid="74592420-4a8a-44bd-a0a9-6e74cce945a2" x="0" y="0" width="556" height="81"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<staticText>
+					<reportElement uuid="88394a96-a2d7-483d-8873-f59a39bf7a9b" x="1" y="4" width="82" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Existing Collateral]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="681a2d75-f03c-4f99-bc23-986abd22d80a" x="1" y="16" width="82" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Borrower]]></text>
+				</staticText>
+				<subreport>
+					<reportElement uuid="2022a7e6-4d50-4f74-b94e-ffea10fdf7fc" x="0" y="31" width="556" height="50"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillExistingCollateralBorrower})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subCollateralBorrower.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+		<band height="90">
+			<frame>
+				<reportElement uuid="59fb8ce9-1e6c-41ec-9246-56554fa900eb" x="0" y="0" width="556" height="90"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<staticText>
+					<reportElement uuid="e9fa1cdc-ba98-48a3-bbdb-73435cac36a7" x="1" y="18" width="82" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Related Person]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="e86349c8-15e1-4992-9c01-2697f5eb21cc" style="Total" x="0" y="0" width="459" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[  Total]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="af5f179c-cb5b-423e-96b9-0327737a0d78" style="Total" x="459" y="0" width="48" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtBorrowerTotalAppraisalValue()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="cec34dd9-adfb-4df1-8ada-620a1cee755d" style="Total" x="507" y="0" width="48" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtBorrowerTotalMortgageValue()]]></textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement uuid="a23adb00-b35b-4d3b-976a-ee52cb30bfb0" x="0" y="40" width="556" height="50"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillExistingCollateralRelated})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subCollateralPerson.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+		<band height="83">
+			<frame>
+				<reportElement uuid="ab1155ef-4697-4ca8-ac92-9d036d847ea9" x="0" y="0" width="556" height="83"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<staticText>
+					<reportElement uuid="7d5a7d84-57c2-4b03-98c4-850865f1bc48" x="1" y="17" width="82" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Existing Guarantor]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="65d6876f-03e1-41ec-96e8-69bc087d3f6a" x="1" y="32" width="233" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Borrower - ระบุเฉพาะผู้ค้ำประกัน / บสย.เดิม ของผู้กู้เท่านั้น]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="45b5d70e-6c3b-4657-8cae-f9c5aefea6e2" style="Total" x="0" y="0" width="459" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[  Total]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="53aed0c2-a0da-454a-9f08-9d3be5a881c5" style="Total" x="459" y="0" width="48" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtRelatedTotalAppraisalValue()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="492769bd-8d71-4f24-bb19-80af2d281c2d" style="Total" x="507" y="0" width="48" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtRelatedTotalMortgageValue()]]></textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement uuid="cb4fdca4-2a23-4bb9-a82d-c8366a39df2a" x="0" y="45" width="555" height="38"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillGuarantorBorrower})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DecisionReport_subGuarantorBorrower.jasper"]]></subreportExpression>
+				</subreport>
+				<break>
+					<reportElement uuid="d7bf0fd8-68fc-4546-97df-9e6528866623" x="0" y="15" width="100" height="1"/>
+				</break>
+			</frame>
+		</band>
+		<band height="78">
+			<frame>
+				<reportElement uuid="2107f254-fc07-441a-8848-9464415eeaf8" mode="Opaque" x="0" y="0" width="555" height="78"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<staticText>
+					<reportElement uuid="2184ce53-6c74-4d02-845d-3bc9dbb36e69" x="1" y="17" width="82" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Proposed Credit]]></text>
+				</staticText>
+				<subreport isUsingCache="true">
+					<reportElement uuid="9b19b0df-3ecd-4c56-aff2-d887a6f8988d" x="0" y="32" width="555" height="46"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillProposedCredit})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subProposedCredit.jasper"]]></subreportExpression>
+				</subreport>
+				<staticText>
+					<reportElement uuid="86d794e5-74b6-4c5c-af66-29ba83100c81" style="Total" x="0" y="0" width="478" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[  Total]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="62de8e5b-8c85-4a34-9e21-5100781d644a" style="Total" x="478" y="0" width="77" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtTotalGuaranteeAmount()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+		<band height="163">
+			<frame>
+				<reportElement uuid="63e43fc6-92fd-446d-a0a8-9ea43b462a00" mode="Opaque" x="0" y="0" width="555" height="163"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<staticText>
+					<reportElement uuid="ed7baf03-b866-4e22-a933-0abf62358af4" x="1" y="18" width="82" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Approved Credit]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="0a8274ed-2732-480f-a726-0d07cd4d10e1" x="1" y="34" width="335" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[วัตถุประสงค์ของการขอสินเชื่อต้องเหมาะสมต่อธุรกิจและประเภทสินเชื่อ :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="336dd79a-2a4a-41e7-accb-493505d550de" x="22" y="53" width="31" height="13"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Normal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="6ee2e15d-8cfb-4348-89d2-b278b4c8cdc5" x="89" y="54" width="31" height="13"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Prime]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="55420a9a-f442-4347-997b-a1e32dadf125" x="1" y="73" width="88" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[ประเภทการขอสินเชื่อ :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d1843c2a-b5fe-4f64-bed0-7fa92292a33d" x="1" y="86" width="136" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[ประเทศที่ต้องการนำเงินไปลงทุน :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="36c66c44-ab22-440f-9aac-e6575cef7397" x="1" y="99" width="222" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[วงเงิน/ภาระสินเชื่อ SME เดิม (รวมกลุ่ม/กิจการในเครือ) :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="533246b1-394d-4c7f-9642-b6321473b699" x="298" y="99" width="49" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[วงเงินสูงสุด :]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="07be86c0-1027-435c-a88b-3311d3de140c" x="89" y="73" width="122" height="13"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getCrdRequestTypeName()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="c3bf4a53-af23-4508-9000-d5cf45ae9a72" x="137" y="86" width="122" height="13"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getCountryName()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="81f24cd1-133c-4fa3-a187-761b1f06bdea" x="223" y="99" width="75" height="13"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExistingSMELimit()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="3bf79b92-b737-446f-ae4d-769785cbbf96" x="347" y="99" width="75" height="13"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getMaximumSMELimit()]]></textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement uuid="36f95455-ba15-4d5d-86b1-d698e6754c86" x="0" y="114" width="555" height="49"/>
+					<subreportParameter name="fillSubProposedCredit">
+						<subreportParameterExpression><![CDATA[]]></subreportParameterExpression>
+					</subreportParameter>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillProposedCredit})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subApprovedCredit.jasper"]]></subreportExpression>
+				</subreport>
+				<staticText>
+					<reportElement uuid="ad63836b-df04-4c4e-b582-e4df2f4c16df" style="Total" x="0" y="0" width="221" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[    Total Proposed Credit]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="469a965c-cd9d-4cc9-bbd3-3611a4c6da3c" style="Total" x="270" y="0" width="285" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="d5e0a0b0-3a23-4494-8e31-e111b69b7036" style="Total" x="221" y="0" width="49" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getProposeTotalCreditLimit()]]></textFieldExpression>
+				</textField>
+				<image scaleImage="RealSize">
+					<reportElement uuid="eed22fd3-69eb-42cd-add3-ae4c635048fa" x="5" y="54" width="17" height="11"/>
+					<imageExpression><![CDATA[($P{fillTotalMasterReport}.getCreditCusType()) == 1 ?
+$P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
+				</image>
+				<image scaleImage="RealSize">
+					<reportElement uuid="cc0e5f91-c87d-4ea4-b93e-059cf916c6bb" x="72" y="55" width="17" height="11"/>
+					<imageExpression><![CDATA[($P{fillTotalMasterReport}.getCreditCusType()) == 2 ?
+$P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
+				</image>
+				<break>
+					<reportElement uuid="1f540d96-1118-41ba-abd3-33c1111d74b4" x="0" y="14" width="100" height="1"/>
+				</break>
+			</frame>
+		</band>
+		<band height="89">
+			<frame>
+				<reportElement uuid="776cbc02-7ea0-4a46-8e07-12adab1895bc" mode="Opaque" x="0" y="0" width="555" height="89"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<staticText>
+					<reportElement uuid="0516868f-fbbe-40e7-8282-fd6dcbf94072" x="1" y="17" width="37" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Borrower]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="febc71a4-139d-4e3f-9743-102779c77979" style="Total" x="23" y="31" width="242" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[    Total Commercial]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="66ebefe8-20f5-4165-9d3b-4292f04dfa94" style="Total" x="265" y="31" width="59" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getApproveBrwTotalCommercial()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="6a5eeb08-a214-4a28-b33d-eb1a0ca51ee8" style="Total" x="324" y="31" width="231" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="1a680add-80e1-4486-8f51-ad1e3b642ed3" style="Total" x="0" y="31" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="e062b5db-e6d5-407b-875a-2e23adcc99ea" style="Total" x="23" y="74" width="242" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[    Total Exposure]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="475ec7d8-55b3-42a9-9942-d8c5117991dc" style="Total" x="265" y="74" width="59" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getApproveTotalExposure()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="8029de30-8512-4f6b-b39a-607fbabdcd7d" style="Total" x="324" y="74" width="231" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="2674b28f-9c73-46bb-9722-3a4ad8008f90" style="Total" x="0" y="74" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="674869f3-978d-4e49-b888-80fdea9aaedd" style="Total" x="23" y="52" width="242" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[    Total Commercial and OBOD]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="eb938ad8-e75d-4f20-bb01-14a865e008d1" style="Total" x="265" y="52" width="59" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getApproveBrwTotalComAndOBOD()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="5f7e5d57-879a-48da-a156-ea8aca8cf027" style="Total" x="324" y="52" width="231" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="a038248c-1851-4f9c-8eea-49bc22194403" style="Total" x="0" y="52" width="23" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="cd214ca3-04e7-4605-bf89-0d04e268b3af" style="Total" x="221" y="0" width="49" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getApproveTotalCreditLimit()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="36e031d0-79f6-49f3-8cf4-652e54bf9b54" style="Total" x="0" y="0" width="18" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="9a7c18bd-9f9c-4be0-a8e7-9af941a46ccc" style="Total" x="18" y="0" width="203" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[    Total Proposed Credit]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="4f75b04c-7c84-4264-85bd-8c5b40011436" style="Total" x="270" y="0" width="285" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</frame>
+		</band>
+		<band height="44">
+			<frame>
+				<reportElement uuid="85826987-e437-4b3f-b8e5-2a0f6931fb35" x="0" y="0" width="556" height="44"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<subreport>
+					<reportElement uuid="1d54e56d-8e56-4b0a-83e4-a58d8a03aeac" x="0" y="4" width="556" height="40"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillProposeFeeInformation})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subProposeFeeInformation.jasper"]]></subreportExpression>
+				</subreport>
+				<break>
+					<reportElement uuid="3c0ca1a0-4a3a-44f2-b367-454358db4bdd" x="0" y="43" width="100" height="1"/>
+				</break>
+			</frame>
+		</band>
+		<band height="56">
+			<frame>
+				<reportElement uuid="714d00ef-2d5e-4f1b-a566-52017941742b" x="0" y="0" width="556" height="56"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<subreport>
+					<reportElement uuid="d9e78720-de99-4258-94c5-e9872112988e" x="0" y="12" width="555" height="35" isRemoveLineWhenBlank="true"/>
+					<dataSourceExpression><![CDATA[$P{fillProposedCollateral}.isEmpty() ?
+new net.sf.jasperreports.engine.JREmptyDataSource()
+: new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillProposedCollateral})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subProposedCollateral.jasper"]]></subreportExpression>
+				</subreport>
+				<staticText>
+					<reportElement uuid="5449e17a-7812-474a-956c-26e128396072" x="1" y="0" width="82" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Propose Collateral]]></text>
+				</staticText>
+				<break>
+					<reportElement uuid="b9ea79ea-818d-4d96-a619-5cb497741575" x="0" y="50" width="100" height="1"/>
+				</break>
+			</frame>
+		</band>
+		<band height="60">
+			<frame>
+				<reportElement uuid="ae901d8c-ac26-41fa-8362-bb817cd031c8" x="0" y="0" width="556" height="60"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<subreport>
+					<reportElement uuid="1cf16328-1f9d-4079-a2f6-c054e5e0b348" x="0" y="13" width="555" height="38" isRemoveLineWhenBlank="true"/>
+					<dataSourceExpression><![CDATA[$P{fillApprovedCollaterral}.isEmpty() ?
+new net.sf.jasperreports.engine.JREmptyDataSource()
+:new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillApprovedCollaterral})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subApprovedCollateral.jasper"]]></subreportExpression>
+				</subreport>
+				<staticText>
+					<reportElement uuid="46142137-3e40-41e2-bb00-c43e3158d7f5" x="1" y="0" width="82" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Approved Collateral]]></text>
+				</staticText>
+				<break>
+					<reportElement uuid="5f22f048-fc86-4b68-89a3-8c14909707b1" x="0" y="52" width="100" height="1"/>
+				</break>
+			</frame>
+		</band>
+		<band height="38">
+			<frame>
+				<reportElement uuid="69593bb6-2a23-4ef7-9d2b-1098f81f0528" x="0" y="0" width="555" height="38"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<subreport>
+					<reportElement uuid="95a0f499-d9f9-496a-bf26-8f2f5d513bc6" x="0" y="13" width="555" height="25"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillProposedGuarantor})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subProposedGuarantor.jasper"]]></subreportExpression>
+				</subreport>
+				<staticText>
+					<reportElement uuid="b111598c-3741-49ba-a17a-528aa45e3f98" x="1" y="0" width="100" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Proposed Guarantor]]></text>
+				</staticText>
+			</frame>
+		</band>
+		<band height="62">
+			<frame>
+				<reportElement uuid="11f0943a-29ce-421c-ad25-505ad6d946ac" x="0" y="0" width="555" height="62"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<staticText>
+					<reportElement uuid="9279caaf-5621-42e6-b5f8-95aa3a24418a" x="1" y="18" width="100" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Approved Guarantor]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="e577f889-91aa-4742-84ee-f6d3ee93014b" style="Total" x="484" y="0" width="71" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getProposeTotalGuaranteeAmt()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="f6ddbda8-e002-4fdd-a32e-501b8733c360" style="Total" x="0" y="0" width="484" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[  Total]]></text>
+				</staticText>
+				<subreport>
+					<reportElement uuid="60b2f16c-9d81-41a4-9faa-a9692c026a81" x="0" y="32" width="555" height="30"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillApprovedCollateral})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subApprovedGuarantor.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+		<band height="97">
+			<frame>
+				<reportElement uuid="8ca4203f-f114-476a-b07e-bcd56109fc10" x="0" y="0" width="555" height="97"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<staticText>
+					<reportElement uuid="f92e7001-d666-4aac-8ef8-b247f8212063" style="Total" x="0" y="0" width="484" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[  Total]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="615ad1e6-861d-4d0b-8643-3bfd8e327145" style="Total" x="484" y="0" width="71" height="15"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getApproveTotalGuaranteeAmt()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="43d907e8-b36e-4c61-b8fa-5453999565f5" x="1" y="20" width="159" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[เงื่อนไขติดตามภายหลังอนุมัติสินเชื่อ]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="bce24101-716c-4669-b0f5-869a59ccc7a4" style="Total" mode="Opaque" x="1" y="48" width="222" height="10" backcolor="#CCCCFF"/>
+					<textElement textAlignment="Center">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillFollowDetail}.getDetail()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="f13e6525-75dd-49f5-a829-f3796a69b986" style="Total" mode="Opaque" x="234" y="48" width="36" height="10" backcolor="#CCCCFF"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillFollowDetail}.getFollwDateDetaill()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="200f7bf2-6264-4b99-8765-665288887c7d" style="Total" mode="Opaque" x="1" y="35" width="222" height="10" backcolor="#FFFFFF"/>
+					<textElement textAlignment="Center">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillFollowDetail}.getConditionView()]]></textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement uuid="7df19b49-ca15-47fd-9524-30be2f587750" x="0" y="61" width="555" height="36"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillFollowUpCondition})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path}+ "DecisionReport_subDecisionFollowUp.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+		<band height="73">
+			<frame>
+				<reportElement uuid="35480317-af83-4308-8a4d-baba0af8ffd8" x="0" y="0" width="555" height="73"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<staticText>
+					<reportElement uuid="4ce5cb9c-a177-448a-946b-95a33d12c463" x="0" y="4" width="146" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[ปรับลดราคาดอกเบี้ย/ค่าธรรมเนียม]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="2876fb70-51b2-4fc2-b197-6b90c67acfb3" x="0" y="21" width="160" height="13"/>
+					<textElement>
+						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2"/>
+					</textElement>
+					<text><![CDATA[ดอกเบี้ย/ค่าธรรมเนียม ที่ขอลดตาม DOA :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="ffe4d868-c2f8-4bc4-bbbc-dda12289b22b" x="0" y="35" width="160" height="38"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2"/>
+					</textElement>
+					<text><![CDATA[เหตุผลประกอบการพิจารณาขอลดดอกเบี้ย :]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="26702280-621c-4e01-abad-80003c9a8bb6" style="Total" mode="Opaque" x="160" y="21" width="31" height="13" backcolor="#CCCCFF"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillPriceFee}.getIntFeeDOA()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="2f4f3dff-d5a9-4f79-8169-3f98ac70c419" x="191" y="21" width="12" height="13"/>
+					<textElement>
+						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="c80d7cae-9b97-48ff-b975-6d7abdbd0bec" x="203" y="21" width="177" height="13"/>
+					<textElement>
+						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2"/>
+					</textElement>
+					<text><![CDATA[ค่าธรรมเนียม Front End Fee ที่ขอลดตาม DOA :]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="af1971de-950e-4fa2-9284-5fc48d2e15d1" style="Total" mode="Opaque" x="380" y="21" width="31" height="13" backcolor="#CCCCFF"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillPriceFee}.getFrontendFeeDOA()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="022aaa4b-99d0-4a11-8fb3-acde0793795d" x="411" y="21" width="12" height="13"/>
+					<textElement>
+						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="c9c59b28-4b35-4ea4-84de-825e43dfbee0" x="423" y="21" width="83" height="13"/>
+					<textElement>
+						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2"/>
+					</textElement>
+					<text><![CDATA[ทุนประกันที่ทำ BA :]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="07014e66-2b9d-4e7e-b683-a08158558cb7" style="Total" mode="Opaque" x="506" y="21" width="37" height="13" backcolor="#CCCCFF"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillPriceFee}.getGuarantorBA()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="71036a8e-cbe6-44d6-adc9-1c353288262b" style="Total" mode="Opaque" x="160" y="37" width="251" height="36" backcolor="#CCCCFF"/>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillPriceFee}.getReasonForReduction()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+		<band height="48">
+			<frame>
+				<reportElement uuid="a4f54ae5-6e9b-4712-bf6e-d89523de0d65" x="0" y="0" width="556" height="48"/>
+				<box>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<subreport>
+					<reportElement uuid="a39ee836-1ea1-4276-baae-154f06cf1362" x="0" y="16" width="555" height="32"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillApprovalHistory})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subApprovalHistory.jasper"]]></subreportExpression>
+				</subreport>
+				<staticText>
+					<reportElement uuid="24fe5914-b6f5-4bab-9598-5e9cceccd40d" x="1" y="0" width="100" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Written/Approval History]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="55" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="0494b393-936c-4f26-b215-740126491d24" x="517" y="0" width="18" height="11"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Page]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="87bcd39d-347c-4d6b-a8dc-266132db4958" mode="Transparent" x="535" y="0" width="20" height="11"/>
+				<textElement>
+					<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
