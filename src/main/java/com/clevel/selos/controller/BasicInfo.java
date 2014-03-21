@@ -476,31 +476,35 @@ public class BasicInfo extends MandatoryFieldsControl {
     }
 
     public void onSelectEditAccount(){
-        customerId = 0;
+        try {
+            customerId = 0;
 
-        Cloner cloner = new Cloner();
-        openAccountView = cloner.deepClone(selectAccount);
-        onChangeAccountType();
+            Cloner cloner = new Cloner();
+            openAccountView = cloner.deepClone(selectAccount);
+            onChangeAccountType();
 
-        accountNameList = cloner.deepClone(openAccountView.getAccountNameList());
+            accountNameList = cloner.deepClone(openAccountView.getAccountNameList());
 
-        bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
-        for(BankAccountPurpose oap : accountPurposeList){
-            BankAccountPurposeView purposeView = new BankAccountPurposeView();
-            purposeView.setPurpose(oap);
-            bankAccountPurposeViewList.add(purposeView);
-        }
+            bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
+            for(BankAccountPurpose oap : accountPurposeList){
+                BankAccountPurposeView purposeView = new BankAccountPurposeView();
+                purposeView.setPurpose(oap);
+                bankAccountPurposeViewList.add(purposeView);
+            }
 
-        for(BankAccountPurposeView biapv : openAccountView.getBankAccountPurposeView()){
-            if(biapv.isSelected()){
-                for(BankAccountPurposeView purposeView : bankAccountPurposeViewList){
-                    if(biapv.getPurpose().getName().equals(purposeView.getPurpose().getName())){
-                        purposeView.setSelected(true);
+            for(BankAccountPurposeView biapv : openAccountView.getBankAccountPurposeView()){
+                if(biapv.isSelected()){
+                    for(BankAccountPurposeView purposeView : bankAccountPurposeViewList){
+                        if(biapv.getPurpose().getName().equals(purposeView.getPurpose().getName())){
+                            purposeView.setSelected(true);
+                        }
                     }
                 }
             }
+            modeForButton = ModeForButton.EDIT;
+        } catch (Exception e) {
+            log.error("onSelectEditAccount Exception : {}",e);
         }
-        modeForButton = ModeForButton.EDIT;
     }
 
     public void onChangeAccountType(){
