@@ -7,13 +7,107 @@
     <div id="header_detail">
         <div id="header_collapse" class="close" onclick="collapseDetail();"><p:spacer width="2"/></div>
         <div id="header_button_bar">
-            <!--Print Report-->
+            <!-- Stage PreScreen -->
+            <p:panel id="header_panel_prescreen" rendered="#{baseController.stageId == 101}" styleClass="panel">
+                <!--Check Mandate Doc Prescreen-->
+                <p:commandButton id="btnChkMandatePreScreen" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
+                                 rendered="#{baseController.checkButton('Check Mandate Doc')}">
 
             <p:commandButton id="btnPrintReport" value="#{msg.get('app.header.button.printReport')}" styleClass="blueButton" title="#{msg.get('app.header.button.printReport')}"
                              oncomplete="printReportDlg.show()"
                              actionListener="#{report.setNameReport()}"
                              update=":frmMain:printReportPanel">
             </p:commandButton>
+                </p:commandButton>
+                <!--Assign To Checker-->
+                <p:commandButton id="btnAssignChecker" value="#{msg.get('app.header.button.assignChecker')}" styleClass="blueButton" title="#{msg.get('app.header.button.assignChecker')}"
+                                 rendered="#{baseController.checkButton('Assign to Checker')}"
+                                 disabled="#{prescreenMaker.disableAssignButton}"
+                                 process="@this"
+                                 actionListener="#{prescreenMaker.onOpenAssignCheckerDialog()}"
+                                 oncomplete="assignCheckerDlg.show()"
+                                 update=":assignCheckerDlgForm">
+                    <p:resetInput target=":assignCheckerDlgForm"/>
+                </p:commandButton>
+                <!--Check NCB-->
+                <p:commandButton id="btnChkNCB" value="#{msg.get('app.header.button.checkNCB')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkNCB')}"
+                                 rendered="#{baseController.checkButton('Check NCB')}"
+                                 actionListener="#{prescreenChecker.onCheckCustomer}"
+                                 process="@form"
+                                 oncomplete="blockUICheckCustomer.hide()"
+                                 update=":frmMain :msgBoxSystemMessagePanel"
+                                 onclick="blockUICheckCustomer.show()"/>
+                <!--Return to Maker-->
+                <p:commandButton id="btnReturnMaker" value="#{msg.get('app.header.button.returnMaker')}" styleClass="blueButton" title="#{msg.get('app.header.button.returnMaker')}"
+                                 rendered="#{baseController.checkButton('Return to BDM')}"
+                                 actionListener="#{prescreenChecker.onReturnToMaker()}"
+                                 oncomplete="returnMakerDlg.show()"
+                                 update=":returnMakerDlgForm">
+                    <p:resetInput target=":returnMakerDlgForm"/>
+                </p:commandButton>
+                <!--Check PreScreen (BRMS)-->
+                <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkPreScreen')}"
+                                 rendered="#{baseController.checkButton('Check Prescreen') and not baseController.requestAppraisalPage}"
+                                 action="#{baseController.onCheckPreScreen}">
+                </p:commandButton>
+                <!--Request Appraisal Prescreen-->
+                <p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
+                                 rendered="#{baseController.checkButton('Request Appraisal') and baseController.requestAppraisal == 0}}"
+                                 type="button"
+                                 onclick="confrmReqApprPreScreen.show()">
+                    <!--Confirm dialog for Request Appraisal Prescreen-->
+                    <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.requestAppraisal')}" styleClass="left"
+                                     icon="ui-icon-alert"
+                                     widgetVar="confrmReqApprPreScreen" global="false" showEffect="fade"
+                                     rendered="#{baseController.checkButton('Request Appraisal')}">
+                        <p:commandButton value="#{msg.get('app.button.yes')}" styleClass="ui-confirmdialog-yes"
+                                         actionListener="#{baseController.onRequestAppraisal()}"
+                                         process="@this"
+                                         oncomplete="confirmRequestAppraisal.hide()"
+                                         update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
+                        <p:commandButton value="#{msg.get('app.button.no')}" styleClass="ui-confirmdialog-no"
+                                         type="button"
+                                         onclick="confrmReqApprPreScreen.hide()" />
+                    </p:confirmDialog>
+                </p:commandButton>
+                <!--Cancel CA-->
+                <p:commandButton id="btnCancelCA" value="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
+                                 rendered="#{baseController.checkButton('Cancel CA') and !baseController.requestAppraisalPage}" type="button"
+                                 onclick="confrmCancelCA.show()"/>
+                    <!--Confirm dialog for Cancel CA-->
+                    <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.cancelCA')}" styleClass="left"
+                                     icon="ui-icon-alert"
+                                     widgetVar="confrmCancelCA" global="false" showEffect="fade"
+                                     rendered="#{baseController.checkButton('Cancel CA') and !baseController.requestAppraisalPage}">
+                        <p:commandButton value="#{msg.get('app.button.yes')}" styleClass="ui-confirmdialog-yes"
+                                         process="@this"
+                                         update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"
+                                         actionListener="#{prescreenMaker.onCancelCA}"
+                                         oncomplete="confirmCancelCA.hide()"/>
+                        <p:commandButton value="#{msg.get('app.button.no')}" styleClass="ui-confirmdialog-no"
+                                         type="button"
+                                         onclick="confrmCancelCA.hide()" />
+                    </p:confirmDialog>
+                <!--Close Sale-->
+                <p:commandButton id="btnCloseSale" value="#{msg.get('app.header.button.closeSale')}" styleClass="blueButton" title="#{msg.get('app.header.button.closeSale')}"
+                                 rendered="#{baseController.checkButton('Close Sales') and !baseController.requestAppraisalPage}" type="button"
+                                 onclick="confrmCloseSaleCA.show()"/>
+                    <!--Confirm dialog for Close Sale-->
+                    <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.closeSale')}" styleClass="left"
+                                     icon="ui-icon-alert"
+                                     widgetVar="confrmCloseSaleCA" global="false" showEffect="fade"
+                                     rendered="#{baseController.checkButton('Close Sales') and !baseController.requestAppraisalPage}">
+                        <p:commandButton value="#{msg.get('app.button.yes')}" styleClass="ui-confirmdialog-yes"
+                                         process="@this"
+                                         actionListener="#{prescreenMaker.onCloseSale()}"
+                                         oncomplete="confrmCloseSaleCA.hide()"
+                                         update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel" />
+                        <p:commandButton value="#{msg.get('app.button.no')}" styleClass="ui-confirmdialog-no"
+                                         type="button" onclick="confrmCloseSaleCA.hide()" />
+                    </p:confirmDialog>
+                <!--Cancel Appraisal Request (Prescreen)-->
+                <p:commandButton id="btnCancelReqApprPreScreen" value="#{msg.get('app.header.button.cancelAppraisalRequest')}" styleClass="blueButton" title="#{msg.get('app.header.button.cancelAppraisalRequest')}"
+                                 rendered="#{baseController.checkButton('Cancel Appraisal Request')}">
 
             <!--View Relate CA-->
             <p:commandButton id="btnViewRelatedCA" value="#{msg.get('app.header.button.viewRelatedCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.viewRelatedCA')}"
@@ -349,7 +443,7 @@
     <p:panel id="printReportPanel" styleClass="panel">
         <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"
                   onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-                  modal="true" width="700" height="300">
+                  modal="true" width="430" height="200">
             <ui:include src="/site/dialog/printReportDialog.xhtml"/>
         </p:dialog>
     </p:panel>

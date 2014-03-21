@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import com.clevel.selos.dao.working.BAPAInfoDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.Bank;
 import com.clevel.selos.model.db.master.BorrowingType;
@@ -18,8 +19,12 @@ import com.clevel.selos.model.db.working.BAPAInfo;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.BasicInfoView;
+import org.slf4j.Logger;
 
 public class BasicInfoTransform extends Transform {
+    @SELOS
+    @Inject
+    private Logger log;
     @Inject
     private OpenAccountTransform openAccountTransform;
     @Inject

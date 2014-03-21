@@ -1,10 +1,12 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.model.StepValue;
+import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.AppHeaderView;
@@ -52,6 +54,9 @@ public class PESQLInbox implements Serializable
     WorkCaseDAO workCaseDAO;
 
     @Inject
+    StepDAO stepDAO;
+
+    @Inject
     PEDBExecute pedbExecute;
 
     @PostConstruct
@@ -69,6 +74,8 @@ public class PESQLInbox implements Serializable
         session.setAttribute("workCasePreScreenId", 0L);
         session.setAttribute("workCaseId", 0L);
         session.setAttribute("stepId", 0L);
+        session.setAttribute("statusId", 0L);
+        session.setAttribute("stageId", 0);
         session.setAttribute("requestAppraisal", 0);
         session.setAttribute("queueName","");
 
@@ -86,24 +93,16 @@ public class PESQLInbox implements Serializable
 
 
     public void onSelectInbox() {
-
-        userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        log.info("onSelectInbox ::: userDetail  : {}", userDetail);
-
-        /*if(Util.isNull(userDetail))
-        {
-            FacesUtil.redirect("/login.jsf");
-            return;
-        }*/
-
         HttpSession session = FacesUtil.getSession(false);
+
         log.info("onSelectInbox ::: setSession ");
         log.info("onSelectInbox ::: inboxViewSelectItem : {}", inboxViewSelectItem);
 
         long stepId = inboxViewSelectItem.getStepId();
-        long wrkCasePreScreenId = 0;
-        long wrkCaseId = 0;
+        long wrkCasePreScreenId = 0L;
+        long wrkCaseId = 0L;
+        long statusId = 0L;
+        int stageId = 0;
         int requestAppraisalFlag = 0;
 
         if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value())
@@ -112,9 +111,11 @@ public class PESQLInbox implements Serializable
             if(workCasePrescreen != null){
                 wrkCasePreScreenId = workCasePrescreen.getId();
                 requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+                statusId = workCasePrescreen.getStatus().getId();
             }
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            session.setAttribute("statusId", statusId);
         }
 
         else
@@ -123,12 +124,21 @@ public class PESQLInbox implements Serializable
             if(workCase != null){
                 wrkCaseId = workCase.getId();
                 requestAppraisalFlag = workCase.getRequestAppraisal();
+                statusId = workCase.getStatus().getId();
             }
             session.setAttribute("workCaseId", wrkCaseId);
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            session.setAttribute("statusId", statusId);
         }
 
         session.setAttribute("stepId", stepId);
+
+        if(stepId != 0){
+            Step step = stepDAO.findById(stepId);
+            stageId = step != null ? step.getStage().getId() : 0;
+        }
+
+        session.setAttribute("stageId", stageId);
 
         String queueName = inboxViewSelectItem.getQueuename();
         if(Util.isNull(queueName)) {

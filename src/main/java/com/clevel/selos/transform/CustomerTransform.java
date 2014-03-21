@@ -1280,4 +1280,20 @@ public class CustomerTransform {
     		address.setExtension(addressView.getPhoneExt());
     	}
     }
+
+    public List<CustomerInfoView> transformToSelectList(List<Customer> customerList){
+        List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
+        for(Customer item : customerList){
+            CustomerInfoView customerInfoView = new CustomerInfoView();
+            customerInfoView.setId(item.getId());
+            customerInfoView.setFirstNameTh(item.getNameTh());
+            if(!Util.isNull(item.getLastNameTh())){
+                customerInfoView.setLastNameTh(item.getLastNameTh());
+            }
+
+            customerInfoViewList.add(customerInfoView);
+        }
+
+        return customerInfoViewList;
+    }
 }

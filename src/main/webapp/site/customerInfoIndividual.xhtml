@@ -155,8 +155,8 @@
                                 </td>
                                 <td colspan="3">
                                     <p:selectOneRadio id="collateral" value="#{custInfoSumIndi.customerInfoView.collateralOwner}"
-                                                      disabled="#{custInfoSumIndi.relationMainCusId == 3
-                                                      || custInfoSumIndi.relationMainCusId == 4
+                                                      disabled="#{(not (custInfoSumIndi.relationMainCusId == 1)
+                                                      and not (custInfoSumIndi.relationMainCusId == 2))
                                                       || not custInfoSumIndi.enableAllFieldCus}">
                                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
@@ -493,7 +493,7 @@
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumIndi.occupationList}"
                                                        var="occupation"
-                                                       itemLabel="#{occupation.description}"
+                                                       itemLabel="#{occupation.code} - #{occupation.description}"
                                                        itemValue="#{occupation.id}"/>
                                     </p:selectOneMenu>
                                 </td>
@@ -1433,8 +1433,8 @@
                                     </td>
                                     <td colspan="3">
                                         <p:selectOneRadio id="collOwnerSpouse" value="#{custInfoSumIndi.customerInfoView.spouse.collateralOwner}"
-                                                          disabled="#{custInfoSumIndi.relationSpouseCusId == 3
-                                                          || custInfoSumIndi.relationSpouseCusId == 4
+                                                          disabled="#{(not (custInfoSumIndi.relationSpouseCusId == 1)
+                                                          and not (custInfoSumIndi.relationSpouseCusId == 2))
                                                           || not custInfoSumIndi.enableAllFieldCusSpouse}">
                                             <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                             <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>

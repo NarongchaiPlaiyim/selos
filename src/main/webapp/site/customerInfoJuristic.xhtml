@@ -111,7 +111,7 @@
                                 </td>
                                 <td>
                                     <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
-                                                     value="#{custInfoSumJuris.relationId}"
+                                                     value="#{custInfoSumJuris.relationId}" id="relation"
                                                      required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRelation}"
                                                      disabled="#{custInfoSumJuris.editBorrower || not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -121,7 +121,7 @@
                                                        itemValue="#{relation.id}"/>
                                         <p:ajax event="change"
                                                 listener="#{custInfoSumJuris.onChangeRelation()}"
-                                                update=":frmMain:reference,:frmMain:collateral"/>
+                                                update=":frmMain:relation,:frmMain:reference,:frmMain:collateral"/>
                                     </p:selectOneMenu>
                                 </td>
 
@@ -130,8 +130,8 @@
                                 </td>
                                 <td colspan="3">
                                     <p:selectOneRadio id="collateral" value="#{custInfoSumJuris.customerInfoView.collateralOwner}"
-                                                      disabled="#{custInfoSumJuris.relationId == 3
-                                                      || custInfoSumJuris.relationId == 4
+                                                      disabled="#{(not (custInfoSumJuris.relationId == 1)
+                                                      and not (custInfoSumJuris.relationId == 2))
                                                       || not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>

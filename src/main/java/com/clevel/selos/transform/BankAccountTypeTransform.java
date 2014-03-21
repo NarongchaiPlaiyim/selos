@@ -2,14 +2,19 @@ package com.clevel.selos.transform;
 
 
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.view.BankAccountTypeView;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BankAccountTypeTransform extends Transform {
+    @SELOS
+    @Inject
+    private Logger log;
 
     @Inject
     BankAccountTypeDAO bankAccountTypeDAO;
