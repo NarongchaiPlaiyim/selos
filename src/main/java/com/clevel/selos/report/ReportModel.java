@@ -7,7 +7,7 @@ import java.util.Date;
 public abstract class ReportModel implements Serializable {
     protected static final String DEFAULT_STRING = "-";
     protected static final int DEFAULT_INTEGER = 0;
-    protected static final BigDecimal DEFAULT_BIG_DECIMAL = new BigDecimal("0.00");
+    protected static final BigDecimal DEFAULT_BIG_DECIMAL = BigDecimal.ZERO;
     protected static final Date DEFAULT_DATE = new Date();
     protected static final boolean DEFAULT_BOOLEAN = false;
 

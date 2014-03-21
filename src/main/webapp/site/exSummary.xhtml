@@ -604,7 +604,7 @@
                                                 <h:outputText value="#{msg.get('app.exSummary.businessInfoSum.label.expiryDate')}"/>
                                             </td>
                                             <td style="text-align: left">
-                                                <h:outputText value="#{executiveSummary.exSummaryView.expiryDate}">
+                                                <h:outputText value="#{executiveSummary.exSummaryView.expiryDate != null ? executiveSummary.exSummaryView.expiryDate : '-'}">
                                                     <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                                 </h:outputText>
                                             </td>
@@ -687,7 +687,8 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{ncbItem.paymentClass}"/>
+                                            <!--<h:outputText value="#{ncbItem.paymentClass}"/>-->
+                                            <h:outputText value="BRMS Rule"/>
                                         </p:column>
                                     </p:dataTable>
                                 </td>
@@ -1426,7 +1427,7 @@
     </ui:include>
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" closable="false"
                          severity="#{executiveSummary.severity}" header="#{executiveSummary.messageHeader}">
             <f:facet name="message">
                 <h:outputText value="#{executiveSummary.message}" escape="false"/>

@@ -21,8 +21,10 @@ import com.clevel.selos.model.view.PledgeInfoView;
 
 public class PledgeInfoTransform extends Transform {
 	private static final long serialVersionUID = 1909028796575736180L;
+
 	@Inject private CustomerTransform customerTransform;
 	@Inject private CreditDetailSimpleTransform creditDetailSimpleTransform;
+
 	public PledgeInfoView transformToView(PledgeInfo model,long workCaseId) {
 		PledgeInfoView view = new PledgeInfoView();
 		if (model == null)

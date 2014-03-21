@@ -280,19 +280,25 @@ public class CustomerInfoIndividual implements Serializable {
     public CustomerInfoIndividual(){
     }
 
+    public boolean checkSession(HttpSession session){
+        boolean checkSession = false;
+        if( (Long)session.getAttribute("workCaseId") != 0 && (Long)session.getAttribute("stepId") != 0){
+            checkSession = true;
+        }
+
+        return checkSession;
+    }
+
     public void preRender(){
         log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        if(checkSession(session)){
+            //TODO Check valid stepId
+            log.debug("preRender ::: Check valid stepId");
         }else{
-            log.debug("onCreation ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}",ex);
-            }
+            log.debug("preRender ::: No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
@@ -302,65 +308,49 @@ public class CustomerInfoIndividual implements Serializable {
 
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            if(workCaseId == 0){
-                try{
-                    FacesUtil.redirect("/site/inbox.jsf");
-                }catch (Exception ex){
-                    log.error("Exception :: {}",ex);
+        if(checkSession(session)){
+            workCaseId = (Long)session.getAttribute("workCaseId");
+
+            //default value
+            isFromJuristic = false;
+
+            enableAllFieldCus = false;
+            enableAllFieldCusSpouse = false;
+
+            onAddNewIndividual();
+
+            Flash flash = FacesUtil.getFlash();
+            Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
+            if (cusInfoParams != null) {
+                isFromSummaryParam = (Boolean) cusInfoParams.get("isFromSummaryParam");
+                isFromJuristicParam = (Boolean) cusInfoParams.get("isFromJuristicParam");
+                isEditFromJuristic = (Boolean) cusInfoParams.get("isEditFromJuristic");
+                customerId = (Long) cusInfoParams.get("customerId");
+                cusInfoJuristic = (CustomerInfoView) cusInfoParams.get("customerInfoView");
+                if(isEditFromJuristic){
+                    rowIndex = (Integer) cusInfoParams.get("rowIndex");
                 }
-                return;
             }
-        }else{
-            log.debug("onCreation ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}",ex);
+
+            //flag for show button
+            if(isFromJuristicParam){                        // add new individual from juristic
+                isFromJuristic = true;                      // for pass param return to juristic
+            }else{
+                isFromJuristic = false;                     // for save individual to DB
             }
-            return;
-        }
 
-        //default value
-        isFromJuristic = false;
-
-        enableAllFieldCus = false;
-        enableAllFieldCusSpouse = false;
-
-        onAddNewIndividual();
-
-        Flash flash = FacesUtil.getFlash();
-        Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
-        if (cusInfoParams != null) {
-            isFromSummaryParam = (Boolean) cusInfoParams.get("isFromSummaryParam");
-            isFromJuristicParam = (Boolean) cusInfoParams.get("isFromJuristicParam");
-            isEditFromJuristic = (Boolean) cusInfoParams.get("isEditFromJuristic");
-            customerId = (Long) cusInfoParams.get("customerId");
-            cusInfoJuristic = (CustomerInfoView) cusInfoParams.get("customerInfoView");
-            if(isEditFromJuristic){
-                rowIndex = (Integer) cusInfoParams.get("rowIndex");
+            if(isFromSummaryParam){                         // go to edit from summary
+                if(customerId != 0 && customerId != -1){
+                    onEditIndividual();
+                }
             }
-        }
 
-        //flag for show button
-        if(isFromJuristicParam){                        // add new individual from juristic
-            isFromJuristic = true;                      // for pass param return to juristic
-        }else{
-            isFromJuristic = false;                     // for save individual to DB
-        }
-
-        if(isFromSummaryParam){                         // go to edit from summary
-            if(customerId != 0 && customerId != -1){
-                onEditIndividual();
-            }
-        }
-
-        if(isEditFromJuristic){                          // select edit individual from juristic
-            if(cusInfoParams != null){
-                CustomerInfoView cusView = (CustomerInfoView) cusInfoParams.get("individualView");
-                customerInfoView = cusView;
-                onEditIndividual();
+            if(isEditFromJuristic){                          // select edit individual from juristic
+                if(cusInfoParams != null){
+                    CustomerInfoView cusView = (CustomerInfoView) cusInfoParams.get("individualView");
+                    customerInfoView = cusView;
+                    onEditIndividual();
+                }
             }
         }
     }
@@ -1092,6 +1082,7 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onSearchCustomerInfo() {
+        updatePnl1();
         log.debug("onSearchCustomerInfo :::");
         log.debug("onSearchCustomerInfo ::: customerInfoView : {}", customerInfoSearch);
         CustomerInfoResultView customerInfoResultView;
@@ -1111,6 +1102,23 @@ public class CustomerInfoIndividual implements Serializable {
                     customerInfoView.setSearchBy(customerInfoSearch.getSearchBy());
                     customerInfoView.setSearchId(customerInfoSearch.getSearchId());
                     customerInfoView.setCollateralOwner(1);
+
+                    //set default country
+                    if(customerInfoView.getCitizenCountry() != null){
+                        customerInfoView.getCitizenCountry().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.setCitizenCountry(country);
+                    }
+                    if(customerInfoView.getSourceIncome() != null){
+                        customerInfoView.getSourceIncome().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.setSourceIncome(country);
+                    }
+
                     if(customerInfoView.getDateOfBirth() != null){
                         customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
                     }
@@ -1166,6 +1174,23 @@ public class CustomerInfoIndividual implements Serializable {
                                     customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
                                     customerInfoView.getSpouse().setSearchFromRM(1);
                                     customerInfoView.getSpouse().setCollateralOwner(1);
+
+                                    //set default country
+                                    if(customerInfoView.getSpouse().getCitizenCountry() != null){
+                                        customerInfoView.getSpouse().getCitizenCountry().setId(211);
+                                    } else {
+                                        Country country = new Country();
+                                        country.setId(211);
+                                        customerInfoView.getSpouse().setCitizenCountry(country);
+                                    }
+                                    if(customerInfoView.getSpouse().getSourceIncome() != null){
+                                        customerInfoView.getSpouse().getSourceIncome().setId(211);
+                                    } else {
+                                        Country country = new Country();
+                                        country.setId(211);
+                                        customerInfoView.getSpouse().setSourceIncome(country);
+                                    }
+
                                     if(customerInfoView.getSpouse().getDateOfBirth() != null){
                                         customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
                                     }
@@ -1329,6 +1354,22 @@ public class CustomerInfoIndividual implements Serializable {
                         reference.setId(refId);
                         customerInfoView.setReference(reference);
 
+                        //set default country
+                        if(customerInfoView.getCitizenCountry() != null){
+                            customerInfoView.getCitizenCountry().setId(211);
+                        } else {
+                            Country country = new Country();
+                            country.setId(211);
+                            customerInfoView.setCitizenCountry(country);
+                        }
+                        if(customerInfoView.getSourceIncome() != null){
+                            customerInfoView.getSourceIncome().setId(211);
+                        } else {
+                            Country country = new Country();
+                            country.setId(211);
+                            customerInfoView.setSourceIncome(country);
+                        }
+
                         if(customerInfoView.getCurrentAddress() != null && customerInfoView.getRegisterAddress() != null){
                             if(customerInfoControl.checkAddress(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress()) == 1){
                                 customerInfoView.getRegisterAddress().setAddressTypeFlag(1);
@@ -1364,6 +1405,22 @@ public class CustomerInfoIndividual implements Serializable {
                                     Reference referenceSpouse = new Reference();
                                     referenceSpouse.setId(refSpoId);
                                     customerInfoView.getSpouse().setReference(referenceSpouse);
+
+                                    //set default country
+                                    if(customerInfoView.getSpouse().getCitizenCountry() != null){
+                                        customerInfoView.getSpouse().getCitizenCountry().setId(211);
+                                    } else {
+                                        Country country = new Country();
+                                        country.setId(211);
+                                        customerInfoView.getSpouse().setCitizenCountry(country);
+                                    }
+                                    if(customerInfoView.getSpouse().getSourceIncome() != null){
+                                        customerInfoView.getSpouse().getSourceIncome().setId(211);
+                                    } else {
+                                        Country country = new Country();
+                                        country.setId(211);
+                                        customerInfoView.getSpouse().setSourceIncome(country);
+                                    }
 
                                     if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
                                         if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress()) == 1){
@@ -1516,6 +1573,22 @@ public class CustomerInfoIndividual implements Serializable {
                         customerInfoView.getSpouse().setSearchId(customerInfoSearchSpouse.getSearchId());
                     }
 
+                    //set default country
+                    if(customerInfoView.getSpouse().getCitizenCountry() != null){
+                        customerInfoView.getSpouse().getCitizenCountry().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.getSpouse().setCitizenCountry(country);
+                    }
+                    if(customerInfoView.getSpouse().getSourceIncome() != null){
+                        customerInfoView.getSpouse().getSourceIncome().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.getSpouse().setSourceIncome(country);
+                    }
+
                     if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
                         if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress()) == 1){
                             customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(1);
@@ -1642,26 +1715,24 @@ public class CustomerInfoIndividual implements Serializable {
         customerInfoView.setReference(mainRef);
 
         if(customerInfoView.getId() != 0){
-            boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getId());
+            boolean isExist = customerInfoControl.checkExistingAll(customerInfoView.getId());
             if(isExist){
                 if(customerInfoView.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                         || customerInfoView.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                     messageHeader = "Information.";
-                    message = "Cannot change customer type from Guarantor to Related. " +
-                            "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
+                    message = msg.get("app.message.customer.existing.error");
                     severity = "info";
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return;
                 }
             } else {
                 if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getId() != 0){
-                    boolean isExistSpouse = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getSpouse().getId());
+                    boolean isExistSpouse = customerInfoControl.checkExistingAll(customerInfoView.getSpouse().getId());
                     if(isExistSpouse){
                         if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                                 || customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                             messageHeader = "Information.";
-                            message = "Cannot change customer type from Guarantor to Related. " +
-                                    "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
+                            message = msg.get("app.message.customer.existing.error");
                             severity = "info";
                             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                             return;
@@ -1790,27 +1861,24 @@ public class CustomerInfoIndividual implements Serializable {
         customerInfoView.setReference(mainRef);
 
         if(customerInfoView.getId() != 0){
-            boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getId());
+            boolean isExist = customerInfoControl.checkExistingAll(customerInfoView.getId());
             if(isExist){
                 if(customerInfoView.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                         || customerInfoView.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                     messageHeader = "Information.";
-                    message = "Cannot change customer type from Guarantor to Related. " +
-                            "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
+                    message = msg.get("app.message.customer.existing.error");
                     severity = "info";
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return "";
                 }
             } else {
                 if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getId() != 0){
-                    boolean isExistSpouse = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getSpouse().getId());
+                    boolean isExistSpouse = customerInfoControl.checkExistingAll(customerInfoView.getSpouse().getId());
                     if(isExistSpouse){
                         if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                                 || customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                             messageHeader = "Information.";
-                            message = "Save Customer Individual Data Failed. " +
-                                    "<br/><br/> Cause : This customer is change relation from Guarantor to Related." +
-                                    "<br/>Affect on Basic Info Page.";
+                            message = msg.get("app.message.customer.existing.error");
                             severity = "info";
                             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                             return "";
@@ -1891,6 +1959,33 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void onChangeSpouseSearch(){
         customerInfoView.getSpouse().setSearchId("");
+    }
+
+    public void updatePnl1(){
+        RequestContext.getCurrentInstance().execute("pnl1()");
+        relationMainCusId = 3;
+        onChangeRelation();
+        customerInfoView.setCollateralOwner(2);
+    }
+
+    public void updatePnl2(){
+        System.out.println("##########################################################################");
+        System.out.println("##########################################################################");
+        System.out.println("##########################################################################");
+        System.out.println("#####################         Update Panel 2      ########################");
+        System.out.println("##########################################################################");
+        System.out.println("##########################################################################");
+        System.out.println("##########################################################################");
+    }
+
+    public void updatePnl3(){
+        System.out.println("##########################################################################");
+        System.out.println("##########################################################################");
+        System.out.println("##########################################################################");
+        System.out.println("#####################         Update Panel 3      ########################");
+        System.out.println("##########################################################################");
+        System.out.println("##########################################################################");
+        System.out.println("##########################################################################");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

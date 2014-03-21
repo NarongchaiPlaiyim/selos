@@ -136,7 +136,7 @@
                                 </td>
                                 <td>
                                     <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
-                                                     value="#{custInfoSumIndi.relationMainCusId}"
+                                                     value="#{custInfoSumIndi.relationMainCusId}" id="relation"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndRelation}"
                                                      disabled="#{custInfoSumIndi.editBorrower || not custInfoSumIndi.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -146,7 +146,7 @@
                                                        itemValue="#{relation.id}"/>
                                         <p:ajax event="change"
                                                 listener="#{custInfoSumIndi.onChangeRelation()}"
-                                                update=":frmMain:reference,:frmMain:collateral,:frmMain:relationSpouse"/>
+                                                update=":frmMain:reference,:frmMain:relation,:frmMain:collateral,:frmMain:relationSpouse"/>
                                     </p:selectOneMenu>
                                 </td>
 
@@ -155,8 +155,8 @@
                                 </td>
                                 <td colspan="3">
                                     <p:selectOneRadio id="collateral" value="#{custInfoSumIndi.customerInfoView.collateralOwner}"
-                                                      disabled="#{custInfoSumIndi.customerInfoView.relation.getId() == 3
-                                                      || custInfoSumIndi.customerInfoView.relation.getId() == 4
+                                                      disabled="#{(not (custInfoSumIndi.relationMainCusId == 1)
+                                                      and not (custInfoSumIndi.relationMainCusId == 2))
                                                       || not custInfoSumIndi.enableAllFieldCus}">
                                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
@@ -258,6 +258,7 @@
                                                     yearRange="1950:2100"
                                                     pattern="dd/MM/yyyy"
                                                     mindate="01/01/1950"
+                                                    readonlyInput="true"
                                                     maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
                                                     value="#{custInfoSumIndi.customerInfoView.dateOfBirth}"
                                                     required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDOB}"
@@ -292,6 +293,7 @@
                                                     yearRange="1950:2100"
                                                     pattern="dd/MM/yyyy"
                                                     mindate="01/01/1950"
+                                                    readonlyInput="true"
                                                     maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
                                                     value="#{custInfoSumIndi.customerInfoView.documentAuthorizeDate}"
                                                     required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDID}"
@@ -308,6 +310,7 @@
                                                     yearRange="1950:2100"
                                                     pattern="dd/MM/yyyy"
                                                     mindate="01/01/1950"
+                                                    readonlyInput="true"
                                                     value="#{custInfoSumIndi.customerInfoView.documentExpiredDate}"
                                                     required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDED}"
                                                     disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
@@ -490,7 +493,7 @@
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumIndi.occupationList}"
                                                        var="occupation"
-                                                       itemLabel="#{occupation.description}"
+                                                       itemLabel="#{occupation.code} - #{occupation.description}"
                                                        itemValue="#{occupation.id}"/>
                                     </p:selectOneMenu>
                                 </td>
@@ -1421,7 +1424,7 @@
                                                            itemValue="#{relation.id}"/>
                                             <p:ajax event="change"
                                                     listener="#{custInfoSumIndi.onChangeRelationSpouse()}"
-                                                    update=":frmMain:reference2"/>
+                                                    update=":frmMain:reference2,:frmMain:relationSpouse,:frmMain:collOwnerSpouse"/>
                                         </p:selectOneMenu>
                                     </td>
 
@@ -1429,9 +1432,9 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.collOwner')}"/>
                                     </td>
                                     <td colspan="3">
-                                        <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.collateralOwner}"
-                                                          disabled="#{custInfoSumIndi.customerInfoView.spouse.relation.getId() == 3
-                                                          || custInfoSumIndi.customerInfoView.spouse.relation.getId() == 4
+                                        <p:selectOneRadio id="collOwnerSpouse" value="#{custInfoSumIndi.customerInfoView.spouse.collateralOwner}"
+                                                          disabled="#{(not (custInfoSumIndi.relationSpouseCusId == 1)
+                                                          and not (custInfoSumIndi.relationSpouseCusId == 2))
                                                           || not custInfoSumIndi.enableAllFieldCusSpouse}">
                                             <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                             <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
@@ -1533,6 +1536,7 @@
                                                         yearRange="1950:2100"
                                                         pattern="dd/MM/yyyy"
                                                         mindate="01/01/1950"
+                                                        readonlyInput="true"
                                                         maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
                                                         value="#{custInfoSumIndi.customerInfoView.spouse.dateOfBirth}"
                                                         disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}">
@@ -1564,6 +1568,7 @@
                                                         yearRange="1950:2100"
                                                         pattern="dd/MM/yyyy"
                                                         mindate="01/01/1950"
+                                                        readonlyInput="true"
                                                         maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
                                                         value="#{custInfoSumIndi.customerInfoView.spouse.documentAuthorizeDate}"
                                                         disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}"/>
@@ -1578,6 +1583,7 @@
                                                         yearRange="1950:2100"
                                                         pattern="dd/MM/yyyy"
                                                         mindate="01/01/1950"
+                                                        readonlyInput="true"
                                                         value="#{custInfoSumIndi.customerInfoView.spouse.documentExpiredDate}"
                                                         disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}"/>
                                     </td>
@@ -1748,7 +1754,7 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.occupationList}"
                                                            var="occupation"
-                                                           itemLabel="#{occupation.description}"
+                                                           itemLabel="#{occupation.code} - #{occupation.description}"
                                                            itemValue="#{occupation.id}"/>
                                         </p:selectOneMenu>
                                     </td>
@@ -2487,7 +2493,7 @@
     </p:panel>
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" closable="false"
                          severity="#{custInfoSumIndi.severity}" header="#{custInfoSumIndi.messageHeader}">
             <f:facet name="message">
                 <h:outputText value="#{custInfoSumIndi.message}" escape="false"/>

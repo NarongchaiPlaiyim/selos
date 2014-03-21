@@ -24,6 +24,7 @@ public class TCGInfoTransform extends Transform {
 		}
 		return view;
 	}
+
 	public TCGInfo transformToNewModel(TCGInfoView view,WorkCase workCase) {
 		TCGInfo model = new TCGInfo();
 		model.setApproveDate(view.getApproveDate());

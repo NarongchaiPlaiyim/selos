@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.master.BaseRateDAO;
 import com.clevel.selos.dao.working.NewCreditDetailDAO;
 import com.clevel.selos.dao.working.NewCreditTierDetailDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.BaseRate;
@@ -17,6 +18,7 @@ import com.clevel.selos.model.view.NewCreditTierDetailView;
 import com.clevel.selos.util.Util;
 
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
@@ -26,9 +28,13 @@ import java.util.Date;
 import java.util.List;
 
 public class NewCreditDetailTransform extends Transform {
+    @SELOS
+    @Inject
+    private Logger log;
 
     @Inject
     public NewCreditDetailTransform() {}
+
     @Inject
     NewCreditDetailDAO newCreditDetailDAO;
     @Inject

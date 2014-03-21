@@ -9,6 +9,7 @@ import com.clevel.selos.dao.working.BankStatementDAO;
 import com.clevel.selos.dao.working.BankStatementDetailDAO;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BankStmtSrcOfCollateralProofDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatement;
 import com.clevel.selos.model.BankType;
 import com.clevel.selos.model.db.master.Bank;
@@ -22,29 +23,34 @@ import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import com.clevel.selos.util.ValidationUtil;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
 
 public class BankStmtTransform extends Transform {
+    @SELOS
+    @Inject
+    private Logger log;
+
     //DAO
     @Inject
-    BankDAO bankDAO;
+    private BankDAO bankDAO;
     @Inject
-    BankStatementSummaryDAO bankStatementSummaryDAO;
+    private BankStatementSummaryDAO bankStatementSummaryDAO;
     @Inject
-    BankStatementDAO bankStatementDAO;
+    private BankStatementDAO bankStatementDAO;
     @Inject
-    BankStatementDetailDAO bankStatementDetailDAO;
+    private BankStatementDetailDAO bankStatementDetailDAO;
     @Inject
-    BankStmtSrcOfCollateralProofDAO srcOfCollateralProofDAO;
+    private BankStmtSrcOfCollateralProofDAO srcOfCollateralProofDAO;
     @Inject
-    BankAccountTypeDAO bankAccountTypeDAO;
+    private BankAccountTypeDAO bankAccountTypeDAO;
     @Inject
-    DWHBankDataSourceDAO dwhBankDataSourceDAO;
+    private DWHBankDataSourceDAO dwhBankDataSourceDAO;
     @Inject
-    AccountStatusDAO accountStatusDAO;
+    private AccountStatusDAO accountStatusDAO;
 
     //Transform
     @Inject

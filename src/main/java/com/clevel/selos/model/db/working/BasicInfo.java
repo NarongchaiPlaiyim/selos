@@ -33,16 +33,8 @@ public class BasicInfo implements Serializable {
     private String refAppNumber;
 
     @OneToOne
-    @JoinColumn(name = "request_type_id")
-    private RequestType requestType;
-
-    @OneToOne
     @JoinColumn(name = "request_reason_code")
     private Reason requestReason;
-
-    @OneToOne
-    @JoinColumn(name = "product_group_id")
-    private ProductGroup productGroup;
 
     @OneToOne
     @JoinColumn(name = "borrower_type_id")
@@ -202,28 +194,12 @@ public class BasicInfo implements Serializable {
         this.refAppNumber = refAppNumber;
     }
 
-    public RequestType getRequestType() {
-        return requestType;
-    }
-
-    public void setRequestType(RequestType requestType) {
-        this.requestType = requestType;
-    }
-
     public Reason getRequestReason() {
         return requestReason;
     }
 
     public void setRequestReason(Reason requestReason) {
         this.requestReason = requestReason;
-    }
-
-    public ProductGroup getProductGroup() {
-        return productGroup;
-    }
-
-    public void setProductGroup(ProductGroup productGroup) {
-        this.productGroup = productGroup;
     }
 
     public CustomerEntity getBorrowerType() {
@@ -528,9 +504,7 @@ public class BasicInfo implements Serializable {
                 append("workCase", workCase).
                 append("caNumber", caNumber).
                 append("refAppNumber", refAppNumber).
-                append("requestType", requestType).
                 append("requestReason", requestReason).
-                append("productGroup", productGroup).
                 append("borrowerType", borrowerType).
                 append("noUnpaidFeeInsurance", noUnpaidFeeInsurance).
                 append("noPendingClaimLG", noPendingClaimLG).

@@ -17,6 +17,7 @@ import com.clevel.selos.transform.AppraisalDetailTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import com.rits.cloning.Cloner;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -87,8 +88,6 @@ public class AppraisalAppointment implements Serializable {
     private Date currentDate;
     private String currentDateDDMMYY;
 
-
-
     private AppraisalDetailView appraisalDetailView;
     private List<AppraisalDetailView> appraisalDetailViewList;
 
@@ -105,7 +104,6 @@ public class AppraisalAppointment implements Serializable {
     private List<AppraisalDivision> appraisalDivisionList;
     private List<LocationProperty> locationPropertyList;
     private List<Province> provinceList;
-
 
     private AppraisalCompany appraisalCompany;
     private AppraisalDivision appraisalDivision;
@@ -126,7 +124,7 @@ public class AppraisalAppointment implements Serializable {
     private List<Reason> reasons;
     private boolean addDialog;
     private Status workCaseStatus;
-    private User user;
+    //private User user;
     @Inject
     private CustomerAcceptanceControl customerAcceptanceControl;
     @Inject
@@ -139,6 +137,7 @@ public class AppraisalAppointment implements Serializable {
 
     private void init(){
         log.debug("-- init()");
+        appraisalView = new AppraisalView();
         appraisalDetailView = new AppraisalDetailView();
         appraisalContactDetailView = new AppraisalContactDetailView();
         appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
@@ -160,20 +159,29 @@ public class AppraisalAppointment implements Serializable {
         appraisalDetailViewSelected = new AppraisalDetailView();
     }
 
+    public boolean checkSession(HttpSession session){
+        boolean checkSession = false;
+        if(( (Long)session.getAttribute("workCaseId") != 0 || (Long)session.getAttribute("workCasePreScreenId") != 0 ) &&
+                (Long)session.getAttribute("stepId") != 0){
+            checkSession = true;
+        }
+
+        return checkSession;
+    }
+
     public void preRender(){
-        log.info("-- preRender.");
+        log.info("preRender ::: ");
         HttpSession session = FacesUtil.getSession(true);
-        log.debug("preRender ::: setSession ");
-        if((!Util.isNull(session.getAttribute("workCaseId")) || !Util.isNull(session.getAttribute("workCasePreScreenId")) ) && !Util.isNull(session.getAttribute("stepId"))){
-            stepId = Long.valueOf(""+session.getAttribute("stepId"));
-            log.debug("-- stepId[{}]", stepId);
+        if(checkSession(session)){
+            stepId = (Long)session.getAttribute("stepId");
 
             if(stepId != StepValue.REQUEST_APPRAISAL.value()){
+                log.debug("preRender ::: invalid stepId : [{}]", stepId);
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
             }
         } else {
-            log.debug("preRender ::: workCaseId is null.");
+            log.debug("preRender ::: workCasePreScreenId, workCaseId, stepId is null.");
             FacesUtil.redirect("/site/inbox.jsf");
             return;
         }
@@ -181,23 +189,18 @@ public class AppraisalAppointment implements Serializable {
 
     @PostConstruct
     public void onCreation() {
-        log.info("-- onCreation.");
-        //preRender();
+        log.info("onCreation :::");
+        init();
         HttpSession session = FacesUtil.getSession(true);
-        boolean canRender = false;
-        user = (User) session.getAttribute("user");
-        if(!Util.isNull(session.getAttribute("workCaseId")) && Long.valueOf(""+session.getAttribute("workCaseId")) != 0){
-            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-            canRender = true;
-        }else if(!Util.isNull(session.getAttribute("workCasePreScreenId")) && Long.valueOf(""+session.getAttribute("workCasePreScreenId")) != 0){
-            workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
-            canRender = true;
-        }
+        if(checkSession(session)){
+            if((Long)session.getAttribute("workCaseId") != 0){
+                workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+            } else if ((Long)session.getAttribute("workCasePreScreenId") != 0){
+                workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
+            }
 
-        contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
+            contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
 
-        if(canRender){
-            init();
             appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId, workCasePreScreenId);
             workCaseStatus = customerAcceptanceControl.getWorkCaseStatus(workCaseId);
 
@@ -217,12 +220,9 @@ public class AppraisalAppointment implements Serializable {
                 updateContractFlag(appraisalContactDetailView);
             } else {
                 appraisalView = new AppraisalView();
-                log.debug("-- AppraisalView[New] created");
-                appraisalContactDetailView = new AppraisalContactDetailView();
-                log.debug("-- AppraisalContactDetailView[New] created");
-                appraisalContactDetailView = new AppraisalContactDetailView();
-                log.debug("-- AppraisalContactDetailView[New] created");
             }
+        } else {
+            //TODO show message box
         }
     }
 
@@ -394,9 +394,8 @@ public class AppraisalAppointment implements Serializable {
     public void onEditAppraisalDetailView(){
         modeForButton = ModeForButton.EDIT;
         log.debug("-- onEditAppraisalDetailView() RowIndex[{}]", rowIndex);
-//        Cloner cloner = new Cloner();
-//        appraisalDetailViewDialog = cloner.deepClone(appraisalDetailViewSelected);
-        appraisalDetailViewDialog = appraisalDetailViewSelected;
+        Cloner cloner = new Cloner();
+        appraisalDetailViewDialog = cloner.deepClone(appraisalDetailViewSelected);
     }
 
     public void onEditAppraisalContactDetailView(){
@@ -567,7 +566,7 @@ public class AppraisalAppointment implements Serializable {
         contactRecord = new ContactRecordDetailView();
         contactRecord.setId(0);
         contactRecord.setCallingDate(new Date());
-        contactRecord.setCreateBy(user);
+        //contactRecord.setCreateBy(user);
         contactRecord.setStatus(workCaseStatus);
         if (reasons == null) {
             reasons = customerAcceptanceControl.getContactRecordReasons();

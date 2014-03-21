@@ -11,13 +11,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoanAccountTypeTransform implements Serializable {
-    @Inject
-    @SELOS
-    Logger log;
+public class LoanAccountTypeTransform extends Transform {
+
     @Inject
     public LoanAccountTypeTransform() {
-
     }
 
     public LoanAccountTypeView getLoanAccountTypeView(AccountType loanAccountType) {

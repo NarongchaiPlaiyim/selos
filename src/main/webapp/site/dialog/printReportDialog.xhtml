@@ -6,20 +6,47 @@
         xmlns:p="http://primefaces.org/ui">
 
     <p:panel id="reportDlgPanel" styleClass="panel-dialog">
-        <table class="content_form" border="0">
+        <table class="content_form" border="0" style="width: 100%">
+           <tr>
+               <td>
+                  <table class="content_form" border="1" style="width: 100%">
+                      <tr>
+                          <td class="title" style="width: 150px">
+                              <p:outputLabel value="Op Shect" />
+                          </td>
+                          <td style="width: 230px">
+                              <h:outputText value="#{report.reportView.nameReportOpShect}" />
+                          </td>
+                          <td class="right">
+                              <p:commandButton id="dlgPrintReportDecisionBtn"
+                                               value="#{msg.get('app.button.print')}"
+                                               styleClass="small"
+                                               actionListener="#{report.onPrintDecisionReport()}"
+                                               ajax="false"/>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td class="title" style="width: 150px">
+                              <p:outputLabel value="Ex Sum" />
+                          </td>
+                          <td style="width: 230px">
+                              <h:outputText value="#{report.reportView.nameReportExSum}" />
+                          </td>
+                          <td class="right">
+                              <p:commandButton id="dlgPrintReportExsumBtn"
+                                               value="#{msg.get('app.button.print')}"
+                                               styleClass="small"
+                                               actionListener="#{report.onPrintExsumReport()}"
+                                               ajax="false"/>
+                          </td>
+                      </tr>
+                  </table>
+               </td>
+           </tr>
             <tr>
-                <td class="title" >
-                    <p:outputLabel value="OpShect :" />
-                </td>
-                <td style="width: 200px">
-                    <p:outputLabel value="Executive Summary Report" />
-                </td>
-                <td class="right">
-                    <p:commandButton id="dlgPrintReportExsumBtn"
-                                     value="#{msg.get('app.button.print')}"
-                                     styleClass="small"
-                                     actionListener="#{report.onPrintExsumReport()}"
-                                     ajax="false"/>
+                <td colspan="3" class="center">
+                    <p:commandButton value="#{msg.get('app.button.close')}" process="@this" type="button"
+                                     styleClass="small" onclick="printReportDlg.hide()"/>
                 </td>
             </tr>
         </table>

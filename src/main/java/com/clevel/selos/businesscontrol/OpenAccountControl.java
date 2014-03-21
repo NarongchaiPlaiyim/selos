@@ -34,7 +34,7 @@ public class OpenAccountControl extends BusinessControl {
     public List<CustomerInfoView> getCustomerList(long workCaseId){
         log.info("getCustomerList ::: workCaseId : {}", workCaseId);
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
-        customerInfoViewList = customerTransform.transformToViewList(customerDAO.findCustomerBorrowerAndGuarantor(workCaseId));
+        customerInfoViewList = customerTransform.transformToSelectList(customerDAO.findCustomerBorrowerAndGuarantor(workCaseId));
         return customerInfoViewList;
     }
 }

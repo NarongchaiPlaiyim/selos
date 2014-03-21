@@ -160,6 +160,7 @@ public class Decision implements Serializable {
     private int seqNumber;
     private Map<Integer, Integer> hashSeqCredit;
     private List<ProposeCreditDetailView> commonProposeCreditList;
+    private WorkCase workCase;
 
     // Retrieve Price/Fee
     private List<CreditRequestTypeView> creditRequestTypeViewList;
@@ -286,6 +287,11 @@ public class Decision implements Serializable {
             seqNumber = lastSeqNumber;
         }
 
+        workCase = workCaseDAO.findById(workCaseId);
+        if (workCase != null) {
+            productGroup = workCase.getProductGroup();
+        }
+
         BasicInfoView basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
         if (basicInfoView != null) {
             if (basicInfoView.getSpProgram() == RadioValue.YES.value()) {
@@ -293,7 +299,6 @@ public class Decision implements Serializable {
             } else {
                 specialProgramView = specialProgramTransform.transformToView(specialProgramDAO.findById(3));
             }
-            productGroup = basicInfoView.getProductGroup();
         }
 
         TCGView tcgView = tcgInfoControl.getTcgView(workCaseId);
@@ -826,7 +831,7 @@ public class Decision implements Serializable {
         boolean success;
         SubCollateralType subCollateralType = getSubCollTypeById(selectedApproveSubColl.getSubCollateralType().getId());
         List<CustomerInfoView> _collOwnerUWList = selectedApproveSubColl.getCollateralOwnerUWList();
-        List<MortgageType> _mortgageTypeList = selectedApproveSubColl.getMortgageList();
+        List<MortgageTypeView> _mortgageTypeList = selectedApproveSubColl.getMortgageList();
         List<NewCollateralSubView> _relatedWithList = selectedApproveSubColl.getRelatedWithList();
 
         if (modeEditSubColl) {
@@ -901,13 +906,14 @@ public class Decision implements Serializable {
 
     public void onAddMortgageType() {
         log.debug("onAddMortgageType() id: {}", selectedApproveSubColl.getMortgageType().getId());
+
         if (selectedApproveSubColl.getMortgageType().getId() != 0) {
             if (selectedApproveSubColl.getMortgageList() == null) {
-                selectedApproveSubColl.setMortgageList(new ArrayList<MortgageType>());
+                selectedApproveSubColl.setMortgageList(new ArrayList<MortgageTypeView>());
             }
             // Validate select duplicate
             if (selectedApproveSubColl.getMortgageList().size() > 0) {
-                for (MortgageType mortgageType : selectedApproveSubColl.getMortgageList()) {
+                for (MortgageTypeView mortgageType : selectedApproveSubColl.getMortgageList()) {
                     if (mortgageType.getId() == selectedApproveSubColl.getMortgageType().getId()) {
                         messageHeader = msg.get("app.messageHeader.error");
                         message = "Can not add duplicate Mortgage type!";
@@ -1134,8 +1140,6 @@ public class Decision implements Serializable {
             if (roleUW) {
                 // Delete List
                 decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
-
-                WorkCase workCase = workCaseDAO.findById(workCaseId);
                 // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
                 decisionView = decisionControl.saveApproveAndConditionData(decisionView, workCase);
                 // Calculate Total Approve
@@ -1315,10 +1319,10 @@ public class Decision implements Serializable {
         return returnSubCollType;
     }
 
-    private MortgageType getMortgageTypeById(int id) {
-        MortgageType returnMortgageType = new MortgageType();
-        if (mortgageTypeList != null && !mortgageTypeList.isEmpty() && id != 0) {
-            for (MortgageType mortgageType : mortgageTypeList) {
+    private MortgageTypeView getMortgageTypeById(int id) {
+        MortgageTypeView returnMortgageType = new MortgageTypeView();
+        if (mortgageTypeViewList != null && !mortgageTypeViewList.isEmpty() && id != 0) {
+            for (MortgageTypeView mortgageType : mortgageTypeViewList) {
                 if (mortgageType.getId() == id) {
                     returnMortgageType.setId(mortgageType.getId());
                     returnMortgageType.setActive(mortgageType.getActive());

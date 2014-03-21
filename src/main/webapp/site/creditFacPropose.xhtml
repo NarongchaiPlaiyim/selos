@@ -534,6 +534,7 @@
         <p:spacer width="10" height="0"/>
 
         <p:commandButton value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
+                         id="retrieveCredit"
                          styleClass="largest"
                          disabled="#{creditFacPropose.notRetrievePricing}"
                          process="@form"
@@ -1079,7 +1080,7 @@
         <p:dataTable id="tradeTable"
                      var="tradeTableItem"
                      value="#{creditFacPropose.newCreditFacilityView.newFeeDetailViewList}"
-                     rowKey="#{tradeTableItem.ProposeFeeDetailView}"
+                     rowKey="#{tradeTableItem.NewFeeDetailView}"
                      rowIndexVar="rowIndex"
                      style="width: 100%">
 
@@ -1112,19 +1113,19 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{tradeTableItem.commitmentFee}"/>
+                <h:outputText value="#{tradeTableItem.commitmentFee.percentFee}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{tradeTableItem.extensionFee}"/>
+                <h:outputText value="#{tradeTableItem.extensionFee.percentFee}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{tradeTableItem.prepaymentFee}"/>
+                <h:outputText value="#{tradeTableItem.prepaymentFee.percentFee}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{tradeTableItem.cancellationFee}"/>
+                <h:outputText value="#{tradeTableItem.cancellationFee.percentFee}"/>
             </p:column>
 
         </p:dataTable>

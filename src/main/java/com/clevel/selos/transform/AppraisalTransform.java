@@ -23,6 +23,7 @@ public class AppraisalTransform extends Transform {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     private AppraisalDAO appraisalDAO;
     //private AppraisalView appraisalView;
@@ -35,9 +36,9 @@ public class AppraisalTransform extends Transform {
     //private AppraisalContactDetailView appraisalContactDetailView;
     @Inject
     private AppraisalContactDetailTransform appraisalContactDetailTransform;
+
     @Inject
     public AppraisalTransform() {
-
     }
 
     public Appraisal transformToModel(final AppraisalView appraisalView, final WorkCase workCase, final WorkCasePrescreen workCasePrescreen, final User user){
@@ -83,7 +84,13 @@ public class AppraisalTransform extends Transform {
         appraisal.setAppointmentCusName(appraisalView.getAppointmentCusName());
         appraisal.setAppointmentDate(appraisalView.getAppointmentDate());
         appraisal.setAppointmentTime(appraisalView.getAppointmentTime());
-        appraisal.setBdmRemark(appraisalView.getBdmRemark());
+
+        if(!Util.isNull(appraisalView.getBdmRemark()) && appraisalView.getBdmRemark().length() < 501){
+            appraisal.setBdmRemark(appraisalView.getBdmRemark());
+        } else {
+            appraisal.setBdmRemark(appraisalView.getBdmRemark().substring(0, 499));
+        }
+
         appraisal.setCancelAppointment(appraisalView.getCancelAppointment());
         appraisal.setAppointmentRemark(appraisalView.getAppointmentRemark());
         appraisal.setZoneLocation(appraisalView.getZoneLocation());

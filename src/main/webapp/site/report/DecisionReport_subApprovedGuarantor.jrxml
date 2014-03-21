@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subApprovedGuarantor" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="72c95323-0ce9-4381-adda-3c8a80a19cae">
+	<property name="ireport.zoom" value="1.464100000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="detail" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF" hAlign="Center" vAlign="Middle" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\ProjectSLOS\\selos\\src\\main\\webapp\\site\\report\\"]]></defaultValueExpression>
+	</parameter>
+	<field name="count" class="java.lang.Integer">
+		<fieldDescription><![CDATA[count]]></fieldDescription>
+	</field>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[name]]></fieldDescription>
+	</field>
+	<field name="tcgLgNo" class="java.lang.String">
+		<fieldDescription><![CDATA[tcgLgNo]]></fieldDescription>
+	</field>
+	<field name="proposeCreditDetailViewList" class="java.util.List">
+		<fieldDescription><![CDATA[proposeCreditDetailViewList]]></fieldDescription>
+	</field>
+	<field name="totalLimitGuaranteeAmount" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[totalLimitGuaranteeAmount]]></fieldDescription>
+	</field>
+	<field name="uwDecision" class="java.lang.String">
+		<fieldDescription><![CDATA[uwDecision]]></fieldDescription>
+	</field>
+	<field name="path" class="java.lang.String"/>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="179c89cb-dd9f-4be2-a21c-405d327bd9e7" style="header" x="0" y="0" width="18" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="78360512-5591-44e0-8e20-0cf68858df89" style="header" x="56" y="0" width="91" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Guarantor Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="49137ae5-18df-43f5-9ce7-cc797d8412da" style="header" x="147" y="0" width="47" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[TCG LG No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a217ffff-c718-4425-b0e5-2f50f52114f4" style="header" x="194" y="0" width="290" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Credit Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2430811e-356e-464a-a80a-f611da7e2fae" style="header" x="484" y="0" width="71" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Guarantor Amount]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2963ff89-2b9e-453e-822e-901ae0e5bba3" style="header" x="18" y="0" width="38" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Decision]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="641e819c-c366-4d74-81f5-73553546b29e" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="18" height="14"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{count}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="22922fe1-2e06-43b0-857c-25d87d3b3ceb" style="detail" stretchType="RelativeToBandHeight" x="56" y="0" width="91" height="14"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="614941a3-7d0b-482e-83dc-2573b4c48adc" style="detail" stretchType="RelativeToBandHeight" x="147" y="0" width="47" height="14"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tcgLgNo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="5de7502f-2ca7-402d-8801-95bef829037f" style="detail" stretchType="RelativeToBandHeight" x="194" y="0" width="290" height="14"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="b29042e5-1573-4dcc-a441-3d1639a51438" style="detail" stretchType="RelativeToBandHeight" x="484" y="0" width="71" height="14"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalLimitGuaranteeAmount}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="9b99df17-b56b-472e-8089-6bf8df40d4db" x="194" y="0" width="290" height="14"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{proposeCreditDetailViewList})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$F{path}+ "DecisionReport_subApprovedGuarantor_sub ApprovedGuarantor.jasper"]]></subreportExpression>
+			</subreport>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="0c803497-2cb0-4ff6-8658-25102ee33ea7" style="detail" stretchType="RelativeToBandHeight" x="18" y="0" width="38" height="14"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{uwDecision}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

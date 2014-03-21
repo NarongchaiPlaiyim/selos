@@ -95,7 +95,7 @@ public class AppraisalRequest implements Serializable {
     }
 
     private void init(){
-        log.debug("-- init()");
+        log.debug("init...");
         modeForButton = ModeForButton.ADD;
         appraisalDetailView = new AppraisalDetailView();
         appraisalDetailViewDialog = new AppraisalDetailView();
@@ -108,30 +108,28 @@ public class AppraisalRequest implements Serializable {
         contactFlag3 = false;
     }
 
-    public void preRender(){
-        log.info("-- preRender.");
-        HttpSession session = FacesUtil.getSession(true);
-        log.debug("preRender ::: setSession ");
-//        workCaseId = 4;
-//        user = (User)session.getAttribute("user");
-        if((!Util.isNull(session.getAttribute("workCaseId")) || !Util.isNull(session.getAttribute("workCasePreScreenId"))) && !Util.isNull(session.getAttribute("stepId"))){
-            stepId = Long.valueOf(""+session.getAttribute("stepId"));
-            log.debug("-- stepId[{}]", stepId);
+    public boolean checkSession(HttpSession session){
+        boolean checkSession = false;
+        if(( (Long)session.getAttribute("workCaseId") != 0 || (Long)session.getAttribute("workCasePreScreenId") != 0 ) &&
+                (Long)session.getAttribute("stepId") != 0){
+            checkSession = true;
+        }
 
+        return checkSession;
+    }
+
+    public void preRender(){
+        log.debug("preRender...");
+        HttpSession session = FacesUtil.getSession(true);
+        if(checkSession(session)){
+            stepId = (Long)session.getAttribute("stepId");
             if(stepId != StepValue.PRESCREEN_MAKER.value() && stepId != StepValue.FULLAPP_BDM_SSO_ABDM.value()){
+                log.debug("preRender ::: Invalid step id : {}", stepId);
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
-            } else {
-                if(stepId == StepValue.PRESCREEN_MAKER.value()){
-                    workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
-                    log.debug("-- workCasePreScreenId : [{}]", workCasePreScreenId);
-                }else if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){
-                    workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-                    log.debug("-- workCaseId[{}]", workCaseId);
-                }
             }
         } else {
-            log.debug("preRender ::: workCaseId is null.");
+            log.debug("preRender ::: workCasePreScreenId, workCaseId, stepId is null.");
             FacesUtil.redirect("/site/inbox.jsf");
             return;
         }
@@ -139,26 +137,45 @@ public class AppraisalRequest implements Serializable {
 
     @PostConstruct
     public void onCreation() {
-        log.info("-- onCreation.");
-        preRender();
+        log.info("onCreation...");
         init();
-        appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, workCasePreScreenId);
-        if(!Util.isNull(appraisalView)){
-            appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
-            if(Util.isZero(appraisalDetailViewList.size())){
-                appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+        HttpSession session = FacesUtil.getSession(true);
+        if(checkSession(session)){
+            stepId = (Long)session.getAttribute("stepId");
+            if(stepId == StepValue.PRESCREEN_MAKER.value()){
+                workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
+                log.debug("onCreation ::: workCasePreScreenId : [{}]", workCasePreScreenId);
+            }else if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){
+                workCaseId = (Long)session.getAttribute("workCaseId");
+                log.debug("onCreation ::: workCaseId : [{}]", workCaseId);
             }
-            appraisalContactDetailView = appraisalView.getAppraisalContactDetailView();
-            if(Util.isNull(appraisalContactDetailView)){
+
+            appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, workCasePreScreenId);
+            log.debug("onCreation ::: appraisalView : {}", appraisalView);
+
+            if(!Util.isNull(appraisalView)){
+                log.debug("onCreation ::: appraisalView.id : [{}]", appraisalView.getId());
+                appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
+
+                if(Util.isZero(appraisalDetailViewList.size())){
+                    appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+                }
+
+                appraisalContactDetailView = appraisalView.getAppraisalContactDetailView();
+                if(Util.isNull(appraisalContactDetailView)){
+                    appraisalContactDetailView = new AppraisalContactDetailView();
+                }
+                log.debug("onCreation ::: appraisalContactDetailView.id : [{}]", appraisalContactDetailView.getId());
+            } else {
+                appraisalView = new AppraisalView();
+                log.debug("-- AppraisalView[New] created");
                 appraisalContactDetailView = new AppraisalContactDetailView();
+                log.debug("-- AppraisalContactDetailView[New] created");
+                appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+                log.debug("-- AppraisalDetailViewList[New] created");
             }
         } else {
-            appraisalView = new AppraisalView();
-            log.debug("-- AppraisalView[New] created");
-            appraisalContactDetailView = new AppraisalContactDetailView();
-            log.debug("-- AppraisalContactDetailView[New] created");
-            appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
-            log.debug("-- AppraisalDetailViewList[New] created");
+            //TODO Show dialog for exception cannot load data from database.
         }
     }
 
@@ -168,10 +185,10 @@ public class AppraisalRequest implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         if(appraisalDetailViewMandate()){
             complete = true;
-            if(ModeForButton.ADD.equals(modeForButton)){
+            if(ModeForButton.ADD == modeForButton){
                 appraisalDetailViewList.add(appraisalDetailViewDialog);
                 appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
-            }else if(ModeForButton.EDIT.equals(modeForButton)){
+            }else if(ModeForButton.EDIT == modeForButton){
                 log.debug("-- RowIndex[{}]", rowIndex);
                 appraisalDetailViewList.set(rowIndex, appraisalDetailViewDialog);
                 appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
@@ -183,10 +200,16 @@ public class AppraisalRequest implements Serializable {
     }
     
     public void onEditAppraisalDetailView(){
+        titleDeedFlag = false;
+        purposeFlag = false;
+        numberOfDocumentsFlag = false;
         modeForButton = ModeForButton.EDIT;
         log.debug("-- onEditAppraisalDetailView() RowIndex[{}]", rowIndex);
-        appraisalDetailViewDialog = appraisalDetailViewSelected;
+        Cloner cloner = new Cloner();
+        appraisalDetailViewDialog = cloner.deepClone(appraisalDetailViewSelected);
     }
+
+
 
     public void onAddAppraisalDetailView(){
         log.info("-- onAddAppraisalDetailView() ModeForButton[ADD]");
@@ -229,14 +252,12 @@ public class AppraisalRequest implements Serializable {
                 }
             } else {
                 messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-//                message = "Please add a customer contact information";
-                message = "กรุณากรอก รายชื่อผู้ติดต่ออย่างน้อย 1 ชื่อ";
+                message = "Please fill in all required information(Contact Detail).";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {
             messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-//            message = "Please add a detail of karn pra mern song raka na ja jub jub";
-            message = "กรุณากรอก รายละเอียดส่งประเมินราคา";
+            message = "Please fill in all required information(Estimate Detail).";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
@@ -248,7 +269,7 @@ public class AppraisalRequest implements Serializable {
     }
 
 
-    private boolean appraisalDetailViewMandate(){
+    public boolean appraisalDetailViewMandate(){
         log.debug("-- appraisalDetailViewMandate()");
         boolean result = true;
         if(Util.isZero(appraisalDetailViewDialog.getTitleDeed().length())){
@@ -277,7 +298,7 @@ public class AppraisalRequest implements Serializable {
 
         return result;
     }
-    private boolean appraisalContactDetailViewMandate(){
+    public boolean appraisalContactDetailViewMandate(){
         log.debug("-- appraisalContactDetailViewMandate()");
         //todo :  2 0 21
         boolean result = true;

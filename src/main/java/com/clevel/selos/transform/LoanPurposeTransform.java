@@ -1,12 +1,17 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.LoanPurposeDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.LoanPurpose;
 import com.clevel.selos.model.view.LoanPurposeView;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
 public class LoanPurposeTransform extends Transform{
+    @SELOS
+    @Inject
+    private Logger log;
 
     @Inject
     LoanPurposeDAO loanPurposeDAO;

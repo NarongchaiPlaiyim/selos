@@ -21,30 +21,27 @@ public class ReportService implements Serializable {
     @Inject
     @SELOS
     Logger log;
-    protected String reportTemplate;
-    protected String reportFileName;
-    protected StreamedContent reportFile;
-
 
     public void init(){
-
     }
 
     public void generatePDF(String fileName, Map<String,Object> parameters,String pdfName) throws JRException, IOException {
         log.debug("generate pdf.");
         JasperReport jasperReport = JasperCompileManager.compileReport(fileName);
+
         JasperPrint print ;
 
         log.info("parameters: {}",parameters);
+
 
         print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
 
         try {
 
-            String date = Util.createDateTime(new Date());
+            System.out.println("-------------"+pdfName);
 
             HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            response.addHeader("Content-disposition", "attachment; filename="+pdfName+date+".pdf");
+            response.addHeader("Content-disposition", "attachment; filename="+pdfName+".pdf");
             ServletOutputStream servletOutputStream=response.getOutputStream();
             JasperExportManager.exportReportToPdfStream(print, servletOutputStream);
             FacesContext.getCurrentInstance().responseComplete();

@@ -2,22 +2,24 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BRMSControl;
 import com.clevel.selos.businesscontrol.FullApplicationControl;
+import com.clevel.selos.businesscontrol.ReturnControl;
+import com.clevel.selos.businesscontrol.StepStatusControl;
+import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
-import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.integration.brms.BRMSInterfaceImpl;
 import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ManageButton;
 import com.clevel.selos.model.PricingDOAValue;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Reason;
-import com.clevel.selos.model.db.master.ReasonType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.view.AppHeaderView;
+import com.clevel.selos.model.view.ReturnInfoView;
 import com.clevel.selos.security.UserDetail;
+import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.primefaces.context.RequestContext;
@@ -30,6 +32,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 
 @ViewScoped
@@ -43,9 +46,17 @@ public class BaseController implements Serializable {
     UserDAO userDAO;
     @Inject
     BasicInfoDAO basicInfoDAO;
+    @Inject
+    ReasonDAO reasonDAO;
 
     @Inject
     FullApplicationControl fullApplicationControl;
+    @Inject
+    ReturnControl returnControl;
+    @Inject
+    StepStatusControl stepStatusControl;
+    @Inject
+    ReturnInfoTransform returnInfoTransform;
 
     @Inject
     BRMSControl brmsControl;
@@ -53,7 +64,10 @@ public class BaseController implements Serializable {
     private ManageButton manageButton;
     private AppHeaderView appHeaderView;
     private long stepId;
+    private long statusId;
+    private int stageId;
     private int requestAppraisal;
+    private boolean requestAppraisalPage;
     private int qualitativeType;
     private int pricingDOALevel;
     private List<User> abdmUserList;
@@ -81,6 +95,15 @@ public class BaseController implements Serializable {
     private String cancalCARemark;
     private int reasonId;
 
+    //Return BDM Dialog
+    private List<ReturnInfoView> returnInfoViewList;
+    private List<Reason> returnReason;
+    private String returnRemark;
+    private int editRecordNo;
+    private List<ReturnInfoView> returnInfoHistoryViewList;
+
+    private HashMap<String, Integer> stepStatusMap;
+
     private String messageHeader;
     private String message;
 
@@ -92,16 +115,27 @@ public class BaseController implements Serializable {
         log.info("BaseController ::: Creation ");
         manageButton = new ManageButton();
         HttpSession session = FacesUtil.getSession(true);
-        long workCasePreScreenId = 0;
-        long workCaseId = 0;
-        stepId = 0;
+        long workCasePreScreenId = 0L;
+        long workCaseId = 0L;
+        stepId = 0L;
+        statusId = 0L;
+        stageId = 0;
+
         requestAppraisal = 0;
 
+        requestAppraisalPage = false;
+
         if (!Util.isNull(session.getAttribute("workCasePreScreenId"))) {
-            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+            workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
         }
         if (!Util.isNull(session.getAttribute("stepId"))) {
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
+            stepId = (Long)session.getAttribute("stepId");
+        }
+        if(!Util.isNull(session.getAttribute("statusId"))) {
+            statusId = (Long)session.getAttribute("statusId");
+        }
+        if(!Util.isNull(session.getAttribute("stageId"))){
+            stageId = (Integer)session.getAttribute("stageId");
         }
         if (!Util.isNull(session.getAttribute("requestAppraisal"))){
             requestAppraisal = Integer.valueOf(session.getAttribute("requestAppraisal").toString());
@@ -109,9 +143,19 @@ public class BaseController implements Serializable {
                 requestAppraisal = 1;
             }
         }
-        log.info("BaseController ::: getSession : workcase = {}, stepid = {}", workCasePreScreenId, stepId);
+        log.debug("Current Page : {}", Util.getCurrentPage());
+        if (Util.getCurrentPage().equals("appraisalRequest.jsf")){
+            requestAppraisalPage = true;
+        }
 
-        if (stepId == StepValue.PRESCREEN_INITIAL.value()) {
+        log.info("BaseController ::: getSession : workCasePreScreenId : {}, workcase = {}, stepId = {}, stageId = {}", workCasePreScreenId, workCaseId, stepId, stageId);
+        log.debug("BaseController ::: find active button");
+
+        //TODO Get all action from Database By Step and Status and Role
+        stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId);
+        log.debug("stepStatusMap : {}", stepStatusMap);
+
+        /*if (stepId == StepValue.PRESCREEN_INITIAL.value()) {
             manageButton.setAssignToCheckerButton(true);
             manageButton.setCancelCAButton(true);
             manageButton.setCheckMandateDocButton(true);
@@ -150,17 +194,18 @@ public class BaseController implements Serializable {
                 manageButton.setAssignToABDMButton(true);
                 manageButton.setCancelCAFullAppButton(true);
                 manageButton.setSubmitCAButton(true);
+                manageButton.setReturnBDMButton(true);
             }
         } else if (stepId == StepValue.REQUEST_APPRAISAL.value()) {
             //Step at AAD Admin (Appraisal Appointment)
             manageButton.setCheckMandateDocButton(true);
-            manageButton.setReturnBDMButton(true);
+            manageButton.setReturnAppraisalBDMButton(true);
             manageButton.setSubmitAADCommitteeButton(true);
         } else if (stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()){
             //Step at AAD Committee (Appraisal Result)
             manageButton.setReturnAADAdminButton(true);
             manageButton.setSubmitAppraisalButton(true);
-        }
+        }*/
 
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
         log.info("BaseController ::: appHeader : {}", appHeaderView);
@@ -187,6 +232,14 @@ public class BaseController implements Serializable {
             session = FacesUtil.getSession(false);
             session.setAttribute("user", user);
         }
+    }
+
+    public boolean checkButton(String buttonName){
+        boolean check = false;
+        if(stepStatusMap!=null && stepStatusMap.containsKey(buttonName)){
+            check = Util.isTrue(stepStatusMap.get(buttonName));
+        }
+        return check;
     }
 
     /*public String getQualitativeType(){
@@ -421,6 +474,202 @@ public class BaseController implements Serializable {
 
     }
 
+    public void onOpenReturnBDMDialog(){
+        log.debug("onOpenReturnBDM ::: starting...");
+        HttpSession session = FacesUtil.getSession(true);
+        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+
+        //get from not accept List and from CheckMandateDoc
+        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
+
+        //set return code master
+        returnReason = returnControl.getReturnReasonList();
+        returnRemark = "";
+
+        log.debug("onOpenReturnBDM ::: returnInfoViewList size : {}", returnInfoViewList.size());
+    }
+
+    public void resetAddReturnInfo(){
+        returnRemark = "";
+        reasonId = 0;
+        editRecordNo = -1;
+    }
+
+    public void onOpenAddReturnInfo(){
+        log.debug("onOpenAddReturnInfo ::: starting...");
+        resetAddReturnInfo();
+    }
+
+    public void onSaveReturnInfo(){
+        log.debug("onSaveReturnInfo ::: starting...");
+        Reason reason = reasonDAO.findById(reasonId);
+
+        if(editRecordNo>-1){
+            returnInfoViewList.get(editRecordNo).setReturnCode(reason.getCode());
+            returnInfoViewList.get(editRecordNo).setDescription(reason.getDescription());
+            returnInfoViewList.get(editRecordNo).setReasonDetail(returnRemark);
+            returnInfoViewList.get(editRecordNo).setCanEdit(true);
+            returnInfoViewList.get(editRecordNo).setReasonId(reasonId);
+        } else {
+            ReturnInfoView returnInfoView = new ReturnInfoView();
+            returnInfoView.setReturnCode(reason.getCode());
+            returnInfoView.setDescription(reason.getDescription());
+            returnInfoView.setReasonDetail(returnRemark);
+            returnInfoView.setCanEdit(true);
+            returnInfoView.setReasonId(reasonId);
+
+            returnInfoViewList.add(returnInfoView);
+        }
+
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+
+        resetAddReturnInfo();
+
+        log.debug("onSaveReturnInfo ::: complete. returnInfoViewList size: {}", returnInfoViewList.size());
+    }
+
+    public void onSumbitReturnBDM(){ //Submit return from UW1 to BDM
+        log.debug("onSumbitReturnSummary ::: returnInfoViewList size : {}", returnInfoViewList);
+        boolean complete = false;
+        if(returnInfoViewList!=null && returnInfoViewList.size()>0){
+            try{
+                HttpSession session = FacesUtil.getSession(true);
+                long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+                String queueName = session.getAttribute("queueName").toString();
+                User user = (User) session.getAttribute("user");
+                long stepId = Long.parseLong(session.getAttribute("stepId").toString());
+
+                List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
+
+                if(returnInfoViews!=null && returnInfoViews.size()>0){
+                    messageHeader = "Information.";
+                    message = "Submit fail. Please check return information before submit return again.";
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+                    log.error("onSubmitReviewReturn ::: fail.");
+                } else {
+                    returnControl.submitReturnBDM(workCaseId, queueName, user, stepId, returnInfoViewList);
+                    messageHeader = "Information.";
+                    message = "Return to BDM success.";
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+                    complete = true;
+                    log.debug("onReturnBDMSubmit ::: success.");
+                }
+            } catch (Exception ex){
+                messageHeader = "Information.";
+                message = "Return to BDM failed, cause : " + Util.getMessageException(ex);
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                complete = false;
+                log.error("onReturnBDMSubmit ::: exception occurred : ", ex);
+            }
+        } else {
+            messageHeader = "Information.";
+            message = "Return to BDM failed, have no reason to return.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            complete = false;
+            log.debug("onSumbitReturnSummary ::: Return to BDM failed, have no reason to return.");
+        }
+
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
+    public void onSumbitReturnUW1(){ //Submit Reply From BDM to UW1
+        log.debug("onSumbitReturnReply");
+
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            String queueName = session.getAttribute("queueName").toString();
+            User user = (User) session.getAttribute("user");
+            long stepId = Long.parseLong(session.getAttribute("stepId").toString());
+            List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReplyList(workCaseId);
+
+            if(returnInfoViews!=null && returnInfoViews.size()>0){
+                messageHeader = "Information.";
+                message = "Submit Return fail. Please check return information again.";
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+                log.error("onSumbitReturnReply ::: fail.");
+            } else {
+                returnControl.submitReturnUW1(workCaseId, queueName);
+
+                messageHeader = "Information.";
+                message = "Submit Return success";
+                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+
+                log.debug("onReturnBDMSubmit ::: success.");
+            }
+        } catch (Exception ex){
+            messageHeader = "Information.";
+            message = "Submit Return fail, cause : " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+            log.error("onSumbitReturnReply ::: exception occurred : ", ex);
+        }
+    }
+
+    public void onSubmitUW2(){ //Submit From UW1 (no return)
+        log.debug("onSubmitUW2 begin");
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            User user = (User) session.getAttribute("user");
+
+            List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
+
+            if(returnInfoViews!=null && returnInfoViews.size()>0){
+                messageHeader = "Information.";
+                message = "Submit fail. Please check return information before submit again.";
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+                log.error("onSubmitUW2 ::: fail.");
+            } else {
+                //check if have return not accept
+                List<ReturnInfoView> returnInfoViewsNoAccept = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
+                if(returnInfoViewsNoAccept!=null && returnInfoViewsNoAccept.size()>0){
+                    messageHeader = "Information.";
+                    message = "Submit fail. Please check return information before submit again.";
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+                    log.error("onSubmitUW2 ::: fail.");
+                } else {
+                    returnControl.saveReturnHistory(workCaseId,user);
+
+                    //TODO: execute bpm workflow for submit to UW2
+
+                    messageHeader = "Information.";
+                    message = "Submit success";
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+
+                    log.debug("onSubmitUW2 ::: success.");
+                }
+            }
+        } catch (Exception ex){
+            messageHeader = "Information.";
+            message = "Submit fail, cause : " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+            log.error("onSubmitUW2 ::: exception occurred : ", ex);
+        }
+    }
+
+    public void onEditReturnInfo(int rowOnTable) {
+        log.debug("onEditReturnInfo ::: rowOnTable : {}",rowOnTable);
+        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
+        reasonId = returnInfoView.getReasonId();
+        returnRemark = returnInfoView.getReasonDetail();
+        editRecordNo = rowOnTable;
+        log.debug("onEditReturnInfo ::: end");
+    }
+
+    public void onDeleteReturnInfo(int rowOnTable) {
+        log.debug("onDeleteReturnInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
+
+        resetAddReturnInfo();
+        log.debug("onDeleteReturnInfo ::: end");
+    }
+
     public void onGoToInbox(){
         FacesUtil.redirect("/site/inbox.jsf");
     }
@@ -627,5 +876,53 @@ public class BaseController implements Serializable {
 
     public void setReasonId(int reasonId) {
         this.reasonId = reasonId;
+    }
+
+    public String getReturnRemark() {
+        return returnRemark;
+    }
+
+    public void setReturnRemark(String returnRemark) {
+        this.returnRemark = returnRemark;
+    }
+
+    public List<Reason> getReturnReason() {
+        return returnReason;
+    }
+
+    public void setReturnReason(List<Reason> returnReason) {
+        this.returnReason = returnReason;
+    }
+
+    public List<ReturnInfoView> getReturnInfoViewList() {
+        return returnInfoViewList;
+    }
+
+    public void setReturnInfoViewList(List<ReturnInfoView> returnInfoViewList) {
+        this.returnInfoViewList = returnInfoViewList;
+    }
+
+    public int getEditRecordNo() {
+        return editRecordNo;
+    }
+
+    public void setEditRecordNo(int editRecordNo) {
+        this.editRecordNo = editRecordNo;
+    }
+
+    public int getStageId() {
+        return stageId;
+    }
+
+    public void setStageId(int stageId) {
+        this.stageId = stageId;
+    }
+
+    public boolean isRequestAppraisalPage() {
+        return requestAppraisalPage;
+    }
+
+    public void setRequestAppraisalPage(boolean requestAppraisalPage) {
+        this.requestAppraisalPage = requestAppraisalPage;
     }
 }

@@ -9,7 +9,6 @@
 <h:head>
     <title>#{msg.get("app.name")} - Appraisal Request</title>
     <h:outputStylesheet name="css/style.css" />
-    <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
     <h:outputScript library="js" name="custom.js" />
     <style type="text/css">
         .ui-datatable thead th {
@@ -22,6 +21,7 @@
     </style>
 </h:head>
 <h:body>
+    <f:event type="preRenderView" listener="#{appraisalRequest.preRender()}" />
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
             <div id="main_container">
@@ -155,7 +155,10 @@
                                             </td>
                                             <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName1}"
-                                                             style = "#{appraisalRequest.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " />
+                                                             style = "#{appraisalRequest.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
+                                                             onkeydown="return onKeyPressName(event);"
+                                                             onkeypress="return onKeyPressName(event);" maxlength="50"
+                                                             counterTemplate="{0} characters remaining." autoResize="false"/>
                                             </td>
                                             <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo1}"
@@ -168,7 +171,10 @@
                                                 <p:outputLabel value="2"/>
                                             </td>
                                             <td class="center">
-                                                <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName2}"/>
+                                                <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName2}"
+                                                             onkeydown="return onKeyPressName(event);"
+                                                             onkeypress="return onKeyPressName(event);" maxlength="50"
+                                                             counterTemplate="{0} characters remaining." autoResize="false"/>
                                             </td>
                                             <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo2}"
@@ -180,7 +186,10 @@
                                                 <p:outputLabel value="3"/>
                                             </td>
                                             <td class="center">
-                                                <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName3}"/>
+                                                <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName3}"
+                                                             onkeydown="return onKeyPressName(event);"
+                                                             onkeypress="return onKeyPressName(event);" maxlength="50"
+                                                             counterTemplate="{0} characters remaining." autoResize="false"/>
                                             </td>
                                             <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo3}"
@@ -214,7 +223,8 @@
                                     <p:outputLabel styleClass="title"  value="#{msg.get('app.appraisal.label.bdmRemark')}"/>
                                 </td>
                                 <td>
-                                    <p:inputTextarea value="#{appraisalRequest.appraisalView.bdmRemark}"  rows="3" cols="90"/>
+                                    <p:inputTextarea value="#{appraisalRequest.appraisalView.bdmRemark}"  rows="3" cols="90" maxlength="500"
+                                                     counterTemplate="{0} characters remaining." autoResize="false"/>
                                 </td>
                             </tr>
                             <tr>
@@ -249,7 +259,7 @@
     </p:panel>
 
     <p:dialog id="appraisalDetailDialog" header="Appraisal Detail Information" widgetVar="appraisalDetailViewDlg" resizable="false"
-              modal="true" width="500" height="200" >
+              modal="true" width="500" height="200" closable="false" >
         <ui:include src="dialog/appraisalDetailDialog.xhtml"/>
     </p:dialog>
 

@@ -28,7 +28,6 @@ public class InsuranceInfoTransform extends Transform {
     @Inject
     @SELOS
     Logger log;
-    
     @Inject
     private NewCollateralTransform newCollateralTransform;
 

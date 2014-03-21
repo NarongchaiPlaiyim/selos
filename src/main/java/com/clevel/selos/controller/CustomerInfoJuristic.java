@@ -190,19 +190,25 @@ public class CustomerInfoJuristic implements Serializable {
     public CustomerInfoJuristic(){
     }
 
+    public boolean checkSession(HttpSession session){
+        boolean checkSession = false;
+        if( (Long)session.getAttribute("workCaseId") != 0 && (Long)session.getAttribute("stepId") != 0){
+            checkSession = true;
+        }
+
+        return checkSession;
+    }
+
     public void preRender(){
         log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        if(checkSession(session)){
+            //TODO Check valid stepId
+            log.debug("preRender ::: Check valid stepId");
         }else{
-            log.debug("onCreation ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}",ex);
-            }
+            log.debug("preRender ::: No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
@@ -211,51 +217,36 @@ public class CustomerInfoJuristic implements Serializable {
         log.debug("onCreation");
 
         HttpSession session = FacesUtil.getSession(true);
-
-        if(session.getAttribute("workCaseId") != null){
+        if(checkSession(session)){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            if(workCaseId == 0){
-                try{
-                    FacesUtil.redirect("/site/inbox.jsf");
-                }catch (Exception ex){
-                    log.error("Exception :: {}",ex);
+
+            initial();
+
+            enableAllFieldCus = false;
+
+            Flash flash = FacesUtil.getFlash();
+            Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
+            if (cusInfoParams != null) {
+                isFromSummaryParam = (Boolean) cusInfoParams.get("isFromSummaryParam");
+                isFromIndividualParam = (Boolean) cusInfoParams.get("isFromIndividualParam");
+                customerId = (Long) cusInfoParams.get("customerId");
+                if(isFromIndividualParam){
+                    customerInfoView = (CustomerInfoView) cusInfoParams.get("customerInfoView");
+                    onEditJuristic();
                 }
-                return;
             }
-        }else{
-            log.debug("onCreation ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}",ex);
+
+            if(isFromSummaryParam){                         // go to edit from summary
+                if(customerId != 0 && customerId != -1){
+                    onEditJuristic();
+                }
             }
-            return;
-        }
-
-        enableAllFieldCus = false;
-
-        onAddNewJuristic();
-
-        Flash flash = FacesUtil.getFlash();
-        Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
-        if (cusInfoParams != null) {
-            isFromSummaryParam = (Boolean) cusInfoParams.get("isFromSummaryParam");
-            isFromIndividualParam = (Boolean) cusInfoParams.get("isFromIndividualParam");
-            customerId = (Long) cusInfoParams.get("customerId");
-            if(isFromIndividualParam){
-                customerInfoView = (CustomerInfoView) cusInfoParams.get("customerInfoView");
-                onEditJuristic();
-            }
-        }
-
-        if(isFromSummaryParam){                         // go to edit from summary
-            if(customerId != 0 && customerId != -1){
-                onEditJuristic();
-            }
+        } else {
+            //TODO Show messageBox
         }
     }
 
-    public void onAddNewJuristic(){
+    public void initial(){
         isEditForm = false;
         customerInfoView = new CustomerInfoView();
         customerInfoView.reset();
@@ -492,6 +483,23 @@ public class CustomerInfoJuristic implements Serializable {
                     customerInfoView.setSearchBy(customerInfoSearch.getSearchBy());
                     customerInfoView.setSearchId(customerInfoSearch.getSearchId());
                     customerInfoView.setCollateralOwner(1);
+
+                    //set default country
+                    if(customerInfoView.getCitizenCountry() != null){
+                        customerInfoView.getCitizenCountry().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.setCitizenCountry(country);
+                    }
+                    if(customerInfoView.getSourceIncome() != null){
+                        customerInfoView.getSourceIncome().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.setSourceIncome(country);
+                    }
+
                     if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
                         if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
                             customerInfoView.getWorkAddress().setAddressTypeFlag(1);
@@ -580,6 +588,22 @@ public class CustomerInfoJuristic implements Serializable {
                         reference.setId(refId);
                         customerInfoView.setReference(reference);
 
+                        //set default country
+                        if(customerInfoView.getCitizenCountry() != null){
+                            customerInfoView.getCitizenCountry().setId(211);
+                        } else {
+                            Country country = new Country();
+                            country.setId(211);
+                            customerInfoView.setCitizenCountry(country);
+                        }
+                        if(customerInfoView.getSourceIncome() != null){
+                            customerInfoView.getSourceIncome().setId(211);
+                        } else {
+                            Country country = new Country();
+                            country.setId(211);
+                            customerInfoView.setSourceIncome(country);
+                        }
+
                         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
                             if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
                                 customerInfoView.getWorkAddress().setAddressTypeFlag(1);
@@ -657,13 +681,12 @@ public class CustomerInfoJuristic implements Serializable {
 
         //check using customer in basic info
         if(customerInfoView.getId() != 0){
-            boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getId());
+            boolean isExist = customerInfoControl.checkExistingAll(customerInfoView.getId());
             if(isExist){
                 if(relationId == RelationValue.DIRECTLY_RELATED.value()
                         || relationId == RelationValue.INDIRECTLY_RELATED.value()){
                     messageHeader = "Information.";
-                    message = "Cannot change customer type from Guarantor to Related. " +
-                            "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
+                    message = msg.get("app.message.customer.existing.error");
                     severity = "info";
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return;
@@ -682,7 +705,7 @@ public class CustomerInfoJuristic implements Serializable {
             customerId = customerInfoControl.saveCustomerInfoJuristic(customerInfoView, workCaseId);
             exSummaryControl.calForCustomerInfoJuristic(workCaseId);
             isFromSummaryParam = true;
-            onAddNewJuristic();
+            initial();
             onEditJuristic();
             messageHeader = "Information.";
             message = "Save Customer Juristic Data Success.";
@@ -713,10 +736,10 @@ public class CustomerInfoJuristic implements Serializable {
         try{
             //check individual using on basic info
             if(selectEditIndividual.getId() != 0){
-                boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(selectEditIndividual.getId());
+                boolean isExist = customerInfoControl.checkExistingAll(selectEditIndividual.getId());
                 if(isExist){
                     messageHeader = "Information.";
-                    message = "Cannot delete Customer Info Individual. <br/><br/>Cause : This customer is using on Opening Account Information in Basic Information menu.";
+                    message = msg.get("app.message.customer.existing.error");
                     severity = "info";
                 } else {
                     customerInfoView.getIndividualViewList().remove(selectEditIndividual);
