@@ -84,15 +84,14 @@ public class FullApplicationConverter extends Converter{
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.YEAR_IN_BUSINESS, applicationInfo.getYearInBusinessMonth()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.COUNTRY_OF_BUSINESS, applicationInfo.getCountryOfRegistration()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.TRADE_CHEQUE_RETURN_PERCENT, applicationInfo.getTradeChequeReturnPercent()));
-        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.GUARANTEE_TYPE, applicationInfo.getLoanRequestType()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.REFERENCE_DOCUMENT_TYPE, applicationInfo.getReferredDocType()));
 
         List<ProductType> productTypeList = applicationType.getProduct();
         ProductType productType = new ProductType();
         productType.setProductType(getValueForInterface(applicationInfo.getProductGroup()));
         productType.setRequestedCreditLimit(getValueForInterface(applicationInfo.getTotalApprovedCredit()));
-
         List<AttributeType> prodAttributeList = productType.getAttribute();
+        prodAttributeList.add(getAttributeType(BRMSFieldAttributes.GUARANTEE_TYPE, applicationInfo.getLoanRequestType()));
         prodAttributeList.add(getAttributeType(BRMSFieldAttributes.MAX_CREDIT_LIMIT_BY_COLLATERAL, applicationInfo.getMaximumSMELimit()));
 
         //2. Convert Value for Collateral Level//

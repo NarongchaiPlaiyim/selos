@@ -386,11 +386,15 @@ public class BRMSControl extends BusinessControl {
             applicationInfo.setFinalGroupExposure(decision.getTotalApproveExposure());
         }
 
+        BigDecimal totalApprovedCredit = BigDecimal.ZERO;
         List<NewCreditDetail> newCreditDetailList = newCreditDetailDAO.findNewCreditDetail(workCaseId, _proposeType);
-        List<BRMSAccountRequested> accountRequestedList = new ArrayList<BRMSAccountRequested>();
+        List<BRMSAccountRequested> accountRequestedList = new ArrayList();
         for(NewCreditDetail newCreditDetail : newCreditDetailList){
             if(newCreditDetail.getRequestType() == RequestTypes.NEW.value()){
                 accountRequestedList.add(getBRMSAccountRequested(newCreditDetail, discountFrontEndFeeRate));
+
+                if(!newCreditDetail.getProductProgram().isBa())
+                    totalApprovedCredit = totalApprovedCredit.add(newCreditDetail.getLimit());
             }
         }
         applicationInfo.setAccountRequestedList(accountRequestedList);
@@ -479,7 +483,7 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setTotalExistingODLimit(existingCreditFacility.getTotalBorrowerODLimit());
         applicationInfo.setTotalNumberOfExistingOD(existingCreditFacility.getTotalBorrowerNumberOfExistingOD());
 
-        applicationInfo.setTotalApprovedCredit(decision.getTotalApproveCredit());
+        applicationInfo.setTotalApprovedCredit(totalApprovedCredit);
         applicationInfo.setTotalNumberContingenPropose(newCreditFacility.getTotalNumberContingenPropose());
         applicationInfo.setTotalNumberProposeCredit(newCreditFacility.getTotalNumberProposeCreditFac());
         applicationInfo.setTotalNumberOfRequestedOD(newCreditFacility.getTotalNumberOfNewOD());
