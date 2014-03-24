@@ -1082,7 +1082,7 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onSearchCustomerInfo() {
-        updatePnl1();
+//        updatePnl1();
         log.debug("onSearchCustomerInfo :::");
         log.debug("onSearchCustomerInfo ::: customerInfoView : {}", customerInfoSearch);
         CustomerInfoResultView customerInfoResultView;
