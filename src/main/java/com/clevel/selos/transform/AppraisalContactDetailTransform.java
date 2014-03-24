@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppraisalContactDetailTransform {
+public class AppraisalContactDetailTransform extends Transform {
     @Inject
     @SELOS
     Logger log;

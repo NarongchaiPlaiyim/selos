@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subPersonRetail_subreport1" pageWidth="115" pageHeight="802" columnWidth="115" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="b7827ad0-6033-430b-93fe-ee5b3cf32482">
+	<property name="ireport.zoom" value="2.3579476910000023"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="detail" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF" hAlign="Center" vAlign="Middle" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<field name="installment" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[installment]]></fieldDescription>
+	</field>
+	<field name="finalBasePrice" class="java.lang.Object">
+		<fieldDescription><![CDATA[finalBasePrice.name]]></fieldDescription>
+	</field>
+	<field name="tenor" class="java.lang.Integer">
+		<fieldDescription><![CDATA[tenor]]></fieldDescription>
+	</field>
+	<field name="finalInterest" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[finalInterest]]></fieldDescription>
+	</field>
+	<detail>
+		<band height="27" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="4fdc6309-99b8-4398-8b59-2e02edf6cd07" style="detail" stretchType="RelativeToBandHeight" x="38" y="0" width="41" height="27"/>
+				<textElement textAlignment="Right">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{finalBasePrice}+"+"+$F{finalInterest}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="f70f11df-f75f-4f1c-b275-c7a5919a983b" style="detail" stretchType="RelativeToBandHeight" x="79" y="0" width="38" height="27"/>
+				<textElement textAlignment="Right">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tenor}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="213ad241-d47c-422b-bebf-2a13e6cea33d" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="38" height="27"/>
+				<textElement textAlignment="Right">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{installment}.equals( null ) ? 0 : $F{installment}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

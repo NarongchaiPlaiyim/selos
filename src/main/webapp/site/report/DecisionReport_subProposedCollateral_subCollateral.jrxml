@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subProposedCollateral_subCollateral" pageWidth="446" pageHeight="802" columnWidth="446" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="d734540b-9b93-4c98-98c1-b0bb9d831c5f">
+	<property name="ireport.zoom" value="1.464100000000003"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="detail" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF" hAlign="Center" vAlign="Middle" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<field name="accountName" class="java.lang.String">
+		<fieldDescription><![CDATA[accountName]]></fieldDescription>
+	</field>
+	<field name="accountNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[accountNumber]]></fieldDescription>
+	</field>
+	<field name="requestType" class="java.lang.Integer">
+		<fieldDescription><![CDATA[requestType]]></fieldDescription>
+	</field>
+	<field name="productProgramView" class="java.lang.Object">
+		<fieldDescription><![CDATA[productProgramView.name]]></fieldDescription>
+	</field>
+	<field name="creditFacilityView" class="java.lang.Object">
+		<fieldDescription><![CDATA[creditFacilityView.name]]></fieldDescription>
+	</field>
+	<field name="limit" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[limit]]></fieldDescription>
+	</field>
+	<field name="accountSuf" class="java.lang.String">
+		<fieldDescription><![CDATA[accountSuf]]></fieldDescription>
+	</field>
+	<field name="seq" class="java.lang.Integer">
+		<fieldDescription><![CDATA[seq]]></fieldDescription>
+	</field>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="d2d4df34-9599-4498-8ea7-1370c82f2964" style="header" x="0" y="0" width="25" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d51a1c50-2a9a-4060-984c-307def0cc5db" style="header" x="25" y="0" width="143" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Account]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="de075f05-d8e2-41ad-a6ad-d72221cfeaf5" style="header" x="168" y="0" width="49" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a4c1a5ac-3a31-4d6c-91d3-30ce7b699303" style="header" x="217" y="0" width="77" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Product Program]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="934a0e10-d683-4546-ae37-7ec04623bd24" style="header" x="294" y="0" width="80" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Credit Facility]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b6d048b5-bbe7-4c13-8d97-2fdab830c5ad" style="header" x="374" y="0" width="72" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Limit]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="d9dd7389-d676-4386-b106-3ca1c3a6a350" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="25" height="14"/>
+				<textElement verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{seq}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="547a30da-edac-4adb-b3bd-6b35ea6b81fe" style="detail" stretchType="RelativeToBandHeight" x="25" y="0" width="143" height="14"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{accountName}+"\n"+
+"Acc No.: "+$F{accountNumber}+" , Suf.: "+$F{accountSuf}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="2ec4891c-c124-42ff-8c53-b53e3ff30cb4" style="detail" stretchType="RelativeToBandHeight" x="168" y="0" width="49" height="14"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{requestType}.intValue() == 1 ? "Change" :
+$F{requestType}.intValue() == 2 ? "New" : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="b6b1ef86-33f0-4a40-8b64-316e87dcdcf8" style="detail" stretchType="RelativeToBandHeight" x="217" y="0" width="77" height="14"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{productProgramView}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a6fd4ca0-d667-43da-955f-ce29fda704d7" style="detail" stretchType="RelativeToBandHeight" x="294" y="0" width="80" height="14"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{creditFacilityView}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="2362d858-b841-4325-802e-10f44dfbac9a" style="detail" stretchType="RelativeToBandHeight" x="374" y="0" width="72" height="14"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

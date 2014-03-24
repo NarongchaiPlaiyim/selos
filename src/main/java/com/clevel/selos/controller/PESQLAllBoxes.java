@@ -135,6 +135,8 @@ public class PESQLAllBoxes implements Serializable
             stageId = step != null ? step.getStage().getId() : 0;
         }
 
+        session.setAttribute("stageId", stageId);
+
         String queueName = inboxViewSelectItem.getQueuename();
         if(Util.isNull(queueName)) {
             session.setAttribute("queueName", "0");

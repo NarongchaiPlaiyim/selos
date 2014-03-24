@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subRelatedCommercial" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1b57e405-735a-4015-bae2-0c47f3413d6e">
+	<property name="ireport.zoom" value="1.000000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="detail" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF" hAlign="Center" vAlign="Middle" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="summary" mode="Opaque" forecolor="#000000" backcolor="#FCFF79" hAlign="Left" vAlign="Middle" fontSize="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\ProjectSLOS\\selos\\src\\main\\webapp\\site\\report\\"]]></defaultValueExpression>
+	</parameter>
+	<field name="accountName" class="java.lang.String">
+		<fieldDescription><![CDATA[accountName]]></fieldDescription>
+	</field>
+	<field name="accountNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[accountNumber]]></fieldDescription>
+	</field>
+	<field name="accountSuf" class="java.lang.String">
+		<fieldDescription><![CDATA[accountSuf]]></fieldDescription>
+	</field>
+	<field name="description" class="java.lang.String">
+		<fieldDescription><![CDATA[description]]></fieldDescription>
+	</field>
+	<field name="productProgramName" class="java.lang.String">
+		<fieldDescription><![CDATA[productProgramName]]></fieldDescription>
+	</field>
+	<field name="creditTypeName" class="java.lang.String">
+		<fieldDescription><![CDATA[creditTypeName]]></fieldDescription>
+	</field>
+	<field name="productCode" class="java.lang.String">
+		<fieldDescription><![CDATA[productCode]]></fieldDescription>
+	</field>
+	<field name="projectCode" class="java.lang.String">
+		<fieldDescription><![CDATA[projectCode]]></fieldDescription>
+	</field>
+	<field name="limit" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[limit]]></fieldDescription>
+	</field>
+	<field name="pcePercent" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[pcePercent]]></fieldDescription>
+	</field>
+	<field name="pceLimit" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[pceLimit]]></fieldDescription>
+	</field>
+	<field name="outstanding" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[outstanding]]></fieldDescription>
+	</field>
+	<field name="existingCreditTierDetailViewList" class="java.util.List">
+		<fieldDescription><![CDATA[existingCreditTierDetailViewList]]></fieldDescription>
+	</field>
+	<field name="count" class="java.lang.Integer">
+		<fieldDescription><![CDATA[count]]></fieldDescription>
+	</field>
+	<field name="path" class="java.lang.String"/>
+	<columnHeader>
+		<band height="38" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="4a924946-6eaa-4572-99f0-73be55afba58" style="header" x="0" y="0" width="555" height="14"/>
+				<textElement>
+					<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Commercial Credit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3e822fd6-a30d-4ebf-a078-d8cc4d4eb02e" style="header" x="0" y="14" width="23" height="24"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a0913862-9024-4570-95c5-ff8a12263d15" style="header" x="23" y="14" width="119" height="24"/>
+				<textElement>
+					<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Account]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bcdb9e8c-4a57-4586-b2eb-9bb23ba0cf87" style="header" x="517" y="14" width="38" height="24"/>
+				<textElement>
+					<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Tenor
+(Months)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="40ecc21c-8329-4e0c-b2dd-bea7be400c9c" style="header" x="476" y="14" width="41" height="24"/>
+				<textElement>
+					<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Int/Fee(%)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0dc9148f-f54d-4862-8f54-ce2efd2ee8e9" style="header" x="438" y="14" width="38" height="24"/>
+				<textElement>
+					<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Installment]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7bf64a90-fd59-4748-98a7-7722e0c2389c" style="header" x="389" y="14" width="49" height="24"/>
+				<textElement>
+					<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Outstanding]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="754c0640-1cbd-4283-9c41-bab334b75102" style="header" x="355" y="14" width="34" height="24"/>
+				<textElement>
+					<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Limit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4dbfce1e-c725-4538-92ba-ff7972d3a891" style="header" x="283" y="14" width="72" height="24"/>
+				<textElement>
+					<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f265405f-0065-45d9-9ce4-0fa9c9a85401" style="header" x="221" y="14" width="62" height="24"/>
+				<textElement>
+					<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Credit Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6a7d5006-d17f-4da0-9f95-8e61b6fc5e96" style="header" x="142" y="14" width="79" height="24"/>
+				<textElement>
+					<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Product Program]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="27" splitType="Stretch">
+			<textField>
+				<reportElement uuid="981e8fc5-55a9-453a-b668-e287c4e928a6" style="detail" stretchType="RelativeToTallestObject" x="389" y="0" width="49" height="27"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{outstanding}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="85a78562-5a8e-4c47-a26f-27c95c9e30df" style="detail" stretchType="RelativeToTallestObject" x="0" y="0" width="23" height="27"/>
+				<textElement>
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="fe8f79c9-eaff-49b2-b86d-69ff3699db24" style="detail" stretchType="RelativeToTallestObject" x="221" y="0" width="62" height="27"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="3" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{creditTypeName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="85742b52-23b5-4bf7-a8c1-87469ea36760" style="detail" stretchType="RelativeToTallestObject" x="142" y="0" width="79" height="27"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="3" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{productProgramName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="01b9324f-0aad-41fe-abff-d0a4e8eb135b" style="detail" stretchType="RelativeToTallestObject" x="355" y="0" width="34" height="27"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement uuid="4ae33c64-1beb-45c5-b7dc-98d82182eee3" style="detail" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="23" y="0" width="119" height="27"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="3" tabStopWidth="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{accountName}+"\n"+
+"Acc No.: "+$F{accountNumber}+
+"Suf. "+$F{accountSuf}+"\n"+
+"Acc Status: "+$F{description}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="9489aed8-f9f8-4e38-94f3-8c3199926310" style="detail" stretchType="RelativeToTallestObject" x="283" y="0" width="72" height="27"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="3" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Product: "+$F{productCode}+"\n"+
+"Project: "+$F{projectCode}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="e7c331a2-70c5-46f3-acf1-f889ed921e96" x="438" y="0" width="117" height="27"/>
+				<dataSourceExpression><![CDATA[$F{existingCreditTierDetailViewList}.isEmpty()?
+new net.sf.jasperreports.engine.JREmptyDataSource() :
+new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTierDetailViewList})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$F{path} + "DecisionReport_subPersonCommercial_subPersonCommercial.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

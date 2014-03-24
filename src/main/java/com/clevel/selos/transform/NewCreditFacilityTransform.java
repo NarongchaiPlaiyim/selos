@@ -2,10 +2,9 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.CountryDAO;
 import com.clevel.selos.dao.master.CreditRequestTypeDAO;
-import com.clevel.selos.dao.working.NewCreditFacilityDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Country;
-import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -34,6 +33,36 @@ public class NewCreditFacilityTransform extends Transform {
     private CountryTransform countryTransform;
     @Inject
     private CreditRequestTypeTransform creditRequestTypeTransform;
+    @Inject
+    NewCollateralCreditDAO newCollateralCreditDAO;
+    @Inject
+    NewFeeCreditDAO newFeeCreditDAO;
+    @Inject
+    NewConditionDetailDAO newConditionDetailDAO;
+    @Inject
+    NewCreditDetailDAO newCreditDetailDAO;
+    @Inject
+    NewCreditTierDetailDAO newCreditTierDetailDAO;
+    @Inject
+    NewGuarantorDetailDAO newGuarantorDetailDAO;
+    @Inject
+    CreditTypeDetailDAO creditTypeDetailDAO;
+    @Inject
+    NewCollateralDAO newCollateralDetailDAO;
+    @Inject
+    NewCollateralSubDAO newCollateralSubDetailDAO;
+    @Inject
+    NewCollateralHeadDAO newCollateralHeadDetailDAO;
+    @Inject
+    private NewFeeDetailTransform newFeeDetailTransform;
+    @Inject
+    private  NewCreditDetailTransform newCreditDetailTransform;
+    @Inject
+    private NewGuarantorDetailTransform newGuarantorDetailTransform;
+    @Inject
+    private NewCollateralTransform newCollateralTransform;
+    @Inject
+    private NewConditionDetailTransform newConditionDetailTransform;
 
     public NewCreditFacility transformToModelDB(NewCreditFacilityView newCreditFacilityView, WorkCase workCase, User user) {
 

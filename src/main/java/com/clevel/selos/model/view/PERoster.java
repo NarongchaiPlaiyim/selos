@@ -38,6 +38,15 @@ public class PERoster implements Serializable {
     private long stepId;
     private String queuename;
     private String step;
+    private String slastatus;
+
+    public String getSlastatus() {
+        return slastatus;
+    }
+
+    public void setSlastatus(String slastatus) {
+        this.slastatus = slastatus;
+    }
 
     public String getStep() {
         return step;

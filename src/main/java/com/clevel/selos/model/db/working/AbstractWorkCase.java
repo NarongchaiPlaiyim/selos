@@ -46,9 +46,9 @@ public class AbstractWorkCase implements Serializable{
     @JoinColumn(name = "doa_level_id")
     protected AuthorizationDOA authorizationDOA;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    /*@Temporal(TemporalType.TIMESTAMP)
     @JoinColumn(name = "sla_end_date")
-    protected Date slaEndDate;
+    protected Date slaEndDate;*/
 
     @Column(name = "total_time_at_user", length = 1, columnDefinition = "int default 0")
     protected int totalTimeAtUser;
@@ -240,13 +240,13 @@ public class AbstractWorkCase implements Serializable{
         this.authorizationDOA = authorizationDOA;
     }
 
-    public Date getSlaEndDate() {
+   /* public Date getSlaEndDate() {
         return slaEndDate;
     }
 
     public void setSlaEndDate(Date slaEndDate) {
         this.slaEndDate = slaEndDate;
-    }
+    }*/
 
     public int getTotalTimeAtUser() {
         return totalTimeAtUser;

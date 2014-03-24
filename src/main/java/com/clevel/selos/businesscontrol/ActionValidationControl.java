@@ -1,10 +1,10 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.master.MandateFieldConfigureDAO;
+import com.clevel.selos.dao.master.MandateFieldDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.CreditType;
-import com.clevel.selos.model.db.master.MandateFieldConfigure;
+import com.clevel.selos.model.db.master.MandateField;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.view.ActionValidationResult;
 import com.clevel.selos.model.view.MandateFieldMessageView;
@@ -28,7 +28,7 @@ public class ActionValidationControl extends BusinessControl{
     Logger logger;
 
     @Inject
-    MandateFieldConfigureDAO mandateFieldConfigureDAO;
+    MandateFieldDAO mandateFieldConfigureDAO;
 
     @Inject
     @ValidationMessage
@@ -44,8 +44,8 @@ public class ActionValidationControl extends BusinessControl{
         Map<String, String> reasonMap = new HashMap<String, String>();
 
         //List<MandateFieldConfigure> mandateFieldConfigureList = mandateFieldConfigureDAO.findByAction(step, status, action);
-        List<MandateFieldConfigure> mandateFieldConfigureList = getMandateFieldConfigureList();
-        for(MandateFieldConfigure mandateFieldConfigure : mandateFieldConfigureList){
+        List<MandateField> mandateFieldConfigureList = getMandateFieldConfigureList();
+        for(MandateField mandateFieldConfigure : mandateFieldConfigureList){
 
         }
 
@@ -110,9 +110,9 @@ public class ActionValidationControl extends BusinessControl{
         return mandateFieldMessageView;
     }
 
-    public List<MandateFieldConfigure> getMandateFieldConfigureList(){
-        List<MandateFieldConfigure> mandateFieldConfigureList = new ArrayList<MandateFieldConfigure>();
-        MandateFieldConfigure mandateFieldConfigure = new MandateFieldConfigure();
+    public List<MandateField> getMandateFieldConfigureList(){
+        List<MandateField> mandateFieldConfigureList = new ArrayList<MandateField>();
+        MandateField mandateFieldConfigure = new MandateField();
         mandateFieldConfigure.setId(1);
         mandateFieldConfigure.setClassName("com.clevel.selos.model.db.working.NewCreditDetail");
         mandateFieldConfigure.setFieldName("creditType");

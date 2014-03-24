@@ -213,7 +213,9 @@ public class ExSummaryControl extends BusinessControl {
             //if isRental = N, display ownerName. If isRental = Y, display expiryDate
             if(bizInfoSummaryView.getRental() == 1) { // 1 is yes??
                 if(bizInfoSummaryView.getExpiryDate() != null){
-                    exSummaryView.setOwner("เช่า วันที่หมดอายุ : "+DateTimeUtil.convertToStringDDMMYYYY(bizInfoSummaryView.getExpiryDate() , new Locale("th", "TH")));
+                    exSummaryView.setOwner(msg.get("app.exSummary.business.location.label.ownerExpired")
+                                            .concat(" ")
+                                            .concat(DateTimeUtil.convertToStringDDMMYYYY(bizInfoSummaryView.getExpiryDate() , new Locale("th", "TH"))));
                 }
             } else {
                 exSummaryView.setOwner(bizInfoSummaryView.getOwnerName()); //owner name
@@ -230,7 +232,7 @@ public class ExSummaryControl extends BusinessControl {
                         bizPermissionList.add(bizInfoDetailViewList.get(i).getBizDocPermission());
 
                         Date currentDate = bizInfoDetailViewList.get(i).getBizDocExpiryDate();
-                        if(DateTimeUtil.compareDate(tmpHighestDate,currentDate) > 0){
+                        if(DateTimeUtil.compareDate(tmpHighestDate,currentDate) < 0){
                             tmpHighestDate = currentDate;
                             tmpIndexHighestExpire = i;
                         }
@@ -249,6 +251,9 @@ public class ExSummaryControl extends BusinessControl {
                 }
                 exSummaryView.setBusinessPermission(bizPermission.toString());
                 exSummaryView.setExpiryDate(bizInfoDetailViewList.get(tmpIndexHighestExpire).getBizDocExpiryDate());
+            } else {
+                exSummaryView.setBusinessPermission("-");
+                exSummaryView.setExpiryDate(null);
             }
         } else {
             exSummaryView.setExSumBusinessInfoView(null);
@@ -269,7 +274,7 @@ public class ExSummaryControl extends BusinessControl {
 //                กรณีผู้กู้ = Juristic
 //        ใช้ ""วันจดทะเบียนนิติบุคคล"" หรือ วันก่อตั้งกิจการ/อ้างอิงประสบการณ์"" Whichever is longer"
         if(bizInfoSummaryView != null && bizInfoSummaryView.getId() != 0){
-            if(DateTimeUtil.compareDate(bizInfoSummaryView.getRegistrationDate(),bizInfoSummaryView.getEstablishDate()) > 0){
+            if(DateTimeUtil.compareDate(bizInfoSummaryView.getRegistrationDate(),bizInfoSummaryView.getEstablishDate()) < 0){
                 exSumCharacteristicView.setStartBusinessDate(bizInfoSummaryView.getRegistrationDate());
             } else {
                 exSumCharacteristicView.setStartBusinessDate(bizInfoSummaryView.getEstablishDate());
