@@ -203,6 +203,7 @@ public class NCBInfo implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
 
         if(checkSession(session)){
+            workCaseId = (Long)session.getAttribute("workCaseId");
             if(session.getAttribute("customerId") != null && (Long)session.getAttribute("customerId") != 0){
                 customerId = (Long)session.getAttribute("customerId");
                 log.debug("onCreation ::: customerId : {}", customerId);
