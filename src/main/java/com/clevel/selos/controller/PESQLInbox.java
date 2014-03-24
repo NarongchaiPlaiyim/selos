@@ -131,6 +131,15 @@ public class PESQLInbox implements Serializable
             session.setAttribute("statusId", statusId);
         }
 
+        if(Util.isNull(inboxViewSelectItem.getFetchType()))
+        {
+            session.setAttribute("fetchType",0);
+        }
+        else
+        {
+            session.setAttribute("fetchType",inboxViewSelectItem.getFetchType());
+        }
+
         session.setAttribute("stepId", stepId);
 
         if(stepId != 0){
