@@ -57,6 +57,10 @@ public class MandateDoc implements Serializable {
     @OneToMany(mappedBy = "mandateDoc", cascade = CascadeType.ALL)
     private List<MandateDocCust> mandateDocCustList;
 
+    @OneToMany(mappedBy = "mandateDoc", cascade = CascadeType.ALL)
+    private List<MandateDocFileName> mandateDocFileNameList;
+
+
     public long getId() {
         return id;
     }
@@ -169,6 +173,14 @@ public class MandateDoc implements Serializable {
         this.reasonExpire = reasonExpire;
     }
 
+    public List<MandateDocFileName> getMandateDocFileNameList() {
+        return mandateDocFileNameList;
+    }
+
+    public void setMandateDocFileNameList(List<MandateDocFileName> mandateDocFileNameList) {
+        this.mandateDocFileNameList = mandateDocFileNameList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -186,6 +198,7 @@ public class MandateDoc implements Serializable {
                 .append("reasonExpire", reasonExpire)
                 .append("mandateDocBRMSList", mandateDocBRMSList)
                 .append("mandateDocCustList", mandateDocCustList)
+                .append("mandateDocFileNameList", mandateDocFileNameList)
                 .toString();
     }
 }

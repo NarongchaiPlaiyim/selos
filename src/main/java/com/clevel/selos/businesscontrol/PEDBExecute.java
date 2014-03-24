@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.UserToAuthorizationDOADAO;
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
@@ -66,7 +67,7 @@ public class PEDBExecute extends BusinessControl
     @Config(name = "interface.pe.sql.searchrosterquery")
     String searchrosterquery;
 
-    @Inject
+    /*@Inject
     @Config(name = "interface.pe.sql.CACancelled")
     String CACancelledStatusid;
 
@@ -93,7 +94,7 @@ public class PEDBExecute extends BusinessControl
     @Inject
     @Config(name = "interface.pe.sql.CARejectedbyUW2")
     String CARejectedbyUW2Statusid;
-
+*/
     @Inject
     private UserDAO userDAO;
     @Inject
@@ -462,6 +463,18 @@ public class PEDBExecute extends BusinessControl
             {
                 inboxName = inboxName.substring(inboxName.indexOf("_")+1,inboxName.length());
             }
+
+            int fetchType;
+
+            if(inboxName.contains("ROSTER"))
+            {
+                fetchType = BPMConstants.FETCH_TYPE_ROSTER;
+            }
+
+            else {
+                fetchType = BPMConstants.FETCH_TYPE_QUEUE;
+            }
+
             log.info("inboxname : {}",inboxName);
 
             PreparedStatement statement = conn.prepareStatement(sqlquery);
@@ -497,6 +510,7 @@ public class PEDBExecute extends BusinessControl
                 peInbox.setFwobnumber(rs.getString("F_WobNum"));
                 peInbox.setQueuename(inboxName);
                 peInbox.setStep(rs.getString("F_StepName"));
+                peInbox.setFetchType(fetchType);
                 resultQueryList.add(peInbox);
 
                 log.info("resultQueryList pedbexecute class is : {}",resultQueryList);
@@ -697,6 +711,8 @@ public class PEDBExecute extends BusinessControl
 
             rs = statement.executeQuery();
 
+            int fetchType = BPMConstants.FETCH_TYPE_ROSTER;
+
             while (rs.next()) {
 
                 peRoster = new PERoster();
@@ -715,6 +731,9 @@ public class PEDBExecute extends BusinessControl
                 peRoster.setTotalTimeAtUser(rs.getString("TotalTimeAtUser"));
                 peRoster.setTotalTimeAtProcess(rs.getString("TotalTimeAtProcess"));
                 peRoster.setF_WobNum(rs.getString("F_WobNum"));
+                peRoster.setFetchType(fetchType);
+                peRoster.setStep(rs.getString("F_StepName"));
+                peRoster.setQueuename(tableName.substring(tableName.indexOf("_")+1,tableName.length()));
 
                 rosterViewList.add(peRoster);
                 peRoster = null;
@@ -791,18 +810,18 @@ public class PEDBExecute extends BusinessControl
                     log.info("Status :",status);
                     if(flag)
                     {
-                        wherecondition += " AND Status ='"+status+"' ";
+                        wherecondition += " AND StatusCode ='"+status+"' ";
                     }
                     else
                     {
 
-                        wherecondition = " where Status ='"+status+"' ";
+                        wherecondition = " where StatusCode ='"+status+"' ";
                     }
                     flag = true;
 
                 }
-                log.info(date1.toString()+""+date2.toString());
-                log.info(wherecondition);
+                //log.info(date1.toString()+""+date2.toString());
+
                 if(date1 != null && date2 != null)
                 {
 
@@ -812,17 +831,19 @@ public class PEDBExecute extends BusinessControl
                     cal.set(Calendar.MINUTE,59);
                     cal.set(Calendar.SECOND,59);
                     date2 = cal.getTime();
-
+                     log.info("in date : "+date2.toString());
                     if(flag)
                     {
-                        wherecondition += " AND ReceivedTime >=  " +date1.getTime()+ " AND  ReceivedTime <=" +date2.getTime();
+                        wherecondition += " AND ReceivedTime >=  " +(date1.getTime()/1000)+ " AND  ReceivedTime <=" +(date2.getTime()/1000);
                     }
                     else
                     {
-                        wherecondition = " where ReceivedTime >=  " +date1.getTime()+ " AND  ReceivedTime <=" +date2.getTime();
+                        wherecondition = " where ReceivedTime >=  " +(date1.getTime()/1000)+ " AND  ReceivedTime <=" +(date2.getTime()/1000);
                     }
                     flag = true;
                 }
+
+                log.info("after daet :"+wherecondition);
                 if(userid != null && userid.length() >0 )
                 {
                     appnumberlistavoidduplicates = new ArrayList<String>();
@@ -885,7 +906,7 @@ public class PEDBExecute extends BusinessControl
 
                             if(flag)
                             {
-                                wherecondition =  " AND where AppNumber = '" +applicationNo + "'";
+                                wherecondition +=  " AND where AppNumber = '" +applicationNo + "'";
                             }
                             else
                             {
@@ -908,7 +929,7 @@ public class PEDBExecute extends BusinessControl
 
                         if(flag)
                         {
-                            wherecondition =  " AND where AppNumber = '" +applicationNo + "'";
+                            wherecondition +=  " AND AppNumber = '" +applicationNo + "'";
                         }
                         else
                         {
@@ -961,7 +982,7 @@ public class PEDBExecute extends BusinessControl
 
                 log.info("sqlquery in getPESearchList is ::::::::: {}",sqlpequery);
 
-                searchViewList =  getPESearchResultSetList(sqlpequery);
+                searchViewList =  getPESearchResultSetList(sqlpequery,rostertableaname);
 
 
             }
@@ -1045,39 +1066,11 @@ public class PEDBExecute extends BusinessControl
                         completedCasesAppNoList.addAll(completedCasesAppNoListByName);
                     }
                 }
-                if(status != "")
+                if(status != null)
                 {
-                    if(status.equalsIgnoreCase("CA Cancelled"))
-                    {
-                        statuscode = Integer.parseInt(CACancelledStatusid);
-                        log.info("status code is : ",statuscode);
-                    }
-                    else if(status.equalsIgnoreCase("CA Rejected by UW1"))
-                    {
-                        statuscode = Integer.parseInt(CARejectedbyUW1Statusid);
-                        log.info("status code is : ",statuscode);
-                    }
-                    else if(status.equalsIgnoreCase("CA Approved by UW1"))
-                    {
-                        statuscode = Integer.parseInt(CAApprovedbyUW1Statusid);
-                    }
-                    else if(status.equalsIgnoreCase("CA Rejected"))
-                    {
-                        statuscode = Integer.parseInt(CARejectedStatusid);
-                    }
-                    else if(status.equalsIgnoreCase("CA Approved"))
-                    {
-                        statuscode = Integer.parseInt(CAApprovedStatusid);
-                    }
-                    else if(status.equalsIgnoreCase("CA Approved by UW2"))
-                    {
-                        statuscode = Integer.parseInt(CAApprovedbyUW2Statusid);
-                    }
-                    else if(status.equalsIgnoreCase("CA Rejected by UW2"))
-                    {
-                        statuscode = Integer.parseInt(CARejectedbyUW2Statusid);
-                    }
 
+                    statuscode = Integer.parseInt(status);
+                    log.info("status code"+statuscode);
                 }
 
                 /*log.info("Before :{}",completedCasesAppNoList.size());
@@ -1246,7 +1239,7 @@ public class PEDBExecute extends BusinessControl
         return  searchViewList;
     }
 
-    public List<PEInbox> getPESearchResultSetList(String query)
+    public List<PEInbox> getPESearchResultSetList(String query,String tableName)
     {
         List<PEInbox> peSearchResultSetList = new ArrayList<PEInbox>();
 
@@ -1266,6 +1259,8 @@ public class PEDBExecute extends BusinessControl
             rs = statement.executeQuery();
 
             log.info("resultset is : {}", rs);
+
+            tableName = tableName.substring(tableName.indexOf("_")+1,tableName.length());
 
             while (rs.next())
             {
@@ -1289,7 +1284,8 @@ public class PEDBExecute extends BusinessControl
                 peInbox.setTotaltimespentatprocess(rs.getInt("TotalTimeAtProcess"));
                 peInbox.setTotaltimespentatuser(rs.getInt("TotalTimeAtUser"));
                 peInbox.setFwobnumber(rs.getString("F_WobNum"));
-
+                peInbox.setStep(rs.getString("F_StepName"));
+                peInbox.setQueuename(tableName);
                 peSearchResultSetList.add(peInbox);
 
                 log.info("resultQueryList pedbexecute class is : {}",peSearchResultSetList);

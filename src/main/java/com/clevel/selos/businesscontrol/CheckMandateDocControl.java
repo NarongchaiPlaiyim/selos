@@ -209,15 +209,15 @@ public class CheckMandateDocControl extends BusinessControl{
             mandateDocView = (MandateDocView)BRMSentry.getValue();
             if(DocMandateType.MANDATE.value() == mandateDocView.getDocMandateType().value()){
                 log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Mandatory Documents");
-                checkMandatoryDocView = checkMandateDocTransform.transformToCheckMandatoryDocView(mandateDocView, 3);
+                checkMandatoryDocView = checkMandateDocTransform.transformToCheckMandatoryDocView(mandateDocView, 2);
                 mandatoryDocumentsList.add(checkMandatoryDocView);
             } else if(DocMandateType.OPTIONAL.value() == mandateDocView.getDocMandateType().value()){
                 log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Optional Documents");
-                optionalDocView = checkMandateDocTransform.transformToCheckOptionalDocView(mandateDocView, 3);
+                optionalDocView = checkMandateDocTransform.transformToCheckOptionalDocView(mandateDocView, 2);
                 optionalDocumentsList.add(optionalDocView);
             } else {
                 log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Other Documents");
-                checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(mandateDocView, 3);
+                checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(mandateDocView, 2);
                 otherDocumentsList.add(checkOtherDocView);
             }
         }
@@ -229,7 +229,7 @@ public class CheckMandateDocControl extends BusinessControl{
         for (Map.Entry<String, List<ECMDetail>> ECMentry : listECMDetailMap.entrySet()) {
             ecmDetailList = Util.safetyList((List<ECMDetail>)ECMentry.getValue());
             log.debug("-- ECMDocType {} = {}.", ECMentry.getKey(), "Other Documents");
-            checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(ecmDetailList, 3, userToken);
+            checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(ecmDetailList, 2, userToken);
             otherDocumentsList.add(checkOtherDocView);
         }
 

@@ -57,16 +57,16 @@
                         <p:outputLabel value="#{mandatoryItem.documentType}"/>
                     </td>
                     <td >
-                        <ui:repeat value="#{mandatoryItem.BRMSDocument}" var="mandatoryBrmsDocument" varStatus="rowMandatoryBRMSIndex">
-                            <p:outputLabel value="#{mandatoryBrmsDocument}"/>
+                        <ui:repeat value="#{mandatoryItem.BRMSDocumentTypeList}" var="mandatoryBrmsDocument" varStatus="rowMandatoryBRMSIndex">
+                            <p:outputLabel value="#{mandatoryBrmsDocument.BRMSDocType}"/>
                             <h:panelGroup rendered="#{rowMandatoryBRMSIndex.last}">
                                 <br/>
                             </h:panelGroup>
                         </ui:repeat>
                     </td>
                     <td >
-                        <ui:repeat value="#{mandatoryItem.owners}" var="mandatoryOwners" varStatus="rowMandatoryOwnersIndex">
-                            <p:outputLabel value="#{mandatoryOwners}"/>
+                        <ui:repeat value="#{mandatoryItem.ownewList}" var="mandatoryOwners" varStatus="rowMandatoryOwnersIndex">
+                            <p:outputLabel value="#{mandatoryOwners.custName}"/>
                             <h:panelGroup rendered="#{rowMandatoryOwnersIndex.last}">
                                 <br/>
                             </h:panelGroup>
@@ -83,24 +83,24 @@
                         </ui:repeat>
                     </td>
                     <td class="center">
-                        <p:selectOneRadio layout="grid" value="#{mandatoryItem.complete}" columns="1">
+                        <p:selectOneRadio layout="grid" value="#{mandatoryItem.complete}" columns="1" disabled="#{checkMandateDoc.checkMandateDocView.completeFlag}">
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')}" itemValue="1"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.no')}" itemValue="2"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.enable')}" itemValue="3"/>
                         </p:selectOneRadio>
                     </td>
                     <td class="left">
-                        <h:selectBooleanCheckbox value="#{mandatoryItem.incomplete}" />
+                        <h:selectBooleanCheckbox value="#{mandatoryItem.incomplete}" disabled="#{checkMandateDoc.checkMandateDocView.reasonFlag} "/>
                         <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.a')}"/> <br />
-                        <h:selectBooleanCheckbox value="#{mandatoryItem.indistinct}" />
+                        <h:selectBooleanCheckbox value="#{mandatoryItem.indistinct}" disabled="#{checkMandateDoc.checkMandateDocView.reasonFlag} "/>
                         <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.b')}"/> <br />
-                        <h:selectBooleanCheckbox value="#{mandatoryItem.incorrect}" />
+                        <h:selectBooleanCheckbox value="#{mandatoryItem.incorrect}"  disabled="#{checkMandateDoc.checkMandateDocView.reasonFlag} "/>
                         <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.c')}"/> <br />
-                        <h:selectBooleanCheckbox value="#{mandatoryItem.expire}" />
+                        <h:selectBooleanCheckbox value="#{mandatoryItem.expire}"     disabled="#{checkMandateDoc.checkMandateDocView.reasonFlag} "/>
                         <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.d')}"/>
                     </td>
                     <td class="center">
-                        <p:inputTextarea value="#{mandatoryItem.remark}" rows="3" cols="25" />
+                        <p:inputTextarea value="#{mandatoryItem.remark}" rows="3" cols="25" disabled="#{checkMandateDoc.checkMandateDocView.remarkFlag} "/>
                     </td>
                 </tr>
             </ui:repeat>
