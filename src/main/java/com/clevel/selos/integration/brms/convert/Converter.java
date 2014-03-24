@@ -29,7 +29,7 @@ public class Converter implements Serializable {
     }
 
     protected String getDecisionID(String applicationNo, String statusCode){
-        logger.debug("getDecisionID with applicationNo {} and statusCode",applicationNo, statusCode);
+        logger.debug("getDecisionID with applicationNo {} and statusCode: {}", applicationNo, statusCode);
         String decisionID = new StringBuilder("SELOS").append(applicationNo).append(statusCode == null ? "" : statusCode).append("_").append(simpleDateFormat.format(Calendar.getInstance().getTime())).toString();
         logger.debug("return decisionID", decisionID);
         return decisionID;

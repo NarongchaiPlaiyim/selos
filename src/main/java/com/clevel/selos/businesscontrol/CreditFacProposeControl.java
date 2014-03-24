@@ -477,7 +477,7 @@ public class CreditFacProposeControl extends BusinessControl {
 
                 BigDecimal limit = BigDecimal.ZERO;
                 int tenor = newCreditTierDetailView.getTenor();
-                BigDecimal installment;
+                BigDecimal installment = BigDecimal.ZERO;
 
                 if (creditDetailView.getLimit() != null) {
                     limit = creditDetailView.getLimit();
@@ -490,7 +490,7 @@ public class CreditFacProposeControl extends BusinessControl {
                         Util.subtract(Util.add(BigDecimal.ONE, interestPerMonth).pow(tenor), BigDecimal.ONE));
                 log.info("installment : {}", installment);
 
-                if(installment!=null){
+                if(installment != null){
                     installment.setScale(2, RoundingMode.HALF_UP);
                 }
 
@@ -540,7 +540,6 @@ public class CreditFacProposeControl extends BusinessControl {
             }
         }
         log.debug("End of 'ExistingCreditDetailList' sequence number = {}", sequenceNumber);
-
         return proposeCreditDetailViewList;
     }
 
