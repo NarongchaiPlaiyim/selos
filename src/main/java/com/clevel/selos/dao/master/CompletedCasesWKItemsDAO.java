@@ -69,7 +69,7 @@ public class CompletedCasesWKItemsDAO extends GenericDAO<CompletedCasesWKItems,S
             if(startfromdate != null)
             {
 
-                criteria.add(Restrictions.ge("receiveddate",formatter.format(startfromdate)))  ; //start from date
+                criteria.add(Restrictions.ge("receiveddate",startfromdate))  ; //formatter.format(startfromdate)start from date
             }
             if(starttodate != null)
             {
@@ -80,12 +80,12 @@ public class CompletedCasesWKItemsDAO extends GenericDAO<CompletedCasesWKItems,S
                 cal.set(Calendar.SECOND,59);
                 starttodate = cal.getTime();
 
-                criteria.add(Restrictions.le("receiveddate",formatter.format(starttodate)))  ; //start to date
+                criteria.add(Restrictions.le("receiveddate",starttodate));//formatter.format(starttodate)))  ; //start to date
             }
             if(terminatefromdate != null)
             {
 
-                criteria.add(Restrictions.ge("createdate",formatter.format(terminatefromdate)))  ; // terminate from date
+                criteria.add(Restrictions.ge("createdate",terminatefromdate))  ; // terminate from date
             }
             if(terminatetodate != null)
             {
@@ -96,7 +96,7 @@ public class CompletedCasesWKItemsDAO extends GenericDAO<CompletedCasesWKItems,S
                 cal.set(Calendar.SECOND,59);
                 terminatetodate = cal.getTime();
 
-                criteria.add(Restrictions.le("createdate",formatter.format(terminatetodate)))  ; // terminate to date
+                criteria.add(Restrictions.le("createdate",terminatetodate))  ; // terminate to date
             }
 
             log.info("criteria is :: {}", criteria.toString());

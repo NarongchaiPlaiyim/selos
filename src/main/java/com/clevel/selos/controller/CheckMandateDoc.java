@@ -62,13 +62,14 @@ public class CheckMandateDoc implements Serializable {
         log.info("-- onCreation.");
         String result = null;
         try{
-            workCaseId = 481L;
-            checkMandateDocView = checkMandateDocControl.getMandateDocView(workCaseId);
+            workCaseId = 4L;
+            checkMandateDocView = null;//checkMandateDocControl.getMandateDocView(workCaseId);
             if(!Util.isNull(checkMandateDocView)){
                 log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
             } else {
                 log.debug("-- Find by work case id = {} CheckMandateDocView is {}   ", workCaseId, checkMandateDocView);
                 checkMandateDocView = new CheckMandateDocView();
+                checkMandateDocView.readOnly();
                 log.debug("-- CheckMandateDocView[New] created");
             }
         } catch (ECMInterfaceException e) {

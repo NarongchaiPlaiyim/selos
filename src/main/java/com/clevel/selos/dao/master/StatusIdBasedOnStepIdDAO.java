@@ -8,6 +8,8 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
+
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import javax.inject.Inject;
@@ -38,26 +40,30 @@ public class StatusIdBasedOnStepIdDAO extends GenericDAO<StatusIdBasedOnStepId,S
             {
                 log.info("controller comes in if condition of stepid value is greater than 0 ::{}",stepidd);
 
-                    Criteria criteria = getSession().createCriteria(StatusIdBasedOnStepId.class);
+                Criteria criteria = getSession().createCriteria(StatusIdBasedOnStepId.class);
 
-                    criteria.setProjection(Projections.projectionList().add(Projections.property("statusid"),"statusid")) ;
+                criteria.setProjection(Projections.projectionList().add(Projections.property("statusid"),"statusid")) ;
 
-                    criteria.add(Restrictions.eq("stepid",stepidd)).setResultTransformer(Transformers.aliasToBean(StatusIdBasedOnStepId.class));
+                criteria.add(Restrictions.eq("stepid",stepidd)).setResultTransformer(Transformers.aliasToBean(StatusIdBasedOnStepId.class));
 
-                    statusIdBasedOnStepIdList = criteria.list();
+                statusIdBasedOnStepIdList = criteria.list();
 
-                    log.info("statusIdBasedOnStepIdListtttttttt  size is : ::::: {}",statusIdBasedOnStepIdList.size());
+                log.info("statusIdBasedOnStepIdListtttttttt  size is : ::::: {}",statusIdBasedOnStepIdList.size());
 
-                    Iterator iterator = statusIdBasedOnStepIdList.iterator();
+                statusIdBasedOnStepIdList = new ArrayList(new HashSet(statusIdBasedOnStepIdList));
 
-                    while(iterator.hasNext() == true)
-                    {
-                        StatusIdBasedOnStepId statusIdBasedOnStepId = new StatusIdBasedOnStepId();
+                log.info("statusIdBasedOnStepIdListtttttttt  size is after : ::::: {}",statusIdBasedOnStepIdList.size());
 
-                        statusIdBasedOnStepId = (StatusIdBasedOnStepId)iterator.next();
+                Iterator iterator = statusIdBasedOnStepIdList.iterator();
 
-                        log.info("status id is ::::::::::: {}",statusIdBasedOnStepId.getStatusid());
-                    }
+                while(iterator.hasNext() == true)
+                {
+                    StatusIdBasedOnStepId statusIdBasedOnStepId = new StatusIdBasedOnStepId();
+
+                    statusIdBasedOnStepId = (StatusIdBasedOnStepId)iterator.next();
+
+                    log.info("status id is ::::::::::: {}",statusIdBasedOnStepId.getStatusid());
+                }
 
             }
             return statusIdBasedOnStepIdList;
