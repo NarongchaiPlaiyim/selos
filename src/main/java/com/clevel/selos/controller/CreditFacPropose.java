@@ -319,7 +319,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 log.info("workCase :: {}",workCase.getId());
                 if(!Util.isNull(workCase)){
                     productGroup = workCase.getProductGroup();
-//                    log.info("productGroup :: {}",productGroup.getId());
                 }
 
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
@@ -348,22 +347,22 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     notRetrievePricing = false;
                 } else { // for show on add new only !!
                     newCreditFacilityView = new NewCreditFacilityView();
-                    newCreditFacilityView.setWCNeed(BigDecimal.ZERO);
-                    newCreditFacilityView.setTotalWcDebit(BigDecimal.ZERO);
-                    newCreditFacilityView.setTotalWcTmb(BigDecimal.ZERO);
-                    newCreditFacilityView.setWCNeedDiffer(BigDecimal.ZERO);
-                    newCreditFacilityView.setCase1WcLimit(BigDecimal.ZERO);
-                    newCreditFacilityView.setCase1WcMinLimit(BigDecimal.ZERO);
-                    newCreditFacilityView.setCase1Wc50CoreWc(BigDecimal.ZERO);
-                    newCreditFacilityView.setCase1WcDebitCoreWc(BigDecimal.ZERO);
-                    newCreditFacilityView.setCase2WcLimit(BigDecimal.ZERO);
-                    newCreditFacilityView.setCase2WcMinLimit(BigDecimal.ZERO);
-                    newCreditFacilityView.setCase2Wc50CoreWc(BigDecimal.ZERO);
-                    newCreditFacilityView.setCase2WcDebitCoreWc(BigDecimal.ZERO);
-                    newCreditFacilityView.setCase3WcLimit(BigDecimal.ZERO);
-                    newCreditFacilityView.setCase3WcMinLimit(BigDecimal.ZERO);
-                    newCreditFacilityView.setCase3Wc50CoreWc(BigDecimal.ZERO);
-                    newCreditFacilityView.setCase3WcDebitCoreWc(BigDecimal.ZERO);
+//                    newCreditFacilityView.setWCNeed(BigDecimal.ZERO);
+//                    newCreditFacilityView.setTotalWcDebit(BigDecimal.ZERO);
+//                    newCreditFacilityView.setTotalWcTmb(BigDecimal.ZERO);
+//                    newCreditFacilityView.setWCNeedDiffer(BigDecimal.ZERO);
+//                    newCreditFacilityView.setCase1WcLimit(BigDecimal.ZERO);
+//                    newCreditFacilityView.setCase1WcMinLimit(BigDecimal.ZERO);
+//                    newCreditFacilityView.setCase1Wc50CoreWc(BigDecimal.ZERO);
+//                    newCreditFacilityView.setCase1WcDebitCoreWc(BigDecimal.ZERO);
+//                    newCreditFacilityView.setCase2WcLimit(BigDecimal.ZERO);
+//                    newCreditFacilityView.setCase2WcMinLimit(BigDecimal.ZERO);
+//                    newCreditFacilityView.setCase2Wc50CoreWc(BigDecimal.ZERO);
+//                    newCreditFacilityView.setCase2WcDebitCoreWc(BigDecimal.ZERO);
+//                    newCreditFacilityView.setCase3WcLimit(BigDecimal.ZERO);
+//                    newCreditFacilityView.setCase3WcMinLimit(BigDecimal.ZERO);
+//                    newCreditFacilityView.setCase3Wc50CoreWc(BigDecimal.ZERO);
+//                    newCreditFacilityView.setCase3WcDebitCoreWc(BigDecimal.ZERO);
                 }
 
             } catch (Exception ex) {
@@ -822,9 +821,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     public void onDeleteCreditInfo() {
         log.debug("delete :: rowIndex :: {}", rowIndex);
         int used;
-
         log.info("onDeleteCreditInfo ::: seq is : {} " + newCreditDetailSelected.getSeq());
-        log.info("onDeleteCreditInfo ::: use is : {} " + hashSeqCredit.get(newCreditDetailSelected.getSeq()));
+
 
         used = hashSeqCredit.get(newCreditDetailSelected.getSeq());
 
@@ -854,10 +852,12 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         if (!Util.isNull(proposeCreditDetailViewList)) {
             for (ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViewList) {
                 seq = proposeCreditDetailView.getSeq();
+                log.info("seq :: {}",seq);
                 useCount = hashSeqCredit.get(seq);
                 if (proposeCreditDetailView.getTypeOfStep().equals("N")) {
                     proposeCreditDetailView.setUseCount(useCount);
                 }
+
             }
         }
     }
@@ -1648,7 +1648,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onSaveCreditFacPropose() {
         log.debug("onSaveCreditFacPropose ::: ModeForDB  {}", modeForDB);
-//        onSetInUsedProposeCreditDetail();
+        onSetInUsedProposeCreditDetail();
         try {
             //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
             creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
@@ -1658,7 +1658,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             creditFacProposeControl.calculateTotalForBRMS(newCreditFacilityView);
             // Save NewCreditFacility, ProposeCredit, Collateral, Guarantor
             newCreditFacilityView = creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
-//            creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
             onCreation();
 
             exSummaryControl.calForCreditFacility(workCaseId);

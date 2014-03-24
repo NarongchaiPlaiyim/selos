@@ -998,7 +998,7 @@ public class CreditFacProposeControl extends BusinessControl {
 
         if (deleteGuarantorIdList != null && deleteGuarantorIdList.size() > 0) {
             List<NewGuarantorDetail> deleteGuarantorList = new ArrayList<NewGuarantorDetail>();
-            for (Long id : deleteGuarantorIdList) {
+            for (Long id : deleteGuarantorIdList){
                 deleteGuarantorList.add(newGuarantorDetailDAO.findGuarantorById(id, ProposeType.P));
             }
             newGuarantorDetailDAO.delete(deleteGuarantorList);
