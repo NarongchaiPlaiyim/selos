@@ -819,29 +819,29 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     }
 
     public void onDeleteCreditInfo() {
-        log.debug("delete :: rowIndex :: {}", rowIndex);
-        int used;
-        log.info("onDeleteCreditInfo ::: seq is : {} " + newCreditDetailSelected.getSeq());
-
-
-        used = hashSeqCredit.get(newCreditDetailSelected.getSeq());
-
-        log.info("before del use is  " + used);
-
-        if (used <= 0) {
-            log.info("used ::: {} ", used);
+//        log.debug("delete :: rowIndex :: {}", rowIndex);
+//        int used;
+//        log.info("onDeleteCreditInfo ::: seq is : {} " + newCreditDetailSelected.getSeq());
+//
+//
+//        used = hashSeqCredit.get(newCreditDetailSelected.getSeq());
+//
+//        log.info("before del use is  " + used);
+//
+//        if (used <= 0) {
+//            log.info("used ::: {} ", used);
             if (newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId() != 0) {
                 deleteCreditIdList.add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
             }
 
-            newCreditFacilityView.getNewCreditDetailViewList().remove(newCreditDetailSelected);
-        } else {
-            log.info("used::: {}", used);
-            messageHeader = msg.get("app.propose.exception");
-            message = msg.get("app.propose.error.delete.credit");
-            severity = MessageDialogSeverity.ALERT.severity();
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        }
+//            newCreditFacilityView.getNewCreditDetailViewList().remove(newCreditDetailSelected);
+//        } else {
+//            log.info("used::: {}", used);
+//            messageHeader = msg.get("app.propose.exception");
+//            message = msg.get("app.propose.error.delete.credit");
+//            severity = MessageDialogSeverity.ALERT.severity();
+//            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//        }
 
 
     }
@@ -1648,7 +1648,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onSaveCreditFacPropose() {
         log.debug("onSaveCreditFacPropose ::: ModeForDB  {}", modeForDB);
-        onSetInUsedProposeCreditDetail();
+//        onSetInUsedProposeCreditDetail();
         try {
             //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
             creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);

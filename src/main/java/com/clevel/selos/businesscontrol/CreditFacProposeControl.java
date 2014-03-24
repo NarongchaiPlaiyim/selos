@@ -3,10 +3,8 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
-import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
@@ -758,8 +756,9 @@ public class CreditFacProposeControl extends BusinessControl {
         log.debug("findByWorkCaseId :: newCreditFacility : {}", newCreditFacility);
         if (newCreditFacility == null) {
             newCreditFacility = new NewCreditFacility();
-            WorkCase workCase = new WorkCase();
-            workCase.setId(workCaseId);
+//            WorkCase workCase = new WorkCase();
+//            workCase.setId(workCaseId);
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
             newCreditFacility.setWorkCase(workCase);
         }
         newCreditFacility.setWcNeed(wcNeed);
@@ -922,56 +921,6 @@ public class CreditFacProposeControl extends BusinessControl {
             }
         }
     }
-
-    // Call COMSInterface
-    public AppraisalDataResult toCallComsInterface(final String jobId) {
-        log.debug("onCallRetrieveAppraisalReportInfo begin jobId is  :: {}", jobId);
-        AppraisalDataResult appraisalDataResult = null;
-        try {
-            appraisalDataResult = comsInterface.getAppraisalData(getCurrentUserID(), jobId);
-
-            if (appraisalDataResult != null) {
-                log.debug("-- appraisalDataResult.getActionResult() ::: {}", appraisalDataResult.getActionResult());
-            }
-
-        } catch (COMSInterfaceException e) {
-            log.error("Exception while get COMS Appraisal data!", e);
-            throw e;
-        } catch (Exception e) {
-            log.error("Exception while get CSI data!", e);
-        }
-        return appraisalDataResult;
-    }
-
-    //call BRMS
-//    public StandardPricingResponse getPriceFeeInterest(final long workCaseId) {
-//        log.debug("getPriceFeeInterest begin workCaseId is  :: {}", workCaseId);
-//        StandardPricingResponse standardPricingResponse = null;
-//        List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
-//        NewFeeDetailView newFeeDetailView = new NewFeeDetailView();
-//        try {
-//            standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
-//            log.debug("getPriceFeeInterest ::::workCase :: {}",workCaseId);
-//
-//            if (ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
-//
-//            }
-//
-////            if (standardPricingResponse != null) {
-////                log.debug("-- standardPricingResponse.getActionResult() ::: {}", standardPricingResponse.getActionResult().toString());
-////                log.debug("-- standardPricingResponse.getReason() ::: {}", standardPricingResponse.getReason());
-////                log.debug("-- standardPricingResponse.getPricingFeeList ::: {}", standardPricingResponse.getPricingFeeList().size());
-////                log.debug("-- standardPricingResponse.getPricingInterest ::: {}", standardPricingResponse.getPricingInterest().toString());
-////            }
-//
-//        } catch (BRMSInterfaceException e) {
-//            log.error("Exception while get getPriceFeeInterest Appraisal data!", e);
-//            throw e;
-//        } catch (Exception e) {
-//            log.error("Exception while get getPriceFeeInterest data!", e);
-//        }
-//        return standardPricingResponse;
-//    }
 
     public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {
         log.info("deleteAllApproveByIdList()");
