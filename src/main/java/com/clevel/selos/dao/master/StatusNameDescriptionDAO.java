@@ -26,7 +26,7 @@ public class StatusNameDescriptionDAO extends GenericDAO<StatusNameDescription,S
     }
 
 
-    public String getStatusNameDescriptions(int statusid)
+    public List<StatusNameDescription> getStatusNameDescriptions(int statusid)
     {
         List<StatusNameDescription> statusnamedescriptions = new ArrayList<StatusNameDescription>();
 
@@ -36,7 +36,7 @@ public class StatusNameDescriptionDAO extends GenericDAO<StatusNameDescription,S
 
         Criteria criteria = getSession().createCriteria(StatusNameDescription.class);
 
-        criteria.setProjection( Projections.projectionList().add(Projections.property("name"),"name")) ;
+        criteria.setProjection( Projections.projectionList().add(Projections.property("name"),"name").add(Projections.property("id"),"id")) ;
 
         criteria.add(Restrictions.eq("id", statusid)).setResultTransformer(Transformers.aliasToBean(StatusNameDescription.class));
 
@@ -49,7 +49,7 @@ public class StatusNameDescriptionDAO extends GenericDAO<StatusNameDescription,S
 
         log.info("iterator hasNext method return type : {}",iterator.hasNext());
 
-        List<String> statusNameDescriptionlist = new ArrayList<String>();
+        List<StatusNameDescription> statusNameDescriptionlist = new ArrayList<StatusNameDescription>();
 
         while(iterator.hasNext() == true)
         {
@@ -61,13 +61,13 @@ public class StatusNameDescriptionDAO extends GenericDAO<StatusNameDescription,S
 
             log.info("statusName Description is : {}",statusNameDescription.getName());
 
-            statusNameDescriptionlist.add(statusNameDescription.getName()) ;
+            statusNameDescriptionlist.add(statusNameDescription) ;
 
-             statusdescription =  statusNameDescription.getName();
+            statusdescription =  statusNameDescription.getName();
         }
 
         log.info("stepnameidlit string values : {}",statusNameDescriptionlist.size());
 
-        return statusdescription;
+        return statusNameDescriptionlist;
     }
 }

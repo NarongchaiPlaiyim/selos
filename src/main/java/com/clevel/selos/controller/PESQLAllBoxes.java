@@ -144,6 +144,15 @@ public class PESQLAllBoxes implements Serializable
             session.setAttribute("queueName", inboxViewSelectItem.getQueuename());
         }
 
+        if(Util.isNull(inboxViewSelectItem.getFetchType()))
+        {
+            session.setAttribute("fetchType",0);
+        }
+        else
+        {
+            session.setAttribute("fetchType",inboxViewSelectItem.getFetchType());
+        }
+
         AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(inboxViewSelectItem.getStepId(), inboxViewSelectItem.getFwobnumber());
         session.setAttribute("appHeaderInfo", appHeaderView);
 
