@@ -382,14 +382,15 @@ public class BaseController implements Serializable {
         try{
             HttpSession session = FacesUtil.getSession(true);
             if(session.getAttribute("workCaseId") != null){
-                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+                workCaseId = (Long)session.getAttribute("workCaseId");
             }
 
             if(session.getAttribute("workCasePreScreenId") != null){
-                workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+                workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
             }
 
             fullApplicationControl.requestAppraisalBDM(workCasePreScreenId, workCaseId);
+            log.debug("onRequestAppraisal ::: save Appraisal Flag completed. Redirect to appraisalRequest.jsf");
             FacesUtil.redirect("/site/appraisalRequest.jsf");
 
         } catch (Exception ex){
@@ -401,13 +402,17 @@ public class BaseController implements Serializable {
     }
 
     public void onSubmitAppraisalAdmin(){
-        log.debug("onRequestAppraisal ( submit to aad admin )");
+        log.debug("onRequestAppraisal ( submit to AAD admin )");
         long workCasePreScreenId = 0;
         long workCaseId = 0;
         try{
             HttpSession session = FacesUtil.getSession(true);
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+            if(session.getAttribute("workCaseId") != null){
+                workCaseId = (Long)session.getAttribute("workCaseId");
+            }
+            if(session.getAttribute("workCasePreScreenId") != null){
+                workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
+            }
 
             fullApplicationControl.requestAppraisal(workCasePreScreenId, workCaseId);
 

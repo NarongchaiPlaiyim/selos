@@ -1,11 +1,14 @@
 package com.clevel.selos.model.report;
 
+import com.clevel.selos.model.view.ExistingCreditTypeDetailView;
 import com.clevel.selos.report.ReportModel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ExistingCollateralBorrowerDecisionReport extends ReportModel{
 
@@ -27,6 +30,8 @@ public class ExistingCollateralBorrowerDecisionReport extends ReportModel{
     private String mortgageType;
     private BigDecimal appraisalValue;
     private BigDecimal mortgageValue;
+    private List<ExistingCreditTypeDetailView> existingCreditTypeDetailViews;
+    private String path;
 
     public ExistingCollateralBorrowerDecisionReport() {
         potentialCollateral = getDefaultString();
@@ -46,6 +51,7 @@ public class ExistingCollateralBorrowerDecisionReport extends ReportModel{
         mortgageType = getDefaultString();
         appraisalValue = getDefaultBigDecimal();
         mortgageValue = getDefaultBigDecimal();
+        existingCreditTypeDetailViews = new ArrayList<ExistingCreditTypeDetailView>();
     }
 
     public int getCount() {
@@ -192,9 +198,27 @@ public class ExistingCollateralBorrowerDecisionReport extends ReportModel{
         this.remark = remark;
     }
 
+    public List<ExistingCreditTypeDetailView> getExistingCreditTypeDetailViews() {
+        return existingCreditTypeDetailViews;
+    }
+
+    public void setExistingCreditTypeDetailViews(List<ExistingCreditTypeDetailView> existingCreditTypeDetailViews) {
+        this.existingCreditTypeDetailViews = existingCreditTypeDetailViews;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("accountNumber", accountNumber)
+                .append("count", count)
                 .append("potentialCollateral", potentialCollateral)
                 .append("collateralType", collateralType)
                 .append("owner", owner)
@@ -204,14 +228,14 @@ public class ExistingCollateralBorrowerDecisionReport extends ReportModel{
                 .append("collateralLocation", collateralLocation)
                 .append("remark", remark)
                 .append("cusName", cusName)
-                .append("accountNumber", accountNumber)
                 .append("accountSuffix", accountSuffix)
+                .append("productProgram", productProgram)
                 .append("creditFacility", creditFacility)
                 .append("limit", limit)
                 .append("mortgageType", mortgageType)
                 .append("appraisalValue", appraisalValue)
                 .append("mortgageValue", mortgageValue)
-                .append("productProgram", productProgram)
+                .append("existingCreditTypeDetailViews", existingCreditTypeDetailViews)
                 .toString();
     }
 }

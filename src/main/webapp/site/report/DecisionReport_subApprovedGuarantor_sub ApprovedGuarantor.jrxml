@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subApprovedGuarantor_sub ApprovedGuarantor" pageWidth="288" pageHeight="802" columnWidth="288" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1a7e5f0d-ac61-4e8e-94fc-bc91083a284d">
+	<property name="ireport.zoom" value="2.143588810000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="detail" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF" hAlign="Center" vAlign="Middle" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<field name="accountName" class="java.lang.String">
+		<fieldDescription><![CDATA[accountName]]></fieldDescription>
+	</field>
+	<field name="accountNumber" class="java.lang.String"/>
+	<field name="accountSuf" class="java.lang.String">
+		<fieldDescription><![CDATA[accountSuf]]></fieldDescription>
+	</field>
+	<field name="productProgramView" class="java.lang.Object">
+		<fieldDescription><![CDATA[productProgramView.name]]></fieldDescription>
+	</field>
+	<field name="creditFacilityView" class="java.lang.Object">
+		<fieldDescription><![CDATA[creditFacilityView.name]]></fieldDescription>
+	</field>
+	<field name="limit" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[limit]]></fieldDescription>
+	</field>
+	<field name="guaranteeAmount" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[guaranteeAmount]]></fieldDescription>
+	</field>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="a991e360-54c6-421c-a3bd-d3111eaa1a9f" style="detail" x="215" y="0" width="75" height="20"/>
+				<box>
+					<leftPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Guarantee Amount: "+$F{guaranteeAmount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6a108bbb-f378-4651-8a9e-05b26dd404e7" style="detail" x="95" y="0" width="89" height="20"/>
+				<box>
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{productProgramView}+"\n"+
+$F{creditFacilityView}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c045fa7c-cd69-4555-9261-4813d3b126ee" style="detail" x="184" y="0" width="31" height="20"/>
+				<box>
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="529f9285-b7f1-486c-a21d-76d9a78c2353" style="detail" x="0" y="0" width="95" height="20"/>
+				<box>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{accountName}+"\n"+
+"Acc No.: "+$F{accountNumber}+", "+"Suf.: "+$F{accountSuf}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

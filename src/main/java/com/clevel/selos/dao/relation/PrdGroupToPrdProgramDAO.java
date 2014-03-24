@@ -34,7 +34,7 @@ public class PrdGroupToPrdProgramDAO extends GenericDAO<PrdGroupToPrdProgram, In
         return list;
 
     }
-    public List<PrdGroupToPrdProgram> getListPrdProByPrdGroupForExistCredit() {
+    public List<PrdGroupToPrdProgram> getListPrdProByPrdGroupForExistCredit(ProductGroup productGroup) {
 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("addExistingCredit", 1));

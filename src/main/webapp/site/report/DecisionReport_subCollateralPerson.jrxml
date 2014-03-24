@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subCollateralRelated" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="29c06dfc-de6e-42d4-a025-18a78946e282">
+	<property name="ireport.zoom" value="1.4641000000000015"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="detail" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF" hAlign="Center" vAlign="Middle" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="summary" mode="Opaque" forecolor="#000000" backcolor="#FCFF79" hAlign="Left" vAlign="Middle" fontSize="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\ProjectSLOS\\selos\\src\\main\\webapp\\site\\report\\"]]></defaultValueExpression>
+	</parameter>
+	<field name="count" class="java.lang.Integer"/>
+	<field name="potentialCollateral" class="java.lang.String">
+		<fieldDescription><![CDATA[potentialCollateral]]></fieldDescription>
+	</field>
+	<field name="collateralType" class="java.lang.String">
+		<fieldDescription><![CDATA[collateralType]]></fieldDescription>
+	</field>
+	<field name="owner" class="java.lang.String">
+		<fieldDescription><![CDATA[owner]]></fieldDescription>
+	</field>
+	<field name="relation" class="java.lang.String">
+		<fieldDescription><![CDATA[relation]]></fieldDescription>
+	</field>
+	<field name="appraisalDate" class="java.util.Date">
+		<fieldDescription><![CDATA[appraisalDate]]></fieldDescription>
+	</field>
+	<field name="collateralNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[collateralNumber]]></fieldDescription>
+	</field>
+	<field name="collateralLocation" class="java.lang.String">
+		<fieldDescription><![CDATA[collateralLocation]]></fieldDescription>
+	</field>
+	<field name="remark" class="java.lang.String">
+		<fieldDescription><![CDATA[remark]]></fieldDescription>
+	</field>
+	<field name="cusName" class="java.lang.String">
+		<fieldDescription><![CDATA[cusName]]></fieldDescription>
+	</field>
+	<field name="productProgram" class="java.lang.String">
+		<fieldDescription><![CDATA[productProgram]]></fieldDescription>
+	</field>
+	<field name="creditFacility" class="java.lang.String">
+		<fieldDescription><![CDATA[creditFacility]]></fieldDescription>
+	</field>
+	<field name="mortgageType" class="java.lang.String">
+		<fieldDescription><![CDATA[mortgageType]]></fieldDescription>
+	</field>
+	<field name="appraisalValue" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[appraisalValue]]></fieldDescription>
+	</field>
+	<field name="mortgageValue" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[mortgageValue]]></fieldDescription>
+	</field>
+	<field name="existingCreditTypeDetailViews" class="java.util.List">
+		<fieldDescription><![CDATA[existingCreditTypeDetailViews]]></fieldDescription>
+	</field>
+	<field name="path" class="java.lang.String">
+		<fieldDescription><![CDATA[path]]></fieldDescription>
+	</field>
+	<columnHeader>
+		<band height="17" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="0a702be2-a33a-4e1d-b7fb-edfbde98f65f" style="header" x="0" y="0" width="23" height="17"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5ea89029-53cc-4c3b-85b8-112e74979d35" style="header" x="23" y="0" width="224" height="17"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Collateral Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9a5790a0-746d-45a4-af33-4b7a60219d2a" style="header" x="507" y="0" width="48" height="17"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[จำนำ/จำนอง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e0cf497b-8218-496a-9f47-91aeb76d9a24" style="header" x="459" y="0" width="48" height="17"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[ราคาประเมิน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f15d43b4-7b98-4e02-bd2e-891528dbebf3" style="header" x="391" y="0" width="68" height="17"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[ประเภทนิติกรรม]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="40b68ffb-6d78-40d8-8bdd-bb81e1bcf7b9" style="header" x="247" y="0" width="144" height="17"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Credit Type]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="44c44b4a-b987-4d2f-89c5-232d2c1814f1" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="23" height="22"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{count}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="8b527ede-d413-4dc7-b880-5ba797cfb120" style="detail" stretchType="RelativeToBandHeight" x="23" y="0" width="112" height="22"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ศักยภาพหลักประกัน :"+"\n"+
+"ประเภทหลักประกัน :"+"\n"+
+"กรรมสิทธิ์ :"+"\n"+
+"ความเกี่ยวพัน :"+"\n"+
+"วันที่ประเมิน :"+"\n"+
+"เลขที่ :"+"\n"+
+"ที่อยู่ :s"+"\n"+
+"หมายเหตุ :"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="957a2c8d-b22a-4d48-9c6d-e2a28776b81c" style="detail" stretchType="RelativeToBandHeight" x="391" y="0" width="68" height="22"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mortgageType}.equals( null ) ? " " :$F{mortgageType}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="c1d74750-aa9f-4d0a-aaaf-c231a926d036" style="detail" stretchType="RelativeToBandHeight" x="459" y="0" width="48" height="22"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{appraisalValue}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="eaadb652-4cd5-4f00-b76c-7f676522c4cf" style="detail" stretchType="RelativeToBandHeight" x="507" y="0" width="48" height="22"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mortgageValue}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="690b2cce-b032-4b2f-bd4d-44ed488c9cb8" style="detail" stretchType="RelativeToBandHeight" x="135" y="0" width="112" height="22"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{potentialCollateral}+"\n"+
+$F{collateralType}+"\n"+
+$F{owner}+"\n"+
+$F{relation}+"\n"+
+$F{appraisalDate}+"\n"+
+$F{collateralNumber}+"\n"+
+$F{collateralLocation}+"\n"+
+$F{remark}]]></textFieldExpression>
+			</textField>
+			<frame>
+				<reportElement uuid="8500e49d-c417-4ae8-8740-730b9e99a6c9" stretchType="RelativeToBandHeight" x="247" y="0" width="144" height="22"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+				</box>
+				<subreport>
+					<reportElement uuid="c3f7b926-db84-4c76-843b-723c8a833fcc" positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="0" width="144" height="22" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
+					<dataSourceExpression><![CDATA[$F{existingCreditTypeDetailViews}.isEmpty()?
+new net.sf.jasperreports.engine.JREmptyDataSource() :
+new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTypeDetailViews})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$F{path} + "DecisionReport_subCollateralPerson_subExtRelated.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+	</detail>
+</jasperReport>

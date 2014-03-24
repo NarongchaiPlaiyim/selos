@@ -50,7 +50,6 @@ public class StandardPricingFeeConverter extends Converter{
             List<AttributeType> attributeTypeList = applicationType.getAttribute();
 
             attributeTypeList.add(getAttributeType(BRMSFieldAttributes.APP_IN_DATE, applicationInfo.getBdmSubmitDate()));
-            attributeTypeList.add(getAttributeType(BRMSFieldAttributes.GUARANTEE_TYPE, applicationInfo.getLoanRequestType()));
             attributeTypeList.add(getAttributeType(BRMSFieldAttributes.TOTAL_TCG_GUARANTEE_AMOUNT, applicationInfo.getTotalTCGGuaranteeAmount()));
             attributeTypeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_INDV_GUARANTOR, applicationInfo.getNumberOfIndvGuarantor()));
             attributeTypeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_JURIS_GUARANTOR, applicationInfo.getNumberOfJurisGuarantor()));
@@ -63,6 +62,9 @@ public class StandardPricingFeeConverter extends Converter{
             ProductType productType = new ProductType();
             productType.setProductType(getValueForInterface(applicationInfo.getProductGroup()));
             productType.setRequestedCreditLimit(getValueForInterface(applicationInfo.getTotalApprovedCredit()));
+
+            List<AttributeType> productTypeAttrList = productType.getAttribute();
+            productTypeAttrList.add(getAttributeType(BRMSFieldAttributes.GUARANTEE_TYPE, applicationInfo.getLoanRequestType()));
 
             List<SELOSProductProgramType> selosProductProgramTypeList = productType.getSelosProductProgram();
 
@@ -90,7 +92,6 @@ public class StandardPricingFeeConverter extends Converter{
             if(selosProductProgramType != null){
                 selosProductProgramTypeList.add(selosProductProgramType);
             }
-
             productTypeList.add(productType);
 
             UnderwritingApprovalRequestType underwritingApprovalRequestType = new UnderwritingApprovalRequestType();
@@ -151,6 +152,7 @@ public class StandardPricingFeeConverter extends Converter{
         pricingFee.setType(feeType.getType());
         if(creditTypeId == null){
             pricingFee.setFeeLevel(FeeLevel.APP_LEVEL);
+            creditTypeId="0"; // prevent NumberFormatException
         } else {
             pricingFee.setFeeLevel(FeeLevel.CREDIT_LEVEL);
         }

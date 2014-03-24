@@ -21,7 +21,6 @@ public class ApprovalHistoryDecisionReport extends ReportModel{
         userName = getDefaultString();
         roleDescription = getDefaultString();
         titleName = getDefaultString();
-        submitDate = getDefaultDate();
         comments = getDefaultString();
     }
 

@@ -19,7 +19,7 @@ import javax.inject.Inject;
 import java.util.Date;
 import java.util.List;
 
-public class AppraisalTransform {
+public class AppraisalTransform extends Transform {
     @Inject
     @SELOS
     Logger log;
