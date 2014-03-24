@@ -1,15 +1,22 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.working.MandateDocDAO;
+import com.clevel.selos.dao.working.WorkCaseAppraisalDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
+import com.clevel.selos.model.DocMandateType;
+import com.clevel.selos.model.db.master.Role;
 import com.clevel.selos.model.db.working.MandateDoc;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +31,19 @@ public class CheckMandateDocTransform extends Transform {
     @Inject
     @Config(name = "interface.mandate.doc.objectStore")
     private String objectStore;
+    @Inject
+    private MandateDocDAO mandateDocDAO;
+    @Inject
+    private WorkCaseDAO workCaseDAO;
+    private WorkCase workCase;
     private CheckMandateDocView checkMandateDocView;
     private MandateDoc mandateDoc;
 
+    private List<CheckMandatoryDocView> mandatoryDocumentsList;
     private CheckMandatoryDocView checkMandatoryDocView;
+    private List<CheckOptionalDocView> optionalDocumentsList;
     private CheckOptionalDocView checkOptionalDocView;
+    private List<CheckOtherDocView> otherDocumentsList;
     private CheckOtherDocView checkOtherDocView;
 
     @Inject
@@ -39,6 +54,9 @@ public class CheckMandateDocTransform extends Transform {
     private void init(){
         log.debug("-- init()");
         checkMandateDocView = null;
+        mandatoryDocumentsList = null;
+        optionalDocumentsList = null;
+        otherDocumentsList = null;
     }
 
     public CheckMandateDocView transformToView(final MandateDoc mandateDoc){
@@ -48,8 +66,66 @@ public class CheckMandateDocTransform extends Transform {
 
     public MandateDoc transformToModel(final CheckMandateDocView checkMandateDocView){
         mandateDoc = new MandateDoc();
+
+
+
+
         return mandateDoc;
     }
+
+    public List<MandateDoc> transformToModel(final CheckMandateDocView checkMandateDocView, final long workCaseId, final Role role){
+        List<MandateDoc> mandateDocList = new ArrayList<MandateDoc>();
+        MandateDoc model = null;
+        workCase = workCaseDAO.findById(workCaseId);
+
+        mandatoryDocumentsList = Util.safetyList(checkMandateDocView.getMandatoryDocumentsList());
+        for(CheckMandatoryDocView view : mandatoryDocumentsList){
+            if(!Util.isZero(view.getId())){
+                model = mandateDocDAO.findById(view.getId());
+            } else {
+                model = new MandateDoc();
+            }
+            model.setWorkCase(workCase);
+            model.setRole(role);
+            model.setEcmDocType(view.getDocumentType());
+            model.setEcmDocTypeDesc("");//todo
+            model.setMandateType(DocMandateType.MANDATE.value());
+            model.setCompleted(view.getComplete());
+            model.setRemark(view.getRemark());
+            model.setReasonIncomplete(Util.isTrue(view.isIncomplete()));
+            model.setReasonIndistinct(Util.isTrue(view.isIndistinct()));
+            model.setReasonIncorrect(Util.isTrue(view.isIncorrect()));
+            model.setReasonExpire(Util.isTrue(view.isExpire()));
+
+            mandateDocList.add(model);
+        }
+
+        optionalDocumentsList = Util.safetyList(checkMandateDocView.getOptionalDocumentsList());
+        for(CheckOptionalDocView view : optionalDocumentsList){
+            if(!Util.isZero(view.getId())){
+                model = mandateDocDAO.findById(view.getId());
+            } else {
+                model = new MandateDoc();
+            }
+            mandateDocList.add(model);
+        }
+
+        otherDocumentsList = Util.safetyList(checkMandateDocView.getOtherDocumentsList());
+        for(CheckOtherDocView view : otherDocumentsList){
+            if(!Util.isZero(view.getId())){
+                model = mandateDocDAO.findById(view.getId());
+            } else {
+                model = new MandateDoc();
+            }
+            mandateDocList.add(model);
+        }
+
+
+        return mandateDocList;
+    }
+
+     //TODO : Creating for ...ROLE[Select from the database]
+
 
     //BRMS and ECM
     public CheckMandatoryDocView transformToCheckMandatoryDocView(final MandateDocView mandateDocView, final List<ECMDetail> ecmDetailList, final int complete, final String token){
@@ -203,13 +279,6 @@ public class CheckMandateDocTransform extends Transform {
     //ECM
     public CheckOtherDocView transformToCheckOtherDocView(final List<ECMDetail> ecmDetailList, final int complete, final String token ){
         checkOtherDocView = new CheckOtherDocView();
-//        //Checking Owners
-//        List<CustomerInfoSimpleView> customerInfoSimpleViewList = Util.safetyList(mandateDocView.getCustomerInfoSimpleViewList());
-//        List<String> ownersList  = new ArrayList<String>();
-//        for(CustomerInfoSimpleView customerInfoSimpleView : customerInfoSimpleViewList){
-//            ownersList.add(customerInfoSimpleView.getCustomerName());
-//        }
-//        checkMandatoryDocView.setOwnewList(ownersList);
 
         List<CheckMandatoryDocFileNameView> fileNameViewList = new ArrayList<CheckMandatoryDocFileNameView>();
         CheckMandatoryDocFileNameView checkMandatoryDocFileNameView = null;
