@@ -858,7 +858,7 @@
         </p:panel>
         </div>
 
-        <p:panel id="pnlButton" rendered="#{prescreenMaker.borrowerInfo.customerEntity.id != 0 and prescreenMaker.enableCustomerForm}" styleClass="center" style="margin-top: 20px; padding-bottom: 10px; border: 0;">
+        <p:panel id="pnlButton" styleClass="center" style="margin-top: 20px; padding-bottom: 10px; border: 0;">
             <p:commandButton
                     id="addCustomer"
                     binding="#{saveCustomerButton}"
@@ -866,6 +866,7 @@
                     styleClass="small"
                     action="#{prescreenMaker.onSaveCustomerInfo}"
                     process="@form"
+                    rendered="#{prescreenMaker.borrowerInfo.customerEntity.id != 0 and prescreenMaker.enableCustomerForm}"
                     update=":customerDlgForm :frmMain :msgBoxSystemMessagePanel"
                     oncomplete=" handlePrescreenCustomerInfoRequest(xhr, status, args)"/>
             <p:commandButton value="Cancel" styleClass="small"
@@ -874,6 +875,7 @@
                 <p:resetInput target=":customerDlgForm" />
             </p:commandButton>
         </p:panel>
+
     </h:form>
 </p:panel>
 <p:blockUI widgetVar="blockUIContentForm" block="customerDlgPanel" trigger=":customerDlgForm:dlgSearchBrBtn :customerDlgForm:addCustomer">
