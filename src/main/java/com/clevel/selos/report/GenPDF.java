@@ -50,7 +50,6 @@ public class GenPDF extends ReportService implements Serializable {
 
     long workCaseId;
 
-    @Inject
     public GenPDF() {
 
     }
