@@ -254,7 +254,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         String linkKey = Util.getLinkKey(getUserDTO().getUserName());
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(), getConfigurationDTO());
-            bpmService.lockCase(queueName, wobNumber);
+            //bpmService.lockCase(queueName, wobNumber);
             log.debug("[{}] lockCase success.", linkKey);
             bpmAuditor.add(getUserDTO().getUserName(), "lockCase", "", now, ActionResult.SUCCESS, "", linkKey);
         } catch (SELOSBPMException e) {
@@ -271,7 +271,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         String linkKey = Util.getLinkKey(getUserDTO().getUserName());
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(), getConfigurationDTO());
-            bpmService.unLockCase(queueName, wobNumber);
+            //bpmService.unLockCase(queueName, wobNumber);
             log.debug("[{}] unLockCase success.", linkKey);
             bpmAuditor.add(getUserDTO().getUserName(), "unLockCase", "", now, ActionResult.SUCCESS, "", linkKey);
         } catch (SELOSBPMException e) {

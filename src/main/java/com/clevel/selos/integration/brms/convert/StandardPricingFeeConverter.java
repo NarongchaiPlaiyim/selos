@@ -152,6 +152,7 @@ public class StandardPricingFeeConverter extends Converter{
         pricingFee.setType(feeType.getType());
         if(creditTypeId == null){
             pricingFee.setFeeLevel(FeeLevel.APP_LEVEL);
+            creditTypeId="0"; // prevent NumberFormatException
         } else {
             pricingFee.setFeeLevel(FeeLevel.CREDIT_LEVEL);
         }
