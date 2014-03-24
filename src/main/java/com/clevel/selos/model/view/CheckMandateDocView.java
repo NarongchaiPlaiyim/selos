@@ -11,6 +11,10 @@ public class CheckMandateDocView implements Serializable{
     private List<CheckOptionalDocView> optionalDocumentsList;
     private List<CheckOtherDocView> otherDocumentsList;
 
+    private boolean isCompleteFlag;
+    private boolean isReasonFlag;
+    private boolean isRemarkFlag;
+
     public CheckMandateDocView() {
         init();
     }
@@ -19,6 +23,15 @@ public class CheckMandateDocView implements Serializable{
         mandatoryDocumentsList = new ArrayList<CheckMandatoryDocView>();
         optionalDocumentsList = new ArrayList<CheckOptionalDocView>();
         otherDocumentsList = new ArrayList<CheckOtherDocView>();
+        isCompleteFlag = false;
+        isReasonFlag = false;
+        isRemarkFlag = false;
+    }
+
+    public void readOnly(){
+        isCompleteFlag = true;
+        isReasonFlag = true;
+        isRemarkFlag = true;
     }
 
     public long getId() {
@@ -51,6 +64,30 @@ public class CheckMandateDocView implements Serializable{
 
     public void setOtherDocumentsList(List<CheckOtherDocView> otherDocumentsList) {
         this.otherDocumentsList = otherDocumentsList;
+    }
+
+    public boolean isCompleteFlag() {
+        return isCompleteFlag;
+    }
+
+    public void setCompleteFlag(boolean completeFlag) {
+        isCompleteFlag = completeFlag;
+    }
+
+    public boolean isReasonFlag() {
+        return isReasonFlag;
+    }
+
+    public void setReasonFlag(boolean reasonFlag) {
+        isReasonFlag = reasonFlag;
+    }
+
+    public boolean isRemarkFlag() {
+        return isRemarkFlag;
+    }
+
+    public void setRemarkFlag(boolean remarkFlag) {
+        isRemarkFlag = remarkFlag;
     }
 
     @Override
