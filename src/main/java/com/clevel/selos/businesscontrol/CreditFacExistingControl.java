@@ -2,12 +2,15 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.CollateralTypeDAO;
 import com.clevel.selos.dao.master.SubCollateralTypeDAO;
+import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.RelationValue;
+import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
@@ -50,6 +53,8 @@ public class CreditFacExistingControl extends BusinessControl {
     @Inject
     ExistingSplitLineDetailTransform existingSplitLineTransform;
     @Inject
+    ProductTransform productTransform;
+    @Inject
     CustomerDAO customerDAO;
     @Inject
     SubCollateralTypeDAO subCollateralTypeDAO;
@@ -79,6 +84,9 @@ public class CreditFacExistingControl extends BusinessControl {
     ExistingCollateralDetailDAO existingCollateralDetailDAO;
     @Inject
     ExistingGuarantorDetailDAO existingGuarantorDetailDAO;
+    @Inject
+    private PrdGroupToPrdProgramDAO prdGroupToPrdProgramDAO;
+
 
     @Inject
     public CreditFacExistingControl() {
@@ -601,5 +609,9 @@ public class CreditFacExistingControl extends BusinessControl {
         log.info("getCustomerListByWorkCaseId ::: customerInfoViewList : {}", customerInfoViewList);
 
         return customerInfoViewList;
+    }
+
+    public List<PrdGroupToPrdProgram> getPrdGroupToPrdProgramProposeByGroup(ProductGroup productGroup) {
+        return prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramPropose(productGroup);
     }
 }
