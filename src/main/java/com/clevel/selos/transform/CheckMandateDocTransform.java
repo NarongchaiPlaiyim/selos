@@ -41,15 +41,6 @@ public class CheckMandateDocTransform {
         checkMandateDocView = null;
     }
 
-    public CheckMandateDocView transformToView(final MandateDoc mandateDoc, final Map<String,List<ECMDetail>> listECMDetailMap, final Map<String, MandateDocView> mandateDocViewMap){
-        log.debug("-- transformToView");
-        init();
-//        mandateDocViewMap.values()
-
-        checkMandateDocView = new CheckMandateDocView();
-        return checkMandateDocView;
-    }
-
     public CheckMandateDocView transformToView(final MandateDoc mandateDoc){
         checkMandateDocView = new CheckMandateDocView();
         return checkMandateDocView;
@@ -60,6 +51,7 @@ public class CheckMandateDocTransform {
         return mandateDoc;
     }
 
+    //BRMS and ECM
     public CheckMandatoryDocView transformToCheckMandatoryDocView(final MandateDocView mandateDocView, final List<ECMDetail> ecmDetailList, final int complete, final String token){
         checkMandatoryDocView = new CheckMandatoryDocView();
         boolean flag = false;
@@ -125,9 +117,7 @@ public class CheckMandateDocTransform {
         return checkOtherDocView;
     }
 
-
-
-
+    //BRMS
     public CheckMandatoryDocView transformToCheckMandatoryDocView(final MandateDocView mandateDocView, final int complete){
         checkMandatoryDocView = new CheckMandatoryDocView();
         //Checking Document Type
@@ -210,18 +200,50 @@ public class CheckMandateDocTransform {
         return checkOtherDocView;
     }
 
-
-
+    //ECM
     public CheckOtherDocView transformToCheckOtherDocView(final List<ECMDetail> ecmDetailList, final int complete, final String token ){
         checkOtherDocView = new CheckOtherDocView();
+//        //Checking Owners
+//        List<CustomerInfoSimpleView> customerInfoSimpleViewList = Util.safetyList(mandateDocView.getCustomerInfoSimpleViewList());
+//        List<String> ownersList  = new ArrayList<String>();
+//        for(CustomerInfoSimpleView customerInfoSimpleView : customerInfoSimpleViewList){
+//            ownersList.add(customerInfoSimpleView.getCustomerName());
+//        }
+//        checkMandatoryDocView.setOwnewList(ownersList);
+
+        List<CheckMandatoryDocFileNameView> fileNameViewList = new ArrayList<CheckMandatoryDocFileNameView>();
+        CheckMandatoryDocFileNameView checkMandatoryDocFileNameView = null;
+        boolean flag = true;
+        for(ECMDetail ecmDetail : ecmDetailList){
+            //Checking Document Type
+            if(flag){
+                if(!Util.isNull(ecmDetail.getTypeNameTH()) && !Util.isZero(ecmDetail.getTypeNameTH().length())){
+                    log.debug("-- EcmDetail.TypeNameTH is not null");
+                    log.debug("-- Document Type is {}", ecmDetail.getTypeNameTH());
+                    checkOtherDocView.setDocumentType(ecmDetail.getTypeNameTH());
+                } else {
+                    log.debug("-- EcmDetail.TypeNameTH is null");
+                    log.debug("-- Document Type is {}", "Empty");
+                    checkOtherDocView.setDocumentType("");
+                }
+                flag = false;
+            }
+
+            //File Name
+            checkMandatoryDocFileNameView = new CheckMandatoryDocFileNameView();
+            checkMandatoryDocFileNameView.setFileName(ecmDetail.getOrgFileName());
+            checkMandatoryDocFileNameView.setUrl(getURLByFNId(ecmDetail.getFnDocId(), token));
+            fileNameViewList.add(checkMandatoryDocFileNameView);
+        }
+        checkMandatoryDocView.setFileNameViewList(fileNameViewList);
+
+        //is Complete
+        checkOtherDocView.setComplete(complete);
         return checkOtherDocView;
     }
 
-
-
-
+    //URL
     private String getURLByFNId(final String FNId, final String token){
         return address+"/getContent?objectStoreName="+objectStore+"&id="+FNId+"&objectType=document&ut=" + token;
     }
-
 }
