@@ -222,11 +222,11 @@ public class NCBInfoControl extends BusinessControl {
         if (customerList != null && customerList.size() > 0) {
             log.debug("getNCBInfoViewByWorkCaseId ::: customerList.size : {}", customerList.size());
             for(Customer cus : customerList){
-                /*if(cus.getNcb() != null){
+                if(cus.getNcb() != null){
                     log.debug("getNCBInfoViewByWorkCaseId ::: ncb : {}", cus.getNcb());
                     NCBInfoView ncbView = ncbTransform.transformToView(cus.getNcb());
                     ncbInfoViewList.add(ncbView);
-                }*/
+                }
             }
         }
         return ncbInfoViewList;
@@ -239,10 +239,10 @@ public class NCBInfoControl extends BusinessControl {
         if (customerList != null && customerList.size() > 0) {
             log.debug("getNCBByWorkCaseId ::: customerList.size : {}", customerList.size());
             for(Customer cus : customerList){
-                /*if(cus.getNcb() != null){
+                if(cus.getNcb() != null){
                     log.debug("getNCBByWorkCaseId ::: ncb : {}", cus.getNcb());
                     ncbList.add(cus.getNcb());
-                }*/
+                }
             }
         }
         return ncbList;

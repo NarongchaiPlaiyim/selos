@@ -5,13 +5,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "mst_mandate_fields")
-public class MandateFieldConfigure {
+public class MandateField implements Serializable{
     @Id
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "action_id")
@@ -34,11 +35,11 @@ public class MandateFieldConfigure {
     @Column(name = "page_name", length = 100)
     private String page;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

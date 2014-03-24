@@ -6,6 +6,7 @@ import com.clevel.selos.businesscontrol.ExistingCreditControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.CalLimitType;
@@ -14,6 +15,7 @@ import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -94,6 +96,7 @@ public class CreditFacExisting implements Serializable {
     private ExistingCreditDetailView selectCreditDetail;
 
 
+    private ProductGroup productGroup;
     private List<ProductProgramView> productProgramViewList;
     private List<CreditType> creditTypeList;
     private List<AccountStatus> accountStatusList;
@@ -153,8 +156,6 @@ public class CreditFacExisting implements Serializable {
     @Inject
     BankAccountStatusTransform bankAccountStatusTransform;
     @Inject
-    private PrdGroupToPrdProgramDAO prdGroupToPrdProgramDAO;        // find product program
-    @Inject
     private PrdProgramToCreditTypeDAO prdProgramToCreditTypeDAO;    // find credit type
     @Inject
     private BaseRateDAO baseRateDAO;
@@ -178,6 +179,8 @@ public class CreditFacExisting implements Serializable {
     private ProductTransform productTransform;
     @Inject
     private BaseRateTransform baseRateTransform;
+    @Inject
+    WorkCaseDAO workCaseDAO;
 
 
     public CreditFacExisting(){
@@ -190,6 +193,8 @@ public class CreditFacExisting implements Serializable {
 
         if( session.getAttribute("workCaseId") == null && session.getAttribute("workCaseId").equals("")){
             FacesUtil.redirect("/site/inbox.jsf");
+        } else {
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         }
 
        /* session.setAttribute("stepId", 1006);*/
@@ -199,8 +204,16 @@ public class CreditFacExisting implements Serializable {
         session = FacesUtil.getSession(true);
         productProgramViewList = productTransform.transformToView(productProgramDAO.findAll());
         baseRateList = baseRateDAO.findAll();
-        //*** Get Product Program List from Product Group ***//
-        prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdProByPrdGroupForExistCredit();
+
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        log.info("workCase :: {}",workCase.getId());
+        if(!Util.isNull(workCase)){
+            productGroup = workCase.getProductGroup();
+            log.info("productGroup :: {}",productGroup.getId());
+        }
+
+        prdGroupToPrdProgramList = creditFacExistingControl.getPrdGroupToPrdProgramProposeByGroup(productGroup);
+
         if(prdGroupToPrdProgramList == null){
             prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
         }
@@ -228,8 +241,6 @@ public class CreditFacExisting implements Serializable {
 
         log.info("preRender ::: 2 ");
         if (session.getAttribute("workCaseId") != null) {
-            log.info("session.getAttribute('workCaseId') != null");
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             log.info("preRender ::: 3.1 " + workCaseId );
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
             log.info("preRender ::: 3.2 " + stepId);
