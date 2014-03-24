@@ -583,7 +583,7 @@
                                                 <f:facet name="header">
                                                     <h:outputText value="#{bankStatementSummary.lastThreeMonth1}"
                                                                   rendered="#{not empty bankStatementSummary.lastThreeMonth1}">
-                                                        <f:convertDateTime pattern="MMM yyyy" locale="en"/>
+                                                        <f:convertDateTime pattern="MMM yyyy" locale="th_TH"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -592,7 +592,7 @@
                                                 <f:facet name="header">
                                                     <h:outputText value="#{bankStatementSummary.lastThreeMonth2}"
                                                                   rendered="#{not empty bankStatementSummary.lastThreeMonth2}">
-                                                        <f:convertDateTime pattern="MMM yyyy" locale="en"/>
+                                                        <f:convertDateTime pattern="MMM yyyy" locale="th_TH"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -601,7 +601,7 @@
                                                 <f:facet name="header">
                                                     <h:outputText value="#{bankStatementSummary.lastThreeMonth3}"
                                                                   rendered="#{not empty bankStatementSummary.lastThreeMonth3}">
-                                                        <f:convertDateTime pattern="MMM yyyy" locale="en"/>
+                                                        <f:convertDateTime pattern="MMM yyyy" locale="th_TH"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -639,7 +639,7 @@
                                     <p:column styleClass="center top">
                                         <h:outputText value="#{item.srcOfCollateralProofViewList[0].dateOfMaxBalance}"
                                                       rendered="#{not empty item.srcOfCollateralProofViewList and fn:length(item.srcOfCollateralProofViewList) gt 0 and not empty item.srcOfCollateralProofViewList[0].dateOfMaxBalance}">
-                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                         </h:outputText>
                                     </p:column>
                                     <p:column styleClass="right top">
@@ -653,7 +653,7 @@
                                     <p:column styleClass="center top">
                                         <h:outputText value="#{item.srcOfCollateralProofViewList[1].dateOfMaxBalance}"
                                                       rendered="#{not empty item.srcOfCollateralProofViewList and fn:length(item.srcOfCollateralProofViewList) gt 1 and not empty item.srcOfCollateralProofViewList[1].dateOfMaxBalance}">
-                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                         </h:outputText>
                                     </p:column>
                                     <p:column styleClass="right top">
@@ -667,7 +667,7 @@
                                     <p:column styleClass="center top">
                                         <h:outputText value="#{item.srcOfCollateralProofViewList[2].dateOfMaxBalance}"
                                                       rendered="#{not empty item.srcOfCollateralProofViewList and fn:length(item.srcOfCollateralProofViewList) gt 2 and not empty item.srcOfCollateralProofViewList[2].dateOfMaxBalance}">
-                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                         </h:outputText>
                                     </p:column>
                                     <p:column styleClass="right top">
