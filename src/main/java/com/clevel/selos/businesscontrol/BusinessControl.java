@@ -16,17 +16,10 @@ import java.math.BigDecimal;
 
 public abstract class BusinessControl implements Serializable {
     @Inject
-    @SELOS
-    private Logger log;
-    @Inject
-    private UserDAO userDAO;
-    @Inject
-    BaseRateDAO baseRateDAO;
+    protected UserDAO userDAO;
 
     @Inject
-    public BusinessControl(){
-
-    }
+    protected BaseRateDAO baseRateDAO;
 
     protected String getCurrentUserID() {
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -39,7 +32,6 @@ public abstract class BusinessControl implements Serializable {
         try {
             return userDAO.findById(getCurrentUserID());
         } catch (Exception ex) {
-            log.error("User Not found", ex);
             return null;
         }
     }
@@ -49,7 +41,6 @@ public abstract class BusinessControl implements Serializable {
             if(baseRate == null) return BigDecimal.ZERO;
             return baseRate.getValue() == null ? BigDecimal.ZERO :  baseRate.getValue();
         }catch (Exception e){
-            log.error("getMRR Not found", e);
             return BigDecimal.ZERO;
         }
     }
@@ -60,7 +51,6 @@ public abstract class BusinessControl implements Serializable {
             if(baseRate == null) return BigDecimal.ZERO;
             return baseRate.getValue() == null ? BigDecimal.ZERO :  baseRate.getValue();
         }catch (Exception e){
-            log.error("getMRR Not found", e);
             return BigDecimal.ZERO;
         }
     }
@@ -71,7 +61,6 @@ public abstract class BusinessControl implements Serializable {
             if(baseRate == null) return BigDecimal.ZERO;
             return baseRate.getValue() == null ? BigDecimal.ZERO :  baseRate.getValue();
         }catch (Exception e){
-            log.error("getMRR Not found", e);
             return BigDecimal.ZERO;
         }
     }

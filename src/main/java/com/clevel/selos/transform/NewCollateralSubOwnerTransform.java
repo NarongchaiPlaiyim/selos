@@ -10,13 +10,7 @@ import java.util.List;
 
 public class NewCollateralSubOwnerTransform extends Transform {
     @Inject
-    @SELOS
-    Logger log;
-
-    @Inject
     public NewCollateralSubOwnerTransform(){
-
     }
-
 
 }

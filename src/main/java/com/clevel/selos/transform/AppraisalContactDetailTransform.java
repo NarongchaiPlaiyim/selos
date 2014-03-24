@@ -18,13 +18,14 @@ public class AppraisalContactDetailTransform extends Transform {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     private AppraisalContactDetailDAO appraisalContactDetailDAO;
     private AppraisalContactDetailView appraisalContactDetailView;
     private List<AppraisalContactDetail> appraisalContactDetailList;
+
     @Inject
     public AppraisalContactDetailTransform() {
-
     }
 
     public List<AppraisalContactDetail> transformToModel(final AppraisalContactDetailView view, final Appraisal appraisal, final User user){

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subGuarantorBorrower_subGuarantorBorrowerCreditType" pageWidth="259" pageHeight="802" columnWidth="259" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="169c693e-f5d6-4423-b35d-d437a59d8e04">
+	<property name="ireport.zoom" value="9.849732675807642"/>
+	<property name="ireport.x" value="1828"/>
+	<property name="ireport.y" value="0"/>
+	<style name="detail" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF" hAlign="Center" vAlign="Middle" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<field name="accountName" class="java.lang.String">
+		<fieldDescription><![CDATA[accountName]]></fieldDescription>
+	</field>
+	<field name="accountNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[accountNumber]]></fieldDescription>
+	</field>
+	<field name="accountSuf" class="java.lang.String">
+		<fieldDescription><![CDATA[accountSuf]]></fieldDescription>
+	</field>
+	<field name="productProgram" class="java.lang.String">
+		<fieldDescription><![CDATA[productProgram]]></fieldDescription>
+	</field>
+	<field name="creditFacility" class="java.lang.String">
+		<fieldDescription><![CDATA[creditFacility]]></fieldDescription>
+	</field>
+	<field name="limit" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[limit]]></fieldDescription>
+	</field>
+	<field name="guaranteeAmount" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[guaranteeAmount]]></fieldDescription>
+	</field>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="1b888ae6-25fa-4064-8acf-5ff2629a3e33" style="detail" stretchType="RelativeToBandHeight" x="94" y="0" width="75" height="14"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{productProgram}+"\n"+
+$F{creditFacility}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="456aece7-c6b1-40c9-95a2-f537e2780454" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="94" height="14"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{accountName}+"\n"+
+"Acc No.: "+$F{accountNumber}+", "+"Suf.: "+$F{accountSuf}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="61951bec-9a30-44bd-9fa0-11becde283e5" style="detail" stretchType="RelativeToBandHeight" x="169" y="0" width="27" height="14"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="64b5b1f2-a2e0-49fd-8918-f0aa59b341c1" style="detail" stretchType="RelativeToBandHeight" x="196" y="0" width="63" height="14"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Guarantee Amount: "+$F{guaranteeAmount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

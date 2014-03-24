@@ -24,7 +24,8 @@ import java.util.List;
 public class AppraisalDetailTransform extends Transform {
     @Inject
     @SELOS
-    private Logger log;
+    Logger log;
+
     @Inject
     @NormalMessage
     private Message msg;
@@ -40,9 +41,9 @@ public class AppraisalDetailTransform extends Transform {
 
     private NewCollateral newCollateral;
     private List<AppraisalDetailView> appraisalDetailViewList;
+
     @Inject
     public AppraisalDetailTransform() {
-
     }
 
     public List<NewCollateral> transformToModel(final List<AppraisalDetailView> appraisalDetailViewList, final NewCreditFacility newCreditFacility, final User user){

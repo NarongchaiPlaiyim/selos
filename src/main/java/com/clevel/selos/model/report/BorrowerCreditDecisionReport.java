@@ -2,7 +2,6 @@ package com.clevel.selos.model.report;
 
 import com.clevel.selos.model.view.ExistingCreditTierDetailView;
 import com.clevel.selos.model.view.ExistingSplitLineDetailView;
-import com.clevel.selos.model.view.NewCreditTierDetailView;
 import com.clevel.selos.report.ReportModel;
 
 import java.math.BigDecimal;
@@ -30,6 +29,7 @@ public class BorrowerCreditDecisionReport extends ReportModel{
     private BigDecimal pceLimit;
     private BigDecimal outstanding;
     private BigDecimal finalInterest;
+    private String path;
 
     private List<ExistingCreditTierDetailView> existingCreditTierDetailViewList;
     private List<ExistingSplitLineDetailView> existingSplitLineDetailViewList;
@@ -182,6 +182,14 @@ public class BorrowerCreditDecisionReport extends ReportModel{
         this.count = count;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -199,6 +207,8 @@ public class BorrowerCreditDecisionReport extends ReportModel{
                 .append("pcePercent", pcePercent)
                 .append("pceLimit", pceLimit)
                 .append("outstanding", outstanding)
+                .append("finalInterest", finalInterest)
+                .append("path", path)
                 .append("existingCreditTierDetailViewList", existingCreditTierDetailViewList)
                 .append("existingSplitLineDetailViewList", existingSplitLineDetailViewList)
                 .toString();

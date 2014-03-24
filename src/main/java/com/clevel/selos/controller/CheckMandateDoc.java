@@ -62,7 +62,7 @@ public class CheckMandateDoc implements Serializable {
         log.info("-- onCreation.");
         String result = null;
         try{
-            workCaseId = 418L;
+            workCaseId = 481L;
             checkMandateDocView = checkMandateDocControl.getMandateDocView(workCaseId);
             if(!Util.isNull(checkMandateDocView)){
                 log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());

@@ -2,6 +2,7 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.BaseRateDAO;
 import com.clevel.selos.dao.working.NewCreditTierDetailDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.response.PricingIntTier;
 import com.clevel.selos.integration.brms.model.response.PricingInterest;
 import com.clevel.selos.model.db.master.BaseRate;
@@ -11,6 +12,7 @@ import com.clevel.selos.model.db.working.NewCreditTierDetail;
 import com.clevel.selos.model.view.NewCreditTierDetailView;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
@@ -18,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NewCreditTierTransform extends Transform {
+    @SELOS
+    @Inject
+    private Logger log;
 
     @Inject
     BaseRateDAO baseRateDAO;

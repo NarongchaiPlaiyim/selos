@@ -43,4 +43,25 @@ public class WorkCasePrescreenDAO extends GenericDAO<WorkCasePrescreen, Long> {
         workCasePrescreen = (WorkCasePrescreen) criteria.uniqueResult();
         return workCasePrescreen;
     }
+
+    //Function for AppHeader
+    public WorkCasePrescreen getWorkCasePreScreenById(long id){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("id", id));
+        criteria.setFetchMode("borrowerType", FetchMode.SELECT);
+        criteria.setFetchMode("customerList", FetchMode.SELECT);
+        criteria.setFetchMode("stepOwner", FetchMode.SELECT);
+        criteria.setFetchMode("atUserTeam", FetchMode.SELECT);
+        criteria.setFetchMode("productGroup", FetchMode.SELECT);
+        criteria.setFetchMode("requestType", FetchMode.SELECT);
+        criteria.setFetchMode("fromUser", FetchMode.SELECT);
+        criteria.setFetchMode("atUser", FetchMode.SELECT);
+        criteria.setFetchMode("authorizationDOA", FetchMode.SELECT);
+        criteria.setFetchMode("step", FetchMode.SELECT);
+        criteria.setFetchMode("modifyBy", FetchMode.SELECT);
+
+        WorkCasePrescreen workCasePrescreen = (WorkCasePrescreen)criteria.uniqueResult();
+
+        return workCasePrescreen;
+    }
 }

@@ -3,17 +3,21 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.master.CreditTypeDAO;
 import com.clevel.selos.dao.master.ProductGroupDAO;
 import com.clevel.selos.dao.master.ProductProgramDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.view.*;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductTransform extends Transform{
-
+    @SELOS
+    @Inject
+    private Logger log;
     @Inject
     CreditTypeDAO creditTypeDAO;
     @Inject

@@ -229,6 +229,7 @@ public class PrescreenConverter extends Converter{
         }
 
         List<AccountType> accountTypeList = applicationType.getAccount();
+        //TODO Check condition with BRMS sheet...
         List<BRMSAccountStmtInfo> accountStmtInfoList = applicationInfo.getAccountStmtInfoList();
         for(BRMSAccountStmtInfo accountStmtInfo : accountStmtInfoList){
             AccountType accountType = new AccountType();

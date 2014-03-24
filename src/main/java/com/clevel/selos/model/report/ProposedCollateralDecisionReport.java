@@ -23,6 +23,7 @@ public class ProposedCollateralDecisionReport extends ReportModel{
     private String mortgageCondition;
     private String  mortgageConditionDetail;
     private String bdmComments;
+    private String path;
 
     private List<ProposeCreditDetailView> proposeCreditDetailViewList;
 
@@ -43,7 +44,6 @@ public class ProposedCollateralDecisionReport extends ReportModel{
 
     public ProposedCollateralDecisionReport() {
         jobID = getDefaultString();
-        appraisalDate = getDefaultDate();
         aadDecision = getDefaultString();
         aadDecisionReason = getDefaultString();
         aadDecisionReasonDetail = getDefaultString();
@@ -219,7 +219,7 @@ public class ProposedCollateralDecisionReport extends ReportModel{
     }
 
     public List<NewCollateralSubView> getSubViewList() {
-        return subViewList;
+        return new ArrayList<NewCollateralSubView>();
     }
 
     public void setSubViewList(List<NewCollateralSubView> subViewList) {
@@ -232,6 +232,14 @@ public class ProposedCollateralDecisionReport extends ReportModel{
 
     public void setHeadCollTypeDescription(String headCollTypeDescription) {
         this.headCollTypeDescription = headCollTypeDescription;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     @Override

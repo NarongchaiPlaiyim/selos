@@ -176,6 +176,7 @@
                             </td>
                             <td>
                                 <p:inputText id="bizDocPermission" value="#{bizInfoDetail.bizInfoDetailView.bizDocPermission}"
+                                             readonly="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"
                                              required="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'Y' and not empty param[saveButton.clientId]}">
                                     <p:ajax event="blur" update=":frmMain:bizDocPermission"/>
                                 </p:inputText>
@@ -188,6 +189,8 @@
                             </td>
                             <td>
                                 <clv:BECalendar id="bizDocExpiryDate" showOn="button" navigator="true" locale="th_TH"
+                                                readonly="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"
+                                                disabled="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"
                                                 required="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'Y' and not empty param[saveButton.clientId]}"
                                                 value="#{bizInfoDetail.bizInfoDetailView.bizDocExpiryDate}"
                                                 defaultdate="#{bizInfoDetail.currentDateDDMMYY}"

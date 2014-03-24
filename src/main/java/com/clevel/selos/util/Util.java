@@ -50,12 +50,12 @@ public class Util implements Serializable {
     }
 
     public static String createDateTime(Date date) {
-        return createDateString(date, "yyyyMMddHHmm");
+        return createDateString(date, "ddMMyyyyyHHmmss");
     }
 
 
     public static Date strYYYYMMDDtoDateFormat(String dateStr) {
-        Date date = new Date();
+        Date date = null;
         if (dateStr == null) {
             return null;
         }
@@ -132,41 +132,6 @@ public class Util implements Serializable {
         }
     }
 
-//    public static boolean isNull(String string) {
-//        if (string == null || "null".equals(string.toLowerCase().trim())) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
-
-    public static boolean checkLength(String string, int length) {
-        if (null != string) {
-            return string.length() <= length ? true : false;
-        } else {
-            return false;
-        }
-    }
-
-    public static boolean checkSize(ArrayList arrayList, int size) {
-        if (null != arrayList) {
-            return arrayList.size() >= size ? true : false;
-        } else {
-            return false;
-        }
-    }
-
-    public static String convertNullToBlank(String string) {
-        if (string != null || !"null".equals(string.toLowerCase())) {
-            return "";
-        } else {
-            return string;
-        }
-    }
-
-    public static List convertNullToEmptyList(List list) {
-        return list != null ? list : Collections.EMPTY_LIST;
-    }
 
     public static String getLinkKey(String userId) {
         return userId + "_" + System.currentTimeMillis();
@@ -460,5 +425,18 @@ public class Util implements Serializable {
         }
         return string;
     }
-   
+
+    public static String checkNullString(String value){
+        if (value == null){
+            return "-";
+        }
+        return value;
+    }
+
+    public static BigDecimal convertNullToZERO(BigDecimal value){
+        if (value == null){
+            return BigDecimal.ZERO;
+        }
+        return value;
+    }
 }

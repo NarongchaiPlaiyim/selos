@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.BRMSControl;
 import com.clevel.selos.businesscontrol.FullApplicationControl;
 import com.clevel.selos.businesscontrol.ReturnControl;
+import com.clevel.selos.businesscontrol.StepStatusControl;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
@@ -31,6 +32,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 
 @ViewScoped
@@ -52,6 +54,8 @@ public class BaseController implements Serializable {
     @Inject
     ReturnControl returnControl;
     @Inject
+    StepStatusControl stepStatusControl;
+    @Inject
     ReturnInfoTransform returnInfoTransform;
 
     @Inject
@@ -60,7 +64,10 @@ public class BaseController implements Serializable {
     private ManageButton manageButton;
     private AppHeaderView appHeaderView;
     private long stepId;
+    private long statusId;
+    private int stageId;
     private int requestAppraisal;
+    private boolean requestAppraisalPage;
     private int qualitativeType;
     private int pricingDOALevel;
     private List<User> abdmUserList;
@@ -95,6 +102,8 @@ public class BaseController implements Serializable {
     private int editRecordNo;
     private List<ReturnInfoView> returnInfoHistoryViewList;
 
+    private HashMap<String, Integer> stepStatusMap;
+
     private String messageHeader;
     private String message;
 
@@ -106,16 +115,27 @@ public class BaseController implements Serializable {
         log.info("BaseController ::: Creation ");
         manageButton = new ManageButton();
         HttpSession session = FacesUtil.getSession(true);
-        long workCasePreScreenId = 0;
-        long workCaseId = 0;
-        stepId = 0;
+        long workCasePreScreenId = 0L;
+        long workCaseId = 0L;
+        stepId = 0L;
+        statusId = 0L;
+        stageId = 0;
+
         requestAppraisal = 0;
 
+        requestAppraisalPage = false;
+
         if (!Util.isNull(session.getAttribute("workCasePreScreenId"))) {
-            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+            workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
         }
         if (!Util.isNull(session.getAttribute("stepId"))) {
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
+            stepId = (Long)session.getAttribute("stepId");
+        }
+        if(!Util.isNull(session.getAttribute("statusId"))) {
+            statusId = (Long)session.getAttribute("statusId");
+        }
+        if(!Util.isNull(session.getAttribute("stageId"))){
+            stageId = (Integer)session.getAttribute("stageId");
         }
         if (!Util.isNull(session.getAttribute("requestAppraisal"))){
             requestAppraisal = Integer.valueOf(session.getAttribute("requestAppraisal").toString());
@@ -123,9 +143,19 @@ public class BaseController implements Serializable {
                 requestAppraisal = 1;
             }
         }
-        log.info("BaseController ::: getSession : workcase = {}, stepid = {}", workCasePreScreenId, stepId);
+        log.debug("Current Page : {}", Util.getCurrentPage());
+        if (Util.getCurrentPage().equals("appraisalRequest.jsf")){
+            requestAppraisalPage = true;
+        }
 
-        if (stepId == StepValue.PRESCREEN_INITIAL.value()) {
+        log.info("BaseController ::: getSession : workCasePreScreenId : {}, workcase = {}, stepId = {}, stageId = {}", workCasePreScreenId, workCaseId, stepId, stageId);
+        log.debug("BaseController ::: find active button");
+
+        //TODO Get all action from Database By Step and Status and Role
+        stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId);
+        log.debug("stepStatusMap : {}", stepStatusMap);
+
+        /*if (stepId == StepValue.PRESCREEN_INITIAL.value()) {
             manageButton.setAssignToCheckerButton(true);
             manageButton.setCancelCAButton(true);
             manageButton.setCheckMandateDocButton(true);
@@ -175,7 +205,7 @@ public class BaseController implements Serializable {
             //Step at AAD Committee (Appraisal Result)
             manageButton.setReturnAADAdminButton(true);
             manageButton.setSubmitAppraisalButton(true);
-        }
+        }*/
 
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
         log.info("BaseController ::: appHeader : {}", appHeaderView);
@@ -202,6 +232,14 @@ public class BaseController implements Serializable {
             session = FacesUtil.getSession(false);
             session.setAttribute("user", user);
         }
+    }
+
+    public boolean checkButton(String buttonName){
+        boolean check = false;
+        if(stepStatusMap!=null && stepStatusMap.containsKey(buttonName)){
+            check = Util.isTrue(stepStatusMap.get(buttonName));
+        }
+        return check;
     }
 
     /*public String getQualitativeType(){
@@ -870,5 +908,21 @@ public class BaseController implements Serializable {
 
     public void setEditRecordNo(int editRecordNo) {
         this.editRecordNo = editRecordNo;
+    }
+
+    public int getStageId() {
+        return stageId;
+    }
+
+    public void setStageId(int stageId) {
+        this.stageId = stageId;
+    }
+
+    public boolean isRequestAppraisalPage() {
+        return requestAppraisalPage;
+    }
+
+    public void setRequestAppraisalPage(boolean requestAppraisalPage) {
+        this.requestAppraisalPage = requestAppraisalPage;
     }
 }

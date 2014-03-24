@@ -19,18 +19,13 @@ import java.util.Date;
 import java.util.List;
 
 public class PreDisbursementTransform extends Transform {
-    @Inject
-    @SELOS
-    Logger log;
-    
-    public PreDisbursementView transfromToPreDisbursementView(PreDisbursement preDisbursement){
+
+    public PreDisbursementView transformToPreDisbursementView(PreDisbursement preDisbursement){
     	PreDisbursementView preDisbursementView = new PreDisbursementView();
     	preDisbursementView.setRemark(preDisbursement.getRemark());
-		
 		return preDisbursementView;
     }
-    
-    
+
     public List<PreDisbursementDetailView> transformPreDisbursementDataList(String groupName, List<PreDisbursementData> preDisbursementDataList){
     	List<PreDisbursementDetailView> preDisbursementDetailViewList = new ArrayList<PreDisbursementDetailView>();
     	

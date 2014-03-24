@@ -278,6 +278,8 @@ public class BRMSControl extends BusinessControl {
             for(BankStatement bankStatement : bankStatementList){
                 accountStmtInfoList.add(getBRMSAccountStmtInfo(bankStatement));
             }
+        } else {
+            applicationInfo.setAccountStmtInfoList(new ArrayList<BRMSAccountStmtInfo>());
         }
         applicationInfo.setAccountStmtInfoList(accountStmtInfoList);
 

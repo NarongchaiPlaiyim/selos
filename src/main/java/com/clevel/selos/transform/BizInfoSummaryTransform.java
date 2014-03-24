@@ -2,16 +2,20 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.BizInfoSummaryDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.view.BizInfoSummaryView;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
 
 public class BizInfoSummaryTransform extends Transform {
-
+    @SELOS
+    @Inject
+    private Logger log;
     @Inject
     private ProvinceDAO provinceDAO;
     @Inject
