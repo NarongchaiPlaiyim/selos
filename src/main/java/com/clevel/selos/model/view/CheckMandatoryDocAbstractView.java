@@ -10,9 +10,9 @@ import java.util.List;
 public abstract class CheckMandatoryDocAbstractView implements Serializable {
     private long id;
     private String documentType;
-    private List<String> BRMSDocumentTypeList;
-    private List<String> ownewList;
-    private List<CheckMandatoryDocFileNameView> fileNameViewList;
+    private List<MandateDocBRMSView> BRMSDocumentTypeList;
+    private List<MandateDocCustView> ownewList;
+    private List<MandateDocFileNameView> fileNameViewList;
     private int complete;
     private boolean incomplete ;
     private boolean indistinct;
@@ -25,7 +25,9 @@ public abstract class CheckMandatoryDocAbstractView implements Serializable {
     }
 
     private void init(){
-        fileNameViewList = new ArrayList<CheckMandatoryDocFileNameView>();
+        BRMSDocumentTypeList = new ArrayList<MandateDocBRMSView>();
+        ownewList = new ArrayList<MandateDocCustView>();
+        fileNameViewList = new ArrayList<MandateDocFileNameView>();
     }
 
     public long getId() {
@@ -44,27 +46,27 @@ public abstract class CheckMandatoryDocAbstractView implements Serializable {
         this.documentType = documentType;
     }
 
-    public List<String> getBRMSDocumentTypeList() {
+    public List<MandateDocBRMSView> getBRMSDocumentTypeList() {
         return BRMSDocumentTypeList;
     }
 
-    public void setBRMSDocumentTypeList(List<String> BRMSDocumentTypeList) {
+    public void setBRMSDocumentTypeList(List<MandateDocBRMSView> BRMSDocumentTypeList) {
         this.BRMSDocumentTypeList = BRMSDocumentTypeList;
     }
 
-    public List<String> getOwnewList() {
+    public List<MandateDocCustView> getOwnewList() {
         return ownewList;
     }
 
-    public void setOwnewList(List<String> ownewList) {
+    public void setOwnewList(List<MandateDocCustView> ownewList) {
         this.ownewList = ownewList;
     }
 
-    public List<CheckMandatoryDocFileNameView> getFileNameViewList() {
+    public List<MandateDocFileNameView> getFileNameViewList() {
         return fileNameViewList;
     }
 
-    public void setFileNameViewList(List<CheckMandatoryDocFileNameView> fileNameViewList) {
+    public void setFileNameViewList(List<MandateDocFileNameView> fileNameViewList) {
         this.fileNameViewList = fileNameViewList;
     }
 
