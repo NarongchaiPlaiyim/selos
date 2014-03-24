@@ -65,11 +65,11 @@
                                          onclick="confrmReqApprPreScreen.hide()" />
                     </p:confirmDialog>
                 </p:commandButton>-->
-                <p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
+                <!--<p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
                                  rendered="#{baseController.checkButton('Request Appraisal') and baseController.requestAppraisal == 0}}"
                                  type="button"
                                  onclick="requeustApprHeaderDlg.show()">
-                </p:commandButton>
+                </p:commandButton>-->
                 <!--Cancel CA-->
                 <p:commandButton id="btnCancelCA" value="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
                                  rendered="#{baseController.checkButton('Cancel CA') and !baseController.requestAppraisalPage}" type="button"
@@ -435,12 +435,12 @@
         </p:dialog>
     </p:panel>
 
-    <p:panel id="requestApprHeader" styleClass="panel">
+    <!--<p:panel id="requestApprHeader" styleClass="panel">
         <p:dialog id="requestApprHeaderDialog" widgetVar="requeustApprHeaderDlg" header="Request Appraisal"
                   onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
                   modal="true" width="840" closable="false">
             <ui:include src="/site/dialog/requestAppraisalDialog.xhtml"/>
         </p:dialog>
-    </p:panel>
+    </p:panel>-->
 
 </ui:composition>
