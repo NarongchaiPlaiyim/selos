@@ -27,6 +27,8 @@ public class CheckMandateDoc implements Serializable {
     private String messageHeader;
     private String message;
     private long workCaseId;
+    private int roleId;
+
     @Inject
     public CheckMandateDoc() {
 //        init();
@@ -44,8 +46,9 @@ public class CheckMandateDoc implements Serializable {
         String result = null;
         checkMandateDocView = null;
         try{
-            workCaseId = 4L;
-            checkMandateDocView = checkMandateDocControl.getMandateDocView(workCaseId);
+            workCaseId = 481L;
+            roleId = 1;
+            checkMandateDocView = checkMandateDocControl.getMandateDocView(workCaseId, roleId);
             if(!Util.isNull(checkMandateDocView)){
                 log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
             } else {

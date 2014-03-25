@@ -34,6 +34,7 @@ public class ECMService implements Serializable {
         try {
             if(!Util.isNull(caNumber) && !Util.isZero(caNumber.length())){
                 ecmDetailList = Util.safetyList(dbExecute.findByCANumber(caNumber));
+                log.debug("-- EcmDetailList.size[{}]", ecmDetailList.size());
                 if(Util.isZero(ecmDetailList.size())){
                     log.debug("Data Not Found!");
                     throw new ECMInterfaceException(new Exception(msg.get(ExceptionMapping.ECM_DATA_NOT_FOUND)),ExceptionMapping.ECM_DATA_NOT_FOUND, msg.get(ExceptionMapping.ECM_DATA_NOT_FOUND));
