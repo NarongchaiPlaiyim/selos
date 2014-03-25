@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.CollateralTypeDAO;
 import com.clevel.selos.dao.working.MandateDocDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.model.DocMandateType;
 import com.clevel.selos.model.db.master.CollateralType;
@@ -20,9 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CheckMandateDocTransform extends Transform {
-    @Inject
-    @NCB
-    private Logger log;
+//    @Inject
+//    @SELOS
+//    private Logger log;
     @Inject
     @Config(name = "interface.workplace.address")
     private String address;
@@ -55,7 +56,7 @@ public class CheckMandateDocTransform extends Transform {
     }
 
     private void init(){
-        log.debug("-- init()");
+//        log.debug("-- init()");
         checkMandateDocView = null;
         mandatoryDocumentsList = null;
         optionalDocumentsList = null;
@@ -166,8 +167,8 @@ public class CheckMandateDocTransform extends Transform {
         boolean flag = false;
         //Checking Document Type
         if(!Util.isNull(mandateDocView.getEcmDocTypeDesc()) && !Util.isZero(mandateDocView.getEcmDocTypeDesc().length())){
-            log.debug("-- MandateDocView.EcmDocTypeDesc is not null");
-            log.debug("-- Document Type is {}", mandateDocView.getEcmDocTypeDesc());
+//            log.debug("-- MandateDocView.EcmDocTypeDesc is not null");
+//            log.debug("-- Document Type is {}", mandateDocView.getEcmDocTypeDesc());
             checkMandatoryDocView.setDocumentType(mandateDocView.getEcmDocTypeDesc());
         } else {
             flag = true;
@@ -187,13 +188,13 @@ public class CheckMandateDocTransform extends Transform {
         for(ECMDetail ecmDetail : ecmDetailList){
             if(flag){
                 if(!Util.isNull(ecmDetail.getTypeNameTH()) && !Util.isZero(ecmDetail.getTypeNameTH().length())){
-                    log.debug("-- EcmDetail.TypeNameTH is not null");
-                    log.debug("-- Document Type is {}", ecmDetail.getTypeNameTH());
+//                    log.debug("-- EcmDetail.TypeNameTH is not null");
+//                    log.debug("-- Document Type is {}", ecmDetail.getTypeNameTH());
                     checkMandatoryDocView.setDocumentType(ecmDetail.getTypeNameTH());
                     flag = false;
                 } else {
-                    log.debug("-- EcmDetail.TypeNameTH is null");
-                    log.debug("-- Document Type is {}", "Empty");
+//                    log.debug("-- EcmDetail.TypeNameTH is null");
+//                    log.debug("-- Document Type is {}", "Empty");
                     checkMandatoryDocView.setDocumentType("");
                     flag = true;
                 }
@@ -226,8 +227,8 @@ public class CheckMandateDocTransform extends Transform {
         checkMandatoryDocView = new CheckMandatoryDocView();
         //Checking Document Type
         if(!Util.isNull(mandateDocView.getEcmDocTypeDesc()) && !Util.isZero(mandateDocView.getEcmDocTypeDesc().length())){
-            log.debug("-- MandateDocView.EcmDocTypeDesc is not null");
-            log.debug("-- Document Type is {}", mandateDocView.getEcmDocTypeDesc());
+//            log.debug("-- MandateDocView.EcmDocTypeDesc is not null");
+//            log.debug("-- Document Type is {}", mandateDocView.getEcmDocTypeDesc());
             checkMandatoryDocView.setDocumentType(mandateDocView.getEcmDocTypeDesc());
         } else {
             checkMandatoryDocView.setDocumentType("");
@@ -249,8 +250,8 @@ public class CheckMandateDocTransform extends Transform {
         checkOptionalDocView = new CheckOptionalDocView();
         //Checking Document Type
         if(!Util.isNull(mandateDocView.getEcmDocTypeDesc()) && !Util.isZero(mandateDocView.getEcmDocTypeDesc().length())){
-            log.debug("-- MandateDocView.EcmDocTypeDesc is not null");
-            log.debug("-- Document Type is {}", mandateDocView.getEcmDocTypeDesc());
+//            log.debug("-- MandateDocView.EcmDocTypeDesc is not null");
+//            log.debug("-- Document Type is {}", mandateDocView.getEcmDocTypeDesc());
             checkOptionalDocView.setDocumentType(mandateDocView.getEcmDocTypeDesc());
         } else {
             checkOptionalDocView.setDocumentType("");
@@ -272,8 +273,8 @@ public class CheckMandateDocTransform extends Transform {
         checkOtherDocView = new CheckOtherDocView();
         //Checking Document Type
         if(!Util.isNull(mandateDocView.getEcmDocTypeDesc()) && !Util.isZero(mandateDocView.getEcmDocTypeDesc().length())){
-            log.debug("-- MandateDocView.EcmDocTypeDesc is not null");
-            log.debug("-- Document Type is {}", mandateDocView.getEcmDocTypeDesc());
+//            log.debug("-- MandateDocView.EcmDocTypeDesc is not null");
+//            log.debug("-- Document Type is {}", mandateDocView.getEcmDocTypeDesc());
             checkOtherDocView.setDocumentType(mandateDocView.getEcmDocTypeDesc());
         } else {
             checkOtherDocView.setDocumentType("");
@@ -303,12 +304,12 @@ public class CheckMandateDocTransform extends Transform {
             //Checking Document Type
             if(flag){
                 if(!Util.isNull(ecmDetail.getTypeNameTH()) && !Util.isZero(ecmDetail.getTypeNameTH().length())){
-                    log.debug("-- EcmDetail.TypeNameTH is not null");
-                    log.debug("-- Document Type is {}", ecmDetail.getTypeNameTH());
+//                    log.debug("-- EcmDetail.TypeNameTH is not null");
+//                    log.debug("-- Document Type is {}", ecmDetail.getTypeNameTH());
                     checkOtherDocView.setDocumentType(ecmDetail.getTypeNameTH());
                 } else {
-                    log.debug("-- EcmDetail.TypeNameTH is null");
-                    log.debug("-- Document Type is {}", "Empty");
+//                    log.debug("-- EcmDetail.TypeNameTH is null");
+//                    log.debug("-- Document Type is {}", "Empty");
                     checkOtherDocView.setDocumentType("");
                 }
                 flag = false;

@@ -162,7 +162,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private List<ProposeCreditDetailView> proposeCreditDetailViewList;
     private List<ExistingCreditDetailView> existingCreditDetailViewList;
 
-
     //for  control Condition Information Dialog
     private NewConditionDetailView newConditionDetailView;
     private NewConditionDetailView selectConditionItem;
