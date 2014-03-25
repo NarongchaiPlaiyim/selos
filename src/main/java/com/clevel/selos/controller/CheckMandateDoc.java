@@ -46,7 +46,7 @@ public class CheckMandateDoc implements Serializable {
         String result = null;
         checkMandateDocView = null;
         try{
-            workCaseId = 4L;
+            workCaseId = 481L;
             roleId = 1;
             checkMandateDocView = checkMandateDocControl.getMandateDocView(workCaseId, roleId);
             if(!Util.isNull(checkMandateDocView)){
