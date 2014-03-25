@@ -11,8 +11,8 @@ public class PrescreenResultView extends PrescreenView {
     private ExistingCreditFacilityView existingCreditFacilityView;
     private BankStmtSummaryView bankStmtSummaryView;
 
-    private List<UWRuleResult> groupRuleResults;
-    private List<UWRuleResult> customerRuleResults;
+    private List<UWRuleResultDetailView> groupRuleResults;
+    private List<UWRuleResultDetailView> customerRuleResults;
 
     public String getInterfaceResult() {
         return interfaceResult;
@@ -38,7 +38,7 @@ public class PrescreenResultView extends PrescreenView {
         this.existingCreditFacilityView = existingCreditFacilityView;
     }
 
-    public List<UWRuleResult> getGroupRuleResults() {
+    public List<UWRuleResultDetailView> getGroupRuleResults() {
         return groupRuleResults;
     }
 
@@ -50,15 +50,15 @@ public class PrescreenResultView extends PrescreenView {
         this.bankStmtSummaryView = bankStmtSummaryView;
     }
 
-    public void setGroupRuleResults(List<UWRuleResult> groupRuleResults) {
+    public void setGroupRuleResults(List<UWRuleResultDetailView> groupRuleResults) {
         this.groupRuleResults = groupRuleResults;
     }
 
-    public List<UWRuleResult> getCustomerRuleResults() {
+    public List<UWRuleResultDetailView> getCustomerRuleResults() {
         return customerRuleResults;
     }
 
-    public void setCustomerRuleResults(List<UWRuleResult> customerRuleResults) {
+    public void setCustomerRuleResults(List<UWRuleResultDetailView> customerRuleResults) {
         this.customerRuleResults = customerRuleResults;
     }
 
