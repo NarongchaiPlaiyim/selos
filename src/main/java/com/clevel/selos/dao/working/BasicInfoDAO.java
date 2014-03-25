@@ -21,7 +21,7 @@ public class BasicInfoDAO extends GenericDAO<BasicInfo, Long> {
     }
 
     public BasicInfo findByWorkCaseId(long workCaseId) {
-        log.info("findByWorkCaseId : {}", workCaseId);
+        log.info("-- findByWorkCaseId : {}", workCaseId);
 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
