@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.CollateralTypeDAO;
 import com.clevel.selos.dao.working.MandateDocDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.model.DocMandateType;
 import com.clevel.selos.model.db.master.CollateralType;
@@ -15,13 +16,14 @@ import com.clevel.selos.system.Config;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CheckMandateDocTransform extends Transform {
     @Inject
-    @NCB
+    @SELOS
     private Logger log;
     @Inject
     @Config(name = "interface.workplace.address")
@@ -51,9 +53,10 @@ public class CheckMandateDocTransform extends Transform {
 
     @Inject
     public CheckMandateDocTransform() {
-        init();
+//        init();
     }
 
+    @PostConstruct
     private void init(){
         log.debug("-- init()");
         checkMandateDocView = null;

@@ -2,22 +2,10 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CheckMandateDocControl;
 import com.clevel.selos.exception.ECMInterfaceException;
-import com.clevel.selos.integration.ECM;
 import com.clevel.selos.integration.ECMInterface;
-import com.clevel.selos.integration.NCB;
-import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
-import com.clevel.selos.integration.ecm.db.ECMDetail;
-import com.clevel.selos.integration.ecm.model.ECMDataResult;
-import com.clevel.selos.integration.filenet.ce.connection.CESessionToken;
-import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.CheckMandateDocView;
-import com.clevel.selos.model.view.CheckMandatoryDocView;
-import com.clevel.selos.model.view.CheckOptionalDocView;
-import com.clevel.selos.model.view.CheckOtherDocView;
-import com.clevel.selos.security.encryption.EncryptionService;
-import com.clevel.selos.system.Config;
 import com.clevel.selos.util.Util;
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -25,16 +13,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @ViewScoped
 @ManagedBean(name = "checkMandateDoc")
 public class CheckMandateDoc implements Serializable {
     @Inject
-    @NCB
+    @SELOS
     private Logger log;
     @Inject
     private CheckMandateDocControl checkMandateDocControl;
@@ -43,27 +27,28 @@ public class CheckMandateDoc implements Serializable {
     private String messageHeader;
     private String message;
     private long workCaseId;
+    private int roleId;
 
     @Inject
-    private ECMInterface ecmInterface;
-    @Inject
-    private BPMInterfaceImpl bpmInterface;
-
     public CheckMandateDoc() {
-        init();
+//        init();
     }
 
     private void init(){
-//        checkMandateDocView = new CheckMandateDocView();
+        log.debug("-- init()");
+        checkMandateDocView = new CheckMandateDocView();
     }
 
     @PostConstruct
     public void onCreation() {
         log.info("-- onCreation.");
+        init();
         String result = null;
+        checkMandateDocView = null;
         try{
-            workCaseId = 4L;
-            checkMandateDocView = null;//checkMandateDocControl.getMandateDocView(workCaseId);
+            workCaseId = 481L;
+            roleId = 1;
+            checkMandateDocView = checkMandateDocControl.getMandateDocView(workCaseId, roleId);
             if(!Util.isNull(checkMandateDocView)){
                 log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
             } else {
@@ -79,7 +64,6 @@ public class CheckMandateDoc implements Serializable {
             log.error("-- Exception : {}", e.getMessage());
             result = e.getMessage();
         }
-
     }
 
     public void onSaveCheckMandateDoc(){

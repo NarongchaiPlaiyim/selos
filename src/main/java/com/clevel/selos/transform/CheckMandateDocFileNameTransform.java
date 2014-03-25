@@ -2,6 +2,7 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.working.MandateDocFileNameDAO;
 import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.MandateDocFileName;
 import com.clevel.selos.model.view.MandateDocFileNameView;
 import com.clevel.selos.util.Util;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class CheckMandateDocFileNameTransform extends Transform {
     @Inject
-    @NCB
+    @SELOS
     private Logger log;
     @Inject
     private MandateDocFileNameDAO mandateDocFileNameDAO;
@@ -39,7 +40,11 @@ public class CheckMandateDocFileNameTransform extends Transform {
 
     public MandateDocFileNameView transformToView(final String name, final String url){
         MandateDocFileNameView view = new MandateDocFileNameView();
-        view.setFileName(name);
+        if(!Util.isNull(name) && !Util.isZero(name.length())){
+            view.setFileName(name);
+        } else {
+            view.setFileName("File name");
+        }
         view.setUrl(url);
         return view;
     }
