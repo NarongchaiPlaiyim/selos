@@ -40,7 +40,11 @@ public class CheckMandateDocFileNameTransform extends Transform {
 
     public MandateDocFileNameView transformToView(final String name, final String url){
         MandateDocFileNameView view = new MandateDocFileNameView();
-        view.setFileName(name);
+        if(!Util.isNull(name) && !Util.isZero(name.length())){
+            view.setFileName(name);
+        } else {
+            view.setFileName("File name");
+        }
         view.setUrl(url);
         return view;
     }

@@ -539,7 +539,7 @@ public class BRMSControl extends BusinessControl {
     }
 
     public MandateDocResponseView getDocCustomer(long workCaseId){
-        logger.debug("getDocCustomer from workCaseId {}", workCaseId);
+        logger.debug("-- getDocCustomer from workCaseId {}", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         List<MandateDocument> mandateDocumentList = null;
 
@@ -549,14 +549,14 @@ public class BRMSControl extends BusinessControl {
 
         MandateDocResponseView mandateDocResponseView = new MandateDocResponseView();
         if(mandateDocumentList != null && mandateDocumentList.size() > 0){
-            logger.debug("Get Mandate Document from mst_mandate_document {}", mandateDocumentList);
+            logger.debug("-- Get Mandate Document from mst_mandate_document {}", mandateDocumentList);
             mandateDocResponseView.setActionResult(ActionResult.SUCCESS);
             List<Customer> customerInfoList = customerDAO.findCustomerByWorkCaseId(workCaseId);
             mandateDocResponseView.setMandateDocViewMap(getMandateDocViewMap(mandateDocumentList, customerInfoList));
             logger.debug("-- Get Mandate Document from mandate_master {}", mandateDocResponseView);
         } else {
             Date checkDate = Calendar.getInstance().getTime();
-            logger.debug("check at date {}", checkDate);
+            logger.debug("-- check at date {}", checkDate);
             BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
             BRMSApplicationInfo applicationInfo = new BRMSApplicationInfo();
             //1. Set Customer Info List
@@ -624,7 +624,7 @@ public class BRMSControl extends BusinessControl {
                 applicationInfo.setReferredDocType(bizInfoSummary.getReferredExperience().getBrmsCode());
 
             DocCustomerResponse docCustomerResponse = brmsInterface.checkDocCustomerRule(applicationInfo);
-            logger.debug("docCustomerResponse return {}", docCustomerResponse);
+            logger.debug("-- docCustomerResponse return {}", docCustomerResponse);
 
             if(ActionResult.SUCCESS.equals(docCustomerResponse.getActionResult())){
                 Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, workCase.getStep());
