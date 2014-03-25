@@ -15,7 +15,7 @@ import java.util.List;
 
 public class CheckMandateDocCustTransform extends Transform {
     @Inject
-    @SELOS
+    @NCB
     private Logger log;
     private MandateDocCustDAO mandateDocCustDAO;
     private List<MandateDocCustView> mandateDocCustViewList;

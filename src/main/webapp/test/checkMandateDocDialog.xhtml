@@ -117,16 +117,16 @@
                         <p:outputLabel value="#{optionalItem.documentType}"/>
                     </td>
                     <td >
-                        <ui:repeat value="#{optionalItem.BRMSDocumentType}" var="optionalBRMSDocument" varStatus="rowOptionalBRMSIndex">
-                            <p:outputLabel value="#{optionalBRMSDocument}"/>
+                        <ui:repeat value="#{optionalItem.BRMSDocumentTypeList}" var="optionalBRMSDocument" varStatus="rowOptionalBRMSIndex">
+                            <p:outputLabel value="#{optionalBRMSDocument.BRMSDocType}"/>
                             <h:panelGroup rendered="#{rowOptionalBRMSIndex.last}">
                                 <br/>
                             </h:panelGroup>
                         </ui:repeat>
                     </td>
                     <td >
-                        <ui:repeat value="#{optionalItem.owners}" var="optionalOwners" varStatus="rowOptionalOwnersIndex">
-                            <p:outputLabel value="#{optionalOwners}"/>
+                        <ui:repeat value="#{optionalItem.ownewList}" var="optionalOwners" varStatus="rowOptionalOwnersIndex">
+                            <p:outputLabel value="#{optionalOwners.custName}"/>
                             <h:panelGroup rendered="#{rowOptionalOwnersIndex.last}">
                                 <br/>
                             </h:panelGroup>
@@ -176,16 +176,16 @@
                         <p:outputLabel value="#{otherItem.documentType}"/>
                     </td>
                     <td >
-                        <ui:repeat value="#{otherItem.BRMSDocumentType}" var="otherBRMSDocument" varStatus="rowOtherBRMSIndex">
-                            <p:outputLabel value="#{otherBRMSDocument}"/>
+                        <ui:repeat value="#{otherItem.BRMSDocumentTypeList}" var="otherBRMSDocument" varStatus="rowOtherBRMSIndex">
+                            <p:outputLabel value="#{otherBRMSDocument.BRMSDocType}"/>
                             <h:panelGroup rendered="#{rowOtherBRMSIndex.last}">
                                 <br/>
                             </h:panelGroup>
                         </ui:repeat>
                     </td>
                     <td >
-                        <ui:repeat value="#{otherItem.owners}" var="otherOwners" varStatus="rowOtherOwnersIndex">
-                            <p:outputLabel value="#{otherOwners}"/>
+                        <ui:repeat value="#{otherItem.ownewList}" var="otherOwners" varStatus="rowOtherOwnersIndex">
+                            <p:outputLabel value="#{otherOwners.custName}"/>
                             <h:panelGroup rendered="#{rowOtherOwnersIndex.last}">
                                 <br/>
                             </h:panelGroup>

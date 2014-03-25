@@ -1,6 +1,7 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.working.MandateDocBRMSDAO;
+import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.MandateDocBRMS;
 import com.clevel.selos.model.view.MandateDocBRMSView;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class CheckMandateDocBRMSTransform extends Transform {
     @Inject
-    @SELOS
+    @NCB
     private Logger log;
     @Inject
     private MandateDocBRMSDAO mandateDocBRMSDAO;

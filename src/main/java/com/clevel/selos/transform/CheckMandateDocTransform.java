@@ -23,7 +23,7 @@ import java.util.List;
 
 public class CheckMandateDocTransform extends Transform {
     @Inject
-    @SELOS
+    @NCB
     private Logger log;
     @Inject
     @Config(name = "interface.workplace.address")
@@ -165,6 +165,7 @@ public class CheckMandateDocTransform extends Transform {
 
     //BRMS and ECM
     public CheckMandatoryDocView transformToCheckMandatoryDocView(final MandateDocView mandateDocView, final List<ECMDetail> ecmDetailList, final int complete, final String userToken){
+        log.debug("-- transformToCheckMandatoryDocView(MandateDocView.EcmDocTypeId[{}], complete[{}])", mandateDocView.getEcmDocTypeId(), complete);
         checkMandatoryDocView = new CheckMandatoryDocView();
         boolean flag = false;
         //Checking Document Type
@@ -175,13 +176,20 @@ public class CheckMandateDocTransform extends Transform {
         } else {
             flag = true;
         }
+        log.debug("-- CheckMandatoryDocView.DocumentType[{}]", checkMandatoryDocView.getDocumentType());
 
         //Checking BRMS Document Type
         List<MandateDocBRMSView> BRMSDocumentTypeList = Util.safetyList(checkMandateDocBRMSTransform.transformStringListToView(mandateDocView.getBrmsDescList()));
+        for(MandateDocBRMSView mandateDocBRMSView : BRMSDocumentTypeList){
+            log.debug("-- MandateDocBRMSView.BRMSDocType[{}]", mandateDocBRMSView.getBRMSDocType());
+        }
         checkMandatoryDocView.setBRMSDocumentTypeList(BRMSDocumentTypeList);
 
         //Checking Owners
         List<MandateDocCustView> ownewList = checkMandateDocCustTransform.transformCustomerListToView(Util.safetyList(mandateDocView.getCustomerInfoSimpleViewList()));
+        for(MandateDocCustView mandateDocCustView : ownewList){
+            log.debug("-- MandateDocCustView.CustName[{}]", mandateDocCustView.getCustName());
+        }
         checkMandatoryDocView.setOwnewList(ownewList);
 
 
@@ -206,26 +214,143 @@ public class CheckMandateDocTransform extends Transform {
             checkMandatoryDocFileNameView = checkMandateDocFileNameTransform.transformToView(ecmDetail.getOrgFileName(), getURLByFNId(ecmDetail.getFnDocId(), userToken));
             fileNameViewList.add(checkMandatoryDocFileNameView);
         }
+        for(MandateDocFileNameView mandateDocFileNameView : fileNameViewList){
+            log.debug("-- MandateDocFileNameView.FileName[{}]", mandateDocFileNameView.getFileName());
+            log.debug("-- MandateDocFileNameView.URL[{}]", mandateDocFileNameView.getUrl());
+        }
         checkMandatoryDocView.setFileNameViewList(fileNameViewList);
 
         //is Complete
         checkMandatoryDocView.setComplete(complete);
-
-
-
+        log.debug("-- CheckOtherDocView.Complete[{}]", checkMandatoryDocView.getComplete());
         return checkMandatoryDocView;
     }
-    public CheckOptionalDocView transformToCheckOptionalDocView(final MandateDocView mandateDocView, final List<ECMDetail> ecmDetailList, final int complete, final String token ){
+    public CheckOptionalDocView transformToCheckOptionalDocView(final MandateDocView mandateDocView, final List<ECMDetail> ecmDetailList, final int complete, final String userToken ){
+        log.debug("-- transformToCheckOptionalDocView(MandateDocView.EcmDocTypeId[{}], complete[{}])", mandateDocView.getEcmDocTypeId(), complete);
         checkOptionalDocView = new CheckOptionalDocView();
+        boolean flag = false;
+        //Checking Document Type
+        if(!Util.isNull(mandateDocView.getEcmDocTypeDesc()) && !Util.isZero(mandateDocView.getEcmDocTypeDesc().length())){
+            log.debug("-- MandateDocView.EcmDocTypeDesc is not null");
+            log.debug("-- Document Type is {}", mandateDocView.getEcmDocTypeDesc());
+            checkOptionalDocView.setDocumentType(mandateDocView.getEcmDocTypeDesc());
+        } else {
+            flag = true;
+        }
+        log.debug("-- CheckMandatoryDocView.DocumentType[{}]", checkOptionalDocView.getDocumentType());
+
+        //Checking BRMS Document Type
+        List<MandateDocBRMSView> BRMSDocumentTypeList = Util.safetyList(checkMandateDocBRMSTransform.transformStringListToView(mandateDocView.getBrmsDescList()));
+        for(MandateDocBRMSView mandateDocBRMSView : BRMSDocumentTypeList){
+            log.debug("-- MandateDocBRMSView.BRMSDocType[{}]", mandateDocBRMSView.getBRMSDocType());
+        }
+        checkOptionalDocView.setBRMSDocumentTypeList(BRMSDocumentTypeList);
+
+        //Checking Owners
+        List<MandateDocCustView> ownewList = checkMandateDocCustTransform.transformCustomerListToView(Util.safetyList(mandateDocView.getCustomerInfoSimpleViewList()));
+        for(MandateDocCustView mandateDocCustView : ownewList){
+            log.debug("-- MandateDocCustView.CustName[{}]", mandateDocCustView.getCustName());
+        }
+        checkOptionalDocView.setOwnewList(ownewList);
+
+
+        List<MandateDocFileNameView> fileNameViewList = new ArrayList<MandateDocFileNameView>();
+        MandateDocFileNameView checkMandatoryDocFileNameView = null;
+        for(ECMDetail ecmDetail : ecmDetailList){
+            if(flag){
+                if(!Util.isNull(ecmDetail.getTypeNameTH()) && !Util.isZero(ecmDetail.getTypeNameTH().length())){
+                    log.debug("-- EcmDetail.TypeNameTH is not null");
+                    log.debug("-- Document Type is {}", ecmDetail.getTypeNameTH());
+                    checkOptionalDocView.setDocumentType(ecmDetail.getTypeNameTH());
+                    flag = false;
+                } else {
+                    log.debug("-- EcmDetail.TypeNameTH is null");
+                    log.debug("-- Document Type is {}", "Empty");
+                    checkOptionalDocView.setDocumentType("");
+                    flag = true;
+                }
+            }
+
+            //File Name
+            checkMandatoryDocFileNameView = checkMandateDocFileNameTransform.transformToView(ecmDetail.getOrgFileName(), getURLByFNId(ecmDetail.getFnDocId(), userToken));
+            fileNameViewList.add(checkMandatoryDocFileNameView);
+        }
+        for(MandateDocFileNameView mandateDocFileNameView : fileNameViewList){
+            log.debug("-- MandateDocFileNameView.FileName[{}]", mandateDocFileNameView.getFileName());
+            log.debug("-- MandateDocFileNameView.URL[{}]", mandateDocFileNameView.getUrl());
+        }
+        checkOptionalDocView.setFileNameViewList(fileNameViewList);
+
+        //is Complete
+        checkOptionalDocView.setComplete(complete);
+        log.debug("-- CheckOtherDocView.Complete[{}]", checkOptionalDocView.getComplete());
         return checkOptionalDocView;
     }
-    public CheckOtherDocView transformToCheckOtherDocView(final MandateDocView mandateDocView, final List<ECMDetail> ecmDetailList, final int complete, final String token ){
+    public CheckOtherDocView transformToCheckOtherDocView(final MandateDocView mandateDocView, final List<ECMDetail> ecmDetailList, final int complete, final String userToken ){
+        log.debug("-- transformToCheckOtherDocView(MandateDocView.EcmDocTypeId[{}], complete[{}])", mandateDocView.getEcmDocTypeId(), complete);
         checkOtherDocView = new CheckOtherDocView();
+        boolean flag = false;
+        //Checking Document Type
+        if(!Util.isNull(mandateDocView.getEcmDocTypeDesc()) && !Util.isZero(mandateDocView.getEcmDocTypeDesc().length())){
+            log.debug("-- MandateDocView.EcmDocTypeDesc is not null");
+            log.debug("-- Document Type is {}", mandateDocView.getEcmDocTypeDesc());
+            checkOtherDocView.setDocumentType(mandateDocView.getEcmDocTypeDesc());
+        } else {
+            flag = true;
+        }
+        log.debug("-- CheckMandatoryDocView.DocumentType[{}]", checkOtherDocView.getDocumentType());
+
+        //Checking BRMS Document Type
+        List<MandateDocBRMSView> BRMSDocumentTypeList = Util.safetyList(checkMandateDocBRMSTransform.transformStringListToView(mandateDocView.getBrmsDescList()));
+        for(MandateDocBRMSView mandateDocBRMSView : BRMSDocumentTypeList){
+            log.debug("-- MandateDocBRMSView.BRMSDocType[{}]", mandateDocBRMSView.getBRMSDocType());
+        }
+        checkOtherDocView.setBRMSDocumentTypeList(BRMSDocumentTypeList);
+
+        //Checking Owners
+        List<MandateDocCustView> ownewList = checkMandateDocCustTransform.transformCustomerListToView(Util.safetyList(mandateDocView.getCustomerInfoSimpleViewList()));
+        for(MandateDocCustView mandateDocCustView : ownewList){
+            log.debug("-- MandateDocCustView.CustName[{}]", mandateDocCustView.getCustName());
+        }
+        checkOtherDocView.setOwnewList(ownewList);
+
+
+        List<MandateDocFileNameView> fileNameViewList = new ArrayList<MandateDocFileNameView>();
+        MandateDocFileNameView checkMandatoryDocFileNameView = null;
+        for(ECMDetail ecmDetail : ecmDetailList){
+            if(flag){
+                if(!Util.isNull(ecmDetail.getTypeNameTH()) && !Util.isZero(ecmDetail.getTypeNameTH().length())){
+                    log.debug("-- EcmDetail.TypeNameTH is not null");
+                    log.debug("-- Document Type is {}", ecmDetail.getTypeNameTH());
+                    checkOtherDocView.setDocumentType(ecmDetail.getTypeNameTH());
+                    flag = false;
+                } else {
+                    log.debug("-- EcmDetail.TypeNameTH is null");
+                    log.debug("-- Document Type is {}", "Empty");
+                    checkOtherDocView.setDocumentType("");
+                    flag = true;
+                }
+            }
+
+            //File Name
+            checkMandatoryDocFileNameView = checkMandateDocFileNameTransform.transformToView(ecmDetail.getOrgFileName(), getURLByFNId(ecmDetail.getFnDocId(), userToken));
+            fileNameViewList.add(checkMandatoryDocFileNameView);
+        }
+        for(MandateDocFileNameView mandateDocFileNameView : fileNameViewList){
+            log.debug("-- MandateDocFileNameView.FileName[{}]", mandateDocFileNameView.getFileName());
+            log.debug("-- MandateDocFileNameView.URL[{}]", mandateDocFileNameView.getUrl());
+        }
+        checkOtherDocView.setFileNameViewList(fileNameViewList);
+
+        //is Complete
+        checkOtherDocView.setComplete(complete);
+        log.debug("-- CheckOtherDocView.Complete[{}]", checkOtherDocView.getComplete());
         return checkOtherDocView;
     }
 
     //BRMS
     public CheckMandatoryDocView transformToCheckMandatoryDocView(final MandateDocView mandateDocView, final int complete){
+        log.debug("-- transformToCheckMandatoryDocView(MandateDocView.EcmDocTypeId[{}], complete[{}])", mandateDocView.getEcmDocTypeId(), complete);
         checkMandatoryDocView = new CheckMandatoryDocView();
         //Checking Document Type
         if(!Util.isNull(mandateDocView.getEcmDocTypeDesc()) && !Util.isZero(mandateDocView.getEcmDocTypeDesc().length())){
@@ -235,21 +360,33 @@ public class CheckMandateDocTransform extends Transform {
         } else {
             checkMandatoryDocView.setDocumentType("");
         }
+        log.debug("-- CheckMandatoryDocView.DocumentType[{}]", checkMandatoryDocView.getDocumentType());
 
         //Checking BRMS Document Type
         List<MandateDocBRMSView> BRMSDocumentTypeList = Util.safetyList(checkMandateDocBRMSTransform.transformStringListToView(mandateDocView.getBrmsDescList()));
+        for(MandateDocBRMSView mandateDocBRMSView : BRMSDocumentTypeList){
+            log.debug("-- MandateDocBRMSView.BRMSDocType[{}]", mandateDocBRMSView.getBRMSDocType());
+        }
         checkMandatoryDocView.setBRMSDocumentTypeList(BRMSDocumentTypeList);
 
         //Checking Owners
         List<MandateDocCustView> ownewList = checkMandateDocCustTransform.transformCustomerListToView(Util.safetyList(mandateDocView.getCustomerInfoSimpleViewList()));
+        for(MandateDocCustView mandateDocCustView : ownewList){
+            log.debug("-- MandateDocCustView.CustName[{}]", mandateDocCustView.getCustName());
+        }
         checkMandatoryDocView.setOwnewList(ownewList);
 
         //is Complete
         checkMandatoryDocView.setComplete(complete);
+        log.debug("-- CheckOtherDocView.Complete[{}]", checkMandatoryDocView.getComplete());
         return checkMandatoryDocView;
     }
+
     public CheckOptionalDocView transformToCheckOptionalDocView(final MandateDocView mandateDocView, final int complete){
+        log.debug("-- transformToCheckOptionalDocView(MandateDocView.EcmDocTypeId[{}], complete[{}])", mandateDocView.getEcmDocTypeId(), complete);
         checkOptionalDocView = new CheckOptionalDocView();
+        log.debug("-- [New]CheckOtherDocView Created");
+
         //Checking Document Type
         if(!Util.isNull(mandateDocView.getEcmDocTypeDesc()) && !Util.isZero(mandateDocView.getEcmDocTypeDesc().length())){
             log.debug("-- MandateDocView.EcmDocTypeDesc is not null");
@@ -258,21 +395,32 @@ public class CheckMandateDocTransform extends Transform {
         } else {
             checkOptionalDocView.setDocumentType("");
         }
+        log.debug("-- CheckOtherDocView.DocumentType[{}]", checkOptionalDocView.getDocumentType());
 
         //Checking BRMS Document Type
         List<MandateDocBRMSView> BRMSDocumentTypeList = Util.safetyList(checkMandateDocBRMSTransform.transformStringListToView(mandateDocView.getBrmsDescList()));
-        checkMandatoryDocView.setBRMSDocumentTypeList(BRMSDocumentTypeList);
+        for(MandateDocBRMSView mandateDocBRMSView : BRMSDocumentTypeList){
+            log.debug("-- MandateDocBRMSView.BRMSDocType[{}]", mandateDocBRMSView.getBRMSDocType());
+        }
+        checkOptionalDocView.setBRMSDocumentTypeList(BRMSDocumentTypeList);
 
         //Checking Owners
         List<MandateDocCustView> ownewList = checkMandateDocCustTransform.transformCustomerListToView(Util.safetyList(mandateDocView.getCustomerInfoSimpleViewList()));
-        checkMandatoryDocView.setOwnewList(ownewList);
+        for(MandateDocCustView mandateDocCustView : ownewList){
+            log.debug("-- MandateDocCustView.CustName[{}]", mandateDocCustView.getCustName());
+        }
+        checkOptionalDocView.setOwnewList(ownewList);
 
         //is Complete
         checkOptionalDocView.setComplete(complete);
+        log.debug("-- CheckOtherDocView.Complete[{}]", checkOptionalDocView.getComplete());
+
         return checkOptionalDocView;
     }
     public CheckOtherDocView transformToCheckOtherDocView(final MandateDocView mandateDocView, final int complete){
+        log.debug("-- transformToCheckOtherDocView(MandateDocView.EcmDocTypeId[{}], complete[{}])", mandateDocView.getEcmDocTypeId(), complete);
         checkOtherDocView = new CheckOtherDocView();
+        log.debug("-- [New]CheckOtherDocView Created");
         //Checking Document Type
         if(!Util.isNull(mandateDocView.getEcmDocTypeDesc()) && !Util.isZero(mandateDocView.getEcmDocTypeDesc().length())){
             log.debug("-- MandateDocView.EcmDocTypeDesc is not null");
@@ -281,17 +429,26 @@ public class CheckMandateDocTransform extends Transform {
         } else {
             checkOtherDocView.setDocumentType("");
         }
+        log.debug("-- CheckOtherDocView.DocumentType[{}]", checkOtherDocView.getDocumentType());
 
         //Checking BRMS Document Type
         List<MandateDocBRMSView> BRMSDocumentTypeList = Util.safetyList(checkMandateDocBRMSTransform.transformStringListToView(mandateDocView.getBrmsDescList()));
-        checkMandatoryDocView.setBRMSDocumentTypeList(BRMSDocumentTypeList);
+        for(MandateDocBRMSView mandateDocBRMSView : BRMSDocumentTypeList){
+            log.debug("-- MandateDocBRMSView.BRMSDocType[{}]", mandateDocBRMSView.getBRMSDocType());
+        }
+        checkOtherDocView.setBRMSDocumentTypeList(BRMSDocumentTypeList);
 
         //Checking Owners
         List<MandateDocCustView> ownewList = checkMandateDocCustTransform.transformCustomerListToView(Util.safetyList(mandateDocView.getCustomerInfoSimpleViewList()));
-        checkMandatoryDocView.setOwnewList(ownewList);
+        for(MandateDocCustView mandateDocCustView : ownewList){
+            log.debug("-- MandateDocCustView.CustName[{}]", mandateDocCustView.getCustName());
+        }
+        checkOtherDocView.setOwnewList(ownewList);
 
         //is Complete
         checkOtherDocView.setComplete(complete);
+        log.debug("-- CheckOtherDocView.Complete[{}]", checkOtherDocView.getComplete());
+
         return checkOtherDocView;
     }
 
@@ -316,16 +473,21 @@ public class CheckMandateDocTransform extends Transform {
                 }
                 flag = false;
             }
+            log.debug("-- CheckOtherDocView.DocumentType[{}]", checkOtherDocView.getDocumentType());
 
             //File Name
             checkMandatoryDocFileNameView = checkMandateDocFileNameTransform.transformToView(ecmDetail.getOrgFileName(), getURLByFNId(ecmDetail.getFnDocId(), userToken));
             fileNameViewList.add(checkMandatoryDocFileNameView);
-            fileNameViewList.add(checkMandatoryDocFileNameView);
         }
-        checkMandatoryDocView.setFileNameViewList(fileNameViewList);
+        for(MandateDocFileNameView mandateDocFileNameView : fileNameViewList){
+            log.debug("-- MandateDocFileNameView.FileName[{}]", mandateDocFileNameView.getFileName());
+            log.debug("-- MandateDocFileNameView.URL[{}]", mandateDocFileNameView.getUrl());
+        }
+        checkOtherDocView.setFileNameViewList(fileNameViewList);
 
         //is Complete
         checkOtherDocView.setComplete(complete);
+        log.debug("-- CheckOtherDocView.Complete[{}]", checkOtherDocView.getComplete());
         return checkOtherDocView;
     }
 
