@@ -428,10 +428,10 @@
                                                      value="#{custInfoSumJuris.customerInfoView.sourceIncome.id}"
                                                      disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                        <f:selectItems value="#{custInfoSumJuris.countryList}"
-                                                       var="country"
-                                                       itemLabel="#{country.name}"
-                                                       itemValue="#{country.id}"/>
+                                        <f:selectItems value="#{custInfoSumJuris.incomeSourceList}"
+                                                       var="incomeSource"
+                                                       itemLabel="#{incomeSource.name}"
+                                                       itemValue="#{incomeSource.id}"/>
                                     </p:selectOneMenu>
                                 </td>
                                 <td class="title larger" >
