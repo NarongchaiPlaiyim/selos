@@ -378,7 +378,8 @@
                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.salesFromFinancialStmt')}"/>
                                 </td>
                                 <td>
-                                    <p:inputText id="salesFormFinancialStmt" styleClass="right" value="#{custInfoSumJuris.customerInfoView.salesFromFinancialStmt}"
+                                    <p:inputText id="salesFormFinancialStmt" styleClass="right" required="true"
+                                                 value="#{custInfoSumJuris.customerInfoView.salesFromFinancialStmt}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownMoney(event);"
                                                  onkeypress="return onKeyPressMoney(event);"

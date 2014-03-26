@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.working.MandateDoc;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.io.Serializable;
 public class MandateDocCustView implements Serializable {
     private long id;
     private String custName;
+    private MandateDoc mandateDoc;
     public MandateDocCustView() {
 
     }
@@ -26,6 +28,14 @@ public class MandateDocCustView implements Serializable {
 
     public void setCustName(String custName) {
         this.custName = custName;
+    }
+
+    public MandateDoc getMandateDoc() {
+        return mandateDoc;
+    }
+
+    public void setMandateDoc(MandateDoc mandateDoc) {
+        this.mandateDoc = mandateDoc;
     }
 
     @Override

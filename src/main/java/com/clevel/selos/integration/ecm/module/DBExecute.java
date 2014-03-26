@@ -2,6 +2,7 @@ package com.clevel.selos.integration.ecm.module;
 
 import com.clevel.selos.exception.ECMInterfaceException;
 import com.clevel.selos.integration.ECM;
+import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.tool.DBContext;
 import com.clevel.selos.system.Config;
@@ -21,7 +22,7 @@ import java.util.List;
 
 public class DBExecute implements Serializable {
     @Inject
-    @ECM
+    @NCB
     private Logger log;
     @Inject
     @Config(name = "interface.ecm.oracle.conn")
