@@ -10,9 +10,12 @@ import com.clevel.selos.model.view.CheckMandateDocView;
 import com.clevel.selos.model.view.CheckMandatoryDocView;
 import com.clevel.selos.model.view.CheckOptionalDocView;
 import com.clevel.selos.model.view.CheckOtherDocView;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.CheckMandateDocCustTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -29,6 +32,9 @@ public class CheckMandateDoc implements Serializable {
     @Inject
     @NCB
     private Logger log;
+    @Inject
+    @NormalMessage
+    private Message msg;
     @Inject
     private CheckMandateDocControl checkMandateDocControl;
     private CheckMandateDocView checkMandateDocView;
@@ -72,8 +78,6 @@ public class CheckMandateDoc implements Serializable {
                 workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
             }
 
-
-
             String result = null;
             checkMandateDocView = null;
             try{
@@ -102,8 +106,23 @@ public class CheckMandateDoc implements Serializable {
     }
 
     public void onSaveCheckMandateDoc(){
-        log.debug("--onSaveCheckMandateDoc.");
-        checkMandateDocControl.onSaveMandateDoc(checkMandateDocView,161);
+        log.debug("-- onSaveCheckMandateDoc.");
+        try {
+            checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, workCaseId);
+            messageHeader = "success";
+            message = "success";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        } catch (Exception ex){
+            log.error("Exception : {}", ex);
+            messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
+            if(ex.getCause() != null){
+                message = msg.get("app.appraisal.request.message.body.save.fail") + " cause : "+ ex.getCause().toString();
+            } else {
+                message = msg.get("app.appraisal.request.message.body.save.fail") + ex.getMessage();
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+
     }
 
     public void onCancelCheckMandateDoc(){
@@ -124,5 +143,21 @@ public class CheckMandateDoc implements Serializable {
 
     public void setRowIndex(int rowIndex) {
         this.rowIndex = rowIndex;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

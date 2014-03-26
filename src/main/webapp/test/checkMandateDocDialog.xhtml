@@ -244,6 +244,20 @@
             </tr>
         </table>
     </h:form>
+
+    <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
+                         header="#{checkMandateDoc.messageHeader}" >
+            <f:facet name="message">
+                <h:outputText value="#{checkMandateDoc.message}" escape="false"/>
+            </f:facet>
+            <p:commandButton value="OK"
+                             process="@this"
+                             update=":checkMandateDocDialog"
+                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
+
 </h:body>
 </f:view>
 </html>
