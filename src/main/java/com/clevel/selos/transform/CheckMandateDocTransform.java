@@ -9,8 +9,7 @@ import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.model.DocMandateType;
 import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.Role;
-import com.clevel.selos.model.db.working.MandateDoc;
-import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.Util;
@@ -78,7 +77,72 @@ public class CheckMandateDocTransform extends Transform {
 
         return mandateDoc;
     }
+    public CheckMandateDocView transformToView(final List<MandateDoc> mandateDocs){
+        CheckMandateDocView view = new CheckMandateDocView();
+        List<CheckMandateDocView> viewList = new ArrayList<CheckMandateDocView>();
+        List<CheckMandatoryDocView> mandatoryDocumentsList = new ArrayList<CheckMandatoryDocView>();
+        CheckMandatoryDocView mandatoryDocView = null;
+        List<CheckOptionalDocView> optionalDocumentsList = new ArrayList<CheckOptionalDocView>();
+        CheckOptionalDocView optionalDocView = null;
+        List<CheckOtherDocView> otherDocumentsList = new ArrayList<CheckOtherDocView>();
+        CheckOtherDocView otherDocView = null;
 
+        for (MandateDoc model : mandateDocs){
+            if(DocMandateType.MANDATE.value() == model.getMandateType()){
+                mandatoryDocView = new CheckMandatoryDocView();
+//                mandatoryDocView.setId(model.getId());
+                mandatoryDocView.setDocumentType(model.getEcmDocType());
+                mandatoryDocView.setComplete(model.getCompleted());
+                mandatoryDocView.setIncomplete(Util.isTrue(model.getReasonIncomplete()));
+                mandatoryDocView.setIncomplete(Util.isTrue(model.getReasonIndistinct()));
+                mandatoryDocView.setIncorrect(Util.isTrue(model.getReasonIncorrect()));
+                mandatoryDocView.setExpire(Util.isTrue(model.getReasonExpire()));
+                mandatoryDocView.setRemark(model.getRemark());
+                log.info("--getRemark. {}",model.getRemark());
+                mandatoryDocView.setBRMSDocumentTypeList(checkMandateDocBRMSTransform.transformToView(model.getMandateDocBRMSList()));
+                log.info("--getBRMSDocumentTypeList. {}",model.getMandateDocBRMSList());
+                mandatoryDocView.setOwnewList(checkMandateDocCustTransform.transformToView(model.getMandateDocCustList()));
+                mandatoryDocView.setFileNameViewList(checkMandateDocFileNameTransform.transformToView(model.getMandateDocFileNameList()));
+                mandatoryDocumentsList.add(mandatoryDocView);
+                log.info("--mandatoryDocumentsList. {} and Size. {}",mandatoryDocumentsList,mandatoryDocumentsList.size());
+            } else if(DocMandateType.OPTIONAL.value() == model.getMandateType()){
+                optionalDocView = new CheckOptionalDocView();
+//                optionalDocView.setId(model.getId());
+                optionalDocView.setDocumentType(model.getEcmDocType());
+                optionalDocView.setComplete(model.getCompleted());
+                optionalDocView.setIncomplete(Util.isTrue(model.getReasonIncomplete()));
+                optionalDocView.setIncomplete(Util.isTrue(model.getReasonIndistinct()));
+                optionalDocView.setIncorrect(Util.isTrue(model.getReasonIncorrect()));
+                optionalDocView.setExpire(Util.isTrue(model.getReasonExpire()));
+                optionalDocView.setRemark(model.getRemark());
+                optionalDocView.setBRMSDocumentTypeList(checkMandateDocBRMSTransform.transformToView(model.getMandateDocBRMSList()));
+                optionalDocView.setOwnewList(checkMandateDocCustTransform.transformToView(model.getMandateDocCustList()));
+                optionalDocView.setFileNameViewList(checkMandateDocFileNameTransform.transformToView(model.getMandateDocFileNameList()));
+                optionalDocumentsList.add(optionalDocView);
+                log.info("--optionalDocumentsList. {} and Size. {}",optionalDocumentsList,optionalDocumentsList.size());
+            } else {
+                otherDocView = new CheckOtherDocView();
+//                otherDocView.setId(model.getId());
+                otherDocView.setDocumentType(model.getEcmDocType());
+                otherDocView.setComplete(model.getCompleted());
+                otherDocView.setIncomplete(Util.isTrue(model.getReasonIncomplete()));
+                otherDocView.setIncomplete(Util.isTrue(model.getReasonIndistinct()));
+                otherDocView.setIncorrect(Util.isTrue(model.getReasonIncorrect()));
+                otherDocView.setExpire(Util.isTrue(model.getReasonExpire()));
+                otherDocView.setRemark(model.getRemark());
+                otherDocView.setBRMSDocumentTypeList(checkMandateDocBRMSTransform.transformToView(model.getMandateDocBRMSList()));
+                otherDocView.setOwnewList(checkMandateDocCustTransform.transformToView(model.getMandateDocCustList()));
+                otherDocView.setFileNameViewList(checkMandateDocFileNameTransform.transformToView(model.getMandateDocFileNameList()));
+                otherDocumentsList.add(otherDocView);
+                log.info("--otherDocumentsList. {} and Size. {}",otherDocumentsList,otherDocumentsList.size());
+            }
+        }
+
+        view.setMandatoryDocumentsList(mandatoryDocumentsList);
+        view.setOptionalDocumentsList(optionalDocumentsList);
+        view.setOtherDocumentsList(otherDocumentsList);
+        return view;
+    }
     public List<MandateDoc> transformToModel(final CheckMandateDocView checkMandateDocView, final long workCaseId, final Role role){
         List<MandateDoc> mandateDocList = new ArrayList<MandateDoc>();
         MandateDoc model = null;
@@ -86,11 +150,13 @@ public class CheckMandateDocTransform extends Transform {
 
         mandatoryDocumentsList = Util.safetyList(checkMandateDocView.getMandatoryDocumentsList());
         for(CheckMandatoryDocView view : mandatoryDocumentsList){
-            if(!Util.isZero(view.getId())){
-                model = mandateDocDAO.findById(view.getId());
-            } else {
+//            if(!Util.isZero(view.getId())){
+//                model = mandateDocDAO.findById(view.getId());
+//                log.debug("-- CheckMandatoryDocView.id[{}]", view.getId());
+//            } else {
                 model = new MandateDoc();
-            }
+                log.debug("-- [NEW]CheckMandatoryDocView Created");
+//            }
             model.setWorkCase(workCase);
             model.setRole(role);
             model.setEcmDocType(view.getDocumentType());
@@ -102,19 +168,21 @@ public class CheckMandateDocTransform extends Transform {
             model.setReasonIndistinct(Util.isTrue(view.isIndistinct()));
             model.setReasonIncorrect(Util.isTrue(view.isIncorrect()));
             model.setReasonExpire(Util.isTrue(view.isExpire()));
-            model.setMandateDocBRMSList(checkMandateDocBRMSTransform.transformToModel(view.getBRMSDocumentTypeList()));
-            model.setMandateDocCustList(checkMandateDocCustTransform.transformToModel(view.getOwnewList()));
-            model.setMandateDocFileNameList(checkMandateDocFileNameTransform.transformToModel(view.getFileNameViewList()));
+            model.setMandateDocBRMSList(checkMandateDocBRMSTransform.transformToModel(model,  Util.safetyList(view.getBRMSDocumentTypeList())));
+            model.setMandateDocCustList(checkMandateDocCustTransform.transformToModel(model, Util.safetyList(view.getOwnewList())));
+            model.setMandateDocFileNameList(checkMandateDocFileNameTransform.transformToModel(model, Util.safetyList(view.getFileNameViewList())));
             mandateDocList.add(model);
         }
 
         optionalDocumentsList = Util.safetyList(checkMandateDocView.getOptionalDocumentsList());
         for(CheckOptionalDocView view : optionalDocumentsList){
-            if(!Util.isZero(view.getId())){
-                model = mandateDocDAO.findById(view.getId());
-            } else {
+//            if(!Util.isZero(view.getId())){
+//                model = mandateDocDAO.findById(view.getId());
+//                log.debug("-- CheckOptionalDocView.id[{}]", view.getId());
+//            } else {
                 model = new MandateDoc();
-            }
+                log.debug("-- [NEW]CheckOptionalDocView Created");
+//            }
             model.setWorkCase(workCase);
             model.setRole(role);
             model.setEcmDocType(view.getDocumentType());
@@ -126,19 +194,21 @@ public class CheckMandateDocTransform extends Transform {
             model.setReasonIndistinct(Util.isTrue(view.isIndistinct()));
             model.setReasonIncorrect(Util.isTrue(view.isIncorrect()));
             model.setReasonExpire(Util.isTrue(view.isExpire()));
-            model.setMandateDocBRMSList(checkMandateDocBRMSTransform.transformToModel(view.getBRMSDocumentTypeList()));
-            model.setMandateDocCustList(checkMandateDocCustTransform.transformToModel(view.getOwnewList()));
-            model.setMandateDocFileNameList(checkMandateDocFileNameTransform.transformToModel(view.getFileNameViewList()));
+            model.setMandateDocBRMSList(checkMandateDocBRMSTransform.transformToModel(model, Util.safetyList(view.getBRMSDocumentTypeList())));
+            model.setMandateDocCustList(checkMandateDocCustTransform.transformToModel(model, Util.safetyList(view.getOwnewList())));
+            model.setMandateDocFileNameList(checkMandateDocFileNameTransform.transformToModel(model, Util.safetyList(view.getFileNameViewList())));
             mandateDocList.add(model);
         }
 
         otherDocumentsList = Util.safetyList(checkMandateDocView.getOtherDocumentsList());
         for(CheckOtherDocView view : otherDocumentsList){
-            if(!Util.isZero(view.getId())){
-                model = mandateDocDAO.findById(view.getId());
-            } else {
+//            if(!Util.isZero(view.getId())){
+//                model = mandateDocDAO.findById(view.getId());
+//                log.debug("-- CheckOtherDocView.id[{}]", view.getId());
+//            } else {
                 model = new MandateDoc();
-            }
+                log.debug("-- [NEW]CheckOtherDocView Created");
+//            }
             model.setWorkCase(workCase);
             model.setRole(role);
             model.setEcmDocType(view.getDocumentType());
@@ -150,9 +220,9 @@ public class CheckMandateDocTransform extends Transform {
             model.setReasonIndistinct(Util.isTrue(view.isIndistinct()));
             model.setReasonIncorrect(Util.isTrue(view.isIncorrect()));
             model.setReasonExpire(Util.isTrue(view.isExpire()));
-            model.setMandateDocBRMSList(checkMandateDocBRMSTransform.transformToModel(view.getBRMSDocumentTypeList()));
-            model.setMandateDocCustList(checkMandateDocCustTransform.transformToModel(view.getOwnewList()));
-            model.setMandateDocFileNameList(checkMandateDocFileNameTransform.transformToModel(view.getFileNameViewList()));
+            model.setMandateDocBRMSList(checkMandateDocBRMSTransform.transformToModel(model, Util.safetyList(view.getBRMSDocumentTypeList())));
+            model.setMandateDocCustList(checkMandateDocCustTransform.transformToModel(model, Util.safetyList(view.getOwnewList())));
+            model.setMandateDocFileNameList(checkMandateDocFileNameTransform.transformToModel(model, Util.safetyList(view.getFileNameViewList())));
             mandateDocList.add(model);
         }
 
@@ -332,6 +402,10 @@ public class CheckMandateDocTransform extends Transform {
     //URL
     private String getURLByFNId(final String FNId, final String token){
         return address+"/getContent?objectStoreName="+objectStore+"&id="+FNId+"&objectType=document&ut=" + token;
+    }
+
+    public void delectList(){
+
     }
 
 }

@@ -2,6 +2,7 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.working.MandateDocBRMSDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.working.MandateDoc;
 import com.clevel.selos.model.db.working.MandateDocBRMS;
 import com.clevel.selos.model.view.MandateDocBRMSView;
 import com.clevel.selos.util.Util;
@@ -25,12 +26,15 @@ public class CheckMandateDocBRMSTransform extends Transform {
     }
 
     public List<MandateDocBRMSView> transformToView(final List<MandateDocBRMS> mandateDocBRMSList){
+        log.debug("--transformToView on MandateDocBRMSView");
         mandateDocBRMSViewList = new ArrayList<MandateDocBRMSView>();
         MandateDocBRMSView view = null;
+        log.debug("--mandateDocBRMSList. {}",mandateDocBRMSList);
         for(MandateDocBRMS model : mandateDocBRMSList){
             view = new MandateDocBRMSView();
-            view.setId(model.getId());
+//            view.setId(model.getId());
             view.setBRMSDocType(model.getBRMSDocType());
+            log.debug("--getBRMSDocType. {}",model.getBRMSDocType());
             mandateDocBRMSViewList.add(view);
         }
         return mandateDocBRMSViewList;
@@ -47,16 +51,19 @@ public class CheckMandateDocBRMSTransform extends Transform {
         return mandateDocBRMSViewList;
     }
 
-    public List<MandateDocBRMS> transformToModel(final List<MandateDocBRMSView> mandateDocBRMSViewList){
+    public List<MandateDocBRMS> transformToModel(final MandateDoc mandateDoc, final List<MandateDocBRMSView> mandateDocBRMSViewList){
         mandateDocBRMSList = new ArrayList<MandateDocBRMS>();
         MandateDocBRMS model = null;
         for(MandateDocBRMSView view : mandateDocBRMSViewList){
-            if(!Util.isNull(view.getId())){
-                model = mandateDocBRMSDAO.findById(view.getId());
-            } else {
+//            if(!Util.isZero(view.getId())){
+//                model = mandateDocBRMSDAO.findById(view.getId());
+//                log.debug("-- MandateDocBRMS.id[{}]", view.getId());
+//            } else {
                 model = new MandateDocBRMS();
-            }
+                log.debug("-- [NEW]MandateDocBRMS Created");
+//            }
             model.setBRMSDocType(view.getBRMSDocType());
+            model.setMandateDoc(mandateDoc);
             mandateDocBRMSList.add(model);
         }
         return mandateDocBRMSList;
