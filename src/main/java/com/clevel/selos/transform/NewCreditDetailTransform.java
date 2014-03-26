@@ -4,7 +4,6 @@ import com.clevel.selos.dao.master.BaseRateDAO;
 import com.clevel.selos.dao.working.NewCreditDetailDAO;
 import com.clevel.selos.dao.working.NewCreditTierDetailDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.BaseRate;
 import com.clevel.selos.model.db.master.User;
@@ -12,16 +11,13 @@ import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.NewCreditTierDetail;
 import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.view.CreditDetailSimpleView;
 import com.clevel.selos.model.view.NewCreditDetailView;
 import com.clevel.selos.model.view.NewCreditTierDetailView;
 import com.clevel.selos.util.Util;
-
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,13 +34,13 @@ public class NewCreditDetailTransform extends Transform {
     @Inject
     NewCreditDetailDAO newCreditDetailDAO;
     @Inject
-    NewCreditTierTransform newCreditTierTransform;
+    private NewCreditTierTransform newCreditTierTransform;
     @Inject
-    DisbursementTypeTransform disbursementTypeTransform;
+    private DisbursementTypeTransform disbursementTypeTransform;
     @Inject
-    ProductTransform productTransform;
+    private ProductTransform productTransform;
     @Inject
-    LoanPurposeTransform loanPurposeTransform;
+    private LoanPurposeTransform loanPurposeTransform;
     @Inject
     NewCreditTierDetailDAO newCreditTierDetailDAO;
     @Inject

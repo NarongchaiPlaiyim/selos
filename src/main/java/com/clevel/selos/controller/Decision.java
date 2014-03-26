@@ -127,6 +127,8 @@ public class Decision implements Serializable {
     private ProposeCreditDetailTransform proposeCreditDetailTransform;
     @Inject
     private NewCollateralSubTransform newCollateralSubTransform;
+    @Inject
+    BaseRateTransform baseRateTransform;
 
     // Session
     private long workCaseId;
@@ -422,12 +424,12 @@ public class Decision implements Serializable {
 
         if (selectedApproveCredit.getRequestType() == RequestTypes.NEW.value()) {
             if (selectedApproveCredit.getNewCreditTierDetailViewList() != null && !selectedApproveCredit.getNewCreditTierDetailViewList().isEmpty()) {
-                BaseRate standardBaseRate = selectedApproveCredit.getNewCreditTierDetailViewList().get(0).getStandardBasePrice();
+                BaseRate standardBaseRate = baseRateTransform.transformToModel(selectedApproveCredit.getNewCreditTierDetailViewList().get(0).getStandardBasePrice());
                 BigDecimal standardInterest = selectedApproveCredit.getNewCreditTierDetailViewList().get(0).getStandardInterest();
                 standardBasePriceDlg = getNewBaseRate(standardBaseRate);
                 standardInterestDlg = new BigDecimal(standardInterest.doubleValue());
 
-                BaseRate suggestBaseRate = selectedApproveCredit.getNewCreditTierDetailViewList().get(0).getSuggestBasePrice();
+                BaseRate suggestBaseRate = baseRateTransform.transformToModel(selectedApproveCredit.getNewCreditTierDetailViewList().get(0).getSuggestBasePrice());
                 BigDecimal suggestInterest = selectedApproveCredit.getNewCreditTierDetailViewList().get(0).getSuggestInterest();
                 suggestBasePriceDlg = getNewBaseRate(suggestBaseRate);
                 suggestInterestDlg = new BigDecimal(suggestInterest.doubleValue());
@@ -664,15 +666,15 @@ public class Decision implements Serializable {
 
         creditTierDetailAdd.setFinalPriceLabel(finalPriceLabel);
         creditTierDetailAdd.setFinalInterest(finalInterest);
-        creditTierDetailAdd.setFinalBasePrice(finalBaseRate);
+        creditTierDetailAdd.setFinalBasePrice(baseRateTransform.transformToView(finalBaseRate));
 
         creditTierDetailAdd.setSuggestPriceLabel(suggestPriceLabel);
         creditTierDetailAdd.setSuggestInterest(new BigDecimal(suggestInterestDlg.doubleValue()));
-        creditTierDetailAdd.setSuggestBasePrice(suggestBase);
+        creditTierDetailAdd.setSuggestBasePrice(baseRateTransform.transformToView(suggestBase));
 
         creditTierDetailAdd.setStandardPriceLabel(standardPriceLabel);
         creditTierDetailAdd.setStandardInterest(new BigDecimal(standardInterestDlg.doubleValue()));
-        creditTierDetailAdd.setStandardBasePrice(standardBase);
+        creditTierDetailAdd.setStandardBasePrice(baseRateTransform.transformToView(standardBase));
 
         creditTierDetailAdd.setCanEdit(true);
 
