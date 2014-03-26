@@ -4,13 +4,12 @@ import com.clevel.selos.dao.master.BaseRateDAO;
 import com.clevel.selos.dao.working.NewCreditTierDetailDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.response.PricingIntTier;
-import com.clevel.selos.integration.brms.model.response.PricingInterest;
 import com.clevel.selos.model.db.master.BaseRate;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.NewCreditTierDetail;
+import com.clevel.selos.model.view.BaseRateView;
 import com.clevel.selos.model.view.NewCreditTierDetailView;
-import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
@@ -28,6 +27,8 @@ public class NewCreditTierTransform extends Transform {
     BaseRateDAO baseRateDAO;
     @Inject
     NewCreditTierDetailDAO newCreditTierDetailDAO;
+    @Inject
+    BaseRateTransform baseRateTransform;
 
     @Inject
     public NewCreditTierTransform() {
@@ -52,23 +53,23 @@ public class NewCreditTierTransform extends Transform {
             }
 
             newCreditTierDetail.setNo(newCreditTierDetailView.getNo());
-            if(newCreditTierDetailView.getFinalBasePrice() != null && newCreditTierDetailView.getFinalBasePrice().getId() != 0){
+            if (newCreditTierDetailView.getFinalBasePrice() != null && newCreditTierDetailView.getFinalBasePrice().getId() != 0) {
                 newCreditTierDetail.setFinalBasePrice(baseRateDAO.findById(newCreditTierDetailView.getFinalBasePrice().getId()));
-            }else{
+            } else {
                 newCreditTierDetail.setFinalBasePrice(null);
             }
             newCreditTierDetail.setFinalInterest(newCreditTierDetailView.getFinalInterest());
 
-            if(newCreditTierDetailView.getSuggestBasePrice() != null && newCreditTierDetailView.getSuggestBasePrice().getId() != 0){
+            if (newCreditTierDetailView.getSuggestBasePrice() != null && newCreditTierDetailView.getSuggestBasePrice().getId() != 0) {
                 newCreditTierDetail.setSuggestBasePrice(baseRateDAO.findById(newCreditTierDetailView.getSuggestBasePrice().getId()));
-            }else{
+            } else {
                 newCreditTierDetail.setSuggestBasePrice(null);
             }
             newCreditTierDetail.setSuggestInterest(newCreditTierDetailView.getSuggestInterest());
 
-            if(newCreditTierDetailView.getStandardBasePrice() != null && newCreditTierDetailView.getStandardBasePrice().getId() != 0){
+            if (newCreditTierDetailView.getStandardBasePrice() != null && newCreditTierDetailView.getStandardBasePrice().getId() != 0) {
                 newCreditTierDetail.setStandardBasePrice(baseRateDAO.findById(newCreditTierDetailView.getStandardBasePrice().getId()));
-            }else{
+            } else {
                 newCreditTierDetail.setStandardBasePrice(null);
             }
             newCreditTierDetail.setStandardInterest(newCreditTierDetailView.getStandardInterest());
@@ -97,27 +98,27 @@ public class NewCreditTierTransform extends Transform {
             newFeeDetailView.setModifyDate(newCreditTierDetail.getModifyDate());
             newFeeDetailView.setModifyBy(newCreditTierDetail.getModifyBy());
             newFeeDetailView.setNo(newCreditTierDetail.getNo());
-            if(newCreditTierDetail.getFinalBasePrice() != null){
-                newFeeDetailView.setFinalBasePrice(newCreditTierDetail.getFinalBasePrice());
-            }else{
-                newFeeDetailView.setFinalBasePrice(new BaseRate());
+            if (newCreditTierDetail.getFinalBasePrice() != null) {
+                newFeeDetailView.setFinalBasePrice(baseRateTransform.transformToView(newCreditTierDetail.getFinalBasePrice()));
+            } else {
+                newFeeDetailView.setFinalBasePrice(new BaseRateView());
             }
             newFeeDetailView.setFinalInterest(newCreditTierDetail.getFinalInterest());
-            newFeeDetailView.setFinalPriceLabel(toGetPricing(newCreditTierDetail.getFinalBasePrice(),newCreditTierDetail.getFinalInterest()));
-            if(newCreditTierDetail.getSuggestBasePrice() != null){
-                newFeeDetailView.setSuggestBasePrice(newCreditTierDetail.getSuggestBasePrice());
-            }else{
-                newFeeDetailView.setSuggestBasePrice(new BaseRate());
+            newFeeDetailView.setFinalPriceLabel(toGetPricing(newCreditTierDetail.getFinalBasePrice(), newCreditTierDetail.getFinalInterest()));
+            if (newCreditTierDetail.getSuggestBasePrice() != null) {
+                newFeeDetailView.setSuggestBasePrice(baseRateTransform.transformToView(newCreditTierDetail.getSuggestBasePrice()));
+            } else {
+                newFeeDetailView.setSuggestBasePrice(new BaseRateView());
             }
             newFeeDetailView.setSuggestInterest(newCreditTierDetail.getSuggestInterest());
-            newFeeDetailView.setSuggestPriceLabel(toGetPricing(newCreditTierDetail.getSuggestBasePrice(),newCreditTierDetail.getSuggestInterest()));
-            if(newCreditTierDetail.getStandardBasePrice() != null){
-                newFeeDetailView.setStandardBasePrice(newCreditTierDetail.getStandardBasePrice());
-            }else{
-                newFeeDetailView.setStandardBasePrice(new BaseRate());
+            newFeeDetailView.setSuggestPriceLabel(toGetPricing(newCreditTierDetail.getSuggestBasePrice(), newCreditTierDetail.getSuggestInterest()));
+            if (newCreditTierDetail.getStandardBasePrice() != null) {
+                newFeeDetailView.setStandardBasePrice(baseRateTransform.transformToView(newCreditTierDetail.getStandardBasePrice()));
+            } else {
+                newFeeDetailView.setStandardBasePrice(new BaseRateView());
             }
             newFeeDetailView.setStandardInterest(newCreditTierDetail.getStandardInterest());
-            newFeeDetailView.setStandardPriceLabel(toGetPricing(newCreditTierDetail.getStandardBasePrice(),newCreditTierDetail.getStandardInterest()));
+            newFeeDetailView.setStandardPriceLabel(toGetPricing(newCreditTierDetail.getStandardBasePrice(), newCreditTierDetail.getStandardInterest()));
             newFeeDetailView.setInstallment(newCreditTierDetail.getInstallment());
             newFeeDetailView.setTenor(newCreditTierDetail.getTenor());
             newCreditTierDetailViewList.add(newFeeDetailView);
@@ -126,27 +127,46 @@ public class NewCreditTierTransform extends Transform {
         return newCreditTierDetailViewList;
     }
 
-    public List<NewCreditTierDetailView> transformPricingIntTierToView(List<PricingInterest> pricingInterestList) {
+    public List<NewCreditTierDetailView> transformPricingIntTierToView(List<PricingIntTier> pricingInterestList) {
         List<NewCreditTierDetailView> newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
-        NewCreditTierDetailView newFeeDetailView;
-        for(PricingInterest pricingInterest : pricingInterestList){
-            if(!Util.isNull(pricingInterest.getCreditDetailId())){
-                for (PricingIntTier newPricingIntTier : pricingInterest.getPricingIntTierList()) {
-                    newFeeDetailView = new NewCreditTierDetailView();
-                    newFeeDetailView.setStandardInterest(newPricingIntTier.getMaxRateVariance());
-        //            newFeeDetailView.setStandardBasePrice();
-                    newFeeDetailView.setStandardPriceLabel(newPricingIntTier.getRateType());
-                    log.info("newPricingIntTier.getRateType() ::: {}",newPricingIntTier.getRateType());
-                    newCreditTierDetailViewList.add(newFeeDetailView);
-                }
-            }
+        NewCreditTierDetailView newCreditTierDetailView;
+        log.debug("transformPricingIntTierToView size ::: {}", pricingInterestList.size());
+
+        for (PricingIntTier newPricingIntTier : pricingInterestList) {
+            StringBuilder standRate = new StringBuilder();
+            StringBuilder suggestRate = new StringBuilder();
+            StringBuilder finalRate = new StringBuilder();
+            newCreditTierDetailView = new NewCreditTierDetailView();
+
+            //Standard
+            standRate.append(newPricingIntTier.getRateType()).append(newPricingIntTier.getSpread()).append(newPricingIntTier.getRateVariance().toString());
+            newCreditTierDetailView.setStandardBasePrice(baseRateTransform.transformToView(baseRateDAO.findByName(newPricingIntTier.getRateType())));
+            newCreditTierDetailView.setStandardInterest(newPricingIntTier.getRateVariance());
+            newCreditTierDetailView.setStandardPriceLabel(standRate.toString());
+
+            //Suggestion
+            suggestRate.append(newPricingIntTier.getRateType()).append(newPricingIntTier.getSpread()).append(newPricingIntTier.getRateVariance().toString());
+            newCreditTierDetailView.setSuggestBasePrice(baseRateTransform.transformToView(baseRateDAO.findByName(newPricingIntTier.getRateType())));
+            newCreditTierDetailView.setSuggestInterest(newPricingIntTier.getRateVariance());
+            newCreditTierDetailView.setSuggestPriceLabel(suggestRate.toString());
+
+            //Final
+            finalRate.append(newPricingIntTier.getRateType()).append(newPricingIntTier.getSpread()).append(newPricingIntTier.getRateVariance().toString());
+            newCreditTierDetailView.setFinalBasePrice(baseRateTransform.transformToView(baseRateDAO.findByName(newPricingIntTier.getRateType())));
+            newCreditTierDetailView.setFinalInterest(newPricingIntTier.getRateVariance());
+            newCreditTierDetailView.setFinalPriceLabel(finalRate.toString());
+
+            log.debug("newPricingIntTier.getRateType() ::: {}", newCreditTierDetailView.getStandardPriceLabel());
+            newCreditTierDetailViewList.add(newCreditTierDetailView);
         }
+
+
         return newCreditTierDetailViewList;
     }
 
-    public String toGetPricing(BaseRate baseRate ,BigDecimal price){
+    public String toGetPricing(BaseRate baseRate, BigDecimal price) {
         String priceToShow = "";
-        if(price != null && baseRate != null){
+        if (price != null && baseRate != null) {
             if (price.doubleValue() < 0) {
                 priceToShow = baseRate.getName() + " " + price;
             } else {
