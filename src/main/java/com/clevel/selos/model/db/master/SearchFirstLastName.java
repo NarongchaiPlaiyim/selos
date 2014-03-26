@@ -27,6 +27,39 @@ public class SearchFirstLastName implements Serializable
     @Column(name = "lastname_th")
     private String lastnametai;
 
+    @Column(name = "workcase_id")
+    private Integer workCaseId;
+
+    @Column(name = "workcase_prescreen_id")
+    private Integer wrokCasePreScreenId;
+
+    @Column(name ="relation_id")
+    private Integer relationId;
+
+    public Integer getRelationId() {
+        return relationId;
+    }
+
+    public void setRelationId(Integer relationId) {
+        this.relationId = relationId;
+    }
+
+    public Integer getWorkCaseId() {
+        return workCaseId;
+    }
+
+    public void setWorkCaseId(Integer workCaseId) {
+        this.workCaseId = workCaseId;
+    }
+
+    public Integer getWrokCasePreScreenId() {
+        return wrokCasePreScreenId;
+    }
+
+    public void setWrokCasePreScreenId(Integer wrokCasePreScreenId) {
+        this.wrokCasePreScreenId = wrokCasePreScreenId;
+    }
+
     public String getLastnameenglish() {
         return lastnameenglish;
     }

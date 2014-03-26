@@ -99,6 +99,8 @@ public class CompletedCasesWKItemsDAO extends GenericDAO<CompletedCasesWKItems,S
                 criteria.add(Restrictions.le("createdate",terminatetodate))  ; // terminate to date
             }
 
+            criteria.add(Restrictions.eq("bpmActive",0))  ;
+
             log.info("criteria is :: {}", criteria.toString());
 
             criteria.setResultTransformer(Transformers.aliasToBean(CompletedCasesWKItems.class));
