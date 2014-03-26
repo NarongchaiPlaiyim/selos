@@ -136,6 +136,8 @@ public class CreditFacProposeControl extends BusinessControl {
     FeeTransform feeTransform;
     @Inject
     ProductTransform productTransform;
+    @Inject
+    FeeDetailDAO feeDetailDAO;
 
     @Inject
     public CreditFacProposeControl() {
@@ -150,12 +152,12 @@ public class CreditFacProposeControl extends BusinessControl {
             if (newCreditFacility != null) {
                 newCreditFacilityView = newCreditFacilityTransform.transformToView(newCreditFacility);
 
-                List<NewFeeDetail> newFeeDetailList = newFeeCreditDAO.findByNewCreditFacility(newCreditFacility);
+                List<FeeDetail> newFeeDetailList = feeDetailDAO.findAllByWorkCaseId(workCaseId);
                 if (newFeeDetailList.size() > 0) {
-                    log.debug("newCreditFacility.getNewFeeDetailList() :: {}", newCreditFacility.getNewFeeDetailList());
-                    List<NewFeeDetailView> newFeeDetailViewList = newFeeDetailTransform.transformToView(newFeeDetailList);
-                    log.debug("newFeeDetailViewList : {}", newFeeDetailViewList);
-                    newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
+                    log.debug("newFeeDetailList :: {}", newFeeDetailList.size());
+//                    List<NewFeeDetailView> newFeeDetailViewList = feeTransform.transformToView(newFeeDetailList);
+//                    log.debug("newFeeDetailViewList : {}", newFeeDetailViewList);
+//                    newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
                 }
 
                 List<NewCreditDetail> newCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility);
