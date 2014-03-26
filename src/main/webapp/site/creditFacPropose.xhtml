@@ -1113,19 +1113,31 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{tradeTableItem.commitmentFee.percentFee}"/>
+                <h:outputText value="#{not empty tradeTableItem.commitmentFee.percentFee ?
+                                                 tradeTableItem.commitmentFee.percentFee : '0.00%'},
+                                     #{not empty tradeTableItem.commitmentFee.feeYear ?
+                                                 tradeTableItem.commitmentFee.feeYear : '-'}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{tradeTableItem.extensionFee.percentFee}"/>
+                <h:outputText value="#{not empty tradeTableItem.extensionFee.percentFee ?
+                                                 tradeTableItem.extensionFee.percentFee : '0.00%'},
+                                     #{not empty tradeTableItem.extensionFee.feeYear ?
+                                                 tradeTableItem.extensionFee.feeYear : '-'}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{tradeTableItem.prepaymentFee.percentFee}"/>
+                <h:outputText value="#{not empty tradeTableItem.prepaymentFee.percentFee ?
+                                                 tradeTableItem.prepaymentFee.percentFee : '0.00%'},
+                                     #{not empty tradeTableItem.prepaymentFee.feeYear ?
+                                                 tradeTableItem.prepaymentFee.feeYear : '-'}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{tradeTableItem.cancellationFee.percentFee}"/>
+                <h:outputText value="#{not empty tradeTableItem.cancellationFee.percentFee ?
+                                                 tradeTableItem.cancellationFee.percentFee : '0.00%'},
+                                     #{not empty tradeTableItem.cancellationFee.feeYear ?
+                                                 tradeTableItem.cancellationFee.feeYear : '-'}"/>
             </p:column>
 
         </p:dataTable>
@@ -1926,7 +1938,7 @@
 <ui:include src="include/footer.xhtml"/>
 <!-- End Footer -->
 </div>
-<p:blockUI block=":frmMain" trigger="btnSave, btnCancel">
+<p:blockUI block=":frmMain" trigger="btnSave, btnCancel,retrieveCredit">
     LOADING<br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>
