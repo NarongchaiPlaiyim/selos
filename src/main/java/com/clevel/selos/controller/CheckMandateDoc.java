@@ -5,8 +5,12 @@ import com.clevel.selos.exception.ECMInterfaceException;
 import com.clevel.selos.integration.ECMInterface;
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.StepValue;
+import com.clevel.selos.model.db.working.MandateDoc;
 import com.clevel.selos.model.view.CheckMandateDocView;
+import com.clevel.selos.model.view.CheckMandatoryDocView;
+import com.clevel.selos.model.view.CheckOptionalDocView;
+import com.clevel.selos.model.view.CheckOtherDocView;
+import com.clevel.selos.transform.CheckMandateDocCustTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -17,6 +21,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "checkMandateDoc")
@@ -32,6 +37,9 @@ public class CheckMandateDoc implements Serializable {
     private String message;
     private long workCaseId;
     private int roleId;
+
+    @Inject
+    CheckMandateDocCustTransform checkMandateDocCustTransform;
 
     @Inject
     public CheckMandateDoc() {
@@ -94,7 +102,8 @@ public class CheckMandateDoc implements Serializable {
     }
 
     public void onSaveCheckMandateDoc(){
-
+        log.debug("--onSaveCheckMandateDoc.");
+        checkMandateDocControl.onSaveMandateDoc(checkMandateDocView,161);
     }
 
     public void onCancelCheckMandateDoc(){

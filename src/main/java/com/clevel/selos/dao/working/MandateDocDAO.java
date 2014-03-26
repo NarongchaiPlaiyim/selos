@@ -41,4 +41,14 @@ public class MandateDocDAO extends GenericDAO<MandateDoc, Long>{
         return mandateDocList;
 
     }
+
+    public List<MandateDoc> findByWorkCaseIdAndRole(long workCaseId, int roleId) {
+        log.info("--findByWorkCaseId : {}", workCaseId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.eq("role.id", roleId));
+        List<MandateDoc> mandateDocList = criteria.list();
+        return mandateDocList;
+
+    }
 }
