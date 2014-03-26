@@ -309,7 +309,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         preRender();
         log.debug("onCreation.");
 
-        if (workCaseId != null) {
+        if (!Util.isNull(workCaseId)) {
             modeForDB = ModeForDB.ADD_DB;
             // Initial sequence number credit
             hashSeqCredit = new HashMap<Integer, Integer>();
@@ -330,7 +330,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
                 log.debug("onCreation ::: newCreditFacilityView : {}", newCreditFacilityView);
-                if (newCreditFacilityView != null) {
+                if (!Util.isNull(newCreditFacilityView))
+                {
                     log.debug("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
 
                     modeForDB = ModeForDB.EDIT_DB;
@@ -354,6 +355,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     notRetrievePricing = false;
                 } else { // for show on add new only !!
                     newCreditFacilityView = new NewCreditFacilityView();
+                    reducePricePanelRendered = false;
+                    cannotEditStandard = true;
 //                    newCreditFacilityView.setWCNeed(BigDecimal.ZERO);
 //                    newCreditFacilityView.setTotalWcDebit(BigDecimal.ZERO);
 //                    newCreditFacilityView.setTotalWcTmb(BigDecimal.ZERO);
@@ -385,7 +388,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 } else {
                     specialProgramView = specialProgramTransform.transformToView(specialProgramDAO.findById(3));
                 }
-//                productGroup = basicInfoView.getProductGroup();
             }
 
             tcgView = tcgInfoControl.getTcgView(workCaseId);
@@ -400,11 +402,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             log.debug("collateralOwnerUwAllList size :: {}", collateralOwnerUwAllList.size());
         }
 
-        if (newCreditFacilityView == null) {
-            newCreditFacilityView = new NewCreditFacilityView();
-            reducePricePanelRendered = false;
-            cannotEditStandard = true;
-        }
 
         collateralOwnerUW = new CustomerInfoView();
 
