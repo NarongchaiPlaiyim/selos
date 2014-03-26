@@ -58,17 +58,20 @@ public class CheckMandateDoc implements Serializable {
         log.info("-- onCreation.");
 //        init();
         HttpSession session = FacesUtil.getSession(true);
-//        if(checkSession(session)){
-//            if((Long)session.getAttribute("workCaseId") != 0){
-//                workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-//            }
+        if(true){//checkSession(session)){
+
+            if(false){//(Long)session.getAttribute("workCaseId") != 0){
+                workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+            }
+
+
 
             String result = null;
             checkMandateDocView = null;
             try{
                 workCaseId = 481L;
                 roleId = 1;
-                checkMandateDocView = checkMandateDocControl.getMandateDocView(workCaseId, roleId);
+                checkMandateDocView = checkMandateDocControl.getMandateDocView(workCaseId);
                 if(!Util.isNull(checkMandateDocView)){
                     log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
                     checkMandateDocView.readOnly();
@@ -84,9 +87,9 @@ public class CheckMandateDoc implements Serializable {
                 log.error("-- Exception : {}", e.getMessage());
                 result = e.getMessage();
             }
-//        } else {
-//            //TODO show message box
-//        }
+        } else {
+            //TODO show message box
+        }
 
     }
 

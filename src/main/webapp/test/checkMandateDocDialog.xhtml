@@ -83,7 +83,7 @@
                         </ui:repeat>
                     </td>
                     <td class="center">
-                        <p:selectOneRadio layout="grid" value="#{mandatoryItem.complete}" columns="1" disabled="#{checkMandateDoc.checkMandateDocView.completeFlag}">
+                        <p:selectOneRadio layout="grid" value="#{mandatoryItem.complete}" columns="1" disabled="#{mandatoryItem.completeFlag}">
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')}" itemValue="1"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.no')}" itemValue="2"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.enable')}" itemValue="3"/>
@@ -100,7 +100,7 @@
                         <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.d')}"/>
                     </td>
                     <td class="center">
-                        <p:inputTextarea value="#{mandatoryItem.remark}" rows="3" cols="25" disabled="#{checkMandateDoc.checkMandateDocView.remarkFlag} "/>
+                        <p:inputTextarea value="#{mandatoryItem.remark}" rows="3" cols="25" readonly="#{checkMandateDoc.checkMandateDocView.remarkFlag} "/>
                     </td>
                 </tr>
             </ui:repeat>
@@ -143,24 +143,24 @@
                         </ui:repeat>
                     </td>
                     <td class="center">
-                        <p:selectOneRadio layout="grid" value="#{optionalItem.complete}" columns="1">
-                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')}" itemValue="1"/>
+                        <p:selectOneRadio layout="grid" value="#{optionalItem.complete}" columns="1" disabled="#{optionalItem.completeFlag}">
+                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')} - #{optionalItem.completeFlag}" itemValue="1"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.no')}" itemValue="2"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.enable')}" itemValue="3"/>
                         </p:selectOneRadio>
                     </td>
                     <td class="left">
-                        <h:selectBooleanCheckbox value="#{optionalItem.incomplete}" />
-                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.a')}"/> <br />
-                        <h:selectBooleanCheckbox value="#{optionalItem.indistinct}" />
+                        <h:selectBooleanCheckbox value="#{optionalItem.incomplete}" disabled="#{checkMandateDoc.checkMandateDocView.reasonFlag} "/>
+                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.a')} - #{checkMandateDoc.checkMandateDocView.reasonFlag}"/> <br />
+                        <h:selectBooleanCheckbox value="#{optionalItem.indistinct}" disabled="#{checkMandateDoc.checkMandateDocView.reasonFlag} "/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.b')}"/> <br />
-                        <h:selectBooleanCheckbox value="#{optionalItem.incorrect}" />
+                        <h:selectBooleanCheckbox value="#{optionalItem.incorrect}"  disabled="#{checkMandateDoc.checkMandateDocView.reasonFlag} "/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.c')}"/> <br />
-                        <h:selectBooleanCheckbox value="#{optionalItem.expire}" />
+                        <h:selectBooleanCheckbox value="#{optionalItem.expire}"     disabled="#{checkMandateDoc.checkMandateDocView.reasonFlag} "/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.d')}"/>
                     </td>
                     <td class="center">
-                        <p:inputTextarea value="#{optionalItem.remark}" rows="3" cols="25" />
+                        <p:inputTextarea value="#{optionalItem.remark}" rows="3" cols="25" readonly="#{true} "/>
                     </td>
                 </tr>
             </ui:repeat>
@@ -202,24 +202,24 @@
                         </ui:repeat>
                     </td>
                     <td class="center">
-                        <p:selectOneRadio layout="grid" value="#{otherItem.complete}" columns="1">
+                        <p:selectOneRadio layout="grid" value="#{otherItem.complete}" columns="1" disabled="#{otherItem.completeFlag}">
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')}" itemValue="1"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.no')}" itemValue="2"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.enable')}" itemValue="3"/>
                         </p:selectOneRadio>
                     </td>
                     <td class="left">
-                        <h:selectBooleanCheckbox value="#{otherItem.incomplete}" />
+                        <h:selectBooleanCheckbox value="#{otherItem.incomplete}" disabled="#{checkMandateDoc.checkMandateDocView.reasonFlag} "/>
                         <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.a')}"/> <br />
-                        <h:selectBooleanCheckbox value="#{otherItem.indistinct}" />
+                        <h:selectBooleanCheckbox value="#{otherItem.indistinct}" disabled="#{checkMandateDoc.checkMandateDocView.reasonFlag} "/>
                         <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.b')}"/> <br />
-                        <h:selectBooleanCheckbox value="#{otherItem.incorrect}" />
+                        <h:selectBooleanCheckbox value="#{otherItem.incorrect}"  disabled="#{checkMandateDoc.checkMandateDocView.reasonFlag} "/>
                         <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.c')}"/> <br />
-                        <h:selectBooleanCheckbox value="#{otherItem.expire}" />
+                        <h:selectBooleanCheckbox value="#{otherItem.expire}"     disabled="#{checkMandateDoc.checkMandateDocView.reasonFlag} "/>
                         <h:outputLabel value="#{msg.get('app.checkmandatedoc.reason.d')}"/>
                     </td>
                     <td class="center">
-                        <p:inputTextarea value="#{otherItem.remark}" rows="3" cols="25" />
+                        <p:inputTextarea value="#{otherItem.remark}" rows="3" cols="25" readonly="#{checkMandateDoc.checkMandateDocView.remarkFlag} "/>
                     </td>
                 </tr>
             </ui:repeat>

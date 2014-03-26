@@ -19,7 +19,7 @@ public class CheckOptionalDocView implements Serializable /*extends CheckMandato
     private boolean Incorrect ;
     private boolean expire;
     private String remark;
-
+    private boolean isCompleteFlag;
     public CheckOptionalDocView() {
 //        super();
         init();
@@ -33,6 +33,11 @@ public class CheckOptionalDocView implements Serializable /*extends CheckMandato
         indistinct = false;
         Incorrect = false;
         expire = false;
+        isCompleteFlag = false;
+    }
+
+    public void readOnly(){
+        isCompleteFlag = false;
     }
 
     public long getId() {
@@ -121,6 +126,14 @@ public class CheckOptionalDocView implements Serializable /*extends CheckMandato
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public boolean isCompleteFlag() {
+        return isCompleteFlag;
+    }
+
+    public void setCompleteFlag(boolean completeFlag) {
+        isCompleteFlag = completeFlag;
     }
 
     @Override
