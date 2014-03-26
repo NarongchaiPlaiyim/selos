@@ -314,15 +314,11 @@ public class Util implements Serializable {
     }
 
     public static int returnNumForFlag(boolean flag) {
-        if (flag == true) {
-            return 1;
-        } else {
-            return 0;
-        }
+        return flag ? 1 : 0;
     }
 
     public static boolean isTrueForCheckBox(int value){
-       return (value == 2)?true:false;
+       return value == 2;
     }
 
     public static String getMessageException(Exception ex){
@@ -346,7 +342,7 @@ public class Util implements Serializable {
 
     public static boolean isZero(int id){
         try {
-            return id == 0 ? true : false;
+            return id == 0;
         } catch (NullPointerException e) {
             return false;
         }
@@ -354,7 +350,7 @@ public class Util implements Serializable {
 
     public static boolean isZero(BigDecimal bigDecimal){
         try {
-            return bigDecimal == BigDecimal.ZERO ? true : false;
+            return BigDecimal.ZERO.compareTo(bigDecimal) == 0;
         } catch (NullPointerException e) {
             return false;
         }
@@ -362,7 +358,7 @@ public class Util implements Serializable {
 
     public static boolean isZero(long id){
         try {
-            return id == 0 ? true : false;
+            return id == 0;
         } catch (NullPointerException e) {
             return false;
         }
@@ -378,7 +374,7 @@ public class Util implements Serializable {
 
     public static boolean isLengthZero(String string){
         try{
-            return string.length() == 0 ? true : false;
+            return string.length() == 0;
         } catch (NullPointerException e) {
             return true;
         }

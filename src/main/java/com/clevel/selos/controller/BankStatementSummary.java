@@ -207,6 +207,28 @@ public class BankStatementSummary implements Serializable {
 
     }
 
+    public void onChangeSeasonalFlag() {
+        log.debug("onChangeSeasonalFlag() seasonalFlag: {}", seasonalFlag);
+        int newNumberOfMonths = bankStmtControl.getNumberOfMonthsBankStmt(seasonalFlag);
+        if (newNumberOfMonths != numberOfMonths) {
+            messageHeader = msg.get("app.messageHeader.info");
+            message = "The number of month based on expected submission date and seasonal flag, not aligned with Bank statement.";
+            severity = MessageDialogSeverity.ALERT.severity();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+    }
+
+    public void onChangeExpectedSubmitDate() {
+        log.debug("onChangeExpectedSubmitDate() expectedSubmitDate: {}", expectedSubmitDate);
+        Date newLastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
+//        if () {
+//            messageHeader = msg.get("app.messageHeader.info");
+//            message = "The number of month based on expected submission date and seasonal flag, not aligned with Bank statement.";
+//            severity = MessageDialogSeverity.ALERT.severity();
+//            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//        }
+    }
+
     public void onRefresh() {
         log.debug("onRefresh()");
         // user (ABDM/BDM) can click refresh by 3 times in Full Application step.

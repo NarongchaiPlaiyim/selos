@@ -61,6 +61,10 @@
                                 <p:selectOneRadio value="#{bankStatementSummary.seasonalFlag}">
                                     <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                                    <p:ajax event="change"
+                                            listener="#{bankStatementSummary.onChangeSeasonalFlag()}"
+                                            process="@this"
+                                            update="@this,"/>
                                 </p:selectOneRadio>
                             </td>
                         </tr>
