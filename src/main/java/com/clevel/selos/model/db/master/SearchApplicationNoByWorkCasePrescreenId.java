@@ -1,16 +1,21 @@
 package com.clevel.selos.model.db.master;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: Prashanth Reddy B
+ * Date: 3/25/14
+ * Time: 12:52 PM
+ * To change this template use File | Settings | File Templates.
+ */
 
 @Entity
-@Table(name = "wrk_case")
-public class SearchApplicationNo implements Serializable
-{
+@Table(name = "wrk_case_prescreen")
+public class SearchApplicationNoByWorkCasePrescreenId {
     @Id
     @Column(name = "id")
     private int id;
@@ -44,6 +49,4 @@ public class SearchApplicationNo implements Serializable
     public void setApplicationNo(String applicationNo) {
         this.applicationNo = applicationNo;
     }
-
-
 }
