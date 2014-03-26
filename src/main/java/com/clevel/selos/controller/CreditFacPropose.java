@@ -309,7 +309,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         preRender();
         log.debug("onCreation.");
 
-        if (workCaseId != null) {
+        if (!Util.isNull(workCaseId)) {
             modeForDB = ModeForDB.ADD_DB;
             // Initial sequence number credit
             hashSeqCredit = new HashMap<Integer, Integer>();
@@ -330,7 +330,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
                 log.debug("onCreation ::: newCreditFacilityView : {}", newCreditFacilityView);
-                if (newCreditFacilityView != null) {
+                if (!Util.isNull(newCreditFacilityView))
+                {
                     log.debug("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
 
                     modeForDB = ModeForDB.EDIT_DB;
@@ -354,22 +355,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     notRetrievePricing = false;
                 } else { // for show on add new only !!
                     newCreditFacilityView = new NewCreditFacilityView();
-//                    newCreditFacilityView.setWCNeed(BigDecimal.ZERO);
-//                    newCreditFacilityView.setTotalWcDebit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setTotalWcTmb(BigDecimal.ZERO);
-//                    newCreditFacilityView.setWCNeedDiffer(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase1WcLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase1WcMinLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase1Wc50CoreWc(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase1WcDebitCoreWc(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase2WcLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase2WcMinLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase2Wc50CoreWc(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase2WcDebitCoreWc(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase3WcLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase3WcMinLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase3Wc50CoreWc(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase3WcDebitCoreWc(BigDecimal.ZERO);
+                    reducePricePanelRendered = false;
+                    cannotEditStandard = true;
                 }
 
             } catch (Exception ex) {
@@ -385,7 +372,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 } else {
                     specialProgramView = specialProgramTransform.transformToView(specialProgramDAO.findById(3));
                 }
-//                productGroup = basicInfoView.getProductGroup();
             }
 
             tcgView = tcgInfoControl.getTcgView(workCaseId);
@@ -400,11 +386,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             log.debug("collateralOwnerUwAllList size :: {}", collateralOwnerUwAllList.size());
         }
 
-        if (newCreditFacilityView == null) {
-            newCreditFacilityView = new NewCreditFacilityView();
-            reducePricePanelRendered = false;
-            cannotEditStandard = true;
-        }
 
         collateralOwnerUW = new CustomerInfoView();
 
