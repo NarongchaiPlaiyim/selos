@@ -91,16 +91,16 @@ public class CheckMandateDocControl extends BusinessControl{
     public CheckMandateDocView  getMandateDocView(final long workCaseId) throws Exception{
         log.debug("-- getMandateDoc WorkCaseId : {}", workCaseId);
 
-        int roleId = 0;
-        User user = getCurrentUser();
-        if(!Util.isNull(user)){
-            roleId = user.getRole().getId();
-            if(UW.equalsIgnoreCase(user.getRole().getName())){
-                //view [DB]
-                log.debug("-- {} Role", UW);
-                return getObjectFromDB(workCaseId, roleId);
-            }
-        }
+//        int roleId = 0;
+//        User user = getCurrentUser();
+//        if(!Util.isNull(user)){
+//            roleId = user.getRole().getId();
+//            if(UW.equalsIgnoreCase(user.getRole().getName())){
+//                //view [DB]
+//                log.debug("-- {} Role", UW);
+//                return getObjectFromDB(workCaseId, roleId);
+//            }
+//        }
 
         //ECM
         log.debug("-- ECM");
@@ -152,21 +152,21 @@ public class CheckMandateDocControl extends BusinessControl{
             log.debug("-- MandateDocViewMap is {} and ListECMDetailMap is {}", mandateDocViewMap, listECMDetailMap);
         }
 
-        if(ABDM.equalsIgnoreCase(user.getRole().getName())){
-            //view [ECM and BRMS]
-            log.debug("-- {} Role", ABDM);
-            checkMandateDocView.readOnly();
-            log.debug("-- isReasonFlag {}", checkMandateDocView.isReasonFlag());
-            log.debug("-- isCompleteFlag {}", checkMandateDocView.isCompleteFlag());
-            log.debug("-- isRemarkFlag {}", checkMandateDocView.isRemarkFlag());
-        } else if(BDM.equalsIgnoreCase(user.getRole().getName())){
-            //view [ECM and BRMS]
-            log.debug("-- {} Role", BDM);
-            checkMandateDocView.readOnly();
-            log.debug("-- isReasonFlag {}", checkMandateDocView.isReasonFlag());
-            log.debug("-- isCompleteFlag {}", checkMandateDocView.isCompleteFlag());
-            log.debug("-- isRemarkFlag {}", checkMandateDocView.isRemarkFlag());
-        }
+//        if(ABDM.equalsIgnoreCase(user.getRole().getName())){
+//            //view [ECM and BRMS]
+//            log.debug("-- {} Role", ABDM);
+//            checkMandateDocView.readOnly();
+//            log.debug("-- isReasonFlag {}", checkMandateDocView.isReasonFlag());
+//            log.debug("-- isCompleteFlag {}", checkMandateDocView.isCompleteFlag());
+//            log.debug("-- isRemarkFlag {}", checkMandateDocView.isRemarkFlag());
+//        } else if(BDM.equalsIgnoreCase(user.getRole().getName())){
+//            //view [ECM and BRMS]
+//            log.debug("-- {} Role", BDM);
+//            checkMandateDocView.readOnly();
+//            log.debug("-- isReasonFlag {}", checkMandateDocView.isReasonFlag());
+//            log.debug("-- isCompleteFlag {}", checkMandateDocView.isCompleteFlag());
+//            log.debug("-- isRemarkFlag {}", checkMandateDocView.isRemarkFlag());
+//        }
         return checkMandateDocView;
     }
 
