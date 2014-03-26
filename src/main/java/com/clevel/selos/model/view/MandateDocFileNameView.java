@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.working.MandateDoc;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -9,6 +10,7 @@ public class MandateDocFileNameView implements Serializable {
     private long id;
     private String fileName;
     private String url;
+    private MandateDoc mandateDoc;
 
     public MandateDocFileNameView() {
 
@@ -36,6 +38,14 @@ public class MandateDocFileNameView implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public MandateDoc getMandateDoc() {
+        return mandateDoc;
+    }
+
+    public void setMandateDoc(MandateDoc mandateDoc) {
+        this.mandateDoc = mandateDoc;
     }
 
     @Override
