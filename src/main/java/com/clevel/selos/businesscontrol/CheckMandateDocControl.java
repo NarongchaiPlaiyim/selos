@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.dao.working.MandateDocDAO;
 import com.clevel.selos.integration.ECMInterface;
@@ -9,11 +10,15 @@ import com.clevel.selos.integration.ecm.model.ECMDataResult;
 import com.clevel.selos.integration.filenet.ce.connection.CESessionToken;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.DocMandateType;
+import com.clevel.selos.model.db.master.Role;
+import com.clevel.selos.model.db.master.RoleType;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.MandateDoc;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.security.encryption.EncryptionService;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.transform.CheckMandateDocCustTransform;
 import com.clevel.selos.transform.CheckMandateDocTransform;
 import com.clevel.selos.util.Util;
 import org.apache.commons.codec.binary.Base64;
@@ -35,6 +40,8 @@ public class CheckMandateDocControl extends BusinessControl{
     private Logger log;
     @Inject
     private MandateDocDAO mandateDocDAO;
+    @Inject
+    private UserDAO userDAO;
     @Inject
     private BasicInfoDAO basicInfoDAO;
     private CheckMandateDocView checkMandateDocView;
@@ -242,10 +249,27 @@ public class CheckMandateDocControl extends BusinessControl{
         checkMandateDocView.setOtherDocumentsList(otherDocumentsList);
     }
 
-    private void onSaveMandateDoc(final CheckMandateDocView checkMandateDocView, final long workCaseId){
+    public void onSaveMandateDoc(final CheckMandateDocView checkMandateDocView, final long workCaseId){
         log.info("-- onSaveMandateDoc ::: workCaseId : {}", workCaseId);
-        checkMandateDocTransform.transformToModel(checkMandateDocView);
+//        List<CheckMandateDocView> viewList = new ArrayList<CheckMandateDocView>();
+//        viewList.add(checkMandateDocView);
+
+
+
+        User user = userDAO.findById("ABDM001");
+
+
+        List<MandateDoc> mandateDocList = checkMandateDocTransform.transformToModel(checkMandateDocView,161,user.getRole());
+//        mandateDocList.remove(2);
+        log.debug("--mandateDocList.size(). {}",mandateDocList.size());
+        log.debug("-- ");
+        mandateDocDAO.delete(mandateDocDAO.findByWorkCaseIdAndRole(161, user.getRole().getId()));
+
+        mandateDocDAO.persist(mandateDocList);
     }
+
+
+
 
     private Map<String,List<ECMDetail>> createMapByECM(final List<ECMDetail> ecmDetailList){
         Map<String,List<ECMDetail>> ecmMap = new HashMap<String, List<ECMDetail>>();
@@ -290,4 +314,100 @@ public class CheckMandateDocControl extends BusinessControl{
         }
     }
 
+    public CheckMandateDocView MakefileMandateDoc(){
+
+
+        checkMandateDocView = new CheckMandateDocView();
+        List<MandateDocBRMSView> BRMSDocumentTypeList = new ArrayList<MandateDocBRMSView>();
+        MandateDocBRMSView brmsView = new MandateDocBRMSView();
+        brmsView.setBRMSDocType("BBBBBBBBBBBBBBBBB");
+        brmsView.setMandateDoc(new MandateDoc());
+        BRMSDocumentTypeList.add(brmsView);
+
+        List<MandateDocCustView> ownewList = new ArrayList<MandateDocCustView>();
+        MandateDocCustView mandateDocCustView = new MandateDocCustView();
+        mandateDocCustView.setCustName("KKKKKKKKKKKKKKKKKK");
+        ownewList.add(mandateDocCustView);
+
+        List<MandateDocFileNameView> fileNameViewList = new ArrayList<MandateDocFileNameView>();
+        MandateDocFileNameView mandateDocFileNameView = new MandateDocFileNameView();
+        mandateDocFileNameView.setFileName("RRRRRRRRRRRRRR");
+        mandateDocFileNameView.setUrl("WWWWWWWWWWWWWWWW");
+        fileNameViewList.add(mandateDocFileNameView);
+
+        //Start  List<CheckMandatoryDocView>
+        List<CheckMandatoryDocView> docViewList = new ArrayList<CheckMandatoryDocView>();
+        CheckMandatoryDocView docView = new CheckMandatoryDocView();
+        docView.setDocumentType("Test");
+
+        docView.setBRMSDocumentTypeList(BRMSDocumentTypeList);
+        docView.setOwnewList(ownewList);
+        docView.setFileNameViewList(fileNameViewList);
+
+        docView.setComplete(1);
+        docView.setIncorrect(true);
+        docView.setIndistinct(true);
+        docView.setIncomplete(true);
+        docView.setExpire(true);
+        docView.setRemark("AAAAAAAAAAAAAAAAAAAAAAAAA");
+        docViewList.add(docView);
+        checkMandateDocView.setMandatoryDocumentsList(docViewList);
+        log.info("--checkMandateDocView. {}",checkMandateDocView);
+        //End  List<CheckMandatoryDocView>
+
+        //Start List<CheckOptionalDocView>
+        List<CheckOptionalDocView> optionalDocViewList = new ArrayList<CheckOptionalDocView>();
+        CheckOptionalDocView optionalDocView = new CheckOptionalDocView();
+        optionalDocView.setDocumentType("FFFFFFFFFFFFFFFF");
+
+        optionalDocView.setBRMSDocumentTypeList(BRMSDocumentTypeList);
+        optionalDocView.setOwnewList(ownewList);
+        optionalDocView.setFileNameViewList(fileNameViewList);
+
+        optionalDocView.setComplete(3);
+        optionalDocView.setIncomplete(true);
+        optionalDocView.setIndistinct(false);
+        optionalDocView.setIncorrect(true);
+        optionalDocView.setExpire(true);
+        optionalDocView.setRemark("PPPPPPPPPPPPPPPPP");
+        optionalDocViewList.add(optionalDocView);
+        log.info("--optionalDocViewList. {}",optionalDocViewList);
+        checkMandateDocView.setOptionalDocumentsList(optionalDocViewList);
+        //End List<CheckOptionalDocView>
+
+        //Start List<CheckOtherDocView> otherDocumentsList
+        List<CheckOtherDocView> otherDocumentsList = new ArrayList<CheckOtherDocView>();
+        CheckOtherDocView checkOtherDocView = new CheckOtherDocView();
+        checkOtherDocView.setDocumentType("IIIIIIIIIIIIIII");
+
+        checkOtherDocView.setBRMSDocumentTypeList(BRMSDocumentTypeList);
+        checkOtherDocView.setOwnewList(ownewList);
+        checkOtherDocView.setFileNameViewList(fileNameViewList);
+
+        checkOtherDocView.setComplete(2);
+        checkOtherDocView.setIncomplete(true);
+        checkOtherDocView.setIndistinct(true);
+        checkOtherDocView.setIncorrect(true);
+        checkOtherDocView.setExpire(false);
+        checkOtherDocView.setRemark("CCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        otherDocumentsList.add(checkOtherDocView);
+        log.info("--otherDocumentsList. {}",otherDocumentsList);
+        checkMandateDocView.setOtherDocumentsList(otherDocumentsList);
+        //End List<CheckOtherDocView> otherDocumentsList
+
+
+        return checkMandateDocView;
+    }
+
+    public CheckMandateDocView getDetail(long workCaseId){
+        log.info("getDetail by WorkCase. {}",workCaseId);
+        User user = userDAO.findById("ABDM001");
+        log.info("user.getRole().getId() {}",user.getRole().getId());
+        List<MandateDoc> view = mandateDocDAO.findByWorkCaseIdAndRole(workCaseId,user.getRole().getId());
+        log.info("--view. {}",view.size());
+        CheckMandateDocView checkMandateDocViews = new CheckMandateDocView();
+        checkMandateDocViews = checkMandateDocTransform.transformToView(view);
+
+        return checkMandateDocViews;
+    }
 }

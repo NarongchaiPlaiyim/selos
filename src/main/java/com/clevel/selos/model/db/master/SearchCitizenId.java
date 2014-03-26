@@ -18,6 +18,17 @@ public class SearchCitizenId implements Serializable
     @Column(name = "citizen_id")
     private String citizenid;
 
+    @Column(name= "customer_id")
+    private int customerId;
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+
     public int getId() {
         return id;
     }

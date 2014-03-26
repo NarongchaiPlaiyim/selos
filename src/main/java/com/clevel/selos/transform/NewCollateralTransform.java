@@ -214,24 +214,24 @@ public class NewCollateralTransform extends Transform {
                 newCollateralSub.setNewCollateralSubOwnerList(newCollateralSubOwnerList);
             }
 
-           /* if (newCollateralSubView.getRelatedWithList() != null) {
-                List<NewCollateralSubRelated> newCollateralSubRelatedList = new ArrayList<NewCollateralSubRelated>();
-                newCollateralSub.setNewCollateralSubRelatedList(newCollateralSubRelatedList);
-                NewCollateralSubRelated newCollateralSubRelate;
-                for (NewCollateralSubView relatedView : newCollateralSubView.getRelatedWithList()) {
-                    log.debug("relatedView.getId() ::: {} ", relatedView.getId());
-                    NewCollateralSub relatedDetail = newCollateralSubDAO.findById(relatedView.getId());
-                    log.debug("relatedDetail.getId() ::: {} ", relatedDetail.getId());
-                    newCollateralSubRelate = new NewCollateralSubRelated();
-                    newCollateralSubRelate.setNewCollateralSubRelated(relatedDetail);
-                    newCollateralSubRelate.setNewCollateralSub(newCollateralSub);
-                    newCollateralSubRelate.setWorkCase(workCase);
-                    newCollateralSubRelate.setProposeType(ProposeType.P);
-                    newCollateralSubRelatedList.add(newCollateralSubRelate);
-                }
-
-                newCollateralSub.setNewCollateralSubRelatedList(newCollateralSubRelatedList);
-            }*/
+//            if (newCollateralSubView.getRelatedWithList() != null) {
+//                List<NewCollateralSubRelated> newCollateralSubRelatedList = new ArrayList<NewCollateralSubRelated>();
+//                newCollateralSub.setNewCollateralSubRelatedList(newCollateralSubRelatedList);
+//                NewCollateralSubRelated newCollateralSubRelate;
+//                for (NewCollateralSubView relatedView : newCollateralSubView.getRelatedWithList()) {
+//                    log.debug("relatedView.getId() ::: {} ", relatedView.getId());
+//                    NewCollateralSub relatedDetail = newCollateralSubDAO.findById(relatedView.getId());
+//                    log.debug("relatedDetail.getId() ::: {} ", relatedDetail.getId());
+//                    newCollateralSubRelate = new NewCollateralSubRelated();
+//                    newCollateralSubRelate.setNewCollateralSubRelated(relatedDetail);
+//                    newCollateralSubRelate.setNewCollateralSub(newCollateralSub);
+//                    newCollateralSubRelate.setWorkCase(workCase);
+//                    newCollateralSubRelate.setProposeType(ProposeType.P);
+//                    newCollateralSubRelatedList.add(newCollateralSubRelate);
+//                }
+//
+//                newCollateralSub.setNewCollateralSubRelatedList(newCollateralSubRelatedList);
+//            }
 
             newCollateralSub.setNewCollateralHead(newCollateralHead);
             newCollateralSubList.add(newCollateralSub);
@@ -239,6 +239,7 @@ public class NewCollateralTransform extends Transform {
 
         return newCollateralSubList;
     }
+
 
     public List<NewCollateralView> transformsCollateralToView(List<NewCollateral> newCollateralList) {
         List<NewCollateralView> newCollateralViewList = new ArrayList<NewCollateralView>();
@@ -434,15 +435,6 @@ public class NewCollateralTransform extends Transform {
                 List<CustomerInfoView> newCollOwnerViewList = transformCustomerInfoView(newCollateralSubCustomerList);
                 newCollateralSubView.setCollateralOwnerUWList(newCollOwnerViewList);
             }
-//            List<CustomerInfoView> collateralOwnerUWList = new ArrayList<CustomerInfoView>();
-//            if (newCollateralSubCustomerList != null) {
-//                for (NewCollateralSubOwner newCollateralSubCustomer : newCollateralSubCustomerList) {
-//                    log.info("newCollateralSubCustomer id ::{}",newCollateralSubCustomer.getId());
-//                    CustomerInfoView customer = customerTransform.transformToView(newCollateralSubCustomer.getCustomer());
-//                    collateralOwnerUWList.add(customer);
-//                }
-//                newCollateralSubView.setCollateralOwnerUWList(collateralOwnerUWList);
-//            }
 
             List<NewCollateralSubMortgage> newCollateralSubMortgages = newCollateralSubMortgageDAO.getListNewCollateralSubMortgage(subCollateralDetail);
             List<MortgageTypeView> mortgageTypeViewList = new ArrayList<MortgageTypeView>();

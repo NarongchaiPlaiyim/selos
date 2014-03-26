@@ -32,7 +32,7 @@ public class SearchCitizenIdDAO extends GenericDAO<SearchCitizenId,String>
 
         Criteria criteria = getSession().createCriteria(SearchCitizenId.class);
 
-        criteria.setProjection(Projections.projectionList().add(Projections.property("id"), "id"));
+        criteria.setProjection(Projections.projectionList().add(Projections.property("id"), "id").add(Projections.property("customerId"),"customerId"));
 
         criteria.add(Restrictions.eq("citizenid", citizenid)).setResultTransformer(Transformers.aliasToBean(SearchCitizenId.class));
 
@@ -40,7 +40,7 @@ public class SearchCitizenIdDAO extends GenericDAO<SearchCitizenId,String>
 
         log.info("searchCitizenIdList size is : {}",searchCitizenIdList);
 
-        Iterator iterator = searchCitizenIdList.iterator();
+        /*Iterator iterator = searchCitizenIdList.iterator();
 
         int citijenbasedworkcaseid = 0;
 
@@ -53,7 +53,7 @@ public class SearchCitizenIdDAO extends GenericDAO<SearchCitizenId,String>
             citijenbasedworkcaseid = searchCitizenId.getId();
 
             log.info("citizen id obtained is : {}",citijenbasedworkcaseid);
-        }
+        }*/
 
 
 

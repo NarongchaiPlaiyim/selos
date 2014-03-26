@@ -35,14 +35,14 @@ public class NewFeeDetailTransform extends Transform {
                 newFeeDetail.setCreateDate(new Date());
                 newFeeDetail.setCreateBy(user);
             }
-//            newFeeDetail.setProductProgram(newFeeDetailView.getProductProgram());
+            newFeeDetail.setProductProgram(newFeeDetailView.getProductProgram());
 //            newFeeDetail.setStandardFrontEndFee(newFeeDetailView.getStandardFrontEndFee());
 //            newFeeDetail.setCommitmentFee(newFeeDetailView.getCommitmentFee());
 //            newFeeDetail.setExtensionFee(newFeeDetailView.getExtensionFee());
 //            newFeeDetail.setPrepaymentFee(newFeeDetailView.getPrepaymentFee());
 //            newFeeDetail.setCancellationFee(newFeeDetailView.getCancellationFee());
-//            newFeeDetail.setNewCreditFacility(creditFacilityPropose);
-//            newFeeDetailList.add(newFeeDetail);
+            newFeeDetail.setNewCreditFacility(creditFacilityPropose);
+            newFeeDetailList.add(newFeeDetail);
         }
 
         return newFeeDetailList;
@@ -54,14 +54,15 @@ public class NewFeeDetailTransform extends Transform {
         NewFeeDetailView newFeeDetailView;
 
         for (NewFeeDetail newFeeDetail : newFeeDetailList) {
-//            newFeeDetailView = new NewFeeDetailView();
-//            newFeeDetailView.setProductProgram(newFeeDetail.getProductProgram());
+            newFeeDetailView = new NewFeeDetailView();
+            newFeeDetailView.setId(newFeeDetail.getId());
+            newFeeDetailView.setProductProgram(newFeeDetail.getProductProgram());
 //            newFeeDetailView.setStandardFrontEndFee(newFeeDetail.getStandardFrontEndFee());
 //            newFeeDetailView.setCommitmentFee(newFeeDetail.getCommitmentFee());
 //            newFeeDetailView.setExtensionFee(newFeeDetail.getExtensionFee());
 //            newFeeDetailView.setPrepaymentFee(newFeeDetail.getPrepaymentFee());
 //            newFeeDetailView.setCancellationFee(newFeeDetail.getCancellationFee());
-//            newFeeDetailViewList.add(newFeeDetailView);
+            newFeeDetailViewList.add(newFeeDetailView);
         }
 
         return newFeeDetailViewList;
