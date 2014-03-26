@@ -16,6 +16,7 @@ import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.FeeDetail;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
@@ -280,9 +281,10 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private NewCreditDetailDAO newCreditDetailDAO;
     @Inject
     BaseRateTransform baseRateTransform;
+    @Inject
+    FeeDetailDAO feeDetailDAO;
 
-    public CreditFacPropose() {
-    }
+    public CreditFacPropose() {}
 
     public void preRender() {
         log.debug("preRender ::: setSession ");
@@ -309,7 +311,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         preRender();
         log.debug("onCreation.");
 
-        if (workCaseId != null) {
+        if (!Util.isNull(workCaseId)) {
             modeForDB = ModeForDB.ADD_DB;
             // Initial sequence number credit
             hashSeqCredit = new HashMap<Integer, Integer>();
@@ -330,7 +332,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
                 log.debug("onCreation ::: newCreditFacilityView : {}", newCreditFacilityView);
-                if (newCreditFacilityView != null) {
+                if (!Util.isNull(newCreditFacilityView))
+                {
                     log.debug("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
 
                     modeForDB = ModeForDB.EDIT_DB;
@@ -354,22 +357,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     notRetrievePricing = false;
                 } else { // for show on add new only !!
                     newCreditFacilityView = new NewCreditFacilityView();
-//                    newCreditFacilityView.setWCNeed(BigDecimal.ZERO);
-//                    newCreditFacilityView.setTotalWcDebit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setTotalWcTmb(BigDecimal.ZERO);
-//                    newCreditFacilityView.setWCNeedDiffer(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase1WcLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase1WcMinLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase1Wc50CoreWc(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase1WcDebitCoreWc(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase2WcLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase2WcMinLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase2Wc50CoreWc(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase2WcDebitCoreWc(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase3WcLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase3WcMinLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase3Wc50CoreWc(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase3WcDebitCoreWc(BigDecimal.ZERO);
+                    reducePricePanelRendered = false;
+                    cannotEditStandard = true;
                 }
 
             } catch (Exception ex) {
@@ -385,7 +374,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 } else {
                     specialProgramView = specialProgramTransform.transformToView(specialProgramDAO.findById(3));
                 }
-//                productGroup = basicInfoView.getProductGroup();
             }
 
             tcgView = tcgInfoControl.getTcgView(workCaseId);
@@ -400,11 +388,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             log.debug("collateralOwnerUwAllList size :: {}", collateralOwnerUwAllList.size());
         }
 
-        if (newCreditFacilityView == null) {
-            newCreditFacilityView = new NewCreditFacilityView();
-            reducePricePanelRendered = false;
-            cannotEditStandard = true;
-        }
 
         collateralOwnerUW = new CustomerInfoView();
 
@@ -518,6 +501,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
                 StandardPricingResponse standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
                 if (ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
+                    List<FeeDetail> feeDetailList = feeTransform.transformToDB(standardPricingResponse.getPricingFeeList(),workCaseId);
                     Map<Long, NewFeeDetailView> newFeeDetailViewMap = new HashMap<Long, NewFeeDetailView>();
                     NewFeeDetailView newFeeDetailView;
                     for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()) {
@@ -560,6 +544,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                             }
                         }
                     }
+                    log.debug("feeDetailList not null ::: {}", feeDetailList.size());
+                    feeDetailDAO.persist(feeDetailList);
+                    log.debug("persist :: feeDetailList ::");
 
                     if(newFeeDetailViewMap!=null && newFeeDetailViewMap.size()>0){
                         Iterator it = newFeeDetailViewMap.entrySet().iterator();
@@ -576,30 +563,30 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                         newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
                     }
 
-                log.debug("standardPricingResponse.getPricingInterest() : {}",standardPricingResponse.getPricingInterest());
-                if(standardPricingResponse.getPricingInterest()!=null && standardPricingResponse.getPricingInterest().size()>0){
-                    for(PricingInterest pricingInterest: standardPricingResponse.getPricingInterest()){
-                        log.debug("pricingInterest : {}",pricingInterest);
-                        String creditTypeId = pricingInterest.getCreditDetailId();
-                        String stringId ;
-                        log.debug("getPricingInterest :: creditTypeId :: {}",creditTypeId);
-                        List<PricingIntTier> pricingIntTierList = pricingInterest.getPricingIntTierList();
-                        //transform tier to view
-                        List<NewCreditTierDetailView> newCreditTierViewList = newCreditTierTransform.transformPricingIntTierToView(pricingIntTierList);
-                        //assign tier view to credit detail view mapping by creditTypeId
-                        for(NewCreditDetailView newCreditView: newCreditFacilityView.getNewCreditDetailViewList()){
+                    log.debug("standardPricingResponse.getPricingInterest() : {}",standardPricingResponse.getPricingInterest());
+                    if(standardPricingResponse.getPricingInterest()!=null && standardPricingResponse.getPricingInterest().size()>0){
+                        for(PricingInterest pricingInterest: standardPricingResponse.getPricingInterest()){
+                            log.debug("pricingInterest : {}",pricingInterest);
+                            String creditTypeId = pricingInterest.getCreditDetailId();
+                            String stringId ;
+                            log.debug("getPricingInterest :: creditTypeId :: {}",creditTypeId);
+                            List<PricingIntTier> pricingIntTierList = pricingInterest.getPricingIntTierList();
+                            //transform tier to view
+                            List<NewCreditTierDetailView> newCreditTierViewList = newCreditTierTransform.transformPricingIntTierToView(pricingIntTierList);
+                            //assign tier view to credit detail view mapping by creditTypeId
+                            for(NewCreditDetailView newCreditView: newCreditFacilityView.getNewCreditDetailViewList()){
 
-                            stringId = String.valueOf(newCreditView.getId());
-                            log.debug("newCreditView.getId() toString :: {}",newCreditView.getId());
-                            if(stringId.equals(creditTypeId)){
-                                newCreditView.setNewCreditTierDetailViewList(newCreditTierViewList);
-                                break;
+                                stringId = String.valueOf(newCreditView.getId());
+                                log.debug("newCreditView.getId() toString :: {}",newCreditView.getId());
+                                if(stringId.equals(creditTypeId)){
+                                    newCreditView.setNewCreditTierDetailViewList(newCreditTierViewList);
+                                    break;
+                                }
+
                             }
-
                         }
+                        cannotAddTier = false;
                     }
-                    cannotAddTier = false;
-                }
 
                 } else if (ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
                     messageHeader = msg.get("app.messageHeader.error");

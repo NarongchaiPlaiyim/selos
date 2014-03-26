@@ -35,7 +35,7 @@ public class SearchRegistrationIdDAO extends GenericDAO<SearchRegistrationId,Str
 
         Criteria criteria = getSession().createCriteria(SearchRegistrationId.class);
 
-        criteria.setProjection(Projections.projectionList().add(Projections.property("id"), "id"));
+        criteria.setProjection(Projections.projectionList().add(Projections.property("id"), "id").add(Projections.property("customerId"),"customerId"));
 
         criteria.add(Restrictions.eq("registrationid", registationid)).setResultTransformer(Transformers.aliasToBean(SearchRegistrationId.class));
 
@@ -43,7 +43,7 @@ public class SearchRegistrationIdDAO extends GenericDAO<SearchRegistrationId,Str
 
         log.info("registrationidlist size is : {}",registrationIdList.size());
 
-        Iterator iterator = registrationIdList.iterator();
+        /*Iterator iterator = registrationIdList.iterator();
 
         int registrationidbasedworkcaseid = 0;
 
@@ -56,7 +56,7 @@ public class SearchRegistrationIdDAO extends GenericDAO<SearchRegistrationId,Str
             registrationidbasedworkcaseid = searchRegistrationId.getId();
 
             log.info("registration id is : {}",registrationidbasedworkcaseid);
-        }
+        }*/
 
         return registrationIdList;
     }

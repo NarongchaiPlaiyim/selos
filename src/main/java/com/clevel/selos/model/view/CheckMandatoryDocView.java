@@ -19,7 +19,7 @@ public class CheckMandatoryDocView implements Serializable /*extends CheckMandat
     private boolean Incorrect ;
     private boolean expire;
     private String remark;
-
+    private boolean isCompleteFlag;
     public CheckMandatoryDocView() {
 //        super();
         init();
@@ -29,6 +29,15 @@ public class CheckMandatoryDocView implements Serializable /*extends CheckMandat
         BRMSDocumentTypeList = new ArrayList<MandateDocBRMSView>();
         ownewList = new ArrayList<MandateDocCustView>();
         fileNameViewList = new ArrayList<MandateDocFileNameView>();
+        incomplete = false;
+        indistinct = false;
+        Incorrect = false;
+        expire = false;
+        isCompleteFlag = false;
+    }
+
+    public void readOnly(){
+        isCompleteFlag = true;
     }
 
     public long getId() {
@@ -119,6 +128,13 @@ public class CheckMandatoryDocView implements Serializable /*extends CheckMandat
         this.remark = remark;
     }
 
+    public boolean isCompleteFlag() {
+        return isCompleteFlag;
+    }
+
+    public void setCompleteFlag(boolean completeFlag) {
+        isCompleteFlag = completeFlag;
+    }
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)

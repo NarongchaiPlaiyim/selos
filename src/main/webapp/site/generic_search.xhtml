@@ -110,7 +110,7 @@ function resetter()
             </tr>
             <tr>
                 <td class="title" style="width: 150px;">User ID :</td>
-                <td><h:inputText size="20" value="#{peSearch.userid}"> </h:inputText></td>
+                <td><h:inputText size="20" value="#{peSearch.userid}" id="userIdId"> </h:inputText></td>
 
             </tr>
             <tr>
@@ -158,10 +158,10 @@ function resetter()
             </tr>
             <tr>
                 <td class="title" style="width: 150px;">First Name :</td>
-                <td><h:inputText id="fisrtNameId" size="20" value="#{peSearch.firstname}"> </h:inputText></td>
+                <td><h:inputText id="firstNameId" size="20" value="#{peSearch.firstname}" validatorMessage="Enter more than 3 letters"><f:validateLength minimum="3" disabled="#{empty param['frmMain:firstNameId']}" /></h:inputText></td>
 
                 <td class="title" style="width: 150px;">Last Name :</td>
-                <td><h:inputText id="lastNameId" size="20" value="#{peSearch.lastname}"> </h:inputText></td>
+                <td><h:inputText id="lastNameId" size="20" value="#{peSearch.lastname}" validatorMessage="Enter more than 3 letters"><f:validateLength minimum="3" disabled="#{empty param['frmMain:lastNameId']}"  /></h:inputText></td>
             </tr>
             <tr>
                 <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
@@ -169,9 +169,9 @@ function resetter()
 
             <tr>
                 <td class="title">Start date From :</td>
-                <td style="width: 350px;"><p:calendar pattern="dd/MM/yyyy" value="#{peSearch.date1}" styleClass="large" id="startformDate" showOn="button" /></td>
+                <td style="width: 350px;"><p:calendar pattern="dd/MM/yyyy" value="#{peSearch.date1}" styleClass="large" id="startformDate" showOn="button" required="#{not empty param['frmMain:userIdId']}" requiredMessage="Please Enter Date"/></td>
                 <td class="title">To :</td>
-                <td><p:calendar pattern="dd/MM/yyyy" value="#{peSearch.date2}" styleClass="large" id="starttoDate" showOn="button" /></td>
+                <td><p:calendar pattern="dd/MM/yyyy" value="#{peSearch.date2}" styleClass="large" id="starttoDate" showOn="button" required="#{not empty param['frmMain:userIdId']}" requiredMessage="Please Enter Date"/></td>
             </tr>
             <tr>
                 <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>

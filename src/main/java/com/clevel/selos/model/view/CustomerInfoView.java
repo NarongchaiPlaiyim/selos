@@ -72,7 +72,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private AddressType mailingAddressType;
     private long spouseId;
     private List<CustomerCSIView> customerCSIList;
-    private Country sourceIncome;
+    private IncomeSource sourceIncome;
     private Country countryIncome;
     private long committeeId;
 
@@ -201,7 +201,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.businessType = new BusinessType();
         this.documentAuthorizeDate = new Date();
         this.customerCSIList = new ArrayList<CustomerCSIView>();
-        this.sourceIncome = new Country();
+        this.sourceIncome = new IncomeSource();
         this.countryIncome = new Country();
         this.individualViewList = new ArrayList<CustomerInfoView>();
 //        this.percentShareSummary = BigDecimal.ZERO;
@@ -810,11 +810,11 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.passportId = passportId;
     }
 
-    public Country getSourceIncome() {
+    public IncomeSource getSourceIncome() {
         return sourceIncome;
     }
 
-    public void setSourceIncome(Country sourceIncome) {
+    public void setSourceIncome(IncomeSource sourceIncome) {
         this.sourceIncome = sourceIncome;
     }
 
