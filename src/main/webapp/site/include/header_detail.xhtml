@@ -174,10 +174,11 @@
                 </p:commandButton>
                 <!--Submit Case-->
                 <p:commandButton id="btnSubmitCase" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
+                                 rendered="#{baseController.checkButton('Submit CA')}"
                                  action="#{baseController.onOpenSubmitZM}"
                                  update=":frmMain:submitZMPanel, :frmMain:msgBoxBaseMessagePanel" >
                 </p:commandButton>
-                <!--rendered="#{baseController.checkButton('Submit CA')}"-->
+                <!---->
             </p:panel>
             <!--Stage for Appraisal-->
             <p:panel id="header_panel_appraisal" rendered="#{baseController.stageId == 203}" styleClass="panel">
