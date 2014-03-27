@@ -515,7 +515,7 @@ public class BaseController implements Serializable {
             checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, workCaseId);
             messageHeader = "Success";
             message = "Success";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         } catch (Exception ex){
             log.error("Exception : {}", ex);
             messageHeader = "Failed";
@@ -525,7 +525,7 @@ public class BaseController implements Serializable {
 //            } else {
 //                message = "Failed " + ex.getMessage();
 //            }
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
     }
 
