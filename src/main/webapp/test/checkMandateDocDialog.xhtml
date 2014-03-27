@@ -151,7 +151,7 @@
                     </td>
                     <td class="left">
                         <p:selectBooleanCheckbox value="#{optionalItem.incomplete}" disabled="#{checkMandateDoc.checkMandateDocView.reasonFlag} "/>
-                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.a')} - #{checkMandateDoc.checkMandateDocView.reasonFlag} "/> <br />
+                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.a')} - #{checkMandateDoc.checkMandateDocView.reasonFlag} "  /> <br />
 
                         <p:selectBooleanCheckbox value="#{optionalItem.indistinct}" disabled="#{checkMandateDoc.checkMandateDocView.reasonFlag} "/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.b')} - #{checkMandateDoc.checkMandateDocView.reasonFlag} "/> <br />
@@ -163,7 +163,7 @@
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.d')}"/>
                     </td>
                     <td class="center">
-                        <p:inputTextarea value="#{optionalItem.remark}" rows="3" cols="25" readonly="#{true} "/>
+                        <p:inputTextarea value="#{optionalItem.remark}" rows="3" cols="25" readonly="#{checkMandateDoc.checkMandateDocView.remarkFlag} "/>
                     </td>
                 </tr>
             </ui:repeat>
