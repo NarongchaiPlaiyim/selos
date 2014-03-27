@@ -18,10 +18,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 public class CreditFacProposeControl extends BusinessControl {
@@ -157,9 +154,8 @@ public class CreditFacProposeControl extends BusinessControl {
                     log.debug("newFeeDetailList :: {}", newFeeDetailList.size());
                     List<FeeDetailView> feeDetailViewList = feeTransform.transformToView(newFeeDetailList);
                     log.debug("feeDetailViewList : {}", feeDetailViewList);
-
-//                    List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
-//                    newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
+                    List<NewFeeDetailView> newFeeDetailViewList = transFormNewFeeDetailViewList(feeDetailViewList);
+                    newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
                 }
 
                 List<NewCreditDetail> newCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility);
@@ -200,6 +196,62 @@ public class CreditFacProposeControl extends BusinessControl {
             log.debug("findNewCreditFacilityByWorkCase end");
         }
         return newCreditFacilityView;
+    }
+
+    public List<NewFeeDetailView> transFormNewFeeDetailViewList(List<FeeDetailView> feeDetailViewList){
+        List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
+        Map<Long, NewFeeDetailView> newFeeDetailViewMap = new HashMap<Long, NewFeeDetailView>();
+        NewFeeDetailView newFeeDetailView;
+        for (FeeDetailView feeDetailView : feeDetailViewList) {
+            if (feeDetailView.getFeeLevel() == FeeLevel.CREDIT_LEVEL) {
+                if (newFeeDetailViewMap.containsKey(feeDetailView.getCreditDetailViewId())) {
+                    newFeeDetailView = newFeeDetailViewMap.get(feeDetailView.getCreditDetailViewId());
+                } else {
+                    newFeeDetailView = new NewFeeDetailView();
+                    newFeeDetailViewMap.put(feeDetailView.getCreditDetailViewId(), newFeeDetailView);
+                }
+
+                log.debug("-- transformToView :: feeDetailView ::: {}", feeDetailView.toString());
+                // find productProgram
+
+                log.debug("feeDetailView.getFeeLevel() :::: {}", feeDetailView.getFeeLevel());
+                log.debug("feeDetailView.getCreditDetailViewId() :::: {}", feeDetailView.getCreditDetailViewId());
+                NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(feeDetailView.getCreditDetailViewId());
+                if (newCreditDetail != null) {
+                    NewCreditDetailView newCreditView = newCreditDetailTransform.transformToView(newCreditDetail);
+                    log.debug("newCreditView.getProductProgramView().getId() :::: {}", newCreditView.getProductProgramView().getId());
+                    ProductProgram productProgram = productProgramDAO.findById(newCreditView.getProductProgramView().getId());
+                    if (productProgram != null) {
+                        log.debug("productProgram :: {}",productProgram.toString());
+                        newFeeDetailView.setProductProgram(productProgram.getName());
+                    }
+                    if ("9".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=9,(Front-End-Fee)
+                        newFeeDetailView.setStandardFrontEndFee(feeDetailView);
+                    } else if ("15".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=15,(Prepayment Fee)
+                        newFeeDetailView.setPrepaymentFee(feeDetailView);
+                    } else if ("20".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=20,(CancellationFee)
+                        newFeeDetailView.setCancellationFee(feeDetailView);
+                    } else if ("21".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=21,(ExtensionFee)
+                        newFeeDetailView.setExtensionFee(feeDetailView);
+                    } else if ("22".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=22,(CommitmentFee)
+                        newFeeDetailView.setCommitmentFee(feeDetailView);
+                    }
+
+                    log.debug("FeePaymentMethodView():::: {}", feeDetailView.getFeePaymentMethodView().getBrmsCode());
+                }
+            }
+        }
+
+        if(newFeeDetailViewMap!=null && newFeeDetailViewMap.size()>0){
+            Iterator it = newFeeDetailViewMap.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pairs = (Map.Entry)it.next();
+                newFeeDetailViewList.add((NewFeeDetailView) pairs.getValue());
+                it.remove(); // avoids a ConcurrentModificationException
+            }
+        }
+
+        return newFeeDetailViewList;
     }
 
     public BigDecimal calTotalGuaranteeAmount(List<NewGuarantorDetailView> guarantorDetailViewList) {
@@ -269,7 +321,7 @@ public class CreditFacProposeControl extends BusinessControl {
                                 log.info("productFormula :: {}", productFormula.getId());
                                 if (productFormula != null){
                                     log.debug("productFormula id :: {}", productFormula.getId());
-                                    log.debug("productFormula.getProgramToCreditType().getCreditType().getCreditGroup():::{}",productFormula.getProgramToCreditType().getCreditType().getCreditGroup());
+                                    log.debug("productFormula.getProgramToCreditType().getCreditType().getCreditGroup():::{}", productFormula.getProgramToCreditType().getCreditType().getCreditGroup());
                                     //OBOD or CASH_IN
                                     if(CreditTypeGroup.CASH_IN.equals(productFormula.getProgramToCreditType().getCreditType().getCreditGroup())){
                                         //ExposureMethod for check to use limit or limit*PCE%

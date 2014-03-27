@@ -323,7 +323,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             deleteSubCollIdList = new ArrayList<Long>();
             deleteConditionIdList = new ArrayList<Long>();
 
-//            try {
+            try {
                 WorkCase workCase = workCaseDAO.findById(workCaseId);
                 log.info("workCase :: {}", workCase.getId());
                 if (!Util.isNull(workCase)) {
@@ -361,9 +361,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     cannotEditStandard = true;
                 }
 
-//            } catch (Exception ex) {
-//                log.error("Exception while loading [Credit Facility] page :: ", ex);
-//            }
+            } catch (Exception ex) {
+                log.error("Exception while loading [Credit Facility] page :: ", ex);
+            }
 
             log.debug("onCreation :: modeForDB :: {}", modeForDB);
 
