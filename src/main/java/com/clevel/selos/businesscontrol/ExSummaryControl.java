@@ -282,10 +282,11 @@ public class ExSummaryControl extends BusinessControl {
         }
 
         exSumCharacteristicView.setSalePerYearBDM(exSummary.getSalePerYearBDM());
-        exSumCharacteristicView.setSalePerYearUW(exSummary.getSalePerYearUW());
         exSumCharacteristicView.setGroupSaleBDM(exSummary.getGroupSaleBDM());
-        exSumCharacteristicView.setGroupSaleUW(exSummary.getGroupSaleUW());
         exSumCharacteristicView.setGroupExposureBDM(exSummary.getGroupExposureBDM());
+        //todo:check role or step or status for show UW Value !?
+        exSumCharacteristicView.setSalePerYearUW(exSummary.getSalePerYearUW());
+        exSumCharacteristicView.setGroupSaleUW(exSummary.getGroupSaleUW());
         exSumCharacteristicView.setGroupExposureUW(exSummary.getGroupExposureUW());
 
         if(newCreditFacilityView != null && newCreditFacilityView.getId() != 0){
@@ -317,18 +318,30 @@ public class ExSummaryControl extends BusinessControl {
             RiskType riskType = riskTypeDAO.findById(basicInfo.getRiskCustomerType().getId());
             if(riskType != null){
                 exSumCreditRiskInfoView.setRiskCusType(riskType.getDescription());
+            } else {
+                exSumCreditRiskInfoView.setRiskCusType("-");
             }
+        } else {
+            exSumCreditRiskInfoView.setRiskCusType("-");
         }
 
         if(basicInfo != null && basicInfo.getExistingSMECustomer() == RadioValue.NO.value()){ //new customer
             if(qualitativeView != null && qualitativeView.getId() != 0){
-                exSumCreditRiskInfoView.setBotClass(qualitativeView.getQualityResult());
                 if(qualitativeView.getQualityLevel().getDescription() != null){
                     exSumCreditRiskInfoView.setReason(qualitativeView.getQualityLevel().getDescription());
                 } else {
                     exSumCreditRiskInfoView.setReason("-");
                 }
+
+                if(qualitativeView.getQualityResult() != null && !qualitativeView.getQualityResult().trim().equalsIgnoreCase("")){
+                    exSumCreditRiskInfoView.setBotClass(qualitativeView.getQualityResult());
+                } else {
+                    exSumCreditRiskInfoView.setBotClass("-");
+                }
             }
+        } else {
+            exSumCreditRiskInfoView.setBotClass("-");
+            exSumCreditRiskInfoView.setReason("-");
         }
 
         //find highest percent biz

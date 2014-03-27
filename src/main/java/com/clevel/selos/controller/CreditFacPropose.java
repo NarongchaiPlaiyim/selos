@@ -16,6 +16,7 @@ import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.FeeDetail;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
@@ -280,9 +281,10 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private NewCreditDetailDAO newCreditDetailDAO;
     @Inject
     BaseRateTransform baseRateTransform;
+    @Inject
+    FeeDetailDAO feeDetailDAO;
 
-    public CreditFacPropose() {
-    }
+    public CreditFacPropose() {}
 
     public void preRender() {
         log.debug("preRender ::: setSession ");
@@ -499,6 +501,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
                 StandardPricingResponse standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
                 if (ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
+                    List<FeeDetail> feeDetailList = feeTransform.transformToDB(standardPricingResponse.getPricingFeeList(),workCaseId);
                     Map<Long, NewFeeDetailView> newFeeDetailViewMap = new HashMap<Long, NewFeeDetailView>();
                     NewFeeDetailView newFeeDetailView;
                     for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()) {
@@ -541,6 +544,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                             }
                         }
                     }
+                    log.debug("feeDetailList not null ::: {}", feeDetailList.size());
+                    feeDetailDAO.persist(feeDetailList);
+                    log.debug("persist :: feeDetailList ::");
 
                     if(newFeeDetailViewMap!=null && newFeeDetailViewMap.size()>0){
                         Iterator it = newFeeDetailViewMap.entrySet().iterator();
@@ -557,30 +563,30 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                         newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
                     }
 
-                log.debug("standardPricingResponse.getPricingInterest() : {}",standardPricingResponse.getPricingInterest());
-                if(standardPricingResponse.getPricingInterest()!=null && standardPricingResponse.getPricingInterest().size()>0){
-                    for(PricingInterest pricingInterest: standardPricingResponse.getPricingInterest()){
-                        log.debug("pricingInterest : {}",pricingInterest);
-                        String creditTypeId = pricingInterest.getCreditDetailId();
-                        String stringId ;
-                        log.debug("getPricingInterest :: creditTypeId :: {}",creditTypeId);
-                        List<PricingIntTier> pricingIntTierList = pricingInterest.getPricingIntTierList();
-                        //transform tier to view
-                        List<NewCreditTierDetailView> newCreditTierViewList = newCreditTierTransform.transformPricingIntTierToView(pricingIntTierList);
-                        //assign tier view to credit detail view mapping by creditTypeId
-                        for(NewCreditDetailView newCreditView: newCreditFacilityView.getNewCreditDetailViewList()){
+                    log.debug("standardPricingResponse.getPricingInterest() : {}",standardPricingResponse.getPricingInterest());
+                    if(standardPricingResponse.getPricingInterest()!=null && standardPricingResponse.getPricingInterest().size()>0){
+                        for(PricingInterest pricingInterest: standardPricingResponse.getPricingInterest()){
+                            log.debug("pricingInterest : {}",pricingInterest);
+                            String creditTypeId = pricingInterest.getCreditDetailId();
+                            String stringId ;
+                            log.debug("getPricingInterest :: creditTypeId :: {}",creditTypeId);
+                            List<PricingIntTier> pricingIntTierList = pricingInterest.getPricingIntTierList();
+                            //transform tier to view
+                            List<NewCreditTierDetailView> newCreditTierViewList = newCreditTierTransform.transformPricingIntTierToView(pricingIntTierList);
+                            //assign tier view to credit detail view mapping by creditTypeId
+                            for(NewCreditDetailView newCreditView: newCreditFacilityView.getNewCreditDetailViewList()){
 
-                            stringId = String.valueOf(newCreditView.getId());
-                            log.debug("newCreditView.getId() toString :: {}",newCreditView.getId());
-                            if(stringId.equals(creditTypeId)){
-                                newCreditView.setNewCreditTierDetailViewList(newCreditTierViewList);
-                                break;
+                                stringId = String.valueOf(newCreditView.getId());
+                                log.debug("newCreditView.getId() toString :: {}",newCreditView.getId());
+                                if(stringId.equals(creditTypeId)){
+                                    newCreditView.setNewCreditTierDetailViewList(newCreditTierViewList);
+                                    break;
+                                }
+
                             }
-
                         }
+                        cannotAddTier = false;
                     }
-                    cannotAddTier = false;
-                }
 
                 } else if (ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
                     messageHeader = msg.get("app.messageHeader.error");
@@ -672,6 +678,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     public void onCalInstallment(NewCreditDetailView newCreditDetailView) {
         log.debug("onCalInstallment :: ");
         creditFacProposeControl.calculateInstallment(newCreditDetailView);
+        creditFacProposeControl.calculatePCEAmount(newCreditDetailView);
     }
 
     public void onAddCreditInfo() {

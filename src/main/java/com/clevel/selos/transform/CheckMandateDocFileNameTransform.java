@@ -15,7 +15,7 @@ import java.util.List;
 
 public class CheckMandateDocFileNameTransform extends Transform {
     @Inject
-    @SELOS
+    @NCB
     private Logger log;
     @Inject
     private MandateDocFileNameDAO mandateDocFileNameDAO;
