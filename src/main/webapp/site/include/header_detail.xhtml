@@ -130,10 +130,9 @@
                                  rendered="#{baseController.checkButton('View Related Application CA')}" >
 
                 </p:commandButton>
-                <!--Mandate Document FullApplication-->
-                <p:commandButton id="btnMandateDocFullApp" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
-                                 rendered="#{baseController.checkButton('Check Mandate Doc')}" disabled="true">
-                </p:commandButton>
+
+
+
                 <!--Check Criteria-->
                 <p:commandButton id="btnCheckCriteria" value="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkCriteria')}"
                                  rendered="#{baseController.checkButton('Check Criteria')}">
@@ -147,6 +146,16 @@
                                  update=":frmMain:assignABDMPanel">
 
                 </p:commandButton>
+
+                <!--Mandate Document FullApplication-->
+                <p:commandButton id="btnMandateDocFullApp" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
+                                 rendered="#{baseController.checkButton('Check Mandate Doc')}"
+                                 actionListener="#{baseController.onCheckMandateDialog()}"
+                                 oncomplete="checkMandateDlg.show()"
+                                 update=":frmMain:checkMandatePanel">
+                    <p:resetInput target=":frmMain:checkMandatePanel"/>
+                </p:commandButton>
+
                 <!--Return to BDM -->
                 <p:commandButton id="btnReturnBDM" value="Return to BDM" styleClass="blueButton" title=""
                                  rendered="#{baseController.checkButton('Return to BDM')}"
@@ -426,6 +435,15 @@
             <ui:include src="/site/dialog/returnBDMDialog.xhtml"/>
         </p:dialog>
     </p:panel>
+
+    <p:panel id="checkMandatePanel" styleClass="panel">
+        <p:dialog id="checkMandateDialog" widgetVar="checkMandateDlg" header="Check MandateDoc"
+                  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+                  modal="true" width="850" height="800" closable="false">
+            <ui:include src="/site/dialog/checkMandateDocDialog.xhtml"/>
+        </p:dialog>
+    </p:panel>
+
 
     <p:panel id="addReturnInfoPanel" styleClass="panel">
         <p:dialog id="addReturnInfoDialog" widgetVar="addReturnInfoDlg" header="Add Return Information"
