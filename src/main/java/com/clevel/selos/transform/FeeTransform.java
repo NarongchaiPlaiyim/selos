@@ -126,4 +126,23 @@ public class FeeTransform extends Transform{
         }
         return feeDetailList;
     }
+
+    public List<FeeDetailView> transformToView( List<FeeDetail> feeDetailList){
+        List<FeeDetailView> feeDetailViewList = new ArrayList<FeeDetailView>();
+        FeeDetailView feeDetailView;
+       for(FeeDetail feeDetail:feeDetailList){
+           feeDetailView = new FeeDetailView();
+           feeDetailView.setCreditDetailViewId(feeDetail.getNewCreditDetail().getId());
+           feeDetailView.setDescription(feeDetail.getDescription());
+           feeDetailView.setFeeLevel(feeDetail.getFeeLevel());
+           feeDetailView.setFeePaymentMethodView(getFeePaymentMethodView(feeDetail.getPaymentMethod().getBrmsCode()));
+           feeDetailView.setFeeTypeView(getFeeTypeView(feeDetail.getFeeType().getBrmsCode()));
+           feeDetailView.setPercentFee(feeDetail.getPercentFee());
+           feeDetailView.setPercentFeeAfter(feeDetail.getPercentFeeAfter());
+           feeDetailView.setFeeYear(feeDetail.getFeeYear());
+           feeDetailView.setFeeAmount(feeDetail.getAmount());
+           feeDetailViewList.add(feeDetailView);
+        }
+        return feeDetailViewList;
+    }
 }
