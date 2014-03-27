@@ -2,14 +2,8 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CheckMandateDocControl;
 import com.clevel.selos.exception.ECMInterfaceException;
-import com.clevel.selos.integration.ECMInterface;
 import com.clevel.selos.integration.NCB;
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.working.MandateDoc;
 import com.clevel.selos.model.view.CheckMandateDocView;
-import com.clevel.selos.model.view.CheckMandatoryDocView;
-import com.clevel.selos.model.view.CheckOptionalDocView;
-import com.clevel.selos.model.view.CheckOtherDocView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.CheckMandateDocCustTransform;
@@ -24,7 +18,6 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "checkMandateDoc")
@@ -42,10 +35,9 @@ public class CheckMandateDoc implements Serializable {
     private String messageHeader;
     private String message;
     private long workCaseId;
-    private int roleId;
 
     @Inject
-    CheckMandateDocCustTransform checkMandateDocCustTransform;
+    private CheckMandateDocCustTransform checkMandateDocCustTransform;
 
     @Inject
     public CheckMandateDoc() {
@@ -63,7 +55,6 @@ public class CheckMandateDoc implements Serializable {
                 (Long)session.getAttribute("stepId") != 0){
             checkSession = true;
         }
-
         return checkSession;
     }
 
@@ -82,7 +73,6 @@ public class CheckMandateDoc implements Serializable {
             checkMandateDocView = null;
             try{
                 workCaseId = 481L;
-                roleId = 1;
                 checkMandateDocView = checkMandateDocControl.getMandateDocView(workCaseId);
                 if(!Util.isNull(checkMandateDocView)){
                     log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
@@ -106,7 +96,7 @@ public class CheckMandateDoc implements Serializable {
     }
 
     public void onSaveCheckMandateDoc(){
-        log.debug("-- onSaveCheckMandateDoc.");
+        log.debug("-- onSaveCheckMandateDoc().");
         try {
             checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, workCaseId);
             messageHeader = "success";
