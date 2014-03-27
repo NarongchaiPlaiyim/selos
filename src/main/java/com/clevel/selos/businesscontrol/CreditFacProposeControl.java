@@ -439,6 +439,24 @@ public class CreditFacProposeControl extends BusinessControl {
         }
     }
 
+
+    public void calculatePCEAmount(NewCreditDetailView creditDetailView) {
+        log.info("creditDetailView : {}", creditDetailView);
+        BigDecimal sumOfPCE = BigDecimal.ZERO;
+
+        if (!Util.isNull(creditDetailView)){
+            sumOfPCE = Util.multiply(creditDetailView.getLimit(),creditDetailView.getPCEPercent());
+
+            if (sumOfPCE != null) {
+                sumOfPCE.setScale(2, RoundingMode.HALF_UP);
+            }
+
+            log.info("creditDetailAdd :sumOfPCE: {}", sumOfPCE);
+            creditDetailView.setPCEAmount(sumOfPCE);
+        }
+
+    }
+
     public void calculateInstallment(NewCreditDetailView creditDetailView) {
         log.info("creditDetailView : {}", creditDetailView);
         BigDecimal sumOfInstallment = BigDecimal.ZERO;

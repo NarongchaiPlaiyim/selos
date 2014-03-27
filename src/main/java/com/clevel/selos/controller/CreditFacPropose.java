@@ -678,6 +678,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     public void onCalInstallment(NewCreditDetailView newCreditDetailView) {
         log.debug("onCalInstallment :: ");
         creditFacProposeControl.calculateInstallment(newCreditDetailView);
+        creditFacProposeControl.calculatePCEAmount(newCreditDetailView);
     }
 
     public void onAddCreditInfo() {
