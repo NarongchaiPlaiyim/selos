@@ -126,7 +126,6 @@ public class CheckMandateDocControl extends BusinessControl{
             }
         }
 
-
         //ECM
         log.debug("-- ECM");
         try {
@@ -153,7 +152,6 @@ public class CheckMandateDocControl extends BusinessControl{
             }
         } catch (Exception e){
             log.error("-- Exception while call ECM {}", e.getMessage());
-//            throw new Exception(e);
         }
 
         //BRMS
@@ -183,22 +181,29 @@ public class CheckMandateDocControl extends BusinessControl{
         }
 
         if(ABDM.equalsIgnoreCase(user.getRole().getName())){
-            //view [ECM and BRMS]
+            //view [ABDM]
             log.debug("-- {} Role[read]", ABDM);
-            checkMandateDocView.readOnly();
+            checkMandateDocView.setReasonFlag(true);
+            checkMandateDocView.setCompleteFlag(true);
+            checkMandateDocView.setRemarkFlag(true);
             log.debug("-- isReasonFlag {}", checkMandateDocView.isReasonFlag());
             log.debug("-- isCompleteFlag {}", checkMandateDocView.isCompleteFlag());
             log.debug("-- isRemarkFlag {}", checkMandateDocView.isRemarkFlag());
         } else if(BDM.equalsIgnoreCase(user.getRole().getName())){
-            //view [ECM and BRMS]
+            //view [BDM]
             log.debug("-- {} Role[read]", BDM);
-            checkMandateDocView.readOnly();
+            checkMandateDocView.setReasonFlag(true);
+            checkMandateDocView.setCompleteFlag(true);
+            checkMandateDocView.setRemarkFlag(true);
             log.debug("-- isReasonFlag {}", checkMandateDocView.isReasonFlag());
             log.debug("-- isCompleteFlag {}", checkMandateDocView.isCompleteFlag());
             log.debug("-- isRemarkFlag {}", checkMandateDocView.isRemarkFlag());
         } else if(UW.equalsIgnoreCase(user.getRole().getName())){
-            //view or edit [ECM and BRMS]
+            //view or edit [UW Edit]
             log.debug("-- {} Role[read or edit]", UW);
+            checkMandateDocView.setReasonFlag(false);
+            checkMandateDocView.setCompleteFlag(false);
+            checkMandateDocView.setRemarkFlag(false);
             log.debug("-- isReasonFlag {}", checkMandateDocView.isReasonFlag());
             log.debug("-- isCompleteFlag {}", checkMandateDocView.isCompleteFlag());
             log.debug("-- isRemarkFlag {}", checkMandateDocView.isRemarkFlag());
