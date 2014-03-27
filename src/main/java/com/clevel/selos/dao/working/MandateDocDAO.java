@@ -1,9 +1,8 @@
 package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.NCB;
 import com.clevel.selos.model.DocMandateType;
-import com.clevel.selos.model.db.master.Role;
 import com.clevel.selos.model.db.working.MandateDoc;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -14,7 +13,7 @@ import java.util.List;
 
 public class MandateDocDAO extends GenericDAO<MandateDoc, Long>{
     @Inject
-    @SELOS
+    @NCB
     Logger log;
     @Inject
     public MandateDocDAO() {
@@ -43,7 +42,7 @@ public class MandateDocDAO extends GenericDAO<MandateDoc, Long>{
     }
 
     public List<MandateDoc> findByWorkCaseIdAndRole(long workCaseId, int roleId) {
-        log.info("--findByWorkCaseId : {}", workCaseId);
+        log.info("--findByWorkCaseId : {}, roleId : {}", workCaseId, roleId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.add(Restrictions.eq("role.id", roleId));

@@ -1,24 +1,19 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.master.UserDAO;
-import com.clevel.selos.dao.working.BasicInfoDAO;
-import com.clevel.selos.dao.working.MandateDocDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.ECMInterface;
-import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.model.ECMDataResult;
 import com.clevel.selos.integration.filenet.ce.connection.CESessionToken;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.DocMandateType;
-import com.clevel.selos.model.db.master.Role;
-import com.clevel.selos.model.db.master.RoleType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.MandateDoc;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.security.encryption.EncryptionService;
 import com.clevel.selos.system.Config;
-import com.clevel.selos.transform.CheckMandateDocCustTransform;
 import com.clevel.selos.transform.CheckMandateDocTransform;
 import com.clevel.selos.util.Util;
 import org.apache.commons.codec.binary.Base64;
@@ -27,7 +22,6 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,12 +30,10 @@ import java.util.Map;
 @Stateless
 public class CheckMandateDocControl extends BusinessControl{
     @Inject
-    @SELOS
+    @NCB
     private Logger log;
     @Inject
     private MandateDocDAO mandateDocDAO;
-    @Inject
-    private UserDAO userDAO;
     @Inject
     private BasicInfoDAO basicInfoDAO;
     private CheckMandateDocView checkMandateDocView;
@@ -69,12 +61,33 @@ public class CheckMandateDocControl extends BusinessControl{
     private EncryptionService encryptionService;
     @Inject
     private CESessionToken CESessionToken;
+    @Inject
+    private MandateDocFileNameDAO mandateDocFileNameDAO;
+    @Inject
+    private MandateDocBRMSDAO mandateDocBRMSDAO;
+    @Inject
+    private MandateDocCustDAO mandateDocCustDAO;
+
     private String passwordEncrypt;
     private String userToken;
     private Map<String, MandateDocView> mandateDocViewMap;
     private MandateDocView mandateDocView;
     private Map<String,List<ECMDetail>> listECMDetailMap;
     private List<ECMDetail> ecmDetailList;
+
+    private final String ABDM = "ABDM";
+    private final String BDM = "BDM";
+    private final String UW = "UW";
+
+    private final String SYSTEM = "SYSTEM";
+    private final String ISA = "ISA";
+    private final String ZM = "ZM";
+    private final String RGM = "RGM";
+    private final String GH = "GH";
+    private final String CSSO = "CSSO";
+    private final String AAD_ADMIN = "AAD ADMIN";
+    private final String AAD_COMMITTEE = "AAD COMMITTEE";
+    private User user;
     @Inject
     public CheckMandateDocControl() {
 //        init();
@@ -89,67 +102,135 @@ public class CheckMandateDocControl extends BusinessControl{
         basicInfo = null;
     }
 
-    public CheckMandateDocView  getMandateDocView(final long workCaseId, final int roleId) throws Exception{
-        log.debug("-- getMandateDoc WorkCaseId : {} RoleId : {}", workCaseId, roleId);
+    public CheckMandateDocView  getMandateDocView(final long workCaseId) throws Exception{
+        log.debug("-- getMandateDoc WorkCaseId : {}", workCaseId);
 
-        //DB
-        log.debug("-- DB");
-        List<MandateDoc> mandateDocList = Util.safetyList(mandateDocDAO.findByWorkCaseIdAndRoleForReturn(workCaseId, roleId));
-        if(!Util.isZero(mandateDocList.size())){
-            log.debug("-- MandateDoc.id[{}]", mandateDoc.getId());
-        } else {
-            log.debug("-- Find by work case id = {} MandateDoc is {}   ", workCaseId, mandateDoc);
-            mandateDocList = new ArrayList<MandateDoc>();
-            log.debug("-- MandateDocList[New] created");
-        }
-
-        //BRMS
-        log.debug("-- BRMS");
-        mandateDocResponseView = brmsControl.getDocCustomer(workCaseId);
-        if(!Util.isNull(mandateDocResponseView) && ActionResult.SUCCESS.equals(mandateDocResponseView.getActionResult())){
-            log.debug("-- ActionResult is {}", ecmDataResult.getActionResult());
-            mandateDocViewMap =  mandateDocResponseView.getMandateDocViewMap();
-        } else {
-            log.debug("-- Find by work case id = {} ActionResult is {} and reason is {}  ", workCaseId, mandateDocResponseView.getActionResult(), mandateDocResponseView.getReason());
+        int roleId = 0;
+        user = getCurrentUser();
+        log.debug("-- User.id[{}]", user.getId());
+        if(!Util.isNull(user)){
+            roleId = user.getRole().getId();
+            log.debug("-- User.Role.id[{}]", roleId);
+            if( SYSTEM.equalsIgnoreCase(user.getRole().getName())       ||
+                    ISA.equalsIgnoreCase(user.getRole().getName())      ||
+                    ZM.equalsIgnoreCase(user.getRole().getName())       ||
+                    RGM.equalsIgnoreCase(user.getRole().getName())      ||
+                    GH.equalsIgnoreCase(user.getRole().getName())       ||
+                    CSSO.equalsIgnoreCase(user.getRole().getName())     ||
+                    AAD_ADMIN.equalsIgnoreCase(user.getRole().getName())||
+                    AAD_COMMITTEE.equalsIgnoreCase(user.getRole().getName())
+                    ){
+                //view [DB]
+                log.debug("-- {} Role[read]", user.getRole().getName());
+                return getObjectFromDB(workCaseId, roleId);
+            }
         }
 
         //ECM
         log.debug("-- ECM");
-        //Getting basicInfo first and than get the CANumber for call ECM
-        basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-        if(!Util.isNull(basicInfo)){
-            log.debug("-- BasicInfo.id[{}]", basicInfo.getId());
-            log.debug("-- BasicInfo.CANumber[{}]", basicInfo.getCaNumber());
-            ecmDataResult = ecmInterface.getECMDataResult(basicInfo.getCaNumber());
-            if(!Util.isNull(ecmDataResult) && ActionResult.SUCCESS.equals(ecmDataResult.getActionResult())){
-                log.debug("-- ActionResult is {}", ecmDataResult.getActionResult());
-                List<ECMDetail> ecmDetailList = Util.safetyList(ecmDataResult.getEcmDetailList());
-                if(!Util.isZero(ecmDetailList.size())){
-                    log.debug("-- EcmDetailList.size()[{}]", ecmDetailList.size());
-                    listECMDetailMap = createMapByECM(ecmDetailList);
+        try {
+            basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+            if(!Util.isNull(basicInfo)){
+                log.debug("-- BasicInfo.id[{}]", basicInfo.getId());
+                log.debug("-- BasicInfo.CANumber[{}]", basicInfo.getCaNumber());
+                ecmDataResult = ecmInterface.getECMDataResult(basicInfo.getCaNumber());
+                if(!Util.isNull(ecmDataResult) && ActionResult.SUCCESS.equals(ecmDataResult.getActionResult())){
+                    log.debug("-- ActionResult is {}", ecmDataResult.getActionResult());
+                    List<ECMDetail> ecmDetailList = Util.safetyList(ecmDataResult.getEcmDetailList());
+                    if(!Util.isZero(ecmDetailList.size())){
+                        log.debug("-- ECM EcmDetailList.size()[{}]", ecmDetailList.size());
+                        createMapByECM(ecmDetailList);
+                        log.debug("-- ECM ListECMDetailMap.size.[{}])", listECMDetailMap.size());
+                    } else {
+                        log.debug("-- EcmDetailList.size()[{}]", ecmDetailList.size());
+                    }
                 } else {
-                    log.debug("-- EcmDetailList.size()[{}]", ecmDetailList.size());
+                    log.debug("-- Find by CA Number = {} ActionResult is {} and reason is {}  ", basicInfo.getCaNumber(), ecmDataResult.getActionResult(), ecmDataResult.getReason());
                 }
             } else {
-                log.debug("-- Find by CA Number = {} ActionResult is {} and reason is {}  ", basicInfo.getCaNumber(), ecmDataResult.getActionResult(), ecmDataResult.getReason());
+                log.debug("-- Find by work case id = {} BasicInfo is {}   ", workCaseId, basicInfo);
             }
-        } else {
-            log.debug("-- Find by work case id = {} BasicInfo is {}   ", workCaseId, basicInfo);
+        } catch (Exception e){
+            log.error("-- Exception while call ECM {}", e.getMessage());
         }
 
-        mandateDocViewMap = new HashMap<String, MandateDocView>();
+        //BRMS
+        log.debug("-- BRMS");
+        try {
+            mandateDocResponseView = brmsControl.getDocCustomer(workCaseId);
+            if(!Util.isNull(mandateDocResponseView) && ActionResult.SUCCESS.equals(mandateDocResponseView.getActionResult())){
+                log.debug("-- ActionResult is {}", ecmDataResult.getActionResult());
+                mandateDocViewMap =  mandateDocResponseView.getMandateDocViewMap();
+                log.debug("-- BRMS MandateDocViewMap.size()[{}]", mandateDocViewMap.size());
+            } else {
+                log.debug("-- Find by work case id = {} ActionResult is {} and reason is {}  ", workCaseId, mandateDocResponseView.getActionResult(), mandateDocResponseView.getReason());
+            }
+        } catch (Exception e){
+            log.error("-- Exception while call BRMS {}", e.getMessage());
+//            throw new Exception(e);
+        }
+
         if(!Util.isNull(mandateDocViewMap) && !Util.isNull(listECMDetailMap)){
             getToken();
             log.debug("-- UserToken = {}", userToken);
+            log.debug("-- BRMS MandateDocViewMap.size()[{}]", mandateDocViewMap.size());
+            log.debug("-- ECM ListECMDetailMap.size()[{}]", listECMDetailMap.size());
             checkMap();
         } else {
-            log.debug("-- MandateDocViewMap is {} ListECMDetailMap is {}", mandateDocViewMap, listECMDetailMap);
+            log.debug("-- MandateDocViewMap is {} and ListECMDetailMap is {}", mandateDocViewMap, listECMDetailMap);
+        }
+
+        if(ABDM.equalsIgnoreCase(user.getRole().getName())){
+            //view [ABDM]
+            log.debug("-- {} Role[read]", ABDM);
+            checkMandateDocView.setReasonFlag(true);
+            checkMandateDocView.setCompleteFlag(true);
+            checkMandateDocView.setRemarkFlag(true);
+            log.debug("-- isReasonFlag {}", checkMandateDocView.isReasonFlag());
+            log.debug("-- isCompleteFlag {}", checkMandateDocView.isCompleteFlag());
+            log.debug("-- isRemarkFlag {}", checkMandateDocView.isRemarkFlag());
+        } else if(BDM.equalsIgnoreCase(user.getRole().getName())){
+            //view [BDM]
+            log.debug("-- {} Role[read]", BDM);
+            checkMandateDocView.setReasonFlag(true);
+            checkMandateDocView.setCompleteFlag(true);
+            checkMandateDocView.setRemarkFlag(true);
+            log.debug("-- isReasonFlag {}", checkMandateDocView.isReasonFlag());
+            log.debug("-- isCompleteFlag {}", checkMandateDocView.isCompleteFlag());
+            log.debug("-- isRemarkFlag {}", checkMandateDocView.isRemarkFlag());
+        } else if(UW.equalsIgnoreCase(user.getRole().getName())){
+            //view or edit [UW Edit]
+            log.debug("-- {} Role[read or edit]", UW);
+            checkMandateDocView.setReasonFlag(false);
+            checkMandateDocView.setCompleteFlag(false);
+            checkMandateDocView.setRemarkFlag(false);
+            log.debug("-- isReasonFlag {}", checkMandateDocView.isReasonFlag());
+            log.debug("-- isCompleteFlag {}", checkMandateDocView.isCompleteFlag());
+            log.debug("-- isRemarkFlag {}", checkMandateDocView.isRemarkFlag());
         }
         return checkMandateDocView;
     }
 
+    private CheckMandateDocView getObjectFromDB(final long workCaseId,final  int roleId){
+        log.debug("-- getObjectFromDB(workCaseId {}, roleId {})", workCaseId, roleId);
+        List<MandateDoc> mandateDocList = Util.safetyList(mandateDocDAO.findByWorkCaseIdAndRoleForReturn(workCaseId, roleId));
+        if(!Util.isZero(mandateDocList.size())){
+            log.debug("-- MandateDocList.size()[{}]", mandateDocList.size());
+            checkMandateDocView = new CheckMandateDocView();
+            checkMandateDocView = checkMandateDocTransform.transformToView(mandateDocList);
+            checkMandateDocView.readOnly();
+            log.debug("-- isReasonFlag {}", checkMandateDocView.isReasonFlag());
+            log.debug("-- isCompleteFlag {}", checkMandateDocView.isCompleteFlag());
+            log.debug("-- isRemarkFlag {}", checkMandateDocView.isRemarkFlag());
+            return checkMandateDocView;
+        } else {
+            log.debug("-- Find by work case id = {} MandateDoc is {}   ", workCaseId, mandateDoc);
+            return null;
+        }
+    }
+
     private void checkMap(){
-        log.debug("-- checkMap()");
+        log.debug("-- checkMap start");
         checkMandateDocView = new CheckMandateDocView();
         List<CheckMandatoryDocView> mandatoryDocumentsList = new ArrayList<CheckMandatoryDocView>();
         CheckMandatoryDocView checkMandatoryDocView = null;
@@ -161,6 +242,9 @@ public class CheckMandateDocControl extends BusinessControl{
         List<String> keyECMList = new ArrayList<String>();
         String keyBRMS = null;
         String keyECM = null;
+
+        log.debug("-- checkMap MandateDocViewMap.size[{}]", mandateDocViewMap.size());
+        log.debug("-- checkMap ListECMDetailMap.size[{}]", listECMDetailMap.size());
 
         for (Map.Entry<String, MandateDocView> BRMSentry : mandateDocViewMap.entrySet()) {
             keyBRMS = BRMSentry.getKey();
@@ -193,14 +277,29 @@ public class CheckMandateDocControl extends BusinessControl{
                     if(DocMandateType.MANDATE.value() == mandateDocView.getDocMandateType().value()){
                         log.debug("-- ECMDocType {} = {}.", keyECM, "Mandatory Documents");
                         checkMandatoryDocView = checkMandateDocTransform.transformToCheckMandatoryDocView(mandateDocView, ecmDetailList, isComplete, userToken);
+                        if(isComplete == 1){
+                            checkMandatoryDocView.readOnly();
+                            checkMandatoryDocView.setCompleteFlag(true);
+                            log.debug("-- CheckMandatoryDocView key[{}] readOnly", keyECM);
+                        }
                         mandatoryDocumentsList.add(checkMandatoryDocView);
                     } else if(DocMandateType.OPTIONAL.value() == mandateDocView.getDocMandateType().value()){
                         log.debug("-- ECMDocType {} = {}.", keyECM, "Optional Documents");
                         optionalDocView = checkMandateDocTransform.transformToCheckOptionalDocView(mandateDocView, ecmDetailList, isComplete, userToken);
+                        if(isComplete == 1){
+                            optionalDocView.readOnly();
+                            optionalDocView.setCompleteFlag(true);
+                            log.debug("-- OptionalDocView key[{}] readOnly", keyECM);
+                        }
                         optionalDocumentsList.add(optionalDocView);
                     } else {
                         log.debug("-- ECMDocType {} = {}.", keyECM, "Other Documents");
                         checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(mandateDocView, ecmDetailList, isComplete, userToken);
+                        if(isComplete == 1){
+                            checkOtherDocView.readOnly();
+                            checkOtherDocView.setCompleteFlag(true);
+                            log.debug("-- CheckOtherDocView key[{}] readOnly", keyECM);
+                        }
                         otherDocumentsList.add(checkOtherDocView);
                     }
                     keyBRMSList.add(keyBRMS);
@@ -211,11 +310,17 @@ public class CheckMandateDocControl extends BusinessControl{
                 }
             }
         }
+        log.debug("-- checkMap stop");
 
+        log.debug("-- [BEFORE] Remove MandateDocViewMap.size()[{}]", mandateDocViewMap.size());
+        log.debug("-- KeyBRMSList.size()[{}]", keyBRMSList.size());
         for(String key : keyBRMSList){
             mandateDocViewMap.remove(key);
             log.debug("-- BRMS key {} was removed.", key);
         }
+        log.debug("-- [AFTER] Remove MandateDocViewMap.size()[{}]", mandateDocViewMap.size());
+
+        //BRMS
         for (Map.Entry<String, MandateDocView> BRMSentry : mandateDocViewMap.entrySet()) {
             mandateDocView = (MandateDocView)BRMSentry.getValue();
             if(DocMandateType.MANDATE.value() == mandateDocView.getDocMandateType().value()){
@@ -232,61 +337,108 @@ public class CheckMandateDocControl extends BusinessControl{
                 otherDocumentsList.add(checkOtherDocView);
             }
         }
-
+        log.debug("-- [BEFORE] Remove ListECMDetailMap.size()[{}]", listECMDetailMap.size());
+        log.debug("-- LeyECMList.size()[{}]", keyECMList.size());
         for(String key : keyECMList){
             listECMDetailMap.remove(key);
             log.debug("-- ECM key {} was removed.", key);
         }
+        log.debug("-- [AFTER] Remove ListECMDetailMap.size()[{}]", listECMDetailMap.size());
+
+        //ECM
         for (Map.Entry<String, List<ECMDetail>> ECMentry : listECMDetailMap.entrySet()) {
             ecmDetailList = Util.safetyList((List<ECMDetail>)ECMentry.getValue());
             log.debug("-- ECMDocType {} = {}.", ECMentry.getKey(), "Other Documents");
             checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(ecmDetailList, 2, userToken);
             otherDocumentsList.add(checkOtherDocView);
         }
-
         checkMandateDocView.setMandatoryDocumentsList(mandatoryDocumentsList);
+        log.debug("-- MandatoryDocumentsList.size()[{}] added to CheckMandateDocView", mandatoryDocumentsList.size());
         checkMandateDocView.setOptionalDocumentsList(optionalDocumentsList);
+        log.debug("-- OptionalDocumentsList.size()[{}] added to CheckMandateDocView", optionalDocumentsList.size());
         checkMandateDocView.setOtherDocumentsList(otherDocumentsList);
+        log.debug("-- OtherDocumentsList.size()[{}] added to CheckMandateDocView", otherDocumentsList.size());
     }
 
     public void onSaveMandateDoc(final CheckMandateDocView checkMandateDocView, final long workCaseId){
         log.info("-- onSaveMandateDoc ::: workCaseId : {}", workCaseId);
-//        List<CheckMandateDocView> viewList = new ArrayList<CheckMandateDocView>();
-//        viewList.add(checkMandateDocView);
-
-
-
-        User user = userDAO.findById("ABDM001");
-
-
-        List<MandateDoc> mandateDocList = checkMandateDocTransform.transformToModel(checkMandateDocView,161,user.getRole());
-//        mandateDocList.remove(2);
-        log.debug("--mandateDocList.size(). {}",mandateDocList.size());
-        log.debug("-- ");
-        mandateDocDAO.delete(mandateDocDAO.findByWorkCaseIdAndRole(161, user.getRole().getId()));
-
-        mandateDocDAO.persist(mandateDocList);
+        List<MandateDoc> mandateDocList = null;
+        mandateDocList = Util.safetyList(mandateDocDAO.findByWorkCaseIdAndRole(workCaseId, user.getRole().getId()));
+        delete(mandateDocList);
+        mandateDocList = null;
+        mandateDocList = Util.safetyList(checkMandateDocTransform.transformToModel(checkMandateDocView, workCaseId, user.getRole()));
+        save(mandateDocList);
     }
 
+    private void save(final List<MandateDoc> mandateDocList){
+        log.debug("-- save start");
+        log.debug("-- MandateDocList.size()[{}]", mandateDocList.size());
+        try {
+            mandateDocDAO.persist(mandateDocList);
+            log.debug("-- save stop");
+        } catch (Exception e) {
+            log.error("-- Exception wile save data reason is {}", e.getMessage());
+        }
+    }
 
+    private void delete(final List<MandateDoc> mandateDocList){
+        log.debug("-- delete start");
+        log.debug("-- MandateDocList.size()[{}]", mandateDocList.size());
+        try {
+            mandateDocDAO.delete(mandateDocList);
+            log.debug("-- delete stop");
+        } catch (Exception e) {
+            log.error("-- Exception wile delete data reason is {}", e.getMessage());
+        }
+    }
 
+    private void createMapByECM(final List<ECMDetail> ecmDetailList){
+        log.debug("-- createMapByECM(EcmDetailList.size.[{}])", ecmDetailList.size());
+        listECMDetailMap = new HashMap<String, List<ECMDetail>>();
 
-    private Map<String,List<ECMDetail>> createMapByECM(final List<ECMDetail> ecmDetailList){
-        Map<String,List<ECMDetail>> ecmMap = new HashMap<String, List<ECMDetail>>();
+        //for test
+//        for (ECMDetail ecmDetail : ecmDetailList) {
+//            if("10634".equalsIgnoreCase(ecmDetail.getEcmDocId())){
+//                ecmDetail.setEcmDocId("10052");
+//            }
+//            if("10668".equalsIgnoreCase(ecmDetail.getEcmDocId())){
+//                ecmDetail.setEcmDocId("10151");
+//            }
+//            if("11148".equalsIgnoreCase(ecmDetail.getEcmDocId())){
+//                ecmDetail.setEcmDocId("10097");
+//            }
+//            if("11149".equalsIgnoreCase(ecmDetail.getEcmDocId())){
+//                ecmDetail.setEcmDocId("10053");
+//            }
+//            if("11285".equalsIgnoreCase(ecmDetail.getEcmDocId())){
+//                ecmDetail.setEcmDocId("10121");
+//            }
+//            if("11296".equalsIgnoreCase(ecmDetail.getEcmDocId())){
+//                ecmDetail.setEcmDocId("10100");
+//            }
+//        }
+
         for (ECMDetail ecmDetail : ecmDetailList) {
-            System.out.println("-- ecmDetail "+ ecmDetail.getEcmDocId());
+            log.debug("-- ECMDtail.EcmDocId[{}]", ecmDetail.getEcmDocId());
             List<ECMDetail> ecmListTmp = null;
-            if(!ecmMap.containsKey(ecmDetail.getEcmDocId())){
+            if(!listECMDetailMap.containsKey(ecmDetail.getEcmDocId())){
+                log.debug("-- add key {} to map", ecmDetail.getEcmDocId());
                 ecmListTmp = new ArrayList<ECMDetail>();
                 ecmListTmp.add(ecmDetail);
+                listECMDetailMap.put(ecmDetail.getEcmDocId(), ecmListTmp);
             } else {
-                ecmListTmp = ecmMap.get(ecmDetail.getEcmDocId());
+                ecmListTmp = listECMDetailMap.get(ecmDetail.getEcmDocId());
+                log.debug("-- get value from key {}", ecmDetail.getEcmDocId());
                 ecmListTmp.add(ecmDetail);
-                ecmMap.remove(ecmDetail.getEcmDocId());
-                ecmMap.put(ecmDetail.getEcmDocId(), ecmListTmp);
+                log.debug("-- add data to {}", ecmListTmp.size());
+                listECMDetailMap.remove(ecmDetail.getEcmDocId());
+                log.debug("-- remove value form map {}", ecmDetail.getEcmDocId());
+                listECMDetailMap.put(ecmDetail.getEcmDocId(), ecmListTmp);
+                log.debug("-- added key {} to map", ecmDetail.getEcmDocId());
             }
         }
-        return ecmMap;
+        log.debug("-- ListECMDetailMap.size()[{}]", listECMDetailMap.size());
+//        return ecmMap;
 
 //            if(ecmMap.containsKey(ecmDetail.getEcmDocId())){
 //                List<ECMDetail> ecmListTmp = ecmMap.get(ecmDetail.getEcmDocId());
@@ -312,102 +464,5 @@ public class CheckMandateDocControl extends BusinessControl{
         } catch (Exception e) {
             log.error("-- Error while get Token reason is {}", e.getMessage());
         }
-    }
-
-    public CheckMandateDocView MakefileMandateDoc(){
-
-
-        checkMandateDocView = new CheckMandateDocView();
-        List<MandateDocBRMSView> BRMSDocumentTypeList = new ArrayList<MandateDocBRMSView>();
-        MandateDocBRMSView brmsView = new MandateDocBRMSView();
-        brmsView.setBRMSDocType("BBBBBBBBBBBBBBBBB");
-        brmsView.setMandateDoc(new MandateDoc());
-        BRMSDocumentTypeList.add(brmsView);
-
-        List<MandateDocCustView> ownewList = new ArrayList<MandateDocCustView>();
-        MandateDocCustView mandateDocCustView = new MandateDocCustView();
-        mandateDocCustView.setCustName("KKKKKKKKKKKKKKKKKK");
-        ownewList.add(mandateDocCustView);
-
-        List<MandateDocFileNameView> fileNameViewList = new ArrayList<MandateDocFileNameView>();
-        MandateDocFileNameView mandateDocFileNameView = new MandateDocFileNameView();
-        mandateDocFileNameView.setFileName("RRRRRRRRRRRRRR");
-        mandateDocFileNameView.setUrl("WWWWWWWWWWWWWWWW");
-        fileNameViewList.add(mandateDocFileNameView);
-
-        //Start  List<CheckMandatoryDocView>
-        List<CheckMandatoryDocView> docViewList = new ArrayList<CheckMandatoryDocView>();
-        CheckMandatoryDocView docView = new CheckMandatoryDocView();
-        docView.setDocumentType("Test");
-
-        docView.setBRMSDocumentTypeList(BRMSDocumentTypeList);
-        docView.setOwnewList(ownewList);
-        docView.setFileNameViewList(fileNameViewList);
-
-        docView.setComplete(1);
-        docView.setIncorrect(true);
-        docView.setIndistinct(true);
-        docView.setIncomplete(true);
-        docView.setExpire(true);
-        docView.setRemark("AAAAAAAAAAAAAAAAAAAAAAAAA");
-        docViewList.add(docView);
-        checkMandateDocView.setMandatoryDocumentsList(docViewList);
-        log.info("--checkMandateDocView. {}",checkMandateDocView);
-        //End  List<CheckMandatoryDocView>
-
-        //Start List<CheckOptionalDocView>
-        List<CheckOptionalDocView> optionalDocViewList = new ArrayList<CheckOptionalDocView>();
-        CheckOptionalDocView optionalDocView = new CheckOptionalDocView();
-        optionalDocView.setDocumentType("FFFFFFFFFFFFFFFF");
-
-        optionalDocView.setBRMSDocumentTypeList(BRMSDocumentTypeList);
-        optionalDocView.setOwnewList(ownewList);
-        optionalDocView.setFileNameViewList(fileNameViewList);
-
-        optionalDocView.setComplete(3);
-        optionalDocView.setIncomplete(true);
-        optionalDocView.setIndistinct(false);
-        optionalDocView.setIncorrect(true);
-        optionalDocView.setExpire(true);
-        optionalDocView.setRemark("PPPPPPPPPPPPPPPPP");
-        optionalDocViewList.add(optionalDocView);
-        log.info("--optionalDocViewList. {}",optionalDocViewList);
-        checkMandateDocView.setOptionalDocumentsList(optionalDocViewList);
-        //End List<CheckOptionalDocView>
-
-        //Start List<CheckOtherDocView> otherDocumentsList
-        List<CheckOtherDocView> otherDocumentsList = new ArrayList<CheckOtherDocView>();
-        CheckOtherDocView checkOtherDocView = new CheckOtherDocView();
-        checkOtherDocView.setDocumentType("IIIIIIIIIIIIIII");
-
-        checkOtherDocView.setBRMSDocumentTypeList(BRMSDocumentTypeList);
-        checkOtherDocView.setOwnewList(ownewList);
-        checkOtherDocView.setFileNameViewList(fileNameViewList);
-
-        checkOtherDocView.setComplete(2);
-        checkOtherDocView.setIncomplete(true);
-        checkOtherDocView.setIndistinct(true);
-        checkOtherDocView.setIncorrect(true);
-        checkOtherDocView.setExpire(false);
-        checkOtherDocView.setRemark("CCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        otherDocumentsList.add(checkOtherDocView);
-        log.info("--otherDocumentsList. {}",otherDocumentsList);
-        checkMandateDocView.setOtherDocumentsList(otherDocumentsList);
-        //End List<CheckOtherDocView> otherDocumentsList
-
-
-        return checkMandateDocView;
-    }
-
-    public CheckMandateDocView getDetail(long workCaseId){
-        log.info("getDetail by WorkCase. {}",workCaseId);
-        User user = userDAO.findById("ABDM001");
-        log.info("user.getRole().getId() {}",user.getRole().getId());
-        List<MandateDoc> view = mandateDocDAO.findByWorkCaseIdAndRole(workCaseId,user.getRole().getId());
-        log.info("--view. {}",view.size());
-        CheckMandateDocView checkMandateDocViews = new CheckMandateDocView();
-        checkMandateDocViews = checkMandateDocTransform.transformToView(view);
-
-        return checkMandateDocViews;
     }
 }

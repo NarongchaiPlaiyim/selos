@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="992d94ee-ab0e-458e-a59a-046b96b4a957">
-	<property name="ireport.zoom" value="3.5369215365000555"/>
-	<property name="ireport.x" value="1115"/>
-	<property name="ireport.y" value="4689"/>
+	<property name="ireport.zoom" value="2.4157650000000377"/>
+	<property name="ireport.x" value="71"/>
+	<property name="ireport.y" value="805"/>
 	<style name="Frame">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -696,7 +696,7 @@
 						<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBusinessOperationActivity()]]></textFieldExpression>
 				</textField>
@@ -710,7 +710,7 @@
 						<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getExpiryDate()]]></textFieldExpression>
 				</textField>
@@ -724,7 +724,7 @@
 						<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBusinessPermission()]]></textFieldExpression>
 				</textField>

@@ -1,9 +1,6 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.BRMSControl;
-import com.clevel.selos.businesscontrol.FullApplicationControl;
-import com.clevel.selos.businesscontrol.ReturnControl;
-import com.clevel.selos.businesscontrol.StepStatusControl;
+import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
@@ -17,6 +14,7 @@ import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.view.AppHeaderView;
+import com.clevel.selos.model.view.CheckMandateDocView;
 import com.clevel.selos.model.view.ReturnInfoView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.transform.ReturnInfoTransform;
@@ -58,7 +56,8 @@ public class BaseController implements Serializable {
     StepStatusControl stepStatusControl;
     @Inject
     ReturnInfoTransform returnInfoTransform;
-
+    @Inject
+    private CheckMandateDocControl checkMandateDocControl;
     @Inject
     BRMSControl brmsControl;
 
@@ -112,6 +111,10 @@ public class BaseController implements Serializable {
     private List<ReturnInfoView> returnInfoHistoryViewList;
 
     private HashMap<String, Integer> stepStatusMap;
+
+    //CheckMandate
+    private CheckMandateDocView checkMandateDocView;
+    private long workCaseId;
 
     private String messageHeader;
     private String message;
@@ -507,6 +510,57 @@ public class BaseController implements Serializable {
                 }
             }
         }
+
+    }
+
+    //
+    public void onCheckMandateDialog(){
+        log.debug("onCheckMandateDialog ::: starting...");
+        HttpSession session = FacesUtil.getSession(true);
+        try {
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        } catch (Exception e) {
+            workCaseId = 0;
+        }
+
+        String result = null;
+        checkMandateDocView = null;
+        try{
+            checkMandateDocView = checkMandateDocControl.getMandateDocView(workCaseId);
+            if(!Util.isNull(checkMandateDocView)){
+                log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
+            } else {
+                log.debug("-- Find by work case id = {} CheckMandateDocView is {}   ", workCaseId, checkMandateDocView);
+                checkMandateDocView = new CheckMandateDocView();
+                log.debug("-- CheckMandateDocView[New] created");
+            }
+        } catch (Exception e) {
+            log.error("-- Exception : {}", e.getMessage());
+            result = e.getMessage();
+        }
+    }
+
+    public void onSaveCheckMandateDoc(){
+        log.debug("-- onSaveCheckMandateDoc().");
+        try {
+            checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, workCaseId);
+            messageHeader = "Success";
+            message = "Success";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        } catch (Exception ex){
+            log.error("Exception : {}", ex);
+            messageHeader = "Failed";
+            message = "Failed";
+//            if(ex.getCause() != null){
+//                message = "Failed " + ex.getCause().toString();
+//            } else {
+//                message = "Failed " + ex.getMessage();
+//            }
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
+    }
+
+    public void onCancelCheckMandateDoc(){
 
     }
 
@@ -960,6 +1014,14 @@ public class BaseController implements Serializable {
 
     public void setRequestAppraisalPage(boolean requestAppraisalPage) {
         this.requestAppraisalPage = requestAppraisalPage;
+    }
+
+    public CheckMandateDocView getCheckMandateDocView() {
+        return checkMandateDocView;
+    }
+
+    public void setCheckMandateDocView(CheckMandateDocView checkMandateDocView) {
+        this.checkMandateDocView = checkMandateDocView;
     }
 
     public boolean isSubmitToGHM() {
