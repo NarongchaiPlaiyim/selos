@@ -156,7 +156,7 @@ public class FullApplicationControl extends BusinessControl {
 
         //TODO: get total com and retail
 
-        bpmExecutor.submitZM(workCaseId, queueName, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, ActionCode.SUBMIT_TO_ZM.getVal());
+        //bpmExecutor.submitZM(workCaseId, queueName, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, ActionCode.SUBMIT_CA_BDM.getVal());
     }
 
     public void requestAppraisalBDM(long workCasePreScreenId, long workCaseId) throws Exception{
