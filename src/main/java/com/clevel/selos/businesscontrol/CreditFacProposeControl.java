@@ -268,8 +268,8 @@ public class CreditFacProposeControl extends BusinessControl {
                                         prdProgramToCreditType, newCreditFacilityView.getCreditCustomerType(), basicInfoView.getSpecialProgram(), tcgView.getTCG());
                                 log.info("productFormula :: {}", productFormula.getId());
                                 if (productFormula != null){
-                                    log.info("productFormula id :: {}", productFormula.getId());
-                                    log.info("productFormula.getProgramToCreditType().getCreditType().getCreditGroup():::{}",productFormula.getProgramToCreditType().getCreditType().getCreditGroup());
+                                    log.debug("productFormula id :: {}", productFormula.getId());
+                                    log.debug("productFormula.getProgramToCreditType().getCreditType().getCreditGroup():::{}",productFormula.getProgramToCreditType().getCreditType().getCreditGroup());
                                     //OBOD or CASH_IN
                                     if(CreditTypeGroup.CASH_IN.equals(productFormula.getProgramToCreditType().getCreditType().getCreditGroup())){
                                         //ExposureMethod for check to use limit or limit*PCE%
@@ -283,7 +283,7 @@ public class CreditFacProposeControl extends BusinessControl {
                                             log.info("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                             sumTotalOBOD = sumTotalOBOD.add(Util.multiply(newCreditDetailView.getLimit(), newCreditDetailView.getPCEPercent()));
                                         }
-                                        log.info("sumTotalOBOD :: {}", sumTotalOBOD);
+                                        log.debug("sumTotalOBOD :: {}", sumTotalOBOD);
                                     }else{//All Credit
                                         //ExposureMethod for check to use limit or limit*PCE%
                                         if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
@@ -296,11 +296,11 @@ public class CreditFacProposeControl extends BusinessControl {
                                             log.info("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                             sumTotalPropose = sumTotalPropose.add(Util.multiply(newCreditDetailView.getLimit(), newCreditDetailView.getPCEPercent()));
                                         }
-                                        log.info("sumTotalPropose :: {}", sumTotalPropose);  // Commercial + OBOD
+                                        log.debug("sumTotalPropose :: {}", sumTotalPropose);  // Commercial + OBOD
                                     }
 
                                     sumTotalBorrowerCommercial = Util.subtract(sumTotalPropose,sumTotalOBOD);  // Commercial - OBOD
-                                    log.info("sumTotalCommercial :: {}", sumTotalBorrowerCommercial);
+                                    log.debug("sumTotalCommercial :: {}", sumTotalBorrowerCommercial);
 
                                     //For DBR  sumTotalLoanDbr and sumTotalNonLoanDbr
                                     if (productFormula.getDbrCalculate() == 1) {// No
