@@ -118,12 +118,45 @@ public class FullApplicationControl extends BusinessControl {
         return ghUserList;
     }
 
+    public List<User> getCSSOUserList(){
+        User currentUser = getCurrentUser();
+
+        List<User> ghUserList = userDAO.findCSSOList(currentUser);
+        if(ghUserList == null){
+            ghUserList = new ArrayList<User>();
+        }
+
+        return ghUserList;
+    }
+
     public void assignToABDM(String abdmUserId, String queueName, long workCaseId) throws Exception {
         bpmExecutor.assignToABDM(workCaseId, queueName, abdmUserId, ActionCode.ASSIGN_TO_ABDM.getVal());
     }
 
-    public void submitToZM(String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, BigDecimal totalCommercial, BigDecimal totalRetail, String resultCode, String queueName, long workCaseId) throws Exception {
-        bpmExecutor.submitZM(workCaseId, queueName, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, ActionCode.SUBMIT_TO_ZM.getVal());
+    public void submitToZMPricing(String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, String queueName, long workCaseId) throws Exception {
+        WorkCase workCase;
+        String productGroup = "";
+        int requestType = 0;
+        String deviationCode = "";
+        String resultCode = "G"; //TODO: get result code
+        BigDecimal totalCommercial = BigDecimal.ZERO;
+        BigDecimal totalRetail = BigDecimal.ZERO;
+
+        if(Long.toString(workCaseId) != null && workCaseId != 0){
+            workCase = workCaseDAO.findById(workCaseId);
+            if(workCase.getProductGroup()!=null){
+                productGroup = workCase.getProductGroup().getName();
+                requestType = workCase.getRequestType().getId();
+            }
+        }
+
+        if(!Util.isEmpty(resultCode) && resultCode.trim().equalsIgnoreCase("R")){
+            deviationCode = "AD"; //TODO:
+        }
+
+        //TODO: get total com and retail
+
+        bpmExecutor.submitZM(workCaseId, queueName, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, ActionCode.SUBMIT_TO_ZM.getVal());
     }
 
     public void requestAppraisalBDM(long workCasePreScreenId, long workCaseId) throws Exception{
