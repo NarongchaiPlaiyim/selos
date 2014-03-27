@@ -131,8 +131,8 @@
         <p:inputText id="limit" value="#{creditFacPropose.newCreditDetailView.limit}"
                      maxlength="14"
                      onclick="this.select()"
-                     onkeydown="return onKeyDownMoney(event);"
-                     onkeypress="return onKeyPressMoney(event);"
+                     onkeydown="return onKeyDownNegMoney(event);"
+                     onkeypress="return onKeyPressNegMoney(event);"
                      required="#{not empty param[onSaveCreditInfo.clientId]}"
                      style="width:200px;text-align: right">
             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"

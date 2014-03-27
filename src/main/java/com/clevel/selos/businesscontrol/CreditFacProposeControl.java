@@ -619,28 +619,28 @@ public class CreditFacProposeControl extends BusinessControl {
         BigDecimal aaaValue = BigDecimal.ZERO;
 
         //table 1
-        BigDecimal wcNeed;
-        BigDecimal totalWcDebit;
-        BigDecimal totalWcTmb;
-        BigDecimal wcNeedDiffer;
+        BigDecimal wcNeed = BigDecimal.ZERO;
+        BigDecimal totalWcDebit= BigDecimal.ZERO;
+        BigDecimal totalWcTmb= BigDecimal.ZERO;
+        BigDecimal wcNeedDiffer= BigDecimal.ZERO;
 
         //table 2
-        BigDecimal case1WcLimit;
-        BigDecimal case1WcMinLimit;
-        BigDecimal case1Wc50CoreWc;
-        BigDecimal case1WcDebitCoreWc;
+        BigDecimal case1WcLimit= BigDecimal.ZERO;
+        BigDecimal case1WcMinLimit= BigDecimal.ZERO;
+        BigDecimal case1Wc50CoreWc= BigDecimal.ZERO;
+        BigDecimal case1WcDebitCoreWc= BigDecimal.ZERO;
 
         //table 3
-        BigDecimal case2WcLimit;
-        BigDecimal case2WcMinLimit;
-        BigDecimal case2Wc50CoreWc;
-        BigDecimal case2WcDebitCoreWc;
+        BigDecimal case2WcLimit= BigDecimal.ZERO;
+        BigDecimal case2WcMinLimit= BigDecimal.ZERO;
+        BigDecimal case2Wc50CoreWc= BigDecimal.ZERO;
+        BigDecimal case2WcDebitCoreWc= BigDecimal.ZERO;
 
         //table 4
-        BigDecimal case3WcLimit;
-        BigDecimal case3WcMinLimit;
-        BigDecimal case3Wc50CoreWc;
-        BigDecimal case3WcDebitCoreWc;
+        BigDecimal case3WcLimit= BigDecimal.ZERO;
+        BigDecimal case3WcMinLimit= BigDecimal.ZERO;
+        BigDecimal case3Wc50CoreWc= BigDecimal.ZERO;
+        BigDecimal case3WcDebitCoreWc= BigDecimal.ZERO;
 
         ////////////////////////////////////////////////////
 
