@@ -218,6 +218,30 @@ public class CheckMandateDocControl extends BusinessControl{
             log.debug("-- MandateDocList.size()[{}]", mandateDocList.size());
             checkMandateDocView = new CheckMandateDocView();
             checkMandateDocView = checkMandateDocTransform.transformToView(mandateDocList);
+            getToken();
+            log.debug("-- UserToken[{}]", userToken);
+            List<CheckMandatoryDocView> mandatoryDocumentsList = checkMandateDocView.getMandatoryDocumentsList();
+            for(CheckMandatoryDocView view : mandatoryDocumentsList){
+                List<MandateDocFileNameView> fileNameViewList = view.getFileNameViewList();
+                for(MandateDocFileNameView fileNameView : fileNameViewList){
+                    fileNameView.setUrl(updateToken(fileNameView.getUrl()));
+                }
+            }
+            List<CheckOptionalDocView> optionalDocumentsList = checkMandateDocView.getOptionalDocumentsList();
+            for(CheckOptionalDocView view : optionalDocumentsList){
+                List<MandateDocFileNameView> fileNameViewList = view.getFileNameViewList();
+                for(MandateDocFileNameView fileNameView : fileNameViewList){
+                    fileNameView.setUrl(updateToken(fileNameView.getUrl()));
+                }
+            }
+            List<CheckOtherDocView> otherDocumentsList = checkMandateDocView.getOtherDocumentsList();
+            for(CheckOtherDocView view : otherDocumentsList){
+                List<MandateDocFileNameView> fileNameViewList = view.getFileNameViewList();
+                for(MandateDocFileNameView fileNameView : fileNameViewList){
+                    fileNameView.setUrl(updateToken(fileNameView.getUrl()));
+                }
+            }
+
             checkMandateDocView.readOnly();
             log.debug("-- isReasonFlag {}", checkMandateDocView.isReasonFlag());
             log.debug("-- isCompleteFlag {}", checkMandateDocView.isCompleteFlag());
@@ -226,6 +250,19 @@ public class CheckMandateDocControl extends BusinessControl{
         } else {
             log.debug("-- Find by work case id = {} MandateDoc is {}   ", workCaseId, mandateDoc);
             return null;
+        }
+    }
+
+    private String updateToken(String oldUrl){
+        String newUrl = null;
+        final String PARAM = "document&ut=";
+        if(!Util.isNull(oldUrl) && !Util.isZero(oldUrl.length())){
+            newUrl = oldUrl.substring(0, oldUrl.indexOf(PARAM))+PARAM+userToken;
+            log.debug("-- [BEFORE] {}", oldUrl);
+            log.debug("-- [AFTER] {}", newUrl);
+            return newUrl;
+        } else {
+            return oldUrl;
         }
     }
 
@@ -338,7 +375,7 @@ public class CheckMandateDocControl extends BusinessControl{
             }
         }
         log.debug("-- [BEFORE] Remove ListECMDetailMap.size()[{}]", listECMDetailMap.size());
-        log.debug("-- LeyECMList.size()[{}]", keyECMList.size());
+        log.debug("-- KeyECMList.size()[{}]", keyECMList.size());
         for(String key : keyECMList){
             listECMDetailMap.remove(key);
             log.debug("-- ECM key {} was removed.", key);
@@ -438,19 +475,6 @@ public class CheckMandateDocControl extends BusinessControl{
             }
         }
         log.debug("-- ListECMDetailMap.size()[{}]", listECMDetailMap.size());
-//        return ecmMap;
-
-//            if(ecmMap.containsKey(ecmDetail.getEcmDocId())){
-//                List<ECMDetail> ecmListTmp = ecmMap.get(ecmDetail.getEcmDocId());
-//                ecmListTmp.add(ecmDetail);
-//                ecmMap.put(ecmDetail.getEcmDocId(),ecmListTmp);
-//                System.out.println("-- Key is "+ ecmDetail.getEcmDocId());
-//            } else {
-//                List<ECMDetail> ecmListTmp = new ArrayList<ECMDetail>();
-//                ecmListTmp.add(ecmDetail);
-//                ecmMap.put(ecmDetail.getEcmDocId(),ecmListTmp);
-//            }
-//        }
     }
 
     private void getToken() {
