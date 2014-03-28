@@ -284,10 +284,17 @@ public class ExSummaryControl extends BusinessControl {
         exSumCharacteristicView.setSalePerYearBDM(exSummary.getSalePerYearBDM());
         exSumCharacteristicView.setGroupSaleBDM(exSummary.getGroupSaleBDM());
         exSumCharacteristicView.setGroupExposureBDM(exSummary.getGroupExposureBDM());
-        //todo:check role or step or status for show UW Value !?
-        exSumCharacteristicView.setSalePerYearUW(exSummary.getSalePerYearUW());
-        exSumCharacteristicView.setGroupSaleUW(exSummary.getGroupSaleUW());
-        exSumCharacteristicView.setGroupExposureUW(exSummary.getGroupExposureUW());
+
+        Long statusId = 0L;
+        HttpSession session = FacesUtil.getSession(true);
+        if(session.getAttribute("status_id") != null){
+            statusId = Long.parseLong(session.getAttribute("status_id").toString());
+        }
+        if(statusId >= 2005){
+            exSumCharacteristicView.setSalePerYearUW(exSummary.getSalePerYearUW());
+            exSumCharacteristicView.setGroupSaleUW(exSummary.getGroupSaleUW());
+            exSumCharacteristicView.setGroupExposureUW(exSummary.getGroupExposureUW());
+        }
 
         if(newCreditFacilityView != null && newCreditFacilityView.getId() != 0){
             if(newCreditFacilityView.getCreditCustomerType() == 1){ // normal 1, prime 2
@@ -339,9 +346,30 @@ public class ExSummaryControl extends BusinessControl {
                     exSumCreditRiskInfoView.setBotClass("-");
                 }
             }
-        } else {
-            exSumCreditRiskInfoView.setBotClass("-");
-            exSumCreditRiskInfoView.setReason("-");
+        } else { // (Bot Class = P,SM,SS,D,DL) DL is the worst.
+            String tmpWorstCase = "";
+            if(cusListView != null && cusListView.size() > 0){
+                for(int i = 0; i < cusListView.size() ; i++){
+                    if(i == 0){
+                        tmpWorstCase = cusListView.get(i).getAdjustClass();
+                    } else {
+                        tmpWorstCase = calWorstCaseBotClass(tmpWorstCase,cusListView.get(i).getAdjustClass());
+                    }
+                }
+            }
+            if(tmpWorstCase.trim().equalsIgnoreCase("")){
+                exSumCreditRiskInfoView.setBotClass("-");
+            } else {
+                exSumCreditRiskInfoView.setBotClass(tmpWorstCase);
+            }
+
+            if(qualitativeView != null && qualitativeView.getId() != 0){
+                if(qualitativeView.getQualityLevel().getDescription() != null){
+                    exSumCreditRiskInfoView.setReason(qualitativeView.getQualityLevel().getDescription());
+                } else {
+                    exSumCreditRiskInfoView.setReason("-");
+                }
+            }
         }
 
         //find highest percent biz
@@ -876,5 +904,55 @@ public class ExSummaryControl extends BusinessControl {
 //        exSummary.setPercentLTV();
 
         exSummaryDAO.persist(exSummary);
+    }
+
+//        (Qualitative Class = P,SM,SS,D,DL) DL is the worst.
+    public String calWorstCaseBotClass(String a, String b){
+        if(a.trim().equalsIgnoreCase("") && b.trim().equalsIgnoreCase("")){
+            return "";
+        } else if(a.trim().equalsIgnoreCase("")){
+            return b;
+        } else if(b.trim().equalsIgnoreCase("")){
+            return a;
+        }
+
+        int aInt;
+        int bInt;
+
+        if(a.trim().equalsIgnoreCase("P")){
+            aInt = 1;
+        } else if(a.trim().equalsIgnoreCase("SM")){
+            aInt = 2;
+        } else if(a.trim().equalsIgnoreCase("SS")){
+            aInt = 3;
+        } else if(a.trim().equalsIgnoreCase("D")){
+            aInt = 4;
+        } else if(a.trim().equalsIgnoreCase("DL")){
+            aInt = 5;
+        } else {
+            aInt = 0;
+        }
+
+        if(b.trim().equalsIgnoreCase("P")){
+            bInt = 1;
+        } else if(b.trim().equalsIgnoreCase("SM")){
+            bInt = 2;
+        } else if(b.trim().equalsIgnoreCase("SS")){
+            bInt = 3;
+        } else if(b.trim().equalsIgnoreCase("D")){
+            bInt = 4;
+        } else if(b.trim().equalsIgnoreCase("DL")){
+            bInt = 5;
+        } else {
+            bInt = 0;
+        }
+
+        if(aInt > bInt){
+            return a;
+        } else if (aInt < bInt){
+            return b;
+        } else { //equal
+            return a;
+        }
     }
 }

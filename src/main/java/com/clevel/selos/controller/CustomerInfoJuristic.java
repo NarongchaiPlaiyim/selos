@@ -91,6 +91,8 @@ public class CustomerInfoJuristic implements Serializable {
     private UserDAO userDAO;
     @Inject
     private JuristicDAO juristicDAO;
+    @Inject
+    private IncomeSourceDAO incomeSourceDAO;
 
     @Inject
     private CustomerInfoControl customerInfoControl;
@@ -118,6 +120,8 @@ public class CustomerInfoJuristic implements Serializable {
     private List<Country> countryList;
     private List<AddressType> addressTypeList;
     private List<KYCLevel> kycLevelList;
+
+    private List<IncomeSource> incomeSourceList;
 
     private List<String> yearList;
 
@@ -271,6 +275,8 @@ public class CustomerInfoJuristic implements Serializable {
         provinceForm2List = provinceDAO.getListOrderByParameter("name");
 
         countryList = countryDAO.findAll();
+
+        incomeSourceList = incomeSourceDAO.findAll();
 
         referenceList = new ArrayList<Reference>();
 
@@ -1257,5 +1263,13 @@ public class CustomerInfoJuristic implements Serializable {
 
     public void setRelationId(int relationId) {
         this.relationId = relationId;
+    }
+
+    public List<IncomeSource> getIncomeSourceList() {
+        return incomeSourceList;
+    }
+
+    public void setIncomeSourceList(List<IncomeSource> incomeSourceList) {
+        this.incomeSourceList = incomeSourceList;
     }
 }
