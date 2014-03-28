@@ -125,6 +125,8 @@ public class CustomerInfoJuristic implements Serializable {
 
     private List<String> yearList;
 
+    private List<IncomeSource> incomeSourceList;
+
     //*** View ***//
     private CustomerInfoView customerInfoView;
     private CustomerInfoView customerInfoSearch;

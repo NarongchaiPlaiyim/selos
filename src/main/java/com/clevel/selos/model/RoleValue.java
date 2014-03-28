@@ -6,6 +6,7 @@ public enum RoleValue {
     ZM(103),
     RGM(104),
     GH(105),
+    CSSO(106),
     UW(107),
     AAD_ADMIN(108),
     AAD_COMITTEE(109);
