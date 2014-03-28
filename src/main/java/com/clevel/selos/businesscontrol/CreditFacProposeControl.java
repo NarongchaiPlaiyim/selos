@@ -318,7 +318,6 @@ public class CreditFacProposeControl extends BusinessControl {
                                 prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
                                 productFormula = productFormulaDAO.findProductFormulaPropose(
                                         prdProgramToCreditType, newCreditFacilityView.getCreditCustomerType(), basicInfoView.getSpecialProgram(), tcgView.getTCG());
-                                log.info("productFormula :: {}", productFormula.getId());
                                 if (productFormula != null){
                                     log.debug("productFormula id :: {}", productFormula.getId());
                                     log.debug("productFormula.getProgramToCreditType().getCreditType().getCreditGroup():::{}", productFormula.getProgramToCreditType().getCreditType().getCreditGroup());
