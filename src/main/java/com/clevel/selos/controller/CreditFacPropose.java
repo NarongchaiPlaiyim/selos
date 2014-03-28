@@ -61,7 +61,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     Message exceptionMsg;
 
     private Long workCaseId;
-    private Long stepId;
 
     enum ModeForButton {ADD, EDIT}
 
@@ -284,7 +283,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     @Inject
     FeeDetailDAO feeDetailDAO;
 
-    public CreditFacPropose() {}
+    public CreditFacPropose(){}
 
     public void preRender() {
         log.debug("preRender ::: setSession ");
@@ -293,8 +292,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         if (!Util.isNull(session.getAttribute("workCaseId"))) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             log.debug("workCaseId :: {} ", workCaseId);
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            log.debug("preRender :: {} ", stepId);
         } else {
             log.debug("preRender ::: workCaseId is null.");
             try {
@@ -323,7 +320,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             deleteSubCollIdList = new ArrayList<Long>();
             deleteConditionIdList = new ArrayList<Long>();
 
-            try {
+//            try {
                 WorkCase workCase = workCaseDAO.findById(workCaseId);
                 log.info("workCase :: {}", workCase.getId());
                 if (!Util.isNull(workCase)) {
@@ -331,9 +328,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 }
 
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
-                log.debug("onCreation ::: newCreditFacilityView : {}", newCreditFacilityView);
-                if (!Util.isNull(newCreditFacilityView))
-                {
+
+                if (!Util.isNull(newCreditFacilityView)){
                     log.debug("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
 
                     modeForDB = ModeForDB.EDIT_DB;
@@ -354,16 +350,20 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                             hashSeqCredit.put(i, proposeCreditDetailViewList.get(i).getUseCount());
                         }
                     }
+
                     notRetrievePricing = false;
-                } else { // for show on add new only !!
+                } else if(Util.isNull(newCreditFacilityView)){ // for show on add new only !!
                     newCreditFacilityView = new NewCreditFacilityView();
                     reducePricePanelRendered = false;
                     cannotEditStandard = true;
+                } else {
+                   log.debug("newCreditFacility it's not null ::::::::::::::::::::::::::::::::::::::::::::::::");
+                   log.debug("onCreation ::: newCreditFacilityView : {}", newCreditFacilityView);
                 }
 
-            } catch (Exception ex) {
-                log.error("Exception while loading [Credit Facility] page :: ", ex);
-            }
+//            } catch (Exception ex) {
+//                log.error("Exception while loading [Credit Facility] page :: ", ex);
+//            }
 
             log.debug("onCreation :: modeForDB :: {}", modeForDB);
 

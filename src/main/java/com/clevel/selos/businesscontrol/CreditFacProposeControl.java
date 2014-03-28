@@ -149,10 +149,10 @@ public class CreditFacProposeControl extends BusinessControl {
             if (newCreditFacility != null) {
                 newCreditFacilityView = newCreditFacilityTransform.transformToView(newCreditFacility);
 
-                List<FeeDetail> newFeeDetailList = feeDetailDAO.findAllByWorkCaseId(workCaseId);
-                if (newFeeDetailList.size() > 0) {
-                    log.debug("newFeeDetailList :: {}", newFeeDetailList.size());
-                    List<FeeDetailView> feeDetailViewList = feeTransform.transformToView(newFeeDetailList);
+                List<FeeDetail> feeDetailList = feeDetailDAO.findAllByWorkCaseId(workCaseId);
+                if (feeDetailList.size() > 0) {
+                    log.debug("feeDetailList size:: {}", feeDetailList.size());
+                    List<FeeDetailView> feeDetailViewList = feeTransform.transformToView(feeDetailList);
                     log.debug("feeDetailViewList : {}", feeDetailViewList);
                     List<NewFeeDetailView> newFeeDetailViewList = transFormNewFeeDetailViewList(feeDetailViewList);
                     newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
@@ -773,7 +773,7 @@ public class CreditFacProposeControl extends BusinessControl {
             weightAR = bizInfoSummaryView.getSumWeightAR();
             weightAP = bizInfoSummaryView.getSumWeightAP();
             weightINV = bizInfoSummaryView.getSumWeightINV();
-            //      Sum(weight cost of goods sold * businessProportion)
+            // Sum(weight cost of goods sold * businessProportion)
             List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
             if (bizInfoSummaryView.getId() != 0) {
                 bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryView.getId());
@@ -844,32 +844,33 @@ public class CreditFacProposeControl extends BusinessControl {
 
         log.debug("Value ::: case3WcLimit : {}, case3WcMinLimit : {}, case3Wc50CoreWc : {}, case3WcDebitCoreWc : {}", case3WcLimit, case3WcMinLimit, case3Wc50CoreWc, case3WcDebitCoreWc);
 
-        NewCreditFacilityView newCreditFacilityView = findNewCreditFacilityByWorkCase(workCaseId);
-        log.debug("findByWorkCaseId :: newCreditFacilityView : {}", newCreditFacilityView);
-        if (newCreditFacilityView == null) {
-            newCreditFacilityView = new NewCreditFacilityView();
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        log.debug("findByWorkCaseId :: newCreditFacility : {}", newCreditFacility);
+        if (newCreditFacility == null) {
+            newCreditFacility = new NewCreditFacility();
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            newCreditFacility.setWorkCase(workCase);
         }
+        newCreditFacility.setWcNeed(wcNeed);
+        newCreditFacility.setTotalWcDebit(totalWcDebit);
+        newCreditFacility.setTotalWcTmb(totalWcTmb);
+        newCreditFacility.setWCNeedDiffer(wcNeedDiffer);
+        newCreditFacility.setCase1WcLimit(case1WcLimit);
+        newCreditFacility.setCase1WcMinLimit(case1WcMinLimit);
+        newCreditFacility.setCase1Wc50CoreWc(case1Wc50CoreWc);
+        newCreditFacility.setCase1WcDebitCoreWc(case1WcDebitCoreWc);
+        newCreditFacility.setCase2WcLimit(case2WcLimit);
+        newCreditFacility.setCase2WcMinLimit(case2WcMinLimit);
+        newCreditFacility.setCase2Wc50CoreWc(case2Wc50CoreWc);
+        newCreditFacility.setCase2WcDebitCoreWc(case2WcDebitCoreWc);
+        newCreditFacility.setCase3WcLimit(case3WcLimit);
+        newCreditFacility.setCase3WcMinLimit(case3WcMinLimit);
+        newCreditFacility.setCase3Wc50CoreWc(case3Wc50CoreWc);
+        newCreditFacility.setCase3WcDebitCoreWc(case3WcDebitCoreWc);
 
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-        newCreditFacilityView.setWCNeed(wcNeed);
-        newCreditFacilityView.setTotalWcDebit(totalWcDebit);
-        newCreditFacilityView.setTotalWcTmb(totalWcTmb);
-        newCreditFacilityView.setWCNeedDiffer(wcNeedDiffer);
-        newCreditFacilityView.setCase1WcLimit(case1WcLimit);
-        newCreditFacilityView.setCase1WcMinLimit(case1WcMinLimit);
-        newCreditFacilityView.setCase1Wc50CoreWc(case1Wc50CoreWc);
-        newCreditFacilityView.setCase1WcDebitCoreWc(case1WcDebitCoreWc);
-        newCreditFacilityView.setCase2WcLimit(case2WcLimit);
-        newCreditFacilityView.setCase2WcMinLimit(case2WcMinLimit);
-        newCreditFacilityView.setCase2Wc50CoreWc(case2Wc50CoreWc);
-        newCreditFacilityView.setCase2WcDebitCoreWc(case2WcDebitCoreWc);
-        newCreditFacilityView.setCase3WcLimit(case3WcLimit);
-        newCreditFacilityView.setCase3WcMinLimit(case3WcMinLimit);
-        newCreditFacilityView.setCase3Wc50CoreWc(case3Wc50CoreWc);
-        newCreditFacilityView.setCase3WcDebitCoreWc(case3WcDebitCoreWc);
-        NewCreditFacility newCreditFacility = newCreditFacilityTransform.transformToModelDB(newCreditFacilityView,workCase,getCurrentUser());
+        log.debug("newCreditFacility : {}", newCreditFacility);
         newCreditFacilityDAO.persist(newCreditFacility);
-        log.debug("after persist newCreditFacility : {}", newCreditFacility);
+        log.debug("after persist newCreditFacility by cal WC :::: {}", newCreditFacility);
     }
 
     public NewCreditFacilityView saveCreditFacility(NewCreditFacilityView newCreditFacilityView, long workCaseId) {
