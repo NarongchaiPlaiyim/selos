@@ -103,4 +103,16 @@ public class UserDAO extends GenericDAO<User,String> {
         return userList;
     }
 
+    public List<User> findCSSOList(User user){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.ne("id", user.getId()));
+        criteria.add(Restrictions.eq("role.id", RoleValue.CSSO.id()));
+        criteria.add(Restrictions.eq("team", user.getTeam()));
+        criteria.addOrder(Order.asc("userName"));
+
+        List<User> userList = criteria.list();
+
+        return userList;
+    }
+
 }

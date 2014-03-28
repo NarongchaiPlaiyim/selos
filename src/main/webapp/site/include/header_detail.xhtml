@@ -178,6 +178,7 @@
                                  action="#{baseController.onOpenSubmitZM}"
                                  update=":frmMain:submitZMPanel, :frmMain:msgBoxBaseMessagePanel" >
                 </p:commandButton>
+                <!---->
             </p:panel>
             <!--Stage for Appraisal-->
             <p:panel id="header_panel_appraisal" rendered="#{baseController.stageId == 203}" styleClass="panel">
@@ -415,7 +416,7 @@
     <p:panel id="submitZMPanel" styleClass="panel">
         <p:dialog id="submitZMDialog" widgetVar="submitZMDlg" header="Submit to Zone Manager"
                   onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-                  modal="true" width="550" height="360">
+                  modal="true" width="550" height="450">
             <ui:include src="/site/dialog/submitCaseDialog.xhtml"/>
         </p:dialog>
     </p:panel>
