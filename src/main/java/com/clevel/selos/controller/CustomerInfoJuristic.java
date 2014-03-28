@@ -121,8 +121,6 @@ public class CustomerInfoJuristic implements Serializable {
     private List<AddressType> addressTypeList;
     private List<KYCLevel> kycLevelList;
 
-    private List<IncomeSource> incomeSourceList;
-
     private List<String> yearList;
 
     private List<IncomeSource> incomeSourceList;
