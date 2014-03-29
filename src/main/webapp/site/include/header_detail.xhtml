@@ -46,11 +46,11 @@
                                  action="#{baseController.onCheckPreScreen}">
                 </p:commandButton>
                 <!--Request Appraisal Prescreen-->
-                <p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
+                <!--<p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
                                  rendered="#{baseController.checkButton('Request Appraisal') and baseController.requestAppraisal == 0}}"
                                  type="button"
                                  onclick="confrmReqApprPreScreen.show()">
-                    <!--Confirm dialog for Request Appraisal Prescreen-->
+                    &lt;!&ndash;Confirm dialog for Request Appraisal Prescreen&ndash;&gt;
                     <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.requestAppraisal')}" styleClass="left"
                                      icon="ui-icon-alert"
                                      widgetVar="confrmReqApprPreScreen" global="false" showEffect="fade"
@@ -64,7 +64,7 @@
                                          type="button"
                                          onclick="confrmReqApprPreScreen.hide()" />
                     </p:confirmDialog>
-                </p:commandButton>
+                </p:commandButton>-->
                 <p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
                                  rendered="#{baseController.checkButton('Request Appraisal')}"
                                  process="@this"
