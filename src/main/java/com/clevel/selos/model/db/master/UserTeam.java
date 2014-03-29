@@ -32,8 +32,8 @@ public class UserTeam implements Serializable
     @Column(name = "team_type")
     private int team_type;
 
-    @Column(name = "role")
-    private String role;
+    /*@Column(name = "role")
+    private String role;*/
 
     @Column(name = "role_id")
     private String roleId;
@@ -97,13 +97,13 @@ public class UserTeam implements Serializable
         this.team_type = team_type;
     }
 
-    public String getRole() {
+    /*public String getRole() {
         return role;
     }
 
     public void setRole(String role) {
         this.role = role;
-    }
+    }*/
 
     public String getRoleId() {
         return roleId;
@@ -124,7 +124,7 @@ public class UserTeam implements Serializable
                 append("team_name", team_name).
                 append("team_type", team_type).
                 append("team_code", team_code).
-                append("role", role).
+                //append("role", role).
                 append("roleId",roleId).
                 toString();
     }
