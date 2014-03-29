@@ -320,7 +320,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             deleteSubCollIdList = new ArrayList<Long>();
             deleteConditionIdList = new ArrayList<Long>();
 
-//            try {
+            try {
                 WorkCase workCase = workCaseDAO.findById(workCaseId);
                 log.info("workCase :: {}", workCase.getId());
                 if (!Util.isNull(workCase)) {
@@ -329,7 +329,11 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
 
-                if (!Util.isNull(newCreditFacilityView)){
+                if(Util.isNull(newCreditFacilityView)){
+                    newCreditFacilityView = new NewCreditFacilityView();
+                    reducePricePanelRendered = false;
+                    cannotEditStandard = true;
+                }else{
                     log.debug("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
 
                     modeForDB = ModeForDB.EDIT_DB;
@@ -338,12 +342,15 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(), existingCreditDetailViewList, workCaseId);
                     log.debug("[List for select in Collateral] :: proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
                     int lastSeqNumber = creditFacProposeControl.getLastSeqNumberFromProposeCredit(proposeCreditDetailViewList);
+
                     if (lastSeqNumber > 1) {
                         seq = lastSeqNumber + 1;
                     } else {
                         seq = lastSeqNumber;
                     }
+
                     log.info("lastSeqNumber :: {}", lastSeqNumber);
+
                     for (int i = 0; i < proposeCreditDetailViewList.size(); i++) {
                         if (proposeCreditDetailViewList.get(i).getTypeOfStep().equals("N")) {
                             log.info("proposeCreditDetailViewList.get(i).getUseCount :: {}", proposeCreditDetailViewList.get(i).getUseCount());
@@ -352,18 +359,13 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     }
 
                     notRetrievePricing = false;
-                } else if(Util.isNull(newCreditFacilityView)){ // for show on add new only !!
-                    newCreditFacilityView = new NewCreditFacilityView();
-                    reducePricePanelRendered = false;
-                    cannotEditStandard = true;
-                } else {
-                   log.debug("newCreditFacility it's not null ::::::::::::::::::::::::::::::::::::::::::::::::");
-                   log.debug("onCreation ::: newCreditFacilityView : {}", newCreditFacilityView);
+
+
                 }
 
-//            } catch (Exception ex) {
-//                log.error("Exception while loading [Credit Facility] page :: ", ex);
-//            }
+            } catch (Exception ex) {
+                log.error("Exception while loading [Credit Facility] page :: ", ex);
+            }
 
             log.debug("onCreation :: modeForDB :: {}", modeForDB);
 
@@ -1508,9 +1510,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             log.debug("newGuarantorDetailViewItem.getProposeCreditDetailViewList():: amount ::  {}", newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(0).getGuaranteeAmount());
 
             for (ProposeCreditDetailView proposeCreditDetailView : newGuarantorDetailView.getProposeCreditDetailViewList()) {
-                for (ProposeCreditDetailView proposeeCreditDetailSelect : selectedGuarantorCrdTypeItems) {
-                    if (proposeCreditDetailView.getSeq() == proposeeCreditDetailSelect.getSeq()) {
-                        proposeCreditDetailView.setGuaranteeAmount(proposeeCreditDetailSelect.getGuaranteeAmount());
+                for (ProposeCreditDetailView proposeCreditDetailSelect : selectedGuarantorCrdTypeItems) {
+                    if (proposeCreditDetailView.getSeq() == proposeCreditDetailSelect.getSeq()) {
+                        proposeCreditDetailView.setGuaranteeAmount(proposeCreditDetailSelect.getGuaranteeAmount());
                     }
                 }
             }
@@ -1692,14 +1694,13 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
             creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
             // Calculate Total Propose
-            creditFacProposeControl.calculateTotalProposeAmount(newCreditFacilityView, basicInfoView, tcgView, workCaseId);
+            newCreditFacilityView = creditFacProposeControl.calculateTotalProposeAmount(newCreditFacilityView, basicInfoView, tcgView, workCaseId);
             // Calculate Total for BRMS
-            creditFacProposeControl.calculateTotalForBRMS(newCreditFacilityView);
-            // Calculate WC
-            creditFacProposeControl.calWC(workCaseId);
+            newCreditFacilityView = creditFacProposeControl.calculateTotalForBRMS(newCreditFacilityView);
             // Save NewCreditFacility, ProposeCredit, Collateral, Guarantor
             newCreditFacilityView = creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
-
+            // Calculate WC
+            creditFacProposeControl.calWC(workCaseId);
 
             onCreation();
 
