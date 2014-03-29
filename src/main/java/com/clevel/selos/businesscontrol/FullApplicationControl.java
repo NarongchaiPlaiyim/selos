@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.dao.history.ReturnInfoHistoryDAO;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.relation.RelTeamUserDetailsDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionCode;
@@ -68,6 +69,8 @@ public class FullApplicationControl extends BusinessControl {
     StepTransform stepTransform;
     @Inject
     StepDAO stepDAO;
+    @Inject
+    RelTeamUserDetailsDAO relTeamUserDetailsDAO;
 
     @Inject
     BPMExecutor bpmExecutor;
@@ -85,10 +88,13 @@ public class FullApplicationControl extends BusinessControl {
         return abdmUserList;
     }
 
-    public List<User> getZMUserList(){
-        User currentUser = getCurrentUser();
+    public List<User> getUserList(User currentUser){
+        List<User> zmUserList = null;
+        List<UserTeam> zmUserTeamList = relTeamUserDetailsDAO.getTeamHeadLeadByTeamId(currentUser.getTeam().getId());
+        if(zmUserTeamList!=null && zmUserTeamList.size()>0){
+            zmUserList = userDAO.findUserZoneList(zmUserTeamList);
+        }
 
-        List<User> zmUserList = userDAO.findUserZoneList(currentUser);
         if(zmUserList == null){
             zmUserList = new ArrayList<User>();
         }
