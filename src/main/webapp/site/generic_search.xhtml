@@ -4,7 +4,8 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 
 <h:head>
     <title>SE-LOS : Search</title>
@@ -45,7 +46,7 @@
         }
         .ui-icon {
             width: 16px!important;
-            height: 8px!important;
+            height: 16px!important;
         }
         .ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td {
             padding: 1px 10px !important;
@@ -85,7 +86,7 @@ function resetter()
 <tr>
     <td style="width: 20px;"></td>
     <td>
-
+        <h:messages style="color:red;margin:8px;" />
         <table>
 
             <tr>
@@ -102,7 +103,7 @@ function resetter()
 
             <tr>
                 <td class="title" style="width: 150px;">Application No. :</td>
-                <td><h:inputText size="20" value="#{peSearch.applicationNumber}"> </h:inputText></td>
+                <td><h:inputText size="20" value="#{peSearch.applicationNumber}" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;"> </h:inputText></td>
 
             </tr>
             <tr>
@@ -110,7 +111,7 @@ function resetter()
             </tr>
             <tr>
                 <td class="title" style="width: 150px;">User ID :</td>
-                <td><h:inputText size="20" value="#{peSearch.userid}"> </h:inputText></td>
+                <td><h:inputText size="20" value="#{peSearch.userid}" id="userIdId"> </h:inputText></td>
 
             </tr>
             <tr>
@@ -158,10 +159,18 @@ function resetter()
             </tr>
             <tr>
                 <td class="title" style="width: 150px;">First Name :</td>
-                <td><h:inputText id="fisrtNameId" size="20" value="#{peSearch.firstname}"> </h:inputText></td>
+                <td>
+                    <h:inputText id="firstNameId" size="20" value="#{peSearch.firstname}" validatorMessage="Enter more than 3 and less than 50 letters for First Name">
+                        <f:validateLength minimum="3" maximum="50" disabled="#{empty param['frmMain:firstNameId']}" />
+                    </h:inputText>
+                </td>
 
                 <td class="title" style="width: 150px;">Last Name :</td>
-                <td><h:inputText id="lastNameId" size="20" value="#{peSearch.lastname}"> </h:inputText></td>
+                <td>
+                    <h:inputText id="lastNameId" size="20" value="#{peSearch.lastname}" validatorMessage="Enter more than 3 and less than 50 letters for Last Name">
+                        <f:validateLength minimum="3" maximum="50" disabled="#{empty param['frmMain:lastNameId']}"  />
+                    </h:inputText>
+                </td>
             </tr>
             <tr>
                 <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
@@ -169,9 +178,31 @@ function resetter()
 
             <tr>
                 <td class="title">Start date From :</td>
-                <td style="width: 350px;"><p:calendar pattern="dd/MM/yyyy" value="#{peSearch.date1}" styleClass="large" id="startformDate" showOn="button" /></td>
+                <td style="width: 350px;">
+                    <clv:BECalendar id="startformDate" showOn="button" showButtonPanel="true" navigator="true"
+                                    yearRange="1950:2100"
+                                    mindate="01/01/1950"
+                                    maxdate="#{peSearch.currentDateDDMMYY}"
+                                    pattern="dd/MM/yyyy"
+                                    value="#{peSearch.date1}"
+                                    requiredMessage="Please Enter From Date"
+                                    required="#{not empty param['frmMain:userIdId']}"
+                                    readonlyInput="true">
+                    </clv:BECalendar>
+                </td>
                 <td class="title">To :</td>
-                <td><p:calendar pattern="dd/MM/yyyy" value="#{peSearch.date2}" styleClass="large" id="starttoDate" showOn="button" /></td>
+                <td>
+                    <clv:BECalendar id="starttoDate" showOn="button" showButtonPanel="true" navigator="true"
+                                    yearRange="1950:2100"
+                                    mindate="01/01/1950"
+                                    maxdate="#{peSearch.currentDateDDMMYY}"
+                                    pattern="dd/MM/yyyy"
+                                    value="#{peSearch.date2}"
+                                    requiredMessage="Please Enter To Date"
+                                    required="#{not empty param['frmMain:userIdId']}"
+                                    readonlyInput="true">
+                    </clv:BECalendar>
+                </td>
             </tr>
             <tr>
                 <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
@@ -180,9 +211,29 @@ function resetter()
 
             <tr >
                 <td class="title" >Terminate date From :</td>
-                <td style="width: 350px;"><p:calendar pattern="dd/MM/yyyy" value="#{peSearch.date3}" styleClass="large" id="terminateformDate" showOn="button" readonly="#{peSearch.statusType eq 'InprocessCases'}" disabled="#{peSearch.statusType eq 'InprocessCases'}"/></td>
+                <td style="width: 350px;">
+                    <clv:BECalendar id="terminateformDate" showOn="button" showButtonPanel="true" navigator="true"
+                                    yearRange="1950:2100"
+                                    mindate="01/01/1950"
+                                    maxdate="#{peSearch.currentDateDDMMYY}"
+                                    pattern="dd/MM/yyyy"
+                                    value="#{peSearch.date3}"
+                                    readonlyInput="true"
+                                    readonly="#{peSearch.statusType eq 'InprocessCases'}" disabled="#{peSearch.statusType eq 'InprocessCases'}">
+                    </clv:BECalendar>
+                </td>
                 <td class="title">To :</td>
-                <td><p:calendar pattern="dd/MM/yyyy" value="#{peSearch.date4}" styleClass="large" id="terminatetoDate" showOn="button" readonly="#{peSearch.statusType eq 'InprocessCases'}" disabled="#{peSearch.statusType eq 'InprocessCases'}"/></td>
+                <td>
+                    <clv:BECalendar id="terminatetoDate" showOn="button" showButtonPanel="true" navigator="true"
+                                    yearRange="1950:2100"
+                                    mindate="01/01/1950"
+                                    maxdate="#{peSearch.currentDateDDMMYY}"
+                                    pattern="dd/MM/yyyy"
+                                    value="#{peSearch.date4}"
+                                    readonlyInput="true"
+                                    readonly="#{peSearch.statusType eq 'InprocessCases'}" disabled="#{peSearch.statusType eq 'InprocessCases'}">
+                    </clv:BECalendar>
+                </td>
             </tr>
 
 
@@ -218,6 +269,7 @@ function resetter()
 
         <h:panelGroup id="pnl_menu_inbox1" rendered='#{peSearch.searchViewList != null}' styleClass="panel">
 
+
             <table class="content_form"  style="width: 100%">
                 <tr>
                     <td>
@@ -246,47 +298,47 @@ function resetter()
                                 <h:outputText value="#{rowIndex+1}"/>
                             </p:column>
 
-                            <p:column headerText="Received Date" styleClass="center" style="width: 130px;" >
+                            <p:column headerText="Received Date" styleClass="center" style="width: 130px;" sortBy="#{item.receiveddate}">
                                 <h:outputText value="#{item.receiveddate}"/>
                             </p:column>
 
-                            <p:column headerText="At User Team" styleClass="center" style="width: 130px;">
+                            <p:column headerText="At User Team" styleClass="center" style="width: 130px;" sortBy="#{item.atuserteam}">
                                 <h:outputText value="#{item.atuserteam}" />
                             </p:column>
 
-                            <p:column headerText="Application Number" styleClass="center" style="width: 110px;">
+                            <p:column headerText="Application Number" styleClass="center" style="width: 110px;" sortBy="#{item.applicationno}">
                                 <h:outputText value="#{item.applicationno}" />
                             </p:column>
 
-                            <p:column headerText="Name" styleClass="center" style="width: 110px;">
+                            <p:column headerText="Name" styleClass="center" style="width: 110px;" sortBy="#{item.name}">
                                 <h:outputText value="#{item.name}"/>
                             </p:column>
 
-                            <p:column headerText="Product Group" style="width: 120px;" styleClass="center" >
+                            <p:column headerText="Product Group" style="width: 120px;" styleClass="center" sortBy="#{item.productgroup}" >
                                 <h:outputText value="#{item.productgroup}"/>
                             </p:column>
 
-                            <p:column headerText="Request Type" style="width: 120px;" styleClass="center">
+                            <p:column headerText="Request Type" style="width: 120px;" styleClass="center" sortBy="#{item.requestTypeStr}">
                                 <h:outputText value="#{item.requestTypeStr}"/>
                             </p:column>
 
-                            <p:column headerText="Step" styleClass="center" style="width: 110px;" >
+                            <p:column headerText="Step" styleClass="center" style="width: 110px;" sortBy="#{item.step}" >
                                 <h:outputText value="#{item.step}"/>
                             </p:column>
 
-                            <p:column headerText="Status" styleClass="center" style="width: 110px;" >
+                            <p:column headerText="Status" styleClass="center" style="width: 110px;"  sortBy="#{item.status}">
                                 <h:outputText value="#{item.status}"/>
                             </p:column>
 
-                            <p:column headerText="From User" styleClass="center" style="width: 110px;">
+                            <p:column headerText="From User" styleClass="center" style="width: 110px;" sortBy="#{item.fromuser}">
                                 <h:outputText value="#{item.fromuser}" />
                             </p:column>
 
-                            <p:column headerText="At User" styleClass="center" style="width: 110px;">
+                            <p:column headerText="At User" styleClass="center" style="width: 110px;" sortBy="#{item.atuser}">
                                 <h:outputText value="#{item.atuser}"/>
                             </p:column>
 
-                            <p:column headerText="Appointment Date" styleClass="center" style="width: 110px;">
+                            <p:column headerText="Appointment Date" styleClass="center" style="width: 110px;" sortBy="#{item.appointmentdate}">
                                 <h:outputText value="#{item.appointmentdate}"/>
                             </p:column>
 
@@ -294,7 +346,7 @@ function resetter()
                                 <h:outputText value="#{item.doalevel}"/>
                             </p:column>
 
-                            <p:column headerText="Action" styleClass="center" style="width: 110px;">
+                            <p:column headerText="Action" styleClass="center" style="width: 110px;" sortBy="#{item.action}">
                                 <h:outputText value="#{item.action}"/>
                             </p:column>
 
@@ -302,11 +354,11 @@ function resetter()
                                 <h:outputText value="#{item.slaenddate}"/>
                             </p:column>
 
-                            <p:column headerText="Total Time Spent At User " styleClass="center" style="width: 110px;" >
+                            <p:column headerText="Total Time Spent At User " styleClass="center" style="width: 110px;" sortBy="#{item.totaltimespentatuser}">
                                 <h:outputText value="#{item.totaltimespentatuser}"/>
                             </p:column>
 
-                            <p:column headerText="Total Time Spent At Process" styleClass="center" style="width: 110px;" >
+                            <p:column headerText="Total Time Spent At Process" styleClass="center" style="width: 110px;" sortBy="#{item.totaltimespentatprocess}" >
                                 <h:outputText value="#{item.totaltimespentatprocess}"/>
                             </p:column>
 

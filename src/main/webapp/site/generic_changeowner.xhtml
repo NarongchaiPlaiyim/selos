@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>SE-LOS : Change Owner</title>
+    <h:outputStylesheet name="css/style.css" />
+
+    <style type="text/css">
+        table.ui-selectoneradio.nolabel_radio {
+            border-collapse: collapse;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+        table.ui-selectoneradio.nolabel_radio tr,
+        table.ui-selectoneradio.nolabel_radio td {
+            border-spacing: 0;
+            padding: 0;
+        }
+        .dialog_noheader.ui-dialog .ui-dialog-titlebar {
+            display:none;
+        }
+        .div_row {
+            display: block;
+            height: 28px;
+            line-height: 28px;
+            padding: 1px;
+        }
+        table table.ui-selectoneradio,
+        table table.ui-selectoneradio td,
+        table table.ui-selectoneradio tr {
+            border: medium none !important;
+        }
+        .full_table table.ui-selectoneradio td {
+            padding : 0 10px 0 0 !important;
+        }
+        .full_table table.ui-selectoneradio {
+            width : auto !important;
+        }
+        .ui-icon {
+            width: 16px!important;
+            height: 8px!important;
+        }
+        .ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td {
+            padding: 1px 10px !important;
+            overflow: hidden !important;
+            white-space: normal !important;
+            border-width: 1px !important;
+            border-style: solid !important;
+            border-color: #868686;
+        }
+    </style>
+</h:head>
+<h:body>
+<p:panel id="pnl_maincontainer">
+<h:form id="frmMain" style="position: relative; min-height: 100%; height: 100%;">
+<div id="main_container">
+<!-- Start Header Logo -->
+<ui:include src="include/header_logo.xhtml" />
+<!-- End Header Logo -->
+<!-- Start Menu -->
+<ui:include src="include/menubar_inbox.xhtml" />
+<!-- End Menu -->
+<div id="content_container">
+    <div id="content_name">Change Owner</div>
+    <div id="content">
+        <table id="content_form">
+            <!--<tr>
+                <td colspan="100%" style="color: red;line-height: 15px;"><label style="font-weight: bold">Change Owner:</label> ใช้เพื่อโอนงานจาก user หนึ่ง ไปให้อีก user หนึ่ง กรณีที่งานจบ step ของ user นั้นๆ แต่ยัง on process ในระบบ</td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="color: red;line-height: 15px;"><label style="font-weight: bold">Reassign:</label> ใช้เพื่อโอนงานจาก user หนึ่งไปให้อีก user หนึ่ง กรณีที่งานยัง on hand อยู่ใน step ของ user นั้นๆ</td>
+            </tr>-->
+            <tr>
+                <td colspan="100%" class="title"><h2>Search Case from Owner</h2></td>
+            </tr>
+            <tr>
+                <td class="title">Team Lead Unit Name:</td>
+                <td > <h:selectOneMenu id="teamId" style="width: 220px;"
+                                      label="TeamId"
+                                      value="#{change.selectTeam}" onchange="submit()" valueChangeListener="#{change.getRoleNameForSelectedTeam}">
+                    <f:selectItem itemValue="" itemLabel="--Please Select--"/>
+                    <f:selectItems value="#{change.teamTypeName}" var="teamName" itemValue="#{teamName.id}" itemLabel="#{teamName.user}"/>
+
+                </h:selectOneMenu>  </td>
+            </tr>
+            <tr>
+                <td class="title"> Role:</td>
+                <td> <h:selectOneMenu id="roleId" style="width: 220px;"
+                                      label="role"
+                                      value="#{change.selectRole}" onchange="submit()" valueChangeListener="#{change.getAllUserNames}">
+                    <f:selectItem itemValue="" itemLabel="--Please Select--"/>
+                    <f:selectItems value="#{change.rolSet}" var="roleItem" itemLabel="#{roleItem.roleName}" itemValue="#{roleItem.roleNumber}"/>
+                </h:selectOneMenu></td>
+            </tr>
+            <tr>
+                <td class="title"> User Name: </td>
+                <td><h:selectOneMenu id="userList"  style="width: 220px;"
+                                     label="UserList"
+                                     value="#{change.selectuser}">
+                    <f:selectItem itemValue="" itemLabel="--Please Select--"/>
+                    <f:selectItems value="#{change.userList1}" id="ALL"/>
+                </h:selectOneMenu>
+
+                    <p:spacer width="15px"/>
+                    <p:commandButton  id="btnSearchFacility" styleClass="medium" value="Search" action="#{change.changOwnerSearchQuery()}" ajax="false"></p:commandButton> </td>
+            </tr>
+
+        </table>
+        <h:panelGroup id="pnl_menu_inbox1" rendered='#{change.changeOwerViewList != null}'
+                      styleClass="panel">
+            <table>
+                <tr>
+                    <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
+                </tr>
+                <tr>
+                    <td colspan="100%"><p:separator/></td>
+                </tr>
+                <tr>
+                    <td colspan="100%" style="color: red;"><p:commandButton value="Change Owner" id="change" disabled="#{change.selectuser eq 'ALL'}" readonly="#{change.selectuser eq 'ALL'}" styleClass="large" onclick="changeOwnerDlg.show()"/>เลือก Change Owner ได้ไม่เกินครั้งละ 5 cases.</td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <p:dataTable id="reassignResult" var="item"
+                                     value="#{change.changeOwerViewList}"
+                                     selectionMode="single"
+                                     paginator="true"
+                                     rows ="10"
+                                     rowKey="#{item.receivedDate}"
+                                     rowIndexVar="rowIndex"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="20,40,60" >
+                            <p:column headerText="" styleClass="center" style="width:22px;">
+                                <h:outputText value="#{rowIndex+1}"/>
+                            </p:column>
+                            <p:column headerText="Select" styleClass="center" style="width:22px;">
+                                <h:selectBooleanCheckbox disabled="false" value="#{change.checked[item.f_WobNum]}"/>
+                            </p:column>
+
+                            <p:column headerText="Received Date" styleClass="center"
+                                      style="width: 130px;" sortBy="#{item.receivedDate}">
+                                <h:outputText value="#{item.receivedDate}"/>
+                            </p:column>
+
+                            <p:column headerText="At User Team" styleClass="center"
+                                      style="width: 130px;" sortBy="#{item.teamName}">
+                                <h:outputText value="#{item.teamName}"/>
+                            </p:column>
+
+                            <p:column headerText="Application Number" styleClass="center"
+                                      style="width: 110px;" sortBy="#{item.appNumber}" >
+                                <h:outputText value="#{item.appNumber}"/>
+                            </p:column>
+
+                            <p:column headerText="Name" styleClass="center"
+                                      style="width: 110px;" sortBy="#{item.name}">
+                                <h:outputText value="#{item.name}"/>
+                            </p:column>
+
+                            <p:column headerText="Product Group" style="width: 120px;" sortBy="#{item.productGroup}">
+                                <h:outputText value="#{item.productGroup}"/>
+                            </p:column>
+
+                            <p:column headerText="Request Type" style="width: 120px;" sortBy="#{item.requestType}">
+                                <h:outputText value="#{item.receivedDate}"/>
+                            </p:column>
+
+                            <p:column headerText="Step" styleClass="center"
+                                      style="width: 110px;" sortBy="#{item.step}">
+                                <h:outputText value="#{item.step}"/>
+                            </p:column>
+
+                            <p:column headerText="Status" styleClass="center"
+                                      style="width: 110px;" sortBy="#{item.status}">
+                                <h:outputText value="#{item.status}"/>
+                            </p:column>
+
+                            <p:column headerText="At User" styleClass="center"
+                                      style="width: 110px;" sortBy="#{item.currentUser}">
+                                <h:outputText value="#{item.currentUser}"/>
+                            </p:column>
+
+                            <p:column headerText="Total Time Spent At User" styleClass="center"
+                                      style="width: 110px;" sortBy="#{item.totalTimeAtUser}">
+                                <h:outputText value="#{item.totalTimeAtUser}"/>
+                            </p:column>
+                            <p:column headerText="SLAEndDate" styleClass="center"
+                                      style="width: 110px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="#{item.SLAEndTime}">
+                                <h:outputText value="#{item.SLAEndTime}" />
+                            </p:column>
+
+                            <p:column headerText="Total Time Spent At Process" styleClass="center"
+                                      style="width: 110px;" sortBy="#{item.totalTimeAtProcess}">
+                                <h:outputText value="#{item.totalTimeAtProcess}"/>
+                            </p:column>
+                            <p:column headerText="F_WOBNumber" styleClass="center"
+                                      style="width: 110px;" sortBy="#{item.f_WobNum}">
+                                <h:outputText value="#{item.f_WobNum}"/>
+                            </p:column>
+
+                        </p:dataTable>
+                    </td>
+                </tr>
+                <tr><td colspan="100%"><p:spacer width="2"/></td></tr>
+            </table>
+        </h:panelGroup>
+    </div>
+    <div class="bottom_line"><!-- --></div>
+</div>
+<div class="clear"></div>
+<!-- Start Footer -->
+<p:dialog id="changeOwnerDialog" header="Change Owner Information" widgetVar="changeOwnerDlg" modal="true">
+
+        <table class="content_form" style="width: 600px;">
+            <tr>
+                <td>
+                    <h:panelGrid columns="2">
+                        <tr>
+                        <td class="title" style="width: 220px;">Team Lead UnitName: </td>
+                        <td><h:selectOneMenu id="teamIdChangeOwner" style="width: 220px;"
+                                         label="teamIdChangeOwner"
+                                         value="#{change.selectTeamNameChangeOwner}">
+                            <f:selectItem itemValue="" itemLabel="--Please Select--"/>
+                            <f:selectItems value="#{change.teamNamesForChangeOwerTo}" var="teamNamesChangeOwner" itemLabel="#{teamNamesChangeOwner.user}" itemValue="#{teamNamesChangeOwner.id}"/>
+                            <f:ajax listener="#{change.userNamesForChangeTo}" render="userListChangeOwner" execute="@this"/>
+                        </h:selectOneMenu> </td>
+                        </tr>
+                        <tr>
+                        <td class="title" style="width: 220px;">Change Owner To :</td>
+                       <td> <h:selectOneMenu id="userListChangeOwner" style="width: 220px;"
+                                         label="UserListChangeOwner"
+                                         value="#{change.selectUserChangeOwner}">
+                            <f:selectItem itemValue="" itemLabel="--Please Select--"/>
+                            <f:selectItems id="selectednames" value="#{change.userNamesForChangeOwnerList}"/>
+                        </h:selectOneMenu> </td>
+                        </tr>
+
+                        <tr>
+                            <td class="title" >Remark :</td>
+                            <td> <h:inputTextarea value="#{change.remark}" cols="50" rows="3" /></td>
+                        </tr>
+                    </h:panelGrid>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p:commandButton value="Submit" styleClass="small" action="#{change.onReassignBulk}" onclick="appealDlg.close();"/>
+                    <p:commandButton value="Cancel" styleClass="small" onclick="appealDlg.close();"/>
+                </td>
+            </tr>
+        </table>
+
+
+</p:dialog>
+<ui:include src="include/footer_inbox.xhtml" />
+<!-- End Footer -->
+</div>
+</h:form>
+</p:panel>
+</h:body>
+</f:view>
+</html>
