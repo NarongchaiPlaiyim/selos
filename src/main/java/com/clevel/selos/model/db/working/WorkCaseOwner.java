@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
+@Entity(name = "com.clevel.selos.model.db.working.WorkCaseOwner")
 @Table(name = "wrk_case_owner")
 public class WorkCaseOwner {
 

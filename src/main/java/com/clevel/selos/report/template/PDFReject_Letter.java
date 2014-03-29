@@ -3,12 +3,18 @@ package com.clevel.selos.report.template;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.ExSummaryControl;
+import com.clevel.selos.dao.working.AddressDAO;
+import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Month;
+import com.clevel.selos.model.db.working.Address;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.report.RejectLetterReport;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -28,18 +34,19 @@ public class PDFReject_Letter implements Serializable {
     Logger log;
 
     long workCaseId;
+    @Inject
+    @NormalMessage
+    Message msg;
 
     @Inject
+    CustomerDAO customerDAO;
+    @Inject
     private WorkCaseDAO workCaseDAO;
-//    @Inject
-//    ExSummaryView exSummaryView;
-//    @Inject
-//    private ExSummaryControl exSummaryControl;
-
+    @Inject
+    private AddressDAO addressDAO;
     @Inject
     private CustomerInfoControl customerInfoControl;
 
-//    private AppHeaderView appHeaderView;
     private List<CustomerInfoView> customerInfoView;
 
     WorkCase workCase;
@@ -66,24 +73,32 @@ public class PDFReject_Letter implements Serializable {
 
         if (!Util.isNull(workCaseId)){
             customerInfoView = new ArrayList<CustomerInfoView>();
-            customerInfoView = customerInfoControl.getAllCustomerByWorkCase(workCaseId);
+            customerInfoView = customerInfoControl.getBorrowerByWorkCase(workCaseId);
         }
     }
 
     public List<RejectLetterReport> fillAllNameReject (){
         log.debug("fillAllNameReject. {}");
+        init();
         List<RejectLetterReport> reportList = new ArrayList<RejectLetterReport>();
         RejectLetterReport report = null;
         StringBuilder stringName = new StringBuilder();
 
+        int i = 0;
         if (Util.safetyList(customerInfoView).size() > 0 ){
             log.debug("customerInfoView. {}",customerInfoView);
             for (CustomerInfoView view : customerInfoView){
+                i++;
                 report = new RejectLetterReport();
-                stringName = stringName.append(view.getTitleTh());
+                stringName = stringName.append(view.getTitleTh().getTitleTh());
                 stringName = stringName.append(view.getFirstNameTh()).append(" ");
                 stringName = stringName.append(view.getLastNameTh());
+                if(i != customerInfoView.size()){
+                    stringName = stringName.append(", ");
+                }
                 report.setName(stringName.toString());
+                log.debug("--getName. {} i {}",report.getName(),i++);
+
                 reportList.add(report);
             }
         } else {
@@ -102,14 +117,48 @@ public class PDFReject_Letter implements Serializable {
         String[] spDate = date.split(" ");
         int month = Integer.valueOf(spDate[1]);
         String setMonth = null;
+        StringBuilder addressTH = null;
 
         if(!Util.isNull(workCaseId)){
-//            letterReport.setAppNumber(appHeaderView.getAppNo());
-//
-//            for (AppBorrowerHeaderView view : appHeaderView.getBorrowerHeaderViewList()){
-//                letterReport.setName(view.getBorrowerName());
-//                log.debug("--getBorrowerName. {}",view.getBorrowerName());
-//            }
+            log.debug("--customerInfoView. {}",customerInfoView.size());
+            for (CustomerInfoView view : customerInfoView){
+                Customer customer = customerDAO.findById(view.getId());
+                log.debug("--getAddressesList. {}",customer.getAddressesList().size());
+
+                if(!Util.isNull(customer.getAddressesList()) && customer.getAddressesList().size() > 0){
+                    addressTH = new StringBuilder();
+                    Address allAddress = customer.getAddressesList().get(0);
+                    addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressNo").concat(" "))
+                        .append((allAddress.getAddressNo() != null ? allAddress.getAddressNo() : "-").concat(" "))
+                        .append(msg.get("app.bizInfoSummary.label.addressMoo").concat(" "))
+                        .append((allAddress.getMoo() != null ? allAddress.getMoo() : "-").concat(" "))
+                        .append(msg.get("app.bizInfoSummary.label.addressBuilding").concat(" "))
+                        .append((allAddress.getBuilding() != null ? allAddress.getBuilding() : "-").concat(" "))
+                        .append(msg.get("app.bizInfoSummary.label.addressStreet").concat(" "))
+                        .append((allAddress.getRoad() != null ? allAddress.getRoad() : "-").concat(" "))
+                        .append(msg.get("app.bizInfoSummary.label.subdistrict").concat(" "))
+                        .append((allAddress.getSubDistrict() != null ? allAddress.getSubDistrict().getCode() != 0 ? allAddress.getSubDistrict().getName() : "-" : "-").concat(" "))
+                        .append(msg.get("app.bizInfoSummary.label.district").concat(" "))
+                        .append((allAddress.getDistrict() != null ? allAddress.getDistrict().getId() != 0 ? allAddress.getDistrict().getName() : "-" : "-").concat(" "))
+                        .append(msg.get("app.bizInfoSummary.label.province").concat(" "))
+                        .append((allAddress.getProvince() != null ? allAddress.getProvince().getCode() != 0 ? allAddress.getProvince().getName() : "-" : "-").concat(" "))
+                        .append(msg.get("app.bizInfoSummary.label.postCode").concat(" "))
+                        .append((allAddress.getPostalCode() != null ? allAddress.getPostalCode() : "-").concat(" "))
+                        .append(msg.get("app.bizInfoSummary.label.country").concat(" "))
+                        .append((allAddress.getCountry() != null ? allAddress.getCountry().getId() != 0 ? allAddress.getCountry().getName() : "-" : "-").concat(" "));
+                    break;
+                } else {
+                    addressTH = addressTH.append("");
+                }
+            }
+            if(!Util.isNull(addressTH.toString())){
+                letterReport.setAddress(addressTH.toString());
+                log.debug("--addressTH. {}",addressTH.toString());
+            } else {
+                letterReport.setAddress("");
+                log.debug("--addressTH. {}","");
+            }
+
 
             switch (month){
                 case 1: setMonth = Month.January.getNameTH(); break;

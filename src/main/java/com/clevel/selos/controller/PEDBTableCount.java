@@ -106,7 +106,15 @@ public class PEDBTableCount
 
             log.info("sql count query in peInboxCount method is : {}",sqlpequery);
 
+            if(sqlpequery != "" && sqlpequery.length() > 0)
+            {
+
             inboxcount = resultSetExcution(sqlpequery);
+            }
+            else
+            {
+                inboxcount = 0;
+            }
 
         }
         catch(Exception e)
@@ -330,11 +338,15 @@ public class PEDBTableCount
 
             log.info("sqlquery is : {}",sqlquery);
 
+            if(sqlquery != "" && sqlquery.length() > 0)
+            {
+
             rs = statement.executeQuery(sqlquery);
 
             log.info("resultset is : {}", rs);
 
             log.info("result set row data type is : {}", rs.getMetaData().getColumnClassName(1));
+            }
 
             try
             {

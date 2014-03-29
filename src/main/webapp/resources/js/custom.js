@@ -26,6 +26,10 @@ PrimeFaces.locales ['th_TH'] = {
     allDayText: 'All Day'
 };
 
+function showCheckedValue(){
+    alert(document.getElementById('jsfForm1:chkRememberMe').checked);
+}
+
 function gotoInbox(contextUrl) {
     window.location = contextUrl;
 }
