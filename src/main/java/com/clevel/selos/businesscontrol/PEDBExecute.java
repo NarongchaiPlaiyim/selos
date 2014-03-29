@@ -68,6 +68,10 @@ public class PEDBExecute extends BusinessControl
     String peInboxQuery;
 
     @Inject
+    @Config(name = "interfac.pe.mysql.inboxreturn.query")
+    String peInboxReturnQuery;
+
+    @Inject
     @Config(name = "interface.pe.mysql.bdmuwreturn.query")
     String peBDMReturnQuery;
 
@@ -246,7 +250,7 @@ public class PEDBExecute extends BusinessControl
         }
         catch(Exception e)
         {
-            log.info("exception occurred while fetching data from pe database : {}",e);
+            log.error("exception occurred while fetching data from pe database : {}",e);
         }
         finally
         {
@@ -440,7 +444,7 @@ public class PEDBExecute extends BusinessControl
         }
         catch(Exception e)
         {
-            log.info("exception occurred while fetching data from pe database : {}",e);
+            log.error("exception occurred while fetching data from pe database : {}",e);
         }
         finally
         {
@@ -508,8 +512,9 @@ public class PEDBExecute extends BusinessControl
 
             while (rs.next())
             {
+                log.info("in while .. ");
                 PEInbox peInbox = new PEInbox();
-
+                log.info("in while");
                 peInbox.setReceiveddate((rs.getObject("ReceivedDate1").toString().trim()));
                 peInbox.setAtuserteam(rs.getString("TeamName"));
                 peInbox.setApplicationno(rs.getString("AppNumber"));
@@ -546,7 +551,8 @@ public class PEDBExecute extends BusinessControl
         }
         catch(Exception e)
         {
-
+            log.error("Error :",e);
+            e.printStackTrace();
         }
 
         return resultQueryList;
@@ -734,6 +740,8 @@ public class PEDBExecute extends BusinessControl
 
             int fetchType = BPMConstants.FETCH_TYPE_ROSTER;
 
+            String queueName = tableName.substring(tableName.indexOf("_")+1,tableName.length());
+
             while (rs.next()) {
 
                 peRoster = new PERoster();
@@ -754,13 +762,15 @@ public class PEDBExecute extends BusinessControl
                 peRoster.setF_WobNum(rs.getString("F_WobNum"));
                 peRoster.setFetchType(fetchType);
                 peRoster.setStep(rs.getString("F_StepName"));
-                peRoster.setQueuename(tableName.substring(tableName.indexOf("_")+1,tableName.length()));
+                peRoster.setQueuename(queueName);
 
                 rosterViewList.add(peRoster);
                 peRoster = null;
             }
 
         } catch (Exception e) {
+
+            log.error("Error :",e);
 
         } finally {
 
@@ -1332,6 +1342,17 @@ public class PEDBExecute extends BusinessControl
 
             tableName = tableName.substring(tableName.indexOf("_")+1,tableName.length());
 
+            int fetchType;
+
+            if(tableName.contains("ROSTER"))
+            {
+                fetchType = BPMConstants.FETCH_TYPE_ROSTER;
+            }
+
+            else {
+                fetchType = BPMConstants.FETCH_TYPE_QUEUE;
+            }
+
             while (rs.next())
             {
                 PEInbox peInbox = new PEInbox();
@@ -1350,12 +1371,21 @@ public class PEDBExecute extends BusinessControl
                 peInbox.setDoalevel(rs.getString("DOALevel"));
                 peInbox.setAction(rs.getString("PreviousAction"));
                 peInbox.setSlastatus(rs.getString("SLAStatus"));
-                peInbox.setSlaenddate((rs.getObject("SLAEndTime1").toString().trim()));
+
+                if(rs.getObject("SLAEndTime1")!=null)
+                {
+
+
+                    peInbox.setSlaenddate((rs.getObject("SLAEndTime1").toString().trim()));
+
+                }
+
                 peInbox.setTotaltimespentatprocess(rs.getInt("TotalTimeAtProcess"));
                 peInbox.setTotaltimespentatuser(rs.getInt("TotalTimeAtUser"));
                 peInbox.setFwobnumber(rs.getString("F_WobNum"));
                 peInbox.setStep(rs.getString("F_StepName"));
                 peInbox.setQueuename(tableName);
+                peInbox.setFetchType(fetchType);
                 peSearchResultSetList.add(peInbox);
 
                 log.info("resultQueryList pedbexecute class is : {}",peSearchResultSetList);
@@ -1370,7 +1400,7 @@ public class PEDBExecute extends BusinessControl
         }
         catch (Exception e)
         {
-            log.info("exception occurred while fetching data from pe database : {}",e);
+            log.error("exception occurred while fetching data from pe database : {}",e);
         }
         finally
         {
@@ -1750,7 +1780,7 @@ public class PEDBExecute extends BusinessControl
         }
         catch (Exception e)
         {
-
+            log.error("Error :",e);
         }
         finally
         {
@@ -1828,7 +1858,7 @@ public class PEDBExecute extends BusinessControl
         }
         catch(Exception e)
         {
-
+           log.error("Error :",e);
         }
 
         return inboxViewList;
@@ -1838,6 +1868,8 @@ public class PEDBExecute extends BusinessControl
     {
         log.info("controller comes to getReassignSearch method of PEDBExecute.java {}",teamname);
         log.info("controller comes to getReassignSearch method of PEDBExecute.java {}",username);
+
+        int teamid = Integer.parseInt(teamname);
 
         inboxViewList = new ArrayList<PEInbox>();
 
@@ -1903,7 +1935,8 @@ public class PEDBExecute extends BusinessControl
                         peInbox.setTotaltimespentatuser(rs.getInt("TotalTimeAtUser"));
                         peInbox.setStatuscode(rs.getString("StatusCode"));
                         peInbox.setFwobnumber(rs.getString("F_WobNum"));
-
+                        peInbox.setLocked(rs.getInt("F_Locked"));
+                        peInbox.setStep(rs.getString("F_StepName"));
                         inboxViewList.add(peInbox);
 
                         log.info("resultQueryList pedbexecute class is(1) : {}",inboxViewList.size());
@@ -1922,7 +1955,7 @@ public class PEDBExecute extends BusinessControl
         }
         catch (Exception e)
         {
-
+            log.error("Error :",e);
         }
         finally
         {
@@ -1968,7 +2001,7 @@ public class PEDBExecute extends BusinessControl
                 peRoster.setTotalTimeAtUser(rs.getString("TotalTimeAtUser"));
                 peRoster.setTotalTimeAtProcess(rs.getString("TotalTimeAtProcess"));
                 peRoster.setF_WobNum(rs.getString("F_WobNum"));
-
+                peRoster.setStep(rs.getString("F_StepName"));
                 changeOwerViewList.add(peRoster);
                 peRoster = null;
 
@@ -1976,6 +2009,8 @@ public class PEDBExecute extends BusinessControl
             }
 
         } catch (Exception e) {
+
+            log.error("Error :",e);
 
         } finally {
 

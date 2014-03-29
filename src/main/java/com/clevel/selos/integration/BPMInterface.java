@@ -34,4 +34,8 @@ public interface BPMInterface {
     public List<BPMInbox> getBDMUWBoxList(String userId, FieldName fieldName, OrderType orderType, int recPerPage, int pageNo);
 
     public BPMInboxRecord getInboxRecord(String userId);
+
+    public void batchDispatchCaseFromRoster(String s, String[] strings, HashMap<String, String> stringStringHashMap);
+
+
 }

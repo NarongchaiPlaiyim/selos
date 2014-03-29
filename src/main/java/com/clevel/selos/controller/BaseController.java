@@ -363,10 +363,11 @@ public class BaseController implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         PricingDOAValue pricingDOA = fullApplicationControl.calculatePricingDOA(workCaseId);
-        pricingDOA = PricingDOAValue.CSSO_DOA;
+        pricingDOA = PricingDOAValue.RGM_DOA;
         if(!Util.isNull(pricingDOA)){
             pricingDOALevel = pricingDOA.value();
             zmEndorseUserId = "";
+            zmUserId = "";
             rgmUserId = "";
             ghmUserId = "";
             cssoUserId = "";
@@ -379,20 +380,20 @@ public class BaseController implements Serializable {
             isSubmitToGHM = false;
             isSubmitToCSSO = false;
 
-            zmUserList = fullApplicationControl.getZMUserList();
+            zmUserList = fullApplicationControl.getUserList(user);
 
             if(pricingDOA.value() >= PricingDOAValue.RGM_DOA.value()){
-                rgmUserList = fullApplicationControl.getRMUserList();
+                //rgmUserList = fullApplicationControl.getRMUserList();
                 isSubmitToRGM = true;
             }
 
             if(pricingDOA.value() >= PricingDOAValue.GH_DOA.value()){
-                ghmUserList = fullApplicationControl.getHeadUserList();
+                //ghmUserList = fullApplicationControl.getHeadUserList();
                 isSubmitToGHM = true;
             }
 
             if(pricingDOA.value() >= PricingDOAValue.CSSO_DOA.value()){
-                cssoUserList = fullApplicationControl.getCSSOUserList();
+                //cssoUserList = fullApplicationControl.getCSSOUserList();
                 isSubmitToCSSO = true;
             }
 
@@ -434,6 +435,33 @@ public class BaseController implements Serializable {
             log.error("onSubmitZM ::: submit failed (ZM not selected)");
         }
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
+    public void onSelectedZM(){
+        if(pricingDOALevel >= PricingDOAValue.RGM_DOA.value()){
+            rgmUserId = "";
+            User userZm = userDAO.findById(zmUserId);
+            rgmUserList = fullApplicationControl.getUserList(userZm);
+            //isSubmitToRGM = true;
+        }
+    }
+
+    public void onSelectedRM(){
+        if(pricingDOALevel >= PricingDOAValue.GH_DOA.value()){
+            ghmUserId = "";
+            User userRm = userDAO.findById(rgmUserId);
+            ghmUserList = fullApplicationControl.getUserList(userRm);
+            //isSubmitToRGM = true;
+        }
+    }
+
+    public void onSelectedGH(){
+        if(pricingDOALevel >= PricingDOAValue.CSSO_DOA.value()){
+            cssoUserId = "";
+            User userGh = userDAO.findById(ghmUserId);
+            cssoUserList = fullApplicationControl.getUserList(userGh);
+            //isSubmitToRGM = true;
+        }
     }
 
     public void onCancelCA(){

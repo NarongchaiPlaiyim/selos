@@ -11,7 +11,8 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "mst_user_team")
-public class UserTeam implements Serializable {
+public class UserTeam implements Serializable
+{
     @Id
     @Column(name = "id")
     private int id;
@@ -21,6 +22,21 @@ public class UserTeam implements Serializable {
     private String description;
     @Column(name = "active")
     private int active;
+
+    @Column(name = "team_name")
+    private String team_name;
+
+    @Column(name = "team_code")
+    private String team_code;
+
+    @Column(name = "team_type")
+    private int team_type;
+
+    /*@Column(name = "role")
+    private String role;*/
+
+    @Column(name = "role_id")
+    private String roleId;
 
     public UserTeam() {
     }
@@ -57,13 +73,59 @@ public class UserTeam implements Serializable {
         this.active = active;
     }
 
+    public String getTeam_name() {
+        return team_name;
+    }
+
+    public void setTeam_name(String team_name) {
+        this.team_name = team_name;
+    }
+
+    public String getTeam_code() {
+        return team_code;
+    }
+
+    public void setTeam_code(String team_code) {
+        this.team_code = team_code;
+    }
+
+    public int getTeam_type() {
+        return team_type;
+    }
+
+    public void setTeam_type(int team_type) {
+        this.team_type = team_type;
+    }
+
+    /*public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }*/
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
     @Override
-    public String toString() {
+    public String toString()
+    {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("name", name).
                 append("description", description).
                 append("active", active).
+                append("team_name", team_name).
+                append("team_type", team_type).
+                append("team_code", team_code).
+                //append("role", role).
+                append("roleId",roleId).
                 toString();
     }
 }
