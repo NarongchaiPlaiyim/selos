@@ -328,7 +328,7 @@ public class BaseController implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         PricingDOAValue pricingDOA = fullApplicationControl.calculatePricingDOA(workCaseId);
-        pricingDOA = PricingDOAValue.RGM_DOA;
+        pricingDOA = PricingDOAValue.CSSO_DOA;
         if(!Util.isNull(pricingDOA)){
             pricingDOALevel = pricingDOA.value();
             zmEndorseUserId = "";
