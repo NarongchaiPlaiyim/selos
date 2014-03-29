@@ -643,18 +643,31 @@ public class PrescreenMaker implements Serializable {
     public void onCloseSale(){
         log.debug("onCloseSale ::: queueName : {}", queueName);
         try{
-            prescreenBusinessControl.duplicateData(workCasePreScreenId, queueName, ActionCode.CLOSE_SALES.getVal());
-            //prescreenBusinessControl.closeSale(workCasePreScreenId, queueName, ActionCode.CLOSE_SALES.getVal());
+            //TODO Check Modified flag
+            int modifyFlag = prescreenBusinessControl.getModifyValue(workCasePreScreenId);
+            if(modifyFlag == 1){
+                messageHeader = "Exception";
+                message = "Some of data has been changed. Please Retrive Interface before Closesale.";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            } else if(modifyFlag == 2){
+                messageHeader = "Exception";
+                message = "Could not get data for PreScreen.";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            } else {
+                prescreenBusinessControl.duplicateData(workCasePreScreenId, queueName, ActionCode.CLOSE_SALES.getVal());
+                //prescreenBusinessControl.closeSale(workCasePreScreenId, queueName, ActionCode.CLOSE_SALES.getVal());
 
-            messageHeader = "Information";
-            message = "Close Sales Complete.";
+                messageHeader = "Information";
+                message = "Close Sales Complete.";
+
+                RequestContext.getCurrentInstance().execute("msgBoxRedirectDlg.show()");
+            }
         } catch (Exception ex){
             messageHeader = "Exception";
             message = "Close Sales Failed, " + ex.getMessage();
 
             log.error("onCloseSale failed : ", ex);
-        } finally {
-            RequestContext.getCurrentInstance().execute("msgBoxRedirectDlg.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
 

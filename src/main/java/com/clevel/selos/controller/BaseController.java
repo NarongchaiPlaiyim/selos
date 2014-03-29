@@ -1,9 +1,6 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.BRMSControl;
-import com.clevel.selos.businesscontrol.FullApplicationControl;
-import com.clevel.selos.businesscontrol.ReturnControl;
-import com.clevel.selos.businesscontrol.StepStatusControl;
+import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
@@ -16,12 +13,15 @@ import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
-import com.clevel.selos.model.view.AppHeaderView;
-import com.clevel.selos.model.view.ReturnInfoView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.security.UserDetail;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.transform.AppraisalDetailTransform;
 import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import com.rits.cloning.Cloner;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +32,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,6 +44,10 @@ public class BaseController implements Serializable {
     Logger log;
 
     @Inject
+    @NormalMessage
+    Message msg;
+
+    @Inject
     UserDAO userDAO;
     @Inject
     BasicInfoDAO basicInfoDAO;
@@ -52,11 +57,15 @@ public class BaseController implements Serializable {
     @Inject
     FullApplicationControl fullApplicationControl;
     @Inject
+    AppraisalRequestControl appraisalRequestControl;
+    @Inject
     ReturnControl returnControl;
     @Inject
     StepStatusControl stepStatusControl;
     @Inject
     ReturnInfoTransform returnInfoTransform;
+    @Inject
+    AppraisalDetailTransform appraisalDetailTransform;
 
     @Inject
     BRMSControl brmsControl;
@@ -101,6 +110,29 @@ public class BaseController implements Serializable {
     private String returnRemark;
     private int editRecordNo;
     private List<ReturnInfoView> returnInfoHistoryViewList;
+
+    //Request Appraisal
+    private enum ModeForButton{ ADD, EDIT }
+    private ModeForButton modeForButton;
+    private int rowIndex;
+
+    private AppraisalView appraisalView;
+
+    private AppraisalDetailView appraisalDetailView;
+    private AppraisalDetailView appraisalDetailViewSelected;
+    private List<AppraisalDetailView> appraisalDetailViewList;
+
+
+
+    private AppraisalContactDetailView appraisalContactDetailView;
+    private AppraisalContactDetailView selectAppraisalContactDetailView;
+
+    private boolean titleDeedFlag;
+    private boolean purposeFlag;
+    private boolean numberOfDocumentsFlag;
+    private boolean contactFlag;
+    private boolean contactFlag2;
+    private boolean contactFlag3;
 
     private HashMap<String, Integer> stepStatusMap;
 
@@ -375,7 +407,7 @@ public class BaseController implements Serializable {
 
     }
 
-    public void onRequestAppraisal(){
+    /*public void onRequestAppraisal(){
         log.debug("onRequestAppraisal ( bdm input data for aad admin )");
         long workCasePreScreenId = 0;
         long workCaseId = 0;
@@ -399,9 +431,9 @@ public class BaseController implements Serializable {
             message = Util.getMessageException(ex);
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
-    }
+    }*/
 
-    public void onSubmitAppraisalAdmin(){
+    /*public void onSubmitAppraisalAdmin(){
         log.debug("onRequestAppraisal ( submit to AAD admin )");
         long workCasePreScreenId = 0;
         long workCaseId = 0;
@@ -425,10 +457,10 @@ public class BaseController implements Serializable {
             message = Util.getMessageException(ex);
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
-    }
+    }*/
 
     public void onSubmitAppraisalCommittee(){
-        log.debug("onSubmitAppraisalCommittee ( submit to aad committee )");
+        log.debug("onSubmitAppraisalCommittee ( submit to AAD committee )");
         long workCasePreScreenId = 0;
         long workCaseId = 0;
         String queueName = "";
@@ -673,6 +705,163 @@ public class BaseController implements Serializable {
 
         resetAddReturnInfo();
         log.debug("onDeleteReturnInfo ::: end");
+    }
+
+
+    //Function for Appraisal Request ( BDM )
+    public void onOpenRequestAppraisal(){
+        log.debug("onOpenRequestAppraisal");
+
+        appraisalView = new AppraisalView();
+        appraisalDetailView = new AppraisalDetailView();
+        appraisalContactDetailView = new AppraisalContactDetailView();
+        appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+    }
+
+    public void onSubmitRequestAppraisal(){
+        log.debug("onSubmitRequestAppraisal ( bdm input data for aad admin )");
+        log.debug("onSubmitRequestAppraisal ::: starting to save RequestAppraisal.");
+        HttpSession session = FacesUtil.getSession(true);
+        RequestContext context = RequestContext.getCurrentInstance();
+        boolean complete = false;
+        long workCaseId = 0;
+        long workCasePreScreenId = 0;
+
+        if(!Util.isNull(session.getAttribute("workCaseId"))){
+            workCaseId = (Long)session.getAttribute("workCaseId");
+        }
+
+        if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
+            workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
+        }
+
+        log.debug("onSubmitRequestAppraisal ::: workCaseId : {}, workCasePreScreenId : {}", session.getAttribute("workCaseId"), session.getAttribute("workCasePreScreenId"));
+
+        if(checkAppraisalContact()){
+            if(appraisalDetailViewList.size() > 0){
+                try{
+                    //Save Appraisal Request
+                    appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
+                    appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
+
+                    //Submit Appraisal - Create WRK_Appraisal And Launch new Workflow
+                    fullApplicationControl.requestAppraisal(appraisalView, workCasePreScreenId, workCaseId);
+                    log.debug("onSubmitRequestAppraisal ::: create new Work Case Appraisal, Launch new workflow.");
+
+                    complete = true;
+
+                    context.execute("msgBoxBaseRedirectDlg.show()");
+                } catch(Exception ex){
+                    log.error("Exception while submitRequestAppraisal : ", ex);
+                    messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
+                    message = msg.get("app.appraisal.request.message.body.save.fail") + Util.getMessageException(ex);
+
+                    context.execute("msgBoxBaseMessageDlg.show()");
+                }
+            } else {
+                messageHeader = "Information.";
+                message = "Please add information in Appraisal Detail at least 1.";
+
+                context.execute("msgBoxBaseMessageDlg.show()");
+            }
+        }
+
+        context.addCallbackParam("functionComplete", complete);
+    }
+
+    public void onSaveAppraisalDetail(){
+        log.debug("-- onSaveAppraisalDetailView() flag = {}", modeForButton);
+        boolean complete = false;
+        RequestContext context = RequestContext.getCurrentInstance();
+        if(checkAppraisalDialog()){
+            complete = true;
+            if(ModeForButton.ADD == modeForButton){
+                appraisalDetailViewList.add(appraisalDetailView);
+                appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
+            }else if(ModeForButton.EDIT == modeForButton){
+                log.debug("-- RowIndex[{}]", rowIndex);
+                appraisalDetailViewList.set(rowIndex, appraisalDetailView);
+                appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
+            }
+            context.addCallbackParam("functionComplete", complete);
+        }else {
+            context.addCallbackParam("functionComplete", complete);
+        }
+    }
+
+    public boolean checkAppraisalDialog(){
+        log.debug("-- appraisalDetailViewMandate() ::: appraisalDetailView : {}", appraisalDetailView);
+        boolean result = true;
+        if(!Util.isNull(appraisalDetailView.getTitleDeed())){
+            if(Util.isZero(appraisalDetailView.getTitleDeed().length())){
+                titleDeedFlag = true;
+                result = false;
+            } else {
+                titleDeedFlag = false;
+            }
+        } else {
+            titleDeedFlag = true;
+            result = false;
+        }
+        if(!appraisalDetailView.isPurposeNewAppraisalB() && !appraisalDetailView.isPurposeReviewAppraisalB() && !appraisalDetailView.isPurposeReviewBuildingB()){
+            purposeFlag = true;
+            result = false;
+        } else {
+            purposeFlag = false;
+        }
+        if(appraisalDetailView.getCharacteristic() == 1 && appraisalDetailView.getNumberOfDocuments() == 0){
+            numberOfDocumentsFlag = true;
+            result = false;
+        } else {
+            numberOfDocumentsFlag = false;
+        }
+
+        log.debug("-- titleDeedFlag = {}", titleDeedFlag);
+        log.debug("-- purposeFlag = {}", purposeFlag);
+        log.debug("-- numberOfDocumentsFlag = {}", numberOfDocumentsFlag);
+        log.debug("-- result = {}", result);
+
+        return result;
+    }
+
+    public boolean checkAppraisalContact(){
+        log.debug("-- checkAppraisalContact()");
+        //todo :  2 0 21
+        boolean result = true;
+
+        if(appraisalContactDetailView.getCustomerName1().length() == 0 && appraisalContactDetailView.getContactNo1().length() == 0 ){
+            contactFlag = true;
+            result = false;
+        } else {
+            contactFlag = false;
+        }
+
+        log.debug("-- contactFlag = {}", contactFlag);
+        log.debug("-- result = {}", result);
+        return result;
+    }
+
+    public void onEditAppraisalDetail(){
+        titleDeedFlag = false;
+        purposeFlag = false;
+        numberOfDocumentsFlag = false;
+        modeForButton = ModeForButton.EDIT;
+        log.debug("-- onEditAppraisalDetailView() RowIndex[{}]", rowIndex);
+        Cloner cloner = new Cloner();
+        try{
+            appraisalDetailView = cloner.deepClone(appraisalDetailViewSelected);
+        } catch (Exception ex){
+            log.error("Exception occur when clone appraisalDetailView.");
+        }
+    }
+
+    public void onAddAppraisalDetail(){
+        log.info("-- onAddAppraisalDetailView() ModeForButton[ADD]");
+        appraisalDetailView = new AppraisalDetailView();
+        titleDeedFlag = false;
+        purposeFlag = false;
+        numberOfDocumentsFlag = false;
+        modeForButton = ModeForButton.ADD;
     }
 
     public void onGoToInbox(){
@@ -929,5 +1118,101 @@ public class BaseController implements Serializable {
 
     public void setRequestAppraisalPage(boolean requestAppraisalPage) {
         this.requestAppraisalPage = requestAppraisalPage;
+    }
+
+    public int getRowIndex() {
+        return rowIndex;
+    }
+
+    public void setRowIndex(int rowIndex) {
+        this.rowIndex = rowIndex;
+    }
+
+    public AppraisalView getAppraisalView() {
+        return appraisalView;
+    }
+
+    public void setAppraisalView(AppraisalView appraisalView) {
+        this.appraisalView = appraisalView;
+    }
+
+    public AppraisalDetailView getAppraisalDetailView() {
+        return appraisalDetailView;
+    }
+
+    public void setAppraisalDetailView(AppraisalDetailView appraisalDetailView) {
+        this.appraisalDetailView = appraisalDetailView;
+    }
+
+    public AppraisalDetailView getAppraisalDetailViewSelected() {
+        return appraisalDetailViewSelected;
+    }
+
+    public void setAppraisalDetailViewSelected(AppraisalDetailView appraisalDetailViewSelected) {
+        this.appraisalDetailViewSelected = appraisalDetailViewSelected;
+    }
+
+    public List<AppraisalDetailView> getAppraisalDetailViewList() {
+        return appraisalDetailViewList;
+    }
+
+    public void setAppraisalDetailViewList(List<AppraisalDetailView> appraisalDetailViewList) {
+        this.appraisalDetailViewList = appraisalDetailViewList;
+    }
+
+    public AppraisalContactDetailView getAppraisalContactDetailView() {
+        return appraisalContactDetailView;
+    }
+
+    public void setAppraisalContactDetailView(AppraisalContactDetailView appraisalContactDetailView) {
+        this.appraisalContactDetailView = appraisalContactDetailView;
+    }
+
+    public boolean isTitleDeedFlag() {
+        return titleDeedFlag;
+    }
+
+    public void setTitleDeedFlag(boolean titleDeedFlag) {
+        this.titleDeedFlag = titleDeedFlag;
+    }
+
+    public boolean isPurposeFlag() {
+        return purposeFlag;
+    }
+
+    public void setPurposeFlag(boolean purposeFlag) {
+        this.purposeFlag = purposeFlag;
+    }
+
+    public boolean isNumberOfDocumentsFlag() {
+        return numberOfDocumentsFlag;
+    }
+
+    public void setNumberOfDocumentsFlag(boolean numberOfDocumentsFlag) {
+        this.numberOfDocumentsFlag = numberOfDocumentsFlag;
+    }
+
+    public boolean isContactFlag() {
+        return contactFlag;
+    }
+
+    public void setContactFlag(boolean contactFlag) {
+        this.contactFlag = contactFlag;
+    }
+
+    public boolean isContactFlag2() {
+        return contactFlag2;
+    }
+
+    public void setContactFlag2(boolean contactFlag2) {
+        this.contactFlag2 = contactFlag2;
+    }
+
+    public boolean isContactFlag3() {
+        return contactFlag3;
+    }
+
+    public void setContactFlag3(boolean contactFlag3) {
+        this.contactFlag3 = contactFlag3;
     }
 }
