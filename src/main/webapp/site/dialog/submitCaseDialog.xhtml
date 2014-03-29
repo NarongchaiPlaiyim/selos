@@ -100,7 +100,7 @@
                                        itemLabel="#{zmItem.id} - #{zmItem.userName}"
                                        itemValue="#{zmItem.id}"/>
 
-                        <p:ajax event="change" listener="#{baseController.onSelectedZM()}" process="@form" update=":rgmUserSelect"/>
+                        <p:ajax event="change" listener="#{baseController.onSelectedZM()}" process="@form" update=":frmMain:rgmUserSelect"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -115,7 +115,7 @@
                                        var="rmItem"
                                        itemLabel="#{rmItem.id} - #{rmItem.userName}"
                                        itemValue="#{rmItem.id}"/>
-                        <p:ajax event="change" listener="#{baseController.onSelectedRM()}" process="@form" update=":ghUserSelect"/>
+                        <p:ajax event="change" listener="#{baseController.onSelectedRM()}" process="@form" update=":frmMain:ghUserSelect"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -130,7 +130,7 @@
                                        var="ghItem"
                                        itemLabel="#{ghItem.id} - #{ghItem.userName}"
                                        itemValue="#{ghItem.id}"/>
-                        <p:ajax event="change" listener="#{baseController.onSelectedGH()}" process="@form" update=":cssoUserSelect"/>
+                        <p:ajax event="change" listener="#{baseController.onSelectedGH()}" process="@form" update=":frmMain:cssoUserSelect"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
