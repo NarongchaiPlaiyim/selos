@@ -53,6 +53,10 @@ public class Util implements Serializable {
         return createDateString(date, "ddMMyyyyyHHmmss");
     }
 
+    public static String createDateTh(Date date) {
+        return createDateString(date, "dd MM yyyy");
+    }
+
 
     public static Date strYYYYMMDDtoDateFormat(String dateStr) {
         Date date = null;

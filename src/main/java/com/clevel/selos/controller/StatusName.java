@@ -4,6 +4,8 @@ import com.clevel.selos.dao.master.StatusIdBasedOnStepIdDAO;
 import com.clevel.selos.dao.master.StatusNameDescriptionDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.StatusIdBasedOnStepId;
+import com.clevel.selos.model.db.master.StatusNameDescription;
+import com.clevel.selos.system.Config;
 import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -11,9 +13,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 
 @ViewScoped
@@ -24,7 +24,7 @@ public class StatusName implements Serializable
     @SELOS
     Logger log;
 
-    List<String> statusnamelist;
+    List<StatusNameDescription> statusnamelist;
 
     String statustype = null;
 
@@ -37,6 +37,10 @@ public class StatusName implements Serializable
     StatusIdBasedOnStepIdDAO statusIdBasedOnStepIdDAO;
 
     @Inject
+    @Config(name = "interface.pe.sql.completedstatus")
+    String completedStatus;
+
+    @Inject
     PESearch peSearch;
 
     public String getStatustype() {
@@ -47,11 +51,11 @@ public class StatusName implements Serializable
         this.statustype = statustype;
     }
 
-    public List<String> getStatusnamelist() {
+    public List<StatusNameDescription> getStatusnamelist() {
         return statusnamelist;
     }
 
-    public void setStatusnamelist(List<String> statusnamelist) {
+    public void setStatusnamelist(List<StatusNameDescription> statusnamelist) {
         this.statusnamelist = statusnamelist;
     }
 
@@ -61,11 +65,11 @@ public class StatusName implements Serializable
 
     }
 
-    public List<String> valueChangeMethod(ValueChangeEvent e)
+    public List<StatusNameDescription> valueChangeMethod(ValueChangeEvent e)
     {
         log.info("step id value is  ::::::::::: {}",e.getNewValue().toString() );
 
-        statusnamelist = new ArrayList<String>();
+        statusnamelist = new ArrayList<StatusNameDescription>();
 
         statustype =   e.getNewValue().toString();
 
@@ -94,7 +98,13 @@ public class StatusName implements Serializable
 
                     log.info("statusStepIdList is :::::: {}",statusIdBasedOnStepIdList.size());
 
+                    statusIdBasedOnStepIdList = new ArrayList(new HashSet(statusIdBasedOnStepIdList));
+
+                    log.info("statusStepIdList is after :::::: {}",statusIdBasedOnStepIdList.size());
+
                     Iterator iterator = statusIdBasedOnStepIdList.iterator();
+
+                    Set<Integer> setStatus = new HashSet<Integer>();
 
                     while(iterator.hasNext() == true)
                     {
@@ -106,12 +116,21 @@ public class StatusName implements Serializable
 
                         log.info("status id is :::::::::::::::::::::::::: {}",statusid);
 
-                        String statusdescriptionname  =  statusNameDescriptionDAO.getStatusNameDescriptions(statusid);
+                        log.info(" size ** "+setStatus.size());
 
-                        if(statusdescriptionname != "" && statusdescriptionname.length() > 0 && !statusnamelist.contains(statusdescriptionname))
+                        if(!setStatus.contains(statusid))
                         {
-                          statusnamelist.add(statusdescriptionname);
+                            log.info("in if "+statusid);
+                            List<StatusNameDescription> statusdescriptionname  =  statusNameDescriptionDAO.getStatusNameDescriptions(statusid);
+
+                            if(statusdescriptionname != null && statusdescriptionname.size() > 0)
+                            {
+                                statusnamelist.add(statusdescriptionname.get(0));
+                            }
                         }
+
+                        setStatus.add(statusid);
+
                     }
                 }
 
@@ -129,11 +148,11 @@ public class StatusName implements Serializable
 
     }
 
-    public List<String> valueChangeMethod1(ValueChangeEvent e)
+    public List<StatusNameDescription> valueChangeMethod1(ValueChangeEvent e)
     {
         log.info("controller comes to valueChangeMethod1");
 
-        statusnamelist = new ArrayList<String>();
+        statusnamelist = new ArrayList<StatusNameDescription>();
 
         statusnamechange = e.getNewValue().toString();
 
@@ -147,13 +166,27 @@ public class StatusName implements Serializable
 
             try
             {
-                statusnamelist.add("CA Cancelled");
+
+                String[] completedStatusArr = completedStatus.split(",");
+                int len = completedStatusArr.length;
+                log.info("status from property file : "+completedStatus);
+                //log.info("array len :"+len);
+                int i =0;
+                while(i<len)
+                {
+                    List<StatusNameDescription> statusdescriptionname  =  statusNameDescriptionDAO.getStatusNameDescriptions(Integer.parseInt(completedStatusArr[i]));
+                    //log.info("List in while : "+statusdescriptionname);
+                    //log.info("descname :"+statusdescriptionname.get(0).getName());
+                    statusnamelist.add(statusdescriptionname.get(0));
+                    i++;
+                }
+                /*statusnamelist.add("CA Cancelled");
                 statusnamelist.add("CA Rejected by UW1");
                 statusnamelist.add("CA Approved by UW1");
                 statusnamelist.add("CA Rejected");
                 statusnamelist.add("CA Approved");
                 statusnamelist.add("CA Approved by UW2");
-                statusnamelist.add("CA Rejected by UW2");
+                statusnamelist.add("CA Rejected by UW2");*/
             }
             catch(Exception exception)
             {

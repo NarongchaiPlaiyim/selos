@@ -18,6 +18,17 @@ public class SearchApplicationNo implements Serializable
     @Column(name = "app_number")
     private String applicationNo;
 
+    @Column(name = "bpm_active")
+    private Integer bpmActive;
+
+    public Integer getBpmActive() {
+        return bpmActive;
+    }
+
+    public void setBpmActive(Integer bpmActive) {
+        this.bpmActive = bpmActive;
+    }
+
     public int getId() {
         return id;
     }

@@ -39,7 +39,15 @@ public class PEInbox implements Serializable
     private long workCaseId;
     private Long stepId;
     private String queuename;
+    private int fetchType;
 
+    public int getFetchType() {
+        return fetchType;
+    }
+
+    public void setFetchType(int fetchType) {
+        this.fetchType = fetchType;
+    }
 
     public String getFwobnumber() {
         return fwobnumber;
@@ -48,10 +56,6 @@ public class PEInbox implements Serializable
     public void setFwobnumber(String fwobnumber) {
         this.fwobnumber = fwobnumber;
     }
-
-
-
-
 
     public String getRequestTypeStr() {
         return requestTypeStr;
@@ -269,6 +273,7 @@ public class PEInbox implements Serializable
                 .append("workCaseId", workCaseId)
                 .append("stepId", stepId)
                 .append("queuename",queuename)
+                .append("fetchType",fetchType)
                 .toString();
     }
 

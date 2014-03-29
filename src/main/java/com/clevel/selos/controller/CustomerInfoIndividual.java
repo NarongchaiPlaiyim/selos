@@ -89,7 +89,8 @@ public class CustomerInfoIndividual implements Serializable {
     private UserDAO userDAO;
     @Inject
     private IndividualDAO individualDAO;
-
+    @Inject
+    private IncomeSourceDAO incomeSourceDAO;
     @Inject
     private CustomerInfoControl customerInfoControl;
 
@@ -131,6 +132,8 @@ public class CustomerInfoIndividual implements Serializable {
     private List<Country> countryList;
     private List<AddressType> addressTypeList;
     private List<KYCLevel> kycLevelList;
+
+    private List<IncomeSource> incomeSourceList;
 
     //*** View ***//
     private CustomerInfoView customerInfoView;
@@ -392,6 +395,8 @@ public class CustomerInfoIndividual implements Serializable {
         provinceForm6List = provinceDAO.getListOrderByParameter("name");
 
         countryList = countryDAO.findAll();
+
+        incomeSourceList = incomeSourceDAO.findAll();
 
         caseBorrowerTypeId = customerInfoControl.getCaseBorrowerTypeIdByWorkCase(workCaseId);
 
@@ -1082,7 +1087,7 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onSearchCustomerInfo() {
-        updatePnl1();
+//        updatePnl1();
         log.debug("onSearchCustomerInfo :::");
         log.debug("onSearchCustomerInfo ::: customerInfoView : {}", customerInfoSearch);
         CustomerInfoResultView customerInfoResultView;
@@ -1110,13 +1115,6 @@ public class CustomerInfoIndividual implements Serializable {
                         Country country = new Country();
                         country.setId(211);
                         customerInfoView.setCitizenCountry(country);
-                    }
-                    if(customerInfoView.getSourceIncome() != null){
-                        customerInfoView.getSourceIncome().setId(211);
-                    } else {
-                        Country country = new Country();
-                        country.setId(211);
-                        customerInfoView.setSourceIncome(country);
                     }
 
                     if(customerInfoView.getDateOfBirth() != null){
@@ -1182,13 +1180,6 @@ public class CustomerInfoIndividual implements Serializable {
                                         Country country = new Country();
                                         country.setId(211);
                                         customerInfoView.getSpouse().setCitizenCountry(country);
-                                    }
-                                    if(customerInfoView.getSpouse().getSourceIncome() != null){
-                                        customerInfoView.getSpouse().getSourceIncome().setId(211);
-                                    } else {
-                                        Country country = new Country();
-                                        country.setId(211);
-                                        customerInfoView.getSpouse().setSourceIncome(country);
                                     }
 
                                     if(customerInfoView.getSpouse().getDateOfBirth() != null){
@@ -1362,13 +1353,6 @@ public class CustomerInfoIndividual implements Serializable {
                             country.setId(211);
                             customerInfoView.setCitizenCountry(country);
                         }
-                        if(customerInfoView.getSourceIncome() != null){
-                            customerInfoView.getSourceIncome().setId(211);
-                        } else {
-                            Country country = new Country();
-                            country.setId(211);
-                            customerInfoView.setSourceIncome(country);
-                        }
 
                         if(customerInfoView.getCurrentAddress() != null && customerInfoView.getRegisterAddress() != null){
                             if(customerInfoControl.checkAddress(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress()) == 1){
@@ -1413,13 +1397,6 @@ public class CustomerInfoIndividual implements Serializable {
                                         Country country = new Country();
                                         country.setId(211);
                                         customerInfoView.getSpouse().setCitizenCountry(country);
-                                    }
-                                    if(customerInfoView.getSpouse().getSourceIncome() != null){
-                                        customerInfoView.getSpouse().getSourceIncome().setId(211);
-                                    } else {
-                                        Country country = new Country();
-                                        country.setId(211);
-                                        customerInfoView.getSpouse().setSourceIncome(country);
                                     }
 
                                     if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
@@ -1580,13 +1557,6 @@ public class CustomerInfoIndividual implements Serializable {
                         Country country = new Country();
                         country.setId(211);
                         customerInfoView.getSpouse().setCitizenCountry(country);
-                    }
-                    if(customerInfoView.getSpouse().getSourceIncome() != null){
-                        customerInfoView.getSpouse().getSourceIncome().setId(211);
-                    } else {
-                        Country country = new Country();
-                        country.setId(211);
-                        customerInfoView.getSpouse().setSourceIncome(country);
                     }
 
                     if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
@@ -3207,5 +3177,13 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void setRelationMainCusId(int relationMainCusId) {
         this.relationMainCusId = relationMainCusId;
+    }
+
+    public List<IncomeSource> getIncomeSourceList() {
+        return incomeSourceList;
+    }
+
+    public void setIncomeSourceList(List<IncomeSource> incomeSourceList) {
+        this.incomeSourceList = incomeSourceList;
     }
 }

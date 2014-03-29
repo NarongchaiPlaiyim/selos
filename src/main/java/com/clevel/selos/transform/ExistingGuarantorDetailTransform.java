@@ -79,7 +79,7 @@ public class ExistingGuarantorDetailTransform extends Transform {
             existingGuarantorDetailView.setModifyDate(existingGuarantorDetail.getModifyDate());
             existingGuarantorDetailView.setModifyBy(existingGuarantorDetail.getModifyBy());
             CustomerInfoView guarantorView = new CustomerInfoView();
-            if(existingGuarantorDetail.getGuarantorName()!=null && existingGuarantorDetail.getGuarantorName().getId()!=0){
+            if(existingGuarantorDetail.getGuarantorName() != null && existingGuarantorDetail.getGuarantorName().getId() != 0){
                 guarantorView = customerTransform.transformToView(customerDAO.findById(existingGuarantorDetail.getGuarantorName().getId()));
             }
             existingGuarantorDetailView.setGuarantorName(guarantorView);

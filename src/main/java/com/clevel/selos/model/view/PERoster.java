@@ -39,6 +39,15 @@ public class PERoster implements Serializable {
     private String queuename;
     private String step;
     private String slastatus;
+    private int fetchType;
+
+    public int getFetchType() {
+        return fetchType;
+    }
+
+    public void setFetchType(int fetchType) {
+        this.fetchType = fetchType;
+    }
 
     public String getSlastatus() {
         return slastatus;
@@ -213,6 +222,7 @@ public class PERoster implements Serializable {
                 .append("TotalTimeAtUser",TotalTimeAtUser)
                 .append("TotalTimeAtProcess", TotalTimeAtProcess)
                 .append("F_WobNum",F_WobNum)
+                .append("fetchType",fetchType)
                 .toString();
     }
 

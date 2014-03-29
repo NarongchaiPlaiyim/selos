@@ -1,6 +1,5 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.BaseRate;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -14,15 +13,15 @@ public class NewCreditTierDetailView implements Serializable {
 
     private int no;
 
-    private BaseRate finalBasePrice;
+    private BaseRateView finalBasePrice;
     private BigDecimal finalInterest;
     private String finalPriceLabel;
 
-    private BaseRate standardBasePrice;
+    private BaseRateView standardBasePrice;
     private BigDecimal standardInterest;
     private String standardPriceLabel;
 
-    private BaseRate suggestBasePrice;
+    private BaseRateView suggestBasePrice;
     private BigDecimal suggestInterest;
     private String suggestPriceLabel;
 
@@ -50,9 +49,9 @@ public class NewCreditTierDetailView implements Serializable {
         this.suggestInterest = BigDecimal.ZERO;
         this.finalInterest = BigDecimal.ZERO;
 
-        this.standardBasePrice =  new BaseRate();
-        this.suggestBasePrice = new BaseRate();
-        this.finalBasePrice = new BaseRate();
+        this.standardBasePrice =  new BaseRateView();
+        this.suggestBasePrice = new BaseRateView();
+        this.finalBasePrice = new BaseRateView();
     }
 
     public long getId() {
@@ -71,14 +70,6 @@ public class NewCreditTierDetailView implements Serializable {
         this.no = no;
     }
 
-    public BaseRate getFinalBasePrice() {
-        return finalBasePrice;
-    }
-
-    public void setFinalBasePrice(BaseRate finalBasePrice) {
-        this.finalBasePrice = finalBasePrice;
-    }
-
     public BigDecimal getFinalInterest() {
         return finalInterest;
     }
@@ -87,28 +78,12 @@ public class NewCreditTierDetailView implements Serializable {
         this.finalInterest = finalInterest;
     }
 
-    public BaseRate getStandardBasePrice() {
-        return standardBasePrice;
-    }
-
-    public void setStandardBasePrice(BaseRate standardBasePrice) {
-        this.standardBasePrice = standardBasePrice;
-    }
-
     public BigDecimal getStandardInterest() {
         return standardInterest;
     }
 
     public void setStandardInterest(BigDecimal standardInterest) {
         this.standardInterest = standardInterest;
-    }
-
-    public BaseRate getSuggestBasePrice() {
-        return suggestBasePrice;
-    }
-
-    public void setSuggestBasePrice(BaseRate suggestBasePrice) {
-        this.suggestBasePrice = suggestBasePrice;
     }
 
     public BigDecimal getSuggestInterest() {
@@ -197,6 +172,30 @@ public class NewCreditTierDetailView implements Serializable {
 
     public void setSuggestPriceLabel(String suggestPriceLabel) {
         this.suggestPriceLabel = suggestPriceLabel;
+    }
+
+    public BaseRateView getFinalBasePrice() {
+        return finalBasePrice;
+    }
+
+    public void setFinalBasePrice(BaseRateView finalBasePrice) {
+        this.finalBasePrice = finalBasePrice;
+    }
+
+    public BaseRateView getStandardBasePrice() {
+        return standardBasePrice;
+    }
+
+    public void setStandardBasePrice(BaseRateView standardBasePrice) {
+        this.standardBasePrice = standardBasePrice;
+    }
+
+    public BaseRateView getSuggestBasePrice() {
+        return suggestBasePrice;
+    }
+
+    public void setSuggestBasePrice(BaseRateView suggestBasePrice) {
+        this.suggestBasePrice = suggestBasePrice;
     }
 
     @Override

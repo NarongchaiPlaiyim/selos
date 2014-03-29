@@ -19,12 +19,18 @@ public class SearchFirstLastNameDAO extends GenericDAO<SearchFirstLastName,Strin
     @SELOS
     Logger log;
 
+    List<Integer> relationIdList;
+
     public SearchFirstLastNameDAO()
     {
+        relationIdList = new ArrayList<Integer>();
 
+        relationIdList.add(1);
+
+        relationIdList.add(2);
     }
 
-    public List<SearchFirstLastName>  getFirstLastName(String firstname,String lastname)
+    public List<SearchFirstLastName>  getFirstName(String firstname)
     {
         List<SearchFirstLastName> firstLastNameList = new ArrayList<SearchFirstLastName>();
 
@@ -32,11 +38,13 @@ public class SearchFirstLastNameDAO extends GenericDAO<SearchFirstLastName,Strin
 
         Criteria criteria = getSession().createCriteria(SearchFirstLastName.class);
 
-        criteria.setProjection( Projections.projectionList().add(Projections.property("id"), "id"));
+        criteria.setProjection( Projections.projectionList().add(Projections.property("id"), "id").add(Projections.property("workCaseId"), "workCaseId").add(Projections.property("wrokCasePreScreenId"), "wrokCasePreScreenId"));
 
-        criteria.add(Restrictions.disjunction().add(Restrictions.like("firstnameenglish", "firstname%")).add(Restrictions.like("firstnametai", "firstname%")));
+        criteria.add(Restrictions.disjunction().add(Restrictions.like("firstnameenglish", firstname+"%")).add(Restrictions.like("firstnametai", firstname+"%")));
 
-        criteria.add(Restrictions.disjunction().add(Restrictions.like("lastnameenglish", "lastname%")).add(Restrictions.like("lastnametai", "lastname%"))).setResultTransformer(Transformers.aliasToBean(SearchFirstLastName.class));
+        criteria.add(Restrictions.in("relationId",relationIdList)).setResultTransformer(Transformers.aliasToBean(SearchFirstLastName.class));
+
+        //criteria.add(Restrictions.disjunction().add(Restrictions.like("lastnameenglish", "lastname%")).add(Restrictions.like("lastnametai", "lastname%"))).setResultTransformer(Transformers.aliasToBean(SearchFirstLastName.class));
 
         firstLastNameList = criteria.list();
 
@@ -57,5 +65,42 @@ public class SearchFirstLastNameDAO extends GenericDAO<SearchFirstLastName,Strin
         }
 
         return firstLastNameList;
+    }
+
+    public List<SearchFirstLastName>  getLastName(String lastname)
+    {
+        List<SearchFirstLastName> lastNameList = new ArrayList<SearchFirstLastName>();
+
+        log.info("Controller comes to getLastName method of SearchFirstLastNameDAO class");
+
+        Criteria criteria = getSession().createCriteria(SearchFirstLastName.class);
+
+        criteria.setProjection( Projections.projectionList().add(Projections.property("id"), "id").add(Projections.property("workCaseId"), "workCaseId").add(Projections.property("wrokCasePreScreenId"), "wrokCasePreScreenId"));
+
+        //criteria.add(Restrictions.disjunction().add(Restrictions.like("firstnameenglish", "firstname%")).add(Restrictions.like("firstnametai", "firstname%")));
+
+        criteria.add(Restrictions.in("relationId",relationIdList));
+
+        criteria.add(Restrictions.disjunction().add(Restrictions.like("lastnameenglish", lastname+"%")).add(Restrictions.like("lastnametai", lastname+"%"))).setResultTransformer(Transformers.aliasToBean(SearchFirstLastName.class));
+
+        lastNameList = criteria.list();
+
+        log.info("firstlastnamelist size is : {}",lastNameList.size());
+
+        Iterator iterator = lastNameList.iterator();
+
+        int firstnamelastnamebasedworkcaseid = 0;
+
+        while(iterator.hasNext() == true)
+        {
+            SearchFirstLastName searchFirstLastName = new SearchFirstLastName();
+
+            searchFirstLastName = (SearchFirstLastName)iterator.next();
+
+            firstnamelastnamebasedworkcaseid = searchFirstLastName.getId();
+
+        }
+
+        return lastNameList;
     }
 }

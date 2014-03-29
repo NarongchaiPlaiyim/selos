@@ -11,17 +11,15 @@ import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
-import com.tmbbank.enterprise.model.*;
 import com.ilog.rules.decisionservice.DecisionServiceRequest;
 import com.ilog.rules.decisionservice.DecisionServiceResponse;
 import com.ilog.rules.param.UnderwritingRequest;
+import com.tmbbank.enterprise.model.*;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.xml.datatype.DatatypeFactory;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -163,6 +161,7 @@ public class StandardPricingIntConverter extends Converter {
                 }
             }
 
+            standardPricingIntResponse.setPricingInterest(pricingInterestList);
             standardPricingIntResponse.setDecisionID(decisionServiceResponse.getDecisionID());
             standardPricingIntResponse.setApplicationNo(applicationType.getApplicationNumber());
 

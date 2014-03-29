@@ -33,6 +33,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -68,6 +69,8 @@ public class BaseController implements Serializable {
     AppraisalDetailTransform appraisalDetailTransform;
 
     @Inject
+    private CheckMandateDocControl checkMandateDocControl;
+    @Inject
     BRMSControl brmsControl;
 
     private ManageButton manageButton;
@@ -81,8 +84,9 @@ public class BaseController implements Serializable {
     private int pricingDOALevel;
     private List<User> abdmUserList;
     private List<User> zmUserList;
-    private List<User> rmUserList;
-    private List<User> ghUserList;
+    private List<User> rgmUserList;
+    private List<User> ghmUserList;
+    private List<User> cssoUserList;
 
     private User user;
     //private User abdm;
@@ -94,10 +98,17 @@ public class BaseController implements Serializable {
 
     private String zmEndorseUserId;
     private String zmEndorseRemark;
+    private String submitRemark;
+    private String slaRemark;
 
-    private String zmPriceUserId;
-    private String rmPriceUserId;
-    private String ghPriceUserId;
+    private String zmUserId;
+    private String rgmUserId;
+    private String ghmUserId;
+    private String cssoUserId;
+
+    private boolean isSubmitToRGM;
+    private boolean isSubmitToGHM;
+    private boolean isSubmitToCSSO;
 
     //Cancel CA FullApp
     private List<Reason> cancelReason;
@@ -135,6 +146,10 @@ public class BaseController implements Serializable {
     private boolean contactFlag3;
 
     private HashMap<String, Integer> stepStatusMap;
+
+    //CheckMandate
+    private CheckMandateDocView checkMandateDocView;
+    private long workCaseId;
 
     private String messageHeader;
     private String message;
@@ -348,25 +363,41 @@ public class BaseController implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         PricingDOAValue pricingDOA = fullApplicationControl.calculatePricingDOA(workCaseId);
+        pricingDOA = PricingDOAValue.CSSO_DOA;
         if(!Util.isNull(pricingDOA)){
             pricingDOALevel = pricingDOA.value();
             zmEndorseUserId = "";
+            rgmUserId = "";
+            ghmUserId = "";
+            cssoUserId = "";
+
             zmEndorseRemark = "";
+            submitRemark = "";
+            slaRemark = "";
+
+            isSubmitToRGM = false;
+            isSubmitToGHM = false;
+            isSubmitToCSSO = false;
 
             zmUserList = fullApplicationControl.getZMUserList();
 
             if(pricingDOA.value() >= PricingDOAValue.RGM_DOA.value()){
-                rmPriceUserId = "";
-                rmUserList = fullApplicationControl.getRMUserList();
+                rgmUserList = fullApplicationControl.getRMUserList();
+                isSubmitToRGM = true;
             }
 
             if(pricingDOA.value() >= PricingDOAValue.GH_DOA.value()){
-                ghPriceUserId = "";
-                ghUserList = fullApplicationControl.getHeadUserList();
+                ghmUserList = fullApplicationControl.getHeadUserList();
+                isSubmitToGHM = true;
             }
 
-            log.debug("onOpenSubmitZM ::: zmUserList size : {}", zmUserList.size());
-            RequestContext.getCurrentInstance().execute("submitZMDialog.show()");
+            if(pricingDOA.value() >= PricingDOAValue.CSSO_DOA.value()){
+                cssoUserList = fullApplicationControl.getCSSOUserList();
+                isSubmitToCSSO = true;
+            }
+
+            log.debug("pricingDOALevel ::: {}", pricingDOA);
+            RequestContext.getCurrentInstance().execute("submitZMDlg.show()");
         } else {
             messageHeader = "Exception.";
             message = "Can not find Pricing DOA Level. Please check value for calculate DOA Level";
@@ -377,12 +408,12 @@ public class BaseController implements Serializable {
     public void onSubmitZM(){
         log.debug("onSubmitZM ::: starting...");
         boolean complete = false;
-        if(zmEndorseUserId != null && !zmEndorseUserId.equals("")){
+        if(zmUserId != null && !zmUserId.equals("")){
             try{
                 HttpSession session = FacesUtil.getSession(true);
                 long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
                 String queueName = session.getAttribute("queueName").toString();
-                //fullApplicationControl.submitToZM(zmEndorseUserId, queueName, workCaseId);
+                fullApplicationControl.submitToZMPricing(zmUserId, rgmUserId, ghmUserId, cssoUserId, queueName, workCaseId);
                 messageHeader = "Information.";
                 message = "Submit to Zone Manager success.";
                 RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
@@ -395,6 +426,12 @@ public class BaseController implements Serializable {
                 complete = false;
                 log.error("onSubmitZM ::: exception occurred : ", ex);
             }
+        } else {
+            messageHeader = "Exception.";
+            message = "Submit to Zone Manager failed, cause : ZM not selected";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            complete = false;
+            log.error("onSubmitZM ::: submit failed (ZM not selected)");
         }
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
@@ -508,6 +545,57 @@ public class BaseController implements Serializable {
                 }
             }
         }
+
+    }
+
+    //
+    public void onCheckMandateDialog(){
+        log.debug("onCheckMandateDialog ::: starting...");
+        HttpSession session = FacesUtil.getSession(true);
+        try {
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        } catch (Exception e) {
+            workCaseId = 0;
+        }
+
+        String result = null;
+        checkMandateDocView = null;
+        try{
+            checkMandateDocView = checkMandateDocControl.getMandateDocView(workCaseId);
+            if(!Util.isNull(checkMandateDocView)){
+                log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
+            } else {
+                log.debug("-- Find by work case id = {} CheckMandateDocView is {}   ", workCaseId, checkMandateDocView);
+                checkMandateDocView = new CheckMandateDocView();
+                log.debug("-- CheckMandateDocView[New] created");
+            }
+        } catch (Exception e) {
+            log.error("-- Exception : {}", e.getMessage());
+            result = e.getMessage();
+        }
+    }
+
+    public void onSaveCheckMandateDoc(){
+        log.debug("-- onSaveCheckMandateDoc().");
+        try {
+            checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, workCaseId);
+            messageHeader = "Success";
+            message = "Success";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        } catch (Exception ex){
+            log.error("Exception : {}", ex);
+            messageHeader = "Failed";
+            message = "Failed";
+//            if(ex.getCause() != null){
+//                message = "Failed " + ex.getCause().toString();
+//            } else {
+//                message = "Failed " + ex.getMessage();
+//            }
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
+    }
+
+    public void onCancelCheckMandateDoc(){
 
     }
 
@@ -956,28 +1044,28 @@ public class BaseController implements Serializable {
         this.assignRemark = assignRemark;
     }
 
-    public String getZmPriceUserId() {
-        return zmPriceUserId;
+    public String getZmUserId() {
+        return zmUserId;
     }
 
-    public void setZmPriceUserId(String zmPriceUserId) {
-        this.zmPriceUserId = zmPriceUserId;
+    public void setZmUserId(String zmUserId) {
+        this.zmUserId = zmUserId;
     }
 
-    public String getRmPriceUserId() {
-        return rmPriceUserId;
+    public String getRgmUserId() {
+        return rgmUserId;
     }
 
-    public void setRmPriceUserId(String rmPriceUserId) {
-        this.rmPriceUserId = rmPriceUserId;
+    public void setRgmUserId(String rgmUserId) {
+        this.rgmUserId = rgmUserId;
     }
 
-    public String getGhPriceUserId() {
-        return ghPriceUserId;
+    public String getGhmUserId() {
+        return ghmUserId;
     }
 
-    public void setGhPriceUserId(String ghPriceUserId) {
-        this.ghPriceUserId = ghPriceUserId;
+    public void setGhmUserId(String ghmUserId) {
+        this.ghmUserId = ghmUserId;
     }
 
     public String getZmEndorseUserId() {
@@ -1012,20 +1100,20 @@ public class BaseController implements Serializable {
         this.requestAppraisal = requestAppraisal;
     }
 
-    public List<User> getRmUserList() {
-        return rmUserList;
+    public List<User> getRgmUserList() {
+        return rgmUserList;
     }
 
-    public void setRmUserList(List<User> rmUserList) {
-        this.rmUserList = rmUserList;
+    public void setRgmUserList(List<User> rgmUserList) {
+        this.rgmUserList = rgmUserList;
     }
 
-    public List<User> getGhUserList() {
-        return ghUserList;
+    public List<User> getGhmUserList() {
+        return ghmUserList;
     }
 
-    public void setGhUserList(List<User> ghUserList) {
-        this.ghUserList = ghUserList;
+    public void setGhmUserList(List<User> ghmUserList) {
+        this.ghmUserList = ghmUserList;
     }
 
     public String getAadCommitteeId() {
@@ -1118,6 +1206,70 @@ public class BaseController implements Serializable {
 
     public void setRequestAppraisalPage(boolean requestAppraisalPage) {
         this.requestAppraisalPage = requestAppraisalPage;
+    }
+
+    public CheckMandateDocView getCheckMandateDocView() {
+        return checkMandateDocView;
+    }
+
+    public void setCheckMandateDocView(CheckMandateDocView checkMandateDocView) {
+        this.checkMandateDocView = checkMandateDocView;
+    }
+
+    public boolean isSubmitToGHM() {
+        return isSubmitToGHM;
+    }
+
+    public void setSubmitToGHM(boolean submitToGHM) {
+        isSubmitToGHM = submitToGHM;
+    }
+
+    public boolean isSubmitToRGM() {
+        return isSubmitToRGM;
+    }
+
+    public void setSubmitToRGM(boolean submitToRGM) {
+        isSubmitToRGM = submitToRGM;
+    }
+
+    public String getCssoUserId() {
+        return cssoUserId;
+    }
+
+    public void setCssoUserId(String cssoUserId) {
+        this.cssoUserId = cssoUserId;
+    }
+
+    public List<User> getCssoUserList() {
+        return cssoUserList;
+    }
+
+    public void setCssoUserList(List<User> cssoUserList) {
+        this.cssoUserList = cssoUserList;
+    }
+
+    public boolean isSubmitToCSSO() {
+        return isSubmitToCSSO;
+    }
+
+    public void setSubmitToCSSO(boolean submitToCSSO) {
+        isSubmitToCSSO = submitToCSSO;
+    }
+
+    public String getSlaRemark() {
+        return slaRemark;
+    }
+
+    public void setSlaRemark(String slaRemark) {
+        this.slaRemark = slaRemark;
+    }
+
+    public String getSubmitRemark() {
+        return submitRemark;
+    }
+
+    public void setSubmitRemark(String submitRemark) {
+        this.submitRemark = submitRemark;
     }
 
     public int getRowIndex() {

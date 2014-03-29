@@ -91,6 +91,8 @@ public class CustomerInfoJuristic implements Serializable {
     private UserDAO userDAO;
     @Inject
     private JuristicDAO juristicDAO;
+    @Inject
+    private IncomeSourceDAO incomeSourceDAO;
 
     @Inject
     private CustomerInfoControl customerInfoControl;
@@ -120,6 +122,8 @@ public class CustomerInfoJuristic implements Serializable {
     private List<KYCLevel> kycLevelList;
 
     private List<String> yearList;
+
+    private List<IncomeSource> incomeSourceList;
 
     //*** View ***//
     private CustomerInfoView customerInfoView;
@@ -271,6 +275,8 @@ public class CustomerInfoJuristic implements Serializable {
         provinceForm2List = provinceDAO.getListOrderByParameter("name");
 
         countryList = countryDAO.findAll();
+
+        incomeSourceList = incomeSourceDAO.findAll();
 
         referenceList = new ArrayList<Reference>();
 
@@ -492,13 +498,6 @@ public class CustomerInfoJuristic implements Serializable {
                         country.setId(211);
                         customerInfoView.setCitizenCountry(country);
                     }
-                    if(customerInfoView.getSourceIncome() != null){
-                        customerInfoView.getSourceIncome().setId(211);
-                    } else {
-                        Country country = new Country();
-                        country.setId(211);
-                        customerInfoView.setSourceIncome(country);
-                    }
 
                     if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
                         if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
@@ -595,13 +594,6 @@ public class CustomerInfoJuristic implements Serializable {
                             Country country = new Country();
                             country.setId(211);
                             customerInfoView.setCitizenCountry(country);
-                        }
-                        if(customerInfoView.getSourceIncome() != null){
-                            customerInfoView.getSourceIncome().setId(211);
-                        } else {
-                            Country country = new Country();
-                            country.setId(211);
-                            customerInfoView.setSourceIncome(country);
                         }
 
                         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
@@ -1271,5 +1263,13 @@ public class CustomerInfoJuristic implements Serializable {
 
     public void setRelationId(int relationId) {
         this.relationId = relationId;
+    }
+
+    public List<IncomeSource> getIncomeSourceList() {
+        return incomeSourceList;
+    }
+
+    public void setIncomeSourceList(List<IncomeSource> incomeSourceList) {
+        this.incomeSourceList = incomeSourceList;
     }
 }

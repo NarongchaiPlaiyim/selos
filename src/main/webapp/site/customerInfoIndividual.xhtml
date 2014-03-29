@@ -538,10 +538,10 @@
                                                      value="#{custInfoSumIndi.customerInfoView.sourceIncome.id}"
                                                      disabled="#{not custInfoSumIndi.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                        <f:selectItems value="#{custInfoSumIndi.countryList}"
-                                                       var="country"
-                                                       itemLabel="#{country.name}"
-                                                       itemValue="#{country.id}"/>
+                                        <f:selectItems value="#{custInfoSumIndi.incomeSourceList}"
+                                                       var="incomeSource"
+                                                       itemLabel="#{incomeSource.name}"
+                                                       itemValue="#{incomeSource.id}"/>
                                     </p:selectOneMenu>
                                 </td>
                                 <td class="title larger" >
@@ -1795,10 +1795,10 @@
                                                          value="#{custInfoSumIndi.customerInfoView.spouse.sourceIncome.id}"
                                                          disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                            <f:selectItems value="#{custInfoSumIndi.countryList}"
-                                                           var="country"
-                                                           itemLabel="#{country.name}"
-                                                           itemValue="#{country.id}"/>
+                                            <f:selectItems value="#{custInfoSumIndi.incomeSourceList}"
+                                                           var="incomeSource"
+                                                           itemLabel="#{incomeSource.name}"
+                                                           itemValue="#{incomeSource.id}"/>
                                         </p:selectOneMenu>
                                     </td>
                                     <td class="title larger" >

@@ -30,8 +30,6 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
@@ -203,6 +201,7 @@ public class NCBInfo implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
 
         if(checkSession(session)){
+            workCaseId = (Long)session.getAttribute("workCaseId");
             if(session.getAttribute("customerId") != null && (Long)session.getAttribute("customerId") != 0){
                 customerId = (Long)session.getAttribute("customerId");
                 log.debug("onCreation ::: customerId : {}", customerId);
