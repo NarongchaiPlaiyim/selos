@@ -6,6 +6,7 @@ import com.clevel.selos.model.view.ExSummaryView;
 import com.clevel.selos.model.view.ReportView;
 import com.clevel.selos.report.template.PDFDecision;
 import com.clevel.selos.report.template.PDFExecutive_Summary;
+import com.clevel.selos.report.template.PDFReject_Letter;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -36,12 +37,19 @@ public class GenPDF extends ReportService implements Serializable {
     String pathsub;
 
     @Inject
+    @Config(name = "report.rejectletter")
+    String pathRejectLetter;
+
+    @Inject
     private WorkCaseDAO workCaseDAO;
 
     WorkCase workCase; // ห้าม @Inject
 
     @Inject
     PDFExecutive_Summary pdfExecutiveSummary;
+
+    @Inject
+    PDFReject_Letter pdfReject_letter;
 
     @Inject
     PDFDecision pdfDecision;
@@ -73,6 +81,7 @@ public class GenPDF extends ReportService implements Serializable {
 
     @PostConstruct
     private void onCreation(){
+        init();
         log.debug("GenPDF onCreation ");
     }
 
@@ -83,7 +92,10 @@ public class GenPDF extends ReportService implements Serializable {
         log.info("On setNameReport()");
         String nameOpShect = "_OpShect.pdf";
         String nameExSum = "_ExSum.pdf";
+        String nameRejectLetter = "_RejectLetter.pdf";
         String date = Util.createDateTime(new Date());
+        String[] month = date.split("");
+        log.debug("--month. {}",month);
 
         if(!Util.isNull(workCaseId)){
             workCase = workCaseDAO.findById(workCaseId);
@@ -91,6 +103,7 @@ public class GenPDF extends ReportService implements Serializable {
             reportView = new ReportView();
             reportView.setNameReportOpShect(appNumber+"_"+date+nameOpShect);
             reportView.setNameReportExSum(appNumber + "_" + date + nameExSum);
+            reportView.setNameReportRejectLetter(appNumber + "_" + date + nameRejectLetter);
         }
     }
 
@@ -148,6 +161,15 @@ public class GenPDF extends ReportService implements Serializable {
 //        pdfName = "Decision_Report_";
 
         generatePDF(pathDecision, map, reportView.getNameReportOpShect());
+    }
+
+    public void onPrintRejectLetter() throws Exception {
+        HashMap map = new HashMap<String, Object>();
+        map.put("path", pathsub);
+        map.put("fillAllNameReject",pdfReject_letter.fillAllNameReject());
+        map.put("fillRejectLetter",pdfReject_letter.fillRejectLetter());
+
+        generatePDF(pathRejectLetter,map,reportView.getNameReportRejectLetter());
     }
 
     public ReportView getReportView() {

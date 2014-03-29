@@ -378,7 +378,8 @@
                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.salesFromFinancialStmt')}"/>
                                 </td>
                                 <td>
-                                    <p:inputText id="salesFormFinancialStmt" styleClass="right" value="#{custInfoSumJuris.customerInfoView.salesFromFinancialStmt}"
+                                    <p:inputText id="salesFormFinancialStmt" styleClass="right" required="true"
+                                                 value="#{custInfoSumJuris.customerInfoView.salesFromFinancialStmt}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownMoney(event);"
                                                  onkeypress="return onKeyPressMoney(event);"
@@ -427,10 +428,10 @@
                                                      value="#{custInfoSumJuris.customerInfoView.sourceIncome.id}"
                                                      disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                        <f:selectItems value="#{custInfoSumJuris.countryList}"
-                                                       var="country"
-                                                       itemLabel="#{country.name}"
-                                                       itemValue="#{country.id}"/>
+                                        <f:selectItems value="#{custInfoSumJuris.incomeSourceList}"
+                                                       var="incomeSource"
+                                                       itemLabel="#{incomeSource.name}"
+                                                       itemValue="#{incomeSource.id}"/>
                                     </p:selectOneMenu>
                                 </td>
                                 <td class="title larger" >

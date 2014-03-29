@@ -2,6 +2,7 @@ package com.clevel.selos.integration.ecm;
 
 import com.clevel.selos.exception.ECMInterfaceException;
 import com.clevel.selos.integration.ECM;
+import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.module.DBExecute;
 import com.clevel.selos.system.message.ExceptionMapping;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class ECMService implements Serializable {
     @Inject
-    @ECM
+    @NCB
     private Logger log;
     @Inject
     private DBExecute dbExecute;
@@ -34,6 +35,7 @@ public class ECMService implements Serializable {
         try {
             if(!Util.isNull(caNumber) && !Util.isZero(caNumber.length())){
                 ecmDetailList = Util.safetyList(dbExecute.findByCANumber(caNumber));
+                log.debug("-- EcmDetailList.size[{}]", ecmDetailList.size());
                 if(Util.isZero(ecmDetailList.size())){
                     log.debug("Data Not Found!");
                     throw new ECMInterfaceException(new Exception(msg.get(ExceptionMapping.ECM_DATA_NOT_FOUND)),ExceptionMapping.ECM_DATA_NOT_FOUND, msg.get(ExceptionMapping.ECM_DATA_NOT_FOUND));

@@ -86,6 +86,8 @@ public class CustomerTransform extends Transform {
     private RaceDAO raceDAO;
     @Inject
     private CustomerOblInfoDAO customerOblInfoDAO;
+    @Inject
+    private IncomeSourceDAO incomeSourceDAO;
 
     public CustomerInfoView transformToView(Customer customer){
         log.info("Start - transformToView ::: customer : {}", customer);
@@ -184,7 +186,7 @@ public class CustomerTransform extends Transform {
 
         customerInfoView.setSourceIncome(customer.getSourceIncome());
         if(customerInfoView.getSourceIncome() == null){
-            customerInfoView.setSourceIncome(new Country());
+            customerInfoView.setSourceIncome(new IncomeSource());
         }
 
         customerInfoView.setCountryIncome(customer.getCountryIncome());
@@ -196,19 +198,6 @@ public class CustomerTransform extends Transform {
         customerInfoView.setCommitteeId(customer.getJuristicId());
         }
         customerInfoView.setValidId(2);
-
-        customerInfoView.setSourceIncome(customer.getSourceIncome());
-        if(customerInfoView.getSourceIncome() == null){
-            customerInfoView.setSourceIncome(new Country());
-        }
-
-        customerInfoView.setCountryIncome(customer.getCountryIncome());
-        if(customerInfoView.getCountryIncome() == null){
-            customerInfoView.setCountryIncome(new Country());
-        }
-
-        customerInfoView.setIsCommittee(customer.getIsCommittee());
-        customerInfoView.setCommitteeId(customer.getJuristicId());
 
         customerInfoView.setCollateralOwner(customer.getCollateralOwner());
         customerInfoView.setPercentShare(customer.getPercentShare());
@@ -520,7 +509,7 @@ public class CustomerTransform extends Transform {
             customer.setMailingAddressType(null);
         }
         if(customerInfoView.getSourceIncome() != null && customerInfoView.getSourceIncome().getId() != 0){
-            customer.setSourceIncome(countryDAO.findById(customerInfoView.getSourceIncome().getId()));
+            customer.setSourceIncome(incomeSourceDAO.findById(customerInfoView.getSourceIncome().getId()));
         } else {
             customer.setSourceIncome(null);
         }

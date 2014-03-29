@@ -14,7 +14,6 @@ public class SubCollateralTypeTransform extends Transform {
     private SubCollateralTypeDAO subCollateralTypeDAO;
     @Inject
     private CollateralTypeDAO collateralTypeDAO;
-
     @Inject
     private CollateralTypeTransform collateralTypeTransform;
 

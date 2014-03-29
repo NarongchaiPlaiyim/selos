@@ -289,20 +289,13 @@ public class DBRControl extends BusinessControl {
         BigDecimal totalPurposeForDBR = BigDecimal.ZERO;
         int roleId = getCurrentUser().getRole().getId();
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
-        //todo non confirm
+        //todo not confirm
         BigDecimal debt = BigDecimal.ZERO;
         debt = Util.add(totalMonthDebtBorrowerFinal, totalMonthDebtRelated);
-        debt = Util.add(debt, totalPurposeForDBR);
-
-        if(newCreditFacility != null && newCreditFacility.getId() > 0){
+        if(newCreditFacility != null && newCreditFacility.getId() > 0)  {
             totalPurposeForDBR = newCreditFacility.getTotalProposeLoanDBR();
-            if(roleId == RoleValue.UW.id()){
-
-            }else if(roleId == RoleValue.BDM.id()){
-
-            }
-
         }
+        debt = Util.add(debt, totalPurposeForDBR);
         result = Util.divide(debt, netMonthlyIncome);
 
         return result;
