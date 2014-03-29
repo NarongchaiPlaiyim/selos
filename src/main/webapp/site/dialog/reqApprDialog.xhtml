@@ -211,7 +211,8 @@
                              update=":frmMain:reqApprDialogPanel, :frmMain:msgBoxBaseMessagePanel"/>
 
             <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="medium"
-                             process="@this" update=":customerDlgForm"
+                             process="@this"
+                             update=":frmMain:reqApprDialogPanel"
                              oncomplete="reqApprDlg.hide()">
                 <p:resetInput target=":frmMain:reqApprDialogPanel" />
             </p:commandButton>

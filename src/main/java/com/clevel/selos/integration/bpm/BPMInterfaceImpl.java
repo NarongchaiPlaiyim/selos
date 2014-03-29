@@ -158,6 +158,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
             bpmAuditor.add(bpmUsername, "createParallelCase", "", now, ActionResult.SUCCESS, "", linkKey);
         } catch (Exception ex) {
             success = false;
+            log.error("[{}] BPM launch work flow failed. : ", ex);
             bpmAuditor.add(bpmUsername, "createParallelCase", "", now, ActionResult.FAILED, msg.get(ExceptionMapping.BPM_NEW_CASE_EXCEPTION), linkKey);
         }
 

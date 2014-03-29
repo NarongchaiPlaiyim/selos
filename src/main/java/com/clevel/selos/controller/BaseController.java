@@ -838,7 +838,10 @@ public class BaseController implements Serializable {
 
                     complete = true;
 
-                    context.execute("msgBoxBaseRedirectDlg.show()");
+                    messageHeader = "Information.";
+                    message = "Request appraisal completed.";
+
+                    context.execute("msgBoxBaseMessageDlg.show()");
                 } catch(Exception ex){
                     log.error("Exception while submitRequestAppraisal : ", ex);
                     messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
