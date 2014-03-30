@@ -33,7 +33,7 @@ public class NewGuarantorRelationDAO extends GenericDAO<NewGuarantorCredit, Long
         criteria.add(Restrictions.eq("newGuarantorDetail", newGuarantorDetail));
         criteria.setFetchMode("newGuarantorDetail", FetchMode.LAZY);
         List<NewGuarantorCredit> newGuarantorCreditList = (List<NewGuarantorCredit>) criteria.list();
-        log.info("getList. (result size: {})", newGuarantorCreditList.size());
+        log.debug("getList. (result size: {})", newGuarantorCreditList.size());
 
         return newGuarantorCreditList;
 

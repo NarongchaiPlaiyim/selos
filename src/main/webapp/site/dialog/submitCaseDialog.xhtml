@@ -99,13 +99,15 @@
                                        var="zmItem"
                                        itemLabel="#{zmItem.id} - #{zmItem.userName}"
                                        itemValue="#{zmItem.id}"/>
+
+                        <p:ajax event="change" listener="#{baseController.onSelectedZM()}" process="@form" update=":frmMain:rgmUserSelect"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
             <tr>
                 <td class="title left">Regional Manager :</td>
                 <td>
-                    <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
+                    <p:selectOneMenu id="rgmUserSelect" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
                                      value="#{baseController.rgmUserId}"
                                      required="#{not empty param[btnSubmitCaseZMPricing.clientId] and baseController.submitToRGM}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -113,13 +115,14 @@
                                        var="rmItem"
                                        itemLabel="#{rmItem.id} - #{rmItem.userName}"
                                        itemValue="#{rmItem.id}"/>
+                        <p:ajax event="change" listener="#{baseController.onSelectedRM()}" process="@form" update=":frmMain:ghUserSelect"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
             <tr>
                 <td class="title left">Group Head :</td>
                 <td>
-                    <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
+                    <p:selectOneMenu id="ghUserSelect" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
                                      value="#{baseController.ghmUserId}"
                                      required="#{not empty param[btnSubmitCaseZMPricing.clientId] and baseController.submitToGHM}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -127,13 +130,14 @@
                                        var="ghItem"
                                        itemLabel="#{ghItem.id} - #{ghItem.userName}"
                                        itemValue="#{ghItem.id}"/>
+                        <p:ajax event="change" listener="#{baseController.onSelectedGH()}" process="@form" update=":frmMain:cssoUserSelect"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
             <tr>
                 <td class="title left">Chief SME :</td>
                 <td>
-                    <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
+                    <p:selectOneMenu id="cssoUserSelect" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
                                      value="#{baseController.cssoUserId}"
                                      required="#{not empty param[btnSubmitCaseZMPricing.clientId] and baseController.submitToCSSO}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
