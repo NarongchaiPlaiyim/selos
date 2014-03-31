@@ -60,7 +60,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="title">#{msg.get('app.custInfoIndi.content.search.by')}</td>
+                                    <td class="title">
+                                        <h:outputText value="#{msg.get('app.custInfoIndi.content.search.by')}"/>
+                                    </td>
                                     <td>
                                         <p:selectOneRadio value="#{custInfoSumIndi.customerInfoSearch.searchBy}" id="searchBySearch"
                                                           required="#{not empty param[searchButton.clientId]}"
@@ -1341,12 +1343,12 @@
                                 </tr>
 
                                 <tr>
-                                    <td colspan="5">
-                                        <p:outputPanel id="spousePnl">
-                                            <p:panel styleClass="panel" rendered="#{custInfoSumIndi.maritalStatusFlag}">
-                                                <table>
+                                    <td colspan="6">
+                                        <p:outputPanel id="spousePnl" style="width: 100%">
+                                            <p:panel style="width: 100%" styleClass="panel" rendered="#{custInfoSumIndi.maritalStatusFlag}">
+                                                <table style="width: 100%">
                                                     <tr>
-                                                        <td colspan="5">
+                                                        <td colspan="6">
                                                             <div class="separate"><!-- --></div>
                                                         </td>
                                                     </tr>
@@ -1361,10 +1363,10 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="title">
+                                                        <td class="title" style="min-width: 200px; max-width: 200px; width: 200px;">
                                                             <h:outputText value="#{msg.get('app.custInfoIndi.content.docType')}"/>
                                                         </td>
-                                                        <td>
+                                                        <td style="min-width: 250px; max-width: 250px; width: 250px;">
                                                             <p:selectOneMenu size="1" id="docTypeSearchSpouse"
                                                                              style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                              value="#{custInfoSumIndi.customerInfoSearchSpouse.documentType.id}"
@@ -1381,7 +1383,7 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="title" style="width: 200px; max-width: 200px; min-width: 200px;">
+                                                        <td class="title">
                                                             <h:outputText value="#{msg.get('app.custInfoIndi.content.search.by')}"/>
                                                         </td>
                                                         <td>

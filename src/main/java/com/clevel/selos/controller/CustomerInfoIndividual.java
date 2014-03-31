@@ -948,6 +948,31 @@ public class CustomerInfoIndividual implements Serializable {
         }
     }
 
+    public void onChangeMaritalStatusSearch(){
+        if(customerInfoView != null && customerInfoView.getMaritalStatus().getId() == 0){
+            return;
+        }
+
+        MaritalStatus maritalStatus = maritalStatusDAO.findById(customerInfoView.getMaritalStatus().getId());
+        if(maritalStatus != null && maritalStatus.getSpouseFlag() == 1){
+            maritalStatusFlag = true;
+        } else {
+            maritalStatusFlag = false;
+        }
+
+        if(maritalStatusFlag){
+            customerInfoView.getMaritalStatus().setSpouseFlag(1);
+            if(customerInfoView.getSpouse() == null){
+                CustomerInfoView cusView = new CustomerInfoView();
+                cusView.reset();
+                customerInfoView.setSpouse(cusView);
+                onChangeRelation();
+                isEditFormSpouse = false;
+                enableAllFieldCusSpouse = false;
+            }
+        }
+    }
+
     public void onChangeMaritalStatus(){
         if(customerInfoView != null && customerInfoView.getMaritalStatus().getId() == 0){
             return;
@@ -1284,7 +1309,7 @@ public class CustomerInfoIndividual implements Serializable {
             onChangeDistrictEditForm2();
             onChangeProvinceEditForm3();
             onChangeDistrictEditForm3();
-            onChangeMaritalStatus();
+            onChangeMaritalStatusSearch();
             onChangeDOB();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
