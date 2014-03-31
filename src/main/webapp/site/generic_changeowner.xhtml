@@ -95,7 +95,7 @@
                                       label="role"
                                       value="#{change.selectRole}" onchange="submit()" valueChangeListener="#{change.getAllUserNames}">
                     <f:selectItem itemValue="" itemLabel="--Please Select--"/>
-                    <f:selectItems value="#{change.rolSet}" var="roleItem" itemLabel="#{roleItem.roleNumber} - #{roleItem.roleName}" itemValue="#{roleItem.roleNumber}"/>
+                    <f:selectItems value="#{change.rolSet}" var="roleItem" itemLabel="#{roleItem.roleName}" itemValue="#{roleItem.roleNumber}"/>
                 </h:selectOneMenu></td>
             </tr>
             <tr>
