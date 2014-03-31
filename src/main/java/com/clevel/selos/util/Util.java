@@ -132,7 +132,6 @@ public class Util implements Serializable {
         }
     }
 
-
     public static String getLinkKey(String userId) {
         return userId + "_" + System.currentTimeMillis();
     }
@@ -434,5 +433,20 @@ public class Util implements Serializable {
             return BigDecimal.ZERO;
         }
         return value;
+    }
+
+    public static boolean compareDateByMonthAndYear(Date date1, Date date2) {
+        Calendar d1 = Calendar.getInstance();
+        d1.setTime(date1);
+        Calendar d2 = Calendar.getInstance();
+        d2.setTime(date2);
+        log.debug("compareDateByMonthAndYear() d1.month: {}, d2.month: {}", d1.get(Calendar.MONTH), d2.get(Calendar.MONTH));
+        if (d1.get(Calendar.MONTH) != d2.get(Calendar.MONTH)) {
+            return false;
+        }
+        else if (d1.get(Calendar.YEAR) != d2.get(Calendar.YEAR)) {
+            return false;
+        }
+        return true;
     }
 }
