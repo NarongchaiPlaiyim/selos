@@ -1509,9 +1509,9 @@ public class PEDBExecute extends BusinessControl
 
                                 while(iterator1.hasNext() == true)
                                 {
-                                    SearchApplicationNo searchApplicationNo = new SearchApplicationNo();
+                                    SearchApplicationNoByWorkCasePrescreenId searchApplicationNo = new SearchApplicationNoByWorkCasePrescreenId();
 
-                                    searchApplicationNo = (SearchApplicationNo)iterator1.next();
+                                    searchApplicationNo = (SearchApplicationNoByWorkCasePrescreenId)iterator1.next();
 
                                     String applicationnumbervalue = searchApplicationNo.getApplicationNo();
 
@@ -1582,9 +1582,9 @@ public class PEDBExecute extends BusinessControl
 
                                 while(iterator1.hasNext() == true)
                                 {
-                                    SearchApplicationNo searchApplicationNo = new SearchApplicationNo();
+                                    SearchApplicationNoByWorkCasePrescreenId searchApplicationNo = new SearchApplicationNoByWorkCasePrescreenId();
 
-                                    searchApplicationNo = (SearchApplicationNo)iterator1.next();
+                                    searchApplicationNo = (SearchApplicationNoByWorkCasePrescreenId)iterator1.next();
 
                                     String applicationnumbervalue = searchApplicationNo.getApplicationNo();
 
@@ -1648,9 +1648,9 @@ public class PEDBExecute extends BusinessControl
 
                         while(iterator1.hasNext() == true)
                         {
-                            SearchApplicationNo searchApplicationNo = new SearchApplicationNo();
+                            SearchApplicationNoByWorkCasePrescreenId searchApplicationNo = new SearchApplicationNoByWorkCasePrescreenId();
 
-                            searchApplicationNo = (SearchApplicationNo)iterator1.next();
+                            searchApplicationNo = (SearchApplicationNoByWorkCasePrescreenId)iterator1.next();
 
                             String applicationnumbervalue = searchApplicationNo.getApplicationNo();
 
@@ -1713,9 +1713,9 @@ public class PEDBExecute extends BusinessControl
 
                         while(iterator1.hasNext() == true)
                         {
-                            SearchApplicationNo searchApplicationNo = new SearchApplicationNo();
+                            SearchApplicationNoByWorkCasePrescreenId searchApplicationNo = new SearchApplicationNoByWorkCasePrescreenId();
 
-                            searchApplicationNo = (SearchApplicationNo)iterator1.next();
+                            searchApplicationNo = (SearchApplicationNoByWorkCasePrescreenId)iterator1.next();
 
                             String applicationnumbervalue = searchApplicationNo.getApplicationNo();
 

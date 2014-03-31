@@ -87,7 +87,7 @@ public class UserDAO extends GenericDAO<User,String> {
 
     public List<User> findUserZoneList(List<UserTeam> userTeams){
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("role.id", RoleValue.ZM.id()));
+        //criteria.add(Restrictions.eq("role.id", RoleValue.ZM.id()));
         criteria.add(Restrictions.in("team", userTeams));
         criteria.addOrder(Order.asc("userName"));
 

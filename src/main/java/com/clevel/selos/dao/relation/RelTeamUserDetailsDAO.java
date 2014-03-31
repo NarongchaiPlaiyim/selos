@@ -42,7 +42,7 @@ public class RelTeamUserDetailsDAO extends GenericDAO<RelTeamUserDetails, Intege
         if(relTeamUserDetailsList!=null && relTeamUserDetailsList.size()>0){
             List<Integer> teamIdList = new ArrayList<Integer>();
             for(RelTeamUserDetails relTeamUserDetails: relTeamUserDetailsList){
-                teamIdList.add(relTeamUserDetails.getId());
+                teamIdList.add(relTeamUserDetails.getTlThId());
             }
 
             Criteria criteria2 = getSession().createCriteria(UserTeam.class);
