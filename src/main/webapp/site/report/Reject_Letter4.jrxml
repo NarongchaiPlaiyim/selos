@@ -10,12 +10,12 @@
 		<band height="69" splitType="Stretch">
 			<image>
 				<reportElement uuid="9e0df807-5da3-4b55-b72b-f9042c4fc131" x="0" y="0" width="529" height="69"/>
-				<imageExpression><![CDATA["D:\\Project_Bird\\งาน\\07_tmb.jpg"]]></imageExpression>
+				<imageExpression><![CDATA[$P{path}+"07_tmb.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="66" splitType="Stretch">
+		<band height="69" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="027db406-1716-4ca4-8c40-177a032b2a3a" x="0" y="13" width="100" height="20"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -166,7 +166,7 @@
 			</staticText>
 			<staticText>
 				<reportElement uuid="f1e73d3b-ecfe-4491-8517-fc1963dc89c5" x="2" y="0" width="33" height="20"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 				</textElement>
