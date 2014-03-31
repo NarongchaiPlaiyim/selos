@@ -199,13 +199,16 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void submitZM(long workCaseId, String queueName, String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, BigDecimal totalCommercial, BigDecimal totalRetail, String resultCode,  long actionCode) throws Exception{
+    public void submitZM(long workCaseId, String queueName, String zmUserId, String rgmUserId, String ghUserId, String cssoUserId,
+                         BigDecimal totalCommercial, BigDecimal totalRetail, String resultCode,
+                         String productGroup, String deviationCode, int requestType, long actionCode) throws Exception{
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         Action action = actionDAO.findById(actionCode);
         if(action != null){
             HashMap<String, String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
+            fields.put("ProductGroup", productGroup);
             fields.put("ZMUserName", zmUserId);
             if(!Util.isEmpty(rgmUserId)){
                 fields.put("RGMUserName", rgmUserId);
@@ -216,6 +219,13 @@ public class BPMExecutor implements Serializable {
             if(!Util.isEmpty(cssoUserId)){
                 fields.put("CSSOUserName", cssoUserId);
             }
+            fields.put("TotalCommercial", totalCommercial.toString());
+            fields.put("TotalRetail", totalRetail.toString());
+            fields.put("ResultCode", resultCode);
+            if(!Util.isEmpty(deviationCode)){
+                fields.put("DeviationCode", deviationCode);
+            }
+            fields.put("RequestType", String.valueOf(requestType));
 
             log.debug("dispatch case for [Submit ZM]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
@@ -327,5 +337,11 @@ public class BPMExecutor implements Serializable {
     private void execute(String queueName, String wobNumber, HashMap<String, String> fields) throws Exception{
         log.debug("BPM Execute ::: queueName : {}, wobNumber : {}, fields : {}", queueName, wobNumber, fields);
         bpmInterface.dispatchCase(queueName, wobNumber, fields);
+    }
+
+    public void batchDispatchCaseFromRoster(String rosterName, String[] arrayOfWobNo, HashMap<String, String> fields)
+    {
+        log.debug("BPM Exrcure batchDispatchCaseFromRoster. RoseterNaem : {}, WObNo : {} , Fields:{}",rosterName,arrayOfWobNo,fields);
+        bpmInterface.batchDispatchCaseFromRoster(rosterName,arrayOfWobNo,fields);
     }
 }
