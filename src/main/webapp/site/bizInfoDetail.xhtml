@@ -185,7 +185,7 @@
                                 <table border="0" style="margin-top: 28px;">
                                     <tr>
                                         <td>
-                                            <p:inputText id="bizDocPermission" value="#{bizInfoDetail.bizInfoDetailView.bizDocPermission}"
+                                            <p:inputText style="width: 350px" id="bizDocPermission" value="#{bizInfoDetail.bizInfoDetailView.bizDocPermission}"
                                                          readonly="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"
                                                          required="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'Y' and not empty param[saveButton.clientId]}">
                                                 <p:ajax event="blur" update=":frmMain:bizDocPermission"/>
