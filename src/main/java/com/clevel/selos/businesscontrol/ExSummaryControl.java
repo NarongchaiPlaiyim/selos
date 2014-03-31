@@ -908,12 +908,20 @@ public class ExSummaryControl extends BusinessControl {
 
 //        (Qualitative Class = P,SM,SS,D,DL) DL is the worst.
     public String calWorstCaseBotClass(String a, String b){
-        if(a.trim().equalsIgnoreCase("") && b.trim().equalsIgnoreCase("")){
-            return "";
-        } else if(a.trim().equalsIgnoreCase("")){
-            return b;
-        } else if(b.trim().equalsIgnoreCase("")){
+        if(a != null && b != null){
+            if(a.trim().equalsIgnoreCase("") && b.trim().equalsIgnoreCase("")){
+                return "";
+            } else if(a.trim().equalsIgnoreCase("")){
+                return b;
+            } else if(b.trim().equalsIgnoreCase("")){
+                return a;
+            }
+        } else if(a != null){
             return a;
+        } else if(b != null){
+            return b;
+        } else {
+            return "";
         }
 
         int aInt;
