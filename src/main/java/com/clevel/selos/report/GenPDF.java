@@ -103,7 +103,7 @@ public class GenPDF extends ReportService implements Serializable {
         String nameOpShect = "_OpShect.pdf";
         String nameExSum = "_ExSum.pdf";
         String nameRejectLetter = "_RejectLetter.pdf";
-        String nameAppraisal = "_Appraisal.pdf";
+        String nameAppraisal = "_AppraisalAppointment.pdf";
         String date = Util.createDateTime(new Date());
         String[] month = date.split("");
         log.debug("--month. {}",month);

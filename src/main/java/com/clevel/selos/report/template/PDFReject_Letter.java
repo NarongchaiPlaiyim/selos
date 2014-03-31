@@ -92,12 +92,12 @@ public class PDFReject_Letter implements Serializable {
             log.debug("appHeaderView.getBorrowerHeaderViewList. {}",appHeaderView.getBorrowerHeaderViewList());
             for (AppBorrowerHeaderView view : appHeaderView.getBorrowerHeaderViewList()){
                 RejectLetterReport report = new RejectLetterReport();
-                i++;
-                stringName = stringName.append(view.getBorrowerName());
-                if (i != appHeaderView.getBorrowerHeaderViewList().size()){
-                    stringName = stringName.append(", ").append("\n");
-                }
-                report.setName(stringName.toString());
+//                i++;
+//                stringName = stringName.append(view.getBorrowerName());
+//                if (i != appHeaderView.getBorrowerHeaderViewList().size()){
+//                    stringName = stringName.append(", ").append("\n");
+//                }
+                report.setName(view.getBorrowerName());
                 reportList.add(report);
                 log.debug("--reportList. {}",reportList);
             }
