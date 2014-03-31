@@ -252,61 +252,61 @@ public class BankStatementSummary implements Serializable {
         if (workCaseId != 0) {
             // retrieve all for borrowers
             List<CustomerInfoView> customerInfoViewList = customerInfoControl.getBorrowerByWorkCase(workCaseId);
-//            BankStmtSummaryView retrieveResult = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, expectedSubmitDate, seasonalFlag);
+            BankStmtSummaryView retrieveResult = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, expectedSubmitDate, seasonalFlag);
 
             // ****************************** Start Data for Test ******************************
-            BankStmtSummaryView retrieveResult = new BankStmtSummaryView();
-            List<BankStmtView> tmbBankStmtList = new ArrayList<BankStmtView>();
-
-            BankView tmbBank = new BankView();
-            tmbBank.setCode(7);
-            tmbBank.setBankShortName(BankType.TMB.shortName());
-
-            AccountStatusView normalAccountStatus = new AccountStatusView();
-            normalAccountStatus.setId("1");
-
-            BankStmtView bankStmt1 = new BankStmtView();
-            bankStmt1.setBankView(tmbBank);
-            bankStmt1.setBranchName("Branch name 1");
-            bankStmt1.setBankAccountTypeId(1);
-            bankStmt1.setAccountNumber("1111111111");
-            bankStmt1.setAccountName("Mr.First One");
-            bankStmt1.setAccountStatusView(normalAccountStatus);
-            bankStmt1.setAccountCharacteristic(1);
-            bankStmt1.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));
-            tmbBankStmtList.add(bankStmt1);
-
-            BankStmtView bankStmt2 = new BankStmtView();
-            bankStmt2.setBankView(tmbBank);
-            bankStmt2.setBranchName("Branch name 2");
-            bankStmt2.setBankAccountTypeId(2);
-            bankStmt2.setAccountNumber("2222222222");
-            bankStmt2.setAccountName("Ms.Second Two");
-            bankStmt2.setAccountStatusView(normalAccountStatus);
-            bankStmt2.setAccountCharacteristic(2);
-            bankStmt2.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));
-            tmbBankStmtList.add(bankStmt2);
-
-            BankStmtView bankStmt3 = new BankStmtView();
-            bankStmt3.setBankView(tmbBank);
-            bankStmt3.setBranchName("Branch name 3");
-            bankStmt3.setBankAccountTypeId(3);
-            bankStmt3.setAccountNumber("3333333333");
-            bankStmt3.setAccountName("Miss.Third Three");
-            bankStmt3.setAccountStatusView(normalAccountStatus);
-            bankStmt3.setAccountCharacteristic(3);
-            bankStmt3.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));
-            tmbBankStmtList.add(bankStmt3);
-
-            retrieveResult.setTmbBankStmtViewList(tmbBankStmtList);
-
-            List<ActionStatusView> actionStatusList = new ArrayList<ActionStatusView>();
-            ActionStatusView actionStatus = new ActionStatusView();
-            actionStatus.setStatusCode(ActionResult.SUCCESS);
-            actionStatus.setStatusDesc("SUCCESS");
-            actionStatusList.add(actionStatus);
-
-            retrieveResult.setActionStatusViewList(actionStatusList);
+//            BankStmtSummaryView retrieveResult = new BankStmtSummaryView();
+//            List<BankStmtView> tmbBankStmtList = new ArrayList<BankStmtView>();
+//
+//            BankView tmbBank = new BankView();
+//            tmbBank.setCode(7);
+//            tmbBank.setBankShortName(BankType.TMB.shortName());
+//
+//            AccountStatusView normalAccountStatus = new AccountStatusView();
+//            normalAccountStatus.setId("1");
+//
+//            BankStmtView bankStmt1 = new BankStmtView();
+//            bankStmt1.setBankView(tmbBank);
+//            bankStmt1.setBranchName("Branch name 1");
+//            bankStmt1.setBankAccountTypeId(1);
+//            bankStmt1.setAccountNumber("1111111111");
+//            bankStmt1.setAccountName("Mr.First One");
+//            bankStmt1.setAccountStatusView(normalAccountStatus);
+//            bankStmt1.setAccountCharacteristic(1);
+//            bankStmt1.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));
+//            tmbBankStmtList.add(bankStmt1);
+//
+//            BankStmtView bankStmt2 = new BankStmtView();
+//            bankStmt2.setBankView(tmbBank);
+//            bankStmt2.setBranchName("Branch name 2");
+//            bankStmt2.setBankAccountTypeId(2);
+//            bankStmt2.setAccountNumber("2222222222");
+//            bankStmt2.setAccountName("Ms.Second Two");
+//            bankStmt2.setAccountStatusView(normalAccountStatus);
+//            bankStmt2.setAccountCharacteristic(2);
+//            bankStmt2.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));
+//            tmbBankStmtList.add(bankStmt2);
+//
+//            BankStmtView bankStmt3 = new BankStmtView();
+//            bankStmt3.setBankView(tmbBank);
+//            bankStmt3.setBranchName("Branch name 3");
+//            bankStmt3.setBankAccountTypeId(3);
+//            bankStmt3.setAccountNumber("3333333333");
+//            bankStmt3.setAccountName("Miss.Third Three");
+//            bankStmt3.setAccountStatusView(normalAccountStatus);
+//            bankStmt3.setAccountCharacteristic(3);
+//            bankStmt3.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));
+//            tmbBankStmtList.add(bankStmt3);
+//
+//            retrieveResult.setTmbBankStmtViewList(tmbBankStmtList);
+//
+//            List<ActionStatusView> actionStatusList = new ArrayList<ActionStatusView>();
+//            ActionStatusView actionStatus = new ActionStatusView();
+//            actionStatus.setStatusCode(ActionResult.SUCCESS);
+//            actionStatus.setStatusDesc("SUCCESS");
+//            actionStatusList.add(actionStatus);
+//
+//            retrieveResult.setActionStatusViewList(actionStatusList);
             // ****************************** End Data for Test ******************************
 
             List<ActionStatusView> actionStatusViewList = retrieveResult.getActionStatusViewList();
