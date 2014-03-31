@@ -48,6 +48,7 @@ public class PDFReject_Letter implements Serializable {
     private CustomerInfoControl customerInfoControl;
 
     private List<CustomerInfoView> customerInfoView;
+    private AppHeaderView appHeaderView;
 
     WorkCase workCase;
 
@@ -81,30 +82,31 @@ public class PDFReject_Letter implements Serializable {
         log.debug("fillAllNameReject. {}");
         init();
         List<RejectLetterReport> reportList = new ArrayList<RejectLetterReport>();
-        RejectLetterReport report = null;
         StringBuilder stringName = new StringBuilder();
 
         int i = 0;
-        if (Util.safetyList(customerInfoView).size() > 0 ){
-            log.debug("customerInfoView. {}",customerInfoView);
-            for (CustomerInfoView view : customerInfoView){
-                i++;
-                report = new RejectLetterReport();
-                stringName = stringName.append(view.getTitleTh().getTitleTh());
-                stringName = stringName.append(view.getFirstNameTh()).append(" ");
-                stringName = stringName.append(view.getLastNameTh());
-                if(i != customerInfoView.size()){
-                    stringName = stringName.append(", ");
-                }
-                report.setName(stringName.toString());
-                log.debug("--getName. {} i {}",report.getName(),i++);
+        HttpSession session = FacesUtil.getSession(true);
+        appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
 
+        if(Util.safetyList(appHeaderView.getBorrowerHeaderViewList()).size() > 0){
+            log.debug("appHeaderView.getBorrowerHeaderViewList. {}",appHeaderView.getBorrowerHeaderViewList());
+            for (AppBorrowerHeaderView view : appHeaderView.getBorrowerHeaderViewList()){
+                RejectLetterReport report = new RejectLetterReport();
+//                i++;
+//                stringName = stringName.append(view.getBorrowerName());
+//                if (i != appHeaderView.getBorrowerHeaderViewList().size()){
+//                    stringName = stringName.append(", ").append("\n");
+//                }
+                report.setName(view.getBorrowerName());
                 reportList.add(report);
+                log.debug("--reportList. {}",reportList);
             }
         } else {
-            log.debug("customerInfoView is Null. {}",customerInfoView.size());
-            reportList.add(new RejectLetterReport());
+            RejectLetterReport report = new RejectLetterReport();
+            reportList.add(report);
+            log.debug("appHeaderView.getBorrowerHeaderViewList is Null. {}");
         }
+
         return reportList;
     }
 

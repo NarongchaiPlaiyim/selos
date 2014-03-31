@@ -55,6 +55,21 @@
                                                ajax="false"/>
                           </td>
                       </tr>
+                      <tr>
+                          <td class="title" style="width: 150px">
+                              <p:outputLabel value="AppraisalAppointment" />
+                          </td>
+                          <td style="width: 230px">
+                              <h:outputText value="#{report.reportView.nameReportAppralsal}" />
+                          </td>
+                          <td class="right">
+                              <p:commandButton id="dlgPrintReportAppraisalBtn"
+                                               value="#{msg.get('app.button.print')}"
+                                               styleClass="small"
+                                               actionListener="#{report.onPrintAppraisal()}"
+                                               ajax="false"/>
+                          </td>
+                      </tr>
                   </table>
                </td>
            </tr>
