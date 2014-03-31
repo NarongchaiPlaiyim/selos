@@ -161,7 +161,7 @@ public class Customer implements Serializable {
 
     @OneToOne
     @JoinColumn(name="source_income")
-    private Country sourceIncome;
+    private IncomeSource sourceIncome;
 
     @OneToOne
     @JoinColumn(name="country_income")
@@ -552,11 +552,11 @@ public class Customer implements Serializable {
         this.searchId = searchId;
     }
 
-    public Country getSourceIncome() {
+    public IncomeSource getSourceIncome() {
         return sourceIncome;
     }
 
-    public void setSourceIncome(Country sourceIncome) {
+    public void setSourceIncome(IncomeSource sourceIncome) {
         this.sourceIncome = sourceIncome;
     }
 

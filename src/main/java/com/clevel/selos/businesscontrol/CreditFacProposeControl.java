@@ -18,10 +18,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 public class CreditFacProposeControl extends BusinessControl {
@@ -62,8 +59,6 @@ public class CreditFacProposeControl extends BusinessControl {
     NewConditionDetailDAO newConditionDetailDAO;
     @Inject
     NewCreditDetailDAO newCreditDetailDAO;
-    @Inject
-    NewCreditTierDetailDAO newCreditTierDetailDAO;
     @Inject
     NewGuarantorDetailDAO newGuarantorDetailDAO;
     @Inject
@@ -136,6 +131,10 @@ public class CreditFacProposeControl extends BusinessControl {
     FeeTransform feeTransform;
     @Inject
     ProductTransform productTransform;
+    @Inject
+    FeeDetailDAO feeDetailDAO;
+    @Inject
+    NewCreditTierDetailDAO newCreditTierDetailDAO;
 
     @Inject
     public CreditFacProposeControl() {
@@ -150,11 +149,12 @@ public class CreditFacProposeControl extends BusinessControl {
             if (newCreditFacility != null) {
                 newCreditFacilityView = newCreditFacilityTransform.transformToView(newCreditFacility);
 
-                List<NewFeeDetail> newFeeDetailList = newFeeCreditDAO.findByNewCreditFacility(newCreditFacility);
-                if (newFeeDetailList.size() > 0) {
-                    log.debug("newCreditFacility.getNewFeeDetailList() :: {}", newCreditFacility.getNewFeeDetailList());
-                    List<NewFeeDetailView> newFeeDetailViewList = newFeeDetailTransform.transformToView(newFeeDetailList);
-                    log.debug("newFeeDetailViewList : {}", newFeeDetailViewList);
+                List<FeeDetail> feeDetailList = feeDetailDAO.findAllByWorkCaseId(workCaseId);
+                if (feeDetailList.size() > 0) {
+                    log.debug("feeDetailList size:: {}", feeDetailList.size());
+                    List<FeeDetailView> feeDetailViewList = feeTransform.transformToView(feeDetailList);
+                    log.debug("feeDetailViewList : {}", feeDetailViewList);
+                    List<NewFeeDetailView> newFeeDetailViewList = transFormNewFeeDetailViewList(feeDetailViewList);
                     newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
                 }
 
@@ -198,35 +198,108 @@ public class CreditFacProposeControl extends BusinessControl {
         return newCreditFacilityView;
     }
 
-    public BigDecimal calTotalGuaranteeAmount(List<NewGuarantorDetailView> guarantorDetailViewList) {
-        log.debug("calTotalGuaranteeAmount start :: ");
-        if (guarantorDetailViewList == null || guarantorDetailViewList.size() == 0) {
-            log.debug("calTotalGuaranteeAmount end :: (guarantorDetailViewList is null! or size == 0) return 0");
-            return BigDecimal.ZERO;
+    public List<NewFeeDetailView> transFormNewFeeDetailViewList(List<FeeDetailView> feeDetailViewList){
+        List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
+        Map<Long, NewFeeDetailView> newFeeDetailViewMap = new HashMap<Long, NewFeeDetailView>();
+        NewFeeDetailView newFeeDetailView;
+        for (FeeDetailView feeDetailView : feeDetailViewList) {
+            if (feeDetailView.getFeeLevel() == FeeLevel.CREDIT_LEVEL) {
+                if (newFeeDetailViewMap.containsKey(feeDetailView.getCreditDetailViewId())) {
+                    newFeeDetailView = newFeeDetailViewMap.get(feeDetailView.getCreditDetailViewId());
+                } else {
+                    newFeeDetailView = new NewFeeDetailView();
+                    newFeeDetailViewMap.put(feeDetailView.getCreditDetailViewId(), newFeeDetailView);
+                }
+
+                log.debug("-- transformToView :: feeDetailView ::: {}", feeDetailView.toString());
+                // find productProgram
+
+                log.debug("feeDetailView.getFeeLevel() :::: {}", feeDetailView.getFeeLevel());
+                log.debug("feeDetailView.getCreditDetailViewId() :::: {}", feeDetailView.getCreditDetailViewId());
+                NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(feeDetailView.getCreditDetailViewId());
+                if (newCreditDetail != null) {
+                    NewCreditDetailView newCreditView = newCreditDetailTransform.transformToView(newCreditDetail);
+                    log.debug("newCreditView.getProductProgramView().getId() :::: {}", newCreditView.getProductProgramView().getId());
+                    ProductProgram productProgram = productProgramDAO.findById(newCreditView.getProductProgramView().getId());
+                    if (productProgram != null) {
+                        log.debug("productProgram :: {}",productProgram.toString());
+                        newFeeDetailView.setProductProgram(productProgram.getName());
+                    }
+                    if ("9".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=9,(Front-End-Fee)
+                        newFeeDetailView.setStandardFrontEndFee(feeDetailView);
+                    } else if ("15".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=15,(Prepayment Fee)
+                        newFeeDetailView.setPrepaymentFee(feeDetailView);
+                    } else if ("20".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=20,(CancellationFee)
+                        newFeeDetailView.setCancellationFee(feeDetailView);
+                    } else if ("21".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=21,(ExtensionFee)
+                        newFeeDetailView.setExtensionFee(feeDetailView);
+                    } else if ("22".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=22,(CommitmentFee)
+                        newFeeDetailView.setCommitmentFee(feeDetailView);
+                    }
+
+                    log.debug("FeePaymentMethodView():::: {}", feeDetailView.getFeePaymentMethodView().getBrmsCode());
+                }
+            }
         }
 
-        BigDecimal sumTotalGuaranteeAmount = BigDecimal.ZERO;
-        for (NewGuarantorDetailView guarantorDetailView : guarantorDetailViewList) {
-            sumTotalGuaranteeAmount = Util.add(sumTotalGuaranteeAmount, guarantorDetailView.getTotalLimitGuaranteeAmount());
+        if(newFeeDetailViewMap!=null && newFeeDetailViewMap.size()>0){
+            Iterator it = newFeeDetailViewMap.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pairs = (Map.Entry)it.next();
+                newFeeDetailViewList.add((NewFeeDetailView) pairs.getValue());
+                it.remove(); // avoids a ConcurrentModificationException
+            }
         }
-        log.debug("calTotalGuaranteeAmount end :: sumTotalGuaranteeAmount: {}", sumTotalGuaranteeAmount);
+
+        return newFeeDetailViewList;
+    }
+
+    public BigDecimal calTotalGuaranteeAmount(List<NewGuarantorDetailView> guarantorDetailViewList) {
+        log.debug("calTotalGuaranteeAmount start :: ");
+
+        BigDecimal sumTotalGuaranteeAmount = BigDecimal.ZERO;
+        if (guarantorDetailViewList == null || guarantorDetailViewList.size() == 0) {
+            log.debug("calTotalGuaranteeAmount end :: (guarantorDetailViewList is null! or size == 0) return 0");
+            sumTotalGuaranteeAmount = BigDecimal.ZERO;
+        }else{
+            for (NewGuarantorDetailView guarantorDetailView : guarantorDetailViewList) {
+                sumTotalGuaranteeAmount = Util.add(sumTotalGuaranteeAmount, guarantorDetailView.getTotalLimitGuaranteeAmount());
+            }
+            log.debug("calTotalGuaranteeAmount end :: sumTotalGuaranteeAmount: {}", sumTotalGuaranteeAmount);
+        }
         return sumTotalGuaranteeAmount;
     }
 
-    public void calculateTotalProposeAmount(NewCreditFacilityView newCreditFacilityView, BasicInfoView basicInfoView, TCGView tcgView, long workCaseId) {
-        log.info("calculateTotalProposeAmount()");
+    public NewCreditFacilityView calculateTotalProposeAmount(NewCreditFacilityView newCreditFacilityView, BasicInfoView basicInfoView, TCGView tcgView, long workCaseId) {
+        log.debug("start :: calculateTotalProposeAmount :::");
         if (newCreditFacilityView != null) {
-
-            BigDecimal sumTotalPropose = BigDecimal.ZERO;
-            BigDecimal sumTotalCommercial = BigDecimal.ZERO;
-            BigDecimal sumTotalCommercialAndOBOD = BigDecimal.ZERO; // wait confirm
-            BigDecimal sumTotalExposure = BigDecimal.ZERO;
+            BigDecimal sumTotalOBOD = BigDecimal.ZERO;         // OBOD of Propose
+            BigDecimal sumTotalPropose = BigDecimal.ZERO;      // All Propose
+            BigDecimal sumTotalBorrowerCommercial = BigDecimal.ZERO;   // Without : OBOD  Propose and Existing
+            BigDecimal sumTotalBorrowerCommercialAndOBOD = BigDecimal.ZERO;  //All Propose and Existing
+            BigDecimal sumTotalGroupExposure = BigDecimal.ZERO;
             BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
             BigDecimal sumTotalNonLoanDbr = BigDecimal.ZERO;
+            BigDecimal borrowerComOBOD = BigDecimal.ZERO;
+            BigDecimal borrowerCom = BigDecimal.ZERO;
+            BigDecimal groupExposure = BigDecimal.ZERO;
+
+            ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
+
+            if (existingCreditFacilityView != null) {
+
+                log.debug("existingCreditFacilityView.getTotalBorrowerComLimit() ::; {}", existingCreditFacilityView.getTotalBorrowerComLimit());
+                log.debug("existingCreditFacilityView.getTotalBorrowerComOBOD() ::; {}", existingCreditFacilityView.getTotalBorrowerComOBOD());
+                log.debug("existingCreditFacilityView.getTotalBorrowerExposure() ::; {}", existingCreditFacilityView.getTotalBorrowerExposure());
+
+                borrowerComOBOD =  existingCreditFacilityView.getTotalBorrowerComOBOD();
+                borrowerCom = existingCreditFacilityView.getTotalBorrowerComLimit();
+                groupExposure =existingCreditFacilityView.getTotalBorrowerExposure();
+            }
 
             if (basicInfoView != null && basicInfoView.getSpecialProgram() != null && tcgView != null) {
-                log.info("basicInfoView.getSpecialProgram()::{}", basicInfoView.getSpecialProgram().getId());
-                log.info("tcgView ::; {}", tcgView.getId());
+                log.debug("basicInfoView.getSpecialProgram()::{}", basicInfoView.getSpecialProgram().getId());
+                log.debug("tcgView ::; {}", tcgView.getId());
 
                 List<NewCreditDetailView> newCreditDetailViewList = newCreditFacilityView.getNewCreditDetailViewList();
 
@@ -237,7 +310,7 @@ public class CreditFacProposeControl extends BusinessControl {
                     ProductFormula productFormula;
 
                     for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
-                        log.info("newCreditDetailView.id: {}", newCreditDetailView.getId());
+                        log.debug("newCreditDetailView.id: {}", newCreditDetailView.getId());
 
                         if (newCreditDetailView.getProductProgramView().getId() != 0 && newCreditDetailView.getCreditTypeView().getId() != 0) {
                             productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgramView().getId());
@@ -247,23 +320,42 @@ public class CreditFacProposeControl extends BusinessControl {
                                 prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
                                 productFormula = productFormulaDAO.findProductFormulaPropose(
                                         prdProgramToCreditType, newCreditFacilityView.getCreditCustomerType(), basicInfoView.getSpecialProgram(), tcgView.getTCG());
-                                log.info("productFormula :: {}", productFormula.getId());
-                                if (productFormula != null) {
-                                    log.info("productFormula id :: {}", productFormula.getId());
-                                    //ExposureMethod
-                                    if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
-                                        log.info("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
-                                        sumTotalPropose = sumTotalPropose.add(BigDecimal.ZERO);
-                                    } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
-                                        log.info("LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
-                                        sumTotalPropose = sumTotalPropose.add(newCreditDetailView.getLimit());
-                                    } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //limit * %PCE
-                                        log.info("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
-                                        sumTotalPropose = sumTotalPropose.add(Util.multiply(newCreditDetailView.getLimit(), newCreditDetailView.getPCEPercent()));
+                                if (productFormula != null){
+                                    log.debug("productFormula id :: {}", productFormula.getId());
+                                    log.debug("productFormula.getProgramToCreditType().getCreditType().getCreditGroup():::{}", productFormula.getProgramToCreditType().getCreditType().getCreditGroup());
+                                    //OBOD or CASH_IN
+                                    if(CreditTypeGroup.CASH_IN.equals(productFormula.getProgramToCreditType().getCreditType().getCreditGroup())){
+                                        //ExposureMethod for check to use limit or limit*PCE%
+                                        if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
+                                            log.info("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                            sumTotalOBOD = sumTotalOBOD.add(BigDecimal.ZERO);
+                                        } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
+                                            log.info("LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                            sumTotalOBOD = sumTotalOBOD.add(newCreditDetailView.getLimit());
+                                        } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) { //limit * %PCE
+                                            log.info("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                            sumTotalOBOD = sumTotalOBOD.add(Util.multiply(newCreditDetailView.getLimit(), newCreditDetailView.getPCEPercent()));
+                                        }
+                                        log.debug("sumTotalOBOD :: {}", sumTotalOBOD);
+                                    }else{//All Credit
+                                        //ExposureMethod for check to use limit or limit*PCE%
+                                        if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
+                                            log.info("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                            sumTotalPropose = sumTotalPropose.add(BigDecimal.ZERO);
+                                        } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
+                                            log.info("LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                            sumTotalPropose = sumTotalPropose.add(newCreditDetailView.getLimit());
+                                        } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //limit * %PCE
+                                            log.info("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                            sumTotalPropose = sumTotalPropose.add(Util.multiply(newCreditDetailView.getLimit(), newCreditDetailView.getPCEPercent()));
+                                        }
+                                        log.debug("sumTotalPropose :: {}", sumTotalPropose);  // Commercial + OBOD
                                     }
-                                    log.info("sumTotalPropose :: {}", sumTotalPropose);
 
-                                    //For DBR
+                                    sumTotalBorrowerCommercial = Util.subtract(sumTotalPropose,sumTotalOBOD);  // Commercial - OBOD
+                                    log.debug("sumTotalCommercial :: {}", sumTotalBorrowerCommercial);
+
+                                    //For DBR  sumTotalLoanDbr and sumTotalNonLoanDbr
                                     if (productFormula.getDbrCalculate() == 1) {// No
                                         log.info("DbrCalculate NO :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
                                         sumTotalNonLoanDbr = BigDecimal.ZERO;
@@ -287,27 +379,25 @@ public class CreditFacProposeControl extends BusinessControl {
                         }
                     }
 
-                    newCreditFacilityView.setTotalPropose(sumTotalPropose); //sumTotalPropose
-                    newCreditFacilityView.setTotalProposeLoanDBR(sumTotalLoanDbr); //sumTotalLoanDbr
-                    newCreditFacilityView.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr); //sumTotalNonLoanDbr
+                    sumTotalBorrowerCommercialAndOBOD = Util.add(borrowerComOBOD,sumTotalPropose); // Total Commercial&OBOD  ของ Borrower (จาก Existing credit) +Total Propose Credit
+                    sumTotalBorrowerCommercial = Util.add(borrowerCom,sumTotalBorrowerCommercial); //Total Commercial  ของ Borrower (จาก Existing credit) + *Commercial ของ propose
+                    sumTotalGroupExposure = Util.add(groupExposure,sumTotalBorrowerCommercialAndOBOD); //ได้มาจาก  Total Exposure ของ Group  (จาก Existing credit) +  Total Borrower Commercial&OBOD (Propose credit)
 
-                    ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
-                    if (existingCreditFacilityView != null) {
-                        log.info("existingCreditFacilityView.getTotalBorrowerComLimit() ::; {}", existingCreditFacilityView.getTotalBorrowerComLimit());
-                        log.info("existingCreditFacilityView.getTotalBorrowerRetailLimit() ::; {}", existingCreditFacilityView.getTotalBorrowerRetailLimit());
-
-                        sumTotalCommercial = Util.add(sumTotalCommercial, (Util.add(existingCreditFacilityView.getTotalBorrowerComLimit(), sumTotalPropose)));
-                        sumTotalExposure = Util.add(sumTotalExposure, Util.add(existingCreditFacilityView.getTotalBorrowerComLimit(), (Util.add(sumTotalPropose, existingCreditFacilityView.getTotalBorrowerRetailLimit()))));
-                    }
-                    log.debug("sumTotalCommercial :: {}", sumTotalCommercial);
-                    log.debug("sumTotalExposure :: {}", sumTotalExposure);
-
-                    newCreditFacilityView.setTotalCommercial(sumTotalCommercial);
-                    newCreditFacilityView.setTotalExposure(sumTotalExposure);
+                    log.debug("sumTotalCommercial after include Existing:: {}", sumTotalBorrowerCommercial);
+                    log.debug("sumTotalExposure :: {}", sumTotalGroupExposure);
                 }
+
             }
 
+            newCreditFacilityView.setTotalPropose(sumTotalPropose);                 //sumTotalPropose All Credit in this case
+            newCreditFacilityView.setTotalProposeLoanDBR(sumTotalLoanDbr);          //sumTotalLoanDbr
+            newCreditFacilityView.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr);    //sumTotalNonLoanDbr
+            newCreditFacilityView.setTotalCommercial(sumTotalBorrowerCommercial);               //sum Commercial of Existing and Propose
+            newCreditFacilityView.setTotalCommercialAndOBOD(sumTotalBorrowerCommercialAndOBOD); //sum Commercial and OBOD of Existing and Propose
+            newCreditFacilityView.setTotalExposure(sumTotalGroupExposure);
         }
+
+        return newCreditFacilityView;
     }
 
     public BigDecimal calTotalProposeLoanDBRForIntYear(NewCreditDetailView newCreditDetailView, BigDecimal dbrSpread) {
@@ -341,7 +431,7 @@ public class CreditFacProposeControl extends BusinessControl {
         return sumTotalLoanDbr;
     }
 
-    public void calculateTotalForBRMS(NewCreditFacilityView newCreditFacilityView) {
+    public NewCreditFacilityView calculateTotalForBRMS(NewCreditFacilityView newCreditFacilityView) {
         log.debug("calculateTotalForBRMS()");
         if (newCreditFacilityView != null) {
             // ***** Credit Detail ***** //
@@ -435,6 +525,25 @@ public class CreditFacProposeControl extends BusinessControl {
             newCreditFacilityView.setTotalJurisGuaranteeAmount(totalJuriGuaranteeAmt);
 
         }
+        return newCreditFacilityView;
+    }
+
+
+    public void calculatePCEAmount(NewCreditDetailView creditDetailView) {
+        log.info("creditDetailView : {}", creditDetailView);
+        BigDecimal sumOfPCE = BigDecimal.ZERO;
+
+        if (!Util.isNull(creditDetailView)){
+            sumOfPCE = Util.multiply(creditDetailView.getLimit(),creditDetailView.getPCEPercent());
+
+            if (sumOfPCE != null) {
+                sumOfPCE.setScale(2, RoundingMode.HALF_UP);
+            }
+
+            log.info("creditDetailAdd :sumOfPCE: {}", sumOfPCE);
+            creditDetailView.setPCEAmount(sumOfPCE);
+        }
+
     }
 
     public void calculateInstallment(NewCreditDetailView creditDetailView) {
@@ -617,41 +726,41 @@ public class CreditFacProposeControl extends BusinessControl {
         BigDecimal aaaValue = BigDecimal.ZERO;
 
         //table 1
-        BigDecimal wcNeed;
-        BigDecimal totalWcDebit;
-        BigDecimal totalWcTmb;
-        BigDecimal wcNeedDiffer;
+        BigDecimal wcNeed = BigDecimal.ZERO;
+        BigDecimal totalWcDebit= BigDecimal.ZERO;
+        BigDecimal totalWcTmb= BigDecimal.ZERO;
+        BigDecimal wcNeedDiffer= BigDecimal.ZERO;
 
         //table 2
-        BigDecimal case1WcLimit;
-        BigDecimal case1WcMinLimit;
-        BigDecimal case1Wc50CoreWc;
-        BigDecimal case1WcDebitCoreWc;
+        BigDecimal case1WcLimit= BigDecimal.ZERO;
+        BigDecimal case1WcMinLimit= BigDecimal.ZERO;
+        BigDecimal case1Wc50CoreWc= BigDecimal.ZERO;
+        BigDecimal case1WcDebitCoreWc= BigDecimal.ZERO;
 
         //table 3
-        BigDecimal case2WcLimit;
-        BigDecimal case2WcMinLimit;
-        BigDecimal case2Wc50CoreWc;
-        BigDecimal case2WcDebitCoreWc;
+        BigDecimal case2WcLimit= BigDecimal.ZERO;
+        BigDecimal case2WcMinLimit= BigDecimal.ZERO;
+        BigDecimal case2Wc50CoreWc= BigDecimal.ZERO;
+        BigDecimal case2WcDebitCoreWc= BigDecimal.ZERO;
 
         //table 4
-        BigDecimal case3WcLimit;
-        BigDecimal case3WcMinLimit;
-        BigDecimal case3Wc50CoreWc;
-        BigDecimal case3WcDebitCoreWc;
+        BigDecimal case3WcLimit= BigDecimal.ZERO;
+        BigDecimal case3WcMinLimit= BigDecimal.ZERO;
+        BigDecimal case3Wc50CoreWc= BigDecimal.ZERO;
+        BigDecimal case3WcDebitCoreWc= BigDecimal.ZERO;
 
         ////////////////////////////////////////////////////
 
         DBRView dbrView = dbrControl.getDBRByWorkCase(workCaseId);
-        log.debug("getDBRByWorkCase :: dbrView : {}", dbrView);
         if (dbrView != null) {
+            log.debug("getDBRByWorkCase :: dbrView : {}", dbrView);
             adjustDBR = dbrView.getMonthlyIncomeAdjust();
             revolvingCreditDBR = dbrView.getTotalMonthDebtRelatedWc();
         }
 
         List<NCB> ncbList = ncbInfoControl.getNCBByWorkCaseId(workCaseId);
-        log.debug("getNCBByWorkCaseId :: ncbList : {}", ncbList);
         if (ncbList != null && ncbList.size() > 0) {
+            log.debug("getNCBByWorkCaseId :: ncbList : {}", ncbList);
             for (NCB ncb : ncbList) {
                 log.debug("getNCBByWorkCaseId :: ncb : {}", ncb);
                 revolvingCreditNCB = Util.add(revolvingCreditNCB, ncb.getLoanCreditNCB());
@@ -663,12 +772,12 @@ public class CreditFacProposeControl extends BusinessControl {
 
 
         BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
-        log.debug("onGetBizInfoSummaryByWorkCase :: bizInfoSummaryView : {}", bizInfoSummaryView);
         if (bizInfoSummaryView != null) {
+            log.debug("onGetBizInfoSummaryByWorkCase :: bizInfoSummaryView : {}", bizInfoSummaryView);
             weightAR = bizInfoSummaryView.getSumWeightAR();
             weightAP = bizInfoSummaryView.getSumWeightAP();
             weightINV = bizInfoSummaryView.getSumWeightINV();
-            //      Sum(weight cost of goods sold * businessProportion)
+            // Sum(weight cost of goods sold * businessProportion)
             List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
             if (bizInfoSummaryView.getId() != 0) {
                 bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryView.getId());
@@ -687,7 +796,6 @@ public class CreditFacProposeControl extends BusinessControl {
 
 //        *** ยอดขาย/รายได้  = รายได้ต่อเดือน (adjusted) [DBR] * 12
         BigDecimal salesIncome = Util.multiply(adjustDBR, monthOfYear);
-
         //calculation
 //        (ยอดขาย/รายได้ หาร 365 คูณ Weighted AR) + (AAAValue หาร 365 คูณ Weighted INV) - ((AAAValue หาร 365 คูณ Weighted AP)
         wcNeed = Util.subtract((Util.add(Util.multiply(Util.divide(salesIncome, dayOfYear), weightAR), Util.multiply(Util.divide(aaaValue, dayOfYear), weightINV))), (Util.multiply(Util.divide(aaaValue, dayOfYear), weightAP)));
@@ -739,58 +847,31 @@ public class CreditFacProposeControl extends BusinessControl {
 
         log.debug("Value ::: case3WcLimit : {}, case3WcMinLimit : {}, case3Wc50CoreWc : {}, case3WcDebitCoreWc : {}", case3WcLimit, case3WcMinLimit, case3Wc50CoreWc, case3WcDebitCoreWc);
 
-       /* NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-        log.debug("findByWorkCaseId :: newCreditFacility : {}", newCreditFacility);
-        if (newCreditFacility == null) {
-            newCreditFacility = new NewCreditFacility();
-            WorkCase workCase = new WorkCase();
-            workCase.setId(workCaseId);
-            newCreditFacility.setWorkCase(workCase);
-        }
-        newCreditFacility.setWcNeed(wcNeed);
-        newCreditFacility.setTotalWcDebit(totalWcDebit);
-        newCreditFacility.setTotalWcTmb(totalWcTmb);
-        newCreditFacility.setWCNeedDiffer(wcNeedDiffer);
-        newCreditFacility.setCase1WcLimit(case1WcLimit);
-        newCreditFacility.setCase1WcMinLimit(case1WcMinLimit);
-        newCreditFacility.setCase1Wc50CoreWc(case1Wc50CoreWc);
-        newCreditFacility.setCase1WcDebitCoreWc(case1WcDebitCoreWc);
-        newCreditFacility.setCase2WcLimit(case2WcLimit);
-        newCreditFacility.setCase2WcMinLimit(case2WcMinLimit);
-        newCreditFacility.setCase2Wc50CoreWc(case2Wc50CoreWc);
-        newCreditFacility.setCase2WcDebitCoreWc(case2WcDebitCoreWc);
-        newCreditFacility.setCase3WcLimit(case3WcLimit);
-        newCreditFacility.setCase3WcMinLimit(case3WcMinLimit);
-        newCreditFacility.setCase3Wc50CoreWc(case3Wc50CoreWc);
-        newCreditFacility.setCase3WcDebitCoreWc(case3WcDebitCoreWc);
-
-        log.debug("newCreditFacility : {}", newCreditFacility);*/
-        NewCreditFacilityView newCreditFacilityView = findNewCreditFacilityByWorkCase(workCaseId);
-        log.debug("findByWorkCaseId :: newCreditFacilityView : {}", newCreditFacilityView);
-        if (newCreditFacilityView == null) {
-            newCreditFacilityView = new NewCreditFacilityView();
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        if(!Util.isNull(newCreditFacility)){
+            log.debug("find new creditFacility id is ::: {}", newCreditFacility.getId());
+            if((!Util.isNull(newCreditFacility)) && (newCreditFacility.getId()!=0))
+            {
+                newCreditFacility.setWcNeed(wcNeed);
+                newCreditFacility.setTotalWcDebit(totalWcDebit);
+                newCreditFacility.setTotalWcTmb(totalWcTmb);
+                newCreditFacility.setWCNeedDiffer(wcNeedDiffer);
+                newCreditFacility.setCase1WcLimit(case1WcLimit);
+                newCreditFacility.setCase1WcMinLimit(case1WcMinLimit);
+                newCreditFacility.setCase1Wc50CoreWc(case1Wc50CoreWc);
+                newCreditFacility.setCase1WcDebitCoreWc(case1WcDebitCoreWc);
+                newCreditFacility.setCase2WcLimit(case2WcLimit);
+                newCreditFacility.setCase2WcMinLimit(case2WcMinLimit);
+                newCreditFacility.setCase2Wc50CoreWc(case2Wc50CoreWc);
+                newCreditFacility.setCase2WcDebitCoreWc(case2WcDebitCoreWc);
+                newCreditFacility.setCase3WcLimit(case3WcLimit);
+                newCreditFacility.setCase3WcMinLimit(case3WcMinLimit);
+                newCreditFacility.setCase3Wc50CoreWc(case3Wc50CoreWc);
+                newCreditFacility.setCase3WcDebitCoreWc(case3WcDebitCoreWc);
+                newCreditFacilityDAO.persist(newCreditFacility);
+            }
         }
 
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-        newCreditFacilityView.setWCNeed(wcNeed);
-        newCreditFacilityView.setTotalWcDebit(totalWcDebit);
-        newCreditFacilityView.setTotalWcTmb(totalWcTmb);
-        newCreditFacilityView.setWCNeedDiffer(wcNeedDiffer);
-        newCreditFacilityView.setCase1WcLimit(case1WcLimit);
-        newCreditFacilityView.setCase1WcMinLimit(case1WcMinLimit);
-        newCreditFacilityView.setCase1Wc50CoreWc(case1Wc50CoreWc);
-        newCreditFacilityView.setCase1WcDebitCoreWc(case1WcDebitCoreWc);
-        newCreditFacilityView.setCase2WcLimit(case2WcLimit);
-        newCreditFacilityView.setCase2WcMinLimit(case2WcMinLimit);
-        newCreditFacilityView.setCase2Wc50CoreWc(case2Wc50CoreWc);
-        newCreditFacilityView.setCase2WcDebitCoreWc(case2WcDebitCoreWc);
-        newCreditFacilityView.setCase3WcLimit(case3WcLimit);
-        newCreditFacilityView.setCase3WcMinLimit(case3WcMinLimit);
-        newCreditFacilityView.setCase3Wc50CoreWc(case3Wc50CoreWc);
-        newCreditFacilityView.setCase3WcDebitCoreWc(case3WcDebitCoreWc);
-        NewCreditFacility newCreditFacility = newCreditFacilityTransform.transformToModelDB(newCreditFacilityView,workCase,getCurrentUser());
-        newCreditFacilityDAO.persist(newCreditFacility);
-        log.debug("after persist newCreditFacility : {}", newCreditFacility);
     }
 
     public NewCreditFacilityView saveCreditFacility(NewCreditFacilityView newCreditFacilityView, long workCaseId) {
@@ -825,6 +906,15 @@ public class CreditFacProposeControl extends BusinessControl {
         //--- Save to NewCreditDetail
         if (Util.safetyList(newCreditFacilityView.getNewCreditDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCreditDetailViewList : {}", newCreditFacilityView.getNewCreditDetailViewList());
+
+//            List<NewCreditDetail> tmpNewCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility);
+//            for (NewCreditDetail newCreditDetail : tmpNewCreditList) {
+//                if (newCreditDetail.getProposeCreditTierDetailList()!= null) {
+//                    newCreditTierDetailDAO.delete(newCreditDetail.getProposeCreditTierDetailList());
+//                }
+//                newCreditDetail.setProposeCreditTierDetailList(Collections.<NewCreditTierDetail>emptyList());
+//            }
+
             List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, currentUser, workCase, ProposeType.P);
             newCreditFacility.setNewCreditDetailList(newCreditDetailList);
             newCreditDetailDAO.persist(newCreditDetailList);
@@ -886,8 +976,6 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         return newCreditFacilityTransform.transformToView(newCreditFacility);
-//        NewCreditFacilityView returnNewCreditFacView = newCreditFacilityTransform.transformToView(newCreditFacility);
-//        return returnNewCreditFacView;
     }
 
 
@@ -899,13 +987,13 @@ public class CreditFacProposeControl extends BusinessControl {
         log.info("deleteGuarantorIdList: {}", deleteGuarantorIdList);
         log.info("deleteConditionIdList: {}", deleteConditionIdList);
 
-//        if (deleteCreditIdList != null && deleteCreditIdList.size() > 0) {
-//            List<NewCreditDetail> deleteCreditDetailList = new ArrayList<NewCreditDetail>();
-//            for (Long id : deleteCreditIdList) {
-//                deleteCreditDetailList.add(newCreditDetailDAO.findById(id));
-//            }
-//            newCreditDetailDAO.delete(deleteCreditDetailList);
-//        }
+        if (deleteCreditIdList != null && deleteCreditIdList.size() > 0) {
+            List<NewCreditDetail> deleteCreditDetailList = new ArrayList<NewCreditDetail>();
+            for (Long id : deleteCreditIdList) {
+                deleteCreditDetailList.add(newCreditDetailDAO.findById(id));
+            }
+            newCreditDetailDAO.delete(deleteCreditDetailList);
+        }
 
         if (deleteCollIdList != null && deleteCollIdList.size() > 0) {
             List<NewCollateral> deleteCollateralList = new ArrayList<NewCollateral>();

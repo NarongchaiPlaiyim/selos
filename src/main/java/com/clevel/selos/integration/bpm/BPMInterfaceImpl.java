@@ -5,6 +5,7 @@ import com.clevel.selos.filenet.bpm.connection.dto.UserDTO;
 import com.clevel.selos.filenet.bpm.services.dto.CaseDTO;
 import com.clevel.selos.filenet.bpm.services.exception.SELOSBPMException;
 import com.clevel.selos.filenet.bpm.services.impl.BPMServiceImpl;
+import com.clevel.selos.filenet.bpm.services.BPMService;
 import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.filenet.bpm.util.resources.BPMConfigurationsDTO;
 import com.clevel.selos.integration.BPM;
@@ -359,6 +360,27 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
 
         log.debug("getInboxRecord. (result : {})", bpmInboxRecord);
         return bpmInboxRecord;
+    }
+
+    @Override
+    public void batchDispatchCaseFromRoster(String rosterName, String[] arrayOfWobNo, HashMap<String, String> fields)
+    {
+        log.debug("dispatchCase. (queueName: {}, wobNumber: {})", rosterName, arrayOfWobNo);
+        Date now = new Date();
+        Util.listFields(fields);
+        log.info("after util:::");
+        String linkKey = Util.getLinkKey(getUserDTO().getUserName());
+        log.info("linkKey:::"+linkKey);
+        try {
+            BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(), getConfigurationDTO());
+            bpmService.batchDispatchCaseFromRoster(rosterName, arrayOfWobNo, fields);
+            log.debug("[{}] dispatchCase success.", linkKey);
+            bpmAuditor.add(getUserDTO().getUserName(), "dispatchCase", "", now, ActionResult.SUCCESS, "", linkKey);
+        } catch (Exception e) {
+            log.error("[{}] Exception while dispatch case in BPM!", linkKey, e);
+            bpmAuditor.add(getUserDTO().getUserName(), "dispatchCase", "", now, ActionResult.FAILED, msg.get(ExceptionMapping.BPM_DISPATCH_EXCEPTION), linkKey);
+            throw new BPMInterfaceException(e, ExceptionMapping.BPM_DISPATCH_EXCEPTION, msg.get(ExceptionMapping.BPM_DISPATCH_EXCEPTION));
+        }
     }
 
     private UserDTO getUserDTO() {

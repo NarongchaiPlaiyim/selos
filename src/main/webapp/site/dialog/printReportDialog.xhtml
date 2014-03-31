@@ -40,6 +40,21 @@
                                                ajax="false"/>
                           </td>
                       </tr>
+                      <tr>
+                          <td class="title" style="width: 150px">
+                              <p:outputLabel value="RejectLetter" />
+                          </td>
+                          <td style="width: 230px">
+                              <h:outputText value="#{report.reportView.nameReportRejectLetter}" />
+                          </td>
+                          <td class="right">
+                              <p:commandButton id="dlgPrintReportRejectLetterBtn"
+                                               value="#{msg.get('app.button.print')}"
+                                               styleClass="small"
+                                               actionListener="#{report.onPrintRejectLetter()}"
+                                               ajax="false"/>
+                          </td>
+                      </tr>
                   </table>
                </td>
            </tr>

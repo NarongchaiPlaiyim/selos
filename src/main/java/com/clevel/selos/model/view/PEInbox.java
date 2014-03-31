@@ -40,6 +40,17 @@ public class PEInbox implements Serializable
     private Long stepId;
     private String queuename;
     private int fetchType;
+    private Integer locked;
+
+    public Integer getLocked()
+    {
+        return locked;
+    }
+
+    public void setLocked(Integer locked)
+    {
+        this.locked = locked;
+    }
 
     public int getFetchType() {
         return fetchType;
