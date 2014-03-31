@@ -12,7 +12,7 @@
 		</box>
 	</style>
 	<parameter name="SUBREPORT_DIR" class="com.clevel.selos.model.report.BorrowerExsumReport" isForPrompting="false">
-		<defaultValueExpression><![CDATA["D:/ProjectSLOS/selos/src/main/webapp/site/report/"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/SLOSSharedLib/reportTemplate/"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="path" class="java.lang.String"/>
 	<parameter name="borrower" class="java.util.Collection"/>

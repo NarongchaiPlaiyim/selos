@@ -1211,16 +1211,22 @@ public class PrescreenMaker implements Serializable {
                                         spouseInfo.setListName("BORROWER");
                                         spouseInfo.setSubIndex(borrowerInfoViewList.size());
                                         borrowerInfoViewList.add(spouseInfo);
+                                        //Add flag for popup when save
+                                        customerModifyFlag = customerModifyFlag + 1;
                                     } else if(spouseInfo.getRelation().getId() == RelationValue.GUARANTOR.value()) {
                                         //Spouse - Guarantor
                                         spouseInfo.setListName("GUARANTOR");
                                         spouseInfo.setSubIndex(guarantorInfoViewList.size());
                                         guarantorInfoViewList.add(spouseInfo);
+                                        //Add flag for popup when save
+                                        customerModifyFlag = customerModifyFlag + 1;
                                     } else if(spouseInfo.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value() || spouseInfo.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()) {
                                         //Spouse - Relate Person
                                         spouseInfo.setListName("RELATED");
                                         spouseInfo.setSubIndex(relatedInfoViewList.size());
                                         relatedInfoViewList.add(spouseInfo);
+                                        //Add flag for popup when save
+                                        customerModifyFlag = customerModifyFlag + 1;
                                     } else {
                                         complete = false;
                                         messageHeader = "Save customer (Spouse) failed.";
@@ -1538,14 +1544,20 @@ public class PrescreenMaker implements Serializable {
                                             newSpouse.setListName("BORROWER");
                                             newSpouse.setSubIndex(borrowerInfoViewList.size());
                                             borrowerInfoViewList.add(newSpouse);
+                                            //Add flag for popup when save
+                                            customerModifyFlag = customerModifyFlag + 1;
                                         } else if(newSpouse.getRelation() != null && newSpouse.getRelation().getId() == RelationValue.GUARANTOR.value()){
                                             newSpouse.setListName("GUARANTOR");
                                             newSpouse.setSubIndex(guarantorInfoViewList.size());
                                             guarantorInfoViewList.add(newSpouse);
+                                            //Add flag for popup when save
+                                            customerModifyFlag = customerModifyFlag + 1;
                                         } else if(newSpouse.getRelation() != null && (newSpouse.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value() || newSpouse.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value())){
                                             newSpouse.setListName("RELATED");
                                             newSpouse.setSubIndex(relatedInfoViewList.size());
                                             relatedInfoViewList.add(newSpouse);
+                                            //Add flag for popup when save
+                                            customerModifyFlag = customerModifyFlag + 1;
                                         }
                                     }
                                 }
@@ -1558,14 +1570,20 @@ public class PrescreenMaker implements Serializable {
                                     newSpouse.setListName("BORROWER");
                                     newSpouse.setSubIndex(borrowerInfoViewList.size());
                                     borrowerInfoViewList.add(newSpouse);
+                                    //Add flag for popup when save
+                                    customerModifyFlag = customerModifyFlag + 1;
                                 } else if (newSpouse.getRelation() != null && newSpouse.getRelation().getId() == RelationValue.GUARANTOR.value()){
                                     newSpouse.setListName("GUARANTOR");
                                     newSpouse.setSubIndex(guarantorInfoViewList.size());
                                     guarantorInfoViewList.add(newSpouse);
+                                    //Add flag for popup when save
+                                    customerModifyFlag = customerModifyFlag + 1;
                                 } else if (newSpouse.getRelation() != null && ( newSpouse.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value() || newSpouse.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value())){
                                     newSpouse.setListName("RELATED");
                                     newSpouse.setSubIndex(relatedInfoViewList.size());
                                     relatedInfoViewList.add(newSpouse);
+                                    //Add flag for popup when save
+                                    customerModifyFlag = customerModifyFlag + 1;
                                 }
                             }
                         } else if(borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getSpouseFlag() == 0) {
@@ -1785,12 +1803,18 @@ public class PrescreenMaker implements Serializable {
             if(selectCustomerInfoItem.getRelation().getId() == 1){
                 borrowerInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.BORROWER);
+                //Add flag for popup when save
+                customerModifyFlag = customerModifyFlag + 1;
             } else if(selectCustomerInfoItem.getRelation().getId() == 2){
                 guarantorInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.GUARANTOR);
+                //Add flag for popup when save
+                customerModifyFlag = customerModifyFlag + 1;
             } else if(selectCustomerInfoItem.getRelation().getId() == 3 || selectCustomerInfoItem.getRelation().getId() == 4){
                 relatedInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.RELATED);
+                //Add flag for popup when save
+                customerModifyFlag = customerModifyFlag + 1;
             }
             //Add to delete for delete from database
             if(selectCustomerInfoItem.getId() != 0){
@@ -1807,14 +1831,20 @@ public class PrescreenMaker implements Serializable {
                 //Remove Borrower List
                 borrowerInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.BORROWER);
+                //Add flag for popup when save
+                customerModifyFlag = customerModifyFlag + 1;
             } else if(selectCustomerInfoItem.getRelation().getId() == RelationValue.GUARANTOR.value()){
                 //Remove Guarantor List
                 guarantorInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.GUARANTOR);
+                //Add flag for popup when save
+                customerModifyFlag = customerModifyFlag + 1;
             } else if(selectCustomerInfoItem.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value() || selectCustomerInfoItem.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                 //Remove Related List
                 relatedInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.RELATED);
+                //Add flag for popup when save
+                customerModifyFlag = customerModifyFlag + 1;
             }
 
             customerInfoViewList.remove(customerInfoView);
@@ -2201,6 +2231,8 @@ public class PrescreenMaker implements Serializable {
 
     public void onChangeMaritalStatus(){
         log.debug("onChangeMaritalStatus ::: Marriage Status : {}", borrowerInfo.getMaritalStatus().getId());
+        //TODO Check Spouse.. if any spouse remove it
+
     }
 
     public void onChangeDocType(){

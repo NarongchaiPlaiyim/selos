@@ -202,6 +202,11 @@ public class BaseController implements Serializable {
         stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId);
         log.debug("stepStatusMap : {}", stepStatusMap);
 
+        //FOR Appraisal Request Dialog
+        appraisalView = new AppraisalView();
+        appraisalDetailView = new AppraisalDetailView();
+        appraisalContactDetailView = new AppraisalContactDetailView();
+
         /*if (stepId == StepValue.PRESCREEN_INITIAL.value()) {
             manageButton.setAssignToCheckerButton(true);
             manageButton.setCancelCAButton(true);
@@ -257,7 +262,7 @@ public class BaseController implements Serializable {
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
         log.info("BaseController ::: appHeader : {}", appHeaderView);
 
-        if(session.getAttribute("workCaseId") != null){
+        if(session.getAttribute("workCaseId") != null && (Long)session.getAttribute("workCaseId") != 0){
             try{
                 workCaseId = (Long)session.getAttribute("workCaseId");
             } catch (ClassCastException ex){
@@ -361,45 +366,51 @@ public class BaseController implements Serializable {
         log.debug("onOpenSubmitZM ::: starting...");
         log.debug("onOpenSubmitZM ::: find Pricing DOA Level");
         HttpSession session = FacesUtil.getSession(true);
-        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-        PricingDOAValue pricingDOA = fullApplicationControl.calculatePricingDOA(workCaseId);
-        pricingDOA = PricingDOAValue.CSSO_DOA;
-        if(!Util.isNull(pricingDOA)){
-            pricingDOALevel = pricingDOA.value();
-            zmEndorseUserId = "";
-            zmUserId = "";
-            rgmUserId = "";
-            ghmUserId = "";
-            cssoUserId = "";
+        long workCaseId = (Long)session.getAttribute("workCaseId");
+        try{
+            PricingDOAValue pricingDOA = fullApplicationControl.calculatePricingDOA(workCaseId);
+            pricingDOA = PricingDOAValue.CSSO_DOA;
+            if(!Util.isNull(pricingDOA)){
+                pricingDOALevel = pricingDOA.value();
+                zmEndorseUserId = "";
+                zmUserId = "";
+                rgmUserId = "";
+                ghmUserId = "";
+                cssoUserId = "";
 
-            zmEndorseRemark = "";
-            submitRemark = "";
-            slaRemark = "";
+                zmEndorseRemark = "";
+                submitRemark = "";
+                slaRemark = "";
 
-            isSubmitToRGM = false;
-            isSubmitToGHM = false;
-            isSubmitToCSSO = false;
+                isSubmitToRGM = false;
+                isSubmitToGHM = false;
+                isSubmitToCSSO = false;
 
-            zmUserList = fullApplicationControl.getUserList(user);
+                zmUserList = fullApplicationControl.getUserList(user);
 
-            if(pricingDOA.value() >= PricingDOAValue.RGM_DOA.value()){
-                //rgmUserList = fullApplicationControl.getRMUserList();
-                isSubmitToRGM = true;
+                if(pricingDOA.value() >= PricingDOAValue.RGM_DOA.value()){
+                    //rgmUserList = fullApplicationControl.getRMUserList();
+                    isSubmitToRGM = true;
+                }
+
+                if(pricingDOA.value() >= PricingDOAValue.GH_DOA.value()){
+                    //ghmUserList = fullApplicationControl.getHeadUserList();
+                    isSubmitToGHM = true;
+                }
+
+                if(pricingDOA.value() >= PricingDOAValue.CSSO_DOA.value()){
+                    //cssoUserList = fullApplicationControl.getCSSOUserList();
+                    isSubmitToCSSO = true;
+                }
+
+                log.debug("pricingDOALevel ::: {}", pricingDOA);
+                RequestContext.getCurrentInstance().execute("submitZMDlg.show()");
+            } else {
+                messageHeader = "Exception.";
+                message = "Can not find Pricing DOA Level. Please check value for calculate DOA Level";
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
             }
-
-            if(pricingDOA.value() >= PricingDOAValue.GH_DOA.value()){
-                //ghmUserList = fullApplicationControl.getHeadUserList();
-                isSubmitToGHM = true;
-            }
-
-            if(pricingDOA.value() >= PricingDOAValue.CSSO_DOA.value()){
-                //cssoUserList = fullApplicationControl.getCSSOUserList();
-                isSubmitToCSSO = true;
-            }
-
-            log.debug("pricingDOALevel ::: {}", pricingDOA);
-            RequestContext.getCurrentInstance().execute("submitZMDlg.show()");
-        } else {
+        } catch (Exception ex){
             messageHeader = "Exception.";
             message = "Can not find Pricing DOA Level. Please check value for calculate DOA Level";
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
