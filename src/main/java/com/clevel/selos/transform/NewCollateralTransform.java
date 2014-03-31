@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.MortgageTypeDAO;
 import com.clevel.selos.dao.master.SubCollateralTypeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.CreditTypeOfStep;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.User;
@@ -314,7 +315,7 @@ public class NewCollateralTransform extends Transform {
                 proposeCreditDetailView = new ProposeCreditDetailView();
                 proposeCreditDetailView.setSeq(tmp.getSeq());
                 proposeCreditDetailView.setId(tmp.getId());
-                proposeCreditDetailView.setTypeOfStep("N");
+                proposeCreditDetailView.setTypeOfStep(CreditTypeOfStep.NEW.type());
                 proposeCreditDetailView.setAccountName(tmp.getAccountName());
                 proposeCreditDetailView.setAccountNumber(tmp.getAccountNumber());
                 proposeCreditDetailView.setAccountSuf(tmp.getAccountSuf());
@@ -336,7 +337,8 @@ public class NewCollateralTransform extends Transform {
             proposeCreditDetailView = new ProposeCreditDetailView();
             proposeCreditDetailView.setSeq((int) existingCreditDetailView.getId());
             proposeCreditDetailView.setId(existingCreditDetailView.getId());
-            proposeCreditDetailView.setTypeOfStep("E");
+            proposeCreditDetailView.setNoFlag(true);
+            proposeCreditDetailView.setTypeOfStep(CreditTypeOfStep.EXISTING.type());
             proposeCreditDetailView.setAccountName(existingCreditDetailView.getAccountName());
             proposeCreditDetailView.setAccountNumber(existingCreditDetailView.getAccountNumber());
             proposeCreditDetailView.setAccountSuf(existingCreditDetailView.getAccountSuf());
