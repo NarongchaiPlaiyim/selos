@@ -4,6 +4,7 @@ import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.ExSummaryView;
 import com.clevel.selos.model.view.ReportView;
+import com.clevel.selos.report.template.PDFAppraisalAppointment;
 import com.clevel.selos.report.template.PDFDecision;
 import com.clevel.selos.report.template.PDFExecutive_Summary;
 import com.clevel.selos.report.template.PDFReject_Letter;
@@ -40,6 +41,12 @@ public class GenPDF extends ReportService implements Serializable {
     @Config(name = "report.rejectletter")
     String pathRejectLetter;
 
+
+    @Inject
+    @Config(name = "report.appraisal")
+    String pathAppraisal;
+
+
     @Inject
     private WorkCaseDAO workCaseDAO;
 
@@ -53,6 +60,9 @@ public class GenPDF extends ReportService implements Serializable {
 
     @Inject
     PDFDecision pdfDecision;
+
+    @Inject
+    PDFAppraisalAppointment pdfAppraisalAppointment;
 
     private ReportView reportView;
 
@@ -93,6 +103,7 @@ public class GenPDF extends ReportService implements Serializable {
         String nameOpShect = "_OpShect.pdf";
         String nameExSum = "_ExSum.pdf";
         String nameRejectLetter = "_RejectLetter.pdf";
+        String nameAppraisal = "_Appraisal.pdf";
         String date = Util.createDateTime(new Date());
         String[] month = date.split("");
         log.debug("--month. {}",month);
@@ -104,6 +115,7 @@ public class GenPDF extends ReportService implements Serializable {
             reportView.setNameReportOpShect(appNumber+"_"+date+nameOpShect);
             reportView.setNameReportExSum(appNumber + "_" + date + nameExSum);
             reportView.setNameReportRejectLetter(appNumber + "_" + date + nameRejectLetter);
+            reportView.setNameReportAppralsal(appNumber + "_" + date + nameAppraisal);
         }
     }
 
@@ -170,6 +182,16 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillRejectLetter",pdfReject_letter.fillRejectLetter());
 
         generatePDF(pathRejectLetter,map,reportView.getNameReportRejectLetter());
+    }
+    public void onPrintAppraisal() throws Exception {
+        HashMap map = new HashMap<String, Object>();
+        map.put("path", pathsub);
+        map.put("fillAppraisalDetailReport",pdfAppraisalAppointment.fillAppraisalDetailReport());
+        map.put("fillAppraisalDetailViewReport",pdfAppraisalAppointment.fillAppraisalDetailViewReport());
+        map.put("fillAppraisalContactDetailViewReport",pdfAppraisalAppointment.fillAppraisalContactDetailViewReport());
+        map.put("fillContactRecordDetailViewReport",pdfAppraisalAppointment.fillContactRecordDetailViewReport());
+
+        generatePDF(pathAppraisal,map,reportView.getNameReportAppralsal());
     }
 
     public ReportView getReportView() {

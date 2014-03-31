@@ -338,4 +338,10 @@ public class BPMExecutor implements Serializable {
         log.debug("BPM Execute ::: queueName : {}, wobNumber : {}, fields : {}", queueName, wobNumber, fields);
         bpmInterface.dispatchCase(queueName, wobNumber, fields);
     }
+
+    public void batchDispatchCaseFromRoster(String rosterName, String[] arrayOfWobNo, HashMap<String, String> fields)
+    {
+        log.debug("BPM Exrcure batchDispatchCaseFromRoster. RoseterNaem : {}, WObNo : {} , Fields:{}",rosterName,arrayOfWobNo,fields);
+        bpmInterface.batchDispatchCaseFromRoster(rosterName,arrayOfWobNo,fields);
+    }
 }

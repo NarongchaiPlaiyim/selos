@@ -8,8 +8,10 @@ import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.PEInbox;
 import com.clevel.selos.security.UserDetail;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import javax.annotation.PostConstruct;
@@ -18,6 +20,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -67,6 +70,23 @@ public class PESearch implements Serializable
     private String citizendid;
 
     private String statusType;
+
+    private String currentDateDDMMYY;
+
+    public Date getCurrentDate() {
+        //log.debug("++++++++++++++++++++++++++++++++++=== Current Date : {}", DateTimeUtil.getCurrentDateTH());
+        return DateTime.now().toDate();
+        //return DateTimeUtil.getCurrentDate();
+    }
+
+    public String getCurrentDateDDMMYY() {
+        log.debug("current date : {}", getCurrentDate());
+        return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
+        this.currentDateDDMMYY = currentDateDDMMYY;
+    }
 
     public String getStatusType() {
         return statusType;

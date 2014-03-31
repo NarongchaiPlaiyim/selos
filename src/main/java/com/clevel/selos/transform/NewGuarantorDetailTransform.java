@@ -4,6 +4,7 @@ import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NewGuarantorDetailDAO;
 import com.clevel.selos.dao.working.NewGuarantorRelationDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.CreditTypeOfStep;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
@@ -106,8 +107,6 @@ public class NewGuarantorDetailTransform extends Transform {
             List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorRelationDAO.getListGuarantorRelationByNewGuarantor(newGuarantorDetail);
             List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
             List<ExistingCreditDetail> existingCreditDetailList = new ArrayList<ExistingCreditDetail>();
-            List<ProposeCreditDetailView> proposeCreditDetailViewList;
-            newGuarantorDetailView.setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
 
             for (NewGuarantorCredit newGuarantorCredit : newGuarantorCreditList) {
                 if (newGuarantorCredit.getExistingCreditDetail() != null) {
@@ -119,8 +118,9 @@ public class NewGuarantorDetailTransform extends Transform {
                 }
             }
 
-            proposeCreditDetailViewList = proposeCreditDetailTransform(newCreditDetailList, existingCreditDetailList, newGuarantorCreditList);
+            List<ProposeCreditDetailView> proposeCreditDetailViewList = proposeCreditDetailTransform(newCreditDetailList, existingCreditDetailList, newGuarantorCreditList);
             if (proposeCreditDetailViewList.size() > 0) {
+                log.info("proposeCreditDetailViewList size ::: {}",proposeCreditDetailViewList.size());
                 newGuarantorDetailView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
             }
             newGuarantorDetailViews.add(newGuarantorDetailView);
@@ -175,7 +175,7 @@ public class NewGuarantorDetailTransform extends Transform {
                 proposeCreditDetailView = new ProposeCreditDetailView();
                 proposeCreditDetailView.setSeq(tmp.getSeq());
                 proposeCreditDetailView.setId(tmp.getId());
-                proposeCreditDetailView.setTypeOfStep("N");
+                proposeCreditDetailView.setTypeOfStep(CreditTypeOfStep.NEW.type());
                 proposeCreditDetailView.setAccountName(tmp.getAccountName());
                 proposeCreditDetailView.setAccountNumber(tmp.getAccountNumber());
                 proposeCreditDetailView.setAccountSuf(tmp.getAccountSuf());
@@ -197,10 +197,10 @@ public class NewGuarantorDetailTransform extends Transform {
 
         for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViewList) {
             proposeCreditDetailView = new ProposeCreditDetailView();
-            proposeCreditDetailView.setSeq(existingCreditDetailView.getSeq());
+            proposeCreditDetailView.setSeq((int)existingCreditDetailView.getId());
             proposeCreditDetailView.setId(existingCreditDetailView.getId());
             proposeCreditDetailView.setNoFlag(true);
-            proposeCreditDetailView.setTypeOfStep("E");
+            proposeCreditDetailView.setTypeOfStep(CreditTypeOfStep.EXISTING.type());
             proposeCreditDetailView.setAccountName(existingCreditDetailView.getAccountName());
             proposeCreditDetailView.setAccountNumber(existingCreditDetailView.getAccountNumber());
             proposeCreditDetailView.setAccountSuf(existingCreditDetailView.getAccountSuf());
@@ -208,12 +208,12 @@ public class NewGuarantorDetailTransform extends Transform {
             proposeCreditDetailView.setCreditFacilityView(existingCreditDetailView.getExistCreditTypeView());
             proposeCreditDetailView.setLimit(existingCreditDetailView.getLimit());
 
-            for (int i = 0; i < newGuarantorCreditList.size(); i++) {
-                if (existingCreditDetailView.getSeq() == newGuarantorCreditList.get(i).getExistingCreditDetail().getSeq()) {
-                    log.info("newGuarantorCreditList.get(i).getNewCreditDetail() ::: {}", newGuarantorCreditList.get(i).getGuaranteeAmount());
-                    proposeCreditDetailView.setGuaranteeAmount(newGuarantorCreditList.get(i).getGuaranteeAmount());
-                }
-            }
+//            for (int i = 0; i < newGuarantorCreditList.size(); i++) {
+////                if (existingCreditDetailView.getId() == newGuarantorCreditList.get(i).getExistingCreditDetail().getId()) {
+//                    log.info("newGuarantorCreditList.get(i).getNewCreditDetail() ::: {}", newGuarantorCreditList.get(i).getGuaranteeAmount());
+//                    proposeCreditDetailView.setGuaranteeAmount(newGuarantorCreditList.get(i).getGuaranteeAmount());
+////                }
+//            }
 
             proposeCreditDetailViewList.add(proposeCreditDetailView);
 

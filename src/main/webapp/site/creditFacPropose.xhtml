@@ -508,7 +508,8 @@
                                  onclick="this.select()"
                                  style="width:200px;text-align: right"
                                  onkeydown="return onKeyDownMoney(event);"
-                                 onkeypress="return onKeyPressMoney(event);">
+                                 onkeypress="return onKeyPressMoney(event);"
+                                 disabled="true">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                          type="number"/>
                         <p:ajax event="blur" update="@this"/>
