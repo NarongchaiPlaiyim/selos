@@ -87,7 +87,7 @@
                                            <td>
                                                 <h:selectOneMenu id="teamnameselectbox" class="largest" value="#{reassignteamnames.selectedTeamName}"  valueChangeListener="#{reassignteamnames.valueChangeMethod}" >
                                                     <f:selectItem itemValue="" itemLabel="-Please Select-"  />
-                                                    <f:selectItems value="#{reassignteamnames.reasignteamnames}" var="reassign" itemValue="#{reassign.teamid}" itemLabel="#{reassign.teamname}"/>
+                                                    <f:selectItems value="#{reassignteamnames.reasignteamnames}" var="reassign" itemValue="#{reassign.teamid}" itemLabel="#{reassign.teamid} - #{reassign.teamname}"/>
                                                     <p:ajax event="change" update="@form" />
                                                 </h:selectOneMenu>
                                            </td>
