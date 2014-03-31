@@ -168,7 +168,7 @@
                             </p:column>
 
                             <p:column headerText="Request Type" style="width: 120px;" sortBy="#{item.requestType}">
-                                <h:outputText value="#{item.receivedDate}"/>
+                                <h:outputText value="#{item.requestType}"/>
                             </p:column>
 
                             <p:column headerText="Step" styleClass="center"
@@ -199,10 +199,10 @@
                                       style="width: 110px;" sortBy="#{item.totalTimeAtProcess}">
                                 <h:outputText value="#{item.totalTimeAtProcess}"/>
                             </p:column>
-                            <p:column headerText="F_WOBNumber" styleClass="center"
-                                      style="width: 110px;" sortBy="#{item.f_WobNum}">
-                                <h:outputText value="#{item.f_WobNum}"/>
-                            </p:column>
+                           <!-- <p:column headerText="F_WOBNumber" styleClass="center"
+                                      style="width: 110px;" sortBy="{item.f_WobNum}">
+                                <h:outputText value="{item.f_WobNum}"/>
+                            </p:column>-->
 
                         </p:dataTable>
                     </td>
