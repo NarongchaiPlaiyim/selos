@@ -303,7 +303,9 @@ public class BizInfoDetail implements Serializable {
     }
 
     public void onChangeBusinessGroup(){
+        log.debug("--businessDescriptionList. [{}], bizGroup. [{}]",businessDescriptionList,bizGroup);
         businessDescriptionList = businessDescriptionDAO.getListByBusinessGroup(bizGroup);
+
         if(descType.equals("")){
             bizInfoDetailView.setBizCode("");
             bizInfoDetailView.setIncomeFactor(null);
