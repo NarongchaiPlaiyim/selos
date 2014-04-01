@@ -290,10 +290,15 @@ public class ExSummaryControl extends BusinessControl {
         if(session.getAttribute("status_id") != null){
             statusId = Long.parseLong(session.getAttribute("status_id").toString());
         }
+
         if(statusId >= 2005){
             exSumCharacteristicView.setSalePerYearUW(exSummary.getSalePerYearUW());
             exSumCharacteristicView.setGroupSaleUW(exSummary.getGroupSaleUW());
             exSumCharacteristicView.setGroupExposureUW(exSummary.getGroupExposureUW());
+        } else {
+            exSumCharacteristicView.setSalePerYearUW(null);
+            exSumCharacteristicView.setGroupSaleUW(null);
+            exSumCharacteristicView.setGroupExposureUW(null);
         }
 
         if(newCreditFacilityView != null && newCreditFacilityView.getId() != 0){
