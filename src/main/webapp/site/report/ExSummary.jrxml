@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="992d94ee-ab0e-458e-a59a-046b96b4a957">
 	<property name="ireport.zoom" value="1.3636363636363844"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="19"/>
 	<style name="Frame">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -11,9 +11,6 @@
 			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 		</box>
 	</style>
-	<parameter name="SUBREPORT_DIR" class="com.clevel.selos.model.report.BorrowerExsumReport" isForPrompting="false">
-		<defaultValueExpression><![CDATA["D:/ProjectSLOS/selos/src/main/webapp/site/report/"]]></defaultValueExpression>
-	</parameter>
 	<parameter name="path" class="java.lang.String"/>
 	<parameter name="borrower" class="java.util.Collection"/>
 	<parameter name="tradeFinance" class="java.util.Collection"/>
@@ -101,6 +98,7 @@
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="6" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<text><![CDATA[ชื่อสถานประกอบการ]]></text>
 				</staticText>
@@ -115,6 +113,7 @@
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="6" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<text><![CDATA[ที่อยู่สถานประกอบการ (ไทย)]]></text>
 				</staticText>
@@ -129,6 +128,7 @@
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="6" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<text><![CDATA[ที่อยู่สถานประกอบการ (อังกฤษ)]]></text>
 				</staticText>
@@ -143,6 +143,7 @@
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="6" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<text><![CDATA[กรรมสิทธิ]]></text>
 				</staticText>
@@ -157,8 +158,9 @@
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
-					<textFieldExpression><![CDATA["  "+$P{businessLocation}.getBusinessLocationName()]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{businessLocation}.getBusinessLocationName()]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement uuid="90fd3911-ea96-4b48-8aeb-b03410a818fb" mode="Opaque" x="107" y="24" width="448" height="20"/>
@@ -171,8 +173,9 @@
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
-					<textFieldExpression><![CDATA["  "+$P{businessLocation}.getBusinessLocationAddress()]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{businessLocation}.getBusinessLocationAddress()]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement uuid="6bf4e0af-1386-4388-8d4e-61d297c69451" mode="Opaque" x="107" y="44" width="448" height="20"/>
@@ -185,8 +188,9 @@
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
-					<textFieldExpression><![CDATA["  "+$P{businessLocation}.getBusinessLocationAddressEN()]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{businessLocation}.getBusinessLocationAddressEN()]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement uuid="6b91b8df-3611-4feb-88ee-025f173f2685" mode="Opaque" x="107" y="64" width="448" height="20"/>
@@ -199,8 +203,9 @@
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
-					<textFieldExpression><![CDATA["  "+$P{businessLocation}.getOwner()]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{businessLocation}.getOwner()]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
@@ -208,8 +213,9 @@
 			<frame>
 				<reportElement uuid="7a816d29-af68-4ca7-9a67-d351b4029524" style="Frame" mode="Opaque" x="0" y="0" width="555" height="67" backcolor="#FFFFFF"/>
 				<box>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-					<bottomPen lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
@@ -240,8 +246,9 @@
 			<frame>
 				<reportElement uuid="82a64e92-741d-4b58-a95b-dba5e95b81ca" style="Frame" mode="Opaque" x="0" y="0" width="555" height="190" backcolor="#FFFFFF"/>
 				<box>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-					<bottomPen lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
@@ -262,6 +269,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getCustomer()]]></textFieldExpression>
 				</textField>
@@ -276,6 +284,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getCurrentDBR()]]></textFieldExpression>
 				</textField>
@@ -290,6 +299,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getFinalDBR()]]></textFieldExpression>
 				</textField>
@@ -304,6 +314,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getIncome()]]></textFieldExpression>
 				</textField>
@@ -318,6 +329,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getRecommendedWCNeed()]]></textFieldExpression>
 				</textField>
@@ -332,6 +344,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getActualWC()]]></textFieldExpression>
 				</textField>
@@ -346,6 +359,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getStartBusinessDate()]]></textFieldExpression>
 				</textField>
@@ -360,6 +374,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getYearInBusiness()]]></textFieldExpression>
 				</textField>
@@ -374,6 +389,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getSalePerYearBDM()]]></textFieldExpression>
 				</textField>
@@ -388,6 +404,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getSalePerYearUW()]]></textFieldExpression>
 				</textField>
@@ -402,6 +419,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getGroupSaleUW()]]></textFieldExpression>
 				</textField>
@@ -416,6 +434,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getGroupSaleBDM()]]></textFieldExpression>
 				</textField>
@@ -430,6 +449,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getGroupExposureUW()]]></textFieldExpression>
 				</textField>
@@ -444,6 +464,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getGroupExposureBDM()]]></textFieldExpression>
 				</textField>
@@ -458,6 +479,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBizSize()]]></textFieldExpression>
 				</textField>
@@ -472,6 +494,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBizType()]]></textFieldExpression>
 				</textField>
@@ -486,6 +509,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBizCode()]]></textFieldExpression>
 				</textField>
@@ -500,6 +524,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBizGroup()]]></textFieldExpression>
 				</textField>
@@ -514,6 +539,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getNetFixAsset()]]></textFieldExpression>
 				</textField>
@@ -528,6 +554,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getNoOfEmployee()]]></textFieldExpression>
 				</textField>
@@ -542,6 +569,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBizDesc()]]></textFieldExpression>
 				</textField>
@@ -556,6 +584,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getUW()]]></textFieldExpression>
 				</textField>
@@ -570,6 +599,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBDM()]]></textFieldExpression>
 				</textField>
@@ -584,6 +614,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getQualitativeClass()]]></textFieldExpression>
 				</textField>
@@ -598,6 +629,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getAR()]]></textFieldExpression>
 				</textField>
@@ -612,6 +644,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBizProvince()]]></textFieldExpression>
 				</textField>
@@ -626,6 +659,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getAP()]]></textFieldExpression>
 				</textField>
@@ -640,6 +674,7 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getINV()]]></textFieldExpression>
 				</textField>
@@ -696,6 +731,7 @@
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBusinessOperationActivity()]]></textFieldExpression>
 				</textField>
@@ -710,6 +746,7 @@
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getExpiryDate()]]></textFieldExpression>
 				</textField>
@@ -724,6 +761,7 @@
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBusinessPermission()]]></textFieldExpression>
 				</textField>
@@ -1193,8 +1231,9 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="5b75cd4f-7bf3-4033-8b9c-72f98749ea7f" style="Frame" mode="Opaque" x="0" y="0" width="555" height="74" backcolor="#FFFFFF"/>
 				<box>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-					<bottomPen lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
@@ -1215,8 +1254,9 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="bb48fc1e-c7d7-420a-a220-8d422a4fc212" style="Frame" mode="Opaque" x="0" y="0" width="555" height="73" backcolor="#FFFFFF"/>
 				<box>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-					<bottomPen lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
@@ -1428,6 +1468,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getOdLimit()]]></textFieldExpression>
 				</textField>
@@ -1442,6 +1483,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getUtilization()]]></textFieldExpression>
 				</textField>
@@ -1456,6 +1498,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getSwing()]]></textFieldExpression>
 				</textField>
@@ -1470,6 +1513,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getOverLimitTimes()]]></textFieldExpression>
 				</textField>
@@ -1484,6 +1528,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getOverLimitDays()]]></textFieldExpression>
 				</textField>
@@ -1498,6 +1543,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getChequeReturn()]]></textFieldExpression>
 				</textField>
@@ -1512,6 +1558,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getCashFlow()]]></textFieldExpression>
 				</textField>
@@ -1526,6 +1573,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getCashFlowLimit()]]></textFieldExpression>
 				</textField>
@@ -1540,6 +1588,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getTradeChequeReturnPercent()]]></textFieldExpression>
 				</textField>
@@ -1554,6 +1603,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getTradeChequeReturnPercent()]]></textFieldExpression>
 				</textField>
@@ -1563,8 +1613,9 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="c8f6258d-baa9-42e7-8ea3-bfb785852658" style="Frame" mode="Opaque" x="0" y="0" width="555" height="84" backcolor="#FFFFFF"/>
 				<box>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-					<bottomPen lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
@@ -1648,6 +1699,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{collateral}.getPercentLTV()]]></textFieldExpression>
 				</textField>
@@ -1662,6 +1714,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{collateral}.getLimitApprove()]]></textFieldExpression>
 				</textField>
@@ -1676,6 +1729,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{collateral}.getCoreAssetValue()]]></textFieldExpression>
 				</textField>
@@ -1690,6 +1744,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{collateral}.getCashCollateralValue()]]></textFieldExpression>
 				</textField>
@@ -1718,6 +1773,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{collateral}.getNoneCoreAssetValue()]]></textFieldExpression>
 				</textField>
@@ -1755,8 +1811,9 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="d59b0748-114a-48c5-b680-50e0df908729" style="Frame" mode="Opaque" x="0" y="0" width="555" height="67" backcolor="#FFFFFF"/>
 				<box>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-					<bottomPen lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
@@ -1826,6 +1883,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{creditRisk}.getNextReviewDate()]]></textFieldExpression>
 				</textField>
@@ -1840,6 +1898,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{creditRisk}.getLastReviewDate()]]></textFieldExpression>
 				</textField>
@@ -1854,6 +1913,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{creditRisk}.getBotClass()]]></textFieldExpression>
 				</textField>
@@ -1868,6 +1928,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{creditRisk}.getRiskCusType()]]></textFieldExpression>
 				</textField>
@@ -1882,6 +1943,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{creditRisk}.getReason()]]></textFieldExpression>
 				</textField>
@@ -1924,6 +1986,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{creditRisk}.getExtendedReviewDate()]]></textFieldExpression>
 				</textField>
@@ -1952,6 +2015,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{creditRisk}.getIndirectCountryName()]]></textFieldExpression>
 				</textField>
@@ -1980,6 +2044,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{creditRisk}.getPercentExport()]]></textFieldExpression>
 				</textField>
@@ -2003,7 +2068,9 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="663b58b5-decc-479f-a991-c93ca0b8f65c" style="Frame" mode="Opaque" x="0" y="0" width="555" height="97" backcolor="#FFFFFF"/>
 				<box>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
@@ -2101,6 +2168,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{decision}.getDeviationReason()]]></textFieldExpression>
 				</textField>
@@ -2129,6 +2197,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{decision}.getFlag()]]></textFieldExpression>
 				</textField>
@@ -2185,6 +2254,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{decision}.getRuleName()]]></textFieldExpression>
 				</textField>
@@ -2212,6 +2282,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{decision}.getCusName()]]></textFieldExpression>
 				</textField>
@@ -2240,6 +2311,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{decision}.getGroup()]]></textFieldExpression>
 				</textField>
@@ -2291,6 +2363,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Top">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{bizSupport}.getNatureOfBusiness()]]></textFieldExpression>
 				</textField>
@@ -2300,7 +2373,9 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="9a20f81a-60de-47f2-a3dc-6f848c0cb91c" style="Frame" mode="Opaque" x="0" y="0" width="555" height="89" backcolor="#FFFFFF"/>
 				<box>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
@@ -2321,6 +2396,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Top">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{bizSupport}.getHistoricalAndReasonOfChange()]]></textFieldExpression>
 				</textField>
@@ -2330,7 +2406,9 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="534233f1-7110-413e-a728-1b5eb4ebe217" style="Frame" mode="Opaque" x="0" y="0" width="555" height="90" backcolor="#FFFFFF"/>
 				<box>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
@@ -2358,6 +2436,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Top">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{bizSupport}.getTmbCreditHistory()]]></textFieldExpression>
 				</textField>
@@ -2367,7 +2446,9 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="b389500f-d085-4153-8248-0707e0e58612" style="Frame" mode="Opaque" x="0" y="0" width="555" height="93" backcolor="#FFFFFF"/>
 				<box>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
@@ -2395,6 +2476,7 @@ Asset]]></text>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Top">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{bizSupport}.getSupportReason()]]></textFieldExpression>
 				</textField>
@@ -2404,7 +2486,9 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="adfb4946-dfad-42c8-8465-b2239f369f1c" style="Frame" mode="Opaque" x="0" y="0" width="555" height="114" backcolor="#FFFFFF"/>
 				<box>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
@@ -2479,6 +2563,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Top">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{bizSupport}.getRm008Remark()]]></textFieldExpression>
 				</textField>
@@ -2493,7 +2578,9 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 			<frame>
 				<reportElement uuid="b399504b-fdde-410b-b949-8e54c357c5ea" style="Frame" mode="Opaque" x="0" y="0" width="555" height="74" backcolor="#FFFFFF"/>
 				<box>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
@@ -2526,6 +2613,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Top">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{bizSupport}.getRm204Remark()]]></textFieldExpression>
 				</textField>
@@ -2568,7 +2656,9 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 			<frame>
 				<reportElement uuid="e5d5fb1a-7d91-42a0-be5c-26b957ee3572" style="Frame" mode="Opaque" x="0" y="0" width="555" height="72" backcolor="#FFFFFF"/>
 				<box>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
@@ -2601,6 +2691,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Top">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{bizSupport}.getRm020Remark()]]></textFieldExpression>
 				</textField>
@@ -2643,7 +2734,9 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 			<frame>
 				<reportElement uuid="55278db9-2a27-4948-b5f5-4e60801a5e81" style="Frame" mode="Opaque" x="0" y="0" width="555" height="126" backcolor="#FFFFFF"/>
 				<box>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
@@ -2685,6 +2778,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{uwDecision}.getName()]]></textFieldExpression>
 				</textField>
@@ -2713,8 +2807,9 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
-					<textFieldExpression><![CDATA[" "+$P{uwDecision}.getUwCode()]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{uwDecision}.getUwCode()]]></textFieldExpression>
 				</textField>
 				<image scaleImage="RealSize">
 					<reportElement uuid="639471f0-f259-4c8b-a3cc-da5707519f17" x="2" y="50" width="16" height="13"/>
@@ -2805,6 +2900,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					</box>
 					<textElement>
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{uwDecision}.getCode() +" - "+ $P{uwDecision}.getDescription()]]></textFieldExpression>
 				</textField>
@@ -2871,6 +2967,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					</box>
 					<textElement>
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{uwDecision}.getUwComment()]]></textFieldExpression>
 				</textField>

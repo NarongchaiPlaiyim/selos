@@ -1017,6 +1017,13 @@ public class PrescreenBusinessControl extends BusinessControl {
         log.debug("savePreScreenInitial ::: saving customer data success...");
     }
 
+    public int getModifyValue(long workCasePreScreenId){
+        Prescreen tmpPrescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
+        int modifyValue = tmpPrescreen != null ? tmpPrescreen.getModifyFlag() : 2;
+
+        return modifyValue;
+    }
+
     public int checkModifyValue(PrescreenView currentPrescreenView, long workCasePrescreenId){
         int modifyCount = 0;
 
