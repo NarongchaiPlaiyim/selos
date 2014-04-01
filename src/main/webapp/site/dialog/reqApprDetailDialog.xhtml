@@ -1,0 +1,89 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+<p:panel id="reqApprDetailDialogPanel" styleClass="panel-dialog">
+    <table class="content_form">
+        <tr>
+            <td class="title" style="width: 200px;">
+                <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.titleDeed')}"/>
+            </td>
+            <td class="title" style="width: 200px;">
+                <p:inputText value="#{baseController.appraisalDetailView.titleDeed}" style = "#{baseController.titleDeedFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
+                             onkeydown="return onKeyPressName2(event);"
+                             onkeypress="return onKeyPressName2(event);" maxlength="50"
+                             counterTemplate="{0} characters remaining." autoResize="false" />
+            </td>
+        </tr>
+        <tr>
+            <td class="title" style="width: 200px;">
+                <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.purpose')}"/>
+            </td>
+            <td id="checkBox" style = "#{baseController.purposeFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} ">
+                <h:selectBooleanCheckbox value="#{baseController.appraisalDetailView.purposeReviewAppraisalB}">
+                    <p:ajax process="@form" update=":frmMain:reqApprDetailDialogPanel"
+                            listener="#{baseController.checkAppraisalDialog()}"/>
+                </h:selectBooleanCheckbox>
+                <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewAppraisal')}" />
+                <br/>
+                <h:selectBooleanCheckbox value="#{baseController.appraisalDetailView.purposeNewAppraisalB}">
+                    <p:ajax process="@form" update=":frmMain:reqApprDetailDialogPanel"
+                            listener="#{baseController.checkAppraisalDialog()}"/>
+                </h:selectBooleanCheckbox>
+                <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeNewAppraisal')}" />
+                <br/>
+                <h:selectBooleanCheckbox value="#{baseController.appraisalDetailView.purposeReviewBuildingB}" >
+                    <p:ajax process="@form" update=":frmMain:reqApprDetailDialogPanel"
+                            listener="#{baseController.checkAppraisalDialog()}"/>
+                </h:selectBooleanCheckbox>
+                <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewBuilding')}" />
+            </td>
+        </tr>
+        <tr>
+            <td class="title" style="width: 200px;">
+                <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.characteristic')}"/>
+            </td>
+            <td style="mid-width: 250px;width: 250px;max-width: 250px;">
+                <p:selectOneRadio id="characteristicRadio" value="#{baseController.appraisalDetailView.characteristic}" >
+                    <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
+                    <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
+                </p:selectOneRadio>
+            </td>
+        </tr>
+        <tr>
+            <td class="title" style="width: 200px;" >
+                <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.numberOfDocuments')}"/>
+            </td>
+            <td class="title" style="width: 200px;">
+                <p:inputText id="numberOfDocuments"  styleClass="right"
+                             onkeypress="return onKeyPressNumber(event);" onkeydown="return onKeyDownNumber(event);"
+                             value="#{baseController.appraisalDetailView.numberOfDocuments}"
+                             style = "#{baseController.numberOfDocumentsFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
+                             maxlength="3">
+                    <p:ajax event="blur" process="@form" update=":frmMain:reqApprDetailDialogPanel"/>
+                </p:inputText>
+                <h:outputText value="     #{msg.get('app.appraisal.appraisalDetail.dialog.copy')}"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="center" colspan="2" style="margin-top: 20px;">
+                <p:commandButton id="btnSaveAppraisalDetail"
+                                 value="#{msg.get('app.button.ok')}"
+                                 onclick="blockReqApprDetailDialogPanel.show();"
+                                 actionListener="#{baseController.onSaveAppraisalDetail()}"
+                                 process="@form"
+                                 update=":frmMain:reqApprDetailDialogPanel, :frmMain:reqApprDialogPanel"
+                                 oncomplete="handleRequestAppraisalDetail(xhr, status, args); blockReqApprDetailDialogPanel.hide()"/>
+
+                <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="reqApprDetailDlg.hide()" />
+            </td>
+        </tr>
+    </table>
+</p:panel>
+<p:blockUI widgetVar="blockReqApprDetailDialogPanel" block="reqApprDetailDialogPanel">
+    LOADING<br />
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
+</ui:composition>
