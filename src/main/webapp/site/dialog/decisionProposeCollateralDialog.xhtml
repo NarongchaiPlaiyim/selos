@@ -70,8 +70,8 @@
                 <td class="left" colspan="3">
                     <table border="0" style="width: 100%">
                         <tr>
-                            <td>#{msg.get('app.decision.label.approved')}</td>
-                            <td>
+                            <td style="width: 80px">#{msg.get('app.decision.label.approved')}</td>
+                            <td style="text-align: left">
                                 <p:selectOneRadio id="dlgCollateralRadioApprove"
                                                   value="#{decision.selectedApproveCollateral.uwDecision}"
                                                   required="#{not empty param[saveCollateralButton.clientId]}">

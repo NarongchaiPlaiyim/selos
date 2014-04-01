@@ -136,7 +136,6 @@ public class Util implements Serializable {
         }
     }
 
-
     public static String getLinkKey(String userId) {
         return userId + "_" + System.currentTimeMillis();
     }
@@ -318,15 +317,11 @@ public class Util implements Serializable {
     }
 
     public static int returnNumForFlag(boolean flag) {
-        if (flag == true) {
-            return 1;
-        } else {
-            return 0;
-        }
+        return flag ? 1 : 0;
     }
 
     public static boolean isTrueForCheckBox(int value){
-       return (value == 2)?true:false;
+       return value == 2;
     }
 
     public static String getMessageException(Exception ex){
@@ -350,7 +345,7 @@ public class Util implements Serializable {
 
     public static boolean isZero(int id){
         try {
-            return id == 0 ? true : false;
+            return id == 0;
         } catch (NullPointerException e) {
             return false;
         }
@@ -358,7 +353,7 @@ public class Util implements Serializable {
 
     public static boolean isZero(BigDecimal bigDecimal){
         try {
-            return bigDecimal == BigDecimal.ZERO ? true : false;
+            return BigDecimal.ZERO.compareTo(bigDecimal) == 0;
         } catch (NullPointerException e) {
             return false;
         }
@@ -366,7 +361,7 @@ public class Util implements Serializable {
 
     public static boolean isZero(long id){
         try {
-            return id == 0 ? true : false;
+            return id == 0;
         } catch (NullPointerException e) {
             return false;
         }
@@ -382,7 +377,7 @@ public class Util implements Serializable {
 
     public static boolean isLengthZero(String string){
         try{
-            return string.length() == 0 ? true : false;
+            return string.length() == 0;
         } catch (NullPointerException e) {
             return true;
         }
@@ -442,5 +437,20 @@ public class Util implements Serializable {
             return BigDecimal.ZERO;
         }
         return value;
+    }
+
+    public static boolean compareDateByMonthAndYear(Date date1, Date date2) {
+        Calendar d1 = Calendar.getInstance();
+        d1.setTime(date1);
+        Calendar d2 = Calendar.getInstance();
+        d2.setTime(date2);
+        log.debug("compareDateByMonthAndYear() d1.month: {}, d2.month: {}", d1.get(Calendar.MONTH), d2.get(Calendar.MONTH));
+        if (d1.get(Calendar.MONTH) != d2.get(Calendar.MONTH)) {
+            return false;
+        }
+        else if (d1.get(Calendar.YEAR) != d2.get(Calendar.YEAR)) {
+            return false;
+        }
+        return true;
     }
 }
