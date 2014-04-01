@@ -210,7 +210,7 @@ war {
 //    war.rootSpec.exclude 'com/clevel/selos/model/db'
     war.rootSpec.exclude 'com/clevel/selos/model'
     war.rootSpec.exclude 'com/clevel/selos/dao'
-    war.rootSpec.exclude 'com/clevel/selos/report'
+    //war.rootSpec.exclude 'com/clevel/selos/report'
     war.rootSpec.exclude 'META-INF/persistence*'
 
     //************* Transformation ****************

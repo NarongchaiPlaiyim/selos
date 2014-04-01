@@ -27,7 +27,7 @@
 		<band height="27" splitType="Stretch">
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="b062dc93-3f60-4291-97b2-a5aa738f73db" style="detail" stretchType="RelativeToBandHeight" x="38" y="0" width="41" height="27"/>
-				<textElement textAlignment="Right">
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
@@ -36,7 +36,7 @@
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="f6b3b1d4-4120-4376-886f-beb1997fb2e8" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="38" height="27"/>
-				<textElement textAlignment="Right">
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
@@ -44,7 +44,7 @@
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="99862666-6e11-4e5a-af6a-7b95810adc7c" style="detail" stretchType="RelativeToBandHeight" x="79" y="0" width="38" height="27"/>
-				<textElement textAlignment="Right">
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
