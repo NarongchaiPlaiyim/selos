@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.dao.history.ReturnInfoHistoryDAO;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.relation.RelTeamUserDetailsDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionCode;
@@ -68,6 +69,8 @@ public class FullApplicationControl extends BusinessControl {
     StepTransform stepTransform;
     @Inject
     StepDAO stepDAO;
+    @Inject
+    RelTeamUserDetailsDAO relTeamUserDetailsDAO;
 
     @Inject
     BPMExecutor bpmExecutor;
@@ -85,10 +88,13 @@ public class FullApplicationControl extends BusinessControl {
         return abdmUserList;
     }
 
-    public List<User> getZMUserList(){
-        User currentUser = getCurrentUser();
+    public List<User> getUserList(User currentUser){
+        List<User> zmUserList = null;
+        List<UserTeam> zmUserTeamList = relTeamUserDetailsDAO.getTeamHeadLeadByTeamId(currentUser.getTeam().getId());
+        if(zmUserTeamList!=null && zmUserTeamList.size()>0){
+            zmUserList = userDAO.findUserZoneList(zmUserTeamList);
+        }
 
-        List<User> zmUserList = userDAO.findUserZoneList(currentUser);
         if(zmUserList == null){
             zmUserList = new ArrayList<User>();
         }
@@ -118,12 +124,45 @@ public class FullApplicationControl extends BusinessControl {
         return ghUserList;
     }
 
+    public List<User> getCSSOUserList(){
+        User currentUser = getCurrentUser();
+
+        List<User> ghUserList = userDAO.findCSSOList(currentUser);
+        if(ghUserList == null){
+            ghUserList = new ArrayList<User>();
+        }
+
+        return ghUserList;
+    }
+
     public void assignToABDM(String abdmUserId, String queueName, long workCaseId) throws Exception {
         bpmExecutor.assignToABDM(workCaseId, queueName, abdmUserId, ActionCode.ASSIGN_TO_ABDM.getVal());
     }
 
-    public void submitToZM(String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, BigDecimal totalCommercial, BigDecimal totalRetail, String resultCode, String queueName, long workCaseId) throws Exception {
-        bpmExecutor.submitZM(workCaseId, queueName, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, ActionCode.SUBMIT_TO_ZM.getVal());
+    public void submitToZMPricing(String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, String queueName, long workCaseId) throws Exception {
+        WorkCase workCase;
+        String productGroup = "";
+        int requestType = 0;
+        String deviationCode = "";
+        String resultCode = "G"; //TODO: get result code
+        BigDecimal totalCommercial = BigDecimal.ZERO;
+        BigDecimal totalRetail = BigDecimal.ZERO;
+
+        if(Long.toString(workCaseId) != null && workCaseId != 0){
+            workCase = workCaseDAO.findById(workCaseId);
+            if(workCase.getProductGroup()!=null){
+                productGroup = workCase.getProductGroup().getName();
+                requestType = workCase.getRequestType().getId();
+            }
+        }
+
+        if(!Util.isEmpty(resultCode) && resultCode.trim().equalsIgnoreCase("R")){
+            deviationCode = "AD"; //TODO:
+        }
+
+        //TODO: get total com and retail
+
+        bpmExecutor.submitZM(workCaseId, queueName, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, ActionCode.SUBMIT_CA_BDM.getVal());
     }
 
     public void requestAppraisalBDM(long workCasePreScreenId, long workCaseId) throws Exception{

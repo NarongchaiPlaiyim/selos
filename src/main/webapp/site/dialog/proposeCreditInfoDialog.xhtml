@@ -131,15 +131,15 @@
         <p:inputText id="limit" value="#{creditFacPropose.newCreditDetailView.limit}"
                      maxlength="14"
                      onclick="this.select()"
-                     onkeydown="return onKeyDownMoney(event);"
-                     onkeypress="return onKeyPressMoney(event);"
+                     onkeydown="return onKeyDownNegMoney(event);"
+                     onkeypress="return onKeyPressNegMoney(event);"
                      required="#{not empty param[onSaveCreditInfo.clientId]}"
                      style="width:200px;text-align: right">
             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                              type="number"/>
             <p:ajax event="blur"
                     listener="#{creditFacPropose.onCalInstallment(creditFacPropose.newCreditDetailView)}"
-                    process="@form" update=":creditInfoDlgForm:limit,:creditInfoDlgForm:resultFinal"/>
+                    process="@form" update=":creditInfoDlgForm:limit,:creditInfoDlgForm:resultFinal,:creditInfoDlgForm:PCEAmount"/>
         </p:inputText>
     </td>
     <td class="title">
@@ -158,7 +158,9 @@
                              maxFractionDigits="2"
                              maxIntegerDigits="3"/>
             <f:validateDoubleRange maximum="100"/>
-            <p:ajax event="blur" update="@this"/>
+             <p:ajax event="blur"
+                     listener="#{creditFacPropose.onCalInstallment(creditFacPropose.newCreditDetailView)}"
+                     process="@form" update=":creditInfoDlgForm:limit,:creditInfoDlgForm:resultFinal,:creditInfoDlgForm:PCEAmount"/>
         </p:inputText>
         <p:spacer width="5" height="0"/>
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.percent')}"/>
@@ -172,12 +174,14 @@
     </td>
     <td class="left">
         <p:inputText value="#{creditFacPropose.newCreditDetailView.PCEAmount}"
+                     id="PCEAmount"
                      maxlength="14"
                      onclick="this.select()"
                      onkeydown="return onKeyDownMoney(event);"
                      onkeypress="return onKeyPressMoney(event);"
                      required="#{not empty param[onSaveCreditInfo.clientId]}"
-                     style="width:200px;text-align: right">
+                     style="width:200px;text-align: right"
+                     readonly="true">
             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                              type="number"/>
             <p:ajax event="blur" update="@this"/>

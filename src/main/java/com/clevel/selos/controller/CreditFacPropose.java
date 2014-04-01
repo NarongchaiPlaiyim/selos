@@ -10,10 +10,14 @@ import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.response.PricingFee;
+import com.clevel.selos.integration.brms.model.response.PricingIntTier;
+import com.clevel.selos.integration.brms.model.response.PricingInterest;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.FeeDetail;
+import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -35,9 +39,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 @ViewScoped
@@ -59,7 +61,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     Message exceptionMsg;
 
     private Long workCaseId;
-    private Long stepId;
 
     enum ModeForButton {ADD, EDIT}
 
@@ -273,8 +274,16 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private NewCreditTierTransform newCreditTierTransform;
     @Inject
     private FeeTransform feeTransform;
+    @Inject
+    private NewCreditDetailTransform newCreditDetailTransform;
+    @Inject
+    private NewCreditDetailDAO newCreditDetailDAO;
+    @Inject
+    BaseRateTransform baseRateTransform;
+    @Inject
+    FeeDetailDAO feeDetailDAO;
 
-    public CreditFacPropose() {}
+    public CreditFacPropose(){}
 
     public void preRender() {
         log.debug("preRender ::: setSession ");
@@ -283,8 +292,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         if (!Util.isNull(session.getAttribute("workCaseId"))) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             log.debug("workCaseId :: {} ", workCaseId);
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            log.debug("preRender :: {} ", stepId);
         } else {
             log.debug("preRender ::: workCaseId is null.");
             try {
@@ -301,28 +308,32 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         preRender();
         log.debug("onCreation.");
 
-        if (workCaseId != null) {
+        if (!Util.isNull(workCaseId)) {
             modeForDB = ModeForDB.ADD_DB;
             // Initial sequence number credit
             hashSeqCredit = new HashMap<Integer, Integer>();
             notRetrievePricing = true;
             // delete list on save
-            deleteCreditIdList  = new ArrayList<Long>();
-            deleteCollIdList  = new ArrayList<Long>();
-            deleteGuarantorIdList  = new ArrayList<Long>();
+            deleteCreditIdList = new ArrayList<Long>();
+            deleteCollIdList = new ArrayList<Long>();
+            deleteGuarantorIdList = new ArrayList<Long>();
             deleteSubCollIdList = new ArrayList<Long>();
             deleteConditionIdList = new ArrayList<Long>();
 
             try {
                 WorkCase workCase = workCaseDAO.findById(workCaseId);
-                log.info("workCase :: {}",workCase.getId());
-                if(!Util.isNull(workCase)){
+                log.info("workCase :: {}", workCase.getId());
+                if (!Util.isNull(workCase)) {
                     productGroup = workCase.getProductGroup();
                 }
 
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
-                log.debug("onCreation ::: newCreditFacilityView : {}", newCreditFacilityView);
-                if (newCreditFacilityView != null) {
+
+                if(Util.isNull(newCreditFacilityView)){
+                    newCreditFacilityView = new NewCreditFacilityView();
+                    reducePricePanelRendered = false;
+                    cannotEditStandard = true;
+                }else{
                     log.debug("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
 
                     modeForDB = ModeForDB.EDIT_DB;
@@ -331,37 +342,25 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(), existingCreditDetailViewList, workCaseId);
                     log.debug("[List for select in Collateral] :: proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
                     int lastSeqNumber = creditFacProposeControl.getLastSeqNumberFromProposeCredit(proposeCreditDetailViewList);
+
                     if (lastSeqNumber > 1) {
                         seq = lastSeqNumber + 1;
                     } else {
                         seq = lastSeqNumber;
                     }
+
                     log.info("lastSeqNumber :: {}", lastSeqNumber);
+
                     for (int i = 0; i < proposeCreditDetailViewList.size(); i++) {
                         if (proposeCreditDetailViewList.get(i).getTypeOfStep().equals("N")) {
                             log.info("proposeCreditDetailViewList.get(i).getUseCount :: {}", proposeCreditDetailViewList.get(i).getUseCount());
                             hashSeqCredit.put(i, proposeCreditDetailViewList.get(i).getUseCount());
                         }
                     }
+
                     notRetrievePricing = false;
-                } else { // for show on add new only !!
-                    newCreditFacilityView = new NewCreditFacilityView();
-//                    newCreditFacilityView.setWCNeed(BigDecimal.ZERO);
-//                    newCreditFacilityView.setTotalWcDebit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setTotalWcTmb(BigDecimal.ZERO);
-//                    newCreditFacilityView.setWCNeedDiffer(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase1WcLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase1WcMinLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase1Wc50CoreWc(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase1WcDebitCoreWc(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase2WcLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase2WcMinLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase2Wc50CoreWc(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase2WcDebitCoreWc(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase3WcLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase3WcMinLimit(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase3Wc50CoreWc(BigDecimal.ZERO);
-//                    newCreditFacilityView.setCase3WcDebitCoreWc(BigDecimal.ZERO);
+
+
                 }
 
             } catch (Exception ex) {
@@ -377,7 +376,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 } else {
                     specialProgramView = specialProgramTransform.transformToView(specialProgramDAO.findById(3));
                 }
-//                productGroup = basicInfoView.getProductGroup();
             }
 
             tcgView = tcgInfoControl.getTcgView(workCaseId);
@@ -392,11 +390,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             log.debug("collateralOwnerUwAllList size :: {}", collateralOwnerUwAllList.size());
         }
 
-        if (newCreditFacilityView == null) {
-            newCreditFacilityView = new NewCreditFacilityView();
-            reducePricePanelRendered = false;
-            cannotEditStandard = true;
-        }
 
         collateralOwnerUW = new CustomerInfoView();
 
@@ -467,7 +460,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                         severity = MessageDialogSeverity.ALERT.severity();
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     }
-                    proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(),existingCreditDetailViewList, workCaseId);
+                    proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(), existingCreditDetailViewList, workCaseId);
                     newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
 
                 } catch (COMSInterfaceException e) {
@@ -508,54 +501,102 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         if (!Util.isNull(workCaseId)) {
             try {
                 List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
-                NewFeeDetailView newFeeDetailView;
                 StandardPricingResponse standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
                 if (ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
-
+                    List<FeeDetail> feeDetailList = feeTransform.transformToDB(standardPricingResponse.getPricingFeeList(),workCaseId);
+                    Map<Long, NewFeeDetailView> newFeeDetailViewMap = new HashMap<Long, NewFeeDetailView>();
+                    NewFeeDetailView newFeeDetailView;
                     for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()) {
                         FeeDetailView feeDetailView = feeTransform.transformToView(pricingFee);
-
-                        log.debug("-- transformToView :: feeDetailView ::: {}", feeDetailView.toString());
-                        // find productProgram
                         if (feeDetailView.getFeeLevel() == FeeLevel.CREDIT_LEVEL) {
-                            newFeeDetailView = new NewFeeDetailView();
-                            ProductProgramView productProgramView = productTransform.transformToView(productProgramDAO.findById((int) feeDetailView.getCreditDetailViewId()));
-                            newFeeDetailView.setProductProgram(productProgramView.getDescription());
-                            if (feeDetailView.getFeeTypeView().getId() == 9) {//type=9,(Front-End-Fee)
-                                newFeeDetailView.setStandardFrontEndFee(feeDetailView);
-                            } else if (feeDetailView.getFeeTypeView().getId() == 15) { //type=15,(Prepayment Fee)
-                                newFeeDetailView.setPrepaymentFee(feeDetailView);
-                            } else if (feeDetailView.getFeeTypeView().getId() == 20) {//type=20,(CancellationFee)
-                                newFeeDetailView.setCancellationFee(feeDetailView);
-                            } else if (feeDetailView.getFeeTypeView().getId() == 21) { //type=21,(ExtensionFee)
-                                newFeeDetailView.setExtensionFee(feeDetailView);
-                            } else if (feeDetailView.getFeeTypeView().getId() == 22) {//type=22,(CommitmentFee)
-                                newFeeDetailView.setCommitmentFee(feeDetailView);
+                            if (newFeeDetailViewMap.containsKey(feeDetailView.getCreditDetailViewId())) {
+                                newFeeDetailView = newFeeDetailViewMap.get(feeDetailView.getCreditDetailViewId());
+                            } else {
+                                newFeeDetailView = new NewFeeDetailView();
+                                newFeeDetailViewMap.put(feeDetailView.getCreditDetailViewId(), newFeeDetailView);
                             }
 
-                            log.debug("FeePaymentMethodView():::: {}", feeDetailView.getFeePaymentMethodView().getBrmsCode());
-                            newFeeDetailViewList.add(newFeeDetailView);
+                            log.debug("-- transformToView :: feeDetailView ::: {}", feeDetailView.toString());
+                            // find productProgram
+
+                            log.debug("feeDetailView.getFeeLevel() :::: {}", feeDetailView.getFeeLevel());
+                            log.debug("feeDetailView.getCreditDetailViewId() :::: {}", feeDetailView.getCreditDetailViewId());
+                            NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(feeDetailView.getCreditDetailViewId());
+                            if (newCreditDetail != null) {
+                                NewCreditDetailView newCreditView = newCreditDetailTransform.transformToView(newCreditDetail);
+                                log.debug("newCreditView.getProductProgramView().getId() :::: {}", newCreditView.getProductProgramView().getId());
+                                ProductProgram productProgram = productProgramDAO.findById(newCreditView.getProductProgramView().getId());
+                                if (productProgram != null) {
+                                    log.debug("productProgram :: {}",productProgram.toString());
+                                    newFeeDetailView.setProductProgram(productProgram.getName());
+                                }
+                                if ("9".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=9,(Front-End-Fee)
+                                    newFeeDetailView.setStandardFrontEndFee(feeDetailView);
+                                } else if ("15".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=15,(Prepayment Fee)
+                                    newFeeDetailView.setPrepaymentFee(feeDetailView);
+                                } else if ("20".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=20,(CancellationFee)
+                                    newFeeDetailView.setCancellationFee(feeDetailView);
+                                } else if ("21".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=21,(ExtensionFee)
+                                    newFeeDetailView.setExtensionFee(feeDetailView);
+                                } else if ("22".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=22,(CommitmentFee)
+                                    newFeeDetailView.setCommitmentFee(feeDetailView);
+                                }
+
+                                log.debug("FeePaymentMethodView():::: {}", feeDetailView.getFeePaymentMethodView().getBrmsCode());
+                            }
                         }
                     }
+                    log.debug("feeDetailList not null ::: {}", feeDetailList.size());
+                    feeDetailDAO.persist(feeDetailList);
+                    log.debug("persist :: feeDetailList ::");
+
+                    if(newFeeDetailViewMap!=null && newFeeDetailViewMap.size()>0){
+                        Iterator it = newFeeDetailViewMap.entrySet().iterator();
+                        while (it.hasNext()) {
+                            Map.Entry pairs = (Map.Entry)it.next();
+                            newFeeDetailViewList.add((NewFeeDetailView) pairs.getValue());
+                            it.remove(); // avoids a ConcurrentModificationException
+                        }
+                    }
+
 
                     if (newFeeDetailViewList != null) {
                         log.debug("newFeeDetailViewList not null ::: {}", newFeeDetailViewList.size());
                         newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
                     }
 
-//                if(standardPricingResponse.getPricingInterest()!=null){
-//                    List<NewCreditTierDetailView> newCreditTier = newCreditTierTransform.transformPricingIntTierToView(standardPricingResponse.getPricingInterest());
-//                }
+                    log.debug("standardPricingResponse.getPricingInterest() : {}",standardPricingResponse.getPricingInterest());
+                    if(standardPricingResponse.getPricingInterest()!=null && standardPricingResponse.getPricingInterest().size()>0){
+                        for(PricingInterest pricingInterest: standardPricingResponse.getPricingInterest()){
+                            log.debug("pricingInterest : {}",pricingInterest);
+                            String creditTypeId = pricingInterest.getCreditDetailId();
+                            String stringId ;
+                            log.debug("getPricingInterest :: creditTypeId :: {}",creditTypeId);
+                            List<PricingIntTier> pricingIntTierList = pricingInterest.getPricingIntTierList();
+                            //transform tier to view
+                            List<NewCreditTierDetailView> newCreditTierViewList = newCreditTierTransform.transformPricingIntTierToView(pricingIntTierList);
+                            //assign tier view to credit detail view mapping by creditTypeId
+                            for(NewCreditDetailView newCreditView: newCreditFacilityView.getNewCreditDetailViewList()){
 
-                }
-                else if (ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
+                                stringId = String.valueOf(newCreditView.getId());
+                                log.debug("newCreditView.getId() toString :: {}",newCreditView.getId());
+                                if(stringId.equals(creditTypeId)){
+                                    newCreditView.setNewCreditTierDetailViewList(newCreditTierViewList);
+                                    break;
+                                }
+
+                            }
+                        }
+                        cannotAddTier = false;
+                    }
+
+                } else if (ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
                     messageHeader = msg.get("app.messageHeader.error");
                     message = standardPricingResponse.getReason();
                     severity = MessageDialogSeverity.ALERT.severity();
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
-            }
-            catch (BRMSInterfaceException e) {
+            } catch (BRMSInterfaceException e) {
                 log.debug("BRMSInterfaceException :: ");
                 messageHeader = msg.get("app.messageHeader.error");
                 message = e.getMessage();
@@ -639,6 +680,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     public void onCalInstallment(NewCreditDetailView newCreditDetailView) {
         log.debug("onCalInstallment :: ");
         creditFacProposeControl.calculateInstallment(newCreditDetailView);
+        creditFacProposeControl.calculatePCEAmount(newCreditDetailView);
     }
 
     public void onAddCreditInfo() {
@@ -668,18 +710,17 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         newCreditDetailView = cloner.deepClone(newCreditDetailSelected);
 
 
-
         prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(newCreditDetailView.getProductProgramView());
         creditFacProposeControl.calculateInstallment(newCreditDetailView);
 
         if (newCreditDetailView.getRequestType() == RequestTypes.NEW.value()) {
             if (newCreditDetailView.getNewCreditTierDetailViewList() != null && newCreditDetailView.getNewCreditTierDetailViewList().size() > 0) {
-                BaseRate suggestBaseRate = newCreditDetailView.getNewCreditTierDetailViewList().get(0).getSuggestBasePrice();
+                BaseRate suggestBaseRate = baseRateTransform.transformToModel(newCreditDetailView.getNewCreditTierDetailViewList().get(0).getSuggestBasePrice());
                 BigDecimal suggestInterest = newCreditDetailView.getNewCreditTierDetailViewList().get(0).getSuggestInterest();
                 suggestInterestDlg = new BigDecimal(suggestInterest.doubleValue());
                 suggestBasePriceDlg = getNewBaseRate(suggestBaseRate);
 
-                BaseRate standardBaseRate = newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardBasePrice();
+                BaseRate standardBaseRate = baseRateTransform.transformToModel(newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardBasePrice());
                 BigDecimal standardInterest = newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardInterest();
                 standardInterestDlg = new BigDecimal(standardInterest.doubleValue());
                 standardBasePriceDlg = getNewBaseRate(standardBaseRate);
@@ -829,11 +870,12 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //
 //        if (used <= 0) {
 //            log.info("used ::: {} ", used);
-            if (newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId() != 0) {
-                deleteCreditIdList.add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
-            }
+        if (newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId() != 0) {
+            deleteCreditIdList.add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
+            newCreditFacilityView.getNewCreditDetailViewList().remove(newCreditDetailSelected);
+        }
 
-//            newCreditFacilityView.getNewCreditDetailViewList().remove(newCreditDetailSelected);
+
 //        } else {
 //            log.info("used::: {}", used);
 //            messageHeader = msg.get("app.propose.exception");
@@ -851,7 +893,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         if (!Util.isNull(proposeCreditDetailViewList)) {
             for (ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViewList) {
                 seq = proposeCreditDetailView.getSeq();
-                log.info("seq :: {}",seq);
+                log.info("seq :: {}", seq);
                 useCount = hashSeqCredit.get(seq);
                 if (proposeCreditDetailView.getTypeOfStep().equals("N")) {
                     proposeCreditDetailView.setUseCount(useCount);
@@ -928,15 +970,15 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
         creditTierDetailAdd.setFinalPriceLabel(finalPriceLabel);
         creditTierDetailAdd.setFinalInterest(finalInterest);
-        creditTierDetailAdd.setFinalBasePrice(finalBaseRate);
+        creditTierDetailAdd.setFinalBasePrice(baseRateTransform.transformToView(finalBaseRate));
 
         creditTierDetailAdd.setSuggestPriceLabel(suggestPriceLabel);
         creditTierDetailAdd.setSuggestInterest(new BigDecimal(suggestInterestDlg.doubleValue()));
-        creditTierDetailAdd.setSuggestBasePrice(suggestBase);
+        creditTierDetailAdd.setSuggestBasePrice(baseRateTransform.transformToView(suggestBase));
 
         creditTierDetailAdd.setStandardPriceLabel(standardPriceLabel);
         creditTierDetailAdd.setStandardInterest(new BigDecimal(standardInterestDlg.doubleValue()));
-        creditTierDetailAdd.setStandardBasePrice(standardBase);
+        creditTierDetailAdd.setStandardBasePrice(baseRateTransform.transformToView(standardBase));
 
         creditTierDetailAdd.setCanEdit(true);
 
@@ -1468,9 +1510,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             log.debug("newGuarantorDetailViewItem.getProposeCreditDetailViewList():: amount ::  {}", newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(0).getGuaranteeAmount());
 
             for (ProposeCreditDetailView proposeCreditDetailView : newGuarantorDetailView.getProposeCreditDetailViewList()) {
-                for (ProposeCreditDetailView proposeeCreditDetailSelect : selectedGuarantorCrdTypeItems) {
-                    if (proposeCreditDetailView.getSeq() == proposeeCreditDetailSelect.getSeq()) {
-                        proposeCreditDetailView.setGuaranteeAmount(proposeeCreditDetailSelect.getGuaranteeAmount());
+                for (ProposeCreditDetailView proposeCreditDetailSelect : selectedGuarantorCrdTypeItems) {
+                    if (proposeCreditDetailView.getSeq() == proposeCreditDetailSelect.getSeq()) {
+                        proposeCreditDetailView.setGuaranteeAmount(proposeCreditDetailSelect.getGuaranteeAmount());
                     }
                 }
             }
@@ -1491,14 +1533,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 NewGuarantorDetailView guarantorDetailAdd = new NewGuarantorDetailView();
 
                 guarantorDetailAdd.setGuarantorName(customerInfoView);
-                if(customerInfoView.getCustomerEntity().getId()==GuarantorCategory.INDIVIDUAL.value()){
+                if (customerInfoView.getCustomerEntity().getId() == GuarantorCategory.INDIVIDUAL.value()) {
                     guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
-                }else if (customerInfoView.getCustomerEntity().getId()==GuarantorCategory.JURISTIC.value()){
+                } else if (customerInfoView.getCustomerEntity().getId() == GuarantorCategory.JURISTIC.value()) {
                     guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.JURISTIC);
 //                todo: What is TCG ?
 //                }else if (customerInfoView.getCustomerEntity().getId()==GuarantorCategory.TCG.value()){
 //                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.TCG);
-                }else{
+                } else {
                     guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.NA);
                 }
 
@@ -1511,20 +1553,20 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                         newCreditTypeItems.add(creditTypeItem);
                         log.debug("creditTypeItem.getGuaranteeAmount() :: {}", creditTypeItem.getGuaranteeAmount());
                         summary = Util.add(summary, creditTypeItem.getGuaranteeAmount());
-                        log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
-                        log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
+//                        log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
+//                        log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
                     }
 
                     guarantorDetailAdd.setProposeCreditDetailViewList(newCreditTypeItems);
 
-                    for (int i = 0; i < guarantorDetailAdd.getProposeCreditDetailViewList().size(); i++) {
-                        seqTemp = guarantorDetailAdd.getProposeCreditDetailViewList().get(i).getSeq();
-                        if (guarantorDetailAdd.getProposeCreditDetailViewList().get(i).isNoFlag()) {
-                            hashSeqCredit.put(seqTemp, hashSeqCredit.get(i) + 1);
-                        } else {
-                            hashSeqCredit.put(seqTemp, hashSeqCredit.get(i) - 1);
-                        }
-                    }
+//                    for (int i = 0; i < guarantorDetailAdd.getProposeCreditDetailViewList().size(); i++) {
+//                        seqTemp = guarantorDetailAdd.getProposeCreditDetailViewList().get(i).getSeq();
+//                        if (guarantorDetailAdd.getProposeCreditDetailViewList().get(i).isNoFlag()) {
+//                            hashSeqCredit.put(seqTemp, hashSeqCredit.get(i) + 1);
+//                        } else {
+//                            hashSeqCredit.put(seqTemp, hashSeqCredit.get(i) - 1);
+//                        }
+//                    }
 
                     guarantorDetailAdd.setTotalLimitGuaranteeAmount(summary);
                     newCreditFacilityView.getNewGuarantorDetailViewList().add(guarantorDetailAdd);
@@ -1549,20 +1591,20 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                         newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().add(creditTypeItem);
                         log.debug(" newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().get(0).getGuaranteeAmount(); :: {}", newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().get(0).getGuaranteeAmount());
                         summary = Util.add(summary, creditTypeItem.getGuaranteeAmount());
-                        log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
-                        log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
+//                        log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
+//                        log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
                     }
                     newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setTotalLimitGuaranteeAmount(summary);
                     complete = true;
 
-                    for (int i = 0; i < newGuarantorDetailView.getProposeCreditDetailViewList().size(); i++) {
-                        seqTemp = newGuarantorDetailView.getProposeCreditDetailViewList().get(i).getSeq();
-                        if (newGuarantorDetailView.getProposeCreditDetailViewList().get(i).isNoFlag()) {
-                            hashSeqCredit.put(seqTemp, hashSeqCredit.get(i) + 1);
-                        } else {
-                            hashSeqCredit.put(seqTemp, hashSeqCredit.get(i) - 1);
-                        }
-                    }
+//                    for (int i = 0; i < newGuarantorDetailView.getProposeCreditDetailViewList().size(); i++) {
+//                        seqTemp = newGuarantorDetailView.getProposeCreditDetailViewList().get(i).getSeq();
+//                        if (newGuarantorDetailView.getProposeCreditDetailViewList().get(i).isNoFlag()) {
+//                            hashSeqCredit.put(seqTemp, hashSeqCredit.get(i) + 1);
+//                        } else {
+//                            hashSeqCredit.put(seqTemp, hashSeqCredit.get(i) - 1);
+//                        }
+//                    }
 
                 } else {
                     messageHeader = msg.get("app.propose.exception");
@@ -1652,11 +1694,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
             creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
             // Calculate Total Propose
-            creditFacProposeControl.calculateTotalProposeAmount(newCreditFacilityView, basicInfoView, tcgView, workCaseId);
+            newCreditFacilityView = creditFacProposeControl.calculateTotalProposeAmount(newCreditFacilityView, basicInfoView, tcgView, workCaseId);
             // Calculate Total for BRMS
-            creditFacProposeControl.calculateTotalForBRMS(newCreditFacilityView);
+            newCreditFacilityView = creditFacProposeControl.calculateTotalForBRMS(newCreditFacilityView);
             // Save NewCreditFacility, ProposeCredit, Collateral, Guarantor
             newCreditFacilityView = creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
+            // Calculate WC
+            creditFacProposeControl.calWC(workCaseId);
+
             onCreation();
 
             exSummaryControl.calForCreditFacility(workCaseId);

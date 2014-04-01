@@ -7,6 +7,9 @@ public class ReportView implements Serializable {
 
     private String nameReportOpShect;
     private String nameReportExSum;
+    private String nameReportRejectLetter;
+    private String nameReportAppralsal;
+
 
     public ReportView() {
     }
@@ -25,5 +28,21 @@ public class ReportView implements Serializable {
 
     public void setNameReportOpShect(String nameReportOpShect) {
         this.nameReportOpShect = nameReportOpShect;
+    }
+
+    public String getNameReportRejectLetter() {
+        return nameReportRejectLetter;
+    }
+
+    public void setNameReportRejectLetter(String nameReportRejectLetter) {
+        this.nameReportRejectLetter = nameReportRejectLetter;
+    }
+
+    public String getNameReportAppralsal() {
+        return nameReportAppralsal;
+    }
+
+    public void setNameReportAppralsal(String nameReportAppralsal) {
+        this.nameReportAppralsal = nameReportAppralsal;
     }
 }

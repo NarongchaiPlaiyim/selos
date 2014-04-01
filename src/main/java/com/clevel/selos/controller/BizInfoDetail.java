@@ -348,6 +348,8 @@ public class BizInfoDetail implements Serializable {
             }
             else{
                 bizInfoDetailView.setBizPermission("N");
+                bizInfoDetailView.setBizDocPermission("");
+                bizInfoDetailView.setBizDocExpiryDate(null);
             }
         }
     }

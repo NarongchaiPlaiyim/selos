@@ -24,7 +24,7 @@ public class SearchApplicationNoDAO extends GenericDAO<SearchApplicationNo,Strin
 
     }
 
-    public List<SearchApplicationNo> getApplicationNoByWorkCaseId(int workcaseid)
+    public List<SearchApplicationNo> getApplicationNoByWorkCaseId(int workcaseid, int bpmActive)
     {
         List<SearchApplicationNo> applicationNoList = new ArrayList<SearchApplicationNo>();
 
@@ -33,6 +33,8 @@ public class SearchApplicationNoDAO extends GenericDAO<SearchApplicationNo,Strin
         Criteria criteria = getSession().createCriteria(SearchApplicationNo.class);
 
         criteria.setProjection( Projections.projectionList().add(Projections.property("applicationNo"),"applicationNo"));
+
+        criteria.add(Restrictions.eq("bpmActive",bpmActive));
 
         criteria.add(Restrictions.eq("id", workcaseid)).setResultTransformer(Transformers.aliasToBean(SearchApplicationNo.class));
 

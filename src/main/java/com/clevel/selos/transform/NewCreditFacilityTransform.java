@@ -22,7 +22,9 @@ public class NewCreditFacilityTransform extends Transform {
     private Logger log;
 
     @Inject
-    public NewCreditFacilityTransform() {}
+    public NewCreditFacilityTransform() {
+    }
+
     @Inject
     private CreditRequestTypeDAO creditRequestTypeDAO;
     @Inject
@@ -56,7 +58,7 @@ public class NewCreditFacilityTransform extends Transform {
     @Inject
     private NewFeeDetailTransform newFeeDetailTransform;
     @Inject
-    private  NewCreditDetailTransform newCreditDetailTransform;
+    private NewCreditDetailTransform newCreditDetailTransform;
     @Inject
     private NewGuarantorDetailTransform newGuarantorDetailTransform;
     @Inject
@@ -217,16 +219,17 @@ public class NewCreditFacilityTransform extends Transform {
             newCreditFacilityView.setTotalMortgageValue(newCreditFacility.getTotalMortgageValue());
         }
 
-        Country country = countryDAO.findById(newCreditFacility.getInvestedCountry().getId());
-        if(!Util.isNull(country)){
-            CountryView countryView = countryTransform.transformToView(country);
-            newCreditFacilityView.setInvestedCountry(countryView);
-        } else {
-            log.debug("-- Country is null while findById {}", newCreditFacility.getInvestedCountry().getId());
-            newCreditFacilityView.setInvestedCountry(new CountryView());
+        if (!Util.isNull(newCreditFacility.getInvestedCountry())) {
+            Country country = countryDAO.findById(newCreditFacility.getInvestedCountry().getId());
+            if (!Util.isNull(country)) {
+                CountryView countryView = countryTransform.transformToView(country);
+                newCreditFacilityView.setInvestedCountry(countryView);
+            } else {
+                log.debug("-- Country is null while findById {}", newCreditFacility.getInvestedCountry().getId());
+                newCreditFacilityView.setInvestedCountry(new CountryView());
+            }
+
         }
-
-
         newCreditFacilityView.setTotalGuaranteeAmount(newCreditFacility.getTotalGuaranteeAmount());
         newCreditFacilityView.setRelatedTMBLending(newCreditFacility.getRelatedTMBLending());
         newCreditFacilityView.setTwentyFivePercentShareRelatedTMBLending(newCreditFacility.getTwentyFivePercentShareRelatedTMBLending());

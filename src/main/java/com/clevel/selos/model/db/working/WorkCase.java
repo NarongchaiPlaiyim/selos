@@ -27,7 +27,7 @@ public class WorkCase extends AbstractWorkCase{
 
     @Column(name = "request_appraisal", columnDefinition = "int default 0")
     private int requestAppraisal;
-
+	
     public long getId() {
         return id;
     }
@@ -75,6 +75,7 @@ public class WorkCase extends AbstractWorkCase{
                 .append("wobNumber", wobNumber)
                 .append("stepOwner", stepOwner)
                 .append("workCasePrescreen", workCasePrescreen)
+                .append("bpmActive", bpmActive)
                 .toString();
     }
 }
