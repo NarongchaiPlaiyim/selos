@@ -287,11 +287,11 @@ public class ExSummaryControl extends BusinessControl {
 
         Long statusId = 0L;
         HttpSession session = FacesUtil.getSession(true);
-        if(session.getAttribute("status_id") != null){
-            statusId = Long.parseLong(session.getAttribute("status_id").toString());
+        if(session.getAttribute("statusId") != null){
+            statusId = Long.parseLong(session.getAttribute("statusId").toString());
         }
 
-        if(statusId >= 2005){
+        if(statusId >= StatusValue.REVIEW_CA.value()){
             exSumCharacteristicView.setSalePerYearUW(exSummary.getSalePerYearUW());
             exSumCharacteristicView.setGroupSaleUW(exSummary.getGroupSaleUW());
             exSumCharacteristicView.setGroupExposureUW(exSummary.getGroupExposureUW());
