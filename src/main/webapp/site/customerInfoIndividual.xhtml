@@ -507,7 +507,7 @@
                                     </td>
                                     <td>
                                         <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
-                                                         value="#{custInfoSumIndi.customerInfoView.businessType.id}" id="businessType"
+                                                         value="#{custInfoSumIndi.customerInfoView.businessSubType.id}" id="businessType"
                                                          required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndBizType}"
                                                          disabled="#{not custInfoSumIndi.enableAllFieldCus}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -1824,7 +1824,7 @@
                                                         <td>
                                                             <p:selectOneMenu size="1" id="businessTypeSpouse"
                                                                              style="width: 200px; max-width: 200px; min-width: 200px;"
-                                                                             value="#{custInfoSumIndi.customerInfoView.spouse.businessType.id}"
+                                                                             value="#{custInfoSumIndi.customerInfoView.spouse.businessSubType.id}"
                                                                              disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}">
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.businessTypeList}"
