@@ -36,6 +36,10 @@
         table.ovr-border tbody td {
             border-style: none !important;
         }
+        .calendar_right input {
+            background: #ffffff !important;
+            border: 1px solid #868686 !important;
+        }
     </style>
 </h:head>
 
@@ -174,7 +178,7 @@
                                                         <!-- BEGIN: Credit Tier Detail [0] -->
                                                         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].installment : ''}">
+                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].installment : '0.00'}">
                                                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="19"/>
                                                             </h:outputText>
                                                         </td>
@@ -190,7 +194,7 @@
                                                         </td>
                                                         <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].tenor : ''}">
+                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].tenor : '0'}">
                                                                 <f:convertNumber pattern="#,##0" maxIntegerDigits="19"/>
                                                             </h:outputText>
                                                         </td>
@@ -419,7 +423,7 @@
                                                         <!-- BEGIN: Credit Tier Detail [0] -->
                                                         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].installment : ''}">
+                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].installment : '0.00'}">
                                                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="19"/>
                                                             </h:outputText>
                                                         </td>
@@ -435,7 +439,7 @@
                                                         </td>
                                                         <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].tenor : ''}">
+                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].tenor : '0'}">
                                                                 <f:convertNumber pattern="#,##0" maxIntegerDigits="19"/>
                                                             </h:outputText>
                                                         </td>
@@ -631,7 +635,7 @@
                                                         <!-- BEGIN: Credit Tier Detail [0] -->
                                                         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].installment : ''}">
+                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].installment : '0.00'}">
                                                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="19"/>
                                                             </h:outputText>
                                                         </td>
@@ -647,7 +651,7 @@
                                                         </td>
                                                         <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].tenor : ''}">
+                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].tenor : '0'}">
                                                                 <f:convertNumber pattern="#,##0" maxIntegerDigits="19"/>
                                                             </h:outputText>
                                                         </td>
@@ -908,7 +912,7 @@
                                                         <!-- BEGIN: Credit Tier Detail [0] -->
                                                         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    relatedCredit.existingCreditTierDetailViewList[0].installment : ''}">
+                                                                                    relatedCredit.existingCreditTierDetailViewList[0].installment : '0.00'}">
                                                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                             </h:outputText>
                                                         </td>
@@ -923,7 +927,7 @@
                                                         </td>
                                                         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    relatedCredit.existingCreditTierDetailViewList[0].tenor : ''}">
+                                                                                    relatedCredit.existingCreditTierDetailViewList[0].tenor : '0'}">
                                                                 <f:convertNumber pattern="#,##0"/>
                                                             </h:outputText>
                                                         </td>
@@ -1118,7 +1122,7 @@
                                                         <!-- BEGIN: Credit Tier Detail [0] -->
                                                         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    relatedCredit.existingCreditTierDetailViewList[0].installment : ''}">
+                                                                                    relatedCredit.existingCreditTierDetailViewList[0].installment : '0.00'}">
                                                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                             </h:outputText>
                                                         </td>
@@ -1133,7 +1137,7 @@
                                                         </td>
                                                         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    relatedCredit.existingCreditTierDetailViewList[0].tenor : ''}">
+                                                                                    relatedCredit.existingCreditTierDetailViewList[0].tenor : '0'}">
                                                                 <f:convertNumber pattern="#,##0"/>
                                                             </h:outputText>
                                                         </td>
@@ -1328,7 +1332,7 @@
                                                         <!-- BEGIN: Credit Tier Detail [0] -->
                                                         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    relatedCredit.existingCreditTierDetailViewList[0].installment : ''}">
+                                                                                    relatedCredit.existingCreditTierDetailViewList[0].installment : '0.00'}">
                                                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                             </h:outputText>
                                                         </td>
@@ -1343,7 +1347,7 @@
                                                         </td>
                                                         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    relatedCredit.existingCreditTierDetailViewList[0].tenor : ''}">
+                                                                                    relatedCredit.existingCreditTierDetailViewList[0].tenor : '0'}">
                                                                 <f:convertNumber pattern="#,##0"/>
                                                             </h:outputText>
                                                         </td>
@@ -2963,7 +2967,7 @@
                                     <ui:repeat value="#{decision.decisionView.proposeCollateralList}"
                                                var="proposeColl" varStatus="collIndex">
                                     <tr>
-                                        <td class="title" style="width: 150px">#{msg.get('app.decision.label.jobId')}</td>
+                                        <td class="title" style="width: 15%">#{msg.get('app.decision.label.jobId')}</td>
                                         <td class="left" colspan="3">#{proposeColl.jobID}</td>
                                     </tr>
                                     <tr>
@@ -2980,9 +2984,9 @@
                                     </tr>
                                     <tr>
                                         <td class="title">#{msg.get('app.decision.label.AADDecisionReason')}</td>
-                                        <td class="left">#{proposeColl.aadDecisionReason}</td>
-                                        <td class="title">#{msg.get('app.decision.label.AADDecisionReasonDetail')}</td>
-                                        <td class="left">#{proposeColl.aadDecisionReasonDetail}</td>
+                                        <td class="left" style="width: 35%">#{proposeColl.aadDecisionReason}</td>
+                                        <td class="title" style="width: 15%">#{msg.get('app.decision.label.AADDecisionReasonDetail')}</td>
+                                        <td class="left" style="width: 35%">#{proposeColl.aadDecisionReasonDetail}</td>
                                     </tr>
                                     <tr>
                                         <td class="title">#{msg.get('app.decision.label.usage')}</td>
@@ -3062,7 +3066,7 @@
                                     <ui:repeat value="#{proposeColl.newCollateralHeadViewList}"
                                                var="collHead" varStatus="collHeadIndex">
                                         <tr>
-                                            <td class="title">#{msg.get('app.decision.label.potential')}</td>
+                                            <td class="title" style="width: 15%">#{msg.get('app.decision.label.potential')}</td>
                                             <td class="left" colspan="3">
                                                 <h:outputText value="#{collHead.potentialCollateral.description}"
                                                               rendered="#{not empty collHead.potentialCollateral}"/>
@@ -3235,8 +3239,8 @@
                                     <ui:repeat value="#{decision.decisionView.approveCollateralList}"
                                                var="proposeColl" varStatus="collIndex">
                                     <tr>
-                                        <td class="title" style="width: 150px">#{msg.get('app.decision.label.jobId')}</td>
-                                        <td class="left">#{proposeColl.jobID}</td>
+                                        <td class="title" style="width: 15%">#{msg.get('app.decision.label.jobId')}</td>
+                                        <td class="left" style="width: 35%">#{proposeColl.jobID}</td>
                                         <td class="right" colspan="2">
                                             <!-- Approved Collateral (Edit/Delete) Button -->
                                             <p:commandButton id="btnEditApprovedCollateral"
@@ -3281,8 +3285,8 @@
                                     <tr>
                                         <td class="title">#{msg.get('app.decision.label.AADDecisionReason')}</td>
                                         <td class="left">#{proposeColl.aadDecisionReason}</td>
-                                        <td class="title">#{msg.get('app.decision.label.AADDecisionReasonDetail')}</td>
-                                        <td class="left">#{proposeColl.aadDecisionReasonDetail}</td>
+                                        <td class="title" style="width: 15%">#{msg.get('app.decision.label.AADDecisionReasonDetail')}</td>
+                                        <td class="left" style="width: 35%">#{proposeColl.aadDecisionReasonDetail}</td>
                                     </tr>
                                     <tr>
                                         <td class="title">#{msg.get('app.decision.label.usage')}</td>
@@ -3381,7 +3385,7 @@
                                     <ui:repeat value="#{proposeColl.newCollateralHeadViewList}"
                                                var="collHeader" varStatus="collHeadIndex">
                                         <tr>
-                                            <td class="title">#{msg.get('app.decision.label.potential')}</td>
+                                            <td class="title" style="width: 15%">#{msg.get('app.decision.label.potential')}</td>
                                             <td class="left" colspan="3">
                                                 <h:outputText value="#{collHeader.potentialCollateral.description}"
                                                               rendered="#{not empty collHeader.potentialCollateral}"/>
@@ -3836,7 +3840,7 @@
                             <td class="left" colspan="2">
                                 <table border="0">
                                     <tr>
-                                        <td class="left" style="border-style: none !important;">
+                                        <td class="left" style="border-style: none !important; width: 400px">
                                             <p:selectOneMenu value="#{decision.decisionFollowConditionView.conditionView.id}"
                                                              disabled="#{not decision.roleUW}"
                                                              style="width: 400px"
