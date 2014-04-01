@@ -720,7 +720,7 @@ public class PEDBExecute extends BusinessControl
 
             query = " select "+queryForRosterColumns+" from ";
 
-            sqlQueryForReturnByMe = query +prefix+"."+tableName+ " where PreviousUser = '" + userName + "' AND PreviousAction in (" + descriptionValues + ")";
+            sqlQueryForReturnByMe = query +prefix+"."+tableName+ " where lower(PreviousUser) = lower('" + userName + "') AND PreviousAction in (" + descriptionValues + ")";
 
             sqlpequery = sqlQueryForReturnByMe;
 
