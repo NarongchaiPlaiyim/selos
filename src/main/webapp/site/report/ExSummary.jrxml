@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="992d94ee-ab0e-458e-a59a-046b96b4a957">
-	<property name="ireport.zoom" value="2.4157650000000377"/>
-	<property name="ireport.x" value="71"/>
-	<property name="ireport.y" value="805"/>
+	<property name="ireport.zoom" value="1.3636363636363844"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Frame">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -11,9 +11,6 @@
 			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 		</box>
 	</style>
-	<parameter name="SUBREPORT_DIR" class="com.clevel.selos.model.report.BorrowerExsumReport" isForPrompting="false">
-		<defaultValueExpression><![CDATA["/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/SLOSSharedLib/reportTemplate/"]]></defaultValueExpression>
-	</parameter>
 	<parameter name="path" class="java.lang.String"/>
 	<parameter name="borrower" class="java.util.Collection"/>
 	<parameter name="tradeFinance" class="java.util.Collection"/>
@@ -54,8 +51,8 @@
 			<frame>
 				<reportElement uuid="cfa39487-fa82-48d2-a892-cacff317c90e" mode="Opaque" x="0" y="0" width="555" height="80" forecolor="#CCCCFF" backcolor="#FFFFFF"/>
 				<box>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="3880145d-832e-45ab-916f-fde3eb897e3b" x="0" y="0" width="43" height="12"/>
@@ -86,9 +83,9 @@
 				<reportElement uuid="628c86d3-fb16-491e-8df5-2bd7c7cb2085" style="Frame" mode="Opaque" x="0" y="0" width="555" height="91" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="97689985-8098-4d07-a2f9-601f1992e3e3" mode="Opaque" x="0" y="4" width="107" height="20"/>
@@ -208,10 +205,9 @@
 			<frame>
 				<reportElement uuid="7a816d29-af68-4ca7-9a67-d351b4029524" style="Frame" mode="Opaque" x="0" y="0" width="555" height="67" backcolor="#FFFFFF"/>
 				<box>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="7ffb1a04-3417-4c04-936a-1992627df6de" x="0" y="0" width="84" height="13"/>
@@ -241,9 +237,9 @@
 			<frame>
 				<reportElement uuid="82a64e92-741d-4b58-a95b-dba5e95b81ca" style="Frame" mode="Opaque" x="0" y="0" width="555" height="190" backcolor="#FFFFFF"/>
 				<box>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="e0768087-ef66-4f0d-8e36-5cd4dc0a3488" x="0" y="0" width="100" height="13"/>
@@ -1194,9 +1190,9 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="5b75cd4f-7bf3-4033-8b9c-72f98749ea7f" style="Frame" mode="Opaque" x="0" y="0" width="555" height="74" backcolor="#FFFFFF"/>
 				<box>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="a3fc204f-e081-4d54-9013-40cac6fceee1" x="0" y="0" width="100" height="13"/>
@@ -1216,9 +1212,9 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="bb48fc1e-c7d7-420a-a220-8d422a4fc212" style="Frame" mode="Opaque" x="0" y="0" width="555" height="73" backcolor="#FFFFFF"/>
 				<box>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="6d4f3f77-1358-4086-b22e-69443a91314e" x="0" y="0" width="100" height="13"/>
@@ -1564,10 +1560,9 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="c8f6258d-baa9-42e7-8ea3-bfb785852658" style="Frame" mode="Opaque" x="0" y="0" width="555" height="84" backcolor="#FFFFFF"/>
 				<box>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="d4ae14ab-2304-4d56-bc6a-f5602343e9f7" mode="Opaque" x="116" y="29" width="98" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
@@ -1757,10 +1752,9 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="d59b0748-114a-48c5-b680-50e0df908729" style="Frame" mode="Opaque" x="0" y="0" width="555" height="67" backcolor="#FFFFFF"/>
 				<box>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="6f85c264-3202-488a-97c7-638315c7dd18" mode="Opaque" x="84" y="21" width="66" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
@@ -2006,10 +2000,8 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="663b58b5-decc-479f-a991-c93ca0b8f65c" style="Frame" mode="Opaque" x="0" y="0" width="555" height="97" backcolor="#FFFFFF"/>
 				<box>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="579d4ae7-a46f-4a78-90c7-ed7968225e17" x="0" y="0" width="150" height="13"/>
@@ -2254,8 +2246,8 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="410d8025-72eb-492a-a55a-a690ff5b1a2a" mode="Opaque" x="0" y="0" width="555" height="108" backcolor="#FFFFFF"/>
 				<box>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="13091f9d-b9f9-48d2-b4c1-4e5b351687d7" x="0" y="0" width="194" height="13"/>
@@ -2305,10 +2297,8 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="9a20f81a-60de-47f2-a3dc-6f848c0cb91c" style="Frame" mode="Opaque" x="0" y="0" width="555" height="89" backcolor="#FFFFFF"/>
 				<box>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="04373913-1026-42ea-8e70-e7def2eb9e70" x="0" y="0" width="346" height="13"/>
@@ -2337,10 +2327,8 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="534233f1-7110-413e-a728-1b5eb4ebe217" style="Frame" mode="Opaque" x="0" y="0" width="555" height="90" backcolor="#FFFFFF"/>
 				<box>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="c077c0ec-75b5-4e1d-8c4d-98ffd7489d84" x="0" y="0" width="176" height="13"/>
@@ -2376,10 +2364,8 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="b389500f-d085-4153-8248-0707e0e58612" style="Frame" mode="Opaque" x="0" y="0" width="555" height="93" backcolor="#FFFFFF"/>
 				<box>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="59d075d6-b008-43ed-82a0-213de26350fb" x="0" y="0" width="176" height="13"/>
@@ -2415,10 +2401,8 @@ Asset]]></text>
 			<frame>
 				<reportElement uuid="adfb4946-dfad-42c8-8465-b2239f369f1c" style="Frame" mode="Opaque" x="0" y="0" width="555" height="114" backcolor="#FFFFFF"/>
 				<box>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="754b1412-0fb1-424c-8a30-1f5693bf4499" x="0" y="0" width="116" height="13"/>
@@ -2506,10 +2490,8 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 			<frame>
 				<reportElement uuid="b399504b-fdde-410b-b949-8e54c357c5ea" style="Frame" mode="Opaque" x="0" y="0" width="555" height="74" backcolor="#FFFFFF"/>
 				<box>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="ca21416e-27bb-4044-88b0-bc72d7a47a0c" x="0" y="0" width="409" height="11"/>
@@ -2583,11 +2565,8 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 			<frame>
 				<reportElement uuid="e5d5fb1a-7d91-42a0-be5c-26b957ee3572" style="Frame" mode="Opaque" x="0" y="0" width="555" height="72" backcolor="#FFFFFF"/>
 				<box>
-					<pen lineColor="#CCCCCC"/>
-					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="760d17cf-3602-4381-af31-d126c4d0fc30" x="0" y="0" width="419" height="11"/>
@@ -2661,10 +2640,8 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 			<frame>
 				<reportElement uuid="55278db9-2a27-4948-b5f5-4e60801a5e81" style="Frame" mode="Opaque" x="0" y="0" width="555" height="126" backcolor="#FFFFFF"/>
 				<box>
-					<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="7a664b57-93ac-4367-ac64-e601e43a95bb" x="0" y="0" width="140" height="13"/>
@@ -2876,9 +2853,9 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				<reportElement uuid="1fa0909a-68b6-49ed-b944-0609237a60af" style="Frame" mode="Opaque" x="0" y="0" width="555" height="68" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="c9b7a981-0af1-4a01-95c6-84954aeb9137" mode="Opaque" x="6" y="21" width="518" height="36"/>
