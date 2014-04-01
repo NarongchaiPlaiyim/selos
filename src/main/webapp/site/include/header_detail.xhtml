@@ -89,11 +89,6 @@
                         <p:commandButton value="#{msg.get('app.button.no')}" styleClass="ui-confirmdialog-no"
                                          type="button" onclick="confrmCloseSaleCA.hide()" />
                     </p:confirmDialog>
-                <!--Cancel Appraisal Request (Prescreen)-->
-                <p:commandButton id="btnCancelReqApprPreScreen" value="#{msg.get('app.header.button.cancelAppraisalRequest')}" styleClass="blueButton" title="#{msg.get('app.header.button.cancelAppraisalRequest')}"
-                                 rendered="#{baseController.checkButton('Cancel Appraisal Request')}">
-
-                </p:commandButton>
             </p:panel>
 
             <!--Stage for FullApplication-->
@@ -141,15 +136,15 @@
                                  update=":frmMain:returnBDMPanel">
                     <p:resetInput target=":frmMain:returnBDMPanel"/>
                 </p:commandButton>
-                <!--Request Appraisal Prescreen-->
-                <p:commandButton id="btnReqApprFullapp" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
+                <!--Request Appraisal Fullapp-->
+                <!--<p:commandButton id="btnReqApprFullapp" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
                                  rendered="#{baseController.checkButton('Request Appraisal')}"
                                  process="@this"
                                  actionListener="#{baseController.onOpenRequestAppraisal()}"
                                  update=":frmMain:reqApprDialogPanel"
                                  oncomplete="reqApprDlg.show()">
                     <p:resetInput target=":frmMain:reqApprDialogPanel"/>
-                </p:commandButton>
+                </p:commandButton>-->
                 <!--Cancel CA FullApplication-->
                 <p:commandButton id="btnCancelCAFullApp" value="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
                                  rendered="#{baseController.checkButton('Cancel CA')}"
