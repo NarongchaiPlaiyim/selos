@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "mst_rule_name")
+@Table(name = "mst_uw_rule_name")
 public class UWRuleName {
     @Id
     @Column(name = "id")
@@ -21,8 +21,11 @@ public class UWRuleName {
     @Column(name = "brms_code", length = 100)
     private String brmsCode;
 
+    @Column(name = "final_rate_flag", length = 1, columnDefinition = "int default 0")
+    private boolean finalRateFlag;
+
     @ManyToOne
-    @JoinColumn(name = "rule_group")
+    @JoinColumn(name = "rule_group_id")
     private UWRuleGroup ruleGroup;
 
     public int getId() {
@@ -31,6 +34,14 @@ public class UWRuleName {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -49,6 +60,14 @@ public class UWRuleName {
         this.brmsCode = brmsCode;
     }
 
+    public boolean isFinalRateFlag() {
+        return finalRateFlag;
+    }
+
+    public void setFinalRateFlag(boolean finalRateFlag) {
+        this.finalRateFlag = finalRateFlag;
+    }
+
     public UWRuleGroup getRuleGroup() {
         return ruleGroup;
     }
@@ -61,8 +80,10 @@ public class UWRuleName {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
+                .append("name", name)
                 .append("description", description)
                 .append("brmsCode", brmsCode)
+                .append("finalRateFlag", finalRateFlag)
                 .append("ruleGroup", ruleGroup)
                 .toString();
     }

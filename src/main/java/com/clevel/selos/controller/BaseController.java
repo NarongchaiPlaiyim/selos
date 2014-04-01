@@ -18,6 +18,7 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.ReturnInfoView;
+import com.clevel.selos.model.view.UWRuleResponseView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.util.FacesUtil;
@@ -466,12 +467,12 @@ public class BaseController implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
-            UWRulesResponse uwRulesResponse = brmsControl.getPrescreenResult(workCasePreScreenId);
-            log.debug("onCheckPreScreen uwRulesResponse : {}", uwRulesResponse);
-            if(uwRulesResponse != null){
-                if(uwRulesResponse.getActionResult().equals(ActionResult.SUCCEED)){
+            UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePreScreenId);
+            log.debug("onCheckPreScreen uwRulesResponse : {}", uwRuleResponseView);
+            if(uwRuleResponseView != null){
+                if(uwRuleResponseView.getActionResult().equals(ActionResult.SUCCEED)){
 
-                }else if(uwRulesResponse.getActionResult().equals(ActionResult.FAILED)){
+                }else if(uwRuleResponseView.getActionResult().equals(ActionResult.FAILED)){
 
                 }
             }

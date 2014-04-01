@@ -10,17 +10,20 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_deviation")
+@Table(name = "mst_uw_deviation")
 public class UWDeviationFlag implements Serializable{
 
     @Id
     @Column(name = "id")
     private int id;
 
-    @Column(name = "description")
+    @Column(name = "name", length = 100)
+    private String name;
+
+    @Column(name = "description", length = 200)
     private String description;
 
-    @Column(name = "brms_code")
+    @Column(name = "brms_code", length = 5)
     private String brmsCode;
 
     public int getId() {
@@ -29,6 +32,14 @@ public class UWDeviationFlag implements Serializable{
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {

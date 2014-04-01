@@ -9,16 +9,19 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "mst_reject_group")
+@Table(name = "mst_uw_reject_group")
 public class UWRejectGroup {
     @Id
     @Column(name = "id")
     private int id;
 
-    @Column(name = "description")
+    @Column(name = "name", length = 100)
+    private String name;
+
+    @Column(name = "description", length = 200)
     private String description;
 
-    @Column(name = "brms_code")
+    @Column(name = "brms_code", length = 5)
     private String brmsCode;
 
     public int getId() {
@@ -27,6 +30,14 @@ public class UWRejectGroup {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {

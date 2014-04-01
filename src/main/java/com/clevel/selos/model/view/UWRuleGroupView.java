@@ -5,12 +5,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-public class UWDeviationFlagView implements Serializable {
-
+public class UWRuleGroupView implements Serializable {
     private int id;
     private String name;
     private String description;
-    private String brmsCode;
 
     public int getId() {
         return id;
@@ -36,21 +34,12 @@ public class UWDeviationFlagView implements Serializable {
         this.description = description;
     }
 
-    public String getBrmsCode() {
-        return brmsCode;
-    }
-
-    public void setBrmsCode(String brmsCode) {
-        this.brmsCode = brmsCode;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("name", name)
                 .append("description", description)
-                .append("brmsCode", brmsCode)
                 .toString();
     }
 }

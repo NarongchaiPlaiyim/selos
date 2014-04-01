@@ -7,7 +7,6 @@ import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
-import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
@@ -37,8 +36,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 public class PrescreenBusinessControl extends BusinessControl {
@@ -49,8 +47,6 @@ public class PrescreenBusinessControl extends BusinessControl {
     PrescreenTransform prescreenTransform;
     @Inject
     PrescreenFacilityTransform prescreenFacilityTransform;
-    @Inject
-    PreScreenResultTransform preScreenResultTransform;
     @Inject
     BizInfoDetailTransform bizInfoTransform;
     @Inject
@@ -125,9 +121,9 @@ public class PrescreenBusinessControl extends BusinessControl {
 
 
     @Inject
-    RMInterface rmInterface;
+    BRMSControl brmsControl;
     @Inject
-    BRMSInterface brmsInterface;
+    RMInterface rmInterface;
     @Inject
     BPMInterface bpmInterface;
     @Inject
@@ -364,15 +360,38 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     // *** Function for BRMS (PreScreenRules) ***//
-    public List<PreScreenResponseView> getPreScreenResultFromBRMS(List<CustomerInfoView> customerInfoViewList){
-        //TODO Transform view model to prescreenRequest
-        //PreScreenRequest preScreenRequest = preScreenResultTransform.transformToRequest(customerInfoViewList);
-        UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(new BRMSApplicationInfo());
+    public PrescreenResultView getPreScreenResultFromBRMS(long workCasePrescreenId) throws Exception{
+        UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePrescreenId);
 
-        //List<PreScreenResponseView> preScreenResponseViewList = preScreenResultTransform.transformResponseToView(preScreenResponseList);
+        if(uwRuleResponseView.getActionResult().equals(ActionResult.FAILED)){
+            throw new Exception(uwRuleResponseView.getReason());
+        } else {
+            UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResponseView.getUwRuleResultSummaryView();
 
-        //return preScreenResponseViewList;
-        return null;
+            PrescreenResultView prescreenResultView = new PrescreenResultView();
+
+            List<UWRuleResultDetailView> uwRuleResultDetailViewList = uwRuleResultSummaryView.getUwRuleResultDetailViewList();
+
+            Map<Integer, UWRuleResultDetailView> _groupUWResultDetailMap = new TreeMap<Integer, UWRuleResultDetailView>();
+            Map<Integer, UWRuleResultDetailView> _customerUWResultDetailMap = new TreeMap<Integer, UWRuleResultDetailView>();
+
+            Integer lastOrder = Integer.MAX_VALUE;
+            for(UWRuleResultDetailView uwRuleResultDetailView : uwRuleResultDetailViewList){
+                if(UWRuleType.GROUP_LEVEL.equals(uwRuleResultDetailView.getUwRuleType())){
+                    if(uwRuleResultDetailView.getRuleOrder() == 0)
+                        _groupUWResultDetailMap.put(lastOrder--, uwRuleResultDetailView);
+                    else
+                        _groupUWResultDetailMap.put(uwRuleResultDetailView.getRuleOrder(), uwRuleResultDetailView);
+                } else {
+                    //_customerUWResultDetailMap.put()
+                }
+
+            }
+            prescreenResultView.setUwRuleResultSummaryView(uwRuleResultSummaryView);
+
+            return prescreenResultView;
+        }
+
     }
 
     // *** Function for NCB *** //
@@ -782,34 +801,6 @@ public class PrescreenBusinessControl extends BusinessControl {
         }
 
         return csiResultList;
-    }
-
-    public List<PreScreenResponseView> getPreScreenCustomerResult(List<PreScreenResponseView> prescreenResponseViews){
-        List<PreScreenResponseView> preScreenResponseViewList = new ArrayList<PreScreenResponseView>();
-        preScreenResponseViewList = preScreenResultTransform.tranformToCustomerResponse(prescreenResponseViews);
-
-        return preScreenResponseViewList;
-    }
-
-    public List<PreScreenResponseView> getPreScreenGroupResult(List<PreScreenResponseView> prescreenResponseViews){
-        List<PreScreenResponseView> preScreenResponseViewList = new ArrayList<PreScreenResponseView>();
-        preScreenResponseViewList = preScreenResultTransform.tranformToGroupResponse(prescreenResponseViews);
-
-        return preScreenResponseViewList;
-    }
-
-    public void savePreScreenResult(List<PreScreenResponseView> preScreenResponseViews, long workCasePreScreenId, long workCaseId, long stepId, User user){
-        WorkCasePrescreen workCasePrescreen = null;
-        WorkCase workCase = null;
-        Step step = null;
-
-        if(workCasePreScreenId != 0){ workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId); }
-        if(workCaseId != 0){ workCase = workCaseDAO.findById(workCaseId); }
-        if(stepId != 0){ step = stepDAO.findById(stepId); }
-
-        List<BRMSResult> brmsResultList = preScreenResultTransform.transformResultToModel(preScreenResponseViews, workCasePrescreen, workCase, step, user);
-
-        brmsResultDAO.persist(brmsResultList);
     }
 
     // *** Function for PreScreen *** //

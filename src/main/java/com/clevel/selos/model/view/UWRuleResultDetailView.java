@@ -1,6 +1,8 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.integration.brms.model.RuleColorResult;
+import com.clevel.selos.model.UWResultColor;
+import com.clevel.selos.model.UWRuleType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -10,7 +12,8 @@ public class UWRuleResultDetailView implements Serializable {
     private long id;
     private UWRuleNameView uwRuleNameView;
     private int ruleOrder;
-    private RuleColorResult ruleColorResult;
+    private UWRuleType uwRuleType;
+    private UWResultColor ruleColorResult;
     private CustomerInfoSimpleView customerInfoSimpleView;
     private UWDeviationFlagView deviationFlag;
     private UWRejectGroupView rejectGroupCode;
@@ -39,11 +42,19 @@ public class UWRuleResultDetailView implements Serializable {
         this.ruleOrder = ruleOrder;
     }
 
-    public RuleColorResult getRuleColorResult() {
+    public UWRuleType getUwRuleType() {
+        return uwRuleType;
+    }
+
+    public void setUwRuleType(UWRuleType uwRuleType) {
+        this.uwRuleType = uwRuleType;
+    }
+
+    public UWResultColor getRuleColorResult() {
         return ruleColorResult;
     }
 
-    public void setRuleColorResult(RuleColorResult ruleColorResult) {
+    public void setRuleColorResult(UWResultColor ruleColorResult) {
         this.ruleColorResult = ruleColorResult;
     }
 
@@ -77,6 +88,7 @@ public class UWRuleResultDetailView implements Serializable {
                 .append("id", id)
                 .append("uwRuleNameView", uwRuleNameView)
                 .append("ruleOrder", ruleOrder)
+                .append("uwRuleType", uwRuleType)
                 .append("ruleColorResult", ruleColorResult)
                 .append("customerInfoSimpleView", customerInfoSimpleView)
                 .append("deviationFlag", deviationFlag)

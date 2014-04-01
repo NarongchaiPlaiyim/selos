@@ -24,4 +24,11 @@ public class UWRuleResultSummaryDAO extends GenericDAO<UWRuleResultSummary, Long
         UWRuleResultSummary uwRuleResultSummary = (UWRuleResultSummary) criteria.uniqueResult();
         return uwRuleResultSummary;
     }
+
+    public UWRuleResultSummary findByWorkcasePrescreenId(long workCasePrescreenId){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
+        UWRuleResultSummary uwRuleResultSummary = (UWRuleResultSummary) criteria.uniqueResult();
+        return uwRuleResultSummary;
+    }
 }

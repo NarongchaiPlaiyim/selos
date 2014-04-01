@@ -24,6 +24,6 @@ public enum UWResultColor {
             if (color.code == value)
                 return color;
         }
-        return GREEN;
+        return null;
     }
 }

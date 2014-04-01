@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.List;
+import java.util.Map;
 
 public class PrescreenResultView extends PrescreenView {
     private String interfaceResult;
@@ -11,8 +12,10 @@ public class PrescreenResultView extends PrescreenView {
     private ExistingCreditFacilityView existingCreditFacilityView;
     private BankStmtSummaryView bankStmtSummaryView;
 
-    private List<UWRuleResultDetailView> groupRuleResults;
-    private List<UWRuleResultDetailView> customerRuleResults;
+
+    private UWRuleResultSummaryView uwRuleResultSummaryView;
+    private Map<Integer, UWRuleResultDetailView> groupRuleResults;
+    private Map<Integer, UWRuleResultDetailView> customerRuleResults;
 
     public String getInterfaceResult() {
         return interfaceResult;
@@ -38,10 +41,6 @@ public class PrescreenResultView extends PrescreenView {
         this.existingCreditFacilityView = existingCreditFacilityView;
     }
 
-    public List<UWRuleResultDetailView> getGroupRuleResults() {
-        return groupRuleResults;
-    }
-
     public BankStmtSummaryView getBankStmtSummaryView() {
         return bankStmtSummaryView;
     }
@@ -50,15 +49,27 @@ public class PrescreenResultView extends PrescreenView {
         this.bankStmtSummaryView = bankStmtSummaryView;
     }
 
-    public void setGroupRuleResults(List<UWRuleResultDetailView> groupRuleResults) {
+    public UWRuleResultSummaryView getUwRuleResultSummaryView() {
+        return uwRuleResultSummaryView;
+    }
+
+    public void setUwRuleResultSummaryView(UWRuleResultSummaryView uwRuleResultSummaryView) {
+        this.uwRuleResultSummaryView = uwRuleResultSummaryView;
+    }
+
+    public Map<Integer, UWRuleResultDetailView> getGroupRuleResults() {
+        return groupRuleResults;
+    }
+
+    public void setGroupRuleResults(Map<Integer, UWRuleResultDetailView> groupRuleResults) {
         this.groupRuleResults = groupRuleResults;
     }
 
-    public List<UWRuleResultDetailView> getCustomerRuleResults() {
+    public Map<Integer, UWRuleResultDetailView> getCustomerRuleResults() {
         return customerRuleResults;
     }
 
-    public void setCustomerRuleResults(List<UWRuleResultDetailView> customerRuleResults) {
+    public void setCustomerRuleResults(Map<Integer, UWRuleResultDetailView> customerRuleResults) {
         this.customerRuleResults = customerRuleResults;
     }
 

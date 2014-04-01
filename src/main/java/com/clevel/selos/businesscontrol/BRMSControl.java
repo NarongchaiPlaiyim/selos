@@ -13,10 +13,9 @@ import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.MandateDocument;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.CustomerInfoSimpleView;
-import com.clevel.selos.model.view.MandateDocResponseView;
-import com.clevel.selos.model.view.MandateDocView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.CustomerTransform;
+import com.clevel.selos.transform.UWRuleResultTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import org.slf4j.Logger;
 
@@ -92,6 +91,9 @@ public class BRMSControl extends BusinessControl {
 
     @Inject
     private CustomerTransform customerTransform;
+
+    @Inject
+    private UWRuleResultTransform uwRuleResultTransform;
 
     @Inject
     public BRMSControl(){}
@@ -223,7 +225,7 @@ public class BRMSControl extends BusinessControl {
         return applicationInfo;
     }
 
-    public UWRulesResponse getPrescreenResult(long workcasePrescreenId){
+    public UWRuleResponseView getPrescreenResult(long workcasePrescreenId){
         logger.debug("getPrescreenReult from workcasePrescreenId {}", workcasePrescreenId);
         Date checkDate = Calendar.getInstance().getTime();
         logger.debug("check at date {}", checkDate);
@@ -324,7 +326,58 @@ public class BRMSControl extends BusinessControl {
         if(prescreen.getReferredExperience() != null)
             applicationInfo.setReferredDocType(prescreen.getReferredExperience().getBrmsCode());
 
-        UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
+        //UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
+        UWRulesResponse uwRulesResponse = getTestUWRulesResponse();
+        //Transform to View//
+        UWRuleResponseView uwRuleResponseView = new UWRuleResponseView();
+        uwRuleResponseView.setActionResult(uwRulesResponse.getActionResult());
+        uwRuleResponseView.setReason(uwRulesResponse.getReason());
+        if(uwRulesResponse.getUwRulesResultMap() != null && uwRulesResponse.getUwRulesResultMap().size() > 0){
+            UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultTransform.transformToView(uwRulesResponse.getUwRulesResultMap(), customerList);
+            uwRuleResponseView.setUwRuleResultSummaryView(uwRuleResultSummaryView);
+        }
+
+        return uwRuleResponseView;
+    }
+
+    private UWRulesResponse getTestUWRulesResponse(){
+        UWRulesResponse uwRulesResponse = new UWRulesResponse();
+        uwRulesResponse.setActionResult(ActionResult.SUCCESS);
+        Map<String, UWRulesResult> uwRuleResultMap = new HashMap<String, UWRulesResult>();
+
+        String[][] strings = {{"Decision_Matrix_Final",             "N", "G", "", "1001", "Group Result", ""},
+                              {"NCB_Delinquency_Status_Current_TMB", "", "G", "", "1002", "", "0303540000361"},
+                              {"NCB_Delinquency_Status_Current_Non_TMB", "", "G", "", "1003", "", "0303540000361"},
+                              {"NCB_Delinquency_Status_Current", "", "G", "", "1004", "", "0303540000361"},
+                              {"NCB_Delinquency_Status_Ever_Juristic_TMB", "", "G", "", "1005", "", "0303540000361"},
+                {"NCB_Delinquency_Status_Ever_Juristic_Non_TMB", "", "G", "", "1006", "", "0303540000361"},
+                {"NCB_Delinquency_Status_Ever_Juristic", "", "G", "", "1007", "", "0303540000361"},
+                {"NCB_Account_Status_TMB", "", "G", "", "1008", "", "0303540000361"},
+                {"NCB_Account_Status_Non_TMB", "", "G", "", "1009", "", "0303540000361"},
+                {"NCB_Account_Status", "", "G", "", "1010", "", "0303540000361"},
+                {"Compliance_Section48", "", "G", "", "1011", "", "0303540000361"},
+                {"Compliance_Section49", "", "G", "", "1012", "", "0303540000361"},
+                {"Guarantee_Prohibited", "", "G", "", "1013", "Group Result", ""},
+                {"Compliance_Connected_Person", "", "G", "", "1014", "Group Result", ""},
+                {"Compliance_KYC_Warning", "", "G", "", "1015", "Group Result", ""},
+                {"Compliance_KYC_Sanction", "", "G", "", "1016", "Group Result", ""},
+                {"Compliance_KYC", "", "G", "", "1017", "Group Result", ""},
+                {"Fraud_Status", "", "G", "", "1018", "Group Result", ""},
+                {"Litigation_Status", "", "G", "", "1019", "Group Result", ""}};
+
+        for(int i=0; i< 19; i++){
+            UWRulesResult uwRulesResult = new UWRulesResult();
+            uwRulesResult.setRuleName(strings[i][0]);
+            uwRulesResult.setRejectGroupCode(strings[i][1]);
+            uwRulesResult.setColor(strings[i][2]);
+            uwRulesResult.setDeviationFlag(strings[i][3]);
+            uwRulesResult.setRuleOrder(strings[i][4]);
+            uwRulesResult.setType(UWRuleType.lookup(strings[i][5]));
+            uwRulesResult.setPersonalID(strings[i][6]);
+            uwRuleResultMap.put(uwRulesResult.getRuleOrder(), uwRulesResult);
+        }
+
+        uwRulesResponse.setUwRulesResultMap(uwRuleResultMap);
 
         return uwRulesResponse;
     }
