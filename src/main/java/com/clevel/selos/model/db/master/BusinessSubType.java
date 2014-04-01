@@ -17,6 +17,8 @@ public class BusinessSubType implements Serializable {
     private int id;
     @Column(name = "active")
     private int active;
+    @Column(name = "code")
+    private String code;
     @Column(name = "main_code", nullable=false, columnDefinition="int default 0")
     private int mainCode;
     @Column(name = "extend_code", nullable=false, columnDefinition="int default 0")
@@ -77,11 +79,20 @@ public class BusinessSubType implements Serializable {
         this.extendCode = extendCode;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("active", active).
+                append("code", code).
                 append("mainCode", mainCode).
                 append("extendCode", extendCode).
                 append("name", name).
