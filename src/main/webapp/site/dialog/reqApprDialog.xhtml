@@ -1,0 +1,232 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+    xmlns:clv="http://clevel.com/ui">
+<h:head>
+    <style type="text/css">
+        .ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td {
+            padding: 5px 5px !important;
+            overflow: hidden !important;
+            white-space: nowrap !important;
+            border-width: 1px !important;
+            border-style: solid !important;
+            border-color: #868686;
+        }
+        label{
+            font-size: 11px !important;
+        }
+    </style>
+</h:head>
+<h:body>
+<p:panel id="reqApprDialogPanel" styleClass="panel-dialog">
+    <table id="table_content" class="content_table_form" style="font-size: 10px;">
+    <tr>
+        <td class="left" colspan="2">
+            <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.header')}" styleClass="title" style="font-size: 15px"/>
+            <p:spacer width="10" height="5"/>
+            <p:commandButton id="btnAddApprHeaderDetail"
+                             value="#{msg.get('app.button.add')}"
+                             styleClass="smaller"
+                             process="@this"
+                             actionListener="#{baseController.onAddAppraisalDetail()}"
+                             update=":frmMain:reqApprDetailPanel"
+                             oncomplete="reqApprDetailDlg.show()"/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <p:dataTable tableStyleClass="center"
+                         id="appraisalDetailViewTable"
+                         var="appraisalDetailItem"
+                         value="#{baseController.appraisalDetailViewList}"
+                         paginator="false"
+                         rowIndexVar="rowIndex" style="font-size:11px;" >
+                <p:columnGroup type="header">
+                    <p:row>
+                        <p:column style="min-width: 30px;width: 30px;max-width: 30px; font-size: 11px;" rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.no')}"/>
+                        <p:column style="min-width: 150px;width: 150px;max-width: 150px; font-size: 11px;" rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.titleDeed')}" />
+                        <p:column style="min-width: 450px;width: 450px;max-width: 450px; font-size: 11px;" rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.purpose')}"/>
+                        <p:column style="min-width: 350px;width: 350px;max-width: 350px; font-size: 11px;" colspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.docDetail')}"/>
+                        <p:column style="min-width: 55px;width: 55px;max-width: 55px; font-size: 11px;" rowspan="2" headerText=""/>
+                    </p:row>
+                    <p:row>
+                        <p:column style="min-width: 200px;width: 200px;max-width: 200px"
+                                  headerText="#{msg.get('app.appraisal.appraisalDetail.table.characteristic')}"/>
+                        <p:column style="min-width: 110px;width: 110px;max-width: 110px"
+                                  headerText="#{msg.get('app.appraisal.appraisalDetail.table.numberOfDocuments')}"/>
+                    </p:row>
+                </p:columnGroup>
+
+                <p:column  styleClass="center" style="font-size: 11px;" >
+                    <h:outputText value="#{rowIndex+1}"/>
+                </p:column>
+                <p:column styleClass="left" style="font-size: 11px;">
+                    <h:outputText value="#{appraisalDetailItem.titleDeed}" />
+                </p:column>
+                <p:column styleClass="left" style="font-size: 11px;">
+                    <h:outputText value="#{appraisalDetailItem.purposeReviewAppraisalLabel}"/>
+                </p:column>
+                <p:column styleClass="left" style="font-size: 11px;">
+                    <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailItem.characteristic}" disabled="true" styleClass="radio_table" style="font-size:11px;">
+                        <f:selectItem id="characteristicRadio0" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
+                        <f:selectItem id="characteristicRadio1" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
+                    </p:selectOneRadio>
+                </p:column>
+                <p:column styleClass="right" style="font-size: 11px;">
+                    <h:outputText value="#{appraisalDetailItem.numberOfDocuments}"/>
+                </p:column>
+                <p:column styleClass="center" >
+                    <p:commandButton icon="ui-icon-pencil"
+                                     process="@this"
+                                     action="#{baseController.onEditAppraisalDetail()}"
+                                     update=":frmMain:reqApprDetailPanel"
+                                     oncomplete="reqApprDetailDlg.show();">
+                        <f:setPropertyActionListener value="#{appraisalDetailItem}"
+                                                     target="#{baseController.appraisalDetailViewSelected}"/>
+                        <f:setPropertyActionListener value="#{rowIndex}"
+                                                     target="#{baseController.rowIndex}"/>
+                    </p:commandButton>
+
+                    <p:commandButton title="Remove" process="@this"
+                                     icon="ui-icon-trash"
+                                     oncomplete="confirmDeleteAppraisalDetailViewDlg.show()" >
+                        <f:setPropertyActionListener value="#{appraisalDetailItem}"
+                                                     target="#{baseController.appraisalDetailViewSelected}"/>
+                        <f:setPropertyActionListener value="#{rowIndex}"
+                                                     target="#{baseController.rowIndex}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"><p:spacer/></td>
+    </tr>
+    <tr>
+        <td colspan="2"><div class="separate"><!-- --></div></td>
+    </tr>
+    <tr>
+        <td class="left" colspan="2">
+            <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.header')}" styleClass="title" style="font-size: 15px"/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <table class="table_content" border="0" style="padding: 0%" >
+                <tr>
+                    <th style="min-width:30px; width:30px; max-width:30px;" />
+                    <th style="min-width:160px; width: 160px; max-width:160px;" >
+                        <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.table.customerName')}"/>
+                    </th>
+                    <th style="min-width: 180px; width: 180px; max-width: 180px;" >
+                        <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.table.contactNo')}"/>
+                    </th>
+                </tr>
+                <tr id="contactId">
+                    <td class="center">
+                        <p:outputLabel for="customerName1" value="1"/>
+                    </td>
+                    <td class="center">
+                        <p:inputText id="customerName1" value="#{baseController.appraisalContactDetailView.customerName1}"
+                                     style = "#{baseController.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
+                                     onkeydown="return onKeyPressName(event);"
+                                     onkeypress="return onKeyPressName(event);" maxlength="50"
+                                     counterTemplate="{0} characters remaining." autoResize="false"/>
+                    </td>
+                    <td class="center">
+                        <p:inputMask value="#{baseController.appraisalContactDetailView.contactNo1}"
+                                     mask="099-999-9999"
+                                     style = "#{baseController.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="center">
+                        <p:outputLabel for="customerName2" value="2"/>
+                    </td>
+                    <td class="center">
+                        <p:inputText id="customerName2" value="#{baseController.appraisalContactDetailView.customerName2}"
+                                     onkeydown="return onKeyPressName(event);"
+                                     onkeypress="return onKeyPressName(event);" maxlength="50"
+                                     counterTemplate="{0} characters remaining." autoResize="false"/>
+                    </td>
+                    <td class="center">
+                        <p:inputMask value="#{baseController.appraisalContactDetailView.contactNo2}"
+                                     mask="099-999-9999" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="center">
+                        <p:outputLabel for="customerName3" value="3"/>
+                    </td>
+                    <td class="center">
+                        <p:inputText id="customerName3" value="#{baseController.appraisalContactDetailView.customerName3}"
+                                     onkeydown="return onKeyPressName(event);"
+                                     onkeypress="return onKeyPressName(event);" maxlength="50"
+                                     counterTemplate="{0} characters remaining." autoResize="false"/>
+                    </td>
+                    <td class="center">
+                        <p:inputMask value="#{baseController.appraisalContactDetailView.contactNo3}"
+                                     mask="099-999-9999" />
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"><p:spacer/></td>
+    </tr>
+    <tr>
+        <td colspan="2"><div class="separate"><!-- --></div></td>
+    </tr>
+    <tr>
+        <td class="title" colspan="2">
+            <p:outputLabel value="#{msg.get('app.appraisal.label.locationAppraisal')}"/>
+        </td>
+    </tr>
+    <tr>
+        <td style="min-width:130px; width:130px; max-width:130px">
+            <p:outputLabel for="zoneLocation" styleClass="title" value="#{msg.get('app.appraisal.label.zoneLocation')}"/>
+        </td>
+        <td>
+            <p:inputText id="zoneLocation" value="#{baseController.appraisalView.zoneLocation}" readonly="true" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p:outputLabel for="bdmRemark" styleClass="title" value="#{msg.get('app.appraisal.label.bdmRemark')}"/>
+        </td>
+        <td>
+            <p:inputTextarea id="bdmRemark" value="#{baseController.appraisalView.bdmRemark}" rows="3" cols="90" maxlength="500"
+                             counterTemplate="{0} characters remaining." autoResize="false"/>
+        </td>
+    </tr>
+    <tr>
+        <td class="center" colspan="2">
+            <p:commandButton id="btnSubmitReqAppr"
+                             value="#{msg.get('app.button.submit')}"
+                             styleClass="medium"
+                             onclick="blockReqApprDialogPanel.show()"
+                             process="@form"
+                             actionListener="#{baseController.onSubmitRequestAppraisal()}"
+                             oncomplete="handleRequestAppraisal(xhr, status, args); blockReqApprDialogPanel.hide();"
+                             update=":frmMain:reqApprDialogPanel, :frmMain:msgBoxBaseMessagePanel"/>
+
+            <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="medium"
+                             process="@this"
+                             update=":frmMain:reqApprDialogPanel"
+                             oncomplete="reqApprDlg.hide()">
+                <p:resetInput target=":frmMain:reqApprDialogPanel" />
+            </p:commandButton>
+
+        </td>
+    </tr>
+    </table>
+</p:panel>
+<p:blockUI widgetVar="blockReqApprDialogPanel" block="reqApprDialogPanel">
+    LOADING<br />
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
+</h:body>
+</ui:composition>
