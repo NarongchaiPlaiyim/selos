@@ -5,22 +5,20 @@
 
     <p:confirmDialog id="#{id}" header="#{headerMessage}" message="#{message}"
                      showEffect="fade" hideEffect="fade" width="#{width}"
-                     severity="alert" widgetVar="#{name}">
+                     severity="alert" widgetVar="#{name}" closable="false">
         <h:form id="#{formId}">
             <div class="onRight">
-                <p:commandButton id="confirmActionBtn" value="ตกลง"
+                <p:commandButton widgetVar="#{id}OkBtn"
+                                 value="#{msg.get('app.button.ok')}"
                                  action="#{controller[action]}"
                                  update="#{update}"
-                                 oncomplete="#{name}.hide()"/>
-                <p:commandButton value="ยกเลิก" onclick="#{name}.hide()"/>
+                                 onclick="#{id}OkBtn.disable();#{id}CancelBtn.disable()"
+                                 oncomplete="#{name}.hide();#{id}OkBtn.enable();#{id}CancelBtn.enable()"/>
+                <p:commandButton widgetVar="#{id}CancelBtn"
+                                 value="#{msg.get('app.button.cancel')}"
+                                 onclick="#{name}.hide()"/>
             </div>
         </h:form>
-
-        <p:blockUI widgetVar="blockProposeCreditDlg" block="#{id}"
-                   trigger=":#{formId}:confirmActionBtn">
-            LOADING<br/>
-            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-        </p:blockUI>
     </p:confirmDialog>
 
 </f:view>
