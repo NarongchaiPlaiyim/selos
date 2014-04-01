@@ -132,7 +132,7 @@ public class PrescreenResult implements Serializable {
             message = Util.getMessageException(ex);
             log.error("exception while retrieve interface info : ", ex);
         }
-        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageResultDlg.show()");
     }
 
     public List<CustomerInfoView> generateCustomerInfoList(List<CustomerInfoView> customerInfoViews){
@@ -160,7 +160,7 @@ public class PrescreenResult implements Serializable {
         message = "Save PreScreen Result data success.";
 
         onCreation();
-        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageResultDlg.show()");
     }
 
     public void onCloseSale() {

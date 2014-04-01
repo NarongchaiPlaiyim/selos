@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AppraisalAppointment" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c8626b90-09bf-4ee1-8d9e-eb95ce1ef9db">
 	<property name="ireport.zoom" value="1.6105100000000023"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="470"/>
+	<property name="ireport.y" value="278"/>
 	<style name="text" vAlign="Middle" isBlankWhenNull="true" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
 			<pen lineColor="#000000"/>
@@ -29,9 +29,6 @@
 			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 		</box>
 	</style>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["D:\\ProjectSELOS\\selos\\src\\main\\webapp\\site\\report\\"]]></defaultValueExpression>
-	</parameter>
 	<parameter name="fillAppraisalDetailReport" class="com.clevel.selos.model.report.AppraisalViewReport"/>
 	<parameter name="fillAppraisalDetailViewReport" class="java.util.Collection"/>
 	<parameter name="fillAppraisalContactDetailViewReport" class="com.clevel.selos.model.report.AppraisalContactDetailViewReport"/>
@@ -111,7 +108,7 @@
 			</staticText>
 			<staticText>
 				<reportElement uuid="aee22bb2-0cc7-4935-97dd-27ec08e564ba" x="0" y="154" width="85" height="20"/>
-				<textElement verticalAlignment="Middle">
+				<textElement verticalAlignment="Top">
 					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 				</textElement>
@@ -372,7 +369,7 @@ $P{path} + "true.jpg" : $P{path} + "false.jpg"]]></imageExpression>
 			</staticText>
 			<staticText>
 				<reportElement uuid="6cdb37f6-fed8-40c5-8be7-288c6863b3f0" x="0" y="44" width="89" height="20"/>
-				<textElement verticalAlignment="Middle">
+				<textElement verticalAlignment="Top">
 					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 				</textElement>

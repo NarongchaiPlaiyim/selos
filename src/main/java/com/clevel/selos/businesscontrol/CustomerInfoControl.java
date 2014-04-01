@@ -203,11 +203,12 @@ public class CustomerInfoControl extends BusinessControl {
 
         if(customerInfoView.getIndividualViewList() != null && customerInfoView.getIndividualViewList().size() > 0){
             for(CustomerInfoView cusIndividual : customerInfoView.getIndividualViewList()){
+                //TODO: Do this for check Reference to cal %Share
                 if(cusIndividual.getReference() != null){
                     if(cusIndividual.getReference().getId() != 0){
                         Reference reference = referenceDAO.findById(cusIndividual.getReference().getId());
                         if(reference != null && reference.getId() != 0 && reference.getPercentShare() != null && !reference.getPercentShare().equalsIgnoreCase("-")){
-                            if(customerJuristic.getShares() != null && cusIndividual.getShares() != null){
+                            if(customerJuristic.getJuristic().getTotalShare() != null && cusIndividual.getShares() != null){
                                 cusIndividual.setPercentShare(Util.divide(cusIndividual.getShares(),customerJuristic.getJuristic().getTotalShare()));
                             }
                         }
