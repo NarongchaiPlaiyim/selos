@@ -43,6 +43,14 @@ public class ExistingCreditFacilityTransform extends Transform {
         existingCreditFacility.setTotalRelatedRetailLimit(existingCreditFacilityView.getTotalRelatedRetailLimit());
         existingCreditFacility.setTotalRelatedAppInRLOSLimit(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit());
 
+        existingCreditFacility.setTotalBorrowerCom(existingCreditFacilityView.getTotalBorrowerCom());
+        existingCreditFacility.setTotalBorrowerComOBOD(existingCreditFacilityView.getTotalBorrowerComOBOD());
+        existingCreditFacility.setTotalBorrowerExposure(existingCreditFacilityView.getTotalBorrowerExposure());
+
+        existingCreditFacility.setTotalRelatedCom(existingCreditFacilityView.getTotalRelatedCom());
+        existingCreditFacility.setTotalRelatedComOBOD(existingCreditFacilityView.getTotalRelatedComOBOD());
+        existingCreditFacility.setTotalRelatedExposure(existingCreditFacilityView.getTotalRelatedExposure());
+
         existingCreditFacility.setTotalGroupCom(existingCreditFacilityView.getTotalGroupCom());
         existingCreditFacility.setTotalGroupComOBOD(existingCreditFacilityView.getTotalGroupComOBOD());
         existingCreditFacility.setTotalGroupExposure(existingCreditFacilityView.getTotalGroupExposure());
@@ -54,6 +62,9 @@ public class ExistingCreditFacilityTransform extends Transform {
         existingCreditFacility.setTotalRelatedMortgageValue(existingCreditFacilityView.getTotalRelatedMortgageValue());
 
         existingCreditFacility.setTotalGuaranteeAmount(existingCreditFacilityView.getTotalGuaranteeAmount());
+
+        existingCreditFacility.setTotalBorrowerNumberOfExistingOD(existingCreditFacilityView.getTotalBorrowerNumberOfExistingOD());
+        existingCreditFacility.setTotalBorrowerODLimit(existingCreditFacilityView.getTotalBorrowerExistingODLimit());
         
         return existingCreditFacility;
     }
@@ -77,6 +88,14 @@ public class ExistingCreditFacilityTransform extends Transform {
         existingCreditFacilityView.setTotalRelatedRetailLimit(existingCreditFacility.getTotalRelatedRetailLimit());
         existingCreditFacilityView.setTotalRelatedAppInRLOSLimit(existingCreditFacility.getTotalRelatedAppInRLOSLimit());
 
+        existingCreditFacilityView.setTotalBorrowerCom(existingCreditFacility.getTotalBorrowerCom());
+        existingCreditFacilityView.setTotalBorrowerComOBOD(existingCreditFacility.getTotalBorrowerComOBOD());
+        existingCreditFacilityView.setTotalBorrowerExposure(existingCreditFacility.getTotalBorrowerExposure());
+
+        existingCreditFacilityView.setTotalRelatedCom(existingCreditFacility.getTotalRelatedCom());
+        existingCreditFacilityView.setTotalRelatedComOBOD(existingCreditFacility.getTotalRelatedComOBOD());
+        existingCreditFacilityView.setTotalRelatedExposure(existingCreditFacility.getTotalRelatedExposure());
+
         existingCreditFacilityView.setTotalGroupCom(existingCreditFacility.getTotalGroupCom());
         existingCreditFacilityView.setTotalGroupComOBOD(existingCreditFacility.getTotalGroupComOBOD());
         existingCreditFacilityView.setTotalGroupExposure(existingCreditFacility.getTotalGroupExposure());
@@ -88,6 +107,9 @@ public class ExistingCreditFacilityTransform extends Transform {
         existingCreditFacilityView.setTotalRelatedMortgageValue(existingCreditFacility.getTotalRelatedMortgageValue());
 
         existingCreditFacilityView.setTotalGuaranteeAmount(existingCreditFacility.getTotalGuaranteeAmount());
+
+        existingCreditFacilityView.setTotalBorrowerNumberOfExistingOD(existingCreditFacility.getTotalBorrowerNumberOfExistingOD());
+        existingCreditFacilityView.setTotalBorrowerExistingODLimit(existingCreditFacility.getTotalBorrowerODLimit());
 
         return existingCreditFacilityView;
     }

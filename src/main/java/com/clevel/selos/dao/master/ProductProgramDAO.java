@@ -37,4 +37,16 @@ public class ProductProgramDAO extends GenericDAO<ProductProgram, Integer> {
         }
         return null;
     }
+
+    public List<ProductProgram> findExistingProductProgram(){
+        try {
+            Criteria criteria = getSession().createCriteria(getEntityClass())
+                    .add(Restrictions.eq("isExisting", 1));
+            List<ProductProgram> productProgramList = criteria.list();
+            return productProgramList;
+        } catch (Exception e){
+
+        }
+        return null;
+    }
 }
