@@ -22,12 +22,11 @@ public class ApprovedGuarantorDecisionReport extends ReportModel{
     private String uwDecision;
 
     public ApprovedGuarantorDecisionReport() {
-        count = getDefaultInteger();
-        name = getDefaultString();
-        tcgLgNo = getDefaultString();
+        count = 0;
+        name = "";
+        tcgLgNo = "";
         proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
-        totalLimitGuaranteeAmount = getDefaultBigDecimal();
-        uwDecision = getDefaultString();
+        uwDecision = "";
     }
 
     public int getCount() {

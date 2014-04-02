@@ -28,27 +28,23 @@ public class BorrowerCreditDecisionReport extends ReportModel{
     private BigDecimal pcePercent;
     private BigDecimal pceLimit;
     private BigDecimal outstanding;
-    private BigDecimal finalInterest;
     private String path;
+
+    private String account;
+    private String code;
 
     private List<ExistingCreditTierDetailView> existingCreditTierDetailViewList;
     private List<ExistingSplitLineDetailView> existingSplitLineDetailViewList;
 
     public BorrowerCreditDecisionReport() {
-        count = getDefaultInteger();
-        accountName = getDefaultString();
-        accountNumber = getDefaultString();
-        accountSuf = getDefaultString();
-        description = getDefaultString();
-        productProgramName = getDefaultString();
-        creditTypeName = getDefaultString();
-        productCode = getDefaultString();
-        projectCode = getDefaultString();
-        limit = getDefaultBigDecimal();
-        usePCE = getDefaultBoolean();
-        pcePercent = getDefaultBigDecimal();
-        pceLimit = getDefaultBigDecimal();
-        outstanding = getDefaultBigDecimal();
+        accountName = "";
+        accountNumber = "";
+        accountSuf = "";
+        description = "";
+        productProgramName = "";
+        creditTypeName = "";
+        productCode = "";
+        projectCode = "";
         existingCreditTierDetailViewList = new ArrayList<ExistingCreditTierDetailView>();
     }
 
@@ -190,9 +186,26 @@ public class BorrowerCreditDecisionReport extends ReportModel{
         this.path = path;
     }
 
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("account", account)
                 .append("accountName", accountName)
                 .append("count", count)
                 .append("accountNumber", accountNumber)
@@ -200,6 +213,7 @@ public class BorrowerCreditDecisionReport extends ReportModel{
                 .append("description", description)
                 .append("productProgramName", productProgramName)
                 .append("creditTypeName", creditTypeName)
+                .append("code", code)
                 .append("productCode", productCode)
                 .append("projectCode", projectCode)
                 .append("limit", limit)
@@ -207,7 +221,6 @@ public class BorrowerCreditDecisionReport extends ReportModel{
                 .append("pcePercent", pcePercent)
                 .append("pceLimit", pceLimit)
                 .append("outstanding", outstanding)
-                .append("finalInterest", finalInterest)
                 .append("path", path)
                 .append("existingCreditTierDetailViewList", existingCreditTierDetailViewList)
                 .append("existingSplitLineDetailViewList", existingSplitLineDetailViewList)

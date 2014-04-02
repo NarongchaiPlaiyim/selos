@@ -71,7 +71,7 @@ public class CustomerInfoIndividual implements Serializable {
     @Inject
     private OccupationDAO occupationDAO;
     @Inject
-    private BusinessTypeDAO businessTypeDAO;
+    private BusinessSubTypeDAO businessSubTypeDAO;
     @Inject
     private MaritalStatusDAO maritalStatusDAO;
     @Inject
@@ -109,7 +109,7 @@ public class CustomerInfoIndividual implements Serializable {
     private List<Nationality> sndNationalityList;
     private List<Education> educationList;
     private List<Occupation> occupationList;
-    private List<BusinessType> businessTypeList;
+    private List<BusinessSubType> businessTypeList;
     private List<MaritalStatus> maritalStatusList;
 
     private List<Province> provinceForm1List;
@@ -387,7 +387,7 @@ public class CustomerInfoIndividual implements Serializable {
         sndNationalityList = nationalityDAO.findAll();
         educationList = educationDAO.findAll();
         occupationList = occupationDAO.findAll();
-        businessTypeList = businessTypeDAO.findAll();
+        businessTypeList = businessSubTypeDAO.findAll();
         maritalStatusList = maritalStatusDAO.findAll();
 
         provinceForm1List = provinceDAO.getListOrderByParameter("name");
@@ -438,7 +438,7 @@ public class CustomerInfoIndividual implements Serializable {
 
         onChangeReference();
         onChangeReferenceSpouse();
-        onChangeMaritalStatus();
+        onChangeMaritalStatusInitial();
     }
 
     public void onEditIndividual(){
@@ -562,7 +562,7 @@ public class CustomerInfoIndividual implements Serializable {
 
         //////////////////////////////////////////////////////////////////
 
-        onChangeMaritalStatus();
+        onChangeMaritalStatusInitial();
         onChangeRelation();
         onChangeReference();
         onChangeProvinceEditForm1();
@@ -644,6 +644,9 @@ public class CustomerInfoIndividual implements Serializable {
         }
 
         customerInfoView.setCollateralOwner(1);
+
+        Relation relation = new Relation();
+        customerInfoView.setRelation(relation);
     }
 
     public void onChangeRelationSpouse(){
@@ -688,6 +691,9 @@ public class CustomerInfoIndividual implements Serializable {
         }
 
         customerInfoView.getSpouse().setCollateralOwner(1);
+
+        Relation relation = new Relation();
+        customerInfoView.getSpouse().setRelation(relation);
     }
 
     public void onChangeProvinceForm1() {
@@ -948,7 +954,7 @@ public class CustomerInfoIndividual implements Serializable {
         }
     }
 
-    public void onChangeMaritalStatusSearch(){
+    public void onChangeMaritalStatusInitial(){
         if(customerInfoView != null && customerInfoView.getMaritalStatus().getId() == 0){
             return;
         }
@@ -1309,7 +1315,7 @@ public class CustomerInfoIndividual implements Serializable {
             onChangeDistrictEditForm2();
             onChangeProvinceEditForm3();
             onChangeDistrictEditForm3();
-            onChangeMaritalStatusSearch();
+            onChangeMaritalStatusInitial();
             onChangeDOB();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
@@ -1681,6 +1687,16 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void onSave(){
         log.debug("onSave");
+        if(maritalStatusFlag){
+            if(customerInfoView.getSpouse() != null){
+                if(customerInfoView.getSpouse().getCitizenId().trim().equalsIgnoreCase("")){
+                    return;
+                }
+            } else {
+                return;
+            }
+        }
+
         //check citizen id
         if(customerInfoView.getSpouse() != null){
             if(customerInfoView.getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId())){
@@ -2061,11 +2077,16 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void updateRmtCmdSpouse11(){
-        updateRmtCmdCommon();
+        RequestContext.getCurrentInstance().execute("rmtCmdSpouse11()");
     }
 
     public void updateRmtCmdCommon(){
         RequestContext.getCurrentInstance().execute("rmtCmdCommon()");
+    }
+
+    public void onCancelForm(){
+        onCreation();
+        updateRmtCmd01();
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2184,11 +2205,11 @@ public class CustomerInfoIndividual implements Serializable {
         this.occupationList = occupationList;
     }
 
-    public List<BusinessType> getBusinessTypeList() {
+    public List<BusinessSubType> getBusinessTypeList() {
         return businessTypeList;
     }
 
-    public void setBusinessTypeList(List<BusinessType> businessTypeList) {
+    public void setBusinessTypeList(List<BusinessSubType> businessTypeList) {
         this.businessTypeList = businessTypeList;
     }
 

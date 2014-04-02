@@ -29,26 +29,23 @@ public class BorrowerExsumReport extends ReportModel{
     private String owner;
 
     public BorrowerExsumReport() {
-        this.titleTh = getDefaultString();
-        this.firstNameTh = getDefaultString();
-        this.lastNameTh = getDefaultString();
-        this.lastNameTh = getDefaultString();
-        this.citizenId = getDefaultString();
-        this.registrationId = getDefaultString();
-        this.tmbCustomerId = getDefaultString();
-        this.relation = getDefaultString();
-        this.collateralOwner = getDefaultString();
-        this.indLv = getDefaultString();
-        this.jurLv = getDefaultString();
-        this.percentShare = getDefaultBigDecimal();
-        this.age = getDefaultInteger();
-        this.kycLevel = getDefaultInteger();
-        this.worthiness = getDefaultString();
-        this.customerCSIList = getDefaultString();
-        this.businessLocationName = getDefaultString();
-        this.businessLocationAddress = getDefaultString();
-        this.businessLocationAddressEN = getDefaultString();
-        this.owner = getDefaultString();
+        this.titleTh = "";
+        this.firstNameTh = "";
+        this.lastNameTh = "";
+        this.lastNameTh = "";
+        this.citizenId = "";
+        this.registrationId = "";
+        this.tmbCustomerId = "";
+        this.relation = "";
+        this.collateralOwner = "";
+        this.indLv = "";
+        this.jurLv = "";
+        this.worthiness = "";
+        this.customerCSIList = "";
+        this.businessLocationName = "";
+        this.businessLocationAddress = "";
+        this.businessLocationAddressEN = "";
+        this.owner = "";
     }
 
     public int getNo() {

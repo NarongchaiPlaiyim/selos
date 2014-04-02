@@ -15,11 +15,6 @@ public class CollateralExSumReport extends ReportModel{
     private BigDecimal percentLTV;
 
     public CollateralExSumReport() {
-        this.cashCollateralValue = getDefaultBigDecimal();
-        this.coreAssetValue = getDefaultBigDecimal();
-        this.noneCoreAssetValue = getDefaultBigDecimal();
-        this.limitApprove = getDefaultBigDecimal();
-        this.percentLTV = getDefaultBigDecimal();
     }
 
     public BigDecimal getCashCollateralValue() {

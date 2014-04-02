@@ -33,6 +33,8 @@ public class ProposedCreditDecisionReport extends ReportModel{
     private BigDecimal holdLimitAmount;
     private String path;
 
+    private String proposedDetail;
+
     //Approved Credit
     private String uwDecision;
 
@@ -40,25 +42,20 @@ public class ProposedCreditDecisionReport extends ReportModel{
 
 
     public ProposedCreditDecisionReport() {
-        count = getDefaultInteger();
-        prodName = getDefaultString();
-        credittypeName = getDefaultString();
-        prodCode = getProjectCode();
-        projectCode = getProjectCode();
-        limit = getDefaultBigDecimal();
-        standardPriceLabel = getDefaultString();
-        suggestPriceLabel = getDefaultString();
-        finalPriceLabel = getDefaultString();
-        installment = getDefaultBigDecimal();
-        tenor = getDefaultInteger();
-        frontEndFee = getDefaultBigDecimal();
-        requestType = getDefaultString();
-        refinance = getDefaultString();
-        purposeDescription = getDisbursement();
-        remark = getDisbursement();
-        disbursement = getDefaultString();
-        holdLimitAmount = getDefaultBigDecimal();
-        uwDecision = getDefaultString();
+        count = 0;
+        prodName = "";
+        credittypeName = "";
+        prodCode = "";
+        projectCode = "";
+        standardPriceLabel = "";
+        suggestPriceLabel = "";
+        finalPriceLabel = "";
+        requestType = "";
+        refinance = "";
+        purposeDescription = "";
+        remark = "";
+        disbursement = "";
+        uwDecision = "";
         newCreditTierDetailViews = new ArrayList<NewCreditTierDetailView>();
     }
 
@@ -230,9 +227,18 @@ public class ProposedCreditDecisionReport extends ReportModel{
         this.path = path;
     }
 
+    public String getProposedDetail() {
+        return proposedDetail;
+    }
+
+    public void setProposedDetail(String proposedDetail) {
+        this.proposedDetail = proposedDetail;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("count", count)
                 .append("prodName", prodName)
                 .append("credittypeName", credittypeName)
                 .append("prodCode", prodCode)
@@ -250,8 +256,10 @@ public class ProposedCreditDecisionReport extends ReportModel{
                 .append("remark", remark)
                 .append("disbursement", disbursement)
                 .append("holdLimitAmount", holdLimitAmount)
-                .append("newCreditTierDetailViews", newCreditTierDetailViews)
+                .append("path", path)
+                .append("proposedDetail", proposedDetail)
                 .append("uwDecision", uwDecision)
+                .append("newCreditTierDetailViews", newCreditTierDetailViews)
                 .toString();
     }
 }

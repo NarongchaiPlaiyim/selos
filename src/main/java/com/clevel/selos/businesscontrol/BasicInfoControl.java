@@ -6,6 +6,7 @@ import com.clevel.selos.dao.master.RequestTypeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BAPaymentMethodValue;
+import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.master.CustomerEntity;
@@ -51,6 +52,10 @@ public class BasicInfoControl extends BusinessControl {
     RequestTypeDAO requestTypeDAO;
     @Inject
     BAPAInfoDAO bapaInfoDAO;
+    @Inject
+    ExistingCreditFacilityDAO existingCreditFacilityDAO;
+    @Inject
+    ExistingCreditDetailDAO existingCreditDetailDAO;
 
     @Inject
     BasicInfoTransform basicInfoTransform;
@@ -208,6 +213,24 @@ public class BasicInfoControl extends BusinessControl {
         basicInfo.setExtendedReviewDate(extendedReviewDate);
 
         basicInfo.setRetrievedFlag(1);
+
+        //set existing loan in one year flag
+        basicInfo.setHaveLoanInOneYear(1);
+        ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(basicInfo.getWorkCase().getId());
+        if(existingCreditFacility!=null) {
+            List<ExistingCreditDetail> borrowerComExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,RelationValue.BORROWER.value(), CreditCategory.COMMERCIAL);
+            if(borrowerComExistingCreditList!=null && borrowerComExistingCreditList.size()>0){
+                for(ExistingCreditDetail existingCreditDetail : borrowerComExistingCreditList){
+                    if(existingCreditDetail.getExistProductSegment()!=null){
+                        if(existingCreditDetail.getExistProductSegment().getId()==2 && existingCreditDetail.getExistProductSegment().getId()==6){
+                            basicInfo.setHaveLoanInOneYear(2);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        log.info("haveLoanInOneYear {}", Util.isRadioTrue(basicInfo.getHaveLoanInOneYear()));
 
         log.info("calBasicInfo :: basicInfo {}", basicInfo);
 

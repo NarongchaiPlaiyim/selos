@@ -572,7 +572,7 @@ public class ExSummaryControl extends BusinessControl {
         }
 
         if(basicInfo != null && basicInfo.getId() != 0 && newCreditFacility != null && newCreditFacility.getId() != 0){
-            if(basicInfo.getRefinanceIN() == 1){
+            if(basicInfo.getRefinanceIN() == RadioValue.YES.value()){
                 if(newCreditFacility.getCreditCustomerType() == CreditCustomerType.PRIME.value()){
                     recommendedWCNeed = getMinBigDecimal(value2,value3);
                 } else {
