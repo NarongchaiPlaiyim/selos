@@ -644,6 +644,9 @@ public class CustomerInfoIndividual implements Serializable {
         }
 
         customerInfoView.setCollateralOwner(1);
+
+        Relation relation = new Relation();
+        customerInfoView.setRelation(relation);
     }
 
     public void onChangeRelationSpouse(){
@@ -688,6 +691,9 @@ public class CustomerInfoIndividual implements Serializable {
         }
 
         customerInfoView.getSpouse().setCollateralOwner(1);
+
+        Relation relation = new Relation();
+        customerInfoView.getSpouse().setRelation(relation);
     }
 
     public void onChangeProvinceForm1() {
@@ -1681,6 +1687,16 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void onSave(){
         log.debug("onSave");
+        if(maritalStatusFlag){
+            if(customerInfoView.getSpouse() != null){
+                if(customerInfoView.getSpouse().getCitizenId().trim().equalsIgnoreCase("")){
+                    return;
+                }
+            } else {
+                return;
+            }
+        }
+
         //check citizen id
         if(customerInfoView.getSpouse() != null){
             if(customerInfoView.getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId())){
@@ -1969,64 +1985,50 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void updateRmtCmd01(){
-        log.debug("##### updateRmtCmd01");
         RequestContext.getCurrentInstance().execute("rmtCmd01()");
     }
 
     public void updateRmtCmd02(){
-        log.debug("##### updateRmtCmd02");
         RequestContext.getCurrentInstance().execute("rmtCmd02()");
     }
 
     public void updateRmtCmd03(){
-        log.debug("##### updateRmtCmd03");
         RequestContext.getCurrentInstance().execute("rmtCmd03()");
     }
 
     public void updateRmtCmd04(){
-        log.debug("##### updateRmtCmd04");
         RequestContext.getCurrentInstance().execute("rmtCmd04()");
     }
 
     public void updateRmtCmd05(){
-        log.debug("##### updateRmtCmd05");
         RequestContext.getCurrentInstance().execute("rmtCmd05()");
     }
 
     public void updateRmtCmd06(){
-        log.debug("##### updateRmtCmd06");
         RequestContext.getCurrentInstance().execute("rmtCmd06()");
     }
 
     public void updateRmtCmd07(){
-        log.debug("##### updateRmtCmd07");
         RequestContext.getCurrentInstance().execute("rmtCmd07()");
     }
 
     public void updateRmtCmd08(){
-        log.debug("##### updateRmtCmd08");
         RequestContext.getCurrentInstance().execute("rmtCmd08()");
     }
 
     public void updateRmtCmd09(){
-        log.debug("##### updateRmtCmd09");
         RequestContext.getCurrentInstance().execute("rmtCmd09()");
     }
 
     public void updateRmtCmd10(){
-        log.debug("##### updateRmtCmd10");
         RequestContext.getCurrentInstance().execute("rmtCmd10()");
     }
 
     public void updateRmtCmd11(){
-        log.debug("##### updateRmtCmd11");
         RequestContext.getCurrentInstance().execute("rmtCmd11()");
     }
 
     public void updateRmtCmdSpouse01(){
-        log.debug("##### updateRmtCmdSpouse01");
-        log.debug("##### updateRmtCmdSpouse01 ::: maritalStatusFlagTmp : {}",maritalStatusFlagTmp);
-        log.debug("##### updateRmtCmdSpouse01 ::: maritalStatusFlag : {}",maritalStatusFlag);
         if(maritalStatusFlagTmp || maritalStatusFlag){
             RequestContext.getCurrentInstance().execute("rmtCmdSpouse01()");
         } else { // not have spouse go to end form
@@ -2035,63 +2037,56 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void updateRmtCmdOnlySpouse01(){
-        log.debug("##### updateRmtCmdOnlySpouse01");
         RequestContext.getCurrentInstance().execute("rmtCmdOnlySpouse01()");
     }
 
     public void updateRmtCmdSpouse02(){
-        log.debug("##### updateRmtCmdSpouse02");
         RequestContext.getCurrentInstance().execute("rmtCmdSpouse02()");
     }
 
     public void updateRmtCmdSpouse03(){
-        log.debug("##### updateRmtCmdSpouse03");
         RequestContext.getCurrentInstance().execute("rmtCmdSpouse03()");
     }
 
     public void updateRmtCmdSpouse04(){
-        log.debug("##### updateRmtCmdSpouse04");
         RequestContext.getCurrentInstance().execute("rmtCmdSpouse04()");
     }
 
     public void updateRmtCmdSpouse05(){
-        log.debug("##### updateRmtCmdSpouse05");
         RequestContext.getCurrentInstance().execute("rmtCmdSpouse05()");
     }
 
     public void updateRmtCmdSpouse06(){
-        log.debug("##### updateRmtCmdSpouse06");
         RequestContext.getCurrentInstance().execute("rmtCmdSpouse06()");
     }
 
     public void updateRmtCmdSpouse07(){
-        log.debug("##### updateRmtCmdSpouse07");
         RequestContext.getCurrentInstance().execute("rmtCmdSpouse07()");
     }
 
     public void updateRmtCmdSpouse08(){
-        log.debug("##### updateRmtCmdSpouse08");
         RequestContext.getCurrentInstance().execute("rmtCmdSpouse08()");
     }
 
     public void updateRmtCmdSpouse09(){
-        log.debug("##### updateRmtCmdSpouse09");
         RequestContext.getCurrentInstance().execute("rmtCmdSpouse09()");
     }
 
     public void updateRmtCmdSpouse10(){
-        log.debug("##### updateRmtCmdSpouse10");
         RequestContext.getCurrentInstance().execute("rmtCmdSpouse10()");
     }
 
     public void updateRmtCmdSpouse11(){
-        log.debug("##### updateRmtCmdSpouse11");
-        updateRmtCmdCommon();
+        RequestContext.getCurrentInstance().execute("rmtCmdSpouse11()");
     }
 
     public void updateRmtCmdCommon(){
-        log.debug("##### updateRmtCmdCommon");
         RequestContext.getCurrentInstance().execute("rmtCmdCommon()");
+    }
+
+    public void onCancelForm(){
+        onCreation();
+        updateRmtCmd01();
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
