@@ -312,7 +312,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             modeForDB = ModeForDB.ADD_DB;
             // Initial sequence number credit
             hashSeqCredit = new HashMap<Integer, Integer>();
-            notRetrievePricing = true;
             // delete list on save
             deleteCreditIdList = new ArrayList<Long>();
             deleteCollIdList = new ArrayList<Long>();
@@ -333,6 +332,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     newCreditFacilityView = new NewCreditFacilityView();
                     reducePricePanelRendered = false;
                     cannotEditStandard = true;
+                    notRetrievePricing = true;
                 }else{
                     log.debug("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
 
@@ -359,8 +359,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     }
 
                     notRetrievePricing = false;
-
-
                 }
 
             } catch (Exception ex) {
