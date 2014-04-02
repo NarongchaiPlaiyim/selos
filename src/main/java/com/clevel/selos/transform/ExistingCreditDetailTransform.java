@@ -76,6 +76,7 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetail.setProductCode(existingCreditDetailView.getProductCode());
             existingCreditDetail.setProjectCode(existingCreditDetailView.getProjectCode());
             existingCreditDetail.setTenor(existingCreditDetailView.getTenor());
+            existingCreditDetail.setExistProductSegment(existingCreditDetailView.getProductSegment());
             existingCreditDetail.setExistingCreditFacility(existingCreditFacility);
 
             existingCreditDetailList.add(existingCreditDetail);
@@ -133,7 +134,7 @@ public class ExistingCreditDetailTransform extends Transform {
                 }
             }
 
-
+            existingCreditDetailView.setProductSegment(existingCreditDetail.getExistProductSegment());
             /*existingCreditDetailView.setPurpose(existingCreditDetail.getPurpose());
             existingCreditDetailView.setReduceFrontEndFee(existingCreditDetail.getReduceFrontEndFee());
             existingCreditDetailView.setReducePriceFlag(existingCreditDetail.getReducePriceFlag());

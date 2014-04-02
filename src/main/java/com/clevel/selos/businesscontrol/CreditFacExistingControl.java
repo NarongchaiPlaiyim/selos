@@ -14,6 +14,7 @@ import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -202,6 +203,24 @@ public class CreditFacExistingControl extends BusinessControl {
             List<ExistingCreditDetail> borrowerComExistingCreditList = existingCreditDetailTransform.transformsToModel(existingCreditFacilityView.getBorrowerComExistingCredit(), existingCreditFacility, user);
             existingCreditDetailDAO.persist(borrowerComExistingCreditList);
             log.info("persist borrower existingCreditDetailList...");
+
+            //update have loan in one year flag in basic info
+            int haveLoanInOneYear = 1;
+            if(borrowerComExistingCreditList!=null && borrowerComExistingCreditList.size()>0){
+                for(ExistingCreditDetail existingCreditDetail : borrowerComExistingCreditList){
+                    if(existingCreditDetail.getExistProductSegment()!=null){
+                        if(existingCreditDetail.getExistProductSegment().getId()==2 || existingCreditDetail.getExistProductSegment().getId()==6){
+                            haveLoanInOneYear = 2;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            BasicInfo basicInfo = basicInfoDAO.getBasicInfoByWorkCaseId(workCaseId);
+            basicInfo.setHaveLoanInOneYear(haveLoanInOneYear);
+            basicInfoDAO.persist(basicInfo);
+            log.info("Update haveLoanInOneYear in BasicInfo {}", Util.isRadioTrue(basicInfo.getHaveLoanInOneYear()));
 
             for (int i=0 ;i<borrowerComExistingCreditList.size();i++) {
                 log.info(" Round borrowerComExistingCreditList  is " + i );
