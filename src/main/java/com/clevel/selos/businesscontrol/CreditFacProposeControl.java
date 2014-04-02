@@ -5,6 +5,7 @@ import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.brms.model.response.PricingFee;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
@@ -872,6 +873,12 @@ public class CreditFacProposeControl extends BusinessControl {
             }
         }
 
+    }
+
+    public void saveFeeDetailFromRetrieve(List<PricingFee> pricingFeeList, long workCaseId) {
+        List<FeeDetail> feeDetailList = feeTransform.transformToDB(pricingFeeList,workCaseId);
+        feeDetailDAO.persist(feeDetailList);
+        log.debug("persist :: feeDetailList ::");
     }
 
     public NewCreditFacilityView saveCreditFacility(NewCreditFacilityView newCreditFacilityView, long workCaseId) {
