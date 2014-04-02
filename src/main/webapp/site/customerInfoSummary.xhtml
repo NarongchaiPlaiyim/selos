@@ -51,16 +51,18 @@
                                                var="customerEntity"
                                                itemLabel="#{customerEntity.description}"
                                                itemValue="#{customerEntity.id}"/>
-                                <p:ajax event="change" update="frmMain"/>
+                                <p:ajax event="change" update="optLb,btnIndividual,btnJuristic" process="@this"/>
                             </p:selectOneMenu>
                         </td>
                         <td style="width: 950px; max-width: 950px; min-width: 950px;">
-                            <p:commandButton id="btnIndividual" value="Add" styleClass="small" process="@form"
-                                             rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 1}"
-                                             action="#{custInfoSummary.onLinkToAddIndividual()}" onclick="blockUI.show()"/>
-                            <p:commandButton id="btnJuristic" value="Add" styleClass="small" process="@form"
-                                             rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 2}"
-                                             action="#{custInfoSummary.onLinkToAddJuristic()}" onclick="blockUI.show()"/>
+                            <p:outputLabel id="optLb">
+                                <p:commandButton id="btnIndividual" value="Add" styleClass="small" process="@form"
+                                                 rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 1}"
+                                                 action="#{custInfoSummary.onLinkToAddIndividual()}" onclick="blockUI.show()"/>
+                                <p:commandButton id="btnJuristic" value="Add" styleClass="small" process="@form"
+                                                 rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 2}"
+                                                 action="#{custInfoSummary.onLinkToAddJuristic()}" onclick="blockUI.show()"/>
+                            </p:outputLabel>
                         </td>
                     </tr>
 

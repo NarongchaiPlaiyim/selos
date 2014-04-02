@@ -223,7 +223,7 @@
                                                     <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item">
                                                         <th class="ui-state-default">
                                                             <h:outputText value="#{item.asOfDate}">
-                                                                <f:convertDateTime pattern="MMM yyyy" locale="en"/>
+                                                                <f:convertDateTime pattern="MMM yyyy" locale="th_TH"/>
                                                             </h:outputText>
                                                         </th>
                                                     </ui:repeat>
@@ -424,7 +424,6 @@
                                                             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                             <clv:BECalendar showOn="focus" showButtonPanel="true" navigator="true"
                                                                             yearRange="1950:2100"
-                                                                            defaultdate="#{bankStatementDetail.currentDateDDMMYY}"
                                                                             maxdate="#{bankStatementDetail.currentDateDDMMYY}"
                                                                             pattern="dd/MM/yyyy"
                                                                             value="#{item.dateOfMaxBalance}"
@@ -458,7 +457,6 @@
                                                             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                             <clv:BECalendar showOn="focus" showButtonPanel="true" navigator="true"
                                                                             yearRange="1950:2100"
-                                                                            defaultdate="#{bankStatementDetail.currentDateDDMMYY}"
                                                                             maxdate="#{bankStatementDetail.currentDateDDMMYY}"
                                                                             pattern="dd/MM/yyyy"
                                                                             value="#{item.dateOfMinBalance}"

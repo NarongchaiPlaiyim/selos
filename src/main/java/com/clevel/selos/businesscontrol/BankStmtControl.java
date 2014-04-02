@@ -96,7 +96,7 @@ public class BankStmtControl extends BusinessControl {
                         log.info("Finding account {}", accountListModelList);
                         for (CustomerAccountListModel customerAccountListModel : accountListModelList) {
                             DWHBankStatementResult dwhBankStatementResult = dwhInterface.getBankStatementData(getCurrentUserID(), customerAccountListModel.getAccountNo(), startBankStmtDate, numberOfMonthBankStmt);
-
+                            log.debug("DWH Bank Statement per Customer Account Result: {}", dwhBankStatementResult.getActionResult());
                             if (dwhBankStatementResult.getActionResult().equals(ActionResult.SUCCESS)) {
                                 List<DWHBankStatement> dwhBankStatementList = dwhBankStatementResult.getBankStatementList();
                                 BankStmtView bankStmtView = null;
@@ -171,8 +171,8 @@ public class BankStmtControl extends BusinessControl {
     public Date getLastMonthDateBankStmt(Date expectedSubmissionDate) {
         if (expectedSubmissionDate != null) {
             int days = DateTimeUtil.getDayOfDate(expectedSubmissionDate);
-            int retrieveMonth = days < 15 ? 2 : 1;
-            return DateTimeUtil.getOnlyDatePlusMonth(expectedSubmissionDate, -retrieveMonth);
+            int retrieveMonth = days < 15 ? -2 : -1;
+            return DateTimeUtil.getOnlyDatePlusMonth(expectedSubmissionDate, retrieveMonth);
         }
         return null;
     }
@@ -1341,48 +1341,6 @@ public class BankStmtControl extends BusinessControl {
         bankStmtView.setAvgOSBalanceAmount( getAvgMaxBalance(bankStmtView, bankAccTypeFromBankStmt, savingAccType, currentAccType, othFDType, othBOEType) );
     }
 
-    public void calSrcOfCollateral(BankStmtSummaryView summaryView) {
-        // Calculate reference from CA Web Formula
-    }
-
-    public Date[] getSourceOfCollateralMonths(BankStmtSummaryView summaryView) {
-        log.debug("getSourceOfCollateralMonths() bankStmtSummary.id: {}", summaryView);
-        Date[] threeMonths = new Date[3];
-        if (summaryView != null &&
-            ((summaryView.getTmbBankStmtViewList() != null && !summaryView.getTmbBankStmtViewList().isEmpty())
-              || (summaryView.getOthBankStmtViewList() != null && !summaryView.getOthBankStmtViewList().isEmpty()))) {
-
-            Date maxDate = null;
-            for (BankStmtView tmbBankStmtView : summaryView.getTmbBankStmtViewList()) {
-                for (BankStmtDetailView detailView : tmbBankStmtView.getBankStmtDetailViewList()) {
-                    if (maxDate == null) {
-                        maxDate = detailView.getAsOfDate();
-                    }
-                    else if (DateTimeUtil.compareDate(detailView.getAsOfDate(), maxDate) > 1) {
-                        maxDate = detailView.getAsOfDate();
-                    }
-                }
-            }
-
-            for (BankStmtView othBankStmtView : summaryView.getOthBankStmtViewList()) {
-                for (BankStmtDetailView detailView : othBankStmtView.getBankStmtDetailViewList()) {
-                    if (maxDate == null) {
-                        maxDate = detailView.getAsOfDate();
-                    }
-                    else if (DateTimeUtil.compareDate(detailView.getAsOfDate(), maxDate) > 1) {
-                        maxDate = detailView.getAsOfDate();
-                    }
-                }
-            }
-
-            threeMonths[0] = DateTimeUtil.getOnlyDatePlusMonth(maxDate, -2);
-            threeMonths[1] = DateTimeUtil.getOnlyDatePlusMonth(maxDate, -1);
-            threeMonths[2] = maxDate;
-        }
-        log.debug("getSourceOfCollateralMonths() result - threeMonths: {}", threeMonths);
-        return threeMonths;
-    }
-
     public int getUserRoleId() {
         User user = getCurrentUser();
         if (user != null && user.getRole() != null) {
@@ -1404,4 +1362,20 @@ public class BankStmtControl extends BusinessControl {
             }
         });
     }
+
+    public List<BankStmtDetailView> generateBankStmtDetail(int numberOfMonths, Date lastMonthDate) {
+        List<BankStmtDetailView> bankStmtDetailViewList;
+        bankStmtDetailViewList = new ArrayList<BankStmtDetailView>();
+        Date date;
+        for (int i = 0; i < numberOfMonths; i++) {
+            BankStmtDetailView bankStmtDetailView = new BankStmtDetailView();
+            date = DateTimeUtil.getOnlyDatePlusMonth(lastMonthDate, -i);
+            bankStmtDetailView.setAsOfDate(date);
+            bankStmtDetailView.setDateOfMaxBalance(DateTimeUtil.getFirstDayOfMonth(date));
+            bankStmtDetailView.setDateOfMinBalance(DateTimeUtil.getFirstDayOfMonth(date));
+            bankStmtDetailViewList.add(bankStmtDetailView);
+        }
+        return bankStmtDetailViewList;
+    }
+
 }

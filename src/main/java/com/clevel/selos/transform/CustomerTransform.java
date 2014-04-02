@@ -79,6 +79,8 @@ public class CustomerTransform extends Transform {
     @Inject
     private BusinessTypeDAO businessTypeDAO;
     @Inject
+    private BusinessSubTypeDAO businessSubTypeDAO;
+    @Inject
     private WarningCodeDAO warningCodeDAO;
     @Inject
     private KYCLevelDAO kycLevelDAO;
@@ -141,6 +143,11 @@ public class CustomerTransform extends Transform {
             customerInfoView.setBusinessType(new BusinessType());
         }
 
+        customerInfoView.setBusinessSubType(customer.getBusinessSubType());
+        if(customerInfoView.getBusinessSubType() == null){
+            customerInfoView.setBusinessSubType(new BusinessSubType());
+        }
+
         customerInfoView.setRelation(customer.getRelation());
         if(customerInfoView.getRelation() == null){
             customerInfoView.setRelation(new Relation());
@@ -178,6 +185,7 @@ public class CustomerTransform extends Transform {
         customerInfoView.setMailingAddressType(customer.getMailingAddressType());
         if(customerInfoView.getMailingAddressType() == null){
             customerInfoView.setMailingAddressType(new AddressType());
+        }
 
 		customerInfoView.setMailingAddressType(customer.getMailingAddressType());
         if(customerInfoView.getMailingAddressType() == null){
@@ -196,7 +204,7 @@ public class CustomerTransform extends Transform {
 
         customerInfoView.setIsCommittee(customer.getIsCommittee());
         customerInfoView.setCommitteeId(customer.getJuristicId());
-        }
+
         customerInfoView.setValidId(2);
 
         customerInfoView.setCollateralOwner(customer.getCollateralOwner());
@@ -471,6 +479,12 @@ public class CustomerTransform extends Transform {
             customer.setBusinessType(businessTypeDAO.findById(customerInfoView.getBusinessType().getId()));
         } else {
             customer.setBusinessType(null);
+        }
+
+        if(customerInfoView.getBusinessSubType() != null && customerInfoView.getBusinessSubType().getId() != 0){
+            customer.setBusinessSubType(businessSubTypeDAO.findById(customerInfoView.getBusinessSubType().getId()));
+        } else {
+            customer.setBusinessSubType(null);
         }
 
         if(customerInfoView.getRelation() != null && customerInfoView.getRelation().getId() != 0){

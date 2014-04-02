@@ -31,6 +31,7 @@ import javax.faces.context.Flash;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.*;
 
 @ViewScoped
@@ -70,7 +71,7 @@ public class CustomerInfoIndividual implements Serializable {
     @Inject
     private OccupationDAO occupationDAO;
     @Inject
-    private BusinessTypeDAO businessTypeDAO;
+    private BusinessSubTypeDAO businessSubTypeDAO;
     @Inject
     private MaritalStatusDAO maritalStatusDAO;
     @Inject
@@ -91,6 +92,7 @@ public class CustomerInfoIndividual implements Serializable {
     private IndividualDAO individualDAO;
     @Inject
     private IncomeSourceDAO incomeSourceDAO;
+
     @Inject
     private CustomerInfoControl customerInfoControl;
 
@@ -107,7 +109,7 @@ public class CustomerInfoIndividual implements Serializable {
     private List<Nationality> sndNationalityList;
     private List<Education> educationList;
     private List<Occupation> occupationList;
-    private List<BusinessType> businessTypeList;
+    private List<BusinessSubType> businessTypeList;
     private List<MaritalStatus> maritalStatusList;
 
     private List<Province> provinceForm1List;
@@ -158,6 +160,7 @@ public class CustomerInfoIndividual implements Serializable {
 
     // maritalStatus
     private boolean maritalStatusFlag;
+    private boolean maritalStatusFlagTmp;
 
     // Mandate boolean for change Reference
     private boolean reqIndRelation;
@@ -384,7 +387,7 @@ public class CustomerInfoIndividual implements Serializable {
         sndNationalityList = nationalityDAO.findAll();
         educationList = educationDAO.findAll();
         occupationList = occupationDAO.findAll();
-        businessTypeList = businessTypeDAO.findAll();
+        businessTypeList = businessSubTypeDAO.findAll();
         maritalStatusList = maritalStatusDAO.findAll();
 
         provinceForm1List = provinceDAO.getListOrderByParameter("name");
@@ -435,7 +438,7 @@ public class CustomerInfoIndividual implements Serializable {
 
         onChangeReference();
         onChangeReferenceSpouse();
-        onChangeMaritalStatus();
+        onChangeMaritalStatusInitial();
     }
 
     public void onEditIndividual(){
@@ -559,7 +562,7 @@ public class CustomerInfoIndividual implements Serializable {
 
         //////////////////////////////////////////////////////////////////
 
-        onChangeMaritalStatus();
+        onChangeMaritalStatusInitial();
         onChangeRelation();
         onChangeReference();
         onChangeProvinceEditForm1();
@@ -639,6 +642,11 @@ public class CustomerInfoIndividual implements Serializable {
                 relationSpouseList.remove(tmp2);
             }
         }
+
+        customerInfoView.setCollateralOwner(1);
+
+        Relation relation = new Relation();
+        customerInfoView.setRelation(relation);
     }
 
     public void onChangeRelationSpouse(){
@@ -681,6 +689,11 @@ public class CustomerInfoIndividual implements Serializable {
                 }
             }
         }
+
+        customerInfoView.getSpouse().setCollateralOwner(1);
+
+        Relation relation = new Relation();
+        customerInfoView.getSpouse().setRelation(relation);
     }
 
     public void onChangeProvinceForm1() {
@@ -941,6 +954,31 @@ public class CustomerInfoIndividual implements Serializable {
         }
     }
 
+    public void onChangeMaritalStatusInitial(){
+        if(customerInfoView != null && customerInfoView.getMaritalStatus().getId() == 0){
+            return;
+        }
+
+        MaritalStatus maritalStatus = maritalStatusDAO.findById(customerInfoView.getMaritalStatus().getId());
+        if(maritalStatus != null && maritalStatus.getSpouseFlag() == 1){
+            maritalStatusFlag = true;
+        } else {
+            maritalStatusFlag = false;
+        }
+
+        if(maritalStatusFlag){
+            customerInfoView.getMaritalStatus().setSpouseFlag(1);
+            if(customerInfoView.getSpouse() == null){
+                CustomerInfoView cusView = new CustomerInfoView();
+                cusView.reset();
+                customerInfoView.setSpouse(cusView);
+                onChangeRelation();
+                isEditFormSpouse = false;
+                enableAllFieldCusSpouse = false;
+            }
+        }
+    }
+
     public void onChangeMaritalStatus(){
         if(customerInfoView != null && customerInfoView.getMaritalStatus().getId() == 0){
             return;
@@ -964,6 +1002,10 @@ public class CustomerInfoIndividual implements Serializable {
                 enableAllFieldCusSpouse = false;
             }
         }
+
+        updateRmtCmdSpouse01();
+
+        maritalStatusFlagTmp = maritalStatusFlag;
     }
 
     public void onChangeReference(){
@@ -1087,7 +1129,6 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onSearchCustomerInfo() {
-//        updatePnl1();
         log.debug("onSearchCustomerInfo :::");
         log.debug("onSearchCustomerInfo ::: customerInfoView : {}", customerInfoSearch);
         CustomerInfoResultView customerInfoResultView;
@@ -1274,7 +1315,7 @@ public class CustomerInfoIndividual implements Serializable {
             onChangeDistrictEditForm2();
             onChangeProvinceEditForm3();
             onChangeDistrictEditForm3();
-            onChangeMaritalStatus();
+            onChangeMaritalStatusInitial();
             onChangeDOB();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
@@ -1540,6 +1581,7 @@ public class CustomerInfoIndividual implements Serializable {
                         customerInfoView.getSpouse().setSearchFromRM(1);
                         customerInfoView.getSpouse().setSearchBy(customerInfoSearchSpouse.getSearchBy());
                         customerInfoView.getSpouse().setSearchId(customerInfoSearchSpouse.getSearchId());
+                        customerInfoView.getSpouse().setCollateralOwner(1);
                     }else{
                         CustomerInfoView cusView = new CustomerInfoView();
                         cusView.reset();
@@ -1548,6 +1590,7 @@ public class CustomerInfoIndividual implements Serializable {
                         customerInfoView.getSpouse().setSearchFromRM(1);
                         customerInfoView.getSpouse().setSearchBy(customerInfoSearchSpouse.getSearchBy());
                         customerInfoView.getSpouse().setSearchId(customerInfoSearchSpouse.getSearchId());
+                        customerInfoView.getSpouse().setCollateralOwner(1);
                     }
 
                     //set default country
@@ -1625,7 +1668,7 @@ public class CustomerInfoIndividual implements Serializable {
             onChangeDistrictEditForm4();
             onChangeProvinceEditForm5();
             onChangeDistrictEditForm5();
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageSpouseDlg.show()");
         }catch (Exception ex){
             enableSpouseDocumentType = true;
             enableSpouseCitizenId = true;
@@ -1638,12 +1681,22 @@ public class CustomerInfoIndividual implements Serializable {
             messageHeader = "Error.";
             message = ex.getMessage();
             severity = "alert";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageSpouseDlg.show()");
         }
     }
 
     public void onSave(){
         log.debug("onSave");
+        if(maritalStatusFlag){
+            if(customerInfoView.getSpouse() != null){
+                if(customerInfoView.getSpouse().getCitizenId().trim().equalsIgnoreCase("")){
+                    return;
+                }
+            } else {
+                return;
+            }
+        }
+
         //check citizen id
         if(customerInfoView.getSpouse() != null){
             if(customerInfoView.getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId())){
@@ -1931,31 +1984,109 @@ public class CustomerInfoIndividual implements Serializable {
         customerInfoView.getSpouse().setSearchId("");
     }
 
-    public void updatePnl1(){
-        RequestContext.getCurrentInstance().execute("pnl1()");
-        relationMainCusId = 3;
-        onChangeRelation();
-        customerInfoView.setCollateralOwner(2);
+    public void updateRmtCmd01(){
+        RequestContext.getCurrentInstance().execute("rmtCmd01()");
     }
 
-    public void updatePnl2(){
-        System.out.println("##########################################################################");
-        System.out.println("##########################################################################");
-        System.out.println("##########################################################################");
-        System.out.println("#####################         Update Panel 2      ########################");
-        System.out.println("##########################################################################");
-        System.out.println("##########################################################################");
-        System.out.println("##########################################################################");
+    public void updateRmtCmd02(){
+        RequestContext.getCurrentInstance().execute("rmtCmd02()");
     }
 
-    public void updatePnl3(){
-        System.out.println("##########################################################################");
-        System.out.println("##########################################################################");
-        System.out.println("##########################################################################");
-        System.out.println("#####################         Update Panel 3      ########################");
-        System.out.println("##########################################################################");
-        System.out.println("##########################################################################");
-        System.out.println("##########################################################################");
+    public void updateRmtCmd03(){
+        RequestContext.getCurrentInstance().execute("rmtCmd03()");
+    }
+
+    public void updateRmtCmd04(){
+        RequestContext.getCurrentInstance().execute("rmtCmd04()");
+    }
+
+    public void updateRmtCmd05(){
+        RequestContext.getCurrentInstance().execute("rmtCmd05()");
+    }
+
+    public void updateRmtCmd06(){
+        RequestContext.getCurrentInstance().execute("rmtCmd06()");
+    }
+
+    public void updateRmtCmd07(){
+        RequestContext.getCurrentInstance().execute("rmtCmd07()");
+    }
+
+    public void updateRmtCmd08(){
+        RequestContext.getCurrentInstance().execute("rmtCmd08()");
+    }
+
+    public void updateRmtCmd09(){
+        RequestContext.getCurrentInstance().execute("rmtCmd09()");
+    }
+
+    public void updateRmtCmd10(){
+        RequestContext.getCurrentInstance().execute("rmtCmd10()");
+    }
+
+    public void updateRmtCmd11(){
+        RequestContext.getCurrentInstance().execute("rmtCmd11()");
+    }
+
+    public void updateRmtCmdSpouse01(){
+        if(maritalStatusFlagTmp || maritalStatusFlag){
+            RequestContext.getCurrentInstance().execute("rmtCmdSpouse01()");
+        } else { // not have spouse go to end form
+            updateRmtCmdCommon();
+        }
+    }
+
+    public void updateRmtCmdOnlySpouse01(){
+        RequestContext.getCurrentInstance().execute("rmtCmdOnlySpouse01()");
+    }
+
+    public void updateRmtCmdSpouse02(){
+        RequestContext.getCurrentInstance().execute("rmtCmdSpouse02()");
+    }
+
+    public void updateRmtCmdSpouse03(){
+        RequestContext.getCurrentInstance().execute("rmtCmdSpouse03()");
+    }
+
+    public void updateRmtCmdSpouse04(){
+        RequestContext.getCurrentInstance().execute("rmtCmdSpouse04()");
+    }
+
+    public void updateRmtCmdSpouse05(){
+        RequestContext.getCurrentInstance().execute("rmtCmdSpouse05()");
+    }
+
+    public void updateRmtCmdSpouse06(){
+        RequestContext.getCurrentInstance().execute("rmtCmdSpouse06()");
+    }
+
+    public void updateRmtCmdSpouse07(){
+        RequestContext.getCurrentInstance().execute("rmtCmdSpouse07()");
+    }
+
+    public void updateRmtCmdSpouse08(){
+        RequestContext.getCurrentInstance().execute("rmtCmdSpouse08()");
+    }
+
+    public void updateRmtCmdSpouse09(){
+        RequestContext.getCurrentInstance().execute("rmtCmdSpouse09()");
+    }
+
+    public void updateRmtCmdSpouse10(){
+        RequestContext.getCurrentInstance().execute("rmtCmdSpouse10()");
+    }
+
+    public void updateRmtCmdSpouse11(){
+        RequestContext.getCurrentInstance().execute("rmtCmdSpouse11()");
+    }
+
+    public void updateRmtCmdCommon(){
+        RequestContext.getCurrentInstance().execute("rmtCmdCommon()");
+    }
+
+    public void onCancelForm(){
+        onCreation();
+        updateRmtCmd01();
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2074,11 +2205,11 @@ public class CustomerInfoIndividual implements Serializable {
         this.occupationList = occupationList;
     }
 
-    public List<BusinessType> getBusinessTypeList() {
+    public List<BusinessSubType> getBusinessTypeList() {
         return businessTypeList;
     }
 
-    public void setBusinessTypeList(List<BusinessType> businessTypeList) {
+    public void setBusinessTypeList(List<BusinessSubType> businessTypeList) {
         this.businessTypeList = businessTypeList;
     }
 
