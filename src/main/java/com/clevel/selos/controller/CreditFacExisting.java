@@ -486,6 +486,7 @@ public class CreditFacExisting implements Serializable {
                 if(productFormula != null){
                     existingCreditDetailView.setProductCode(productFormula.getProductCode());
                     existingCreditDetailView.setProjectCode(productFormula.getProjectCode());
+                    existingCreditDetailView.setProductSegment(productFormula.getProductSegment());
                 } else {
                     existingCreditDetailView.setProductCode("-");
                     existingCreditDetailView.setProjectCode("-");
@@ -885,6 +886,7 @@ public class CreditFacExisting implements Serializable {
             existingCreditDetailViewRow.setOutstanding(existingCreditDetailView.getOutstanding());
             existingCreditDetailViewRow.setPcePercent(existingCreditDetailView.getPcePercent());
             existingCreditDetailViewRow.setPceLimit(existingCreditDetailView.getPceLimit());
+            existingCreditDetailViewRow.setProductSegment(existingCreditDetailView.getProductSegment());
 
             if(Util.isTrue(creditType.getCanSplit())){
                 for(int i=0;i<existingSplitLineDetailViewList.size();i++){
