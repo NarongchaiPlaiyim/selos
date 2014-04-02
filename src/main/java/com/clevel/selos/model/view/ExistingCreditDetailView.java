@@ -2,7 +2,8 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.CreditRelationType;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.ProductSegment;
+import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -46,6 +47,7 @@ public class ExistingCreditDetailView implements Serializable {
     private String accountRef;
 
     private ProductSegment productSegment;
+    private BigDecimal guaranteeAmount;
 
     private Date createDate;
     private Date modifyDate;
@@ -367,6 +369,14 @@ public class ExistingCreditDetailView implements Serializable {
 
     public void setExistingSplitLineDetailViewList(List<ExistingSplitLineDetailView> existingSplitLineDetailViewList) {
         this.existingSplitLineDetailViewList = existingSplitLineDetailViewList;
+    }
+
+    public BigDecimal getGuaranteeAmount() {
+        return guaranteeAmount;
+    }
+
+    public void setGuaranteeAmount(BigDecimal guaranteeAmount) {
+        this.guaranteeAmount = guaranteeAmount;
     }
 
     @Override

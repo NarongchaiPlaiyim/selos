@@ -140,7 +140,9 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     private BigDecimal shares;
 
-    List<Long> removeIndividualIdList;
+    private List<Long> removeIndividualIdList;
+
+    private BusinessSubType businessSubType;
 
     public CustomerInfoView(){
         //reset();
@@ -199,6 +201,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.reason = "";
         this.spouse = new CustomerInfoView();
         this.businessType = new BusinessType();
+        this.businessSubType = new BusinessSubType();
         this.documentAuthorizeDate = new Date();
         this.customerCSIList = new ArrayList<CustomerCSIView>();
         this.sourceIncome = new IncomeSource();
@@ -1038,7 +1041,14 @@ public class CustomerInfoView implements Serializable, Cloneable {
     public void setSignContract(boolean signContract) {
 		this.signContract = signContract;
 	}
-    
+
+    public BusinessSubType getBusinessSubType() {
+        return businessSubType;
+    }
+
+    public void setBusinessSubType(BusinessSubType businessSubType) {
+        this.businessSubType = businessSubType;
+    }
 
     @Override
     public String toString() {

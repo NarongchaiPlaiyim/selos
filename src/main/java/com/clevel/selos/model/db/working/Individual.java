@@ -81,7 +81,7 @@ public class Individual implements Serializable {
     @JoinColumn(name = "maritalstatus_id")
     private MaritalStatus maritalStatus;
 
-    @Column(name = "num_of_children")
+    @Column(name = "num_of_children", nullable=false, columnDefinition="int default 0")
     private int numberOfChildren;
 
     @OneToOne

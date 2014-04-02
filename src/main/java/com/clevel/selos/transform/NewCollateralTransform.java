@@ -215,24 +215,25 @@ public class NewCollateralTransform extends Transform {
                 newCollateralSub.setNewCollateralSubOwnerList(newCollateralSubOwnerList);
             }
 
-//            if (newCollateralSubView.getRelatedWithList() != null) {
-//                List<NewCollateralSubRelated> newCollateralSubRelatedList = new ArrayList<NewCollateralSubRelated>();
-//                newCollateralSub.setNewCollateralSubRelatedList(newCollateralSubRelatedList);
-//                NewCollateralSubRelated newCollateralSubRelate;
-//                for (NewCollateralSubView relatedView : newCollateralSubView.getRelatedWithList()) {
-//                    log.debug("relatedView.getId() ::: {} ", relatedView.getId());
+            if (newCollateralSubView.getRelatedWithList() != null) {
+                List<NewCollateralSubRelated> newCollateralSubRelatedList = new ArrayList<NewCollateralSubRelated>();
+                newCollateralSub.setNewCollateralSubRelatedList(newCollateralSubRelatedList);
+                NewCollateralSubRelated newCollateralSubRelate;
+                for (NewCollateralSubView relatedView : newCollateralSubView.getRelatedWithList()) {
+                    log.debug("relatedView.getId() ::: {} ", relatedView.getId());
 //                    NewCollateralSub relatedDetail = newCollateralSubDAO.findById(relatedView.getId());
-//                    log.debug("relatedDetail.getId() ::: {} ", relatedDetail.getId());
-//                    newCollateralSubRelate = new NewCollateralSubRelated();
-//                    newCollateralSubRelate.setNewCollateralSubRelated(relatedDetail);
-//                    newCollateralSubRelate.setNewCollateralSub(newCollateralSub);
-//                    newCollateralSubRelate.setWorkCase(workCase);
-//                    newCollateralSubRelate.setProposeType(ProposeType.P);
-//                    newCollateralSubRelatedList.add(newCollateralSubRelate);
-//                }
-//
-//                newCollateralSub.setNewCollateralSubRelatedList(newCollateralSubRelatedList);
-//            }
+                    NewCollateralSub relatedDetail = newCollateralSubDAO.findById(relatedView.getId());
+                    log.debug("relatedDetail.getId() ::: {} ", relatedDetail.getId());
+                    newCollateralSubRelate = new NewCollateralSubRelated();
+                    newCollateralSubRelate.setNewCollateralSubRelated(relatedDetail);
+                    newCollateralSubRelate.setNewCollateralSub(newCollateralSub);
+                    newCollateralSubRelate.setWorkCase(workCase);
+                    newCollateralSubRelate.setProposeType(ProposeType.P);
+                    newCollateralSubRelatedList.add(newCollateralSubRelate);
+                }
+
+                newCollateralSub.setNewCollateralSubRelatedList(newCollateralSubRelatedList);
+            }
 
             newCollateralSub.setNewCollateralHead(newCollateralHead);
             newCollateralSubList.add(newCollateralSub);
@@ -335,7 +336,7 @@ public class NewCollateralTransform extends Transform {
 
         for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViewList) {
             proposeCreditDetailView = new ProposeCreditDetailView();
-            proposeCreditDetailView.setSeq((int) existingCreditDetailView.getId());
+            proposeCreditDetailView.setSeq(rowCount);
             proposeCreditDetailView.setId(existingCreditDetailView.getId());
             proposeCreditDetailView.setNoFlag(true);
             proposeCreditDetailView.setTypeOfStep(CreditTypeOfStep.EXISTING.type());
