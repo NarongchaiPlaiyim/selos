@@ -24,6 +24,8 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
     private String  mortgageConditionDetail;
     private String bdmComments;
     private String path;
+    private String UwDecision;
+    private String approved;
 
     private List<ProposeCreditDetailView> proposeCreditDetailViewList;
 
@@ -43,26 +45,24 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
 
 
     public ApprovedCollateralDecisionReport() {
-        jobID = getDefaultString();
-        aadDecision = getDefaultString();
-        aadDecisionReason = getDefaultString();
-        aadDecisionReasonDetail = getDefaultString();
-        usage = getDefaultString();
-        typeOfUsage = getDefaultString();
-        mortgageCondition = getDefaultString();
-        mortgageConditionDetail = getDefaultString();
+        jobID = "";
+        aadDecision = "";
+        aadDecisionReason = "";
+        aadDecisionReasonDetail = "";
+        usage = "";
+        typeOfUsage = "";
+        mortgageCondition = "";
+        mortgageConditionDetail = "";
         proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
         subViewList = new ArrayList<NewCollateralSubView>();
-        bdmComments = getDefaultString();
-        collateralDescription = getDefaultString();
-        percentLTVDescription = getDefaultString();
-        existingCredit = getDefaultBigDecimal();
-        titleDeed = getDefaultString();
-        collateralLocation = getDefaultString();
-        appraisalValue = getDefaultBigDecimal();
-        collTypeDescription = getDefaultString();
-        headCollTypeDescription = getDefaultString();
-        insuranceCompany = getDefaultString();
+        bdmComments = "";
+        collateralDescription = "";
+        percentLTVDescription = "";
+        titleDeed = "";
+        collateralLocation = "";
+        collTypeDescription = "";
+        headCollTypeDescription = "";
+        insuranceCompany = "";
     }
 
     public String getAadDecision() {
@@ -242,20 +242,39 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
         this.path = path;
     }
 
+    public String getUwDecision() {
+        return UwDecision;
+    }
+
+    public void setUwDecision(String uwDecision) {
+        UwDecision = uwDecision;
+    }
+
+    public String getApproved() {
+        return approved;
+    }
+
+    public void setApproved(String approved) {
+        this.approved = approved;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("aadDecision", aadDecision)
                 .append("jobID", jobID)
                 .append("appraisalDate", appraisalDate)
+                .append("aadDecision", aadDecision)
                 .append("aadDecisionReason", aadDecisionReason)
                 .append("aadDecisionReasonDetail", aadDecisionReasonDetail)
                 .append("usage", usage)
                 .append("typeOfUsage", typeOfUsage)
                 .append("mortgageCondition", mortgageCondition)
                 .append("mortgageConditionDetail", mortgageConditionDetail)
-                .append("proposeCreditDetailViewList", proposeCreditDetailViewList)
                 .append("bdmComments", bdmComments)
+                .append("path", path)
+                .append("UwDecision", UwDecision)
+                .append("approved", approved)
+                .append("proposeCreditDetailViewList", proposeCreditDetailViewList)
                 .append("collateralDescription", collateralDescription)
                 .append("percentLTVDescription", percentLTVDescription)
                 .append("existingCredit", existingCredit)
@@ -263,8 +282,8 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
                 .append("collateralLocation", collateralLocation)
                 .append("appraisalValue", appraisalValue)
                 .append("collTypeDescription", collTypeDescription)
-                .append("insuranceCompany", insuranceCompany)
                 .append("headCollTypeDescription", headCollTypeDescription)
+                .append("insuranceCompany", insuranceCompany)
                 .append("subViewList", subViewList)
                 .toString();
     }

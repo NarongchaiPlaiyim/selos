@@ -19,14 +19,10 @@ public class CreditRiskInfoExSumReport extends ReportModel{
     private BigDecimal percentExport;
 
     public CreditRiskInfoExSumReport() {
-        this.riskCusType = getDefaultString();
-        this.botClass = getDefaultString();
-        this.reason = getDefaultString();
-        this.lastReviewDate = getDefaultDate();
-        this.nextReviewDate = getDefaultDate();
-        this.extendedReviewDate = getDefaultDate();
-        this.indirectCountryName = getDefaultString();
-        this.percentExport = getDefaultBigDecimal();
+        this.riskCusType ="";
+        this.botClass ="";
+        this.reason ="";
+        this.indirectCountryName ="";
     }
 
     public String getRiskCusType() {

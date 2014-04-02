@@ -57,6 +57,7 @@ public class PDFAppraisalAppointment implements Serializable {
         if (!Util.isNull(workCaseId)){
             appraisalView = new AppraisalView();
             appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId,workCasePreScreenId);
+            log.debug("--appraisalView. {}",appraisalView);
         }
 
     }
@@ -95,8 +96,8 @@ public class PDFAppraisalAppointment implements Serializable {
         List<AppraisalDetailViewReport> appraisalDetailViewReportList = new ArrayList<AppraisalDetailViewReport>();
 
         int count = 1;
-
-        if (!Util.isNull(appraisalView.getAppraisalDetailViewList())){
+        log.debug("--AppraisalDetailViewList. {}",appraisalView.getAppraisalDetailViewList());
+        if (Util.safetyList(appraisalView.getAppraisalDetailViewList()).size() > 0 && !Util.isNull(appraisalView.getAppraisalDetailViewList())){
             log.debug("--AppraisalDetailViewList. {}",appraisalView.getAppraisalDetailViewList());
             for (AppraisalDetailView view : appraisalView.getAppraisalDetailViewList()){
                 AppraisalDetailViewReport report = new AppraisalDetailViewReport();

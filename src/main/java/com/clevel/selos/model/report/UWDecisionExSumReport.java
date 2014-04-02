@@ -15,12 +15,11 @@ public class UWDecisionExSumReport extends ReportModel{
 
 
     public UWDecisionExSumReport() {
-        this.name = getDefaultString();
-        this.uwCode = getDefaultString();
-        this.decision = getDefaultInteger();
-        this.code = getDefaultString();
-        this.description = getDefaultString();
-        this.uwComment = getDefaultString();
+        this.name = "";
+        this.uwCode = "";
+        this.code = "";
+        this.description = "";
+        this.uwComment = "";
     }
 
     public String getName() {
