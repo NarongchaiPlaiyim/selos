@@ -256,7 +256,7 @@
                                     <td>
                                         <h:selectOneMenu class="largest" id="teamNameReassign" label="teamNameReassign" value="#{reassignteamnames.popupselectedteamname}" >
                                             <f:selectItem itemValue="" itemLabel="-Please Select-"/>
-                                            <f:selectItems value="#{reassignteamnames.popupreasignteamnames}" var="popupreassign" itemValue="#{popupreassign.teamid}" itemLabel="#{popupreassign.teamname}"/>
+                                            <f:selectItems value="#{reassignteamnames.popupreasignteamnames}" var="popupreassign" itemValue="#{popupreassign.teamid}" itemLabel="#{popupreassign.teamid} - #{popupreassign.teamname}"/>
                                             <f:ajax listener="#{reassignteamnames.changeUserNameBasedOnTeamName}" render="userNameReassign" execute="@this"/>
                                         </h:selectOneMenu>
                                     </td>
