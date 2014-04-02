@@ -15,9 +15,9 @@ public class ConditionDecisionReport extends ReportModel{
     private String conditionDesc;
 
     public ConditionDecisionReport() {
-        count = getDefaultInteger();
-        loanType = getDefaultString();
-        conditionDesc = getDefaultString();
+        count = 0;
+        loanType = "";
+        conditionDesc = "";
     }
 
     public String getConditionDesc() {

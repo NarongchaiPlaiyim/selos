@@ -84,7 +84,7 @@
 				<textElement>
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{purposeReviewAppraisalLabel}.valueOf( null ) ?
+				<textFieldExpression><![CDATA[$F{count}.intValue() == 0 ?
 "" : $F{count}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
@@ -112,7 +112,7 @@
 				<textFieldExpression><![CDATA[$F{numberOfDocuments}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement uuid="cc608743-cd0f-44ce-9d39-f5b3fa61ce31" x="323" y="1" width="11" height="13"/>
+				<reportElement uuid="cc608743-cd0f-44ce-9d39-f5b3fa61ce31" x="328" y="1" width="11" height="13"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -122,7 +122,7 @@
 $F{path}+"true.jpg" : $F{path}+"false.jpg"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement uuid="e23609f6-ba4e-402f-a7eb-4064ff8ffe7a" x="334" y="0" width="64" height="14"/>
+				<reportElement uuid="e23609f6-ba4e-402f-a7eb-4064ff8ffe7a" x="339" y="0" width="59" height="14"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -162,11 +162,11 @@ $F{path}+"true.jpg" : $F{path}+"false.jpg"]]></imageExpression>
 					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2"/>
 				</textElement>
 			</textField>
-			<textField>
-				<reportElement uuid="e6998ad0-2d95-4efa-90fb-7e4710776fc0" style="detail" mode="Transparent" x="0" y="0" width="555" height="14"/>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="e6998ad0-2d95-4efa-90fb-7e4710776fc0" style="detail" mode="Transparent" x="0" y="0" width="555" height="14" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Left"/>
-				<textFieldExpression><![CDATA[$F{purposeReviewAppraisalLabel}.valueOf( null ) ?
-"No records found." : $F{count}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{count}.intValue() == 0?
+"No records found." : ""]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

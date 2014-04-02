@@ -34,23 +34,20 @@ public class ExistingCollateralBorrowerDecisionReport extends ReportModel{
     private String path;
 
     public ExistingCollateralBorrowerDecisionReport() {
-        potentialCollateral = getDefaultString();
-        collateralType = getDefaultString();
-        owner = getDefaultString();
-        relation = getDefaultString();
-        appraisalDate = new Date();
-        collateralNumber = getDefaultString();
-        collateralLocation = getDefaultString();
-        remark = getDefaultString();
-        cusName = getDefaultString();
-        accountNumber = getDefaultString();
-        accountSuffix = getDefaultString();
-        productProgram = getDefaultString();
-        creditFacility = getDefaultString();
-        limit = BigDecimal.ZERO;
-        mortgageType = getDefaultString();
-        appraisalValue = getDefaultBigDecimal();
-        mortgageValue = getDefaultBigDecimal();
+        potentialCollateral = "";
+        collateralType = "";
+        owner = "";
+        relation = "";
+        appraisalDate = null;
+        collateralNumber = "";
+        collateralLocation = "";
+        remark = "";
+        cusName = "";
+        accountNumber = "";
+        accountSuffix = "";
+        productProgram = "";
+        creditFacility = "";
+        mortgageType = "";
         existingCreditTypeDetailViews = new ArrayList<ExistingCreditTypeDetailView>();
     }
 
@@ -217,7 +214,6 @@ public class ExistingCollateralBorrowerDecisionReport extends ReportModel{
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("accountNumber", accountNumber)
                 .append("count", count)
                 .append("potentialCollateral", potentialCollateral)
                 .append("collateralType", collateralType)
@@ -228,6 +224,7 @@ public class ExistingCollateralBorrowerDecisionReport extends ReportModel{
                 .append("collateralLocation", collateralLocation)
                 .append("remark", remark)
                 .append("cusName", cusName)
+                .append("accountNumber", accountNumber)
                 .append("accountSuffix", accountSuffix)
                 .append("productProgram", productProgram)
                 .append("creditFacility", creditFacility)
@@ -236,6 +233,7 @@ public class ExistingCollateralBorrowerDecisionReport extends ReportModel{
                 .append("appraisalValue", appraisalValue)
                 .append("mortgageValue", mortgageValue)
                 .append("existingCreditTypeDetailViews", existingCreditTypeDetailViews)
+                .append("path", path)
                 .toString();
     }
 }
