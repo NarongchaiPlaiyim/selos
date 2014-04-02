@@ -771,6 +771,10 @@ tfoot {
     margin-top: -18px !important;
 }
 
+.hide-column-names table thead tr {
+    display: none;
+}
+
 /*////////////////////////////////////////////////////////// ISA    */
 
 .subject {

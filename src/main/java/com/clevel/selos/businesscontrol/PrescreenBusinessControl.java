@@ -6,8 +6,6 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.*;
-import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
-import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
 import com.clevel.selos.integration.ncb.NCBInterfaceImpl;
@@ -33,7 +31,6 @@ import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
@@ -121,8 +118,6 @@ public class PrescreenBusinessControl extends BusinessControl {
 
 
     @Inject
-    BRMSControl brmsControl;
-    @Inject
     RMInterface rmInterface;
     @Inject
     BPMInterface bpmInterface;
@@ -138,13 +133,16 @@ public class PrescreenBusinessControl extends BusinessControl {
     NCBInterface ncbInterface;  */
 
     @Inject
-    NCBInterfaceImpl ncbInterface;
+    private NCBInterfaceImpl ncbInterface;
 
     @Inject
-    ExistingCreditControl existingCreditControl;
+    private ExistingCreditControl existingCreditControl;
 
     @Inject
-    BankStmtControl bankStmtControl;
+    private BankStmtControl bankStmtControl;
+
+    @Inject
+    private UWRuleResultControl uwRuleResultControl;
 
     @Inject
     public PrescreenBusinessControl(){
@@ -342,6 +340,86 @@ public class PrescreenBusinessControl extends BusinessControl {
         Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
         PrescreenResultView prescreenResultView = prescreenTransform.getPrescreenResultView(prescreen);
         prescreenResultView.setExistingCreditFacilityView(existingCreditControl.getExistingCredit(workCasePreScreenId));
+
+        //set Prescreen Result//
+        UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultControl.getUWRuleResultByWorkCasePrescreenId(workCasePreScreenId);
+        if(uwRuleResultSummaryView != null){
+            if(uwRuleResultSummaryView.getUwRuleResultDetailViewList() != null){
+
+                Map<RelationValue, Integer> _numberOfCusRelationMap = new TreeMap<RelationValue, Integer>();
+                Map<String, CustomerInfoSimpleView> _customerInfoSimpleMap = new TreeMap<String, CustomerInfoSimpleView>();
+                List<Customer> customerList = customerDAO.findCustomerByWorkCasePreScreenId(workCasePreScreenId);
+                for(Customer customer : customerList){
+                    if((customer.getRelation() != null) && (customer.getRelation().getId() != RelationValue.INDIRECTLY_RELATED.value())){
+                        CustomerInfoSimpleView _customerInfoSimpleView = customerTransform.transformToSimpleView(customer);
+                        RelationValue _relationValue = RelationValue.lookup(customer.getRelation().getId());
+
+                        //Set Number of Customer Per Relation Type
+                        Integer _numberOfCustomer = _numberOfCusRelationMap.get(_relationValue);
+                        if(_numberOfCustomer == null)
+                            _numberOfCustomer = 0;
+                        _numberOfCusRelationMap.put(_relationValue, _numberOfCustomer+1);
+
+                        //Set Customer with Map to Relation Type;
+                        _customerInfoSimpleMap.put(_relationValue.value() + _customerInfoSimpleView.getCitizenId(), _customerInfoSimpleView);
+                    }
+                }
+
+
+                List<UWRuleResultDetailView> uwRuleResultDetailViewList = uwRuleResultSummaryView.getUwRuleResultDetailViewList();
+                Map<Integer, UWRuleResultDetailView> _groupUWResultDetailMap = new TreeMap<Integer, UWRuleResultDetailView>();
+
+                Integer lastOrder = Integer.MAX_VALUE;
+                Map<Integer, PrescreenCusRulesGroupView> _prescreenCusRulesGroupViewMap = new TreeMap<Integer, PrescreenCusRulesGroupView>();
+                for(UWRuleResultDetailView uwRuleResultDetailView : uwRuleResultDetailViewList){
+                    if(UWRuleType.GROUP_LEVEL.equals(uwRuleResultDetailView.getUwRuleType())){
+                        if(uwRuleResultDetailView.getRuleOrder() == 0)
+                            _groupUWResultDetailMap.put(lastOrder--, uwRuleResultDetailView);
+                        else
+                            _groupUWResultDetailMap.put(uwRuleResultDetailView.getRuleOrder(), uwRuleResultDetailView);
+                    } else {
+
+                        UWRuleGroupView _uwRuleGroupView = uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView();
+                        PrescreenCusRulesGroupView _prescreenCusRulesGroupView = _prescreenCusRulesGroupViewMap.get(_uwRuleGroupView.getId());
+                        if(_prescreenCusRulesGroupView == null){
+                            _prescreenCusRulesGroupView = new PrescreenCusRulesGroupView();
+                        }
+                        _prescreenCusRulesGroupView.setUwRuleGroupView(_uwRuleGroupView);
+                        _prescreenCusRulesGroupView.setNumberOfRuleName(_prescreenCusRulesGroupView.getNumberOfRuleName() + 1);
+
+                        Map<Integer, PrescreenCusRuleNameView> _prescreenCusRuleNameViewMap = _prescreenCusRulesGroupView.getPrescreenCusRuleNameViewMap();
+                        if(_prescreenCusRuleNameViewMap == null)
+                            _prescreenCusRuleNameViewMap = new TreeMap<Integer, PrescreenCusRuleNameView>();
+
+                        PrescreenCusRuleNameView _prescreenCusRuleNameView = _prescreenCusRuleNameViewMap.get(uwRuleResultDetailView.getUwRuleNameView().getId());
+                        if(_prescreenCusRuleNameView == null)
+                            _prescreenCusRuleNameView = new PrescreenCusRuleNameView();
+                        _prescreenCusRuleNameView.setUwRuleNameView(uwRuleResultDetailView.getUwRuleNameView());
+                        Map<String, UWRuleResultDetailView> _uwRuleResultDetailViewMap = _prescreenCusRuleNameView.getUwRuleResultDetailViewMap();
+                        if(_uwRuleResultDetailViewMap == null)
+                            _uwRuleResultDetailViewMap = new TreeMap<String, UWRuleResultDetailView>();
+                        _uwRuleResultDetailViewMap.put(uwRuleResultDetailView.getCustomerInfoSimpleView().getCitizenId(), uwRuleResultDetailView);
+                        _prescreenCusRuleNameView.setUwRuleResultDetailViewMap(_uwRuleResultDetailViewMap);
+                        _prescreenCusRuleNameViewMap.put( uwRuleResultDetailView.getUwRuleNameView().getId(), _prescreenCusRuleNameView);
+
+                        _prescreenCusRulesGroupView.setPrescreenCusRuleNameViewMap(_prescreenCusRuleNameViewMap);
+                        _prescreenCusRulesGroupViewMap.put(_uwRuleGroupView.getId(), _prescreenCusRulesGroupView);
+
+                        //_customerUWResultDetailMap.put()
+                    }
+                }
+                prescreenResultView.setPrescreenCusRulesGroupViewMap(_prescreenCusRulesGroupViewMap);
+                prescreenResultView.setUwRuleResultSummaryView(uwRuleResultSummaryView);
+                log.debug("uwRuleResultSummaryView {}", prescreenResultView.getUwRuleResultSummaryView());
+                prescreenResultView.setGroupRuleResults(_groupUWResultDetailMap);
+                log.debug("groupRuleResult {}", prescreenResultView.getGroupRuleResults());
+
+
+                prescreenResultView.setNumberOfCusRelation(_numberOfCusRelationMap);
+                prescreenResultView.setCustomerInfoSimpleViewMap(_customerInfoSimpleMap);
+            }
+        }
+
         return prescreenResultView;
     }
 
@@ -357,41 +435,6 @@ public class PrescreenBusinessControl extends BusinessControl {
         } catch(Exception ex){
             log.error("cannot get workcase prescreen id", ex);
         }
-    }
-
-    // *** Function for BRMS (PreScreenRules) ***//
-    public PrescreenResultView getPreScreenResultFromBRMS(long workCasePrescreenId) throws Exception{
-        UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePrescreenId);
-
-        if(uwRuleResponseView.getActionResult().equals(ActionResult.FAILED)){
-            throw new Exception(uwRuleResponseView.getReason());
-        } else {
-            UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResponseView.getUwRuleResultSummaryView();
-
-            PrescreenResultView prescreenResultView = new PrescreenResultView();
-
-            List<UWRuleResultDetailView> uwRuleResultDetailViewList = uwRuleResultSummaryView.getUwRuleResultDetailViewList();
-
-            Map<Integer, UWRuleResultDetailView> _groupUWResultDetailMap = new TreeMap<Integer, UWRuleResultDetailView>();
-            Map<Integer, UWRuleResultDetailView> _customerUWResultDetailMap = new TreeMap<Integer, UWRuleResultDetailView>();
-
-            Integer lastOrder = Integer.MAX_VALUE;
-            for(UWRuleResultDetailView uwRuleResultDetailView : uwRuleResultDetailViewList){
-                if(UWRuleType.GROUP_LEVEL.equals(uwRuleResultDetailView.getUwRuleType())){
-                    if(uwRuleResultDetailView.getRuleOrder() == 0)
-                        _groupUWResultDetailMap.put(lastOrder--, uwRuleResultDetailView);
-                    else
-                        _groupUWResultDetailMap.put(uwRuleResultDetailView.getRuleOrder(), uwRuleResultDetailView);
-                } else {
-                    //_customerUWResultDetailMap.put()
-                }
-
-            }
-            prescreenResultView.setUwRuleResultSummaryView(uwRuleResultSummaryView);
-
-            return prescreenResultView;
-        }
-
     }
 
     // *** Function for NCB *** //

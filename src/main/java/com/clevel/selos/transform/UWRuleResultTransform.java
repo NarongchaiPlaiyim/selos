@@ -4,9 +4,7 @@ import com.clevel.selos.dao.master.UWDeviationFlagDAO;
 import com.clevel.selos.dao.master.UWRejectGroupDAO;
 import com.clevel.selos.dao.master.UWRuleGroupDAO;
 import com.clevel.selos.dao.master.UWRuleNameDAO;
-import com.clevel.selos.dao.working.CustomerDAO;
-import com.clevel.selos.dao.working.UWRuleResultDetailDAO;
-import com.clevel.selos.dao.working.UWRuleResultSummaryDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.exception.BRMSInterfaceException;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.response.UWRulesResult;
@@ -52,6 +50,10 @@ public class UWRuleResultTransform extends Transform{
     private UWRuleGroupDAO uwRuleGroupDAO;
     @Inject
     private CustomerDAO customerDAO;
+    @Inject
+    private WorkCaseDAO workCaseDAO;
+    @Inject
+    private WorkCasePrescreenDAO workCasePrescreenDAO;
 
     @Inject
     @ExceptionMessage
@@ -117,6 +119,7 @@ public class UWRuleResultTransform extends Transform{
                 uwRuleResultDetailView.setRuleColorResult(uwResultColor);
                 uwRuleResultDetailView.setRejectGroupCode(transformToView(uwRejectGroup));
                 uwRuleResultDetailView.setDeviationFlag(transformToView(uwDeviationFlag));
+                uwRuleResultDetailView.setUwRuleType(uwRulesResult.getType());
 
                 if(!Util.isEmpty(uwRulesResult.getRuleOrder())){
                     logger.debug("transform Rule Order {}", uwRulesResult.getRuleOrder());
@@ -177,21 +180,33 @@ public class UWRuleResultTransform extends Transform{
 
     public UWRuleResultSummary transformToModel(UWRuleResultSummaryView uwRuleResultSummaryView){
         logger.debug("-- begin transformToMode UWRuleResultSummaryView {}", uwRuleResultSummaryView);
-        if(uwRuleResultSummaryView != null)
+        if(uwRuleResultSummaryView == null)
             return null;
 
-        UWRuleResultSummary uwRuleResultSummary = new UWRuleResultSummary();
-        if(uwRuleResultSummaryView.getId() != 0){
-            if(uwRuleResultSummaryView.getWorkCasePrescreenId() != 0)
-                uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(uwRuleResultSummaryView.getWorkCasePrescreenId());
-            else
-                uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(uwRuleResultSummaryView.getWorkCaseId());
+        UWRuleResultSummary uwRuleResultSummary = null;
+        if(uwRuleResultSummaryView.getWorkCasePrescreenId() != 0){
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(uwRuleResultSummaryView.getWorkCasePrescreenId());
+            if(uwRuleResultSummary == null){
+                uwRuleResultSummary = new UWRuleResultSummary();
+                uwRuleResultSummary.setWorkCasePrescreen(workCasePrescreenDAO.findById(uwRuleResultSummaryView.getWorkCasePrescreenId()));
+            }
+            logger.debug("set UWResult for Prescreen Result");
+        }
+        else {
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(uwRuleResultSummaryView.getWorkCaseId());
+            if(uwRuleResultSummary == null){
+                uwRuleResultSummary = new UWRuleResultSummary();
+                uwRuleResultSummary.setWorkCase(workCaseDAO.findById(uwRuleResultSummaryView.getWorkCaseId()));
+
+            }
+            logger.debug("set UWResult for Full App Result");
         }
 
         uwRuleResultSummary.setUwRuleName(transformToModel(uwRuleResultSummaryView.getUwRuleNameView()));
         uwRuleResultSummary.setUwResultColor(uwRuleResultSummaryView.getUwResultColor());
         uwRuleResultSummary.setRejectGroup(transformToModel(uwRuleResultSummaryView.getRejectGroupView()));
         uwRuleResultSummary.setUwDeviationFlag(transformToModel(uwRuleResultSummaryView.getUwDeviationFlagView()));
+
         List<UWRuleResultDetail> uwRuleResultDetailList = new ArrayList<UWRuleResultDetail>();
         List<UWRuleResultDetailView> uwRuleResultDetailViewList = uwRuleResultSummaryView.getUwRuleResultDetailViewList();
         for(UWRuleResultDetailView uwRuleResultDetailView : uwRuleResultDetailViewList){
@@ -224,8 +239,9 @@ public class UWRuleResultTransform extends Transform{
         uwRuleResultDetail.setUwDeviationFlag(transformToModel(uwRuleResultDetailView.getDeviationFlag()));
         uwRuleResultDetail.setRejectGroup(transformToModel(uwRuleResultDetailView.getRejectGroupCode()));
         uwRuleResultDetail.setUwResultColor(uwRuleResultDetailView.getRuleColorResult());
+        uwRuleResultDetail.setUwRuleType(uwRuleResultDetailView.getUwRuleType());
         uwRuleResultDetail.setUwRuleName(transformToModel(uwRuleResultDetailView.getUwRuleNameView()));
-        uwRuleResultDetail.setRule_order(uwRuleResultDetailView.getRuleOrder());
+        uwRuleResultDetail.setRuleOrder(uwRuleResultDetailView.getRuleOrder());
         logger.debug("-- end transformToModel UWRuleResultDetailView {}", uwRuleResultDetailView);
         return uwRuleResultDetail;
     }
@@ -319,24 +335,51 @@ public class UWRuleResultTransform extends Transform{
     }
 
     public UWRuleResultSummaryView transformToView(UWRuleResultSummary uwRuleResultSummary){
+        logger.debug("transformToView uwRuleResultSummary {}", uwRuleResultSummary);
         if(uwRuleResultSummary == null)
             return null;
 
+        UWRuleResultSummaryView uwRuleResultSummaryView = new UWRuleResultSummaryView();
+        uwRuleResultSummaryView.setId(uwRuleResultSummary.getId());
+        uwRuleResultSummaryView.setUwRuleNameView(transformToView(uwRuleResultSummary.getUwRuleName()));
+        uwRuleResultSummaryView.setUwDeviationFlagView(transformToView(uwRuleResultSummary.getUwDeviationFlag()));
+        uwRuleResultSummaryView.setRejectGroupView(transformToView(uwRuleResultSummary.getRejectGroup()));
+        if(uwRuleResultSummary.getWorkCasePrescreen() != null)
+            uwRuleResultSummaryView.setWorkCasePrescreenId(uwRuleResultSummary.getWorkCasePrescreen().getId());
+        if(uwRuleResultSummary.getWorkCase() != null)
+            uwRuleResultSummaryView.setWorkCaseId(uwRuleResultSummary.getWorkCase().getId());
+        uwRuleResultSummaryView.setUwResultColor(uwRuleResultSummary.getUwResultColor());
 
-        return null;
+        List<UWRuleResultDetailView> uwRuleResultDetailViewList = new ArrayList<UWRuleResultDetailView>();
+        List<UWRuleResultDetail> uwRuleResultDetailList = uwRuleResultSummary.getUwRuleResultDetailList();
+        for(UWRuleResultDetail uwRuleResultDetail : uwRuleResultDetailList){
+            UWRuleResultDetailView uwRuleResultDetailView = transformToView(uwRuleResultDetail);
+            if(uwRuleResultDetailView != null)
+                uwRuleResultDetailViewList.add(uwRuleResultDetailView);
+        }
+        uwRuleResultSummaryView.setUwRuleResultDetailViewList(uwRuleResultDetailViewList);
+        logger.debug("transformToView return uwRuleResultSummaryView {}", uwRuleResultSummaryView);
+        return uwRuleResultSummaryView;
     }
 
     public UWRuleResultDetailView transformToView(UWRuleResultDetail uwRuleResultDetail){
+
         if(uwRuleResultDetail == null)
             return null;
 
         UWRuleResultDetailView uwRuleResultDetailView = new UWRuleResultDetailView();
         uwRuleResultDetailView.setId(uwRuleResultDetail.getId());
-
-        CustomerInfoSimpleView customerInfoSimpleView = customerTransform.transformToSimpleView(uwRuleResultDetail.getCustomer());
-        uwRuleResultDetailView.setCustomerInfoSimpleView(customerInfoSimpleView);
-        return null;
-
+        uwRuleResultDetailView.setDeviationFlag(transformToView(uwRuleResultDetail.getUwDeviationFlag()));
+        uwRuleResultDetailView.setRuleOrder(uwRuleResultDetail.getRuleOrder());
+        uwRuleResultDetailView.setUwRuleNameView(transformToView(uwRuleResultDetail.getUwRuleName()));
+        uwRuleResultDetailView.setRejectGroupCode(transformToView(uwRuleResultDetail.getRejectGroup()));
+        uwRuleResultDetailView.setUwRuleType(uwRuleResultDetail.getUwRuleType());
+        uwRuleResultDetailView.setRuleColorResult(uwRuleResultDetail.getUwResultColor());
+        if(uwRuleResultDetail.getCustomer() != null){
+            CustomerInfoSimpleView customerInfoSimpleView = customerTransform.transformToSimpleView(uwRuleResultDetail.getCustomer());
+            uwRuleResultDetailView.setCustomerInfoSimpleView(customerInfoSimpleView);
+        }
+        return uwRuleResultDetailView;
     }
 
     public UWRejectGroupView transformToView(UWRejectGroup uwRejectGroup){

@@ -41,10 +41,10 @@
                     <p:resetInput target=":returnMakerDlgForm"/>
                 </p:commandButton>
                 <!--Check PreScreen (BRMS)-->
-                <!--<p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkPreScreen')}"
+                <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkPreScreen')}"
                                  rendered="#{baseController.checkButton('Check Prescreen') and not baseController.requestAppraisalPage}"
                                  action="#{baseController.onCheckPreScreen}">
-                </p:commandButton>-->
+                </p:commandButton>
                 <!--Request Appraisal Prescreen-->
                 <!--<p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
                                  rendered="#{baseController.checkButton('Request Appraisal')}"

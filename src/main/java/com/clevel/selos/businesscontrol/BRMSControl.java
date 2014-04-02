@@ -346,8 +346,8 @@ public class BRMSControl extends BusinessControl {
         Map<String, UWRulesResult> uwRuleResultMap = new HashMap<String, UWRulesResult>();
 
         String[][] strings = {{"Decision_Matrix_Final",             "N", "G", "", "1001", "Group Result", ""},
-                              {"NCB_Delinquency_Status_Current_TMB", "", "G", "", "1002", "", "0303540000361"},
-                              {"NCB_Delinquency_Status_Current_Non_TMB", "", "G", "", "1003", "", "0303540000361"},
+                {"NCB_Delinquency_Status_Current_TMB", "", "G", "", "1002", "", "0303540000361"},
+                {"NCB_Delinquency_Status_Current_Non_TMB", "", "G", "", "1003", "", "0303540000361"},
                               {"NCB_Delinquency_Status_Current", "", "G", "", "1004", "", "0303540000361"},
                               {"NCB_Delinquency_Status_Ever_Juristic_TMB", "", "G", "", "1005", "", "0303540000361"},
                 {"NCB_Delinquency_Status_Ever_Juristic_Non_TMB", "", "G", "", "1006", "", "0303540000361"},

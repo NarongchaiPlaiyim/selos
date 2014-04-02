@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.UWResultColor;
+import com.clevel.selos.model.UWRuleType;
 import com.clevel.selos.model.db.master.UWDeviationFlag;
 import com.clevel.selos.model.db.master.UWRejectGroup;
 import com.clevel.selos.model.db.master.UWRuleName;
@@ -23,7 +24,7 @@ public class UWRuleResultDetail {
     private UWRuleName uwRuleName;
 
     @Column(name = "rule_order", columnDefinition = "int default 0")
-    private int rule_order;
+    private int ruleOrder;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -32,6 +33,10 @@ public class UWRuleResultDetail {
     @Column(name = "color")
     @Enumerated(EnumType.ORDINAL)
     private UWResultColor uwResultColor;
+
+    @Column(name = "rule_type")
+    @Enumerated(EnumType.ORDINAL)
+    private UWRuleType uwRuleType;
 
     @ManyToOne
     @JoinColumn(name = "deviation_flag_id")
@@ -61,12 +66,12 @@ public class UWRuleResultDetail {
         this.uwRuleName = uwRuleName;
     }
 
-    public int getRule_order() {
-        return rule_order;
+    public int getRuleOrder() {
+        return ruleOrder;
     }
 
-    public void setRule_order(int rule_order) {
-        this.rule_order = rule_order;
+    public void setRuleOrder(int ruleOrder) {
+        this.ruleOrder = ruleOrder;
     }
 
     public Customer getCustomer() {
@@ -83,6 +88,14 @@ public class UWRuleResultDetail {
 
     public void setUwResultColor(UWResultColor uwResultColor) {
         this.uwResultColor = uwResultColor;
+    }
+
+    public UWRuleType getUwRuleType() {
+        return uwRuleType;
+    }
+
+    public void setUwRuleType(UWRuleType uwRuleType) {
+        this.uwRuleType = uwRuleType;
     }
 
     public UWDeviationFlag getUwDeviationFlag() {
@@ -114,9 +127,10 @@ public class UWRuleResultDetail {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("uwRuleName", uwRuleName)
-                .append("rule_order", rule_order)
+                .append("ruleOrder", ruleOrder)
                 .append("customer", customer)
                 .append("uwResultColor", uwResultColor)
+                .append("uwRuleType", uwRuleType)
                 .append("uwDeviationFlag", uwDeviationFlag)
                 .append("rejectGroup", rejectGroup)
                 .append("uwRuleResultSummary", uwRuleResultSummary)
