@@ -223,7 +223,7 @@
                                          label="teamIdChangeOwner"
                                          value="#{change.selectTeamNameChangeOwner}">
                             <f:selectItem itemValue="" itemLabel="--Please Select--"/>
-                            <f:selectItems value="#{change.teamNamesForChangeOwerTo}" var="teamNamesChangeOwner" itemLabel="#{teamNamesChangeOwner.user}" itemValue="#{teamNamesChangeOwner.id}"/>
+                            <f:selectItems value="#{change.teamNamesForChangeOwerTo}" var="teamNamesChangeOwner" itemLabel="#{teamNamesChangeOwner.id} - #{teamNamesChangeOwner.user}" itemValue="#{teamNamesChangeOwner.id}"/>
                             <f:ajax listener="#{change.userNamesForChangeTo}" render="userListChangeOwner" execute="@this"/>
                         </h:selectOneMenu> </td>
                         </tr>
