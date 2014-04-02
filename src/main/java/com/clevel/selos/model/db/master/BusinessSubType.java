@@ -19,10 +19,10 @@ public class BusinessSubType implements Serializable {
     private int active;
     @Column(name = "code")
     private String code;
-    @Column(name = "main_code", nullable=false, columnDefinition="int default 0")
-    private int mainCode;
-    @Column(name = "extend_code", nullable=false, columnDefinition="int default 0")
-    private int extendCode;
+    @Column(name = "main_code")
+    private String mainCode;
+    @Column(name = "extend_code")
+    private String extendCode;
     @Column(name = "name")
     private String name;
     @Column(name = "description")
@@ -63,19 +63,19 @@ public class BusinessSubType implements Serializable {
         this.active = active;
     }
 
-    public int getMainCode() {
+    public String getMainCode() {
         return mainCode;
     }
 
-    public void setMainCode(int mainCode) {
+    public void setMainCode(String mainCode) {
         this.mainCode = mainCode;
     }
 
-    public int getExtendCode() {
+    public String getExtendCode() {
         return extendCode;
     }
 
-    public void setExtendCode(int extendCode) {
+    public void setExtendCode(String extendCode) {
         this.extendCode = extendCode;
     }
 
