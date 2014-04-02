@@ -8,10 +8,7 @@ import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.BorrowerType;
-import com.clevel.selos.model.CalLimitType;
-import com.clevel.selos.model.CreditCategory;
-import com.clevel.selos.model.RelationValue;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
@@ -98,6 +95,7 @@ public class CreditFacExisting implements Serializable {
 
     private ProductGroup productGroup;
     private List<ProductProgramView> productProgramViewList;
+    private List<ProductProgramView> productProgramViewListSplit;
     private List<CreditType> creditTypeList;
     private List<AccountStatus> accountStatusList;
     private List<BankAccountStatus> bankAccountStatusList;
@@ -160,7 +158,7 @@ public class CreditFacExisting implements Serializable {
     @Inject
     private BaseRateDAO baseRateDAO;
     @Inject
-    private ProductFormulaDAO productFormulaDAO;
+    private ExistingProductFormulaDAO existingProductFormulaDAO;
     @Inject
     CustomerInfoControl customerInfoControl;
     @Inject
@@ -202,7 +200,8 @@ public class CreditFacExisting implements Serializable {
         log.info("preRender ::: 1 ");
 
         session = FacesUtil.getSession(true);
-        productProgramViewList = productTransform.transformToView(productProgramDAO.findAll());
+        productProgramViewList = productTransform.transformToView(productProgramDAO.findExistingProductProgram());
+        productProgramViewListSplit = productTransform.transformToView(productProgramDAO.findExistingProductProgram());
         baseRateList = baseRateDAO.findAll();
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
@@ -418,6 +417,10 @@ public class CreditFacExisting implements Serializable {
                 log.info("preRender ::: getBorrowerGuarantorList "+  existingCreditFacilityView.getBorrowerGuarantorList().size()) ;*/
             }
 
+            calTotalCreditBorrower();
+            calTotalCreditRelated();
+            calTotalCreditGroup();
+
             log.info("preRender ::: end ");
         } else {
             log.info("preRender ::: workCaseId is null.");
@@ -451,11 +454,13 @@ public class CreditFacExisting implements Serializable {
         //ProductProgramView productProgramView = productTransform.transformToView(productProgram);
         log.info("onChangeProductProgram :::: productProgram : {}", productProgram);
 
-        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(productProgram);
-        if(prdProgramToCreditTypeList == null){
-            prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
+        if(productProgram!=null && productProgram.getId()!=0){
+            prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditExistingByPrdprogram(productProgram.getId());
+            if(prdProgramToCreditTypeList == null){
+                prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
+            }
+            log.info("onChangeProductProgram :::: prdProgramToCreditTypeList.size ::: " +prdProgramToCreditTypeList.size());
         }
-        log.info("onChangeProductProgram :::: prdProgramToCreditTypeList.size ::: " +prdProgramToCreditTypeList.size());
     }
 
     public void onChangeCreditType(){
@@ -475,13 +480,15 @@ public class CreditFacExisting implements Serializable {
             }
 
             if(productProgram != null && creditType != null){
-                PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType,productProgram);
-                ProductFormula productFormula = productFormulaDAO.findProductFormula(prdProgramToCreditType);
-                log.debug("onChangeCreditType :::: productFormula : {}", productFormula.getId());
+                ExistingProductFormula productFormula = existingProductFormulaDAO.findProductFormulaDefaultByPrdProgAndCreditType(productProgram,creditType);
+                log.debug("onChangeCreditType : productFormula : {}", productFormula);
 
                 if(productFormula != null){
                     existingCreditDetailView.setProductCode(productFormula.getProductCode());
                     existingCreditDetailView.setProjectCode(productFormula.getProjectCode());
+                } else {
+                    existingCreditDetailView.setProductCode("-");
+                    existingCreditDetailView.setProjectCode("-");
                 }
             }
 
@@ -620,6 +627,7 @@ public class CreditFacExisting implements Serializable {
              }
             onSetRowNoCreditDetail(existingCreditFacilityView.getBorrowerComExistingCredit());
             calTotalCreditBorrower();
+            calTotalCreditGroup();
         }else if(typeOfList.equals("related")){
             log.info("del 1");
 
@@ -641,6 +649,7 @@ public class CreditFacExisting implements Serializable {
             }
             onSetRowNoCreditDetail(existingCreditFacilityView.getRelatedComExistingCredit());
             calTotalCreditRelated();
+            calTotalCreditGroup();
         }
     }
 
@@ -909,8 +918,10 @@ public class CreditFacExisting implements Serializable {
 
         if(typeOfList.equals("borrower")){
             calTotalCreditBorrower();
+            calTotalCreditGroup();
         }else if(typeOfList.equals("related")){
             calTotalCreditRelated();
+            calTotalCreditGroup();
         }
 
         complete = true;
@@ -978,26 +989,56 @@ public class CreditFacExisting implements Serializable {
         BigDecimal totalBorrowerRetail = BigDecimal.ZERO;
         BigDecimal totalBorrowerRlos = BigDecimal.ZERO;
 
+        BigDecimal totalBrCom = BigDecimal.ZERO;
+        BigDecimal totalBrComOBOD = BigDecimal.ZERO;
+        BigDecimal totalBrExpose = BigDecimal.ZERO;
+
+        BigDecimal tmpTotal;
+
+        int numberOfOD = 0;
+        BigDecimal totalBrODLimit = BigDecimal.ZERO;
+
         if(existingCreditFacilityView.getBorrowerComExistingCredit() != null){
             for(int i=0;i< existingCreditFacilityView.getBorrowerComExistingCredit().size();i++){
                 ExistingCreditDetailView existingCreditDetailViewTmp = existingCreditFacilityView.getBorrowerComExistingCredit().get(i);
+                tmpTotal = new BigDecimal(0);
                 if(existingCreditDetailViewTmp.getExistCreditTypeView()!=null && existingCreditDetailViewTmp.getExistCreditTypeView().getId()!=0){
                     switch (CalLimitType.getCalLimitType(existingCreditDetailViewTmp.getExistCreditTypeView().getCalLimitType())) {
                         case LIMIT:
-                            totalBorrowerCom = totalBorrowerCom.add(existingCreditDetailViewTmp.getLimit());
+                            tmpTotal = existingCreditDetailViewTmp.getLimit();
+                            totalBorrowerCom = totalBorrowerCom.add(tmpTotal);
                             break;
                         case OUTSTANDING:
-                            totalBorrowerCom = totalBorrowerCom.add(existingCreditDetailViewTmp.getOutstanding());
+                            tmpTotal = existingCreditDetailViewTmp.getOutstanding();
+                            totalBorrowerCom = totalBorrowerCom.add(tmpTotal);
                             break;
                         case PCE:
-                            totalBorrowerCom = totalBorrowerCom.add(existingCreditDetailViewTmp.getPceLimit());
+                            tmpTotal = existingCreditDetailViewTmp.getPceLimit();
+                            totalBorrowerCom = totalBorrowerCom.add(tmpTotal);
                             break;
                         default:
-                            totalBorrowerCom = totalBorrowerCom.add(existingCreditDetailViewTmp.getLimit());
+                            tmpTotal = existingCreditDetailViewTmp.getLimit();
+                            totalBorrowerCom = totalBorrowerCom.add(tmpTotal);
                             break;
                     }
+
+                    if(CreditTypeGroup.getCreditTypeGroup(existingCreditDetailViewTmp.getExistCreditTypeView().getCreditGroup()) == CreditTypeGroup.OD){
+                        numberOfOD = numberOfOD+1;
+                        totalBrODLimit = totalBrODLimit.add(existingCreditDetailViewTmp.getLimit());
+                    }
                 } else {
-                    totalBorrowerCom = totalBorrowerCom.add(existingCreditDetailViewTmp.getLimit());
+                    tmpTotal = existingCreditDetailViewTmp.getLimit();
+                    totalBorrowerCom = totalBorrowerCom.add(tmpTotal);
+                }
+
+                if((existingCreditDetailViewTmp.getExistCreditTypeView()!=null && existingCreditDetailViewTmp.getExistCreditTypeView().getId()!=0) &&
+                        CreditTypeGroup.getCreditTypeGroup(existingCreditDetailViewTmp.getExistCreditTypeView().getCreditGroup()) == CreditTypeGroup.CASH_IN) {
+                    totalBrComOBOD = totalBrComOBOD.add((tmpTotal));
+                    totalBrExpose = totalBrExpose.add(tmpTotal);
+                } else {
+                    totalBrCom = totalBrCom.add(tmpTotal);
+                    totalBrComOBOD = totalBrComOBOD.add(tmpTotal);
+                    totalBrExpose = totalBrExpose.add(tmpTotal);
                 }
             }
         }
@@ -1024,6 +1065,8 @@ public class CreditFacExisting implements Serializable {
                     totalBorrowerRetail = totalBorrowerRetail.add(existingCreditDetailViewTmp.getLimit());
                 }
             }
+
+            totalBrExpose = totalBrExpose.add(totalBorrowerRetail);
         }
 
         if(existingCreditFacilityView.getBorrowerAppInRLOSCredit() != null){
@@ -1048,11 +1091,22 @@ public class CreditFacExisting implements Serializable {
                     totalBorrowerRlos = totalBorrowerRlos.add(existingCreditDetailViewTmp.getLimit());
                 }
             }
+
+            totalBrExpose = totalBrExpose.add(totalBorrowerRlos);
         }
+
         existingCreditFacilityView.setTotalBorrowerComLimit(totalBorrowerCom);
         existingCreditFacilityView.setTotalBorrowerRetailLimit(totalBorrowerRetail);
         existingCreditFacilityView.setTotalBorrowerAppInRLOSLimit(totalBorrowerRlos);
-        calTotalCreditGroup();
+
+        existingCreditFacilityView.setTotalBorrowerCom(totalBrCom);
+        existingCreditFacilityView.setTotalBorrowerComOBOD(totalBrComOBOD);
+        existingCreditFacilityView.setTotalBorrowerExposure(totalBrExpose);
+
+        existingCreditFacilityView.setTotalBorrowerNumberOfExistingOD(new BigDecimal(numberOfOD));
+        existingCreditFacilityView.setTotalBorrowerExistingODLimit(totalBrODLimit);
+
+        //calTotalCreditGroup();
 
     }
 
@@ -1061,26 +1115,48 @@ public class CreditFacExisting implements Serializable {
         BigDecimal totalRelatedRetail = BigDecimal.ZERO;
         BigDecimal totalRelatedRlos = BigDecimal.ZERO;
 
+        BigDecimal totalRelCom = BigDecimal.ZERO;
+        BigDecimal totalRelComOBOD = BigDecimal.ZERO;
+        BigDecimal totalRelExpose = BigDecimal.ZERO;
+
+        BigDecimal tmpTotal;
+
         if(existingCreditFacilityView.getRelatedComExistingCredit() != null){
             for(int i=0;i< existingCreditFacilityView.getRelatedComExistingCredit().size();i++){
+                tmpTotal = new BigDecimal(0);
                 ExistingCreditDetailView existingCreditDetailViewTmp = existingCreditFacilityView.getRelatedComExistingCredit().get(i);
                 if(existingCreditDetailViewTmp.getExistCreditTypeView()!=null && existingCreditDetailViewTmp.getExistCreditTypeView().getId()!=0){
                     switch (CalLimitType.getCalLimitType(existingCreditDetailViewTmp.getExistCreditTypeView().getCalLimitType())) {
                         case LIMIT:
-                            totalRelatedCom = totalRelatedCom.add(existingCreditDetailViewTmp.getLimit());
+                            tmpTotal = existingCreditDetailViewTmp.getLimit();
+                            totalRelatedCom = totalRelatedCom.add(tmpTotal);
                             break;
                         case OUTSTANDING:
-                            totalRelatedCom = totalRelatedCom.add(existingCreditDetailViewTmp.getOutstanding());
+                            tmpTotal = existingCreditDetailViewTmp.getOutstanding();
+                            totalRelatedCom = totalRelatedCom.add(tmpTotal);
                             break;
                         case PCE:
-                            totalRelatedCom = totalRelatedCom.add(existingCreditDetailViewTmp.getPceLimit());
+                            tmpTotal = existingCreditDetailViewTmp.getPceLimit();
+                            totalRelatedCom = totalRelatedCom.add(tmpTotal);
                             break;
                         default:
-                            totalRelatedCom = totalRelatedCom.add(existingCreditDetailViewTmp.getLimit());
+                            tmpTotal = existingCreditDetailViewTmp.getLimit();
+                            totalRelatedCom = totalRelatedCom.add(tmpTotal);
                             break;
                     }
                 } else {
-                    totalRelatedCom = totalRelatedCom.add(existingCreditDetailViewTmp.getLimit());
+                    tmpTotal = existingCreditDetailViewTmp.getLimit();
+                    totalRelatedCom = totalRelatedCom.add(tmpTotal);
+                }
+
+                if((existingCreditDetailViewTmp.getExistCreditTypeView()!=null && existingCreditDetailViewTmp.getExistCreditTypeView().getId()!=0) &&
+                        CreditTypeGroup.getCreditTypeGroup(existingCreditDetailViewTmp.getExistCreditTypeView().getCreditGroup()) == CreditTypeGroup.CASH_IN) {
+                    totalRelComOBOD = totalRelComOBOD.add((tmpTotal));
+                    totalRelExpose = totalRelExpose.add(tmpTotal);
+                } else {
+                    totalRelCom = totalRelCom.add(tmpTotal);
+                    totalRelComOBOD = totalRelComOBOD.add(tmpTotal);
+                    totalRelExpose = totalRelExpose.add(tmpTotal);
                 }
             }
         }
@@ -1107,6 +1183,7 @@ public class CreditFacExisting implements Serializable {
                     totalRelatedRetail = totalRelatedRetail.add(existingCreditDetailViewTmp.getLimit());
                 }
             }
+            totalRelExpose = totalRelExpose.add(totalRelatedRetail);
         }
 
         if(existingCreditFacilityView.getRelatedAppInRLOSCredit() != null){
@@ -1131,55 +1208,59 @@ public class CreditFacExisting implements Serializable {
                     totalRelatedRlos = totalRelatedRlos.add(existingCreditDetailViewTmp.getLimit());
                 }
             }
+            totalRelExpose = totalRelExpose.add(totalRelatedRlos);
         }
         existingCreditFacilityView.setTotalRelatedComLimit(totalRelatedCom);
         existingCreditFacilityView.setTotalRelatedRetailLimit(totalRelatedRetail);
         existingCreditFacilityView.setTotalRelatedAppInRLOSLimit(totalRelatedRlos);
-        calTotalCreditGroup();
+
+        existingCreditFacilityView.setTotalRelatedCom(totalRelCom);
+        existingCreditFacilityView.setTotalRelatedComOBOD(totalRelComOBOD);
+        existingCreditFacilityView.setTotalRelatedExposure(totalRelExpose);
+        //calTotalCreditGroup();
 
     }
 
     private void calTotalCreditGroup(){
+        BigDecimal totalGroupCom = BigDecimal.ZERO;
+        BigDecimal totalGroupComOBOD = BigDecimal.ZERO;
+        BigDecimal totalGroupExposure = BigDecimal.ZERO;
 
-        double totalGroupCom = 0;
-        double totalGroupRetail = 0;
-        double totalGroupRlos = 0;
+        BigDecimal totalBorrowerCom = BigDecimal.ZERO;
+        BigDecimal totalBorrowerComOBOD = BigDecimal.ZERO;
+        BigDecimal totalBorrowerExposure = BigDecimal.ZERO;
 
-        double totalBorrowerCom    = 0;
-        double totalBorrowerRetail = 0;
-        double totalBorrowerRlos   = 0;
+        BigDecimal totalRelatedCom = BigDecimal.ZERO;
+        BigDecimal totalRelatedComOBOD = BigDecimal.ZERO;
+        BigDecimal totalRelatedExposure = BigDecimal.ZERO;
 
-        double totalRelatedCom    = 0;
-        double totalRelatedRetail = 0;
-        double totalRelatedRlos   = 0;
-
-        if( existingCreditFacilityView.getTotalBorrowerComLimit() != null){
-            totalBorrowerCom    = existingCreditFacilityView.getTotalBorrowerComLimit().doubleValue();
+        if( existingCreditFacilityView.getTotalBorrowerCom() != null){
+            totalBorrowerCom = existingCreditFacilityView.getTotalBorrowerCom();
         }
-        if( existingCreditFacilityView.getTotalBorrowerRetailLimit() != null){
-            totalBorrowerRetail = existingCreditFacilityView.getTotalBorrowerRetailLimit().doubleValue();
+        if( existingCreditFacilityView.getTotalBorrowerComOBOD() != null){
+            totalBorrowerComOBOD = existingCreditFacilityView.getTotalBorrowerComOBOD();
         }
-        if( existingCreditFacilityView.getTotalBorrowerAppInRLOSLimit() != null){
-            totalBorrowerRlos    = existingCreditFacilityView.getTotalBorrowerAppInRLOSLimit().doubleValue();
-        }
-
-        if( existingCreditFacilityView.getTotalRelatedComLimit() != null){
-            totalRelatedCom    = existingCreditFacilityView.getTotalRelatedComLimit().doubleValue();
-        }
-        if( existingCreditFacilityView.getTotalRelatedRetailLimit() != null){
-            totalRelatedRetail = existingCreditFacilityView.getTotalRelatedRetailLimit().doubleValue();
-        }
-        if( existingCreditFacilityView.getTotalRelatedAppInRLOSLimit() != null){
-            totalRelatedRlos    = existingCreditFacilityView.getTotalRelatedAppInRLOSLimit().doubleValue();
+        if( existingCreditFacilityView.getTotalBorrowerExposure() != null){
+            totalBorrowerExposure = existingCreditFacilityView.getTotalBorrowerExposure();
         }
 
-        totalGroupCom    = totalBorrowerCom + totalRelatedCom;
-        totalGroupRetail = totalBorrowerRetail + totalRelatedRetail;
-        totalGroupRlos   = totalBorrowerRlos + totalRelatedRlos;
+        if( existingCreditFacilityView.getTotalRelatedCom() != null){
+            totalRelatedCom = existingCreditFacilityView.getTotalRelatedCom();
+        }
+        if( existingCreditFacilityView.getTotalRelatedComOBOD() != null){
+            totalRelatedComOBOD = existingCreditFacilityView.getTotalRelatedComOBOD();
+        }
+        if( existingCreditFacilityView.getTotalRelatedExposure() != null){
+            totalRelatedExposure = existingCreditFacilityView.getTotalRelatedExposure();
+        }
 
-        existingCreditFacilityView.setTotalGroupCom(new BigDecimal(totalGroupCom).setScale(2, RoundingMode.HALF_UP));
-        existingCreditFacilityView.setTotalGroupComOBOD(new BigDecimal(totalGroupRetail).setScale(2, RoundingMode.HALF_UP));
-        existingCreditFacilityView.setTotalGroupExposure(new BigDecimal(totalGroupRlos).setScale(2, RoundingMode.HALF_UP));
+        totalGroupCom = totalBorrowerCom.add(totalRelatedCom);
+        totalGroupComOBOD = totalBorrowerComOBOD.add(totalRelatedComOBOD);
+        totalGroupExposure = totalBorrowerExposure.add(totalRelatedExposure);
+
+        existingCreditFacilityView.setTotalGroupCom(totalGroupCom);
+        existingCreditFacilityView.setTotalGroupComOBOD(totalGroupComOBOD);
+        existingCreditFacilityView.setTotalGroupExposure(totalGroupExposure);
 
     }
 
@@ -1987,6 +2068,10 @@ public class CreditFacExisting implements Serializable {
             }
         }
 
+        calTotalCreditBorrower();
+        calTotalCreditRelated();
+        calTotalCreditGroup();
+
         messageHeader = msg.get("app.header.information");
         message = msg.get("app.credit.facility.message.success.refresh");
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -2136,6 +2221,14 @@ public class CreditFacExisting implements Serializable {
 
     public void setProductProgramViewList(List<ProductProgramView> productProgramViewList) {
         this.productProgramViewList = productProgramViewList;
+    }
+
+    public List<ProductProgramView> getProductProgramViewListSplit() {
+        return productProgramViewListSplit;
+    }
+
+    public void setProductProgramViewListSplit(List<ProductProgramView> productProgramViewListSplit) {
+        this.productProgramViewListSplit = productProgramViewListSplit;
     }
 
     public List<CreditType> getCreditTypeList() {

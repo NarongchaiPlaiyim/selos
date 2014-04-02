@@ -2,9 +2,7 @@ package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.ExistingProductFormula;
-import com.clevel.selos.model.db.master.ProductFormula;
-import com.clevel.selos.model.db.master.SpecialProgram;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -38,5 +36,22 @@ public class ExistingProductFormulaDAO extends GenericDAO<ExistingProductFormula
         criteria.add(Restrictions.eq("projectCode", projectCode));
         List<ExistingProductFormula> existingProductFormula = criteria.list();
         return existingProductFormula;
+    }
+
+    public ExistingProductFormula findProductFormulaDefaultByPrdProgAndCreditType(ProductProgram productProgram,CreditType creditType) {
+        ExistingProductFormula productFormula = null;
+        try{
+            Criteria criteria = createCriteria();
+            criteria.add(Restrictions.eq("productProgram", productProgram));
+            criteria.add(Restrictions.eq("creditType", creditType));
+            criteria.add(Restrictions.eq("defaultValue", 1));
+            List<ExistingProductFormula> existingProductFormulaList = criteria.list();
+            if(existingProductFormulaList!=null && existingProductFormulaList.size()>0){ //prevent, if default_value is not unique
+                productFormula = existingProductFormulaList.get(0);
+            }
+        } catch (Exception ex){
+            log.error("Exception while get existing formula : ",ex);
+        }
+        return productFormula;
     }
 }
