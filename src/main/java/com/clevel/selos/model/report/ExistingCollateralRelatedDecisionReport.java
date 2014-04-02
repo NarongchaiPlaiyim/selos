@@ -36,23 +36,20 @@ public class ExistingCollateralRelatedDecisionReport extends ReportModel{
     private List<ExistingCreditTypeDetailView> existingCreditTypeDetailViews;
 
     public ExistingCollateralRelatedDecisionReport() {
-        potentialCollateral = getDefaultString();
-        collateralType = getDefaultString();
-        owner = getDefaultString();
-        relation = getDefaultString();
-        appraisalDate = new Date();
-        collateralNumber = getDefaultString();
-        collateralLocation = getDefaultString();
-        remark = getDefaultString();
-        cusName = getDefaultString();
-        accountNumber = getDefaultString();
-        accountSuffix = getDefaultString();
-        productProgram = getDefaultString();
-        creditFacility = getDefaultString();
-        limit = BigDecimal.ZERO;
-        mortgageType = getDefaultString();
-        appraisalValue = getDefaultBigDecimal();
-        mortgageValue = getDefaultBigDecimal();
+        potentialCollateral = "";
+        collateralType = "";
+        owner = "";
+        relation = "";
+        appraisalDate = null;
+        collateralNumber = "";
+        collateralLocation = "";
+        remark = "";
+        cusName = "";
+        accountNumber = "";
+        accountSuffix = "";
+        productProgram = "";
+        creditFacility = "";
+        mortgageType = "";
         existingCreditTypeDetailViews = new ArrayList<ExistingCreditTypeDetailView>();
     }
 

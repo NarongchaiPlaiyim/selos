@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subProposedCollateral" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="95e889d3-9347-482d-aea8-5d43633a2466">
 	<property name="ireport.zoom" value="1.3310000000000006"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="7"/>
+	<property name="ireport.y" value="0"/>
 	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -19,9 +19,6 @@
 			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 		</box>
 	</style>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["D:\\ProjectSLOS\\selos\\src\\main\\webapp\\site\\report\\"]]></defaultValueExpression>
-	</parameter>
 	<field name="jobID" class="java.lang.String">
 		<fieldDescription><![CDATA[jobID]]></fieldDescription>
 	</field>
@@ -52,9 +49,6 @@
 	<field name="bdmComments" class="java.lang.String">
 		<fieldDescription><![CDATA[bdmComments]]></fieldDescription>
 	</field>
-	<field name="proposeCreditDetailViewList" class="java.util.List">
-		<fieldDescription><![CDATA[proposeCreditDetailViewList]]></fieldDescription>
-	</field>
 	<field name="collateralDescription" class="java.lang.String">
 		<fieldDescription><![CDATA[collateralDescription]]></fieldDescription>
 	</field>
@@ -82,11 +76,14 @@
 	<field name="insuranceCompany" class="java.lang.String">
 		<fieldDescription><![CDATA[insuranceCompany]]></fieldDescription>
 	</field>
-	<field name="subViewList" class="java.util.List">
-		<fieldDescription><![CDATA[subViewList]]></fieldDescription>
-	</field>
 	<field name="path" class="java.lang.String">
 		<fieldDescription><![CDATA[path]]></fieldDescription>
+	</field>
+	<field name="collateralSubViewList" class="java.util.List">
+		<fieldDescription><![CDATA[collateralSubViewList]]></fieldDescription>
+	</field>
+	<field name="detailViewList" class="java.util.List">
+		<fieldDescription><![CDATA[detailViewList]]></fieldDescription>
 	</field>
 	<detail>
 		<band height="184" splitType="Stretch">
@@ -254,15 +251,15 @@
 					<textFieldExpression><![CDATA[$F{mortgageConditionDetail}]]></textFieldExpression>
 				</textField>
 				<subreport>
-					<reportElement uuid="97e89e1e-7742-4a40-9d4e-8a68dbb69138" x="111" y="126" width="442" height="32"/>
-					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{proposeCreditDetailViewList})]]></dataSourceExpression>
-					<subreportExpression><![CDATA[$F{path}+ "DecisionReport_subProposedCollateral_subCollateral.jasper"]]></subreportExpression>
+					<reportElement uuid="fc083104-a724-4fd7-9122-2220ccc7651c" x="66" y="120" width="444" height="39"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{detailViewList})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$F{path} + "DecisionReport_subApprovedCollateral_subCollateral.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 		</band>
-		<band height="202">
+		<band height="198">
 			<frame>
-				<reportElement uuid="1ebfb697-caa3-4027-8672-180fe1d867d0" x="0" y="0" width="555" height="202"/>
+				<reportElement uuid="1ebfb697-caa3-4027-8672-180fe1d867d0" x="0" y="0" width="555" height="198"/>
 				<staticText>
 					<reportElement uuid="5256691e-7055-40f3-90a5-90aae9c03f1d" x="0" y="0" width="111" height="20"/>
 					<textElement verticalAlignment="Middle">
@@ -327,11 +324,6 @@
 					</textElement>
 					<text><![CDATA[Insurance Company :]]></text>
 				</staticText>
-				<subreport>
-					<reportElement uuid="9a342338-97a8-443f-a5ad-b55cc9c2df63" x="0" y="159" width="555" height="43" isRemoveLineWhenBlank="true"/>
-					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{subViewList})]]></dataSourceExpression>
-					<subreportExpression><![CDATA[$F{path} + "DecisionReport_subProposedCollateral_subSubCollateral.jasper"]]></subreportExpression>
-				</subreport>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="3b3ad931-7eda-4c78-ae7f-9fe8ecf3a272" x="111" y="0" width="133" height="20"/>
 					<textElement verticalAlignment="Middle">
@@ -388,6 +380,11 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{insuranceCompany}]]></textFieldExpression>
 				</textField>
+				<subreport>
+					<reportElement uuid="b4d2792f-d486-4f3f-97ab-d3d52c1b39ae" x="0" y="160" width="555" height="38" isRemoveLineWhenBlank="true"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{collateralSubViewList})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$F{path} + "DecisionReport_subApprovedCollateral_subSubCollateral.jasper"]]></subreportExpression>
+				</subreport>
 			</frame>
 		</band>
 	</detail>

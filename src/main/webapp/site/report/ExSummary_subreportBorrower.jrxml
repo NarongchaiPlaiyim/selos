@@ -309,9 +309,9 @@
 	<detail>
 		<band height="20" splitType="Stretch">
 			<frame>
-				<reportElement uuid="75853a34-f69a-4b11-9cab-a6b11372e3d1" x="-1" y="0" width="556" height="20"/>
-				<textField>
-					<reportElement uuid="0c28ca4c-1313-42cb-8ce3-d4ecb6126d0d" style="detail" mode="Opaque" x="521" y="0" width="35" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement uuid="75853a34-f69a-4b11-9cab-a6b11372e3d1" x="-1" y="0" width="556" height="20" isRemoveLineWhenBlank="true"/>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="0c28ca4c-1313-42cb-8ce3-d4ecb6126d0d" style="detail" mode="Opaque" x="521" y="0" width="35" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -324,8 +324,8 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{worthiness}]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement uuid="62eca502-906d-4360-987a-b01a27430e36" style="detail" mode="Opaque" x="1" y="0" width="20" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="62eca502-906d-4360-987a-b01a27430e36" style="detail" mode="Opaque" x="1" y="0" width="20" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -336,10 +336,11 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{no}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{no}.intValue() == 0 ?
+"" : $F{no}]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement uuid="af660d18-bc75-4e3b-903d-ce27af8ae2e8" style="detail" mode="Opaque" x="21" y="0" width="77" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="af660d18-bc75-4e3b-903d-ce27af8ae2e8" style="detail" mode="Opaque" x="21" y="0" width="77" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -353,8 +354,8 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{titleTh}+$F{firstNameTh}+" "+$F{firstNameTh}]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement uuid="2bd5fef9-84c9-4c84-b90e-ed9cf0d2bfcc" style="detail" mode="Opaque" x="98" y="0" width="58" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="2bd5fef9-84c9-4c84-b90e-ed9cf0d2bfcc" style="detail" mode="Opaque" x="98" y="0" width="58" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -368,21 +369,7 @@
 					<textFieldExpression><![CDATA[$F{citizenId}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="d4dae217-2e3d-42ab-bf9a-c50857a61fae" style="detail" mode="Opaque" x="156" y="0" width="58" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
-					<box>
-						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{tmbCustomerId}]]></textFieldExpression>
-				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="ae58835b-8b7f-4443-8065-a468da86a46b" style="detail" mode="Opaque" x="214" y="0" width="67" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement uuid="ae58835b-8b7f-4443-8065-a468da86a46b" style="detail" mode="Opaque" x="214" y="0" width="67" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -395,8 +382,8 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{relation}]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement uuid="6f4212d7-d5e5-43ee-b3e0-f5f4680af84a" style="detail" mode="Opaque" x="281" y="0" width="26" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="6f4212d7-d5e5-43ee-b3e0-f5f4680af84a" style="detail" mode="Opaque" x="281" y="0" width="26" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -409,8 +396,8 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{collateralOwner}]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement uuid="3a9617a4-f367-4c07-a872-ae29ae91d987" style="detail" mode="Opaque" x="307" y="0" width="60" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="3a9617a4-f367-4c07-a872-ae29ae91d987" style="detail" mode="Opaque" x="307" y="0" width="60" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -423,8 +410,8 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{indLv}]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement uuid="c1c4e1a3-fe26-4e93-b60b-bfde587a662d" style="detail" mode="Opaque" x="367" y="0" width="44" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="c1c4e1a3-fe26-4e93-b60b-bfde587a662d" style="detail" mode="Opaque" x="367" y="0" width="44" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -437,8 +424,8 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{jurLv}]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement uuid="9330b7be-531b-4b95-9af9-4d9d2706850e" style="detail" mode="Opaque" x="411" y="0" width="31" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="9330b7be-531b-4b95-9af9-4d9d2706850e" style="detail" mode="Opaque" x="411" y="0" width="31" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -451,8 +438,8 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{percentShare}]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement uuid="9c7dea81-5f7e-4f49-84c3-6791cb229810" style="detail" mode="Opaque" x="468" y="0" width="26" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="9c7dea81-5f7e-4f49-84c3-6791cb229810" style="detail" mode="Opaque" x="468" y="0" width="26" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -465,8 +452,8 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{kycLevel}]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement uuid="a709bc60-3385-4869-b347-8b7d47d51c68" style="detail" mode="Opaque" x="442" y="0" width="26" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="a709bc60-3385-4869-b347-8b7d47d51c68" style="detail" mode="Opaque" x="442" y="0" width="26" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -480,7 +467,7 @@
 					<textFieldExpression><![CDATA[$F{age}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="e35209ea-b3e9-49e2-9a45-1bc9a80e5c06" style="detail" mode="Opaque" x="494" y="0" width="27" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement uuid="e35209ea-b3e9-49e2-9a45-1bc9a80e5c06" style="detail" mode="Opaque" x="494" y="0" width="27" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -492,6 +479,28 @@
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{customerCSIList}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="801dc3bb-49e0-4c82-a330-7ce8829c2f98" style="detail" mode="Transparent" x="0" y="0" width="555" height="20" isRemoveLineWhenBlank="true"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{no}.intValue() == 0 ? "No records found" : ""]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="d4dae217-2e3d-42ab-bf9a-c50857a61fae" style="detail" mode="Opaque" x="156" y="0" width="58" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
+					<box>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{tmbCustomerId}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

@@ -17,6 +17,14 @@ public class TradeFinanceExsumReport extends ReportModel{
 
 
     public TradeFinanceExsumReport() {
+        contactName = "";
+        contactPhoneNo = "";
+        interService = "";
+        currentAddress = "";
+        importMail = "";
+        exportMail = "";
+        depositBranchCode = "";
+        ownerBranchCode = "";
     }
 
     public String getContactName() {
