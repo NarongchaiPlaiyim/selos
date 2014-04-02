@@ -2420,6 +2420,7 @@ public class PrescreenMaker implements Serializable {
             prescreenView.setRefinanceInBank(null);
             prescreenView.setRefinanceOutBank(null);
             prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, deleteCustomerInfoViewList, workCasePreScreenId, caseBorrowerTypeId, user);
+            prescreenBusinessControl.updateBorrowerForBPM(borrowerInfoViewList, queueName, workCasePreScreenId);
 
             //TODO show messageBox success
             messageHeader = "Save PreScreen Success.";

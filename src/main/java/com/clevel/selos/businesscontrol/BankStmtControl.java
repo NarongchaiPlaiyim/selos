@@ -96,7 +96,7 @@ public class BankStmtControl extends BusinessControl {
                         log.info("Finding account {}", accountListModelList);
                         for (CustomerAccountListModel customerAccountListModel : accountListModelList) {
                             DWHBankStatementResult dwhBankStatementResult = dwhInterface.getBankStatementData(getCurrentUserID(), customerAccountListModel.getAccountNo(), startBankStmtDate, numberOfMonthBankStmt);
-
+                            log.debug("DWH Bank Statement per Customer Account Result: {}", dwhBankStatementResult.getActionResult());
                             if (dwhBankStatementResult.getActionResult().equals(ActionResult.SUCCESS)) {
                                 List<DWHBankStatement> dwhBankStatementList = dwhBankStatementResult.getBankStatementList();
                                 BankStmtView bankStmtView = null;
@@ -171,8 +171,8 @@ public class BankStmtControl extends BusinessControl {
     public Date getLastMonthDateBankStmt(Date expectedSubmissionDate) {
         if (expectedSubmissionDate != null) {
             int days = DateTimeUtil.getDayOfDate(expectedSubmissionDate);
-            int retrieveMonth = days < 15 ? 2 : 1;
-            return DateTimeUtil.getOnlyDatePlusMonth(expectedSubmissionDate, -retrieveMonth);
+            int retrieveMonth = days < 15 ? -2 : -1;
+            return DateTimeUtil.getOnlyDatePlusMonth(expectedSubmissionDate, retrieveMonth);
         }
         return null;
     }
@@ -1371,6 +1371,8 @@ public class BankStmtControl extends BusinessControl {
             BankStmtDetailView bankStmtDetailView = new BankStmtDetailView();
             date = DateTimeUtil.getOnlyDatePlusMonth(lastMonthDate, -i);
             bankStmtDetailView.setAsOfDate(date);
+            bankStmtDetailView.setDateOfMaxBalance(DateTimeUtil.getFirstDayOfMonth(date));
+            bankStmtDetailView.setDateOfMinBalance(DateTimeUtil.getFirstDayOfMonth(date));
             bankStmtDetailViewList.add(bankStmtDetailView);
         }
         return bankStmtDetailViewList;

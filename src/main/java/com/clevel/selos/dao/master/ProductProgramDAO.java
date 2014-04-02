@@ -6,6 +6,7 @@ import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.master.ProductProgram;
 import com.clevel.selos.system.Config;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -32,6 +33,19 @@ public class ProductProgramDAO extends GenericDAO<ProductProgram, Integer> {
                     .add(Restrictions.eq("id", prdProgramId));
             ProductProgram productProgram = (ProductProgram)criteria.uniqueResult();
             return productProgram;
+        } catch (Exception e){
+
+        }
+        return null;
+    }
+
+    public List<ProductProgram> findExistingProductProgram(){
+        try {
+            Criteria criteria = getSession().createCriteria(getEntityClass())
+                    .add(Restrictions.eq("isExisting", 1));
+            criteria.addOrder(Order.asc("name"));
+            List<ProductProgram> productProgramList = criteria.list();
+            return productProgramList;
         } catch (Exception e){
 
         }

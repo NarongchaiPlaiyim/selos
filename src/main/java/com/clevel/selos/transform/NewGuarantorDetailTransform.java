@@ -197,7 +197,7 @@ public class NewGuarantorDetailTransform extends Transform {
 
         for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViewList) {
             proposeCreditDetailView = new ProposeCreditDetailView();
-            proposeCreditDetailView.setSeq((int)existingCreditDetailView.getId());
+            proposeCreditDetailView.setSeq(rowCount);
             proposeCreditDetailView.setId(existingCreditDetailView.getId());
             proposeCreditDetailView.setNoFlag(true);
             proposeCreditDetailView.setTypeOfStep(CreditTypeOfStep.EXISTING.type());
@@ -207,14 +207,9 @@ public class NewGuarantorDetailTransform extends Transform {
             proposeCreditDetailView.setProductProgramView(existingCreditDetailView.getExistProductProgramView());
             proposeCreditDetailView.setCreditFacilityView(existingCreditDetailView.getExistCreditTypeView());
             proposeCreditDetailView.setLimit(existingCreditDetailView.getLimit());
-
-//            for (int i = 0; i < newGuarantorCreditList.size(); i++) {
-////                if (existingCreditDetailView.getId() == newGuarantorCreditList.get(i).getExistingCreditDetail().getId()) {
-//                    log.info("newGuarantorCreditList.get(i).getNewCreditDetail() ::: {}", newGuarantorCreditList.get(i).getGuaranteeAmount());
-//                    proposeCreditDetailView.setGuaranteeAmount(newGuarantorCreditList.get(i).getGuaranteeAmount());
-////                }
-//            }
-
+            log.info("existingCreditDetailView getSeq :: {}",existingCreditDetailView.getSeq());
+            log.info("existingCreditDetailView getId :: {}",existingCreditDetailView.getId());
+            proposeCreditDetailView.setGuaranteeAmount(findNewGuarantorCredit(newGuarantorCreditList, existingCreditDetailView).getGuaranteeAmount());
             proposeCreditDetailViewList.add(proposeCreditDetailView);
 
             rowCount++;
@@ -232,7 +227,20 @@ public class NewGuarantorDetailTransform extends Transform {
                 break;
             }
         }
-        log.info("newGuarantorCreditReturn ::: {}", newGuarantorCreditReturn.getGuaranteeAmount());
+        log.info("newGuarantorCreditReturn getNewCreditDetail ::: {}", newGuarantorCreditReturn.getGuaranteeAmount());
+        return newGuarantorCreditReturn;
+    }
+
+    public NewGuarantorCredit findNewGuarantorCredit(List<NewGuarantorCredit> newGuarantorCreditList, ExistingCreditDetailView existingCreditDetailView) {
+        NewGuarantorCredit newGuarantorCreditReturn = new NewGuarantorCredit();
+        for (NewGuarantorCredit newGuarantorCredit : newGuarantorCreditList) {
+            if (newGuarantorCredit.getExistingCreditDetail() != null &&
+                newGuarantorCredit.getExistingCreditDetail().getId() == existingCreditDetailView.getId()) {
+                newGuarantorCreditReturn = newGuarantorCredit;
+                break;
+            }
+        }
+        log.info("newGuarantorCreditReturn getExistingCreditDetail ::: {}", newGuarantorCreditReturn.getGuaranteeAmount());
         return newGuarantorCreditReturn;
     }
 

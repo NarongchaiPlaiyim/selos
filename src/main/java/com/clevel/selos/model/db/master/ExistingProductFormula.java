@@ -53,6 +53,9 @@ public class ExistingProductFormula {
     @Column(name = "dbr_method")
     private int dbrMethod;
 
+    @Column(name = "default_value", columnDefinition="int default 0")
+    private int defaultValue;
+
     @Column(name = "active")
     private int active;
 
@@ -160,6 +163,14 @@ public class ExistingProductFormula {
         this.dbrMethod = dbrMethod;
     }
 
+    public int getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(int defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
     public int getActive() {
         return active;
     }
@@ -184,6 +195,7 @@ public class ExistingProductFormula {
                 .append("wcCalculate", wcCalculate)
                 .append("dbrCalculate", dbrCalculate)
                 .append("dbrMethod", dbrMethod)
+                .append("defaultValue", defaultValue)
                 .append("active", active)
                 .toString();
     }

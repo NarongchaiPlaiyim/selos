@@ -84,6 +84,10 @@ public class Appraisal implements Serializable {
 
     @OneToOne
     @JoinColumn(name="workcase_appraisal_id")
+    private WorkCaseAppraisal workCaseAppraisal;
+
+    @OneToOne
+    @JoinColumn(name="workcase_id")
     private WorkCase workCase;
 
     @OneToOne
@@ -286,6 +290,14 @@ public class Appraisal implements Serializable {
         this.workCase = workCase;
     }
 
+    public WorkCaseAppraisal getWorkCaseAppraisal() {
+        return workCaseAppraisal;
+    }
+
+    public void setWorkCaseAppraisal(WorkCaseAppraisal workCaseAppraisal) {
+        this.workCaseAppraisal = workCaseAppraisal;
+    }
+
     public WorkCasePrescreen getWorkCasePrescreen() {
         return workCasePrescreen;
     }
@@ -361,14 +373,19 @@ public class Appraisal implements Serializable {
                 .append("appointmentTime", appointmentTime)
                 .append("appointmentCusName", appointmentCusName)
                 .append("cancelAppointment", cancelAppointment)
+                .append("appointmentRemark", appointmentRemark)
                 .append("AADAdminRemark", AADAdminRemark)
                 .append("appraisalDetailList", appraisalDetailList)
                 .append("appraisalContactDetailList", appraisalContactDetailList)
+                .append("workCaseAppraisal", workCaseAppraisal)
                 .append("workCase", workCase)
+                .append("workCasePrescreen", workCasePrescreen)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("aadCommittee", aadCommittee)
+                .append("aadAdmin", aadAdmin)
                 .toString();
     }
 }

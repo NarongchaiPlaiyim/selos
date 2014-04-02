@@ -16,7 +16,6 @@ import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.FeeDetail;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
@@ -312,7 +311,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             modeForDB = ModeForDB.ADD_DB;
             // Initial sequence number credit
             hashSeqCredit = new HashMap<Integer, Integer>();
-            notRetrievePricing = true;
             // delete list on save
             deleteCreditIdList = new ArrayList<Long>();
             deleteCollIdList = new ArrayList<Long>();
@@ -333,6 +331,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     newCreditFacilityView = new NewCreditFacilityView();
                     reducePricePanelRendered = false;
                     cannotEditStandard = true;
+                    notRetrievePricing = true;
                 }else{
                     log.debug("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
 
@@ -359,8 +358,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     }
 
                     notRetrievePricing = false;
-
-
                 }
 
             } catch (Exception ex) {
@@ -503,7 +500,12 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
                 StandardPricingResponse standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
                 if (ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
-                    List<FeeDetail> feeDetailList = feeTransform.transformToDB(standardPricingResponse.getPricingFeeList(),workCaseId);
+                    //persist FeeDetail from retrieve
+//                    if (Util.safetyList(standardPricingResponse.getPricingFeeList()).size() > 0) {
+//                        creditFacProposeControl.saveFeeDetailFromRetrieve(standardPricingResponse.getPricingFeeList(),workCaseId);
+//                        log.debug("standardPricingResponse.getPricingFeeList() not null ::: {}", standardPricingResponse.getPricingFeeList().size());
+//                    }
+
                     Map<Long, NewFeeDetailView> newFeeDetailViewMap = new HashMap<Long, NewFeeDetailView>();
                     NewFeeDetailView newFeeDetailView;
                     for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()) {
@@ -546,9 +548,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                             }
                         }
                     }
-                    log.debug("feeDetailList not null ::: {}", feeDetailList.size());
-                    feeDetailDAO.persist(feeDetailList);
-                    log.debug("persist :: feeDetailList ::");
 
                     if(newFeeDetailViewMap!=null && newFeeDetailViewMap.size()>0){
                         Iterator it = newFeeDetailViewMap.entrySet().iterator();
@@ -890,11 +889,13 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             for (ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViewList) {
                 seq = proposeCreditDetailView.getSeq();
                 log.info("seq :: {}", seq);
-                useCount = hashSeqCredit.get(seq);
-                if (proposeCreditDetailView.getTypeOfStep().equals("N")) {
-                    proposeCreditDetailView.setUseCount(useCount);
+                if(hashSeqCredit.containsKey(seq)){
+                    useCount = hashSeqCredit.get(seq);
+                    log.info("useCount :: {}",useCount);
+                    if (proposeCreditDetailView.getTypeOfStep().equals("N")) {
+                        proposeCreditDetailView.setUseCount(useCount);
+                    }
                 }
-
             }
         }
     }
@@ -1685,7 +1686,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onSaveCreditFacPropose() {
         log.debug("onSaveCreditFacPropose ::: ModeForDB  {}", modeForDB);
-//        onSetInUsedProposeCreditDetail();
+        onSetInUsedProposeCreditDetail();
         try {
             //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
             creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);

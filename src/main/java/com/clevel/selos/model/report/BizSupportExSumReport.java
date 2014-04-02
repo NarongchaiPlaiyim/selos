@@ -18,16 +18,13 @@ public class BizSupportExSumReport extends ReportModel{
     private String rm020Remark;
 
     public BizSupportExSumReport() {
-        this.natureOfBusiness = getDefaultString();
-        this.historicalAndReasonOfChange = getDefaultString();
-        this.tmbCreditHistory = getDefaultString();
-        this.supportReason = getDefaultString();
-        this.rm008Code = getDefaultInteger();
-        this.rm008Remark = getDefaultString();
-        this.rm204Code = getDefaultInteger();
-        this.rm204Remark = getDefaultString();
-        this.rm020Code = getDefaultInteger();
-        this.rm020Remark = getRm008Remark();
+        this.natureOfBusiness = "";
+        this.historicalAndReasonOfChange = "";
+        this.tmbCreditHistory = "";
+        this.supportReason = "";
+        this.rm008Remark = "";
+        this.rm204Remark = "";
+        this.rm020Remark = "";
     }
 
     public String getNatureOfBusiness() {

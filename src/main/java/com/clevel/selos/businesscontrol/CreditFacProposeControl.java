@@ -874,6 +874,12 @@ public class CreditFacProposeControl extends BusinessControl {
 
     }
 
+/*    public void saveFeeDetailFromRetrieve(List<PricingFee> pricingFeeList, long workCaseId) {
+        List<FeeDetail> feeDetailList = feeTransform.transformToDB(pricingFeeList,workCaseId);
+        feeDetailDAO.persist(feeDetailList);
+        log.debug("persist :: feeDetailList ::");
+    }*/
+
     public NewCreditFacilityView saveCreditFacility(NewCreditFacilityView newCreditFacilityView, long workCaseId) {
         log.debug("Starting saveCreditFacility...");
         log.debug("saveCreditFacility ::: workCaseId : {}", workCaseId);

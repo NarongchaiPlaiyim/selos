@@ -88,4 +88,18 @@ public class PrdProgramToCreditTypeDAO extends GenericDAO<PrdProgramToCreditType
         return prdProgramToCreditType;
 
     }
+
+    public List<PrdProgramToCreditType> getListCreditExistingByPrdprogram(int productProgramId) {
+        log.info("getListCreditProposeByPrdprogram. (ProductProgramId: {})", productProgramId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("productProgram.id", productProgramId));
+        criteria.add(Restrictions.eq("addExistingCredit", 1));
+        criteria.addOrder(Order.asc("creditType.id"));
+        List<PrdProgramToCreditType> list = criteria.list();
+
+        log.info("getList. (result size: {})", list.size());
+
+        return list;
+
+    }
 }

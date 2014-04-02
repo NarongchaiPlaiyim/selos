@@ -96,22 +96,22 @@ public class PDFExecutive_Summary implements Serializable {
             for (CustomerInfoView view:customerInfoViewList){
                 BorrowerExsumReport borrowerExsumReport = new BorrowerExsumReport();
                 borrowerExsumReport.setNo(count++);
-                borrowerExsumReport.setTitleTh(view.getTitleTh().getTitleTh());
-                borrowerExsumReport.setFirstNameTh(view.getFirstNameTh());
-                borrowerExsumReport.setLastNameTh(view.getLastNameTh());
-                borrowerExsumReport.setCitizenId(view.getCitizenId());
-                borrowerExsumReport.setRegistrationId(view.getRegistrationId());
-                borrowerExsumReport.setTmbCustomerId(view.getTmbCustomerId());
-                borrowerExsumReport.setRelation(view.getRelation().getDescription());
+                borrowerExsumReport.setTitleTh(Util.checkNullString(view.getTitleTh().getTitleTh()));
+                borrowerExsumReport.setFirstNameTh(Util.checkNullString(view.getFirstNameTh()));
+                borrowerExsumReport.setLastNameTh(Util.checkNullString(view.getLastNameTh()));
+                borrowerExsumReport.setCitizenId(Util.checkNullString(view.getCitizenId()));
+                borrowerExsumReport.setRegistrationId(Util.checkNullString(view.getRegistrationId()));
+                borrowerExsumReport.setTmbCustomerId(Util.checkNullString(view.getTmbCustomerId()));
+                borrowerExsumReport.setRelation(Util.checkNullString(view.getRelation().getDescription()));
                 if(view.getCollateralOwner() == 2){
                     borrowerExsumReport.setCollateralOwner("Y");
                 } else {
                     borrowerExsumReport.setCollateralOwner("N");
                 }
 
-                borrowerExsumReport.setIndLv(view.getIndLv());
-                borrowerExsumReport.setJurLv(view.getJurLv());
-                borrowerExsumReport.setPercentShare(view.getPercentShare());
+                borrowerExsumReport.setIndLv(Util.checkNullString(view.getIndLv()));
+                borrowerExsumReport.setJurLv(Util.checkNullString(view.getJurLv()));
+                borrowerExsumReport.setPercentShare(Util.convertNullToZERO(view.getPercentShare()));
                 borrowerExsumReport.setAge(view.getAge());
                 borrowerExsumReport.setKycLevel(view.getKycLevel().getKycLevel());
 
@@ -130,9 +130,10 @@ public class PDFExecutive_Summary implements Serializable {
 
                 if (!Util.isNull(customerCSIList)){
                     for(CustomerCSIView csiView:customerCSIList){
-                        borrowerExsumReport.setCustomerCSIList(csiView.getWarningCode().getCode());
+                        borrowerExsumReport.setCustomerCSIList(Util.checkNullString(csiView.getWarningCode().getCode()));
                     }
                 } else {
+                    borrowerExsumReport.setCustomerCSIList("-");
                     log.debug("customerCSIList is Null. {}",customerCSIList);
                 }
                 reports.add(borrowerExsumReport);
@@ -155,18 +156,23 @@ public class PDFExecutive_Summary implements Serializable {
             log.info("creditFacilityViews: {}",creditFacilityViews);
             newCreditFacilityViewArrayList.add(creditFacilityViews);
 
-            for (NewCreditFacilityView facilityView : newCreditFacilityViewArrayList){
-                TradeFinanceExsumReport tradeFinanceExsumReport = new TradeFinanceExsumReport();
-                tradeFinanceExsumReport.setContactName(facilityView.getContactName());
-                tradeFinanceExsumReport.setContactPhoneNo(facilityView.getContactPhoneNo());
-                tradeFinanceExsumReport.setInterService(facilityView.getInterService());
-                tradeFinanceExsumReport.setCurrentAddress(facilityView.getCurrentAddress());
-                tradeFinanceExsumReport.setImportMail(facilityView.getImportMail());
-                tradeFinanceExsumReport.setExportMail(facilityView.getExportMail());
-                tradeFinanceExsumReport.setDepositBranchCode(facilityView.getDepositBranchCode());
-                tradeFinanceExsumReport.setOwnerBranchCode(facilityView.getOwnerBranchCode());
-                financeExsumReports.add(tradeFinanceExsumReport);
+            if (Util.safetyList(newCreditFacilityViewArrayList).size() > 0) {
+                for (NewCreditFacilityView facilityView : newCreditFacilityViewArrayList){
+                    TradeFinanceExsumReport tradeFinanceExsumReport = new TradeFinanceExsumReport();
+                    tradeFinanceExsumReport.setContactName(Util.checkNullString(facilityView.getContactName()));
+                    tradeFinanceExsumReport.setContactPhoneNo(Util.checkNullString(facilityView.getContactPhoneNo()));
+                    tradeFinanceExsumReport.setInterService(Util.checkNullString(facilityView.getInterService()));
+                    tradeFinanceExsumReport.setCurrentAddress(Util.checkNullString(facilityView.getCurrentAddress()));
+                    tradeFinanceExsumReport.setImportMail(Util.checkNullString(facilityView.getImportMail()));
+                    tradeFinanceExsumReport.setExportMail(Util.checkNullString(facilityView.getExportMail()));
+                    tradeFinanceExsumReport.setDepositBranchCode(Util.checkNullString(facilityView.getDepositBranchCode()));
+                    tradeFinanceExsumReport.setOwnerBranchCode(Util.checkNullString(facilityView.getOwnerBranchCode()));
+                    financeExsumReports.add(tradeFinanceExsumReport);
+                }
+            } else {
+                log.debug("--newCreditFacilityViewArrayList. {}",newCreditFacilityViewArrayList.size());
             }
+
         } else {
             log.debug("newCreditFacilityViewArrayList in Method fillTradeFinance is Null. {}",newCreditFacilityViewArrayList);
         }
@@ -181,14 +187,14 @@ public class PDFExecutive_Summary implements Serializable {
         if (!Util.isNull(ncbInfoViewList)){
             for (NCBInfoView ncbInfoView:ncbInfoViewList){
                 NCBRecordExsumReport ncbRecordExsumReport = new NCBRecordExsumReport();
-                ncbRecordExsumReport.setNcbCusName(ncbInfoView.getNcbCusName());
+                ncbRecordExsumReport.setNcbCusName(Util.checkNullString(ncbInfoView.getNcbCusName()));
                 ncbRecordExsumReport.setCheckIn6Month(ncbInfoView.getCheckIn6Month());
-                ncbRecordExsumReport.setCurrentPaymentType(ncbInfoView.getCurrentPaymentType());
-                ncbRecordExsumReport.setHistoryPaymentType(ncbInfoView.getHistoryPaymentType());
-                ncbRecordExsumReport.setNplFlagText(ncbInfoView.getNplFlagText());
-                ncbRecordExsumReport.setTdrFlagText(ncbInfoView.getTdrFlagText());
-                ncbRecordExsumReport.setDescription(ncbInfoView.getTdrCondition().getDescription());
-                ncbRecordExsumReport.setPaymentClass(ncbInfoView.getPaymentClass());
+                ncbRecordExsumReport.setCurrentPaymentType(Util.checkNullString(ncbInfoView.getCurrentPaymentType()));
+                ncbRecordExsumReport.setHistoryPaymentType(Util.checkNullString(ncbInfoView.getHistoryPaymentType()));
+                ncbRecordExsumReport.setNplFlagText(Util.checkNullString(ncbInfoView.getNplFlagText()));
+                ncbRecordExsumReport.setTdrFlagText(Util.checkNullString(ncbInfoView.getTdrFlagText()));
+                ncbRecordExsumReport.setDescription(Util.checkNullString(ncbInfoView.getTdrCondition().getDescription()));
+                ncbRecordExsumReport.setPaymentClass(Util.checkNullString(ncbInfoView.getPaymentClass()));
 
                 recordExsumReports.add(ncbRecordExsumReport);
             }
@@ -203,10 +209,10 @@ public class PDFExecutive_Summary implements Serializable {
         BorrowerExsumReport borrowerExsumReport = new BorrowerExsumReport();
 
         if(!Util.isNull(exSummaryView)){
-            borrowerExsumReport.setBusinessLocationName(exSummaryView.getBusinessLocationName());
-            borrowerExsumReport.setBusinessLocationAddress(exSummaryView.getBusinessLocationAddress());
-            borrowerExsumReport.setBusinessLocationAddressEN(exSummaryView.getBusinessLocationAddressEN());
-            borrowerExsumReport.setOwner(exSummaryView.getOwner());
+            borrowerExsumReport.setBusinessLocationName(Util.checkNullString(exSummaryView.getBusinessLocationName()));
+            borrowerExsumReport.setBusinessLocationAddress(Util.checkNullString(exSummaryView.getBusinessLocationAddress()));
+            borrowerExsumReport.setBusinessLocationAddressEN(Util.checkNullString(exSummaryView.getBusinessLocationAddressEN()));
+            borrowerExsumReport.setOwner(Util.checkNullString(exSummaryView.getOwner()));
         } else {
             log.debug("exSummaryView in Method fillBorrower  is Null. {}",exSummaryView);
         }
@@ -221,20 +227,20 @@ public class PDFExecutive_Summary implements Serializable {
         log.debug("exSumCharacteristicView: {}",exSumCharacteristicView);
 
         if(!Util.isNull(exSumCharacteristicView)){
-            characteristicExSumReport.setCustomer(exSumCharacteristicView.getCustomer());
-            characteristicExSumReport.setCurrentDBR(exSumCharacteristicView.getCurrentDBR());
-            characteristicExSumReport.setFinalDBR(exSumCharacteristicView.getFinalDBR());
-            characteristicExSumReport.setIncome(exSumCharacteristicView.getIncome());
-            characteristicExSumReport.setRecommendedWCNeed(exSumCharacteristicView.getRecommendedWCNeed());
-            characteristicExSumReport.setActualWC(exSumCharacteristicView.getActualWC());
+            characteristicExSumReport.setCustomer(Util.checkNullString(exSumCharacteristicView.getCustomer()));
+            characteristicExSumReport.setCurrentDBR(Util.convertNullToZERO(exSumCharacteristicView.getCurrentDBR()));
+            characteristicExSumReport.setFinalDBR(Util.convertNullToZERO(exSumCharacteristicView.getFinalDBR()));
+            characteristicExSumReport.setIncome(Util.convertNullToZERO(exSumCharacteristicView.getIncome()));
+            characteristicExSumReport.setRecommendedWCNeed(Util.convertNullToZERO(exSumCharacteristicView.getRecommendedWCNeed()));
+            characteristicExSumReport.setActualWC(Util.convertNullToZERO(exSumCharacteristicView.getActualWC()));
             characteristicExSumReport.setStartBusinessDate(exSumCharacteristicView.getStartBusinessDate());
-            characteristicExSumReport.setYearInBusiness(exSumCharacteristicView.getYearInBusiness());
-            characteristicExSumReport.setSalePerYearBDM(exSumCharacteristicView.getSalePerYearBDM());
-            characteristicExSumReport.setSalePerYearUW(exSumCharacteristicView.getSalePerYearUW());
-            characteristicExSumReport.setGroupSaleBDM(exSumCharacteristicView.getGroupSaleBDM());
-            characteristicExSumReport.setGroupSaleUW(exSumCharacteristicView.getGroupSaleUW());
-            characteristicExSumReport.setGroupExposureBDM(exSumCharacteristicView.getGroupExposureBDM());
-            characteristicExSumReport.setGroupExposureUW(exSumCharacteristicView.getGroupExposureUW());
+            characteristicExSumReport.setYearInBusiness(Util.checkNullString(exSumCharacteristicView.getYearInBusiness()));
+            characteristicExSumReport.setSalePerYearBDM(Util.convertNullToZERO(exSumCharacteristicView.getSalePerYearBDM()));
+            characteristicExSumReport.setSalePerYearUW(Util.convertNullToZERO(exSumCharacteristicView.getSalePerYearUW()));
+            characteristicExSumReport.setGroupSaleBDM(Util.convertNullToZERO(exSumCharacteristicView.getGroupSaleBDM()));
+            characteristicExSumReport.setGroupSaleUW(Util.convertNullToZERO(exSumCharacteristicView.getGroupSaleUW()));
+            characteristicExSumReport.setGroupExposureBDM(Util.convertNullToZERO(exSumCharacteristicView.getGroupExposureBDM()));
+            characteristicExSumReport.setGroupExposureUW(Util.convertNullToZERO(exSumCharacteristicView.getGroupExposureUW()));
         } else {
             log.debug("exSumCharacteristicView in Method fillBorrowerCharacteristic is Null. {}",exSumCharacteristicView);
         }
@@ -243,27 +249,27 @@ public class PDFExecutive_Summary implements Serializable {
         ExSumBusinessInfoView exSumBusinessInfoView = exSummaryView.getExSumBusinessInfoView();
 
         if (!Util.isNull(exSumBusinessInfoView)){
-            characteristicExSumReport.setNetFixAsset(exSumBusinessInfoView.getNetFixAsset());
-            characteristicExSumReport.setNoOfEmployee(exSumBusinessInfoView.getNoOfEmployee());
-            characteristicExSumReport.setBizProvince(exSumBusinessInfoView.getBizProvince());
-            characteristicExSumReport.setBizType(exSumBusinessInfoView.getBizType());
-            characteristicExSumReport.setBizGroup(exSumBusinessInfoView.getBizGroup());
-            characteristicExSumReport.setBizCode(exSumBusinessInfoView.getBizCode());
-            characteristicExSumReport.setBizDesc(exSumBusinessInfoView.getBizDesc());
-            characteristicExSumReport.setQualitativeClass(exSumBusinessInfoView.getQualitativeClass());
-            characteristicExSumReport.setBizSize(exSumBusinessInfoView.getBizSize());
-            characteristicExSumReport.setBDM(exSumBusinessInfoView.getBDM());
-            characteristicExSumReport.setUW(exSumBusinessInfoView.getUW());
-            characteristicExSumReport.setAR(exSumBusinessInfoView.getAR());
-            characteristicExSumReport.setAP(exSumBusinessInfoView.getAP());
-            characteristicExSumReport.setINV(exSumBusinessInfoView.getINV());
+            characteristicExSumReport.setNetFixAsset(Util.convertNullToZERO(exSumBusinessInfoView.getNetFixAsset()));
+            characteristicExSumReport.setNoOfEmployee(Util.convertNullToZERO(exSumBusinessInfoView.getNoOfEmployee()));
+            characteristicExSumReport.setBizProvince(Util.checkNullString(exSumBusinessInfoView.getBizProvince()));
+            characteristicExSumReport.setBizType(Util.checkNullString(exSumBusinessInfoView.getBizType()));
+            characteristicExSumReport.setBizGroup(Util.checkNullString(exSumBusinessInfoView.getBizGroup()));
+            characteristicExSumReport.setBizCode(Util.checkNullString(exSumBusinessInfoView.getBizCode()));
+            characteristicExSumReport.setBizDesc(Util.checkNullString(exSumBusinessInfoView.getBizDesc()));
+            characteristicExSumReport.setQualitativeClass(Util.checkNullString(exSumBusinessInfoView.getQualitativeClass()));
+            characteristicExSumReport.setBizSize(Util.convertNullToZERO(exSumBusinessInfoView.getBizSize()));
+            characteristicExSumReport.setBDM(Util.convertNullToZERO(exSumBusinessInfoView.getBDM()));
+            characteristicExSumReport.setUW(Util.convertNullToZERO(exSumBusinessInfoView.getUW()));
+            characteristicExSumReport.setAR(Util.convertNullToZERO(exSumBusinessInfoView.getAR()));
+            characteristicExSumReport.setAP(Util.convertNullToZERO(exSumBusinessInfoView.getAP()));
+            characteristicExSumReport.setINV(Util.convertNullToZERO(exSumBusinessInfoView.getINV()));
         } else {
             log.debug("exSumBusinessInfoView in Mrthod fillBorrowerCharacteristic is Null. {}",exSumBusinessInfoView);
         }
 
         if(!Util.isNull(exSummaryView)){
-            characteristicExSumReport.setBusinessOperationActivity(exSummaryView.getBusinessOperationActivity());
-            characteristicExSumReport.setBusinessPermission(exSummaryView.getBusinessPermission());
+            characteristicExSumReport.setBusinessOperationActivity(Util.checkNullString(exSummaryView.getBusinessOperationActivity()));
+            characteristicExSumReport.setBusinessPermission(Util.checkNullString(exSummaryView.getBusinessPermission()));
             characteristicExSumReport.setExpiryDate(exSummaryView.getExpiryDate());
         } else {
             log.debug("exSummaryView in Method fillBorrowerCharacteristic is Null. {}",exSummaryView);
@@ -281,16 +287,16 @@ public class PDFExecutive_Summary implements Serializable {
 
         if(!Util.isNull(movementViewList)){
             for (ExSumAccountMovementView movementView:movementViewList){
-                movementExSumReport.setOdLimit(movementView.getOdLimit());
-                movementExSumReport.setUtilization(movementView.getUtilization());
-                movementExSumReport.setSwing(movementView.getSwing());
-                movementExSumReport.setOverLimitTimes(movementView.getOverLimitTimes());
-                movementExSumReport.setOverLimitDays(movementExSumReport.getOverLimitDays());
-                movementExSumReport.setChequeReturn(movementView.getChequeReturn());
-                movementExSumReport.setCashFlow(movementView.getCashFlow());
-                movementExSumReport.setCashFlowLimit(movementView.getCashFlowLimit());
-                movementExSumReport.setTradeChequeReturnAmount(movementExSumReport.getTradeChequeReturnPercent());
-                movementExSumReport.setTradeChequeReturnPercent(movementExSumReport.getTradeChequeReturnPercent());
+                movementExSumReport.setOdLimit(Util.convertNullToZERO(movementView.getOdLimit()));
+                movementExSumReport.setUtilization(Util.convertNullToZERO(movementView.getUtilization()));
+                movementExSumReport.setSwing(Util.convertNullToZERO(movementView.getSwing()));
+                movementExSumReport.setOverLimitTimes(Util.convertNullToZERO(movementView.getOverLimitTimes()));
+                movementExSumReport.setOverLimitDays(Util.convertNullToZERO(movementView.getOverLimitDays()));
+                movementExSumReport.setChequeReturn(Util.convertNullToZERO(movementView.getChequeReturn()));
+                movementExSumReport.setCashFlow(Util.convertNullToZERO(movementView.getCashFlow()));
+                movementExSumReport.setCashFlowLimit(Util.convertNullToZERO(movementView.getCashFlowLimit()));
+                movementExSumReport.setTradeChequeReturnAmount(Util.convertNullToZERO(movementView.getTradeChequeReturnPercent()));
+                movementExSumReport.setTradeChequeReturnPercent(Util.convertNullToZERO(movementView.getTradeChequeReturnPercent()));
             }
         } else {
             log.debug("movementViewList in Method fillAccountMovement id Null. {}",movementViewList);
@@ -303,11 +309,11 @@ public class PDFExecutive_Summary implements Serializable {
         CollateralExSumReport collateralExSumReport = new CollateralExSumReport();
 
         if (!Util.isNull(exSummary)){
-            collateralExSumReport.setCashCollateralValue(exSummary.getCashCollateralValue());
-            collateralExSumReport.setCoreAssetValue(exSummary.getCoreAssetValue());
-            collateralExSumReport.setNoneCoreAssetValue(exSummary.getNoneCoreAssetValue());
-            collateralExSumReport.setLimitApprove(exSummary.getLimitApprove());
-            collateralExSumReport.setPercentLTV(exSummary.getPercentLTV());
+            collateralExSumReport.setCashCollateralValue(Util.convertNullToZERO(exSummary.getCashCollateralValue()));
+            collateralExSumReport.setCoreAssetValue(Util.convertNullToZERO(exSummary.getCoreAssetValue()));
+            collateralExSumReport.setNoneCoreAssetValue(Util.convertNullToZERO(exSummary.getNoneCoreAssetValue()));
+            collateralExSumReport.setLimitApprove(Util.convertNullToZERO(exSummary.getLimitApprove()));
+            collateralExSumReport.setPercentLTV(Util.convertNullToZERO(exSummary.getPercentLTV()));
         } else {
             log.debug("exSummary is Method fillCollateral is Null. {}",exSummary);
         }
@@ -320,14 +326,14 @@ public class PDFExecutive_Summary implements Serializable {
         ExSumCreditRiskInfoView exSumCreditRiskInfoView = exSummaryView.getExSumCreditRiskInfoView();
 
         if (!Util.isNull(exSumCreditRiskInfoView)){
-            riskInfoExSumReport.setRiskCusType(exSumCreditRiskInfoView.getRiskCusType());
-            riskInfoExSumReport.setBotClass(exSumCreditRiskInfoView.getBotClass());
-            riskInfoExSumReport.setReason(exSumCreditRiskInfoView.getReason());
+            riskInfoExSumReport.setRiskCusType(Util.checkNullString(exSumCreditRiskInfoView.getRiskCusType()));
+            riskInfoExSumReport.setBotClass(Util.checkNullString(exSumCreditRiskInfoView.getBotClass()));
+            riskInfoExSumReport.setReason(Util.checkNullString(exSumCreditRiskInfoView.getReason()));
             riskInfoExSumReport.setLastReviewDate(exSumCreditRiskInfoView.getLastReviewDate());
             riskInfoExSumReport.setNextReviewDate(exSumCreditRiskInfoView.getNextReviewDate());
             riskInfoExSumReport.setExtendedReviewDate(exSumCreditRiskInfoView.getExtendedReviewDate());
-            riskInfoExSumReport.setIndirectCountryName(exSumCreditRiskInfoView.getIndirectCountryName());
-            riskInfoExSumReport.setPercentExport(exSumCreditRiskInfoView.getPercentExport());
+            riskInfoExSumReport.setIndirectCountryName(Util.checkNullString(exSumCreditRiskInfoView.getIndirectCountryName()));
+            riskInfoExSumReport.setPercentExport(Util.convertNullToZERO(exSumCreditRiskInfoView.getPercentExport()));
         } else {
             log.debug("exSumCreditRiskInfoView in Method fillCreditRisk is Null. {}",exSumCreditRiskInfoView);
         }
@@ -342,11 +348,11 @@ public class PDFExecutive_Summary implements Serializable {
         if(!Util.isNull(exSumDecisionView)){
             for (ExSumDecisionView decisionView : exSumDecisionView){
                 decisionExSumReport.setId(decisionView.getId());
-                decisionExSumReport.setFlag(decisionView.getFlag());
-                decisionExSumReport.setGroup(decisionView.getGroup());
-                decisionExSumReport.setRuleName(decisionView.getRuleName());
-                decisionExSumReport.setCusName(decisionView.getCusName());
-                decisionExSumReport.setDeviationReason(decisionView.getDeviationReason());
+                decisionExSumReport.setFlag(Util.checkNullString(decisionView.getFlag()));
+                decisionExSumReport.setGroup(Util.checkNullString(decisionView.getGroup()));
+                decisionExSumReport.setRuleName(Util.checkNullString(decisionView.getRuleName()));
+                decisionExSumReport.setCusName(Util.checkNullString(decisionView.getCusName()));
+                decisionExSumReport.setDeviationReason(Util.checkNullString(decisionView.getDeviationReason()));
             }
         } else {
             log.debug("ExSumDecisionView in Method fillDecision is Null. {}",exSumDecisionView);
@@ -359,16 +365,16 @@ public class PDFExecutive_Summary implements Serializable {
         BizSupportExSumReport bizSupportExSumReport = new BizSupportExSumReport();
 
         if (!Util.isNull(exSummaryView)){
-            bizSupportExSumReport.setNatureOfBusiness(exSummaryView.getNatureOfBusiness());
-            bizSupportExSumReport.setHistoricalAndReasonOfChange(exSummaryView.getHistoricalAndReasonOfChange());
-            bizSupportExSumReport.setTmbCreditHistory(exSummaryView.getTmbCreditHistory());
-            bizSupportExSumReport.setSupportReason(exSummaryView.getSupportReason());
+            bizSupportExSumReport.setNatureOfBusiness(Util.checkNullString(exSummaryView.getNatureOfBusiness()));
+            bizSupportExSumReport.setHistoricalAndReasonOfChange(Util.checkNullString(exSummaryView.getHistoricalAndReasonOfChange()));
+            bizSupportExSumReport.setTmbCreditHistory(Util.checkNullString(exSummaryView.getTmbCreditHistory()));
+            bizSupportExSumReport.setSupportReason(Util.checkNullString(exSummaryView.getSupportReason()));
             bizSupportExSumReport.setRm008Code(exSummaryView.getRm008Code());
-            bizSupportExSumReport.setRm008Remark(exSummaryView.getRm008Remark());
+            bizSupportExSumReport.setRm008Remark(Util.checkNullString(exSummaryView.getRm008Remark()));
             bizSupportExSumReport.setRm204Code(exSummaryView.getRm204Code());
-            bizSupportExSumReport.setRm204Remark(exSummaryView.getRm204Remark());
+            bizSupportExSumReport.setRm204Remark(Util.checkNullString(exSummaryView.getRm204Remark()));
             bizSupportExSumReport.setRm020Code(exSummaryView.getRm020Code());
-            bizSupportExSumReport.setRm020Remark(exSummaryView.getRm020Remark());
+            bizSupportExSumReport.setRm020Remark(Util.checkNullString(exSummaryView.getRm020Remark()));
         } else {
             log.debug("exSummaryView in Method fillBizSupport is Null. {}",exSummaryView);
         }
@@ -381,18 +387,18 @@ public class PDFExecutive_Summary implements Serializable {
         List<ExSumReasonView> exSumReasonViews = exSummaryView.getDeviateCode();
 
         if (!Util.isNull(exSummaryView)){
-            uwDecisionExSumReport.setUwCode(exSummaryView.getUwCode());
-            uwDecisionExSumReport.setName(exSummaryView.getApproveAuthority().getName());
+            uwDecisionExSumReport.setUwCode(Util.checkNullString(exSummaryView.getUwCode()));
+            uwDecisionExSumReport.setName(Util.checkNullString(exSummaryView.getApproveAuthority().getName()));
             uwDecisionExSumReport.setDecision(exSummaryView.getDecision());
-            uwDecisionExSumReport.setUwComment(exSummaryView.getUwComment());
+            uwDecisionExSumReport.setUwComment(Util.checkNullString(exSummaryView.getUwComment()));
         } else {
             log.debug("exSummaryView in Method fillUWDecision is Null. {}",exSummaryView);
         }
 
         if(!Util.isNull(exSumReasonViews)){
             for (ExSumReasonView sumReasonView : exSumReasonViews) {
-                uwDecisionExSumReport.setCode(sumReasonView.getCode());
-                uwDecisionExSumReport.setDescription(sumReasonView.getDescription());
+                uwDecisionExSumReport.setCode(Util.checkNullString(sumReasonView.getCode()));
+                uwDecisionExSumReport.setDescription(Util.checkNullString(sumReasonView.getDescription()));
             }
         } else {
             log.debug("exSumReasonViews in Method fillUWDecision is Null. {}",exSumReasonViews);
