@@ -403,11 +403,14 @@ public class BankStatementSummary implements Serializable {
 
                 try {
                     bankStmtControl.bankStmtSumTotalCalculation(summaryView, true);
-//                    summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
-//                    // update related parts
-//                    dbrControl.updateValueOfDBR(workCaseId);
-//                    exSummaryControl.calForBankStmtSummary(workCaseId);
-//                    bizInfoSummaryControl.calByBankStatement(workCaseId);
+                    summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
+                    // update related parts
+                    dbrControl.updateValueOfDBR(workCaseId);
+                    exSummaryControl.calForBankStmtSummary(workCaseId);
+                    bizInfoSummaryControl.calByBankStatement(workCaseId);
+
+                    onCreation();
+
                 }
                 catch (Exception e) {
                     log.debug("", e);
@@ -496,11 +499,6 @@ public class BankStatementSummary implements Serializable {
             dbrControl.updateValueOfDBR(workCaseId);
             exSummaryControl.calForBankStmtSummary(workCaseId);
             bizInfoSummaryControl.calByBankStatement(workCaseId);
-
-            // reset to default value
-            isRetrieveSuccess = false;
-            hasDataFromRetrieve = false;
-            isNotAlignWithPrevData = false;
 
             onCreation();
 
