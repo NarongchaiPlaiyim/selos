@@ -6,6 +6,7 @@ import com.clevel.selos.dao.working.BizInfoSummaryDAO;
 import com.clevel.selos.dao.working.BizProductDetailDAO;
 import com.clevel.selos.dao.working.BizStakeHolderDetailDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.StatusValue;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.User;
@@ -370,6 +371,20 @@ public class BizInfoDetailControl extends BusinessControl {
             log.info("supplier size {}",bizInfoDetailView.getSupplierDetailList().size());
             bizInfoDetailView.setBuyerDetailList(buyerDetailList);
             log.info("buyer size {}",bizInfoDetailView.getBuyerDetailList().size());
+
+            //for hidden field on status below UW
+            Long statusId = 0L;
+            HttpSession session = FacesUtil.getSession(true);
+            if(session.getAttribute("statusId") != null){
+                statusId = Long.parseLong(session.getAttribute("statusId").toString());
+            }
+
+            if(statusId >= StatusValue.REVIEW_CA.value()){
+                bizInfoDetailView.setSupplierUWAdjustPercentCredit(null);
+                bizInfoDetailView.setSupplierUWAdjustCreditTerm(null);
+                bizInfoDetailView.setBuyerUWAdjustPercentCredit(null);
+                bizInfoDetailView.setBuyerUWAdjustCreditTerm(null);
+            }
 
             return bizInfoDetailView;
 
