@@ -89,8 +89,6 @@ public class BankStatementDetail implements Serializable {
 
     //View form
     private BankStmtView bankStmtView;
-    private Date currentDate;
-    private String currentDateDDMMYY;
 
     enum ModeForButton { ADD, EDIT }
     private ModeForButton modeForButton;
@@ -108,8 +106,6 @@ public class BankStatementDetail implements Serializable {
 
     //Session
     private long workCaseId;
-    private long stepId;
-    //private String userId;
 
     private boolean bankAccTypeSelectRequired;
     private boolean roleUW;
@@ -118,26 +114,12 @@ public class BankStatementDetail implements Serializable {
     public BankStatementDetail() {
     }
 
-    @PostConstruct
-    public void onCreation() {
-        preRender();
-        initViewFormAndSelectItems();
-        checkRequiredBankAccTypeSelected();
-        clickSave = false;
-    }
-
     private void preRender() {
         log.info("preRender ::: setSession ");
-        /*HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("workCaseId", new Long(2));
-        session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);*/
 
         HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            //userId = session.getAttribute("userId").toString();
         } else {
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
@@ -150,9 +132,9 @@ public class BankStatementDetail implements Serializable {
         }
 
         if (FacesUtil.getSessionMapValue("bankStmtSumView") == null
-            || FacesUtil.getSessionMapValue("isTmbBank") == null
-            || FacesUtil.getSessionMapValue("lastMonthDate") == null
-            || FacesUtil.getSessionMapValue("numberOfMonths") == null) {
+                || FacesUtil.getSessionMapValue("isTmbBank") == null
+                || FacesUtil.getSessionMapValue("lastMonthDate") == null
+                || FacesUtil.getSessionMapValue("numberOfMonths") == null) {
 
             log.error("Some necessary parameters from Bank statement summary is null!");
             FacesUtil.redirect("/site/bankStatementSummary.jsf");
@@ -168,26 +150,36 @@ public class BankStatementDetail implements Serializable {
                     isTmbBank, lastMonthDate, numberOfMonths, null == bankStmtView);
 
             if (numberOfMonths == 0) {
-                log.error("Number of months from Bank statement summary is zero(0)!, Can not be generate Bank statement detail table.");
+                log.error("Number of months from Bank statement summary is zero(0)!, Can not generate Bank statement detail table.");
                 FacesUtil.redirect("/site/bankStatementSummary.jsf");
                 return;
             }
         }
 
-        // Check Role
+        // set Role
         int roleId = bankStmtControl.getUserRoleId();
         if (RoleValue.UW.id() == roleId) {
             roleUW = true;
         }
     }
 
+    @PostConstruct
+    public void onCreation() {
+        preRender();
+        initViewFormAndSelectItems();
+        checkRequiredBankAccTypeSelected();
+        clickSave = false;
+    }
+
     private void initViewFormAndSelectItems() {
         if (bankStmtView == null) {
+            log.debug("Create new data.");
             // ADD NEW - Click Add New from Summary page
             bankStmtView = new BankStmtView();
             bankStmtView.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));
         }
         else {
+            log.debug("Init exist data from summary page.");
             // Click Edit from Summary page
             // - Edit already exist Bank statement from Database
             // - Edit Bank statement from DWH (NOT EXIST from Database) will be generate detail from
@@ -200,7 +192,7 @@ public class BankStatementDetail implements Serializable {
 
         bankStmtControl.sortAsOfDateBankStmtDetails(bankStmtView.getBankStmtDetailViewList(), SortOrder.ASCENDING);
 
-        // select items
+        log.debug("Load drop-down items from database.");
         bankViewList = new ArrayList<BankView>();
         if (isTmbBank) {
             bankViewList.add(bankTransform.getBankView(bankDAO.getTMBBank()));
@@ -403,18 +395,6 @@ public class BankStatementDetail implements Serializable {
 
     public Date getCurrentDate() {
         return DateTime.now().toDate();
-    }
-
-    public void setCurrentDate(Date currentDate) {
-        this.currentDate = currentDate;
-    }
-
-    public String getCurrentDateDDMMYY() {
-        return currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
-    }
-
-    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
-        this.currentDateDDMMYY = currentDateDDMMYY;
     }
 
     public boolean isBankAccTypeSelectRequired() {
