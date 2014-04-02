@@ -424,7 +424,6 @@
                                                             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                             <clv:BECalendar showOn="focus" showButtonPanel="true" navigator="true"
                                                                             yearRange="1950:2100"
-                                                                            maxdate="#{bankStatementDetail.currentDateDDMMYY}"
                                                                             pattern="dd/MM/yyyy"
                                                                             value="#{item.dateOfMaxBalance}"
                                                                             locale="th_TH"
@@ -457,7 +456,6 @@
                                                             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                             <clv:BECalendar showOn="focus" showButtonPanel="true" navigator="true"
                                                                             yearRange="1950:2100"
-                                                                            maxdate="#{bankStatementDetail.currentDateDDMMYY}"
                                                                             pattern="dd/MM/yyyy"
                                                                             value="#{item.dateOfMinBalance}"
                                                                             locale="th_TH"
