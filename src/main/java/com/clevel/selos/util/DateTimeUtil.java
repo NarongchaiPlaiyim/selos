@@ -32,6 +32,7 @@ public class DateTimeUtil implements Serializable {
     }
 
     public static int compareDate(Date targetDate,Date referenceDate) {
+        log.debug("compareDate() targetDate: {}, referenceDate: {}", targetDate, referenceDate);
         DateTime referenceDateTime = new DateTime(getOnlyDate(referenceDate));
         DateTime targetDateTime = new DateTime(getOnlyDate(targetDate));
         return targetDateTime.compareTo(referenceDateTime);

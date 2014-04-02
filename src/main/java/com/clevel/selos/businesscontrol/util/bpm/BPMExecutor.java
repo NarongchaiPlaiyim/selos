@@ -45,7 +45,7 @@ public class BPMExecutor implements Serializable {
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         Action action = actionDAO.findById(actionCode);
         Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
-        List<Customer> customerList = customerDAO.findCustomerByWorkCasePreScreenId(workCasePreScreenId);
+        List<Customer> customerList = customerDAO.getBorrowerByWorkCaseId(0, workCasePreScreenId);
 
         log.debug("assignChecker : workCasePreScreenId : {}, queueName : {}, checkerId : {}, actionCode : {}", workCasePrescreen, queueName, checkerId, actionCode);
         if(action != null && prescreen != null){
@@ -54,9 +54,17 @@ public class BPMExecutor implements Serializable {
             fields.put("Action_Name", action.getDescription());
             fields.put("BDMCheckerUserName", checkerId);
             fields.put("ProductGroup", prescreen.getProductGroup().getName());
-            for(Customer item : customerList){
-                fields.put("BorrowerName", item.getNameTh());
+            //Send only 1st Borrower
+            if(customerList != null && customerList.size() > 0){
+                String borrowerName = customerList.get(0).getNameTh();
+                if(customerList.get(0).getLastNameTh() != null){
+                    borrowerName = borrowerName + " " + customerList.get(0).getLastNameTh();
+                }
+                fields.put("BorrowerName", borrowerName);
             }
+            /*for(Customer item : customerList){
+                fields.put("BorrowerName", item.getNameTh());
+            }*/
             if(!Util.isEmpty(remark)){
                 fields.put("Remark", remark);
             }

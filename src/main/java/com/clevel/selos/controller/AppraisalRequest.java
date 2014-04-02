@@ -270,13 +270,18 @@ public class AppraisalRequest implements Serializable {
 
 
     public boolean appraisalDetailViewMandate(){
-        log.debug("-- appraisalDetailViewMandate()");
+        log.debug("-- appraisalDetailViewMandate() ::: appraisalDetailViewDialog : {}", appraisalDetailViewDialog);
         boolean result = true;
-        if(Util.isZero(appraisalDetailViewDialog.getTitleDeed().length())){
+        if(!Util.isNull(appraisalDetailViewDialog.getTitleDeed())){
+            if(Util.isZero(appraisalDetailViewDialog.getTitleDeed().length())){
+                titleDeedFlag = true;
+                result = false;
+            } else {
+                titleDeedFlag = false;
+            }
+        } else {
             titleDeedFlag = true;
             result = false;
-        } else {
-            titleDeedFlag = false;
         }
         if(!appraisalDetailViewDialog.isPurposeNewAppraisalB() && !appraisalDetailViewDialog.isPurposeReviewAppraisalB() && !appraisalDetailViewDialog.isPurposeReviewBuildingB()){
             purposeFlag = true;

@@ -185,7 +185,7 @@ public class BankStatementDetail implements Serializable {
         if (bankStmtView == null) {
             // ADD NEW - Click Add New from Summary page
             bankStmtView = new BankStmtView();
-            bankStmtView.setBankStmtDetailViewList(generateBankStmtDetail());
+            bankStmtView.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));
         }
         else {
             // Click Edit from Summary page
@@ -194,7 +194,7 @@ public class BankStatementDetail implements Serializable {
             if (bankStmtView.getBankStmtDetailViewList() != null && bankStmtView.getBankStmtDetailViewList().size() > 0) {
                 numberOfMonths = Util.safetyList(bankStmtView.getBankStmtDetailViewList()).size();
             } else {
-                bankStmtView.setBankStmtDetailViewList(generateBankStmtDetail());
+                bankStmtView.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));
             }
         }
 
@@ -211,19 +211,6 @@ public class BankStatementDetail implements Serializable {
         bankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.getBankAccountTypeList());
         othBankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.getOtherAccountTypeList());
         accStatusViewList = accountStatusTransform.transformToViewList(accountStatusDAO.findAll());
-    }
-
-    private List<BankStmtDetailView> generateBankStmtDetail() {
-        List<BankStmtDetailView> bankStmtDetailViewList;
-        bankStmtDetailViewList = new ArrayList<BankStmtDetailView>();
-        Date date;
-        for (int i = 0; i < numberOfMonths; i++) {
-            BankStmtDetailView bankStmtDetailView = new BankStmtDetailView();
-            date = DateTimeUtil.getOnlyDatePlusMonth(lastMonthDate, -i);
-            bankStmtDetailView.setAsOfDate(date);
-            bankStmtDetailViewList.add(bankStmtDetailView);
-        }
-        return bankStmtDetailViewList;
     }
 
     public void onSave() {

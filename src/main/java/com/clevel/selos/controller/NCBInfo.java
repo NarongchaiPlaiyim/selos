@@ -416,7 +416,8 @@ public class NCBInfo implements Serializable {
         log.debug("onSaveNcb::::");
         log.debug("ncbDetailViewList.size() ::: {} ", ncbDetailViewList.size());
         try {
-            if (ncbDetailViewList.size() > 0) {
+            //Remove checked NCB Detail list
+            //if (ncbDetailViewList.size() > 0) {
                 ncbInfoControl.onSaveNCBToDB(ncbInfoView, ncbDetailViewList);
                 dbrControl.updateValueOfDBR(workCaseId);
                 messageHeader = msg.get("app.header.save.success");
@@ -424,11 +425,11 @@ public class NCBInfo implements Serializable {
                 creditFacProposeControl.calWC(workCaseId);
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            } else {
-                messageHeader = msg.get("app.ncb.response.cannot.save");
-                message = msg.get("app.ncb.response.desc.cannot.save");
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            }
+            //} else {
+            //    messageHeader = msg.get("app.ncb.response.cannot.save");
+            //    message = msg.get("app.ncb.response.desc.cannot.save");
+            //    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            //}
 
 
         } catch (Exception ex) {

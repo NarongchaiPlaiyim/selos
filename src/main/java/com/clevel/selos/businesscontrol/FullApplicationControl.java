@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.dao.history.ReturnInfoHistoryDAO;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.relation.RelTeamUserDetailsDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionCode;
@@ -11,6 +12,7 @@ import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.history.ReturnInfoHistory;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.model.view.ReturnInfoView;
 import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.transform.StepTransform;
@@ -68,6 +70,11 @@ public class FullApplicationControl extends BusinessControl {
     StepTransform stepTransform;
     @Inject
     StepDAO stepDAO;
+    @Inject
+    RelTeamUserDetailsDAO relTeamUserDetailsDAO;
+
+    @Inject
+    AppraisalRequestControl appraisalRequestControl;
 
     @Inject
     BPMExecutor bpmExecutor;
@@ -85,10 +92,13 @@ public class FullApplicationControl extends BusinessControl {
         return abdmUserList;
     }
 
-    public List<User> getZMUserList(){
-        User currentUser = getCurrentUser();
+    public List<User> getUserList(User currentUser){
+        List<User> zmUserList = null;
+        List<UserTeam> zmUserTeamList = relTeamUserDetailsDAO.getTeamHeadLeadByTeamId(currentUser.getTeam().getId());
+        if(zmUserTeamList!=null && zmUserTeamList.size()>0){
+            zmUserList = userDAO.findUserZoneList(zmUserTeamList);
+        }
 
-        List<User> zmUserList = userDAO.findUserZoneList(currentUser);
         if(zmUserList == null){
             zmUserList = new ArrayList<User>();
         }
@@ -156,10 +166,10 @@ public class FullApplicationControl extends BusinessControl {
 
         //TODO: get total com and retail
 
-        //bpmExecutor.submitZM(workCaseId, queueName, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, ActionCode.SUBMIT_CA_BDM.getVal());
+        bpmExecutor.submitZM(workCaseId, queueName, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, ActionCode.SUBMIT_CA_BDM.getVal());
     }
 
-    public void requestAppraisalBDM(long workCasePreScreenId, long workCaseId) throws Exception{
+    /*public void requestAppraisalBDM(long workCasePreScreenId, long workCaseId) throws Exception{
         //update request appraisal flag
         if(workCasePreScreenId != 0){
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
@@ -173,28 +183,63 @@ public class FullApplicationControl extends BusinessControl {
             log.error("exception while Request Appraisal (BDM), can not find workcase or workcaseprescreen.");
             throw new Exception("exception while Request Appraisal, can not find case.");
         }
-    }
+    }*/
 
-    public void requestAppraisal(long workCasePreScreenId, long workCaseId) throws Exception{
+    public void requestAppraisal(AppraisalView appraisalView, long workCasePreScreenId, long workCaseId) throws Exception{
+        //Update Request Appraisal Flag
+        WorkCasePrescreen workCasePrescreen;
+        WorkCase workCase;
+        String appNumber = "";
+        ProductGroup productGroup = null;
+        RequestType requestType = null;
+
+        //Create WorkCaseAppraisal
+        WorkCaseAppraisal workCaseAppraisal = createWorkCaseAppraisal(workCasePreScreenId, workCaseId);
+        log.debug("requestAppraisal ::: Create WorkCaseAppraisal Complete.");
+
+        log.debug("requestAppraisal ::: workCaseAppraisal : {}", workCaseAppraisal);
         try{
-            WorkCaseAppraisal workCaseAppraisal = createWorkCaseAppraisal(workCasePreScreenId, workCaseId);
-            try{
-                createWorkItemAppraisal(workCaseAppraisal);
-                log.debug("create workcase for appraisal complete.");
-            }catch (Exception ex){
-                workCaseAppraisalDAO.delete(workCaseAppraisal);
-                log.error("exception while launch workflow for appraisal, remove workcase appraisal.");
-                throw new Exception(Util.getMessageException(ex));
-            }
-        }catch (Exception ex){
-            throw new Exception(ex);
+            bpmExecutor.requestAppraisal(workCaseAppraisal.getAppNumber(), "", workCaseAppraisal.getProductGroup().getName(), workCaseAppraisal.getRequestType().getId(), getCurrentUserID());
+            log.debug("requestAppraisal ::: Create Work Item for appraisal complete.");
+        } catch (Exception ex){
+            log.error("Exception while Create Work Item for Appraisal.");
+            workCaseAppraisalDAO.delete(workCaseAppraisal);
+            throw new Exception("Exception while Create Work Item for Appraisal.");
         }
 
-    }
+        if(workCasePreScreenId != 0){
+            workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
 
-    public void createWorkItemAppraisal(WorkCaseAppraisal workCaseAppraisal) throws Exception{
-        log.debug("requestAppraisal ::: workCaseAppraisal : {}", workCaseAppraisal);
-        bpmExecutor.requestAppraisal(workCaseAppraisal.getAppNumber(), "", workCaseAppraisal.getProductGroup().getName(), workCaseAppraisal.getRequestType().getId(), getCurrentUserID());
+            if(workCasePrescreen != null){
+                workCasePrescreen.setRequestAppraisal(1);
+                appNumber = workCasePrescreen.getAppNumber();
+                productGroup = workCasePrescreen.getProductGroup();
+                requestType = workCasePrescreen.getRequestType();
+                workCasePrescreenDAO.persist(workCasePrescreen);
+            } else{
+                throw new Exception("exception while request appraisal, cause can not find data from prescreen");
+            }
+        } else if(workCaseId != 0) {
+            workCase = workCaseDAO.findById(workCaseId);
+
+            if(workCase != null){
+                workCase.setRequestAppraisal(1);
+                appNumber = workCase.getAppNumber();
+                productGroup = workCase.getProductGroup();
+                requestType = workCase.getRequestType();
+                workCaseDAO.persist(workCase);
+            } else{
+                throw new Exception("exception while request appraisal, cause can not find data from full application");
+            }
+        } else {
+            log.error("exception while Request Appraisal (BDM), can not find workcase or workcaseprescreen.");
+            throw new Exception("exception while Request Appraisal, can not find case.");
+        }
+        log.debug("requestAppraisal ::: Update Request Appraisal Flag Complete.");
+
+        //Save Appraisal Request Detail
+        appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, workCasePreScreenId);
+        log.debug("requestAppraisal ::: Save Appraisal Request Complete.");
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)

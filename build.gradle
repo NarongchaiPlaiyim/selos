@@ -3,10 +3,10 @@ apply plugin: 'war'
 sourceCompatibility = 1.6
 
 project.ext {
-    projectRoot='D:/C-Level/SE_LOS/FullAppSpace/selos'
+    projectRoot='C:/Work/TMB/SELOS/Workspace/selos_update/selos'
     beanXML= projectRoot+'/src/main/webapp/WEB-INF/beans.xml'
     persistenceXML = projectRoot+'/src/main/resources/META-INF/persistence.bank.xml'
-    selosLib='D:/C-Level/SE_LOS/_shared_library/_selos_lib_compile'
+    selosLib='C:/Work/TMB/SELOS/Server/Gradle/gradle-build-lib/library'
     versionString = ''
     versionNumber = 'vvv'
     buildNumber = '0'
@@ -210,7 +210,7 @@ war {
 //    war.rootSpec.exclude 'com/clevel/selos/model/db'
     war.rootSpec.exclude 'com/clevel/selos/model'
     war.rootSpec.exclude 'com/clevel/selos/dao'
-    war.rootSpec.exclude 'com/clevel/selos/report'
+    //war.rootSpec.exclude 'com/clevel/selos/report'
     war.rootSpec.exclude 'META-INF/persistence*'
 
     //************* Transformation ****************

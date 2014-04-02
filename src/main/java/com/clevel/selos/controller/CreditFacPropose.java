@@ -557,11 +557,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                         }
                     }
 
-
-                    if (newFeeDetailViewList != null) {
-                        log.debug("newFeeDetailViewList not null ::: {}", newFeeDetailViewList.size());
-                        newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
-                    }
+                    newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
 
                     log.debug("standardPricingResponse.getPricingInterest() : {}",standardPricingResponse.getPricingInterest());
                     if(standardPricingResponse.getPricingInterest()!=null && standardPricingResponse.getPricingInterest().size()>0){

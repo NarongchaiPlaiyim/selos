@@ -41,34 +41,18 @@
                     <p:resetInput target=":returnMakerDlgForm"/>
                 </p:commandButton>
                 <!--Check PreScreen (BRMS)-->
-                <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkPreScreen')}"
+                <!--<p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkPreScreen')}"
                                  rendered="#{baseController.checkButton('Check Prescreen') and not baseController.requestAppraisalPage}"
                                  action="#{baseController.onCheckPreScreen}">
-                </p:commandButton>
+                </p:commandButton>-->
                 <!--Request Appraisal Prescreen-->
-                <p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
-                                 rendered="#{baseController.checkButton('Request Appraisal') and baseController.requestAppraisal == 0}}"
-                                 type="button"
-                                 onclick="confrmReqApprPreScreen.show()">
-                    <!--Confirm dialog for Request Appraisal Prescreen-->
-                    <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.requestAppraisal')}" styleClass="left"
-                                     icon="ui-icon-alert"
-                                     widgetVar="confrmReqApprPreScreen" global="false" showEffect="fade"
-                                     rendered="#{baseController.checkButton('Request Appraisal')}">
-                        <p:commandButton value="#{msg.get('app.button.yes')}" styleClass="ui-confirmdialog-yes"
-                                         actionListener="#{baseController.onRequestAppraisal()}"
-                                         process="@this"
-                                         oncomplete="confirmRequestAppraisal.hide()"
-                                         update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
-                        <p:commandButton value="#{msg.get('app.button.no')}" styleClass="ui-confirmdialog-no"
-                                         type="button"
-                                         onclick="confrmReqApprPreScreen.hide()" />
-                    </p:confirmDialog>
-                </p:commandButton>
                 <!--<p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
-                                 rendered="#{baseController.checkButton('Request Appraisal') and baseController.requestAppraisal == 0}}"
-                                 type="button"
-                                 onclick="requeustApprHeaderDlg.show()">
+                                 rendered="#{baseController.checkButton('Request Appraisal')}"
+                                 process="@this"
+                                 actionListener="#{baseController.onOpenRequestAppraisal()}"
+                                 update=":frmMain:reqApprDialogPanel"
+                                 oncomplete="reqApprDlg.show()">
+                    <p:resetInput target=":frmMain:reqApprDialogPanel"/>
                 </p:commandButton>-->
                 <!--Cancel CA-->
                 <p:commandButton id="btnCancelCA" value="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
@@ -105,16 +89,6 @@
                         <p:commandButton value="#{msg.get('app.button.no')}" styleClass="ui-confirmdialog-no"
                                          type="button" onclick="confrmCloseSaleCA.hide()" />
                     </p:confirmDialog>
-                <!--Cancel Appraisal Request (Prescreen)-->
-                <p:commandButton id="btnCancelReqApprPreScreen" value="#{msg.get('app.header.button.cancelAppraisalRequest')}" styleClass="blueButton" title="#{msg.get('app.header.button.cancelAppraisalRequest')}"
-                                 rendered="#{baseController.checkButton('Cancel Appraisal Request')}">
-
-                </p:commandButton>
-                <!--Request for Appraisal (Prescreen)-->
-                <p:commandButton id="btnReqForApprPreScreen" value="#{msg.get('app.header.button.cancelAppraisalRequest')}" styleClass="blueButton" title="#{msg.get('app.header.button.cancelAppraisalRequest')}"
-                                 rendered="#{baseController.checkButton('Request for Appraisal')}">
-
-                </p:commandButton>
             </p:panel>
 
             <!--Stage for FullApplication-->
@@ -130,8 +104,6 @@
                                  rendered="#{baseController.checkButton('View Related Application CA')}" >
 
                 </p:commandButton>
-
-
 
                 <!--Check Criteria-->
                 <p:commandButton id="btnCheckCriteria" value="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkCriteria')}"
@@ -164,6 +136,15 @@
                                  update=":frmMain:returnBDMPanel">
                     <p:resetInput target=":frmMain:returnBDMPanel"/>
                 </p:commandButton>
+                <!--Request Appraisal Fullapp-->
+                <!--<p:commandButton id="btnReqApprFullapp" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
+                                 rendered="#{baseController.checkButton('Request Appraisal')}"
+                                 process="@this"
+                                 actionListener="#{baseController.onOpenRequestAppraisal()}"
+                                 update=":frmMain:reqApprDialogPanel"
+                                 oncomplete="reqApprDlg.show()">
+                    <p:resetInput target=":frmMain:reqApprDialogPanel"/>
+                </p:commandButton>-->
                 <!--Cancel CA FullApplication-->
                 <p:commandButton id="btnCancelCAFullApp" value="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
                                  rendered="#{baseController.checkButton('Cancel CA')}"
@@ -183,20 +164,20 @@
             <!--Stage for Appraisal-->
             <p:panel id="header_panel_appraisal" rendered="#{baseController.stageId == 203}" styleClass="panel">
                 <!-- Appraisal flow : Cancel Appraisal Request -->
-                <p:commandButton id="btnCancelAppraisal" value="Cancel Appraisal Request" styleClass="blueButton" title=""
+                <!--<p:commandButton id="btnCancelAppraisal" value="Cancel Appraisal Request" styleClass="blueButton" title=""
                                  rendered="#{baseController.manageButton.cancelAppraisalButton}">
                     <p:confirmDialog header="Confirmation" message="Are you sure to Cancel Appraisal Request?" styleClass="left"
                                      icon="ui-icon-alert"
                                      widgetVar="confirmCancelAppraisalRequest" global="false" showEffect="fade"
                                      rendered="#{baseController.manageButton.cancelAppraisalButton}">
-                        <!--<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+                        &lt;!&ndash;<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
                                          update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"
                                          actionListener="#{prescreenMaker.onCloseSale()}"
                                          process="@this" oncomplete="confirmCloseSaleCA.hide()"/>
                         <p:commandButton value="No" type="button" onclick="confirmCloseSaleCA.hide()"
-                                         styleClass="ui-confirmdialog-no"/>-->
+                                         styleClass="ui-confirmdialog-no"/>&ndash;&gt;
                     </p:confirmDialog>
-                </p:commandButton>
+                </p:commandButton>-->
                 <!-- Appraisal flow : Return to BDM -->
                 <p:commandButton id="btnReturnAppraisalBDM" value="Return to BDM" styleClass="blueButton" title=""
                                  rendered="#{baseController.manageButton.returnAppraisalBDMButton}">
@@ -400,7 +381,7 @@
     <p:panel id="printReportPanel" styleClass="panel">
         <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"
                   onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-                  modal="true" width="430" height="200">
+                  modal="true" width="750" height="200">
             <ui:include src="/site/dialog/printReportDialog.xhtml"/>
         </p:dialog>
     </p:panel>
@@ -454,12 +435,20 @@
         </p:dialog>
     </p:panel>
 
-    <!--<p:panel id="requestApprHeader" styleClass="panel">
-        <p:dialog id="requestApprHeaderDialog" widgetVar="requeustApprHeaderDlg" header="Request Appraisal"
+    <p:panel id="reqApprPanel" styleClass="panel" rendered="#{baseController.checkButton('Request Appraisal')}">
+        <p:dialog id="reqApprDialog" widgetVar="reqApprDlg" header="Request Appraisal"
                   onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-                  modal="true" width="840" closable="false">
-            <ui:include src="/site/dialog/requestAppraisalDialog.xhtml"/>
+                  modal="true" width="1120" closable="false">
+            <ui:include src="/site/dialog/reqApprDialog.xhtml"/>
         </p:dialog>
-    </p:panel>-->
+    </p:panel>
+
+    <p:panel id="reqApprDetailPanel" styleClass="panel" rendered="#{baseController.checkButton('Request Appraisal')}">
+        <p:dialog id="reqApprDetailDialog" widgetVar="reqApprDetailDlg" header="Appraisal Detail Information"
+                  resizable="false"
+                  modal="true" width="500" height="200" closable="false" >
+            <ui:include src="/site/dialog/reqApprDetailDialog.xhtml"/>
+        </p:dialog>
+    </p:panel>
 
 </ui:composition>

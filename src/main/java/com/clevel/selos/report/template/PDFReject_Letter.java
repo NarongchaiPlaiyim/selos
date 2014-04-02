@@ -48,6 +48,7 @@ public class PDFReject_Letter implements Serializable {
     private CustomerInfoControl customerInfoControl;
 
     private List<CustomerInfoView> customerInfoView;
+    private AppHeaderView appHeaderView;
 
     WorkCase workCase;
 
@@ -81,30 +82,31 @@ public class PDFReject_Letter implements Serializable {
         log.debug("fillAllNameReject. {}");
         init();
         List<RejectLetterReport> reportList = new ArrayList<RejectLetterReport>();
-        RejectLetterReport report = null;
         StringBuilder stringName = new StringBuilder();
 
         int i = 0;
-        if (Util.safetyList(customerInfoView).size() > 0 ){
-            log.debug("customerInfoView. {}",customerInfoView);
-            for (CustomerInfoView view : customerInfoView){
-                i++;
-                report = new RejectLetterReport();
-                stringName = stringName.append(view.getTitleTh().getTitleTh());
-                stringName = stringName.append(view.getFirstNameTh()).append(" ");
-                stringName = stringName.append(view.getLastNameTh());
-                if(i != customerInfoView.size()){
-                    stringName = stringName.append(", ");
-                }
-                report.setName(stringName.toString());
-                log.debug("--getName. {} i {}",report.getName(),i++);
+        HttpSession session = FacesUtil.getSession(true);
+        appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
 
+        if(Util.safetyList(appHeaderView.getBorrowerHeaderViewList()).size() > 0){
+            log.debug("appHeaderView.getBorrowerHeaderViewList. {}",appHeaderView.getBorrowerHeaderViewList());
+            for (AppBorrowerHeaderView view : appHeaderView.getBorrowerHeaderViewList()){
+                RejectLetterReport report = new RejectLetterReport();
+//                i++;
+//                stringName = stringName.append(view.getBorrowerName());
+//                if (i != appHeaderView.getBorrowerHeaderViewList().size()){
+//                    stringName = stringName.append(", ").append("\n");
+//                }
+                report.setName(view.getBorrowerName());
                 reportList.add(report);
+                log.debug("--reportList. {}",reportList);
             }
         } else {
-            log.debug("customerInfoView is Null. {}",customerInfoView.size());
-            reportList.add(new RejectLetterReport());
+            RejectLetterReport report = new RejectLetterReport();
+            reportList.add(report);
+            log.debug("appHeaderView.getBorrowerHeaderViewList is Null. {}");
         }
+
         return reportList;
     }
 
@@ -161,18 +163,18 @@ public class PDFReject_Letter implements Serializable {
 
 
             switch (month){
-                case 1: setMonth = Month.January.getNameTH(); break;
-                case 2: setMonth = Month.February.getNameTH(); break;
-                case 3: setMonth = Month.March.getNameTH(); break;
-                case 4: setMonth = Month.April.getNameTH(); break;
-                case 5: setMonth = Month.May.getNameTH(); break;
-                case 6: setMonth = Month.June.getNameTH(); break;
-                case 7: setMonth = Month.July.getNameTH(); break;
-                case 8: setMonth = Month.August.getNameTH(); break;
-                case 9: setMonth = Month.September.getNameTH(); break;
-                case 10: setMonth = Month.October.getNameTH(); break;
-                case 11: setMonth = Month.November.getNameTH(); break;
-                case 12: setMonth = Month.December.getNameTH(); break;
+                case 1: setMonth = "\\u0E21\\u0E01\\u0E23\\u0E32\\u0E04\\u0E21"; break;
+                case 2: setMonth = "\\u0E01\\u0E38\\u0E21\\u0E20\\u0E32\\u0E1E\\u0E31\\u0E19\\u0E18\\u0E4C"; break;
+                case 3: setMonth = "\\u0E21\\u0E35\\u0E19\\u0E32\\u0E04\\u0E21"; break;
+                case 4: setMonth = "\\u0E40\\u0E21\\u0E29\\u0E32\\u0E22\\u0E19"; break;
+                case 5: setMonth = "\\u0E1E\\u0E24\\u0E29\\u0E20\\u0E32\\u0E04\\u0E21"; break;
+                case 6: setMonth = "\\u0E21\\u0E34\\u0E16\\u0E38\\u0E19\\u0E32\\u0E22\\u0E19"; break;
+                case 7: setMonth = "\\u0E01\\u0E23\\u0E01\\u0E0E\\u0E32\\u0E04\\u0E21"; break;
+                case 8: setMonth = "\\u0E2A\\u0E34\\u0E07\\u0E2B\\u0E32\\u0E04\\u0E21"; break;
+                case 9: setMonth = "\\u0E01\\u0E31\\u0E19\\u0E22\\u0E32\\u0E22\\u0E19"; break;
+                case 10: setMonth = "\\u0E15\\u0E38\\u0E25\\u0E32\\u0E04\\u0E21"; break;
+                case 11: setMonth = "\\u0E1E\\u0E24\\u0E28\\u0E08\\u0E34\\u0E01\\u0E32\\u0E22\\u0E19"; break;
+                case 12: setMonth = "\\u0E18\\u0E31\\u0E19\\u0E27\\u0E32\\u0E04\\u0E21"; break;
                 default:setMonth = "";
 
             }
