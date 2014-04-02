@@ -85,9 +85,7 @@ public class BizInfoSummaryControl extends BusinessControl {
         BizInfoSummary bizInfoSummary;
         BizInfoSummaryView bizInfoSummaryView;
 
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-
-        bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
+        bizInfoSummary = bizInfoSummaryDAO.findByWorkCaseId(workCaseId);
 
         if (bizInfoSummary != null) {
             bizInfoSummaryView = bizInfoSummaryTransform.transformToView(bizInfoSummary);

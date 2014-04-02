@@ -1415,4 +1415,22 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         return relationList;
     }
+
+    public void updateBorrowerForBPM(List<CustomerInfoView> borrowerInfoViewList, String queueName, long workCasePreScreenId) throws Exception{
+        String borrowerName = "";
+        if(borrowerInfoViewList != null && borrowerInfoViewList.size() > 0){
+            CustomerInfoView customerInfoView = borrowerInfoViewList.get(0);
+            borrowerName = customerInfoView.getFirstNameTh();
+            if(!Util.isNull(customerInfoView.getLastNameTh()) && !Util.isEmpty(customerInfoView.getLastNameTh())){
+                borrowerName = customerInfoView.getLastNameTh();
+            }
+        }
+
+        WorkCasePrescreen workCasePreScreen = workCasePrescreenDAO.getWorkCasePreScreenById(workCasePreScreenId);
+        if(workCasePreScreen != null){
+            bpmExecutor.updateBorrowerForBPM(borrowerName, queueName, workCasePreScreen.getWobNumber());
+        }else{
+            throw new Exception("Work item data could not found.");
+        }
+    }
 }

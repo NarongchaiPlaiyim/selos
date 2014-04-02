@@ -127,10 +127,12 @@ public class AppraisalAppointment implements Serializable {
     //private User user;
     @Inject
     private CustomerAcceptanceControl customerAcceptanceControl;
+
     @Inject
     private ReasonDAO reasonDAO;
+
     private CustomerAcceptanceView customerAcceptanceView;
-    @Inject
+
     public AppraisalAppointment() {
 
     }
