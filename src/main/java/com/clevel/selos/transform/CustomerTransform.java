@@ -185,6 +185,7 @@ public class CustomerTransform extends Transform {
         customerInfoView.setMailingAddressType(customer.getMailingAddressType());
         if(customerInfoView.getMailingAddressType() == null){
             customerInfoView.setMailingAddressType(new AddressType());
+        }
 
 		customerInfoView.setMailingAddressType(customer.getMailingAddressType());
         if(customerInfoView.getMailingAddressType() == null){
@@ -203,7 +204,7 @@ public class CustomerTransform extends Transform {
 
         customerInfoView.setIsCommittee(customer.getIsCommittee());
         customerInfoView.setCommitteeId(customer.getJuristicId());
-        }
+
         customerInfoView.setValidId(2);
 
         customerInfoView.setCollateralOwner(customer.getCollateralOwner());

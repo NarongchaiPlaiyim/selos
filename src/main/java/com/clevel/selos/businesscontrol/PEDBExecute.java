@@ -523,8 +523,14 @@ public class PEDBExecute extends BusinessControl
                 peInbox.setRequestTypeStr(rs.getString("RequestTypeStr"));
                 peInbox.setStepId(Long.parseLong(rs.getString("Step_Code")));
                 peInbox.setStatus(rs.getString("Status"));
-                peInbox.setFromuser(rs.getString("PreviousUser"));
-                peInbox.setAtuser(rs.getString("CurrentUser"));
+                if(rs.getString("PreviousUser") != null)
+                {
+                    peInbox.setFromuser(userDAO.getUserNameById(rs.getString("PreviousUser")));
+                }
+                if(rs.getString("CurrentUser") != null)
+                {
+                    peInbox.setAtuser(userDAO.getUserNameById(rs.getString("CurrentUser")));
+                }
                 peInbox.setAppointmentdate((rs.getObject("AppointmentDate1").toString().trim()));
                 peInbox.setDoalevel(rs.getString("DOALevel"));
                 peInbox.setAction(rs.getString("PreviousAction"));
@@ -754,7 +760,12 @@ public class PEDBExecute extends BusinessControl
                 peRoster.setRequestType(rs.getString("RequestTypeStr"));
                 peRoster.setStepId(Integer.parseInt(rs.getString("Step_Code")));
                 peRoster.setStatus(rs.getString("Status"));
-                peRoster.setCurrentUser(rs.getString("CurrentUser"));
+
+                if(rs.getString("CurrentUser") != null)
+                {
+                    peRoster.setCurrentUser(userDAO.getUserNameById(rs.getString("CurrentUser")));
+                }
+
                 peRoster.setSlastatus(rs.getString("SLAStatus"));
                 peRoster.setSLAEndTime(rs.getObject("SLAEndTime1").toString().trim());
                 peRoster.setTotalTimeAtUser(rs.getString("TotalTimeAtUser"));
@@ -1365,8 +1376,17 @@ public class PEDBExecute extends BusinessControl
                 peInbox.setRequestTypeStr(rs.getString("RequestTypeStr"));
                 peInbox.setStepId(Long.parseLong(rs.getString("Step_Code")));
                 peInbox.setStatus(rs.getString("Status"));
-                peInbox.setFromuser(rs.getString("PreviousUser"));
-                peInbox.setAtuser(rs.getString("CurrentUser"));
+
+                if(rs.getString("PreviousUser") != null)
+                {
+                    peInbox.setFromuser(userDAO.getUserNameById(rs.getString("PreviousUser")));
+                }
+
+                if(rs.getString("CurrentUser") != null)
+                {
+                    peInbox.setAtuser(userDAO.getUserNameById(rs.getString("CurrentUser")));
+                }
+
                 peInbox.setAppointmentdate((rs.getObject("AppointmentDate1").toString().trim()));
                 peInbox.setDoalevel(rs.getString("DOALevel"));
                 peInbox.setAction(rs.getString("PreviousAction"));
@@ -1838,7 +1858,10 @@ public class PEDBExecute extends BusinessControl
                 peInbox.setRequestTypeStr(rs.getString("RequestTypeStr"));
                 peInbox.setStep(rs.getString("Step_Code"));
                 peInbox.setStatus(rs.getString("Status"));
-                peInbox.setAtuser(rs.getString("CurrentUser"));
+                if(rs.getString("CurrentUser") != null)
+                {
+                    peInbox.setAtuser(userDAO.getUserNameById(rs.getString("CurrentUser")));
+                }
                 peInbox.setSlaenddate((rs.getObject("SLAEndTime1").toString().trim()));
                 peInbox.setTotaltimespentatprocess(rs.getInt("TotalTimeAtProcess"));
                 peInbox.setTotaltimespentatuser(rs.getInt("TotalTimeAtUser"));
@@ -1924,8 +1947,15 @@ public class PEDBExecute extends BusinessControl
                         peInbox.setRequestTypeStr(rs.getString("RequestTypeStr"));
                         peInbox.setStepId(Long.parseLong(rs.getString("Step_Code")));
                         peInbox.setStatus(rs.getString("Status"));
-                        peInbox.setFromuser(rs.getString("PreviousUser"));
-                        peInbox.setAtuser(rs.getString("CurrentUser"));
+                        if(rs.getString("PreviousUser") != null)
+                        {
+                            peInbox.setFromuser(userDAO.getUserNameById(rs.getString("PreviousUser")));
+                        }
+
+                        if(rs.getString("CurrentUser") != null)
+                        {
+                            peInbox.setAtuser(userDAO.getUserNameById(rs.getString("CurrentUser")));
+                        }
                         peInbox.setAppointmentdate((rs.getObject("AppointmentDate1").toString().trim()));
                         peInbox.setDoalevel(rs.getString("DOALevel"));
                         peInbox.setAction(rs.getString("PreviousAction"));
@@ -1995,7 +2025,12 @@ public class PEDBExecute extends BusinessControl
                 peRoster.setRequestType(rs.getString("RequestTypeStr"));
                 peRoster.setStepId(Integer.parseInt(rs.getString("Step_Code")));
                 peRoster.setStatus(rs.getString("Status"));
-                peRoster.setCurrentUser(rs.getString("CurrentUser"));
+
+                if(rs.getString("CurrentUser") != null)
+                {
+                    peRoster.setCurrentUser(userDAO.getUserNameById(rs.getString("CurrentUser")));
+                }
+
                 peRoster.setSlastatus(rs.getString("SLAStatus"));
                 peRoster.setSLAEndTime(rs.getObject("SLAEndTime1").toString().trim());
                 peRoster.setTotalTimeAtUser(rs.getString("TotalTimeAtUser"));

@@ -138,20 +138,18 @@ public class BankStatementSummary implements Serializable {
     public void onCreation() {
         preRender();
 
+        log.debug("Init default value and load necessary data.");
         yesValue = RadioValue.YES.value();
-
-        // reset to default value
         isRetrieveSuccess = false;
         hasDataFromRetrieve = false;
         isNotAlignWithPrevData = false;
-
+        bankStmtSrcOfCollateralProofList = new ArrayList<BankStmtView>();
         othBankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.getOtherAccountTypeList());
 
-        bankStmtSrcOfCollateralProofList = new ArrayList<BankStmtView>();
-
+        log.debug("Find Bank statement summary by workCaseId: {}", workCaseId);
         summaryView = bankStmtControl.getBankStmtSummaryByWorkCaseId(workCaseId);
         if (summaryView != null && summaryView.getId() != 0) {
-            log.debug("Found Bank statement summary on workCaseId: {}", workCaseId);
+            log.debug("Bank statement summary was found.");
 
             seasonalFlag = summaryView.getSeasonal();
             expectedSubmitDate = summaryView.getExpectedSubmitDate();
@@ -161,7 +159,7 @@ public class BankStatementSummary implements Serializable {
             lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -1);
             lastThreeMonth1 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -2);
 
-            // provide Source of Collateral Proof from all Bank statement
+            // calculate and provide source of collateral proof
             for (BankStmtView tmbBankStmtView : Util.safetyList(summaryView.getTmbBankStmtViewList())) {
                 bankStmtControl.calSourceOfCollateralProof(tmbBankStmtView);
                 bankStmtSrcOfCollateralProofList.add(tmbBankStmtView);
@@ -172,12 +170,11 @@ public class BankStatementSummary implements Serializable {
                 bankStmtSrcOfCollateralProofList.add(othBankStmtView);
             }
 
-            // calculate total & grand total summary
+            // calculate total and grand total summary
             bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
-
         }
         else {
-            log.debug("Create new Bank statement summary");
+            log.debug("Bank statement summary was NOT found, Create new data.");
             seasonalFlag = RadioValue.NOT_SELECTED.value();
             expectedSubmitDate = getCurrentDate();
             currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
@@ -194,7 +191,6 @@ public class BankStatementSummary implements Serializable {
         numberOfMonths = bankStmtControl.getNumberOfMonthsBankStmt(seasonalFlag);
         lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
         log.debug("numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
-
     }
 
     public void onChangeSeasonalFlag() {
@@ -240,6 +236,9 @@ public class BankStatementSummary implements Serializable {
 
     public void onRefresh() {
         log.debug("onRefresh()");
+        if (!checkSelectSeasonalFlag())
+            return;
+
         // user (ABDM/BDM) can click refresh by 3 times in Full Application step.
         if (isABDM_BDM) {
             if (countRefresh < MAX_REFRESH_TIME) {
@@ -313,12 +312,12 @@ public class BankStatementSummary implements Serializable {
             if (actionStatusViewList != null && actionStatusViewList.size() > 0) {
                 ActionStatusView actionStatusView = actionStatusViewList.get(0);
                 if (ActionResult.FAILED == actionStatusView.getStatusCode()) {
-                    log.debug("Retrieve bank statement from DWH is failed!");
+                    log.debug("Retrieve data from DWH is FAILED!");
                     isRetrieveSuccess = false;
                     hasDataFromRetrieve = false;
 
                     messageHeader = msg.get("app.messageHeader.error");
-                    message = "Connection to DWH is down!. " + actionStatusView.getStatusDesc();
+                    message = "Retrieve data from DWH is FAILED!, " + actionStatusView.getStatusDesc();
                     severity = MessageDialogSeverity.ALERT.severity();
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return;
@@ -326,15 +325,11 @@ public class BankStatementSummary implements Serializable {
             }
 
             isRetrieveSuccess = true;
-            log.debug("Retrieve bank statement from DWH is success.");
+            log.debug("Retrieve data from DWH is SUCCESS.");
 
             if (retrieveResult.getTmbBankStmtViewList() != null && retrieveResult.getTmbBankStmtViewList().size() > 0) {
                 log.debug("Has data from DWH.");
                 hasDataFromRetrieve = true;
-
-//                numberOfMonths = bankStmtControl.getNumberOfMonthsBankStmt(seasonalFlag);
-//                lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
-//                log.debug("Recalculate numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
 
                 if (summaryView.getTmbBankStmtViewList() != null && summaryView.getTmbBankStmtViewList().size() > 0) {
                     // delete previous TMB data
@@ -346,12 +341,16 @@ public class BankStatementSummary implements Serializable {
                                 bankStmtControl.deleteBankStmtById(tmbBankStmtView.getId());
                             } catch (Exception e) {
                                 log.debug("", e);
+                                messageHeader = msg.get("app.messageHeader.error");
+                                message = e.getCause() != null ? e.getCause().toString() : e.getMessage();
+                                severity = MessageDialogSeverity.ALERT.severity();
+                                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                                return;
                             }
                         }
                         if (bankStmtSrcOfCollateralProofList.contains(tmbBankStmtView)) {
                             bankStmtSrcOfCollateralProofList.remove(tmbBankStmtView);
                         }
-
                         i.remove();
                     }
                 }
@@ -366,6 +365,11 @@ public class BankStatementSummary implements Serializable {
                                 bankStmtControl.deleteBankStmtById(othBankStmtView.getId());
                             } catch (Exception e) {
                                 log.debug("", e);
+                                messageHeader = msg.get("app.messageHeader.error");
+                                message = e.getCause() != null ? e.getCause().toString() : e.getMessage();
+                                severity = MessageDialogSeverity.ALERT.severity();
+                                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                                return;
                             }
                         }
                         if (bankStmtSrcOfCollateralProofList.contains(othBankStmtView)) {
@@ -379,21 +383,20 @@ public class BankStatementSummary implements Serializable {
                 Cloner cloner = new Cloner();
                 summaryView.setTmbBankStmtViewList(cloner.deepClone(retrieveResult.getTmbBankStmtViewList()));
 
-                lastThreeMonth3 = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
-                lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -1);
-                lastThreeMonth1 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -2);
-
                 // calculate data from DWH
                 for (BankStmtView tmbBankStmtView : Util.safetyList(summaryView.getTmbBankStmtViewList())) {
                     bankStmtControl.bankStmtDetailCalculation(tmbBankStmtView, seasonalFlag);
                     bankStmtControl.calSourceOfCollateralProof(tmbBankStmtView);
                     bankStmtSrcOfCollateralProofList.add(tmbBankStmtView);
                 }
+                // set last three month label to Source of collateral proof column header
+                lastThreeMonth3 = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
+                lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -1);
+                lastThreeMonth1 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -2);
 
                 numberOfMonths = bankStmtControl.getNumberOfMonthsBankStmt(seasonalFlag);
                 lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
                 currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(summaryView.getExpectedSubmitDate());
-                log.debug("Recalculate: numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
 
                 summaryView.setSeasonal(seasonalFlag);
                 summaryView.setExpectedSubmitDate(expectedSubmitDate);
@@ -401,7 +404,6 @@ public class BankStatementSummary implements Serializable {
                 try {
                     bankStmtControl.bankStmtSumTotalCalculation(summaryView, true);
 //                    summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
-//
 //                    // update related parts
 //                    dbrControl.updateValueOfDBR(workCaseId);
 //                    exSummaryControl.calForBankStmtSummary(workCaseId);
@@ -409,12 +411,21 @@ public class BankStatementSummary implements Serializable {
                 }
                 catch (Exception e) {
                     log.debug("", e);
+                    messageHeader = msg.get("app.messageHeader.error");
+                    message = e.getCause() != null ? e.getCause().toString() : e.getMessage();
+                    severity = MessageDialogSeverity.ALERT.severity();
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
 
             }
             else {
                 log.debug("No more data from DWH");
                 hasDataFromRetrieve = false;
+
+                messageHeader = msg.get("app.messageHeader.info");
+                message = "No more data from DWH.";
+                severity = MessageDialogSeverity.INFO.severity();
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
 
         }
@@ -429,13 +440,13 @@ public class BankStatementSummary implements Serializable {
         numberOfMonths = bankStmtControl.getNumberOfMonthsBankStmt(seasonalFlag);
         lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
         currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(summaryView.getExpectedSubmitDate());
-        log.debug("Recalculate: numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
+        log.debug("re-calculate: numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
 
         summaryView.setSeasonal(seasonalFlag);
         summaryView.setExpectedSubmitDate(expectedSubmitDate);
 
         try {
-
+            // clear previous data if not aligned
             if (isNotAlignWithPrevData) {
                 if (summaryView.getTmbBankStmtViewList() != null && summaryView.getTmbBankStmtViewList().size() > 0) {
                     Iterator<BankStmtView> i = summaryView.getTmbBankStmtViewList().iterator();
@@ -446,6 +457,8 @@ public class BankStatementSummary implements Serializable {
                                 bankStmtControl.deleteBankStmtById(tmbBankStmtView.getId());
                             } catch (Exception e) {
                                 log.debug("", e);
+                                message = "Save Bank statement summary data failed!, Cause : ";
+                                message += e.getCause() != null ? e.getCause().toString() : e.getMessage();
                             }
                         }
                         i.remove();
@@ -461,6 +474,8 @@ public class BankStatementSummary implements Serializable {
                                 bankStmtControl.deleteBankStmtById(othBankStmtView.getId());
                             } catch (Exception e) {
                                 log.debug("", e);
+                                message = "Save Bank statement summary data failed!, Cause : ";
+                                message += e.getCause() != null ? e.getCause().toString() : e.getMessage();
                             }
                         }
                         j.remove();
@@ -483,24 +498,21 @@ public class BankStatementSummary implements Serializable {
             bizInfoSummaryControl.calByBankStatement(workCaseId);
 
             // reset to default value
-//            isRetrieveSuccess = false;
-//            hasDataFromRetrieve = false;
-//            isNotAlignWithPrevData = false;
+            isRetrieveSuccess = false;
+            hasDataFromRetrieve = false;
+            isNotAlignWithPrevData = false;
 
             onCreation();
 
             messageHeader = msg.get("app.messageHeader.info");
-            message = "Save Bank Statement Summary data success.";
+            message = "Save Bank statement summary data success.";
             severity = MessageDialogSeverity.INFO.severity();
         }
         catch (Exception e) {
             messageHeader = msg.get("app.messageHeader.error");
             severity = MessageDialogSeverity.ALERT.severity();
-            if (e.getCause() != null) {
-                message = "Save Bank Statement Summary data failed. Cause : " + e.getCause().toString();
-            } else {
-                message = "Save Bank Statement Summary data failed. Cause : " + e.getMessage();
-            }
+            message = "Save Bank statement summary data failed!, Cause : ";
+            message += e.getCause() != null ? e.getCause().toString() : e.getMessage();
         }
 
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -533,18 +545,14 @@ public class BankStatementSummary implements Serializable {
             bankStmtControl.bankStmtSumTotalCalculation(summaryView, (isRetrieveSuccess && hasDataFromRetrieve));
 
             messageHeader = msg.get("app.messageHeader.info");
-            message = "Delete Bank Statement data success.";
+            message = "Delete Bank statement data success.";
             severity = MessageDialogSeverity.INFO.severity();
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
         catch (Exception e) {
             messageHeader = msg.get("app.messageHeader.error");
             severity = MessageDialogSeverity.ALERT.severity();
-            if (e.getCause() != null) {
-                message = "Delete Bank Statement data failed. Cause : " + e.getCause().toString();
-            } else {
-                message = "Delete Bank Statement data failed. Cause : " + e.getMessage();
-            }
+            message = "Delete Bank statement data failed!, Cause : ";
+            message += e.getCause() != null ? e.getCause().toString() : e.getMessage();
         }
 
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -569,6 +577,10 @@ public class BankStatementSummary implements Serializable {
                             bankStmtControl.deleteBankStmtById(tmbBankStmtView.getId());
                         } catch (Exception e) {
                             log.debug("", e);
+                            messageHeader = msg.get("app.messageHeader.error");
+                            message = e.getCause() != null ? e.getCause().toString() : e.getMessage();
+                            severity = MessageDialogSeverity.ALERT.severity();
+                            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                         }
                     }
                     if (bankStmtSrcOfCollateralProofList.contains(tmbBankStmtView)) {
@@ -587,6 +599,10 @@ public class BankStatementSummary implements Serializable {
                             bankStmtControl.deleteBankStmtById(othBankStmtView.getId());
                         } catch (Exception e) {
                             log.debug("", e);
+                            messageHeader = msg.get("app.messageHeader.error");
+                            message = e.getCause() != null ? e.getCause().toString() : e.getMessage();
+                            severity = MessageDialogSeverity.ALERT.severity();
+                            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                         }
                     }
                     if (bankStmtSrcOfCollateralProofList.contains(othBankStmtView)) {
@@ -621,6 +637,10 @@ public class BankStatementSummary implements Serializable {
                             bankStmtControl.deleteBankStmtById(tmbBankStmtView.getId());
                         } catch (Exception e) {
                             log.debug("", e);
+                            messageHeader = msg.get("app.messageHeader.error");
+                            message = e.getCause() != null ? e.getCause().toString() : e.getMessage();
+                            severity = MessageDialogSeverity.ALERT.severity();
+                            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                         }
                     }
                     if (bankStmtSrcOfCollateralProofList.contains(tmbBankStmtView)) {
@@ -639,6 +659,10 @@ public class BankStatementSummary implements Serializable {
                             bankStmtControl.deleteBankStmtById(othBankStmtView.getId());
                         } catch (Exception e) {
                             log.debug("", e);
+                            messageHeader = msg.get("app.messageHeader.error");
+                            message = e.getCause() != null ? e.getCause().toString() : e.getMessage();
+                            severity = MessageDialogSeverity.ALERT.severity();
+                            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                         }
                     }
                     if (bankStmtSrcOfCollateralProofList.contains(othBankStmtView)) {
@@ -659,7 +683,7 @@ public class BankStatementSummary implements Serializable {
 
         if (isNotAlignWithPrevData) {
             messageHeader = msg.get("app.messageHeader.info");
-            message = "Can not edit this item because the number of month based on seasonal flag and expected submission date is not aligned.";
+            message = "Can not edit this item!, Because this data is not aligned base on seasonal and expected submission date.";
             severity = MessageDialogSeverity.INFO.severity();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
@@ -678,7 +702,7 @@ public class BankStatementSummary implements Serializable {
 
         if (isNotAlignWithPrevData) {
             messageHeader = msg.get("app.messageHeader.info");
-            message = "Can not edit this item because the number of month based on seasonal flag and expected submission date is not aligned.";
+            message = "Can not edit this item!, Because this data is not aligned base on seasonal and expected submission date.";
             severity = MessageDialogSeverity.INFO.severity();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
@@ -749,7 +773,7 @@ public class BankStatementSummary implements Serializable {
         log.debug("checkSelectSeasonalFlag()");
         if (RadioValue.NOT_SELECTED.value() == seasonalFlag) {
             messageHeader = msg.get("app.messageHeader.info");
-            message = "Please, select the Seasonal";
+            message = "Please, select the Seasonal.";
             severity = MessageDialogSeverity.INFO.severity();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             log.debug("result: false");
