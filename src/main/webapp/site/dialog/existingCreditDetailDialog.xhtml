@@ -56,10 +56,10 @@
                              size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                              >
                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                <f:selectItems value="#{creditFacExisting.prdGroupToPrdProgramList}"
+                <f:selectItems value="#{creditFacExisting.productProgramViewList}"
                                var="prodProgramItem"
-                               itemLabel="#{prodProgramItem.productProgram.name}"
-                               itemValue="#{prodProgramItem.productProgram.id}"/>
+                               itemLabel="#{prodProgramItem.name}"
+                               itemValue="#{prodProgramItem.id}"/>
                 <p:ajax event="change"
                         listener="#{creditFacExisting.onChangeProductProgram}"
                         update=":existingCreditDlgForm:creditTypeName"/>
@@ -284,7 +284,7 @@
                     <p:selectOneMenu id="dlgSplitProdProgram" value="#{existingSplitLine.productProgram.id}" required="#{not empty param[saveCreditBtn.clientId]}"
                                      size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{creditFacExisting.productProgramViewList}"
+                        <f:selectItems value="#{creditFacExisting.productProgramViewListSplit}"
                                        var="productProgram"
                                        itemLabel="#{productProgram.name}"
                                        itemValue="#{productProgram.id}"/>
