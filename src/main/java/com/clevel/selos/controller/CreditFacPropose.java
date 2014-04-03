@@ -177,6 +177,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewAll;
     private List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewByGroup;
 
+    private List<PricingFee> pricingFeeList;
+
     @Inject
     WorkCaseDAO workCaseDAO;
     @Inject
@@ -332,6 +334,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     reducePricePanelRendered = false;
                     cannotEditStandard = true;
                     notRetrievePricing = true;
+                    pricingFeeList = new ArrayList<PricingFee>();
                 }else{
                     log.debug("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
 
@@ -500,15 +503,11 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
                 StandardPricingResponse standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
                 if (ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
-                    //persist FeeDetail from retrieve
-//                    if (Util.safetyList(standardPricingResponse.getPricingFeeList()).size() > 0) {
-//                        creditFacProposeControl.saveFeeDetailFromRetrieve(standardPricingResponse.getPricingFeeList(),workCaseId);
-//                        log.debug("standardPricingResponse.getPricingFeeList() not null ::: {}", standardPricingResponse.getPricingFeeList().size());
-//                    }
 
                     Map<Long, NewFeeDetailView> newFeeDetailViewMap = new HashMap<Long, NewFeeDetailView>();
                     NewFeeDetailView newFeeDetailView;
                     for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()) {
+                        pricingFeeList = standardPricingResponse.getPricingFeeList();
                         FeeDetailView feeDetailView = feeTransform.transformToView(pricingFee);
                         if (feeDetailView.getFeeLevel() == FeeLevel.CREDIT_LEVEL) {
                             if (newFeeDetailViewMap.containsKey(feeDetailView.getCreditDetailViewId())) {
@@ -1695,7 +1694,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             // Calculate Total for BRMS
             newCreditFacilityView = creditFacProposeControl.calculateTotalForBRMS(newCreditFacilityView);
             // Save NewCreditFacility, ProposeCredit, Collateral, Guarantor
-            newCreditFacilityView = creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
+            newCreditFacilityView = creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId, pricingFeeList);
             // Calculate WC
             creditFacProposeControl.calWC(workCaseId);
 

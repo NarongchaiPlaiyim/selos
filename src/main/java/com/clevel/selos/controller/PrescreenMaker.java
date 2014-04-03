@@ -620,22 +620,9 @@ public class PrescreenMaker implements Serializable {
 
     }
 
-    // *** Function for PreScreen *** //
-    public void onCheckPreScreen(){
-        // *** Validate Data for Check PreScreen *** //
-        boolean validate = validateCheckPrescreen(customerInfoViewList);
-        if(validate){
-            preScreenResponseViewList = prescreenBusinessControl.getPreScreenResultFromBRMS(customerInfoViewList);
-            prescreenBusinessControl.savePreScreenResult(preScreenResponseViewList, workCasePreScreenId, 0, stepId, user);
-            preScreenResponseCustomerList = prescreenBusinessControl.getPreScreenCustomerResult(preScreenResponseViewList);
-            preScreenResponseGroupList = prescreenBusinessControl.getPreScreenGroupResult(preScreenResponseViewList);
-        }else{
-            // *** MessageBox show validation Failed. *** //
-        }
-    }
-
     public boolean validateCheckPrescreen(List<CustomerInfoView> vCustomerInfoViewList){
-        boolean validate = false;
+        //boolean validate = false;
+        boolean validate = true;
 
         return validate;
     }

@@ -2055,7 +2055,10 @@
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
                      severity="#{creditFacPropose.severity}"
-                     header="#{creditFacPropose.messageHeader}" message="#{creditFacPropose.message}">
+                     header="#{creditFacPropose.messageHeader}"
+                     message="#{creditFacPropose.message}"
+                     closable="false"
+                     closeOnEscape="false">
         <p:commandButton value="OK"
                          process="@this"
                          update="frmMain"
