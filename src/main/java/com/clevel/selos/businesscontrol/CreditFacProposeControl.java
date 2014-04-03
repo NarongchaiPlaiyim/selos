@@ -1038,11 +1038,11 @@ public class CreditFacProposeControl extends BusinessControl {
 
             if (!Util.isNull(tcgDetailViewList)&&(tcgDetailViewList.size()>0))
             {
-                for (TCGDetailView tcgDetailView : tcgDetailViewList) {
-                    BigDecimal  ltvPercent= tcgDetailView.getLtvPercent();
-                    log.info("ltvPercent :: {}",ltvPercent);
-
-                }
+//                for (TCGDetailView tcgDetailView : tcgDetailViewList) {
+//                    BigDecimal  ltvPercent= tcgDetailView.getLtvPercent();
+//                    log.info("ltvPercent :: {}",ltvPercent);
+//
+//                }
             }
         }
     }
