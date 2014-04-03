@@ -208,12 +208,9 @@ public class CustomerTransform extends Transform {
         customerInfoView.setValidId(2);
 
         customerInfoView.setCollateralOwner(customer.getCollateralOwner());
-        customerInfoView.setPercentShare(customer.getPercentShare());
 
         customerInfoView.setSearchBy(customer.getSearchBy());
         customerInfoView.setSearchId(customer.getSearchId());
-
-        customerInfoView.setPercentShare(customer.getPercentShare());
 
 		customerInfoView.setCsiFlag(customer.getCsiFlag());
 
@@ -456,7 +453,7 @@ public class CustomerTransform extends Transform {
         customer.setTmbCustomerId(customerInfoView.getTmbCustomerId());
         customer.setDocumentAuthorizeBy(customerInfoView.getDocumentAuthorizeBy());
         customer.setCollateralOwner(customerInfoView.getCollateralOwner());
-        customer.setPercentShare(customerInfoView.getPercentShare());
+        customer.setShares(customerInfoView.getShares());
         customer.setApproxIncome(customerInfoView.getApproxIncome());
         customer.setDocumentExpiredDate(customerInfoView.getDocumentExpiredDate());
 
@@ -540,8 +537,6 @@ public class CustomerTransform extends Transform {
         customer.setJuristicId(customerInfoView.getCommitteeId());
 
 		customer.setCsiFlag(customerInfoView.getCsiFlag());
-
-		customer.setShares(customerInfoView.getShares());
 
 //        log.info("transformToModel : customer before adding address : {}", customer);
 

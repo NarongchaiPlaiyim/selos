@@ -122,7 +122,8 @@ $F{requestType}.intValue() == 2 ? "New" : ""]]></textFieldExpression>
 				<textElement verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{seq}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{COLUMN_NUMBER}.intValue() == 0 ?
+"" : $V{COLUMN_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="3c69907a-c70b-4021-89ec-36d5cf88e07d" style="detail" stretchType="RelativeToBandHeight" x="374" y="0" width="72" height="14"/>

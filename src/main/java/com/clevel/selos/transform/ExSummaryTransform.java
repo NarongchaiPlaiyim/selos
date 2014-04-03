@@ -144,28 +144,12 @@ public class ExSummaryTransform extends Transform {
         return exSumDeviateList;
     }
 
-    public ExSumBusinessInfoView transformBizInfoSumToExSumBizView(BizInfoSummaryView bizInfoSummaryView, QualitativeView qualitativeView, BigDecimal bizSize){
+    public ExSumBusinessInfoView transformBizInfoSumToExSumBizView(BizInfoSummaryView bizInfoSummaryView, QualitativeView qualitativeView, BigDecimal bizSize, ExSummary exSummary){
         ExSumBusinessInfoView exSumBusinessInfoView = new ExSumBusinessInfoView();
 
         exSumBusinessInfoView.setNetFixAsset(bizInfoSummaryView.getNetFixAsset());
         exSumBusinessInfoView.setNoOfEmployee(bizInfoSummaryView.getNoOfEmployee());
         exSumBusinessInfoView.setBizProvince(bizInfoSummaryView.getProvince().getName());
-
-        /*List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
-        if(bizInfoSummaryView.getId() != 0){
-            bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryView.getId());
-        }
-
-        if(bizInfoDetailViewList != null && bizInfoDetailViewList.size() > 0) {
-            for(BizInfoDetailView bd : bizInfoDetailViewList){
-                if(bd.getIsMainDetail() == 1){
-                    exSumBusinessInfoView.setBizType(bd.getBizType().getDescription());
-                    exSumBusinessInfoView.setBizGroup(bd.getBizGroup().getDescription());
-                    exSumBusinessInfoView.setBizCode(bd.getBizCode());
-                    exSumBusinessInfoView.setBizDesc(bd.getBizDesc().getName());
-                }
-            }
-        }*/
 
         if(qualitativeView != null){
             exSumBusinessInfoView.setQualitativeClass(qualitativeView.getQualityResult());
@@ -176,12 +160,14 @@ public class ExSummaryTransform extends Transform {
 //        If Borrower is Juristic use Customer Info Detail else if Borrower is Individual use Bank Statement Summary
         exSumBusinessInfoView.setBizSize(bizSize);
 
-        //todo:income factor percent
-//        exSumBusinessInfoView.setBDM(bizInfoSummaryView.getWeightIncomeFactor());
-//        exSumBusinessInfoView.setUW();
         exSumBusinessInfoView.setAR(bizInfoSummaryView.getSumWeightAR());
         exSumBusinessInfoView.setAP(bizInfoSummaryView.getSumWeightAP());
         exSumBusinessInfoView.setINV(bizInfoSummaryView.getSumWeightINV());
+
+        if(exSummary != null && exSummary.getId() != 0){
+            exSumBusinessInfoView.setBDM(exSummary.getIncomeFactorBDM());
+            exSumBusinessInfoView.setUW(exSummary.getIncomeFactorUW());
+        }
 
         return exSumBusinessInfoView;
     }
