@@ -256,7 +256,8 @@
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <p:dataTable id="tradeTable" var="item" style="width: 100%">
+                                    <p:dataTable id="tradeTable" var="itemTrade"
+                                                 value="#{executiveSummary.exSummaryView.tradeFinance}" style="width: 100%">
                                         <p:columnGroup type="header">
                                             <p:row>
                                                 <p:column style="width:200px;"
@@ -279,35 +280,35 @@
                                         </p:columnGroup>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{executiveSummary.exSummaryView.tradeFinance.contactName}"/>
+                                            <h:outputText value="#{itemTrade.contactName}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{executiveSummary.exSummaryView.tradeFinance.contactPhoneNo}"/>
+                                            <h:outputText value="#{itemTrade.contactPhoneNo}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{executiveSummary.exSummaryView.tradeFinance.interService}"/>
+                                            <h:outputText value="#{itemTrade.interService}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{executiveSummary.exSummaryView.tradeFinance.currentAddress}"/>
+                                            <h:outputText value="#{itemTrade.currentAddress}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{executiveSummary.exSummaryView.tradeFinance.importMail}"/>
+                                            <h:outputText value="#{itemTrade.importMail}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{executiveSummary.exSummaryView.tradeFinance.exportMail}"/>
+                                            <h:outputText value="#{itemTrade.exportMail}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{executiveSummary.exSummaryView.tradeFinance.depositBranchCode}"/>
+                                            <h:outputText value="#{itemTrade.depositBranchCode}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{executiveSummary.exSummaryView.tradeFinance.ownerBranchCode}"/>
+                                            <h:outputText value="#{itemTrade.ownerBranchCode}"/>
                                         </p:column>
                                     </p:dataTable>
                                 </td>
