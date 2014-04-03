@@ -273,12 +273,8 @@ public class BizInfoDetail implements Serializable {
             onCheckRole();
 
         }catch (Exception ex){
-            log.debug("onCreation Exception ");
-            if(ex.getCause() != null){
-                message = "Save Basic Info data failed. Cause : " + ex.getCause().toString();
-            } else {
-                message = "Save Basic Info data failed. Cause : " + ex.getMessage();
-            }
+            log.error("onCreation Exception : ", ex);
+            message = "Exception while load data : " + Util.getMessageException(ex);
         }finally {
             log.debug("onCreation end ");
         }
