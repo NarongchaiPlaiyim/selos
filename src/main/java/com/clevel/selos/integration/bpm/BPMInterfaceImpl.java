@@ -153,7 +153,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         String linkKey = Util.getLinkKey(bpmUsername);
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getSystemUserDTO(), getConfigurationDTO());
-            bpmService.launchWorkflow(caseParameter, "Parallel Appraisal Workflow");
+            bpmService.launchWorkflow(caseParameter, "SELOS Parallel Appraisal Workflow");
             log.debug("[{}] BPM launch work flow successful.", linkKey);
             bpmAuditor.add(bpmUsername, "createParallelCase", "", now, ActionResult.SUCCESS, "", linkKey);
         } catch (Exception ex) {

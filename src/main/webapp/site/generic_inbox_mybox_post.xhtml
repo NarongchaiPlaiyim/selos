@@ -167,7 +167,7 @@
 
                                         </p:dataTable>
 
-                                        <p:dataTable id="resultInbox" var="item"
+                                        <p:dataTable id="resultInboxPool" var="item"
                                                      value="#{peAllBoxes.inboxViewList}"
                                                      selection="#{peAllBoxes.inboxViewSelectItem}"
                                                      selectionMode="single"
@@ -178,7 +178,7 @@
                                                      rowKey="#{item.fwobnumber}"
                                                      rowIndexVar="rowIndex">
 
-                                            <p:ajax event="rowSelect" update=":frmMain:resultInbox" onstart="#{peAllBoxes.onClickPickUpCase}">
+                                            <p:ajax event="rowSelect" update=":frmMain:resultInboxPool" listener="#{peAllBoxes.onClickPickUpCase()}">
                                                 <f:setPropertyActionListener value="#{item}" target="#{peAllBoxes.inboxViewSelectItem}"/>
                                             </p:ajax>
 

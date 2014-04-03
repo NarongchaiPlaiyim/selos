@@ -97,7 +97,7 @@
                                         <td>
                                             <h:selectOneMenu id="usernameselectbox" class="largest" value="#{reassignteamnames.selectedUserName}" >
                                                 <f:selectItem itemValue="" itemLabel="-Please Select-" />
-                                                <f:selectItems value="#{reassignteamnames.teamuserslist}" />
+                                                <f:selectItems value="#{reassignteamnames.usersIdNameList}" var="username" itemLabel="#{username.id} - #{username.userName}" itemValue="#{username.userName}" />
 
                                             </h:selectOneMenu>
                                             <p:spacer width="15px"/>
@@ -268,7 +268,7 @@
                                     <td>
                                         <h:selectOneMenu class="largest" id="userNameReassign" label="userNameReassign" value="#{reassignteamnames.popupselectedusername}">
                                             <f:selectItem itemValue="" itemLabel="-Please Select-"/>
-                                            <f:selectItems value="#{reassignteamnames.poupreasignUsernames}" />
+                                            <f:selectItems value="#{reassignteamnames.usersIdNameList1}" var="username1" itemLabel="#{username1.id} - #{username1.userName}" itemValue="#{username1.userName}"/>
                                         </h:selectOneMenu>
                                     </td>
                                 </tr>
