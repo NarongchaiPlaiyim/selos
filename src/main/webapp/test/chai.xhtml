@@ -15,6 +15,10 @@
         <h:form id="BRMS">
             <p:panel header="BRMSHeader">
                 <h:panelGrid columns="2">
+                    <h:outputText value="URL" />
+                    <a href="http://stackoverflow.com/questions/2157180/onclick-open-window-and-specific-size"
+                       onclick="window.open(this.href,'targetWindow','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=SomeSize,height=SomeSize')" />
+
 
                     <h:outputText value=""/>
                     <p:commandButton id="submitOnClickCallBRMS" value="CallBRMS" update="@form"
