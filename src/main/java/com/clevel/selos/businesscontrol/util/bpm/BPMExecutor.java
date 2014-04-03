@@ -342,9 +342,10 @@ public class BPMExecutor implements Serializable {
         execute(queueName, wobNumber, fields);
     }
 
-    public void updateBorrowerForBPM(String borrowerName, String queueName, String wobNumber) throws Exception{
+    public void updateBorrowerProductGroup(String borrowerName, String productGroup, String queueName, String wobNumber) throws Exception{
         HashMap<String, String> fields = new HashMap<String, String>();
         fields.put("BorrowerName", borrowerName);
+        fields.put("ProductGroup", productGroup);
 
         bpmInterface.updateCase(queueName, wobNumber, fields);
     }

@@ -528,4 +528,101 @@ public class BankStmtTransform extends Transform {
         }
         return srcOfCollateralProof;
     }
+
+    public BankStmtView copyToNewBankStmtView(BankStmtView originalBankStmtView) {
+        BankStmtView newBankStmtView = new BankStmtView();
+        if (originalBankStmtView == null) {
+            return newBankStmtView;
+        }
+
+        newBankStmtView.setId(originalBankStmtView.getId());
+        newBankStmtView.setNotCountIncome(originalBankStmtView.getNotCountIncome());
+        newBankStmtView.setBankView(originalBankStmtView.getBankView());
+        newBankStmtView.setBranchName(originalBankStmtView.getBranchName());
+        newBankStmtView.setBankAccountTypeId(originalBankStmtView.getBankAccountTypeId());
+        newBankStmtView.setBankAccountTypeView(originalBankStmtView.getBankAccountTypeView());
+        newBankStmtView.setOtherAccountType(originalBankStmtView.getOtherAccountType());
+        newBankStmtView.setAccountNumber(originalBankStmtView.getAccountNumber());
+        newBankStmtView.setAccountName(originalBankStmtView.getAccountName());
+        newBankStmtView.setAccountStatusView(originalBankStmtView.getAccountStatusView());
+        newBankStmtView.setMainAccount(originalBankStmtView.getMainAccount());
+        newBankStmtView.setAccountCharacteristic(originalBankStmtView.getAccountCharacteristic());
+        newBankStmtView.setTMB(originalBankStmtView.getTMB());
+        newBankStmtView.setHighestInflow(originalBankStmtView.getHighestInflow());
+        newBankStmtView.setAvgLimit(originalBankStmtView.getAvgLimit());
+        newBankStmtView.setAvgIncomeGross(originalBankStmtView.getAvgIncomeGross());
+        newBankStmtView.setAvgIncomeNetBDM(originalBankStmtView.getAvgIncomeNetBDM());
+        newBankStmtView.setAvgIncomeNetUW(originalBankStmtView.getAvgIncomeNetUW());
+        newBankStmtView.setAvgWithDrawAmount(originalBankStmtView.getAvgWithDrawAmount());
+        newBankStmtView.setAvgSwingPercent(originalBankStmtView.getAvgSwingPercent());
+        newBankStmtView.setAvgUtilizationPercent(originalBankStmtView.getAvgUtilizationPercent());
+        newBankStmtView.setAvgGrossInflowPerLimit(originalBankStmtView.getAvgGrossInflowPerLimit());
+        newBankStmtView.setChequeReturn(originalBankStmtView.getChequeReturn());
+        newBankStmtView.setTrdChequeReturnAmount(originalBankStmtView.getTrdChequeReturnAmount());
+        newBankStmtView.setTrdChequeReturnPercent(originalBankStmtView.getTrdChequeReturnPercent());
+        newBankStmtView.setOverLimitTimes(originalBankStmtView.getOverLimitTimes());
+        newBankStmtView.setOverLimitDays(originalBankStmtView.getOverLimitDays());
+        newBankStmtView.setRemark(originalBankStmtView.getRemark());
+        newBankStmtView.setAvgOSBalanceAmount(originalBankStmtView.getAvgOSBalanceAmount());
+
+        List<BankStmtDetailView> bankStmtDetailViewList = new ArrayList<BankStmtDetailView>();
+        for (BankStmtDetailView detail : Util.safetyList(originalBankStmtView.getBankStmtDetailViewList())) {
+            bankStmtDetailViewList.add(copyToNewBankStmtDetail(detail));
+        }
+        newBankStmtView.setBankStmtDetailViewList(bankStmtDetailViewList);
+
+        List<BankStmtSrcOfCollateralProofView> srcCollateralProofList = new ArrayList<BankStmtSrcOfCollateralProofView>();
+        for (BankStmtSrcOfCollateralProofView srcOfCollProofView : Util.safetyList(originalBankStmtView.getSrcOfCollateralProofViewList())) {
+            srcCollateralProofList.add(copyToNewSrcOfCollProofView(srcOfCollProofView));
+        }
+        newBankStmtView.setSrcOfCollateralProofViewList(srcCollateralProofList);
+        return newBankStmtView;
+    }
+
+    public BankStmtDetailView copyToNewBankStmtDetail(BankStmtDetailView originalBankStmtDetailView) {
+        BankStmtDetailView newBankStmtDetailView = new BankStmtDetailView();
+        if (originalBankStmtDetailView == null) {
+            return newBankStmtDetailView;
+        }
+
+        newBankStmtDetailView.setId(originalBankStmtDetailView.getId());
+        newBankStmtDetailView.setOverLimitAmount(originalBankStmtDetailView.getOverLimitAmount());
+        newBankStmtDetailView.setGrossCreditBalance(originalBankStmtDetailView.getGrossCreditBalance());
+        newBankStmtDetailView.setNumberOfCreditTxn(originalBankStmtDetailView.getNumberOfCreditTxn());
+        newBankStmtDetailView.setExcludeListBDM(originalBankStmtDetailView.getExcludeListBDM());
+        newBankStmtDetailView.setExcludeListUW(originalBankStmtDetailView.getExcludeListUW());
+        newBankStmtDetailView.setCreditAmountBDM(originalBankStmtDetailView.getCreditAmountBDM());
+        newBankStmtDetailView.setCreditAmountUW(originalBankStmtDetailView.getCreditAmountUW());
+        newBankStmtDetailView.setTimesOfAvgCreditBDM(originalBankStmtDetailView.getTimesOfAvgCreditBDM());
+        newBankStmtDetailView.setTimesOfAvgCreditUW(originalBankStmtDetailView.getTimesOfAvgCreditUW());
+        newBankStmtDetailView.setDebitAmount(originalBankStmtDetailView.getDebitAmount());
+        newBankStmtDetailView.setNumberOfDebitTxn(originalBankStmtDetailView.getNumberOfDebitTxn());
+        newBankStmtDetailView.setDateOfMaxBalance(originalBankStmtDetailView.getDateOfMaxBalance());
+        newBankStmtDetailView.setMaxBalance(originalBankStmtDetailView.getMaxBalance());
+        newBankStmtDetailView.setDateOfMinBalance(originalBankStmtDetailView.getDateOfMinBalance());
+        newBankStmtDetailView.setMinBalance(originalBankStmtDetailView.getMinBalance());
+        newBankStmtDetailView.setMonthBalance(originalBankStmtDetailView.getMonthBalance());
+        newBankStmtDetailView.setNumberOfChequeReturn(originalBankStmtDetailView.getNumberOfChequeReturn());
+        newBankStmtDetailView.setChequeReturnAmount(originalBankStmtDetailView.getChequeReturnAmount());
+        newBankStmtDetailView.setOverLimitTimes(originalBankStmtDetailView.getOverLimitTimes());
+        newBankStmtDetailView.setOverLimitDays(originalBankStmtDetailView.getOverLimitDays());
+        newBankStmtDetailView.setSwingPercent(originalBankStmtDetailView.getSwingPercent());
+        newBankStmtDetailView.setUtilizationPercent(originalBankStmtDetailView.getUtilizationPercent());
+        newBankStmtDetailView.setGrossInflowPerLimit(originalBankStmtDetailView.getGrossInflowPerLimit());
+        newBankStmtDetailView.setTotalTransaction(originalBankStmtDetailView.getTotalTransaction());
+        newBankStmtDetailView.setAsOfDate(originalBankStmtDetailView.getAsOfDate());
+        return newBankStmtDetailView;
+    }
+
+    public BankStmtSrcOfCollateralProofView copyToNewSrcOfCollProofView(BankStmtSrcOfCollateralProofView originalSrcOfCollProofView) {
+        BankStmtSrcOfCollateralProofView newSrcOfCollProofView = new BankStmtSrcOfCollateralProofView();
+        if (originalSrcOfCollProofView == null) {
+            return newSrcOfCollProofView;
+        }
+
+        newSrcOfCollProofView.setId(originalSrcOfCollProofView.getId());
+        newSrcOfCollProofView.setDateOfMaxBalance(originalSrcOfCollProofView.getDateOfMaxBalance());
+        newSrcOfCollProofView.setMaxBalance(originalSrcOfCollProofView.getMaxBalance());
+        return newSrcOfCollProofView;
+    }
 }
