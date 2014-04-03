@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -383,7 +384,7 @@ public class PDFDecision implements Serializable {
         return relatedAppInRLOSDecisionReportArrayList;
     }
 
-    public List<ExistingCollateralBorrowerDecisionReport> fillExistingCollateralBorrower(String path){
+    public List<ExistingCollateralBorrowerDecisionReport> fillExistingCollateralBorrower(String path) throws UnsupportedEncodingException {
         init();
         List<ExistingCollateralBorrowerDecisionReport> collateralBorrowerDecisionReportList = new ArrayList<ExistingCollateralBorrowerDecisionReport>();
         List<ExistingCollateralDetailView> conditionDetailViews = decisionView.getExtBorrowerCollateralList();
@@ -397,14 +398,19 @@ public class PDFDecision implements Serializable {
                 collateralBorrowerDecisionReport.setPath(path);
 
                 StringBuilder collateralType = new StringBuilder();
-                collateralType = collateralType.append("ศักยภาพหลักประกัน :").append((Util.checkNullString(detailView.getPotentialCollateral().getDescription()))).append("\n");
-                collateralType = collateralType.append("ประเภทหลักประกัน :").append((Util.checkNullString(detailView.getCollateralType().getDescription()))).append("\n");
-                collateralType = collateralType.append("กรรมสิทธิ์ :").append((Util.checkNullString(detailView.getOwner()))).append("\n");
-                collateralType = collateralType.append("ความเกี่ยวพัน :").append((Util.checkNullString(detailView.getRelation().getDescription()))).append("\n");
-                collateralType = collateralType.append("วันที่ประเมิน :").append((detailView.getAppraisalDate()) == null ? "" : detailView.getAppraisalDate()).append("\n");
-                collateralType = collateralType.append("เลขที่ :").append((Util.checkNullString(detailView.getCollateralNumber()))).append("\n");
-                collateralType = collateralType.append("ที่อยู่ :").append((Util.checkNullString(detailView.getCollateralLocation()))).append("\\n");
-                collateralType = collateralType.append("หมายเหตุ :").append((Util.checkNullString(detailView.getRemark())));
+                try {
+                    collateralType = collateralType.append(new String("ศักยภาพหลักประกัน :".getBytes("ISO-8859-1"), "UTF-8")).append((Util.checkNullString(detailView.getPotentialCollateral().getDescription()))).append("\n");
+                    collateralType = collateralType.append(new String("ประเภทหลักประกัน :".getBytes("ISO-8859-1"), "UTF-8")).append((Util.checkNullString(detailView.getCollateralType().getDescription()))).append("\n");
+                    collateralType = collateralType.append(new String("กรรมสิทธิ์ :".getBytes("ISO-8859-1"), "UTF-8")).append((Util.checkNullString(detailView.getOwner()))).append("\n");
+                    collateralType = collateralType.append(new String("ความเกี่ยวพัน :".getBytes("ISO-8859-1"), "UTF-8")).append((Util.checkNullString(detailView.getRelation().getDescription()))).append("\n");
+                    collateralType = collateralType.append(new String("วันที่ประเมิน :".getBytes("ISO-8859-1"), "UTF-8")).append((detailView.getAppraisalDate()) == null ? "" : detailView.getAppraisalDate()).append("\n");
+                    collateralType = collateralType.append(new String("เลขที่ :".getBytes("ISO-8859-1"), "UTF-8")).append((Util.checkNullString(detailView.getCollateralNumber()))).append("\n");
+                    collateralType = collateralType.append(new String("ที่อยู่ :".getBytes("ISO-8859-1"), "UTF-8")).append((Util.checkNullString(detailView.getCollateralLocation()))).append("\\n");
+                    collateralType = collateralType.append(new String("หมายเหตุ :".getBytes("ISO-8859-1"), "UTF-8")).append((Util.checkNullString(detailView.getRemark())));
+                } catch (Exception e){
+                    log.debug("Exception while convert BYTE to UTF-8");
+                }
+
 
                 collateralBorrowerDecisionReport.setCollateralType(collateralType.toString());
                 log.debug("--CollateralType. {}",collateralType.toString());
@@ -647,6 +653,7 @@ public class PDFDecision implements Serializable {
                 collateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
                 collateralDecisionReport.setMortgageCondition(Util.checkNullString(view.getMortgageCondition()));
                 collateralDecisionReport.setMortgageConditionDetail(Util.checkNullString(view.getMortgageConditionDetail()));
+                collateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
 
                 if (Util.safetyList(view.getProposeCreditDetailViewList()).size() > 0) {
                     log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditDetailViewList());
@@ -710,6 +717,7 @@ public class PDFDecision implements Serializable {
                 approvedCollateralDecisionReport.setAadDecisionReasonDetail(Util.checkNullString(view.getAadDecisionReasonDetail()));
                 approvedCollateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
                 approvedCollateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
+                approvedCollateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
 //                approvedCollateralDecisionReport.setUwDecision(Util.checkNullString(view.getUwDecision().getValue()));
                 if (view.getUwDecision().equals("APPROVED")){
                     approvedCollateralDecisionReport.setApproved("Approved");

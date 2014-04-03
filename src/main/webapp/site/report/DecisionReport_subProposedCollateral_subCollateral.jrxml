@@ -96,7 +96,8 @@
 				<textElement verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{COLUMN_NUMBER}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{COLUMN_NUMBER}.intValue() == 0 ?
+"" : $V{COLUMN_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="547a30da-edac-4adb-b3bd-6b35ea6b81fe" style="detail" stretchType="RelativeToBandHeight" x="25" y="0" width="143" height="14"/>
