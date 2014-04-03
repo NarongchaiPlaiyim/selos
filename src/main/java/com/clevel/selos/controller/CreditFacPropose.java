@@ -501,10 +501,10 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 StandardPricingResponse standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
                 if (ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
                     //persist FeeDetail from retrieve
-                    if (Util.safetyList(standardPricingResponse.getPricingFeeList()).size() > 0) {
-                        creditFacProposeControl.saveFeeDetailFromRetrieve(standardPricingResponse.getPricingFeeList(),workCaseId);
-                        log.debug("standardPricingResponse.getPricingFeeList() not null ::: {}", standardPricingResponse.getPricingFeeList().size());
-                    }
+//                    if (Util.safetyList(standardPricingResponse.getPricingFeeList()).size() > 0) {
+//                        creditFacProposeControl.saveFeeDetailFromRetrieve(standardPricingResponse.getPricingFeeList(),workCaseId);
+//                        log.debug("standardPricingResponse.getPricingFeeList() not null ::: {}", standardPricingResponse.getPricingFeeList().size());
+//                    }
 
                     Map<Long, NewFeeDetailView> newFeeDetailViewMap = new HashMap<Long, NewFeeDetailView>();
                     NewFeeDetailView newFeeDetailView;

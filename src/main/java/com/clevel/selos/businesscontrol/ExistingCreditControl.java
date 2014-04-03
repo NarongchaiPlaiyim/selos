@@ -342,7 +342,7 @@ public class ExistingCreditControl extends BusinessControl {
                     log.debug("Staus : {}", appInProcess.getStatus());
 
                     //Check for STAUS = STPCP, PDSTP
-                    if(appInProcess.getStatus()!=null && (appInProcess.getStatus().equalsIgnoreCase("PDSTP") || appInProcess.getStatus().equalsIgnoreCase("STPCP"))){
+                    if(appInProcess.getStatus()!=null && (appInProcess.getStatus().trim().equalsIgnoreCase("PDSTP") || appInProcess.getStatus().trim().equalsIgnoreCase("STPCP"))){
                         //check date T+2
                         int diffNumber = DateTimeUtil.daysBetween2Dates(DateTimeUtil.getOnlyDate(appInProcess.getDateSentSTP()), DateTimeUtil.getOnlyDate(new Date()));
                         log.debug("Staus : {}, DiffDate SentSTP: {}", appInProcess.getStatus(),diffNumber);

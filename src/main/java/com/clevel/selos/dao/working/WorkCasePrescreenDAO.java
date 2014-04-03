@@ -44,6 +44,17 @@ public class WorkCasePrescreenDAO extends GenericDAO<WorkCasePrescreen, Long> {
         return workCasePrescreen;
     }
 
+    public WorkCasePrescreen findByAppNumber(String appNumber){
+        log.info("findByAppNumber : {}", appNumber);
+        WorkCasePrescreen workCasePrescreen;
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("appNumber", appNumber));
+
+
+        workCasePrescreen = (WorkCasePrescreen) criteria.uniqueResult();
+        return workCasePrescreen;
+    }
+
     //Function for AppHeader
     public WorkCasePrescreen getWorkCasePreScreenById(long id){
         Criteria criteria = createCriteria();

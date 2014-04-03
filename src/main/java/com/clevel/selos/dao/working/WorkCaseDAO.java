@@ -41,6 +41,16 @@ public class WorkCaseDAO extends GenericDAO<WorkCase, Long> {
         return workCase;
     }
 
+    public WorkCase findByAppNumber(String appNumber) {
+        log.info("findByAppNumber : {}", appNumber);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("appNumber", appNumber));
+        criteria.setFetchMode("workCasePrescreen", FetchMode.SELECT);
+        WorkCase workCase = (WorkCase) criteria.uniqueResult();
+
+        return workCase;
+    }
+
     //Function for AppHeader
     public WorkCase getWorkCaseById(long id){
         Criteria criteria = createCriteria();
