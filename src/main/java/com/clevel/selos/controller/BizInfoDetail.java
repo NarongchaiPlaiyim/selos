@@ -589,6 +589,7 @@ public class BizInfoDetail implements Serializable {
     }
 
     private boolean calSumBizStakeHolderDetailView(List<BizStakeHolderDetailView> stakeHoldersCalList,String stakeType){
+        onCheckRole();
         double sumSalePercent = 0;
         double sumCreditPercent = 0;
         double sumCreditTerm = 0;
@@ -627,8 +628,13 @@ public class BizInfoDetail implements Serializable {
             bizInfoDetailView.setSupplierTotalPercentCredit(sumCreditPercentB);
             bizInfoDetailView.setSupplierTotalCreditTerm(sumCreditTermB);
             log.debug(" stakeType ===== 1.1" );
-            bizInfoDetailView.setSupplierUWAdjustPercentCredit(sumCreditPercentB);
-            bizInfoDetailView.setSupplierUWAdjustCreditTerm(sumCreditTermB);
+            if (readonlyIsUW){
+                bizInfoDetailView.setSupplierUWAdjustPercentCredit(null);
+                bizInfoDetailView.setSupplierUWAdjustCreditTerm(null);
+            } else {
+                bizInfoDetailView.setSupplierUWAdjustPercentCredit(sumCreditPercentB);
+                bizInfoDetailView.setSupplierUWAdjustCreditTerm(sumCreditTermB);
+            }
             bizInfoDetailView.setPurchasePercentCash(new BigDecimal(100 - sumCreditPercentB.doubleValue()));
             bizInfoDetailView.setPurchasePercentCredit(sumCreditPercentB);
             log.debug(" stakeType ===== 1.5" );
@@ -639,8 +645,13 @@ public class BizInfoDetail implements Serializable {
             bizInfoDetailView.setBuyerTotalPercentCredit(sumCreditPercentB);
             bizInfoDetailView.setBuyerTotalCreditTerm(sumCreditTermB);
             log.debug(" stakeType ===== 2.1" );
-            bizInfoDetailView.setBuyerUWAdjustPercentCredit(sumCreditPercentB);
-            bizInfoDetailView.setBuyerUWAdjustCreditTerm(sumCreditTermB);
+            if (readonlyIsUW){
+                bizInfoDetailView.setBuyerUWAdjustPercentCredit(null);
+                bizInfoDetailView.setBuyerUWAdjustCreditTerm(null);
+            } else {
+                bizInfoDetailView.setBuyerUWAdjustPercentCredit(sumCreditPercentB);
+                bizInfoDetailView.setBuyerUWAdjustCreditTerm(sumCreditTermB);
+            }
             bizInfoDetailView.setPayablePercentCash(new BigDecimal(100 - sumCreditPercentB.doubleValue()));
             bizInfoDetailView.setPayablePercentCredit(sumCreditPercentB);
             log.debug(" stakeType ===== 2.5" );
