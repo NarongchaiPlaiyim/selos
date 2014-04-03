@@ -183,22 +183,13 @@ public class UWRuleResultTransform extends Transform{
         if(uwRuleResultSummaryView == null)
             return null;
 
-        UWRuleResultSummary uwRuleResultSummary = null;
+        UWRuleResultSummary uwRuleResultSummary = new UWRuleResultSummary();
         if(uwRuleResultSummaryView.getWorkCasePrescreenId() != 0){
-            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(uwRuleResultSummaryView.getWorkCasePrescreenId());
-            if(uwRuleResultSummary == null){
-                uwRuleResultSummary = new UWRuleResultSummary();
-                uwRuleResultSummary.setWorkCasePrescreen(workCasePrescreenDAO.findById(uwRuleResultSummaryView.getWorkCasePrescreenId()));
-            }
+            uwRuleResultSummary.setWorkCasePrescreen(workCasePrescreenDAO.findById(uwRuleResultSummaryView.getWorkCasePrescreenId()));
             logger.debug("set UWResult for Prescreen Result");
         }
         else {
-            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(uwRuleResultSummaryView.getWorkCaseId());
-            if(uwRuleResultSummary == null){
-                uwRuleResultSummary = new UWRuleResultSummary();
-                uwRuleResultSummary.setWorkCase(workCaseDAO.findById(uwRuleResultSummaryView.getWorkCaseId()));
-
-            }
+            uwRuleResultSummary.setWorkCase(workCaseDAO.findById(uwRuleResultSummaryView.getWorkCaseId()));
             logger.debug("set UWResult for Full App Result");
         }
 
@@ -227,9 +218,6 @@ public class UWRuleResultTransform extends Transform{
             return null;
 
         UWRuleResultDetail uwRuleResultDetail = new UWRuleResultDetail();
-        if(uwRuleResultDetailView.getId() != 0){
-            uwRuleResultDetail = uwRuleResultDetailDAO.findById(uwRuleResultDetailView.getId());
-        }
 
         if(uwRuleResultDetailView.getCustomerInfoSimpleView() != null && uwRuleResultDetailView.getCustomerInfoSimpleView().getId() != 0){
             Customer customer = customerDAO.findById(uwRuleResultDetailView.getCustomerInfoSimpleView().getId());

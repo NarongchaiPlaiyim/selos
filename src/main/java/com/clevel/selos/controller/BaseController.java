@@ -582,7 +582,7 @@ public class BaseController implements Serializable {
                     try{
                         uwRuleResultSummaryView = uwRuleResponseView.getUwRuleResultSummaryView();
                         uwRuleResultSummaryView.setWorkCasePrescreenId(workCasePreScreenId);
-                        uwRuleResultControl.saveUWRuleResult(uwRuleResultSummaryView);
+                        uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
                     }catch (Exception ex){
                         log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                         messageHeader = "Exception.";
@@ -598,7 +598,7 @@ public class BaseController implements Serializable {
                     RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
                 }
             } else {
-                uwRuleResultControl.saveUWRuleResult(uwRuleResponseView.getUwRuleResultSummaryView());
+                uwRuleResultControl.saveNewUWRuleResult(uwRuleResponseView.getUwRuleResultSummaryView());
                 messageHeader = "Information.";
                 message = "No. I'm";
                 RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");

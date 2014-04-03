@@ -3,9 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.working.UWRuleResultDetailDAO;
 import com.clevel.selos.dao.working.UWRuleResultSummaryDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.working.UWRuleResultDetail;
 import com.clevel.selos.model.db.working.UWRuleResultSummary;
-import com.clevel.selos.model.view.UWRuleResultDetailView;
 import com.clevel.selos.model.view.UWRuleResultSummaryView;
 import com.clevel.selos.transform.UWRuleResultTransform;
 import org.slf4j.Logger;
@@ -30,12 +28,26 @@ public class UWRuleResultControl extends BusinessControl{
     @Inject
     public UWRuleResultControl(){}
 
-    public void saveUWRuleResult(UWRuleResultSummaryView uwRuleResultSummaryView){
-        logger.debug("-- begin saveUWRuleResult UWRuleResultSummaryView {}", uwRuleResultSummaryView);
+    public void saveNewUWRuleResult(UWRuleResultSummaryView uwRuleResultSummaryView){
+        logger.debug("-- begin saveNewUWRuleResult UWRuleResultSummaryView {}", uwRuleResultSummaryView);
+        //Delete old list first.
+        deleteUWRuleResult(uwRuleResultSummaryView);
         UWRuleResultSummary uwRuleResultSummary = uwRuleResultTransform.transformToModel(uwRuleResultSummaryView);
         uwRuleResultSummary = uwRuleResultSummaryDAO.persist(uwRuleResultSummary);
         uwRuleResultDetailDAO.persist(uwRuleResultSummary.getUwRuleResultDetailList());
-        logger.debug("-- end saveUWRuleResult {}", uwRuleResultSummary);
+        logger.debug("-- end saveNewUWRuleResult {}", uwRuleResultSummary);
+    }
+
+    public void deleteUWRuleResult(UWRuleResultSummaryView uwRuleResultSummaryView){
+        logger.debug("-- begin deleteUWRuleResult --");
+        UWRuleResultSummary uwRuleResultSummary;
+        if(uwRuleResultSummaryView.getWorkCasePrescreenId() > 0)
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(uwRuleResultSummaryView.getWorkCasePrescreenId());
+        else
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(uwRuleResultSummaryView.getWorkCaseId());
+        uwRuleResultDetailDAO.delete(uwRuleResultSummary.getUwRuleResultDetailList());
+        uwRuleResultSummaryDAO.delete(uwRuleResultSummary);
+        logger.debug("-- end deleteUWRuleResult --");
     }
 
     public UWRuleResultSummaryView getUWRuleResultByWorkCasePrescreenId(long workCasePrescreenId){
