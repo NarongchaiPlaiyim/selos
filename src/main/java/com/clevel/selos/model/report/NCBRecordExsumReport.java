@@ -14,6 +14,14 @@ public class NCBRecordExsumReport {
     private String paymentClass;
 
     public NCBRecordExsumReport() {
+        ncbCusName = "";
+        checkIn6Month = 0;
+        currentPaymentType = "";
+        historyPaymentType = "";
+        nplFlagText = "";
+        tdrFlagText = "";
+        description = "";
+        paymentClass = "";
     }
 
     public String getNcbCusName() {

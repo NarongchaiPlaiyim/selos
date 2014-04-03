@@ -1,0 +1,24 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui">
+
+    <p:confirmDialog id="#{id}" header="#{headerMessage}" message="#{message}"
+                     showEffect="fade" hideEffect="fade" width="#{width}"
+                     severity="alert" widgetVar="#{name}" closable="false">
+        <h:form id="#{formId}">
+            <div class="onRight">
+                <p:commandButton widgetVar="#{id}OkBtn"
+                                 value="#{msg.get('app.button.ok')}"
+                                 action="#{controller[action]}"
+                                 update="#{update}"
+                                 onclick="#{id}OkBtn.disable();#{id}CancelBtn.disable()"
+                                 oncomplete="#{name}.hide();#{id}OkBtn.enable();#{id}CancelBtn.enable()"/>
+                <p:commandButton widgetVar="#{id}CancelBtn"
+                                 value="#{msg.get('app.button.cancel')}"
+                                 onclick="#{name}.hide()"/>
+            </div>
+        </h:form>
+    </p:confirmDialog>
+
+</f:view>

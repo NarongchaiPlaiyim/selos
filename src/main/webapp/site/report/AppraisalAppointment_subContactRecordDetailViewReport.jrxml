@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AppraisalAppointment_subContactRecordDetailViewReport" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="dcb37af8-da0f-45d9-80a0-0c3eb8f011fb">
+	<property name="ireport.zoom" value="1.6105100000000037"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="detail" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF" hAlign="Center" vAlign="Middle" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<field name="path" class="java.lang.String">
+		<fieldDescription><![CDATA[path]]></fieldDescription>
+	</field>
+	<field name="count" class="java.lang.Integer">
+		<fieldDescription><![CDATA[count]]></fieldDescription>
+	</field>
+	<field name="callingDate" class="java.lang.String"/>
+	<field name="callingResult" class="java.lang.Integer">
+		<fieldDescription><![CDATA[callingResult]]></fieldDescription>
+	</field>
+	<field name="acceptResult" class="java.lang.Integer"/>
+	<field name="nextCallingDate" class="java.lang.String"/>
+	<field name="reasonDescription" class="java.lang.String">
+		<fieldDescription><![CDATA[reasonDescription]]></fieldDescription>
+	</field>
+	<field name="remark" class="java.lang.String">
+		<fieldDescription><![CDATA[remark]]></fieldDescription>
+	</field>
+	<field name="statusDescription" class="java.lang.String"/>
+	<field name="displayName" class="java.lang.String"/>
+	<columnHeader>
+		<band height="41" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="9d658395-6155-4b72-9267-5149c35d7ce7" style="header" x="0" y="0" width="555" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[Customer Contact Record]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e1bd6d0-5460-4c7e-913c-bf330af6dcd7" style="header" x="0" y="15" width="16" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1b96ca52-b70b-4d87-b400-9776c1689188" style="header" x="16" y="15" width="53" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[Calling
+Date/Time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e9a1dd3a-bc0c-43b0-af7e-6e751eca6a84" style="header" x="69" y="15" width="77" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[Calling Result]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1f5db53e-1ff7-495c-b80e-88060d66ed4e" style="header" x="146" y="15" width="74" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[Accept Result]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="089ed0e4-c3d2-4469-801e-c21f945fb269" style="header" x="220" y="15" width="57" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[Next Calling
+Date/Time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="435ac131-7fd0-46dc-84a2-a83f0b6add68" style="header" x="277" y="15" width="65" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[Reason]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7d09f4c6-85f1-4bed-9482-89f2ee1f241a" style="header" x="342" y="15" width="102" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[Remark]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7e10ac16-b2ed-4a07-b1f6-a1dc28693c14" style="header" x="444" y="15" width="68" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="30bc909c-03f5-4198-be0e-3b40004963d1" style="header" x="512" y="15" width="43" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[Calling By]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Prevent">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="93b20286-0bd6-4b57-824f-b91561b9b75b" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="16" height="14" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{count}.intValue() == 0 ?
+"" : $F{count}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a225490d-d1d9-4a6b-a2e6-d98c6270ba97" style="detail" stretchType="RelativeToBandHeight" x="16" y="0" width="53" height="14" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{callingDate}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="1c3f1d6d-99b7-4ffc-a328-b1fa1652b9c4" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="69" y="0" width="77" height="14" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{callingResult}.intValue() == 2 ?
+"Can Contact" : $F{callingResult}.intValue() == 1 ?
+"Cannot Contact" : " "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="e7273aec-9847-4888-a239-3ce21138f639" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="146" y="0" width="74" height="14" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{acceptResult}.intValue() == 2 ?
+"Accept" : $F{acceptResult}.intValue() == 1 ?
+"Not Accept" : " "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="7a8a4497-007b-42bc-a44c-9ef9ec191b60" style="detail" stretchType="RelativeToBandHeight" x="220" y="0" width="57" height="14" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nextCallingDate}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="63e260ca-0101-48c3-918d-88b511cb6697" style="detail" stretchType="RelativeToBandHeight" x="277" y="0" width="65" height="14" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reasonDescription}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="2d766014-a480-42c8-ac37-c609bf65b46d" style="detail" stretchType="RelativeToBandHeight" x="342" y="0" width="102" height="14" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{remark}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="00569166-d06b-4b9f-8fcb-7b6c7aa7cd8d" style="detail" stretchType="RelativeToBandHeight" x="444" y="0" width="68" height="14" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{statusDescription}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="d0ba6b0a-102d-4326-b495-d66bdc8d2b8f" style="detail" stretchType="RelativeToBandHeight" x="512" y="0" width="43" height="14" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{displayName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="add8f405-f233-41c6-93f7-d3ad30c6d6f8" style="detail" mode="Transparent" x="0" y="0" width="555" height="14" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Left">
+					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{count}.intValue() == 0 ?
+"No records found." : $F{count}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

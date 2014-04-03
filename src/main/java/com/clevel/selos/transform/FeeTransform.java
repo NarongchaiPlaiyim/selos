@@ -127,6 +127,7 @@ public class FeeTransform extends Transform{
         return feeDetailList;
     }
 
+
     public List<FeeDetailView> transformToView( List<FeeDetail> feeDetailList){
         List<FeeDetailView> feeDetailViewList = new ArrayList<FeeDetailView>();
         FeeDetailView feeDetailView;

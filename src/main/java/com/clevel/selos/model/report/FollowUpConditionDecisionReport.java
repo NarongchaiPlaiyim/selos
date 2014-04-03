@@ -17,10 +17,10 @@ public class FollowUpConditionDecisionReport extends ReportModel{
     private Date follwDateDetaill;
 
     public FollowUpConditionDecisionReport() {
-        count = getDefaultInteger();
-        conditionView = getDefaultString();
-        detail = getDefaultString();
-        followDate = getDefaultDate();
+        count = 0;
+        conditionView = "";
+        detail = "";
+        followDate = null;
     }
 
     public String getConditionView() {

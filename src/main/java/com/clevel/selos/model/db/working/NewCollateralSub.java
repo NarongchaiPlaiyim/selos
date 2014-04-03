@@ -91,7 +91,7 @@ public class NewCollateralSub implements Serializable {
     private List<NewCollateralSubOwner> newCollateralSubOwnerList;
 
     @OneToMany(mappedBy = "newCollateralSub",cascade=CascadeType.ALL)
-    private List<NewCollateralSubRelated> newCollateralSubRelatedList;
+    private List<NewCollateralSubRelated> newCollateralSubRelatedList;    // when save to database must to transform view to DB
 
     public long getId() {
         return id;

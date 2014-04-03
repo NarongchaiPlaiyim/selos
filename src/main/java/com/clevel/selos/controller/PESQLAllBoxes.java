@@ -1,20 +1,25 @@
 package com.clevel.selos.controller;
 
 
+import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.dao.master.StepDAO;
+import com.clevel.selos.dao.working.WorkCaseAppraisalDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ActionCode;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCaseAppraisal;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.PEInbox;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -38,7 +43,8 @@ public class PESQLAllBoxes implements Serializable
 
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
-
+    @Inject
+    WorkCaseAppraisalDAO workCaseAppraisalDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
 
@@ -52,8 +58,12 @@ public class PESQLAllBoxes implements Serializable
     private String orderType;
     private String inboxname;
 
+    private String message;
+
     @Inject
     PEDBExecute pedbExecute;
+    @Inject
+    InboxControl inboxControl;
 
     public PESQLAllBoxes() { }
 
@@ -65,6 +75,7 @@ public class PESQLAllBoxes implements Serializable
         //Clear all session before selectInbox
         HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCasePreScreenId", 0L);
+        session.setAttribute("workCaseAppraisalId", 0L);
         session.setAttribute("workCaseId", 0L);
         session.setAttribute("stepId", 0L);
         session.setAttribute("statusId", 0L);
@@ -99,7 +110,9 @@ public class PESQLAllBoxes implements Serializable
         log.info("onSelectInbox ::: inboxViewSelectItem : {}", inboxViewSelectItem);
 
         long stepId = inboxViewSelectItem.getStepId();
+        String appNumber = inboxViewSelectItem.getApplicationno();
         long wrkCasePreScreenId = 0L;
+        long wrkCaseAppraisalId = 0L;
         long wrkCaseId = 0L;
         long statusId = 0L;
         int stageId = 0;
@@ -116,6 +129,27 @@ public class PESQLAllBoxes implements Serializable
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
             session.setAttribute("statusId", statusId);
+        } else if (stepId == StepValue.REQUEST_APPRAISAL.value()) {     //For Parallel Appraisal
+            WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
+            if(workCase != null){
+                wrkCaseId = workCase.getId();
+                requestAppraisalFlag = workCase.getRequestAppraisal();
+                session.setAttribute("workCaseId", wrkCaseId);
+                session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            } else {
+                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
+                wrkCasePreScreenId = workCasePrescreen.getId();
+                requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+                session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
+                session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            }
+            WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
+            if(workCaseAppraisal != null){
+                statusId = workCaseAppraisal.getStatus().getId();
+                wrkCaseAppraisalId = workCaseAppraisal.getId();
+                session.setAttribute("statusId", statusId);
+                session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
+            }
         } else {
             WorkCase workCase = workCaseDAO.findByWobNumber(inboxViewSelectItem.getFwobnumber());
             if(workCase != null){
@@ -158,12 +192,34 @@ public class PESQLAllBoxes implements Serializable
 
         String landingPage = pedbExecute.getLandingPage(stepId);
 
+        log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
+
         if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
             FacesUtil.redirect(landingPage);
             return;
         } else {
             //TODO Show dialog
         }
+    }
+
+    public void onClickPickUpCase(PEInbox inboxSelect){
+        inboxViewSelectItem = inboxSelect;
+        RequestContext.getCurrentInstance().execute("msgBoxConfirmDlg.show()");
+    }
+
+    public void onPickUpCase(){
+        try{
+            //TODO dispatch for Select case
+            String queueName = inboxViewSelectItem.getQueuename();
+            String wobNumber = inboxViewSelectItem.getFwobnumber();
+            inboxControl.selectCasePoolBox(queueName, wobNumber, ActionCode.ASSIGN_TO_ME.getVal());
+            //TODO Reload all value for Inbox Select
+            onSelectInbox();
+        } catch (Exception ex){
+            log.error("Exception while select case from PoolBox : ", ex);
+            RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+        }
+
     }
 
     public String getInboxname() {
@@ -206,4 +262,11 @@ public class PESQLAllBoxes implements Serializable
         this.inboxViewSelectItem = inboxViewSelectItem;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

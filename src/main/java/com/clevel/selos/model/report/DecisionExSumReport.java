@@ -15,10 +15,10 @@ public class DecisionExSumReport extends ReportModel{
     private String deviationReason;
 
     public DecisionExSumReport() {
-        this.flag = getDefaultString();
-        this.group = getDefaultString();
-        this.cusName = getDefaultString();
-        this.deviationReason = getDefaultString();
+        this.flag = "";
+        this.group = "";
+        this.cusName = "";
+        this.deviationReason = "";
     }
 
     public long getId() {

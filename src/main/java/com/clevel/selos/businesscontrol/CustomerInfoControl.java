@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -181,17 +182,23 @@ public class CustomerInfoControl extends BusinessControl {
         //calculation age for juristic
         customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfRegister()));
 
+        BigDecimal totalShare = customerInfoView.getTotalShare();
+        BigDecimal share = customerInfoView.getShares();
+
+        customerInfoView.setPercentShare(Util.multiply(Util.divide(share,totalShare),100));
+
         Customer customerJuristic = customerTransform.transformToModel(customerInfoView, null, workCase, getCurrentUser());
-        if(customerJuristic.getReference() != null){
-            if(customerJuristic.getReference().getId() != 0){
-                Reference reference = referenceDAO.findById(customerJuristic.getReference().getId());
-                if(!reference.getPercentShare().equalsIgnoreCase("-")){
-                    if(customerJuristic.getShares() != null && customerJuristic.getJuristic().getTotalShare() != null){
-                        customerJuristic.setPercentShare(Util.divide(customerJuristic.getShares(),customerJuristic.getJuristic().getTotalShare()));
-                    }
-                }
-            }
-        }
+        //TODO: Do this for check Reference to cal %Share
+//        if(customerJuristic.getReference() != null){
+//            if(customerJuristic.getReference().getId() != 0){
+//                Reference reference = referenceDAO.findById(customerJuristic.getReference().getId());
+//                if(reference != null && reference.getId() != 0 && reference.getPercentShare() != null && !reference.getPercentShare().equalsIgnoreCase("-")){
+//                    if(customerJuristic.getShares() != null && customerJuristic.getJuristic().getTotalShare() != null){
+//                        customerJuristic.setPercentShare(Util.divide(customerJuristic.getShares(),customerJuristic.getJuristic().getTotalShare()));
+//                    }
+//                }
+//            }
+//        }
 
         if(customerJuristic.getCustomerOblInfo() != null){
             customerOblInfoDAO.persist(customerJuristic.getCustomerOblInfo());
@@ -203,29 +210,36 @@ public class CustomerInfoControl extends BusinessControl {
 
         if(customerInfoView.getIndividualViewList() != null && customerInfoView.getIndividualViewList().size() > 0){
             for(CustomerInfoView cusIndividual : customerInfoView.getIndividualViewList()){
-                if(cusIndividual.getReference() != null){
-                    if(cusIndividual.getReference().getId() != 0){
-                        Reference reference = referenceDAO.findById(cusIndividual.getReference().getId());
-                        if(reference != null && reference.getId() != 0 && reference.getPercentShare() != null && !reference.getPercentShare().equalsIgnoreCase("-")){
-                            if(customerJuristic.getShares() != null && cusIndividual.getShares() != null){
-                                cusIndividual.setPercentShare(Util.divide(cusIndividual.getShares(),customerJuristic.getJuristic().getTotalShare()));
-                            }
-                        }
-                    }
-                }
+                BigDecimal mainCusShare = cusIndividual.getShares();
+                cusIndividual.setPercentShare(Util.multiply(Util.divide(mainCusShare,totalShare),100));
+
+                //TODO: Do this for check Reference to cal %Share
+//                if(cusIndividual.getReference() != null){
+//                    if(cusIndividual.getReference().getId() != 0){
+//                        Reference reference = referenceDAO.findById(cusIndividual.getReference().getId());
+//                        if(reference != null && reference.getId() != 0 && reference.getPercentShare() != null && !reference.getPercentShare().equalsIgnoreCase("-")){
+//                            if(customerJuristic.getJuristic().getTotalShare() != null && cusIndividual.getShares() != null){
+//                                cusIndividual.setPercentShare(Util.divide(cusIndividual.getShares(),customerJuristic.getJuristic().getTotalShare()));
+//                            }
+//                        }
+//                    }
+//                }
                 cusIndividual.setIsCommittee(1);
                 cusIndividual.setCommitteeId(customerJuristic.getId());
                 if(cusIndividual.getSpouse() != null){
-                    if(cusIndividual.getSpouse().getReference() != null){
-                        if(cusIndividual.getSpouse().getReference().getId() != 0){
-                            Reference reference = referenceDAO.findById(cusIndividual.getSpouse().getReference().getId());
-                            if(reference != null && reference.getId() != 0 && reference.getPercentShare() != null && !reference.getPercentShare().equalsIgnoreCase("-")){
-                                if(customerJuristic.getShares() != null && cusIndividual.getSpouse().getShares() != null){
-                                    cusIndividual.getSpouse().setPercentShare(Util.divide(cusIndividual.getSpouse().getShares(),customerJuristic.getJuristic().getTotalShare()));
-                                }
-                            }
-                        }
-                    }
+                    BigDecimal spouseCusShare = cusIndividual.getSpouse().getShares();
+                    cusIndividual.getSpouse().setPercentShare(Util.multiply(Util.divide(spouseCusShare,totalShare),100));
+                    //TODO: Do this for check Reference to cal %Share
+//                    if(cusIndividual.getSpouse().getReference() != null){
+//                        if(cusIndividual.getSpouse().getReference().getId() != 0){
+//                            Reference reference = referenceDAO.findById(cusIndividual.getSpouse().getReference().getId());
+//                            if(reference != null && reference.getId() != 0 && reference.getPercentShare() != null && !reference.getPercentShare().equalsIgnoreCase("-")){
+//                                if(customerJuristic.getShares() != null && cusIndividual.getSpouse().getShares() != null){
+//                                    cusIndividual.getSpouse().setPercentShare(Util.divide(cusIndividual.getSpouse().getShares(),customerJuristic.getJuristic().getTotalShare()));
+//                                }
+//                            }
+//                        }
+//                    }
                     cusIndividual.getSpouse().setIsCommittee(0);
                 }
                 saveCustomerInfoIndividual(cusIndividual,workCaseId);

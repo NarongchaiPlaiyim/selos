@@ -77,19 +77,37 @@ public class PDFDecision implements Serializable {
                 BorrowerCreditDecisionReport decisionReport = new BorrowerCreditDecisionReport();
                 decisionReport.setCount(count++);
                 decisionReport.setPath(pathsub);
-                decisionReport.setAccountName(Util.checkNullString(detailView.getAccountName()));
-                decisionReport.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
-                decisionReport.setAccountSuf(Util.checkNullString(detailView.getAccountSuf()));
-                decisionReport.setDescription(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
+
+                StringBuilder account =new StringBuilder();
+                account = account.append(Util.checkNullString(detailView.getAccountName())).append("\n");
+                account = account.append("Acc No.: ").append(Util.checkNullString(detailView.getAccountNumber()));
+                account = account.append(" Suf.: ").append(Util.checkNullString(detailView.getAccountNumber())).append("\n");
+                account = account.append("Acc Status: ").append(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
+
+                decisionReport.setAccount(account.toString());
+                log.debug("accountLable by creditBorrower. {}",account.toString());
+
                 decisionReport.setProductProgramName(Util.checkNullString(detailView.getExistProductProgramView().getName()));
                 decisionReport.setCreditTypeName(Util.checkNullString(detailView.getExistCreditTypeView().getName()));
-                decisionReport.setProductCode(Util.checkNullString(detailView.getProductCode()));
-                decisionReport.setProjectCode(Util.checkNullString(detailView.getProjectCode()));
+
+                StringBuilder code =new StringBuilder();
+                code = code.append("Product: ").append(Util.checkNullString(detailView.getProductCode())).append("\n");
+                code = code.append("Project: ").append(Util.checkNullString(detailView.getProjectCode()));
+
+                decisionReport.setCode(code.toString());
+                log.debug("codeLable by creditBorrower. {}", code.toString());
+
                 decisionReport.setLimit(Util.convertNullToZERO(detailView.getLimit()));
                 decisionReport.setPcePercent(Util.convertNullToZERO(detailView.getPceLimit()));
                 decisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
                 decisionReport.setOutstanding(Util.convertNullToZERO(detailView.getOutstanding()));
-                decisionReport.setExistingCreditTierDetailViewList(Util.safetyList(detailView.getExistingCreditTierDetailViewList()));
+
+                if (Util.safetyList(Util.safetyList(detailView.getExistingCreditTierDetailViewList())).size() > 0){
+                    decisionReport.setExistingCreditTierDetailViewList(detailView.getExistingCreditTierDetailViewList());
+                } else {
+                    log.debug("getExistingCreditTierDetailViewList is Null. {}",detailView.getExistingCreditTierDetailViewList());
+                }
+
                 borrowerCreditDecisionReportList.add(decisionReport);
             }
         } else {
@@ -138,14 +156,25 @@ public class PDFDecision implements Serializable {
                 BorrowerRetailDecisionReport borrowerRetailDecisionReport = new BorrowerRetailDecisionReport();
                 borrowerRetailDecisionReport.setCount(count++);
                 borrowerRetailDecisionReport.setPath(pathsub);
-                borrowerRetailDecisionReport.setAccountName(Util.checkNullString(detailView.getAccountName()));
-                borrowerRetailDecisionReport.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
-                borrowerRetailDecisionReport.setAccountSuf(Util.checkNullString(detailView.getAccountSuf()));
-                borrowerRetailDecisionReport.setDescription(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
+
+                StringBuilder account =new StringBuilder();
+                account = account.append(Util.checkNullString(detailView.getAccountName())).append("\n");
+                account = account.append("Acc No.: ").append(Util.checkNullString(detailView.getAccountNumber()));
+                account = account.append(" Suf.: ").append(Util.checkNullString(detailView.getAccountNumber())).append("\n");
+                account = account.append("Acc Status: ").append(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
+
+                borrowerRetailDecisionReport.setAccount(account.toString());
+                log.debug("accountLable by borrowerRetail. {}",account.toString());
+
                 borrowerRetailDecisionReport.setProductProgramName(Util.checkNullString(detailView.getExistProductProgramView().getName()));
                 borrowerRetailDecisionReport.setCreditTypeName(Util.checkNullString(detailView.getExistCreditTypeView().getName()));
-                borrowerRetailDecisionReport.setProductCode(Util.checkNullString(detailView.getProductCode()));
-                borrowerRetailDecisionReport.setProjectCode(Util.checkNullString(detailView.getProjectCode()));
+
+                StringBuilder code =new StringBuilder();
+                code = code.append("Product: ").append(Util.checkNullString(detailView.getProductCode())).append("\n");
+                code = code.append("Project: ").append(Util.checkNullString(detailView.getProjectCode()));
+                borrowerRetailDecisionReport.setCode(code.toString());
+                log.debug("codeLable by borrowerRetail. {}",code.toString());
+
                 borrowerRetailDecisionReport.setLimit(Util.convertNullToZERO(detailView.getLimit()));
                 borrowerRetailDecisionReport.setPcePercent(Util.convertNullToZERO(detailView.getPceLimit()));
                 borrowerRetailDecisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
@@ -174,14 +203,26 @@ public class PDFDecision implements Serializable {
                 BorrowerAppInRLOSDecisionReport borrowerAppInRLOSDecisionReport = new BorrowerAppInRLOSDecisionReport();
                 borrowerAppInRLOSDecisionReport.setCount(count++);
                 borrowerAppInRLOSDecisionReport.setPath(pathsub);
-                borrowerAppInRLOSDecisionReport.setAccountName(Util.checkNullString(detailView.getAccountName()));
-                borrowerAppInRLOSDecisionReport.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
-                borrowerAppInRLOSDecisionReport.setAccountSuf(Util.checkNullString(detailView.getAccountSuf()));
-                borrowerAppInRLOSDecisionReport.setDescription(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
+
+                StringBuilder account =new StringBuilder();
+                account = account.append(Util.checkNullString(detailView.getAccountName())).append("\n");
+                account = account.append("Acc No.: ").append(Util.checkNullString(detailView.getAccountNumber()));
+                account = account.append(" Suf.: ").append(Util.checkNullString(detailView.getAccountNumber())).append("\n");
+                account = account.append("Acc Status: ").append(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
+
+                borrowerAppInRLOSDecisionReport.setAccount(account.toString());
+                log.debug("account by borrowerAppInRLOSDecisionReport. {}",account.toString());
+
                 borrowerAppInRLOSDecisionReport.setProductProgramName(Util.checkNullString(detailView.getExistProductProgramView().getName()));
                 borrowerAppInRLOSDecisionReport.setCreditTypeName(Util.checkNullString(detailView.getExistCreditTypeView().getName()));
-                borrowerAppInRLOSDecisionReport.setProductCode(Util.checkNullString(detailView.getProductCode()));
-                borrowerAppInRLOSDecisionReport.setProjectCode(Util.checkNullString(detailView.getProjectCode()));
+
+                StringBuilder code =new StringBuilder();
+                code = code.append("Product: ").append(Util.checkNullString(detailView.getProductCode())).append("\n");
+                code = code.append("Project: ").append(Util.checkNullString(detailView.getProjectCode()));
+
+                borrowerAppInRLOSDecisionReport.setCode(code.toString());
+                log.debug("codeLable by borrowerAppInRLOSDecisionReport. {}",code.toString());
+
                 borrowerAppInRLOSDecisionReport.setLimit(Util.convertNullToZERO(detailView.getLimit()));
                 borrowerAppInRLOSDecisionReport.setPcePercent(Util.convertNullToZERO(detailView.getPceLimit()));
                 borrowerAppInRLOSDecisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
@@ -209,14 +250,26 @@ public class PDFDecision implements Serializable {
                 RelatedCommercialDecisionReport relatedCommercialDecisionReport = new RelatedCommercialDecisionReport();
                 relatedCommercialDecisionReport.setCount(count++);
                 relatedCommercialDecisionReport.setPath(pathsub);
-                relatedCommercialDecisionReport.setAccountName(Util.checkNullString(detailView.getAccountName()));
-                relatedCommercialDecisionReport.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
-                relatedCommercialDecisionReport.setAccountSuf(Util.checkNullString(detailView.getAccountSuf()));
-                relatedCommercialDecisionReport.setDescription(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
+
+                StringBuilder account =new StringBuilder();
+                account = account.append(Util.checkNullString(detailView.getAccountName())).append("\n");
+                account = account.append("Acc No.: ").append(Util.checkNullString(detailView.getAccountNumber()));
+                account = account.append(" Suf.: ").append(Util.checkNullString(detailView.getAccountNumber())).append("\n");
+                account = account.append("Acc Status: ").append(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
+
+                relatedCommercialDecisionReport.setAccount(account.toString());
+                log.debug("account by relatedCommercialDecisionReport. {}",account.toString());
+
                 relatedCommercialDecisionReport.setProductProgramName(Util.checkNullString(detailView.getExistProductProgramView().getName()));
                 relatedCommercialDecisionReport.setCreditTypeName(Util.checkNullString(detailView.getExistCreditTypeView().getName()));
-                relatedCommercialDecisionReport.setProductCode(Util.checkNullString(detailView.getProductCode()));
-                relatedCommercialDecisionReport.setProjectCode(Util.checkNullString(detailView.getProjectCode()));
+
+                StringBuilder code =new StringBuilder();
+                code = code.append("Product: ").append(Util.checkNullString(detailView.getProductCode())).append("\n");
+                code = code.append("Project: ").append(Util.checkNullString(detailView.getProjectCode()));
+
+                relatedCommercialDecisionReport.setCode(code.toString());
+                log.debug("codeLable by relatedCommercialDecisionReport. {}",code.toString());
+
                 relatedCommercialDecisionReport.setLimit(Util.convertNullToZERO(detailView.getLimit()));
                 relatedCommercialDecisionReport.setPcePercent(Util.convertNullToZERO(detailView.getPceLimit()));
                 relatedCommercialDecisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
@@ -245,14 +298,26 @@ public class PDFDecision implements Serializable {
                 RelatedRetailDecisionReport relatedRetailDecisionReport = new RelatedRetailDecisionReport();
                 relatedRetailDecisionReport.setCount(count++);
                 relatedRetailDecisionReport.setPath(pathsub);
-                relatedRetailDecisionReport.setAccountName(Util.checkNullString(detailView.getAccountName()));
-                relatedRetailDecisionReport.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
-                relatedRetailDecisionReport.setAccountSuf(Util.checkNullString(detailView.getAccountSuf()));
-                relatedRetailDecisionReport.setDescription(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
+
+                StringBuilder account =new StringBuilder();
+                account = account.append(Util.checkNullString(detailView.getAccountName())).append("\n");
+                account = account.append("Acc No.: ").append(Util.checkNullString(detailView.getAccountNumber()));
+                account = account.append(" Suf.: ").append(Util.checkNullString(detailView.getAccountNumber())).append("\n");
+                account = account.append("Acc Status: ").append(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
+
+                relatedRetailDecisionReport.setAccount(account.toString());
+                log.debug("account by relatedRetailDecisionReport. {}",account.toString());
+
                 relatedRetailDecisionReport.setProductProgramName(Util.checkNullString(detailView.getExistProductProgramView().getName()));
                 relatedRetailDecisionReport.setCreditTypeName(Util.checkNullString(detailView.getExistCreditTypeView().getName()));
-                relatedRetailDecisionReport.setProductCode(Util.checkNullString(detailView.getProductCode()));
-                relatedRetailDecisionReport.setProjectCode(Util.checkNullString(detailView.getProjectCode()));
+
+                StringBuilder code =new StringBuilder();
+                code = code.append("Product: ").append(Util.checkNullString(detailView.getProductCode())).append("\n");
+                code = code.append("Project: ").append(Util.checkNullString(detailView.getProjectCode()));
+
+                relatedRetailDecisionReport.setCode(code.toString());
+                log.debug("codeLable by relatedRetailDecisionReport. {}",code.toString());
+
                 relatedRetailDecisionReport.setLimit(Util.convertNullToZERO(detailView.getLimit()));
                 relatedRetailDecisionReport.setPcePercent(Util.convertNullToZERO(detailView.getPceLimit()));
                 relatedRetailDecisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
@@ -281,14 +346,26 @@ public class PDFDecision implements Serializable {
                 RelatedAppInRLOSDecisionReport relatedAppInRLOSDecisionReport = new RelatedAppInRLOSDecisionReport();
                 relatedAppInRLOSDecisionReport.setCount(count++);
                 relatedAppInRLOSDecisionReport.setPath(pathsub);
-                relatedAppInRLOSDecisionReport.setAccountName(Util.checkNullString(detailView.getAccountName()));
-                relatedAppInRLOSDecisionReport.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
-                relatedAppInRLOSDecisionReport.setAccountSuf(Util.checkNullString(detailView.getAccountSuf()));
-                relatedAppInRLOSDecisionReport.setDescription(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
+
+                StringBuilder account =new StringBuilder();
+                account = account.append(Util.checkNullString(detailView.getAccountName())).append("\n");
+                account = account.append("Acc No.: ").append(Util.checkNullString(detailView.getAccountNumber()));
+                account = account.append(" Suf.: ").append(Util.checkNullString(detailView.getAccountNumber())).append("\n");
+                account = account.append("Acc Status: ").append(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
+
+                relatedAppInRLOSDecisionReport.setAccount(account.toString());
+                log.debug("account by relatedAppInRLOSDecisionReport. {}",account.toString());
+
                 relatedAppInRLOSDecisionReport.setProductProgramName(Util.checkNullString(detailView.getExistProductProgramView().getName()));
                 relatedAppInRLOSDecisionReport.setCreditTypeName(Util.checkNullString(detailView.getExistCreditTypeView().getName()));
-                relatedAppInRLOSDecisionReport.setProductCode(Util.checkNullString(detailView.getProductCode()));
-                relatedAppInRLOSDecisionReport.setProjectCode(Util.checkNullString(detailView.getProjectCode()));
+
+                StringBuilder code =new StringBuilder();
+                code = code.append("Product: ").append(Util.checkNullString(detailView.getProductCode())).append("\n");
+                code = code.append("Project: ").append(Util.checkNullString(detailView.getProjectCode()));
+
+                relatedAppInRLOSDecisionReport.setCode(code.toString());
+                log.debug("codeLable by relatedAppInRLOSDecisionReport. {}",code.toString());
+
                 relatedAppInRLOSDecisionReport.setLimit(Util.convertNullToZERO(detailView.getLimit()));
                 relatedAppInRLOSDecisionReport.setPcePercent(Util.convertNullToZERO(detailView.getPceLimit()));
                 relatedAppInRLOSDecisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
@@ -317,17 +394,21 @@ public class PDFDecision implements Serializable {
             for (ExistingCollateralDetailView detailView : conditionDetailViews){
                 ExistingCollateralBorrowerDecisionReport collateralBorrowerDecisionReport = new ExistingCollateralBorrowerDecisionReport();
                 collateralBorrowerDecisionReport.setCount(count++);
-                collateralBorrowerDecisionReport.setPotentialCollateral(Util.checkNullString(detailView.getPotentialCollateral().getDescription()));
-                collateralBorrowerDecisionReport.setCollateralType(Util.checkNullString(detailView.getCollateralType().getDescription()));
-                collateralBorrowerDecisionReport.setOwner(Util.checkNullString(detailView.getOwner()));
-                collateralBorrowerDecisionReport.setRelation(Util.checkNullString(detailView.getRelation().getDescription()));
-
-                collateralBorrowerDecisionReport.setAppraisalDate(detailView.getAppraisalDate());
                 collateralBorrowerDecisionReport.setPath(path);
 
-                collateralBorrowerDecisionReport.setCollateralNumber(Util.checkNullString(detailView.getCollateralNumber()));
-                collateralBorrowerDecisionReport.setCollateralLocation(Util.checkNullString(detailView.getCollateralLocation()));
-                collateralBorrowerDecisionReport.setRemark(Util.checkNullString(detailView.getRemark()));
+                StringBuilder collateralType = new StringBuilder();
+                collateralType = collateralType.append("ศักยภาพหลักประกัน :").append((Util.checkNullString(detailView.getPotentialCollateral().getDescription()))).append("\n");
+                collateralType = collateralType.append("ประเภทหลักประกัน :").append((Util.checkNullString(detailView.getCollateralType().getDescription()))).append("\n");
+                collateralType = collateralType.append("กรรมสิทธิ์ :").append((Util.checkNullString(detailView.getOwner()))).append("\n");
+                collateralType = collateralType.append("ความเกี่ยวพัน :").append((Util.checkNullString(detailView.getRelation().getDescription()))).append("\n");
+                collateralType = collateralType.append("วันที่ประเมิน :").append((detailView.getAppraisalDate()) == null ? "" : detailView.getAppraisalDate()).append("\n");
+                collateralType = collateralType.append("เลขที่ :").append((Util.checkNullString(detailView.getCollateralNumber()))).append("\n");
+                collateralType = collateralType.append("ที่อยู่ :").append((Util.checkNullString(detailView.getCollateralLocation()))).append("\\n");
+                collateralType = collateralType.append("หมายเหตุ :").append((Util.checkNullString(detailView.getRemark())));
+
+                collateralBorrowerDecisionReport.setCollateralType(collateralType.toString());
+                log.debug("--CollateralType. {}",collateralType.toString());
+
                 collateralBorrowerDecisionReport.setCusName(Util.checkNullString(detailView.getCusName()));
                 collateralBorrowerDecisionReport.setExistingCreditTypeDetailViews(Util.safetyList(detailView.getExistingCreditTypeDetailViewList()));
                 collateralBorrowerDecisionReport.setProductProgram(Util.checkNullString(detailView.getProductProgram()));
@@ -358,17 +439,21 @@ public class PDFDecision implements Serializable {
             for (ExistingCollateralDetailView detailView : conditionDetailViews){
                 ExistingCollateralRelatedDecisionReport collateralRelatedDecisionReport = new ExistingCollateralRelatedDecisionReport();
                 collateralRelatedDecisionReport.setCount(count++);
-                collateralRelatedDecisionReport.setPotentialCollateral(Util.checkNullString(detailView.getPotentialCollateral().getDescription()));
-                collateralRelatedDecisionReport.setCollateralType(Util.checkNullString(detailView.getCollateralType().getDescription()));
-                collateralRelatedDecisionReport.setOwner(Util.checkNullString(detailView.getOwner()));
-                collateralRelatedDecisionReport.setRelation(Util.checkNullString(detailView.getRelation().getDescription()));
-
-                collateralRelatedDecisionReport.setAppraisalDate(detailView.getAppraisalDate());
                 collateralRelatedDecisionReport.setPath(path);
 
-                collateralRelatedDecisionReport.setCollateralNumber(Util.checkNullString(detailView.getCollateralNumber()));
-                collateralRelatedDecisionReport.setCollateralLocation(Util.checkNullString(detailView.getCollateralLocation()));
-                collateralRelatedDecisionReport.setRemark(Util.checkNullString(detailView.getRemark()));
+                StringBuilder collateralType = new StringBuilder();
+                collateralType = collateralType.append("ศักยภาพหลักประกัน :").append((Util.checkNullString(detailView.getPotentialCollateral().getDescription()))).append("\n");
+                collateralType = collateralType.append("ประเภทหลักประกัน :").append((Util.checkNullString(detailView.getCollateralType().getDescription()))).append("\n");
+                collateralType = collateralType.append("กรรมสิทธิ์ :").append((Util.checkNullString(detailView.getOwner()))).append("\n");
+                collateralType = collateralType.append("ความเกี่ยวพัน :").append((Util.checkNullString(detailView.getRelation().getDescription()))).append("\n");
+                collateralType = collateralType.append("วันที่ประเมิน :").append((detailView.getAppraisalDate()) == null ? "" : detailView.getAppraisalDate()).append("\n");
+                collateralType = collateralType.append("เลขที่ :").append((Util.checkNullString(detailView.getCollateralNumber()))).append("\n");
+                collateralType = collateralType.append("ที่อยู่ :").append((Util.checkNullString(detailView.getCollateralLocation()))).append("\\n");
+                collateralType = collateralType.append("หมายเหตุ :").append((Util.checkNullString(detailView.getRemark())));
+
+                collateralRelatedDecisionReport.setCollateralType(collateralType.toString());
+                log.debug("--CollateralType. {}",collateralType.toString());
+
                 collateralRelatedDecisionReport.setCusName(Util.checkNullString(detailView.getCusName()));
                 collateralRelatedDecisionReport.setExistingCreditTypeDetailViews(Util.safetyList(detailView.getExistingCreditTypeDetailViewList()));
                 collateralRelatedDecisionReport.setProductProgram(Util.checkNullString(detailView.getProductProgram()));
@@ -435,7 +520,7 @@ public class PDFDecision implements Serializable {
                 } else if (detailView.getUwDecision() == DecisionType.REJECTED){
                     proposedView.setUwDecision("REJECTED");
                 } else {
-                    proposedView.setUwDecision("");
+                    proposedView.setUwDecision("-");
                 }
                 proposedView.setCredittypeName(Util.checkNullString(detailView.getCreditTypeView().getName()));
                 proposedView.setProdCode(Util.checkNullString(detailView.getProductCode()));
@@ -444,32 +529,38 @@ public class PDFDecision implements Serializable {
                 proposedView.setFrontEndFee(Util.convertNullToZERO(detailView.getFrontEndFee()));
                 proposedView.setNewCreditTierDetailViews(Util.safetyList(detailView.getNewCreditTierDetailViewList()));
 
+                StringBuilder builder = new StringBuilder();
+
                 if (detailView.getRequestType() == RequestTypes.NEW.value()){
-                    proposedView.setRequestType("New");
+                    builder = builder.append("Request Type : New    ");
                 } else if (detailView.getRequestType() == RequestTypes.CHANGE.value()){
-                    proposedView.setRequestType("Change");
+                    builder = builder.append("Request Type : Change    ");
                 }
 
                 if (detailView.getRefinance() == RadioValue.YES.value()){
+                    builder = builder.append("Refinance : Yes").append("\n");
                     proposedView.setRefinance("Yes");
                 } else if (detailView.getRefinance() == RadioValue.NO.value()){
-                    proposedView.setRefinance("No");
+                    builder = builder.append("Refinance : No").append("\n");
                 }
 
                 if (!Util.isNull(detailView.getLoanPurposeView())){
-                    proposedView.setPurposeDescription(detailView.getLoanPurposeView().getDescription());
+                    builder = builder.append("Purpose : ").append(Util.checkNullString(detailView.getLoanPurposeView().getDescription())).append("\n");
                 } else {
-                    proposedView.setPurposeDescription("");
+                    builder =builder.append("Purpose : ").append("\n");
                 }
+
+                builder = builder.append("Purpose Detail : ").append(Util.checkNullString(detailView.getRemark())).append("\n");
 
                 if (!Util.isNull(detailView.getDisbursementTypeView())){
-                    proposedView.setDisbursement(detailView.getDisbursementTypeView().getDisbursement());
+                    builder = builder.append("Disbursement : ").append(Util.checkNullString(detailView.getDisbursementTypeView().getDisbursement())).append("   ");
                 } else {
-                    proposedView.setDisbursement("");
+                    builder = builder.append("Disbursement : ").append("   ");
                 }
-                proposedView.setRemark(Util.checkNullString(detailView.getRemark()));
-                proposedView.setHoldLimitAmount(Util.convertNullToZERO(detailView.getHoldLimitAmount()));
+                builder = builder.append("Hold Amount : ").append(Util.convertNullToZERO(detailView.getHoldLimitAmount()));
 
+                proposedView.setProposedDetail(builder.toString());
+                log.debug("--ProposedDetail. {}",builder.toString());
                 proposedCreditDecisionReportList.add(proposedView);
             }
         } else {
@@ -493,16 +584,37 @@ public class PDFDecision implements Serializable {
                 ProposeFeeInformationDecisionReport proposeFeeInformationDecisionReport = new ProposeFeeInformationDecisionReport();
                 proposeFeeInformationDecisionReport.setCount(count++);
                 proposeFeeInformationDecisionReport.setProductProgram(Util.checkNullString(view.getProductProgram()));
-                proposeFeeInformationDecisionReport.setStandardFrontEndFee(Util.convertNullToZERO(view.getStandardFrontEndFee().getFeeAmount()));
-                proposeFeeInformationDecisionReport.setStandardFrontEndFee(Util.convertNullToZERO(view.getStandardFrontEndFee().getFeeYear()));
-                proposeFeeInformationDecisionReport.setCommitmentFee(Util.convertNullToZERO(view.getCommitmentFee().getFeeAmount()));
-                proposeFeeInformationDecisionReport.setCommitmentFeeYear(Util.convertNullToZERO(view.getCommitmentFee().getFeeYear()));
-                proposeFeeInformationDecisionReport.setExtensionFee(Util.convertNullToZERO(view.getExtensionFee().getFeeAmount()));
-                proposeFeeInformationDecisionReport.setExtensionFeeYear(Util.convertNullToZERO(view.getExtensionFee().getFeeYear()));
-                proposeFeeInformationDecisionReport.setPrepaymentFee(Util.convertNullToZERO(view.getPrepaymentFee().getFeeAmount()));
-                proposeFeeInformationDecisionReport.setPrepaymentFeeYear(Util.convertNullToZERO(view.getPrepaymentFee().getFeeYear()));
-                proposeFeeInformationDecisionReport.setCancellationFee(Util.convertNullToZERO(view.getCancellationFee().getFeeAmount()));
-                proposeFeeInformationDecisionReport.setCancellationFeeYear(Util.convertNullToZERO(view.getCancellationFee().getFeeYear()));
+
+                StringBuilder standard = new StringBuilder();
+                standard = standard.append(Util.convertNullToZERO(view.getStandardFrontEndFee().getFeeAmount())).append(" % ")
+                        .append(Util.convertNullToZERO(view.getStandardFrontEndFee().getFeeYear())).append(" Year");
+                proposeFeeInformationDecisionReport.setStandardFront(standard.toString());
+                log.debug("--StandardFront. {}",standard.toString());
+
+                StringBuilder commit = new StringBuilder();
+                commit = commit.append(Util.convertNullToZERO(view.getCommitmentFee().getFeeAmount())).append(" % ")
+                        .append(Util.convertNullToZERO(view.getCommitmentFee().getFeeYear())).append(" Year");
+                proposeFeeInformationDecisionReport.setCommitmentFee(commit.toString());
+                log.debug("--CommitmentFee. {}",commit.toString());
+
+                StringBuilder extension = new StringBuilder();
+                extension = extension.append(Util.convertNullToZERO(view.getExtensionFee().getFeeAmount())).append(" % ")
+                        .append(Util.convertNullToZERO(view.getExtensionFee().getFeeYear())).append(" Year");
+                proposeFeeInformationDecisionReport.setExtensionFee(extension.toString());
+                log.debug("--ExtensionFee. {}",extension.toString());
+
+                StringBuilder prepayment = new StringBuilder();
+                prepayment = prepayment.append(Util.convertNullToZERO(view.getPrepaymentFee().getFeeAmount())).append(" % ")
+                        .append(Util.convertNullToZERO(view.getPrepaymentFee().getFeeYear())).append(" Year");
+                proposeFeeInformationDecisionReport.setPrepaymentFee(prepayment.toString());
+                log.debug("--PrepaymentFee. {}",prepayment.toString());
+
+                StringBuilder cancellation = new StringBuilder();
+                cancellation = cancellation.append(Util.convertNullToZERO(view.getCancellationFee().getFeeAmount())).append(" % ")
+                        .append(Util.convertNullToZERO(view.getCancellationFee().getFeeYear())).append(" Year");
+                proposeFeeInformationDecisionReport.setCancellationFee(cancellation.toString());
+                log.debug("--PrepaymentFee. {}",cancellation.toString());
+
                 proposeFeeInformationDecisionReportList.add(proposeFeeInformationDecisionReport);
             }
         } else {
@@ -538,7 +650,7 @@ public class PDFDecision implements Serializable {
 
                 if (Util.safetyList(view.getProposeCreditDetailViewList()).size() > 0) {
                     log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditDetailViewList());
-                    collateralDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditDetailViewList()));
+                    collateralDecisionReport.setDetailViewList(view.getProposeCreditDetailViewList());
                 } else {
                     log.debug("getProposeCreditDetailViewList is Null. {}",view.getProposeCreditDetailViewList());
                 }
@@ -561,20 +673,13 @@ public class PDFDecision implements Serializable {
                         } else {
                             collateralDecisionReport.setInsuranceCompany("");
                         }
+                        collateralDecisionReport.setCollateralSubViewList(headView.getNewCollateralSubViewList());
+                        log.debug("-------------------- {},+++++++++++{}",collateralDecisionReport.getCollateralSubViewList(),headView.getNewCollateralSubViewList());
                     }
                 } else {
                     log.debug("collateralHeadViewList is Null. {}",collateralHeadViewList);
                 }
 
-                if (Util.safetyList(view.getNewCollateralHeadViewList()).size() > 0) {
-                    log.debug("getNewCollateralHeadViewList. {}",view.getNewCollateralHeadViewList());
-                    for (NewCollateralHeadView headView : view.getNewCollateralHeadViewList()){
-                        collateralDecisionReport.setSubViewList(Util.safetyList(headView.getNewCollateralSubViewList()));
-                    }
-                } else {
-                    log.debug("getNewCollateralHeadViewList is Null. {}",view.getNewCollateralHeadViewList());
-                    collateralDecisionReport.setSubViewList(collateralDecisionReport.getSubViewList());
-                }
                 proposedCollateralDecisionReportList.add(collateralDecisionReport);
             }
 
@@ -605,6 +710,15 @@ public class PDFDecision implements Serializable {
                 approvedCollateralDecisionReport.setAadDecisionReasonDetail(Util.checkNullString(view.getAadDecisionReasonDetail()));
                 approvedCollateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
                 approvedCollateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
+//                approvedCollateralDecisionReport.setUwDecision(Util.checkNullString(view.getUwDecision().getValue()));
+                if (view.getUwDecision().equals("APPROVED")){
+                    approvedCollateralDecisionReport.setApproved("Approved");
+                } else if(view.getUwDecision().equals("REJECTED")){
+                    approvedCollateralDecisionReport.setApproved("Rejected");
+                } else {
+                    approvedCollateralDecisionReport.setApproved("");
+                }
+
                 approvedCollateralDecisionReport.setMortgageCondition(Util.checkNullString(view.getMortgageCondition()));
                 approvedCollateralDecisionReport.setMortgageConditionDetail(Util.checkNullString(view.getMortgageConditionDetail()));
 
@@ -633,20 +747,12 @@ public class PDFDecision implements Serializable {
                         } else {
                             approvedCollateralDecisionReport.setInsuranceCompany("");
                         }
+                        approvedCollateralDecisionReport.setSubViewList(Util.safetyList(headView.getNewCollateralSubViewList()));
                     }
                 } else {
                     log.debug("collateralHeadViewList is Null. {}",collateralHeadViewList);
                 }
 
-                if (Util.safetyList(view.getNewCollateralHeadViewList()).size() > 0) {
-                    log.debug("getNewCollateralHeadViewList. {}",view.getNewCollateralHeadViewList());
-                    for (NewCollateralHeadView headView : view.getNewCollateralHeadViewList()){
-                        approvedCollateralDecisionReport.setSubViewList(Util.safetyList(headView.getNewCollateralSubViewList()));
-                    }
-                } else {
-                    log.debug("getNewCollateralHeadViewList is Null. {}",view.getNewCollateralHeadViewList());
-                    approvedCollateralDecisionReport.setSubViewList(approvedCollateralDecisionReport.getSubViewList());
-                }
                 approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
             }
 
@@ -812,7 +918,7 @@ public class PDFDecision implements Serializable {
         totalDecisionReport.setExtBorrowerTotalMortgageValue(Util.convertNullToZERO(decisionView.getExtBorrowerTotalMortgageValue()));
 
         //Existing Related Person
-        totalDecisionReport.setExtRelatedTotalAppraisalValue(decisionView.getExtRelatedTotalAppraisalValue());
+        totalDecisionReport.setExtRelatedTotalAppraisalValue(Util.convertNullToZERO(decisionView.getExtRelatedTotalAppraisalValue()));
         totalDecisionReport.setExtRelatedTotalMortgageValue(Util.convertNullToZERO(decisionView.getExtRelatedTotalMortgageValue()));
 
         //Existing Guarantor

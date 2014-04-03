@@ -6,9 +6,6 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.*;
-import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
-import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
-import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
 import com.clevel.selos.integration.ncb.NCBInterfaceImpl;
@@ -34,11 +31,9 @@ import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 public class PrescreenBusinessControl extends BusinessControl {
@@ -49,8 +44,6 @@ public class PrescreenBusinessControl extends BusinessControl {
     PrescreenTransform prescreenTransform;
     @Inject
     PrescreenFacilityTransform prescreenFacilityTransform;
-    @Inject
-    PreScreenResultTransform preScreenResultTransform;
     @Inject
     BizInfoDetailTransform bizInfoTransform;
     @Inject
@@ -127,8 +120,6 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     RMInterface rmInterface;
     @Inject
-    BRMSInterface brmsInterface;
-    @Inject
     BPMInterface bpmInterface;
     @Inject
     RLOSInterface rlosInterface;
@@ -142,13 +133,16 @@ public class PrescreenBusinessControl extends BusinessControl {
     NCBInterface ncbInterface;  */
 
     @Inject
-    NCBInterfaceImpl ncbInterface;
+    private NCBInterfaceImpl ncbInterface;
 
     @Inject
-    ExistingCreditControl existingCreditControl;
+    private ExistingCreditControl existingCreditControl;
 
     @Inject
-    BankStmtControl bankStmtControl;
+    private BankStmtControl bankStmtControl;
+
+    @Inject
+    private UWRuleResultControl uwRuleResultControl;
 
     @Inject
     public PrescreenBusinessControl(){
@@ -346,6 +340,86 @@ public class PrescreenBusinessControl extends BusinessControl {
         Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
         PrescreenResultView prescreenResultView = prescreenTransform.getPrescreenResultView(prescreen);
         prescreenResultView.setExistingCreditFacilityView(existingCreditControl.getExistingCredit(workCasePreScreenId));
+
+        //set Prescreen Result//
+        UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultControl.getUWRuleResultByWorkCasePrescreenId(workCasePreScreenId);
+        if(uwRuleResultSummaryView != null){
+            if(uwRuleResultSummaryView.getUwRuleResultDetailViewList() != null){
+
+                Map<RelationValue, Integer> _numberOfCusRelationMap = new TreeMap<RelationValue, Integer>();
+                Map<String, CustomerInfoSimpleView> _customerInfoSimpleMap = new TreeMap<String, CustomerInfoSimpleView>();
+                List<Customer> customerList = customerDAO.findCustomerByWorkCasePreScreenId(workCasePreScreenId);
+                for(Customer customer : customerList){
+                    if((customer.getRelation() != null) && (customer.getRelation().getId() != RelationValue.INDIRECTLY_RELATED.value())){
+                        CustomerInfoSimpleView _customerInfoSimpleView = customerTransform.transformToSimpleView(customer);
+                        RelationValue _relationValue = RelationValue.lookup(customer.getRelation().getId());
+
+                        //Set Number of Customer Per Relation Type
+                        Integer _numberOfCustomer = _numberOfCusRelationMap.get(_relationValue);
+                        if(_numberOfCustomer == null)
+                            _numberOfCustomer = 0;
+                        _numberOfCusRelationMap.put(_relationValue, _numberOfCustomer+1);
+
+                        //Set Customer with Map to Relation Type;
+                        _customerInfoSimpleMap.put(_relationValue.value() + _customerInfoSimpleView.getCitizenId(), _customerInfoSimpleView);
+                    }
+                }
+
+
+                List<UWRuleResultDetailView> uwRuleResultDetailViewList = uwRuleResultSummaryView.getUwRuleResultDetailViewList();
+                Map<Integer, UWRuleResultDetailView> _groupUWResultDetailMap = new TreeMap<Integer, UWRuleResultDetailView>();
+
+                Integer lastOrder = Integer.MAX_VALUE;
+                Map<Integer, PrescreenCusRulesGroupView> _prescreenCusRulesGroupViewMap = new TreeMap<Integer, PrescreenCusRulesGroupView>();
+                for(UWRuleResultDetailView uwRuleResultDetailView : uwRuleResultDetailViewList){
+                    if(UWRuleType.GROUP_LEVEL.equals(uwRuleResultDetailView.getUwRuleType())){
+                        if(uwRuleResultDetailView.getRuleOrder() == 0)
+                            _groupUWResultDetailMap.put(lastOrder--, uwRuleResultDetailView);
+                        else
+                            _groupUWResultDetailMap.put(uwRuleResultDetailView.getRuleOrder(), uwRuleResultDetailView);
+                    } else {
+
+                        UWRuleGroupView _uwRuleGroupView = uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView();
+                        PrescreenCusRulesGroupView _prescreenCusRulesGroupView = _prescreenCusRulesGroupViewMap.get(_uwRuleGroupView.getId());
+                        if(_prescreenCusRulesGroupView == null){
+                            _prescreenCusRulesGroupView = new PrescreenCusRulesGroupView();
+                        }
+                        _prescreenCusRulesGroupView.setUwRuleGroupView(_uwRuleGroupView);
+                        _prescreenCusRulesGroupView.setNumberOfRuleName(_prescreenCusRulesGroupView.getNumberOfRuleName() + 1);
+
+                        Map<Integer, PrescreenCusRuleNameView> _prescreenCusRuleNameViewMap = _prescreenCusRulesGroupView.getPrescreenCusRuleNameViewMap();
+                        if(_prescreenCusRuleNameViewMap == null)
+                            _prescreenCusRuleNameViewMap = new TreeMap<Integer, PrescreenCusRuleNameView>();
+
+                        PrescreenCusRuleNameView _prescreenCusRuleNameView = _prescreenCusRuleNameViewMap.get(uwRuleResultDetailView.getUwRuleNameView().getId());
+                        if(_prescreenCusRuleNameView == null)
+                            _prescreenCusRuleNameView = new PrescreenCusRuleNameView();
+                        _prescreenCusRuleNameView.setUwRuleNameView(uwRuleResultDetailView.getUwRuleNameView());
+                        Map<String, UWRuleResultDetailView> _uwRuleResultDetailViewMap = _prescreenCusRuleNameView.getUwRuleResultDetailViewMap();
+                        if(_uwRuleResultDetailViewMap == null)
+                            _uwRuleResultDetailViewMap = new TreeMap<String, UWRuleResultDetailView>();
+                        _uwRuleResultDetailViewMap.put(uwRuleResultDetailView.getCustomerInfoSimpleView().getCitizenId(), uwRuleResultDetailView);
+                        _prescreenCusRuleNameView.setUwRuleResultDetailViewMap(_uwRuleResultDetailViewMap);
+                        _prescreenCusRuleNameViewMap.put( uwRuleResultDetailView.getUwRuleNameView().getId(), _prescreenCusRuleNameView);
+
+                        _prescreenCusRulesGroupView.setPrescreenCusRuleNameViewMap(_prescreenCusRuleNameViewMap);
+                        _prescreenCusRulesGroupViewMap.put(_uwRuleGroupView.getId(), _prescreenCusRulesGroupView);
+
+                        //_customerUWResultDetailMap.put()
+                    }
+                }
+                prescreenResultView.setPrescreenCusRulesGroupViewMap(_prescreenCusRulesGroupViewMap);
+                prescreenResultView.setUwRuleResultSummaryView(uwRuleResultSummaryView);
+                log.debug("uwRuleResultSummaryView {}", prescreenResultView.getUwRuleResultSummaryView());
+                prescreenResultView.setGroupRuleResults(_groupUWResultDetailMap);
+                log.debug("groupRuleResult {}", prescreenResultView.getGroupRuleResults());
+
+
+                prescreenResultView.setNumberOfCusRelation(_numberOfCusRelationMap);
+                prescreenResultView.setCustomerInfoSimpleViewMap(_customerInfoSimpleMap);
+            }
+        }
+
         return prescreenResultView;
     }
 
@@ -361,18 +435,6 @@ public class PrescreenBusinessControl extends BusinessControl {
         } catch(Exception ex){
             log.error("cannot get workcase prescreen id", ex);
         }
-    }
-
-    // *** Function for BRMS (PreScreenRules) ***//
-    public List<PreScreenResponseView> getPreScreenResultFromBRMS(List<CustomerInfoView> customerInfoViewList){
-        //TODO Transform view model to prescreenRequest
-        //PreScreenRequest preScreenRequest = preScreenResultTransform.transformToRequest(customerInfoViewList);
-        UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(new BRMSApplicationInfo());
-
-        //List<PreScreenResponseView> preScreenResponseViewList = preScreenResultTransform.transformResponseToView(preScreenResponseList);
-
-        //return preScreenResponseViewList;
-        return null;
     }
 
     // *** Function for NCB *** //
@@ -784,34 +846,6 @@ public class PrescreenBusinessControl extends BusinessControl {
         return csiResultList;
     }
 
-    public List<PreScreenResponseView> getPreScreenCustomerResult(List<PreScreenResponseView> prescreenResponseViews){
-        List<PreScreenResponseView> preScreenResponseViewList = new ArrayList<PreScreenResponseView>();
-        preScreenResponseViewList = preScreenResultTransform.tranformToCustomerResponse(prescreenResponseViews);
-
-        return preScreenResponseViewList;
-    }
-
-    public List<PreScreenResponseView> getPreScreenGroupResult(List<PreScreenResponseView> prescreenResponseViews){
-        List<PreScreenResponseView> preScreenResponseViewList = new ArrayList<PreScreenResponseView>();
-        preScreenResponseViewList = preScreenResultTransform.tranformToGroupResponse(prescreenResponseViews);
-
-        return preScreenResponseViewList;
-    }
-
-    public void savePreScreenResult(List<PreScreenResponseView> preScreenResponseViews, long workCasePreScreenId, long workCaseId, long stepId, User user){
-        WorkCasePrescreen workCasePrescreen = null;
-        WorkCase workCase = null;
-        Step step = null;
-
-        if(workCasePreScreenId != 0){ workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId); }
-        if(workCaseId != 0){ workCase = workCaseDAO.findById(workCaseId); }
-        if(stepId != 0){ step = stepDAO.findById(stepId); }
-
-        List<BRMSResult> brmsResultList = preScreenResultTransform.transformResultToModel(preScreenResponseViews, workCasePrescreen, workCase, step, user);
-
-        brmsResultDAO.persist(brmsResultList);
-    }
-
     // *** Function for PreScreen *** //
     public int getCaseBorrowerTypeId(long workCasePreScreenId){
         int caseBorrowerTypeId = 0;
@@ -1015,6 +1049,13 @@ public class PrescreenBusinessControl extends BusinessControl {
         log.debug("savePreScreenInitial ::: saving customer data...");
         saveCustomerData(customerInfoDeleteList, customerInfoViewList, workCasePrescreen);
         log.debug("savePreScreenInitial ::: saving customer data success...");
+    }
+
+    public int getModifyValue(long workCasePreScreenId){
+        Prescreen tmpPrescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
+        int modifyValue = tmpPrescreen != null ? tmpPrescreen.getModifyFlag() : 2;
+
+        return modifyValue;
     }
 
     public int checkModifyValue(PrescreenView currentPrescreenView, long workCasePrescreenId){
@@ -1407,5 +1448,23 @@ public class PrescreenBusinessControl extends BusinessControl {
         }
 
         return relationList;
+    }
+
+    public void updateBorrowerForBPM(List<CustomerInfoView> borrowerInfoViewList, String queueName, long workCasePreScreenId) throws Exception{
+        String borrowerName = "";
+        if(borrowerInfoViewList != null && borrowerInfoViewList.size() > 0){
+            CustomerInfoView customerInfoView = borrowerInfoViewList.get(0);
+            borrowerName = customerInfoView.getFirstNameTh();
+            if(!Util.isNull(customerInfoView.getLastNameTh()) && !Util.isEmpty(customerInfoView.getLastNameTh())){
+                borrowerName = customerInfoView.getLastNameTh();
+            }
+        }
+
+        WorkCasePrescreen workCasePreScreen = workCasePrescreenDAO.getWorkCasePreScreenById(workCasePreScreenId);
+        if(workCasePreScreen != null){
+            bpmExecutor.updateBorrowerForBPM(borrowerName, queueName, workCasePreScreen.getWobNumber());
+        }else{
+            throw new Exception("Work item data could not found.");
+        }
     }
 }

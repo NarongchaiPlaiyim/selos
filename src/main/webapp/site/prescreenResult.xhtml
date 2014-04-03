@@ -44,7 +44,7 @@
                                                  styleClass="largest"
                                                  process="@this"
                                                  actionListener="#{prescreenResult.onRetrieveInterfaceInfo}"
-                                                 update="frmMain:interfaceInfoPanel, :msgBoxSystemMessagePanel">
+                                                 update="frmMain:interfaceInfoPanel, :msgBoxSystemMessageResultPanel">
 
                             </p:commandButton><p:spacer width="10" height="5"/><h:outputText styleClass="require-field" value="#{msg.get('app.prescreen.result.warning')}" rendered="#{prescreenResult.prescreenView.modifyFlag == 1}"/></td>
                         </tr>
@@ -412,12 +412,98 @@
                                 </p:dataTable>
                             </td>
                         </tr>
-                        <tr>
-                            <td></td>
-                        </tr>
                         </table>
                         </p:panel>
-                        <p:panel styleClass="panel" id="prescreenResultPanel">
+                        <p:panel styleClass="panel" id="prescreenResultPanel" rendered="#{prescreenResult.prescreenResultView != null and prescreenResult.prescreenResultView.uwRuleResultSummaryView != null}">
+                            <table class="content_table_form">
+                                <tr>
+                                    <td colspan="100%" style="line-height: 10px;"><p:spacer width="5px;"/></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="100%"><p:separator/></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="100%"><h2>Prescreen Result</h2></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 200px;" class="title">Final Application Result:</td>
+                                    <td class="left"><span style="height:30px; line-height: 30px; width: 200px;" class="#{prescreenResult.prescreenResultView.uwRuleResultSummaryView.uwResultColor.resultClass}">#{prescreenResult.prescreenResultView.uwRuleResultSummaryView.uwResultColor}</span></td>
+                                </tr>
+                                <tr>
+                                    <td  class="title top">Group Result:</td>
+                                    <td class="top">
+                                        <p:dataTable id="prescreenGroupResult" var="groupResultEntry"
+                                                     value="#{prescreenResult.prescreenResultView.groupResultsList}"
+                                                     paginator="false" rowKey="#{groupResultEntry.id}" rowIndexVar="rowIndex" styleClass="hide-column-names">
+                                            <p:column styleClass="center" style="width:22px;">
+                                                <h:outputText value="#{rowIndex+1}"/>
+                                            </p:column>
+                                            <p:column style="width: 300px;">
+                                                <h:outputText value="#{groupResultEntry.value.uwRuleNameView.name}"/>
+                                            </p:column>
+                                            <p:column style="width: 100px;" styleClass="#{groupResultEntry.value.ruleColorResult.resultClass} center">
+                                                <h:outputText value="#{groupResultEntry.value.ruleColorResult}"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="100%" style="line-height: 10px;"><p:spacer width="5px;"/></td>
+                                </tr>
+                                <tr>
+                                    <td  class="title top">Customer Result:</td>
+                                    <td class="top">
+                                        <div class="ui-datatable ui-widget">
+                                            <div class="ui-datatable-tablewrapper">
+                                                <table style="width: 100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th rowspan="2">Group</th>
+                                                            <th rowspan="2">Rules Name</th>
+                                                            <ui:repeat value="#{prescreenResult.prescreenResultView.numberOfCusRelation}"
+                                                                       var="numberOfCusRelationEntry" varStatus="i">
+                                                                <th colspan="#{numberOfCusRelationEntry.value}">#{numberOfCusRelationEntry.key}</th>
+                                                            </ui:repeat>
+                                                        </tr>
+                                                        <tr>
+                                                            <ui:repeat value="#{prescreenResult.prescreenResultView.customerInfoSimpleViewMap}"
+                                                                       var="customerInfoSimpleViewEntry" varStatus="i">
+                                                                <th><h:outputText value="#{customerInfoSimpleViewEntry.value.customerName}"/></th>
+                                                            </ui:repeat>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="ui-datatable-data ui-widget-content">
+                                                        <ui:repeat value="#{prescreenResult.prescreenResultView.prescreenCusRulesGroupViewMapList}"
+                                                               var="cusRuleGroupViewEntry" varStatus="groupId">
+                                                            <ui:repeat value="#{cusRuleGroupViewEntry.value.cusRuleNameViewMapList}"
+                                                                       var="cusRuleNameViewEntry" varStatus="ruleNameStatus">
+                                                            <tr>
+                                                                <ui:fragment rendered="#{cusRuleGroupViewEntry.value.count == 0}">
+                                                                    <th class="ui-datatable-header" rowspan="#{cusRuleGroupViewEntry.value.numberOfRuleName}">
+                                                                        <h:outputText value="#{cusRuleGroupViewEntry.value.uwRuleGroupView.name}"/>
+                                                                    </th>
+                                                                </ui:fragment>
+                                                                <td><h:outputText value="#{cusRuleNameViewEntry.value.uwRuleNameView.name}"/></td>
+                                                                <ui:repeat value="#{prescreenResult.prescreenResultView.customerInfoSimpleViewMap}"
+                                                                           var="cusInfoEntry" varStatus="cusStatus">
+                                                                    <ui:param name="uwRuleResult" value="#{cusRuleNameViewEntry.value.getUWRuleDetailView(cusInfoEntry.value.citizenId)}"/>
+                                                                    <td class="#{not empty cusRuleNameViewEntry.value.getUWRuleDetailView(cusInfoEntry.value.citizenId)? cusRuleNameViewEntry.value.getUWRuleDetailView(cusInfoEntry.value.citizenId).ruleColorResult.resultClass:''} center">
+                                                                        <h:outputText value="#{(not empty cusRuleNameViewEntry.value.getUWRuleDetailView(cusInfoEntry.value.citizenId))?
+                                                                        cusRuleNameViewEntry.value.getUWRuleDetailView(cusInfoEntry.value.citizenId).ruleColorResult:'-'}"/></td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            </ui:repeat>
+                                                        </ui:repeat>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </p:panel>
+                        <p:panel styleClass="panel" id="footerPaner">
                             <table class="content_table_form">
                                 <tr>
                                     <td colspan="100%" style="line-height: 10px;"><p:spacer width="5px;"/></td>
@@ -433,7 +519,7 @@
                                         <p:commandButton id="btnSave"
                                                          value="#{msg.get('app.button.save')}"
                                                          action="#{prescreenResult.onSave()}"
-                                                         update=":frmMain :msgBoxSystemMessagePanel"
+                                                         update=":frmMain :msgBoxSystemMessageResultPanel"
                                                          styleClass="medium"/>
                                     </td>
                                 </tr>
@@ -456,11 +542,23 @@
         </p:blockUI>
 </h:form>
 </p:panel>
-<p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
+<p:panel id="msgBoxSystemMessageResultPanel" styleClass="panel">
+    <p:confirmDialog id="msgBoxSystemMessageResultDialog" widgetVar="msgBoxSystemMessageResultDlg" styleClass="messageDialog"
                      header="#{prescreenResult.messageHeader}">
         <f:facet name="message">
             <h:outputText value="#{prescreenResult.message}" escape="false"/>
+        </f:facet>
+        <p:commandButton value="OK"
+                         process="@this"
+                         update=":frmMain"
+                         oncomplete="msgBoxSystemMessageResultDlg.hide()"/>
+    </p:confirmDialog>
+</p:panel>
+<p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
+                     header="#{prescreenMaker.messageHeader}">
+        <f:facet name="message">
+            <h:outputText value="#{prescreenMaker.message}" escape="false"/>
         </f:facet>
         <p:commandButton value="OK"
                          process="@this"

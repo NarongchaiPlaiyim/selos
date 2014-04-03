@@ -16,7 +16,6 @@ import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.FeeDetail;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
@@ -178,6 +177,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewAll;
     private List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewByGroup;
 
+    private List<PricingFee> pricingFeeList;
+
     @Inject
     WorkCaseDAO workCaseDAO;
     @Inject
@@ -312,7 +313,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             modeForDB = ModeForDB.ADD_DB;
             // Initial sequence number credit
             hashSeqCredit = new HashMap<Integer, Integer>();
-            notRetrievePricing = true;
             // delete list on save
             deleteCreditIdList = new ArrayList<Long>();
             deleteCollIdList = new ArrayList<Long>();
@@ -333,6 +333,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     newCreditFacilityView = new NewCreditFacilityView();
                     reducePricePanelRendered = false;
                     cannotEditStandard = true;
+                    notRetrievePricing = true;
+                    pricingFeeList = new ArrayList<PricingFee>();
                 }else{
                     log.debug("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
 
@@ -359,8 +361,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                     }
 
                     notRetrievePricing = false;
-
-
                 }
 
             } catch (Exception ex) {
@@ -503,10 +503,11 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
                 StandardPricingResponse standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
                 if (ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
-                    List<FeeDetail> feeDetailList = feeTransform.transformToDB(standardPricingResponse.getPricingFeeList(),workCaseId);
+
                     Map<Long, NewFeeDetailView> newFeeDetailViewMap = new HashMap<Long, NewFeeDetailView>();
                     NewFeeDetailView newFeeDetailView;
                     for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()) {
+                        pricingFeeList = standardPricingResponse.getPricingFeeList();
                         FeeDetailView feeDetailView = feeTransform.transformToView(pricingFee);
                         if (feeDetailView.getFeeLevel() == FeeLevel.CREDIT_LEVEL) {
                             if (newFeeDetailViewMap.containsKey(feeDetailView.getCreditDetailViewId())) {
@@ -546,9 +547,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                             }
                         }
                     }
-                    log.debug("feeDetailList not null ::: {}", feeDetailList.size());
-                    feeDetailDAO.persist(feeDetailList);
-                    log.debug("persist :: feeDetailList ::");
 
                     if(newFeeDetailViewMap!=null && newFeeDetailViewMap.size()>0){
                         Iterator it = newFeeDetailViewMap.entrySet().iterator();
@@ -559,11 +557,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                         }
                     }
 
-
-                    if (newFeeDetailViewList != null) {
-                        log.debug("newFeeDetailViewList not null ::: {}", newFeeDetailViewList.size());
-                        newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
-                    }
+                    newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
 
                     log.debug("standardPricingResponse.getPricingInterest() : {}",standardPricingResponse.getPricingInterest());
                     if(standardPricingResponse.getPricingInterest()!=null && standardPricingResponse.getPricingInterest().size()>0){
@@ -894,11 +888,13 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             for (ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViewList) {
                 seq = proposeCreditDetailView.getSeq();
                 log.info("seq :: {}", seq);
-                useCount = hashSeqCredit.get(seq);
-                if (proposeCreditDetailView.getTypeOfStep().equals("N")) {
-                    proposeCreditDetailView.setUseCount(useCount);
+                if(hashSeqCredit.containsKey(seq)){
+                    useCount = hashSeqCredit.get(seq);
+                    log.info("useCount :: {}",useCount);
+                    if (proposeCreditDetailView.getTypeOfStep().equals("N")) {
+                        proposeCreditDetailView.setUseCount(useCount);
+                    }
                 }
-
             }
         }
     }
@@ -1689,7 +1685,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onSaveCreditFacPropose() {
         log.debug("onSaveCreditFacPropose ::: ModeForDB  {}", modeForDB);
-//        onSetInUsedProposeCreditDetail();
+        onSetInUsedProposeCreditDetail();
         try {
             //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
             creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
@@ -1698,7 +1694,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             // Calculate Total for BRMS
             newCreditFacilityView = creditFacProposeControl.calculateTotalForBRMS(newCreditFacilityView);
             // Save NewCreditFacility, ProposeCredit, Collateral, Guarantor
-            newCreditFacilityView = creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
+            newCreditFacilityView = creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId, pricingFeeList);
             // Calculate WC
             creditFacProposeControl.calWC(workCaseId);
 

@@ -32,27 +32,7 @@ public class BRMSInterfaceImplTest implements BRMSInterface {
             throw new ValidationException("002");
         }
 
-        List<PreScreenResponse> preScreenResponseList = new ArrayList<PreScreenResponse>();
 
-        PreScreenResponse preScreenResponse = new PreScreenResponse();
-        preScreenResponse.setRuleName("Group_Result_Final_AppLevel");
-        preScreenResponse.setRuleOrder("2010");
-        preScreenResponse.setType("Group Result");
-        preScreenResponse.setPersonalId("");
-        preScreenResponse.setColor(RuleColorResult.GREEN);
-        preScreenResponse.setDeviationFlag("No Deviation");
-        preScreenResponse.setRejectGroupCode("P");
-        preScreenResponseList.add(preScreenResponse);
-
-        PreScreenResponse preScreenResponse2 = new PreScreenResponse();
-        preScreenResponse2.setRuleName("Decision_Matrix_NCB_DB");
-        preScreenResponse2.setRuleOrder("1010");
-        preScreenResponse2.setType("");
-        preScreenResponse2.setPersonalId("1234567890123");
-        preScreenResponse2.setColor(RuleColorResult.RED);
-        preScreenResponse2.setDeviationFlag("");
-        preScreenResponse2.setRejectGroupCode("");
-        //preScreenResponseList.add(preScreenResponse2);
         return null;
         //return preScreenResponseList;
     }

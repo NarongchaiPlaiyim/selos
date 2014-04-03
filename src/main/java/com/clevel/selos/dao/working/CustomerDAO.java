@@ -25,13 +25,13 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
     }
 
     public List<Customer> findBorrowerByWorkCasePreScreenId(long workCasePreScreenId) {
-        log.info("findByWorkCasePreScreenId ::: workCasePreScreenId : {}", workCasePreScreenId);
+        log.info("findBorrowerByWorkCasePreScreenId ::: workCasePreScreenId : {}", workCasePreScreenId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
         criteria.add(Restrictions.eq("relation.id", RelationValue.BORROWER.value()));
         criteria.addOrder(Order.asc("id"));
         List<Customer> customerList = (List<Customer>) criteria.list();
-        log.info("findByWorkCasePreScreenId ::: size : {}", customerList.size());
+        log.info("findBorrowerByWorkCasePreScreenId ::: size : {}", customerList.size());
         return customerList;
     }
 
@@ -111,18 +111,18 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
         criteria.addOrder(Order.asc("id"));
         List<Customer> customerList = (List<Customer>) criteria.list();
-
+        log.info("findByWorkCasePreScreenId ::: size : {}", customerList.size());
         return customerList;
     }
 
     public List<Customer> findCustomerByWorkCasePreScreenId(long workCasePreScreenId) {
-        log.info("findByWorkCasePreScreenId : {}", workCasePreScreenId);
+        log.info("findCustomerByWorkCasePreScreenId : {}", workCasePreScreenId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
         criteria.add(Restrictions.eq("isSpouse", 0));
         criteria.addOrder(Order.asc("id"));
         List<Customer> customerList = (List<Customer>) criteria.list();
-
+        log.info("findCustomerByWorkCasePreScreenId ::: size : {}", customerList.size());
         return customerList;
     }
 
@@ -133,7 +133,7 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         criteria.add(Restrictions.eq("isSpouse", 0));
         criteria.addOrder(Order.asc("id"));
         List<Customer> customerList = (List<Customer>) criteria.list();
-
+        log.info("findCustomerByWorkCaseId ::: size : {}", customerList.size());
         return customerList;
     }
 
@@ -173,7 +173,7 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         criteria.addOrder(Order.asc("id"));
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         List<Customer> customerList = (List<Customer>) criteria.list();
-
+        log.info("findByWorkCaseId ::: size : {}", customerList.size());
         return customerList;
     }
 
@@ -193,29 +193,29 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         criteria.add(Restrictions.eq("juristicId", committeeId));
         criteria.addOrder(Order.asc("id"));
         List<Customer> customerList = (List<Customer>) criteria.list();
-
+        log.info("findCustomerByCommitteeId ::: size : {}", customerList.size());
         return customerList;
     }
 
     public List<Customer> findGuarantorByWorkCaseId(long workCaseId) {
-        log.info("findByWorkCaseId : {}", workCaseId);
+        log.info("findGuarantorByWorkCaseId : {}", workCaseId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.add(Restrictions.eq("relation.id", RelationValue.GUARANTOR.value()));
         criteria.addOrder(Order.asc("id"));
         List<Customer> customerList = (List<Customer>)criteria.list();
-        log.info("criteria.list() :: {}",criteria.list());
+        log.info("findGuarantorByWorkCaseId ::: size : {}", customerList.size());
         return customerList;
     }
 
-    public List<Customer>  findCollateralOwnerUWByWorkCaseId(long workCaseId) {
-        log.info("findByWorkCaseId : {}", workCaseId);
+    public List<Customer> findCollateralOwnerUWByWorkCaseId(long workCaseId) {
+        log.info("findCollateralOwnerUWByWorkCaseId : {}", workCaseId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.add(Restrictions.or(Restrictions.eq("relation.id", RelationValue.BORROWER.value()),Restrictions.eq("relation.id", RelationValue.GUARANTOR.value())));
         criteria.addOrder(Order.asc("id"));
         List<Customer> customerList = (List<Customer>)criteria.list();
-        log.info("criteria.list() :: {}",criteria.list());
+        log.info("findCollateralOwnerUWByWorkCaseId ::: size : {}", customerList.size());
         return customerList;
     }
 
@@ -260,6 +260,7 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
 
 
         List<Customer> customerList = (List<Customer>)criteria.list();
+        log.info("findCustomerBorrowerAndGuarantor ::: size : {}", customerList.size());
         return customerList;
     }
 

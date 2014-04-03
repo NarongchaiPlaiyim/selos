@@ -45,7 +45,7 @@ public class BPMExecutor implements Serializable {
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         Action action = actionDAO.findById(actionCode);
         Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
-        List<Customer> customerList = customerDAO.findCustomerByWorkCasePreScreenId(workCasePreScreenId);
+        List<Customer> customerList = customerDAO.getBorrowerByWorkCaseId(0, workCasePreScreenId);
 
         log.debug("assignChecker : workCasePreScreenId : {}, queueName : {}, checkerId : {}, actionCode : {}", workCasePrescreen, queueName, checkerId, actionCode);
         if(action != null && prescreen != null){
@@ -54,9 +54,17 @@ public class BPMExecutor implements Serializable {
             fields.put("Action_Name", action.getDescription());
             fields.put("BDMCheckerUserName", checkerId);
             fields.put("ProductGroup", prescreen.getProductGroup().getName());
-            for(Customer item : customerList){
-                fields.put("BorrowerName", item.getNameTh());
+            //Send only 1st Borrower
+            if(customerList != null && customerList.size() > 0){
+                String borrowerName = customerList.get(0).getNameTh();
+                if(customerList.get(0).getLastNameTh() != null){
+                    borrowerName = borrowerName + " " + customerList.get(0).getLastNameTh();
+                }
+                fields.put("BorrowerName", borrowerName);
             }
+            /*for(Customer item : customerList){
+                fields.put("BorrowerName", item.getNameTh());
+            }*/
             if(!Util.isEmpty(remark)){
                 fields.put("Remark", remark);
             }
@@ -331,6 +339,29 @@ public class BPMExecutor implements Serializable {
         	fields.put("Reason", reason);
 
         log.debug("dispatch case for [Cancel Case]..., Action_Code : {}, Action_Name : {}, Remark : {}, Reason : {}", action.getId(), action.getName(), remark, reason);
+        execute(queueName, wobNumber, fields);
+    }
+
+    public void updateBorrowerForBPM(String borrowerName, String queueName, String wobNumber) throws Exception{
+        HashMap<String, String> fields = new HashMap<String, String>();
+        fields.put("BorrowerName", borrowerName);
+
+        bpmInterface.updateCase(queueName, wobNumber, fields);
+    }
+
+    public void selectCase(long actionCode, String queueName, String wobNumber) throws Exception{
+        Action action = null;
+        if (actionCode >= 0)
+            action = actionDAO.findById(actionCode);
+        if (action == null) {
+            throw new Exception("An exception occurred, Can not find Action.");
+        }
+
+        HashMap<String, String> fields = new HashMap<String, String>();
+        fields.put("Action_Code", Long.toString(actionCode));
+        fields.put("Action_Name", action.getDescription());
+
+        log.debug("dispatch case for [Select Case]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
         execute(queueName, wobNumber, fields);
     }
     

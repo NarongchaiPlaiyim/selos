@@ -5,6 +5,7 @@ import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.integration.brms.model.response.UWRulesResult;
+import com.clevel.selos.model.UWRuleType;
 import com.ilog.rules.decisionservice.DecisionServiceRequest;
 import com.ilog.rules.decisionservice.DecisionServiceResponse;
 import com.ilog.rules.param.UnderwritingRequest;
@@ -281,7 +282,7 @@ public class PrescreenConverter extends Converter{
             for(ResultType resultType : resultTypeList){
                 UWRulesResult uwRulesResult = new UWRulesResult();
                 uwRulesResult.setRuleName(resultType.getRuleName());
-                uwRulesResult.setType(resultType.getType());
+                uwRulesResult.setType(UWRuleType.lookup(resultType.getType()));
                 uwRulesResult.setColor(resultType.getColor());
                 uwRulesResult.setDeviationFlag(resultType.getDeviationFlag());
                 uwRulesResult.setRejectGroupCode(resultType.getRejectGroupCode());

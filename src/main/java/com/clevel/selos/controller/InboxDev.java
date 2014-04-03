@@ -111,6 +111,8 @@ public class InboxDev implements Serializable {
             session.setAttribute("workCaseId", 0);
         }
 
+        //TODO Change for Appraisal WorkCase
+
         session.setAttribute("stepId", inboxViewSelectItem.getStepId());
         session.setAttribute("queueName", inboxViewSelectItem.getQueueName());
         session.setAttribute("requestAppraisal", inboxViewSelectItem.getRequestAppraisal());

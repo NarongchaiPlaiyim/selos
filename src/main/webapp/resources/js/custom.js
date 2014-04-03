@@ -721,6 +721,18 @@ function handleAppraisalDetailRequest(xhr, status, args) {
     }
 }
 
+function handleRequestAppraisal(xhr, status, args) {
+    if(args.functionComplete){
+        reqApprDlg.hide();
+    }
+}
+
+function handleRequestAppraisalDetail(xhr, status, args) {
+    if(args.functionComplete){
+        reqApprDetailDlg.hide();
+    }
+}
+
 function handleAppraisalContactDetailRequest(xhr, status, args) {
     if(args.functionComplete){
         contactRecordViewDlg.hide();

@@ -95,6 +95,10 @@ public class Customer implements Serializable {
     private BusinessType businessType;
 
     @OneToOne
+    @JoinColumn(name="business_sub_type_id")
+    private BusinessSubType businessSubType;
+
+    @OneToOne
     @JoinColumn(name="relation_id")
     private Relation relation;
 
@@ -662,6 +666,14 @@ public class Customer implements Serializable {
 
     public void setCustomerOblAccountInfoList(List<CustomerOblAccountInfo> customerOblAccountInfoList) {
         this.customerOblAccountInfoList = customerOblAccountInfoList;
+    }
+
+    public BusinessSubType getBusinessSubType() {
+        return businessSubType;
+    }
+
+    public void setBusinessSubType(BusinessSubType businessSubType) {
+        this.businessSubType = businessSubType;
     }
 
     @Override
