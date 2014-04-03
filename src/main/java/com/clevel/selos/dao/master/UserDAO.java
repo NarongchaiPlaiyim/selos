@@ -65,6 +65,29 @@ public class UserDAO extends GenericDAO<User,String> {
 
     }
 
+    public String getUserIdByName(String userName)
+    {
+
+        Criteria criteria1 = getSession().createCriteria(User.class);
+        criteria1.setProjection(Projections.projectionList().add(Projections.property("id"), "id"));
+        criteria1.add(Restrictions.eq("userName",userName).ignoreCase()).setResultTransformer(Transformers.aliasToBean(User.class));
+        List usernamebasedteamid = criteria1.list();
+        Iterator iterator1 = usernamebasedteamid.iterator();
+        String userId = null;
+        while(iterator1.hasNext() == true)
+        {
+            User user = new User();
+            user = (User)iterator1.next();
+            userId = user.getId();
+            user = null;
+        }
+
+        userName = userId+" - "+userName;
+
+        return userName;
+
+    }
+
     public User findByUserName(String userName) {
         //log.debug("findByUserName. (userName: {})",userName);
         return findOneByCriteria(Restrictions.eq("userName",userName));
@@ -579,11 +602,15 @@ public class UserDAO extends GenericDAO<User,String> {
 
                 }
 
-                workCasePrescreenId = (long)workCaseOwner.getWorkCasePrescreenId();
+                if(workCaseOwner.getWorkCasePrescreenId()!=null)
+                {
+                    workCasePrescreenId = (long)workCaseOwner.getWorkCasePrescreenId();
 
-                log.info("workCasePrescreenId is ::::::{}" , workCasePrescreenId);
+                    log.info("workCasePrescreenId is ::::::{}" , workCasePrescreenId);
 
-                WorkCasePrescreenList.add(workCasePrescreenId);
+                    WorkCasePrescreenList.add(workCasePrescreenId);
+                }
+
                 workCaseOwner = null;
             }
             log.info("WorkCaseList is ::::::" + WorkCaseList.size());
