@@ -8,17 +8,22 @@
                      severity="alert" widgetVar="#{name}" closable="false">
         <h:form id="#{formId}">
             <div class="onRight">
-                <p:commandButton widgetVar="#{id}OkBtn"
+                <p:commandButton id="confirmActionBtn"
                                  value="#{msg.get('app.button.ok')}"
                                  action="#{controller[action]}"
                                  update="#{update}"
-                                 onclick="#{id}OkBtn.disable();#{id}CancelBtn.disable()"
-                                 oncomplete="#{name}.hide();#{id}OkBtn.enable();#{id}CancelBtn.enable()"/>
-                <p:commandButton widgetVar="#{id}CancelBtn"
-                                 value="#{msg.get('app.button.cancel')}"
+                                 oncomplete="#{name}.hide()"/>
+
+                <p:commandButton value="#{msg.get('app.button.cancel')}"
                                  onclick="#{name}.hide()"/>
             </div>
         </h:form>
+
+        <p:blockUI widgetVar="#{id}BlockUI" block="#{id}"
+                   trigger=":#{formId}:confirmActionBtn">
+            LOADING<br/>
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
     </p:confirmDialog>
 
 </f:view>

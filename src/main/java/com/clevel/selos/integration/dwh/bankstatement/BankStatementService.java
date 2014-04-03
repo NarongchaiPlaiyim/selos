@@ -154,6 +154,8 @@ public class BankStatementService implements Serializable {
                 } else if (numOfDifMonth == 13 && numberOfMonth < 2) {
                     firstMonth = monthTmp;
                 } else {
+                    log.debug("Action result is failed!");
+                    log.debug("Data in DWH is not enough.");
                     bankStatementResult.setActionResult(ActionResult.FAILED);
                     //bankStatementResult.setReason(exceptionMsg.get(ExceptionMapping.DWH_DATA_NOT_ENOUGH));
                     bankStatementResult.setReason("Data in Data Warehouse is not enough.");
@@ -166,25 +168,34 @@ public class BankStatementService implements Serializable {
                     if (systemParameter != null) {
                         List<DWHBankStatement> bankStatementList = getList(accountNumber, systemParameter.getValue(), numberOfMonth);
                         if (bankStatementList != null && bankStatementList.size() > 0) {
+                            log.debug("Action result is success.");
                             bankStatementResult.setActionResult(ActionResult.SUCCESS);
                             bankStatementResult.setBankStatementList(bankStatementList);
                         } else {
+                            log.debug("Action result is failed!");
+                            log.debug("DWH data not found.");
                             bankStatementResult.setActionResult(ActionResult.FAILED);
                             bankStatementResult.setReason(exceptionMsg.get(ExceptionMapping.DWH_DATA_NOT_FOUND));
                             bankStatementResult.setBankStatementList(new ArrayList<DWHBankStatement>());
                         }
                     } else {
+                        log.debug("Action result is failed!");
+                        log.debug("Not found system parameter by first month.");
                         bankStatementResult.setActionResult(ActionResult.FAILED);
                         bankStatementResult.setReason(exceptionMsg.get(ExceptionMapping.NOT_FOUND_SYSTEM_PARAM));
                         bankStatementResult.setBankStatementList(new ArrayList<DWHBankStatement>());
                     }
                 }
             } else {
+                log.debug("Action result is failed!");
+                log.debug("Not found system parameter by last month.");
                 bankStatementResult.setActionResult(ActionResult.FAILED);
                 bankStatementResult.setReason(exceptionMsg.get(ExceptionMapping.NOT_FOUND_SYSTEM_PARAM));
                 bankStatementResult.setBankStatementList(new ArrayList<DWHBankStatement>());
             }
         } else {
+            log.debug("Action result is failed!");
+            log.debug("DWH invalid input.");
             bankStatementResult.setActionResult(ActionResult.FAILED);
             bankStatementResult.setReason(exceptionMsg.get(ExceptionMapping.DWH_INVALID_INPUT));
             bankStatementResult.setBankStatementList(new ArrayList<DWHBankStatement>());
@@ -1055,6 +1066,7 @@ public class BankStatementService implements Serializable {
     }
 
     public DWHBankStatement transform(BankStatement1 bankStatement) {
+        log.debug("transform() BankStatement: {}", bankStatement);
         DWHBankStatement bankStatementResult = new DWHBankStatement();
         if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
@@ -1084,6 +1096,7 @@ public class BankStatementService implements Serializable {
     }
 
     public DWHBankStatement transform(BankStatement2 bankStatement) {
+        log.debug("transform() BankStatement: {}", bankStatement);
         DWHBankStatement bankStatementResult = new DWHBankStatement();
         if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
@@ -1113,6 +1126,7 @@ public class BankStatementService implements Serializable {
     }
 
     public DWHBankStatement transform(BankStatement3 bankStatement) {
+        log.debug("transform() BankStatement: {}", bankStatement);
         DWHBankStatement bankStatementResult = new DWHBankStatement();
         if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
@@ -1142,6 +1156,7 @@ public class BankStatementService implements Serializable {
     }
 
     public DWHBankStatement transform(BankStatement4 bankStatement) {
+        log.debug("transform() BankStatement: {}", bankStatement);
         DWHBankStatement bankStatementResult = new DWHBankStatement();
         if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
@@ -1171,6 +1186,7 @@ public class BankStatementService implements Serializable {
     }
 
     public DWHBankStatement transform(BankStatement5 bankStatement) {
+        log.debug("transform() BankStatement: {}", bankStatement);
         DWHBankStatement bankStatementResult = new DWHBankStatement();
         if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
@@ -1200,6 +1216,7 @@ public class BankStatementService implements Serializable {
     }
 
     public DWHBankStatement transform(BankStatement6 bankStatement) {
+        log.debug("transform() BankStatement: {}", bankStatement);
         DWHBankStatement bankStatementResult = new DWHBankStatement();
         if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
@@ -1229,6 +1246,7 @@ public class BankStatementService implements Serializable {
     }
 
     public DWHBankStatement transform(BankStatement7 bankStatement) {
+        log.debug("transform() BankStatement: {}", bankStatement);
         DWHBankStatement bankStatementResult = new DWHBankStatement();
         if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
@@ -1258,6 +1276,7 @@ public class BankStatementService implements Serializable {
     }
 
     public DWHBankStatement transform(BankStatement8 bankStatement) {
+        log.debug("transform() BankStatement: {}", bankStatement);
         DWHBankStatement bankStatementResult = new DWHBankStatement();
         if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
@@ -1287,6 +1306,7 @@ public class BankStatementService implements Serializable {
     }
 
     public DWHBankStatement transform(BankStatement9 bankStatement) {
+        log.debug("transform() BankStatement: {}", bankStatement);
         DWHBankStatement bankStatementResult = new DWHBankStatement();
         if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
@@ -1316,6 +1336,7 @@ public class BankStatementService implements Serializable {
     }
 
     public DWHBankStatement transform(BankStatement10 bankStatement) {
+        log.debug("transform() BankStatement: {}", bankStatement);
         DWHBankStatement bankStatementResult = new DWHBankStatement();
         if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
@@ -1345,6 +1366,7 @@ public class BankStatementService implements Serializable {
     }
 
     public DWHBankStatement transform(BankStatement11 bankStatement) {
+        log.debug("transform() BankStatement: {}", bankStatement);
         DWHBankStatement bankStatementResult = new DWHBankStatement();
         if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
@@ -1374,6 +1396,7 @@ public class BankStatementService implements Serializable {
     }
 
     public DWHBankStatement transform(BankStatement12 bankStatement) {
+        log.debug("transform() BankStatement: {}", bankStatement);
         DWHBankStatement bankStatementResult = new DWHBankStatement();
         if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
@@ -1403,6 +1426,7 @@ public class BankStatementService implements Serializable {
     }
 
     public DWHBankStatement transform(BankStatement13 bankStatement) {
+        log.debug("transform() BankStatement: {}", bankStatement);
         DWHBankStatement bankStatementResult = new DWHBankStatement();
         if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
@@ -1432,6 +1456,7 @@ public class BankStatementService implements Serializable {
     }
 
     public DWHBankStatement transform(BankStatement14 bankStatement) {
+        log.debug("transform() BankStatement: {}", bankStatement);
         DWHBankStatement bankStatementResult = new DWHBankStatement();
         if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
