@@ -897,9 +897,9 @@ public class CreditFacProposeControl extends BusinessControl {
         //--- Save to NewFeeCredit
         if ((!Util.isNull(pricingFeeList)) && (Util.safetyList(pricingFeeList).size() > 0)) {
             log.debug("saveCreditFacility ::: pricingFeeList : {}", pricingFeeList.size());
-            List<FeeDetail> feeDetailList = feeTransform.transformToDB(pricingFeeList,workCaseId);
-            feeDetailDAO.persist(feeDetailList);
-            log.debug("persist :: feeDetailList ::");
+//            List<FeeDetail> feeDetailList = feeTransform.transformToDB(pricingFeeList,workCaseId);
+//            feeDetailDAO.persist(feeDetailList);
+//            log.debug("persist :: feeDetailList ::");
 
         }
 
