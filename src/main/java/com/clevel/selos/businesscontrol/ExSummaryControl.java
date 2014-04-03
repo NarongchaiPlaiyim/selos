@@ -352,9 +352,24 @@ public class ExSummaryControl extends BusinessControl {
         exSumCollateralView.setCoreAssetValue(tmpCoreAsset);
         exSumCollateralView.setNoneCoreAssetValue(tmpNonCore);
 
-        exSumCollateralView.setLimitApprove(Util.add(decisionView.getApproveTotalCreditLimit(),newCreditFacilityView.getTotalPropose()));
+//        Sum of (Propose/PreApprove/Approve Limit)
+        if(decisionView != null && newCreditFacilityView != null){
+            exSumCollateralView.setLimitApprove(Util.add(decisionView.getApproveTotalCreditLimit(),newCreditFacilityView.getTotalPropose()));
+        }else if(decisionView != null){
+            exSumCollateralView.setLimitApprove(decisionView.getApproveTotalCreditLimit());
+        }else if(newCreditFacilityView != null){
+            exSumCollateralView.setLimitApprove(newCreditFacilityView.getTotalPropose());
+        }else{
+            exSumCollateralView.setLimitApprove(null);
+        }
 
         //Todo: Percent LTV
+//        (limitApprove + Sum(วงเงิน/ภาระสินเชื่อเดิม)) หาร (cashCollateralValue + coreAssetValue + noneCoreAssetValue)
+        BigDecimal existingSMELimit = null;
+        if(newCreditFacilityView != null){
+            existingSMELimit = newCreditFacilityView.getExistingSMELimit();
+        }
+        exSumCollateralView.setPercentLTV(Util.divide(Util.add(exSumCollateralView.getLimitApprove(),existingSMELimit),Util.add(Util.add(tmpCashColl,tmpCoreAsset),tmpNonCore)));
 
         exSummaryView.setExSumCollateralView(exSumCollateralView);
 
