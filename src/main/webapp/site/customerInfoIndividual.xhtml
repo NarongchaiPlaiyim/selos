@@ -2547,7 +2547,11 @@
                                                          rendered="#{not custInfoSumIndi.fromJuristic}"
                                                          disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
                                         <p:commandButton value="#{msg.get('app.button.save')}" styleClass="small" id="btnSave2"
-                                                         process="@form" update=":msgBoxSystemMessagePanel"
+                                                         process="@form" update=":frmMain:relation,:frmMain:reference,:frmMain:docType,:frmMain:citiId,:frmMain:gender,
+                                                                 :frmMain:titleTh,:frmMain:firstNameTh,:frmMain:lastNameTh,:frmMain:maritalStatus,
+                                                                 :frmMain:relationSpouse,:frmMain:referenceSpouse,:frmMain:docTypeSpouse,
+                                                                 :frmMain:citiIdSpouse,:frmMain:titleThSpouse,:frmMain:firstNameThSpouse,:frmMain:lastNameThSpouse,
+                                                                 :msgBoxSystemMessagePanel"
                                                          action="#{custInfoSumIndi.onSaveFromJuristic()}" binding="#{saveCustomer2}"
                                                          rendered="#{custInfoSumIndi.fromJuristic}"
                                                          disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
