@@ -771,6 +771,10 @@ tfoot {
     margin-top: -18px !important;
 }
 
+.hide-column-names table thead tr {
+    display: none;
+}
+
 /*////////////////////////////////////////////////////////// ISA    */
 
 .subject {
@@ -892,3 +896,15 @@ table tbody tr.grandtotal_summary td {
     border-color: transparent!important;
 }
 
+.dataTableRequestAppraisal{
+    padding: 5px 5px !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-color: #868686;
+}
+
+#reqApprDialogPanel label{
+    font-size: 10px !important;
+}

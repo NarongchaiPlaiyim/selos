@@ -10,7 +10,6 @@ import com.clevel.selos.integration.bpm.model.BPMInbox;
 import com.clevel.selos.integration.bpm.model.FieldName;
 import com.clevel.selos.integration.bpm.model.OrderType;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
-import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.brms.service.EndPoint;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatementResult;

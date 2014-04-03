@@ -8,11 +8,19 @@ public enum RelationValue {
 
     int value;
 
-    RelationValue(int value) {
+    private RelationValue(int value) {
         this.value = value;
     }
 
     public int value() {
         return this.value;
+    }
+
+    public static final RelationValue lookup(int value){
+        for(RelationValue relationValue : RelationValue.values()){
+            if(relationValue.value == value)
+                return relationValue;
+        }
+        return INDIRECTLY_RELATED;
     }
 }

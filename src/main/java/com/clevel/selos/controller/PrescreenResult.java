@@ -112,6 +112,8 @@ public class PrescreenResult implements Serializable {
 
             prescreenResultView = prescreenBusinessControl.getPrescreenResult(workCasePreScreenId);
             prescreenView = prescreenBusinessControl.getPreScreen(workCasePreScreenId);
+
+
         }
     }
 
