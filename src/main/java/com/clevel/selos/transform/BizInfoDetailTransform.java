@@ -1,5 +1,7 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.model.db.master.BusinessActivity;
+import com.clevel.selos.model.db.master.BusinessType;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.BizInfoDetailView;
@@ -86,7 +88,13 @@ public class BizInfoDetailTransform extends Transform {
         bizInfoDetailView.setId(bizInfoDetail.getId());
         bizInfoDetailView.setBizInfoText(bizInfoDetail.getBizInfoText());
         bizInfoDetailView.setBizActivity(bizInfoDetail.getBusinessActivity());
+        if(bizInfoDetail.getBusinessActivity() == null){                         //Check null if PreScreen Send by NULL
+            bizInfoDetailView.setBizActivity(new BusinessActivity());
+        }
         bizInfoDetailView.setBizType(bizInfoDetail.getBusinessType());
+        if(bizInfoDetail.getBusinessType() == null){
+            bizInfoDetailView.setBizType(new BusinessType());
+        }
         bizInfoDetailView.setBizGroup(bizInfoDetail.getBusinessGroup());
         bizInfoDetailView.setBizDesc(bizInfoDetail.getBusinessDescription());
         bizInfoDetailView.setBizCode(bizInfoDetail.getBizCode());

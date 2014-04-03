@@ -225,7 +225,7 @@ public class BRMSControl extends BusinessControl {
         return applicationInfo;
     }
 
-    public UWRuleResponseView getPrescreenResult(long workcasePrescreenId){
+    public UWRuleResponseView getPrescreenResult(long workcasePrescreenId) throws Exception{
         logger.debug("getPrescreenReult from workcasePrescreenId {}", workcasePrescreenId);
         Date checkDate = Calendar.getInstance().getTime();
         logger.debug("check at date {}", checkDate);

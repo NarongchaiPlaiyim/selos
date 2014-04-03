@@ -202,8 +202,7 @@ public class PESQLAllBoxes implements Serializable
         }
     }
 
-    public void onClickPickUpCase(PEInbox inboxSelect){
-        inboxViewSelectItem = inboxSelect;
+    public void onClickPickUpCase(){
         RequestContext.getCurrentInstance().execute("msgBoxConfirmDlg.show()");
     }
 

@@ -445,4 +445,12 @@ public class BizInfoDetailControl extends BusinessControl {
         }
     }
 
+    public int getUserRoleId() {
+        User user = getCurrentUser();
+        if (user != null && user.getRole() != null) {
+            return user.getRole().getId();
+        }
+        return 0;
+    }
+
 }

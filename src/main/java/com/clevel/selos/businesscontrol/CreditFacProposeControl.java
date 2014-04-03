@@ -334,36 +334,39 @@ public class CreditFacProposeControl extends BusinessControl {
                                     log.debug("productFormula id :: {}", productFormula.getId());
                                     log.debug("productFormula.getProgramToCreditType().getCreditType().getCreditGroup():::{}", productFormula.getProgramToCreditType().getCreditType().getCreditGroup());
                                     //OBOD or CASH_IN
-                                    if (CreditTypeGroup.CASH_IN.equals(productFormula.getProgramToCreditType().getCreditType().getCreditGroup())) {
+                                    if (CreditTypeGroup.CASH_IN.value()==(productFormula.getProgramToCreditType().getCreditType().getCreditGroup())) {
+                                        log.debug("OBOD ::: CASH_IN");
                                         //ExposureMethod for check to use limit or limit*PCE%
                                         if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
-                                            log.info("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                            log.debug("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                             sumTotalOBOD = sumTotalOBOD.add(BigDecimal.ZERO);
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
-                                            log.info("LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                            log.debug("LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                             sumTotalOBOD = sumTotalOBOD.add(newCreditDetailView.getLimit());
-                                        } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) { //limit * %PCE
-                                            log.info("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
-                                            sumTotalOBOD = sumTotalOBOD.add(Util.multiply(newCreditDetailView.getLimit(), newCreditDetailView.getPCEPercent()));
+                                        } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) { //(limit * %PCE)/100
+                                            log.debug("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+//                                            sumTotalOBOD = sumTotalOBOD.add(Util.multiply(newCreditDetailView.getLimit(), newCreditDetailView.getPCEPercent()));
+                                            sumTotalOBOD = sumTotalOBOD.add(newCreditDetailView.getPCEAmount());
                                         }
                                         log.debug("sumTotalOBOD :: {}", sumTotalOBOD);
-                                    } else {//All Credit
+                                    }else{//All Credit
                                         //ExposureMethod for check to use limit or limit*PCE%
                                         if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
-                                            log.info("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                            log.debug("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                             sumTotalPropose = sumTotalPropose.add(BigDecimal.ZERO);
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
-                                            log.info("LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                            log.debug("LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                             sumTotalPropose = sumTotalPropose.add(newCreditDetailView.getLimit());
-                                        } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //limit * %PCE
-                                            log.info("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
-                                            sumTotalPropose = sumTotalPropose.add(Util.multiply(newCreditDetailView.getLimit(), newCreditDetailView.getPCEPercent()));
+                                        } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //(limit * %PCE)/100
+                                            log.debug("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+//                                            sumTotalPropose = sumTotalPropose.add(Util.multiply(newCreditDetailView.getLimit(), newCreditDetailView.getPCEPercent()));
+                                            sumTotalPropose = sumTotalPropose.add(newCreditDetailView.getPCEAmount());
                                         }
                                         log.debug("sumTotalPropose :: {}", sumTotalPropose);  // Commercial + OBOD
                                     }
 
                                     sumTotalBorrowerCommercial = Util.subtract(sumTotalPropose, sumTotalOBOD);  // Commercial - OBOD
-                                    log.debug("sumTotalCommercial :: {}", sumTotalBorrowerCommercial);
+                                    log.debug("sumTotalBorrowerCommercial :: {}", sumTotalBorrowerCommercial);
 
                                     //For DBR  sumTotalLoanDbr and sumTotalNonLoanDbr
                                     if (productFormula.getDbrCalculate() == 1) {// No
@@ -542,16 +545,18 @@ public class CreditFacProposeControl extends BusinessControl {
     public void calculatePCEAmount(NewCreditDetailView creditDetailView) {
         log.info("creditDetailView : {}", creditDetailView);
         BigDecimal sumOfPCE = BigDecimal.ZERO;
+        BigDecimal sum = BigDecimal.ZERO;
 
         if (!Util.isNull(creditDetailView)) {
             sumOfPCE = Util.multiply(creditDetailView.getLimit(), creditDetailView.getPCEPercent());
+            sum = Util.divide(sumOfPCE,BigDecimal.valueOf(100));
 
-            if (sumOfPCE != null) {
-                sumOfPCE.setScale(2, RoundingMode.HALF_UP);
+            if (sum != null) {
+                sum.setScale(2, RoundingMode.HALF_UP);
             }
 
-            log.info("creditDetailAdd :sumOfPCE: {}", sumOfPCE);
-            creditDetailView.setPCEAmount(sumOfPCE);
+            log.info("creditDetailAdd :sum: {}", sum);
+            creditDetailView.setPCEAmount(sum);
         }
 
     }
@@ -1029,21 +1034,4 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
 
-    public void toFindLTVPercent(long workCaseId) {
-        log.debug("toCalculateLtvValue LTV Value of all collateral ::  ");
-        TCGView TCGView = tcgInfoControl.getTcgView(workCaseId);
-
-        if (!Util.isNull(TCGView)) {
-            List<TCGDetailView> tcgDetailViewList = tcgInfoControl.getTcgDetailListView(TCGView);
-
-            if (!Util.isNull(tcgDetailViewList)&&(tcgDetailViewList.size()>0))
-            {
-//                for (TCGDetailView tcgDetailView : tcgDetailViewList) {
-//                    BigDecimal  ltvPercent= tcgDetailView.getLtvPercent();
-//                    log.info("ltvPercent :: {}",ltvPercent);
-//
-//                }
-            }
-        }
-    }
 }
