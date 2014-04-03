@@ -24,6 +24,7 @@ public class BusinessSubTypeDAO extends GenericDAO<BusinessSubType, Integer> {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("active", 1));
         criteria.addOrder(Order.asc("mainCode"));
+        criteria.addOrder(Order.asc("extendCode"));
         List<BusinessSubType> businessSubTypes = criteria.list();
         log.info("findAll BusinessSubType. (result size: {})", businessSubTypes.size());
 
