@@ -542,16 +542,18 @@ public class CreditFacProposeControl extends BusinessControl {
     public void calculatePCEAmount(NewCreditDetailView creditDetailView) {
         log.info("creditDetailView : {}", creditDetailView);
         BigDecimal sumOfPCE = BigDecimal.ZERO;
+        BigDecimal sum = BigDecimal.ZERO;
 
         if (!Util.isNull(creditDetailView)) {
             sumOfPCE = Util.multiply(creditDetailView.getLimit(), creditDetailView.getPCEPercent());
+            sum = Util.divide(sumOfPCE,BigDecimal.valueOf(100));
 
-            if (sumOfPCE != null) {
-                sumOfPCE.setScale(2, RoundingMode.HALF_UP);
+            if (sum != null) {
+                sum.setScale(2, RoundingMode.HALF_UP);
             }
 
-            log.info("creditDetailAdd :sumOfPCE: {}", sumOfPCE);
-            creditDetailView.setPCEAmount(sumOfPCE);
+            log.info("creditDetailAdd :sum: {}", sum);
+            creditDetailView.setPCEAmount(sum);
         }
 
     }
@@ -1029,21 +1031,4 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
 
-    public void toFindLTVPercent(long workCaseId) {
-        log.debug("toCalculateLtvValue LTV Value of all collateral ::  ");
-        TCGView TCGView = tcgInfoControl.getTcgView(workCaseId);
-
-        if (!Util.isNull(TCGView)) {
-            List<TCGDetailView> tcgDetailViewList = tcgInfoControl.getTcgDetailListView(TCGView);
-
-            if (!Util.isNull(tcgDetailViewList)&&(tcgDetailViewList.size()>0))
-            {
-//                for (TCGDetailView tcgDetailView : tcgDetailViewList) {
-//                    BigDecimal  ltvPercent= tcgDetailView.getLtvPercent();
-//                    log.info("ltvPercent :: {}",ltvPercent);
-//
-//                }
-            }
-        }
-    }
 }
