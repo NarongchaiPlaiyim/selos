@@ -399,14 +399,14 @@ public class PDFDecision implements Serializable {
 
                 StringBuilder collateralType = new StringBuilder();
                 try {
-                    collateralType = collateralType.append(new String("ศักยภาพหลักประกัน :".getBytes("ISO-8859-1"), "UTF-8")).append((Util.checkNullString(detailView.getPotentialCollateral().getDescription()))).append("\n");
-                    collateralType = collateralType.append(new String("ประเภทหลักประกัน :".getBytes("ISO-8859-1"), "UTF-8")).append((Util.checkNullString(detailView.getCollateralType().getDescription()))).append("\n");
-                    collateralType = collateralType.append(new String("กรรมสิทธิ์ :".getBytes("ISO-8859-1"), "UTF-8")).append((Util.checkNullString(detailView.getOwner()))).append("\n");
-                    collateralType = collateralType.append(new String("ความเกี่ยวพัน :".getBytes("ISO-8859-1"), "UTF-8")).append((Util.checkNullString(detailView.getRelation().getDescription()))).append("\n");
-                    collateralType = collateralType.append(new String("วันที่ประเมิน :".getBytes("ISO-8859-1"), "UTF-8")).append((detailView.getAppraisalDate()) == null ? "" : detailView.getAppraisalDate()).append("\n");
-                    collateralType = collateralType.append(new String("เลขที่ :".getBytes("ISO-8859-1"), "UTF-8")).append((Util.checkNullString(detailView.getCollateralNumber()))).append("\n");
-                    collateralType = collateralType.append(new String("ที่อยู่ :".getBytes("ISO-8859-1"), "UTF-8")).append((Util.checkNullString(detailView.getCollateralLocation()))).append("\\n");
-                    collateralType = collateralType.append(new String("หมายเหตุ :".getBytes("ISO-8859-1"), "UTF-8")).append((Util.checkNullString(detailView.getRemark())));
+                    collateralType = collateralType.append(new String("ศักยภาพหลักประกัน :".getBytes(), "UTF-8")).append((Util.checkNullString(detailView.getPotentialCollateral().getDescription()))).append("\n");
+                    collateralType = collateralType.append(new String("ประเภทหลักประกัน :".getBytes(), "ISO-8859-1")).append((Util.checkNullString(detailView.getCollateralType().getDescription()))).append("\n");
+                    collateralType = collateralType.append(new String("กรรมสิทธิ์ :".getBytes("UTF-8"), "ISO-8859-1")).append((Util.checkNullString(detailView.getOwner()))).append("\n");
+                    collateralType = collateralType.append(new String("ความเกี่ยวพัน :".getBytes("UTF-8"), "ISO-8859-1")).append((Util.checkNullString(detailView.getRelation().getDescription()))).append("\n");
+                    collateralType = collateralType.append(new String("วันที่ประเมิน :".getBytes("UTF-8"), "ISO-8859-1")).append((detailView.getAppraisalDate()) == null ? "" : detailView.getAppraisalDate()).append("\n");
+                    collateralType = collateralType.append(new String("เลขที่ :".getBytes("UTF-8"), "ISO-8859-1")).append((Util.checkNullString(detailView.getCollateralNumber()))).append("\n");
+                    collateralType = collateralType.append(new String("ที่อยู่ :".getBytes("UTF-8"), "ISO-8859-1")).append((Util.checkNullString(detailView.getCollateralLocation()))).append("\\n");
+                    collateralType = collateralType.append(new String("หมายเหตุ :".getBytes("UTF-8"), "ISO-8859-1")).append((Util.checkNullString(detailView.getRemark())));
                 } catch (Exception e){
                     log.debug("Exception while convert BYTE to UTF-8");
                 }
