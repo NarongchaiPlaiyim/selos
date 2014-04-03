@@ -14,7 +14,7 @@
     <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 </h:head>
 
-<h:body>
+<h:body onload="loadComplete()">
     <f:event type="preRenderView" listener="#{custInfoSumIndi.preRender()}" />
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
@@ -513,7 +513,7 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.businessTypeList}"
                                                            var="busType"
-                                                           itemLabel="#{busType.description}"
+                                                           itemLabel="#{busType.mainCode}#{busType.extendCode} - #{busType.description}"
                                                            itemValue="#{busType.id}"/>
                                         </p:selectOneMenu>
                                     </td>
@@ -1811,7 +1811,7 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.businessTypeList}"
                                                                                var="busType"
-                                                                               itemLabel="#{busType.description}"
+                                                                               itemLabel="#{busType.mainCode}#{busType.extendCode} - #{busType.description}"
                                                                                itemValue="#{busType.id}"/>
                                                             </p:selectOneMenu>
                                                         </td>
@@ -2585,6 +2585,9 @@
                 LOADING<br />
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>
+
+            <p:remoteCommand name="loadComplete" process="@this" id="loadComplete"
+                             action="#{custInfoSumIndi.onLoadComplete()}"/>
 
             <p:remoteCommand name="rmtCmd01" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmd02()}"

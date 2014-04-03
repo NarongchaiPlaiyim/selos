@@ -131,7 +131,7 @@
 				<textFieldExpression><![CDATA[$F{cancellationFee}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="1592a021-9d11-43d3-ae33-3d4fcb61ba6d" style="detail" mode="Transparent" x="0" y="0" width="555" height="20" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="1592a021-9d11-43d3-ae33-3d4fcb61ba6d" style="detail" mode="Transparent" x="0" y="0" width="555" height="10" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>

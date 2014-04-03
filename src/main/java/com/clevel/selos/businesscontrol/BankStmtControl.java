@@ -96,7 +96,7 @@ public class BankStmtControl extends BusinessControl {
                         log.info("Finding account {}", accountListModelList);
                         for (CustomerAccountListModel customerAccountListModel : accountListModelList) {
                             DWHBankStatementResult dwhBankStatementResult = dwhInterface.getBankStatementData(getCurrentUserID(), customerAccountListModel.getAccountNo(), startBankStmtDate, numberOfMonthBankStmt);
-                            log.debug("DWH Bank Statement per Customer Account Result: {}", dwhBankStatementResult.getActionResult());
+                            log.debug("DWH Bank statement result: {} by Account No: {}", dwhBankStatementResult.getActionResult(), customerAccountListModel.getAccountNo());
                             if (dwhBankStatementResult.getActionResult().equals(ActionResult.SUCCESS)) {
                                 List<DWHBankStatement> dwhBankStatementList = dwhBankStatementResult.getBankStatementList();
                                 BankStmtView bankStmtView = null;
@@ -1367,7 +1367,7 @@ public class BankStmtControl extends BusinessControl {
         List<BankStmtDetailView> bankStmtDetailViewList;
         bankStmtDetailViewList = new ArrayList<BankStmtDetailView>();
         Date date;
-        for (int i = 0; i < numberOfMonths; i++) {
+        for (int i=(numberOfMonths-1); i>=0; i--) {
             BankStmtDetailView bankStmtDetailView = new BankStmtDetailView();
             date = DateTimeUtil.getOnlyDatePlusMonth(lastMonthDate, -i);
             bankStmtDetailView.setAsOfDate(date);

@@ -112,15 +112,15 @@ public class ExSummary implements Serializable {
     private String qualitativeClass;
 
     @Column(name = "biz_size")
-    private BigDecimal bizSize;
+    private BigDecimal bizSize;*/
 
-    @Column(name = "bdm")
-    private BigDecimal BDM;
+    @Column(name = "income_factor_bdm")
+    private BigDecimal incomeFactorBDM;
 
-    @Column(name = "uw")
-    private BigDecimal UW;
+    @Column(name = "income_factor_uw")
+    private BigDecimal incomeFactorUW;
 
-    @Column(name = "ar")
+    /*@Column(name = "ar")
     private BigDecimal AR;
 
     @Column(name = "ap")
@@ -572,6 +572,22 @@ public class ExSummary implements Serializable {
         this.percentLTV = percentLTV;
     }
 
+    public BigDecimal getIncomeFactorBDM() {
+        return incomeFactorBDM;
+    }
+
+    public void setIncomeFactorBDM(BigDecimal incomeFactorBDM) {
+        this.incomeFactorBDM = incomeFactorBDM;
+    }
+
+    public BigDecimal getIncomeFactorUW() {
+        return incomeFactorUW;
+    }
+
+    public void setIncomeFactorUW(BigDecimal incomeFactorUW) {
+        this.incomeFactorUW = incomeFactorUW;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -591,6 +607,8 @@ public class ExSummary implements Serializable {
                 append("groupSaleUW", groupSaleUW).
                 append("groupExposureBDM", groupExposureBDM).
                 append("groupExposureUW", groupExposureUW).
+                append("incomeFactorBDM", incomeFactorBDM).
+                append("incomeFactorUW", incomeFactorUW).
                 append("cashCollateralValue", cashCollateralValue).
                 append("coreAssetValue", coreAssetValue).
                 append("noneCoreAssetValue", noneCoreAssetValue).
