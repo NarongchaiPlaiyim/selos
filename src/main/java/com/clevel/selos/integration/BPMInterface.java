@@ -37,5 +37,7 @@ public interface BPMInterface {
 
     public void batchDispatchCaseFromRoster(String s, String[] strings, HashMap<String, String> stringStringHashMap);
 
+    public void updateCase(String queueName, String wobNumber, HashMap<String, String> fields);
+
 
 }

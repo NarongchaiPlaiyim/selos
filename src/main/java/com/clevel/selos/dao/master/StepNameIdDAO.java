@@ -4,7 +4,6 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.StepNameId;
 import com.clevel.selos.system.Config;
-import org.bouncycastle.asn1.isismtt.x509.Restriction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;

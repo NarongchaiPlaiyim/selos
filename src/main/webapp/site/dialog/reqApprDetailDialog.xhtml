@@ -4,7 +4,7 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
-<p:panel id="reqApprDetailDialogPanel" styleClass="panel-dialog">
+<p:panel id="reqApprDetailDialogPanel" styleClass="panel-dialog" rendered="#{baseController.checkButton('Request Appraisal')}">
     <table class="content_form">
         <tr>
             <td class="title" style="width: 200px;">
