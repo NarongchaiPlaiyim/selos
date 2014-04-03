@@ -178,7 +178,7 @@
                                                      rowKey="#{item.fwobnumber}"
                                                      rowIndexVar="rowIndex">
 
-                                            <p:ajax event="rowSelect" update=":frmMain:resultInboxPool" listener="#{peAllBoxes.onClickPickUpCase}">
+                                            <p:ajax event="rowSelect" update=":frmMain:resultInboxPool" listener="#{peAllBoxes.onClickPickUpCase()}">
                                                 <f:setPropertyActionListener value="#{item}" target="#{peAllBoxes.inboxViewSelectItem}"/>
                                             </p:ajax>
 
