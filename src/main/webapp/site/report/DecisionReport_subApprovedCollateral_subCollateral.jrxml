@@ -92,6 +92,14 @@
 	<detail>
 		<band height="14" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="8d17dd25-f1a8-4a17-9c9a-647796235cfc" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="25" height="14"/>
+				<textElement verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}.intValue() == 0 ?
+"" : $V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="5fbfd8fa-27f0-434b-a3cc-9a37e8943907" style="detail" stretchType="RelativeToBandHeight" x="217" y="0" width="77" height="14"/>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
@@ -116,14 +124,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{requestType}.intValue() == 1 ? "Change" :
 $F{requestType}.intValue() == 2 ? "New" : ""]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="8d17dd25-f1a8-4a17-9c9a-647796235cfc" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="25" height="14"/>
-				<textElement verticalAlignment="Top">
-					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{COLUMN_NUMBER}.intValue() == 0 ?
-"" : $V{COLUMN_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="3c69907a-c70b-4021-89ec-36d5cf88e07d" style="detail" stretchType="RelativeToBandHeight" x="374" y="0" width="72" height="14"/>
