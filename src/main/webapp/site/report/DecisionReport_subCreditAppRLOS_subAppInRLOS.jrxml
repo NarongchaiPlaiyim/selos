@@ -24,17 +24,17 @@
 		<fieldDescription><![CDATA[finalInterest]]></fieldDescription>
 	</field>
 	<detail>
-		<band height="27" splitType="Stretch">
+		<band height="13" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="e8e5686c-e5b2-49d5-8a24-1aa334deb2a4" style="detail" stretchType="RelativeToBandHeight" x="79" y="0" width="38" height="27"/>
+				<reportElement uuid="e8e5686c-e5b2-49d5-8a24-1aa334deb2a4" style="detail" stretchType="RelativeToBandHeight" x="79" y="0" width="38" height="13"/>
 				<textElement textAlignment="Right">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{tenor}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{tenor}.equals( null ) ? 0 : $F{tenor}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="f53e4e85-e492-4adb-8f42-6b4588d7bc2e" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="38" height="27"/>
+				<reportElement uuid="f53e4e85-e492-4adb-8f42-6b4588d7bc2e" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="38" height="13"/>
 				<textElement textAlignment="Right">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
@@ -42,12 +42,14 @@
 				<textFieldExpression><![CDATA[$F{installment}.equals( null ) ? 0 : $F{installment}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="7b141abf-6c49-4b1d-a468-bc72cb70dd9b" style="detail" stretchType="RelativeToBandHeight" x="38" y="0" width="41" height="27"/>
+				<reportElement uuid="7b141abf-6c49-4b1d-a468-bc72cb70dd9b" style="detail" stretchType="RelativeToBandHeight" x="38" y="0" width="41" height="13"/>
 				<textElement textAlignment="Right">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{finalBasePrice}+"+"+$F{finalInterest}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{finalBasePrice}.equals( null ) ?
+"" +"+"+$F{finalInterest}
+: $F{finalBasePrice} +"+"+$F{finalInterest}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
