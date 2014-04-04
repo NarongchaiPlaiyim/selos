@@ -406,13 +406,13 @@ public class PDFDecision implements Serializable {
                 StringBuilder collateralType = new StringBuilder();
                 try {
                     collateralType = collateralType.append(msg.get("app.decision.tb.td.label.potential")).append((Util.checkNullString(detailView.getPotentialCollateral().getDescription()))).append("\n");
-                    collateralType = collateralType.append("ประเภทหลักประกัน :").append((Util.checkNullString(detailView.getCollateralType().getDescription()))).append("\n");
-                    collateralType = collateralType.append("กรรมสิทธิ์ :").append((Util.checkNullString(detailView.getOwner()))).append("\n");
-                    collateralType = collateralType.append("ความเกี่ยวพัน :").append((Util.checkNullString(detailView.getRelation().getDescription()))).append("\n");
-                    collateralType = collateralType.append("วันที่ประเมิน :").append((detailView.getAppraisalDate()) == null ? "" : detailView.getAppraisalDate()).append("\n");
-                    collateralType = collateralType.append("เลขที่ :").append((Util.checkNullString(detailView.getCollateralNumber()))).append("\n");
-                    collateralType = collateralType.append("ที่อยู่ :").append((Util.checkNullString(detailView.getCollateralLocation()))).append("\\n");
-                    collateralType = collateralType.append("หมายเหตุ :").append((Util.checkNullString(detailView.getRemark())));
+                    collateralType = collateralType.append(msg.get("app.decision.tb.td.label.collateralType")).append((Util.checkNullString(detailView.getCollateralType().getDescription()))).append("\n");
+                    collateralType = collateralType.append(msg.get("app.decision.tb.td.label.owner")).append((Util.checkNullString(detailView.getOwner()))).append("\n");
+                    collateralType = collateralType.append(msg.get("app.decision.tb.td.label.relationship")).append((Util.checkNullString(detailView.getRelation().getDescription()))).append("\n");
+                    collateralType = collateralType.append(msg.get("app.decision.tb.td.label.appraisalDate")).append((detailView.getAppraisalDate()) == null ? "" : detailView.getAppraisalDate()).append("\n");
+                    collateralType = collateralType.append(msg.get("app.decision.tb.td.label.collateralNumber")).append((Util.checkNullString(detailView.getCollateralNumber()))).append("\n");
+                    collateralType = collateralType.append(msg.get("app.decision.tb.td.label.collateralLocation")).append((Util.checkNullString(detailView.getCollateralLocation()))).append("\\n");
+                    collateralType = collateralType.append(msg.get("app.decision.tb.td.label.remark")).append((Util.checkNullString(detailView.getRemark())));
                 } catch (Exception e){
                     log.debug("Exception while convert BYTE to UTF-8");
                 }
@@ -454,14 +454,14 @@ public class PDFDecision implements Serializable {
                 collateralRelatedDecisionReport.setPath(path);
 
                 StringBuilder collateralType = new StringBuilder();
-                collateralType = collateralType.append("ศักยภาพหลักประกัน :").append((Util.checkNullString(detailView.getPotentialCollateral().getDescription()))).append("\n");
-                collateralType = collateralType.append("ประเภทหลักประกัน :").append((Util.checkNullString(detailView.getCollateralType().getDescription()))).append("\n");
-                collateralType = collateralType.append("กรรมสิทธิ์ :").append((Util.checkNullString(detailView.getOwner()))).append("\n");
-                collateralType = collateralType.append("ความเกี่ยวพัน :").append((Util.checkNullString(detailView.getRelation().getDescription()))).append("\n");
-                collateralType = collateralType.append("วันที่ประเมิน :").append((detailView.getAppraisalDate()) == null ? "" : detailView.getAppraisalDate()).append("\n");
-                collateralType = collateralType.append("เลขที่ :").append((Util.checkNullString(detailView.getCollateralNumber()))).append("\n");
-                collateralType = collateralType.append("ที่อยู่ :").append((Util.checkNullString(detailView.getCollateralLocation()))).append("\\n");
-                collateralType = collateralType.append("หมายเหตุ :").append((Util.checkNullString(detailView.getRemark())));
+                collateralType = collateralType.append(msg.get("app.decision.tb.td.label.potential")).append((Util.checkNullString(detailView.getPotentialCollateral().getDescription()))).append("\n");
+                collateralType = collateralType.append(msg.get("app.decision.tb.td.label.collateralType")).append((Util.checkNullString(detailView.getCollateralType().getDescription()))).append("\n");
+                collateralType = collateralType.append(msg.get("app.decision.tb.td.label.owner")).append((Util.checkNullString(detailView.getOwner()))).append("\n");
+                collateralType = collateralType.append(msg.get("app.decision.tb.td.label.relationship")).append((Util.checkNullString(detailView.getRelation().getDescription()))).append("\n");
+                collateralType = collateralType.append(msg.get("app.decision.tb.td.label.appraisalDate")).append((detailView.getAppraisalDate()) == null ? "" : detailView.getAppraisalDate()).append("\n");
+                collateralType = collateralType.append(msg.get("app.decision.tb.td.label.collateralNumber")).append((Util.checkNullString(detailView.getCollateralNumber()))).append("\n");
+                collateralType = collateralType.append(msg.get("app.decision.tb.td.label.collateralLocation")).append((Util.checkNullString(detailView.getCollateralLocation()))).append("\\n");
+                collateralType = collateralType.append(msg.get("app.decision.tb.td.label.remark")).append((Util.checkNullString(detailView.getRemark())));
 
                 collateralRelatedDecisionReport.setCollateralType(collateralType.toString());
                 log.debug("--CollateralType. {}",collateralType.toString());
