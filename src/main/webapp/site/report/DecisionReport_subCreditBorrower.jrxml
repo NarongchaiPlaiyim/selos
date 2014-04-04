@@ -233,7 +233,7 @@
 			<frame>
 				<reportElement uuid="22103bcf-776f-4b12-8c32-e12ab8397b1f" stretchType="RelativeToBandHeight" mode="Transparent" x="438" y="0" width="117" height="30"/>
 				<subreport>
-					<reportElement uuid="9bcb64b8-8c1b-4024-a687-728f6090ab65" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="0" width="117" height="30" isRemoveLineWhenBlank="true"/>
+					<reportElement uuid="9bcb64b8-8c1b-4024-a687-728f6090ab65" positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="0" width="117" height="30" isRemoveLineWhenBlank="true"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTierDetailViewList})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$F{path}+ "DecisionReport_subCreditBorrower_subCreditBorrower.jasper"]]></subreportExpression>
 				</subreport>

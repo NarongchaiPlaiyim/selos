@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b568264b-3421-42fd-80e8-96aa4a75cbf6">
 	<property name="ireport.zoom" value="1.771561000000038"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="912"/>
+	<property name="ireport.y" value="1440"/>
 	<style name="Total" mode="Opaque" forecolor="#000000" backcolor="#FCFF79" hAlign="Left" vAlign="Middle" fontSize="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1016,7 +1016,7 @@
 				</staticText>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="d5e0a0b0-3a23-4494-8e31-e111b69b7036" style="Total" x="221" y="0" width="49" height="15"/>
-					<textElement>
+					<textElement textAlignment="Right">
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
 					</textElement>
@@ -1137,7 +1137,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</staticText>
 				<textField>
 					<reportElement uuid="cd214ca3-04e7-4605-bf89-0d04e268b3af" style="Total" x="221" y="0" width="49" height="15"/>
-					<textElement>
+					<textElement textAlignment="Right">
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
 					</textElement>

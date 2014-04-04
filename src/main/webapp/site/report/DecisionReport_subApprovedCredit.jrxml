@@ -187,6 +187,7 @@ Fee(%)]]></text>
 				<reportElement uuid="ff193b68-1a91-4728-b9c6-fa6facbe7453" style="detail" stretchType="RelativeToBandHeight" mode="Opaque" x="138" y="0" width="48" height="18" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Left">
 					<font isItalic="false" pdfFontName="fonts/TAHOMA.TTF"/>
+					<paragraph firstLineIndent="1" leftIndent="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{credittypeName}]]></textFieldExpression>
 			</textField>
@@ -194,6 +195,7 @@ Fee(%)]]></text>
 				<reportElement uuid="e54535de-8d48-4a64-9e21-189096569e2f" style="detail" stretchType="RelativeToBandHeight" mode="Opaque" x="79" y="0" width="59" height="18" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Left">
 					<font isItalic="false" pdfFontName="fonts/TAHOMA.TTF"/>
+					<paragraph firstLineIndent="1" leftIndent="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{prodName}]]></textFieldExpression>
 			</textField>
