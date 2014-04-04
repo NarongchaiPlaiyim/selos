@@ -5,6 +5,7 @@ import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.businesscontrol.PEDBExecute;
+import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -13,11 +14,13 @@ import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import com.clevel.selos.model.view.PEInbox;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
@@ -54,6 +57,9 @@ public class PESQLInbox implements Serializable
     WorkCaseDAO workCaseDAO;
 
     @Inject
+    BPMInterfaceImpl bpmInterfaceImpl;
+
+    @Inject
     StepDAO stepDAO;
 
     @Inject
@@ -71,6 +77,31 @@ public class PESQLInbox implements Serializable
 
         //Clear all session before selectInbox
         HttpSession session = FacesUtil.getSession(false);
+
+        try
+        {
+            if(session.getAttribute("isLocked")!=null)
+            {
+
+                String isLocked = (String) session.getAttribute("isLocked");
+
+                if(isLocked.equalsIgnoreCase("true"))
+                {
+                    String wobNum = (String)session.getAttribute("wobNum");
+                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNum,(Integer)session.getAttribute("fetchType"));
+                }
+                else
+                {
+                    session.removeAttribute("isLocked");
+                }
+
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
+        }
+
         session.setAttribute("workCasePreScreenId", 0L);
         session.setAttribute("workCaseId", 0L);
         session.setAttribute("stepId", 0L);
@@ -84,6 +115,7 @@ public class PESQLInbox implements Serializable
             inboxName = "My Box";
             inboxViewList =  pedbExecute.getPEInbox(inboxName);
             log.debug("onCreation ::: inboxViewList : {}", inboxViewList);
+
         }
         catch(Exception ex)
         {
@@ -116,6 +148,7 @@ public class PESQLInbox implements Serializable
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
             session.setAttribute("statusId", statusId);
+            session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
         }
 
         else
@@ -129,6 +162,7 @@ public class PESQLInbox implements Serializable
             session.setAttribute("workCaseId", wrkCaseId);
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
             session.setAttribute("statusId", statusId);
+            session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
         }
 
         if(Util.isNull(inboxViewSelectItem.getFetchType()))
@@ -154,6 +188,22 @@ public class PESQLInbox implements Serializable
             session.setAttribute("queueName", "0");
         } else {
             session.setAttribute("queueName", inboxViewSelectItem.getQueuename());
+        }
+
+        try
+        {
+
+            bpmInterfaceImpl.lockCase(queueName,inboxViewSelectItem.getFwobnumber(),inboxViewSelectItem.getFetchType());
+            session.setAttribute("isLocked","true");
+
+        }
+        catch (Exception e)
+        {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            FacesMessage facesMessage = new FacesMessage("Another User is Working on this case!! Please Retry Later.");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Another User is Working on this case!! Please Retry Later.","");
+            facesContext.addMessage(null, facesMessage);
+            log.error("Error while Locking case in queue : {}, WobNum : {}",queueName, inboxViewSelectItem.getFwobnumber(), e);
         }
 
         AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(stepId, inboxViewSelectItem.getFwobnumber());

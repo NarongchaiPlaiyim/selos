@@ -82,9 +82,9 @@ public class UserDAO extends GenericDAO<User,String> {
             user = null;
         }
 
-        userName = userId+" - "+userName;
+        //userName = userId+" - "+userName;
 
-        return userName;
+        return userId;
 
     }
 

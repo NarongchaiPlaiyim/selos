@@ -100,7 +100,7 @@
                                      label="UserList"
                                      value="#{change.selectuser}">
                     <f:selectItem itemValue="" itemLabel="--Please Select--"/>
-                    <f:selectItems value="#{change.userList1}" id="ALL"/>
+                    <f:selectItems value="#{change.usersIdNameList}" id="ALL" var="username1" itemValue="#{username1.userName}" itemLabel="#{username1.id} - #{username1.userName}"/>
                 </h:selectOneMenu>
 
                     <p:spacer width="15px"/>
@@ -233,7 +233,7 @@
                                          label="UserListChangeOwner"
                                          value="#{change.selectUserChangeOwner}">
                             <f:selectItem itemValue="" itemLabel="--Please Select--"/>
-                            <f:selectItems id="selectednames" value="#{change.userNamesForChangeOwnerList}"/>
+                            <f:selectItems id="selectednames" value="#{change.usersIdNameList1}" var="username" itemLabel="#{username.id} - #{username.userName}" itemValue="#{username.userName}"/>
                         </h:selectOneMenu> </td>
                         </tr>
 
