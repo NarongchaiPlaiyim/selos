@@ -12,12 +12,12 @@ public class CriteriaModel implements Serializable {
     private String enquirystatus = "IQ";
     private String registid;
     private String mediacode = "BB";
-    private String memberreference;
+    private String memberref;
 
-    public CriteriaModel( String enquiryuser, String registid, String memberreference) {
+    public CriteriaModel( String enquiryuser, String registid, String memberref) {
 //        this.enquirydatefrom = enquirydatefrom;
         this.enquiryuser = enquiryuser;
         this.registid = registid;
-        this.memberreference = memberreference;
+        this.memberref = memberref;
     }
 }

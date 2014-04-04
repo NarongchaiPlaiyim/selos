@@ -15,18 +15,18 @@ public class CriteriaModel implements Serializable {
     private String idnumber;
     private String consent = "Y";
     private String mediacode = "BB";
-    private String memberref;
+    private String memberreference;
 
     public CriteriaModel(String enquirydateto, String enquiryuser) {
         this.enquirydateto = enquirydateto;
         this.enquiryuser = enquiryuser;
     }
 
-    public CriteriaModel(String enquirydatefrom, String idtype, String idnumber, String enquiryuser, String memberref) {
+    public CriteriaModel(String enquirydatefrom, String idtype, String idnumber, String enquiryuser, String memberreference) {
         this.enquirydatefrom = enquirydatefrom;
         this.idtype = idtype;
         this.idnumber = idnumber;
         this.enquiryuser = enquiryuser;
-        this.memberref = memberref;
+        this.memberreference = memberreference;
     }
 }
