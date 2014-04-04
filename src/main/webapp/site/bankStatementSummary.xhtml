@@ -838,7 +838,7 @@
                          severity="#{bankStatementSummary.severity}"
                          header="#{bankStatementSummary.messageHeader}"
                          message="#{bankStatementSummary.message}"
-                         closable="false">
+                         closable="false" closeOnEscape="false">
             <p:commandButton value="OK"
                              process="@this"
                              update="frmMain"
