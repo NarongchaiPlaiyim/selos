@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reject_Letter2" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="17d95c3e-3985-40bb-98c1-ddcbcc9398a9">
 	<property name="ireport.zoom" value="1.1000000000000008"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="311"/>
 	<parameter name="fillRejectLetter" class="com.clevel.selos.model.report.RejectLetterReport"/>
 	<parameter name="fillAllNameReject" class="java.util.List"/>
 	<parameter name="path" class="java.lang.String"/>
@@ -68,30 +68,6 @@
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 				</textElement>
 				<text><![CDATA[*  กรณีที่ท่านมีเหตุจำเป็นต้องขอเอกสารประกอบการพิจารณาคืนจากธนาคาร  กรุณาติดต่อขอรับคืนที่สำนักงานเขตพัฒนาธุรกิจฯ ที่ท่านติดต่อ  ภายใน 30 วัน นับจากวันที่ออกหนังสือฉบับนี้ ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="9d5f6fb3-d3e4-46e6-b6f9-1e80ce8d3dfe" x="0" y="295" width="555" height="58"/>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="50" leftIndent="1" rightIndent="10"/>
-				</textElement>
-				<text><![CDATA[ธนาคารฯ หวังเป็นอย่างยิ่งว่า ธนาคารฯ จะมีโอกาสได้รับใช้ท่าน จากการเลือกใช้ผลิตภัณฑ์อื่นที่เหมาะสมของธนาคารฯ ในโอกาสต่อไป  โดยท่านสามารถศึกษารายละเอียดข้อมูลผลิต๓ัณฑ์อื่นๆ ได้ที่ www.tmbbank.com หรือติดต่อสอบถามได้ที่  ศูนย์ธุรกิจสัมพันธ์ลูกค้ารายย่อย (RMC: Relationship Management Center) โทร. 02828-2828 เวลา 08:00-20:00 น. วันจันทร์-วันเสาร์ ยกเว้นวันอาทิตย์และวันหยุดนักขัตฤกษ์]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="31261dfc-eb04-45a0-b8f0-2b339c637fd5" x="0" y="184" width="555" height="20"/>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="50" leftIndent="1" rightIndent="1"/>
-				</textElement>
-				<text><![CDATA[ธนาคารทหารไทย  จำกัด (มหาชน) ขอขอบคุณที่ท่านได้ให้ความสนใจสมัครใช้ผลิตภัณฑ์สินเชื่อกับทางธนาคาร]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="2e621791-337c-4d60-ad9c-a50e9772b216" x="0" y="227" width="555" height="31"/>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="50" leftIndent="1" rightIndent="10"/>
-				</textElement>
-				<text><![CDATA[ธนาคารฯ ได้พิจารณาและตรวจสอบเอกสารประกอบการขอสินเชื่อของท่านโดยละเอียดแล้ว  ขอเรียนให้ท่านทราบว่า  ธนาคารฯ ยังไม่สามารถให้บริการดังกล่าวแก่ท่านได้  เนื่องจาก]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="ac58def1-945b-4633-8471-4d4b484e948c" x="0" y="513" width="329" height="20"/>
@@ -163,6 +139,33 @@
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 				</textElement>
 				<text><![CDATA[ธนาคารทหารไทย จำกัด (มหาชน)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bc7e6d45-37c9-45dd-8dc7-a582f418da71" x="2" y="176" width="555" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[	ธนาคารทหารไทย  จำกัด (มหาชน) ขอขอบคุณที่ท่านได้ให้ความสนใจสมัครใช้ผลิตภัณฑ์สินเชื่อกับทางธนาคาร]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="35b83d35-b6bb-4680-b75b-6ce2a3da2e33" x="0" y="214" width="555" height="31"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="10"/>
+				</textElement>
+				<text><![CDATA[	ธนาคารฯ ได้พิจารณาและตรวจสอบเอกสารประกอบการขอสินเชื่อของท่านโดยละเอียดแล้ว  ขอเรียนให้ท่านทราบว่า ธนาคารฯ ยังไม่สามารถให้บริการดังกล่าวแก่ท่านได้  เนื่องจาก]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c00982bb-5e35-473b-af34-f5cba0e8b97c" x="0" y="307" width="555" height="58"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[	ธนาคารฯ หวังเป็นอย่างยิ่งว่า ธนาคารฯ จะมีโอกาสได้รับใช้ท่าน จากการเลือกใช้ผลิตภัณฑ์อื่นที่เหมาะสมของธนาคารฯ
+ในโอกาสต่อไป  โดยท่านสามารถศึกษารายละเอียดข้อมูลผลิตภัณฑ์อื่นๆ ได้ที่www.tmbbank.com หรือติดต่อสอบถามได้ที่ศูนย์
+ธุรกิจสัมพันธ์ลูกค้ารายย่อย(RMC: Relationship Management Center) โทร. 02828-2828 เวลา 08:00-20:00 น.วันจันทร์-วันเสาร์
+ยกเว้น วันอาทิตย์และวันหยุดนักขัตฤกษ์]]></text>
 			</staticText>
 		</band>
 	</detail>

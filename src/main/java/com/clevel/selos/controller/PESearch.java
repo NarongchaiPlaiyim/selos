@@ -4,6 +4,7 @@ import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.PEInbox;
@@ -17,7 +18,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -40,6 +43,9 @@ public class PESearch implements Serializable
 
     @Inject
     WorkCaseDAO workCaseDAO;
+
+    @Inject
+    BPMInterfaceImpl bpmInterfaceImpl;
 
     private List<PEInbox> searchViewList;
 
@@ -225,6 +231,48 @@ public class PESearch implements Serializable
         this.searchViewSelectItem = inboxViewSelectItem;
     }
 
+    @PostConstruct
+    public void onCreation()
+    {
+        log.debug("Controller in onCreation method of PESearch.java ");
+
+        //Clear all session before selectInbox
+        HttpSession session = FacesUtil.getSession(false);
+        try
+        {
+            if(session.getAttribute("isLocked")!=null)
+            {
+
+                String isLocked = (String) session.getAttribute("isLocked");
+
+                if(isLocked.equalsIgnoreCase("true"))
+                {
+                    String wobNum = (String)session.getAttribute("wobNum");
+                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNum,(Integer)session.getAttribute("fetchType"));
+                }
+                else
+                {
+                    session.removeAttribute("isLocked");
+                }
+
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
+        }
+
+        session.setAttribute("workCasePreScreenId", 0L);
+        session.setAttribute("workCaseId", 0L);
+        session.setAttribute("stepId", 0L);
+        session.setAttribute("statusId", 0L);
+        session.setAttribute("stageId", 0);
+        session.setAttribute("requestAppraisal", 0);
+        session.setAttribute("queueName","");
+        session.removeAttribute("wobNum");
+
+    }
+
     public List<PEInbox> search()
     {
         log.info(" Controller comes to PESearch method of search class ");
@@ -235,9 +283,12 @@ public class PESearch implements Serializable
 
             log.info("searchViewList size is : {}",searchViewList.size());
 
+
+
         }
         catch (Exception e)
         {
+            log.error("Error in search() of PESearch",e);
         }
         finally
         {
@@ -274,7 +325,7 @@ public class PESearch implements Serializable
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
             log.info("Work case pre screen id : {}",wrkCasePreScreenId);
             //session.setAttribute("workCaseId", 0);
-
+            session.setAttribute("wobNum",searchViewSelectItem.getFwobnumber());
         }
 
         else
@@ -283,7 +334,17 @@ public class PESearch implements Serializable
             wrkCaseId = workCaseDAO.findIdByWobNumber(searchViewSelectItem.getFwobnumber());
             session.setAttribute("workCaseId", wrkCaseId);
             //session.setAttribute("workCasePreScreenId", 0);
+            session.setAttribute("wobNum",searchViewSelectItem.getFwobnumber());
 
+        }
+
+        if(Util.isNull(searchViewSelectItem.getFetchType()))
+        {
+            session.setAttribute("fetchType",0);
+        }
+        else
+        {
+            session.setAttribute("fetchType",searchViewSelectItem.getFetchType());
         }
 
         /*if(!Util.isEmpty(Long.toString(inboxViewSelectItem.getWorkCasePreScreenId()))){
@@ -306,6 +367,18 @@ public class PESearch implements Serializable
         else
         {
             session.setAttribute("queueName",searchViewSelectItem.getQueuename());
+        }
+
+        try
+        {
+
+            bpmInterfaceImpl.lockCase(searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
+            session.setAttribute("isLocked","true");
+
+        }
+        catch (Exception e)
+        {
+            log.error("Error while Locking case in queue : {}, WobNum : {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(), e);
         }
 
         AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(searchViewSelectItem.getStepId(), searchViewSelectItem.getFwobnumber());
