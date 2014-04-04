@@ -283,6 +283,8 @@ public class CustomerInfoIndividual implements Serializable {
     private int referenceMainCusId;
     private int referenceSpouseCusId;
 
+    private CustomerInfoView individualView;
+
     public CustomerInfoIndividual(){
     }
 
@@ -335,6 +337,7 @@ public class CustomerInfoIndividual implements Serializable {
                 cusInfoJuristic = (CustomerInfoView) cusInfoParams.get("customerInfoView");
                 if(isEditFromJuristic){
                     rowIndex = (Integer) cusInfoParams.get("rowIndex");
+                    individualView = (CustomerInfoView) cusInfoParams.get("individualView");
                 }
             }
 
@@ -344,21 +347,22 @@ public class CustomerInfoIndividual implements Serializable {
             }else{
                 isFromJuristic = false;                     // for save individual to DB
             }
+        }
+    }
 
-            if(isFromSummaryParam){                         // go to edit from summary
-                if(customerId != 0 && customerId != -1){
-                    onEditIndividual();
-                }
-            }
-
-            if(isEditFromJuristic){                          // select edit individual from juristic
-                if(cusInfoParams != null){
-                    CustomerInfoView cusView = (CustomerInfoView) cusInfoParams.get("individualView");
-                    customerInfoView = cusView;
-                    onEditIndividual();
-                }
+    public void onLoadComplete(){
+        if(isFromSummaryParam){                         // go to edit from summary
+            if(customerId != 0 && customerId != -1){
+                onEditIndividual();
             }
         }
+
+        if(isEditFromJuristic){                          // select edit individual from juristic
+            customerInfoView = individualView;
+            onEditIndividual();
+        }
+
+        updateRmtCmd01();
     }
 
     public void onAddNewIndividual(){
@@ -2086,7 +2090,7 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void onCancelForm(){
         onCreation();
-        updateRmtCmd01();
+        onLoadComplete();
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

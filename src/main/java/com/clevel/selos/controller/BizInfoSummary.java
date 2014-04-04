@@ -298,6 +298,7 @@ public class BizInfoSummary implements Serializable {
         long bizInfoSummaryViewId;
         bizInfoSummaryViewId = bizInfoSummaryView.getId();
         bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryViewId);
+        log.debug("getBusinessInfoListDB ::: bizInfoDetailViewList : {}", bizInfoDetailViewList);
 
         if(bizInfoDetailViewList.size() > 0
                 && bizInfoSummaryView.getCirculationAmount().compareTo(BigDecimal.ZERO) > 0){

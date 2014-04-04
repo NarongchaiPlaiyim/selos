@@ -620,22 +620,9 @@ public class PrescreenMaker implements Serializable {
 
     }
 
-    // *** Function for PreScreen *** //
-    public void onCheckPreScreen(){
-        // *** Validate Data for Check PreScreen *** //
-        boolean validate = validateCheckPrescreen(customerInfoViewList);
-        if(validate){
-            preScreenResponseViewList = prescreenBusinessControl.getPreScreenResultFromBRMS(customerInfoViewList);
-            prescreenBusinessControl.savePreScreenResult(preScreenResponseViewList, workCasePreScreenId, 0, stepId, user);
-            preScreenResponseCustomerList = prescreenBusinessControl.getPreScreenCustomerResult(preScreenResponseViewList);
-            preScreenResponseGroupList = prescreenBusinessControl.getPreScreenGroupResult(preScreenResponseViewList);
-        }else{
-            // *** MessageBox show validation Failed. *** //
-        }
-    }
-
     public boolean validateCheckPrescreen(List<CustomerInfoView> vCustomerInfoViewList){
-        boolean validate = false;
+        //boolean validate = false;
+        boolean validate = true;
 
         return validate;
     }
@@ -2433,6 +2420,12 @@ public class PrescreenMaker implements Serializable {
             prescreenView.setRefinanceInBank(null);
             prescreenView.setRefinanceOutBank(null);
             prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, deleteCustomerInfoViewList, workCasePreScreenId, caseBorrowerTypeId, user);
+            String productGroupName = "";
+            if(prescreenView.getProductGroup() != null){
+                ProductGroup productGroup = productGroupDAO.findById(prescreenView.getProductGroup().getId());
+                productGroupName = productGroup.getName();
+            }
+            prescreenBusinessControl.updateBorrowerProductGroupForBPM(borrowerInfoViewList, productGroupName, queueName, workCasePreScreenId);
 
             //TODO show messageBox success
             messageHeader = "Save PreScreen Success.";
@@ -2512,6 +2505,12 @@ public class PrescreenMaker implements Serializable {
         try{
             customerModifyFlag = customerModifyFlag + prescreenBusinessControl.checkModifyValue(prescreenView, workCasePreScreenId);
             boolean modifyFlag = prescreenBusinessControl.savePreScreen(prescreenView, facilityViewList, customerInfoViewList, deleteCustomerInfoViewList, bizInfoViewList, proposePrescreenCollateralViewList, workCasePreScreenId, customerModifyFlag, user);
+            String productGroupName = "";
+            if(prescreenView.getProductGroup() != null){
+                ProductGroup productGroup = productGroupDAO.findById(prescreenView.getProductGroup().getId());
+                productGroupName = productGroup.getName();
+            }
+            prescreenBusinessControl.updateBorrowerProductGroupForBPM(borrowerInfoViewList, productGroupName, queueName, workCasePreScreenId);
 
             messageHeader = "Save PreScreen Success.";
             message = "Save PreScreen data success.";
@@ -2526,7 +2525,7 @@ public class PrescreenMaker implements Serializable {
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
-            log.error("onSavePreScreenInitial ::: exception : {}", ex);
+            log.error("onSavePrescreen ::: exception : {}", ex);
             //TODO show messageBox error
             messageHeader = "Save PreScreen Failed.";
             if(ex.getCause() != null){

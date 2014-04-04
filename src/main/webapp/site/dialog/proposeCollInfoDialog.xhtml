@@ -339,9 +339,9 @@
                 styleClass="smaller"
                 disabled="#{creditFacPropose.flagComs}"
                 process="@this"
-                action="#{creditFacPropose.onAddSubCollateral}"
-                update=":subCollateralDlgForm"
-                oncomplete="subCollateralInfoDlg.show();">
+                actionListener="#{creditFacPropose.onAddSubCollateral}"
+                update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
+                >
             <f:setPropertyActionListener value="#{i.index}"
                                          target="#{creditFacPropose.rowCollHeadIndex}"/>
             <p:resetInput target=":subCollateralDlgForm"/>

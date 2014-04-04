@@ -126,7 +126,6 @@ public class BankStatementSummary implements Serializable {
             log.info("preRender ::: workCaseId is null.");
             try {
                 FacesUtil.redirect("/site/inbox.jsf");
-                return;
             } catch (Exception e) {
                 log.info("Exception :: {}", e);
             }
@@ -380,8 +379,27 @@ public class BankStatementSummary implements Serializable {
                 }
 
                 // replace previous data
-                Cloner cloner = new Cloner();
-                summaryView.setTmbBankStmtViewList(cloner.deepClone(retrieveResult.getTmbBankStmtViewList()));
+                List<BankStmtView> newTMBBankStmtViewList = new ArrayList<BankStmtView>();
+                BankStmtView newBankStmtView;
+                for (BankStmtView originalTMBBankStmt : retrieveResult.getTmbBankStmtViewList()) {
+                    newBankStmtView = bankStmtTransform.copyToNewBankStmtView(originalTMBBankStmt);
+                    if (newBankStmtView.getBankStmtDetailViewList() != null && newBankStmtView.getBankStmtDetailViewList().size() > 0) {
+                        int numOfMonths = newBankStmtView.getBankStmtDetailViewList().size();
+                        Date tmpDate;
+                        for (int i=(numOfMonths-1), j=0; i>=0; i--, j++) {
+                            BankStmtDetailView bankStmtDetailView = newBankStmtView.getBankStmtDetailViewList().get(j);
+                            // Replace the AsOfDate to NULL
+                            if (Util.isNull(bankStmtDetailView.getAsOfDate())) {
+                                tmpDate = DateTimeUtil.getOnlyDatePlusMonth(lastMonthDate, -i);
+                                bankStmtDetailView.setAsOfDate(tmpDate);
+                                bankStmtDetailView.setDateOfMaxBalance(DateTimeUtil.getFirstDayOfMonth(tmpDate));
+                                bankStmtDetailView.setDateOfMinBalance(DateTimeUtil.getFirstDayOfMonth(tmpDate));
+                            }
+                        }
+                    }
+                    newTMBBankStmtViewList.add(newBankStmtView);
+                }
+                summaryView.setTmbBankStmtViewList(newTMBBankStmtViewList);
 
                 // calculate data from DWH
                 for (BankStmtView tmbBankStmtView : Util.safetyList(summaryView.getTmbBankStmtViewList())) {
@@ -403,11 +421,14 @@ public class BankStatementSummary implements Serializable {
 
                 try {
                     bankStmtControl.bankStmtSumTotalCalculation(summaryView, true);
-//                    summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
-//                    // update related parts
-//                    dbrControl.updateValueOfDBR(workCaseId);
-//                    exSummaryControl.calForBankStmtSummary(workCaseId);
-//                    bizInfoSummaryControl.calByBankStatement(workCaseId);
+                    summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
+                    // update related parts
+                    dbrControl.updateValueOfDBR(workCaseId);
+                    exSummaryControl.calForBankStmtSummary(workCaseId);
+                    bizInfoSummaryControl.calByBankStatement(workCaseId);
+
+                    onCreation();
+
                 }
                 catch (Exception e) {
                     log.debug("", e);
@@ -496,11 +517,6 @@ public class BankStatementSummary implements Serializable {
             dbrControl.updateValueOfDBR(workCaseId);
             exSummaryControl.calForBankStmtSummary(workCaseId);
             bizInfoSummaryControl.calByBankStatement(workCaseId);
-
-            // reset to default value
-            isRetrieveSuccess = false;
-            hasDataFromRetrieve = false;
-            isNotAlignWithPrevData = false;
 
             onCreation();
 

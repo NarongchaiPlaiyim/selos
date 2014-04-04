@@ -20,7 +20,7 @@
 		</box>
 	</style>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["D:\\ProjectSLOS\\selos\\src\\main\\webapp\\site\\report\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["D:/ProjectSELOS/selos/src/main/webapp/site/report/"]]></defaultValueExpression>
 	</parameter>
 	<field name="accountName" class="java.lang.String">
 		<fieldDescription><![CDATA[accountName]]></fieldDescription>
@@ -65,6 +65,12 @@
 		<fieldDescription><![CDATA[count]]></fieldDescription>
 	</field>
 	<field name="path" class="java.lang.String"/>
+	<field name="accout" class="java.lang.String">
+		<fieldDescription><![CDATA[account]]></fieldDescription>
+	</field>
+	<field name="code" class="java.lang.String">
+		<fieldDescription><![CDATA[code]]></fieldDescription>
+	</field>
 	<columnHeader>
 		<band height="38">
 			<staticText>
@@ -148,86 +154,79 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="27" splitType="Stretch">
-			<textField>
-				<reportElement uuid="2c404308-ef54-44aa-9d3d-916b1b16539b" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="23" height="27"/>
-				<textElement>
+		<band height="31" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="2c404308-ef54-44aa-9d3d-916b1b16539b" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="23" height="31" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Top">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{count}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{count}.intValue() == 0 ?
+"" : $F{count}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement uuid="18bdd29b-893f-4717-a55b-65dcd99ef1b2" style="detail" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="23" y="0" width="119" height="27"/>
+				<reportElement uuid="18bdd29b-893f-4717-a55b-65dcd99ef1b2" style="detail" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="23" y="0" width="119" height="31" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="3" tabStopWidth="40"/>
+					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1" tabStopWidth="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{accountName}+"\n"+
-"Acc No.: "+$F{accountNumber}+
-"Suf. "+$F{accountSuf}+"\n"+
-"Acc Status: "+$F{description}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{accout}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="94efd00c-3448-4f3f-8532-5138cd2b604c" style="detail" stretchType="RelativeToBandHeight" x="221" y="0" width="62" height="27"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="94efd00c-3448-4f3f-8532-5138cd2b604c" style="detail" stretchType="RelativeToBandHeight" x="221" y="0" width="62" height="31" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="3" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{creditTypeName}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="79981b9a-2464-4559-9f95-1925d0b4ceac" style="detail" stretchType="RelativeToBandHeight" x="283" y="0" width="72" height="27"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="79981b9a-2464-4559-9f95-1925d0b4ceac" style="detail" stretchType="RelativeToBandHeight" x="283" y="0" width="72" height="31" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="3" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Product: "+$F{productCode}+"\n"+
-"Project: "+$F{projectCode}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="ac179ccf-bbfb-4069-af63-dde5ef87f366" style="detail" stretchType="RelativeToBandHeight" x="355" y="0" width="34" height="27"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="ac179ccf-bbfb-4069-af63-dde5ef87f366" style="detail" stretchType="RelativeToBandHeight" x="355" y="0" width="34" height="31" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="042f341d-d28e-4086-8416-9d618e10cb4b" style="detail" stretchType="RelativeToBandHeight" x="389" y="0" width="49" height="27"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="042f341d-d28e-4086-8416-9d618e10cb4b" style="detail" stretchType="RelativeToBandHeight" x="389" y="0" width="49" height="31" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{outstanding}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="223a814a-527f-412e-85e3-92b1d0e0e4d9" style="detail" stretchType="RelativeToBandHeight" x="142" y="0" width="79" height="27"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="223a814a-527f-412e-85e3-92b1d0e0e4d9" style="detail" stretchType="RelativeToBandHeight" x="142" y="0" width="79" height="31" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="3" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{productProgramName}]]></textFieldExpression>
 			</textField>
-			<subreport>
-				<reportElement uuid="73cadf47-d281-4281-9bb4-299d731e29be" x="438" y="0" width="117" height="27"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTierDetailViewList})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$F{path} + "DecisionReport_subCreditBorrower_subCreditBorrower.jasper"]]></subreportExpression>
-			</subreport>
-			<textField>
-				<reportElement uuid="959f4748-b6a7-40bc-905e-85da8cc8ca9a" style="detail" mode="Transparent" x="476" y="0" width="41" height="27"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="11fe93ab-161b-428a-a023-a49b26b25f09" style="detail" mode="Transparent" x="0" y="0" width="555" height="15" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{count}.intValue() == 0 ? "No records found" : ""]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="f74aaf29-2aba-42cc-9328-3e18e7eb7ff8" style="detail" mode="Transparent" x="438" y="0" width="38" height="27"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[""]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="f77b54f3-7387-4d48-846a-4796e9e09b08" style="detail" mode="Transparent" x="517" y="0" width="38" height="27"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[""]]></textFieldExpression>
-			</textField>
+			<frame>
+				<reportElement uuid="cb3c286c-7a24-4239-b725-be7ad8e612d0" stretchType="RelativeToTallestObject" x="438" y="0" width="117" height="31"/>
+				<subreport>
+					<reportElement uuid="73cadf47-d281-4281-9bb4-299d731e29be" stretchType="RelativeToBandHeight" x="0" y="0" width="117" height="31"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTierDetailViewList})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$F{path} + "DecisionReport_subCreditBorrower_subCreditBorrower.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
 		</band>
 	</detail>
 </jasperReport>

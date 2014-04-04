@@ -20,10 +20,9 @@ public class GuarantorBorrowerDecisionReport extends ReportModel{
     private String path;
 
     public GuarantorBorrowerDecisionReport() {
-        count = getDefaultInteger();
-        guarantorName = getDefaultString();
-        tcgLgNo = getDefaultString();
-        totalLimitGuaranteeAmount = getDefaultBigDecimal();
+        count = 0;
+        guarantorName = "";
+        tcgLgNo = "";
         existingCreditTypeDetailViewList = new ArrayList<ExistingCreditTypeDetailView>();
     }
 

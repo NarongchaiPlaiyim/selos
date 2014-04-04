@@ -195,8 +195,8 @@ Date/Time]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{displayName}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="add8f405-f233-41c6-93f7-d3ad30c6d6f8" style="detail" mode="Transparent" x="0" y="0" width="555" height="14"/>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="add8f405-f233-41c6-93f7-d3ad30c6d6f8" style="detail" mode="Transparent" x="0" y="0" width="555" height="14" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Left">
 					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2"/>
 				</textElement>

@@ -96,7 +96,7 @@ public class BankStmtControl extends BusinessControl {
                         log.info("Finding account {}", accountListModelList);
                         for (CustomerAccountListModel customerAccountListModel : accountListModelList) {
                             DWHBankStatementResult dwhBankStatementResult = dwhInterface.getBankStatementData(getCurrentUserID(), customerAccountListModel.getAccountNo(), startBankStmtDate, numberOfMonthBankStmt);
-                            log.debug("DWH Bank Statement per Customer Account Result: {}", dwhBankStatementResult.getActionResult());
+                            log.debug("DWH Bank statement result: {} by Account No: {}", dwhBankStatementResult.getActionResult(), customerAccountListModel.getAccountNo());
                             if (dwhBankStatementResult.getActionResult().equals(ActionResult.SUCCESS)) {
                                 List<DWHBankStatement> dwhBankStatementList = dwhBankStatementResult.getBankStatementList();
                                 BankStmtView bankStmtView = null;
@@ -1077,9 +1077,9 @@ public class BankStmtControl extends BusinessControl {
                          */
                         if (bankStmtView.getAvgIncomeGross() != null) {
                             if (ValidationUtil.isValueCompareToZero(bankStmtView.getAvgIncomeGross(), ValidationUtil.CompareMode.EQUAL)) {
-                                bankStmtView.setColorIncomeGross(ColorStyleType.RED.code());
+                                bankStmtView.setColorIncomeGross(UWResultColor.RED.code());
                             } else {
-                                bankStmtView.setColorIncomeGross(ColorStyleType.GREEN.code());
+                                bankStmtView.setColorIncomeGross(UWResultColor.GREEN.code());
                             }
                         } else {
                             bankStmtView.setColorIncomeGross("");
@@ -1093,18 +1093,18 @@ public class BankStmtControl extends BusinessControl {
                          */
                         if (bankStmtView.getAvgSwingPercent() != null && bankStmtView.getAvgUtilizationPercent() != null) {
                             if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgUtilizationPercent(), ninety, ValidationUtil.CompareMode.LESS_THAN_OR_EQUAL)) {
-                                bankStmtView.setColorSwingPercent(ColorStyleType.GREEN.code());
-                                bankStmtView.setColorUtilPercent(ColorStyleType.GREEN.code());
+                                bankStmtView.setColorSwingPercent(UWResultColor.GREEN.code());
+                                bankStmtView.setColorUtilPercent(UWResultColor.GREEN.code());
                             }
                             else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgUtilizationPercent(), ninety, ValidationUtil.CompareMode.GREATER_THAN)
                                     && ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgSwingPercent(), fifteen, ValidationUtil.CompareMode.GREATER_THAN_OR_EQUAL)) {
-                                bankStmtView.setColorSwingPercent(ColorStyleType.YELLOW.code());
-                                bankStmtView.setColorUtilPercent(ColorStyleType.YELLOW.code());
+                                bankStmtView.setColorSwingPercent(UWResultColor.YELLOW.code());
+                                bankStmtView.setColorUtilPercent(UWResultColor.YELLOW.code());
                             }
                             else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgUtilizationPercent(), ninety, ValidationUtil.CompareMode.GREATER_THAN)
                                     && ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgSwingPercent(), fifteen, ValidationUtil.CompareMode.LESS_THAN)) {
-                                bankStmtView.setColorSwingPercent(ColorStyleType.RED.code());
-                                bankStmtView.setColorUtilPercent(ColorStyleType.RED.code());
+                                bankStmtView.setColorSwingPercent(UWResultColor.RED.code());
+                                bankStmtView.setColorUtilPercent(UWResultColor.RED.code());
                             }
                             else {
                                 bankStmtView.setColorSwingPercent("");
@@ -1123,14 +1123,14 @@ public class BankStmtControl extends BusinessControl {
                          */
                         if (bankStmtView.getOverLimitTimes() != null) {
                             if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getOverLimitTimes(), BigDecimal.ONE, ValidationUtil.CompareMode.LESS_THAN)) {
-                                bankStmtView.setColorOvrLimitTime(ColorStyleType.GREEN.code());
+                                bankStmtView.setColorOvrLimitTime(UWResultColor.GREEN.code());
                             }
                             else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getOverLimitTimes(), BigDecimal.ONE, ValidationUtil.CompareMode.GREATER_THAN_OR_EQUAL)
                                     && ValidationUtil.isFirstCompareToSecond(bankStmtView.getOverLimitTimes(), two, ValidationUtil.CompareMode.LESS_THAN_OR_EQUAL)) {
-                                bankStmtView.setColorOvrLimitTime(ColorStyleType.YELLOW.code());
+                                bankStmtView.setColorOvrLimitTime(UWResultColor.YELLOW.code());
                             }
                             else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getOverLimitTimes(), two, ValidationUtil.CompareMode.GREATER_THAN)) {
-                                bankStmtView.setColorOvrLimitTime(ColorStyleType.RED.code());
+                                bankStmtView.setColorOvrLimitTime(UWResultColor.RED.code());
                             }
                             else {
                                 bankStmtView.setColorOvrLimitTime("");
@@ -1147,14 +1147,14 @@ public class BankStmtControl extends BusinessControl {
                          */
                         if (bankStmtView.getOverLimitDays() != null) {
                             if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getOverLimitDays(), three, ValidationUtil.CompareMode.LESS_THAN_OR_EQUAL)) {
-                                bankStmtView.setColorOvrLimitDays(ColorStyleType.GREEN.code());
+                                bankStmtView.setColorOvrLimitDays(UWResultColor.GREEN.code());
                             }
                             else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getOverLimitDays(), three, ValidationUtil.CompareMode.GREATER_THAN)
                                     && ValidationUtil.isFirstCompareToSecond(bankStmtView.getOverLimitDays(), seven, ValidationUtil.CompareMode.LESS_THAN_OR_EQUAL)) {
-                                bankStmtView.setColorOvrLimitDays(ColorStyleType.YELLOW.code());
+                                bankStmtView.setColorOvrLimitDays(UWResultColor.YELLOW.code());
                             }
                             else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getOverLimitDays(), seven, ValidationUtil.CompareMode.GREATER_THAN)) {
-                                bankStmtView.setColorOvrLimitDays(ColorStyleType.RED.code());
+                                bankStmtView.setColorOvrLimitDays(UWResultColor.RED.code());
                             }
                             else {
                                 bankStmtView.setColorOvrLimitDays("");
@@ -1171,14 +1171,14 @@ public class BankStmtControl extends BusinessControl {
                          */
                         if (bankStmtView.getChequeReturn() != null) {
                             if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getChequeReturn(), BigDecimal.ONE, ValidationUtil.CompareMode.LESS_THAN)) {
-                                bankStmtView.setColorChequeReturn(ColorStyleType.GREEN.code());
+                                bankStmtView.setColorChequeReturn(UWResultColor.GREEN.code());
                             }
                             else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getChequeReturn(), BigDecimal.ONE, ValidationUtil.CompareMode.GREATER_THAN_OR_EQUAL)
                                     && ValidationUtil.isFirstCompareToSecond(bankStmtView.getChequeReturn(), two, ValidationUtil.CompareMode.LESS_THAN_OR_EQUAL)) {
-                                bankStmtView.setColorChequeReturn(ColorStyleType.YELLOW.code());
+                                bankStmtView.setColorChequeReturn(UWResultColor.YELLOW.code());
                             }
                             else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getChequeReturn(), two, ValidationUtil.CompareMode.GREATER_THAN)) {
-                                bankStmtView.setColorChequeReturn(ColorStyleType.RED.code());
+                                bankStmtView.setColorChequeReturn(UWResultColor.RED.code());
                             }
                             else {
                                 bankStmtView.setColorChequeReturn("");
@@ -1196,14 +1196,14 @@ public class BankStmtControl extends BusinessControl {
                     // - Trade Cheque Return > 5%           -> Red
                     if ( !(RadioValue.YES.value() == bankStmtView.getNotCountIncome()) && bankStmtView.getTrdChequeReturnPercent() != null) {
                         if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getTrdChequeReturnPercent(), three, ValidationUtil.CompareMode.LESS_THAN_OR_EQUAL)) {
-                            bankStmtView.setColorTrdChqRetPercent(ColorStyleType.GREEN.code());
+                            bankStmtView.setColorTrdChqRetPercent(UWResultColor.GREEN.code());
                         }
                         else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getTrdChequeReturnPercent(), three, ValidationUtil.CompareMode.GREATER_THAN)
                                 && ValidationUtil.isFirstCompareToSecond(bankStmtView.getTrdChequeReturnPercent(), five, ValidationUtil.CompareMode.LESS_THAN_OR_EQUAL)) {
-                            bankStmtView.setColorTrdChqRetPercent(ColorStyleType.YELLOW.code());
+                            bankStmtView.setColorTrdChqRetPercent(UWResultColor.YELLOW.code());
                         }
                         else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getTrdChequeReturnPercent(), five, ValidationUtil.CompareMode.GREATER_THAN)) {
-                            bankStmtView.setColorTrdChqRetPercent(ColorStyleType.RED.code());
+                            bankStmtView.setColorTrdChqRetPercent(UWResultColor.RED.code());
                         }
                         else {
                             bankStmtView.setColorTrdChqRetPercent("");
@@ -1367,7 +1367,7 @@ public class BankStmtControl extends BusinessControl {
         List<BankStmtDetailView> bankStmtDetailViewList;
         bankStmtDetailViewList = new ArrayList<BankStmtDetailView>();
         Date date;
-        for (int i = 0; i < numberOfMonths; i++) {
+        for (int i=(numberOfMonths-1); i>=0; i--) {
             BankStmtDetailView bankStmtDetailView = new BankStmtDetailView();
             date = DateTimeUtil.getOnlyDatePlusMonth(lastMonthDate, -i);
             bankStmtDetailView.setAsOfDate(date);

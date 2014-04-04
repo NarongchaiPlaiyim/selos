@@ -5,7 +5,6 @@ import com.clevel.selos.filenet.bpm.connection.dto.UserDTO;
 import com.clevel.selos.filenet.bpm.services.dto.CaseDTO;
 import com.clevel.selos.filenet.bpm.services.exception.SELOSBPMException;
 import com.clevel.selos.filenet.bpm.services.impl.BPMServiceImpl;
-import com.clevel.selos.filenet.bpm.services.BPMService;
 import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.filenet.bpm.util.resources.BPMConfigurationsDTO;
 import com.clevel.selos.integration.BPM;
@@ -154,7 +153,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         String linkKey = Util.getLinkKey(bpmUsername);
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getSystemUserDTO(), getConfigurationDTO());
-            bpmService.launchWorkflow(caseParameter, "Parallel Appraisal Workflow");
+            bpmService.launchWorkflow(caseParameter, "SELOS Parallel Appraisal Workflow");
             log.debug("[{}] BPM launch work flow successful.", linkKey);
             bpmAuditor.add(bpmUsername, "createParallelCase", "", now, ActionResult.SUCCESS, "", linkKey);
         } catch (Exception ex) {
@@ -382,6 +381,26 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
             bpmAuditor.add(getUserDTO().getUserName(), "dispatchCase", "", now, ActionResult.FAILED, msg.get(ExceptionMapping.BPM_DISPATCH_EXCEPTION), linkKey);
             throw new BPMInterfaceException(e, ExceptionMapping.BPM_DISPATCH_EXCEPTION, msg.get(ExceptionMapping.BPM_DISPATCH_EXCEPTION));
         }
+    }
+
+    @Override
+    public void updateCase(String queueName, String wobNumber, HashMap<String, String> fields){
+        log.debug("dispatchCase. (queueName: {}, wobNumber: {})", queueName, wobNumber);
+        Date now = new Date();
+        Util.listFields(fields);
+        String linkKey = Util.getLinkKey(getUserDTO().getUserName());
+        try{
+            BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(), getConfigurationDTO());
+            bpmService.updateWorkItem(queueName, wobNumber, fields);
+            log.debug("[{}] dispatchCase success.", linkKey);
+            bpmAuditor.add(getUserDTO().getUserName(), "dispatchCase", "", now, ActionResult.SUCCESS, "", linkKey);
+        }catch (Exception e){
+            log.error("[{}] Exception while dispatch case in BPM!", linkKey, e);
+            bpmAuditor.add(getUserDTO().getUserName(), "dispatchCase", "", now, ActionResult.FAILED, msg.get(ExceptionMapping.BPM_DISPATCH_EXCEPTION), linkKey);
+            throw new BPMInterfaceException(e, ExceptionMapping.BPM_DISPATCH_EXCEPTION, msg.get(ExceptionMapping.BPM_DISPATCH_EXCEPTION));
+        }
+
+
     }
 
     private UserDTO getUserDTO() {

@@ -296,6 +296,7 @@ public class ObligationBizTransform extends BusinessTransform {
                 existingCreditDetail.setAccountSuf(existingCreditDetailView.getAccountSuf());
                 existingCreditDetail.setProductCode(existingCreditDetailView.getProductCode());
                 existingCreditDetail.setProjectCode(existingCreditDetailView.getProjectCode());
+                existingCreditDetail.setExistProductSegment(existingCreditDetailView.getProductSegment());
                 existingCreditDetail.setNo(no);
                 existingCreditDetailList.add(existingCreditDetail);
                 log.debug("transform ExistingCreditTransform ::: existingCreditDetailList : {}", existingCreditDetail);
@@ -451,6 +452,7 @@ public class ObligationBizTransform extends BusinessTransform {
         else
             existingCreditDetailView.setCreditRelationType(CreditRelationType.RELATED);
         existingCreditDetailView.setLimit(existingCreditDetail.getLimit());
+        existingCreditDetailView.setProductSegment(existingCreditDetail.getExistProductSegment());
         return existingCreditDetailView;
     }
 

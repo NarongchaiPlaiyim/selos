@@ -29,24 +29,21 @@ public class BorrowerRetailDecisionReport extends ReportModel{
     private BigDecimal outstanding;
     private String path;
 
+    private String account;
+    private String code;
+
     private List<ExistingCreditTierDetailView> existingCreditTierDetailViewList;
     private List<ExistingSplitLineDetailView> existingSplitLineDetailViewList;
 
     public BorrowerRetailDecisionReport() {
-        count = getDefaultInteger();
-        accountName = getDefaultString();
-        accountNumber = getDefaultString();
-        accountSuf = getDefaultString();
-        description = getDefaultString();
-        productProgramName = getDefaultString();
-        creditTypeName = getDefaultString();
-        productCode = getDefaultString();
-        projectCode = getDefaultString();
-        limit = getDefaultBigDecimal();
-        usePCE = getDefaultBoolean();
-        pcePercent = getDefaultBigDecimal();
-        pceLimit = getDefaultBigDecimal();
-        outstanding = getDefaultBigDecimal();
+        accountName = "";
+        accountNumber = "";
+        accountSuf = "";
+        description = "";
+        productProgramName = "";
+        creditTypeName = "";
+        productCode = "";
+        projectCode = "";
     }
 
 
@@ -187,11 +184,27 @@ public class BorrowerRetailDecisionReport extends ReportModel{
         this.path = path;
     }
 
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("accountName", accountName)
                 .append("count", count)
+                .append("accountName", accountName)
                 .append("accountNumber", accountNumber)
                 .append("accountSuf", accountSuf)
                 .append("description", description)
@@ -204,6 +217,9 @@ public class BorrowerRetailDecisionReport extends ReportModel{
                 .append("pcePercent", pcePercent)
                 .append("pceLimit", pceLimit)
                 .append("outstanding", outstanding)
+                .append("path", path)
+                .append("account", account)
+                .append("code", code)
                 .append("existingCreditTierDetailViewList", existingCreditTierDetailViewList)
                 .append("existingSplitLineDetailViewList", existingSplitLineDetailViewList)
                 .toString();

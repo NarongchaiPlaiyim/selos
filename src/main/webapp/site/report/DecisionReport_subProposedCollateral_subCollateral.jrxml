@@ -20,10 +20,10 @@
 		</box>
 	</style>
 	<field name="accountName" class="java.lang.String">
-		<fieldDescription><![CDATA[accountName]]></fieldDescription>
+		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="accountNumber" class="java.lang.String">
-		<fieldDescription><![CDATA[accountNumber]]></fieldDescription>
+		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="requestType" class="java.lang.Integer">
 		<fieldDescription><![CDATA[requestType]]></fieldDescription>
@@ -38,7 +38,7 @@
 		<fieldDescription><![CDATA[limit]]></fieldDescription>
 	</field>
 	<field name="accountSuf" class="java.lang.String">
-		<fieldDescription><![CDATA[accountSuf]]></fieldDescription>
+		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="seq" class="java.lang.Integer">
 		<fieldDescription><![CDATA[seq]]></fieldDescription>
@@ -90,13 +90,14 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="14" splitType="Stretch">
+		<band height="14" splitType="Prevent">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="d9dd7389-d676-4386-b106-3ca1c3a6a350" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="25" height="14"/>
 				<textElement verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{seq}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{COLUMN_NUMBER}.intValue() == 0 ?
+"" : $V{COLUMN_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="547a30da-edac-4adb-b3bd-6b35ea6b81fe" style="detail" stretchType="RelativeToBandHeight" x="25" y="0" width="143" height="14"/>

@@ -16,12 +16,12 @@ public class ApprovalHistoryDecisionReport extends ReportModel{
     private String comments;
 
     public ApprovalHistoryDecisionReport() {
-        count = getDefaultInteger();
-        description = getDefaultString();
-        userName = getDefaultString();
-        roleDescription = getDefaultString();
-        titleName = getDefaultString();
-        comments = getDefaultString();
+        count = 0;
+        description = "";
+        userName = "";
+        roleDescription = "";
+        titleName = "";
+        comments = "";
     }
 
     public int getCount() {

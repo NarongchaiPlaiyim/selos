@@ -5,7 +5,6 @@ import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ManageButton;
 import com.clevel.selos.model.PricingDOAValue;
@@ -33,7 +32,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -71,7 +69,9 @@ public class BaseController implements Serializable {
     @Inject
     private CheckMandateDocControl checkMandateDocControl;
     @Inject
-    BRMSControl brmsControl;
+    private BRMSControl brmsControl;
+    @Inject
+    private UWRuleResultControl uwRuleResultControl;
 
     private ManageButton manageButton;
     private AppHeaderView appHeaderView;
@@ -574,17 +574,44 @@ public class BaseController implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
-            UWRulesResponse uwRulesResponse = brmsControl.getPrescreenResult(workCasePreScreenId);
-            log.debug("onCheckPreScreen uwRulesResponse : {}", uwRulesResponse);
-            if(uwRulesResponse != null){
-                if(uwRulesResponse.getActionResult().equals(ActionResult.SUCCEED)){
-
-                }else if(uwRulesResponse.getActionResult().equals(ActionResult.FAILED)){
-
+            try{
+                UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePreScreenId);
+                log.info("onCheckPreScreen uwRulesResponse : {}", uwRuleResponseView);
+                if(uwRuleResponseView != null){
+                    if(uwRuleResponseView.getActionResult().equals(ActionResult.SUCCESS)){
+                        UWRuleResultSummaryView uwRuleResultSummaryView = null;
+                        try{
+                            uwRuleResultSummaryView = uwRuleResponseView.getUwRuleResultSummaryView();
+                            uwRuleResultSummaryView.setWorkCasePrescreenId(workCasePreScreenId);
+                            uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
+                        }catch (Exception ex){
+                            log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
+                            messageHeader = "Exception.";
+                            message = Util.getMessageException(ex);
+                            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                        }
+                        messageHeader = "Information.";
+                        message = "Request for Check Pre-Screen success";
+                        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                    }else {
+                        messageHeader = "Exception.";
+                        message = uwRuleResponseView.getReason();
+                        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                    }
+                } else {
+                    uwRuleResultControl.saveNewUWRuleResult(uwRuleResponseView.getUwRuleResultSummaryView());
+                    messageHeader = "Information.";
+                    message = "No. I'm";
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
                 }
+            } catch (Exception ex){
+                log.error("Exception while getPrescreenResult : ", ex);
+                messageHeader = "Exception.";
+                message = Util.getMessageException(ex);
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
             }
-        }
 
+        }
     }
 
     //

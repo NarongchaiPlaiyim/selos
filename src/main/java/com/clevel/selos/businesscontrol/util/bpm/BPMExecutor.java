@@ -341,6 +341,30 @@ public class BPMExecutor implements Serializable {
         log.debug("dispatch case for [Cancel Case]..., Action_Code : {}, Action_Name : {}, Remark : {}, Reason : {}", action.getId(), action.getName(), remark, reason);
         execute(queueName, wobNumber, fields);
     }
+
+    public void updateBorrowerProductGroup(String borrowerName, String productGroup, String queueName, String wobNumber) throws Exception{
+        HashMap<String, String> fields = new HashMap<String, String>();
+        fields.put("BorrowerName", borrowerName);
+        fields.put("ProductGroup", productGroup);
+
+        bpmInterface.updateCase(queueName, wobNumber, fields);
+    }
+
+    public void selectCase(long actionCode, String queueName, String wobNumber) throws Exception{
+        Action action = null;
+        if (actionCode >= 0)
+            action = actionDAO.findById(actionCode);
+        if (action == null) {
+            throw new Exception("An exception occurred, Can not find Action.");
+        }
+
+        HashMap<String, String> fields = new HashMap<String, String>();
+        fields.put("Action_Code", Long.toString(actionCode));
+        fields.put("Action_Name", action.getDescription());
+
+        log.debug("dispatch case for [Select Case]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+        execute(queueName, wobNumber, fields);
+    }
     
     private void execute(String queueName, String wobNumber, HashMap<String, String> fields) throws Exception{
         log.debug("BPM Execute ::: queueName : {}, wobNumber : {}, fields : {}", queueName, wobNumber, fields);

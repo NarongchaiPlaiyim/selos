@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.dao.master.StepLandingPageDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
@@ -34,11 +35,15 @@ public class InboxControl extends BusinessControl {
 
     @Inject
     BPMInterface bpmInterface;
+    @Inject
+    BPMExecutor bpmExecutor;
 
     @Inject
     private UserDAO userDAO;
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
+    @Inject
+    WorkCaseAppraisalDAO workCaseAppraisalDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
     @Inject
@@ -70,13 +75,14 @@ public class InboxControl extends BusinessControl {
         //List<CaseDTO> caseDTOList = bpmInterface.getInboxList();
 
         List<CaseDTO> caseDTOList = new ArrayList<CaseDTO>();
-        List<WorkCasePrescreen> workCasePrescreenList = getWorkCasePreScreen();
 
+        List<WorkCasePrescreen> workCasePrescreenList = getWorkCasePreScreen();
+        log.debug("workCasePrescreen List.size() : {}", workCasePrescreenList.size());
         for (WorkCasePrescreen workCasePrescreen : workCasePrescreenList) {
             CaseDTO caseDTO = new CaseDTO();
             HashMap<String, String> caseData = new HashMap<String, String>();
+            caseData.put("F_AppNumber", workCasePrescreen.getAppNumber());
             caseData.put("F_WobNum", workCasePrescreen.getWobNumber());
-            log.info("******** "+workCasePrescreen.getWobNumber());
             caseData.put("F_StepName", "PS1001");
             caseData.put("Step_Code", Long.toString(workCasePrescreen.getStep().getId()));
             caseData.put("Lock_Status", "0");
@@ -89,13 +95,32 @@ public class InboxControl extends BusinessControl {
         }
 
         List<WorkCase> workCaseList = getWorkCase();
-        log.debug("workCase List : {}", workCaseList);
+        log.debug("workCase List.size() : {}", workCaseList.size());
         for (WorkCase workCase : workCaseList) {
             CaseDTO caseDTO = new CaseDTO();
             HashMap<String, String> caseData = new HashMap<String, String>();
+            caseData.put("F_AppNumber", workCase.getAppNumber());
             caseData.put("F_WobNum", workCase.getWobNumber());
-            caseData.put("F_StepName", "PS1001");
+            caseData.put("F_StepName", "PS2001");
             caseData.put("Step_Code", Long.toString(workCase.getStep().getId()));
+            caseData.put("Lock_Status", "0");
+            caseData.put("Locked_User", "0");
+            caseData.put("QUEUE_NAME", "0");
+
+            caseDTO.setCaseData(caseData);
+
+            caseDTOList.add(caseDTO);
+        }
+
+        List<WorkCaseAppraisal> workCaseAppraisalList = getWorkCaseAppraisal();
+        log.debug("workCase List : {}", workCaseList);
+        for(WorkCaseAppraisal workCaseAppraisal : workCaseAppraisalList) {
+            CaseDTO caseDTO = new CaseDTO();
+            HashMap<String, String> caseData = new HashMap<String, String>();
+            caseData.put("F_AppNumber", workCaseAppraisal.getAppNumber());
+            caseData.put("F_WobNum", workCaseAppraisal.getWobNumber());
+            caseData.put("F_StepName", "PS2005");
+            caseData.put("Step_Code", Long.toString(workCaseAppraisal.getStep().getId()));
             caseData.put("Lock_Status", "0");
             caseData.put("Locked_User", "0");
             caseData.put("QUEUE_NAME", "0");
@@ -139,6 +164,12 @@ public class InboxControl extends BusinessControl {
         List<WorkCasePrescreen> workCasePrescreenList = workCasePrescreenDAO.findAll();
 
         return workCasePrescreenList;
+    }
+
+    public List<WorkCaseAppraisal> getWorkCaseAppraisal() {
+        List<WorkCaseAppraisal> workCaseAppraisalList = workCaseAppraisalDAO.findAll();
+
+        return workCaseAppraisalList;
     }
 
     public String getLandingPage(long stepId){
@@ -261,5 +292,10 @@ public class InboxControl extends BusinessControl {
         }*/
         log.debug("getHeaderInformation ::: end : return appHeaderView : {}", appHeaderView);
         return appHeaderView;
+    }
+
+    public void selectCasePoolBox(String queueName, String wobNumber, long actionCode) throws Exception{
+        //Send only QueueName, Action, WobNum
+        bpmExecutor.selectCase(actionCode, queueName, wobNumber);
     }
 }

@@ -1,5 +1,6 @@
 package com.clevel.selos.integration.brms.model.response;
 
+import com.clevel.selos.model.UWRuleType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -8,7 +9,7 @@ import java.io.Serializable;
 public class UWRulesResult implements Serializable{
     private String ruleName;
     private String ruleOrder;
-    private String type;
+    private UWRuleType type;
     private String personalID;
     private String color;
     private String deviationFlag;
@@ -30,11 +31,11 @@ public class UWRulesResult implements Serializable{
         this.ruleOrder = ruleOrder;
     }
 
-    public String getType() {
+    public UWRuleType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(UWRuleType type) {
         this.type = type;
     }
 
