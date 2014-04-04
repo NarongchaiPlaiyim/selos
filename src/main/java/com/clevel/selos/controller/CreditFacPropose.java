@@ -1290,6 +1290,21 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     // ****************************************************Start Add SUB Collateral****************************************************//
     public void onAddSubCollateral() {
         log.debug("onAddSubCollateral and rowCollHeadIndex :: {}", rowCollHeadIndex);
+        if (newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId() != 0) {
+
+            RequestContext.getCurrentInstance().execute("subCollateralInfoDlg.show()");
+            CollateralType collateralType = collateralTypeDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId());
+            subCollateralTypeList = subCollateralTypeDAO.findByCollateralType(collateralType);
+            subCollateralTypeViewList = subCollateralTypeTransform.transformToView(subCollateralTypeList);
+            log.debug("subCollateralTypeList ::: {}", subCollateralTypeList.size());
+
+        } else {
+            messageHeader = msg.get("app.messageHeader.error");
+            message = "Please to choose Coll Type (%LTV)";
+            severity = MessageDialogSeverity.ALERT.severity();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
+        }
         newCollateralSubView = new NewCollateralSubView();
         relatedWithSelected = new NewCollateralSubView();
         modeForSubColl = ModeForButton.ADD;
@@ -1297,18 +1312,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         newCollateralSubView.setRelatedWithList(new ArrayList<NewCollateralSubView>());
         relatedWithAllList = creditFacProposeControl.findNewCollateralSubView(newCreditFacilityView.getNewCollateralViewList());
 
-        if (newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId() != 0) {
-            CollateralType collateralType = collateralTypeDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId());
-            subCollateralTypeList = subCollateralTypeDAO.findByCollateralType(collateralType);
-            subCollateralTypeViewList = subCollateralTypeTransform.transformToView(subCollateralTypeList);
-            log.debug("subCollateralTypeList ::: {}", subCollateralTypeList.size());
-        } else {
-            messageHeader = msg.get("app.messageHeader.error");
-            message = "Please to choose Head Collateral Type";
-            severity = MessageDialogSeverity.ALERT.severity();
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
-        }
+
 
     }
 
