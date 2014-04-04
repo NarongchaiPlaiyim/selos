@@ -167,7 +167,7 @@
 				<reportElement uuid="18bdd29b-893f-4717-a55b-65dcd99ef1b2" style="detail" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="23" y="0" width="119" height="31" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="3" tabStopWidth="40"/>
+					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1" tabStopWidth="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{accout}]]></textFieldExpression>
 			</textField>
