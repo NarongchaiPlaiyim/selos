@@ -334,7 +334,8 @@ public class CreditFacProposeControl extends BusinessControl {
                                     log.debug("productFormula id :: {}", productFormula.getId());
                                     log.debug("productFormula.getProgramToCreditType().getCreditType().getCreditGroup():::{}", productFormula.getProgramToCreditType().getCreditType().getCreditGroup());
                                     //OBOD or CASH_IN
-                                    if (CreditTypeGroup.CASH_IN.equals(productFormula.getProgramToCreditType().getCreditType().getCreditGroup())) {
+                                    if (CreditTypeGroup.CASH_IN.value()==(productFormula.getProgramToCreditType().getCreditType().getCreditGroup())) {
+                                        log.debug("OBOD ::: CASH_IN");
                                         //ExposureMethod for check to use limit or limit*PCE%
                                         if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
                                             log.debug("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
@@ -348,7 +349,7 @@ public class CreditFacProposeControl extends BusinessControl {
                                             sumTotalOBOD = sumTotalOBOD.add(newCreditDetailView.getPCEAmount());
                                         }
                                         log.debug("sumTotalOBOD :: {}", sumTotalOBOD);
-                                    } else {//All Credit
+                                    }else{//All Credit
                                         //ExposureMethod for check to use limit or limit*PCE%
                                         if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
                                             log.debug("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
@@ -365,7 +366,7 @@ public class CreditFacProposeControl extends BusinessControl {
                                     }
 
                                     sumTotalBorrowerCommercial = Util.subtract(sumTotalPropose, sumTotalOBOD);  // Commercial - OBOD
-                                    log.debug("sumTotalCommercial :: {}", sumTotalBorrowerCommercial);
+                                    log.debug("sumTotalBorrowerCommercial :: {}", sumTotalBorrowerCommercial);
 
                                     //For DBR  sumTotalLoanDbr and sumTotalNonLoanDbr
                                     if (productFormula.getDbrCalculate() == 1) {// No

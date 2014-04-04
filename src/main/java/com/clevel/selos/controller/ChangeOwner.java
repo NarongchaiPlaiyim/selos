@@ -8,6 +8,7 @@ import com.clevel.selos.filenet.bpm.services.impl.BPMServiceImpl;
 import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.ChangeOwnerView;
 import com.clevel.selos.model.view.PERoster;
 import com.clevel.selos.security.UserDetail;
@@ -201,6 +202,26 @@ public class ChangeOwner implements Serializable {
     @Inject
     BPMInterfaceImpl bpmInterfaceImpl;
 
+    List<User> usersIdNameList1 = new ArrayList<User>();
+
+    List<User> usersIdNameList = new ArrayList<User>();
+
+    public List<User> getUsersIdNameList1() {
+        return usersIdNameList1;
+    }
+
+    public void setUsersIdNameList1(List<User> usersIdNameList1) {
+        this.usersIdNameList1 = usersIdNameList1;
+    }
+
+    public List<User> getUsersIdNameList() {
+        return usersIdNameList;
+    }
+
+    public void setUsersIdNameList(List<User> usersIdNameList) {
+        this.usersIdNameList = usersIdNameList;
+    }
+
     public List<ChangeOwnerView> getTeamTypeName() {
         return teamTypeName;
     }
@@ -323,7 +344,7 @@ public class ChangeOwner implements Serializable {
     }
 
 
-    public List<String> getAllUserNames(ValueChangeEvent event)
+    public List<User> getAllUserNames(ValueChangeEvent event)
     {
         try
         {
@@ -331,12 +352,24 @@ public class ChangeOwner implements Serializable {
             userList1 = new ArrayList();
             selectRole = event.getNewValue().toString();
 
+            usersIdNameList = new ArrayList<User>();
+
             if(selectRole != null && selectRole.trim().length()>0 && selectTeam != null)
             {
                 selectedTeamId = Integer.parseInt(selectTeam);
                 userList1 = userDAO.getUserNames(teamId, selectedTeamId,selectRole);
                 log.info("userList::::" + userList1);
+                Iterator<String> it = userList1.iterator();
+                while (it.hasNext())
+                {
+                    User user1= new User();
+                    user1.setUserName(it.next());
+                    user1.setId(userDAO.getUserIdByName(user1.getUserName()));
+                    usersIdNameList.add(user1);
+                }
+
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -348,8 +381,8 @@ public class ChangeOwner implements Serializable {
         {
             userList1.add(all);
         }*/
-
-        return userList1;
+        return usersIdNameList;
+        //return userList1;
     }
 
 
@@ -384,20 +417,31 @@ public class ChangeOwner implements Serializable {
 
     }
 
-    public List<String> userNamesForChangeTo(AjaxBehaviorEvent ajaxBehaviorEvent)
+    public List<User> userNamesForChangeTo(AjaxBehaviorEvent ajaxBehaviorEvent)
     {
         log.info("this is userNamesForChangeTo method");
         UIComponent source = (UIComponent)ajaxBehaviorEvent.getSource();
         log.info("Value:" + ((HtmlSelectOneMenu) source).getValue());
         String selectTeamName= ((HtmlSelectOneMenu)source).getValue().toString();
 
+        usersIdNameList1 = new ArrayList<User>();
+
         if(selectTeamName != null && selectRole != null)
         {
             selectedTeamId = Integer.parseInt(selectTeamName);
             userNamesForChangeOwnerList = userDAO.getUserNames(teamId, selectedTeamId,selectRole);
+            Iterator<String> it = userNamesForChangeOwnerList.iterator();
+            while (it.hasNext())
+            {
+                User user1= new User();
+                user1.setUserName(it.next());
+                user1.setId(userDAO.getUserIdByName(user1.getUserName()));
+                usersIdNameList1.add(user1);
+            }
             log.info("userNamesForChangeOwnerList:::::::::::"+userNamesForChangeOwnerList);
         }
-        return  userNamesForChangeOwnerList;
+        //return  userNamesForChangeOwnerList;
+        return usersIdNameList1;
 
     }
 

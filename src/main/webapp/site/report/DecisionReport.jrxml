@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b568264b-3421-42fd-80e8-96aa4a75cbf6">
 	<property name="ireport.zoom" value="1.771561000000038"/>
-	<property name="ireport.x" value="2"/>
-	<property name="ireport.y" value="2050"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="912"/>
 	<style name="Total" mode="Opaque" forecolor="#000000" backcolor="#FCFF79" hAlign="Left" vAlign="Middle" fontSize="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -38,7 +38,7 @@
 			<staticText>
 				<reportElement uuid="bc17712d-975b-4eb7-9f86-69414b719398" x="1" y="0" width="100" height="20"/>
 				<textElement>
-					<font isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					<font isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Decision]]></text>
 			</staticText>
@@ -48,16 +48,16 @@
 			<staticText>
 				<reportElement uuid="f10607d1-66f5-4acb-a539-f3cd669153a3" x="1" y="22" width="100" height="14"/>
 				<textElement>
-					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Existing Credit]]></text>
 			</staticText>
 		</band>
 	</title>
 	<detail>
-		<band height="47" splitType="Prevent">
+		<band height="30" splitType="Prevent">
 			<frame>
-				<reportElement uuid="b2752ea6-344f-4090-ae01-2234246f6c8b" mode="Opaque" x="0" y="0" width="555" height="47"/>
+				<reportElement uuid="b2752ea6-344f-4090-ae01-2234246f6c8b" mode="Opaque" x="0" y="0" width="555" height="30"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -65,12 +65,12 @@
 				<staticText>
 					<reportElement uuid="c3cbd3ea-7775-45f7-9011-929828de6ce8" x="1" y="0" width="100" height="13"/>
 					<textElement>
-						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<text><![CDATA[Borrower :]]></text>
 				</staticText>
 				<subreport>
-					<reportElement uuid="3eeac197-c6d6-431e-9d11-ebd858892477" x="0" y="15" width="555" height="32"/>
+					<reportElement uuid="3eeac197-c6d6-431e-9d11-ebd858892477" x="0" y="15" width="555" height="15"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillCreditBorrower})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subCreditBorrower.jasper"]]></subreportExpression>
 				</subreport>
@@ -126,23 +126,23 @@
 				</subreport>
 			</frame>
 		</band>
-		<band height="40" splitType="Prevent">
+		<band height="29" splitType="Prevent">
 			<frame>
-				<reportElement uuid="29d9a208-d006-4678-a300-01123cab16ae" mode="Opaque" x="0" y="0" width="555" height="40"/>
+				<reportElement uuid="29d9a208-d006-4678-a300-01123cab16ae" mode="Opaque" x="0" y="0" width="555" height="29"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<subreport>
-					<reportElement uuid="842567da-1283-4991-a4f0-205f1830026c" x="0" y="10" width="555" height="30"/>
+					<reportElement uuid="842567da-1283-4991-a4f0-205f1830026c" x="0" y="10" width="555" height="19"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillBorrowerRetail})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subCreditRetail.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 		</band>
-		<band height="60" splitType="Prevent">
+		<band height="44" splitType="Prevent">
 			<frame>
-				<reportElement uuid="7c7e4db6-b8d8-4c73-bd82-bab4a301da95" mode="Opaque" x="0" y="0" width="555" height="60"/>
+				<reportElement uuid="7c7e4db6-b8d8-4c73-bd82-bab4a301da95" mode="Opaque" x="0" y="0" width="555" height="44"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -177,7 +177,7 @@
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtBorrowerTotalRetailLimit()]]></textFieldExpression>
 				</textField>
 				<subreport>
-					<reportElement uuid="b6f6aa5a-2955-417f-849c-337299e34a4b" x="0" y="29" width="555" height="31"/>
+					<reportElement uuid="b6f6aa5a-2955-417f-849c-337299e34a4b" x="0" y="29" width="555" height="15"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillAppInRLOS})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subCreditAppRLOS.jasper"]]></subreportExpression>
 				</subreport>
@@ -333,9 +333,9 @@
 				</staticText>
 			</frame>
 		</band>
-		<band height="43" splitType="Prevent">
+		<band height="29" splitType="Prevent">
 			<frame>
-				<reportElement uuid="c4e364ec-7376-4ee6-9679-1fda8a12c608" mode="Opaque" x="0" y="0" width="555" height="43"/>
+				<reportElement uuid="c4e364ec-7376-4ee6-9679-1fda8a12c608" mode="Opaque" x="0" y="0" width="555" height="29"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -348,15 +348,15 @@
 					<text><![CDATA[Related Person]]></text>
 				</staticText>
 				<subreport>
-					<reportElement uuid="87404799-dd3d-4b1b-8657-0d726260b487" x="0" y="13" width="555" height="30"/>
+					<reportElement uuid="87404799-dd3d-4b1b-8657-0d726260b487" x="0" y="13" width="555" height="16"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillRelatedCommercial})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subPersonCommercial.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 		</band>
-		<band height="56" splitType="Prevent">
+		<band height="43" splitType="Prevent">
 			<frame>
-				<reportElement uuid="c7be1657-60af-4daa-a8bf-d5eb5a162d01" mode="Opaque" x="0" y="0" width="555" height="56"/>
+				<reportElement uuid="c7be1657-60af-4daa-a8bf-d5eb5a162d01" mode="Opaque" x="0" y="0" width="555" height="43"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -391,15 +391,15 @@
 					<text><![CDATA[]]></text>
 				</staticText>
 				<subreport>
-					<reportElement uuid="79f8c277-a6c3-4bfb-be2e-7ff831ac89a1" x="0" y="25" width="555" height="31"/>
+					<reportElement uuid="79f8c277-a6c3-4bfb-be2e-7ff831ac89a1" x="0" y="25" width="555" height="18"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillRelatedRetail})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subPersonRetail.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 		</band>
-		<band height="57" splitType="Prevent">
+		<band height="42" splitType="Prevent">
 			<frame>
-				<reportElement uuid="b1f8f9cc-7939-4a66-982c-2a4933960cb9" mode="Opaque" x="0" y="0" width="556" height="57"/>
+				<reportElement uuid="b1f8f9cc-7939-4a66-982c-2a4933960cb9" mode="Opaque" x="0" y="0" width="556" height="42"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -434,7 +434,7 @@
 					<text><![CDATA[]]></text>
 				</staticText>
 				<subreport>
-					<reportElement uuid="ddbd96ee-9262-4453-8a81-3757d899b5cb" x="0" y="24" width="556" height="33"/>
+					<reportElement uuid="ddbd96ee-9262-4453-8a81-3757d899b5cb" x="0" y="24" width="556" height="18"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillRelatedAppInRLOS})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path}+ "DecisionReport_subPersonAppRLOS.jasper"]]></subreportExpression>
 				</subreport>

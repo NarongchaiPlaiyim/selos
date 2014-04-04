@@ -92,10 +92,9 @@
                                         <p:dataTable id="resultTrackCA" var="item"
                                                      value="#{trackBean.rosterViewList}"
                                                      paginator="true"
-                                                     rows ="10"
-                                                     rowIndexVar="rowIndex"
+                                                     rows ="20"
                                                      rowKey="#{item.fwobnumber}"
-                                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                     rowIndexVar="rowIndex"
                                                      rowsPerPageTemplate="20,40,60">
                                             <p:column headerText="" styleClass="center" style="width:22px;">
                                                 <h:outputText value="#{rowIndex+1}"/>
