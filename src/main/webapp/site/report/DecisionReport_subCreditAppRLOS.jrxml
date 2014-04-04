@@ -164,9 +164,9 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="27" splitType="Stretch">
+		<band height="31" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="7071d9cf-33e8-4be8-9152-13bcc921223d" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="23" height="27" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="7071d9cf-33e8-4be8-9152-13bcc921223d" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="23" height="31" isRemoveLineWhenBlank="true"/>
 				<textElement verticalAlignment="Top">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
@@ -174,15 +174,15 @@
 "" : $F{count}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement uuid="c54565f8-cbd0-4a91-97ff-326c601204a2" style="detail" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="23" y="0" width="119" height="27" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="c54565f8-cbd0-4a91-97ff-326c601204a2" style="detail" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="23" y="0" width="119" height="31" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="3" tabStopWidth="40"/>
+					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1" tabStopWidth="40"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{accout}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="92fe55e6-7544-4550-9f9f-8f299420d7a8" style="detail" stretchType="RelativeToBandHeight" x="221" y="0" width="62" height="27" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="92fe55e6-7544-4550-9f9f-8f299420d7a8" style="detail" stretchType="RelativeToBandHeight" x="221" y="0" width="62" height="31" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="3" spacingBefore="1" spacingAfter="1"/>
@@ -190,7 +190,7 @@
 				<textFieldExpression><![CDATA[$F{creditTypeName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="5ba26b9b-9fa2-451a-aaa2-80a66f9b71cf" style="detail" stretchType="RelativeToBandHeight" x="283" y="0" width="72" height="27" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="5ba26b9b-9fa2-451a-aaa2-80a66f9b71cf" style="detail" stretchType="RelativeToBandHeight" x="283" y="0" width="72" height="31" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="3" spacingBefore="1" spacingAfter="1"/>
@@ -198,7 +198,7 @@
 				<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="b11db0fd-1b32-4fb2-968d-978209da243a" style="detail" stretchType="RelativeToBandHeight" x="355" y="0" width="34" height="27" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="b11db0fd-1b32-4fb2-968d-978209da243a" style="detail" stretchType="RelativeToBandHeight" x="355" y="0" width="34" height="31" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
@@ -206,7 +206,7 @@
 				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="8bc7bfed-e80e-4d2f-8cf3-9ae61c0f28d6" style="detail" stretchType="RelativeToBandHeight" x="389" y="0" width="49" height="27" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="8bc7bfed-e80e-4d2f-8cf3-9ae61c0f28d6" style="detail" stretchType="RelativeToBandHeight" x="389" y="0" width="49" height="31" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
@@ -214,7 +214,7 @@
 				<textFieldExpression><![CDATA[$F{outstanding}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="90a9475b-9e6f-46ff-bdb6-f31f168e1775" style="detail" stretchType="RelativeToBandHeight" x="142" y="0" width="79" height="27" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="90a9475b-9e6f-46ff-bdb6-f31f168e1775" style="detail" stretchType="RelativeToBandHeight" x="142" y="0" width="79" height="31" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="3" spacingBefore="1" spacingAfter="1"/>
@@ -230,9 +230,9 @@
 				<textFieldExpression><![CDATA[$F{count}.intValue() == 0 ? "No records found" : ""]]></textFieldExpression>
 			</textField>
 			<frame>
-				<reportElement uuid="b2250b78-9bf8-417c-b716-f393b9b91cf9" stretchType="RelativeToTallestObject" x="438" y="0" width="117" height="27"/>
+				<reportElement uuid="b2250b78-9bf8-417c-b716-f393b9b91cf9" stretchType="RelativeToTallestObject" x="438" y="0" width="117" height="31"/>
 				<subreport>
-					<reportElement uuid="a0e63d0a-8b48-4a60-bfb3-65f5ed39fa10" stretchType="RelativeToBandHeight" x="0" y="0" width="117" height="27"/>
+					<reportElement uuid="a0e63d0a-8b48-4a60-bfb3-65f5ed39fa10" stretchType="RelativeToBandHeight" x="0" y="0" width="117" height="31"/>
 					<dataSourceExpression><![CDATA[$F{existingCreditTierDetailViewList}.isEmpty() ?
 new net.sf.jasperreports.engine.JREmptyDataSource() :
 new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTierDetailViewList})]]></dataSourceExpression>
