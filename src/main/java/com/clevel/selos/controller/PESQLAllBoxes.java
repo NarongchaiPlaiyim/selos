@@ -219,6 +219,8 @@ public class PESQLAllBoxes implements Serializable
             session.setAttribute("fetchType",inboxViewSelectItem.getFetchType());
         }
 
+        session.setAttribute("caseOwner",inboxViewSelectItem.getAtuser());
+
         try
         {
 
