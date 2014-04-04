@@ -348,7 +348,7 @@ public class ReassignTeamNames implements Serializable
     {
 
         //Clear all session before selectInbox
-        /*HttpSession session = FacesUtil.getSession(false);
+        HttpSession session = FacesUtil.getSession(false);
         try
         {
             if(session.getAttribute("isLocked")!=null)
@@ -371,7 +371,7 @@ public class ReassignTeamNames implements Serializable
         catch (Exception e)
         {
             log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
-        }*/
+        }
 
         reasignteamnames = new ArrayList<ReassignTeamNameId>();
 
@@ -544,7 +544,7 @@ public class ReassignTeamNames implements Serializable
         session.setAttribute("queuename",searchViewSelectItem.getQueuename());
         session.setAttribute("fetchType",searchViewSelectItem.getFetchType());
 
-        /*try
+        try
         {
 
             bpmInterfaceImpl.lockCase(searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
@@ -554,7 +554,7 @@ public class ReassignTeamNames implements Serializable
         catch (Exception e)
         {
             log.error("Error while Locking case in queue : {}, WobNum : {}",searchViewSelectItem.getQueuename(), searchViewSelectItem.getFwobnumber(), e);
-        }*/
+        }
 
        /* AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(searchViewSelectItem.getWorkCasePreScreenId(), searchViewSelectItem.getWorkCaseId());
         session.setAttribute("appHeaderInfo", appHeaderView);*/

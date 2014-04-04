@@ -341,7 +341,7 @@
                 process="@this"
                 actionListener="#{creditFacPropose.onAddSubCollateral}"
                 update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
-                oncomplete="subCollateralInfoDlg.show();">
+                >
             <f:setPropertyActionListener value="#{i.index}"
                                          target="#{creditFacPropose.rowCollHeadIndex}"/>
             <p:resetInput target=":subCollateralDlgForm"/>
