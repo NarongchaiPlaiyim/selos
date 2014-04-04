@@ -165,7 +165,7 @@
 					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 				</box>
 				<textElement textAlignment="Left">
-					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<font fontName="Tahoma" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{collateralType}]]></textFieldExpression>

@@ -96,7 +96,7 @@
 			<frame>
 				<reportElement uuid="fa18a4c3-a001-4c82-99f3-a861f7d8e53f" x="0" y="0" width="555" height="182"/>
 				<box>
-					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
 					<reportElement uuid="e3fa267a-7a91-48da-a72f-500a05eb3f5b" x="0" y="0" width="111" height="20"/>

@@ -163,18 +163,18 @@ public class PDFReject_Letter implements Serializable {
 
 
             switch (month){
-                case 1: setMonth = "\\u0E21\\u0E01\\u0E23\\u0E32\\u0E04\\u0E21"; break;
-                case 2: setMonth = "\\u0E01\\u0E38\\u0E21\\u0E20\\u0E32\\u0E1E\\u0E31\\u0E19\\u0E18\\u0E4C"; break;
-                case 3: setMonth = "\\u0E21\\u0E35\\u0E19\\u0E32\\u0E04\\u0E21"; break;
-                case 4: setMonth = "\\u0E40\\u0E21\\u0E29\\u0E32\\u0E22\\u0E19"; break;
-                case 5: setMonth = "\\u0E1E\\u0E24\\u0E29\\u0E20\\u0E32\\u0E04\\u0E21"; break;
-                case 6: setMonth = "\\u0E21\\u0E34\\u0E16\\u0E38\\u0E19\\u0E32\\u0E22\\u0E19"; break;
-                case 7: setMonth = "\\u0E01\\u0E23\\u0E01\\u0E0E\\u0E32\\u0E04\\u0E21"; break;
-                case 8: setMonth = "\\u0E2A\\u0E34\\u0E07\\u0E2B\\u0E32\\u0E04\\u0E21"; break;
-                case 9: setMonth = "\\u0E01\\u0E31\\u0E19\\u0E22\\u0E32\\u0E22\\u0E19"; break;
-                case 10: setMonth = "\\u0E15\\u0E38\\u0E25\\u0E32\\u0E04\\u0E21"; break;
-                case 11: setMonth = "\\u0E1E\\u0E24\\u0E28\\u0E08\\u0E34\\u0E01\\u0E32\\u0E22\\u0E19"; break;
-                case 12: setMonth = "\\u0E18\\u0E31\\u0E19\\u0E27\\u0E32\\u0E04\\u0E21"; break;
+                case 1: setMonth = msg.get("app.month.january"); break;
+                case 2: setMonth = msg.get("app.month.february"); break;
+                case 3: setMonth = msg.get("app.month.march"); break;
+                case 4: setMonth = msg.get("app.month.april"); break;
+                case 5: setMonth = msg.get("app.month.may"); break;
+                case 6: setMonth = msg.get("app.month.june"); break;
+                case 7: setMonth = msg.get("app.month.july"); break;
+                case 8: setMonth = msg.get("app.month.august"); break;
+                case 9: setMonth = msg.get("app.month.september"); break;
+                case 10: setMonth = msg.get("app.month.october"); break;
+                case 11: setMonth = msg.get("app.month.november"); break;
+                case 12: setMonth = msg.get("app.month.december"); break;
                 default:setMonth = "";
 
             }

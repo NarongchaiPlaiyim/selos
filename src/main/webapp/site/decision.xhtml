@@ -2301,7 +2301,7 @@
 
                                     <p:commandButton id="btnRetrievePricingFee"
                                                      value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
-                                                     disabled="#{not decision.roleUW}"
+                                                     disabled="#{not decision.roleUW or decision.notRetrievePricing}"
                                                      actionListener="#{decision.onRetrievePricingFee()}"
                                                      process="@form"
                                                      update=":frmMain"
