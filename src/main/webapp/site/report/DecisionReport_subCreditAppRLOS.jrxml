@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subExistingAppRLOS" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="0d9179ea-d6ac-4b26-850f-ed4b1fca8731">
 	<property name="ireport.zoom" value="1.1000000000000016"/>
-	<property name="ireport.x" value="176"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
@@ -232,7 +232,7 @@
 			<frame>
 				<reportElement uuid="b2250b78-9bf8-417c-b716-f393b9b91cf9" stretchType="RelativeToBandHeight" x="438" y="0" width="117" height="27"/>
 				<subreport>
-					<reportElement uuid="a0e63d0a-8b48-4a60-bfb3-65f5ed39fa10" stretchType="RelativeToBandHeight" x="0" y="0" width="117" height="27"/>
+					<reportElement uuid="a0e63d0a-8b48-4a60-bfb3-65f5ed39fa10" stretchType="RelativeToTallestObject" x="0" y="0" width="117" height="27"/>
 					<dataSourceExpression><![CDATA[$F{existingCreditTierDetailViewList}.isEmpty() ?
 new net.sf.jasperreports.engine.JREmptyDataSource() :
 new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTierDetailViewList})]]></dataSourceExpression>

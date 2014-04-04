@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -399,14 +400,14 @@ public class PDFDecision implements Serializable {
 
                 StringBuilder collateralType = new StringBuilder();
                 try {
-                    collateralType = collateralType.append(new String("»—°¬¿“æÀ≈—°ª√–°—π :".getBytes(), "UTF-8")).append((Util.checkNullString(detailView.getPotentialCollateral().getDescription()))).append("\n");
-                    collateralType = collateralType.append(new String("ª√–‡¿∑À≈—°ª√–°—π :".getBytes(), "ISO-8859-1")).append((Util.checkNullString(detailView.getCollateralType().getDescription()))).append("\n");
-                    collateralType = collateralType.append(new String("°√√¡ ‘∑∏‘Ï :".getBytes("ISO-8859-1"), "UTF-8")).append((Util.checkNullString(detailView.getOwner()))).append("\n");
-                    collateralType = collateralType.append(new String("§«“¡‡°’Ë¬«æ—π :".getBytes("UTF-8"), "ISO-8859-1")).append((Util.checkNullString(detailView.getRelation().getDescription()))).append("\n");
-                    collateralType = collateralType.append(new String("«—π∑’Ëª√–‡¡‘π :".getBytes("UTF-8"), "ISO-8859-1")).append((detailView.getAppraisalDate()) == null ? "" : detailView.getAppraisalDate()).append("\n");
-                    collateralType = collateralType.append(new String("‡≈¢∑’Ë :".getBytes("UTF-8"), "ISO-8859-1")).append((Util.checkNullString(detailView.getCollateralNumber()))).append("\n");
-                    collateralType = collateralType.append(new String("∑’ËÕ¬ŸË :".getBytes("UTF-8"), "ISO-8859-1")).append((Util.checkNullString(detailView.getCollateralLocation()))).append("\\n");
-                    collateralType = collateralType.append(new String("À¡“¬‡Àµÿ :".getBytes("UTF-8"), "ISO-8859-1")).append((Util.checkNullString(detailView.getRemark())));
+                    collateralType = collateralType.append(new String("‡∏®‡∏±‡∏Å‡∏¢‡∏†‡∏≤‡∏û‡∏´‡∏•‡∏±‡∏Å‡∏õ‡∏£‡∏∞‡∏Å‡∏±‡∏ô :".getBytes(), "TIS-620")).append((Util.checkNullString(detailView.getPotentialCollateral().getDescription()))).append("\n");
+                    collateralType = collateralType.append(new String("‡∏õ‡∏£‡∏∞‡πÄ‡∏†‡∏ó‡∏´‡∏•‡∏±‡∏Å‡∏õ‡∏£‡∏∞‡∏Å‡∏±‡∏ô :".getBytes(Charset.forName("UTF-8")))).append((Util.checkNullString(detailView.getCollateralType().getDescription()))).append("\n");
+                    collateralType = collateralType.append(new String("‡∏Å‡∏£‡∏£‡∏°‡∏™‡∏¥‡∏ó‡∏ò‡∏¥‡πå :".getBytes(Charset.forName("TIS-620")))).append((Util.checkNullString(detailView.getOwner()))).append("\n");
+                    collateralType = collateralType.append(new String("‡∏Ñ‡∏ß‡∏≤‡∏°‡πÄ‡∏Å‡∏µ‡πà‡∏¢‡∏ß‡∏û‡∏±‡∏ô :".getBytes(Charset.forName("ISO-8859-1")))).append((Util.checkNullString(detailView.getRelation().getDescription()))).append("\n");
+                    collateralType = collateralType.append(new String("‡∏ß‡∏±‡∏ô‡∏ó‡∏µ‡πà‡∏õ‡∏£‡∏∞‡πÄ‡∏°‡∏¥‡∏ô :".getBytes(), Charset.forName("TIS-620"))).append((detailView.getAppraisalDate()) == null ? "" : detailView.getAppraisalDate()).append("\n");
+                    collateralType = collateralType.append(new String("‡πÄ‡∏•‡∏Ç‡∏ó‡∏µ‡πà :".getBytes(), Charset.forName("ISO-8859-1"))).append((Util.checkNullString(detailView.getCollateralNumber()))).append("\n");
+                    collateralType = collateralType.append(new String("‡∏ó‡∏µ‡πà‡∏≠‡∏¢‡∏π‡πà :".getBytes(), Charset.forName("UTF-8"))).append((Util.checkNullString(detailView.getCollateralLocation()))).append("\\n");
+                    collateralType = collateralType.append(new String("‡∏´‡∏°‡∏≤‡∏¢‡πÄ‡∏´‡∏ï‡∏∏ :".getBytes(), Charset.forName("TIS-620"))).append((Util.checkNullString(detailView.getRemark())));
                 } catch (Exception e){
                     log.debug("Exception while convert BYTE to UTF-8");
                 }
@@ -448,14 +449,14 @@ public class PDFDecision implements Serializable {
                 collateralRelatedDecisionReport.setPath(path);
 
                 StringBuilder collateralType = new StringBuilder();
-                collateralType = collateralType.append("»—°¬¿“æÀ≈—°ª√–°—π :").append((Util.checkNullString(detailView.getPotentialCollateral().getDescription()))).append("\n");
-                collateralType = collateralType.append("ª√–‡¿∑À≈—°ª√–°—π :").append((Util.checkNullString(detailView.getCollateralType().getDescription()))).append("\n");
-                collateralType = collateralType.append("°√√¡ ‘∑∏‘Ï :").append((Util.checkNullString(detailView.getOwner()))).append("\n");
-                collateralType = collateralType.append("§«“¡‡°’Ë¬«æ—π :").append((Util.checkNullString(detailView.getRelation().getDescription()))).append("\n");
-                collateralType = collateralType.append("«—π∑’Ëª√–‡¡‘π :").append((detailView.getAppraisalDate()) == null ? "" : detailView.getAppraisalDate()).append("\n");
-                collateralType = collateralType.append("‡≈¢∑’Ë :").append((Util.checkNullString(detailView.getCollateralNumber()))).append("\n");
-                collateralType = collateralType.append("∑’ËÕ¬ŸË :").append((Util.checkNullString(detailView.getCollateralLocation()))).append("\\n");
-                collateralType = collateralType.append("À¡“¬‡Àµÿ :").append((Util.checkNullString(detailView.getRemark())));
+                collateralType = collateralType.append("‡∏®‡∏±‡∏Å‡∏¢‡∏†‡∏≤‡∏û‡∏´‡∏•‡∏±‡∏Å‡∏õ‡∏£‡∏∞‡∏Å‡∏±‡∏ô :").append((Util.checkNullString(detailView.getPotentialCollateral().getDescription()))).append("\n");
+                collateralType = collateralType.append("‡∏õ‡∏£‡∏∞‡πÄ‡∏†‡∏ó‡∏´‡∏•‡∏±‡∏Å‡∏õ‡∏£‡∏∞‡∏Å‡∏±‡∏ô :").append((Util.checkNullString(detailView.getCollateralType().getDescription()))).append("\n");
+                collateralType = collateralType.append("‡∏Å‡∏£‡∏£‡∏°‡∏™‡∏¥‡∏ó‡∏ò‡∏¥‡πå :").append((Util.checkNullString(detailView.getOwner()))).append("\n");
+                collateralType = collateralType.append("‡∏Ñ‡∏ß‡∏≤‡∏°‡πÄ‡∏Å‡∏µ‡πà‡∏¢‡∏ß‡∏û‡∏±‡∏ô :").append((Util.checkNullString(detailView.getRelation().getDescription()))).append("\n");
+                collateralType = collateralType.append("‡∏ß‡∏±‡∏ô‡∏ó‡∏µ‡πà‡∏õ‡∏£‡∏∞‡πÄ‡∏°‡∏¥‡∏ô :").append((detailView.getAppraisalDate()) == null ? "" : detailView.getAppraisalDate()).append("\n");
+                collateralType = collateralType.append("‡πÄ‡∏•‡∏Ç‡∏ó‡∏µ‡πà :").append((Util.checkNullString(detailView.getCollateralNumber()))).append("\n");
+                collateralType = collateralType.append("‡∏ó‡∏µ‡πà‡∏≠‡∏¢‡∏π‡πà :").append((Util.checkNullString(detailView.getCollateralLocation()))).append("\\n");
+                collateralType = collateralType.append("‡∏´‡∏°‡∏≤‡∏¢‡πÄ‡∏´‡∏ï‡∏∏ :").append((Util.checkNullString(detailView.getRemark())));
 
                 collateralRelatedDecisionReport.setCollateralType(collateralType.toString());
                 log.debug("--CollateralType. {}",collateralType.toString());
