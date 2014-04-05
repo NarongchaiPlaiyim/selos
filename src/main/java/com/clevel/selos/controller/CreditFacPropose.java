@@ -29,6 +29,7 @@ import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import com.clevel.selos.util.ValidationUtil;
 import com.rits.cloning.Cloner;
+
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -37,13 +38,15 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
 
 @ViewScoped
 @ManagedBean(name = "creditFacPropose")
-public class CreditFacPropose extends MandatoryFieldsControl {
+public class CreditFacPropose implements Serializable {
     @Inject
     @SELOS
     Logger log;
@@ -439,9 +442,13 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         String jobId = newCollateralView.getJobID();
         log.debug("onCallRetrieveAppraisalReportInfo begin key is  :: {}", jobId);
         boolean flag = true;
-        User user = getCurrentUser();
-
-        if (!Util.isNull(jobId)) {
+//        User user = getCurrentUser();
+        HttpSession session = FacesUtil.getSession(false);
+        User user = null;
+		if (session != null) {
+			user = (User) session.getAttribute("user");
+		}
+        if (!Util.isNull(jobId) && user != null) {
             flag = checkJobIdExist(newCreditFacilityView.getNewCollateralViewList(), jobId);
 
             if (flag) {
