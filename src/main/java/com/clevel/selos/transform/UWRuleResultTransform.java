@@ -88,6 +88,11 @@ public class UWRuleResultTransform extends Transform{
                 throw new BRMSInterfaceException(null, ExceptionMapping.BRMS_INVALID_RETURN_DATA, exceptionMsg.get(ExceptionMapping.BRMS_INVALID_RETURN_DATA, "UW Rule Name was not found " + uwRulesResult.getRuleName()));
             }
 
+            if(uwRuleName == null){
+                logger.debug("Cannot Find uwRuleName - '{}' uwRuleName was not found", uwRulesResult.getRuleName());
+                throw new BRMSInterfaceException(null, ExceptionMapping.BRMS_INVALID_RETURN_DATA, exceptionMsg.get(ExceptionMapping.BRMS_INVALID_RETURN_DATA, "UW Rule Name was not found " + uwRulesResult.getRuleName()));
+            }
+
             if(uwResultColor.equals(UWResultColor.RED)){
                 if(Util.isEmpty(uwRulesResult.getDeviationFlag())){
                     logger.debug("Cannot Find uwDeviationFlag - '{}' uw Deviation Flag was not found when UWResultColor is RED", uwRulesResult.getDeviationFlag());
