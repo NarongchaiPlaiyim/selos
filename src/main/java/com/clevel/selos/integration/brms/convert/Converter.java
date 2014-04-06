@@ -2,12 +2,17 @@ package com.clevel.selos.integration.brms.convert;
 
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
+import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
+import com.clevel.selos.integration.brms.model.response.UWRulesResult;
 import com.clevel.selos.model.BRMSYesNo;
 import com.clevel.selos.integration.brms.model.response.DocumentDetail;
 import com.clevel.selos.model.DocLevel;
-import com.tmbbank.enterprise.model.AttributeType;
-import com.tmbbank.enterprise.model.DocumentSetType;
-import com.tmbbank.enterprise.model.DocumentType;
+import com.clevel.selos.model.UWRuleType;
+import com.clevel.selos.util.Util;
+import com.ilog.rules.decisionservice.DecisionServiceResponse;
+import com.ilog.rules.param.UnderwritingRequest;
+import com.ilog.rules.param.UnderwritingResult;
+import com.tmbbank.enterprise.model.*;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -154,5 +159,69 @@ public class Converter implements Serializable {
 
         logger.debug("-- end getDocumentDetail return {}", documentDetailList);
         return documentDetailList;
+    }
+
+    public UWRulesResponse getUWRulesResponse(DecisionServiceResponse decisionServiceResponse){
+        logger.debug("-- start convert getUWRulesResponse from DecisionServiceResponse {}", decisionServiceResponse);
+
+        UWRulesResponse uwRulesResponse = new UWRulesResponse();
+
+        if(decisionServiceResponse != null){
+            uwRulesResponse.setDecisionID(decisionServiceResponse.getDecisionID());
+
+            UnderwritingRequest underwritingRequest = decisionServiceResponse.getUnderwritingRequest();
+            UnderwritingApprovalRequestType underwritingApprovalRequestType = underwritingRequest.getUnderwritingApprovalRequest();
+
+            ApplicationType applicationType = underwritingApprovalRequestType.getApplication();
+            uwRulesResponse.setApplicationNo(applicationType.getApplicationNumber());
+
+            UnderwritingResult underwritingResult = decisionServiceResponse.getUnderwritingResult();
+            UnderwritingApprovalResultType underwritingApprovalResultType = underwritingResult.getUnderwritingApprovalResult();
+
+            Map<String, UWRulesResult> uwRulesResultMap = new TreeMap<String, UWRulesResult>();
+            List<ResultType> resultTypeList = underwritingApprovalResultType.getResult();
+            for(ResultType resultType : resultTypeList){
+                UWRulesResult uwRulesResult = new UWRulesResult();
+                uwRulesResult.setRuleName(resultType.getRuleName());
+                //Find if it is Group Level//
+                UWRuleType _ruleType = null;
+                if(("Group_Result").equals(resultType.getType()))
+                    _ruleType = UWRuleType.GROUP_LEVEL;
+
+                uwRulesResult.setColor(resultType.getColor());
+                uwRulesResult.setDeviationFlag(resultType.getDeviationFlag());
+                uwRulesResult.setRejectGroupCode(resultType.getRejectGroupCode());
+
+                List<AttributeType> uwAttributeTypeList = resultType.getAttribute();
+                for(AttributeType attributeType : uwAttributeTypeList){
+                    if(attributeType.getName() != null){
+                        if(attributeType.getName().equals(BRMSFieldAttributes.UW_RULE_ORDER.value())){
+                            uwRulesResult.setRuleOrder(attributeType.getStringValue());
+                        }
+                        if(attributeType.getName().equals(BRMSFieldAttributes.UW_PERSONAL_ID)){
+                            String _attrValue = attributeType.getStringValue();
+                            if(_attrValue != null){
+                                uwRulesResult.setPersonalID(_attrValue);
+                                _ruleType = UWRuleType.CUS_LEVEL;
+                            }else {
+                                //if UW_PERSONAL_ID == null, then it is Group Level//
+                                _ruleType = UWRuleType.GROUP_LEVEL;
+                            }
+                        }
+                    }
+                }
+
+                uwRulesResult.setType(_ruleType);
+                if(Util.isEmpty(uwRulesResult.getRuleOrder())){
+                    uwRulesResult.setRuleOrder("0001");
+                }
+                logger.debug("uwRulesResult : {}", uwRulesResult);
+                uwRulesResultMap.put(uwRulesResult.getRuleOrder(), uwRulesResult);
+            }
+            uwRulesResponse.setUwRulesResultMap(uwRulesResultMap);
+        }
+
+        logger.debug("-- end convert getUWRulesResponse from DecisionServiceResponse return {}", uwRulesResponse);
+        return uwRulesResponse;
     }
 }
