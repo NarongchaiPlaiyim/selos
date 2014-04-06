@@ -1,8 +1,8 @@
 package com.clevel.selos.integration.ecm;
 
 import com.clevel.selos.exception.ECMInterfaceException;
-import com.clevel.selos.integration.ECM;
 import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.ecm.db.ECMCAPShare;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.module.DBExecute;
 import com.clevel.selos.system.message.ExceptionMapping;
@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ECMService implements Serializable {
@@ -50,4 +49,68 @@ public class ECMService implements Serializable {
             throw new Exception(e.getMessage());
         }
     }
+
+    public boolean update(final ECMCAPShare ecmcapShare) throws Exception{
+        if(Util.isNull(ecmcapShare)){
+            log.error("Exception while update ECM! ECMCAPShare is {}", ecmcapShare);
+            throw new Exception("ECMCAPShare is null");
+        } else {
+            if(Util.isNull(ecmcapShare.getCrsUKCANumber())){
+                log.error("Exception while update ECM! ECMCAPShare is {}", ecmcapShare.getCrsUKCANumber());
+                throw new Exception("ECMCAPShare.CRSUKCANumber[null]");
+            }
+        }
+
+        try {
+            if(dbExecute.updateECM(ecmcapShare)){
+                log.debug("AppNumber[{}] updated", ecmcapShare.getCrsUKCANumber());
+                return true;
+            } else {
+                log.debug("AppNumber[{}] canceled", ecmcapShare.getCrsUKCANumber());
+                return false;
+            }
+        } catch (ECMInterfaceException e){
+            log.error("ECMInterfaceException while update ECM!",e);
+            throw e;
+        } catch (Exception e) {
+            log.error("Exception while update ECM!",e);
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    public boolean insert(final ECMCAPShare ecmcapShare) throws Exception{
+        if(Util.isNull(ecmcapShare)){
+            log.error("Exception while insert ECM! ECMCAPShare is {}", ecmcapShare);
+            throw new Exception("ECMCAPShare is null");
+        } else {
+            if(Util.isNull(ecmcapShare.getCrsUKCANumber())){
+                log.error("Exception while insert ECM! ECMCAPShare is {}", ecmcapShare.getCrsUKCANumber());
+                throw new Exception("ECMCAPShare.CRSUKCANumber[null]");
+            }
+
+            if(Util.isNull(ecmcapShare.getCrsCustName())){
+                log.error("Exception while insert ECM! ECMCAPShare is {}", ecmcapShare.getCrsCustName());
+                throw new Exception("ECMCAPShare.CRSCustName[null]");
+            }
+        }
+
+
+
+        try {
+            if(dbExecute.insertIntoECM(ecmcapShare)){
+                log.debug("AppNumber[{}] inserted", ecmcapShare.getCrsUKCANumber());
+                return true;
+            } else {
+                log.debug("AppNumber[{}] canceled", ecmcapShare.getCrsUKCANumber());
+                return false;
+            }
+        } catch (ECMInterfaceException e){
+            log.error("ECMInterfaceException while insert into ECM!",e);
+            throw e;
+        } catch (Exception e) {
+            log.error("Exception while insert into ECM!",e);
+            throw new Exception(e.getMessage());
+        }
+    }
+
 }

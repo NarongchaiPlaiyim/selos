@@ -3,13 +3,12 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.UserToAuthorizationDOADAO;
 import com.clevel.selos.dao.working.*;
-import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.bpm.tool.SQLDBConnection;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.*;
-import com.clevel.selos.integration.bpm.tool.SQLDBConnection;
 import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -19,12 +18,12 @@ import com.clevel.selos.transform.business.InboxBizTransform;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.PreparedStatement;
-import java.text.ParseException;
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -493,11 +492,11 @@ public class PEDBExecute extends BusinessControl
 
             if(inboxName.contains("ROSTER"))
             {
-                fetchType = BPMConstants.FETCH_TYPE_ROSTER;
+//                fetchType = BPMConstants.FETCH_TYPE_ROSTER;
             }
 
             else {
-                fetchType = BPMConstants.FETCH_TYPE_QUEUE;
+//                fetchType = BPMConstants.FETCH_TYPE_QUEUE;
             }
 
             log.info("inboxname : {}",inboxName);
@@ -542,7 +541,7 @@ public class PEDBExecute extends BusinessControl
                 peInbox.setFwobnumber(rs.getString("F_WobNum"));
                 peInbox.setQueuename(inboxName);
                 peInbox.setStep(rs.getString("F_StepName"));
-                peInbox.setFetchType(fetchType);
+//                peInbox.setFetchType(fetchType);
                 resultQueryList.add(peInbox);
 
                 log.info("resultQueryList pedbexecute class is : {}",resultQueryList);
@@ -744,7 +743,7 @@ public class PEDBExecute extends BusinessControl
 
             rs = statement.executeQuery();
 
-            int fetchType = BPMConstants.FETCH_TYPE_ROSTER;
+//            int fetchType = BPMConstants.FETCH_TYPE_ROSTER;
 
             String queueName = tableName.substring(tableName.indexOf("_")+1,tableName.length());
 
@@ -771,7 +770,7 @@ public class PEDBExecute extends BusinessControl
                 peRoster.setTotalTimeAtUser(rs.getString("TotalTimeAtUser"));
                 peRoster.setTotalTimeAtProcess(rs.getString("TotalTimeAtProcess"));
                 peRoster.setF_WobNum(rs.getString("F_WobNum"));
-                peRoster.setFetchType(fetchType);
+//                peRoster.setFetchType(fetchType);
                 peRoster.setStep(rs.getString("F_StepName"));
                 peRoster.setQueuename(queueName);
 
@@ -1357,11 +1356,11 @@ public class PEDBExecute extends BusinessControl
 
             if(tableName.contains("ROSTER"))
             {
-                fetchType = BPMConstants.FETCH_TYPE_ROSTER;
+//                fetchType = BPMConstants.FETCH_TYPE_ROSTER;
             }
 
             else {
-                fetchType = BPMConstants.FETCH_TYPE_QUEUE;
+//                fetchType = BPMConstants.FETCH_TYPE_QUEUE;
             }
 
             while (rs.next())
@@ -1405,7 +1404,7 @@ public class PEDBExecute extends BusinessControl
                 peInbox.setFwobnumber(rs.getString("F_WobNum"));
                 peInbox.setStep(rs.getString("F_StepName"));
                 peInbox.setQueuename(tableName);
-                peInbox.setFetchType(fetchType);
+//                peInbox.setFetchType(fetchType);
                 peSearchResultSetList.add(peInbox);
 
                 log.info("resultQueryList pedbexecute class is : {}",peSearchResultSetList);
