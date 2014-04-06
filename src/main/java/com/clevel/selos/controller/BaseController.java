@@ -478,13 +478,124 @@ public class BaseController implements Serializable {
         }
     }
 
+    public void onSubmitRM(){
+        log.debug("onSubmitRM ::: starting...");
+        boolean complete = false;
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            String queueName = session.getAttribute("queueName").toString();
+            fullApplicationControl.submitToRM(queueName, workCaseId);
+            messageHeader = "Information.";
+            message = "Submit to Region Manager success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            complete = true;
+            log.debug("onSubmitRM ::: success.");
+        } catch (Exception ex){
+            messageHeader = "Exception.";
+            message = "Submit to Region Manager failed, cause : " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            complete = false;
+            log.error("onSubmitRM ::: exception occurred : ", ex);
+        }
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
+    public void onSubmitGH(){
+        log.debug("onSubmitGH ::: starting...");
+        boolean complete = false;
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            String queueName = session.getAttribute("queueName").toString();
+            fullApplicationControl.submitToGH(queueName, workCaseId);
+            messageHeader = "Information.";
+            message = "Submit to Group Head success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            complete = true;
+            log.debug("onSubmitGH ::: success.");
+        } catch (Exception ex){
+            messageHeader = "Exception.";
+            message = "Submit to Group Head failed, cause : " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            complete = false;
+            log.error("onSubmitGH ::: exception occurred : ", ex);
+        }
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
+    public void onSubmitCSSO(){
+        log.debug("onSubmitCSSO ::: starting...");
+        boolean complete = false;
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            String queueName = session.getAttribute("queueName").toString();
+            fullApplicationControl.submitToCSSO(queueName, workCaseId);
+            messageHeader = "Information.";
+            message = "Submit to CSSO success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            complete = true;
+            log.debug("onSubmitCSSO ::: success.");
+        } catch (Exception ex){
+            messageHeader = "Exception.";
+            message = "Submit to CSSO failed, cause : " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            complete = false;
+            log.error("onSubmitCSSO ::: exception occurred : ", ex);
+        }
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
+    public void onSubmitUWFromCSSO(){
+        log.debug("onSubmitUWFromCSSO ::: starting...");
+        boolean complete = false;
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            String queueName = session.getAttribute("queueName").toString();
+            fullApplicationControl.submitToUWFromCSSO(queueName, workCaseId);
+            messageHeader = "Information.";
+            message = "Submit to UW From CSSO success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            complete = true;
+            log.debug("onSubmitUWFromCSSO ::: success.");
+        } catch (Exception ex){
+            messageHeader = "Exception.";
+            message = "Submit to UW From CSSO failed, cause : " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            complete = false;
+            log.error("onSubmitUWFromCSSO ::: exception occurred : ", ex);
+        }
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
     public void onCancelCA(){
 
     }
    
 
-    public void onSubmitCA(){
-
+    public void onSubmitCA(){ //From UW2
+        log.debug("onSubmitCA ::: starting...");
+        boolean complete = false;
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            String queueName = session.getAttribute("queueName").toString();
+            fullApplicationControl.submitCA(queueName, workCaseId);
+            messageHeader = "Information.";
+            message = "Submit CA success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            complete = true;
+            log.debug("onSubmitCA ::: success.");
+        } catch (Exception ex){
+            messageHeader = "Exception.";
+            message = "Submit CA failed, cause : " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            complete = false;
+            log.error("onSubmitCA ::: exception occurred : ", ex);
+        }
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
     /*public void onRequestAppraisal(){
@@ -808,6 +919,7 @@ public class BaseController implements Serializable {
         try{
             HttpSession session = FacesUtil.getSession(true);
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            String queueName = session.getAttribute("queueName").toString();
             User user = (User) session.getAttribute("user");
 
             List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
@@ -830,7 +942,7 @@ public class BaseController implements Serializable {
                 } else {
                     returnControl.saveReturnHistory(workCaseId,user);
 
-                    //TODO: execute bpm workflow for submit to UW2
+                    fullApplicationControl.submitToUW2(queueName, workCaseId);
 
                     messageHeader = "Information.";
                     message = "Submit success";
