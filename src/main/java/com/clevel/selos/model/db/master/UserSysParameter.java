@@ -13,6 +13,9 @@ public class UserSysParameter implements Serializable{
     @Column(name = "id")
     private long id;
 
+    @Column(name = "code")
+    private String code;
+
     @Column(name = "name")
     private String name;
 
@@ -40,6 +43,14 @@ public class UserSysParameter implements Serializable{
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {

@@ -327,8 +327,8 @@ public class BRMSControl extends BusinessControl {
             applicationInfo.setReferredDocType(prescreen.getReferredExperience().getBrmsCode());
 
         /** To Change to use test Data using second line**/
-        UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
-        //UWRulesResponse uwRulesResponse = getTestUWRulesResponse();
+        //UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
+        UWRulesResponse uwRulesResponse = getTestUWRulesResponse();
 
          //Transform to View//
         UWRuleResponseView uwRuleResponseView = new UWRuleResponseView();
