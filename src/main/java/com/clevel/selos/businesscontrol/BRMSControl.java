@@ -327,8 +327,8 @@ public class BRMSControl extends BusinessControl {
             applicationInfo.setReferredDocType(prescreen.getReferredExperience().getBrmsCode());
 
         /** To Change to use test Data using second line**/
-        UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
-        //UWRulesResponse uwRulesResponse = getTestUWRulesResponse();
+        //UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
+        UWRulesResponse uwRulesResponse = getTestUWRulesResponse();
 
          //Transform to View//
         UWRuleResponseView uwRuleResponseView = new UWRuleResponseView();
@@ -384,7 +384,7 @@ public class BRMSControl extends BusinessControl {
         return uwRulesResponse;
     }
 
-    public UWRulesResponse getFullApplicationResult(long workCaseId){
+    public UWRuleResponseView getFullApplicationResult(long workCaseId){
         logger.debug("getFullApplicationResult from workcaseId {}", workCaseId);
         Date checkDate = Calendar.getInstance().getTime();
         logger.debug("check at date {}", checkDate);
@@ -587,8 +587,18 @@ public class BRMSControl extends BusinessControl {
 
         UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
         logger.debug("-- end getFullApplicationResult return {}", uwRulesResponse);
+        //UWRulesResponse uwRulesResponse = getTestUWRulesResponse();
 
-        return uwRulesResponse;
+        //Transform to View//
+        UWRuleResponseView uwRuleResponseView = new UWRuleResponseView();
+        uwRuleResponseView.setActionResult(uwRulesResponse.getActionResult());
+        uwRuleResponseView.setReason(uwRulesResponse.getReason());
+        if(uwRulesResponse.getUwRulesResultMap() != null && uwRulesResponse.getUwRulesResultMap().size() > 0){
+            UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultTransform.transformToView(uwRulesResponse.getUwRulesResultMap(), customerList);
+            uwRuleResponseView.setUwRuleResultSummaryView(uwRuleResultSummaryView);
+        }
+
+        return uwRuleResponseView;
     }
 
     public MandateDocResponseView getDocCustomer(long workCaseId){
@@ -791,7 +801,7 @@ public class BRMSControl extends BusinessControl {
             tmbAccountInfo.setDataSource(customerOblAccountInfo.getDataSource());
             tmbAccountInfo.setAccountRef(customerOblAccountInfo.getAccountRef());
             tmbAccountInfo.setCustToAccountRelationCD(customerOblAccountInfo.getCusRelAccount());
-            tmbAccountInfo.setTmbTDRFlag(customerOblAccountInfo.isTdrFlag());
+            tmbAccountInfo.setTmbTDRFlag(customerOblAccountInfo.getTdrFlag().isTdrFlag());
             tmbAccountInfo.setNumMonthIntPastDue(customerOblAccountInfo.getNumMonthIntPastDue());
             tmbAccountInfo.setNumMonthIntPastDueTDRAcc(customerOblAccountInfo.getNumMonthIntPastDueTDRAcc());
             tmbAccountInfo.setTmbDelPriDay(customerOblAccountInfo.getTmbDelPriDay());
