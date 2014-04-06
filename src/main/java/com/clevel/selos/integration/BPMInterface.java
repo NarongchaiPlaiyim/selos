@@ -23,9 +23,9 @@ public interface BPMInterface {
 
     public void dispatchCase(String queueName, String wobNumber, HashMap<String, String> fields);
 
-    public void lockCase(String queueName, String wobNumber);
+    public void lockCase(String queueName, String wobNumber, int fetchType) throws Exception;
 
-    public void unLockCase(String queueName, String wobNumber);
+    public void unLockCase(String queueName, String wobNumber, int fetchType) throws Exception;
 
     public List<BPMInbox> getMyBoxList(String userId, FieldName fieldName, OrderType orderType, int recPerPage, int pageNo);
 

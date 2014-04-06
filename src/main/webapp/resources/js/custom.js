@@ -27,7 +27,7 @@ PrimeFaces.locales ['th_TH'] = {
 };
 
 function showCheckedValue(){
-    alert(document.getElementById('jsfForm1:chkRememberMe').checked);
+    alert(document.getElementById('frmMain:checkBoxId').checked);
 }
 
 function gotoInbox(contextUrl) {
@@ -985,4 +985,17 @@ function isValidateComplete(args) {
 	if (!args)
 		return false;
 	return !args.validationFailed;
+}
+
+function collapseDetail() {
+    var currentState = $("#header_collapse").attr("class");
+    if (currentState == 'close') {
+        $("#header_collapse").removeAttr("class");
+        $("#header_collapse").attr("class", "open");
+        $("#header_information").fadeOut();
+    } else {
+        $("#header_collapse").removeAttr("class");
+        $("#header_collapse").attr("class", "close");
+        $("#header_information").fadeIn();
+    }
 }

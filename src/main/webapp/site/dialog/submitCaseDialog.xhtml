@@ -15,10 +15,10 @@
                 <td class="title left">Zone Manager :</td>
                 <td>
                     <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                     value="#{baseController.zmUserId}"
+                                     value="#{headerController.zmUserId}"
                                      required="#{not empty param[btnSubmitCaseZM.clientId]}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{baseController.zmUserList}"
+                        <f:selectItems value="#{headerController.zmUserList}"
                                        var="zmItem"
                                        itemLabel="#{zmItem.id} - #{zmItem.userName}"
                                        itemValue="#{zmItem.id}"/>
@@ -28,7 +28,7 @@
             <tr>
                 <td class="title left">Submit Remark :</td>
                 <td>
-                    <p:inputTextarea value="#{baseController.submitRemark}"
+                    <p:inputTextarea value="#{headerController.submitRemark}"
                                      autoResize="false"
                                      cols="35"
                                      rows="5">
@@ -43,10 +43,10 @@
                     <td class="title left">Reason for over SLA :</td>
                     <td>
                         <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                         value="#{baseController.zmEndorseUserId}"
+                                         value="#{headerController.zmEndorseUserId}"
                                          required="#{not empty param[btnSubmitCaseZM.clientId]}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                            <f:selectItems value="#{baseController.zmUserList}"
+                            <f:selectItems value="#{headerController.zmUserList}"
                                            var="zmItem"
                                            itemLabel="#{zmItem.id} - #{zmItem.userName}"
                                            itemValue="#{zmItem.id}"/>
@@ -56,7 +56,7 @@
                 <tr>
                     <td class="title left">SLA Remark :</td>
                     <td>
-                        <p:inputTextarea value="#{baseController.slaRemark}"
+                        <p:inputTextarea value="#{headerController.slaRemark}"
                                          autoResize="false"
                                          cols="35"
                                          rows="5">
@@ -73,7 +73,7 @@
                                      binding="#{btnSubmitCaseZM}"
                                      value="#{msg.get('app.button.submit')}"
                                      styleClass="small"
-                                     actionListener="#{baseController.onSubmitZM()}"
+                                     actionListener="#{headerController.onSubmitZM()}"
                                      oncomplete="handleSubmitZMDialogRequest(xhr, status, args)"
                                      process="@form"
                                      update=":frmMain:submitCaseDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
@@ -92,15 +92,15 @@
                 <td class="title left">Zone Manager :</td>
                 <td>
                     <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                     value="#{baseController.zmUserId}"
+                                     value="#{headerController.zmUserId}"
                                      required="#{not empty param[btnSubmitCaseZMPricing.clientId]}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{baseController.zmUserList}"
+                        <f:selectItems value="#{headerController.zmUserList}"
                                        var="zmItem"
                                        itemLabel="#{zmItem.id} - #{zmItem.userName}"
                                        itemValue="#{zmItem.id}"/>
 
-                        <p:ajax event="change" listener="#{baseController.onSelectedZM()}" process="@form" update=":frmMain:rgmUserSelect"/>
+                        <p:ajax event="change" listener="#{headerController.onSelectedZM()}" process="@form" update=":frmMain:rgmUserSelect"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -108,14 +108,14 @@
                 <td class="title left">Regional Manager :</td>
                 <td>
                     <p:selectOneMenu id="rgmUserSelect" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                     value="#{baseController.rgmUserId}"
-                                     required="#{not empty param[btnSubmitCaseZMPricing.clientId] and baseController.submitToRGM}">
+                                     value="#{headerController.rgmUserId}"
+                                     required="#{not empty param[btnSubmitCaseZMPricing.clientId] and headerController.submitToRGM}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{baseController.rgmUserList}"
+                        <f:selectItems value="#{headerController.rgmUserList}"
                                        var="rmItem"
                                        itemLabel="#{rmItem.id} - #{rmItem.userName}"
                                        itemValue="#{rmItem.id}"/>
-                        <p:ajax event="change" listener="#{baseController.onSelectedRM()}" process="@form" update=":frmMain:ghUserSelect"/>
+                        <p:ajax event="change" listener="#{headerController.onSelectedRM()}" process="@form" update=":frmMain:ghUserSelect"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -123,14 +123,14 @@
                 <td class="title left">Group Head :</td>
                 <td>
                     <p:selectOneMenu id="ghUserSelect" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                     value="#{baseController.ghmUserId}"
-                                     required="#{not empty param[btnSubmitCaseZMPricing.clientId] and baseController.submitToGHM}">
+                                     value="#{headerController.ghmUserId}"
+                                     required="#{not empty param[btnSubmitCaseZMPricing.clientId] and headerController.submitToGHM}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{baseController.ghmUserList}"
+                        <f:selectItems value="#{headerController.ghmUserList}"
                                        var="ghItem"
                                        itemLabel="#{ghItem.id} - #{ghItem.userName}"
                                        itemValue="#{ghItem.id}"/>
-                        <p:ajax event="change" listener="#{baseController.onSelectedGH()}" process="@form" update=":frmMain:cssoUserSelect"/>
+                        <p:ajax event="change" listener="#{headerController.onSelectedGH()}" process="@form" update=":frmMain:cssoUserSelect"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -138,10 +138,10 @@
                 <td class="title left">Chief SME :</td>
                 <td>
                     <p:selectOneMenu id="cssoUserSelect" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                     value="#{baseController.cssoUserId}"
-                                     required="#{not empty param[btnSubmitCaseZMPricing.clientId] and baseController.submitToCSSO}">
+                                     value="#{headerController.cssoUserId}"
+                                     required="#{not empty param[btnSubmitCaseZMPricing.clientId] and headerController.submitToCSSO}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{baseController.cssoUserList}"
+                        <f:selectItems value="#{headerController.cssoUserList}"
                                        var="cssoItem"
                                        itemLabel="#{cssoItem.id} - #{cssoItem.userName}"
                                        itemValue="#{cssoItem.id}"/>
@@ -151,7 +151,7 @@
             <tr>
                 <td class="title left">Submit Remark :</td>
                 <td>
-                    <p:inputTextarea value="#{baseController.submitRemark}"
+                    <p:inputTextarea value="#{headerController.submitRemark}"
                                      autoResize="false"
                                      cols="35"
                                      rows="5">
@@ -166,10 +166,10 @@
                     <td class="title left">Reason for over SLA :</td>
                     <td>
                         <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                         value="#{baseController.zmEndorseUserId}"
+                                         value="#{headerController.zmEndorseUserId}"
                                          required="#{not empty param[btnSubmitCaseZMPricing.clientId]}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                            <f:selectItems value="#{baseController.zmUserList}"
+                            <f:selectItems value="#{headerController.zmUserList}"
                                            var="zmItem"
                                            itemLabel="#{zmItem.id} - #{zmItem.userName}"
                                            itemValue="#{zmItem.id}"/>
@@ -179,7 +179,7 @@
                 <tr>
                     <td class="title left">SLA Remark :</td>
                     <td>
-                        <p:inputTextarea value="#{baseController.slaRemark}"
+                        <p:inputTextarea value="#{headerController.slaRemark}"
                                          autoResize="false"
                                          cols="35"
                                          rows="5">
@@ -196,7 +196,7 @@
                                      binding="#{btnSubmitCaseZMPricing}"
                                      value="#{msg.get('app.button.submit')}"
                                      styleClass="small"
-                                     actionListener="#{baseController.onSubmitZM()}"
+                                     actionListener="#{headerController.onSubmitZM()}"
                                      oncomplete="handleSubmitZMDialogRequest(xhr, status, args)"
                                      process="@form"
                                      update=":frmMain:submitCaseDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>

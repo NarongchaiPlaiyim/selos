@@ -89,6 +89,7 @@ public class UserDAO extends GenericDAO<User,String> {
     }
 
     public User findByUserName(String userName) {
+
         //log.debug("findByUserName. (userName: {})",userName);
         return findOneByCriteria(Restrictions.eq("userName",userName));
     }

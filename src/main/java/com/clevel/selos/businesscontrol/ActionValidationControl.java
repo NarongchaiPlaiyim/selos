@@ -42,6 +42,7 @@ public class ActionValidationControl extends BusinessControl{
         actionValidationResult.setActionResult(ActionResult.SUCCESS);
 
         Map<String, String> reasonMap = new HashMap<String, String>();
+        System.out.println(reasonMap.getClass().getName());
 
         //List<MandateFieldConfigure> mandateFieldConfigureList = mandateFieldConfigureDAO.findByAction(step, status, action);
         List<MandateField> mandateFieldConfigureList = getMandateFieldConfigureList();
@@ -62,16 +63,26 @@ public class ActionValidationControl extends BusinessControl{
         Field[] fields = objClass.getDeclaredFields();
         System.out.println("fields length: " + fields.length);
         String compareField = "creditType";
+        boolean failed = false;
         for(Field field : fields){
-            System.out.println(field.getName());
+            System.out.println("field :" + field.getName());
             try{
                 field.setAccessible(true);
                 if(field.getName().equals(compareField)){
+                    System.out.println("CompareField : " + compareField);
                     Object value = field.get(obj);
+
+                    System.out.println("Value : " + value.getClass().getName());
+                    if(value == null){
+
+                    } else {
+                        mandateFieldMessageViewList.add(getMandateFieldMessageView(field.getName(), validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), ""));
+                    }
                     if(value.getClass().isPrimitive()){
                         Class valueClass = value.getClass();
                         if(valueClass.equals(String.class.getName())){
                             if(value == null){
+
                                 mandateFieldMessageViewList.add(getMandateFieldMessageView(field.getName(), validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), ""));
                             }
                         } else if(valueClass.equals(Integer.class.getName())){
@@ -79,9 +90,12 @@ public class ActionValidationControl extends BusinessControl{
                                 mandateFieldMessageViewList.add(getMandateFieldMessageView(field.getName(), validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), ""));
                             }
                         } else if(valueClass.equals(Long.class.getName())){
-
+                            if((Long)value == 0){
+                                mandateFieldMessageViewList.add(getMandateFieldMessageView(field.getName(), validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), ""));
+                            }
                         }
                     } else {
+
                         //reasonMap.put("NewCreditDetail", field.getName());
                     }
                 }
@@ -124,7 +138,9 @@ public class ActionValidationControl extends BusinessControl{
         ActionValidationControl actionValidationControl = new ActionValidationControl();
         NewCreditDetail newCreditDetail = new NewCreditDetail();
         newCreditDetail.setCreditType(new CreditType());
-        ActionValidationResult actionValidationResult = actionValidationControl.validateClass(new NewCreditDetail());
+        ActionValidationResult actionValidationResult = actionValidationControl.validateClass(newCreditDetail);
+        List<String> stringList = new ArrayList<String>();
+        System.out.println("stringList :" + stringList.getClass().getName());
         System.out.print("result action Validation " + actionValidationResult);
 
     }

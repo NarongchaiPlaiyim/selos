@@ -3,6 +3,7 @@ package com.clevel.selos.integration.ecm;
 import com.clevel.selos.exception.ECMInterfaceException;
 import com.clevel.selos.integration.ECM;
 import com.clevel.selos.integration.ECMInterface;
+import com.clevel.selos.integration.ecm.db.ECMCAPShare;
 import com.clevel.selos.integration.ecm.model.ECMDataResult;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.system.message.ExceptionMapping;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.sql.Date;
 
 public class ECMInterfaceImpl implements ECMInterface, Serializable {
     @Inject
@@ -46,6 +48,31 @@ public class ECMInterfaceImpl implements ECMInterface, Serializable {
                 exceptionMessage = e.getMessage();
             }
             throw new ECMInterfaceException(e, ExceptionMapping.ECM_EXCEPTION, exceptionMessage);
+        }
+    }
+
+    @Override
+    public boolean update(final ECMCAPShare ecmcapShare) {
+        try {
+            ecmcapShare.setCrsLastUpdate(new Date(new java.util.Date().getTime()));
+            return ecmService.update(ecmcapShare);
+        } catch (Exception e) {
+            log.error("Exception while update ECM data!", e);
+            return false;
+//            throw new ECMInterfaceException(e, ExceptionMapping.ECM_UPDATEDATA_ERROR, e.getMessage());
+        }
+    }
+
+    @Override
+    public boolean insert(final ECMCAPShare ecmcapShare) {
+        try {
+            ecmcapShare.setCrsCreateDate(new Date(new java.util.Date().getTime()));
+            ecmcapShare.setCrsLastUpdate(new Date(new java.util.Date().getTime()));
+            return ecmService.insert(ecmcapShare);
+        } catch (Exception e) {
+            log.error("Exception while insert into ECM data!", e);
+            return false;
+//            throw new ECMInterfaceException(e, ExceptionMapping.ECM_INSERTDATA_ERROR, e.getMessage());
         }
     }
 }

@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class UWRuleResultTransform extends Transform{
 
@@ -68,7 +69,7 @@ public class UWRuleResultTransform extends Transform{
             return null;
 
         UWRuleResultSummaryView uwRuleResultSummaryView = new UWRuleResultSummaryView();
-        List<UWRuleResultDetailView> uwRuleResultDetailViewList = new ArrayList<UWRuleResultDetailView>();
+        Map<Integer, UWRuleResultDetailView> uwRuleResultDetailViewMap = new TreeMap<Integer, UWRuleResultDetailView>();
         for(UWRulesResult uwRulesResult : uwRulesResultMap.values()){
             logger.debug("transform uwRuleResult: {}", uwRulesResult);
             UWRuleName uwRuleName = null;
@@ -83,6 +84,11 @@ public class UWRuleResultTransform extends Transform{
             try{
                 uwRuleName = uwRuleNameDAO.findByBRMSCode(uwRulesResult.getRuleName());
             } catch (Exception ex){
+                logger.debug("Cannot Find uwRuleName - '{}' uwRuleName was not found", uwRulesResult.getRuleName());
+                throw new BRMSInterfaceException(null, ExceptionMapping.BRMS_INVALID_RETURN_DATA, exceptionMsg.get(ExceptionMapping.BRMS_INVALID_RETURN_DATA, "UW Rule Name was not found " + uwRulesResult.getRuleName()));
+            }
+
+            if(uwRuleName == null){
                 logger.debug("Cannot Find uwRuleName - '{}' uwRuleName was not found", uwRulesResult.getRuleName());
                 throw new BRMSInterfaceException(null, ExceptionMapping.BRMS_INVALID_RETURN_DATA, exceptionMsg.get(ExceptionMapping.BRMS_INVALID_RETURN_DATA, "UW Rule Name was not found " + uwRulesResult.getRuleName()));
             }
@@ -163,7 +169,7 @@ public class UWRuleResultTransform extends Transform{
                         throw new BRMSInterfaceException(null, ExceptionMapping.BRMS_INVALID_RETURN_DATA, exceptionMsg.get(ExceptionMapping.BRMS_INVALID_RETURN_DATA, "customer was not return " + uwRulesResult.getPersonalID()));
                     }
                 }
-                uwRuleResultDetailViewList.add(uwRuleResultDetailView);
+                uwRuleResultDetailViewMap.put(uwRuleResultDetailView.getRuleOrder(), uwRuleResultDetailView);
             } else {
                 logger.debug("Found UW Final Result {}", uwRuleName);
                 uwRuleResultSummaryView.setUwDeviationFlagView(transformToView(uwDeviationFlag));
@@ -173,7 +179,7 @@ public class UWRuleResultTransform extends Transform{
             }
         }
 
-        uwRuleResultSummaryView.setUwRuleResultDetailViewList(uwRuleResultDetailViewList);
+        uwRuleResultSummaryView.setUwRuleResultDetailViewMap(uwRuleResultDetailViewMap);
         logger.debug("-- end transformToView return uwRuleResultSummaryView: {}", uwRuleResultSummaryView);
         return uwRuleResultSummaryView;
     }
@@ -199,8 +205,8 @@ public class UWRuleResultTransform extends Transform{
         uwRuleResultSummary.setUwDeviationFlag(transformToModel(uwRuleResultSummaryView.getUwDeviationFlagView()));
 
         List<UWRuleResultDetail> uwRuleResultDetailList = new ArrayList<UWRuleResultDetail>();
-        List<UWRuleResultDetailView> uwRuleResultDetailViewList = uwRuleResultSummaryView.getUwRuleResultDetailViewList();
-        for(UWRuleResultDetailView uwRuleResultDetailView : uwRuleResultDetailViewList){
+        Map<Integer, UWRuleResultDetailView> uwRuleResultDetailViewMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
+        for(UWRuleResultDetailView uwRuleResultDetailView : uwRuleResultDetailViewMap.values()){
             UWRuleResultDetail uwRuleResultDetail = transformToModel(uwRuleResultDetailView);
             if(uwRuleResultDetail != null)
                 uwRuleResultDetail.setUwRuleResultSummary(uwRuleResultSummary);
@@ -338,14 +344,14 @@ public class UWRuleResultTransform extends Transform{
             uwRuleResultSummaryView.setWorkCaseId(uwRuleResultSummary.getWorkCase().getId());
         uwRuleResultSummaryView.setUwResultColor(uwRuleResultSummary.getUwResultColor());
 
-        List<UWRuleResultDetailView> uwRuleResultDetailViewList = new ArrayList<UWRuleResultDetailView>();
+        Map<Integer, UWRuleResultDetailView> uwRuleResultDetailViewMap = new TreeMap<Integer, UWRuleResultDetailView>();
         List<UWRuleResultDetail> uwRuleResultDetailList = uwRuleResultSummary.getUwRuleResultDetailList();
         for(UWRuleResultDetail uwRuleResultDetail : uwRuleResultDetailList){
             UWRuleResultDetailView uwRuleResultDetailView = transformToView(uwRuleResultDetail);
             if(uwRuleResultDetailView != null)
-                uwRuleResultDetailViewList.add(uwRuleResultDetailView);
+                uwRuleResultDetailViewMap.put(uwRuleResultDetailView.getRuleOrder(), uwRuleResultDetailView);
         }
-        uwRuleResultSummaryView.setUwRuleResultDetailViewList(uwRuleResultDetailViewList);
+        uwRuleResultSummaryView.setUwRuleResultDetailViewMap(uwRuleResultDetailViewMap);
         logger.debug("transformToView return uwRuleResultSummaryView {}", uwRuleResultSummaryView);
         return uwRuleResultSummaryView;
     }
