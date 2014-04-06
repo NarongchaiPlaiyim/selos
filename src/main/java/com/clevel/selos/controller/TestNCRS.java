@@ -4,7 +4,10 @@ import com.clevel.selos.businesscontrol.AppraisalResultControl;
 import com.clevel.selos.businesscontrol.BRMSControl;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.exception.ECMInterfaceException;
-import com.clevel.selos.integration.*;
+import com.clevel.selos.integration.BRMSInterface;
+import com.clevel.selos.integration.COMSInterface;
+import com.clevel.selos.integration.ECMInterface;
+import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.model.ECMDataResult;
@@ -32,8 +35,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @ViewScoped
 @ManagedBean(name = "TestNCRS")
@@ -65,6 +70,9 @@ public class TestNCRS implements Serializable {
 
     @Inject
     private BRMSControl brmsControl;
+
+    private String appNumber;
+    private String crsCustName;
 
     //    @Inject
 //    NCBIService ncbiService;
@@ -330,6 +338,59 @@ public class TestNCRS implements Serializable {
         }
     }
 
+    public void onClickECMCAPShareUpdate(){
+        log.debug("-- onClickECMCAPShare()");
+        /*ECMCAPShare ecmcapShare = null;
+        try{
+            ecmcapShare = new ECMCAPShare();
+            ecmcapShare.setCrsUKCANumber(appNumber);
+            ecmcapShare.setCrsCancelCA("Y");
+            ecmcapShare.setCrsLastUpdate(new java.sql.Date(new Date().getTime()));
+            log.debug("-- LastUpdate DATE[{}]", ecmcapShare.getCrsLastUpdate());
+
+            log.debug("Model [{}]", ecmcapShare.toString());
+            if(ecmInterface.update(ecmcapShare)){
+                result = "SUCCESS";
+            } else {
+                result = "FAILED";
+            }
+        } catch (ECMInterfaceException e) {
+            log.error("-- ECMInterfaceException : {}", e.getMessage());
+            result = e.getMessage();
+        } catch (Exception e) {
+            log.error("-- Exception : {}", e.getMessage());
+            result = e.getMessage();
+        }*/
+
+    }
+
+    public void onClickECMCAPShare(){
+        log.debug("-- onClickECMCAPShare()");
+        /*ECMCAPShare ecmcapShare = null;
+        try{
+            ecmcapShare = new ECMCAPShare();
+            ecmcapShare.setCrsUKCANumber(appNumber);
+            ecmcapShare.setCrsCustName(crsCustName);
+            ecmcapShare.setCrsCreateDate(new java.sql.Date(new Date().getTime()));
+            log.debug("-- Create DATE[{}]", ecmcapShare.getCrsCreateDate());
+            ecmcapShare.setCrsLastUpdate(new java.sql.Date(new Date().getTime()));
+            log.debug("-- LastUpdate DATE[{}]", ecmcapShare.getCrsLastUpdate());
+
+            log.debug("Model [{}]", ecmcapShare.toString());
+            if(ecmInterface.insert(ecmcapShare)){
+                result = "SUCCESS";
+            } else {
+                result = "FAILED";
+            }
+        } catch (ECMInterfaceException e) {
+            log.error("-- ECMInterfaceException : {}", e.getMessage());
+            result = e.getMessage();
+        } catch (Exception e) {
+            log.error("-- Exception : {}", e.getMessage());
+            result = e.getMessage();
+        }*/
+    }
+
     public void onClickCallBRMS(){
         log.debug("-- onClickCallBRMS()");
         log.debug("-- workCaseId is {}", workCaseId);
@@ -556,5 +617,21 @@ public class TestNCRS implements Serializable {
 
     public void setIdNumber2(String idNumber2) {
         this.idNumber2 = idNumber2;
+    }
+
+    public String getAppNumber() {
+        return appNumber;
+    }
+
+    public void setAppNumber(String appNumber) {
+        this.appNumber = appNumber;
+    }
+
+    public String getCrsCustName() {
+        return crsCustName;
+    }
+
+    public void setCrsCustName(String crsCustName) {
+        this.crsCustName = crsCustName;
     }
 }

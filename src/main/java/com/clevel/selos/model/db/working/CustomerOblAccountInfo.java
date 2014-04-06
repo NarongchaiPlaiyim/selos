@@ -1,5 +1,9 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.TMBTDRFlag;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -30,7 +34,7 @@ public class CustomerOblAccountInfo implements Serializable {
     private String cusRelAccount;
 
     @Column(name = "tdr_flag", length = 1, columnDefinition = "int default 0")
-    private boolean tdrFlag;
+    private TMBTDRFlag tdrFlag;
 
     @Column(name = "num_month_int_past_due", length = 5, precision = 0)
     private BigDecimal numMonthIntPastDue;
@@ -95,11 +99,11 @@ public class CustomerOblAccountInfo implements Serializable {
         this.cusRelAccount = cusRelAccount;
     }
 
-    public boolean isTdrFlag() {
+    public TMBTDRFlag getTdrFlag() {
         return tdrFlag;
     }
 
-    public void setTdrFlag(boolean tdrFlag) {
+    public void setTdrFlag(TMBTDRFlag tdrFlag) {
         this.tdrFlag = tdrFlag;
     }
 
@@ -141,5 +145,23 @@ public class CustomerOblAccountInfo implements Serializable {
 
     public void setCardBlockCode(String cardBlockCode) {
         this.cardBlockCode = cardBlockCode;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("customer", customer)
+                .append("accountActiveFlag", accountActiveFlag)
+                .append("dataSource", dataSource)
+                .append("accountRef", accountRef)
+                .append("cusRelAccount", cusRelAccount)
+                .append("tdrFlag", tdrFlag)
+                .append("numMonthIntPastDue", numMonthIntPastDue)
+                .append("numMonthIntPastDueTDRAcc", numMonthIntPastDueTDRAcc)
+                .append("tmbDelPriDay", tmbDelPriDay)
+                .append("tmbDelIntDay", tmbDelIntDay)
+                .append("cardBlockCode", cardBlockCode)
+                .toString();
     }
 }
