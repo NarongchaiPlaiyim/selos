@@ -339,6 +339,31 @@ public class TestNCRS implements Serializable {
         }
     }
 
+    public void onClickECMCAPShareUpdate(){
+        log.debug("-- onClickECMCAPShare()");
+        ECMCAPShare ecmcapShare = null;
+        try{
+            ecmcapShare = new ECMCAPShare();
+            ecmcapShare.setCrsUKCANumber(appNumber);
+            ecmcapShare.setCrsCancelCA("Y");
+            ecmcapShare.setCrsLastUpdate(new java.sql.Date(new Date().getTime()));
+            log.debug("-- LastUpdate DATE[{}]", ecmcapShare.getCrsLastUpdate());
+
+            log.debug("Model [{}]", ecmcapShare.toString());
+            if(ecmInterface.update(ecmcapShare)){
+                result = "SUCCESS";
+            } else {
+                result = "FAILED";
+            }
+        } catch (ECMInterfaceException e) {
+            log.error("-- ECMInterfaceException : {}", e.getMessage());
+            result = e.getMessage();
+        } catch (Exception e) {
+            log.error("-- Exception : {}", e.getMessage());
+            result = e.getMessage();
+        }
+    }
+
     public void onClickECMCAPShare(){
         log.debug("-- onClickECMCAPShare()");
         ECMCAPShare ecmcapShare = null;
