@@ -230,34 +230,28 @@ public class PEDBExecute extends BusinessControl
 
     }
 
-    public List<PEInbox> getPEInbox(String inboxname)
+    public List<PEInbox> getPEInbox(String inboxName) throws Exception
     {
         log.info("controller in getPEInbox method of pedbexecute class");
 
         inboxViewList = new ArrayList<PEInbox>();
 
-        log.info("inboxname in getPEInbox method of pedbexecute class is : {}",inboxname);
+        log.info("inboxname in getPEInbox method of pedbexecute class is : {}",inboxName);
 
-        try
-        {
-            // String inboxname = "My Box";
-
+        try {
             String peQuery[] = new String[2];
 
-            peQuery =  getSqlpeQuery(inboxname);
+            peQuery =  getSqlpeQuery(inboxName);
 
             log.info("sql query is in inbox method is  : {}", peQuery[1]);
 
             inboxViewList =  getResultSetExecution(peQuery) ;
-
-        }
-        catch(Exception e)
-        {
-            log.error("exception occurred while fetching data from pe database : {}",e);
-        }
-        finally
-        {
             sqlpequery = null;
+
+        } catch(Exception e) {
+            log.error("exception occurred while fetching data from pe database : {}",e);
+            sqlpequery = null;
+            throw e;
         }
 
         return inboxViewList;

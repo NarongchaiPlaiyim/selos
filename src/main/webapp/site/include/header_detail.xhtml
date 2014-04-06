@@ -164,15 +164,34 @@
                 </p:commandButton>
                 <!--Submit To Region Manager-->
                 <p:commandButton id="btnSubmitCaseToRGM" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
-                                 rendered="#{baseController.checkButton('Submit CA') and baseController.stepId == 2002}"
-                                 action="#{baseController.onOpenSubmitZM}"
-                                 update=":frmMain:submitZMPanel, :frmMain:msgBoxBaseMessagePanel" >
+                                 rendered="#{baseController.checkButton('Submit CA') and baseController.stepId == 2002}">
+                    <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
+                                     icon="ui-icon-alert"
+                                     widgetVar="confirmSubmitSubmitRGM" global="false" showEffect="fade"
+                                     rendered="#{baseController.checkButton('Submit CA') and baseController.stepId == 2002}">
+                        <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+                                         update=":frmMain:msgBoxBaseMessagePanel"
+                                                     actionListener="#{baseController.onSubmitRM()}"
+                                                     process="@this" oncomplete="confirmSubmitSubmitRGM.hide()"/>
+                        <p:commandButton value="No" type="button" onclick="confirmSubmitSubmitRGM.hide()"
+                                         styleClass="ui-confirmdialog-no"/>
+                    </p:confirmDialog>
                 </p:commandButton>
                 <!--Submit To Head-->
-                <p:commandButton id="btnSubmitCaseToCSSO" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
+                <p:commandButton id="btnSubmitCaseToGH" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
                                  rendered="#{baseController.checkButton('Submit CA') and baseController.stepId == 2020}"
-                                 action="#{baseController.onOpenSubmitZM}"
-                                 update=":frmMain:submitZMPanel, :frmMain:msgBoxBaseMessagePanel" >
+                                 update=":frmMain:msgBoxBaseMessagePanel" >
+                    <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
+                                     icon="ui-icon-alert"
+                                     widgetVar="confirmSubmitSubmitGH" global="false" showEffect="fade"
+                                     rendered="#{baseController.checkButton('Submit CA') and baseController.stepId == 2020}">
+                        <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+                                         update=":frmMain:msgBoxBaseMessagePanel"
+                                         actionListener="#{baseController.onSubmitGH()}"
+                                         process="@this" oncomplete="confirmSubmitSubmitGH.hide()"/>
+                        <p:commandButton value="No" type="button" onclick="confirmSubmitSubmitGH.hide()"
+                                         styleClass="ui-confirmdialog-no"/>
+                    </p:confirmDialog>
                 </p:commandButton>
                 <!---->
             </p:panel>

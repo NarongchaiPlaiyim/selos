@@ -198,7 +198,7 @@ public class BaseController implements Serializable {
             requestAppraisalPage = true;
         }
 
-        log.info("BaseController ::: getSession : workCasePreScreenId : {}, workcase = {}, stepId = {}, stageId = {}", workCasePreScreenId, workCaseId, stepId, stageId);
+        log.info("BaseController ::: getSession : workCasePreScreenId : {}, workcase = {}, stepId = {}, statusId = {}, stageId = {}", workCasePreScreenId, workCaseId, stepId, statusId, stageId);
         log.debug("BaseController ::: find active button");
 
         //TODO Get all action from Database By Step and Status and Role

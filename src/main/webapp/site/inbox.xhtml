@@ -76,7 +76,7 @@
                                                      selectionMode="single"
                                                      resizableColumns="true" paginator="true" rows="20" rowsPerPageTemplate="20,40,60"
                                                      rowKey="#{item.fwobnumber}" rowIndexVar="rowIndex">
-                                            <p:ajax event="rowSelect" update=":frmMain:resultInbox" listener="#{peInbox.onSelectInbox}" onstart="blockInbox.show()"/>
+                                            <p:ajax event="rowSelect" update=":frmMain:resultInbox, :frmMain:msgBoxErrorPanel" listener="#{peInbox.onSelectInbox}" onstart="blockInbox.show()"/>
                                             <p:column headerText="" styleClass="center" style="width:22px;"  >
                                                 <h:outputText value="#{rowIndex+1}"/>
                                             </p:column>
@@ -217,17 +217,19 @@
                                      process="@this"
                                      oncomplete="msgBoxConfirmDialog.hide()"/>
                 </p:confirmDialog>
-                <p:confirmDialog id="msgBoxErrorDialog" widgetVar="msgBoxErrorDlg" styleClass="messageDialog"
-                                 closable="false"
-                                 header="Exception.">
-                    <f:facet name="message">
-                        <h:outputText value="#{peInbox.message}" escape="false"/>
-                    </f:facet>
-                    <p:commandButton value="#{msg.get('app.button.ok')}"
-                                     process="@this"
-                                     update="frmMain"
-                                     oncomplete="msgBoxErrorDlg.hide()"/>
-                </p:confirmDialog>
+                <p:panel id="msgBoxErrorPanel" styleClass="panel">
+                    <p:confirmDialog id="msgBoxErrorDialog" widgetVar="msgBoxErrorDlg" styleClass="messageDialog"
+                                     closable="false"
+                                     header="Exception.">
+                        <f:facet name="message">
+                            <h:outputText value="#{peInbox.message}" escape="false"/>
+                        </f:facet>
+                        <p:commandButton value="#{msg.get('app.button.ok')}"
+                                         process="@this"
+                                         update="frmMain"
+                                         oncomplete="msgBoxErrorDlg.hide()"/>
+                    </p:confirmDialog>
+                </p:panel>
             </h:form>
         </p:panel>
         <p:blockUI widgetVar="blockInbox" block=":frmMain">
