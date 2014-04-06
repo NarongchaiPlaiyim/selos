@@ -1,13 +1,21 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.PEDBExecute;
+import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.dao.master.UserTeamDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.WorkCaseOwnerDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.StepValue;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.PEInbox;
+import com.clevel.selos.model.view.ReassignTeamNameId;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
@@ -24,7 +32,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 @ViewScoped
@@ -231,6 +241,15 @@ public class PESearch implements Serializable
         this.searchViewSelectItem = inboxViewSelectItem;
     }
 
+    @Inject
+    WorkCaseOwnerDAO workCaseOwnerDAO;
+
+    @Inject
+    UserDAO userDAO;
+
+    @Inject
+    UserTeamDAO userTeamDAO;
+
     @PostConstruct
     public void onCreation()
     {
@@ -259,6 +278,7 @@ public class PESearch implements Serializable
         }
         catch (Exception e)
         {
+
             log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
         }
 
@@ -308,6 +328,8 @@ public class PESearch implements Serializable
             return;
         }
 
+        User user = userDAO.findByUserName(userDetail.getUserName());
+
         HttpSession session = FacesUtil.getSession(false);
         log.info("onSelectInbox ::: setSession ");
         log.info("onSelectInbox ::: searchViewSelectItem : {}", searchViewSelectItem);
@@ -317,6 +339,184 @@ public class PESearch implements Serializable
         long wrkCasePreScreenId;
 
         long wrkCaseId;
+
+        WorkCase workCase = workCaseDAO.findByWobNumber(searchViewSelectItem.getFwobnumber());
+
+        if(workCase == null)
+        {
+
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByWobNumber(searchViewSelectItem.getFwobnumber());
+
+            log.info("in prescreen if. case owner");
+
+            if(userDetail.getRoleId() == RoleValue.GH.id() || userDetail.getRoleId() == RoleValue.CSSO.id()){}
+
+            else if(userDetail.getRoleId() == RoleValue.BDM.id())
+            {
+
+                if(workCasePrescreen.getCreateBy().getUserName().equalsIgnoreCase(userDetail.getUserName())){}
+
+                else
+                {
+
+                    //TODO Alert Box
+                    log.info("You are not authorised to view this case.(BDM)");
+                    FacesUtil.redirect("/site/generic_search.jsf");
+                    return;
+                }
+
+            }
+
+            else
+            {
+
+                if(user.getTeam().getTeam_type() == 4 || user.getTeam().getTeam_type() == 5){}
+
+                else if(user.getTeam().getTeam_type() == 3 || user.getTeam().getTeam_type() == 2)
+                {
+
+                    List userTeamList = userTeamDAO.getUserteams(userDetail.getTeamid(),"Y");
+
+                    Iterator<ReassignTeamNameId> it = userTeamList.iterator();
+
+                    List<String> usersList = new ArrayList<String>();
+
+                    while (it.hasNext())
+                    {
+
+                        ReassignTeamNameId reassignTeamNameId = it.next();
+
+                        List<String> users = userTeamDAO.getUsers(reassignTeamNameId.getTeamid());
+
+                        usersList.addAll(users);
+
+
+                    }
+
+                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCasePrescreenId(new Long(workCasePrescreen.getId()).intValue());
+
+                    log.info("Users List : "+usersList.toString());
+
+                    log.info("WorkCaseOwnerUsers List :"+workCaseOwnerUsersList.toString());
+
+                    log.info("Users List Size before"+usersList.size());
+
+                    usersList.retainAll(workCaseOwnerUsersList);
+
+                    log.info("Users List Size "+usersList.size());
+
+                    if(usersList.size()>0){}
+
+                    else
+                    {
+                        //TODO Alert Box
+                        log.info("You are not authorised to view this case.(Team type 3,2)");
+                        FacesUtil.redirect("/site/generic_search.jsf");
+                        return;
+                    }
+
+                }
+
+                else
+                {
+
+                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCasePrescreenId(new Long(workCasePrescreen.getId()).intValue());
+
+                    if(workCaseOwnerUsersList.contains(userDetail.getUserName())){}
+
+                    else
+                    {
+                        //TODO Alert Box
+                        log.info("You are not authorised to view this case.");
+                        FacesUtil.redirect("/site/generic_search.jsf");
+                        return;
+                    }
+
+                }
+
+            }
+        }
+
+        else
+        {
+            if(userDetail.getRoleId() == RoleValue.GH.id() || userDetail.getRoleId() == RoleValue.CSSO.id()){}
+
+            else if(userDetail.getRoleId() == RoleValue.BDM.id())
+            {
+
+                if(workCase.getCreateBy().getUserName().equalsIgnoreCase(userDetail.getUserName())){}
+
+                else
+                {
+                    //TODO Alert Box
+                    log.info("You are not authorised to view this case.");
+                    FacesUtil.redirect("/site/generic_search.jsf");
+                    return;
+                }
+
+            }
+
+            else
+            {
+
+                if(user.getTeam().getTeam_type() == 4 || user.getTeam().getTeam_type() == 5){}
+
+                else if(user.getTeam().getTeam_type() == 3 || user.getTeam().getTeam_type() == 2)
+                {
+
+                    List userTeamList = userTeamDAO.getUserteams(userDetail.getTeamid(),"Y");
+
+                    Iterator<ReassignTeamNameId> it = userTeamList.iterator();
+
+                    List<String> usersList = new ArrayList<String>();
+
+                    while (it.hasNext())
+                    {
+
+                        ReassignTeamNameId reassignTeamNameId = it.next();
+
+                        List<String> users = userTeamDAO.getUsers(reassignTeamNameId.getTeamid());
+
+                        usersList.addAll(users);
+
+
+                    }
+
+                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(new Long(workCase.getId()).intValue());
+
+                    usersList.retainAll(workCaseOwnerUsersList);
+
+                    if(usersList.size()>0){}
+
+                    else
+                    {
+                        //TODO Alert Box
+                        log.info("You are not authorised to view this case.");
+                        FacesUtil.redirect("/site/generic_search.jsf");
+                        return;
+                    }
+
+                }
+
+                else
+                {
+
+                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(new Long(workCase.getId()).intValue());
+
+                    if(workCaseOwnerUsersList.contains(userDetail.getUserName())){}
+
+                    else
+                    {
+                        //TODO Alert Box
+                        log.info("You are not authorised to view this case.");
+                        FacesUtil.redirect("/site/generic_search.jsf");
+                        return;
+                    }
+
+                }
+
+            }
+        }
 
         if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value())
         {
@@ -381,6 +581,8 @@ public class PESearch implements Serializable
         catch (Exception e)
         {
             log.error("Error while Locking case in queue : {}, WobNum : {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(), e);
+            FacesUtil.redirect("/site/generic_search.jsf");
+            return;
         }
 
         AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(searchViewSelectItem.getStepId(), searchViewSelectItem.getFwobnumber());

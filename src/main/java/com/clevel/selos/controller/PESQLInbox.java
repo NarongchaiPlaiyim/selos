@@ -1,14 +1,20 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.StepDAO;
+import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.dao.master.UserTeamDAO;
 import com.clevel.selos.dao.working.WorkCaseAppraisalDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.WorkCaseOwnerDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Step;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.WorkCaseOwner;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCaseAppraisal;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -17,6 +23,10 @@ import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 import com.clevel.selos.model.view.PEInbox;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -102,6 +112,8 @@ public class PESQLInbox implements Serializable
         }
         catch (Exception e)
         {
+
+
             log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
         }
 
@@ -127,7 +139,6 @@ public class PESQLInbox implements Serializable
         }
     }
 
-
     public void onSelectInbox() {
         HttpSession session = FacesUtil.getSession(false);
 
@@ -142,15 +153,6 @@ public class PESQLInbox implements Serializable
         long statusId = 0L;
         int stageId = 0;
         int requestAppraisalFlag = 0;
-
-        if(userDetail.getRoleId() == 102)
-        {
-             if(inboxViewSelectItem.getAtuser().equalsIgnoreCase(userDetail.getUserName()) || inboxViewSelectItem.getAtuser().equalsIgnoreCase(userDetail.getUserName()))
-             {
-
-             }
-
-        }
 
         if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value())
         {
@@ -238,11 +240,14 @@ public class PESQLInbox implements Serializable
         }
         catch (Exception e)
         {
+            //TODO Alert Box
             FacesContext facesContext = FacesContext.getCurrentInstance();
             FacesMessage facesMessage = new FacesMessage("Another User is Working on this case!! Please Retry Later.");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Another User is Working on this case!! Please Retry Later.","");
             facesContext.addMessage(null, facesMessage);
             log.error("Error while Locking case in queue : {}, WobNum : {}",queueName, inboxViewSelectItem.getFwobnumber(), e);
+            FacesUtil.redirect("/site/generic_inbox_mybox_post.jsf");
+            return;
         }
 
         AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(stepId, inboxViewSelectItem.getFwobnumber());
