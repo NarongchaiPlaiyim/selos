@@ -193,8 +193,8 @@ public class ExSummaryTransform extends Transform {
 
     public List<ExSumDecisionView> transformUWRuleToExSumDecision(UWRuleResultSummaryView uwRuleResultSummaryView){
         List<ExSumDecisionView> exSumDecisionViewList = new ArrayList<ExSumDecisionView>();
-        if(uwRuleResultSummaryView.getUwRuleResultDetailViewList() != null && uwRuleResultSummaryView.getUwRuleResultDetailViewList().size() > 0){
-            for (UWRuleResultDetailView uwRule : uwRuleResultSummaryView.getUwRuleResultDetailViewList()){
+        if(uwRuleResultSummaryView.getUwRuleResultDetailViewMap() != null && uwRuleResultSummaryView.getUwRuleResultDetailViewMap().size() > 0){
+            for (UWRuleResultDetailView uwRule : uwRuleResultSummaryView.getUwRuleResultDetailViewMap().values()){
                 ExSumDecisionView exSumDecisionView = new ExSumDecisionView();
                 if(!uwRule.getRuleColorResult().colorCode().equals(UWResultColor.GREEN.getResultClass())){
                     exSumDecisionView.setFlag(uwRule.getRuleColorResult());
