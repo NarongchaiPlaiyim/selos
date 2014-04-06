@@ -13,6 +13,7 @@ import com.clevel.selos.model.CreditRelationType;
 import com.clevel.selos.model.QualitativeClass;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.CustomerOblAccountInfo;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;
 import com.clevel.selos.model.view.*;
@@ -28,6 +29,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.StringTokenizer;
 
 
 public class ObligationBizTransform extends BusinessTransform {
@@ -582,5 +584,61 @@ public class ObligationBizTransform extends BusinessTransform {
 
         }
         return customerInfoView;
+    }
+
+    public CustomerOblAccountInfo getCustomerOblAccountInfo(Obligation obligation){
+        log.debug("-- begin getCustomerOblAccountInfo obligation: {}", obligation);
+        if(obligation == null)
+            return null;
+
+        CustomerOblAccountInfo customerOblAccountInfo = new CustomerOblAccountInfo();
+        boolean accountActiveFlag = false;
+        if("04".equals(obligation.getDataSource())){
+            int compareResult = BigDecimal.ZERO.compareTo(obligation.getOutstanding());
+            if(compareResult < 0){
+                accountActiveFlag = true;
+            } else if(compareResult == 0){
+                boolean isMatch = false;
+                StringTokenizer tokenizer = new StringTokenizer("_blank|C|H|J|P|T","|");
+                while(tokenizer.hasMoreTokens()){
+                    String _value = tokenizer.nextToken();
+
+                    if(_value.equals(obligation.getCardBlockCode())){
+
+                    }
+                }
+                if(isMatch){
+                    accountActiveFlag = true;
+                }
+            }
+        } else if("11".equals(obligation.getDataSource())){
+            StringTokenizer tokenizer = new StringTokenizer("CL|PF", "|");
+            boolean isMatch = false;
+            while (tokenizer.hasMoreTokens()){
+                String _value = tokenizer.nextToken();
+                if(_value.equals(obligation.getAccountStatus())){
+                    isMatch = true;
+                }
+            }
+
+            if(isMatch){
+
+            } else {
+                accountActiveFlag = true;
+            }
+
+        }
+        customerOblAccountInfo.setAccountActiveFlag(accountActiveFlag);
+        customerOblAccountInfo.setAccountRef(obligation.getAccountRef());
+        customerOblAccountInfo.setDataSource(obligation.getDataSource());
+        customerOblAccountInfo.setCusRelAccount(obligation.getCusRelAccount());
+        //customerOblAccountInfo.setTdrFlag(obligation.getTdrFlag());
+        customerOblAccountInfo.setNumMonthIntPastDue(obligation.getNumMonthIntPastDue());
+        customerOblAccountInfo.setNumMonthIntPastDueTDRAcc(obligation.getNumMonthIntPastDueTDRAcc());
+        customerOblAccountInfo.setTmbDelPriDay(obligation.getTmbDelPriDay());
+        customerOblAccountInfo.setTmbDelIntDay(obligation.getTmbDelIntDay());
+        customerOblAccountInfo.setCardBlockCode(obligation.getCardBlockCode());
+        log.debug("-- end getCustomerOblAccountInfo return customerOblAccountInfo: {}", customerOblAccountInfo);
+        return customerOblAccountInfo;
     }
 }
