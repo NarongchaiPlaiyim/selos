@@ -4,6 +4,8 @@ import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
 import com.clevel.selos.dao.master.AuthorizationDOADAO;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.integration.corebanking.model.CustomerInfo;
+import com.clevel.selos.model.UWResultColor;
+import com.clevel.selos.model.UWRuleType;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -187,5 +189,28 @@ public class ExSummaryTransform extends Transform {
         exSumAccountMovementView.setTradeChequeReturnPercent(bankStatement.getTdChequeReturnPercent());
 
         return exSumAccountMovementView;
+    }
+
+    public List<ExSumDecisionView> transformUWRuleToExSumDecision(UWRuleResultSummaryView uwRuleResultSummaryView){
+        List<ExSumDecisionView> exSumDecisionViewList = new ArrayList<ExSumDecisionView>();
+        if(uwRuleResultSummaryView.getUwRuleResultDetailViewList() != null && uwRuleResultSummaryView.getUwRuleResultDetailViewList().size() > 0){
+            for (UWRuleResultDetailView uwRule : uwRuleResultSummaryView.getUwRuleResultDetailViewList()){
+                ExSumDecisionView exSumDecisionView = new ExSumDecisionView();
+                if(!uwRule.getRuleColorResult().colorCode().equals(UWResultColor.GREEN.getResultClass())){
+                    exSumDecisionView.setFlag(uwRule.getRuleColorResult());
+                    exSumDecisionView.setGroup(uwRule.getUwRuleNameView().getUwRuleGroupView().getName());
+                    exSumDecisionView.setRuleName(uwRule.getUwRuleNameView().getName());
+                    if(uwRule.getUwRuleType().equals(UWRuleType.GROUP_LEVEL)){
+                        exSumDecisionView.setCusName("Application");
+                    } else {
+                        exSumDecisionView.setCusName(uwRule.getCustomerInfoSimpleView().getCustomerName());
+                    }
+
+                    exSumDecisionViewList.add(exSumDecisionView);
+                }
+            }
+        }
+
+        return exSumDecisionViewList;
     }
 }

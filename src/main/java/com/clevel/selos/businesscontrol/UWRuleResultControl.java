@@ -58,4 +58,11 @@ public class UWRuleResultControl extends BusinessControl{
         return uwRuleResultSummaryView;
     }
 
+    public UWRuleResultSummaryView getUWRuleResultByWorkCaseId(long workCaseId){
+        logger.debug("-- begin getUWRuleResultByWorkCaseId {}", workCaseId);
+        UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+        UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultTransform.transformToView(uwRuleResultSummary);
+        logger.info("-- end getUWRuleResultByWorkCaseId return{}", uwRuleResultSummaryView);
+        return uwRuleResultSummaryView;
+    }
 }

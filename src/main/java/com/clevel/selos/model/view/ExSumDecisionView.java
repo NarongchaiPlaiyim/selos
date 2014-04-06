@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.UWResultColor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -7,7 +8,7 @@ import java.io.Serializable;
 
 public class ExSumDecisionView implements Serializable {
     private long id;
-    private String flag;
+    private UWResultColor flag;
     private String group;
     private String ruleName;
     private String cusName;
@@ -18,7 +19,7 @@ public class ExSumDecisionView implements Serializable {
     }
 
     public void reset() {
-        this.flag = "";
+//        this.flag = "";
         this.group = "";
         this.ruleName = "";
         this.cusName = "";
@@ -33,11 +34,11 @@ public class ExSumDecisionView implements Serializable {
         this.id = id;
     }
 
-    public String getFlag() {
+    public UWResultColor getFlag() {
         return flag;
     }
 
-    public void setFlag(String flag) {
+    public void setFlag(UWResultColor flag) {
         this.flag = flag;
     }
 
