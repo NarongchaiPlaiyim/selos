@@ -1,5 +1,7 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.HeaderControl;
+import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.master.UserTeamDAO;
@@ -47,6 +49,10 @@ public class PESearch implements Serializable
 
     @Inject
     PEDBExecute pedbExecute;
+    @Inject
+    InboxControl inboxControl;
+    @Inject
+    HeaderControl headerControl;
 
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
@@ -585,12 +591,11 @@ public class PESearch implements Serializable
             return;
         }
 
-        AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(searchViewSelectItem.getStepId(), searchViewSelectItem.getFwobnumber());
-        session.setAttribute("appHeaderInfo", appHeaderView);
+		AppHeaderView appHeaderView = headerControl.getHeaderInformation(searchViewSelectItem.getStepId(), searchViewSelectItem.getFwobnumber());        session.setAttribute("appHeaderInfo", appHeaderView);
 
 
         long selectedStepId = searchViewSelectItem.getStepId();
-        String landingPage = pedbExecute.getLandingPage(selectedStepId);
+        String landingPage = inboxControl.getLandingPage(selectedStepId);
 
         if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
             FacesUtil.redirect(landingPage);

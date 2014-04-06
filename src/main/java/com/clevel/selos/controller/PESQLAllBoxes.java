@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 
+import com.clevel.selos.businesscontrol.HeaderControl;
 import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.dao.master.StepDAO;
@@ -70,6 +71,8 @@ public class PESQLAllBoxes implements Serializable
     PEDBExecute pedbExecute;
     @Inject
     InboxControl inboxControl;
+    @Inject
+    HeaderControl headerControl;
 
     @Inject
     BPMInterfaceImpl bpmInterfaceImpl;
@@ -167,7 +170,7 @@ public class PESQLAllBoxes implements Serializable
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
             session.setAttribute("statusId", statusId);
             session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
-        } else if (stepId == StepValue.REQUEST_APPRAISAL.value()) {     //For Parallel Appraisal
+        } else if (stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Parallel Appraisal
             WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
             if(workCase != null){
                 wrkCaseId = workCase.getId();
@@ -226,6 +229,7 @@ public class PESQLAllBoxes implements Serializable
             session.setAttribute("fetchType",inboxViewSelectItem.getFetchType());
         }
 
+        AppHeaderView appHeaderView = headerControl.getHeaderInformation(inboxViewSelectItem.getStepId(), inboxViewSelectItem.getFwobnumber());
         session.setAttribute("caseOwner",inboxViewSelectItem.getAtuser());
 
         try
@@ -243,10 +247,9 @@ public class PESQLAllBoxes implements Serializable
             return;
         }
 
-        AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(inboxViewSelectItem.getStepId(), inboxViewSelectItem.getFwobnumber());
         session.setAttribute("appHeaderInfo", appHeaderView);
 
-        String landingPage = pedbExecute.getLandingPage(stepId);
+        String landingPage = inboxControl.getLandingPage(stepId);
 
         log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
 

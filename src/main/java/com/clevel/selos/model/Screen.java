@@ -14,8 +14,13 @@ public enum Screen {
     //Customer Info
     CUSTOMER_INFO_SUMMARY(3002),
     CUSTOMER_INFO_INDIVIDUAL(3003),
-    CUSTOMER_INFO_JURISTIC(3004);
-
+    CUSTOMER_INFO_JURISTIC(3004),
+    
+    //Step 301 Screen //TODO
+    ContactRecord(0),
+    CallingRecordDialog(0),
+    FeeCalculation(0),
+    ;
     int value;
 
     Screen(int value) {

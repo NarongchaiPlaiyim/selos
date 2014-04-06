@@ -723,7 +723,7 @@ public class BizInfoDetail implements Serializable {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } catch(Exception ex){
-            log.debug("ERROR");
+            log.error("Exception while save business description : ", ex);
             messageHeader = msg.get("app.bizInfoDetail.message.header.save.fail");
             if(ex.getCause() != null){
                 message = msg.get("app.bizInfoDetail.message.body.save.fail") + ex.getCause().toString();

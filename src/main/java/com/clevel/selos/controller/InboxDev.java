@@ -1,6 +1,8 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.HeaderControl;
 import com.clevel.selos.businesscontrol.InboxControl;
+import com.clevel.selos.businesscontrol.InboxDevControl;
 import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
@@ -48,7 +50,9 @@ public class InboxDev implements Serializable {
     BPMInterface bpmInterface;
 
     @Inject
-    InboxControl inboxControl;
+    InboxDevControl inboxDevControl;
+    @Inject
+    HeaderControl headerControl;
 
     @Inject
     StepDAO stepDAO;
@@ -70,10 +74,10 @@ public class InboxDev implements Serializable {
         userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info("onCreation ::: userDetail : {}", userDetail);
         try {
-            inboxViewList = inboxControl.getInboxFromBPM(userDetail);
+            inboxViewList = inboxDevControl.getInboxFromBPM(userDetail);
             inboxPoolViewList = new ArrayList<InboxView>();
             if(userDetail.getRole().equals("ROLE_UW") || userDetail.getRole().equals("ROLE_AAD")){
-                inboxPoolViewList = inboxControl.getInboxPoolFromBPM(userDetail);
+                inboxPoolViewList = inboxDevControl.getInboxPoolFromBPM(userDetail);
                 renderedPool = true;
             } else {
                 renderedPool = false;
@@ -124,11 +128,11 @@ public class InboxDev implements Serializable {
         }
 
         //*** Get Information for Header ***//
-        AppHeaderView appHeaderView = inboxControl.getHeaderInformation(inboxViewSelectItem.getWorkCasePreScreenId(), inboxViewSelectItem.getWorkCaseId());
+        AppHeaderView appHeaderView = headerControl.getHeaderInformation(inboxViewSelectItem.getStepId(), inboxViewSelectItem.getFnWobNum());
         session.setAttribute("appHeaderInfo", appHeaderView);
 
         long selectedStepId = inboxViewSelectItem.getStepId();
-        String landingPage = inboxControl.getLandingPage(selectedStepId);
+        String landingPage = inboxDevControl.getLandingPage(selectedStepId);
 
         if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
             FacesUtil.redirect(landingPage);

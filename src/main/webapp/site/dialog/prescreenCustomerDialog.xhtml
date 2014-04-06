@@ -788,8 +788,8 @@
                                     <table class="table_noborder">
                                         <tr>
                                             <td>
-                                                <p:selectOneMenu size="1" style="min-width: 200px; width: 200px; max-width: 200px;" id="provinceJuristic"
-                                                                 value="#{prescreenMaker.borrowerInfo.currentAddress.province.code}"
+                                                <p:selectOneMenu size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
+                                                                 value="#{prescreenMaker.borrowerInfo.registerAddress.province.code}"
                                                                  disabled="#{not prescreenMaker.enableCustomerForm}">
                                                     <f:selectItem itemLabel="#{msg.get('app.province')}" itemValue="0"/>
                                                     <f:selectItems value="#{prescreenMaker.provinceList}"
@@ -797,12 +797,12 @@
                                                                    itemLabel="#{province.name}"
                                                                    itemValue="#{province.code}"/>
                                                     <p:ajax listener="#{prescreenMaker.onChangeProvinceBorrower()}"
-                                                            update=":customerDlgForm, :customerDlgForm:provinceJuristic, :customerDlgForm:districtJuristic, :customerDlgForm:subDistrictJuristic"/>
+                                                            update=":customerDlgForm:districtJuristic, :customerDlgForm:subDistrictJuristic"/>
                                                 </p:selectOneMenu>
                                             </td>
                                             <td>
                                                 <p:selectOneMenu size="1" style="min-width: 200px; width: 200px; max-width: 200px;" id="districtJuristic"
-                                                                 value="#{prescreenMaker.borrowerInfo.currentAddress.district.id}"
+                                                                 value="#{prescreenMaker.borrowerInfo.registerAddress.district.id}"
                                                                  disabled="#{not prescreenMaker.enableCustomerForm}">
                                                     <f:selectItem itemLabel="#{msg.get('app.district')}" itemValue="0"/>
                                                     <f:selectItems value="#{prescreenMaker.districtList}"
@@ -815,7 +815,7 @@
                                             </td>
                                             <td>
                                                 <p:selectOneMenu size="1" style="min-width: 200px; width: 200px; max-width: 200px;" id="subDistrictJuristic"
-                                                                 value="#{prescreenMaker.borrowerInfo.currentAddress.subDistrict.code}"
+                                                                 value="#{prescreenMaker.borrowerInfo.registerAddress.subDistrict.code}"
                                                                  disabled="#{not prescreenMaker.enableCustomerForm}">
                                                     <f:selectItem itemLabel="#{msg.get('app.subdistrict')}" itemValue="0"/>
                                                     <f:selectItems value="#{prescreenMaker.subDistrictList}"

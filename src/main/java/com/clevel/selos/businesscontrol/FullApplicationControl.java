@@ -9,15 +9,12 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionCode;
 import com.clevel.selos.model.PricingDOAValue;
 import com.clevel.selos.model.RoleValue;
-import com.clevel.selos.model.db.history.ReturnInfoHistory;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalView;
-import com.clevel.selos.model.view.ReturnInfoView;
 import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.transform.StepTransform;
 import com.clevel.selos.transform.UserTransform;
-import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -26,10 +23,8 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -166,7 +161,77 @@ public class FullApplicationControl extends BusinessControl {
 
         //TODO: get total com and retail
 
-        bpmExecutor.submitZM(workCaseId, queueName, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, ActionCode.SUBMIT_CA_BDM.getVal());
+        bpmExecutor.submitZM(workCaseId, queueName, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, ActionCode.SUBMIT_CA.getVal());
+    }
+
+    public void submitToRM(String queueName, long workCaseId) throws Exception {
+        WorkCase workCase;
+        String zmDecisionFlag = "A"; //TODO
+        String zmPricingRequestFlag = "A"; //TODO
+        BigDecimal totalCommercial = BigDecimal.ZERO; //TODO
+        BigDecimal totalRetail = BigDecimal.ZERO; //TODO
+        String resultCode = "G"; //TODO
+        String deviationCode = ""; //TODO
+        int requestType = 0;
+
+        //TODO: verify decision flag. if not exist, throws Exception to controller
+
+        if(Long.toString(workCaseId) != null && workCaseId != 0){
+            workCase = workCaseDAO.findById(workCaseId);
+            if(workCase.getProductGroup()!=null){
+                requestType = workCase.getRequestType().getId();
+            }
+        }
+
+        if(!Util.isEmpty(resultCode) && resultCode.trim().equalsIgnoreCase("R")){
+            deviationCode = "AD"; //TODO:
+        }
+
+        bpmExecutor.submitRM(workCaseId, queueName, zmDecisionFlag, zmPricingRequestFlag, totalCommercial, totalRetail, resultCode, deviationCode, requestType, ActionCode.SUBMIT_CA.getVal());
+    }
+
+    public void submitToGH(String queueName, long workCaseId) throws Exception {
+        String rgmDecisionFlag = "A"; //TODO
+
+        //TODO: verify decision flag. if not exist, throws Exception to controller
+
+        bpmExecutor.submitGH(workCaseId, queueName, rgmDecisionFlag, ActionCode.SUBMIT_CA.getVal());
+    }
+
+    public void submitToCSSO(String queueName, long workCaseId) throws Exception {
+        String ghDecisionFlag = "A"; //TODO
+
+        //TODO: verify decision flag. if not exist, throws Exception to controller
+
+        bpmExecutor.submitCSSO(workCaseId, queueName, ghDecisionFlag, ActionCode.SUBMIT_CA.getVal());
+    }
+
+    public void submitToUWFromCSSO(String queueName, long workCaseId) throws Exception {
+        String cssoDecisionFlag = "A"; //TODO
+
+        //TODO: verify decision flag. if not exist, throws Exception to controller
+
+        bpmExecutor.submitUWFromCSSO(workCaseId, queueName, cssoDecisionFlag, ActionCode.SUBMIT_CA.getVal());
+    }
+
+    public void submitToUW2(String queueName, long workCaseId) throws Exception {
+        String assignToUW2Name = ""; //TODO
+        String levelDOAForUW2 = ""; //TODO
+        String decisionFlag = "A"; //TODO
+        String haveRG001 = "N"; //TODO
+
+        //TODO: verify data before execute BPM. If not valid, throws Exception to controller
+
+        bpmExecutor.submitUW2(workCaseId, queueName, assignToUW2Name, levelDOAForUW2, decisionFlag, haveRG001, ActionCode.SUBMIT_TO_UW2.getVal());
+    }
+
+    public void submitCA(String queueName, long workCaseId) throws Exception {
+        String decisionFlag = "A"; //TODO
+        String haveRG001 = "N"; //TODO
+
+        //TODO: verify data before execute BPM. If not valid, throws Exception to controller
+
+        bpmExecutor.submitCA(workCaseId, queueName, decisionFlag, haveRG001, ActionCode.SUBMIT_CA.getVal());
     }
 
     /*public void requestAppraisalBDM(long workCasePreScreenId, long workCaseId) throws Exception{
