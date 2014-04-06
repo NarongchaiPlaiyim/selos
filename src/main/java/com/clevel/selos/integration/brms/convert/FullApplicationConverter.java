@@ -6,6 +6,7 @@ import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.integration.brms.model.response.UWRulesResult;
 import com.clevel.selos.model.UWRuleType;
+import com.clevel.selos.util.Util;
 import com.tmbbank.enterprise.model.*;
 import com.ilog.rules.decisionservice.DecisionServiceRequest;
 import com.ilog.rules.decisionservice.DecisionServiceResponse;
@@ -211,10 +212,11 @@ public class FullApplicationConverter extends Converter{
             borrowerAttributeList.add(getAttributeType(BRMSFieldAttributes.SPOUSE_RELATIONSHIP_TYPE, customerInfo.getSpouseRelationType()));
 
             if(customerInfo.isIndividual()){
-                IndividualType individualType = borrowerType.getIndividual();
+                IndividualType individualType = new IndividualType();
                 individualType.setCitizenID(getValueForInterface(customerInfo.getPersonalID()));
                 individualType.setAge(getValueForInterface(customerInfo.getAgeMonths()));
                 individualType.setMaritalStatus(getValueForInterface(customerInfo.getMarriageStatus()));
+                borrowerType.setIndividual(individualType);
             }
 
             //7. Convert Acc/TMB Acc information//
@@ -333,8 +335,11 @@ public class FullApplicationConverter extends Converter{
             for(ResultType resultType : resultTypeList){
                 UWRulesResult uwRulesResult = new UWRulesResult();
                 uwRulesResult.setRuleName(resultType.getRuleName());
+                //Find if it is Group Level//
+                UWRuleType _ruleType = null;
+                if(resultType.getType().equals("Group_Result"))
+                    _ruleType = UWRuleType.GROUP_LEVEL;
 
-                uwRulesResult.setType(UWRuleType.lookup(resultType.getType()));
                 uwRulesResult.setColor(resultType.getColor());
                 uwRulesResult.setDeviationFlag(resultType.getDeviationFlag());
                 uwRulesResult.setRejectGroupCode(resultType.getRejectGroupCode());
@@ -346,9 +351,21 @@ public class FullApplicationConverter extends Converter{
                             uwRulesResult.setRuleOrder(attributeType.getStringValue());
                         }
                         if(attributeType.getName().equals(BRMSFieldAttributes.UW_PERSONAL_ID)){
-                            uwRulesResult.setRuleName(attributeType.getStringValue());
+                            String _attrValue = attributeType.getStringValue();
+                            if(_attrValue != null){
+                                uwRulesResult.setPersonalID(_attrValue);
+                                _ruleType = UWRuleType.CUS_LEVEL;
+                            }else {
+                                //if UW_PERSONAL_ID == null, then it is Group Level//
+                                _ruleType = UWRuleType.GROUP_LEVEL;
+                            }
                         }
                     }
+                }
+
+                uwRulesResult.setType(_ruleType);
+                if(Util.isEmpty(uwRulesResult.getRuleOrder())){
+                    uwRulesResult.setRuleOrder("0001");
                 }
                 uwRulesResultMap.put(uwRulesResult.getRuleOrder(), uwRulesResult);
             }

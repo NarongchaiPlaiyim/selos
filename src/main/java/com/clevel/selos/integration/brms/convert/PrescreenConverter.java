@@ -6,6 +6,7 @@ import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.integration.brms.model.response.UWRulesResult;
 import com.clevel.selos.model.UWRuleType;
+import com.clevel.selos.util.Util;
 import com.ilog.rules.decisionservice.DecisionServiceRequest;
 import com.ilog.rules.decisionservice.DecisionServiceResponse;
 import com.ilog.rules.param.UnderwritingRequest;
@@ -282,7 +283,11 @@ public class PrescreenConverter extends Converter{
             for(ResultType resultType : resultTypeList){
                 UWRulesResult uwRulesResult = new UWRulesResult();
                 uwRulesResult.setRuleName(resultType.getRuleName());
-                uwRulesResult.setType(UWRuleType.lookup(resultType.getType()));
+                //Find if it is Group Level//
+                UWRuleType _ruleType = null;
+                if(resultType.getType().equals("Group_Result"))
+                    _ruleType = UWRuleType.GROUP_LEVEL;
+
                 uwRulesResult.setColor(resultType.getColor());
                 uwRulesResult.setDeviationFlag(resultType.getDeviationFlag());
                 uwRulesResult.setRejectGroupCode(resultType.getRejectGroupCode());
@@ -294,10 +299,23 @@ public class PrescreenConverter extends Converter{
                             uwRulesResult.setRuleOrder(attributeType.getStringValue());
                         }
                         if(attributeType.getName().equals(BRMSFieldAttributes.UW_PERSONAL_ID)){
-                            uwRulesResult.setRuleName(attributeType.getStringValue());
+                            String _attrValue = attributeType.getStringValue();
+                            if(_attrValue != null){
+                                uwRulesResult.setPersonalID(_attrValue);
+                                _ruleType = UWRuleType.CUS_LEVEL;
+                            }else {
+                                //if UW_PERSONAL_ID == null, then it is Group Level//
+                                _ruleType = UWRuleType.GROUP_LEVEL;
+                            }
                         }
                     }
                 }
+
+                uwRulesResult.setType(_ruleType);
+                if(Util.isEmpty(uwRulesResult.getRuleOrder())){
+                    uwRulesResult.setRuleOrder("0001");
+                }
+                logger.debug("uwRulesResult : {}", uwRulesResult);
                 uwRulesResultMap.put(uwRulesResult.getRuleOrder(), uwRulesResult);
             }
             uwRulesResponse.setUwRulesResultMap(uwRulesResultMap);
