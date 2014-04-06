@@ -58,7 +58,8 @@ public class ECMInterfaceImpl implements ECMInterface, Serializable {
             return ecmService.update(ecmcapShare);
         } catch (Exception e) {
             log.error("Exception while update ECM data!", e);
-            throw new ECMInterfaceException(e, ExceptionMapping.ECM_UPDATEDATA_ERROR, e.getMessage());
+            return false;
+//            throw new ECMInterfaceException(e, ExceptionMapping.ECM_UPDATEDATA_ERROR, e.getMessage());
         }
     }
 
@@ -70,7 +71,8 @@ public class ECMInterfaceImpl implements ECMInterface, Serializable {
             return ecmService.insert(ecmcapShare);
         } catch (Exception e) {
             log.error("Exception while insert into ECM data!", e);
-            throw new ECMInterfaceException(e, ExceptionMapping.ECM_INSERTDATA_ERROR, e.getMessage());
+            return false;
+//            throw new ECMInterfaceException(e, ExceptionMapping.ECM_INSERTDATA_ERROR, e.getMessage());
         }
     }
 }
