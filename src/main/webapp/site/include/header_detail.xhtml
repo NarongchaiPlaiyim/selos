@@ -46,6 +46,12 @@
                                  update=":frmMain:msgBoxBaseMessagePanel"
                                  actionListener="#{headerController.onCheckPreScreen}">
                 </p:commandButton>
+                <!--Check Criteria (BRMS)-->
+                <p:commandButton id="btnChkCriteria" value="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkCriteria')}"
+                                 rendered="#{headerController.checkButton('Check Criteria')}"
+                                 update=":frmMain:msgBoxBaseMessagePanel"
+                                 actionListener="#{headerController.onCheckCriteria}">
+                </p:commandButton>
                 <!--Request Appraisal Prescreen-->
                 <p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
                                  rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
