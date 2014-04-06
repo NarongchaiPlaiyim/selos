@@ -1088,6 +1088,51 @@ public class HeaderController implements Serializable {
         FacesUtil.redirect("/site/inbox.jsf");
     }
 
+    public void onCheckCriteria(){
+        long workCaseId = 0;
+        HttpSession session = FacesUtil.getSession(true);
+        if(!Util.isNull(session.getAttribute("workCaseId"))){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            try{
+                UWRuleResponseView uwRuleResponseView = brmsControl.getFullApplicationResult(workCaseId);
+                log.info("onCheckCriteria uwRulesResponse : {}", uwRuleResponseView);
+                if(uwRuleResponseView != null){
+                    if(uwRuleResponseView.getActionResult().equals(ActionResult.SUCCESS)){
+                        UWRuleResultSummaryView uwRuleResultSummaryView = null;
+                        try{
+                            uwRuleResultSummaryView = uwRuleResponseView.getUwRuleResultSummaryView();
+                            uwRuleResultSummaryView.setWorkCaseId(workCaseId);
+                            uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
+                        }catch (Exception ex){
+                            log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
+                            messageHeader = "Exception.";
+                            message = Util.getMessageException(ex);
+                            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                        }
+                        messageHeader = "Information.";
+                        message = "Request for Check Criteria Success.";
+                        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                    }else {
+                        messageHeader = "Exception.";
+                        message = uwRuleResponseView.getReason();
+                        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                    }
+                } else {
+                    uwRuleResultControl.saveNewUWRuleResult(uwRuleResponseView.getUwRuleResultSummaryView());
+                    messageHeader = "Exception.";
+                    message = "Request for Check Criteria Fail.";
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                }
+            } catch (Exception ex){
+                log.error("Exception while onCheckCriteria : ", ex);
+                messageHeader = "Exception.";
+                message = Util.getMessageException(ex);
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            }
+
+        }
+    }
+
     public int getQualitativeType() {
         return qualitativeType;
     }

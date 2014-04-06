@@ -5,14 +5,19 @@ import com.clevel.selos.businesscontrol.HeaderControl;
 import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.dao.master.StepDAO;
+import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.dao.master.UserTeamDAO;
 import com.clevel.selos.dao.working.WorkCaseAppraisalDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.WorkCaseOwnerDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.ActionCode;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Step;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCaseAppraisal;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -102,6 +107,7 @@ public class PESQLAllBoxes implements Serializable
         }
         catch (Exception e)
         {
+
             log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
         }
 
@@ -150,6 +156,7 @@ public class PESQLAllBoxes implements Serializable
         long statusId = 0L;
         int stageId = 0;
         int requestAppraisalFlag = 0;
+
 
         if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value())
         {
@@ -234,7 +241,10 @@ public class PESQLAllBoxes implements Serializable
         }
         catch (Exception e)
         {
+            //TODO Alert Box
             log.error("Error while Locking case in queue : {}, WobNum : {}",queueName, inboxViewSelectItem.getFwobnumber(), e);
+            FacesUtil.redirect("/site/generic_inbox_mybox_post.jsf");
+            return;
         }
 
         session.setAttribute("appHeaderInfo", appHeaderView);

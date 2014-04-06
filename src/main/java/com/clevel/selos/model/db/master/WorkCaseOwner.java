@@ -33,6 +33,26 @@ public class WorkCaseOwner implements Serializable
     private Integer stepId;
     @Column(name = "workcase_prescreen_id")
     private Integer workCasePrescreenId;
+    @Column(name = "create_by")
+    private String createBy;
+    @Column(name = "modify_by")
+    private String modifyBy;
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(String modifyBy) {
+        this.modifyBy = modifyBy;
+    }
 
     public Integer getWorkCasePrescreenId() {
         return workCasePrescreenId;
