@@ -960,10 +960,24 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onChangeDistrictBorrower(){
-        if(borrowerInfo.getCurrentAddress().getDistrict() != null && borrowerInfo.getCurrentAddress().getDistrict().getId() != 0){
+        /*if(borrowerInfo.getCurrentAddress().getDistrict() != null && borrowerInfo.getCurrentAddress().getDistrict().getId() != 0){
             subDistrictList = subDistrictDAO.getListByDistrict(borrowerInfo.getCurrentAddress().getDistrict());
         } else {
             subDistrictList = new ArrayList<SubDistrict>();
+        }*/
+
+        if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+            if(borrowerInfo.getCurrentAddress().getDistrict() != null && borrowerInfo.getCurrentAddress().getDistrict().getId() != 0){
+                subDistrictList = subDistrictDAO.getListByDistrict(borrowerInfo.getCurrentAddress().getDistrict());
+            } else {
+                subDistrictList = new ArrayList<SubDistrict>();
+            }
+        } else {
+            if(borrowerInfo.getRegisterAddress().getDistrict() != null && borrowerInfo.getRegisterAddress().getDistrict().getId() != 0){
+                subDistrictList = subDistrictDAO.getListByDistrict(borrowerInfo.getRegisterAddress().getDistrict());
+            } else {
+                subDistrictList = new ArrayList<SubDistrict>();
+            }
         }
     }
 
