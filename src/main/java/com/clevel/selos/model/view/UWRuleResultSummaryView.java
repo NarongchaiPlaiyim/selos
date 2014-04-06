@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public class UWRuleResultSummaryView implements Serializable {
 
@@ -16,7 +17,7 @@ public class UWRuleResultSummaryView implements Serializable {
     private UWResultColor uwResultColor;
     private UWDeviationFlagView uwDeviationFlagView;
     private UWRejectGroupView rejectGroupView;
-    private List<UWRuleResultDetailView> uwRuleResultDetailViewList;
+    private Map<Integer, UWRuleResultDetailView> uwRuleResultDetailViewMap;
 
     public long getId() {
         return id;
@@ -74,12 +75,12 @@ public class UWRuleResultSummaryView implements Serializable {
         this.rejectGroupView = rejectGroupView;
     }
 
-    public List<UWRuleResultDetailView> getUwRuleResultDetailViewList() {
-        return uwRuleResultDetailViewList;
+    public Map<Integer, UWRuleResultDetailView> getUwRuleResultDetailViewMap() {
+        return uwRuleResultDetailViewMap;
     }
 
-    public void setUwRuleResultDetailViewList(List<UWRuleResultDetailView> uwRuleResultDetailViewList) {
-        this.uwRuleResultDetailViewList = uwRuleResultDetailViewList;
+    public void setUwRuleResultDetailViewMap(Map<Integer, UWRuleResultDetailView> uwRuleResultDetailViewMap) {
+        this.uwRuleResultDetailViewMap = uwRuleResultDetailViewMap;
     }
 
     @Override
@@ -92,7 +93,7 @@ public class UWRuleResultSummaryView implements Serializable {
                 .append("uwResultColor", uwResultColor)
                 .append("uwDeviationFlagView", uwDeviationFlagView)
                 .append("rejectGroupView", rejectGroupView)
-                .append("uwRuleResultDetailViewList", uwRuleResultDetailViewList)
+                .append("uwRuleResultDetailViewMap", uwRuleResultDetailViewMap)
                 .toString();
     }
 }
