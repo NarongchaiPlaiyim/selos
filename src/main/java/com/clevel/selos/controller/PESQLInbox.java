@@ -1,11 +1,14 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.HeaderControl;
+import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.working.WorkCaseAppraisalDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.businesscontrol.PEDBExecute;
+import com.clevel.selos.model.ActionCode;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -15,6 +18,7 @@ import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import com.clevel.selos.model.view.PEInbox;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,19 +39,12 @@ import java.io.Serializable;
 import java.util.List;
 
 @ViewScoped
-@ManagedBean(name = "peinbox")
+@ManagedBean(name = "peInbox")
 public class PESQLInbox implements Serializable
 {
     @Inject
     @SELOS
     Logger log;
-
-    private List<PEInbox> inboxViewList;
-    private PEInbox inboxViewSelectItem;
-    private UserDetail userDetail;
-    private String columnName;
-    private String orderType;
-    private String inboxName;
 
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
@@ -55,17 +52,27 @@ public class PESQLInbox implements Serializable
     WorkCaseAppraisalDAO workCaseAppraisalDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
-
     @Inject
     StepDAO stepDAO;
 
     @Inject
     PEDBExecute pedbExecute;
+    @Inject
+    InboxControl inboxControl;
+    @Inject
+    HeaderControl headerControl;
+
+    private List<PEInbox> inboxViewList;
+    private PEInbox inboxViewSelectItem;
+    private UserDetail userDetail;
+    private String columnName;
+    private String orderType;
+    private String inboxName;
+    private String message;
 
     @PostConstruct
     public void onCreation()
     {
-
         log.info("Controller in onCreation method of PESQLInbox.java ");
 
         userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -83,14 +90,15 @@ public class PESQLInbox implements Serializable
         session.setAttribute("requestAppraisal", 0);
         session.setAttribute("queueName","");
 
-        try
-        {
-            inboxName = "My Box";
+        HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+
+        try {
+            log.debug("Request parameter is [id] : {}", request.getParameter("id"));
+            inboxName =  request.getParameter("id") ;
+            if(Util.isEmpty(inboxName)) inboxName = "My Box";
             inboxViewList =  pedbExecute.getPEInbox(inboxName);
             log.debug("onCreation ::: inboxViewList : {}", inboxViewList);
-        }
-        catch(Exception ex)
-        {
+        } catch(Exception ex) {
             log.error("Exception while getInboxPE : ", ex);
         }
     }
@@ -112,7 +120,7 @@ public class PESQLInbox implements Serializable
         int requestAppraisalFlag = 0;
 
         if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {
-            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByWobNumber(inboxViewSelectItem.getFwobnumber());
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
             if(workCasePrescreen != null){
                 wrkCasePreScreenId = workCasePrescreen.getId();
                 requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
@@ -121,7 +129,7 @@ public class PESQLInbox implements Serializable
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
             session.setAttribute("statusId", statusId);
-        } else if (stepId == StepValue.REQUEST_APPRAISAL.value()) {     //For Parallel Appraisal
+        } else if (stepId == StepValue.REQUEST_APPRAISAL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Parallel Appraisal
             WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
             if(workCase != null){
                 wrkCaseId = workCase.getId();
@@ -143,7 +151,7 @@ public class PESQLInbox implements Serializable
                 session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
             }
         } else {
-            WorkCase workCase = workCaseDAO.findByWobNumber(inboxViewSelectItem.getFwobnumber());
+            WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
             if(workCase != null){
                 wrkCaseId = workCase.getId();
                 requestAppraisalFlag = workCase.getRequestAppraisal();
@@ -154,22 +162,18 @@ public class PESQLInbox implements Serializable
             session.setAttribute("statusId", statusId);
         }
 
-        if(Util.isNull(inboxViewSelectItem.getFetchType()))
-        {
+        if(Util.isNull(inboxViewSelectItem.getFetchType())) {
             session.setAttribute("fetchType",0);
-        }
-        else
-        {
+        } else {
             session.setAttribute("fetchType",inboxViewSelectItem.getFetchType());
         }
-
-        session.setAttribute("stepId", stepId);
 
         if(stepId != 0){
             Step step = stepDAO.findById(stepId);
             stageId = step != null ? step.getStage().getId() : 0;
         }
 
+        session.setAttribute("stepId", stepId);
         session.setAttribute("stageId", stageId);
 
         String queueName = inboxViewSelectItem.getQueuename();
@@ -179,10 +183,10 @@ public class PESQLInbox implements Serializable
             session.setAttribute("queueName", inboxViewSelectItem.getQueuename());
         }
 
-        AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(stepId, inboxViewSelectItem.getFwobnumber());
+        AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, inboxViewSelectItem.getFwobnumber());
         session.setAttribute("appHeaderInfo", appHeaderView);
 
-        String landingPage = pedbExecute.getLandingPage(stepId);
+        String landingPage = inboxControl.getLandingPage(stepId);
 
         log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
 
@@ -192,6 +196,26 @@ public class PESQLInbox implements Serializable
         } else {
             //TODO Show dialog
         }
+    }
+
+    public void onClickPickUpCase(){
+        RequestContext.getCurrentInstance().execute("msgBoxConfirmDlg.show()");
+    }
+
+    public void onPickUpCase(){
+        try{
+            //TODO dispatch for Select case
+            String queueName = inboxViewSelectItem.getQueuename();
+            String wobNumber = inboxViewSelectItem.getFwobnumber();
+            inboxControl.selectCasePoolBox(queueName, wobNumber, ActionCode.ASSIGN_TO_ME.getVal());
+            //TODO Reload all value for Inbox Select
+            onSelectInbox();
+        } catch (Exception ex){
+            log.error("Exception while select case from PoolBox : ", ex);
+            message = Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+        }
+
     }
 
     public String getInboxName() {
@@ -232,5 +256,13 @@ public class PESQLInbox implements Serializable
 
     public void setInboxViewSelectItem(PEInbox inboxViewSelectItem) {
         this.inboxViewSelectItem = inboxViewSelectItem;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

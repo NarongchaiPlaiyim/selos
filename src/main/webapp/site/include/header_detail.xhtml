@@ -48,7 +48,7 @@
                 </p:commandButton>
                 <!--Request Appraisal Prescreen-->
                 <p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
-                                 rendered="#{baseController.checkButton('Request Appraisal')}"
+                                 rendered="#{baseController.checkButton('Request Appraisal') and baseController.requestAppraisal == 0}"
                                  process="@this"
                                  actionListener="#{baseController.onOpenRequestAppraisal()}"
                                  update=":frmMain:reqApprDialogPanel"
@@ -57,20 +57,20 @@
                 </p:commandButton>
                 <!--Cancel CA-->
                 <p:commandButton id="btnCancelCA" value="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
-                                 rendered="#{baseController.checkButton('Cancel CA') and !baseController.requestAppraisalPage}" type="button"
+                                 rendered="#{baseController.checkButton('Cancel CA')}" type="button"
                                  onclick="confrmCancelCA.show()"/>
                     <!--Confirm dialog for Cancel CA-->
                     <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.cancelCA')}" styleClass="left"
                                      icon="ui-icon-alert"
                                      widgetVar="confrmCancelCA" global="false" showEffect="fade"
-                                     rendered="#{baseController.checkButton('Cancel CA') and !baseController.requestAppraisalPage}">
+                                     rendered="#{baseController.checkButton('Cancel CA')}">
                         <p:commandButton value="#{msg.get('app.button.yes')}" styleClass="ui-confirmdialog-yes"
                                          process="@this"
                                          update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"
                                          actionListener="#{prescreenMaker.onCancelCA}"
                                          oncomplete="confrmCancelCA.hide()"/>
                         <p:commandButton value="#{msg.get('app.button.no')}" styleClass="ui-confirmdialog-no"
-                                         type="button"
+                                         process="@this"
                                          onclick="confrmCancelCA.hide()" />
                     </p:confirmDialog>
                 <!--Close Sale-->
@@ -88,7 +88,8 @@
                                          oncomplete="confrmCloseSaleCA.hide()"
                                          update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel" />
                         <p:commandButton value="#{msg.get('app.button.no')}" styleClass="ui-confirmdialog-no"
-                                         type="button" onclick="confrmCloseSaleCA.hide()" />
+                                         process="@this"
+                                         onclick="confrmCloseSaleCA.hide()" />
                     </p:confirmDialog>
             </p:panel>
 
@@ -138,14 +139,14 @@
                     <p:resetInput target=":frmMain:returnBDMPanel"/>
                 </p:commandButton>
                 <!--Request Appraisal Fullapp-->
-                <!--<p:commandButton id="btnReqApprFullapp" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
+                <p:commandButton id="btnReqApprFullapp" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
                                  rendered="#{baseController.checkButton('Request Appraisal')}"
                                  process="@this"
                                  actionListener="#{baseController.onOpenRequestAppraisal()}"
                                  update=":frmMain:reqApprDialogPanel"
                                  oncomplete="reqApprDlg.show()">
                     <p:resetInput target=":frmMain:reqApprDialogPanel"/>
-                </p:commandButton>-->
+                </p:commandButton>
                 <!--Cancel CA FullApplication-->
                 <p:commandButton id="btnCancelCAFullApp" value="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
                                  rendered="#{baseController.checkButton('Cancel CA')}"
@@ -155,8 +156,21 @@
                     <p:resetInput target=":frmMain:cancelCAFullAppPanel"/>
                 </p:commandButton>
                 <!--Submit Case-->
-                <p:commandButton id="btnSubmitCase" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
-                                 rendered="#{baseController.checkButton('Submit CA')}"
+                <!--Submit To Zone Manager-->
+                <p:commandButton id="btnSubmitCaseToZM" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
+                                 rendered="#{baseController.checkButton('Submit CA') and baseController.stepId == 2001}"
+                                 action="#{baseController.onOpenSubmitZM}"
+                                 update=":frmMain:submitZMPanel, :frmMain:msgBoxBaseMessagePanel" >
+                </p:commandButton>
+                <!--Submit To Region Manager-->
+                <p:commandButton id="btnSubmitCaseToRGM" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
+                                 rendered="#{baseController.checkButton('Submit CA') and baseController.stepId == 2002}"
+                                 action="#{baseController.onOpenSubmitZM}"
+                                 update=":frmMain:submitZMPanel, :frmMain:msgBoxBaseMessagePanel" >
+                </p:commandButton>
+                <!--Submit To Head-->
+                <p:commandButton id="btnSubmitCaseToCSSO" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
+                                 rendered="#{baseController.checkButton('Submit CA') and baseController.stepId == 2020}"
                                  action="#{baseController.onOpenSubmitZM}"
                                  update=":frmMain:submitZMPanel, :frmMain:msgBoxBaseMessagePanel" >
                 </p:commandButton>
@@ -203,7 +217,7 @@
 
 
             <!--Request Appraisal [Submit to AAD Admin]-->
-            <p:commandButton id="btnRequestAppraisalAADADmin" value="Request for Appraisal" styleClass="blueButton" title="Request for Appraisal"
+            <!--<p:commandButton id="btnRequestAppraisalAADADmin" value="Request for Appraisal" styleClass="blueButton" title="Request for Appraisal"
                              rendered="#{baseController.manageButton.submitRequestAppraisalButton}">
                 <p:confirmDialog header="Confirmation" message="Are you want to Request for Appraisal? ( Submit to AAD Admin )" styleClass="left"
                                  icon="ui-icon-alert"
@@ -216,10 +230,7 @@
                     <p:commandButton value="No" type="button" onclick="confirmRequestForAppraisal.hide()"
                                      styleClass="ui-confirmdialog-no"/>
                 </p:confirmDialog>
-            </p:commandButton>
-
-
-
+            </p:commandButton>-->
 
             <!--Submit UW2 for test-->
            <!-- <p:commandButton id="btnReturnReview" value="Submit" styleClass="blueButton" title="Submit Review"
@@ -231,7 +242,7 @@
 
             <!--Submit Return Reply for test-->
            <!-- <p:commandButton id="btnReturnReply" value="Submit UW1" styleClass="blueButton" title="Submit Reply"
-                             action="#{baseController.onSumbitReturnUW1()}"
+                             action="#{baseController.onSubmitReturnUW1()}"
                              update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"
                              rendered="true">
 
@@ -239,122 +250,10 @@
         </div>
         <div class="clear"></div>
         <div id="header_information">
-            <table id="header_information_table">
-                <tr>
-                    <td colspan="11" style="font-weight: bold; text-align: right;">Status :</td>
-                    <td><h:outputText value="#{baseController.appHeaderView.caseStatus}"/></td>
-                </tr>
-                <tr>
-                    <td class="title left" style="min-width: 130px; max-width: 180px;">BDM :</td>
-                    <td class="left" style="min-width: 180px;"><h:outputText
-                            value="#{baseController.appHeaderView.bdmName}"/></td>
-                    <td class="title right" style="min-width: 50px; max-width: 60px;">Tel. :</td>
-                    <td class="left" style="min-width:90px; max-width:100px;"><h:outputText
-                            value="#{baseController.appHeaderView.bdmPhoneNumber}"/></td>
-                    <td class="title right" style="min-width: 50px; max-width: 60px;">Ext. :</td>
-                    <td class="left" style="min-width:80px; max-width: 90px;"><h:outputText
-                            value="#{baseController.appHeaderView.bdmPhoneExtNumber}"/></td>
-                    <td class="title right" style="min-width: 50px; max-width: 60px;">Zone :</td>
-                    <td class="left" style="min-width:100px; max-width: 130px;"><h:outputText
-                            value="#{baseController.appHeaderView.bdmZoneName}"/></td>
-                    <td class="title right" style="min-width: 60px; max-width: 70px;">Region :</td>
-                    <td class="left" style="min-width:80px;"><h:outputText
-                            value="#{baseController.appHeaderView.bdmRegionName}"/></td>
-                    <td class="title right" style="min-width: 100px; max-width: 110px;">Submit Date :</td>
-                    <td class="left" style="min-width:90px; max-width: 90px;"><h:outputText
-                            value="#{baseController.appHeaderView.submitDate}"/></td>
-                </tr>
-                <tr>
-                    <td class="title">Underwriter :</td>
-                    <td><h:outputText value="#{baseController.appHeaderView.uwName}"/></td>
-                    <td class="title right">Tel. :</td>
-                    <td><h:outputText value="#{baseController.appHeaderView.uwPhoneNumber}"/></td>
-                    <td class="title right">Ext. :</td>
-                    <td><h:outputText value="#{baseController.appHeaderView.uwPhoneExtNumber}"/></td>
-                    <td class="title right">Team :</td>
-                    <td><h:outputText value="#{baseController.appHeaderView.uwTeamName}"/></td>
-                    <td colspan="3" class="title right">Request Type :</td>
-                    <td><h:outputText value="#{baseController.appHeaderView.requestType}"/></td>
-                </tr>
-                <tr>
-                    <td colspan="11" style="font-weight: bold; text-align: right;">Refinance :</td>
-                    <td><h:outputText value="#{baseController.appHeaderView.refinance}"/></td>
-                </tr>
-                <tr>
-                    <td style="font-weight: bold;">CA No. :</td>
-                    <td colspan="2"><h:outputText value="#{baseController.appHeaderView.appNo}"/></td>
-                    <td class="title right">Ref CA No. :</td>
-                    <td colspan="3"><h:outputText value="#{baseController.appHeaderView.appRefNo}"/></td>
-                    <td colspan="2" class="title right">Ref CA Date :</td>
-                    <td colspan="2"><h:outputText value="#{baseController.appHeaderView.appRefDate}"/></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td style="font-weight: bold;">Borrower Name :</td>
-                    <td colspan="11" style="padding:0; vertical-align: top;">
-                        <table>
-                            <tr>
-                                <ui:repeat var="borrower" value="#{baseController.appHeaderView.borrowerHeaderViewList}"
-                                           varStatus="status">
-                                    <td style="min-width: 140px; max-width: 140px; width: 140px;">#{borrower.borrowerName}</td>
-                                </ui:repeat>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="font-weight: bold;">Citizen ID/<br/>Registration ID :</td>
-                    <td colspan="11" style="padding:0; vertical-align: top;">
-                        <table>
-                            <tr>
-                                <ui:repeat var="personalId"
-                                           value="#{baseController.appHeaderView.borrowerHeaderViewList}"
-                                           varStatus="status">
-                                    <td style="min-width: 140px; max-width: 140px; width: 140px;"><h:outputText
-                                            rendered="#{baseController.stepId != 1002}"
-                                            value="#{personalId.personalId}"/></td>
-                                </ui:repeat>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="font-weight: bold;">Product Program :</td>
-                    <td colspan="11">
-                        <table>
-                            <tr>
-                                <ui:repeat var="productProgram"
-                                           value="#{baseController.appHeaderView.productProgramList}"
-                                           varStatus="status">
-                                    <td>#{productProgram}</td>
-                                </ui:repeat>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="font-weight: bold;">Prescreen Result :</td>
-                    <td colspan="11"></td>
-                </tr>
-            </table>
+            <ui:include src="header_information.xhtml"/>
         </div>
     </div>
     <div class="clear"></div>
-    <script type="text/javascript" language="javascript">
-        function collapseDetail() {
-            var currentState = $("#header_collapse").attr("class");
-            if (currentState == 'close') {
-                $("#header_collapse").removeAttr("class");
-                $("#header_collapse").attr("class", "open");
-                $("#header_information").fadeOut();
-            } else {
-                $("#header_collapse").removeAttr("class");
-                $("#header_collapse").attr("class", "close");
-                $("#header_information").fadeIn();
-            }
-        }
-    </script>
-
     <p:panel id="msgBoxBaseMessagePanel" styleClass="panel">
         <p:confirmDialog id="msgBoxBaseMessageDialog" widgetVar="msgBoxBaseMessageDlg" styleClass="messageDialog"
                          header="#{baseController.messageHeader}" >
@@ -366,7 +265,6 @@
                              oncomplete="msgBoxBaseMessageDlg.hide()"/>
         </p:confirmDialog>
     </p:panel>
-
     <p:panel id="msgBoxBaseRedirectPanel" styleClass="panel">
         <p:confirmDialog id="msgBoxBaseRedirectDialog" widgetVar="msgBoxBaseRedirectDlg" styleClass="messageDialog"
                          header="#{baseController.messageHeader}" >

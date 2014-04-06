@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.dao.master.ActionDAO;
@@ -74,6 +75,8 @@ public class ReassignTeamNames implements Serializable
 
     @Inject
     PEDBExecute pedbExecute;
+    @Inject
+    InboxControl inboxControl;
 
     @Inject
     BPMInterfaceImpl bpmInterfaceImpl;
@@ -560,7 +563,7 @@ public class ReassignTeamNames implements Serializable
         session.setAttribute("appHeaderInfo", appHeaderView);*/
 
         long selectedStepId = searchViewSelectItem.getStepId();
-        String landingPage = pedbExecute.getLandingPage(selectedStepId);
+        String landingPage = inboxControl.getLandingPage(selectedStepId);
 
         if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
             FacesUtil.redirect(landingPage);
