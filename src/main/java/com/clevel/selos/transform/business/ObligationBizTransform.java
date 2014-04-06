@@ -10,6 +10,7 @@ import com.clevel.selos.integration.rlos.appin.model.CreditDetail;
 import com.clevel.selos.integration.rlos.appin.model.CustomerDetail;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.CustomerOblAccountInfo;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;
@@ -467,6 +468,7 @@ public class ObligationBizTransform extends BusinessTransform {
             String covenantFlag = null;
             String reviewFlag = null;
             QualitativeClass qualitativeClass = null;
+            List<CustomerOblAccountInfoView> customerOblAccountInfoViewList = new ArrayList<CustomerOblAccountInfoView>();
 
             for(Obligation obligation : obligationList){
                 //Service Segment, which should be the same for all obligation record
@@ -532,6 +534,9 @@ public class ObligationBizTransform extends BusinessTransform {
                         log.debug("Adjust Class");
                     }
                 }
+
+                //Set Customfer Obl Account.
+                customerOblAccountInfoViewList.add(getCustomerOblAccountInfo(obligation));
             }
 
             customerInfoView.setServiceSegmentView(serviceSegmentTransform.transformToView(Util.isEmpty(serviceSegment)? 0 : Integer.parseInt(serviceSegment)));
@@ -578,19 +583,20 @@ public class ObligationBizTransform extends BusinessTransform {
             } else if (covenantFlag.equalsIgnoreCase("N")){
                 customerInfoView.setReviewFlag(RadioValue.NO.value());
             }
+            customerInfoView.setCustomerOblAccountInfoViewList(customerOblAccountInfoViewList);
 
         }
         return customerInfoView;
     }
 
-    public CustomerOblAccountInfo getCustomerOblAccountInfo(Obligation obligation){
+    public CustomerOblAccountInfoView getCustomerOblAccountInfo(Obligation obligation){
         log.debug("-- begin getCustomerOblAccountInfo obligation: {}", obligation);
         if(obligation == null)
             return null;
 
-        CustomerOblAccountInfo customerOblAccountInfo = new CustomerOblAccountInfo();
+        CustomerOblAccountInfoView customerOblAccountInfo = new CustomerOblAccountInfoView();
         boolean accountActiveFlag = false;
-        if("04".equals(obligation.getDataSource())){
+        /*if("04".equals(obligation.getDataSource())){
             int compareResult = BigDecimal.ZERO.compareTo(obligation.getOutstanding());
             if(compareResult < 0){
                 accountActiveFlag = true;
@@ -624,7 +630,7 @@ public class ObligationBizTransform extends BusinessTransform {
                 accountActiveFlag = true;
             }
 
-        }
+        }*/
         customerOblAccountInfo.setAccountActiveFlag(accountActiveFlag);
         customerOblAccountInfo.setAccountRef(obligation.getAccountRef());
         customerOblAccountInfo.setDataSource(obligation.getDataSource());

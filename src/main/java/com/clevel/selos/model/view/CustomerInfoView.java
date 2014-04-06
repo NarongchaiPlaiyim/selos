@@ -137,6 +137,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private SBFScoreView ratingFinal;
     private BigDecimal unpaidFeeInsurance;
     private BigDecimal pendingClaimLG;
+    private List<CustomerOblAccountInfoView> customerOblAccountInfoViewList;
 
     private BigDecimal shares;
 
@@ -915,6 +916,14 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setPendingClaimLG(BigDecimal pendingClaimLG) {
         this.pendingClaimLG = pendingClaimLG;
+    }
+
+    public List<CustomerOblAccountInfoView> getCustomerOblAccountInfoViewList() {
+        return customerOblAccountInfoViewList;
+    }
+
+    public void setCustomerOblAccountInfoViewList(List<CustomerOblAccountInfoView> customerOblAccountInfoViewList) {
+        this.customerOblAccountInfoViewList = customerOblAccountInfoViewList;
     }
 
     public Date getLastReviewDate() {
