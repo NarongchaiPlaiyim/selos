@@ -42,6 +42,7 @@ public class ActionValidationControl extends BusinessControl{
         actionValidationResult.setActionResult(ActionResult.SUCCESS);
 
         Map<String, String> reasonMap = new HashMap<String, String>();
+        System.out.println(reasonMap.getClass().getName());
 
         //List<MandateFieldConfigure> mandateFieldConfigureList = mandateFieldConfigureDAO.findByAction(step, status, action);
         List<MandateField> mandateFieldConfigureList = getMandateFieldConfigureList();
@@ -63,11 +64,13 @@ public class ActionValidationControl extends BusinessControl{
         System.out.println("fields length: " + fields.length);
         String compareField = "creditType";
         for(Field field : fields){
-            System.out.println(field.getName());
+            System.out.println("field :" + field.getName());
             try{
                 field.setAccessible(true);
                 if(field.getName().equals(compareField)){
+                    System.out.println("CompareField : " + compareField);
                     Object value = field.get(obj);
+                    System.out.print("Value : " + value);
                     if(value.getClass().isPrimitive()){
                         Class valueClass = value.getClass();
                         if(valueClass.equals(String.class.getName())){
@@ -125,6 +128,8 @@ public class ActionValidationControl extends BusinessControl{
         NewCreditDetail newCreditDetail = new NewCreditDetail();
         newCreditDetail.setCreditType(new CreditType());
         ActionValidationResult actionValidationResult = actionValidationControl.validateClass(new NewCreditDetail());
+        List<String> stringList = new ArrayList<String>();
+        System.out.println("stringList :" + stringList.getClass().getName());
         System.out.print("result action Validation " + actionValidationResult);
 
     }

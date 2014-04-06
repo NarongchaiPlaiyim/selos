@@ -289,6 +289,7 @@ public class BRMSControl extends BusinessControl {
         BigDecimal totalNumberOfContingenCredit = BigDecimal.ZERO;
         List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreenId(workcasePrescreenId);
         List<BRMSAccountRequested> accountRequestedList = new ArrayList<BRMSAccountRequested>();
+
         for(PrescreenFacility prescreenFacility : prescreenFacilityList){
             BRMSAccountRequested accountRequested = new BRMSAccountRequested();
             accountRequested.setCreditDetailId(String.valueOf(prescreenFacility.getId()));
