@@ -543,6 +543,7 @@ public class ReassignTeamNames implements Serializable
         session.setAttribute("stepId", searchViewSelectItem.getStepId());
         session.setAttribute("queuename",searchViewSelectItem.getQueuename());
         session.setAttribute("fetchType",searchViewSelectItem.getFetchType());
+        session.setAttribute("caseOwner",searchViewSelectItem.getAtuser());
 
         try
         {

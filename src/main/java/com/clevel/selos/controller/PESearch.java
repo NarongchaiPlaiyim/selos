@@ -359,6 +359,8 @@ public class PESearch implements Serializable
         }*/
 
         session.setAttribute("stepId", searchViewSelectItem.getStepId());
+        session.setAttribute("caseOwner",searchViewSelectItem.getAtuser());
+
         if(searchViewSelectItem.getQueuename() == null)
         {
             session.setAttribute("queueName","0");

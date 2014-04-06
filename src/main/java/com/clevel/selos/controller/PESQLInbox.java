@@ -143,7 +143,17 @@ public class PESQLInbox implements Serializable
         int stageId = 0;
         int requestAppraisalFlag = 0;
 
-        if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {
+        if(userDetail.getRoleId() == 102)
+        {
+             if(inboxViewSelectItem.getAtuser().equalsIgnoreCase(userDetail.getUserName()) || inboxViewSelectItem.getAtuser().equalsIgnoreCase(userDetail.getUserName()))
+             {
+
+             }
+
+        }
+
+        if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value())
+        {
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByWobNumber(inboxViewSelectItem.getFwobnumber());
             if(workCasePrescreen != null){
                 wrkCasePreScreenId = workCasePrescreen.getId();
@@ -154,7 +164,10 @@ public class PESQLInbox implements Serializable
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
             session.setAttribute("statusId", statusId);
             session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
-        } else if (stepId == StepValue.REQUEST_APPRAISAL.value()) {     //For Parallel Appraisal
+        }
+
+        else if (stepId == StepValue.REQUEST_APPRAISAL.value())
+        {     //For Parallel Appraisal
             WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
             if(workCase != null){
                 wrkCaseId = workCase.getId();
@@ -175,7 +188,9 @@ public class PESQLInbox implements Serializable
                 session.setAttribute("statusId", statusId);
                 session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
             }
-        } else {
+        }
+        else
+        {
             WorkCase workCase = workCaseDAO.findByWobNumber(inboxViewSelectItem.getFwobnumber());
             if(workCase != null){
                 wrkCaseId = workCase.getId();
@@ -198,6 +213,7 @@ public class PESQLInbox implements Serializable
         }
 
         session.setAttribute("stepId", stepId);
+        session.setAttribute("caseOwner",inboxViewSelectItem.getAtuser());
 
         if(stepId != 0){
             Step step = stepDAO.findById(stepId);
