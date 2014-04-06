@@ -209,9 +209,8 @@
                            var="potentialItem"
                            itemLabel="#{potentialItem.description}"
                            itemValue="#{potentialItem.id}"/>
-            <p:ajax event="change"
-                    process="@this"
-                    update="@this"/>
+            <p:ajax event="change" listener="#{creditFacPropose.onChangePotentialCollateralType(CollateralHeaderDetailView)}"
+                    process="@form" update=":collateralDlgForm"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -221,10 +220,25 @@
     </td>
     <td class="left" colspan="3">
         <p:selectOneMenu id="dlgCollTypePercentLTV"
+                         value="#{CollateralHeaderDetailView.tcgCollateralType.id}"
+                         styleClass="largest"
+                         size="1"
+                         required="#{not empty param[btnSaveCollateral.clientId]}"
+                         style="min-width: 400px; width: 400px; max-width: 400px;">
+            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+            <f:selectItems value="#{creditFacPropose.potentialColToTCGColList}"
+                           var="dlgPotentialColToTCGColList"
+                           itemLabel="#{dlgPotentialColToTCGColList.tcgCollateralType.description}"
+                           itemValue="#{dlgPotentialColToTCGColList.tcgCollateralType.id}"/>
+            <p:ajax event="change"
+                    listener="#{creditFacPropose.onChangeCollTypeLTV(CollateralHeaderDetailView)}"
+                    process="@form"
+                    update=":collateralDlgForm"/>
+        </p:selectOneMenu>
+        <!--<p:selectOneMenu id="dlgCollTypePercentLTV"
                          value="#{CollateralHeaderDetailView.collTypePercentLTV.id}"
                          style="min-width: 400px; width: 400px; max-width: 400px;"
                          required="#{not empty param[btnSaveCollateral.clientId]}">
-           <!-- disabled="#{creditFacPropose.flagComs}"-->
             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
             <f:selectItems value="#{creditFacPropose.collTypeViewList}"
                            var="collTypePercentItem"
@@ -234,7 +248,7 @@
                     listener="#{creditFacPropose.onChangeCollTypeLTV(CollateralHeaderDetailView)}"
                     process="@form"
                     update=":collateralDlgForm"/>
-        </p:selectOneMenu>
+        </p:selectOneMenu>-->
     </td>
 </tr>
 <tr>
@@ -305,6 +319,20 @@
     </td>
     <td class="left" colspan="3">
         <p:selectOneMenu id="dlgHeadCollType"
+                         value="#{CollateralHeaderDetailView.tcgHeadCollType.id}"
+                         style="min-width: 400px; width: 400px; max-width: 400px;"
+                         required="#{not empty param[btnSaveCollateral.clientId]}"
+                         disabled="true">
+            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+            <f:selectItems value="#{creditFacPropose.headCollTypeList}"
+                           var="headCollateralTypeItem"
+                           itemLabel="#{headCollateralTypeItem.tcgCollateralType.description}"
+                           itemValue="#{headCollateralTypeItem.tcgCollateralType.id}"/>
+            <p:ajax event="change"
+                    process="@this"
+                    update="@this"/>
+        </p:selectOneMenu>
+       <!-- <p:selectOneMenu id="dlgHeadCollType"
                          value="#{CollateralHeaderDetailView.headCollType.id}"
                          style="min-width: 400px; width: 400px; max-width: 400px;"
                          required="#{not empty param[btnSaveCollateral.clientId]}"
@@ -317,7 +345,7 @@
             <p:ajax event="change"
                     process="@this"
                     update="@this"/>
-        </p:selectOneMenu>
+        </p:selectOneMenu>-->
     </td>
 </tr>
 <tr>
