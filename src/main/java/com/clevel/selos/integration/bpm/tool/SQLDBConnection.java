@@ -74,7 +74,8 @@ public class SQLDBConnection implements Serializable
         }
         catch(Exception e)
         {
-            log.error("Exception while connect to PE database ",e);
+            log.error("Exception while connect to PE database ", e);
+            throw e;
         }
 
         return conn;

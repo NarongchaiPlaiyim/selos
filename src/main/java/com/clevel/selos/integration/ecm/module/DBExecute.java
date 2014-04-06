@@ -172,52 +172,58 @@ public class DBExecute implements Serializable {
     }
 
     public boolean updateECM(final ECMCAPShare ecmcapShare){
-        log.debug("-- updateECM.[{}]");
+        log.debug("-- updateECM.[{}]", ecmcapShare.getCrsUKCANumber());
+        boolean result = false;
         StringBuilder stringBuilder = null;
-
         stringBuilder = new StringBuilder();
         if(!Util.isNull(schemaCAPShare) && !Util.isZero(schemaCAPShare.length())){
             stringBuilder.append("UPDATE ")
-                    .append(schemaCAPShare).append(".CRS_CRSLOOKUP ").append("SET")
+                    .append(schemaCAPShare).append(".CRS_CRSLOOKUP ").append("SET ")
                     .append("CRS_LASTUPDATE = ?, ")
                     .append("CRS_CANCEL_CA = ? ")
-                    .append(" WHERE ")
-
-
-                    .append(schemaCAPShare).append(".CRS_CRSLOOKUP");
+                    .append("WHERE ")
+                    .append("CRS_UK_CANUMBER = ?");
         } else {
-
+            stringBuilder.append("UPDATE ")
+                    .append("CRS_CRSLOOKUP ").append("SET ")
+                    .append("CRS_LASTUPDATE = ?, ")
+                    .append("CRS_CANCEL_CA = ? ")
+                    .append("WHERE ")
+                    .append("CRS_UK_CANUMBER = ?");
         }
-
         try{
             connection = dbContext.getConnection(connECMCAPShare, ecmUserCAPShare, ecmPasswordCAPShare);
         } catch (ECMInterfaceException ex){
             throw ex;
         }
-
         try {
             log.debug("open connection.");
             String sql = stringBuilder.toString();
             log.debug("-- SQL[{}]", sql);
             PreparedStatement statement = connection.prepareStatement(sql);
-
+            statement.setDate(1, ecmcapShare.getCrsLastUpdate());
+            statement.setString(2, ecmcapShare.getCrsCancelCA());
+            statement.setString(3, ecmcapShare.getCrsUKCANumber());
+            int flag = statement.executeUpdate();
+            if(flag != -1){
+                return !result;
+            }
             connection.close();
             connection = null;
             log.debug("connection closed.");
         } catch (SQLException e) {
             log.error("execute query exception!",e);
-            throw new ECMInterfaceException(e, ExceptionMapping.ECM_GETDATA_ERROR, msg.get(ExceptionMapping.ECM_GETDATA_ERROR));
+            throw new ECMInterfaceException(e, ExceptionMapping.ECM_UPDATEDATA_ERROR, msg.get(ExceptionMapping.ECM_UPDATEDATA_ERROR));
         } finally {
             closeConnection();
         }
-        return true;
+        return result;
     }
 
     public boolean insertIntoECM(final ECMCAPShare ecmcapShare){
         boolean result = false;
-        log.debug("-- updateECM.[{}]");
+        log.debug("-- insertIntoECM.[{}]", ecmcapShare.getCrsUKCANumber());
         StringBuilder stringBuilder = null;
-
         stringBuilder = new StringBuilder();
         if(!Util.isNull(schemaCAPShare) && !Util.isZero(schemaCAPShare.length())){
             stringBuilder.append("INSERT INTO ")
@@ -240,20 +246,18 @@ public class DBExecute implements Serializable {
                     .append("CRS_UK_CANUMBER)")
                     .append("VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         }
-
         try{
             connection = dbContext.getConnection(connECMCAPShare, ecmUserCAPShare, ecmPasswordCAPShare);
         } catch (ECMInterfaceException ex){
             throw ex;
         }
-
         try {
             log.debug("open connection.");
             String sql = stringBuilder.toString();
             log.debug("-- SQL[{}]", sql);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, Util.convertNullToZero(ecmcapShare.getCrsBranchCode()));
-            statement.setString(2,  ecmcapShare.getCrsCancelCA());
+            statement.setString(2,  ecmcapShare.getCrsCancelCA() == null ? "N" : ecmcapShare.getCrsCancelCA());
             statement.setDate(3, ecmcapShare.getCrsCreateDate());
             statement.setString(4, ecmcapShare.getCrsCustName());
             statement.setString(5,  Util.convertNullToZero(ecmcapShare.getCrsCusType()));
@@ -271,7 +275,7 @@ public class DBExecute implements Serializable {
             log.debug("connection closed.");
         } catch (SQLException e) {
             log.error("execute query exception!",e);
-            throw new ECMInterfaceException(e, ExceptionMapping.ECM_GETDATA_ERROR, msg.get(ExceptionMapping.ECM_GETDATA_ERROR));
+            throw new ECMInterfaceException(e, ExceptionMapping.ECM_INSERTDATA_ERROR, msg.get(ExceptionMapping.ECM_INSERTDATA_ERROR));
         } finally {
             closeConnection();
         }

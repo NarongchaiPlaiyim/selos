@@ -36,6 +36,27 @@
             </p:panel>
         </h:form>
 
+        <h:form id="ECMCAPShareUpdate">
+            <p:panel header="ECMCAPShareUpdateHeader">
+                <h:panelGrid columns="2">
+
+                    <h:outputText value=""/>
+                    <p:commandButton id="submitOnClickECMCAPShareUpdate" value="Update" update="@form"
+                                     action="#{TestNCRS.onClickECMCAPShareUpdate()}"/>
+
+                    <h:outputText value="App Number : "/>
+                    <p:inputText value="#{TestNCRS.appNumber}"/>
+
+                    <h:outputText value="Result"/>
+                    <p:inputTextarea value="#{TestNCRS.result}" rows="50" cols="100">
+
+                    </p:inputTextarea>
+
+
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+
 
 
 

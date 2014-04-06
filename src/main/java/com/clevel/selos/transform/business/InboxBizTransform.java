@@ -54,7 +54,7 @@ public class InboxBizTransform extends BusinessTransform {
                         inboxView.setRequestAppraisal(workCasePrescreen.getRequestAppraisal());
                         inboxView.setStatusCode(workCasePrescreen.getStatus().getId());
                     }
-                } else if (Integer.parseInt(item.getCaseData().get("Step_Code")) == StepValue.REQUEST_APPRAISAL.value()){
+                } else if (Integer.parseInt(item.getCaseData().get("Step_Code")) == StepValue.REVIEW_APPRAISAL_REQUEST.value()){
                     WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(item.getCaseData().get("F_AppNumber"));
                     if(workCaseAppraisal != null){
                         inboxView.setCaNo(workCaseAppraisal.getAppNumber());

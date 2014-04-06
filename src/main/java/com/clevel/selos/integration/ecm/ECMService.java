@@ -60,7 +60,6 @@ public class ECMService implements Serializable {
                 throw new Exception("ECMCAPShare.CRSUKCANumber[null]");
             }
         }
-
         try {
             if(dbExecute.updateECM(ecmcapShare)){
                 log.debug("AppNumber[{}] updated", ecmcapShare.getCrsUKCANumber());
@@ -93,9 +92,6 @@ public class ECMService implements Serializable {
                 throw new Exception("ECMCAPShare.CRSCustName[null]");
             }
         }
-
-
-
         try {
             if(dbExecute.insertIntoECM(ecmcapShare)){
                 log.debug("AppNumber[{}] inserted", ecmcapShare.getCrsUKCANumber());

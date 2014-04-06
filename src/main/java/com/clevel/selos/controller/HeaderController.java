@@ -39,8 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 
 @ViewScoped
-@ManagedBean(name = "baseController")
-public class BaseController implements Serializable {
+@ManagedBean(name = "headerController")
+public class HeaderController implements Serializable {
     @Inject
     @SELOS
     Logger log;
@@ -157,12 +157,12 @@ public class BaseController implements Serializable {
     private String messageHeader;
     private String message;
 
-    public BaseController() {
+    public HeaderController() {
     }
 
     @PostConstruct
     public void onCreation() {
-        log.info("BaseController ::: Creation ");
+        log.info("HeaderController ::: Creation ");
         manageButton = new ManageButton();
         HttpSession session = FacesUtil.getSession(true);
         long workCasePreScreenId = 0L;
@@ -198,8 +198,8 @@ public class BaseController implements Serializable {
             requestAppraisalPage = true;
         }
 
-        log.info("BaseController ::: getSession : workCasePreScreenId : {}, workcase = {}, stepId = {}, stageId = {}", workCasePreScreenId, workCaseId, stepId, stageId);
-        log.debug("BaseController ::: find active button");
+        log.info("HeaderController ::: getSession : workCasePreScreenId : {}, workcase = {}, stepId = {}, statusId = {}, stageId = {}", workCasePreScreenId, workCaseId, stepId, statusId, stageId);
+        log.debug("HeaderController ::: find active button");
 
         //TODO Get all action from Database By Step and Status and Role
         stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId);
@@ -210,60 +210,8 @@ public class BaseController implements Serializable {
         appraisalDetailView = new AppraisalDetailView();
         appraisalContactDetailView = new AppraisalContactDetailView();
 
-        /*if (stepId == StepValue.PRESCREEN_INITIAL.value()) {
-            manageButton.setAssignToCheckerButton(true);
-            manageButton.setCancelCAButton(true);
-            manageButton.setCheckMandateDocButton(true);
-        } else if (stepId == StepValue.PRESCREEN_CHECKER.value()) {
-            manageButton.setCheckMandateDocButton(true);
-            manageButton.setCheckNCBButton(true);
-            manageButton.setReturnToMakerButton(true);
-        } else if (stepId == StepValue.PRESCREEN_MAKER.value()) {
-            if(Util.getCurrentPage().equals("prescreenMaker.jsf") || Util.getCurrentPage().equals("prescreenResult.jsf")){
-                manageButton.setCancelCAButton(true);
-                manageButton.setCloseSaleButton(true);
-                manageButton.setCheckBRMSButton(true);
-                manageButton.setCheckMandateDocButton(true);
-                if(requestAppraisal == 0){
-                    manageButton.setRequestAppraisalButton(true);
-                }
-            }else if(Util.getCurrentPage().equals("appraisalRequest.jsf")){
-                manageButton.setCheckMandateDocButton(true);
-                manageButton.setCancelAppraisalButton(true);
-                //manageButton.setSubmitAppraisalButton(true);
-                manageButton.setSubmitRequestAppraisalButton(true);
-            }
-        } else if (stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()) {
-            if(Util.getCurrentPage().equals("/site/appraisalRequest.jsf")){
-                manageButton.setCheckMandateDocButton(true);
-                manageButton.setCancelAppraisalButton(true);
-                //manageButton.setSubmitAppraisalButton(true);
-                manageButton.setSubmitRequestAppraisalButton(true);
-            }else{
-                manageButton.setViewRelatedCA(true);
-                if(requestAppraisal == 0){
-                    manageButton.setRequestAppraisalButton(true);
-                }
-                manageButton.setCheckMandateDocButton(true);
-                manageButton.setCheckCriteriaButton(true);
-                manageButton.setAssignToABDMButton(true);
-                manageButton.setCancelCAFullAppButton(true);
-                manageButton.setSubmitCAButton(true);
-                manageButton.setReturnBDMButton(true);
-            }
-        } else if (stepId == StepValue.REQUEST_APPRAISAL.value()) {
-            //Step at AAD Admin (Appraisal Appointment)
-            manageButton.setCheckMandateDocButton(true);
-            manageButton.setReturnAppraisalBDMButton(true);
-            manageButton.setSubmitAADCommitteeButton(true);
-        } else if (stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()){
-            //Step at AAD Committee (Appraisal Result)
-            manageButton.setReturnAADAdminButton(true);
-            manageButton.setSubmitAppraisalButton(true);
-        }*/
-
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
-        log.info("BaseController ::: appHeader : {}", appHeaderView);
+        log.info("HeaderController ::: appHeader : {}", appHeaderView);
 
         if(session.getAttribute("workCaseId") != null && (Long)session.getAttribute("workCaseId") != 0){
             try{
@@ -834,8 +782,8 @@ public class BaseController implements Serializable {
         log.debug("onSaveReturnInfo ::: complete. returnInfoViewList size: {}", returnInfoViewList.size());
     }
 
-    public void onSumbitReturnBDM(){ //Submit return from UW1 to BDM
-        log.debug("onSumbitReturnSummary ::: returnInfoViewList size : {}", returnInfoViewList);
+    public void onSubmitReturnBDM(){ //Submit return from UW1 to BDM
+        log.debug("onSubmitReturnBDM ::: returnInfoViewList size : {}", returnInfoViewList);
         boolean complete = false;
         if(returnInfoViewList!=null && returnInfoViewList.size()>0){
             try{
@@ -873,14 +821,14 @@ public class BaseController implements Serializable {
             message = "Return to BDM failed, have no reason to return.";
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
             complete = false;
-            log.debug("onSumbitReturnSummary ::: Return to BDM failed, have no reason to return.");
+            log.debug("onSubmitReturnBDM ::: Return to BDM failed, have no reason to return.");
         }
 
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
-    public void onSumbitReturnUW1(){ //Submit Reply From BDM to UW1
-        log.debug("onSumbitReturnReply");
+    public void onSubmitReturnUW1(){ //Submit Reply From BDM to UW1
+        log.debug("onSubmitReturnReply");
 
         try{
             HttpSession session = FacesUtil.getSession(true);

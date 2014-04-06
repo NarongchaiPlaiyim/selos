@@ -9,7 +9,6 @@ import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.ECMInterface;
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
-import com.clevel.selos.integration.ecm.db.ECMCAPShare;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.model.ECMDataResult;
 import com.clevel.selos.integration.ncb.NCBInterfaceImpl;
@@ -339,9 +338,35 @@ public class TestNCRS implements Serializable {
         }
     }
 
+    public void onClickECMCAPShareUpdate(){
+        log.debug("-- onClickECMCAPShare()");
+        /*ECMCAPShare ecmcapShare = null;
+        try{
+            ecmcapShare = new ECMCAPShare();
+            ecmcapShare.setCrsUKCANumber(appNumber);
+            ecmcapShare.setCrsCancelCA("Y");
+            ecmcapShare.setCrsLastUpdate(new java.sql.Date(new Date().getTime()));
+            log.debug("-- LastUpdate DATE[{}]", ecmcapShare.getCrsLastUpdate());
+
+            log.debug("Model [{}]", ecmcapShare.toString());
+            if(ecmInterface.update(ecmcapShare)){
+                result = "SUCCESS";
+            } else {
+                result = "FAILED";
+            }
+        } catch (ECMInterfaceException e) {
+            log.error("-- ECMInterfaceException : {}", e.getMessage());
+            result = e.getMessage();
+        } catch (Exception e) {
+            log.error("-- Exception : {}", e.getMessage());
+            result = e.getMessage();
+        }*/
+
+    }
+
     public void onClickECMCAPShare(){
         log.debug("-- onClickECMCAPShare()");
-        ECMCAPShare ecmcapShare = null;
+        /*ECMCAPShare ecmcapShare = null;
         try{
             ecmcapShare = new ECMCAPShare();
             ecmcapShare.setCrsUKCANumber(appNumber);
@@ -363,7 +388,7 @@ public class TestNCRS implements Serializable {
         } catch (Exception e) {
             log.error("-- Exception : {}", e.getMessage());
             result = e.getMessage();
-        }
+        }*/
     }
 
     public void onClickCallBRMS(){
