@@ -285,6 +285,8 @@ public class DecisionControl extends BusinessControl {
         if (RoleValue.UW.id() == getUserRoleId()) {
             Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
             if (decision != null && decision.getId() != 0 && decision.getSaveFlag() == 1) {
+                decisionView.setId(decision.getId());
+
                 // Approve data already been recorded
                 List<NewCreditDetail> approveCreditList = newCreditDetailDAO.findNewCreditDetail(workCaseId, ProposeType.A);
                 decisionView.setApproveCreditList(newCreditDetailTransform.transformToView(approveCreditList));

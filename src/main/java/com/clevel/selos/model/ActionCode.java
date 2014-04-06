@@ -14,7 +14,7 @@ public enum ActionCode {
     SUBMIT_TO_BDM(1011, "Submit to BDM"),
     REPLY_TO_AAD(1012, "Reply to AAD"),
     PRINT_OP_SHEET(1013, "Print PDF"),
-    SUBMIT_CA_BDM(1015, "Submit CA"),
+    SUBMIT_CA(1015, "Submit CA"),
     RETURN_TO_BDM_FULLAPP(1016, "Return to BDM 2"),
     VIEW_RELATE_APP(1017, "View Related Application CA"),
     SUBMIT_TO_UW1(1018, "Submit to UW1"),

@@ -144,8 +144,8 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font pdfFontName="fonts/TAHOMA.TTF"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{collateralType}]]></textFieldExpression>
 			</textField>

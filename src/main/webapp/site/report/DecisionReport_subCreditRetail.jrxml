@@ -167,7 +167,7 @@
 				<reportElement uuid="18bdd29b-893f-4717-a55b-65dcd99ef1b2" style="detail" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="23" y="0" width="119" height="31" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="3" tabStopWidth="40"/>
+					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1" tabStopWidth="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{accout}]]></textFieldExpression>
 			</textField>
@@ -220,9 +220,9 @@
 				<textFieldExpression><![CDATA[$F{count}.intValue() == 0 ? "No records found" : ""]]></textFieldExpression>
 			</textField>
 			<frame>
-				<reportElement uuid="cb3c286c-7a24-4239-b725-be7ad8e612d0" stretchType="RelativeToBandHeight" x="438" y="0" width="117" height="31"/>
+				<reportElement uuid="cb3c286c-7a24-4239-b725-be7ad8e612d0" stretchType="RelativeToTallestObject" x="438" y="0" width="117" height="31"/>
 				<subreport>
-					<reportElement uuid="73cadf47-d281-4281-9bb4-299d731e29be" x="0" y="0" width="117" height="31"/>
+					<reportElement uuid="73cadf47-d281-4281-9bb4-299d731e29be" stretchType="RelativeToBandHeight" x="0" y="0" width="117" height="31"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTierDetailViewList})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$F{path} + "DecisionReport_subCreditBorrower_subCreditBorrower.jasper"]]></subreportExpression>
 				</subreport>

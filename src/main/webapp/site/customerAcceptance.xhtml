@@ -57,10 +57,10 @@
                                     <table>
                                         <tr>
                                             <td class="title" style="width:200px;">
-                                                <p:outputLabel value="#{msg.get('app.approveType')}" styleClass="center"/>
+                                                <p:outputLabel value="#{msg.get('app.approveType')}#{customerAcceptance.mandate('approvedType')}" styleClass="center"/>
                                             </td>
                                             <td style="width:200px;">
-                                                <p:selectOneRadio disabled="true" value="#{customerAcceptance.approveType}">
+                                                <p:selectOneRadio disabled="#{customerAcceptance.isDisabled('approvedType')}" value="#{customerAcceptance.approveType}">
                                                 	<f:selectItems value="#{enumGeneralControl.approveTypes}" var="approveType"
                                                 		itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}" 
                                                 		/>
@@ -82,11 +82,11 @@
 	                                        </th>
 	                                    </tr>
 	                                    <tr>
-	                                        <td class="title left">
-	                                        	<h:outputText value="#{msg.get('app.cusaccept.customerAcceptance.approveResult')}" />
+	                                        <td class="title left" style="width:240px">
+	                                        	<h:outputText value="#{msg.get('app.cusaccept.customerAcceptance.approveResult')}#{customerAcceptance.mandate('cusaccept.approveResult')}" />
 	                                        </td>
 	                                        <td colspan="5" class="left">
-	                                             <p:selectOneRadio disabled="true" value="#{customerAcceptance.approveResult}">
+	                                             <p:selectOneRadio disabled="#{customerAcceptance.isDisabled('cusaccept.approveResult')}" value="#{customerAcceptance.approveResult}">
 	                                             	<f:selectItems value="#{enumGeneralControl.approveResults}" var="approveResult"
 	                                             		itemLabel="#{msg.get(approveResult.msgKey)}" itemValue="approveResult" 
 	                                             		/>
@@ -95,30 +95,30 @@
 	                                    </tr>
 	                                    <tr>
 	                                        <td class="title left">
-	                                        	<h:outputText value="#{msg.get('app.cusaccept.customerAcceptance.zoneManager')}" />
+	                                        	<h:outputText value="#{msg.get('app.cusaccept.customerAcceptance.zoneManager')}#{customerAcceptance.mandate('cusaccept.name')}" />
 	                                        </td>
 	                                        <td class="left">
-	                                        	<p:inputText styleClass="large readonly" readonly="true"
+	                                        	<p:inputText styleClass="large" readonly="#{customerAcceptance.isDisabled('cusaccept.name')}"
 	                                        		value="Mr. Zone Manager" /> 
 	                                        </td>
 	                                        <td class="title left" style="width: 100px;">
-	                                        	<h:outputText value="#{msg.get('app.cusaccept.customerAcceptance.tel')}" />
+	                                        	<h:outputText value="#{msg.get('app.cusaccept.customerAcceptance.tel')}#{customerAcceptance.mandate('cusaccept.phoneNo')}" />
 	                                        </td>
 	                                        <td class="left">
-	                                        	<p:inputText styleClass="large readonly" readonly="true"
+	                                        	<p:inputText styleClass="large" readonly="#{customerAcceptance.isDisabled('cusaccept.phoneNo')}"
 	                                        		value="Telephone" />
 	                                        </td>
 	                                        <td class="title left">
-	                                        	<h:outputText value="#{msg.get('app.cusaccept.customerAcceptance.emailAddress')}" />
+	                                        	<h:outputText value="#{msg.get('app.cusaccept.customerAcceptance.emailAddress')}#{customerAcceptance.mandate('cusaccept.email')}" />
 	                                        </td>
 	                                        <td class="left">
-	                                        	<p:inputText styleClass="readonly" readonly="true" size="30"
+	                                        	<p:inputText readonly="#{customerAcceptance.isDisabled('cusaccept.email')}" size="30"
 	                                        		value="zone.manager@tmbbank.com" />
 	                                        </td>
 	                                    </tr>
 	                                    <tr>
 	                                        <td class="title left" style="width: 200px;">
-	                                        	<h:outputText value="#{msg.get('app.cusaccept.customerAcceptance.TCGPayinSlipSendDate')}" />
+	                                        	<h:outputText value="#{msg.get('app.cusaccept.customerAcceptance.TCGPayinSlipSendDate')}#{customerAcceptance.mandate('cusaccpt.TCGPayinSlipSendDate')}" />
 	                                        </td>
 	                                        <td class="left" colspan="5">
 	                                        
@@ -126,15 +126,18 @@
 	                                        		value="#{customerAcceptance.tcgInfoView.payinSlipSendDate}"
 	                                        		mindate="#{customerAcceptance.minTCGPayinSlipSendDate}"
 	                                        		autocomplete="false"  locale="th_TH"
+	                                        		disabled="#{customerAcceptance.isDisabled('cusaccpt.TCGPayinSlipSendDate')}"
 	                                        		/>
 	                                         </td>
 	                                    </tr>
 	                                    <tr>
 	                                        <td class="title left" style="width: 190px;">
-	                                        	<h:outputText value="#{msg.get('app.cusaccept.customerAcceptance.receiveTCGSlip')}" /> 
+	                                        	<h:outputText value="#{msg.get('app.cusaccept.customerAcceptance.receiveTCGSlip')}#{customerAcceptance.mandate('cusaccept.receiveTCGSlip')}" /> 
 	                                        </td>
 	                                        <td class="left" colspan="5">
-	                                       		<p:selectOneRadio value="#{customerAcceptance.tcgInfoView.receiveTCGSlip}">
+	                                       		<p:selectOneRadio
+	                                       			disabled="#{customerAcceptance.isDisabled('cusaccept.receiveTCGSlip')}" 
+	                                       			value="#{customerAcceptance.tcgInfoView.receiveTCGSlip}">
 	                                                 <f:selectItem
 	                                                 	itemLabel="#{msg.get('app.button.yes')}" 
 	                                                 	itemValue="2"/>
@@ -159,6 +162,7 @@
 				                                action="#{customerAcceptance.onOpenAddContactRecordDialog()}"
 				                                oncomplete="p_contactRecordDlg.show()"
 				                                update=":contactRecordDlg"
+				                                disabled="#{customerAcceptance.isDisabled('addButton')}"
 				                                >
 										<p:resetInput target=":contactRecordDlg" />
 				                   	</p:commandButton>
@@ -190,15 +194,6 @@
 	                           					 />
 	                           				<h:outputText value="#{msg.get('app.cusaccept.callResult.radio.cannotcontact')}"
 	                           					rendered="#{detail.callingResult eq 1}"
-	                           					 />
-	                           			</p:column>
-	                           			<p:column style='width:100px' styleClass="left" 
-	                           				headerText="#{msg.get('app.cusaccept.contactRecord.acceptResult')}">
-	                           				<h:outputText value="#{msg.get('app.cusaccept.acceptResult.radio.accept')}"
-	                           					rendered="#{detail.acceptResult eq 2}"
-	                           					 />
-	                           				<h:outputText value="#{msg.get('app.cusaccept.acceptResult.radio.notaccept')}"
-	                           					rendered="#{detail.acceptResult eq 1}"
 	                           					 />
 	                           			</p:column>
 	                           			<p:column style='width:100px' styleClass="center"
@@ -233,6 +228,7 @@
 	                           						action="#{customerAcceptance.onOpenUpdateContactRecordDialog()}"
 	                           						update=":contactRecordDlg"
 	                           						style="margin-right:0px !important"
+	                           						disabled="#{customerAcceptance.isDisabled('customerContactRec.actionList')}"
 	                           						>
 	                           						<p:resetInput target=":contactRecordDlg" />
 	                           						<f:setPropertyActionListener target="#{customerAcceptance.contactRecord}"
@@ -243,6 +239,7 @@
 	                                            	process="@this"
 	                           						oncomplete="p_delContactRecordDlg.show()"
 	                           						style="margin-right:0px !important"
+	                           						disabled="#{customerAcceptance.isDisabled('customerContactRec.actionList')}"
 	                                            	>
 	                                            	<f:setPropertyActionListener target="#{customerAcceptance.deletedRowId}" value="#{rowIdx}" />
 	                                            </p:commandButton>
@@ -267,9 +264,12 @@
 										onstart="handleOnStartOpenCfmDlg();"
 										oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveCusAcceptanceDlg);"
 										update=":frmMain:full_main_container,:result_dialog"
+										disabled="#{customerAcceptance.isDisabled('saveButton')}"
 	                                 	 />
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"
+										oncomplete="p_cancelContactRecordDlg.show()"
+										disabled="#{customerAcceptance.isDisabled('cancelButton')}"
 										/>
 	                             </td>
 	                        </tr>
@@ -295,7 +295,15 @@
 		dynamic="true">
 		<ui:include src="dialog/contactRecordDetailViewDialog.xhtml" />
 	</p:dialog>
-    
+    <ui:include src="dialog/confirmCancelDlg.xhtml">
+        <ui:param name="id" value="cancelContactRecordDlg"/>
+        <ui:param name="name" value="p_cancelContactRecordDlg"/>
+        <ui:param name="formId" value="cancelContactRecordFrm"/>
+        <ui:param name="controller" value="#{customerAcceptance}"/>
+        <ui:param name="action" value="onCancelCustomerAcceptance"/>
+        <ui:param name="update" value=":frmMain:full_main_container"/>
+     </ui:include>
+	
 	 <ui:include src="dialog/confirmDeleteDlg.xhtml">
         <ui:param name="id" value="delContactRecordDlg"/>
         <ui:param name="name" value="p_delContactRecordDlg"/>
@@ -304,7 +312,7 @@
         <ui:param name="action" value="onDeleteContactRecord"/>
         <ui:param name="update" value=":frmMain:contact_record_tbl"/>
     </ui:include>
-	<ui:include src="dialog/confirmEditDlg.xhtml">
+    <ui:include src="dialog/confirmEditDlg.xhtml">
 		<ui:param name="id" value="saveCusAcceptanceDlg"/>
 		<ui:param name="name" value="p_saveCusAcceptanceDlg"/>
 		<ui:param name="formId" value="saveCusAcceptanceFrm"/>

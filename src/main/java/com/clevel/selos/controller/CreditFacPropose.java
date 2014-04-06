@@ -29,6 +29,7 @@ import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import com.clevel.selos.util.ValidationUtil;
 import com.rits.cloning.Cloner;
+
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -37,13 +38,15 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
 
 @ViewScoped
 @ManagedBean(name = "creditFacPropose")
-public class CreditFacPropose extends MandatoryFieldsControl {
+public class CreditFacPropose implements Serializable {
     @Inject
     @SELOS
     Logger log;
@@ -439,9 +442,13 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         String jobId = newCollateralView.getJobID();
         log.debug("onCallRetrieveAppraisalReportInfo begin key is  :: {}", jobId);
         boolean flag = true;
-        User user = getCurrentUser();
-
-        if (!Util.isNull(jobId)) {
+//        User user = getCurrentUser();
+        HttpSession session = FacesUtil.getSession(false);
+        User user = null;
+		if (session != null) {
+			user = (User) session.getAttribute("user");
+		}
+        if (!Util.isNull(jobId) && user != null) {
             flag = checkJobIdExist(newCreditFacilityView.getNewCollateralViewList(), jobId);
 
             if (flag) {
@@ -1290,6 +1297,21 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     // ****************************************************Start Add SUB Collateral****************************************************//
     public void onAddSubCollateral() {
         log.debug("onAddSubCollateral and rowCollHeadIndex :: {}", rowCollHeadIndex);
+        if (newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId() != 0) {
+
+            RequestContext.getCurrentInstance().execute("subCollateralInfoDlg.show()");
+            CollateralType collateralType = collateralTypeDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId());
+            subCollateralTypeList = subCollateralTypeDAO.findByCollateralType(collateralType);
+            subCollateralTypeViewList = subCollateralTypeTransform.transformToView(subCollateralTypeList);
+            log.debug("subCollateralTypeList ::: {}", subCollateralTypeList.size());
+
+        } else {
+            messageHeader = msg.get("app.messageHeader.error");
+            message = "Please to choose Coll Type (%LTV)";
+            severity = MessageDialogSeverity.ALERT.severity();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
+        }
         newCollateralSubView = new NewCollateralSubView();
         relatedWithSelected = new NewCollateralSubView();
         modeForSubColl = ModeForButton.ADD;
@@ -1297,18 +1319,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         newCollateralSubView.setRelatedWithList(new ArrayList<NewCollateralSubView>());
         relatedWithAllList = creditFacProposeControl.findNewCollateralSubView(newCreditFacilityView.getNewCollateralViewList());
 
-        if (newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId() != 0) {
-            CollateralType collateralType = collateralTypeDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId());
-            subCollateralTypeList = subCollateralTypeDAO.findByCollateralType(collateralType);
-            subCollateralTypeViewList = subCollateralTypeTransform.transformToView(subCollateralTypeList);
-            log.debug("subCollateralTypeList ::: {}", subCollateralTypeList.size());
-        } else {
-            messageHeader = msg.get("app.messageHeader.error");
-            message = "Please to choose Head Collateral Type";
-            severity = MessageDialogSeverity.ALERT.severity();
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
-        }
+
 
     }
 

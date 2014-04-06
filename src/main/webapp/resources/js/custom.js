@@ -27,7 +27,7 @@ PrimeFaces.locales ['th_TH'] = {
 };
 
 function showCheckedValue(){
-    alert(document.getElementById('jsfForm1:chkRememberMe').checked);
+    alert(document.getElementById('frmMain:checkBoxId').checked);
 }
 
 function gotoInbox(contextUrl) {

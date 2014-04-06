@@ -9,6 +9,7 @@ import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.model.ActionCode;
+import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -19,11 +20,13 @@ import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.primefaces.context.RequestContext;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import com.clevel.selos.model.view.PEInbox;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
@@ -53,6 +56,9 @@ public class PESQLInbox implements Serializable
     @Inject
     WorkCaseDAO workCaseDAO;
     @Inject
+    BPMInterfaceImpl bpmInterfaceImpl;
+
+    @Inject
     StepDAO stepDAO;
 
     @Inject
@@ -81,6 +87,31 @@ public class PESQLInbox implements Serializable
 
         //Clear all session before selectInbox
         HttpSession session = FacesUtil.getSession(false);
+
+        try
+        {
+            if(session.getAttribute("isLocked")!=null)
+            {
+
+                String isLocked = (String) session.getAttribute("isLocked");
+
+                if(isLocked.equalsIgnoreCase("true"))
+                {
+                    String wobNum = (String)session.getAttribute("wobNum");
+                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNum,(Integer)session.getAttribute("fetchType"));
+                }
+                else
+                {
+                    session.removeAttribute("isLocked");
+                }
+
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
+        }
+
         session.setAttribute("workCasePreScreenId", 0L);
         session.setAttribute("workCaseAppraisalId", 0L);
         session.setAttribute("workCaseId", 0L);
@@ -119,7 +150,17 @@ public class PESQLInbox implements Serializable
         int stageId = 0;
         int requestAppraisalFlag = 0;
 
-        if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {
+        if(userDetail.getRoleId() == 102)
+        {
+             if(inboxViewSelectItem.getAtuser().equalsIgnoreCase(userDetail.getUserName()) || inboxViewSelectItem.getAtuser().equalsIgnoreCase(userDetail.getUserName()))
+             {
+
+             }
+
+        }
+
+        if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value())
+        {
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
             if(workCasePrescreen != null){
                 wrkCasePreScreenId = workCasePrescreen.getId();
@@ -129,6 +170,9 @@ public class PESQLInbox implements Serializable
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
             session.setAttribute("statusId", statusId);
+            session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
+        }
+
         } else if (stepId == StepValue.REQUEST_APPRAISAL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Parallel Appraisal
             WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
             if(workCase != null){
@@ -150,7 +194,9 @@ public class PESQLInbox implements Serializable
                 session.setAttribute("statusId", statusId);
                 session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
             }
-        } else {
+        }
+        else
+        {
             WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
             if(workCase != null){
                 wrkCaseId = workCase.getId();
@@ -160,6 +206,7 @@ public class PESQLInbox implements Serializable
             session.setAttribute("workCaseId", wrkCaseId);
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
             session.setAttribute("statusId", statusId);
+            session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
         }
 
         if(Util.isNull(inboxViewSelectItem.getFetchType())) {
@@ -167,6 +214,9 @@ public class PESQLInbox implements Serializable
         } else {
             session.setAttribute("fetchType",inboxViewSelectItem.getFetchType());
         }
+
+        session.setAttribute("stepId", stepId);
+        session.setAttribute("caseOwner",inboxViewSelectItem.getAtuser());
 
         if(stepId != 0){
             Step step = stepDAO.findById(stepId);
@@ -184,6 +234,22 @@ public class PESQLInbox implements Serializable
         }
 
         AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, inboxViewSelectItem.getFwobnumber());
+        try
+        {
+
+            bpmInterfaceImpl.lockCase(queueName,inboxViewSelectItem.getFwobnumber(),inboxViewSelectItem.getFetchType());
+            session.setAttribute("isLocked","true");
+
+        }
+        catch (Exception e)
+        {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            FacesMessage facesMessage = new FacesMessage("Another User is Working on this case!! Please Retry Later.");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Another User is Working on this case!! Please Retry Later.","");
+            facesContext.addMessage(null, facesMessage);
+            log.error("Error while Locking case in queue : {}, WobNum : {}",queueName, inboxViewSelectItem.getFwobnumber(), e);
+        }
+
         session.setAttribute("appHeaderInfo", appHeaderView);
 
         String landingPage = inboxControl.getLandingPage(stepId);

@@ -247,6 +247,64 @@
                              rendered="true">
 
             </p:commandButton>-->
+            
+            <!-- Stage 301 - Customer acceptance -->
+            <p:panel id="header_panel_301" rendered="#{baseController.stageId == 301}" styleClass="panel">
+            	<!--Print Op Sheet -->
+            	<p:commandButton id="btnPrintReport301" value="#{msg.get('app.header.button.printReport')}" 
+                				 styleClass="blueButton" title="#{msg.get('app.header.button.printReport')}"
+                                 oncomplete="printReportDlg.show()"
+                                 actionListener="#{report.setNameReport()}"
+                                 update=":frmMain:printReportPanel"
+                                 rendered="#{baseController.checkButton('Print PDF')}">
+                </p:commandButton>
+				<!--Check Mandate Doc -->
+                <p:commandButton id="btnChkMandate301" value="#{msg.get('app.header.button.mandateDoc')}" 
+                				 styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
+                                 rendered="#{baseController.checkButton('Check Mandate Doc')}">
+                </p:commandButton>
+                
+                <!--Request for Price Reduction -->
+                <p:commandButton id="btnPriceReduction301" value="#{msg.get('app.header.button.requestPriceReduction')}" 
+                				 styleClass="blueButton" title="#{msg.get('app.header.button.requestPriceReduction')}"
+                                 rendered="#{baseController.checkButton('Request for Price Reduction')}">
+                </p:commandButton>
+                
+                
+                <!--Return to BDM -->
+                <p:commandButton id="btnReturnBDM301" value="#{msg.get('app.header.button.returnToBDM')}" 
+                				styleClass="blueButton" title="#{msg.get('app.header.button.returnToBDM')}"
+                                 rendered="#{baseController.checkButton('Return to BDM')}"
+                                 actionListener="#{baseController.onOpenReturnBDMDialog()}"
+                                 oncomplete="returnBDMDlg.show()"
+                                 update=":frmMain:returnBDMPanel">
+                    <p:resetInput target=":frmMain:returnBDMPanel"/>
+                </p:commandButton>
+                
+                <!--Return to UW2 -->
+                <p:commandButton id="btnReturnUW2_301" value="#{msg.get('app.header.button.returnToUW2')}" 
+                				 styleClass="blueButton" title="#{msg.get('app.header.button.returnToBDM')}"
+                                 rendered="#{baseController.checkButton('Return to UW 2')}"
+                                 >
+                </p:commandButton>
+                
+                <!--Cancel CA -->
+                <p:commandButton id="btnCancelCA301" value="#{msg.get('app.header.button.cancelCA')}" 
+                				 styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
+                                 rendered="#{baseController.checkButton('Cancel CA')}"
+                                 actionListener="#{baseController.onOpenCancelCAFullApp()}"
+                                 oncomplete="cancelCAFullAppDlg.show()"
+                                 update=":frmMain:cancelCAFullAppPanel">
+                    <p:resetInput target=":frmMain:cancelCAFullAppPanel"/>
+                </p:commandButton>
+                <!--Submit to BDM -->
+                <p:commandButton id="btnSubmitCase301" value="#{msg.get('app.header.button.submit')}" 
+                				 styleClass="blueButton" title="#{msg.get('app.header.button.submit')}"
+                                 rendered="#{baseController.checkButton('Submit to BDM')}"
+                                >
+                </p:commandButton>
+                
+            </p:panel>
         </div>
         <div class="clear"></div>
         <div id="header_information">

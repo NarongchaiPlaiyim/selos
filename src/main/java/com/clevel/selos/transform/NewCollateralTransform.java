@@ -215,8 +215,8 @@ public class NewCollateralTransform extends Transform {
                 newCollateralSub.setNewCollateralSubOwnerList(newCollateralSubOwnerList);
             }
 
-//            if (newCollateralSubView.getRelatedWithList() != null) {
-//                List<NewCollateralSubRelated> newCollateralSubRelatedList = new ArrayList<NewCollateralSubRelated>();
+            if (newCollateralSubView.getRelatedWithList() != null) {
+                List<NewCollateralSubRelated> newCollateralSubRelatedList = new ArrayList<NewCollateralSubRelated>();
                 // transform to DB >> newCollateralSubView.getRelatedWithList()
 //                List<NewCollateralSubRelated> newCollateralSubRelatedList  = transformNewCollateralSubRelated(newCollateralSubView.getRelatedWithList(),newCollateralHead,user,workCase);
 
@@ -233,8 +233,8 @@ public class NewCollateralTransform extends Transform {
 //                    newCollateralSubRelatedList.add(newCollateralSubRelate);
 //                }
 
-//                newCollateralSub.setNewCollateralSubRelatedList(newCollateralSubRelatedList);
-//            }
+                newCollateralSub.setNewCollateralSubRelatedList(newCollateralSubRelatedList);
+            }
 
             newCollateralSub.setNewCollateralHead(newCollateralHead);
             newCollateralSubList.add(newCollateralSub);
