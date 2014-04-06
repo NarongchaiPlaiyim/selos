@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.sql.Date;
 
 public class ECMInterfaceImpl implements ECMInterface, Serializable {
     @Inject
@@ -53,6 +54,7 @@ public class ECMInterfaceImpl implements ECMInterface, Serializable {
     @Override
     public boolean update(final ECMCAPShare ecmcapShare) {
         try {
+            ecmcapShare.setCrsLastUpdate(new Date(new java.util.Date().getTime()));
             return ecmService.update(ecmcapShare);
         } catch (Exception e) {
             log.error("Exception while update ECM data!", e);
@@ -63,6 +65,8 @@ public class ECMInterfaceImpl implements ECMInterface, Serializable {
     @Override
     public boolean insert(final ECMCAPShare ecmcapShare) {
         try {
+            ecmcapShare.setCrsCreateDate(new Date(new java.util.Date().getTime()));
+            ecmcapShare.setCrsLastUpdate(new Date(new java.util.Date().getTime()));
             return ecmService.insert(ecmcapShare);
         } catch (Exception e) {
             log.error("Exception while insert into ECM data!", e);

@@ -4,6 +4,8 @@ import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.history.CaseCreationHistoryDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.integration.BPMInterface;
+import com.clevel.selos.integration.ecm.ECMInterfaceImpl;
+import com.clevel.selos.integration.ecm.db.ECMCAPShare;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.CaseRequestTypes;
@@ -30,6 +32,8 @@ public class CaseCreation implements WSCaseCreation, Serializable {
     @Inject
     @WS
     Logger log;
+    @Inject
+    ECMInterfaceImpl ecmInterface;
     @Inject
     CaseCreationHistoryDAO caseCreationHistoryDAO;
     @Inject
@@ -408,6 +412,11 @@ public class CaseCreation implements WSCaseCreation, Serializable {
 
             //all validation passed including new case creation in BPM.
             if (bpmInterface.createCase(caseCreationHistory)) {
+                ECMCAPShare ecmcapShare = new ECMCAPShare();
+                ecmcapShare.setCrsUKCANumber(caseCreationHistory.getAppNumber());
+                ecmcapShare.setCrsCustName(caseCreationHistory.getCustomerName());
+                ecmInterface.insert(ecmcapShare);
+
                 log.debug("case creation success!");
                 response.setValue(WSResponse.SUCCESS, normalMsg.get("ws.newCase.response.success"), caseCreationHistory.getAppNumber());
             } else {

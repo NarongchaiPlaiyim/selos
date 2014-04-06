@@ -39,8 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 
 @ViewScoped
-@ManagedBean(name = "baseController")
-public class BaseController implements Serializable {
+@ManagedBean(name = "headerController")
+public class HeaderController implements Serializable {
     @Inject
     @SELOS
     Logger log;
@@ -157,12 +157,12 @@ public class BaseController implements Serializable {
     private String messageHeader;
     private String message;
 
-    public BaseController() {
+    public HeaderController() {
     }
 
     @PostConstruct
     public void onCreation() {
-        log.info("BaseController ::: Creation ");
+        log.info("HeaderController ::: Creation ");
         manageButton = new ManageButton();
         HttpSession session = FacesUtil.getSession(true);
         long workCasePreScreenId = 0L;
@@ -198,8 +198,8 @@ public class BaseController implements Serializable {
             requestAppraisalPage = true;
         }
 
-        log.info("BaseController ::: getSession : workCasePreScreenId : {}, workcase = {}, stepId = {}, statusId = {}, stageId = {}", workCasePreScreenId, workCaseId, stepId, statusId, stageId);
-        log.debug("BaseController ::: find active button");
+        log.info("HeaderController ::: getSession : workCasePreScreenId : {}, workcase = {}, stepId = {}, statusId = {}, stageId = {}", workCasePreScreenId, workCaseId, stepId, statusId, stageId);
+        log.debug("HeaderController ::: find active button");
 
         //TODO Get all action from Database By Step and Status and Role
         stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId);
@@ -211,7 +211,7 @@ public class BaseController implements Serializable {
         appraisalContactDetailView = new AppraisalContactDetailView();
 
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
-        log.info("BaseController ::: appHeader : {}", appHeaderView);
+        log.info("HeaderController ::: appHeader : {}", appHeaderView);
 
         if(session.getAttribute("workCaseId") != null && (Long)session.getAttribute("workCaseId") != 0){
             try{

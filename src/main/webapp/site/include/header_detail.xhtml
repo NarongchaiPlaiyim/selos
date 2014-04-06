@@ -8,15 +8,15 @@
         <div id="header_collapse" class="close" onclick="collapseDetail();"><p:spacer width="2"/></div>
         <div id="header_button_bar">
             <!-- Stage PreScreen -->
-            <p:panel id="header_panel_prescreen" rendered="#{baseController.stageId == 101}" styleClass="panel">
+            <p:panel id="header_panel_prescreen" rendered="#{headerController.stageId == 101}" styleClass="panel">
                 <!--Check Mandate Doc Prescreen-->
                 <p:commandButton id="btnChkMandatePreScreen" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
-                                 rendered="#{baseController.checkButton('Check Mandate Doc')}">
+                                 rendered="#{headerController.checkButton('Check Mandate Doc')}">
 
                 </p:commandButton>
                 <!--Assign To Checker-->
                 <p:commandButton id="btnAssignChecker" value="#{msg.get('app.header.button.assignChecker')}" styleClass="blueButton" title="#{msg.get('app.header.button.assignChecker')}"
-                                 rendered="#{baseController.checkButton('Assign to Checker')}"
+                                 rendered="#{headerController.checkButton('Assign to Checker')}"
                                  disabled="#{prescreenMaker.disableAssignButton}"
                                  process="@this"
                                  actionListener="#{prescreenMaker.onOpenAssignCheckerDialog()}"
@@ -26,7 +26,7 @@
                 </p:commandButton>
                 <!--Check NCB-->
                 <p:commandButton id="btnChkNCB" value="#{msg.get('app.header.button.checkNCB')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkNCB')}"
-                                 rendered="#{baseController.checkButton('Check NCB')}"
+                                 rendered="#{headerController.checkButton('Check NCB')}"
                                  actionListener="#{prescreenChecker.onCheckCustomer}"
                                  process="@form"
                                  oncomplete="blockUICheckCustomer.hide()"
@@ -34,7 +34,7 @@
                                  onclick="blockUICheckCustomer.show()"/>
                 <!--Return to Maker-->
                 <p:commandButton id="btnReturnMaker" value="#{msg.get('app.header.button.returnMaker')}" styleClass="blueButton" title="#{msg.get('app.header.button.returnMaker')}"
-                                 rendered="#{baseController.checkButton('Return to BDM')}"
+                                 rendered="#{headerController.checkButton('Return to BDM')}"
                                  actionListener="#{prescreenChecker.onReturnToMaker()}"
                                  oncomplete="returnMakerDlg.show()"
                                  update=":returnMakerDlgForm">
@@ -42,28 +42,28 @@
                 </p:commandButton>
                 <!--Check PreScreen (BRMS)-->
                 <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkPreScreen')}"
-                                 rendered="#{baseController.checkButton('Check Prescreen') and not baseController.requestAppraisalPage}"
+                                 rendered="#{headerController.checkButton('Check Prescreen') and not headerController.requestAppraisalPage}"
                                  update=":frmMain:msgBoxBaseMessagePanel"
-                                 actionListener="#{baseController.onCheckPreScreen}">
+                                 actionListener="#{headerController.onCheckPreScreen}">
                 </p:commandButton>
                 <!--Request Appraisal Prescreen-->
                 <p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
-                                 rendered="#{baseController.checkButton('Request Appraisal') and baseController.requestAppraisal == 0}"
+                                 rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
                                  process="@this"
-                                 actionListener="#{baseController.onOpenRequestAppraisal()}"
+                                 actionListener="#{headerController.onOpenRequestAppraisal()}"
                                  update=":frmMain:reqApprDialogPanel"
                                  oncomplete="reqApprDlg.show()">
                     <p:resetInput target=":frmMain:reqApprDialogPanel"/>
                 </p:commandButton>
                 <!--Cancel CA-->
                 <p:commandButton id="btnCancelCA" value="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
-                                 rendered="#{baseController.checkButton('Cancel CA')}" type="button"
+                                 rendered="#{headerController.checkButton('Cancel CA')}" type="button"
                                  onclick="confrmCancelCA.show()"/>
                     <!--Confirm dialog for Cancel CA-->
                     <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.cancelCA')}" styleClass="left"
                                      icon="ui-icon-alert"
                                      widgetVar="confrmCancelCA" global="false" showEffect="fade"
-                                     rendered="#{baseController.checkButton('Cancel CA')}">
+                                     rendered="#{headerController.checkButton('Cancel CA')}">
                         <p:commandButton value="#{msg.get('app.button.yes')}" styleClass="ui-confirmdialog-yes"
                                          process="@this"
                                          update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"
@@ -75,13 +75,13 @@
                     </p:confirmDialog>
                 <!--Close Sale-->
                 <p:commandButton id="btnCloseSale" value="#{msg.get('app.header.button.closeSale')}" styleClass="blueButton" title="#{msg.get('app.header.button.closeSale')}"
-                                 rendered="#{baseController.checkButton('Close Sales') and !baseController.requestAppraisalPage}" type="button"
+                                 rendered="#{headerController.checkButton('Close Sales') and !headerController.requestAppraisalPage}" type="button"
                                  onclick="confrmCloseSaleCA.show()"/>
                     <!--Confirm dialog for Close Sale-->
                     <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.closeSale')}" styleClass="left"
                                      icon="ui-icon-alert"
                                      widgetVar="confrmCloseSaleCA" global="false" showEffect="fade"
-                                     rendered="#{baseController.checkButton('Close Sales') and !baseController.requestAppraisalPage}">
+                                     rendered="#{headerController.checkButton('Close Sales') and !headerController.requestAppraisalPage}">
                         <p:commandButton value="#{msg.get('app.button.yes')}" styleClass="ui-confirmdialog-yes"
                                          process="@this"
                                          actionListener="#{prescreenMaker.onCloseSale()}"
@@ -94,7 +94,7 @@
             </p:panel>
 
             <!--Stage for FullApplication-->
-            <p:panel id="header_panel_fullapplication" rendered="#{baseController.stageId == 201}" styleClass="panel">
+            <p:panel id="header_panel_fullapplication" rendered="#{headerController.stageId == 201}" styleClass="panel">
                 <!--Print Report-->
                 <p:commandButton id="btnPrintReport" value="#{msg.get('app.header.button.printReport')}" styleClass="blueButton" title="#{msg.get('app.header.button.printReport')}"
                                  oncomplete="printReportDlg.show()"
@@ -103,19 +103,19 @@
                 </p:commandButton>
                 <!--View Relate CA-->
                 <p:commandButton id="btnViewRelatedCA" value="#{msg.get('app.header.button.viewRelatedCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.viewRelatedCA')}"
-                                 rendered="#{baseController.checkButton('View Related Application CA')}" >
+                                 rendered="#{headerController.checkButton('View Related Application CA')}" >
 
                 </p:commandButton>
 
                 <!--Check Criteria-->
                 <p:commandButton id="btnCheckCriteria" value="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkCriteria')}"
-                                 rendered="#{baseController.checkButton('Check Criteria')}">
+                                 rendered="#{headerController.checkButton('Check Criteria')}">
 
                 </p:commandButton>
                 <!--Assign to ABDM-->
                 <p:commandButton id="btnAssignABDM" value="#{msg.get('app.header.button.assignABDM')}" styleClass="blueButton" title="#{msg.get('app.header.button.assignABDM')}"
-                                 rendered="#{baseController.checkButton('Assign to ABDM')}"
-                                 actionListener="#{baseController.onOpenAssignToABDM()}"
+                                 rendered="#{headerController.checkButton('Assign to ABDM')}"
+                                 actionListener="#{headerController.onOpenAssignToABDM()}"
                                  oncomplete="assignABDMDlg.show()"
                                  update=":frmMain:assignABDMPanel">
 
@@ -123,8 +123,8 @@
 
                 <!--Mandate Document FullApplication-->
                 <p:commandButton id="btnMandateDocFullApp" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
-                                 rendered="#{baseController.checkButton('Check Mandate Doc')}"
-                                 actionListener="#{baseController.onCheckMandateDialog()}"
+                                 rendered="#{headerController.checkButton('Check Mandate Doc')}"
+                                 actionListener="#{headerController.onCheckMandateDialog()}"
                                  oncomplete="checkMandateDlg.show()"
                                  update=":frmMain:checkMandatePanel">
                     <p:resetInput target=":frmMain:checkMandatePanel"/>
@@ -132,25 +132,25 @@
 
                 <!--Return to BDM -->
                 <p:commandButton id="btnReturnBDM" value="Return to BDM" styleClass="blueButton" title=""
-                                 rendered="#{baseController.checkButton('Return to BDM')}"
-                                 actionListener="#{baseController.onOpenReturnBDMDialog()}"
+                                 rendered="#{headerController.checkButton('Return to BDM')}"
+                                 actionListener="#{headerController.onOpenReturnBDMDialog()}"
                                  oncomplete="returnBDMDlg.show()"
                                  update=":frmMain:returnBDMPanel">
                     <p:resetInput target=":frmMain:returnBDMPanel"/>
                 </p:commandButton>
                 <!--Request Appraisal Fullapp-->
                 <p:commandButton id="btnReqApprFullapp" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
-                                 rendered="#{baseController.checkButton('Request Appraisal')}"
+                                 rendered="#{headerController.checkButton('Request Appraisal')}"
                                  process="@this"
-                                 actionListener="#{baseController.onOpenRequestAppraisal()}"
+                                 actionListener="#{headerController.onOpenRequestAppraisal()}"
                                  update=":frmMain:reqApprDialogPanel"
                                  oncomplete="reqApprDlg.show()">
                     <p:resetInput target=":frmMain:reqApprDialogPanel"/>
                 </p:commandButton>
                 <!--Cancel CA FullApplication-->
                 <p:commandButton id="btnCancelCAFullApp" value="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
-                                 rendered="#{baseController.checkButton('Cancel CA')}"
-                                 actionListener="#{baseController.onOpenCancelCAFullApp()}"
+                                 rendered="#{headerController.checkButton('Cancel CA')}"
+                                 actionListener="#{headerController.onOpenCancelCAFullApp()}"
                                  oncomplete="cancelCAFullAppDlg.show()"
                                  update=":frmMain:cancelCAFullAppPanel">
                     <p:resetInput target=":frmMain:cancelCAFullAppPanel"/>
@@ -158,20 +158,20 @@
                 <!--Submit Case-->
                 <!--Submit To Zone Manager-->
                 <p:commandButton id="btnSubmitCaseToZM" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
-                                 rendered="#{baseController.checkButton('Submit CA') and baseController.stepId == 2001}"
-                                 action="#{baseController.onOpenSubmitZM}"
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2001}"
+                                 action="#{headerController.onOpenSubmitZM}"
                                  update=":frmMain:submitZMPanel, :frmMain:msgBoxBaseMessagePanel" >
                 </p:commandButton>
                 <!--Submit To Region Manager-->
                 <p:commandButton id="btnSubmitCaseToRGM" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
-                                 rendered="#{baseController.checkButton('Submit CA') and baseController.stepId == 2002}">
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2002}">
                     <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                                      icon="ui-icon-alert"
                                      widgetVar="confirmSubmitSubmitRGM" global="false" showEffect="fade"
-                                     rendered="#{baseController.checkButton('Submit CA') and baseController.stepId == 2002}">
+                                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2002}">
                         <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
                                          update=":frmMain:msgBoxBaseMessagePanel"
-                                                     actionListener="#{baseController.onSubmitRM()}"
+                                                     actionListener="#{headerController.onSubmitRM()}"
                                                      process="@this" oncomplete="confirmSubmitSubmitRGM.hide()"/>
                         <p:commandButton value="No" type="button" onclick="confirmSubmitSubmitRGM.hide()"
                                          styleClass="ui-confirmdialog-no"/>
@@ -179,15 +179,15 @@
                 </p:commandButton>
                 <!--Submit To Head-->
                 <p:commandButton id="btnSubmitCaseToGH" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
-                                 rendered="#{baseController.checkButton('Submit CA') and baseController.stepId == 2020}"
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2020}"
                                  update=":frmMain:msgBoxBaseMessagePanel" >
                     <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                                      icon="ui-icon-alert"
                                      widgetVar="confirmSubmitSubmitGH" global="false" showEffect="fade"
-                                     rendered="#{baseController.checkButton('Submit CA') and baseController.stepId == 2020}">
+                                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2020}">
                         <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
                                          update=":frmMain:msgBoxBaseMessagePanel"
-                                         actionListener="#{baseController.onSubmitGH()}"
+                                         actionListener="#{headerController.onSubmitGH()}"
                                          process="@this" oncomplete="confirmSubmitSubmitGH.hide()"/>
                         <p:commandButton value="No" type="button" onclick="confirmSubmitSubmitGH.hide()"
                                          styleClass="ui-confirmdialog-no"/>
@@ -196,7 +196,7 @@
                 <!---->
             </p:panel>
             <!--Stage for Appraisal-->
-            <p:panel id="header_panel_appraisal" rendered="#{baseController.stageId == 203}" styleClass="panel">
+            <p:panel id="header_panel_appraisal" rendered="#{headerController.stageId == 203}" styleClass="panel">
                 <!-- Appraisal flow : Cancel Appraisal Request -->
                 <!--<p:commandButton id="btnCancelAppraisal" value="Cancel Appraisal Request" styleClass="blueButton" title=""
                                  rendered="#{baseController.manageButton.cancelAppraisalButton}">
@@ -214,22 +214,22 @@
                 </p:commandButton>-->
                 <!-- Appraisal flow : Return to BDM -->
                 <p:commandButton id="btnReturnAppraisalBDM" value="Return to BDM" styleClass="blueButton" title=""
-                                 rendered="#{baseController.manageButton.returnAppraisalBDMButton}">
+                                 rendered="#{headerController.manageButton.returnAppraisalBDMButton}">
 
                 </p:commandButton>
                 <!-- Appraisal flow : Submit to AAD Committee-->
                 <p:commandButton id="btnSubmitAADCommittee" value="Submit to AAD Committee" styleClass="blueButton" title=""
-                                 rendered="#{baseController.manageButton.submitAADCommitteeButton}" >
+                                 rendered="#{headerController.manageButton.submitAADCommitteeButton}" >
 
                 </p:commandButton>
                 <!-- Appraisal flow : Return to AAD Admin-->
                 <p:commandButton id="btnReturnAADAdmin" value="Return to AAD Admin" styleClass="blueButton" title=""
-                                 rendered="#{baseController.manageButton.returnAADAdminButton}">
+                                 rendered="#{headerController.manageButton.returnAADAdminButton}">
 
                 </p:commandButton>
                 <!-- Appraisal flow : Submit to UW2-->
                 <p:commandButton id="btnSubmitUW2" value="Submit" styleClass="blueButton" title=""
-                                 rendered="#{baseController.manageButton.submitRequestAppraisalButton}">
+                                 rendered="#{headerController.manageButton.submitRequestAppraisalButton}">
 
                 </p:commandButton>
             </p:panel>
@@ -268,33 +268,33 @@
             </p:commandButton>-->
             
             <!-- Stage 301 - Customer acceptance -->
-            <p:panel id="header_panel_301" rendered="#{baseController.stageId == 301}" styleClass="panel">
+            <p:panel id="header_panel_301" rendered="#{headerController.stageId == 301}" styleClass="panel">
             	<!--Print Op Sheet -->
             	<p:commandButton id="btnPrintReport301" value="#{msg.get('app.header.button.printReport')}" 
                 				 styleClass="blueButton" title="#{msg.get('app.header.button.printReport')}"
                                  oncomplete="printReportDlg.show()"
                                  actionListener="#{report.setNameReport()}"
                                  update=":frmMain:printReportPanel"
-                                 rendered="#{baseController.checkButton('Print PDF')}">
+                                 rendered="#{headerController.checkButton('Print PDF')}">
                 </p:commandButton>
 				<!--Check Mandate Doc -->
                 <p:commandButton id="btnChkMandate301" value="#{msg.get('app.header.button.mandateDoc')}" 
                 				 styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
-                                 rendered="#{baseController.checkButton('Check Mandate Doc')}">
+                                 rendered="#{headerController.checkButton('Check Mandate Doc')}">
                 </p:commandButton>
                 
                 <!--Request for Price Reduction -->
                 <p:commandButton id="btnPriceReduction301" value="#{msg.get('app.header.button.requestPriceReduction')}" 
                 				 styleClass="blueButton" title="#{msg.get('app.header.button.requestPriceReduction')}"
-                                 rendered="#{baseController.checkButton('Request for Price Reduction')}">
+                                 rendered="#{headerController.checkButton('Request for Price Reduction')}">
                 </p:commandButton>
                 
                 
                 <!--Return to BDM -->
                 <p:commandButton id="btnReturnBDM301" value="#{msg.get('app.header.button.returnToBDM')}" 
                 				styleClass="blueButton" title="#{msg.get('app.header.button.returnToBDM')}"
-                                 rendered="#{baseController.checkButton('Return to BDM')}"
-                                 actionListener="#{baseController.onOpenReturnBDMDialog()}"
+                                 rendered="#{headerController.checkButton('Return to BDM')}"
+                                 actionListener="#{headerController.onOpenReturnBDMDialog()}"
                                  oncomplete="returnBDMDlg.show()"
                                  update=":frmMain:returnBDMPanel">
                     <p:resetInput target=":frmMain:returnBDMPanel"/>
@@ -303,15 +303,15 @@
                 <!--Return to UW2 -->
                 <p:commandButton id="btnReturnUW2_301" value="#{msg.get('app.header.button.returnToUW2')}" 
                 				 styleClass="blueButton" title="#{msg.get('app.header.button.returnToBDM')}"
-                                 rendered="#{baseController.checkButton('Return to UW 2')}"
+                                 rendered="#{headerController.checkButton('Return to UW 2')}"
                                  >
                 </p:commandButton>
                 
                 <!--Cancel CA -->
                 <p:commandButton id="btnCancelCA301" value="#{msg.get('app.header.button.cancelCA')}" 
                 				 styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
-                                 rendered="#{baseController.checkButton('Cancel CA')}"
-                                 actionListener="#{baseController.onOpenCancelCAFullApp()}"
+                                 rendered="#{headerController.checkButton('Cancel CA')}"
+                                 actionListener="#{headerController.onOpenCancelCAFullApp()}"
                                  oncomplete="cancelCAFullAppDlg.show()"
                                  update=":frmMain:cancelCAFullAppPanel">
                     <p:resetInput target=":frmMain:cancelCAFullAppPanel"/>
@@ -319,7 +319,7 @@
                 <!--Submit to BDM -->
                 <p:commandButton id="btnSubmitCase301" value="#{msg.get('app.header.button.submit')}" 
                 				 styleClass="blueButton" title="#{msg.get('app.header.button.submit')}"
-                                 rendered="#{baseController.checkButton('Submit to BDM')}"
+                                 rendered="#{headerController.checkButton('Submit to BDM')}"
                                 >
                 </p:commandButton>
                 
@@ -333,9 +333,9 @@
     <div class="clear"></div>
     <p:panel id="msgBoxBaseMessagePanel" styleClass="panel">
         <p:confirmDialog id="msgBoxBaseMessageDialog" widgetVar="msgBoxBaseMessageDlg" styleClass="messageDialog"
-                         header="#{baseController.messageHeader}" >
+                         header="#{headerController.messageHeader}" >
             <f:facet name="message">
-                <h:outputText value="#{baseController.message}" escape="false"/>
+                <h:outputText value="#{headerController.message}" escape="false"/>
             </f:facet>
             <p:commandButton value="OK"
                              process="@this"
@@ -344,13 +344,13 @@
     </p:panel>
     <p:panel id="msgBoxBaseRedirectPanel" styleClass="panel">
         <p:confirmDialog id="msgBoxBaseRedirectDialog" widgetVar="msgBoxBaseRedirectDlg" styleClass="messageDialog"
-                         header="#{baseController.messageHeader}" >
+                         header="#{headerController.messageHeader}" >
             <f:facet name="message">
-                <h:outputText value="#{baseController.message}" escape="false"/>
+                <h:outputText value="#{headerController.message}" escape="false"/>
             </f:facet>
             <p:commandButton value="OK"
                              process="@this"
-                             action="#{baseController.onGoToInbox}"/>
+                             action="#{headerController.onGoToInbox}"/>
         </p:confirmDialog>
     </p:panel>
 
@@ -411,7 +411,7 @@
         </p:dialog>
     </p:panel>
 
-    <p:panel id="reqApprPanel" styleClass="panel" rendered="#{baseController.checkButton('Request Appraisal')}">
+    <p:panel id="reqApprPanel" styleClass="panel" rendered="#{headerController.checkButton('Request Appraisal')}">
         <p:dialog id="reqApprDialog" widgetVar="reqApprDlg" header="Request Appraisal"
                   onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
                   modal="true" width="1210" closable="false">
@@ -419,7 +419,7 @@
         </p:dialog>
     </p:panel>
 
-    <p:panel id="reqApprDetailPanel" styleClass="panel" rendered="#{baseController.checkButton('Request Appraisal')}">
+    <p:panel id="reqApprDetailPanel" styleClass="panel" rendered="#{headerController.checkButton('Request Appraisal')}">
         <p:dialog id="reqApprDetailDialog" widgetVar="reqApprDetailDlg" header="Appraisal Detail Information"
                   resizable="false"
                   modal="true" width="500" height="200" closable="false" >
