@@ -195,6 +195,7 @@ public class Decision implements Serializable {
     private boolean modeEditReducePricing;
     private boolean modeEditReduceFrontEndFee;
     private boolean cannotEditStandard;
+    private boolean notRetrievePricing;
     private boolean cannotAddTier;
     private List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewList;
     private List<PrdProgramToCreditTypeView> prdProgramToCreditTypeViewList;
@@ -289,6 +290,13 @@ public class Decision implements Serializable {
         preRender();
 
         decisionView = decisionControl.getDecisionView(workCaseId);
+        if (decisionView.getId() == 0) {
+//            reducePricePanelRendered = false;
+            cannotEditStandard = true;
+            notRetrievePricing = true;
+        } else {
+            notRetrievePricing = false;
+        }
 
         // delete list on save
         deleteCreditIdList = new ArrayList<Long>();
@@ -1948,5 +1956,13 @@ public class Decision implements Serializable {
 
     public void setSeverity(String severity) {
         this.severity = severity;
+    }
+
+    public boolean isNotRetrievePricing() {
+        return notRetrievePricing;
+    }
+
+    public void setNotRetrievePricing(boolean notRetrievePricing) {
+        this.notRetrievePricing = notRetrievePricing;
     }
 }

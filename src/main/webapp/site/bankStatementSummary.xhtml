@@ -79,6 +79,7 @@
                                         <td style="border-style: none !important;">
                                             <clv:BECalendar id="expectSumitDate" showOn="both" showButtonPanel="true" navigator="true"
                                                             yearRange="1950:2100"
+                                                            mindate="#{bankStatementSummary.currentDateDDMMYY}"
                                                             defaultdate="#{bankStatementSummary.currentDateDDMMYY}"
                                                             pattern="dd/MM/yyyy"
                                                             value="#{bankStatementSummary.expectedSubmitDate}"
@@ -835,7 +836,9 @@
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
         <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
                          severity="#{bankStatementSummary.severity}"
-                         header="#{bankStatementSummary.messageHeader}" message="#{bankStatementSummary.message}">
+                         header="#{bankStatementSummary.messageHeader}"
+                         message="#{bankStatementSummary.message}"
+                         closable="false" closeOnEscape="false">
             <p:commandButton value="OK"
                              process="@this"
                              update="frmMain"

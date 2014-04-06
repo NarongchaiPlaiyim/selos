@@ -128,7 +128,7 @@ public class PDFExecutive_Summary implements Serializable {
 
                 List<CustomerCSIView> customerCSIList = view.getCustomerCSIList();
 
-                if (!Util.isNull(customerCSIList)){
+                if (Util.safetyList(customerCSIList).size() > 0){
                     for(CustomerCSIView csiView:customerCSIList){
                         borrowerExsumReport.setCustomerCSIList(Util.checkNullString(csiView.getWarningCode().getCode()));
                     }

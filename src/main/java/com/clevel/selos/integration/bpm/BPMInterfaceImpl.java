@@ -153,7 +153,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         String linkKey = Util.getLinkKey(bpmUsername);
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getSystemUserDTO(), getConfigurationDTO());
-            bpmService.launchWorkflow(caseParameter, "Parallel Appraisal Workflow");
+            bpmService.launchWorkflow(caseParameter, "SELOS Parallel Appraisal Workflow");
             log.debug("[{}] BPM launch work flow successful.", linkKey);
             bpmAuditor.add(bpmUsername, "createParallelCase", "", now, ActionResult.SUCCESS, "", linkKey);
         } catch (Exception ex) {
@@ -249,13 +249,13 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     }
 
     @Override
-    public void lockCase(String queueName, String wobNumber) {
+    public void lockCase(String queueName, String wobNumber, int fetchType) throws Exception{
         log.debug("lockCase. (queueName: {}, wobNumber: {})", queueName, wobNumber);
         Date now = new Date();
         String linkKey = Util.getLinkKey(getUserDTO().getUserName());
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(), getConfigurationDTO());
-            //bpmService.lockCase(queueName, wobNumber);
+            bpmService.lockCase(queueName, wobNumber, fetchType);
             log.debug("[{}] lockCase success.", linkKey);
             bpmAuditor.add(getUserDTO().getUserName(), "lockCase", "", now, ActionResult.SUCCESS, "", linkKey);
         } catch (SELOSBPMException e) {
@@ -266,13 +266,13 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     }
 
     @Override
-    public void unLockCase(String queueName, String wobNumber) {
+    public void unLockCase(String queueName, String wobNumber, int fetchType) throws Exception{
         log.debug("unLockCase. (queueName: {}, wobNumber: {})", queueName, wobNumber);
         Date now = new Date();
         String linkKey = Util.getLinkKey(getUserDTO().getUserName());
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(), getConfigurationDTO());
-            //bpmService.unLockCase(queueName, wobNumber);
+            bpmService.unLockCase(queueName, wobNumber,fetchType);
             log.debug("[{}] unLockCase success.", linkKey);
             bpmAuditor.add(getUserDTO().getUserName(), "unLockCase", "", now, ActionResult.SUCCESS, "", linkKey);
         } catch (SELOSBPMException e) {

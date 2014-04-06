@@ -1,9 +1,6 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.BizInfoDetailControl;
-import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
-import com.clevel.selos.businesscontrol.CreditFacProposeControl;
-import com.clevel.selos.businesscontrol.DBRControl;
+import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.BusinessActivityDAO;
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
@@ -123,6 +120,8 @@ public class BizInfoDetail implements Serializable {
     CreditFacProposeControl creditFacProposeControl;
     @Inject
     private DBRControl dbrControl;
+    @Inject
+    private ExSummaryControl exSummaryControl;
 
     public BizInfoDetail(){
 
@@ -273,12 +272,8 @@ public class BizInfoDetail implements Serializable {
             onCheckRole();
 
         }catch (Exception ex){
-            log.debug("onCreation Exception ");
-            if(ex.getCause() != null){
-                message = "Save Basic Info data failed. Cause : " + ex.getCause().toString();
-            } else {
-                message = "Save Basic Info data failed. Cause : " + ex.getMessage();
-            }
+            log.error("onCreation Exception : ", ex);
+            message = "Exception while load data : " + Util.getMessageException(ex);
         }finally {
             log.debug("onCreation end ");
         }
@@ -589,6 +584,7 @@ public class BizInfoDetail implements Serializable {
     }
 
     private boolean calSumBizStakeHolderDetailView(List<BizStakeHolderDetailView> stakeHoldersCalList,String stakeType){
+        onCheckRole();
         double sumSalePercent = 0;
         double sumCreditPercent = 0;
         double sumCreditTerm = 0;
@@ -627,8 +623,13 @@ public class BizInfoDetail implements Serializable {
             bizInfoDetailView.setSupplierTotalPercentCredit(sumCreditPercentB);
             bizInfoDetailView.setSupplierTotalCreditTerm(sumCreditTermB);
             log.debug(" stakeType ===== 1.1" );
-            bizInfoDetailView.setSupplierUWAdjustPercentCredit(sumCreditPercentB);
-            bizInfoDetailView.setSupplierUWAdjustCreditTerm(sumCreditTermB);
+            if (readonlyIsUW){
+                bizInfoDetailView.setSupplierUWAdjustPercentCredit(null);
+                bizInfoDetailView.setSupplierUWAdjustCreditTerm(null);
+            } else {
+                bizInfoDetailView.setSupplierUWAdjustPercentCredit(sumCreditPercentB);
+                bizInfoDetailView.setSupplierUWAdjustCreditTerm(sumCreditTermB);
+            }
             bizInfoDetailView.setPurchasePercentCash(new BigDecimal(100 - sumCreditPercentB.doubleValue()));
             bizInfoDetailView.setPurchasePercentCredit(sumCreditPercentB);
             log.debug(" stakeType ===== 1.5" );
@@ -639,8 +640,13 @@ public class BizInfoDetail implements Serializable {
             bizInfoDetailView.setBuyerTotalPercentCredit(sumCreditPercentB);
             bizInfoDetailView.setBuyerTotalCreditTerm(sumCreditTermB);
             log.debug(" stakeType ===== 2.1" );
-            bizInfoDetailView.setBuyerUWAdjustPercentCredit(sumCreditPercentB);
-            bizInfoDetailView.setBuyerUWAdjustCreditTerm(sumCreditTermB);
+            if (readonlyIsUW){
+                bizInfoDetailView.setBuyerUWAdjustPercentCredit(null);
+                bizInfoDetailView.setBuyerUWAdjustCreditTerm(null);
+            } else {
+                bizInfoDetailView.setBuyerUWAdjustPercentCredit(sumCreditPercentB);
+                bizInfoDetailView.setBuyerUWAdjustCreditTerm(sumCreditTermB);
+            }
             bizInfoDetailView.setPayablePercentCash(new BigDecimal(100 - sumCreditPercentB.doubleValue()));
             bizInfoDetailView.setPayablePercentCredit(sumCreditPercentB);
             log.debug(" stakeType ===== 2.5" );
@@ -703,6 +709,7 @@ public class BizInfoDetail implements Serializable {
                 bizInfoDetailView.setBuyerDetailList(buyerDetailList);
                 bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId, workCaseId);
                 dbrControl.updateValueOfDBR(workCaseId);
+                exSummaryControl.calForBizInfoSummary(workCaseId);
                 messageHeader = msg.get("app.bizInfoDetail.message.header.save.success");
                 message = msg.get("app.bizInfoDetail.message.body.save.success");
 

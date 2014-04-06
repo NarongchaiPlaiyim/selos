@@ -2301,7 +2301,7 @@
 
                                     <p:commandButton id="btnRetrievePricingFee"
                                                      value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
-                                                     disabled="#{not decision.roleUW}"
+                                                     disabled="#{not decision.roleUW or decision.notRetrievePricing}"
                                                      actionListener="#{decision.onRetrievePricingFee()}"
                                                      process="@form"
                                                      update=":frmMain"
@@ -3297,7 +3297,7 @@
                                     <tr>
                                         <td class="title left large">#{msg.get('app.decision.label.UWDecision')}</td>
                                         <td class="left" colspan="3">
-                                            <table border="1">
+                                            <table border="0">
                                                 <tr>
                                                     <td class="title">#{msg.get('app.decision.label.approved')}</td>
                                                     <td class="left">

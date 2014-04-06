@@ -175,8 +175,19 @@ public class BankStatementDetail implements Serializable {
         if (bankStmtView != null) {
             log.debug("Edit Bank statement.");
             if (bankStmtView.getBankStmtDetailViewList() != null && bankStmtView.getBankStmtDetailViewList().size() > 0) {
-                numberOfMonths = Util.safetyList(bankStmtView.getBankStmtDetailViewList()).size();
-            } else {
+                numberOfMonths = bankStmtView.getBankStmtDetailViewList().size();
+//                Date tmpDate;
+//                for (int i=(numberOfMonths-1), j=0; i>=0; i--, j++) {
+//                    BankStmtDetailView bankStmtDetailView = bankStmtView.getBankStmtDetailViewList().get(j);
+//                    if (Util.isNull(bankStmtDetailView.getAsOfDate())) {
+//                        tmpDate = DateTimeUtil.getOnlyDatePlusMonth(lastMonthDate, -i);
+//                        bankStmtDetailView.setAsOfDate(tmpDate);
+//                        bankStmtDetailView.setDateOfMaxBalance(DateTimeUtil.getFirstDayOfMonth(tmpDate));
+//                        bankStmtDetailView.setDateOfMinBalance(DateTimeUtil.getFirstDayOfMonth(tmpDate));
+//                    }
+//                }
+            }
+            else {
                 bankStmtView.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));
             }
         }

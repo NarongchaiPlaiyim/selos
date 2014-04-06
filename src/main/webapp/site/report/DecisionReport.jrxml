@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b568264b-3421-42fd-80e8-96aa4a75cbf6">
-	<property name="ireport.zoom" value="1.464100000000031"/>
-	<property name="ireport.x" value="32"/>
-	<property name="ireport.y" value="1082"/>
+	<property name="ireport.zoom" value="1.771561000000038"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="1440"/>
 	<style name="Total" mode="Opaque" forecolor="#000000" backcolor="#FCFF79" hAlign="Left" vAlign="Middle" fontSize="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -38,7 +38,7 @@
 			<staticText>
 				<reportElement uuid="bc17712d-975b-4eb7-9f86-69414b719398" x="1" y="0" width="100" height="20"/>
 				<textElement>
-					<font isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					<font isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Decision]]></text>
 			</staticText>
@@ -48,16 +48,16 @@
 			<staticText>
 				<reportElement uuid="f10607d1-66f5-4acb-a539-f3cd669153a3" x="1" y="22" width="100" height="14"/>
 				<textElement>
-					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Existing Credit]]></text>
 			</staticText>
 		</band>
 	</title>
 	<detail>
-		<band height="63" splitType="Prevent">
+		<band height="30" splitType="Prevent">
 			<frame>
-				<reportElement uuid="b2752ea6-344f-4090-ae01-2234246f6c8b" mode="Opaque" x="0" y="0" width="555" height="63"/>
+				<reportElement uuid="b2752ea6-344f-4090-ae01-2234246f6c8b" mode="Opaque" x="0" y="0" width="555" height="30"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -65,12 +65,12 @@
 				<staticText>
 					<reportElement uuid="c3cbd3ea-7775-45f7-9011-929828de6ce8" x="1" y="0" width="100" height="13"/>
 					<textElement>
-						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<text><![CDATA[Borrower :]]></text>
 				</staticText>
 				<subreport>
-					<reportElement uuid="3eeac197-c6d6-431e-9d11-ebd858892477" x="0" y="15" width="555" height="48"/>
+					<reportElement uuid="3eeac197-c6d6-431e-9d11-ebd858892477" x="0" y="15" width="555" height="15"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillCreditBorrower})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subCreditBorrower.jasper"]]></subreportExpression>
 				</subreport>
@@ -126,23 +126,23 @@
 				</subreport>
 			</frame>
 		</band>
-		<band height="59" splitType="Prevent">
+		<band height="29" splitType="Prevent">
 			<frame>
-				<reportElement uuid="29d9a208-d006-4678-a300-01123cab16ae" mode="Opaque" x="0" y="0" width="555" height="59"/>
+				<reportElement uuid="29d9a208-d006-4678-a300-01123cab16ae" mode="Opaque" x="0" y="0" width="555" height="29"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<subreport>
-					<reportElement uuid="842567da-1283-4991-a4f0-205f1830026c" x="0" y="10" width="555" height="49"/>
+					<reportElement uuid="842567da-1283-4991-a4f0-205f1830026c" x="0" y="10" width="555" height="19"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillBorrowerRetail})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subCreditRetail.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 		</band>
-		<band height="74" splitType="Prevent">
+		<band height="44" splitType="Prevent">
 			<frame>
-				<reportElement uuid="7c7e4db6-b8d8-4c73-bd82-bab4a301da95" mode="Opaque" x="0" y="0" width="555" height="74"/>
+				<reportElement uuid="7c7e4db6-b8d8-4c73-bd82-bab4a301da95" mode="Opaque" x="0" y="0" width="555" height="44"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -177,7 +177,7 @@
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtBorrowerTotalRetailLimit()]]></textFieldExpression>
 				</textField>
 				<subreport>
-					<reportElement uuid="b6f6aa5a-2955-417f-849c-337299e34a4b" x="0" y="29" width="555" height="45"/>
+					<reportElement uuid="b6f6aa5a-2955-417f-849c-337299e34a4b" x="0" y="29" width="555" height="15"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillAppInRLOS})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subCreditAppRLOS.jasper"]]></subreportExpression>
 				</subreport>
@@ -206,7 +206,10 @@
 				</staticText>
 				<textField>
 					<reportElement uuid="9302d668-6766-4d40-bf5b-daecb0ad0d93" style="Total" x="265" y="33" width="59" height="15"/>
-					<textElement textAlignment="Right">
+					<box>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
 					</textElement>
@@ -214,6 +217,9 @@
 				</textField>
 				<staticText>
 					<reportElement uuid="d91a56fc-8e46-4735-9f88-8d77ed84762c" style="Total" x="324" y="33" width="231" height="15"/>
+					<box>
+						<leftPen lineWidth="0.0"/>
+					</box>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF"/>
 					</textElement>
@@ -235,7 +241,10 @@
 				</staticText>
 				<textField>
 					<reportElement uuid="6f905176-c557-4e1a-895b-490070b3ff1c" style="Total" x="265" y="76" width="59" height="15"/>
-					<textElement textAlignment="Right">
+					<box>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
 					</textElement>
@@ -243,6 +252,9 @@
 				</textField>
 				<staticText>
 					<reportElement uuid="f978260e-374f-417f-bd5a-974bf7bcaf07" style="Total" x="324" y="76" width="231" height="15"/>
+					<box>
+						<leftPen lineWidth="0.0"/>
+					</box>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF"/>
 					</textElement>
@@ -264,7 +276,10 @@
 				</staticText>
 				<textField>
 					<reportElement uuid="34b96e14-c97f-4f8f-bbb7-3cc5be683cf1" style="Total" x="265" y="54" width="59" height="15"/>
-					<textElement textAlignment="Right">
+					<box>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
 					</textElement>
@@ -272,6 +287,9 @@
 				</textField>
 				<staticText>
 					<reportElement uuid="37d679d1-daae-47e5-af20-a0c3eecd6806" style="Total" x="324" y="54" width="231" height="15"/>
+					<box>
+						<leftPen lineWidth="0.0"/>
+					</box>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF"/>
 					</textElement>
@@ -302,7 +320,7 @@
 					<reportElement uuid="52cccbe4-c280-4d1d-9ff0-95ef7279d5a6" style="Total" x="355" y="0" width="34" height="15"/>
 					<textElement textAlignment="Right">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtBorrowerTotalAppInRLOSLimit()]]></textFieldExpression>
 				</textField>
@@ -315,9 +333,9 @@
 				</staticText>
 			</frame>
 		</band>
-		<band height="63" splitType="Prevent">
+		<band height="29" splitType="Prevent">
 			<frame>
-				<reportElement uuid="c4e364ec-7376-4ee6-9679-1fda8a12c608" mode="Opaque" x="0" y="0" width="555" height="63"/>
+				<reportElement uuid="c4e364ec-7376-4ee6-9679-1fda8a12c608" mode="Opaque" x="0" y="0" width="555" height="29"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -330,15 +348,15 @@
 					<text><![CDATA[Related Person]]></text>
 				</staticText>
 				<subreport>
-					<reportElement uuid="87404799-dd3d-4b1b-8657-0d726260b487" x="0" y="13" width="555" height="50"/>
+					<reportElement uuid="87404799-dd3d-4b1b-8657-0d726260b487" x="0" y="13" width="555" height="16"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillRelatedCommercial})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subPersonCommercial.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 		</band>
-		<band height="73" splitType="Prevent">
+		<band height="43" splitType="Prevent">
 			<frame>
-				<reportElement uuid="c7be1657-60af-4daa-a8bf-d5eb5a162d01" mode="Opaque" x="0" y="0" width="555" height="73"/>
+				<reportElement uuid="c7be1657-60af-4daa-a8bf-d5eb5a162d01" mode="Opaque" x="0" y="0" width="555" height="43"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -373,15 +391,15 @@
 					<text><![CDATA[]]></text>
 				</staticText>
 				<subreport>
-					<reportElement uuid="79f8c277-a6c3-4bfb-be2e-7ff831ac89a1" x="0" y="25" width="555" height="48"/>
+					<reportElement uuid="79f8c277-a6c3-4bfb-be2e-7ff831ac89a1" x="0" y="25" width="555" height="18"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillRelatedRetail})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subPersonRetail.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 		</band>
-		<band height="75" splitType="Prevent">
+		<band height="42" splitType="Prevent">
 			<frame>
-				<reportElement uuid="b1f8f9cc-7939-4a66-982c-2a4933960cb9" mode="Opaque" x="0" y="0" width="556" height="75"/>
+				<reportElement uuid="b1f8f9cc-7939-4a66-982c-2a4933960cb9" mode="Opaque" x="0" y="0" width="556" height="42"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -416,7 +434,7 @@
 					<text><![CDATA[]]></text>
 				</staticText>
 				<subreport>
-					<reportElement uuid="ddbd96ee-9262-4453-8a81-3757d899b5cb" x="0" y="24" width="556" height="51"/>
+					<reportElement uuid="ddbd96ee-9262-4453-8a81-3757d899b5cb" x="0" y="24" width="556" height="18"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillRelatedAppInRLOS})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path}+ "DecisionReport_subPersonAppRLOS.jasper"]]></subreportExpression>
 				</subreport>
@@ -445,7 +463,12 @@
 				</staticText>
 				<textField>
 					<reportElement uuid="4a9334ed-32dc-4156-9bd8-508537de4db3" style="Total" x="265" y="31" width="59" height="15"/>
-					<textElement textAlignment="Right">
+					<box>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					</box>
+					<textElement textAlignment="Left">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
 					</textElement>
@@ -453,6 +476,12 @@
 				</textField>
 				<staticText>
 					<reportElement uuid="773661b7-841a-4935-9cea-b02be2e8d4ec" style="Total" x="324" y="31" width="231" height="15"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					</box>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
@@ -474,7 +503,13 @@
 				</staticText>
 				<textField>
 					<reportElement uuid="e047c7a7-0681-4dfa-bbe6-dfb291213842" style="Total" x="265" y="74" width="59" height="15"/>
-					<textElement textAlignment="Right">
+					<box>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
 					</textElement>
@@ -482,6 +517,12 @@
 				</textField>
 				<staticText>
 					<reportElement uuid="68f2a24c-a934-490b-8339-714dc6c38e21" style="Total" x="324" y="74" width="231" height="15"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					</box>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
@@ -503,7 +544,12 @@
 				</staticText>
 				<textField>
 					<reportElement uuid="70c6aebc-8c3a-4adb-8bf3-1d03907d9b9c" style="Total" x="265" y="52" width="59" height="15"/>
-					<textElement textAlignment="Right">
+					<box>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					</box>
+					<textElement textAlignment="Left">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
 					</textElement>
@@ -511,6 +557,12 @@
 				</textField>
 				<staticText>
 					<reportElement uuid="9949f6d7-b18a-4636-a8b0-2d384f1d7b0b" style="Total" x="324" y="52" width="231" height="15"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					</box>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
@@ -577,7 +629,12 @@
 				</staticText>
 				<textField>
 					<reportElement uuid="45b570cd-74b7-46e4-aed5-edf39d78df3a" style="Total" x="265" y="13" width="59" height="15"/>
-					<textElement textAlignment="Right">
+					<box>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					</box>
+					<textElement textAlignment="Left">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
 					</textElement>
@@ -585,6 +642,12 @@
 				</textField>
 				<staticText>
 					<reportElement uuid="2f772ed5-0fc4-4f20-8b8e-022e891dc701" style="Total" x="324" y="13" width="231" height="15"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					</box>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
@@ -606,7 +669,12 @@
 				</staticText>
 				<textField>
 					<reportElement uuid="d0449729-cddc-4538-88ee-6451164aab7b" style="Total" x="265" y="55" width="59" height="15"/>
-					<textElement textAlignment="Right">
+					<box>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					</box>
+					<textElement textAlignment="Left">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
 					</textElement>
@@ -614,6 +682,12 @@
 				</textField>
 				<staticText>
 					<reportElement uuid="73eb2ab9-3c8d-411d-80d2-381a92d64772" style="Total" x="324" y="55" width="231" height="15"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					</box>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
@@ -635,7 +709,12 @@
 				</staticText>
 				<textField>
 					<reportElement uuid="f6e64eb4-1f2a-4603-9cef-d1a59b7ef2c5" style="Total" x="265" y="34" width="59" height="15"/>
-					<textElement textAlignment="Right">
+					<box>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					</box>
+					<textElement textAlignment="Left">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
 					</textElement>
@@ -643,6 +722,12 @@
 				</textField>
 				<staticText>
 					<reportElement uuid="95af44e3-8ad1-4060-a967-8524f932a115" style="Total" x="324" y="34" width="231" height="15"/>
+					<box>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					</box>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
@@ -780,9 +865,9 @@
 				</subreport>
 			</frame>
 		</band>
-		<band height="78" splitType="Prevent">
+		<band height="63" splitType="Prevent">
 			<frame>
-				<reportElement uuid="2107f254-fc07-441a-8848-9464415eeaf8" mode="Opaque" x="0" y="0" width="555" height="78"/>
+				<reportElement uuid="2107f254-fc07-441a-8848-9464415eeaf8" mode="Opaque" x="0" y="0" width="555" height="63"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -795,7 +880,7 @@
 					<text><![CDATA[Proposed Credit]]></text>
 				</staticText>
 				<subreport isUsingCache="true">
-					<reportElement uuid="9b19b0df-3ecd-4c56-aff2-d887a6f8988d" x="0" y="32" width="555" height="46"/>
+					<reportElement uuid="9b19b0df-3ecd-4c56-aff2-d887a6f8988d" x="0" y="32" width="555" height="31"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillProposedCredit})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subProposedCredit.jasper"]]></subreportExpression>
 				</subreport>
@@ -931,7 +1016,7 @@
 				</staticText>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="d5e0a0b0-3a23-4494-8e31-e111b69b7036" style="Total" x="221" y="0" width="49" height="15"/>
-					<textElement>
+					<textElement textAlignment="Right">
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
 					</textElement>
@@ -1052,7 +1137,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</staticText>
 				<textField>
 					<reportElement uuid="cd214ca3-04e7-4605-bf89-0d04e268b3af" style="Total" x="221" y="0" width="49" height="15"/>
-					<textElement>
+					<textElement textAlignment="Right">
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1"/>
 					</textElement>
@@ -1081,15 +1166,15 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</staticText>
 			</frame>
 		</band>
-		<band height="44" splitType="Prevent">
+		<band height="33" splitType="Prevent">
 			<frame>
-				<reportElement uuid="85826987-e437-4b3f-b8e5-2a0f6931fb35" x="0" y="0" width="556" height="44"/>
+				<reportElement uuid="85826987-e437-4b3f-b8e5-2a0f6931fb35" x="0" y="0" width="556" height="33"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<subreport>
-					<reportElement uuid="1d54e56d-8e56-4b0a-83e4-a58d8a03aeac" x="0" y="4" width="556" height="40"/>
+					<reportElement uuid="1d54e56d-8e56-4b0a-83e4-a58d8a03aeac" x="0" y="4" width="556" height="29"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillProposeFeeInformation})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subProposeFeeInformation.jasper"]]></subreportExpression>
 				</subreport>

@@ -1,7 +1,6 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.ExSummaryControl;
-import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.dao.master.AuthorizationDOADAO;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
@@ -18,6 +17,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -26,13 +26,15 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
 @ViewScoped
 @ManagedBean(name = "executiveSummary")
-public class ExecutiveSummary extends MandatoryFieldsControl {
+public class ExecutiveSummary implements Serializable {
 
     @Inject
     @SELOS
@@ -148,7 +150,7 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
             reasonList = new ArrayList<Reason>();
         }
 
-        User user = getCurrentUser();
+        User user = (User) session.getAttribute("user");
         if(user != null && user.getRole() != null && user.getRole().getId() == RoleValue.UW.id()){
             isRoleUW = true;
         } else {
