@@ -1076,27 +1076,28 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         newCollateralView.setMortgageCondition(selectCollateralDetailView.getMortgageCondition());
         newCollateralView.setMortgageConditionDetail(selectCollateralDetailView.getMortgageConditionDetail());
         newCollateralView.setComs(selectCollateralDetailView.isComs());
-        //   newCollateralView.setNewCollateralHeadViewList(new ArrayList<NewCollateralHeadView>());
-        //   newCollateralView.setNewCollateralHeadViewList(selectCollateralDetailView.getNewCollateralHeadViewList());
+        newCollateralView.setNewCollateralHeadViewList(new ArrayList<NewCollateralHeadView>());
+        newCollateralView.setNewCollateralHeadViewList(selectCollateralDetailView.getNewCollateralHeadViewList());
 
-        List<NewCollateralHeadView> newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
-        NewCollateralHeadView newCollateralHeadEdit;
-        for (NewCollateralHeadView newCollHeadEdit : selectCollateralDetailView.getNewCollateralHeadViewList()) {
-            newCollateralHeadEdit = new NewCollateralHeadView();
-            newCollateralHeadEdit.setTitleDeed(newCollHeadEdit.getTitleDeed());
-            newCollateralHeadEdit.setCollateralLocation(newCollHeadEdit.getCollateralLocation());
-            newCollateralHeadEdit.setAppraisalValue(newCollHeadEdit.getAppraisalValue());
-            newCollateralHeadEdit.setPotentialCollateral(newCollHeadEdit.getPotentialCollateral());
-            newCollateralHeadEdit.setCollTypePercentLTV(newCollHeadEdit.getCollTypePercentLTV());
-            newCollateralHeadEdit.setHeadCollType(newCollHeadEdit.getHeadCollType());
-            newCollateralHeadEdit.setTcgCollateralType(newCollHeadEdit.getTcgCollateralType());
-            newCollateralHeadEdit.setTcgHeadCollType(newCollHeadEdit.getTcgHeadCollType());
-            newCollateralHeadEdit.setExistingCredit(newCollHeadEdit.getExistingCredit());
-            newCollateralHeadEdit.setInsuranceCompany(newCollHeadEdit.getInsuranceCompany());
-            newCollateralHeadViewList.add(newCollateralHeadEdit);
-        }
+//        List<NewCollateralHeadView> newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
+//        NewCollateralHeadView newCollateralHeadEdit;
+//        for (NewCollateralHeadView newCollHeadEdit : selectCollateralDetailView.getNewCollateralHeadViewList()) {
+//            newCollateralHeadEdit = new NewCollateralHeadView();
+//            newCollateralHeadEdit.setTitleDeed(newCollHeadEdit.getTitleDeed());
+//            newCollateralHeadEdit.setCollateralLocation(newCollHeadEdit.getCollateralLocation());
+//            newCollateralHeadEdit.setAppraisalValue(newCollHeadEdit.getAppraisalValue());
+//            newCollateralHeadEdit.setPotentialCollateral(newCollHeadEdit.getPotentialCollateral());
+//            newCollateralHeadEdit.setCollTypePercentLTV(newCollHeadEdit.getCollTypePercentLTV());
+//            newCollateralHeadEdit.setHeadCollType(newCollHeadEdit.getHeadCollType());
+//            newCollateralHeadEdit.setTcgCollateralType(newCollHeadEdit.getTcgCollateralType());
+//            newCollateralHeadEdit.setTcgHeadCollType(newCollHeadEdit.getTcgHeadCollType());
+//            newCollateralHeadEdit.setExistingCredit(newCollHeadEdit.getExistingCredit());
+//            newCollateralHeadEdit.setInsuranceCompany(newCollHeadEdit.getInsuranceCompany());
+//            newCollateralHeadViewList.add(newCollateralHeadEdit);
+//        }
+//
+//        newCollateralView.setNewCollateralHeadViewList(newCollateralHeadViewList);
 
-        newCollateralView.setNewCollateralHeadViewList(newCollateralHeadViewList);
         flagComs = false;
         selectedCollateralCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
         proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(), existingCreditDetailViewList, workCaseId);
