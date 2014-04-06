@@ -344,7 +344,8 @@ public class PrescreenBusinessControl extends BusinessControl {
         //set Prescreen Result//
         UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultControl.getUWRuleResultByWorkCasePrescreenId(workCasePreScreenId);
         if(uwRuleResultSummaryView != null){
-            if(uwRuleResultSummaryView.getUwRuleResultDetailViewList() != null){
+
+            if(uwRuleResultSummaryView.getUwRuleResultDetailViewMap() != null){
 
                 Map<RelationValue, Integer> _numberOfCusRelationMap = new TreeMap<RelationValue, Integer>();
                 Map<String, CustomerInfoSimpleView> _customerInfoSimpleMap = new TreeMap<String, CustomerInfoSimpleView>();
@@ -366,12 +367,12 @@ public class PrescreenBusinessControl extends BusinessControl {
                 }
 
 
-                List<UWRuleResultDetailView> uwRuleResultDetailViewList = uwRuleResultSummaryView.getUwRuleResultDetailViewList();
+                Map<Integer, UWRuleResultDetailView> uwRuleResultDetailViewMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
                 Map<Integer, UWRuleResultDetailView> _groupUWResultDetailMap = new TreeMap<Integer, UWRuleResultDetailView>();
 
                 Integer lastOrder = Integer.MAX_VALUE;
                 Map<Integer, PrescreenCusRulesGroupView> _prescreenCusRulesGroupViewMap = new TreeMap<Integer, PrescreenCusRulesGroupView>();
-                for(UWRuleResultDetailView uwRuleResultDetailView : uwRuleResultDetailViewList){
+                for(UWRuleResultDetailView uwRuleResultDetailView : uwRuleResultDetailViewMap.values()){
                     if(UWRuleType.GROUP_LEVEL.equals(uwRuleResultDetailView.getUwRuleType())){
                         if(uwRuleResultDetailView.getRuleOrder() == 0)
                             _groupUWResultDetailMap.put(lastOrder--, uwRuleResultDetailView);
