@@ -80,19 +80,7 @@ public class PESQLInbox implements Serializable
         log.info("onCreation userDetail PESQLInbox.java : {}", userDetail);
 
         //Clear all session before selectInbox
-        HttpSession session = FacesUtil.getSession(false);
-
-        session.setAttribute("workCasePreScreenId", 0L);
-        session.setAttribute("workCaseAppraisalId", 0L);
-        session.setAttribute("workCaseId", 0L);
-        session.setAttribute("stepId", 0L);
-        session.setAttribute("statusId", 0L);
-        session.setAttribute("stageId", 0);
-        session.setAttribute("requestAppraisal", 0);
-        session.setAttribute("queueName", "");
-        session.setAttribute("wobNumber", "");
-        session.setAttribute("caseOwner", "");
-        session.setAttribute("fetchType",0);
+        HttpSession session = FacesUtil.getSession(true);
 
         try {
             if(session.getAttribute("isLocked") != null) {
@@ -123,6 +111,21 @@ public class PESQLInbox implements Serializable
             message = "Error while unlocking case.";
             RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
         }
+
+        //Clear all session
+        session = FacesUtil.getSession(false);
+
+        session.setAttribute("workCasePreScreenId", 0L);
+        session.setAttribute("workCaseAppraisalId", 0L);
+        session.setAttribute("workCaseId", 0L);
+        session.setAttribute("stepId", 0L);
+        session.setAttribute("statusId", 0L);
+        session.setAttribute("stageId", 0);
+        session.setAttribute("requestAppraisal", 0);
+        session.setAttribute("queueName", "");
+        session.setAttribute("wobNumber", "");
+        session.setAttribute("caseOwner", "");
+        session.setAttribute("fetchType",0);
     }
 
 
