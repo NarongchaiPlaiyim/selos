@@ -2445,7 +2445,7 @@ public class PrescreenMaker implements Serializable {
             messageHeader = "Save PreScreen Success.";
             message = "Save PreScreen data success.";
 
-            /*BaseController baseController = new BaseController();
+            /*HeaderController baseController = new HeaderController();
             baseController.setAppHeaderView(inboxControl.getHeaderInformation(workCasePreScreenId, new Long(0)));*/
             //setAppHeaderView(inboxControl.getHeaderInformation(workCasePreScreenId, new Long(0)));
 

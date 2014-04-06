@@ -11,10 +11,10 @@
             <td class="title right" style="min-width: 80px; width: 80px;">Assign to :</td>
             <td>
                 <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                 value="#{baseController.abdmUserId}"
+                                 value="#{headerController.abdmUserId}"
                                  required="#{not empty param[btnSubmitAssignABDM.clientId]}">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                    <f:selectItems value="#{baseController.abdmUserList}"
+                    <f:selectItems value="#{headerController.abdmUserList}"
                                    var="abdmItem"
                                    itemLabel="#{abdmItem.id} - #{abdmItem.userName}"
                                    itemValue="#{abdmItem.id}"/>
@@ -24,7 +24,7 @@
         <tr>
             <td class="title right top">Remark :</td>
             <td>
-                <p:inputTextarea value="#{baseController.assignRemark}" autoResize="false" cols="35"
+                <p:inputTextarea value="#{headerController.assignRemark}" autoResize="false" cols="35"
                                  rows="5"></p:inputTextarea>
             </td>
         </tr>
@@ -34,7 +34,7 @@
                                  binding="#{btnSubmitAssignABDM}"
                                  value="#{msg.get('app.button.submit')}"
                                  styleClass="small"
-                                 actionListener="#{baseController.onAssignToABDM()}"
+                                 actionListener="#{headerController.onAssignToABDM()}"
                                  oncomplete="handleAssignABDMDialogRequest(xhr, status, args)"
                                  process="@form"
                                  update=":frmMain:assignABDMDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>

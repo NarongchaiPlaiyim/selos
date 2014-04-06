@@ -582,6 +582,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
                         //*** Save NCB ,, Transform NCB ***//
                         if(ncbInfoView != null){
+                            ncbInfoView.setCheckingDate(new Date());
                             NCB ncb = ncbTransform.transformToModel(ncbInfoView);
                             log.debug("saving ncb (individual) data ... ncbView after transform : {}", ncb);
                             ncb.setCustomer(customer);
@@ -618,6 +619,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
                     //save NCB,, transform NCB
                     if(ncbInfoView != null){
+                        ncbInfoView.setCheckingDate(new Date());
                         NCB ncb = ncbTransform.transformToModel(ncbInfoView);
                         log.debug("saving ncb (juristic) data ... ncbView after transform : {}", ncb);
                         ncb.setCustomer(customer);

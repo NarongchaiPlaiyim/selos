@@ -10,7 +10,7 @@
             <tr>
                 <td>
                     <p:commandButton id="btnReturnBDMDlg" value="Add Return Code" styleClass="larger" title="Add Return Code"
-                                     action="#{baseController.onOpenAddReturnInfo()}"
+                                     action="#{headerController.onOpenAddReturnInfo()}"
                                      oncomplete="addReturnInfoDlg.show()"
                                      update=":frmMain:reasonId, :frmMain:remark">
                         <p:resetInput target=":frmMain:reasonId, :frmMain:remark"/>
@@ -20,7 +20,7 @@
             <tr>
                 <td>
                     <p:dataTable id="returnResult" var="returnInfo"
-                                 value="#{baseController.returnInfoViewList}"
+                                 value="#{headerController.returnInfoViewList}"
                                  rowKey="#{returnInfo.id}" rowIndexVar="rowIndex" style="width: 100%">
                         <p:columnGroup type="header">
                             <p:row>
@@ -52,14 +52,14 @@
                             <p:commandButton title="Edit" process="@form"
                                              icon="ui-icon-pencil"
                                              rendered="#{returnInfo.canEdit}"
-                                             actionListener="#{baseController.onEditReturnInfo(rowIndex)}"
+                                             actionListener="#{headerController.onEditReturnInfo(rowIndex)}"
                                              oncomplete="addReturnInfoDlg.show()"
                                              update=":frmMain:reasonId, :frmMain:remark">
                             </p:commandButton>
                             <p:commandButton title="Remove" process="@form"
                                              icon="ui-icon-trash"
                                              rendered="#{returnInfo.canEdit}"
-                                             action="#{baseController.onDeleteReturnInfo(rowIndex)}"
+                                             action="#{headerController.onDeleteReturnInfo(rowIndex)}"
                                              update=":frmMain:returnBDMDlgPanel">
                             </p:commandButton>
                         </p:column>
@@ -72,7 +72,7 @@
                                      binding="#{btnSubmitReturnSummary}"
                                      value="#{msg.get('app.button.submit')}"
                                      styleClass="small"
-                                     actionListener="#{baseController.onSumbitReturnBDM()}"
+                                     actionListener="#{headerController.onSubmitReturnBDM()}"
                                      oncomplete="handleReturnBDMDialogRequest(xhr, status, args)"
                                      process="@form"
                                      update=":frmMain:returnBDMDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>

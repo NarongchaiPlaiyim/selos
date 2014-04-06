@@ -1015,9 +1015,12 @@
                                 <td  colspan="2" style="text-align: left;width:10px;" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.deviation.label.applicationResult')}"/>
                                     <p:spacer width="10px;" />
-                                    <!--<h:outputText value="color result"/>-->
+                                    <h:outputText value="#{executiveSummary.exSummaryView.applicationColorResult.code == 'R' ? 'Red'
+                                                            : executiveSummary.exSummaryView.applicationColorResult.code == 'G' ? 'Green'
+                                                            : executiveSummary.exSummaryView.applicationColorResult.code == 'Y' ? 'Yellow' : ''}"
+                                                  style="background-color: #{executiveSummary.exSummaryView.applicationColorResult.colorCode}"/>
                                     <p:spacer width="10px;" />
-                                    <h:outputText value="#{msg.get('app.exSummary.deviation.label.applicationResult.last')}"/>
+                                    <h:outputText value="#{executiveSummary.exSummaryView.applicationResult}"/>
                                 </td>
                             </tr>
                             <tr>
@@ -1061,7 +1064,7 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemDecision.flag}"/>
+                                            <h:outputText value="#{itemDecision.flag.code}" style="background-color: #{itemDecision.flag.colorCode}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
