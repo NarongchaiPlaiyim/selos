@@ -167,7 +167,14 @@ public class PrescreenConverter extends Converter{
                         ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CURRENT_PAYMENT_PATTERN_INDV, ncbAccountInfo.getCurrentPaymentType()));
                         ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.SIX_MONTHS_PAYMENT_PATTERN_INDV, ncbAccountInfo.getSixMonthPaymentType()));
                         ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TWELVE_MONTHS_PAYMENT_PATTERN_INDV, ncbAccountInfo.getTwelveMonthPaymentType()));
+                        ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CURRENT_PAYMENT_PATTERN_JURIS, ""));
+                        ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.SIX_MONTHS_PAYMENT_PATTERN_JURIS, ""));
+                        ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TWELVE_MONTHS_PAYMENT_PATTERN_JURIS, ""));
                     } else {
+                        ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CURRENT_PAYMENT_PATTERN_INDV, ""));
+                        ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.SIX_MONTHS_PAYMENT_PATTERN_INDV, ""));
+                        ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TWELVE_MONTHS_PAYMENT_PATTERN_INDV, ""));
+
                         ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CURRENT_PAYMENT_PATTERN_JURIS, ncbAccountInfo.getCurrentPaymentType()));
                         ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.SIX_MONTHS_PAYMENT_PATTERN_JURIS, ncbAccountInfo.getSixMonthPaymentType()));
                         ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TWELVE_MONTHS_PAYMENT_PATTERN_JURIS, ncbAccountInfo.getTwelveMonthPaymentType()));
