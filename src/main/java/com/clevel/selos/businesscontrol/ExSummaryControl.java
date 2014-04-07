@@ -408,9 +408,7 @@ public class ExSummaryControl extends BusinessControl {
             String worstCase = "";
             if(cusListView != null && cusListView.size() > 0){
                 for(int i = 0; i < cusListView.size() ; i++){
-                    if(i == 0){
-                        tmpWorstCase = cusListView.get(i).getAdjustClass();
-                    } else {
+                    if(cusListView.get(i).getRelation().getId() == RelationValue.BORROWER.value()){
                         tmpWorstCase = calWorstCaseBotClass(tmpWorstCase,cusListView.get(i).getAdjustClass());
                     }
                 }
@@ -497,13 +495,16 @@ public class ExSummaryControl extends BusinessControl {
         exSummaryView.setExSumCreditRiskInfoView(exSumCreditRiskInfoView);
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultControl.getUWRuleResultByWorkCaseId(workCaseId);
+        if(uwRuleResultSummaryView != null && uwRuleResultSummaryView.getId() != 0){
+            if(uwRuleResultSummaryView.getUwDeviationFlagView() != null){
+                exSummaryView.setApplicationResult(uwRuleResultSummaryView.getUwDeviationFlagView().getName());
+            }
+            exSummaryView.setApplicationColorResult(uwRuleResultSummaryView.getUwResultColor());
 
-        exSummaryView.setApplicationResult(uwRuleResultSummaryView.getUwDeviationFlagView().getName());
-        exSummaryView.setApplicationColorResult(uwRuleResultSummaryView.getUwResultColor());
+            List<ExSumDecisionView> exSumDecisionViewList = exSummaryTransform.transformUWRuleToExSumDecision(uwRuleResultSummaryView);
 
-        List<ExSumDecisionView> exSumDecisionViewList = exSummaryTransform.transformUWRuleToExSumDecision(uwRuleResultSummaryView);
-
-        exSummaryView.setExSumDecisionListView(exSumDecisionViewList);
+            exSummaryView.setExSumDecisionListView(exSumDecisionViewList);
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

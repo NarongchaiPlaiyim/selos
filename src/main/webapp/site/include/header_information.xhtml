@@ -1,0 +1,102 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <table id="header_information_table">
+        <tr>
+            <td colspan="11" class="title right"><h:outputText value="#{msg.get('app.header.label.status')}"/> :</td>
+            <td><h:outputText value="#{headerController.appHeaderView.caseStatus}"/></td>
+        </tr>
+        <tr>
+            <td class="title left" style="min-width: 130px; max-width: 180px;"><h:outputText value="#{msg.get('app.header.label.bdm')}"/> :</td>
+            <td class="left" style="min-width: 180px;">
+                <h:outputText value="#{headerController.appHeaderView.bdmName}"/>
+            </td>
+            <td class="title right" style="min-width: 50px; max-width: 60px;"><h:outputText value="#{msg.get('app.header.label.tel')}"/> :</td>
+            <td class="left" style="min-width:90px; max-width:100px;">
+                <h:outputText value="#{headerController.appHeaderView.bdmPhoneNumber}"/>
+            </td>
+            <td class="title right" style="min-width: 50px; max-width: 60px;"><h:outputText value="#{msg.get('app.header.label.ext')}"/> :</td>
+            <td class="left" style="min-width:80px; max-width: 90px;">
+                <h:outputText value="#{headerController.appHeaderView.bdmPhoneExtNumber}"/>
+            </td>
+            <td class="title right" style="min-width: 50px; max-width: 60px;"><h:outputText value="#{msg.get('app.header.label.zone')}"/> :</td>
+            <td class="left" style="min-width:100px; max-width: 130px;">
+                <h:outputText value="#{headerController.appHeaderView.bdmZoneName}"/>
+            </td>
+            <td class="title right" style="min-width: 60px; max-width: 70px;"><h:outputText value="#{msg.get('app.header.label.region')}"/> :</td>
+            <td class="left" style="min-width:80px;">
+                <h:outputText value="#{headerController.appHeaderView.bdmRegionName}"/>
+            </td>
+            <td class="title right" style="min-width: 100px; max-width: 110px;"><h:outputText value="#{msg.get('app.header.label.submitDate')}"/> :</td>
+            <td class="left" style="min-width:90px; max-width: 90px;">
+                <h:outputText value="#{headerController.appHeaderView.submitDate}"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="title"><h:outputText value="#{msg.get('app.header.label.uw')}"/> :</td>
+            <td><h:outputText value="#{headerController.appHeaderView.uwName}"/></td>
+            <td class="title right"><h:outputText value="#{msg.get('app.header.label.tel')}"/> :</td>
+            <td><h:outputText value="#{headerController.appHeaderView.uwPhoneNumber}"/></td>
+            <td class="title right"><h:outputText value="#{msg.get('app.header.label.ext')}"/> :</td>
+            <td><h:outputText value="#{headerController.appHeaderView.uwPhoneExtNumber}"/></td>
+            <td class="title right"><h:outputText value="#{msg.get('app.header.label.team')}"/> :</td>
+            <td><h:outputText value="#{headerController.appHeaderView.uwTeamName}"/></td>
+            <td colspan="3" class="title right"><h:outputText value="#{msg.get('app.header.label.requestType')}"/> :</td>
+            <td><h:outputText value="#{headerController.appHeaderView.requestType}"/></td>
+        </tr>
+        <tr>
+            <td colspan="11" style="font-weight: bold; text-align: right;"><h:outputText value="#{msg.get('app.header.label.refinance')}"/> :</td>
+            <td><h:outputText value="#{headerController.appHeaderView.refinance}"/></td>
+        </tr>
+        <tr>
+            <td class="title"><h:outputText value="#{msg.get('app.header.label.appNo')}"/> :</td>
+            <td><h:outputText value="#{headerController.appHeaderView.appNo}"/></td>
+            <td class="title right"><h:outputText value="#{msg.get('app.header.label.refAppNo')}"/> :</td>
+            <td colspan="2"><h:outputText value="#{headerController.appHeaderView.appRefNo}"/></td>
+            <td class="title right"><h:outputText value="#{msg.get('app.header.label.appRefDate')}"/> :</td>
+            <td colspan="2"><h:outputText value="#{headerController.appHeaderView.appRefDate}"/></td>
+            <td class="title right"><h:outputText value="#{msg.get('app.header.label.refNo')}"/> :</td>
+            <td colspan="3"><h:outputText value="#{headerController.appHeaderView.appRefDate}"/></td>
+        </tr>
+        <tr>
+            <td class="title"><h:outputText value="#{msg.get('app.header.label.borrowerName')}"/> :</td>
+            <td colspan="11" style="padding:0; vertical-align: top;">
+                <table>
+                    <tr>
+                        <ui:repeat var="borrower" value="#{headerController.appHeaderView.borrowerHeaderViewList}"
+                                   varStatus="status">
+                            <td style="min-width: 140px; max-width: 140px; width: 140px;">#{borrower.borrowerName}</td>
+                        </ui:repeat>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td class="title"><h:outputText value="#{msg.get('app.header.label.citizenID')}"/>/<br/><h:outputText value="#{msg.get('app.header.label.registrationID')}"/> :</td>
+            <td colspan="11" style="padding:0; vertical-align: top;">
+                <table>
+                    <tr>
+                        <ui:repeat var="personalId"
+                                   value="#{headerController.appHeaderView.borrowerHeaderViewList}"
+                                   varStatus="status">
+                            <td style="min-width: 140px; max-width: 140px; width: 140px;"><h:outputText
+                                    rendered="#{headerController.stepId != 1002}"
+                                    value="#{personalId.personalId}"/></td>
+                        </ui:repeat>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td class="title"><h:outputText value="#{msg.get('app.header.label.productGroup')}"/> :</td>
+            <td colspan="3"><h:outputText value="#{headerController.appHeaderView.productGroup}"/></td>
+            <td colspan="2" class="title right"><h:outputText value="#{msg.get('app.header.label.lastDecision')}"/> :</td>
+            <td colspan="2"></td>
+            <td colspan="2" class="title right"><h:outputText value="#{msg.get('app.header.label.limitSetupExpiredDate')}"/> :</td>
+            <td colspan="2"></td>
+        </tr>
+    </table>
+
+</ui:composition>

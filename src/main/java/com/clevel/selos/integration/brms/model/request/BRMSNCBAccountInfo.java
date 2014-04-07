@@ -19,7 +19,7 @@ public class BRMSNCBAccountInfo implements Serializable{
     private String twelveMonthPaymentType; //Payment Pattern in last 12 months.
     private int numberOfOverDue;//Over Due 31-60 days within last 12 months.
     private int numberOfOverLimit;//Number of Over Limit last 6 months.
-    private String accountCloseDateMonths; //Number of month from account close date;
+    private BigDecimal accountCloseDateMonths; //Number of month from account close date;
 
     public String getLoanAccountStatus() {
         return loanAccountStatus;
@@ -117,11 +117,11 @@ public class BRMSNCBAccountInfo implements Serializable{
         this.numberOfOverLimit = numberOfOverLimit;
     }
 
-    public String getAccountCloseDateMonths() {
+    public BigDecimal getAccountCloseDateMonths() {
         return accountCloseDateMonths;
     }
 
-    public void setAccountCloseDateMonths(String accountCloseDateMonths) {
+    public void setAccountCloseDateMonths(BigDecimal accountCloseDateMonths) {
         this.accountCloseDateMonths = accountCloseDateMonths;
     }
 
