@@ -16,7 +16,7 @@ public class BaseController implements Serializable {
     private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
     private final HashMap<String, FieldsControlView> dialogFieldMap = new HashMap<String, FieldsControlView>();
 
-    private void loadFieldControl(long workCaseId) {
+    private void loadFieldControl(long workCaseId, Screen screenId) {
         List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.ContactRecord);
         List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.CallingRecordDialog);
         fieldMap.clear();

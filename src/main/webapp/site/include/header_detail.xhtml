@@ -174,23 +174,23 @@
                 </p:commandButton>
                 <!--Submit To Region Manager-->
                 <p:commandButton id="btnSubmitCaseToRGM" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
-                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2002}">
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2002}"
+                                 onclick="confirmSubmitSubmitRGM.show()"/>
                     <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                                      icon="ui-icon-alert"
                                      widgetVar="confirmSubmitSubmitRGM" global="false" showEffect="fade"
                                      rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2002}">
                         <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
                                          update=":frmMain:msgBoxBaseMessagePanel"
-                                                     actionListener="#{headerController.onSubmitRM()}"
-                                                     process="@this" oncomplete="confirmSubmitSubmitRGM.hide()"/>
+                                         actionListener="#{headerController.onSubmitRM()}"
+                                         process="@this" oncomplete="confirmSubmitSubmitRGM.hide()"/>
                         <p:commandButton value="No" type="button" onclick="confirmSubmitSubmitRGM.hide()"
                                          styleClass="ui-confirmdialog-no"/>
                     </p:confirmDialog>
-                </p:commandButton>
                 <!--Submit To Head-->
                 <p:commandButton id="btnSubmitCaseToGH" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
                                  rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2020}"
-                                 update=":frmMain:msgBoxBaseMessagePanel" >
+                                 onclick="confirmSubmitSubmitGH.show()" />
                     <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                                      icon="ui-icon-alert"
                                      widgetVar="confirmSubmitSubmitGH" global="false" showEffect="fade"
@@ -202,7 +202,6 @@
                         <p:commandButton value="No" type="button" onclick="confirmSubmitSubmitGH.hide()"
                                          styleClass="ui-confirmdialog-no"/>
                     </p:confirmDialog>
-                </p:commandButton>
                 <!---->
             </p:panel>
             <!--Stage for Appraisal-->
