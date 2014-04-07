@@ -164,11 +164,6 @@ public class NCBBizTransform extends BusinessTransform {
 
                                     //Check lastAsOfDate
                                     for(SubjectAccountModel subjectAccountModel : subjectAccountModelResults){
-                                        isValidPayment = isValidPaymentPatternIndividual(subjectAccountModel, lastAsOfDate);
-                                        log.debug("isValidPayment {}",isValidPayment);
-                                        if(!isValidPayment){
-                                            break;
-                                        }
                                         if(Util.isNull(lastAsOfDate)){
                                             lastAsOfDate = subjectAccountModel.getAsofdate() != null ? subjectAccountModel.getAsofdate() : null;
                                         }else{
@@ -177,6 +172,14 @@ public class NCBBizTransform extends BusinessTransform {
                                                     lastAsOfDate = subjectAccountModel.getAsofdate();
                                                 }
                                             }
+                                        }
+                                    }
+
+                                    for(SubjectAccountModel subjectAccountModel : subjectAccountModelResults){
+                                        isValidPayment = isValidPaymentPatternIndividual(subjectAccountModel, lastAsOfDate);
+                                        log.debug("isValidPayment {}",isValidPayment);
+                                        if(!isValidPayment){
+                                            break;
                                         }
                                     }
 
@@ -2024,7 +2027,7 @@ public class NCBBizTransform extends BusinessTransform {
     }
 
     private boolean isInMonthPeriodYYYYMMDD(String dateStr, String compareStr, int numberMonth) {
-        if (!Util.isNull(dateStr) && !Util.isEmpty(dateStr) && !Util.isNull(dateStr) && !Util.isEmpty(dateStr)) {
+        if (!Util.isNull(dateStr) && !Util.isEmpty(dateStr) && !Util.isNull(compareStr) && !Util.isEmpty(compareStr)) {
             Date paymentDate = Util.strYYYYMMDDtoDateFormat(dateStr);
             Date compareDate = Util.strYYYYMMDDtoDateFormat(compareStr);
             Calendar startCalendar = new GregorianCalendar();
