@@ -96,6 +96,9 @@ public class BRMSControl extends BusinessControl {
     private UWRuleResultTransform uwRuleResultTransform;
 
     @Inject
+    private ActionValidationControl actionValidationControl;
+
+    @Inject
     public BRMSControl(){}
 
     public StandardPricingResponse getPriceFeeInterest(long workCaseId){
@@ -226,6 +229,7 @@ public class BRMSControl extends BusinessControl {
     }
 
     public UWRuleResponseView getPrescreenResult(long workcasePrescreenId) throws Exception{
+
         logger.debug("getPrescreenReult from workcasePrescreenId {}", workcasePrescreenId);
         Date checkDate = Calendar.getInstance().getTime();
         logger.debug("check at date {}", checkDate);
@@ -607,30 +611,31 @@ public class BRMSControl extends BusinessControl {
         return uwRuleResponseView;
     }
 
-    public MandateDocResponseView getDocCustomer(long workCaseId){
-        logger.debug("-- getDocCustomer from workCaseId {}", workCaseId);
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
+    public MandateDocResponseView getDocCustomerForPrescreen(long workCasePrescreenId){
+        logger.debug("-- getDocCustomerForPrescreen from workCaseId {}", workCasePrescreenId);
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
         List<MandateDocument> mandateDocumentList = null;
 
-        if(workCase.getStep() != null) {
-            mandateDocumentList = mandateDocumentDAO.findByStep(workCase.getStep().getId());
+        if(workCasePrescreen.getStep() != null) {
+            mandateDocumentList = mandateDocumentDAO.findByStep(workCasePrescreen.getStep().getId());
         }
 
         MandateDocResponseView mandateDocResponseView = new MandateDocResponseView();
         if(mandateDocumentList != null && mandateDocumentList.size() > 0){
             logger.debug("-- Get Mandate Document from mst_mandate_document {}", mandateDocumentList);
             mandateDocResponseView.setActionResult(ActionResult.SUCCESS);
-            List<Customer> customerInfoList = customerDAO.findCustomerByWorkCaseId(workCaseId);
+            List<Customer> customerInfoList = customerDAO.findCustomerByWorkCasePreScreenId(workCasePrescreenId);
             mandateDocResponseView.setMandateDocViewMap(getMandateDocViewMap(mandateDocumentList, customerInfoList));
             logger.debug("-- Get Mandate Document from mandate_master {}", mandateDocResponseView);
         } else {
             Date checkDate = Calendar.getInstance().getTime();
             logger.debug("-- check at date {}", checkDate);
-            BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+            Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePrescreenId);
+
             BRMSApplicationInfo applicationInfo = new BRMSApplicationInfo();
             //1. Set Customer Info List
             List<BRMSCustomerInfo> customerInfoList = new ArrayList<BRMSCustomerInfo>();
-            List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
+            List<Customer> customerList = customerDAO.findCustomerByWorkCasePreScreenId(workCasePrescreenId);
             for(Customer customer : customerList){
                 BRMSCustomerInfo brmsCustomerInfo = getCustomerInfoWithoutCreditAccount(customer, checkDate);
                 customerInfoList.add(brmsCustomerInfo);
@@ -638,65 +643,35 @@ public class BRMSControl extends BusinessControl {
             applicationInfo.setCustomerInfoList(customerInfoList);
 
             //2. Set Account Requested List
-            ProposeType _proposeType = ProposeType.P;
-            if(workCase.getStep() != null)
-                _proposeType = workCase.getStep().getProposeType();
-
-            List<NewCreditDetail> newCreditDetailList = newCreditDetailDAO.findNewCreditDetail(workCaseId, _proposeType);
+            List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreen(prescreen);
             List<BRMSAccountRequested> accountRequestedList = new ArrayList();
-            for(NewCreditDetail newCreditDetail : newCreditDetailList){
-                if(newCreditDetail.getRequestType() == RequestTypes.NEW.value()){
-                    accountRequestedList.add(getBRMSAccountRequested(newCreditDetail, null));
-                }
+            for(PrescreenFacility prescreenFacility : prescreenFacilityList){
+                accountRequestedList.add(getBRMSAccountRequested(prescreenFacility));
             }
             applicationInfo.setAccountRequestedList(accountRequestedList);
 
             //3. Set Application Information.
-            applicationInfo.setApplicationNo(workCase.getAppNumber());
+            applicationInfo.setApplicationNo(workCasePrescreen.getAppNumber());
             applicationInfo.setProcessDate(checkDate);
-            applicationInfo.setBdmSubmitDate(basicInfo.getBdmSubmitDate());
-            if(basicInfo.getBorrowerType() != null)
-                applicationInfo.setBorrowerType(basicInfo.getBorrowerType().getBrmsCode());
-            applicationInfo.setExistingSMECustomer(getRadioBoolean(basicInfo.getExistingSMECustomer()));
-            applicationInfo.setRequestLoanWithSameName(getRadioBoolean(basicInfo.getRequestLoanWithSameName()));
-            applicationInfo.setRefinanceIN(getRadioBoolean(basicInfo.getRefinanceIN()));
-            applicationInfo.setRefinanceOUT(getRadioBoolean(basicInfo.getRefinanceOUT()));
+            if(workCasePrescreen.getBorrowerType() != null)
+                applicationInfo.setBorrowerType(workCasePrescreen.getBorrowerType().getBrmsCode());
+            applicationInfo.setExistingSMECustomer(getRadioBoolean(prescreen.getExistingSMECustomer()));
+            applicationInfo.setRefinanceIN(getRadioBoolean(prescreen.getRefinanceIN()));
+            applicationInfo.setRefinanceOUT(getRadioBoolean(prescreen.getRefinanceOUT()));
 
-            BAPAInfo bapaInfo = bapaInfoDAO.findByWorkCase(workCaseId);
+            applicationInfo.setRequestTCG(getRadioBoolean(prescreen.getTcg()));
+            if(workCasePrescreen.getStep() != null)
+                applicationInfo.setStepCode(workCasePrescreen.getStep().getCode());
+            if(workCasePrescreen.getProductGroup() != null)
+                applicationInfo.setProductGroup(workCasePrescreen.getProductGroup().getBrmsCode());
 
-            if(bapaInfo.getApplyBA().getBoolValue()){
-                if(BAPaymentMethodValue.DIRECT.equals(bapaInfo.getBaPaymentMethod())){
-                    applicationInfo.setApplyBAwithCash(Boolean.TRUE);
-                    applicationInfo.setTopupBA(Boolean.FALSE);
-                } else if(BAPaymentMethodValue.TOPUP.equals(bapaInfo.getBaPaymentMethod())){
-                    applicationInfo.setApplyBAwithCash(Boolean.FALSE);
-                    applicationInfo.setTopupBA(Boolean.TRUE);
-                } else {
-                    applicationInfo.setApplyBAwithCash(Boolean.FALSE);
-                    applicationInfo.setTopupBA(Boolean.FALSE);
-                }
-            } else {
-                applicationInfo.setApplyBAwithCash(Boolean.FALSE);
-                applicationInfo.setTopupBA(Boolean.FALSE);
-            }
-
-            TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
-            applicationInfo.setRequestTCG(getRadioBoolean(tcg.getTcgFlag()));
-            if(workCase.getStep() != null)
-                applicationInfo.setStepCode(workCase.getStep().getCode());
-            if(workCase.getProductGroup() != null)
-                applicationInfo.setProductGroup(workCase.getProductGroup().getBrmsCode());
-
-            BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findByWorkCaseId(workCaseId);
-
-            if(bizInfoSummary.getReferredExperience() != null)
-                applicationInfo.setReferredDocType(bizInfoSummary.getReferredExperience().getBrmsCode());
+            applicationInfo.setReferredDocType(prescreen.getReferredExperience().getBrmsCode());
 
             DocCustomerResponse docCustomerResponse = brmsInterface.checkDocCustomerRule(applicationInfo);
             logger.debug("-- docCustomerResponse return {}", docCustomerResponse);
 
             if(ActionResult.SUCCESS.equals(docCustomerResponse.getActionResult())){
-                Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, workCase.getStep());
+                Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, workCasePrescreen.getStep());
                 mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
                 mandateDocResponseView.setMandateDocViewMap(mandateDocViewMap);
             } else {
@@ -704,8 +679,100 @@ public class BRMSControl extends BusinessControl {
                 mandateDocResponseView.setReason(docCustomerResponse.getReason());
             }
 
-            logger.debug("-- end getDocCustomer return {}", mandateDocResponseView);
+            logger.debug("-- end getDocCustomerForPrescreen return {}", mandateDocResponseView);
         }
+
+        return mandateDocResponseView;
+    }
+
+    public MandateDocResponseView getDocCustomerForFullApp(long workCaseId){
+        logger.debug("-- getDocCustomer from workCaseId {}", workCaseId);
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+
+        MandateDocResponseView mandateDocResponseView = new MandateDocResponseView();
+
+        Date checkDate = Calendar.getInstance().getTime();
+        logger.debug("-- check at date {}", checkDate);
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        BRMSApplicationInfo applicationInfo = new BRMSApplicationInfo();
+        //1. Set Customer Info List
+        List<BRMSCustomerInfo> customerInfoList = new ArrayList<BRMSCustomerInfo>();
+        List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
+        for(Customer customer : customerList){
+            BRMSCustomerInfo brmsCustomerInfo = getCustomerInfoWithoutCreditAccount(customer, checkDate);
+            customerInfoList.add(brmsCustomerInfo);
+        }
+        applicationInfo.setCustomerInfoList(customerInfoList);
+
+        //2. Set Account Requested List
+        ProposeType _proposeType = ProposeType.P;
+        if(workCase.getStep() != null)
+            _proposeType = workCase.getStep().getProposeType();
+
+        List<NewCreditDetail> newCreditDetailList = newCreditDetailDAO.findNewCreditDetail(workCaseId, _proposeType);
+        List<BRMSAccountRequested> accountRequestedList = new ArrayList();
+        for(NewCreditDetail newCreditDetail : newCreditDetailList){
+            if(newCreditDetail.getRequestType() == RequestTypes.NEW.value()){
+                accountRequestedList.add(getBRMSAccountRequested(newCreditDetail, null));
+            }
+        }
+        applicationInfo.setAccountRequestedList(accountRequestedList);
+
+        //3. Set Application Information.
+        applicationInfo.setApplicationNo(workCase.getAppNumber());
+        applicationInfo.setProcessDate(checkDate);
+        applicationInfo.setBdmSubmitDate(basicInfo.getBdmSubmitDate());
+        if(basicInfo.getBorrowerType() != null)
+            applicationInfo.setBorrowerType(basicInfo.getBorrowerType().getBrmsCode());
+        applicationInfo.setExistingSMECustomer(getRadioBoolean(basicInfo.getExistingSMECustomer()));
+        applicationInfo.setRequestLoanWithSameName(getRadioBoolean(basicInfo.getRequestLoanWithSameName()));
+        applicationInfo.setRefinanceIN(getRadioBoolean(basicInfo.getRefinanceIN()));
+        applicationInfo.setRefinanceOUT(getRadioBoolean(basicInfo.getRefinanceOUT()));
+
+        BAPAInfo bapaInfo = bapaInfoDAO.findByWorkCase(workCaseId);
+
+        if(bapaInfo.getApplyBA().getBoolValue()){
+            if(BAPaymentMethodValue.DIRECT.equals(bapaInfo.getBaPaymentMethod())){
+                applicationInfo.setApplyBAwithCash(Boolean.TRUE);
+                applicationInfo.setTopupBA(Boolean.FALSE);
+            } else if(BAPaymentMethodValue.TOPUP.equals(bapaInfo.getBaPaymentMethod())){
+                applicationInfo.setApplyBAwithCash(Boolean.FALSE);
+                applicationInfo.setTopupBA(Boolean.TRUE);
+            } else {
+                applicationInfo.setApplyBAwithCash(Boolean.FALSE);
+                applicationInfo.setTopupBA(Boolean.FALSE);
+            }
+        } else {
+            applicationInfo.setApplyBAwithCash(Boolean.FALSE);
+            applicationInfo.setTopupBA(Boolean.FALSE);
+        }
+
+        TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
+        applicationInfo.setRequestTCG(getRadioBoolean(tcg.getTcgFlag()));
+        if(workCase.getStep() != null)
+            applicationInfo.setStepCode(workCase.getStep().getCode());
+        if(workCase.getProductGroup() != null)
+            applicationInfo.setProductGroup(workCase.getProductGroup().getBrmsCode());
+
+        BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findByWorkCaseId(workCaseId);
+
+        if(bizInfoSummary.getReferredExperience() != null)
+            applicationInfo.setReferredDocType(bizInfoSummary.getReferredExperience().getBrmsCode());
+
+        DocCustomerResponse docCustomerResponse = brmsInterface.checkDocCustomerRule(applicationInfo);
+        logger.debug("-- docCustomerResponse return {}", docCustomerResponse);
+
+        if(ActionResult.SUCCESS.equals(docCustomerResponse.getActionResult())){
+            Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, workCase.getStep());
+            mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
+            mandateDocResponseView.setMandateDocViewMap(mandateDocViewMap);
+        } else {
+            mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
+            mandateDocResponseView.setReason(docCustomerResponse.getReason());
+        }
+
+        logger.debug("-- end getDocCustomer return {}", mandateDocResponseView);
+
 
         return mandateDocResponseView;
     }
@@ -1022,6 +1089,24 @@ public class BRMSControl extends BusinessControl {
         return accountRequested;
     }
 
+    private BRMSAccountRequested getBRMSAccountRequested(PrescreenFacility prescreenFacility){
+        logger.debug("-- getBRMSAccountRequested with PrescreenFacility {}", prescreenFacility);
+        if(prescreenFacility == null){
+            logger.debug("getBRMSAccountRequested return null");
+            return null;
+        }
+
+        BRMSAccountRequested accountRequested = new BRMSAccountRequested();
+        accountRequested.setCreditDetailId(String.valueOf(prescreenFacility.getId()));
+        if(prescreenFacility.getProductProgram() != null)
+            accountRequested.setProductProgram(prescreenFacility.getProductProgram().getBrmsCode());
+        if(prescreenFacility.getCreditType() != null)
+            accountRequested.setCreditType(prescreenFacility.getCreditType().getBrmsCode());
+        accountRequested.setLimit(prescreenFacility.getRequestAmount());
+
+        return accountRequested;
+    }
+
     private BRMSBizInfo getBRMSBizInfo(PrescreenBusiness prescreenBusiness){
         logger.debug("- getBRMSBizInfo with prescreenBusiness {}", prescreenBusiness);
         BRMSBizInfo brmsBizInfo = new BRMSBizInfo();
@@ -1182,7 +1267,7 @@ public class BRMSControl extends BusinessControl {
 
                 logger.debug("Add New Customer Info");
                 for(Customer customer : customerList){
-                    if(customer.getCustomerEntity().equals(mandateDocument.getCustomerEntity())){
+                    if(customer.getRelation().equals(mandateDocument.getRelation())){
                         Customer _customerInfo = null;
                         for(CustomerInfoSimpleView _compare : customerInfoSimpleViewList){
                             if(_compare.getId() == customer.getId()){

@@ -37,6 +37,9 @@ public class UserSysParameter implements Serializable{
     @Column(name = "pass_fin_approval_step_flag", columnDefinition = "int default 0")
     private boolean passFinalApprovalStep;
 
+    @Column(name = "active", columnDefinition = "int default 0")
+    private boolean active;
+
     public long getId() {
         return id;
     }
@@ -109,10 +112,19 @@ public class UserSysParameter implements Serializable{
         this.passFinalApprovalStep = passFinalApprovalStep;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
+                .append("code", code)
                 .append("name", name)
                 .append("description", description)
                 .append("value", value)
@@ -120,6 +132,7 @@ public class UserSysParameter implements Serializable{
                 .append("noBDMSubmit", noBDMSubmit)
                 .append("passBUApproval", passBUApproval)
                 .append("passFinalApprovalStep", passFinalApprovalStep)
+                .append("active", active)
                 .toString();
     }
 }

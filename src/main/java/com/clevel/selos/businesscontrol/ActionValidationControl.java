@@ -80,35 +80,47 @@ public class ActionValidationControl extends BusinessControl{
             List<MandateFieldView> mandateFieldViewList = mandateFieldViewMap.get(objectClass.getName());
             Field[] fields = objectClass.getDeclaredFields();
             for(Field field : fields){
+                logger.debug("check for field name {}", field.getName());
                 field.setAccessible(true);
                 for(MandateFieldView mandateFieldView : mandateFieldViewList){
+                    logger.debug("loop for mandateFieldView name {}", mandateFieldView);
                     if(field.getName().equals(mandateFieldView.getFieldName())){
+                        logger.debug("found name matched field: {}, mandateFieldView: {}", field.getName(), mandateFieldView.getFieldName());
                         mandateFieldView.setChecked(Boolean.TRUE);
+                        boolean failed = false;
+
                         try{
                             Object _fieldObj = field.get(object);
-
                             if(_fieldObj == null){
-                                addMandateFieldMessageView(mandateFieldView.getFieldDesc(), mandateFieldView.getFieldDesc(),validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), mandateFieldView.getPage());
-
+                                failed = true;
                             }
                             Class _fieldObjClass = _fieldObj.getClass();
                             if(_fieldObjClass.equals(Integer.class.getName())){
                                 if((Integer)_fieldObj == 0){
-                                    addMandateFieldMessageView(mandateFieldView.getFieldDesc(), mandateFieldView.getFieldDesc(), validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), mandateFieldView.getPage());
+                                    failed = true;
                                 }
                             } else if(_fieldObjClass.equals(Long.class.getName())){
                                 if((Long)_fieldObj == 0){
-                                    addMandateFieldMessageView(mandateFieldView.getFieldDesc(), mandateFieldView.getFieldDesc(), validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), mandateFieldView.getPage());
+                                    failed = true;
                                 }
                             } else if(_fieldObjClass.equals(BigDecimal.class.getName())){
                                 if(BigDecimal.ZERO.equals((BigDecimal)_fieldObj)){
-                                    addMandateFieldMessageView(mandateFieldView.getFieldDesc(), mandateFieldView.getFieldDesc(), validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), mandateFieldView.getPage());
+                                    failed = true;
+                                }
+                            } else if(_fieldObjClass.equals(List.class.getClass())){
+                                if(((List)_fieldObj).size() == 0){
+                                    failed = true;
                                 }
                             }
                         } catch (IllegalAccessException iae){
                             logger.debug("Cannot validate Field to validate Field {}", field.getName());
+                            failed = true;
+                        }
+
+                        if(failed){
                             addMandateFieldMessageView(mandateFieldView.getFieldDesc(), mandateFieldView.getFieldDesc(),validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), mandateFieldView.getPage());
                         }
+                        break;
                     }
                 }
             }
@@ -131,5 +143,16 @@ public class ActionValidationControl extends BusinessControl{
         mandateFieldConfigure.setClassName("com.clevel.selos.model.db.working.NewCreditDetail");
         mandateFieldConfigure.setFieldName("creditType");
         return mandateFieldConfigureList;
+    }
+
+    public ActionValidationResult getFinalValidationResult(){
+
+        if(actionValidationResult.getMandateFieldMessageViewList().size() > 0){
+            actionValidationResult.setActionResult(ActionResult.FAILED);
+
+        } else {
+            actionValidationResult.setActionResult(ActionResult.SUCCESS);
+        }
+        return actionValidationResult;
     }
 }

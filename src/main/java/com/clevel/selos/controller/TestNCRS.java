@@ -396,7 +396,7 @@ public class TestNCRS implements Serializable {
         log.debug("-- workCaseId is {}", workCaseId);
         MandateDocView mandateDocView = null;
         try{
-            MandateDocResponseView mandateDocResponseView = brmsControl.getDocCustomer(workCaseId);
+            MandateDocResponseView mandateDocResponseView = brmsControl.getDocCustomerForFullApp(workCaseId);
             if(!Util.isNull(mandateDocResponseView) && ActionResult.SUCCESS.equals(mandateDocResponseView.getActionResult())){
                 log.debug("-- ActionResult = ", mandateDocResponseView.getActionResult());
                 Map<String, MandateDocView> mandateDocViewMap =  mandateDocResponseView.getMandateDocViewMap();
