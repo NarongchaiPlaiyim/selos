@@ -102,6 +102,11 @@ public class CheckMandateDocControl extends BusinessControl{
         basicInfo = null;
     }
 
+    public CheckMandateDocView  getMandateDocViewByWorkCasePreScreenId(final long workCasePreScreenId){
+        log.debug("-- getMandateDocViewByWorkCasePreScreenId WorkCaseId : {}", workCasePreScreenId);
+        return checkMandateDocView;
+    }
+
     public CheckMandateDocView  getMandateDocView(final long workCaseId) throws Exception{
         log.debug("-- getMandateDoc WorkCaseId : {}", workCaseId);
 
