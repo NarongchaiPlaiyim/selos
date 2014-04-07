@@ -26,18 +26,6 @@
                 </p:commandButton>
                 <!--                         -->
 
-                <!--Mandate Document FullApplication-->
-                <p:commandButton id="btnMandateDocPerScreenChecker" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
-                                 rendered="#{headerController.flag}"
-                                 actionListener="#{headerController.onCheckMandateForCheckerDialog()}"
-                                 oncomplete="checkMandateDlg.show()"
-                                 update=":frmMain:checkMandatePanel"
-                        >
-                    <p:resetInput target=":frmMain:checkMandatePanel"/>
-                </p:commandButton>
-
-
-
                 <!--Assign To Checker-->
                 <p:commandButton id="btnAssignChecker" value="#{msg.get('app.header.button.assignChecker')}" styleClass="blueButton" title="#{msg.get('app.header.button.assignChecker')}"
                                  rendered="#{headerController.checkButton('Assign to Checker')}"
