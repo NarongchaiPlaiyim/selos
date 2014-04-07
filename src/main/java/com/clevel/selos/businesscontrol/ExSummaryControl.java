@@ -497,13 +497,16 @@ public class ExSummaryControl extends BusinessControl {
         exSummaryView.setExSumCreditRiskInfoView(exSumCreditRiskInfoView);
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultControl.getUWRuleResultByWorkCaseId(workCaseId);
+        if(uwRuleResultSummaryView != null && uwRuleResultSummaryView.getId() != 0){
+            if(uwRuleResultSummaryView.getUwDeviationFlagView() != null){
+                exSummaryView.setApplicationResult(uwRuleResultSummaryView.getUwDeviationFlagView().getName());
+            }
+            exSummaryView.setApplicationColorResult(uwRuleResultSummaryView.getUwResultColor());
 
-        exSummaryView.setApplicationResult(uwRuleResultSummaryView.getUwDeviationFlagView().getName());
-        exSummaryView.setApplicationColorResult(uwRuleResultSummaryView.getUwResultColor());
+            List<ExSumDecisionView> exSumDecisionViewList = exSummaryTransform.transformUWRuleToExSumDecision(uwRuleResultSummaryView);
 
-        List<ExSumDecisionView> exSumDecisionViewList = exSummaryTransform.transformUWRuleToExSumDecision(uwRuleResultSummaryView);
-
-        exSummaryView.setExSumDecisionListView(exSumDecisionViewList);
+            exSummaryView.setExSumDecisionListView(exSumDecisionViewList);
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
