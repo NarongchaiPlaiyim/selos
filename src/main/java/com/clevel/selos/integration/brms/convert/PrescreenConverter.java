@@ -3,14 +3,8 @@ package com.clevel.selos.integration.brms.convert;
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
 import com.clevel.selos.integration.brms.model.request.*;
-import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
-import com.clevel.selos.integration.brms.model.response.UWRulesResult;
-import com.clevel.selos.model.UWRuleType;
-import com.clevel.selos.util.Util;
 import com.ilog.rules.decisionservice.DecisionServiceRequest;
-import com.ilog.rules.decisionservice.DecisionServiceResponse;
 import com.ilog.rules.param.UnderwritingRequest;
-import com.ilog.rules.param.UnderwritingResult;
 import com.tmbbank.enterprise.model.*;
 
 
@@ -18,7 +12,6 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.xml.datatype.DatatypeFactory;
-import java.math.BigDecimal;
 import java.util.*;
 
 public class PrescreenConverter extends Converter{
@@ -158,6 +151,10 @@ public class PrescreenConverter extends Converter{
                     ncbAccountType.setTdrFlag(getValueForInterface(ncbAccountInfo.isTdrFlag()));
                     ncbAccountType.setOverdue31DTo60DCount(getValueForInterface(ncbAccountInfo.getNumberOfOverDue()));
                     ncbAccountType.setOverLimitLast6MthsCount(getValueForInterface(ncbAccountInfo.getNumberOfOverLimit()));
+                    //Only For Testing
+                    ncbAccountType.setPaymentPattern(ncbAccountInfo.getCurrentPaymentType());
+                    ncbAccountType.setPaymentHistory1(ncbAccountInfo.getSixMonthPaymentType());
+                    ncbAccountType.setPaymentHistory2(ncbAccountInfo.getTwelveMonthPaymentType());
 
                     List<AttributeType> ncbAccAttributeList = ncbAccountType.getAttribute();
                     ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_BANK_FLAG, ncbAccountInfo.isTmbFlag()));
