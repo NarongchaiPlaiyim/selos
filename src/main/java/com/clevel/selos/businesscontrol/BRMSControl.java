@@ -793,9 +793,9 @@ public class BRMSControl extends BusinessControl {
         ncbAccountInfo.setNumberOfOverLimit(ncbDetail.getOverLimit());
         if(ncbDetail.getAccountCloseDate() != null)
             if(ncbDetail.getAccountCloseDate() != null)
-                ncbAccountInfo.setAccountCloseDateMonths(String.valueOf(DateTimeUtil.monthBetween2Dates(ncbDetail.getAccountCloseDate(), checkDate)));
+                ncbAccountInfo.setAccountCloseDateMonths(new BigDecimal(DateTimeUtil.monthBetween2Dates(ncbDetail.getAccountCloseDate(), checkDate)));
         else
-            ncbAccountInfo.setAccountCloseDateMonths(String.valueOf(0));
+            ncbAccountInfo.setAccountCloseDateMonths(BigDecimal.ZERO);
         return ncbAccountInfo;
     }
 
