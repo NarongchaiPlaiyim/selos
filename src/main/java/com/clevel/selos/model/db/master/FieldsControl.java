@@ -1,5 +1,8 @@
 package com.clevel.selos.model.db.master;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -22,10 +25,6 @@ public class FieldsControl implements Serializable {
     private Role role;
 
     @OneToOne
-    @JoinColumn(name = "status_id")
-    private Status status;
-
-    @OneToOne
     @JoinColumn(name = "step_id")
     private Step step;
 
@@ -34,6 +33,17 @@ public class FieldsControl implements Serializable {
 
     @Column(name = "readonly")
     private int readonly;
+
+    @OneToOne
+    @JoinColumn(name = "product_group_id")
+    ProductGroup productGroup;
+
+    @OneToOne
+    @JoinColumn(name = "product_program_id")
+    ProductProgram productProgram;
+
+    @Column(name = "special_type_id")
+    private int specialTypeId;
 
     public long getId() {
         return id;
@@ -67,14 +77,6 @@ public class FieldsControl implements Serializable {
         this.role = role;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
     public int getMandate() {
         return mandate;
     }
@@ -97,5 +99,45 @@ public class FieldsControl implements Serializable {
 
     public void setStep(Step step) {
         this.step = step;
+    }
+
+    public ProductGroup getProductGroup() {
+        return productGroup;
+    }
+
+    public void setProductGroup(ProductGroup productGroup) {
+        this.productGroup = productGroup;
+    }
+
+    public ProductProgram getProductProgram() {
+        return productProgram;
+    }
+
+    public void setProductProgram(ProductProgram productProgram) {
+        this.productProgram = productProgram;
+    }
+
+    public int getSpecialTypeId() {
+        return specialTypeId;
+    }
+
+    public void setSpecialTypeId(int specialTypeId) {
+        this.specialTypeId = specialTypeId;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("fieldName", fieldName)
+                .append("screenId", screenId)
+                .append("role", role)
+                .append("step", step)
+                .append("mandate", mandate)
+                .append("readonly", readonly)
+                .append("productGroup", productGroup)
+                .append("productProgram", productProgram)
+                .append("specialTypeId", specialTypeId)
+                .toString();
     }
 }

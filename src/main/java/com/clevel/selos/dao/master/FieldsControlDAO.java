@@ -31,4 +31,19 @@ public class FieldsControlDAO extends GenericDAO<FieldsControl, Long> {
 
         return fieldsControlList;
     }
+
+    public List<FieldsControl> findFieldControl(int screenId, Role role, long stepId, int productGroupId, int productProgramId, int specialTypeId) {
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("screenId", screenId));
+        criteria.add(Restrictions.eq("role", role));
+        criteria.add(Restrictions.eq("step.id", stepId));
+
+        if(productGroupId != 0) criteria.add(Restrictions.eq("productGroup.id", productGroupId));
+
+        if(productProgramId != 0) criteria.add(Restrictions.eq("productProgram.id", productProgramId));
+
+        List<FieldsControl> fieldsControlList = criteria.list();
+
+        return fieldsControlList;
+    }
 }
