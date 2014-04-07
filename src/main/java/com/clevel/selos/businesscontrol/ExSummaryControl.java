@@ -408,9 +408,7 @@ public class ExSummaryControl extends BusinessControl {
             String worstCase = "";
             if(cusListView != null && cusListView.size() > 0){
                 for(int i = 0; i < cusListView.size() ; i++){
-                    if(i == 0){
-                        tmpWorstCase = cusListView.get(i).getAdjustClass();
-                    } else {
+                    if(cusListView.get(i).getRelation().getId() == RelationValue.BORROWER.value()){
                         tmpWorstCase = calWorstCaseBotClass(tmpWorstCase,cusListView.get(i).getAdjustClass());
                     }
                 }
