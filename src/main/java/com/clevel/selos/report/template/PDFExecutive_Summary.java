@@ -348,7 +348,7 @@ public class PDFExecutive_Summary implements Serializable {
         if(!Util.isNull(exSumDecisionView)){
             for (ExSumDecisionView decisionView : exSumDecisionView){
                 decisionExSumReport.setId(decisionView.getId());
-                decisionExSumReport.setFlag(Util.checkNullString(decisionView.getFlag()));
+//                decisionExSumReport.setFlag(Util.checkNullString(decisionView.getFlag()));
                 decisionExSumReport.setGroup(Util.checkNullString(decisionView.getGroup()));
                 decisionExSumReport.setRuleName(Util.checkNullString(decisionView.getRuleName()));
                 decisionExSumReport.setCusName(Util.checkNullString(decisionView.getCusName()));

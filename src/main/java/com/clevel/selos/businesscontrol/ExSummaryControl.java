@@ -67,6 +67,8 @@ public class ExSummaryControl extends BusinessControl {
     private CreditFacProposeControl creditFacProposeControl;
     @Inject
     private DecisionControl decisionControl;
+    @Inject
+    private UWRuleResultControl uwRuleResultControl;
 
     public ExSummaryView getExSummaryViewByWorkCaseId(long workCaseId) {
         log.info("getExSummaryView ::: workCaseId : {}", workCaseId);
@@ -493,6 +495,16 @@ public class ExSummaryControl extends BusinessControl {
         exSumCreditRiskInfoView.setExtendedReviewDate(null); //Always '-'
 
         exSummaryView.setExSumCreditRiskInfoView(exSumCreditRiskInfoView);
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultControl.getUWRuleResultByWorkCaseId(workCaseId);
+
+        exSummaryView.setApplicationResult(uwRuleResultSummaryView.getUwDeviationFlagView().getName());
+        exSummaryView.setApplicationColorResult(uwRuleResultSummaryView.getUwResultColor());
+
+        List<ExSumDecisionView> exSumDecisionViewList = exSummaryTransform.transformUWRuleToExSumDecision(uwRuleResultSummaryView);
+
+        exSummaryView.setExSumDecisionListView(exSumDecisionViewList);
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         log.info("getExSummaryView ::: exSummaryView : {}", exSummaryView);

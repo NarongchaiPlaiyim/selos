@@ -287,8 +287,9 @@ public class BRMSControl extends BusinessControl {
         BigDecimal proposedCreditAmount = BigDecimal.ZERO;
         BigDecimal totalNumberOfProposedCredit = BigDecimal.ZERO;
         BigDecimal totalNumberOfContingenCredit = BigDecimal.ZERO;
-        List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreenId(workcasePrescreenId);
+        List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreenId(prescreen.getId());
         List<BRMSAccountRequested> accountRequestedList = new ArrayList<BRMSAccountRequested>();
+
         for(PrescreenFacility prescreenFacility : prescreenFacilityList){
             BRMSAccountRequested accountRequested = new BRMSAccountRequested();
             accountRequested.setCreditDetailId(String.valueOf(prescreenFacility.getId()));
@@ -327,8 +328,8 @@ public class BRMSControl extends BusinessControl {
             applicationInfo.setReferredDocType(prescreen.getReferredExperience().getBrmsCode());
 
         /** To Change to use test Data using second line**/
-        //UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
-        UWRulesResponse uwRulesResponse = getTestUWRulesResponse();
+        UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
+        //UWRulesResponse uwRulesResponse = getTestUWRulesResponse();
 
          //Transform to View//
         UWRuleResponseView uwRuleResponseView = new UWRuleResponseView();
@@ -359,7 +360,7 @@ public class BRMSControl extends BusinessControl {
                 {"NCB_Account_Status", "", "G", "", "1010", "", "0303540000361"},
                 {"Compliance_Section48", "", "G", "", "1011", "", "0303540000361"},
                 {"Compliance_Section49", "", "G", "", "1012", "", "0303540000361"},
-                {"Guarantee_Prohibited", "", "G", "", "1013", "Group Result", ""},
+                {"Guarantee_Prohibited", "", "G", "", "1013", "Group_Result", ""},
                 {"Compliance_Connected_Person", "", "G", "", "1014", "Group Result", ""},
                 {"Compliance_KYC_Warning", "", "G", "", "1015", "Group Result", ""},
                 {"Compliance_KYC_Sanction", "", "G", "", "1016", "Group Result", ""},
@@ -374,7 +375,7 @@ public class BRMSControl extends BusinessControl {
             uwRulesResult.setColor(strings[i][2]);
             uwRulesResult.setDeviationFlag(strings[i][3]);
             uwRulesResult.setRuleOrder(strings[i][4]);
-            uwRulesResult.setType(UWRuleType.lookup(strings[i][5]));
+            //uwRulesResult.setType(UWRuleType.lookup(strings[i][5]));
             uwRulesResult.setPersonalID(strings[i][6]);
             uwRuleResultMap.put(uwRulesResult.getRuleOrder(), uwRulesResult);
         }
@@ -516,8 +517,12 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setRequestTCG(getRadioBoolean(tcg.getTcgFlag()));
 
         WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByWorkcaseId(workCaseId);
-        AppraisalStatus appraisalStatus = AppraisalStatus.lookup(workCaseAppraisal.getAppraisalResult());
-        applicationInfo.setPassAppraisalProcess(appraisalStatus.booleanValue());
+        if(workCaseAppraisal != null){
+            AppraisalStatus appraisalStatus = AppraisalStatus.lookup(workCaseAppraisal.getAppraisalResult());
+            applicationInfo.setPassAppraisalProcess(appraisalStatus.booleanValue());
+        }else{
+            applicationInfo.setPassAppraisalProcess(false);
+        }
         if(workCase.getStep() != null)
             applicationInfo.setStepCode(workCase.getStep().getCode());
 
@@ -585,7 +590,7 @@ public class BRMSControl extends BusinessControl {
 
         applicationInfo.setNetFixAsset(bizInfoSummary.getNetFixAsset());
 
-        UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
+        UWRulesResponse uwRulesResponse = brmsInterface.checkFullApplicationRule(applicationInfo);
         logger.debug("-- end getFullApplicationResult return {}", uwRulesResponse);
         //UWRulesResponse uwRulesResponse = getTestUWRulesResponse();
 
@@ -597,6 +602,7 @@ public class BRMSControl extends BusinessControl {
             UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultTransform.transformToView(uwRulesResponse.getUwRulesResultMap(), customerList);
             uwRuleResponseView.setUwRuleResultSummaryView(uwRuleResultSummaryView);
         }
+        logger.debug("-- uwRuleResponseView : {}", uwRuleResponseView);
 
         return uwRuleResponseView;
     }
@@ -916,13 +922,13 @@ public class BRMSControl extends BusinessControl {
 
             /*Start setting TMB Account for each customer*/
         List<CustomerOblAccountInfo> oblAccountInfoList = customerOblAccountInfoDAO.findByCustomerId(customer.getId());
+        List<BRMSTMBAccountInfo> tmbAccountInfoList = new ArrayList<BRMSTMBAccountInfo>();
         if(oblAccountInfoList != null && oblAccountInfoList.size() > 0){
-            List<BRMSTMBAccountInfo> tmbAccountInfoList = new ArrayList<BRMSTMBAccountInfo>();
             for(CustomerOblAccountInfo customerOblAccountInfo : oblAccountInfoList){
                 tmbAccountInfoList.add(getBRMSTMBAccountInfo(customerOblAccountInfo));
             }
-            customerInfo.setTmbAccountInfoList(tmbAccountInfoList);
         }
+        customerInfo.setTmbAccountInfoList(tmbAccountInfoList);
         return customerInfo;
     }
 

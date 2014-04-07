@@ -1,38 +1,22 @@
-package com.clevel.selos.model.db.master;
+package com.clevel.selos.model.view;
 
 
+import com.clevel.selos.model.db.master.Action;
+import com.clevel.selos.model.db.master.Step;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "mst_mandate_fields")
-public class MandateField implements Serializable{
-    @Id
-    @Column(name = "id")
+public class MandateFieldView implements Serializable{
     private long id;
-
-    @ManyToOne
-    @JoinColumn(name = "action_id")
-    private Action action;
-
-    @ManyToOne
-    @JoinColumn(name = "step_id")
-    private Step step;
-
-    @Column(name = "class_name", length = 200)
+    private ActionView actionView;
+    private StepView stepView;
     private String className;
-
-    @Column(name = "field_name", length = 50)
     private String fieldName;
-
-    @Column(name = "field_description", length = 100)
-    private String fieldDescription;
-
-    @Column(name = "page_name", length = 100)
+    private String fieldDesc;
     private String page;
+    private boolean checked = false;
 
     public long getId() {
         return id;
@@ -42,20 +26,20 @@ public class MandateField implements Serializable{
         this.id = id;
     }
 
-    public Action getAction() {
-        return action;
+    public ActionView getActionView() {
+        return actionView;
     }
 
-    public void setAction(Action action) {
-        this.action = action;
+    public void setActionView(ActionView actionView) {
+        this.actionView = actionView;
     }
 
-    public Step getStep() {
-        return step;
+    public StepView getStepView() {
+        return stepView;
     }
 
-    public void setStep(Step step) {
-        this.step = step;
+    public void setStepView(StepView stepView) {
+        this.stepView = stepView;
     }
 
     public String getClassName() {
@@ -74,12 +58,12 @@ public class MandateField implements Serializable{
         this.fieldName = fieldName;
     }
 
-    public String getFieldDescription() {
-        return fieldDescription;
+    public String getFieldDesc() {
+        return fieldDesc;
     }
 
-    public void setFieldDescription(String fieldDescription) {
-        this.fieldDescription = fieldDescription;
+    public void setFieldDesc(String fieldDesc) {
+        this.fieldDesc = fieldDesc;
     }
 
     public String getPage() {
@@ -90,15 +74,22 @@ public class MandateField implements Serializable{
         this.page = page;
     }
 
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("action", action)
-                .append("step", step)
+                .append("actionView", actionView)
+                .append("stepView", stepView)
                 .append("className", className)
                 .append("fieldName", fieldName)
-                .append("fieldDescription", fieldDescription)
                 .append("page", page)
                 .toString();
     }

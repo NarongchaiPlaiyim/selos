@@ -55,6 +55,8 @@ public class CustomerInfoControl extends BusinessControl {
     @Inject
     CustomerOblInfoDAO customerOblInfoDAO;
     @Inject
+    CustomerOblAccountInfoDAO customerOblAccountInfoDAO;
+    @Inject
     OpenAccountNameDAO openAccountNameDAO;
     @Inject
     NewGuarantorDetailDAO newGuarantorDetailDAO;
@@ -122,6 +124,14 @@ public class CustomerInfoControl extends BusinessControl {
 
         if(customer.getCustomerOblInfo() != null){
             customerOblInfoDAO.persist(customer.getCustomerOblInfo());
+
+            if(customerInfoView.getCustomerOblAccountInfoViewList() != null && customerInfoView.getCustomerOblAccountInfoViewList().size() > 0){
+                List<CustomerOblAccountInfo> customerOblAccountInfoList = customerTransform.getCustomerOblAccountInfo(customerInfoView, customer);
+                if(customerOblAccountInfoList.size() > 0){
+                    deleteCustomerOblAccountInfo(customer);
+                    customerOblAccountInfoDAO.persist(customerOblAccountInfoList);
+                }
+            }
         }
 
         customerDAO.persist(customer);
@@ -139,6 +149,14 @@ public class CustomerInfoControl extends BusinessControl {
 
             if(spouse.getCustomerOblInfo() != null){
                 customerOblInfoDAO.persist(spouse.getCustomerOblInfo());
+
+                if(customerInfoView.getCustomerOblAccountInfoViewList() != null && customerInfoView.getCustomerOblAccountInfoViewList().size() > 0){
+                    List<CustomerOblAccountInfo> customerOblAccountInfoList = customerTransform.getCustomerOblAccountInfo(customerInfoView, customer);
+                    if(customerOblAccountInfoList.size() > 0){
+                        deleteCustomerOblAccountInfo(customer);
+                        customerOblAccountInfoDAO.persist(customerOblAccountInfoList);
+                    }
+                }
             }
 
             spouse.setIsSpouse(1);
@@ -202,6 +220,14 @@ public class CustomerInfoControl extends BusinessControl {
 
         if(customerJuristic.getCustomerOblInfo() != null){
             customerOblInfoDAO.persist(customerJuristic.getCustomerOblInfo());
+
+            if(customerInfoView.getCustomerOblAccountInfoViewList() != null && customerInfoView.getCustomerOblAccountInfoViewList().size() > 0){
+                List<CustomerOblAccountInfo> customerOblAccountInfoList = customerTransform.getCustomerOblAccountInfo(customerInfoView, customerJuristic);
+                if(customerOblAccountInfoList.size() > 0){
+                    deleteCustomerOblAccountInfo(customerJuristic);
+                    customerOblAccountInfoDAO.persist(customerOblAccountInfoList);
+                }
+            }
         }
 
         customerDAO.persist(customerJuristic);
@@ -247,6 +273,13 @@ public class CustomerInfoControl extends BusinessControl {
         }
         log.info("saveCustomerInfoJuristic ::: customerId : {}", customerJuristic.getId());
         return customerJuristic.getId();
+    }
+
+    public void deleteCustomerOblAccountInfo(Customer customer){
+        if(customer.getId() > 0){
+            List<CustomerOblAccountInfo> customerOblAccountInfoList = customerOblAccountInfoDAO.findByCustomerId(customer.getId());
+            customerOblAccountInfoDAO.delete(customerOblAccountInfoList);
+        }
     }
 
     public CustomerInfoView getCustomerIndividualById(long id){
@@ -317,6 +350,11 @@ public class CustomerInfoControl extends BusinessControl {
                     }
                 }
 
+                List<CustomerOblAccountInfo> customerOblAccountInfoList = customerOblAccountInfoDAO.findByCustomerId(spouseCustomer.getId());
+                if(customerOblAccountInfoList != null && customerOblAccountInfoList.size() > 0){
+                    customerOblAccountInfoDAO.delete(customerOblAccountInfoList);
+                }
+
                 customerDAO.delete(spouseCustomer);
             }
         }
@@ -352,6 +390,11 @@ public class CustomerInfoControl extends BusinessControl {
             if(customerOblInfo != null && customerOblInfo.getId() != 0){
                 customerOblInfoDAO.delete(customerOblInfo);
             }
+        }
+
+        List<CustomerOblAccountInfo> customerOblAccountInfoList = customerOblAccountInfoDAO.findByCustomerId(mainCustomer.getId());
+        if(customerOblAccountInfoList != null && customerOblAccountInfoList.size() > 0){
+            customerOblAccountInfoDAO.delete(customerOblAccountInfoList);
         }
 
         customerDAO.delete(mainCustomer);
@@ -392,6 +435,10 @@ public class CustomerInfoControl extends BusinessControl {
             if(customerOblInfo != null && customerOblInfo.getId() != 0){
                 customerOblInfoDAO.delete(customerOblInfo);
             }
+        }
+        List<CustomerOblAccountInfo> customerOblAccountInfoList = customerOblAccountInfoDAO.findByCustomerId(customer.getId());
+        if(customerOblAccountInfoList != null && customerOblAccountInfoList.size() > 0){
+            customerOblAccountInfoDAO.delete(customerOblAccountInfoList);
         }
 
         customerDAO.delete(customer);

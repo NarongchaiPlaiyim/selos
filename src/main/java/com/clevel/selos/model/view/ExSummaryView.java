@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.UWResultColor;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -48,6 +49,7 @@ public class ExSummaryView  implements Serializable {
 
     //Deviate
     private String applicationResult;
+    private UWResultColor applicationColorResult;
     private List<ExSumDecisionView> exSumDecisionListView;
 
     //Business Overview and Support Decision
@@ -391,6 +393,14 @@ public class ExSummaryView  implements Serializable {
         this.exSumCreditRiskInfoView = exSumCreditRiskInfoView;
     }
 
+    public UWResultColor getApplicationColorResult() {
+        return applicationColorResult;
+    }
+
+    public void setApplicationColorResult(UWResultColor applicationColorResult) {
+        this.applicationColorResult = applicationColorResult;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -415,6 +425,7 @@ public class ExSummaryView  implements Serializable {
                 append("exSumCollateralView", exSumCollateralView).
                 append("exSumCreditRiskInfoView", exSumCreditRiskInfoView).
                 append("applicationResult", applicationResult).
+                append("applicationColorResult", applicationColorResult).
                 append("exSumDecisionListView", exSumDecisionListView).
                 append("natureOfBusiness", natureOfBusiness).
                 append("historicalAndReasonOfChange", historicalAndReasonOfChange).

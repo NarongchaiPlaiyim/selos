@@ -6,6 +6,7 @@ import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.integration.brms.model.response.UWRulesResult;
 import com.clevel.selos.model.UWRuleType;
+import com.clevel.selos.util.Util;
 import com.ilog.rules.decisionservice.DecisionServiceRequest;
 import com.ilog.rules.decisionservice.DecisionServiceResponse;
 import com.ilog.rules.param.UnderwritingRequest;
@@ -258,52 +259,5 @@ public class PrescreenConverter extends Converter{
 
         logger.debug("-- end convert getDecisionServiceRequest from BRMSApplicationInfo return {}", decisionServiceRequest);
         return decisionServiceRequest;
-    }
-
-    public UWRulesResponse getUWRulesResponse(DecisionServiceResponse decisionServiceResponse){
-        logger.debug("-- start convert getUWRulesResponse from DecisionServiceResponse {}", decisionServiceResponse);
-
-        UWRulesResponse uwRulesResponse = new UWRulesResponse();
-
-        if(decisionServiceResponse != null){
-            uwRulesResponse.setDecisionID(decisionServiceResponse.getDecisionID());
-
-            UnderwritingRequest underwritingRequest = decisionServiceResponse.getUnderwritingRequest();
-            UnderwritingApprovalRequestType underwritingApprovalRequestType = underwritingRequest.getUnderwritingApprovalRequest();
-
-            ApplicationType applicationType = underwritingApprovalRequestType.getApplication();
-            uwRulesResponse.setApplicationNo(applicationType.getApplicationNumber());
-
-            UnderwritingResult underwritingResult = decisionServiceResponse.getUnderwritingResult();
-            UnderwritingApprovalResultType underwritingApprovalResultType = underwritingResult.getUnderwritingApprovalResult();
-
-            Map<String, UWRulesResult> uwRulesResultMap = new TreeMap<String, UWRulesResult>();
-            List<ResultType> resultTypeList = underwritingApprovalResultType.getResult();
-            for(ResultType resultType : resultTypeList){
-                UWRulesResult uwRulesResult = new UWRulesResult();
-                uwRulesResult.setRuleName(resultType.getRuleName());
-                uwRulesResult.setType(UWRuleType.lookup(resultType.getType()));
-                uwRulesResult.setColor(resultType.getColor());
-                uwRulesResult.setDeviationFlag(resultType.getDeviationFlag());
-                uwRulesResult.setRejectGroupCode(resultType.getRejectGroupCode());
-
-                List<AttributeType> uwAttributeTypeList = resultType.getAttribute();
-                for(AttributeType attributeType : uwAttributeTypeList){
-                    if(attributeType.getName() != null){
-                        if(attributeType.getName().equals(BRMSFieldAttributes.UW_RULE_ORDER.value())){
-                            uwRulesResult.setRuleOrder(attributeType.getStringValue());
-                        }
-                        if(attributeType.getName().equals(BRMSFieldAttributes.UW_PERSONAL_ID)){
-                            uwRulesResult.setRuleName(attributeType.getStringValue());
-                        }
-                    }
-                }
-                uwRulesResultMap.put(uwRulesResult.getRuleOrder(), uwRulesResult);
-            }
-            uwRulesResponse.setUwRulesResultMap(uwRulesResultMap);
-        }
-
-        logger.debug("-- end convert getUWRulesResponse from DecisionServiceResponse return {}", uwRulesResponse);
-        return uwRulesResponse;
     }
 }

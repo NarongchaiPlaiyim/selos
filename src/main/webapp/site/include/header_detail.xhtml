@@ -107,10 +107,11 @@
 
                 </p:commandButton>
 
-                <!--Check Criteria-->
-                <p:commandButton id="btnCheckCriteria" value="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkCriteria')}"
-                                 rendered="#{headerController.checkButton('Check Criteria')}">
-
+                <!--Check Criteria (BRMS)-->
+                <p:commandButton id="btnChkCriteria" value="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkCriteria')}"
+                                 rendered="#{headerController.checkButton('Check Criteria')}"
+                                 update=":frmMain:msgBoxBaseMessagePanel"
+                                 actionListener="#{headerController.onCheckCriteria}">
                 </p:commandButton>
                 <!--Assign to ABDM-->
                 <p:commandButton id="btnAssignABDM" value="#{msg.get('app.header.button.assignABDM')}" styleClass="blueButton" title="#{msg.get('app.header.button.assignABDM')}"
