@@ -5,7 +5,6 @@ import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ActionCode;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ManageButton;
 import com.clevel.selos.model.PricingDOAValue;
@@ -22,7 +21,6 @@ import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import com.rits.cloning.Cloner;
-
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,7 +30,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -153,6 +150,8 @@ public class HeaderController implements Serializable {
     //CheckMandate
     private CheckMandateDocView checkMandateDocView;
     private long workCaseId;
+    private long workCasePreScreenId;
+    private boolean flag;
 
     private String messageHeader;
     private String message;
@@ -174,6 +173,7 @@ public class HeaderController implements Serializable {
         requestAppraisal = 0;
 
         requestAppraisalPage = false;
+        flag = false;
 
         if (!Util.isNull(session.getAttribute("workCasePreScreenId"))) {
             workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
@@ -677,7 +677,45 @@ public class HeaderController implements Serializable {
         }
     }
 
-    //
+
+    public void onCheckMandateForCheckerDialog(){
+        log.debug("onCheckMandateForCheckerDialog ::: starting...");
+        HttpSession session = FacesUtil.getSession(true);
+        try {
+            workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
+        } catch (Exception e) {
+            workCasePreScreenId = 0;
+        }
+
+        try {
+            stepId = (Long)session.getAttribute("stepId");
+            if(stepId == StepValue.PRESCREEN_CHECKER.value()){
+                flag = true;
+                log.debug("PRESCREEN_CHECKER");
+            } else {
+                log.debug("StepId[{}]", stepId);
+            }
+        } catch (Exception e) {
+            stepId = 0;
+        }
+
+        String result = null;
+        checkMandateDocView = null;
+        try{
+            checkMandateDocView = checkMandateDocControl.getMandateDocViewByWorkCasePreScreenId(workCasePreScreenId);
+            if(!Util.isNull(checkMandateDocView)){
+                log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
+            } else {
+                log.debug("-- Find by work case pre screen id = {} CheckMandateDocView is {} ", workCasePreScreenId, checkMandateDocView);
+                checkMandateDocView = new CheckMandateDocView();
+                log.debug("-- CheckMandateDocView[New] created");
+            }
+        } catch (Exception e) {
+            log.error("-- Exception : {}", e.getMessage());
+            result = e.getMessage();
+        }
+    }
+
     public void onCheckMandateDialog(){
         log.debug("onCheckMandateDialog ::: starting...");
         HttpSession session = FacesUtil.getSession(true);
@@ -1543,5 +1581,13 @@ public class HeaderController implements Serializable {
 
     public void setContactFlag3(boolean contactFlag3) {
         this.contactFlag3 = contactFlag3;
+    }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 }
