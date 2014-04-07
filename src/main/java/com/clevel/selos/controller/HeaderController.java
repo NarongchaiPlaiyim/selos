@@ -151,6 +151,7 @@ public class HeaderController implements Serializable {
     private CheckMandateDocView checkMandateDocView;
     private long workCaseId;
     private long workCasePreScreenId;
+    private boolean flag;
 
     private String messageHeader;
     private String message;
@@ -172,6 +173,7 @@ public class HeaderController implements Serializable {
         requestAppraisal = 0;
 
         requestAppraisalPage = false;
+        flag = false;
 
         if (!Util.isNull(session.getAttribute("workCasePreScreenId"))) {
             workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
@@ -675,7 +677,7 @@ public class HeaderController implements Serializable {
         }
     }
 
-//    547654564654654564
+
     public void onCheckMandateForCheckerDialog(){
         log.debug("onCheckMandateForCheckerDialog ::: starting...");
         HttpSession session = FacesUtil.getSession(true);
@@ -685,10 +687,33 @@ public class HeaderController implements Serializable {
             workCasePreScreenId = 0;
         }
 
+        try {
+            stepId = (Long)session.getAttribute("stepId");
+            if(stepId == StepValue.PRESCREEN_CHECKER.value()){
+                flag = true;
+                log.debug("PRESCREEN_CHECKER");
+            } else {
+                log.debug("StepId[{}]", stepId);
+            }
+        } catch (Exception e) {
+            stepId = 0;
+        }
+
         String result = null;
         checkMandateDocView = null;
-
-
+        try{
+            checkMandateDocView = checkMandateDocControl.getMandateDocViewByWorkCasePreScreenId(workCasePreScreenId);
+            if(!Util.isNull(checkMandateDocView)){
+                log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
+            } else {
+                log.debug("-- Find by work case pre screen id = {} CheckMandateDocView is {} ", workCasePreScreenId, checkMandateDocView);
+                checkMandateDocView = new CheckMandateDocView();
+                log.debug("-- CheckMandateDocView[New] created");
+            }
+        } catch (Exception e) {
+            log.error("-- Exception : {}", e.getMessage());
+            result = e.getMessage();
+        }
     }
 
     public void onCheckMandateDialog(){
@@ -1556,5 +1581,13 @@ public class HeaderController implements Serializable {
 
     public void setContactFlag3(boolean contactFlag3) {
         this.contactFlag3 = contactFlag3;
+    }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 }

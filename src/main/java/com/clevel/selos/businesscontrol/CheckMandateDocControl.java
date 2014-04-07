@@ -104,8 +104,73 @@ public class CheckMandateDocControl extends BusinessControl{
 
     public CheckMandateDocView  getMandateDocViewByWorkCasePreScreenId(final long workCasePreScreenId){
         log.debug("-- getMandateDocViewByWorkCasePreScreenId WorkCaseId : {}", workCasePreScreenId);
-        mandateDocResponseView = brmsControl.getDocCustomer(workCasePreScreenId);
+        try {
+            mandateDocResponseView = brmsControl.getDocCustomerForPrescreen(workCasePreScreenId);
+            if(!Util.isNull(mandateDocResponseView) && ActionResult.SUCCESS.equals(mandateDocResponseView.getActionResult())){
+                log.debug("-- ActionResult is {}", ecmDataResult.getActionResult());
+                checkMandateDocView = new CheckMandateDocView();
+                List<CheckMandatoryDocView> mandatoryDocumentsList = new ArrayList<CheckMandatoryDocView>();
+                CheckMandatoryDocView checkMandatoryDocView = null;
+                List<CheckOptionalDocView> optionalDocumentsList = new ArrayList<CheckOptionalDocView>();
+                CheckOptionalDocView optionalDocView = null;
+                List<CheckOtherDocView> otherDocumentsList = new ArrayList<CheckOtherDocView>();
+                CheckOtherDocView checkOtherDocView = null;
 
+                mandateDocViewMap =  mandateDocResponseView.getMandateDocViewMap();
+                log.debug("-- BRMS MandateDocViewMap.size()[{}]", mandateDocViewMap.size());
+
+                for (Map.Entry<String, MandateDocView> BRMSentry : mandateDocViewMap.entrySet()) {
+                    mandateDocView = (MandateDocView)BRMSentry.getValue();
+                    if(DocMandateType.MANDATE.value() == mandateDocView.getDocMandateType().value()){
+                        log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Mandatory Documents");
+                        checkMandatoryDocView = checkMandateDocTransform.transformToCheckMandatoryDocView(mandateDocView, 3);
+                        mandatoryDocumentsList.add(checkMandatoryDocView);
+                    } else if(DocMandateType.OPTIONAL.value() == mandateDocView.getDocMandateType().value()){
+                        log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Optional Documents");
+                        optionalDocView = checkMandateDocTransform.transformToCheckOptionalDocView(mandateDocView, 3);
+                        optionalDocumentsList.add(optionalDocView);
+                    } else {
+                        log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Other Documents");
+                        checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(mandateDocView, 3);
+                        otherDocumentsList.add(checkOtherDocView);
+                    }
+                }
+
+                //to update userToken for open The document.
+                getToken();
+                log.debug("-- UserToken[{}]", userToken);
+                for(CheckMandatoryDocView view : mandatoryDocumentsList){
+                    List<MandateDocFileNameView> fileNameViewList = Util.safetyList(view.getFileNameViewList());
+                    for(MandateDocFileNameView fileNameView : fileNameViewList){
+                        fileNameView.setUrl(updateToken(fileNameView.getUrl()));
+                    }
+                }
+                for(CheckOptionalDocView view : optionalDocumentsList){
+                    List<MandateDocFileNameView> fileNameViewList = Util.safetyList(view.getFileNameViewList());
+                    for(MandateDocFileNameView fileNameView : fileNameViewList){
+                        fileNameView.setUrl(updateToken(fileNameView.getUrl()));
+                    }
+                }
+                for(CheckOtherDocView view : otherDocumentsList){
+                    List<MandateDocFileNameView> fileNameViewList = Util.safetyList(view.getFileNameViewList());
+                    for(MandateDocFileNameView fileNameView : fileNameViewList){
+                        fileNameView.setUrl(updateToken(fileNameView.getUrl()));
+                    }
+                }
+
+                checkMandateDocView.setMandatoryDocumentsList(mandatoryDocumentsList);
+                log.debug("-- MandatoryDocumentsList.size()[{}] added to CheckMandateDocView", mandatoryDocumentsList.size());
+                checkMandateDocView.setOptionalDocumentsList(optionalDocumentsList);
+                log.debug("-- OptionalDocumentsList.size()[{}] added to CheckMandateDocView", optionalDocumentsList.size());
+                checkMandateDocView.setOtherDocumentsList(otherDocumentsList);
+                log.debug("-- OtherDocumentsList.size()[{}] added to CheckMandateDocView", otherDocumentsList.size());
+            } else {
+                log.debug("-- Find by work pre screen case id = {} ActionResult is {} and reason is {}  ", workCasePreScreenId, mandateDocResponseView.getActionResult(), mandateDocResponseView.getReason());
+            }
+        } catch (Exception e){
+            log.error("-- Exception while call BRMS {}", e.getMessage());
+//            throw new Exception(e);
+        }
         return checkMandateDocView;
     }
 
