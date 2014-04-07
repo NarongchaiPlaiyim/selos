@@ -739,7 +739,11 @@ public class HeaderController implements Serializable {
     public void onSaveCheckMandateDoc(){
         log.debug("-- onSaveCheckMandateDoc().");
         try {
-            checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, workCaseId);
+            if(!Util.isZero(workCaseId)){
+                checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, workCaseId, 0);
+            } else {
+                checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, 0, workCasePreScreenId);
+            }
             messageHeader = "Success";
             message = "Success";
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
