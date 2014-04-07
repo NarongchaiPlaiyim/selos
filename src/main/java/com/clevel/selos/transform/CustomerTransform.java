@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.AddressDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.dao.working.CustomerOblAccountInfoDAO;
 import com.clevel.selos.dao.working.CustomerOblInfoDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.AttorneyRelationType;
@@ -11,14 +12,7 @@ import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.AddressView;
-import com.clevel.selos.model.view.CustomerCSIView;
-import com.clevel.selos.model.view.CustomerInfoPostAddressView;
-import com.clevel.selos.model.view.CustomerInfoPostBaseView;
-import com.clevel.selos.model.view.CustomerInfoPostIndvView;
-import com.clevel.selos.model.view.CustomerInfoPostJurisView;
-import com.clevel.selos.model.view.CustomerInfoSimpleView;
-import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.Util;
 
 import org.joda.time.DateTime;
@@ -88,6 +82,8 @@ public class CustomerTransform extends Transform {
     private RaceDAO raceDAO;
     @Inject
     private CustomerOblInfoDAO customerOblInfoDAO;
+    @Inject
+    private CustomerOblAccountInfoDAO customerOblAccountInfoDAO;
     @Inject
     private IncomeSourceDAO incomeSourceDAO;
 
@@ -844,12 +840,46 @@ public class CustomerTransform extends Transform {
 
             customerOblInfo.setCustomer(customer);
             customer.setCustomerOblInfo(customerOblInfo);
+
+
+
         } else {
             customer.setCustomerOblInfo(null);
         }
         log.info("############# - transformToModel ::: customer.getCustomerOblInfo : {}", customer.getCustomerOblInfo());
         log.info("Return - transformToModel ::: customer : {}", customer);
         return customer;
+    }
+
+    public List<CustomerOblAccountInfo> getCustomerOblAccountInfo(CustomerInfoView customerInfoView, Customer customer){
+        List<CustomerOblAccountInfo> customerOblAccountInfoList = new ArrayList<CustomerOblAccountInfo>();
+        if(customerInfoView.getCustomerOblAccountInfoViewList() != null && customerInfoView.getCustomerOblAccountInfoViewList().size() > 0){
+            for(CustomerOblAccountInfoView customerOblAccountInfoView : customerInfoView.getCustomerOblAccountInfoViewList()){
+
+                CustomerOblAccountInfo customerOblAccountInfo = null;
+                if(customerOblAccountInfoView.getId() != 0) {
+                    try{
+                        customerOblAccountInfo = customerOblAccountInfoDAO.findById(customerOblAccountInfoView.getId());
+                    }catch (Exception ex){
+                        log.debug("cannot find customerOblInfo with id {}", customerInfoView.getCustomerOblInfoID());
+                        customerOblAccountInfo = new CustomerOblAccountInfo();
+                    }
+                }
+
+                customerOblAccountInfo.setAccountRef(customerOblAccountInfoView.getAccountRef());
+                customerOblAccountInfo.setAccountActiveFlag(customerOblAccountInfoView.isAccountActiveFlag());
+                customerOblAccountInfo.setCardBlockCode(customerOblAccountInfoView.getCardBlockCode());
+                customerOblAccountInfo.setTmbDelIntDay(customerOblAccountInfoView.getTmbDelIntDay());
+                customerOblAccountInfo.setCusRelAccount(customerOblAccountInfoView.getCusRelAccount());
+                customerOblAccountInfo.setDataSource(customerOblAccountInfoView.getDataSource());
+                customerOblAccountInfo.setNumMonthIntPastDue(customerOblAccountInfoView.getNumMonthIntPastDue());
+                customerOblAccountInfo.setNumMonthIntPastDueTDRAcc(customerOblAccountInfoView.getNumMonthIntPastDueTDRAcc());
+                customerOblAccountInfo.setTdrFlag(customerOblAccountInfoView.getTdrFlag());
+                customerOblAccountInfo.setTmbDelPriDay(customerOblAccountInfoView.getTmbDelPriDay());
+                customerOblAccountInfo.setCustomer(customer);
+            }
+        }
+        return customerOblAccountInfoList;
     }
 
     public List<CustomerInfoView> transformToViewList(List<Customer> customers){

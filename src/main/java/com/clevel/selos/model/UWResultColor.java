@@ -27,7 +27,7 @@ public enum UWResultColor {
 
     public static final UWResultColor lookup(String value) {
         for (UWResultColor color : UWResultColor.values()) {
-            if (color.code == value)
+            if (color.code.equals(value))
                 return color;
         }
         return null;
