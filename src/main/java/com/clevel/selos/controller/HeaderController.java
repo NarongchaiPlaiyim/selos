@@ -681,6 +681,7 @@ public class HeaderController implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         try {
             workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
+            workCaseId = 0;
         } catch (Exception e) {
             workCasePreScreenId = 0;
         }
@@ -714,6 +715,7 @@ public class HeaderController implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         try {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            workCasePreScreenId = 0;
         } catch (Exception e) {
             workCaseId = 0;
         }
