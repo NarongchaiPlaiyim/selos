@@ -107,7 +107,7 @@ public class CheckMandateDocControl extends BusinessControl{
         try {
             mandateDocResponseView = brmsControl.getDocCustomerForPrescreen(workCasePreScreenId);
             if(!Util.isNull(mandateDocResponseView) && ActionResult.SUCCESS.equals(mandateDocResponseView.getActionResult())){
-                log.debug("-- ActionResult is {}", ecmDataResult.getActionResult());
+                log.debug("-- ActionResult is {}", mandateDocResponseView.getActionResult());
                 checkMandateDocView = new CheckMandateDocView();
                 List<CheckMandatoryDocView> mandatoryDocumentsList = new ArrayList<CheckMandatoryDocView>();
                 CheckMandatoryDocView checkMandatoryDocView = null;
