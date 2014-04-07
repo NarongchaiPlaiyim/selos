@@ -157,7 +157,7 @@ public class CheckMandateDocControl extends BusinessControl{
         //BRMS
         log.debug("-- BRMS");
         try {
-            mandateDocResponseView = brmsControl.getDocCustomer(workCaseId);
+            mandateDocResponseView = brmsControl.getDocCustomerForFullApp(workCaseId);
             if(!Util.isNull(mandateDocResponseView) && ActionResult.SUCCESS.equals(mandateDocResponseView.getActionResult())){
                 log.debug("-- ActionResult is {}", ecmDataResult.getActionResult());
                 mandateDocViewMap =  mandateDocResponseView.getMandateDocViewMap();
