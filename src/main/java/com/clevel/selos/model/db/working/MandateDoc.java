@@ -21,6 +21,10 @@ public class MandateDoc implements Serializable {
     private WorkCase workCase;
 
     @OneToOne
+    @JoinColumn(name="workCasePrescreen_id")
+    private WorkCasePrescreen workCasePrescreen;
+
+    @OneToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
@@ -181,11 +185,20 @@ public class MandateDoc implements Serializable {
         this.mandateDocFileNameList = mandateDocFileNameList;
     }
 
+    public WorkCasePrescreen getWorkCasePrescreen() {
+        return workCasePrescreen;
+    }
+
+    public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
+        this.workCasePrescreen = workCasePrescreen;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("workCase", workCase)
+                .append("workCasePrescreen", workCasePrescreen)
                 .append("role", role)
                 .append("ecmDocType", ecmDocType)
                 .append("ecmDocTypeDesc", ecmDocTypeDesc)
