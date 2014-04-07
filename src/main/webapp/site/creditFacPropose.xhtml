@@ -1388,6 +1388,8 @@
                 <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.headcoll.collTypePercentLTV')}"/>
             </td>
             <td class="left">
+               <!-- <h:outputText value="#{not empty CollateralHeaderDetailView.tcgCollateralType ?
+                                                               CollateralHeaderDetailView.tcgCollateralType.description : ''}"/>-->
                 <h:outputText value="#{not empty CollateralHeaderDetailView.collTypePercentLTV ?
                                                                CollateralHeaderDetailView.collTypePercentLTV.description : ''}"/>
             </td>

@@ -134,6 +134,7 @@ public class NewCollateralTransform extends Transform {
         }
 
         collateralHeaderDetail.setHeadCollType(newCollateralHeadView.getHeadCollType());
+        collateralHeaderDetail.setSubCollateralType(newCollateralHeadView.getSubCollType());
         collateralHeaderDetail.setPotential(newCollateralHeadView.getPotentialCollateral());
         collateralHeaderDetail.setCollateralLocation(newCollateralHeadView.getCollateralLocation());
         collateralHeaderDetail.setTitleDeed(newCollateralHeadView.getTitleDeed());
@@ -184,6 +185,7 @@ public class NewCollateralTransform extends Transform {
             newCollateralSub.setCollateralOwner(newCollateralSubView.getCollateralOwner());
             newCollateralSub.setCollateralOwnerAAD(newCollateralSubView.getCollateralOwnerAAD());
             newCollateralSub.setSubCollateralType(newCollateralSubView.getSubCollateralType());
+            newCollateralSub.setCollateralTypeType(newCollateralSubView.getHeadCollType());
 
             if (newCollateralSubView.getMortgageList() != null) {
                 List<NewCollateralSubMortgage> newCollateralSubMortgageList = new ArrayList<NewCollateralSubMortgage>();
@@ -472,6 +474,7 @@ public class NewCollateralTransform extends Transform {
             newCollateralHeadView.setCreateBy(collateralHeaderDetail.getCreateBy());
             newCollateralHeadView.setCreateDate(collateralHeaderDetail.getCreateDate());
             newCollateralHeadView.setModifyDate(collateralHeaderDetail.getModifyDate());
+            newCollateralHeadView.setSubCollType(collateralHeaderDetail.getSubCollateralType());
 
             List<NewCollateralSub> newCollateralSubDetails = newCollateralSubDAO.getAllNewSubCollateral(collateralHeaderDetail);
             if (newCollateralSubDetails.size() > 0) {
@@ -504,7 +507,7 @@ public class NewCollateralTransform extends Transform {
             newCollateralSubView.setCreateDate(subCollateralDetail.getCreateDate());
             newCollateralSubView.setModifyBy(subCollateralDetail.getModifyBy());
             newCollateralSubView.setModifyDate(subCollateralDetail.getModifyDate());
-
+            newCollateralSubView.setHeadCollType(subCollateralDetail.getCollateralTypeType());
 
             List<NewCollateralSubOwner> newCollateralSubCustomerList = newCollateralSubOwnerDAO.getListNewCollateralSubCustomer(subCollateralDetail);
             if (newCollateralSubCustomerList != null) {

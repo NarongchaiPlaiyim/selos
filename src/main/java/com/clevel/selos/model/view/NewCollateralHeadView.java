@@ -1,9 +1,6 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.CollateralType;
-import com.clevel.selos.model.db.master.PotentialCollateral;
-import com.clevel.selos.model.db.master.TCGCollateralType;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -20,6 +17,7 @@ public class NewCollateralHeadView implements Serializable {
     private String collateralLocation;
     private BigDecimal appraisalValue;
     private CollateralType headCollType;
+    private SubCollateralType subCollType;
     private CollateralType collTypePercentLTV;
     private PotentialCollateral potentialCollateral ;
     private TCGCollateralType tcgCollateralType;
@@ -53,6 +51,7 @@ public class NewCollateralHeadView implements Serializable {
         this.newCollateralSubDeleteList = new ArrayList<NewCollateralSubView>();
         this.tcgCollateralType = new TCGCollateralType();
         this.tcgHeadCollType = new TCGCollateralType();
+        this.subCollType = new SubCollateralType();
     }
 
     public long getId() {
@@ -207,6 +206,14 @@ public class NewCollateralHeadView implements Serializable {
         this.tcgHeadCollType = tcgHeadCollType;
     }
 
+    public SubCollateralType getSubCollType() {
+        return subCollType;
+    }
+
+    public void setSubCollType(SubCollateralType subCollType) {
+        this.subCollType = subCollType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -216,6 +223,7 @@ public class NewCollateralHeadView implements Serializable {
                 .append("collateralLocation", collateralLocation)
                 .append("appraisalValue", appraisalValue)
                 .append("headCollType", headCollType)
+                .append("subCollType", subCollType)
                 .append("collTypePercentLTV", collTypePercentLTV)
                 .append("potentialCollateral", potentialCollateral)
                 .append("tcgCollateralType", tcgCollateralType)
