@@ -1220,7 +1220,7 @@ public class PEDBExecute extends BusinessControl
 
             if(tableName.contains("ROSTER"))
             {
-                fetchType = BPMConstants.FETCH_TYPE_ROSTER;
+               fetchType = BPMConstants.FETCH_TYPE_ROSTER;
             }
 
             else {

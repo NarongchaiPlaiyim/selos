@@ -196,7 +196,7 @@ public class ExSummaryTransform extends Transform {
         if(uwRuleResultSummaryView.getUwRuleResultDetailViewMap() != null && uwRuleResultSummaryView.getUwRuleResultDetailViewMap().size() > 0){
             for (UWRuleResultDetailView uwRule : uwRuleResultSummaryView.getUwRuleResultDetailViewMap().values()){
                 ExSumDecisionView exSumDecisionView = new ExSumDecisionView();
-                if(!uwRule.getRuleColorResult().colorCode().equals(UWResultColor.GREEN.getResultClass())){
+                if(!uwRule.getRuleColorResult().code().equals(UWResultColor.GREEN.code())){
                     exSumDecisionView.setFlag(uwRule.getRuleColorResult());
                     exSumDecisionView.setGroup(uwRule.getUwRuleNameView().getUwRuleGroupView().getName());
                     exSumDecisionView.setRuleName(uwRule.getUwRuleNameView().getName());
