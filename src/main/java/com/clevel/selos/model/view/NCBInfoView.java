@@ -13,6 +13,7 @@ public class NCBInfoView implements Serializable {
     private long customerId;
     private String ncbCusMarriageStatus;
     private Date checkingDate;
+    private Date enquiryDate;
     private Date ncbLastInfoAsOfDate;
     private String enquiry;
     private int checkIn6Month;
@@ -58,6 +59,7 @@ public class NCBInfoView implements Serializable {
 
     public void reset() {
         this.checkingDate = new Date();
+        this.enquiryDate = new Date();
         this.checkIn6Month = 0;
         this.paymentClass = "";
         this.personalId = "";
@@ -444,6 +446,14 @@ public class NCBInfoView implements Serializable {
 
     public void setNcbFlag(String ncbFlag) {
         this.ncbFlag = ncbFlag;
+    }
+
+    public Date getEnquiryDate() {
+        return enquiryDate;
+    }
+
+    public void setEnquiryDate(Date enquiryDate) {
+        this.enquiryDate = enquiryDate;
     }
 
     @Override

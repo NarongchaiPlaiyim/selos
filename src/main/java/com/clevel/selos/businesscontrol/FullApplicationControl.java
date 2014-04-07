@@ -167,7 +167,7 @@ public class FullApplicationControl extends BusinessControl {
     public void submitToRM(String queueName, long workCaseId) throws Exception {
         WorkCase workCase;
         String zmDecisionFlag = "A"; //TODO
-        String zmPricingRequestFlag = "A"; //TODO
+        String zmPricingRequestFlag = "E"; //TODO
         BigDecimal totalCommercial = BigDecimal.ZERO; //TODO
         BigDecimal totalRetail = BigDecimal.ZERO; //TODO
         String resultCode = "G"; //TODO
@@ -191,7 +191,7 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public void submitToGH(String queueName, long workCaseId) throws Exception {
-        String rgmDecisionFlag = "A"; //TODO
+        String rgmDecisionFlag = "E"; //TODO
 
         //TODO: verify decision flag. if not exist, throws Exception to controller
 

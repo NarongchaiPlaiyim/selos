@@ -46,6 +46,7 @@ public class NCBTransform extends Transform {
 
         ncb.setCheckIn6Month(ncbInfoView.getCheckIn6Month());
         ncb.setCheckingDate(ncbInfoView.getCheckingDate());
+        ncb.setEnquiryDate(ncbInfoView.getEnquiryDate());
         ncb.setCurrentPaymentType(ncbInfoView.getCurrentPaymentType());
         ncb.setHistoryPaymentType(ncbInfoView.getHistoryPaymentType());
 
@@ -92,6 +93,7 @@ public class NCBTransform extends Transform {
         ncbInfoView.setModifyDate(ncb.getModifyDate());
         ncbInfoView.setCheckIn6Month(ncb.getCheckIn6Month());
         ncbInfoView.setCheckingDate(ncb.getCheckingDate());
+        ncbInfoView.setEnquiryDate(ncb.getEnquiryDate());
         ncbInfoView.setCurrentPaymentType(ncb.getCurrentPaymentType());
         ncbInfoView.setHistoryPaymentType(ncb.getHistoryPaymentType());
         //NPL Flag = NPL Radio Value
