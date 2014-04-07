@@ -11,7 +11,11 @@
             <p:panel id="header_panel_prescreen" rendered="#{headerController.stageId == 101}" styleClass="panel">
                 <!--Check Mandate Doc Prescreen-->
                 <p:commandButton id="btnChkMandatePreScreen" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
-                                 rendered="#{headerController.checkButton('Check Mandate Doc')}">
+                                 rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1002}">
+
+                </p:commandButton>
+                <p:commandButton id="btnChkMandatePreScreenx" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
+                                 rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1003}">
 
                 </p:commandButton>
                 <!--Assign To Checker-->
