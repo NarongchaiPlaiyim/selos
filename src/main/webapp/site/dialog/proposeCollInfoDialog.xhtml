@@ -219,7 +219,7 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.headcoll.collTypePercentLTV')}"/>
     </td>
     <td class="left" colspan="3">
-        <!--<p:selectOneMenu id="dlgCollTypePercentLTV"
+        <p:selectOneMenu id="dlgCollTypePercentLTV"
                          value="#{CollateralHeaderDetailView.tcgCollateralType.id}"
                          styleClass="largest"
                          size="1"
@@ -234,8 +234,8 @@
                     listener="#{creditFacPropose.onChangeCollTypeLTV(CollateralHeaderDetailView)}"
                     process="@form"
                     update=":collateralDlgForm"/>
-        </p:selectOneMenu>-->
-        <p:selectOneMenu id="dlgCollTypePercentLTV"
+        </p:selectOneMenu>
+        <!--<p:selectOneMenu id="dlgCollTypePercentLTV"
                          value="#{CollateralHeaderDetailView.collTypePercentLTV.id}"
                          style="min-width: 400px; width: 400px; max-width: 400px;"
                          required="#{not empty param[btnSaveCollateral.clientId]}">
@@ -248,7 +248,7 @@
                     listener="#{creditFacPropose.onChangeCollTypeLTV(CollateralHeaderDetailView)}"
                     process="@form"
                     update=":collateralDlgForm"/>
-        </p:selectOneMenu>
+        </p:selectOneMenu>-->
     </td>
 </tr>
 <tr>

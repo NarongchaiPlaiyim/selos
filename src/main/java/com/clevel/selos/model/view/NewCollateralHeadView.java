@@ -21,7 +21,6 @@ public class NewCollateralHeadView implements Serializable {
     private CollateralType collTypePercentLTV;
     private PotentialCollateral potentialCollateral ;
     private TCGCollateralType tcgCollateralType;
-    private TCGCollateralType tcgHeadCollType;
     private String collID;
     private BigDecimal existingCredit;
     private int insuranceCompany;
@@ -50,7 +49,6 @@ public class NewCollateralHeadView implements Serializable {
         this.newCollateralSubViewList = new ArrayList<NewCollateralSubView>();
         this.newCollateralSubDeleteList = new ArrayList<NewCollateralSubView>();
         this.tcgCollateralType = new TCGCollateralType();
-        this.tcgHeadCollType = new TCGCollateralType();
         this.subCollType = new SubCollateralType();
     }
 
@@ -198,14 +196,6 @@ public class NewCollateralHeadView implements Serializable {
         this.tcgCollateralType = tcgCollateralType;
     }
 
-    public TCGCollateralType getTcgHeadCollType() {
-        return tcgHeadCollType;
-    }
-
-    public void setTcgHeadCollType(TCGCollateralType tcgHeadCollType) {
-        this.tcgHeadCollType = tcgHeadCollType;
-    }
-
     public SubCollateralType getSubCollType() {
         return subCollType;
     }
@@ -227,7 +217,6 @@ public class NewCollateralHeadView implements Serializable {
                 .append("collTypePercentLTV", collTypePercentLTV)
                 .append("potentialCollateral", potentialCollateral)
                 .append("tcgCollateralType", tcgCollateralType)
-                .append("tcgHeadCollType", tcgHeadCollType)
                 .append("collID", collID)
                 .append("existingCredit", existingCredit)
                 .append("insuranceCompany", insuranceCompany)

@@ -809,6 +809,7 @@ public class CreditFacProposeControl extends BusinessControl {
         BigDecimal numBank = BigDecimal.valueOf(100000000);  //100,000,000
         BigDecimal sumBank = BigDecimal.ZERO;
         BigDecimal summary = BigDecimal.ZERO;
+        boolean flag_for_core_asset = false;
         /*
         1. Customer Type = Individual
         2. มี Core Asset ใน Proposed หรือ Approved Collateral
@@ -821,12 +822,30 @@ public class CreditFacProposeControl extends BusinessControl {
             sumBank = Util.multiply(Util.add(bankStatementSummary.getTMBTotalIncomeGross(),bankStatementSummary.getOthTotalIncomeGross()),BigDecimal.valueOf(12));
         }
 
+        List<NewCollateralView> newCollateralViewList = newCreditFacilityView.getNewCollateralViewList();
+        if (newCollateralViewList != null && newCollateralViewList.size() > 0) {
+            for (NewCollateralView collateralView : newCollateralViewList) {
+                List<NewCollateralHeadView> collHeadViewList = collateralView.getNewCollateralHeadViewList();
+                if (collHeadViewList != null && collHeadViewList.size() > 0) {
+                    for (NewCollateralHeadView collHeadView : collHeadViewList) {
+                        PotentialCollateral potentialCollateral = collHeadView.getPotentialCollateral();
+
+                        if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
+                            flag_for_core_asset = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         if (!Util.isNull(basicInfo)) {
             if (((!Util.isNull(basicInfo.getBorrowerType())) && (basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value())) &&
                 ((!Util.isNull(basicInfo.getSbfScore())) && (basicInfo.getSbfScore().getScore() <= 13)) &&
                 (basicInfo.getHaveLoanInOneYear() == RadioValue.YES.value()) &&
-                (sumBank.doubleValue()>=numBank.doubleValue()))     //TODO เหลือ Core Asset in proposed/approved
+                (sumBank.doubleValue()>=numBank.doubleValue()) &&
+                (flag_for_core_asset))     //TODO  Core Asset in proposed/approved
             {
                 summary = Util.subtract(num2, newCreditFacilityView.getExistingSMELimit());   //35 ล้าน - วงเงิน/ภาระสินเชื่อ SME เดิม (รวมกลุ่มกิจการในเครื่อ)
             } else {
