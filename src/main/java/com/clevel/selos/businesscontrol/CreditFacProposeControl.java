@@ -1180,12 +1180,17 @@ public class CreditFacProposeControl extends BusinessControl {
         log.debug("saveCreditFacility ::: persist newCreditFacility : {}", newCreditFacility);
 
         //--- Save to NewFeeCredit
-//        if ((!Util.isNull(pricingFeeList)) && (Util.safetyList(pricingFeeList).size() > 0)) {
-//            log.debug("saveCreditFacility ::: pricingFeeList : {}", pricingFeeList.size());
-//            List<FeeDetail> feeDetailList = feeTransform.transformToDB(pricingFeeList,workCaseId);
-//            feeDetailDAO.persist(feeDetailList);
-//            log.debug("persist :: feeDetailList ::");
-//        }
+        if (Util.safetyList(newCreditFacilityView.getNewFeeDetailViewList()).size() > 0) {
+            List<FeeDetail> feeDetailDelList  =  feeDetailDAO.findAllByWorkCaseId(workCaseId);
+            if(feeDetailDelList.size()>0){
+                feeDetailDAO.delete(feeDetailDelList);
+            }
+
+            log.debug("saveCreditFacility ::: newCreditFacilityView.getNewFeeDetailViewList()).size() : {}", newCreditFacilityView.getNewFeeDetailViewList().size());
+            List<FeeDetail> feeDetailList = feeTransform.transformToDB(newCreditFacilityView.getNewFeeDetailViewList(),workCaseId);
+            feeDetailDAO.persist(feeDetailList);
+            log.debug("persist :: feeDetailList ::");
+        }
 
         //--- Save to NewConditionCredit
         if (Util.safetyList(newCreditFacilityView.getNewConditionDetailViewList()).size() > 0) {
