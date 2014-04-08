@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PDFExecutive_Summary implements Serializable {
+public class PDFExecutiveSummary implements Serializable {
     @Inject
     private ExSummaryControl exSummaryControl;
 
@@ -55,7 +55,7 @@ public class PDFExecutive_Summary implements Serializable {
     long workCaseId;
 
     @Inject
-    public PDFExecutive_Summary() {
+    public PDFExecutiveSummary() {
     }
 
     public void init(){

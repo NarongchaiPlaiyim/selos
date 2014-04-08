@@ -62,17 +62,6 @@
 				<textFieldExpression><![CDATA[$P{fillRejectLetter}.getAddress()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="9b74f453-09fc-457a-9832-9ddd0ba85459" x="0" y="298" width="555" height="58"/>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
-				</textElement>
-				<text><![CDATA[	ธนาคารฯ หวังเป็นอย่างยิ่งว่า ธนาคารฯ จะมีโอกาสได้รับใช้ท่าน จากการเลือกใช้ผลิตภัณฑ์อื่นที่เหมาะสมของธนาคารฯ
-ในโอกาสต่อไป  โดยท่านสามารถศึกษารายละเอียดข้อมูลผลิตภัณฑ์อื่นๆ ได้ที่ www.tmbbank.com หรือติดต่อสอบถามได้ที่ศูนย์
-ธุรกิจสัมพันธ์ลูกค้ารายย่อย(RMC: Relationship Management Center) โทร. 02828-2828 เวลา 08:00-20:00 น. วันจันทร์ - วันเสาร์
-ยกเว้น วันอาทิตย์และวันหยุดนักขัตฤกษ์]]></text>
-			</staticText>
-			<staticText>
 				<reportElement uuid="ff8cee9e-259b-4184-adb9-bcec661deb50" x="1" y="167" width="555" height="20"/>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
@@ -152,7 +141,7 @@
 				<text><![CDATA[*  จดหมายฉบับนี้จัดพิมพ์โดยระบบอัตโนมัติจึงไม่มีลายมือชื่อบนเอกสาร]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="b8fccdd5-1fa2-4a40-b8af-f9383b8f66ee" x="52" y="368" width="123" height="20"/>
+				<reportElement uuid="b8fccdd5-1fa2-4a40-b8af-f9383b8f66ee" x="37" y="367" width="123" height="20"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
@@ -174,6 +163,16 @@
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 				</textElement>
 				<text><![CDATA[ที่อยู่]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="663aa54e-a315-477a-bdf6-663b9a15170d" x="0" y="285" width="555" height="82"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[	ธนาคารฯ หวังเป็นอย่างยิ่งว่า ธนาคารฯ จะมีโอกาสได้รับใช้ท่าน จากการเลือกใช้ผลิตภัณฑ์อื่นที่เหมาะสมของธนาคารฯ
+ในโอกาสต่อไป  โดยท่านสามารถศึกษารายละเอียดข้อมูลผลิตภัณฑ์อื่นๆ ได้ที่ www.tmbbank.com หรือติดต่อสอบถามได้ที่ศูนย์
+ธุรกิจสัมพันธ์ลูกค้ารายย่อย(RMC: Relationship Management Center) โทร. 02828-2828 เวลา 08:00-20:00 น. วันจันทร์ - วันเสาร์ ยกเว้นวันอาทิตย์และวันหยุดนักขัตฤกษ์]]></text>
 			</staticText>
 		</band>
 	</detail>

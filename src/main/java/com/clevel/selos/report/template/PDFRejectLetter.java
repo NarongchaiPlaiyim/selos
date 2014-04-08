@@ -28,7 +28,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class PDFReject_Letter implements Serializable {
+public class PDFRejectLetter implements Serializable {
     @Inject
     @SELOS
     Logger log;
@@ -52,7 +52,7 @@ public class PDFReject_Letter implements Serializable {
 
     WorkCase workCase;
 
-    public PDFReject_Letter() {
+    public PDFRejectLetter() {
     }
 
     public void init(){
@@ -61,7 +61,6 @@ public class PDFReject_Letter implements Serializable {
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-//            appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
             log.debug("workCaseId. {}",workCaseId);
         }else{
             log.debug("workCaseId is null.");
@@ -93,11 +92,6 @@ public class PDFReject_Letter implements Serializable {
             log.debug("appHeaderView.getBorrowerHeaderViewList. {}",appHeaderView.getBorrowerHeaderViewList());
             for (AppBorrowerHeaderView view : appHeaderView.getBorrowerHeaderViewList()){
                 RejectLetterReport report = new RejectLetterReport();
-//                i++;
-//                stringName = stringName.append(view.getBorrowerName());
-//                if (i != appHeaderView.getBorrowerHeaderViewList().size()){
-//                    stringName = stringName.append(", ").append("\n");
-//                }
                 report.setName(view.getBorrowerName());
                 reportList.add(report);
                 log.debug("--reportList. {}",reportList);
