@@ -27,6 +27,12 @@ public class WorkCase extends AbstractWorkCase{
 
     @Column(name = "request_appraisal", columnDefinition = "int default 0")
     private int requestAppraisal;
+
+    @Column(name = "request_pricing", columnDefinition = "int default 0")
+    private int requestPricing;
+
+    @Column(name = "pricing_doa_level", columnDefinition = "int default 0")
+    private int pricingDoaLevel;
 	
     public long getId() {
         return id;
@@ -66,6 +72,22 @@ public class WorkCase extends AbstractWorkCase{
 
     public void setRequestAppraisal(int requestAppraisal) {
         this.requestAppraisal = requestAppraisal;
+    }
+
+    public int getRequestPricing() {
+        return requestPricing;
+    }
+
+    public void setRequestPricing(int requestPricing) {
+        this.requestPricing = requestPricing;
+    }
+
+    public int getPricingDoaLevel() {
+        return pricingDoaLevel;
+    }
+
+    public void setPricingDoaLevel(int pricingDoaLevel) {
+        this.pricingDoaLevel = pricingDoaLevel;
     }
 
     @Override
