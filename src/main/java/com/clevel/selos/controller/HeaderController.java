@@ -331,11 +331,15 @@ public class HeaderController implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         long workCaseId = (Long)session.getAttribute("workCaseId");
         try{
-            int requestPricingFlag = fullApplicationControl.getRequestPricing(workCaseId);
-            requestPricing = Util.isTrue(requestPricingFlag);
+            /*int requestPricingFlag = fullApplicationControl.getRequestPricing(workCaseId);
+            requestPricing = Util.isTrue(requestPricingFlag);*/
+            //For test
+            int requestPricingFlag = 1;
+            requestPricing = true;
             //check for pricing request
             if(requestPricingFlag==1){
-                int pricingDOA = fullApplicationControl.getPricingDOALevel(workCaseId);
+                //int pricingDOA = fullApplicationControl.getPricingDOALevel(workCaseId);
+                int pricingDOA = 4;
                 if(pricingDOA != 0){
                     zmEndorseUserId = "";
                     zmUserId = "";
