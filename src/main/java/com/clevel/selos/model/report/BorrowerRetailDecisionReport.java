@@ -6,6 +6,7 @@ import com.clevel.selos.model.view.NewCreditTierDetailView;
 import com.clevel.selos.report.ReportModel;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -44,6 +45,8 @@ public class BorrowerRetailDecisionReport extends ReportModel{
         creditTypeName = "";
         productCode = "";
         projectCode = "";
+        existingCreditTierDetailViewList = new ArrayList<ExistingCreditTierDetailView>();
+        existingSplitLineDetailViewList = new ArrayList<ExistingSplitLineDetailView>();
     }
 
 
