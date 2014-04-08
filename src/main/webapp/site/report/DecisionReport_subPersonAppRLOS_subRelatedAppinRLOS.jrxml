@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subPersonAppRLOS_subRelatedAppinRLOS" pageWidth="113" pageHeight="802" columnWidth="113" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="3e858f0c-0c6e-48b0-b714-4e130a4cc29b">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subPersonAppRLOS_subRelatedAppinRLOS" pageWidth="144" pageHeight="802" columnWidth="144" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="3e858f0c-0c6e-48b0-b714-4e130a4cc29b">
 	<property name="ireport.zoom" value="1.7715610000000013"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -24,30 +24,31 @@
 		<fieldDescription><![CDATA[finalInterest]]></fieldDescription>
 	</field>
 	<detail>
-		<band height="16" splitType="Stretch">
-			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="0edd28ed-836e-403d-be0f-e1bd6e4b4bdf" style="detail" stretchType="RelativeToBandHeight" x="97" y="0" width="20" height="16"/>
-				<textElement textAlignment="Right">
+		<band height="43" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="0edd28ed-836e-403d-be0f-e1bd6e4b4bdf" style="detail" stretchType="RelativeToBandHeight" x="97" y="0" width="47" height="43"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tenor}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement uuid="68ac51b6-0394-46c3-94a8-288a9f80d46c" style="detail" stretchType="RelativeToBandHeight" x="56" y="0" width="41" height="16"/>
-				<textElement textAlignment="Right">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
+				<reportElement uuid="68ac51b6-0394-46c3-94a8-288a9f80d46c" style="detail" stretchType="RelativeToBandHeight" x="56" y="0" width="41" height="43"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{finalBasePrice}+"+"+$F{finalInterest}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{finalBasePrice}+
+($F{finalInterest}.intValue() > 0 ? "+" + $F{finalInterest} : "" )]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="8fc5bbdd-b2aa-4f90-891e-c58cfec32356" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="56" height="16"/>
-				<textElement textAlignment="Right">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="8fc5bbdd-b2aa-4f90-891e-c58cfec32356" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="56" height="43"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{installment}.equals( null ) ? 0 : $F{installment}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{installment}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

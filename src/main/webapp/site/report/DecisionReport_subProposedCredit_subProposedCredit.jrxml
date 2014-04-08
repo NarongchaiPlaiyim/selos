@@ -27,39 +27,39 @@
 		<fieldDescription><![CDATA[tenor]]></fieldDescription>
 	</field>
 	<detail>
-		<band height="18" splitType="Stretch">
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="12ea9d7d-0256-4e49-bd5f-97caea049c07" style="detail" x="0" y="0" width="49" height="18"/>
+		<band height="21" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="12ea9d7d-0256-4e49-bd5f-97caea049c07" style="detail" x="0" y="0" width="49" height="21"/>
 				<textElement>
-					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{standardPriceLabel}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="072fe305-7d74-4431-bd7e-96744ccb78f5" style="detail" x="49" y="0" width="51" height="18"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="072fe305-7d74-4431-bd7e-96744ccb78f5" style="detail" x="49" y="0" width="51" height="21"/>
 				<textElement>
-					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{suggestPriceLabel}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="1ba91fa7-743c-4729-94d5-1a5c8a7826c0" style="detail" x="100" y="0" width="48" height="18"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="1ba91fa7-743c-4729-94d5-1a5c8a7826c0" style="detail" x="100" y="0" width="48" height="21"/>
 				<textElement>
-					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{finalPriceLabel}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="3bf87825-f394-447f-b6dc-68fef8784555" style="detail" x="148" y="0" width="57" height="18"/>
-				<textElement>
-					<font pdfFontName="fonts/TAHOMA.TTF"/>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="3bf87825-f394-447f-b6dc-68fef8784555" style="detail" x="148" y="0" width="57" height="21"/>
+				<textElement textAlignment="Right">
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{installment}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="95cd4fee-8f21-4d09-b908-14054a5371f5" style="detail" x="205" y="0" width="39" height="18"/>
-				<textElement>
-					<font pdfFontName="fonts/TAHOMA.TTF"/>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="95cd4fee-8f21-4d09-b908-14054a5371f5" style="detail" x="205" y="0" width="39" height="21"/>
+				<textElement textAlignment="Right">
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tenor}]]></textFieldExpression>
 			</textField>
