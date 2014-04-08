@@ -214,6 +214,7 @@ public class FeeTransform extends Transform{
         FeeDetailView feeDetailView;
        for(FeeDetail feeDetail:feeDetailList){
            feeDetailView = new FeeDetailView();
+           feeDetailView.setId(feeDetail.getId());
            feeDetailView.setCreditDetailViewId(feeDetail.getNewCreditDetail().getId());
            feeDetailView.setDescription(feeDetail.getDescription());
            feeDetailView.setFeeLevel(feeDetail.getFeeLevel());
