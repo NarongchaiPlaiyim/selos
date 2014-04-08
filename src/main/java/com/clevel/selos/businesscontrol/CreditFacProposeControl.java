@@ -1225,15 +1225,6 @@ public class CreditFacProposeControl extends BusinessControl {
         //--- Save to NewCreditDetail
         if (Util.safetyList(newCreditFacilityView.getNewCreditDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCreditDetailViewList : {}", newCreditFacilityView.getNewCreditDetailViewList());
-
-//            List<NewCreditDetail> tmpNewCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility);
-//            for (NewCreditDetail newCreditDetail : tmpNewCreditList) {
-//                if (newCreditDetail.getProposeCreditTierDetailList()!= null) {
-//                    newCreditTierDetailDAO.delete(newCreditDetail.getProposeCreditTierDetailList());
-//                }
-//                newCreditDetail.setProposeCreditTierDetailList(Collections.<NewCreditTierDetail>emptyList());
-//            }
-
             List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, currentUser, workCase, ProposeType.P);
             newCreditFacility.setNewCreditDetailList(newCreditDetailList);
             newCreditDetailDAO.persist(newCreditDetailList);
@@ -1301,11 +1292,13 @@ public class CreditFacProposeControl extends BusinessControl {
 
 
     public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList, List<Long> deleteCreditTierIdList) {
-        log.info("deleteAllApproveByIdList()");
-        log.info("deleteCreditIdList: {}", deleteCreditIdList);
-        log.info("deleteCollIdList: {}", deleteCollIdList);
-        log.info("deleteGuarantorIdList: {}", deleteGuarantorIdList);
-        log.info("deleteConditionIdList: {}", deleteConditionIdList);
+        log.debug("deleteAllApproveByIdList()");
+        log.debug("deleteCreditIdList: {}", deleteCreditIdList);
+        log.debug("deleteCollIdList: {}", deleteCollIdList);
+        log.debug("deleteGuarantorIdList: {}", deleteGuarantorIdList);
+        log.debug("deleteConditionIdList: {}", deleteConditionIdList);
+        log.debug("deleteCreditTierIdList: {}", deleteCreditTierIdList);
+
 
         if (deleteCreditTierIdList != null && deleteCreditTierIdList.size() > 0) {
             List<NewCreditTierDetail> deleteCreditTierDelIdList = new ArrayList<NewCreditTierDetail>();
