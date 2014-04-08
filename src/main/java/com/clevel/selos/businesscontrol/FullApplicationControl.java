@@ -518,6 +518,26 @@ public class FullApplicationControl extends BusinessControl {
         return workCaseAppraisal;
     }
 
+    public boolean checkAppointmentInformation(long workCaseId, long workCasePreScreenId){
+        Appraisal appraisal = null;
+        boolean checkAppointment = false;
+        if(!Util.isNull(workCaseId) && workCaseId != 0){
+            appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
+            log.debug("checkAppointmentInformation ::: find appraisal by workCase : {}", appraisal);
+        }else if(!Util.isNull(workCasePreScreenId) && workCasePreScreenId != 0){
+            appraisal = appraisalDAO.findByWorkCasePreScreenId(workCaseId);
+            log.debug("checkAppointmentInformation ::: find appraisal by workCasePrescreen: {}", appraisal);
+        }
+
+        if(appraisal != null){
+            if(!Util.isNull(appraisal.getAppointmentDate()) && !Util.isEmpty(appraisal.getAppointmentCusName())){
+                checkAppointment = true;
+            }
+        }
+
+        return checkAppointment;
+    }
+
     public void submitToAADCommittee(String aadCommitteeUserId, long workCaseId, long workCasePreScreenId, String queueName) throws Exception{
         log.debug("submitToAADCommittee ::: starting...");
         String appNumber = "";

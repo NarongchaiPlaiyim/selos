@@ -89,6 +89,7 @@ public class HeaderController implements Serializable {
     private List<User> rgmUserList;
     private List<User> ghmUserList;
     private List<User> cssoUserList;
+    private List<User> aadCommiteeList;
     private boolean requestPricing;
 
     private User user;
@@ -625,7 +626,7 @@ public class HeaderController implements Serializable {
     }
 
     public void onCancelCA(){
-
+        fullApplicationControl.getUserList(user);
     }
    
 
@@ -704,8 +705,31 @@ public class HeaderController implements Serializable {
         }
     }*/
 
-    public void onSubmitAppraisalCommittee(){
-        log.debug("onSubmitAppraisalCommittee ( submit to AAD committee )");
+    public void onOpenSubmitAADCommittee(){
+        log.debug("onOpenSubmitAADCommittee ( submit to AAD committee )");
+        HttpSession session = FacesUtil.getSession(true);
+        long workCasePreScreenId = 0;
+        long workCaseId = 0;
+        if(!Util.isNull(session.getAttribute("workCaseId"))){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        }
+        if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
+            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+        }
+        if(fullApplicationControl.checkAppointmentInformation(workCaseId, workCasePreScreenId)){
+            //List AAD Admin by team structure
+            aadCommiteeList = fullApplicationControl.getUserList(user);
+            RequestContext.getCurrentInstance().execute("submitAADCDlg.show()");
+        } else {
+            //TO show error
+            messageHeader = "Exception.";
+            message = "Please input Appointment Date first.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
+    }
+
+    public void onSubmitAADCommittee(){
+        log.debug("onSubmitAADCommittee ( submit to AAD committee )");
         long workCasePreScreenId = 0;
         long workCaseId = 0;
         String queueName = "";
@@ -1523,6 +1547,14 @@ public class HeaderController implements Serializable {
 
     public void setCssoUserList(List<User> cssoUserList) {
         this.cssoUserList = cssoUserList;
+    }
+
+    public List<User> getAadCommiteeList() {
+        return aadCommiteeList;
+    }
+
+    public void setAadCommiteeList(List<User> aadCommiteeList) {
+        this.aadCommiteeList = aadCommiteeList;
     }
 
     public boolean isSubmitToCSSO() {
