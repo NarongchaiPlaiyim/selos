@@ -540,7 +540,8 @@ public class ExSummaryControl extends BusinessControl {
             }
         }
         //Save Deviate
-        List<UWRuleResultDetail> uwRuleResultDetails = exSummaryTransform.transformExSumDecisionToUWRuleResultDetailModelList(exSummaryView.getUwRuleSummaryId(), exSummaryView.getExSumDecisionListView());
+        log.debug("workCaseId :: {}, UwRuleSummaryId :: {} , ExSumDecisionListView :: {}",workCaseId, exSummaryView.getUwRuleSummaryId(), exSummaryView.getExSumDecisionListView());
+        List<UWRuleResultDetail> uwRuleResultDetails = exSummaryTransform.transformExSumDecisionToUWRuleResultDetailModelList(workCaseId, exSummaryView.getUwRuleSummaryId(), exSummaryView.getExSumDecisionListView());
         int tmpMostOrder = 90000;
         for(UWRuleResultDetail uw : uwRuleResultDetails){
             if(uw.getUwResultColor() == null){ // add new only not from BRMS
