@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.MaritalStatusDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
 import com.clevel.selos.model.BorrowerType;
+import com.clevel.selos.model.Month;
 import com.clevel.selos.model.db.master.TDRCondition;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.NCB;
@@ -101,7 +102,11 @@ public class NCBTransform extends Transform {
         //NPL Other Flag & TMB Flag = Check Box Value
         ncbInfoView.setNplOtherFlag(transFormBooleanToView(ncb.getNplOtherFlag()));
         ncbInfoView.setNplOtherMonth(ncb.getNplOtherMonth());
+        if(ncb.getNplOtherMonth() != 0){
+            ncbInfoView.setNplOtherMonthStr();
+        }
         ncbInfoView.setNplOtherYear(ncb.getNplOtherYear());
+
         ncbInfoView.setNplTMBFlag(transFormBooleanToView(ncb.getNplTMBFlag()));
         ncbInfoView.setNplTMBMonth(ncb.getNplTMBMonth());
         ncbInfoView.setNplTMBYear(ncb.getNplTMBYear());
