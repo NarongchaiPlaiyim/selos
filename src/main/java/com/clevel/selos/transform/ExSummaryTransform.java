@@ -4,6 +4,7 @@ import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
 import com.clevel.selos.dao.master.AuthorizationDOADAO;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.working.UWRuleResultDetailDAO;
+import com.clevel.selos.dao.working.UWRuleResultSummaryDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.UWResultColor;
 import com.clevel.selos.model.UWRuleType;
@@ -32,6 +33,8 @@ public class ExSummaryTransform extends Transform {
     private ReasonDAO reasonDAO;
     @Inject
     private UWRuleResultDetailDAO uwRuleResultDetailDAO;
+    @Inject
+    private UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
 
     @Inject
     private BizInfoSummaryControl bizInfoSummaryControl;
@@ -240,9 +243,17 @@ public class ExSummaryTransform extends Transform {
         return exSumDecisionViewList;
     }
 
-    public UWRuleResultDetail transformExSumDecisionToUWRuleResultDetailModel(long uwRuleSummaryId, ExSumDecisionView exSumDecisionView){
+    public UWRuleResultDetail transformExSumDecisionToUWRuleResultDetailModel(long workCaseId, Long uwRuleSummaryId, ExSumDecisionView exSumDecisionView){
+        log.debug("transformExSumDecisionToUWRuleResultDetailModel ::: workCaseId : {} , uwRuleSummaryId : {} , exSumDecisionView : {}",workCaseId,uwRuleSummaryId,exSumDecisionView);
         UWRuleResultSummary uwRuleResultSummary = new UWRuleResultSummary();
-        uwRuleResultSummary.setId(uwRuleSummaryId);
+        if(uwRuleSummaryId != null && uwRuleSummaryId != 0){
+            uwRuleResultSummary.setId(uwRuleSummaryId);
+        } else {
+            WorkCase workCase = new WorkCase();
+            workCase.setId(workCaseId);
+            uwRuleResultSummary.setWorkCase(workCase);
+            uwRuleResultSummaryDAO.persist(uwRuleResultSummary);
+        }
 
         UWRuleName uwRuleName = new UWRuleName();
         uwRuleName.setId(exSumDecisionView.getUwRuleNameId());
@@ -268,11 +279,11 @@ public class ExSummaryTransform extends Transform {
         return uwRuleResultDetail;
     }
 
-    public List<UWRuleResultDetail> transformExSumDecisionToUWRuleResultDetailModelList(long uwRuleSummaryId,List<ExSumDecisionView> exSumDecisionView) {
+    public List<UWRuleResultDetail> transformExSumDecisionToUWRuleResultDetailModelList(long workCaseId, Long uwRuleSummaryId,List<ExSumDecisionView> exSumDecisionView) {
         List<UWRuleResultDetail> uwRuleResultDetailList = new ArrayList<UWRuleResultDetail>();
         if (exSumDecisionView != null) {
             for (ExSumDecisionView exSum : exSumDecisionView) {
-                UWRuleResultDetail uwRuleResultDetail = transformExSumDecisionToUWRuleResultDetailModel(uwRuleSummaryId, exSum);
+                UWRuleResultDetail uwRuleResultDetail = transformExSumDecisionToUWRuleResultDetailModel(workCaseId, uwRuleSummaryId, exSum);
                 uwRuleResultDetailList.add(uwRuleResultDetail);
             }
         }
