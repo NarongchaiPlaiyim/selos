@@ -86,6 +86,8 @@ public class DecisionControl extends BusinessControl {
     private CountryTransform countryTransform;
     @Inject
     private StepTransform stepTransform;
+    @Inject
+    private RoleTransform roleTransform;
 
     //Other Business Control
     @Inject
@@ -403,15 +405,21 @@ public class DecisionControl extends BusinessControl {
 
         User user = getCurrentUser();
         UserView userView = new UserView();
+        RoleView roleView = new RoleView();
         if (user != null) {
             userView.setId(user.getId());
             userView.setUserName(user.getUserName());
             userView.setTitleName(user.getTitle() != null ? user.getTitle().getName() : "");
             userView.setRoleDescription(user.getRole() != null ? user.getRole().getDescription() : "");
+
+            if (user.getRole() != null) {
+                roleView = roleTransform.transformRoleToView(user.getRole());
+            }
         }
 
         approvalHistoryView.setStepView(stepView);
         approvalHistoryView.setUserView(userView);
+        approvalHistoryView.setRoleView(roleView);
         return approvalHistoryView;
     }
 
