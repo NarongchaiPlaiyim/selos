@@ -47,6 +47,7 @@ public class RelatedCommercialDecisionReport extends ReportModel{
         projectCode = "";
 
         existingCreditTierDetailViewList = new ArrayList<ExistingCreditTierDetailView>();
+        existingSplitLineDetailViewList = new ArrayList<ExistingSplitLineDetailView>();
     }
 
 

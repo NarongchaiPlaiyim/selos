@@ -18,7 +18,7 @@
                 </td>
                 <td class="left" style="width: 80%">
                     <p:selectOneRadio id="dlgGuarantorRadioApprove"
-                                      value="#{decision.selectedApproveGuarantor.uwDecision}"
+                                      value="#{decision.selectedApproveGuarantor.approveDecision}"
                                       required="#{not empty param[saveGuarantorButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
                         <f:selectItem itemLabel="#{msg.get('app.button.notApprove')}" itemValue="#{decision.decisionREJECTED}"/>

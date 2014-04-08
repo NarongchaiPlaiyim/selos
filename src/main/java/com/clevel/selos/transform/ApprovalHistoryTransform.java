@@ -74,8 +74,9 @@ public class ApprovalHistoryTransform extends Transform {
         approvalHistory.setWorkCase(workCase);
         approvalHistory.setSubmitDate(approvalHistoryView.getSubmitDate());
         approvalHistory.setComments(approvalHistoryView.getComments());
-        approvalHistory.setApproveDecision(DecisionType.APPROVED == approvalHistoryView.getUwDecision() ? 1 : 0);
+        approvalHistory.setApproveDecision(DecisionType.APPROVED == approvalHistoryView.getApproveDecision() ? 1 : 0);
         approvalHistory.setSubmit(approvalHistoryView.getSubmit());
+        approvalHistory.setApproveType(approvalHistoryView.getApproveType());
         return approvalHistory;
     }
 
@@ -102,7 +103,7 @@ public class ApprovalHistoryTransform extends Transform {
         approvalHistoryView.setRoleView(roleTransform.transformRoleToView(approvalHistory.getRole()));
         approvalHistoryView.setSubmitDate(approvalHistory.getSubmitDate());
         approvalHistoryView.setComments(approvalHistory.getComments());
-        approvalHistoryView.setUwDecision(approvalHistory.getApproveDecision() == 1 ? DecisionType.APPROVED : DecisionType.REJECTED);
+        approvalHistoryView.setApproveDecision(approvalHistory.getApproveDecision() == 1 ? DecisionType.APPROVED : DecisionType.REJECTED);
         approvalHistoryView.setSubmit(approvalHistory.getSubmit());
         return approvalHistoryView;
     }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subCollateralBorrower" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="45c6dcd9-fb3b-4241-9e67-3039819d22ab">
-	<property name="ireport.zoom" value="1.6500000000000017"/>
+	<property name="ireport.zoom" value="0.7697371773460607"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
@@ -127,18 +127,8 @@
 	</columnHeader>
 	<detail>
 		<band height="16" splitType="Stretch">
-			<frame>
-				<reportElement uuid="8340101f-f9b0-44e0-bc48-76a23ed35038" stretchType="RelativeToBandHeight" x="247" y="0" width="144" height="16" isRemoveLineWhenBlank="true"/>
-				<box>
-					<pen lineColor="#CCCCCC"/>
-					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-				</box>
-			</frame>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="c2940c17-130f-4f00-a98d-aa5018dbb2d4" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="23" height="16" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="c2940c17-130f-4f00-a98d-aa5018dbb2d4" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="23" height="16"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -146,12 +136,13 @@
 				</box>
 				<textElement>
 					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{count}.intValue() == 0 ?
 "" : $F{count}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="77f9dfdd-918a-4654-8caf-18e47d06e64a" style="detail" stretchType="RelativeToBandHeight" x="23" y="0" width="168" height="16" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="77f9dfdd-918a-4654-8caf-18e47d06e64a" style="detail" stretchType="RelativeToBandHeight" x="23" y="0" width="168" height="16"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -161,12 +152,12 @@
 				</box>
 				<textElement textAlignment="Left">
 					<font fontName="SansSerif" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{collateralType}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="e2099f51-245e-49bc-8dff-e5207cd78538" style="detail" stretchType="RelativeToBandHeight" x="335" y="0" width="68" height="16" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="e2099f51-245e-49bc-8dff-e5207cd78538" style="detail" stretchType="RelativeToBandHeight" x="335" y="0" width="68" height="16"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -174,12 +165,12 @@
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{mortgageType}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="6f4e730d-975a-4ecc-ab1b-aa5d795abe41" style="detail" stretchType="RelativeToBandHeight" x="403" y="0" width="75" height="16" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="6f4e730d-975a-4ecc-ab1b-aa5d795abe41" style="detail" stretchType="RelativeToBandHeight" x="403" y="0" width="75" height="16"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -187,12 +178,12 @@
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF"/>
-					<paragraph leftIndent="2"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{appraisalValue}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="b5e42045-d1e7-44ce-8c67-ef7d69760952" style="detail" stretchType="RelativeToBandHeight" x="478" y="0" width="77" height="16" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="b5e42045-d1e7-44ce-8c67-ef7d69760952" style="detail" stretchType="RelativeToBandHeight" x="478" y="0" width="77" height="16"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -200,21 +191,15 @@
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF"/>
-					<paragraph leftIndent="2"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{mortgageValue}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="653d0d1a-287c-41f5-8170-f071c6a918ee" style="detail" mode="Transparent" x="0" y="0" width="555" height="16" isRemoveLineWhenBlank="true"/>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{count}.intValue() == 0 ? "No records found" : ""]]></textFieldExpression>
-			</textField>
 			<subreport>
-				<reportElement uuid="6d8d396d-bdb5-4e6d-9c26-cf1da0494033" x="191" y="0" width="144" height="16" isRemoveLineWhenBlank="true"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTypeDetailViews})]]></dataSourceExpression>
+				<reportElement uuid="6d8d396d-bdb5-4e6d-9c26-cf1da0494033" x="191" y="0" width="144" height="16"/>
+				<dataSourceExpression><![CDATA[$F{existingCreditTypeDetailViews}.isEmpty() ?
+new net.sf.jasperreports.engine.JREmptyDataSource() :
+new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTypeDetailViews})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$F{path} + "DecisionReport_subCollateralBorrower_subExtBorrower.jasper"]]></subreportExpression>
 			</subreport>
 		</band>

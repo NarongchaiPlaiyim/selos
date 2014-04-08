@@ -2346,8 +2346,8 @@
                                                         <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                     fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
-                                                            #{proposeCredit.uwDecision eq 'APPROVED' ? msg.get('app.label.approved')
-                                                            : proposeCredit.uwDecision eq 'REJECTED' ? msg.get('app.label.rejected')
+                                                            #{proposeCredit.approveDecision eq 'APPROVED' ? msg.get('app.label.approved')
+                                                            : proposeCredit.approveDecision eq 'REJECTED' ? msg.get('app.label.rejected')
                                                             : ''}
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
@@ -2659,8 +2659,8 @@
                                                     <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                     fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
-                                                        #{proposeCredit.uwDecision eq 'APPROVED' ? msg.get('app.label.approved') :
-                                                          proposeCredit.uwDecision eq 'REJECTED' ? msg.get('app.label.rejected') : ''}
+                                                        #{proposeCredit.approveDecision eq 'APPROVED' ? msg.get('app.label.approved') :
+                                                          proposeCredit.approveDecision eq 'REJECTED' ? msg.get('app.label.rejected') : ''}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -3300,8 +3300,8 @@
                                                 <tr>
                                                     <td class="title">#{msg.get('app.decision.label.approved')}</td>
                                                     <td class="left">
-                                                        #{proposeColl.uwDecision eq 'APPROVED' ? msg.get('app.button.yes')
-                                                        : proposeColl.uwDecision eq 'REJECTED' ? msg.get('app.button.no')
+                                                        #{proposeColl.approveDecision eq 'APPROVED' ? msg.get('app.button.yes')
+                                                        : proposeColl.approveDecision eq 'REJECTED' ? msg.get('app.button.no')
                                                         : ''}
                                                     </td>
                                                 </tr>
@@ -3704,8 +3704,8 @@
                                         <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                         <p:column styleClass="center top">
-                                            #{guarantor.uwDecision eq 'APPROVED' ? msg.get('app.label.approved')
-                                            : guarantor.uwDecision eq 'REJECTED' ? msg.get('app.label.rejected')
+                                            #{guarantor.approveDecision eq 'APPROVED' ? msg.get('app.label.approved')
+                                            : guarantor.approveDecision eq 'REJECTED' ? msg.get('app.label.rejected')
                                             : ''}
                                         </p:column>
 
@@ -4128,7 +4128,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td class="center">
-                                                            <p:selectOneRadio value="#{decision.approvalHistoryView.uwDecision}"
+                                                            <p:selectOneRadio value="#{decision.approvalHistoryView.approveDecision}"
                                                                               required="#{decision.roleUW and not empty param[saveDecisionBtn.clientId]}"
                                                                               styleClass="ovr-border">
                                                                 <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
