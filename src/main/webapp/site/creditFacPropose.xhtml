@@ -1108,37 +1108,37 @@
 
             <p:column styleClass="center">
                 <h:outputText value="#{not empty tradeTableItem.standardFrontEndFee.percentFee ?
-                                                 tradeTableItem.standardFrontEndFee.percentFee : '0.00%'},
+                                                 tradeTableItem.standardFrontEndFee.percentFee  : '0.00'} %,
                                      #{not empty tradeTableItem.standardFrontEndFee.feeYear ?
-                                                 tradeTableItem.standardFrontEndFee.feeYear : '-'}"/>
+                                                 tradeTableItem.standardFrontEndFee.feeYear : '-'} Years"/>
             </p:column>
 
             <p:column styleClass="center">
                 <h:outputText value="#{not empty tradeTableItem.commitmentFee.percentFee ?
-                                                 tradeTableItem.commitmentFee.percentFee : '0.00%'},
+                                                 tradeTableItem.commitmentFee.percentFee : '0.00'} %,
                                      #{not empty tradeTableItem.commitmentFee.feeYear ?
-                                                 tradeTableItem.commitmentFee.feeYear : '-'}"/>
+                                                 tradeTableItem.commitmentFee.feeYear : '-'} Years"/>
             </p:column>
 
             <p:column styleClass="center">
                 <h:outputText value="#{not empty tradeTableItem.extensionFee.percentFee ?
-                                                 tradeTableItem.extensionFee.percentFee : '0.00%'},
+                                                 tradeTableItem.extensionFee.percentFee : '0.00'} %,
                                      #{not empty tradeTableItem.extensionFee.feeYear ?
-                                                 tradeTableItem.extensionFee.feeYear : '-'}"/>
+                                                 tradeTableItem.extensionFee.feeYear : '-'} Years"/>
             </p:column>
 
             <p:column styleClass="center">
                 <h:outputText value="#{not empty tradeTableItem.prepaymentFee.percentFee ?
-                                                 tradeTableItem.prepaymentFee.percentFee : '0.00%'},
+                                                 tradeTableItem.prepaymentFee.percentFee : '0.00'} %,
                                      #{not empty tradeTableItem.prepaymentFee.feeYear ?
-                                                 tradeTableItem.prepaymentFee.feeYear : '-'}"/>
+                                                 tradeTableItem.prepaymentFee.feeYear : '-'} Years"/>
             </p:column>
 
             <p:column styleClass="center">
                 <h:outputText value="#{not empty tradeTableItem.cancellationFee.percentFee ?
-                                                 tradeTableItem.cancellationFee.percentFee : '0.00%'},
+                                                 tradeTableItem.cancellationFee.percentFee : '0.00%'} %,
                                      #{not empty tradeTableItem.cancellationFee.feeYear ?
-                                                 tradeTableItem.cancellationFee.feeYear : '-'}"/>
+                                                 tradeTableItem.cancellationFee.feeYear : '-'} Years"/>
             </p:column>
 
         </p:dataTable>
@@ -1388,8 +1388,10 @@
                 <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.headcoll.collTypePercentLTV')}"/>
             </td>
             <td class="left">
-                <h:outputText value="#{not empty CollateralHeaderDetailView.collTypePercentLTV ?
-                                                               CollateralHeaderDetailView.collTypePercentLTV.description : ''}"/>
+                <h:outputText value="#{not empty CollateralHeaderDetailView.tcgCollateralType ?
+                                                               CollateralHeaderDetailView.tcgCollateralType.description : ''}"/>
+<!--                <h:outputText value="#{not empty CollateralHeaderDetailView.collTypePercentLTV ?
+                                                               CollateralHeaderDetailView.collTypePercentLTV.description : ''}"/>-->
             </td>
         </tr>
 
