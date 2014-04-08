@@ -1,6 +1,5 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.integration.brms.model.RuleColorResult;
 import com.clevel.selos.model.UWResultColor;
 import com.clevel.selos.model.UWRuleType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -17,6 +16,7 @@ public class UWRuleResultDetailView implements Serializable {
     private CustomerInfoSimpleView customerInfoSimpleView;
     private UWDeviationFlagView deviationFlag;
     private UWRejectGroupView rejectGroupCode;
+    private String reason;
 
     public long getId() {
         return id;
@@ -82,17 +82,26 @@ public class UWRuleResultDetailView implements Serializable {
         this.rejectGroupCode = rejectGroupCode;
     }
 
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("uwRuleNameView", uwRuleNameView)
-                .append("ruleOrder", ruleOrder)
-                .append("uwRuleType", uwRuleType)
-                .append("ruleColorResult", ruleColorResult)
-                .append("customerInfoSimpleView", customerInfoSimpleView)
-                .append("deviationFlag", deviationFlag)
-                .append("rejectGroupCode", rejectGroupCode)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("uwRuleNameView", uwRuleNameView).
+                append("ruleOrder", ruleOrder).
+                append("uwRuleType", uwRuleType).
+                append("ruleColorResult", ruleColorResult).
+                append("customerInfoSimpleView", customerInfoSimpleView).
+                append("deviationFlag", deviationFlag).
+                append("rejectGroupCode", rejectGroupCode).
+                append("reason", reason).
+                toString();
     }
 }

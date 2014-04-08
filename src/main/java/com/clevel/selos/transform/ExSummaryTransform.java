@@ -3,17 +3,19 @@ package com.clevel.selos.transform;
 import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
 import com.clevel.selos.dao.master.AuthorizationDOADAO;
 import com.clevel.selos.dao.master.ReasonDAO;
-import com.clevel.selos.integration.corebanking.model.CustomerInfo;
+import com.clevel.selos.dao.working.UWRuleResultDetailDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.UWResultColor;
 import com.clevel.selos.model.UWRuleType;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.AuthorizationDOA;
+import com.clevel.selos.model.db.master.Reason;
+import com.clevel.selos.model.db.master.UWRuleName;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
-import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,9 +23,15 @@ import java.util.List;
 
 public class ExSummaryTransform extends Transform {
     @Inject
+    @SELOS
+    Logger log;
+
+    @Inject
     private AuthorizationDOADAO authorizationDOADAO;
     @Inject
     private ReasonDAO reasonDAO;
+    @Inject
+    private UWRuleResultDetailDAO uwRuleResultDetailDAO;
 
     @Inject
     private BizInfoSummaryControl bizInfoSummaryControl;
@@ -196,21 +204,78 @@ public class ExSummaryTransform extends Transform {
         if(uwRuleResultSummaryView.getUwRuleResultDetailViewMap() != null && uwRuleResultSummaryView.getUwRuleResultDetailViewMap().size() > 0){
             for (UWRuleResultDetailView uwRule : uwRuleResultSummaryView.getUwRuleResultDetailViewMap().values()){
                 ExSumDecisionView exSumDecisionView = new ExSumDecisionView();
-                if(!uwRule.getRuleColorResult().code().equals(UWResultColor.GREEN.code())){
-                    exSumDecisionView.setFlag(uwRule.getRuleColorResult());
+                exSumDecisionView.setId(uwRule.getId());
+                if(uwRule.getRuleColorResult() != null){
+                    if(!uwRule.getRuleColorResult().code().equals(UWResultColor.GREEN.code())){
+                        exSumDecisionView.setFlag(uwRule.getRuleColorResult());
+                        exSumDecisionView.setGroup(uwRule.getUwRuleNameView().getUwRuleGroupView().getName());
+                        exSumDecisionView.setRuleName(uwRule.getUwRuleNameView().getName());
+                        exSumDecisionView.setDeviationReason(uwRule.getReason());
+                        exSumDecisionView.setUwRuleNameId(uwRule.getUwRuleNameView().getId());
+                        exSumDecisionView.setCanEdit(false);
+                        if(uwRule.getUwRuleType().equals(UWRuleType.GROUP_LEVEL)){
+                            exSumDecisionView.setCusName("Application");
+                        } else {
+                            exSumDecisionView.setCusName(uwRule.getCustomerInfoSimpleView().getCustomerName());
+                            exSumDecisionView.setCustomerId(uwRule.getCustomerInfoSimpleView().getId());
+                        }
+                        exSumDecisionViewList.add(exSumDecisionView);
+                    }
+                } else {
                     exSumDecisionView.setGroup(uwRule.getUwRuleNameView().getUwRuleGroupView().getName());
                     exSumDecisionView.setRuleName(uwRule.getUwRuleNameView().getName());
+                    exSumDecisionView.setDeviationReason(uwRule.getReason());
+                    exSumDecisionView.setUwRuleNameId(uwRule.getUwRuleNameView().getId());
+                    exSumDecisionView.setCanEdit(true);
                     if(uwRule.getUwRuleType().equals(UWRuleType.GROUP_LEVEL)){
                         exSumDecisionView.setCusName("Application");
                     } else {
                         exSumDecisionView.setCusName(uwRule.getCustomerInfoSimpleView().getCustomerName());
+                        exSumDecisionView.setCustomerId(uwRule.getCustomerInfoSimpleView().getId());
                     }
-
                     exSumDecisionViewList.add(exSumDecisionView);
                 }
             }
         }
-
         return exSumDecisionViewList;
+    }
+
+    public UWRuleResultDetail transformExSumDecisionToUWRuleResultDetailModel(long uwRuleSummaryId, ExSumDecisionView exSumDecisionView){
+        UWRuleResultSummary uwRuleResultSummary = new UWRuleResultSummary();
+        uwRuleResultSummary.setId(uwRuleSummaryId);
+
+        UWRuleName uwRuleName = new UWRuleName();
+        uwRuleName.setId(exSumDecisionView.getUwRuleNameId());
+
+        UWRuleResultDetail uwRuleResultDetail = new UWRuleResultDetail();
+        if(exSumDecisionView.getId() != 0){
+            uwRuleResultDetail = uwRuleResultDetailDAO.findById(exSumDecisionView.getId());
+        }
+        uwRuleResultDetail.setUwRuleResultSummary(uwRuleResultSummary);
+        uwRuleResultDetail.setUwRuleName(uwRuleName);
+
+        if(exSumDecisionView.getCustomerId() != 0){
+            Customer customer = new Customer();
+            customer.setId(exSumDecisionView.getCustomerId());
+            uwRuleResultDetail.setCustomer(customer);
+            uwRuleResultDetail.setUwRuleType(UWRuleType.CUS_LEVEL);
+        } else {
+            uwRuleResultDetail.setUwRuleType(UWRuleType.GROUP_LEVEL);
+        }
+
+        uwRuleResultDetail.setReason(exSumDecisionView.getDeviationReason());
+
+        return uwRuleResultDetail;
+    }
+
+    public List<UWRuleResultDetail> transformExSumDecisionToUWRuleResultDetailModelList(long uwRuleSummaryId,List<ExSumDecisionView> exSumDecisionView) {
+        List<UWRuleResultDetail> uwRuleResultDetailList = new ArrayList<UWRuleResultDetail>();
+        if (exSumDecisionView != null) {
+            for (ExSumDecisionView exSum : exSumDecisionView) {
+                UWRuleResultDetail uwRuleResultDetail = transformExSumDecisionToUWRuleResultDetailModel(uwRuleSummaryId, exSum);
+                uwRuleResultDetailList.add(uwRuleResultDetail);
+            }
+        }
+        return uwRuleResultDetailList;
     }
 }

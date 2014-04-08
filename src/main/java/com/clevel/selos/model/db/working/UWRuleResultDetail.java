@@ -50,6 +50,9 @@ public class UWRuleResultDetail {
     @JoinColumn(name = "uw_rule_result_sum_id")
     private UWRuleResultSummary uwRuleResultSummary;
 
+    @Column(name = "reason")
+    private String reason;
+
     public long getId() {
         return id;
     }
@@ -122,18 +125,27 @@ public class UWRuleResultDetail {
         this.uwRuleResultSummary = uwRuleResultSummary;
     }
 
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("uwRuleName", uwRuleName)
-                .append("ruleOrder", ruleOrder)
-                .append("customer", customer)
-                .append("uwResultColor", uwResultColor)
-                .append("uwRuleType", uwRuleType)
-                .append("uwDeviationFlag", uwDeviationFlag)
-                .append("rejectGroup", rejectGroup)
-                .append("uwRuleResultSummary", uwRuleResultSummary)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("uwRuleName", uwRuleName).
+                append("ruleOrder", ruleOrder).
+                append("customer", customer).
+                append("uwResultColor", uwResultColor).
+                append("uwRuleType", uwRuleType).
+                append("uwDeviationFlag", uwDeviationFlag).
+                append("rejectGroup", rejectGroup).
+                append("uwRuleResultSummary", uwRuleResultSummary).
+                append("reason", reason).
+                toString();
     }
 }
