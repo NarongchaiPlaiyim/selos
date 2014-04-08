@@ -73,7 +73,8 @@ public class PDFExecutiveSummary implements Serializable {
                 log.error("Exception :: {}",ex);
             }
         }
-        log.info("workCaseID: {}",workCaseId);
+
+        exSummaryView = new ExSummaryView();
 
         if(!Util.isNull(workCaseId) && !Util.isZero(workCaseId)){
             exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
@@ -83,7 +84,6 @@ public class PDFExecutiveSummary implements Serializable {
         } else {
             log.debug("workCaseId is Null. {}",workCaseId);
         }
-
     }
 
     public List<BorrowerExsumReport> fillBorrowerRelatedProfile(){

@@ -25,24 +25,24 @@
 	</field>
 	<detail>
 		<band height="16" splitType="Stretch">
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="481134be-25ae-45a8-a97e-3464f6e1473b" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="38" height="16"/>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="481134be-25ae-45a8-a97e-3464f6e1473b" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="56" height="16"/>
 				<textElement textAlignment="Right">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{installment}.equals( null ) ? 0 : $F{installment}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="36bcd156-1ed2-46b7-acc2-0fbb23dd3b43" style="detail" stretchType="RelativeToBandHeight" x="38" y="0" width="41" height="16"/>
+			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
+				<reportElement uuid="36bcd156-1ed2-46b7-acc2-0fbb23dd3b43" style="detail" stretchType="RelativeToBandHeight" x="56" y="0" width="41" height="16"/>
 				<textElement textAlignment="Right">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{finalBasePrice}+"+"+$F{finalInterest}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="4d71734e-bd52-4719-8f5d-a59b49c9bbbe" style="detail" stretchType="RelativeToBandHeight" x="79" y="0" width="38" height="16"/>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="4d71734e-bd52-4719-8f5d-a59b49c9bbbe" style="detail" stretchType="RelativeToBandHeight" x="97" y="0" width="20" height="16"/>
 				<textElement textAlignment="Right">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>

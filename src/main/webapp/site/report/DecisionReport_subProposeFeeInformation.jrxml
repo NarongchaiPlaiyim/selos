@@ -95,38 +95,43 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{productProgram}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="9e70b49c-5c3b-4d8b-ab25-c9565302c750" style="detail" x="105" y="0" width="93" height="20" isRemoveLineWhenBlank="true"/>
 				<textElement>
-					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{standardFront}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="c4d5b5b4-8375-44fc-b6f1-96def137c67c" style="detail" x="198" y="0" width="99" height="20" isRemoveLineWhenBlank="true"/>
 				<textElement>
-					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{commitmentFee}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="b8538b83-cb44-4d6a-886d-6ada1204a598" style="detail" x="297" y="0" width="86" height="20" isRemoveLineWhenBlank="true"/>
 				<textElement>
-					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{extensionFee}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="f7da6dbc-1d95-4310-a0ef-863445b1dc81" style="detail" x="383" y="0" width="86" height="20" isRemoveLineWhenBlank="true"/>
 				<textElement>
-					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{prepaymentFee}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="e7bc9ea1-fce5-4bba-9ac7-91ba4ecad5bb" style="detail" x="469" y="0" width="86" height="20" isRemoveLineWhenBlank="true"/>
 				<textElement>
-					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cancellationFee}]]></textFieldExpression>
 			</textField>

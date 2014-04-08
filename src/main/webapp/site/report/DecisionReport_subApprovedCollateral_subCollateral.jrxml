@@ -125,7 +125,7 @@
 				<textFieldExpression><![CDATA[$F{requestType}.intValue() == 1 ? "Change" :
 $F{requestType}.intValue() == 2 ? "New" : ""]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="3c69907a-c70b-4021-89ec-36d5cf88e07d" style="detail" stretchType="RelativeToBandHeight" x="374" y="0" width="72" height="14"/>
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
