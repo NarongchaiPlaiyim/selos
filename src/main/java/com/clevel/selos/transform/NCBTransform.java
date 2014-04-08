@@ -4,10 +4,13 @@ import com.clevel.selos.dao.master.MaritalStatusDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
 import com.clevel.selos.model.BorrowerType;
+import com.clevel.selos.model.Month;
 import com.clevel.selos.model.db.master.TDRCondition;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.NCBInfoView;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -26,6 +29,10 @@ public class NCBTransform extends Transform {
     MaritalStatusDAO maritalStatusDAO;
     @Inject
     NCBDAO ncbDAO;
+
+    @Inject
+    @NormalMessage
+    Message msg;
 
     public NCB transformToModel(NCBInfoView ncbInfoView) {
         NCB ncb = new NCB();
@@ -101,9 +108,12 @@ public class NCBTransform extends Transform {
         //NPL Other Flag & TMB Flag = Check Box Value
         ncbInfoView.setNplOtherFlag(transFormBooleanToView(ncb.getNplOtherFlag()));
         ncbInfoView.setNplOtherMonth(ncb.getNplOtherMonth());
+        if(ncb.getNplOtherMonth() != 0) ncbInfoView.setNplOtherMonthStr(getMonthString(ncb.getNplOtherMonth()));
         ncbInfoView.setNplOtherYear(ncb.getNplOtherYear());
+
         ncbInfoView.setNplTMBFlag(transFormBooleanToView(ncb.getNplTMBFlag()));
         ncbInfoView.setNplTMBMonth(ncb.getNplTMBMonth());
+        if(ncb.getNplTMBMonth() != 0) ncbInfoView.setNplTMBMonthStr(getMonthString(ncb.getNplTMBMonth()));
         ncbInfoView.setNplTMBYear(ncb.getNplTMBYear());
 
         //TDR Flag = TDR Radio Value
@@ -163,6 +173,36 @@ public class NCBTransform extends Transform {
 
     public boolean transFormBooleanToView(int viewObject) {
         return Util.isTrue(viewObject);
+    }
+
+    private String getMonthString(int month){
+        String monthStr = "";
+        switch(month){
+            case 1 : monthStr = msg.get("app.month.january");
+                break;
+            case 2 : monthStr = msg.get("app.month.february");
+                break;
+            case 3 : monthStr = msg.get("app.month.march");
+                break;
+            case 4 : monthStr = msg.get("app.month.april");
+                break;
+            case 5 : monthStr = msg.get("app.month.may");
+                break;
+            case 6 : monthStr = msg.get("app.month.june");
+                break;
+            case 7 : monthStr = msg.get("app.month.july");
+                break;
+            case 8 : monthStr = msg.get("app.month.august");
+                break;
+            case 9 : monthStr = msg.get("app.month.september");
+                break;
+            case 10 : monthStr = msg.get("app.month.october");
+                break;
+            case 11 : monthStr = msg.get("app.month.november");
+                break;
+            case 12 : monthStr = msg.get("app.month.december");
+        }
+        return monthStr;
     }
 
 }

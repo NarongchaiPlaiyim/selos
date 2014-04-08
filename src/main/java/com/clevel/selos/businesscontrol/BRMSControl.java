@@ -3,7 +3,6 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.MandateDocumentDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BRMSInterface;
-import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.*;
 import com.clevel.selos.model.*;
@@ -27,7 +26,7 @@ import java.util.*;
 public class BRMSControl extends BusinessControl {
 
     @Inject
-    @SELOS
+    @com.clevel.selos.integration.NCB
     private Logger logger;
 
     @Inject
@@ -616,14 +615,17 @@ public class BRMSControl extends BusinessControl {
             logger.debug("StepId[{}]", workCasePrescreen.getStep().getId());
         }
         if(workCasePrescreen.getStep() != null) {
-            mandateDocumentList = mandateDocumentDAO.findByStep(workCasePrescreen.getStep().getId());
+            mandateDocumentList = Util.safetyList(mandateDocumentDAO.findByStep(workCasePrescreen.getStep().getId()));
+            logger.debug("MandateDocumentList.size()[{}]", mandateDocumentList.size());
         }
 
-        MandateDocResponseView mandateDocResponseView = new MandateDocResponseView();
+        MandateDocResponseView mandateDocResponseView = null;
         if(mandateDocumentList != null && mandateDocumentList.size() > 0){
+            mandateDocResponseView = new MandateDocResponseView();
             logger.debug("-- Get Mandate Document from mst_mandate_document {}", mandateDocumentList);
             mandateDocResponseView.setActionResult(ActionResult.SUCCESS);
-            List<Customer> customerInfoList = customerDAO.findCustomerByWorkCasePreScreenId(workCasePrescreenId);
+            List<Customer> customerInfoList = Util.safetyList(customerDAO.findCustomerByWorkCasePreScreenId(workCasePrescreenId));
+            logger.debug("CustomerInfoList.size()[{}]", customerInfoList.size());
             mandateDocResponseView.setMandateDocViewMap(getMandateDocViewMap(mandateDocumentList, customerInfoList));
             logger.debug("-- Get Mandate Document from mandate_master {}", mandateDocResponseView);
         } else {
@@ -634,53 +636,93 @@ public class BRMSControl extends BusinessControl {
             BRMSApplicationInfo applicationInfo = new BRMSApplicationInfo();
             //1. Set Customer Info List
             List<BRMSCustomerInfo> customerInfoList = new ArrayList<BRMSCustomerInfo>();
-            List<Customer> customerList = customerDAO.findCustomerByWorkCasePreScreenId(workCasePrescreenId);
+            List<Customer> customerList = Util.safetyList(customerDAO.findCustomerByWorkCasePreScreenId(workCasePrescreenId));
+            logger.debug("CustomerList.size()[{}]", customerList.size());
             for(Customer customer : customerList){
                 BRMSCustomerInfo brmsCustomerInfo = getCustomerInfoWithoutCreditAccount(customer, checkDate);
                 customerInfoList.add(brmsCustomerInfo);
             }
+            logger.debug("CustomerInfoList.size()[{}]", customerInfoList.size());
             applicationInfo.setCustomerInfoList(customerInfoList);
 
             //2. Set Account Requested List
-            List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreen(prescreen);
-            List<BRMSAccountRequested> accountRequestedList = new ArrayList();
-            for(PrescreenFacility prescreenFacility : prescreenFacilityList){
-                accountRequestedList.add(getBRMSAccountRequested(prescreenFacility));
-            }
-            applicationInfo.setAccountRequestedList(accountRequestedList);
+            if(!Util.isNull(prescreen)){
+                List<PrescreenFacility> prescreenFacilityList = Util.safetyList(prescreenFacilityDAO.findByPreScreen(prescreen));
+                logger.debug("PrescreenFacilityList.size()[{}]", prescreenFacilityList.size());
+                List<BRMSAccountRequested> accountRequestedList = new ArrayList();
+                for(PrescreenFacility prescreenFacility : prescreenFacilityList){
+                    accountRequestedList.add(getBRMSAccountRequested(prescreenFacility));
+                }
+                logger.debug("AccountRequestedList.size()[{}]", accountRequestedList.size());
+                applicationInfo.setAccountRequestedList(accountRequestedList);
 
-            //3. Set Application Information.
-            applicationInfo.setApplicationNo(workCasePrescreen.getAppNumber());
-            applicationInfo.setProcessDate(checkDate);
-            if(workCasePrescreen.getBorrowerType() != null)
-                applicationInfo.setBorrowerType(workCasePrescreen.getBorrowerType().getBrmsCode());
-            applicationInfo.setExistingSMECustomer(getRadioBoolean(prescreen.getExistingSMECustomer()));
-            applicationInfo.setRefinanceIN(getRadioBoolean(prescreen.getRefinanceIN()));
-            applicationInfo.setRefinanceOUT(getRadioBoolean(prescreen.getRefinanceOUT()));
+                //3. Set Application Information.
+                if(!Util.isNull(workCasePrescreen.getAppNumber())){
+                    applicationInfo.setApplicationNo(workCasePrescreen.getAppNumber());
+                    logger.debug("WorkCasePrescreen.AppNumber[{}]", workCasePrescreen.getAppNumber());
+                } else {
+                    logger.debug("WorkCasePrescreen.AppNumber[{}]", workCasePrescreen.getAppNumber());
+                }
 
-            applicationInfo.setRequestTCG(getRadioBoolean(prescreen.getTcg()));
-            if(workCasePrescreen.getStep() != null)
-                applicationInfo.setStepCode(workCasePrescreen.getStep().getCode());
-            if(workCasePrescreen.getProductGroup() != null)
-                applicationInfo.setProductGroup(workCasePrescreen.getProductGroup().getBrmsCode());
+                logger.debug("checkDate[{}]", checkDate);
+                applicationInfo.setProcessDate(checkDate);
 
-            applicationInfo.setReferredDocType(prescreen.getReferredExperience().getBrmsCode());
 
-            DocCustomerResponse docCustomerResponse = brmsInterface.checkDocCustomerRule(applicationInfo);
-            logger.debug("-- docCustomerResponse return {}", docCustomerResponse);
-
-            if(ActionResult.SUCCESS.equals(docCustomerResponse.getActionResult())){
-                Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, workCasePrescreen.getStep());
-                mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
-                mandateDocResponseView.setMandateDocViewMap(mandateDocViewMap);
+                if(!Util.isNull(workCasePrescreen.getBorrowerType())) {
+                    applicationInfo.setBorrowerType(workCasePrescreen.getBorrowerType().getBrmsCode());
+                    logger.debug("WorkCasePrescreen.BorrowerType[{}]", workCasePrescreen.getBorrowerType());
+                }
+                if(!Util.isNull(prescreen.getExistingSMECustomer())){
+                    applicationInfo.setExistingSMECustomer(getRadioBoolean(prescreen.getExistingSMECustomer()));
+                    logger.debug("Prescreen.ExistingSMECustomer[{}]", prescreen.getExistingSMECustomer());
+                }
+                if(!Util.isNull(prescreen.getRefinanceIN())){
+                    applicationInfo.setRefinanceIN(getRadioBoolean(prescreen.getRefinanceIN()));
+                    logger.debug("Prescreen.RefinanceIN[{}]", prescreen.getRefinanceIN());
+                }
+                if(!Util.isNull(prescreen.getRefinanceOUT())){
+                    applicationInfo.setRefinanceOUT(getRadioBoolean(prescreen.getRefinanceOUT()));
+                    logger.debug("Prescreen.RefinanceOUT[{}]", prescreen.getRefinanceOUT());
+                }
+                if(!Util.isNull(prescreen.getTcg())){
+                    applicationInfo.setRequestTCG(getRadioBoolean(prescreen.getTcg()));
+                    logger.debug("Prescreen.TCG[{}]", prescreen.getTcg());
+                }
+                if(!Util.isNull(workCasePrescreen.getStep())){
+                    applicationInfo.setStepCode(workCasePrescreen.getStep().getCode());
+                    logger.debug("WorkCasePrescreen.Step.Code[{}]", workCasePrescreen.getStep().getCode());
+                }
+                if(!Util.isNull(workCasePrescreen.getProductGroup())){
+                    applicationInfo.setProductGroup(workCasePrescreen.getProductGroup().getBrmsCode());
+                    logger.debug("WorkCasePrescreen.ProductGroup.BRMSCode[{}]", workCasePrescreen.getProductGroup().getBrmsCode());
+                }
+                if(!Util.isNull(prescreen.getReferredExperience())){
+                    applicationInfo.setReferredDocType(prescreen.getReferredExperience().getBrmsCode());
+                    logger.debug("Prescreen.ReferredExperience.BRMSCode()[{}]", prescreen.getReferredExperience().getBrmsCode());
+                }
             } else {
-                mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
-                mandateDocResponseView.setReason(docCustomerResponse.getReason());
+                logger.debug("Prescreen is {}", prescreen);
             }
 
+            DocCustomerResponse docCustomerResponse = null;
+            if(!Util.isNull(applicationInfo)){
+                docCustomerResponse = brmsInterface.checkDocCustomerRule(applicationInfo);
+                logger.debug("-- docCustomerResponse return {}", docCustomerResponse);
+                if(ActionResult.SUCCESS.equals(docCustomerResponse.getActionResult())){
+                    mandateDocResponseView = new MandateDocResponseView();
+                    Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, workCasePrescreen.getStep());
+                    mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
+                    mandateDocResponseView.setMandateDocViewMap(mandateDocViewMap);
+                } else {
+                    mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
+                    mandateDocResponseView.setReason(docCustomerResponse.getReason());
+                }
+                return mandateDocResponseView;
+            } else {
+                logger.debug("DocCustomerResponse is {}", docCustomerResponse);
+            }
             logger.debug("-- end getDocCustomerForPrescreen return {}", mandateDocResponseView);
         }
-
         return mandateDocResponseView;
     }
 

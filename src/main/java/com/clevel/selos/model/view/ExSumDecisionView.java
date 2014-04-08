@@ -13,6 +13,9 @@ public class ExSumDecisionView implements Serializable {
     private String ruleName;
     private String cusName;
     private String deviationReason;
+    private int uwRuleNameId;
+    private long customerId;
+    private boolean isCanEdit;
 
     public ExSumDecisionView() {
         reset();
@@ -74,6 +77,30 @@ public class ExSumDecisionView implements Serializable {
         this.deviationReason = deviationReason;
     }
 
+    public int getUwRuleNameId() {
+        return uwRuleNameId;
+    }
+
+    public void setUwRuleNameId(int uwRuleNameId) {
+        this.uwRuleNameId = uwRuleNameId;
+    }
+
+    public boolean isCanEdit() {
+        return isCanEdit;
+    }
+
+    public void setCanEdit(boolean canEdit) {
+        isCanEdit = canEdit;
+    }
+
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -83,6 +110,9 @@ public class ExSumDecisionView implements Serializable {
                 append("ruleName", ruleName).
                 append("cusName", cusName).
                 append("deviationReason", deviationReason).
+                append("uwRuleNameId", uwRuleNameId).
+                append("customerId", customerId).
+                append("isCanEdit", isCanEdit).
                 toString();
     }
 }

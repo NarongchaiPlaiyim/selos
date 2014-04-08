@@ -103,7 +103,7 @@ public class CheckMandateDocControl extends BusinessControl{
     }
 
     public CheckMandateDocView  getMandateDocViewByWorkCasePreScreenId(final long workCasePreScreenId){
-        log.debug("-- getMandateDocViewByWorkCasePreScreenId WorkCaseId : {}", workCasePreScreenId);
+        log.debug("-- getMandateDocViewByWorkCasePreScreenId WorkCasePreScreenId : {}", workCasePreScreenId);
         try {
             mandateDocResponseView = brmsControl.getDocCustomerForPrescreen(workCasePreScreenId);
             if(!Util.isNull(mandateDocResponseView) && ActionResult.SUCCESS.equals(mandateDocResponseView.getActionResult())){

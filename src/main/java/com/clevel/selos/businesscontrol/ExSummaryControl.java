@@ -10,6 +10,7 @@ import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.ExSummaryTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
@@ -54,6 +55,8 @@ public class ExSummaryControl extends BusinessControl {
 
     @Inject
     private ExSummaryTransform exSummaryTransform;
+    @Inject
+    private CustomerTransform customerTransform;
 
     @Inject
     private CustomerInfoControl customerInfoControl;
@@ -504,6 +507,8 @@ public class ExSummaryControl extends BusinessControl {
             List<ExSumDecisionView> exSumDecisionViewList = exSummaryTransform.transformUWRuleToExSumDecision(uwRuleResultSummaryView);
 
             exSummaryView.setExSumDecisionListView(exSumDecisionViewList);
+        } else {
+            exSummaryView.setExSumDecisionListView(new ArrayList<ExSumDecisionView>());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1058,5 +1063,11 @@ public class ExSummaryControl extends BusinessControl {
         } else { //equal
             return a;
         }
+    }
+
+    public List<CustomerInfoView> getCustomerList(long workCaseId){
+        log.info("getCustomerList ::: workCaseId : {}", workCaseId);
+        List<CustomerInfoView> customerInfoViewList = customerTransform.transformToSelectList(customerDAO.findByWorkCaseId(workCaseId));
+        return customerInfoViewList;
     }
 }
