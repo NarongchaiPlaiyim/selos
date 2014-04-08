@@ -843,7 +843,7 @@ public class CreditFacPropose implements Serializable {
                             deleteCreditTierIdList.add(newCreditTierDetailView.getId());
                         }
                     }
-
+                    log.debug("deleteCreditTierIdList ::: {}",deleteCreditTierIdList.size());
                     newCreditView.setNewCreditTierDetailViewList(null);
                 }
                 log.debug("after tier : {}", newCreditView.getNewCreditTierDetailViewList());
