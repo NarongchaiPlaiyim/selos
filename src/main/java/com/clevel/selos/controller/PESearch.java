@@ -23,6 +23,7 @@ import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import javax.annotation.PostConstruct;
@@ -256,6 +257,8 @@ public class PESearch implements Serializable
     @Inject
     UserTeamDAO userTeamDAO;
 
+    String message;
+
     @PostConstruct
     public void onCreation()
     {
@@ -366,9 +369,12 @@ public class PESearch implements Serializable
                 {
 
                     //TODO Alert Box
+
+                    message = "You are not Authorised to view this case!";
+                    RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
                     log.info("You are not authorised to view this case.(BDM)");
-                    FacesUtil.redirect("/site/generic_search.jsf");
-                    return;
+                    /*FacesUtil.redirect("/site/generic_search.jsf");
+                    return;*/
                 }
 
             }
@@ -417,8 +423,8 @@ public class PESearch implements Serializable
                     {
                         //TODO Alert Box
                         log.info("You are not authorised to view this case.(Team type 3,2)");
-                        FacesUtil.redirect("/site/generic_search.jsf");
-                        return;
+                        message = "You are not Authorised to view this case!";
+                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
                     }
 
                 }
@@ -433,9 +439,9 @@ public class PESearch implements Serializable
                     else
                     {
                         //TODO Alert Box
-                        log.info("You are not authorised to view this case.");
-                        FacesUtil.redirect("/site/generic_search.jsf");
-                        return;
+                        log.info("You are not authorised to view this case. else after 3 2 ");
+                        message = "You are not Authorised to view this case!";
+                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
                     }
 
                 }
@@ -455,9 +461,9 @@ public class PESearch implements Serializable
                 else
                 {
                     //TODO Alert Box
-                    log.info("You are not authorised to view this case.");
-                    FacesUtil.redirect("/site/generic_search.jsf");
-                    return;
+                    log.info("You are not authorised to view this case. BDM");
+                    message = "You are not Authorised to view this case!";
+                    RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
                 }
 
             }
@@ -490,16 +496,24 @@ public class PESearch implements Serializable
 
                     List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(new Long(workCase.getId()).intValue());
 
+                    log.info("Users List work case : "+usersList.toString());
+
+                    log.info("WorkCaseOwnerUsers List :"+workCaseOwnerUsersList.toString());
+
+                    log.info("Users List Size before"+usersList.size());
+
                     usersList.retainAll(workCaseOwnerUsersList);
+
+                    log.info("Users List Size after"+usersList.size());
 
                     if(usersList.size()>0){}
 
                     else
                     {
                         //TODO Alert Box
-                        log.info("You are not authorised to view this case.");
-                        FacesUtil.redirect("/site/generic_search.jsf");
-                        return;
+                        log.info("You are not authorised to view this case.3 2 ");
+                        message = "You are not Authorised to view this case!";
+                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
                     }
 
                 }
@@ -514,9 +528,9 @@ public class PESearch implements Serializable
                     else
                     {
                         //TODO Alert Box
-                        log.info("You are not authorised to view this case.");
-                        FacesUtil.redirect("/site/generic_search.jsf");
-                        return;
+                        log.info("You are not authorised to view this case. after 3 2");
+                        message = "You are not Authorised to view this case!";
+                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
                     }
 
                 }

@@ -16,16 +16,16 @@ public class SearchUserId implements Serializable
     private int id;
 
     @Column(name = "workcase_id")
-    private int workcaseid;
+    private Integer workcaseid;
 
     @Column(name = "user_id")
     private String userid;
 
-    public int getWorkcaseid() {
+    public Integer getWorkcaseid() {
         return workcaseid;
     }
 
-    public void setWorkcaseid(int workcaseid) {
+    public void setWorkcaseid(Integer workcaseid) {
         this.workcaseid = workcaseid;
     }
 
