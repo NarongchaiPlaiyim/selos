@@ -25,4 +25,12 @@ public class ProductGroupDAO extends GenericDAO<ProductGroup, Integer> {
         List<ProductGroup> list = criteria.list();
         return list;
     }
+
+    public String productGroupNameById(Integer id)
+    {
+        Criteria criteria = getSession().createCriteria(getEntityClass()).add(Restrictions.eq("id",id));
+        ProductGroup productGroup = (ProductGroup)criteria.uniqueResult();
+        log.info("Product Group id :{} , name :{}",id,productGroup.getName());
+        return productGroup.getName();
+    }
 }

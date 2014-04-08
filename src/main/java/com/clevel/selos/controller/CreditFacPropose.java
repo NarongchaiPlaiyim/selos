@@ -131,6 +131,7 @@ public class CreditFacPropose implements Serializable {
     private boolean cannotEditStandard;
     private boolean notRetrievePricing;
     private List<Long> deleteCreditIdList;
+    private List<Long> deleteCreditTierIdList;
 
     // for control Propose Collateral
     private NewCollateralView newCollateralView;
@@ -151,6 +152,7 @@ public class CreditFacPropose implements Serializable {
     private boolean editProposeColl;
     private List<Long> deleteCollIdList;
     private List<Long> deleteSubCollIdList;
+
 
     // for  control Guarantor Information Dialog
     private NewGuarantorDetailView newGuarantorDetailView;
@@ -835,6 +837,13 @@ public class CreditFacPropose implements Serializable {
                 log.debug("newCreditDetail : {} ", newCreditView);
                 if (newCreditView.getNewCreditTierDetailViewList() != null && newCreditView.getNewCreditTierDetailViewList().size() == 0) {
                     log.debug("set null");
+                    for(NewCreditTierDetailView newCreditTierDetailView : newCreditView.getNewCreditTierDetailViewList()){
+                        deleteCreditTierIdList = new ArrayList<Long>();
+                        if(newCreditTierDetailView.getId()!=0){
+                            deleteCreditTierIdList.add(newCreditTierDetailView.getId());
+                        }
+                    }
+                    log.debug("deleteCreditTierIdList ::: {}",deleteCreditTierIdList.size());
                     newCreditView.setNewCreditTierDetailViewList(null);
                 }
                 log.debug("after tier : {}", newCreditView.getNewCreditTierDetailViewList());
@@ -1803,7 +1812,7 @@ public class CreditFacPropose implements Serializable {
         onSetInUsedProposeCreditDetail();
         try {
             //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
-            creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
+            creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList,deleteCreditTierIdList);
             // Calculate Total Propose
             newCreditFacilityView = creditFacProposeControl.calculateTotalProposeAmount(newCreditFacilityView, basicInfoView, tcgView, workCaseId);
             // Calculate Total for BRMS

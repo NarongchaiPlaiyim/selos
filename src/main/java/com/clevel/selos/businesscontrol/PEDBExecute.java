@@ -213,6 +213,21 @@ public class PEDBExecute extends BusinessControl
     @Inject
     BPMActiveDAO bpmActiveDAO;
 
+    @Inject
+    RequestTypeDAO requestTypeDAO;
+
+    @Inject
+    ProductGroupDAO productGroupDAO;
+
+    @Inject
+    UserTeamDAO userTeamDAO;
+
+    @Inject
+    StatusDAO statusDAO;
+
+    @Inject
+    StepDAO stepDAO;
+
     List<String> appnumberlistavoidduplicates = null;
 
     List<String> SearchApplicationNumberList = null;
@@ -1083,90 +1098,129 @@ public class PEDBExecute extends BusinessControl
 
                     log.info("completedCasewrkitems APPLICATION NO : {}",completedCasesWKItems.getApplicationNo());
 
-                    if(completedCasesWKItems.getReceiveddate()!=null)
+                    if(completedCasesWKItems.getCreatedate()!=null)
                     {
-                        peInbox.setReceiveddate(completedCasesWKItems.getReceiveddate().toString());
+                        peInbox.setReceiveddate(completedCasesWKItems.getCreatedate().toString());
                     }
                     else
                     {
                         peInbox.setReceiveddate("");
                     }
-                    if(completedCasesWKItems.getAtUserTeamId()!=null)
+
+                    if(completedCasesWKItems.getCreateBy()!=null)
                     {
-                        peInbox.setAtuserteam(String.valueOf(completedCasesWKItems.getAtUserTeamId()));
+                        peInbox.setAtuserteam(userTeamDAO.teamNameById(userDAO.findByUserName(completedCasesWKItems.getCreateBy()).getTeam().getId()));
                     }
                     else
                     {
                         peInbox.setAtuserteam("");
                     }
+
                     peInbox.setApplicationno(completedCasesWKItems.getApplicationNo());
+
                     peInbox.setName("");
+
                     if(completedCasesWKItems.getProductgroupid()!=null)
                     {
-                        peInbox.setProductgroup(String.valueOf(completedCasesWKItems.getProductgroupid()));
+                        log.info("in pedbexecute : product group id :"+completedCasesWKItems.getProductgroupid());
+                        peInbox.setProductgroup(productGroupDAO.productGroupNameById(completedCasesWKItems.getProductgroupid()));
                     }
+
                     else
                     {
                         peInbox.setProductgroup("");
                     }
+
                     if(completedCasesWKItems.getRequesttypeid()!=null)
                     {
-                        peInbox.setRequestTypeStr(String.valueOf(completedCasesWKItems.getRequesttypeid()));
+                        log.info("in pedbexecute : requesttype id :"+completedCasesWKItems.getRequesttypeid());
+                        peInbox.setRequestTypeStr(requestTypeDAO.requestTypeById(completedCasesWKItems.getRequesttypeid()));
                     }
+
                     else
                     {
                         peInbox.setRequestTypeStr("");
                     }
 
+
                     if(completedCasesWKItems.getStepid()!=null)
                     {
                         Integer a = completedCasesWKItems.getStepid();
+
                         peInbox.setStepId(Long.parseLong(a.toString()));
                     }
+
                     else
                     {
                         peInbox.setStepId(null);
                     }
 
+                    //if(completedCasesWKItems.gets)
+
+                    peInbox.setStep(stepDAO.stepNameById(0));
+
                     if(completedCasesWKItems.getStatusid()!=null)
                     {
-                        peInbox.setStatus(String.valueOf(completedCasesWKItems.getStatusid()));
+                        peInbox.setStatus(statusDAO.statusNameById(completedCasesWKItems.getStatusid()));
                     }
+
                     else
                     {
                         peInbox.setStatus("");
                     }
 
                     peInbox.setFromuser(completedCasesWKItems.getFromuserid());
-                    peInbox.setAtuser(completedCasesWKItems.getFromuserid());
+
+                    peInbox.setAtuser(userDAO.getUserNameById(completedCasesWKItems.getCreateBy()));
+
                     if(completedCasesWKItems.getAppointmentDate()!=null)
                     {
                         peInbox.setAppointmentdate(completedCasesWKItems.getAppointmentDate().toString());
                     }
+
                     else
                     {
                         peInbox.setAppointmentdate("");
                     }
+
                     if(completedCasesWKItems.getDoalevelid()!=null)
                     {
                         peInbox.setDoalevel(String.valueOf(completedCasesWKItems.getDoalevelid()));
                     }
+
                     else
                     {
                         peInbox.setDoalevel("");
                     }
+
                     peInbox.setAction("");
+
                     peInbox.setSlastatus("");
+
                     if(completedCasesWKItems.getSlaenddate()!=null)
                     {
                         peInbox.setSlaenddate(completedCasesWKItems.getSlaenddate().toString());
                     }
+
                     else
                     {
                         peInbox.setSlaenddate("");
                     }
+
+                    if(completedCasesWKItems.getCompletedate()!=null)
+                    {
+                        peInbox.setTerminateDate(completedCasesWKItems.getCompletedate().toString());
+                    }
+
+                    else
+                    {
+                        peInbox.setTerminateDate("");
+                    }
+
                     peInbox.setTotaltimespentatprocess(completedCasesWKItems.getTotaltimeatprocess());
+
                     peInbox.setTotaltimespentatuser(completedCasesWKItems.getTotaltimeatuser());
+
                     peInbox.setFwobnumber(completedCasesWKItems.getWobnumber());
 
                     log.info("resultQueryList for completed caseses in pedbexecute class is : {}",searchViewList.size());
@@ -1269,6 +1323,7 @@ public class PEDBExecute extends BusinessControl
                 peInbox.setStep(rs.getString("F_StepName"));
                 peInbox.setQueuename(tableName);
                 peInbox.setFetchType(fetchType);
+                peInbox.setTerminateDate("");
                 peSearchResultSetList.add(peInbox);
 
                 log.info("resultQueryList pedbexecute class is : {}",peSearchResultSetList);
@@ -1322,24 +1377,28 @@ public class PEDBExecute extends BusinessControl
 
                     searchUserId = (SearchUserId)iterator.next();
 
-                    int useridbasedworkcaseid = searchUserId.getWorkcaseid();
-
-                    List<SearchApplicationNo> applicationNoList = new ArrayList<SearchApplicationNo>();
-
-                    applicationNoList = searchApplicationNoDAO.getApplicationNoByWorkCaseId(useridbasedworkcaseid,bpmactive);
-
-                    Iterator iterator1 = applicationNoList.iterator();
-
-                    while(iterator1.hasNext() == true)
+                    if(searchUserId.getWorkcaseid()!=null)
                     {
-                        SearchApplicationNo searchApplicationNo = new SearchApplicationNo();
+                        int useridbasedworkcaseid = searchUserId.getWorkcaseid();
 
-                        searchApplicationNo = (SearchApplicationNo)iterator1.next();
+                        List<SearchApplicationNo> applicationNoList = new ArrayList<SearchApplicationNo>();
 
-                        String applicationnumbervalue = searchApplicationNo.getApplicationNo();
+                        applicationNoList = searchApplicationNoDAO.getApplicationNoByWorkCaseId(useridbasedworkcaseid,bpmactive);
 
-                        SearchApplicationNumberList.add(applicationnumbervalue);
+                        Iterator iterator1 = applicationNoList.iterator();
+
+                        while(iterator1.hasNext() == true)
+                        {
+                            SearchApplicationNo searchApplicationNo = new SearchApplicationNo();
+
+                            searchApplicationNo = (SearchApplicationNo)iterator1.next();
+
+                            String applicationnumbervalue = searchApplicationNo.getApplicationNo();
+
+                            SearchApplicationNumberList.add(applicationnumbervalue);
+                        }
                     }
+
                 }
             }
             else if(citizenid != null)

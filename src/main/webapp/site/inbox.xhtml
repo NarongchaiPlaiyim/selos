@@ -83,9 +83,7 @@
                                             <p:column headerText="Received Date" styleClass="center" style="width: 60px;" sortBy="#{item.receiveddate}" >
                                                 <h:outputText value="#{item.receiveddate}"/>
                                             </p:column>
-                                            <p:column headerText="At User Team" styleClass="center" style="width: 60px;">
-                                                <h:outputText value="#{item.atuserteam}" />
-                                            </p:column>
+
                                             <p:column headerText="Application Number" styleClass="center" style="width: 60px;" sortBy="#{item.applicationno}">
                                                 <h:outputText value="#{item.applicationno}"/>
                                             </p:column>
@@ -109,6 +107,10 @@
                                             </p:column>
                                             <p:column headerText="At User" styleClass="center" style="width: 60px;" >
                                                 <h:outputText value="#{item.atuser}"/>
+                                            </p:column>
+
+                                            <p:column headerText="At User Team" styleClass="center" style="width: 60px;">
+                                                <h:outputText value="#{item.atuserteam}" />
                                             </p:column>
                                             <p:column headerText="Appointment Date" styleClass="center" style="width: 60px;" >
                                                 <h:outputText value="#{item.appointmentdate}"/>
