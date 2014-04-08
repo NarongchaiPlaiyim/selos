@@ -107,7 +107,7 @@ public class CheckMandateDocControl extends BusinessControl{
         try {
             mandateDocResponseView = brmsControl.getDocCustomerForPrescreen(workCasePreScreenId);
             if(!Util.isNull(mandateDocResponseView) && ActionResult.SUCCESS.equals(mandateDocResponseView.getActionResult())){
-                log.debug("-- ActionResult is {}", ecmDataResult.getActionResult());
+                log.debug("-- ActionResult is {}", mandateDocResponseView.getActionResult());
                 checkMandateDocView = new CheckMandateDocView();
                 List<CheckMandatoryDocView> mandatoryDocumentsList = new ArrayList<CheckMandatoryDocView>();
                 CheckMandatoryDocView checkMandatoryDocView = null;
@@ -469,10 +469,16 @@ public class CheckMandateDocControl extends BusinessControl{
         log.debug("-- OtherDocumentsList.size()[{}] added to CheckMandateDocView", otherDocumentsList.size());
     }
 
-    public void onSaveMandateDoc(final CheckMandateDocView checkMandateDocView, final long workCaseId){
-        log.info("-- onSaveMandateDoc ::: workCaseId : {}", workCaseId);
+    public void onSaveMandateDoc(final CheckMandateDocView checkMandateDocView, final long workCaseId, final long workCasePreScreenId){
         List<MandateDoc> mandateDocList = null;
-        mandateDocList = Util.safetyList(mandateDocDAO.findByWorkCaseIdAndRole(workCaseId, user.getRole().getId()));
+        if(!Util.isZero(workCaseId)){
+            log.info("-- onSaveMandateDoc ::: workCaseId : {}", workCaseId);
+            mandateDocList = Util.safetyList(mandateDocDAO.findByWorkCaseIdAndRole(workCaseId, user.getRole().getId()));
+        } else {
+            log.info("-- onSaveMandateDoc ::: workCasePreScreenId : {}", workCasePreScreenId);
+            mandateDocList = Util.safetyList(mandateDocDAO.findByWorkCasePreScreenIdAndRole(workCasePreScreenId, user.getRole().getId()));
+        }
+
         delete(mandateDocList);
         mandateDocList = null;
         mandateDocList = Util.safetyList(checkMandateDocTransform.transformToModel(checkMandateDocView, workCaseId, user.getRole()));

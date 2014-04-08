@@ -681,6 +681,7 @@ public class HeaderController implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         try {
             workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
+            workCaseId = 0;
         } catch (Exception e) {
             workCasePreScreenId = 0;
         }
@@ -714,6 +715,7 @@ public class HeaderController implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         try {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            workCasePreScreenId = 0;
         } catch (Exception e) {
             workCaseId = 0;
         }
@@ -739,7 +741,11 @@ public class HeaderController implements Serializable {
     public void onSaveCheckMandateDoc(){
         log.debug("-- onSaveCheckMandateDoc().");
         try {
-            checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, workCaseId);
+            if(!Util.isZero(workCaseId)){
+                checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, workCaseId, 0);
+            } else {
+                checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, 0, workCasePreScreenId);
+            }
             messageHeader = "Success";
             message = "Success";
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");

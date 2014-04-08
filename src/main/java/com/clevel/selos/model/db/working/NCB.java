@@ -23,6 +23,9 @@ public class NCB implements Serializable {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @Column(name = "enquiry_date")
+    private Date enquiryDate;
+
     @Column(name = "checking_date")
     private Date checkingDate;
 
@@ -455,6 +458,14 @@ public class NCB implements Serializable {
 
     public void setNcbDetailList(List<NCBDetail> ncbDetailList) {
         this.ncbDetailList = ncbDetailList;
+    }
+
+    public Date getEnquiryDate() {
+        return enquiryDate;
+    }
+
+    public void setEnquiryDate(Date enquiryDate) {
+        this.enquiryDate = enquiryDate;
     }
 
     @Override

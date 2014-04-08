@@ -115,7 +115,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         if(caseCreationHistory.getRequestType()== CaseRequestTypes.APPEAL_CASE.value() || caseCreationHistory.getRequestType()== CaseRequestTypes.RESUBMIT_CASE.value()) { //Appeal/ReSubmit
             caseParameter.put("RefAppNumber", caseCreationHistory.getRefAppNumber());
             caseParameter.put("Reason", caseCreationHistory.getReason());
-            caseParameter.put("checkNCB", caseCreationHistory.getCheckNCB());
+            caseParameter.put("CheckNCB", caseCreationHistory.getCheckNCB());
             caseParameter.put("SSOUserName", caseCreationHistory.getSsoId());
         }
 

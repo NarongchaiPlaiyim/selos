@@ -6,10 +6,8 @@ import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.*;
-import com.clevel.selos.integration.corebanking.model.CustomerInfo;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.BusinessDescription;
-import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.MandateDocument;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.*;
@@ -17,6 +15,7 @@ import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.UWRuleResultTransform;
 import com.clevel.selos.util.DateTimeUtil;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -613,6 +612,9 @@ public class BRMSControl extends BusinessControl {
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
         List<MandateDocument> mandateDocumentList = null;
 
+        if(!Util.isNull(workCasePrescreen.getStep())){
+            logger.debug("StepId[{}]", workCasePrescreen.getStep().getId());
+        }
         if(workCasePrescreen.getStep() != null) {
             mandateDocumentList = mandateDocumentDAO.findByStep(workCasePrescreen.getStep().getId());
         }

@@ -257,6 +257,9 @@ public class NCBBizTransform extends BusinessTransform {
                                                     currentWorstPaymentStatus = subjectAccountModel.getPaymt01();
                                             }
 
+                                            //set history payment
+                                            ncbDetailView.setHistoryPayment(settlementStatus);
+
                                             //check for last 6,12 months for get worst payment, calculate number of outstanding and number of over limit
                                             String worstCode = null;
                                             int numberOfOutStandingPayment = 0;
