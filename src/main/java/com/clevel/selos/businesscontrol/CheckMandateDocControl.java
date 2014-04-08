@@ -403,8 +403,8 @@ public class CheckMandateDocControl extends BusinessControl{
 
     private String updateToken(String oldUrl){
         String newUrl = null;
-//        final String PARAM = "document&ut=";
-        final String PARAM = "document&id=";
+        final String PARAM = "document&ut=";
+//        final String PARAM = "document&id=";
         if(!Util.isNull(oldUrl) && !Util.isZero(oldUrl.length())){
             newUrl = oldUrl.substring(0, oldUrl.indexOf(PARAM))+PARAM+userToken;
             log.debug("-- [BEFORE] {}", oldUrl);

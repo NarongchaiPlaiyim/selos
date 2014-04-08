@@ -524,8 +524,8 @@ public class CheckMandateDocTransform extends Transform {
 
     //URL
     private String getURLByFNId(final String FNId, final String token){
-//        return address+"/getContent?objectStoreName="+objectStore+"&id="+FNId+"&objectType=document&ut=" + token;
-        return address+"/getContent?objectStoreName="+objectStore+"&vsId="+FNId+"&objectType=document&id=" + token;
+        return address+"/getContent?objectStoreName="+objectStore+"&id="+FNId+"&objectType=document&ut=" + token;
+//        return address+"/getContent?objectStoreName="+objectStore+"&vsId="+FNId+"&objectType=document&id=" + token;
     }
 
 }
