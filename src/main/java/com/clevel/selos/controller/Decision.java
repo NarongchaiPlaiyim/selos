@@ -15,7 +15,6 @@ import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.ApprovalHistory;
-import com.clevel.selos.model.db.working.FeeDetail;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
@@ -442,8 +441,8 @@ public class Decision implements Serializable {
                         }
                     }
                 }
-                List<FeeDetail> feeDetailList = feeTransform.transformToDB(standardPricingResponse.getPricingFeeList(),workCaseId);
-                feeDetailDAO.persist(feeDetailList);
+//                List<FeeDetail> feeDetailList = feeTransform.transformToDB(standardPricingResponse.getPricingFeeList(),workCaseId);
+//                feeDetailDAO.persist(feeDetailList);
 
                 List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
                 if (newFeeDetailViewMap != null && newFeeDetailViewMap.size() > 0) {
