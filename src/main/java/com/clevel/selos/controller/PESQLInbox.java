@@ -80,19 +80,7 @@ public class PESQLInbox implements Serializable
         log.info("onCreation userDetail PESQLInbox.java : {}", userDetail);
 
         //Clear all session before selectInbox
-        HttpSession session = FacesUtil.getSession(false);
-
-        session.setAttribute("workCasePreScreenId", 0L);
-        session.setAttribute("workCaseAppraisalId", 0L);
-        session.setAttribute("workCaseId", 0L);
-        session.setAttribute("stepId", 0L);
-        session.setAttribute("statusId", 0L);
-        session.setAttribute("stageId", 0);
-        session.setAttribute("requestAppraisal", 0);
-        session.setAttribute("queueName", "");
-        session.setAttribute("wobNumber", "");
-        session.setAttribute("caseOwner", "");
-        session.setAttribute("fetchType",0);
+        HttpSession session = FacesUtil.getSession(true);
 
         try {
             if(session.getAttribute("isLocked") != null) {
@@ -106,23 +94,39 @@ public class PESQLInbox implements Serializable
                 }
             }
 
-            HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-            try {
-                log.debug("Request parameter is [id] : {}", request.getParameter("id"));
-                inboxName =  request.getParameter("id") ;
-                if(Util.isEmpty(inboxName)) inboxName = "My Box";
-                inboxViewList =  pedbExecute.getPEInbox(inboxName);
-                log.debug("onCreation ::: inboxViewList : {}", inboxViewList);
-            } catch(Exception ex) {
-                log.error("Exception while getInboxPE : ", ex);
-                message = "Error while retrieve case list.";
-                RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
-            }
         } catch (Exception e) {
             log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
             message = "Error while unlocking case.";
             RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
         }
+
+        HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        try {
+            log.debug("Request parameter is [id] : {}", request.getParameter("id"));
+            inboxName =  request.getParameter("id") ;
+            if(Util.isEmpty(inboxName)) inboxName = "My Box";
+            inboxViewList =  pedbExecute.getPEInbox(inboxName);
+            log.debug("onCreation ::: inboxViewList : {}", inboxViewList);
+        } catch(Exception ex) {
+            log.error("Exception while getInboxPE : ", ex);
+            message = "Error while retrieve case list.";
+            RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+        }
+
+        //Clear all session
+        session = FacesUtil.getSession(false);
+
+        session.setAttribute("workCasePreScreenId", 0L);
+        session.setAttribute("workCaseAppraisalId", 0L);
+        session.setAttribute("workCaseId", 0L);
+        session.setAttribute("stepId", 0L);
+        session.setAttribute("statusId", 0L);
+        session.setAttribute("stageId", 0);
+        session.setAttribute("requestAppraisal", 0);
+        session.setAttribute("queueName", "");
+        session.setAttribute("wobNumber", "");
+        session.setAttribute("caseOwner", "");
+        session.setAttribute("fetchType",0);
     }
 
 

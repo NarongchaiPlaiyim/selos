@@ -3,18 +3,20 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.MandateFieldDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.db.master.CreditType;
 import com.clevel.selos.model.db.master.MandateField;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.view.ActionValidationResult;
 import com.clevel.selos.model.view.MandateFieldMessageView;
+import com.clevel.selos.model.view.MandateFieldView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.transform.MandateFieldTransform;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,100 +30,113 @@ public class ActionValidationControl extends BusinessControl{
     Logger logger;
 
     @Inject
-    MandateFieldDAO mandateFieldConfigureDAO;
+    private MandateFieldDAO mandateFieldDAO;
 
     @Inject
     @ValidationMessage
     Message validationMsg;
 
+    @Inject
+    MandateFieldTransform mandateFieldTransform;
+
     private final static String ACTION_DATA_REQUIRED = "1151";
     private final static String ACTION_DATA_INCORRECT = "1152";
 
-    public ActionValidationResult ActionValidationControl(String step, String status, String action){
-        ActionValidationResult actionValidationResult = new ActionValidationResult();
-        actionValidationResult.setActionResult(ActionResult.SUCCESS);
+    private Map<String, List<MandateFieldView>> mandateFieldViewMap;
+    private ActionValidationResult actionValidationResult;
 
-        Map<String, String> reasonMap = new HashMap<String, String>();
-        System.out.println(reasonMap.getClass().getName());
+    public int loadActionValidation(long stepId, long actionId){
+        logger.info("-- begin loadActionValidation stepId {}: actionId {}", stepId, actionId);
+        mandateFieldViewMap = new HashMap<String, List<MandateFieldView>>();
+        List<MandateField> mandateFieldList = mandateFieldDAO.findByAction(stepId, actionId);
+        logger.info("-- update Mandate Field {}", mandateFieldList);
 
-        //List<MandateFieldConfigure> mandateFieldConfigureList = mandateFieldConfigureDAO.findByAction(step, status, action);
-        List<MandateField> mandateFieldConfigureList = getMandateFieldConfigureList();
-        for(MandateField mandateFieldConfigure : mandateFieldConfigureList){
+        for(MandateField mandateField : mandateFieldList){
+            MandateFieldView mandateFieldView = mandateFieldTransform.transformToView(mandateField);
+            List<MandateFieldView> mandateFieldViewList = mandateFieldViewMap.get(mandateFieldView.getClassName());
+            if(mandateFieldViewList == null)
+                mandateFieldViewList = new ArrayList<MandateFieldView>();
+            mandateFieldViewList.add(mandateFieldView);
 
+            logger.info("mandateFieldView {}", mandateFieldView);
+
+            mandateFieldViewMap.put(mandateFieldView.getClassName(), mandateFieldViewList);
         }
-
-        return actionValidationResult;
+        actionValidationResult = new ActionValidationResult();
+        List<MandateFieldMessageView> mandateFieldMessageViewList = new ArrayList<MandateFieldMessageView>();
+        actionValidationResult.setMandateFieldMessageViewList(mandateFieldMessageViewList);
+        return mandateFieldViewMap.size();
     }
 
-    public ActionValidationResult validateClass(Object obj){
-        System.out.println("class Name : " + obj.getClass().getName());
+    public boolean validate(List<Object> objectList){
+        for(Object object : objectList){
+            validate(object);
+        }
+        return true;
+    }
 
-        List<MandateFieldMessageView> mandateFieldMessageViewList = new ArrayList<MandateFieldMessageView>();
-
-        Class objClass = obj.getClass();
-
-        Field[] fields = objClass.getDeclaredFields();
-        System.out.println("fields length: " + fields.length);
-        String compareField = "creditType";
-        boolean failed = false;
-        for(Field field : fields){
-            System.out.println("field :" + field.getName());
-            try{
+    public boolean validate(Object object){
+        if(object != null){
+            Class objectClass = object.getClass();
+            logger.info("object class {}", objectClass.getName());
+            List<MandateFieldView> mandateFieldViewList = mandateFieldViewMap.get(objectClass.getName());
+            Field[] fields = objectClass.getDeclaredFields();
+            for(Field field : fields){
+                logger.info("check for field name {}", field.getName());
                 field.setAccessible(true);
-                if(field.getName().equals(compareField)){
-                    System.out.println("CompareField : " + compareField);
-                    Object value = field.get(obj);
+                for(MandateFieldView mandateFieldView : mandateFieldViewList){
+                    logger.info("loop for mandateFieldView name {}", mandateFieldView);
+                    if(field.getName().equals(mandateFieldView.getFieldName())){
+                        logger.info("found name matched field: {}, mandateFieldView: {}", field.getName(), mandateFieldView.getFieldName());
+                        mandateFieldView.setChecked(Boolean.TRUE);
+                        boolean failed = false;
 
-                    System.out.println("Value : " + value.getClass().getName());
-                    if(value == null){
-
-                    } else {
-                        mandateFieldMessageViewList.add(getMandateFieldMessageView(field.getName(), validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), ""));
-                    }
-                    if(value.getClass().isPrimitive()){
-                        Class valueClass = value.getClass();
-                        if(valueClass.equals(String.class.getName())){
-                            if(value == null){
-
-                                mandateFieldMessageViewList.add(getMandateFieldMessageView(field.getName(), validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), ""));
+                        try{
+                            Object _fieldObj = field.get(object);
+                            if(_fieldObj == null){
+                                failed = true;
+                            } else {
+                                Class _fieldObjClass = _fieldObj.getClass();
+                                if(_fieldObjClass.equals(Integer.class.getName())){
+                                    if((Integer)_fieldObj == 0){
+                                        failed = true;
+                                    }
+                                } else if(_fieldObjClass.equals(Long.class.getName())){
+                                    if((Long)_fieldObj == 0){
+                                        failed = true;
+                                    }
+                                } else if(_fieldObjClass.equals(BigDecimal.class.getName())){
+                                    if(BigDecimal.ZERO.equals((BigDecimal)_fieldObj)){
+                                        failed = true;
+                                    }
+                                } else if(_fieldObjClass.equals(List.class.getClass())){
+                                    if(((List)_fieldObj).size() == 0){
+                                        failed = true;
+                                    }
+                                }
                             }
-                        } else if(valueClass.equals(Integer.class.getName())){
-                            if((Integer)value == 0){
-                                mandateFieldMessageViewList.add(getMandateFieldMessageView(field.getName(), validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), ""));
-                            }
-                        } else if(valueClass.equals(Long.class.getName())){
-                            if((Long)value == 0){
-                                mandateFieldMessageViewList.add(getMandateFieldMessageView(field.getName(), validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), ""));
-                            }
+                        } catch (IllegalAccessException iae){
+                            logger.debug("Cannot validate Field to validate Field {}", field.getName());
+                            failed = true;
                         }
-                    } else {
 
-                        //reasonMap.put("NewCreditDetail", field.getName());
+                        if(failed){
+                            addMandateFieldMessageView(mandateFieldView.getFieldDesc(), mandateFieldView.getFieldDesc(),validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), mandateFieldView.getPage());
+                        }
+                        break;
                     }
                 }
-            } catch (IllegalAccessException iae){
-                System.out.println("Cannot Convert Fields");
-                //reasonMap.put(field.getName(), "Cannot Convert Field");
             }
         }
-
-        ActionValidationResult actionValidationResult = new ActionValidationResult();
-        actionValidationResult.setActionResult(ActionResult.SUCCESS);
-        if(mandateFieldMessageViewList.size() == 0){
-            actionValidationResult.setActionResult(ActionResult.SUCCESS);
-        } else {
-            actionValidationResult.setActionResult(ActionResult.FAILED);
-            actionValidationResult.setMandateFieldMessageViewList(mandateFieldMessageViewList);
-        }
-        return actionValidationResult;
+        return true;
     }
 
-    private MandateFieldMessageView getMandateFieldMessageView(String fieldName, String message, String pageName){
+    private void addMandateFieldMessageView(String fieldName, String description, String message, String pageName){
         MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
         mandateFieldMessageView.setFieldName(fieldName);
         mandateFieldMessageView.setMessage(message);
         mandateFieldMessageView.setPageName(pageName);
-        return mandateFieldMessageView;
+        actionValidationResult.getMandateFieldMessageViewList().add(mandateFieldMessageView);
     }
 
     public List<MandateField> getMandateFieldConfigureList(){
@@ -133,17 +148,14 @@ public class ActionValidationControl extends BusinessControl{
         return mandateFieldConfigureList;
     }
 
-    public static void main(String args[]){
+    public ActionValidationResult getFinalValidationResult(){
 
-        ActionValidationControl actionValidationControl = new ActionValidationControl();
-        NewCreditDetail newCreditDetail = new NewCreditDetail();
-        newCreditDetail.setCreditType(new CreditType());
-        ActionValidationResult actionValidationResult = actionValidationControl.validateClass(newCreditDetail);
-        List<String> stringList = new ArrayList<String>();
-        System.out.println("stringList :" + stringList.getClass().getName());
-        System.out.print("result action Validation " + actionValidationResult);
+        if(actionValidationResult.getMandateFieldMessageViewList().size() > 0){
+            actionValidationResult.setActionResult(ActionResult.FAILED);
 
+        } else {
+            actionValidationResult.setActionResult(ActionResult.SUCCESS);
+        }
+        return actionValidationResult;
     }
-
-
 }

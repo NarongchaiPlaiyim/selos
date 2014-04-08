@@ -470,6 +470,7 @@ public class BPMExecutor implements Serializable {
         fields.put("BorrowerName", borrowerName);
         fields.put("ProductGroup", productGroup);
 
+        log.debug("updateBorrowerProductGroup : fields : {}", fields);
         bpmInterface.updateCase(queueName, wobNumber, fields);
     }
 

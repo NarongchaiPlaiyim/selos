@@ -5,7 +5,6 @@ import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ActionCode;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ManageButton;
 import com.clevel.selos.model.PricingDOAValue;
@@ -22,7 +21,6 @@ import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import com.rits.cloning.Cloner;
-
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,7 +30,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -153,6 +150,7 @@ public class HeaderController implements Serializable {
     //CheckMandate
     private CheckMandateDocView checkMandateDocView;
     private long workCaseId;
+    private long workCasePreScreenId;
 
     private String messageHeader;
     private String message;
@@ -677,12 +675,47 @@ public class HeaderController implements Serializable {
         }
     }
 
-    //
+
+    public void onCheckMandateForCheckerDialog(){
+        log.debug("onCheckMandateForCheckerDialog ::: starting...");
+        HttpSession session = FacesUtil.getSession(true);
+        try {
+            workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
+            workCaseId = 0;
+        } catch (Exception e) {
+            workCasePreScreenId = 0;
+        }
+
+        try {
+            stepId = (Long)session.getAttribute("stepId");
+        } catch (Exception e) {
+            stepId = 0;
+        }
+
+        String result = null;
+        checkMandateDocView = null;
+        try{
+            checkMandateDocView = checkMandateDocControl.getMandateDocViewByWorkCasePreScreenId(workCasePreScreenId);
+            if(!Util.isNull(checkMandateDocView)){
+                log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
+            } else {
+                log.debug("-- Find by work case pre screen id = {} CheckMandateDocView is {} ", workCasePreScreenId, checkMandateDocView);
+                checkMandateDocView = new CheckMandateDocView();
+                log.debug("-- CheckMandateDocView[New] created");
+            }
+            log.debug("stop...");
+        } catch (Exception e) {
+            log.error("-- Exception : {}", e.getMessage());
+            result = e.getMessage();
+        }
+    }
+
     public void onCheckMandateDialog(){
         log.debug("onCheckMandateDialog ::: starting...");
         HttpSession session = FacesUtil.getSession(true);
         try {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            workCasePreScreenId = 0;
         } catch (Exception e) {
             workCaseId = 0;
         }
@@ -698,6 +731,7 @@ public class HeaderController implements Serializable {
                 checkMandateDocView = new CheckMandateDocView();
                 log.debug("-- CheckMandateDocView[New] created");
             }
+            log.debug("stop...");
         } catch (Exception e) {
             log.error("-- Exception : {}", e.getMessage());
             result = e.getMessage();
@@ -707,7 +741,11 @@ public class HeaderController implements Serializable {
     public void onSaveCheckMandateDoc(){
         log.debug("-- onSaveCheckMandateDoc().");
         try {
-            checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, workCaseId);
+            if(!Util.isZero(workCaseId)){
+                checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, workCaseId, 0);
+            } else {
+                checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, 0, workCasePreScreenId);
+            }
             messageHeader = "Success";
             message = "Success";
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");

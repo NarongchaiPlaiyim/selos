@@ -164,11 +164,6 @@ public class NCBBizTransform extends BusinessTransform {
 
                                     //Check lastAsOfDate
                                     for(SubjectAccountModel subjectAccountModel : subjectAccountModelResults){
-                                        isValidPayment = isValidPaymentPatternIndividual(subjectAccountModel, lastAsOfDate);
-                                        log.debug("isValidPayment {}",isValidPayment);
-                                        if(!isValidPayment){
-                                            break;
-                                        }
                                         if(Util.isNull(lastAsOfDate)){
                                             lastAsOfDate = subjectAccountModel.getAsofdate() != null ? subjectAccountModel.getAsofdate() : null;
                                         }else{
@@ -177,6 +172,14 @@ public class NCBBizTransform extends BusinessTransform {
                                                     lastAsOfDate = subjectAccountModel.getAsofdate();
                                                 }
                                             }
+                                        }
+                                    }
+
+                                    for(SubjectAccountModel subjectAccountModel : subjectAccountModelResults){
+                                        isValidPayment = isValidPaymentPatternIndividual(subjectAccountModel, lastAsOfDate);
+                                        log.debug("isValidPayment {}",isValidPayment);
+                                        if(!isValidPayment){
+                                            break;
                                         }
                                     }
 
@@ -253,6 +256,9 @@ public class NCBBizTransform extends BusinessTransform {
                                                 if(!isIgnoreCode(subjectAccountModel.getPaymt01()))
                                                     currentWorstPaymentStatus = subjectAccountModel.getPaymt01();
                                             }
+
+                                            //set history payment
+                                            ncbDetailView.setHistoryPayment(settlementStatus);
 
                                             //check for last 6,12 months for get worst payment, calculate number of outstanding and number of over limit
                                             String worstCode = null;
@@ -2024,7 +2030,7 @@ public class NCBBizTransform extends BusinessTransform {
     }
 
     private boolean isInMonthPeriodYYYYMMDD(String dateStr, String compareStr, int numberMonth) {
-        if (!Util.isNull(dateStr) && !Util.isEmpty(dateStr) && !Util.isNull(dateStr) && !Util.isEmpty(dateStr)) {
+        if (!Util.isNull(dateStr) && !Util.isEmpty(dateStr) && !Util.isNull(compareStr) && !Util.isEmpty(compareStr)) {
             Date paymentDate = Util.strYYYYMMDDtoDateFormat(dateStr);
             Date compareDate = Util.strYYYYMMDDtoDateFormat(compareStr);
             Calendar startCalendar = new GregorianCalendar();
