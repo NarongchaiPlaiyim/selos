@@ -1200,10 +1200,10 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //--- Save to NewFeeCredit
         if (Util.safetyList(newCreditFacilityView.getNewFeeDetailViewList()).size() > 0) {
-            List<FeeDetail> feeDetailDelList  =  feeDetailDAO.findAllByWorkCaseId(workCaseId);
-            if(feeDetailDelList.size()>0){
-                feeDetailDAO.delete(feeDetailDelList);
-            }
+//            List<FeeDetail> feeDetailDelList  =  feeDetailDAO.findAllByWorkCaseId(workCaseId);
+//            if(feeDetailDelList.size()>0){
+//                feeDetailDAO.delete(feeDetailDelList);
+//            }
 
             log.debug("saveCreditFacility ::: newCreditFacilityView.getNewFeeDetailViewList()).size() : {}", newCreditFacilityView.getNewFeeDetailViewList().size());
             List<FeeDetail> feeDetailList = feeTransform.transformToDB(newCreditFacilityView.getNewFeeDetailViewList(),workCaseId);
