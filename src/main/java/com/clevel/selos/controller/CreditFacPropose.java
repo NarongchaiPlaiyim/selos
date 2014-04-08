@@ -522,10 +522,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                                 newFeeDetailViewMap.put(feeDetailView.getCreditDetailViewId(), newFeeDetailView);
                             }
 
-                            //TODO transform feeDetailView to DB (FeeDetail)
-                            log.debug("-- transformToView :: feeDetailView ::: {}", feeDetailView.toString());
                             // find productProgram
-
                             log.debug("feeDetailView.getFeeLevel() :::: {}", feeDetailView.getFeeLevel());
                             log.debug("feeDetailView.getCreditDetailViewId() :::: {}", feeDetailView.getCreditDetailViewId());
                             NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(feeDetailView.getCreditDetailViewId());
