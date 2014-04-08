@@ -77,16 +77,20 @@ public class ExSummaryView  implements Serializable {
     private int yearInBusinessMonth;
 
     private List<Long> deleteTmpList;
+    private Long uwRuleSummaryId;
 
-    public  ExSummaryView(){}
+    public  ExSummaryView(){
+        reset();
+    }
 
     public void reset(){
-        borrowerListView = new ArrayList<CustomerInfoView>();
-        ncbInfoListView = new ArrayList<NCBInfoView>();
-        exSumDecisionListView = new ArrayList<ExSumDecisionView>();
-        exSumCharacteristicView = new ExSumCharacteristicView();
-        exSumBusinessInfoView = new ExSumBusinessInfoView();
-        exSumAccMovementViewList = new ArrayList<ExSumAccountMovementView>();
+        this.borrowerListView = new ArrayList<CustomerInfoView>();
+        this.ncbInfoListView = new ArrayList<NCBInfoView>();
+        this.exSumDecisionListView = new ArrayList<ExSumDecisionView>();
+        this.exSumCharacteristicView = new ExSumCharacteristicView();
+        this.exSumBusinessInfoView = new ExSumBusinessInfoView();
+        this.exSumAccMovementViewList = new ArrayList<ExSumAccountMovementView>();
+        this.deleteTmpList = new ArrayList<Long>();
     }
 
     public long getId() {
@@ -409,6 +413,14 @@ public class ExSummaryView  implements Serializable {
 
     public void setDeleteTmpList(List<Long> deleteTmpList) {
         this.deleteTmpList = deleteTmpList;
+    }
+
+    public Long getUwRuleSummaryId() {
+        return uwRuleSummaryId;
+    }
+
+    public void setUwRuleSummaryId(Long uwRuleSummaryId) {
+        this.uwRuleSummaryId = uwRuleSummaryId;
     }
 
     @Override

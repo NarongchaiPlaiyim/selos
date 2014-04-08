@@ -12,6 +12,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.ExSummaryTransform;
+import com.clevel.selos.transform.UWRuleResultTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -52,6 +53,8 @@ public class ExSummaryControl extends BusinessControl {
     private RiskTypeDAO riskTypeDAO;
     @Inject
     private DecisionDAO decisionDAO;
+    @Inject
+    UWRuleResultDetailDAO uwRuleResultDetailDAO;
 
     @Inject
     private ExSummaryTransform exSummaryTransform;
@@ -503,6 +506,7 @@ public class ExSummaryControl extends BusinessControl {
                 exSummaryView.setApplicationResult(uwRuleResultSummaryView.getUwDeviationFlagView().getName());
             }
             exSummaryView.setApplicationColorResult(uwRuleResultSummaryView.getUwResultColor());
+            exSummaryView.setUwRuleSummaryId(uwRuleResultSummaryView.getId());
 
             List<ExSumDecisionView> exSumDecisionViewList = exSummaryTransform.transformUWRuleToExSumDecision(uwRuleResultSummaryView);
 
@@ -527,6 +531,33 @@ public class ExSummaryControl extends BusinessControl {
 
         ExSummary exSummary = exSummaryTransform.transformToModel(exSummaryView, workCase, user);
         exSummaryDAO.persist(exSummary);
+
+        //Delete By Tmp DeviateDecision
+        if(exSummaryView.getDeleteTmpList() != null && exSummaryView.getDeleteTmpList().size() > 0){
+            for(Long tmpId : exSummaryView.getDeleteTmpList()){
+                UWRuleResultDetail uwRuleResultDetail = uwRuleResultDetailDAO.findById(tmpId);
+                uwRuleResultDetailDAO.delete(uwRuleResultDetail);
+            }
+        }
+        //Save Deviate
+        List<UWRuleResultDetail> uwRuleResultDetails = exSummaryTransform.transformExSumDecisionToUWRuleResultDetailModelList(exSummaryView.getUwRuleSummaryId(), exSummaryView.getExSumDecisionListView());
+        int tmpMostOrder = 90000;
+        for(UWRuleResultDetail uw : uwRuleResultDetails){
+            if(uw.getUwResultColor() == null){ // add new only not from BRMS
+                if(uw.getRuleOrder() == 0){ //for find most order
+                    for(int i = 0 ; i < uwRuleResultDetails.size() ; i++){
+                        if(uwRuleResultDetails.get(i).getRuleOrder() > 90000){
+                            if(uwRuleResultDetails.get(i).getRuleOrder() > tmpMostOrder){
+                                tmpMostOrder = uwRuleResultDetails.get(i).getRuleOrder();
+                            }
+                        }
+                    }
+                    tmpMostOrder = tmpMostOrder + 1;
+                    uw.setRuleOrder(tmpMostOrder);
+                }
+            }
+        }
+        uwRuleResultDetailDAO.persist(uwRuleResultDetails);
 
         //Delete All Deviate
         List<ExSumDeviate> esdList = exSumDeviateDAO.findByExSumId(exSummary.getId());

@@ -88,11 +88,12 @@ public class ExecutiveSummary implements Serializable {
 
     //
     private ExSumReasonView reason;
+    private ExSumReasonView selectDeviate;
 
     private List<CustomerInfoView> customerInfoViewList;
     private long customerId;
     private CustomerInfoView selectCustomer;
-    private ExSumDecisionView selectDeviate;
+    private ExSumDecisionView selectDeviateDecision;
 
     private ExSumDecisionView exSumDecisionView;
 
@@ -160,10 +161,13 @@ public class ExecutiveSummary implements Serializable {
 
         uwRuleNameList = uwRuleNameDAO.findAll();
 
+        exSummaryView = new ExSummaryView();
+        exSummaryView.reset();
         exSummaryView = exSummaryControl.getExSummaryViewByWorkCaseId(workCaseId);
 
         if(exSummaryView == null){
             exSummaryView = new ExSummaryView();
+            exSummaryView.reset();
         }
 
         exSummaryView.setUwCode("6500000000");
@@ -274,7 +278,7 @@ public class ExecutiveSummary implements Serializable {
         try {
             customerId = 0;
             Cloner cloner = new Cloner();
-            exSumDecisionView = cloner.deepClone(selectDeviate);
+            exSumDecisionView = cloner.deepClone(selectDeviateDecision);
             onChangeRuleName();
             modeForButton = ModeForButton.EDIT;
         } catch (Exception e) {
@@ -303,9 +307,9 @@ public class ExecutiveSummary implements Serializable {
         context.addCallbackParam("functionComplete", complete);
     }
 
-    public void onDeleteAccount() {
-        exSummaryView.getDeleteTmpList().add(selectDeviate.getId());
-        exSummaryView.getExSumDecisionListView().remove(selectDeviate);
+    public void onDeleteDeviateDecision() {
+        exSummaryView.getDeleteTmpList().add(selectDeviateDecision.getId());
+        exSummaryView.getExSumDecisionListView().remove(selectDeviateDecision);
     }
 
     public void onChangeRuleName(){
@@ -428,16 +432,28 @@ public class ExecutiveSummary implements Serializable {
         this.uwRuleNameList = uwRuleNameList;
     }
 
-    public void setSelectDeviate(ExSumDecisionView selectDeviate) {
-        this.selectDeviate = selectDeviate;
-    }
-
     public int getRowIndex() {
         return rowIndex;
     }
 
     public void setRowIndex(int rowIndex) {
         this.rowIndex = rowIndex;
+    }
+
+    public ExSumDecisionView getSelectDeviateDecision() {
+        return selectDeviateDecision;
+    }
+
+    public void setSelectDeviateDecision(ExSumDecisionView selectDeviateDecision) {
+        this.selectDeviateDecision = selectDeviateDecision;
+    }
+
+    public ExSumReasonView getSelectDeviate() {
+        return selectDeviate;
+    }
+
+    public void setSelectDeviate(ExSumReasonView selectDeviate) {
+        this.selectDeviate = selectDeviate;
     }
 }
 
