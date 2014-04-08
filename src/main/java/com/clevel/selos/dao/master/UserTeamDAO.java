@@ -37,6 +37,15 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
     {
     }
 
+    public String teamNameById(int id)
+    {
+
+        Criteria criteria = getSession().createCriteria(UserTeam.class).add(Restrictions.eq("id",id));
+        UserTeam userTeam = (UserTeam)criteria.uniqueResult();
+
+        return userTeam.getTeam_name();
+    }
+
     public List<ReassignTeamNameId> getUserteams(int teamId,String rasearchcase)
     {
         matcheduserteamslist = new ArrayList<ReassignTeamNameId>();

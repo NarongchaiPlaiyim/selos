@@ -54,7 +54,10 @@ public class CompletedCasesWKItemsDAO extends GenericDAO<CompletedCasesWKItems,S
                     .add(Projections.property("totaltimeatuser"),"totaltimeatuser")
                     .add(Projections.property("appointmentDate"),"appointmentDate")
                     .add(Projections.property("slaenddate"), "slaenddate")
-                    .add(Projections.property("statusid"), "statusid")) ;
+                    .add(Projections.property("statusid"), "statusid")
+                    .add(Projections.property("createBy"), "createBy")
+                    .add(Projections.property("completedate"), "completedate")
+                    .add(Projections.property("createdate"),"createdate"));
 
             if(appnumberlist != null)
             {
@@ -66,10 +69,18 @@ public class CompletedCasesWKItemsDAO extends GenericDAO<CompletedCasesWKItems,S
 
                 criteria.add(Restrictions.eq("statusid",statusid))  ; //status id
             }
+
+
             if(startfromdate != null)
             {
-
-                criteria.add(Restrictions.ge("receiveddate",startfromdate))  ; //formatter.format(startfromdate)start from date
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(startfromdate);
+                cal.set(Calendar.HOUR_OF_DAY,0);
+                cal.set(Calendar.MINUTE,0);
+                cal.set(Calendar.SECOND,1);
+                startfromdate = cal.getTime();
+                cal=null;
+                criteria.add(Restrictions.ge("createdate",formatter.parse(formatter.format(startfromdate))))  ; //formatter.format(startfromdate)start from date
             }
             if(starttodate != null)
             {
@@ -79,13 +90,20 @@ public class CompletedCasesWKItemsDAO extends GenericDAO<CompletedCasesWKItems,S
                 cal.set(Calendar.MINUTE,59);
                 cal.set(Calendar.SECOND,59);
                 starttodate = cal.getTime();
+                cal=null;
 
-                criteria.add(Restrictions.le("receiveddate",starttodate));//formatter.format(starttodate)))  ; //start to date
+                criteria.add(Restrictions.le("createdate",formatter.parse(formatter.format(starttodate))));//formatter.format(starttodate)))  ; //start to date
             }
             if(terminatefromdate != null)
             {
-
-                criteria.add(Restrictions.ge("createdate",terminatefromdate))  ; // terminate from date
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(terminatefromdate);
+                cal.set(Calendar.HOUR_OF_DAY,0);
+                cal.set(Calendar.MINUTE,0);
+                cal.set(Calendar.SECOND,1);
+                terminatefromdate = cal.getTime();
+                cal=null;
+                criteria.add(Restrictions.ge("completedate",formatter.parse(formatter.format(terminatefromdate))))  ; // terminate from date
             }
             if(terminatetodate != null)
             {
@@ -95,8 +113,9 @@ public class CompletedCasesWKItemsDAO extends GenericDAO<CompletedCasesWKItems,S
                 cal.set(Calendar.MINUTE,59);
                 cal.set(Calendar.SECOND,59);
                 terminatetodate = cal.getTime();
+                cal=null;
 
-                criteria.add(Restrictions.le("createdate",terminatetodate))  ; // terminate to date
+                criteria.add(Restrictions.le("completedate",formatter.parse(formatter.format(terminatetodate))))  ; // terminate to date
             }
 
             criteria.add(Restrictions.eq("bpmActive",0))  ;
@@ -120,7 +139,7 @@ public class CompletedCasesWKItemsDAO extends GenericDAO<CompletedCasesWKItems,S
 
                 completedCasesWKItems = (CompletedCasesWKItems)iterator.next();
 
-                log.info("applicatin number :::::: is : {} ",completedCasesWKItems.getCreatedate());
+                log.info("create date::::: is : {} ",completedCasesWKItems.getCreatedate());
 
                 log.info("applicatin number :::::: is : {} ",completedCasesWKItems.getApplicationNo());
 
@@ -143,6 +162,7 @@ public class CompletedCasesWKItemsDAO extends GenericDAO<CompletedCasesWKItems,S
                 log.info("requesttype id :::::: is : {} ",completedCasesWKItems.getRequesttypeid());
 
                 log.info(" wobnumber :::::: is : {} ",completedCasesWKItems.getWobnumber());
+                log.info(" complete date :::::: is : {} ",completedCasesWKItems.getCompletedate());
 
             }
 

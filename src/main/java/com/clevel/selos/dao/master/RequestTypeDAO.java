@@ -25,4 +25,13 @@ public class RequestTypeDAO extends GenericDAO<RequestType, Integer> {
         List<RequestType> list = criteria.list();
         return list;
     }
+
+    public String requestTypeById(Integer id)
+    {
+        log.info("Request Type ID :",id);
+        Criteria criteria = getSession().createCriteria(getEntityClass()).add(Restrictions.eq("id",id));
+        RequestType requestType = (RequestType)criteria.uniqueResult();
+        log.info("Request Type Description :",requestType.getName());
+        return requestType.getName();
+    }
 }

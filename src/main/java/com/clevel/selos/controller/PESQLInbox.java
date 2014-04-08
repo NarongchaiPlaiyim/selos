@@ -87,8 +87,12 @@ public class PESQLInbox implements Serializable
                 String isLocked = (String) session.getAttribute("isLocked");
 
                 if(isLocked.equalsIgnoreCase("true")) {
-                    String wobNum = (String)session.getAttribute("wobNum");
-                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNum,(Integer)session.getAttribute("fetchType"));
+                    if(session.getAttribute("wobNum")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
+                    {
+                        String wobNum = (String)session.getAttribute("wobNum");
+                        bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNum,(Integer)session.getAttribute("fetchType"));
+                    }
+
                 } else {
                     session.removeAttribute("isLocked");
                 }

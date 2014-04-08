@@ -18,9 +18,16 @@ public class CompletedCasesWKItems implements Serializable
     @Column(name = "app_number")
     private String applicationNo;
 
+    @Column(name = "create_by")
+    private String createBy;
+
     @Column(name = "create_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdate;
+
+    @Column(name = "complete_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date completedate;
 
     @Column(name = "wob_number")
     private String wobnumber;
@@ -37,19 +44,6 @@ public class CompletedCasesWKItems implements Serializable
 
     @Column(name = "bpm_active")
     private Integer bpmActive;
-
-
-    public Date getReceiveddate() {
-        return receiveddate;
-    }
-
-    public void setReceiveddate(Date receiveddate) {
-        this.receiveddate = receiveddate;
-    }
-
-    @Column(name = "received_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date receiveddate;
 
     @Column(name = "sla_end_date")
     private Date slaenddate;
@@ -72,10 +66,36 @@ public class CompletedCasesWKItems implements Serializable
     @Column(name = "from_user_id")
     private String fromuserid;
 
-
     @Column(name = "doa_level_id")
     private Integer doalevelid;
 
+    @Column(name = "received_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date receiveddate;
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public Date getCompletedate() {
+        return completedate;
+    }
+
+    public void setCompletedate(Date completedate) {
+        this.completedate = completedate;
+    }
+
+    public Date getReceiveddate() {
+        return receiveddate;
+    }
+
+    public void setReceiveddate(Date receiveddate) {
+        this.receiveddate = receiveddate;
+    }
 
     public Integer getProductgroupid() {
         return productgroupid;
