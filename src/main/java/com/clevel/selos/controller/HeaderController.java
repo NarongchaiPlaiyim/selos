@@ -338,9 +338,9 @@ public class HeaderController implements Serializable {
             requestPricing = true;
             //check for pricing request
             if(requestPricingFlag==1){
-                //int pricingDOA = fullApplicationControl.getPricingDOALevel(workCaseId);
-                int pricingDOA = 4;
-                if(pricingDOA != 0){
+                //pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
+                pricingDOALevel = PricingDOAValue.CSSO_DOA.value();
+                if(pricingDOALevel != 0){
                     zmEndorseUserId = "";
                     zmUserId = "";
                     rgmUserId = "";
@@ -357,18 +357,18 @@ public class HeaderController implements Serializable {
 
                     zmUserList = fullApplicationControl.getUserList(user);
 
-                    if(pricingDOA >= PricingDOAValue.RGM_DOA.value()){
+                    if(pricingDOALevel >= PricingDOAValue.RGM_DOA.value()){
                         isSubmitToRGM = true;
                     }
 
-                    if(pricingDOA >= PricingDOAValue.GH_DOA.value()){
+                    if(pricingDOALevel >= PricingDOAValue.GH_DOA.value()){
                         isSubmitToGHM = true;
                     }
 
-                    if(pricingDOA >= PricingDOAValue.CSSO_DOA.value()){
+                    if(pricingDOALevel >= PricingDOAValue.CSSO_DOA.value()){
                         isSubmitToCSSO = true;
                     }
-                    log.debug("pricingDOALevel ::: {}", pricingDOA);
+                    log.debug("pricingDOALevel ::: {}", pricingDOALevel);
                     RequestContext.getCurrentInstance().execute("submitZMDlg.show()");
                 } else {
                     messageHeader = "Exception.";
