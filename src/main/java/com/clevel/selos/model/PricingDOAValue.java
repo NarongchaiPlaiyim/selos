@@ -1,6 +1,7 @@
 package com.clevel.selos.model;
 
 public enum PricingDOAValue {
+    NO_DOA(0),
     ZM_DOA(1),
     RGM_DOA(2),
     GH_DOA(3),

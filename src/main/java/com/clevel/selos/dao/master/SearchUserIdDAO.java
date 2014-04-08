@@ -45,7 +45,7 @@ public class SearchUserIdDAO extends GenericDAO<SearchUserId,Integer>
 
         int id;
 
-        int workcaseid;
+        int workcaseid = 0 ;
 
         while(iterator.hasNext() == true)
         {
@@ -55,7 +55,10 @@ public class SearchUserIdDAO extends GenericDAO<SearchUserId,Integer>
 
             id = searchUserId.getId();
 
-            workcaseid = searchUserId.getWorkcaseid();
+            if(searchUserId.getWorkcaseid()!=null)
+            {
+                workcaseid = searchUserId.getWorkcaseid();
+            }
 
             log.info("id value is : {}",id);
 

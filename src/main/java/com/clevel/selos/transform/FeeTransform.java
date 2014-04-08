@@ -128,7 +128,9 @@ public class FeeTransform extends Transform{
                 feeDetail.setDescription(newFeeDetailView.getCommitmentFee().getDescription());
                 feeDetail.setWorkCase(workCase);
                 feeDetailList.add(feeDetail);
-            }else if(!Util.isNull(newFeeDetailView.getCancellationFee())){ // CancellationFee
+            }
+
+            if(!Util.isNull(newFeeDetailView.getCancellationFee())){ // CancellationFee
                 feeDetail = new FeeDetail();
                 NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(newFeeDetailView.getNewCreditDetailView().getId());
                 FeeType feeType = feeTypeDAO.findByBRMSCode(newFeeDetailView.getCancellationFee().getFeeTypeView().getBrmsCode());
@@ -144,7 +146,9 @@ public class FeeTransform extends Transform{
                 feeDetail.setDescription(newFeeDetailView.getCancellationFee().getDescription());
                 feeDetail.setWorkCase(workCase);
                 feeDetailList.add(feeDetail);
-            }else if(!Util.isNull(newFeeDetailView.getExtensionFee())){ // ExtensionFee
+            }
+
+            if(!Util.isNull(newFeeDetailView.getExtensionFee())){ // ExtensionFee
                 feeDetail = new FeeDetail();
                 NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(newFeeDetailView.getNewCreditDetailView().getId());
                 FeeType feeType = feeTypeDAO.findByBRMSCode(newFeeDetailView.getExtensionFee().getFeeTypeView().getBrmsCode());
@@ -160,7 +164,9 @@ public class FeeTransform extends Transform{
                 feeDetail.setDescription(newFeeDetailView.getExtensionFee().getDescription());
                 feeDetail.setWorkCase(workCase);
                 feeDetailList.add(feeDetail);
-            }else if(!Util.isNull(newFeeDetailView.getPrepaymentFee())){ // PrepaymentFee
+            }
+
+            if(!Util.isNull(newFeeDetailView.getPrepaymentFee())){ // PrepaymentFee
                 feeDetail = new FeeDetail();
                 NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(newFeeDetailView.getNewCreditDetailView().getId());
                 FeeType feeType = feeTypeDAO.findByBRMSCode(newFeeDetailView.getPrepaymentFee().getFeeTypeView().getBrmsCode());
@@ -176,7 +182,9 @@ public class FeeTransform extends Transform{
                 feeDetail.setDescription(newFeeDetailView.getPrepaymentFee().getDescription());
                 feeDetail.setWorkCase(workCase);
                 feeDetailList.add(feeDetail);
-            }else if(!Util.isNull(newFeeDetailView.getStandardFrontEndFee())){ // StandardFrontEndFee
+            }
+
+            if(!Util.isNull(newFeeDetailView.getStandardFrontEndFee())){ // StandardFrontEndFee
                 feeDetail = new FeeDetail();
                 NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(newFeeDetailView.getNewCreditDetailView().getId());
                 FeeType feeType = feeTypeDAO.findByBRMSCode(newFeeDetailView.getStandardFrontEndFee().getFeeTypeView().getBrmsCode());
@@ -206,6 +214,7 @@ public class FeeTransform extends Transform{
         FeeDetailView feeDetailView;
        for(FeeDetail feeDetail:feeDetailList){
            feeDetailView = new FeeDetailView();
+           feeDetailView.setId(feeDetail.getId());
            feeDetailView.setCreditDetailViewId(feeDetail.getNewCreditDetail().getId());
            feeDetailView.setDescription(feeDetail.getDescription());
            feeDetailView.setFeeLevel(feeDetail.getFeeLevel());

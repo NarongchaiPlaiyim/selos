@@ -583,6 +583,12 @@ function handleSubmitZMDialogRequest(xhr, status, args) {
     }
 }
 
+function handleSubmitUWDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        submitUWDlg.hide();
+    }
+}
+
 function handleAssignABDMDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
         assignABDMDlg.hide();
@@ -845,6 +851,12 @@ function handlePrintRerportDialogRequest(xhr, status, args) {
 function handleConditionInfoRequest(xhr, status, args) {
     if (args.functionComplete) {
         conditionDlg.hide();
+    }
+}
+
+function handleSubmitAADCDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        submitAADCDlg.hide();
     }
 }
 

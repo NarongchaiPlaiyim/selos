@@ -9,10 +9,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "wrk_uwresult_detail")
-public class UWRuleResultDetail {
+public class UWRuleResultDetail implements Serializable {
 
     @Id
     @SequenceGenerator(name = "SEQ_WRK_UW_RULE_RESULT_DET_ID", sequenceName = "SEQ_WRK_UW_RULE_RESULT_DET_ID", allocationSize = 1)

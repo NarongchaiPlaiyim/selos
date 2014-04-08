@@ -1016,7 +1016,8 @@
                                     <h:outputText value="#{msg.get('app.exSummary.deviation.label.applicationResult')}"/>
                                     <p:spacer width="10px;" />
                                     <h:outputText class="result #{executiveSummary.exSummaryView.applicationColorResult.resultClass}"
-                                            value="#{executiveSummary.exSummaryView.applicationColorResult}"/>
+                                            value="#{executiveSummary.exSummaryView.applicationColorResult}"
+                                            rendered="#{executiveSummary.exSummaryView.applicationColorResult != null}"/>
                                     <p:spacer width="10px;" />
                                     <h:outputText value="#{executiveSummary.exSummaryView.applicationResult}"/>
                                 </td>
