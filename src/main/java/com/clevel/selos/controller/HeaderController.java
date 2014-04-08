@@ -531,6 +531,29 @@ public class HeaderController implements Serializable {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
+    public void onSubmitUWFromZM(){
+        log.debug("onSubmitUWFromZM ::: starting...");
+        boolean complete = false;
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            String queueName = session.getAttribute("queueName").toString();
+            fullApplicationControl.submitToUWFromZM(queueName, workCaseId);
+            messageHeader = "Information.";
+            message = "Submit to UW From ZM success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            complete = true;
+            log.debug("onSubmitUWFromZM ::: success.");
+        } catch (Exception ex){
+            messageHeader = "Exception.";
+            message = "Submit to UW From ZM failed, cause : " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            complete = false;
+            log.error("onSubmitUWFromZM ::: exception occurred : ", ex);
+        }
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
     public void onOpenSubmitUW2(){
         log.debug("onOpenSubmitUW ::: starting...");
         HttpSession session = FacesUtil.getSession(true);

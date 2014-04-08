@@ -12,7 +12,7 @@
                 <!--Check Mandate Doc Prescreen-->
                 <p:commandButton id="btnChkMandatePreScreenChecker" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
                                  rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1002}"
-                                 actionListener="#{headerController.onCheckMandateForCheckerDialog()}"
+                                 actionListener="#{headerController.onCheckMandateDialog()}"
                                  oncomplete="checkMandateDlg.show()"
                                  update=":frmMain:checkMandatePanel">
                     <p:resetInput target=":frmMain:checkMandatePanel"/>

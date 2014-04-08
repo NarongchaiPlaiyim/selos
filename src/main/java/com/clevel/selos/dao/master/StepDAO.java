@@ -25,4 +25,14 @@ public class StepDAO extends GenericDAO<Step, Long> {
 
         return stepId;
     }
+
+    public String stepNameById(int id)
+    {
+
+        long longId = new Integer(id).longValue();
+        Criteria criteria = getSession().createCriteria(getEntityClass()).add(Restrictions.eq("id",longId));
+        Step step = (Step)criteria.uniqueResult();
+
+        return step.getDescription();
+    }
 }
