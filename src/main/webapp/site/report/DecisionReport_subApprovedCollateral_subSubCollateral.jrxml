@@ -180,7 +180,7 @@
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 				</textElement>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="4939a6f2-b23f-447c-b6dd-da7de5482b79" style="detail" stretchType="RelativeToBandHeight" x="507" y="0" width="48" height="28"/>
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
@@ -188,7 +188,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{mortgageValue}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="b469be18-ff60-4ebb-8073-c7ec909f1a66" style="detail" stretchType="RelativeToBandHeight" x="455" y="0" width="52" height="28"/>
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
