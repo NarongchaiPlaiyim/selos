@@ -150,6 +150,7 @@ public class TCGInfoControl extends BusinessControl {
         return tcgDetailViewList;
     }
 
+    //TODO find LTV Percent
     public void toCalculateLtvValue(long workCaseId, TCGView tcgView, List<TCGDetailView> tcgDetailViewList) {
         log.debug("toCalculateLtvValue LTV Value of all collateral ::  ");
 

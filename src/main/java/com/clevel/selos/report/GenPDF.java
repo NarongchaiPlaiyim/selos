@@ -2,12 +2,11 @@ package com.clevel.selos.report;
 
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.view.ExSummaryView;
 import com.clevel.selos.model.view.ReportView;
 import com.clevel.selos.report.template.PDFAppraisalAppointment;
 import com.clevel.selos.report.template.PDFDecision;
-import com.clevel.selos.report.template.PDFExecutive_Summary;
-import com.clevel.selos.report.template.PDFReject_Letter;
+import com.clevel.selos.report.template.PDFExecutiveSummary;
+import com.clevel.selos.report.template.PDFRejectLetter;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -53,10 +52,10 @@ public class GenPDF extends ReportService implements Serializable {
     WorkCase workCase; // ห้าม @Inject
 
     @Inject
-    PDFExecutive_Summary pdfExecutiveSummary;
+    PDFExecutiveSummary pdfExecutiveSummary;
 
     @Inject
-    PDFReject_Letter pdfReject_letter;
+    PDFRejectLetter pdfReject_letter;
 
     @Inject
     PDFDecision pdfDecision;
@@ -100,7 +99,7 @@ public class GenPDF extends ReportService implements Serializable {
     public void setNameReport(){
         init();
         log.info("On setNameReport()");
-        String nameOpShect = "_OpShect.pdf";
+        String nameOpShect = "_OpSheet.pdf";
         String nameExSum = "_ExSum.pdf";
         String nameRejectLetter = "_RejectLetter.pdf";
         String nameAppraisal = "_AppraisalAppointment.pdf";

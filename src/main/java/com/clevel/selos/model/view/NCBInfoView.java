@@ -25,17 +25,21 @@ public class NCBInfoView implements Serializable {
     private String nplFlagText;
     private boolean nplTMBFlag;
     private int nplTMBMonth;
+    private String nplTMBMonthStr;
     private int nplTMBYear;
     private boolean nplOtherFlag;
     private int nplOtherMonth;
+    private String nplOtherMonthStr;
     private int nplOtherYear;
     private int tdrFlag;
     private String tdrFlagText;
     private boolean tdrTMBFlag;
     private int tdrTMBMonth;
+    private String tdrTMBMonthStr;
     private int tdrTMBYear;
     private boolean tdrOtherFlag;
     private int tdrOtherMonth;
+    private String tdrOtherMonthStr;
     private int tdrOtherYear;
     private String remark;
     private TDRCondition tdrCondition;
@@ -68,16 +72,20 @@ public class NCBInfoView implements Serializable {
         this.nplFlag = 0;
         this.nplTMBFlag = false;
         this.nplTMBMonth = 0;
+        this.nplTMBMonthStr = "";
         this.nplTMBYear = 0;
         this.nplOtherFlag = false;
         this.nplOtherMonth = 0;
+        this.nplOtherMonthStr = "";
         this.nplOtherYear = 0;
         this.tdrFlag = 0;
         this.tdrTMBFlag = false;
         this.tdrTMBMonth = 0;
+        this.tdrTMBMonthStr = "";
         this.tdrTMBYear = 0;
         this.tdrOtherFlag = false;
         this.tdrOtherMonth = 0;
+        this.tdrOtherMonthStr = "";
         this.tdrOtherYear = 0;
         this.remark = "";
         this.tdrCondition = new TDRCondition();
@@ -456,6 +464,38 @@ public class NCBInfoView implements Serializable {
         this.enquiryDate = enquiryDate;
     }
 
+    public String getNplTMBMonthStr() {
+        return nplTMBMonthStr;
+    }
+
+    public void setNplTMBMonthStr(String nplTMBMonthStr) {
+        this.nplTMBMonthStr = nplTMBMonthStr;
+    }
+
+    public String getNplOtherMonthStr() {
+        return nplOtherMonthStr;
+    }
+
+    public void setNplOtherMonthStr(String nplOtherMonthStr) {
+        this.nplOtherMonthStr = nplOtherMonthStr;
+    }
+
+    public String getTdrTMBMonthStr() {
+        return tdrTMBMonthStr;
+    }
+
+    public void setTdrTMBMonthStr(String tdrTMBMonthStr) {
+        this.tdrTMBMonthStr = tdrTMBMonthStr;
+    }
+
+    public String getTdrOtherMonthStr() {
+        return tdrOtherMonthStr;
+    }
+
+    public void setTdrOtherMonthStr(String tdrOtherMonthStr) {
+        this.tdrOtherMonthStr = tdrOtherMonthStr;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -463,6 +503,7 @@ public class NCBInfoView implements Serializable {
                 .append("customerId", customerId)
                 .append("ncbCusMarriageStatus", ncbCusMarriageStatus)
                 .append("checkingDate", checkingDate)
+                .append("enquiryDate", enquiryDate)
                 .append("ncbLastInfoAsOfDate", ncbLastInfoAsOfDate)
                 .append("enquiry", enquiry)
                 .append("checkIn6Month", checkIn6Month)
@@ -474,17 +515,21 @@ public class NCBInfoView implements Serializable {
                 .append("nplFlagText", nplFlagText)
                 .append("nplTMBFlag", nplTMBFlag)
                 .append("nplTMBMonth", nplTMBMonth)
+                .append("nplTMBMonthStr", nplTMBMonthStr)
                 .append("nplTMBYear", nplTMBYear)
                 .append("nplOtherFlag", nplOtherFlag)
                 .append("nplOtherMonth", nplOtherMonth)
+                .append("nplOtherMonthStr", nplOtherMonthStr)
                 .append("nplOtherYear", nplOtherYear)
                 .append("tdrFlag", tdrFlag)
                 .append("tdrFlagText", tdrFlagText)
                 .append("tdrTMBFlag", tdrTMBFlag)
                 .append("tdrTMBMonth", tdrTMBMonth)
+                .append("tdrTMBMonthStr", tdrTMBMonthStr)
                 .append("tdrTMBYear", tdrTMBYear)
                 .append("tdrOtherFlag", tdrOtherFlag)
                 .append("tdrOtherMonth", tdrOtherMonth)
+                .append("tdrOtherMonthStr", tdrOtherMonthStr)
                 .append("tdrOtherYear", tdrOtherYear)
                 .append("remark", remark)
                 .append("tdrCondition", tdrCondition)

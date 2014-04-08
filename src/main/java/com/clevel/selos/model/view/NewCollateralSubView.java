@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -17,6 +18,7 @@ public class NewCollateralSubView implements Serializable {
     private String collID;
     private String headCollID;
     private SubCollateralType subCollateralType;
+    private CollateralType headCollType;
     private String address;
     private String landOffice;
     private String titleDeed;
@@ -56,6 +58,7 @@ public class NewCollateralSubView implements Serializable {
         this.mortgageList = new ArrayList<MortgageTypeView>();
         this.relatedWithList = new ArrayList<NewCollateralSubView>();
         this.collateralOwnerUW = new CustomerInfoView();
+        this.headCollType = new CollateralType();
     }
 
     public int getLineNo() {
@@ -258,6 +261,14 @@ public class NewCollateralSubView implements Serializable {
         this.headCollID = headCollID;
     }
 
+    public CollateralType getHeadCollType() {
+        return headCollType;
+    }
+
+    public void setHeadCollType(CollateralType headCollType) {
+        this.headCollType = headCollType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -266,6 +277,7 @@ public class NewCollateralSubView implements Serializable {
                 .append("collID", collID)
                 .append("headCollID", headCollID)
                 .append("subCollateralType", subCollateralType)
+                .append("headCollType", headCollType)
                 .append("address", address)
                 .append("landOffice", landOffice)
                 .append("titleDeed", titleDeed)
@@ -283,6 +295,9 @@ public class NewCollateralSubView implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("usage", usage)
+                .append("typeOfUsage", typeOfUsage)
+                .append("lineNo", lineNo)
                 .toString();
     }
 }

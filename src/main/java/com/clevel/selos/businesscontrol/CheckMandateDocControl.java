@@ -103,7 +103,7 @@ public class CheckMandateDocControl extends BusinessControl{
     }
 
     public CheckMandateDocView  getMandateDocViewByWorkCasePreScreenId(final long workCasePreScreenId){
-        log.debug("-- getMandateDocViewByWorkCasePreScreenId WorkCaseId : {}", workCasePreScreenId);
+        log.debug("-- getMandateDocViewByWorkCasePreScreenId WorkCasePreScreenId : {}", workCasePreScreenId);
         try {
             mandateDocResponseView = brmsControl.getDocCustomerForPrescreen(workCasePreScreenId);
             if(!Util.isNull(mandateDocResponseView) && ActionResult.SUCCESS.equals(mandateDocResponseView.getActionResult())){
@@ -223,7 +223,7 @@ public class CheckMandateDocControl extends BusinessControl{
                 log.debug("-- Find by work case id = {} BasicInfo is {}   ", workCaseId, basicInfo);
             }
         } catch (Exception e){
-            log.error("-- Exception while call ECM {}", e.getMessage());
+            log.error("-- Exception while call ECM {}", e);
         }
 
         //BRMS

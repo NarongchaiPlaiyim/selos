@@ -2974,7 +2974,7 @@
                                         <td class="title">#{msg.get('app.decision.label.appraisalDate')}</td>
                                         <td class="left" colspan="3">
                                             <h:outputText value="#{proposeColl.appraisalDate}">
-                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                             </h:outputText>
                                         </td>
                                     </tr>
@@ -3274,7 +3274,7 @@
                                         <td class="title">#{msg.get('app.decision.label.appraisalDate')}</td>
                                         <td class="left" colspan="3">
                                             <h:outputText value="#{proposeColl.appraisalDate}">
-                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                             </h:outputText>
                                         </td>
                                     </tr>
@@ -3923,7 +3923,7 @@
 
                                     <p:column styleClass="center top">
                                         <h:outputText value="#{followUpCondition.followDate}">
-                                            <f:convertDateTime pattern="dd/MM/yyyy" locale="en"/>
+                                            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                         </h:outputText>
                                     </p:column>
 
@@ -4074,7 +4074,7 @@
 
                                     <p:column styleClass="center top">
                                         <h:outputText value="#{approvalHistory.submitDate}">
-                                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
                                         </h:outputText>
                                     </p:column>
 
@@ -4165,7 +4165,7 @@
                                                                     </td>
                                                                     <td class="left" style="border-style:none !important;">
                                                                         <h:outputText value="#{decision.approvalHistoryView.submitDate}">
-                                                                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                                                                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
                                                                         </h:outputText>
                                                                     </td>
                                                                 </tr>
@@ -4248,7 +4248,8 @@
           header="Approve Credit Information"
           modal="true"
           onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"
-          width="900" height="500">
+          width="900" height="500"
+          closable="false" closeOnEscape="false">
     <ui:include src="dialog/decisionProposeCreditDialog.xhtml"/>
 </p:dialog>
 
@@ -4266,7 +4267,8 @@
           header="Approve Collateral Information"
           modal="true"
           onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"
-          width="1000" height="500">
+          width="1000" height="500"
+          closable="false" closeOnEscape="false">
     <ui:include src="dialog/decisionProposeCollateralDialog.xhtml"/>
 </p:dialog>
 
@@ -4284,7 +4286,8 @@
           header="Sub Collateral Information"
           modal="true"
           onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"
-          width="600" height="500">
+          width="600" height="500"
+          closable="false" closeOnEscape="false">
     <ui:include src="dialog/decisionProposeSubCollDialog.xhtml"/>
 </p:dialog>
 
@@ -4302,7 +4305,8 @@
           header="Approve Guarantor Information"
           modal="true"
           onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"
-          width="900">
+          width="900"
+          closable="false" closeOnEscape="false">
     <ui:include src="dialog/decisionProposeGuarantorDialog.xhtml"/>
 </p:dialog>
 
@@ -4327,7 +4331,8 @@
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
                      severity="#{decision.severity}"
-                     header="#{decision.messageHeader}" message="#{decision.message}">
+                     header="#{decision.messageHeader}" message="#{decision.message}"
+                     closable="false" closeOnEscape="false">
         <p:commandButton value="OK"
                          process="@this"
                          update="frmMain"

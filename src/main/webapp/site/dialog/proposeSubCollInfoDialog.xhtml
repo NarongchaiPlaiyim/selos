@@ -242,6 +242,8 @@
     </td>
 </tr>
 
+
+<!--
 <tr>
     <td class="title">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.relatedWith')}"/>
@@ -264,7 +266,6 @@
                     </p:selectOneMenu>
                 </td>
                 <td>
-
                     <p:commandButton
                             id="addRelatedWithButton"
                             value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
@@ -319,6 +320,7 @@
         </p:dataTable>
     </td>
 </tr>
+-->
 
 <tr>
     <td class="title">
@@ -367,7 +369,6 @@
                 id="saveSubColl"
                 value="#{msg.get('app.credit.facility.propose.okButton')}"
                 binding="#{addSubCollDlg}"
-                styleClass="small"
                 actionListener="#{creditFacPropose.onSaveSubCollateral()}"
                 process=":subCollateralDlgForm"
                 update=":subCollateralDlgForm,:collateralDlgForm,:msgBoxSystemMessagePanel"
