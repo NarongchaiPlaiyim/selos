@@ -166,10 +166,10 @@ public class CreditFacProposeControl extends BusinessControl {
                 List<FeeDetail> feeDetailList = feeDetailDAO.findAllByWorkCaseId(workCaseId);
                 if (feeDetailList.size() > 0) {
                     log.debug("feeDetailList size:: {}", feeDetailList.size());
-//                    List<FeeDetailView> feeDetailViewList = feeTransform.transformToView(feeDetailList);
-//                    log.debug("feeDetailViewList : {}", feeDetailViewList);
-//                    List<NewFeeDetailView> newFeeDetailViewList = transFormNewFeeDetailViewList(feeDetailViewList);
-//                    newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
+                    List<FeeDetailView> feeDetailViewList = feeTransform.transformToView(feeDetailList);
+                    log.debug("feeDetailViewList : {}", feeDetailViewList);
+                    List<NewFeeDetailView> newFeeDetailViewList = transFormNewFeeDetailViewList(feeDetailViewList);
+                    newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
                 }
 
                 List<NewCreditDetail> newCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility);
