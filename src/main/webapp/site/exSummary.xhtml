@@ -1015,23 +1015,22 @@
                                 <td  colspan="2" style="text-align: left;width:10px;" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.deviation.label.applicationResult')}"/>
                                     <p:spacer width="10px;" />
-                                    <h:outputText value="#{executiveSummary.exSummaryView.applicationColorResult.code == 'R' ? 'Red'
-                                                            : executiveSummary.exSummaryView.applicationColorResult.code == 'G' ? 'Green'
-                                                            : executiveSummary.exSummaryView.applicationColorResult.code == 'Y' ? 'Yellow' : ''}"
-                                                  style="background-color: #{executiveSummary.exSummaryView.applicationColorResult.colorCode}"/>
+                                    <h:outputText class="result #{executiveSummary.exSummaryView.applicationColorResult.resultClass}"
+                                            value="#{executiveSummary.exSummaryView.applicationColorResult}"
+                                            rendered="#{executiveSummary.exSummaryView.applicationColorResult != null}"/>
                                     <p:spacer width="10px;" />
                                     <h:outputText value="#{executiveSummary.exSummaryView.applicationResult}"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <p:commandButton
-                                            id="btnAdd"
-                                            value="#{msg.get('app.addButton')}"
-                                            styleClass="smaller"
-                                            process="@this"
-                                            update=":frmMain">
-                                        <p:resetInput target=":frmMain"/>
+                                    <p:commandButton value="#{msg.get('app.button.add')}"
+                                                     styleClass="smaller"
+                                                     process="@this"
+                                                     actionListener="#{executiveSummary.onInitAddDeviate}"
+                                                     update=":exSumDeviateDlgForm"
+                                                     oncomplete="exSumDeviateDlg.show();">
+                                        <p:resetInput target=":exSumDeviateDlgForm"/>
                                     </p:commandButton>
                                 </td>
                             </tr>
@@ -1063,8 +1062,8 @@
                                             <h:outputText value="#{rowIndex+1}"/>
                                         </p:column>
 
-                                        <p:column styleClass="center">
-                                            <h:outputText value="#{itemDecision.flag.code}" style="background-color: #{itemDecision.flag.colorCode}"/>
+                                        <p:column styleClass="center #{itemDecision.flag.resultClass}">
+                                                <h:outputText value="#{itemDecision.flag}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
@@ -1080,11 +1079,35 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemDecision.deviationReason}"/>
+                                            <h:inputTextarea value="#{itemDecision.deviationReason}" style="width: 100%; margin-top: 5px; margin-left: -3px;"
+                                                             required="#{itemDecision.flag == 'RED'}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <p:column headerText="" styleClass="center" style="width:54px;">
+                                                <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                                 icon="ui-icon-pencil"
+                                                                 action="#{executiveSummary.onSelectEditDeviate()}"
+                                                                 update=":exSumDeviateDlgForm"
+                                                                 oncomplete="exSumDeviateDlg.show();"
+                                                                 rendered="#{itemDecision.canEdit}">
+                                                    <f:setPropertyActionListener value="#{itemDecision}"
+                                                                                 target="#{executiveSummary.selectDeviateDecision}"/>
+                                                    <f:setPropertyActionListener value="#{rowIndex}"
+                                                                                 target="#{executiveSummary.rowIndex}"/>
+                                                    <p:resetInput target=":exSumDeviateDlgForm"/>
+                                                </p:commandButton>
+
+                                                <p:commandButton title="#{msg.get('app.button.remove')}"
+                                                                 icon="ui-icon-trash"
+                                                                 oncomplete="confirmDeleteDeviateDecisionDlg.show()"
+                                                                 update=":frmMain:decisionTable"
+                                                                 process="@form"
+                                                                 rendered="#{itemDecision.canEdit}">
+                                                    <f:setPropertyActionListener value="#{itemDecision}"
+                                                                                 target="#{executiveSummary.selectDeviateDecision}"/>
+                                                </p:commandButton>
+                                            </p:column>
                                         </p:column>
 
                                     </p:dataTable>
@@ -1243,7 +1266,6 @@
                                                      onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
                                 </td>
                             </tr>
-
                         </table>
                     </td>
                 </tr>
@@ -1430,6 +1452,15 @@
         <ui:param name="update" value=":frmMain"/>
     </ui:include>
 
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteDeviateDecisionDialog"/>
+        <ui:param name="name" value="confirmDeleteDeviateDecisionDlg"/>
+        <ui:param name="formId" value="frmconfirmDeleteDeviateDecision"/>
+        <ui:param name="controller" value="#{executiveSummary}"/>
+        <ui:param name="action" value="onDeleteDeviateDecision"/>
+        <ui:param name="update" value=":frmMain"/>
+    </ui:include>
+
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
         <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" closable="false"
                          severity="#{executiveSummary.severity}" header="#{executiveSummary.messageHeader}">
@@ -1442,6 +1473,11 @@
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
         </p:confirmDialog>
     </p:panel>
+
+    <p:dialog id="exSumDeviateDialog" header="Deviate Information" widgetVar="exSumDeviateDlg" resizable="false"
+              modal="true" width="490" height="120" closable="false">
+        <ui:include src="dialog/exSumDeviateDialog.xhtml"/>
+    </p:dialog>
 
 </h:body>
 </f:view>

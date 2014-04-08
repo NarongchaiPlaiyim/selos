@@ -37,7 +37,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "basicInfo")
-public class BasicInfo implements Serializable {
+public class BasicInfo extends BaseController {
     @Inject
     @SELOS
     Logger log;

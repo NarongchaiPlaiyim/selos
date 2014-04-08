@@ -185,7 +185,8 @@ public class Converter implements Serializable {
                 uwRulesResult.setRuleName(resultType.getRuleName());
                 //Find if it is Group Level//
                 UWRuleType _ruleType = null;
-                if(("Group_Result").equals(resultType.getType()))
+                //if(("Group_Result").equals(resultType.getType()))
+                if(("Group_Result").equals(resultType.getStringValue()))
                     _ruleType = UWRuleType.GROUP_LEVEL;
 
                 uwRulesResult.setColor(resultType.getColor());

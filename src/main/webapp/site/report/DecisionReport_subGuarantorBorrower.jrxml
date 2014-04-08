@@ -110,7 +110,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tcgLgNo}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="72dba54f-9292-4489-bc3b-c21d5c9e2e35" style="detail" stretchType="RelativeToBandHeight" x="478" y="0" width="77" height="14" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>

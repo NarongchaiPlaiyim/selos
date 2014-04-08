@@ -98,21 +98,22 @@ public class PESQLInbox implements Serializable
                 }
             }
 
-            HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-            try {
-                log.debug("Request parameter is [id] : {}", request.getParameter("id"));
-                inboxName =  request.getParameter("id") ;
-                if(Util.isEmpty(inboxName)) inboxName = "My Box";
-                inboxViewList =  pedbExecute.getPEInbox(inboxName);
-                log.debug("onCreation ::: inboxViewList : {}", inboxViewList);
-            } catch(Exception ex) {
-                log.error("Exception while getInboxPE : ", ex);
-                message = "Error while retrieve case list.";
-                RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
-            }
         } catch (Exception e) {
             log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
             message = "Error while unlocking case.";
+            RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+        }
+
+        HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        try {
+            log.debug("Request parameter is [id] : {}", request.getParameter("id"));
+            inboxName =  request.getParameter("id") ;
+            if(Util.isEmpty(inboxName)) inboxName = "My Box";
+            inboxViewList =  pedbExecute.getPEInbox(inboxName);
+            log.debug("onCreation ::: inboxViewList : {}", inboxViewList);
+        } catch(Exception ex) {
+            log.error("Exception while getInboxPE : ", ex);
+            message = "Error while retrieve case list.";
             RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
         }
 

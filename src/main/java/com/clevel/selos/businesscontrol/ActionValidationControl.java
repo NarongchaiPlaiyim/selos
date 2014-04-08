@@ -3,7 +3,6 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.MandateFieldDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.db.master.CreditType;
 import com.clevel.selos.model.db.master.MandateField;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.view.ActionValidationResult;
@@ -31,7 +30,7 @@ public class ActionValidationControl extends BusinessControl{
     Logger logger;
 
     @Inject
-    MandateFieldDAO mandateFieldDAO;
+    private MandateFieldDAO mandateFieldDAO;
 
     @Inject
     @ValidationMessage
@@ -46,18 +45,21 @@ public class ActionValidationControl extends BusinessControl{
     private Map<String, List<MandateFieldView>> mandateFieldViewMap;
     private ActionValidationResult actionValidationResult;
 
-    public int loadActionValidation(String step, String action){
+    public int loadActionValidation(long stepId, long actionId){
+        logger.info("-- begin loadActionValidation stepId {}: actionId {}", stepId, actionId);
         mandateFieldViewMap = new HashMap<String, List<MandateFieldView>>();
-        List<MandateField> mandateFieldList = mandateFieldDAO.findActiveAll();
+        List<MandateField> mandateFieldList = mandateFieldDAO.findByAction(stepId, actionId);
+        logger.info("-- update Mandate Field {}", mandateFieldList);
 
         for(MandateField mandateField : mandateFieldList){
             MandateFieldView mandateFieldView = mandateFieldTransform.transformToView(mandateField);
             List<MandateFieldView> mandateFieldViewList = mandateFieldViewMap.get(mandateFieldView.getClassName());
-            if(mandateFieldList == null)
+            if(mandateFieldViewList == null)
                 mandateFieldViewList = new ArrayList<MandateFieldView>();
             mandateFieldViewList.add(mandateFieldView);
 
-            logger.debug("mandateFieldView {}", mandateFieldView);
+            logger.info("mandateFieldView {}", mandateFieldView);
+
             mandateFieldViewMap.put(mandateFieldView.getClassName(), mandateFieldViewList);
         }
         actionValidationResult = new ActionValidationResult();
@@ -76,39 +78,52 @@ public class ActionValidationControl extends BusinessControl{
     public boolean validate(Object object){
         if(object != null){
             Class objectClass = object.getClass();
-
+            logger.info("object class {}", objectClass.getName());
             List<MandateFieldView> mandateFieldViewList = mandateFieldViewMap.get(objectClass.getName());
             Field[] fields = objectClass.getDeclaredFields();
             for(Field field : fields){
+                logger.info("check for field name {}", field.getName());
                 field.setAccessible(true);
                 for(MandateFieldView mandateFieldView : mandateFieldViewList){
+                    logger.info("loop for mandateFieldView name {}", mandateFieldView);
                     if(field.getName().equals(mandateFieldView.getFieldName())){
+                        logger.info("found name matched field: {}, mandateFieldView: {}", field.getName(), mandateFieldView.getFieldName());
                         mandateFieldView.setChecked(Boolean.TRUE);
+                        boolean failed = false;
+
                         try{
                             Object _fieldObj = field.get(object);
-
                             if(_fieldObj == null){
-                                addMandateFieldMessageView(mandateFieldView.getFieldDesc(), mandateFieldView.getFieldDesc(),validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), mandateFieldView.getPage());
-
-                            }
-                            Class _fieldObjClass = _fieldObj.getClass();
-                            if(_fieldObjClass.equals(Integer.class.getName())){
-                                if((Integer)_fieldObj == 0){
-                                    addMandateFieldMessageView(mandateFieldView.getFieldDesc(), mandateFieldView.getFieldDesc(), validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), mandateFieldView.getPage());
-                                }
-                            } else if(_fieldObjClass.equals(Long.class.getName())){
-                                if((Long)_fieldObj == 0){
-                                    addMandateFieldMessageView(mandateFieldView.getFieldDesc(), mandateFieldView.getFieldDesc(), validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), mandateFieldView.getPage());
-                                }
-                            } else if(_fieldObjClass.equals(BigDecimal.class.getName())){
-                                if(BigDecimal.ZERO.equals((BigDecimal)_fieldObj)){
-                                    addMandateFieldMessageView(mandateFieldView.getFieldDesc(), mandateFieldView.getFieldDesc(), validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), mandateFieldView.getPage());
+                                failed = true;
+                            } else {
+                                Class _fieldObjClass = _fieldObj.getClass();
+                                if(_fieldObjClass.equals(Integer.class.getName())){
+                                    if((Integer)_fieldObj == 0){
+                                        failed = true;
+                                    }
+                                } else if(_fieldObjClass.equals(Long.class.getName())){
+                                    if((Long)_fieldObj == 0){
+                                        failed = true;
+                                    }
+                                } else if(_fieldObjClass.equals(BigDecimal.class.getName())){
+                                    if(BigDecimal.ZERO.equals((BigDecimal)_fieldObj)){
+                                        failed = true;
+                                    }
+                                } else if(_fieldObjClass.equals(List.class.getClass())){
+                                    if(((List)_fieldObj).size() == 0){
+                                        failed = true;
+                                    }
                                 }
                             }
                         } catch (IllegalAccessException iae){
                             logger.debug("Cannot validate Field to validate Field {}", field.getName());
+                            failed = true;
+                        }
+
+                        if(failed){
                             addMandateFieldMessageView(mandateFieldView.getFieldDesc(), mandateFieldView.getFieldDesc(),validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), mandateFieldView.getPage());
                         }
+                        break;
                     }
                 }
             }
@@ -131,5 +146,16 @@ public class ActionValidationControl extends BusinessControl{
         mandateFieldConfigure.setClassName("com.clevel.selos.model.db.working.NewCreditDetail");
         mandateFieldConfigure.setFieldName("creditType");
         return mandateFieldConfigureList;
+    }
+
+    public ActionValidationResult getFinalValidationResult(){
+
+        if(actionValidationResult.getMandateFieldMessageViewList().size() > 0){
+            actionValidationResult.setActionResult(ActionResult.FAILED);
+
+        } else {
+            actionValidationResult.setActionResult(ActionResult.SUCCESS);
+        }
+        return actionValidationResult;
     }
 }

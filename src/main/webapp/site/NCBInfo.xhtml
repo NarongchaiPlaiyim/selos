@@ -55,7 +55,7 @@
                     <h:outputText value="#{msg.get('app.ncbCheckingDate')}"/>
                 </td>
                 <td>
-                    <p:inputText value="#{ncbInfo.ncbInfoView.checkingDate}"
+                    <p:inputText value="#{ncbInfo.ncbInfoView.enquiryDate}"
                                   id="checkingDate"
                                   readonly="true"
                                   style="width:200px;">
@@ -144,7 +144,10 @@
                                                readonly="true"/>
                             </td>
                             <td>
-                                <p:selectOneMenu value="#{ncbInfo.ncbInfoView.nplTMBMonth}"
+                                <p:inputText id="nplTMBMonth" rendered="#{ncbInfo.nplRendered}" styleClass="medium"
+                                             disabled="true"
+                                             value="#{ncbInfo.ncbInfoView.nplTMBMonthStr}"/>
+                                <!--<p:selectOneMenu value="#{ncbInfo.ncbInfoView.nplTMBMonth}"
                                                  rendered="#{ncbInfo.nplRendered}"
                                                  disabled="true">
                                     <f:selectItem itemLabel="" itemValue="0"/>
@@ -152,15 +155,18 @@
                                                    var="MonthList"
                                                    itemValue="#{MonthList.value}"
                                                    itemLabel="#{MonthList.nameTH}"/>
-                                </p:selectOneMenu>
+                                </p:selectOneMenu>-->
                             </td>
                             <td>
-                                <p:selectOneMenu value="#{ncbInfo.ncbInfoView.nplTMBYear}"
+                                <p:inputText id="nplTMBYear" rendered="#{ncbInfo.nplRendered}" styleClass="small"
+                                             disabled="true"
+                                             value="#{ncbInfo.ncbInfoView.nplTMBYear}"/>
+                                <!--<p:selectOneMenu value="#{ncbInfo.ncbInfoView.nplTMBYear}"
                                                  rendered="#{ncbInfo.nplRendered}"
                                                  disabled="true">
                                     <f:selectItem itemLabel="" itemValue="0"/>
                                     <f:selectItems value="#{ncbInfo.yearList}"/>
-                                </p:selectOneMenu>
+                                </p:selectOneMenu>-->
                             </td>
                             <td>
                                 <p:spacer width="10px;" height="20px;"/>
@@ -176,7 +182,10 @@
                                         readonly="true"/>
                             </td>
                             <td>
-                                <p:selectOneMenu value="#{ncbInfo.ncbInfoView.nplOtherMonth}"
+                                <p:inputText id="nplOtherMonth" rendered="#{ncbInfo.nplRendered}" styleClass="medium"
+                                             disabled="true"
+                                             value="#{ncbInfo.ncbInfoView.nplOtherMonthStr}"/>
+                                <!--<p:selectOneMenu value="#{ncbInfo.ncbInfoView.nplOtherMonth}"
                                                  rendered="#{ncbInfo.nplRendered}"
                                                  disabled="true">
                                     <f:selectItem itemLabel="" itemValue="0"/>
@@ -184,15 +193,18 @@
                                                    var="MonthList"
                                                    itemValue="#{MonthList.value}"
                                                    itemLabel="#{MonthList.nameTH}"/>
-                                </p:selectOneMenu>
+                                </p:selectOneMenu>-->
                             </td>
                             <td>
-                                <p:selectOneMenu value="#{ncbInfo.ncbInfoView.nplOtherYear}"
+                                <p:inputText id="nplOtherYear" rendered="#{ncbInfo.nplRendered}" styleClass="small"
+                                             disabled="true"
+                                             value="#{ncbInfo.ncbInfoView.nplOtherYear}"/>
+                                <!--<p:selectOneMenu value="#{ncbInfo.ncbInfoView.nplOtherYear}"
                                                  rendered="#{ncbInfo.nplRendered}"
                                                  disabled="true">
                                     <f:selectItem itemLabel="" itemValue="0"/>
                                     <f:selectItems value="#{ncbInfo.yearList}"/>
-                                </p:selectOneMenu>
+                                </p:selectOneMenu>-->
                             </td>
                         </tr>
                         <tr style="display: none">
