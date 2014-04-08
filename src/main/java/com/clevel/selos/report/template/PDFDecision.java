@@ -728,7 +728,7 @@ public class PDFDecision implements Serializable {
                 approvedCollateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
                 approvedCollateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
                 approvedCollateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
-//                approvedCollateralDecisionReport.setUwDecision(Util.checkNullString(view.getUwDecision().getValue()));
+//                approvedCollateralDecisionReport.setApproveDecision(Util.checkNullString(view.getApproveDecision().getValue()));
                 if (view.getUwDecision().equals("APPROVED")){
                     approvedCollateralDecisionReport.setApproved("Approved");
                 } else if(view.getUwDecision().equals("REJECTED")){

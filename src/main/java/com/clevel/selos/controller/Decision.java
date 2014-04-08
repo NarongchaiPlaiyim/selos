@@ -242,6 +242,7 @@ public class Decision implements Serializable {
 
     // Approval History
     private ApprovalHistoryView approvalHistoryView;
+    private ApprovalHistoryView approvalHistoryPricingView;
 
     // List One Time Query on init
     private List<PrdGroupToPrdProgramView> _prdGroupToPrdProgramAll;
@@ -1963,5 +1964,13 @@ public class Decision implements Serializable {
 
     public void setNotRetrievePricing(boolean notRetrievePricing) {
         this.notRetrievePricing = notRetrievePricing;
+    }
+
+    public ApprovalHistoryView getApprovalHistoryPricingView() {
+        return approvalHistoryPricingView;
+    }
+
+    public void setApprovalHistoryPricingView(ApprovalHistoryView approvalHistoryPricingView) {
+        this.approvalHistoryPricingView = approvalHistoryPricingView;
     }
 }
