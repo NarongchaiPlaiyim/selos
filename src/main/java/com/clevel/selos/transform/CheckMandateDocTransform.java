@@ -1,15 +1,13 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.dao.master.CollateralTypeDAO;
 import com.clevel.selos.dao.working.MandateDocDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.NCB;
-import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.model.DocMandateType;
-import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.Role;
-import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.MandateDoc;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.Util;
@@ -526,7 +524,8 @@ public class CheckMandateDocTransform extends Transform {
 
     //URL
     private String getURLByFNId(final String FNId, final String token){
-        return address+"/getContent?objectStoreName="+objectStore+"&id="+FNId+"&objectType=document&ut=" + token;
+//        return address+"/getContent?objectStoreName="+objectStore+"&id="+FNId+"&objectType=document&ut=" + token;
+        return address+"/getContent?objectStoreName="+objectStore+"&vsId="+FNId+"&objectType=document&id=" + token;
     }
 
 }
