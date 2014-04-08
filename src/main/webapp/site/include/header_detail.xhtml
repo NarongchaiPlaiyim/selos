@@ -265,11 +265,9 @@
             </p:commandButton>-->
 
             <!--Submit UW2 for test-->
-           <!-- <p:commandButton id="btnReturnReview" value="Submit" styleClass="blueButton" title="Submit Review"
-                             action="#{baseController.onSubmitUW2()}"
-                             update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"
-                             rendered="true">
-
+            <!--<p:commandButton id="btnSubmitCaseToUW" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
+                             action="#{headerController.onOpenSubmitUW2()}"
+                             update=":frmMain:submitUWPanel, :frmMain:msgBoxBaseMessagePanel" >
             </p:commandButton>-->
 
             <!--Submit Return Reply for test-->
@@ -279,11 +277,11 @@
                              rendered="true">
 
             </p:commandButton>-->
-            
+
             <!-- Stage 301 - Customer acceptance -->
             <p:panel id="header_panel_301" rendered="#{headerController.stageId == 301}" styleClass="panel">
             	<!--Print Op Sheet -->
-            	<p:commandButton id="btnPrintReport301" value="#{msg.get('app.header.button.printReport')}" 
+            	<p:commandButton id="btnPrintReport301" value="#{msg.get('app.header.button.printReport')}"
                 				 styleClass="blueButton" title="#{msg.get('app.header.button.printReport')}"
                                  oncomplete="printReportDlg.show()"
                                  actionListener="#{report.setNameReport()}"
@@ -291,20 +289,20 @@
                                  rendered="#{headerController.checkButton('Print PDF')}">
                 </p:commandButton>
 				<!--Check Mandate Doc -->
-                <p:commandButton id="btnChkMandate301" value="#{msg.get('app.header.button.mandateDoc')}" 
+                <p:commandButton id="btnChkMandate301" value="#{msg.get('app.header.button.mandateDoc')}"
                 				 styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
                                  rendered="#{headerController.checkButton('Check Mandate Doc')}">
                 </p:commandButton>
-                
+
                 <!--Request for Price Reduction -->
-                <p:commandButton id="btnPriceReduction301" value="#{msg.get('app.header.button.requestPriceReduction')}" 
+                <p:commandButton id="btnPriceReduction301" value="#{msg.get('app.header.button.requestPriceReduction')}"
                 				 styleClass="blueButton" title="#{msg.get('app.header.button.requestPriceReduction')}"
                                  rendered="#{headerController.checkButton('Request for Price Reduction')}">
                 </p:commandButton>
-                
-                
+
+
                 <!--Return to BDM -->
-                <p:commandButton id="btnReturnBDM301" value="#{msg.get('app.header.button.returnToBDM')}" 
+                <p:commandButton id="btnReturnBDM301" value="#{msg.get('app.header.button.returnToBDM')}"
                 				styleClass="blueButton" title="#{msg.get('app.header.button.returnToBDM')}"
                                  rendered="#{headerController.checkButton('Return to BDM')}"
                                  actionListener="#{headerController.onOpenReturnBDMDialog()}"
@@ -312,16 +310,16 @@
                                  update=":frmMain:returnBDMPanel">
                     <p:resetInput target=":frmMain:returnBDMPanel"/>
                 </p:commandButton>
-                
+
                 <!--Return to UW2 -->
-                <p:commandButton id="btnReturnUW2_301" value="#{msg.get('app.header.button.returnToUW2')}" 
+                <p:commandButton id="btnReturnUW2_301" value="#{msg.get('app.header.button.returnToUW2')}"
                 				 styleClass="blueButton" title="#{msg.get('app.header.button.returnToBDM')}"
                                  rendered="#{headerController.checkButton('Return to UW 2')}"
                                  >
                 </p:commandButton>
-                
+
                 <!--Cancel CA -->
-                <p:commandButton id="btnCancelCA301" value="#{msg.get('app.header.button.cancelCA')}" 
+                <p:commandButton id="btnCancelCA301" value="#{msg.get('app.header.button.cancelCA')}"
                 				 styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
                                  rendered="#{headerController.checkButton('Cancel CA')}"
                                  actionListener="#{headerController.onOpenCancelCAFullApp()}"
@@ -330,12 +328,12 @@
                     <p:resetInput target=":frmMain:cancelCAFullAppPanel"/>
                 </p:commandButton>
                 <!--Submit to BDM -->
-                <p:commandButton id="btnSubmitCase301" value="#{msg.get('app.header.button.submit')}" 
+                <p:commandButton id="btnSubmitCase301" value="#{msg.get('app.header.button.submit')}"
                 				 styleClass="blueButton" title="#{msg.get('app.header.button.submit')}"
                                  rendered="#{headerController.checkButton('Submit to BDM')}"
                                 >
                 </p:commandButton>
-                
+
             </p:panel>
         </div>
         <div class="clear"></div>
@@ -388,6 +386,14 @@
                   onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
                   modal="true" width="550" height="450">
             <ui:include src="/site/dialog/submitCaseDialog.xhtml"/>
+        </p:dialog>
+    </p:panel>
+
+    <p:panel id="submitUWPanel" styleClass="panel">
+        <p:dialog id="submitUWDialog" widgetVar="submitUWDlg" header="Submit to UW"
+                  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+                  modal="true" width="550" height="450">
+            <ui:include src="/site/dialog/submitCaseUWDialog.xhtml"/>
         </p:dialog>
     </p:panel>
 

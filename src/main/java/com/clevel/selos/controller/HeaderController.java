@@ -9,9 +9,11 @@ import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ManageButton;
 import com.clevel.selos.model.PricingDOAValue;
 import com.clevel.selos.model.StepValue;
+import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.Message;
@@ -87,6 +89,7 @@ public class HeaderController implements Serializable {
     private List<User> rgmUserList;
     private List<User> ghmUserList;
     private List<User> cssoUserList;
+    private boolean requestPricing;
 
     private User user;
     //private User abdm;
@@ -133,8 +136,6 @@ public class HeaderController implements Serializable {
     private AppraisalDetailView appraisalDetailViewSelected;
     private List<AppraisalDetailView> appraisalDetailViewList;
 
-
-
     private AppraisalContactDetailView appraisalContactDetailView;
     private AppraisalContactDetailView selectAppraisalContactDetailView;
 
@@ -154,6 +155,12 @@ public class HeaderController implements Serializable {
 
     private String messageHeader;
     private String message;
+
+    //UW submit dialog
+    private List<User> uw2UserList;
+    private List<AuthorizationDOA> authorizationDOAList;
+    private long selectedDOALevel;
+    private String selectedUW2User;
 
     public HeaderController() {
     }
@@ -284,7 +291,13 @@ public class HeaderController implements Serializable {
         log.debug("onOpenCancelCAFullApp ::: starting...");
         cancalCARemark = "";
         reasonId = 0;
-        cancelReason = fullApplicationControl.getCancelReasonList();
+        try {
+            cancelReason = fullApplicationControl.getCancelReasonList();
+        } catch (Exception ex){
+            cancelReason = new ArrayList<Reason>();
+            log.error("onOpenCancelCAFullApp Exception : ",ex);
+        }
+
         log.debug("onOpenCancelCAFullApp ::: cancelReason size : {}", cancelReason.size());
     }
 
@@ -317,51 +330,53 @@ public class HeaderController implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         long workCaseId = (Long)session.getAttribute("workCaseId");
         try{
-            PricingDOAValue pricingDOA = fullApplicationControl.calculatePricingDOA(workCaseId);
-            pricingDOA = PricingDOAValue.CSSO_DOA;
-            if(!Util.isNull(pricingDOA)){
-                pricingDOALevel = pricingDOA.value();
-                zmEndorseUserId = "";
-                zmUserId = "";
-                rgmUserId = "";
-                ghmUserId = "";
-                cssoUserId = "";
+            int requestPricingFlag = fullApplicationControl.getRequestPricing(workCaseId);
+            requestPricing = Util.isTrue(requestPricingFlag);
+            //check for pricing request
+            if(requestPricingFlag==1){
+                int pricingDOA = fullApplicationControl.getPricingDOALevel(workCaseId);
+                if(pricingDOA != 0){
+                    zmEndorseUserId = "";
+                    zmUserId = "";
+                    rgmUserId = "";
+                    ghmUserId = "";
+                    cssoUserId = "";
 
-                zmEndorseRemark = "";
-                submitRemark = "";
-                slaRemark = "";
+                    zmEndorseRemark = "";
+                    submitRemark = "";
+                    slaRemark = "";
 
-                isSubmitToRGM = false;
-                isSubmitToGHM = false;
-                isSubmitToCSSO = false;
+                    isSubmitToRGM = false;
+                    isSubmitToGHM = false;
+                    isSubmitToCSSO = false;
 
-                zmUserList = fullApplicationControl.getUserList(user);
+                    zmUserList = fullApplicationControl.getUserList(user);
 
-                if(pricingDOA.value() >= PricingDOAValue.RGM_DOA.value()){
-                    //rgmUserList = fullApplicationControl.getRMUserList();
-                    isSubmitToRGM = true;
+                    if(pricingDOA >= PricingDOAValue.RGM_DOA.value()){
+                        isSubmitToRGM = true;
+                    }
+
+                    if(pricingDOA >= PricingDOAValue.GH_DOA.value()){
+                        isSubmitToGHM = true;
+                    }
+
+                    if(pricingDOA >= PricingDOAValue.CSSO_DOA.value()){
+                        isSubmitToCSSO = true;
+                    }
+                    log.debug("pricingDOALevel ::: {}", pricingDOA);
+                    RequestContext.getCurrentInstance().execute("submitZMDlg.show()");
+                } else {
+                    messageHeader = "Exception.";
+                    message = "Can not find Pricing DOA Level. Please check value for calculate DOA Level";
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
                 }
-
-                if(pricingDOA.value() >= PricingDOAValue.GH_DOA.value()){
-                    //ghmUserList = fullApplicationControl.getHeadUserList();
-                    isSubmitToGHM = true;
-                }
-
-                if(pricingDOA.value() >= PricingDOAValue.CSSO_DOA.value()){
-                    //cssoUserList = fullApplicationControl.getCSSOUserList();
-                    isSubmitToCSSO = true;
-                }
-
-                log.debug("pricingDOALevel ::: {}", pricingDOA);
-                RequestContext.getCurrentInstance().execute("submitZMDlg.show()");
             } else {
-                messageHeader = "Exception.";
-                message = "Can not find Pricing DOA Level. Please check value for calculate DOA Level";
-                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                log.debug("No pricing request");
+                RequestContext.getCurrentInstance().execute("submitZMDlg.show()");
             }
         } catch (Exception ex){
             messageHeader = "Exception.";
-            message = "Can not find Pricing DOA Level. Please check value for calculate DOA Level";
+            message = "Exception is occured, cause : "+ex.getMessage();
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
     }
@@ -374,7 +389,7 @@ public class HeaderController implements Serializable {
                 HttpSession session = FacesUtil.getSession(true);
                 long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
                 String queueName = session.getAttribute("queueName").toString();
-                fullApplicationControl.submitToZMPricing(zmUserId, rgmUserId, ghmUserId, cssoUserId, queueName, workCaseId);
+                fullApplicationControl.submitToZMPricing(zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, queueName, workCaseId);
                 messageHeader = "Information.";
                 message = "Submit to Zone Manager success.";
                 RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
@@ -513,6 +528,99 @@ public class HeaderController implements Serializable {
             complete = false;
             log.error("onSubmitUWFromCSSO ::: exception occurred : ", ex);
         }
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
+    public void onOpenSubmitUW2(){
+        log.debug("onOpenSubmitUW ::: starting...");
+        HttpSession session = FacesUtil.getSession(true);
+        long workCaseId = (Long)session.getAttribute("workCaseId");
+        selectedUW2User = "";
+        selectedDOALevel = 0;
+        try{
+            authorizationDOAList = fullApplicationControl.getAuthorizationDOALevelList(workCaseId);
+            RequestContext.getCurrentInstance().execute("submitUWDlg.show()");
+        } catch (Exception ex){
+            messageHeader = "Exception.";
+            message = "Exception is occured, cause : "+ex.getMessage();
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
+    }
+
+    public void onSelectedUWDOALevel(){
+        log.debug("selected UW2 DOALevel id : ()",selectedDOALevel);
+        try{
+            if(selectedDOALevel!=0){
+                uw2UserList = fullApplicationControl.getUWUserListFromDOALevel(selectedDOALevel);
+            } else {
+                uw2UserList = new ArrayList<User>();
+            }
+        } catch (Exception ex) {
+            uw2UserList = new ArrayList<User>();
+            log.error("onSelectedUWDOALevel Exception : ",ex);
+        }
+
+    }
+
+    public void onSubmitUW2(){ //Submit From UW1 (no return)
+        log.debug("onSubmitUW2 begin");
+        boolean complete = false;
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            String queueName = session.getAttribute("queueName").toString();
+            User user = (User) session.getAttribute("user");
+
+            if(selectedUW2User != null && !selectedUW2User.equals("")){
+                List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
+
+                if(returnInfoViews!=null && returnInfoViews.size()>0){
+                    messageHeader = "Information.";
+                    message = "Submit fail. Please check return information before submit again.";
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+                    log.error("onSubmitUW2 ::: fail.");
+                } else {
+                    //check if have return not accept
+                    List<ReturnInfoView> returnInfoViewsNoAccept = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
+                    if(returnInfoViewsNoAccept!=null && returnInfoViewsNoAccept.size()>0){
+                        messageHeader = "Information.";
+                        message = "Submit fail. Please check return information before submit again.";
+                        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+                        log.error("onSubmitUW2 ::: fail.");
+                    } else {
+                        returnControl.saveReturnHistory(workCaseId,user);
+
+                        fullApplicationControl.submitToUW2(selectedUW2User, selectedDOALevel, submitRemark, queueName, workCaseId);
+
+                        messageHeader = "Information.";
+                        message = "Submit success";
+                        RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+
+                        log.debug("onSubmitUW2 ::: success.");
+                    }
+                }
+                messageHeader = "Information.";
+                message = "Submit to UW2 success.";
+                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+                complete = true;
+                log.debug("onSubmitUW2 ::: success.");
+            } else {
+                messageHeader = "Exception.";
+                message = "Submit to Zone Manager failed, cause : UW2 was not selected";
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                complete = false;
+                log.error("onSubmitUW2 ::: submit failed (UW2 not selected)");
+            }
+        } catch (Exception ex){
+            messageHeader = "Information.";
+            message = "Submit fail, cause : " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+            log.error("onSubmitUW2 ::: exception occurred : ", ex);
+        }
+
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
@@ -897,52 +1005,6 @@ public class HeaderController implements Serializable {
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
 
             log.error("onSumbitReturnReply ::: exception occurred : ", ex);
-        }
-    }
-
-    public void onSubmitUW2(){ //Submit From UW1 (no return)
-        log.debug("onSubmitUW2 begin");
-        try{
-            HttpSession session = FacesUtil.getSession(true);
-            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            String queueName = session.getAttribute("queueName").toString();
-            User user = (User) session.getAttribute("user");
-
-            List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
-
-            if(returnInfoViews!=null && returnInfoViews.size()>0){
-                messageHeader = "Information.";
-                message = "Submit fail. Please check return information before submit again.";
-                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-
-                log.error("onSubmitUW2 ::: fail.");
-            } else {
-                //check if have return not accept
-                List<ReturnInfoView> returnInfoViewsNoAccept = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
-                if(returnInfoViewsNoAccept!=null && returnInfoViewsNoAccept.size()>0){
-                    messageHeader = "Information.";
-                    message = "Submit fail. Please check return information before submit again.";
-                    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-
-                    log.error("onSubmitUW2 ::: fail.");
-                } else {
-                    returnControl.saveReturnHistory(workCaseId,user);
-
-                    fullApplicationControl.submitToUW2(queueName, workCaseId);
-
-                    messageHeader = "Information.";
-                    message = "Submit success";
-                    RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-
-                    log.debug("onSubmitUW2 ::: success.");
-                }
-            }
-        } catch (Exception ex){
-            messageHeader = "Information.";
-            message = "Submit fail, cause : " + Util.getMessageException(ex);
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-
-            log.error("onSubmitUW2 ::: exception occurred : ", ex);
         }
     }
 
@@ -1581,5 +1643,45 @@ public class HeaderController implements Serializable {
 
     public void setContactFlag3(boolean contactFlag3) {
         this.contactFlag3 = contactFlag3;
+    }
+
+    public boolean isRequestPricing() {
+        return requestPricing;
+    }
+
+    public void setRequestPricing(boolean requestPricing) {
+        this.requestPricing = requestPricing;
+    }
+
+    public List<AuthorizationDOA> getAuthorizationDOAList() {
+        return authorizationDOAList;
+    }
+
+    public void setAuthorizationDOAList(List<AuthorizationDOA> authorizationDOAList) {
+        this.authorizationDOAList = authorizationDOAList;
+    }
+
+    public List<User> getUw2UserList() {
+        return uw2UserList;
+    }
+
+    public void setUw2UserList(List<User> uw2UserList) {
+        this.uw2UserList = uw2UserList;
+    }
+
+    public long getSelectedDOALevel() {
+        return selectedDOALevel;
+    }
+
+    public void setSelectedDOALevel(long selectedDOALevel) {
+        this.selectedDOALevel = selectedDOALevel;
+    }
+
+    public String getSelectedUW2User() {
+        return selectedUW2User;
+    }
+
+    public void setSelectedUW2User(String selectedUW2User) {
+        this.selectedUW2User = selectedUW2User;
     }
 }

@@ -583,6 +583,12 @@ function handleSubmitZMDialogRequest(xhr, status, args) {
     }
 }
 
+function handleSubmitUWDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        submitUWDlg.hide();
+    }
+}
+
 function handleAssignABDMDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
         assignABDMDlg.hide();
