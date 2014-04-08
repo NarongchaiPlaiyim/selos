@@ -731,7 +731,7 @@ public class BRMSControl extends BusinessControl {
     }
 
     public MandateDocResponseView getDocCustomerForFullApp(long workCaseId){
-        logger.debug("-- getDocCustomer from workCaseId {}", workCaseId);
+        logger.debug("-- getDocCustomerForFullApp(workCaseId {})", workCaseId);
         WorkCase workCase = null;
         BasicInfo basicInfo = null;
         MandateDocResponseView mandateDocResponseView = null;

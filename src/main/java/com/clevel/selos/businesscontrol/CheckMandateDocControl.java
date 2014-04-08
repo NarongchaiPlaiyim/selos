@@ -223,7 +223,7 @@ public class CheckMandateDocControl extends BusinessControl{
                 log.debug("-- Find by work case id = {} BasicInfo is {}   ", workCaseId, basicInfo);
             }
         } catch (Exception e){
-            log.error("-- Exception while call ECM {}", e.getMessage());
+            log.error("-- Exception while call ECM {}", e);
         }
 
         //BRMS
