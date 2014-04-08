@@ -31,7 +31,6 @@ import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import com.clevel.selos.util.ValidationUtil;
 import com.rits.cloning.Cloner;
-
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -40,7 +39,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
@@ -535,6 +533,7 @@ public class CreditFacPropose implements Serializable {
                             NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(feeDetailView.getCreditDetailViewId());
                             if (newCreditDetail != null) {
                                 NewCreditDetailView newCreditView = newCreditDetailTransform.transformToView(newCreditDetail);
+                                newFeeDetailView.setNewCreditDetailView(newCreditView);
                                 log.debug("newCreditView.getProductProgramView().getId() :::: {}", newCreditView.getProductProgramView().getId());
                                 ProductProgram productProgram = productProgramDAO.findById(newCreditView.getProductProgramView().getId());
                                 if (productProgram != null) {
@@ -1809,8 +1808,8 @@ public class CreditFacPropose implements Serializable {
             newCreditFacilityView = creditFacProposeControl.calculateTotalProposeAmount(newCreditFacilityView, basicInfoView, tcgView, workCaseId);
             // Calculate Total for BRMS
             newCreditFacilityView = creditFacProposeControl.calculateTotalForBRMS(newCreditFacilityView);
-//  Calculate Maximum SME Limit
-//  newCreditFacilityView = creditFacProposeControl.calculateMaximumSMELimit(newCreditFacilityView,workCaseId);
+            //  Calculate Maximum SME Limit
+            newCreditFacilityView = creditFacProposeControl.calculateMaximumSMELimit(newCreditFacilityView,workCaseId);
             // Save NewCreditFacility, ProposeCredit, Collateral, Guarantor
             newCreditFacilityView = creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
             // Calculate WC

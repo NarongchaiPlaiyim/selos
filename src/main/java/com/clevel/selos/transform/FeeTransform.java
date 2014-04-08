@@ -114,7 +114,7 @@ public class FeeTransform extends Transform{
         for(NewFeeDetailView newFeeDetailView : newFeeDetailViewList){
             if(!Util.isNull(newFeeDetailView.getCommitmentFee())){ // CommitmentFee
                 feeDetail = new FeeDetail();
-                NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(Long.valueOf(newFeeDetailView.getProductProgram()));
+                NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(newFeeDetailView.getNewCreditDetailView().getId());
                 FeeType feeType = feeTypeDAO.findByBRMSCode(newFeeDetailView.getCommitmentFee().getFeeTypeView().getBrmsCode());
                 FeePaymentMethod feePaymentMethod = feePaymentMethodDAO.findByBRMSCode(newFeeDetailView.getCommitmentFee().getFeePaymentMethodView().getBrmsCode());
                 feeDetail.setPercentFee(newFeeDetailView.getCommitmentFee().getPercentFee());
@@ -130,7 +130,7 @@ public class FeeTransform extends Transform{
                 feeDetailList.add(feeDetail);
             }else if(!Util.isNull(newFeeDetailView.getCancellationFee())){ // CancellationFee
                 feeDetail = new FeeDetail();
-                NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(Long.valueOf(newFeeDetailView.getProductProgram()));
+                NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(newFeeDetailView.getNewCreditDetailView().getId());
                 FeeType feeType = feeTypeDAO.findByBRMSCode(newFeeDetailView.getCancellationFee().getFeeTypeView().getBrmsCode());
                 FeePaymentMethod feePaymentMethod = feePaymentMethodDAO.findByBRMSCode(newFeeDetailView.getCancellationFee().getFeePaymentMethodView().getBrmsCode());
                 feeDetail.setPercentFee(newFeeDetailView.getCancellationFee().getPercentFee());
@@ -146,7 +146,7 @@ public class FeeTransform extends Transform{
                 feeDetailList.add(feeDetail);
             }else if(!Util.isNull(newFeeDetailView.getExtensionFee())){ // ExtensionFee
                 feeDetail = new FeeDetail();
-                NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(Long.valueOf(newFeeDetailView.getProductProgram()));
+                NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(newFeeDetailView.getNewCreditDetailView().getId());
                 FeeType feeType = feeTypeDAO.findByBRMSCode(newFeeDetailView.getExtensionFee().getFeeTypeView().getBrmsCode());
                 FeePaymentMethod feePaymentMethod = feePaymentMethodDAO.findByBRMSCode(newFeeDetailView.getExtensionFee().getFeePaymentMethodView().getBrmsCode());
                 feeDetail.setPercentFee(newFeeDetailView.getExtensionFee().getPercentFee());
@@ -162,7 +162,7 @@ public class FeeTransform extends Transform{
                 feeDetailList.add(feeDetail);
             }else if(!Util.isNull(newFeeDetailView.getPrepaymentFee())){ // PrepaymentFee
                 feeDetail = new FeeDetail();
-                NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(Long.valueOf(newFeeDetailView.getProductProgram()));
+                NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(newFeeDetailView.getNewCreditDetailView().getId());
                 FeeType feeType = feeTypeDAO.findByBRMSCode(newFeeDetailView.getPrepaymentFee().getFeeTypeView().getBrmsCode());
                 FeePaymentMethod feePaymentMethod = feePaymentMethodDAO.findByBRMSCode(newFeeDetailView.getPrepaymentFee().getFeePaymentMethodView().getBrmsCode());
                 feeDetail.setPercentFee(newFeeDetailView.getPrepaymentFee().getPercentFee());
@@ -178,7 +178,7 @@ public class FeeTransform extends Transform{
                 feeDetailList.add(feeDetail);
             }else if(!Util.isNull(newFeeDetailView.getStandardFrontEndFee())){ // StandardFrontEndFee
                 feeDetail = new FeeDetail();
-                NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(Long.valueOf(newFeeDetailView.getProductProgram()));
+                NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(newFeeDetailView.getNewCreditDetailView().getId());
                 FeeType feeType = feeTypeDAO.findByBRMSCode(newFeeDetailView.getStandardFrontEndFee().getFeeTypeView().getBrmsCode());
                 FeePaymentMethod feePaymentMethod = feePaymentMethodDAO.findByBRMSCode(newFeeDetailView.getStandardFrontEndFee().getFeePaymentMethodView().getBrmsCode());
                 feeDetail.setPercentFee(newFeeDetailView.getStandardFrontEndFee().getPercentFee());

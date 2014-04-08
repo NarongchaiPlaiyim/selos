@@ -745,8 +745,8 @@ public class BRMSControl extends BusinessControl {
         BizInfoSummary bizInfoSummary = null;
         DocCustomerResponse docCustomerResponse = null;
 
+        workCase = workCaseDAO.findById(workCaseId);
         if(!Util.isNull(workCase)){
-            workCase = workCaseDAO.findById(workCaseId);
             logger.debug("WorkCase.id[{}]", workCase.getId());
             basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
             if(!Util.isNull(basicInfo)){
