@@ -145,6 +145,8 @@ public class CreditFacProposeControl extends BusinessControl {
     PotentialCollateralDAO potentialCollateralDAO;
     @Inject
     BasicInfoDAO basicInfoDAO;
+    @Inject
+    FullApplicationControl fullApplicationControl;
 
     @Inject
     public CreditFacProposeControl() {
@@ -988,6 +990,8 @@ public class CreditFacProposeControl extends BusinessControl {
             newCollateralDetailDAO.persist(newCollateralList);
             log.debug("saveCreditFacility ::: persist newCollateralList : {}", newCollateralList);
         }
+
+        fullApplicationControl.calculatePricingDOA(workCaseId, newCreditFacility);
 
         return newCreditFacilityTransform.transformToView(newCreditFacility);
     }

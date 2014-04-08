@@ -74,7 +74,7 @@ public class WorkCase extends AbstractWorkCase{
         this.requestAppraisal = requestAppraisal;
     }
 
-    public int getRequestPricing() {
+   public int getRequestPricing() {
         return requestPricing;
     }
 
@@ -94,10 +94,11 @@ public class WorkCase extends AbstractWorkCase{
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("wobNumber", wobNumber)
                 .append("stepOwner", stepOwner)
                 .append("workCasePrescreen", workCasePrescreen)
-                .append("bpmActive", bpmActive)
+                .append("requestAppraisal", requestAppraisal)
+                .append("requestPricing", requestPricing)
+                .append("pricingDoaLevel", pricingDoaLevel)
                 .toString();
     }
 }

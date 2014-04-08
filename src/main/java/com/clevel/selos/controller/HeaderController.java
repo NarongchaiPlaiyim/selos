@@ -316,7 +316,7 @@ public class HeaderController implements Serializable {
         log.debug("onOpenSubmitZM ::: find Pricing DOA Level");
         HttpSession session = FacesUtil.getSession(true);
         long workCaseId = (Long)session.getAttribute("workCaseId");
-        try{
+        /*try{
             PricingDOAValue pricingDOA = fullApplicationControl.calculatePricingDOA(workCaseId);
             pricingDOA = PricingDOAValue.CSSO_DOA;
             if(!Util.isNull(pricingDOA)){
@@ -363,7 +363,7 @@ public class HeaderController implements Serializable {
             messageHeader = "Exception.";
             message = "Can not find Pricing DOA Level. Please check value for calculate DOA Level";
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-        }
+        }*/
     }
 
     public void onSubmitZM(){
