@@ -1064,6 +1064,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                 }
                                             }
                                             //set worst payment status
+                                            log.debug("Account : {} worstCode : {}",ncbDetailView.getAccountName(), worstCode);
                                             SettlementStatus historySettlementStatus = new SettlementStatus();
                                             if (!Util.isEmpty(worstCode)) {
                                                 historySettlementStatus = settlementStatusDAO.getIndividualByCode(worstCode);
@@ -1115,9 +1116,9 @@ public class NCBBizTransform extends BusinessTransform {
                                         if (isNPLTMB) {
                                             ncbInfoView.setNplTMBFlag(true);
                                             if(!Util.isEmpty(lastNPLDateTMB)){
-                                                if(lastNPLDateTMB.length()>=8){
+                                                if(lastNPLDateTMB.length()>=6){
                                                     int month = Integer.parseInt(lastNPLDateTMB.substring(4,6));
-                                                    int year = Integer.parseInt(lastNPLDateTMB.substring(6,8));
+                                                    int year = Integer.parseInt(lastNPLDateTMB.substring(0,4));
                                                     ncbInfoView.setNplTMBMonth(month);
                                                     ncbInfoView.setNplTMBYear(year);
                                                 }
@@ -1126,9 +1127,9 @@ public class NCBBizTransform extends BusinessTransform {
                                         if (isNPLOther) {
                                             ncbInfoView.setNplOtherFlag(true);
                                             if(!Util.isEmpty(lastNPLDateOther)){
-                                                if(lastNPLDateOther.length()>=8){
+                                                if(lastNPLDateOther.length()>=6){
                                                     int month = Integer.parseInt(lastNPLDateOther.substring(4,6));
-                                                    int year = Integer.parseInt(lastNPLDateOther.substring(6,8));
+                                                    int year = Integer.parseInt(lastNPLDateOther.substring(0,4));
                                                     ncbInfoView.setNplOtherMonth(month);
                                                     ncbInfoView.setNplOtherYear(year);
                                                 }
@@ -1143,9 +1144,9 @@ public class NCBBizTransform extends BusinessTransform {
                                         if (isTDRTMB) {
                                             ncbInfoView.setTdrTMBFlag(true);
                                             if(!Util.isEmpty(lastTDRDateTMB)){
-                                                if(lastTDRDateTMB.length()>=8){
+                                                if(lastTDRDateTMB.length()>=6){
                                                     int month = Integer.parseInt(lastTDRDateTMB.substring(4,6));
-                                                    int year = Integer.parseInt(lastTDRDateTMB.substring(6,8));
+                                                    int year = Integer.parseInt(lastTDRDateTMB.substring(0,4));
                                                     ncbInfoView.setTdrTMBMonth(month);
                                                     ncbInfoView.setTdrTMBYear(year);
                                                 }
@@ -1154,9 +1155,9 @@ public class NCBBizTransform extends BusinessTransform {
                                         if (isTDROther) {
                                             ncbInfoView.setTdrOtherFlag(true);
                                             if(!Util.isEmpty(lastTDRDateOther)){
-                                                if(lastTDRDateOther.length()>=8){
+                                                if(lastTDRDateOther.length()>=6){
                                                     int month = Integer.parseInt(lastTDRDateOther.substring(4,6));
-                                                    int year = Integer.parseInt(lastTDRDateOther.substring(6,8));
+                                                    int year = Integer.parseInt(lastTDRDateOther.substring(0,4));
                                                     ncbInfoView.setTdrOtherMonth(month);
                                                     ncbInfoView.setTdrOtherYear(year);
                                                 }
@@ -1772,9 +1773,9 @@ public class NCBBizTransform extends BusinessTransform {
                                         if (isNPLTMB) {
                                             ncbInfoView.setNplTMBFlag(true);
                                             if(!Util.isEmpty(lastNPLDateTMB)){
-                                                if(lastNPLDateTMB.length()>=8){
+                                                if(lastNPLDateTMB.length()>=6){
                                                     int month = Integer.parseInt(lastNPLDateTMB.substring(4,6));
-                                                    int year = Integer.parseInt(lastNPLDateTMB.substring(6,8));
+                                                    int year = Integer.parseInt(lastNPLDateTMB.substring(0,4));
                                                     ncbInfoView.setNplTMBMonth(month);
                                                     ncbInfoView.setNplTMBYear(year);
                                                 }
@@ -1783,9 +1784,9 @@ public class NCBBizTransform extends BusinessTransform {
                                         if (isNPLOther) {
                                             ncbInfoView.setNplOtherFlag(true);
                                             if(!Util.isEmpty(lastNPLDateOther)){
-                                                if(lastNPLDateOther.length()>=8){
+                                                if(lastNPLDateOther.length()>=6){
                                                     int month = Integer.parseInt(lastNPLDateOther.substring(4,6));
-                                                    int year = Integer.parseInt(lastNPLDateOther.substring(6,8));
+                                                    int year = Integer.parseInt(lastNPLDateOther.substring(0,4));
                                                     ncbInfoView.setNplOtherMonth(month);
                                                     ncbInfoView.setNplOtherYear(year);
                                                 }
@@ -1800,9 +1801,9 @@ public class NCBBizTransform extends BusinessTransform {
                                         if (isTDRTMB) {
                                             ncbInfoView.setTdrTMBFlag(true);
                                             if(!Util.isEmpty(lastTDRDateTMB)){
-                                                if(lastTDRDateTMB.length()>=8){
+                                                if(lastTDRDateTMB.length()>=6){
                                                     int month = Integer.parseInt(lastTDRDateTMB.substring(4,6));
-                                                    int year = Integer.parseInt(lastTDRDateTMB.substring(6,8));
+                                                    int year = Integer.parseInt(lastTDRDateTMB.substring(0,4));
                                                     ncbInfoView.setTdrTMBMonth(month);
                                                     ncbInfoView.setTdrTMBYear(year);
                                                 }
@@ -1811,9 +1812,9 @@ public class NCBBizTransform extends BusinessTransform {
                                         if (isTDROther) {
                                             ncbInfoView.setTdrOtherFlag(true);
                                             if(!Util.isEmpty(lastTDRDateOther)){
-                                                if(lastTDRDateOther.length()>=8){
+                                                if(lastTDRDateOther.length()>=6){
                                                     int month = Integer.parseInt(lastTDRDateOther.substring(4,6));
-                                                    int year = Integer.parseInt(lastTDRDateOther.substring(6,8));
+                                                    int year = Integer.parseInt(lastTDRDateOther.substring(0,4));
                                                     ncbInfoView.setTdrOtherMonth(month);
                                                     ncbInfoView.setTdrOtherYear(year);
                                                 }
@@ -2047,7 +2048,8 @@ public class NCBBizTransform extends BusinessTransform {
     }
 
     private boolean isInMonthPeriodYYYYMMDD(String dateStr, String compareStr, int numberMonth) {
-        if (!Util.isNull(dateStr) && !Util.isEmpty(dateStr) && !Util.isNull(compareStr) && !Util.isEmpty(compareStr)) {
+        log.debug("isInMonthPeriodYYYYMMDD (dateStr: {}, compareStr: {}, numberMonth: {}",dateStr,compareStr,numberMonth);
+        if (!Util.isEmpty(dateStr) && !Util.isEmpty(compareStr)) {
             Date paymentDate = Util.strYYYYMMDDtoDateFormat(dateStr);
             Date compareDate = Util.strYYYYMMDDtoDateFormat(compareStr);
             Calendar startCalendar = new GregorianCalendar();
@@ -2057,9 +2059,11 @@ public class NCBBizTransform extends BusinessTransform {
             int diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
             int diffMonth = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
             if (diffMonth <= numberMonth) {
+                log.debug("return : true");
                 return true;
             }
         }
+        log.debug("return : false");
         return false;
     }
 

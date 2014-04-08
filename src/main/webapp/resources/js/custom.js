@@ -745,6 +745,12 @@ function handleCollateralDetailRequest(xhr, status, args) {
     }
 }
 
+function handleExSumDeviateRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        exSumDeviateDlg.hide();
+    }
+}
+
 function testHandle(){
     return true;
 }
