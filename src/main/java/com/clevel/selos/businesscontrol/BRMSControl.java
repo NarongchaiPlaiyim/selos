@@ -745,8 +745,8 @@ public class BRMSControl extends BusinessControl {
         BizInfoSummary bizInfoSummary = null;
         DocCustomerResponse docCustomerResponse = null;
 
+        workCase = workCaseDAO.findById(workCaseId);
         if(!Util.isNull(workCase)){
-            workCase = workCaseDAO.findById(workCaseId);
             logger.debug("WorkCase.id[{}]", workCase.getId());
             basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
             if(!Util.isNull(basicInfo)){
@@ -781,12 +781,15 @@ public class BRMSControl extends BusinessControl {
 
         //2. Set Account Requested List
         ProposeType _proposeType = ProposeType.P;
-        if(!Util.isNull(workCase.getStep())){
-            _proposeType = workCase.getStep().getProposeType();
-            logger.debug("ProposeType is {}", _proposeType);
-        } else {
-            logger.debug("WorkCase.Step is ", workCase.getStep());
+        if(!Util.isNull(workCase)){
+            if(!Util.isNull(workCase.getStep())){
+                _proposeType = workCase.getStep().getProposeType();
+                logger.debug("ProposeType is {}", _proposeType);
+            } else {
+                logger.debug("WorkCase.Step is ", workCase.getStep());
+            }
         }
+
 
         newCreditDetailList = Util.safetyList(newCreditDetailDAO.findNewCreditDetail(workCaseId, _proposeType));
         logger.debug("NewCreditDetailList.size()[{}]", newCreditDetailList.size());
