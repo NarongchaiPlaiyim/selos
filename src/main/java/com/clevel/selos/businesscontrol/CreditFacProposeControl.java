@@ -1296,12 +1296,20 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
 
-    public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {
+    public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList, List<Long> deleteCreditTierIdList) {
         log.info("deleteAllApproveByIdList()");
         log.info("deleteCreditIdList: {}", deleteCreditIdList);
         log.info("deleteCollIdList: {}", deleteCollIdList);
         log.info("deleteGuarantorIdList: {}", deleteGuarantorIdList);
         log.info("deleteConditionIdList: {}", deleteConditionIdList);
+
+        if (deleteCreditTierIdList != null && deleteCreditTierIdList.size() > 0) {
+            List<NewCreditTierDetail> deleteCreditTierDelIdList = new ArrayList<NewCreditTierDetail>();
+            for (Long id : deleteCreditTierIdList) {
+                deleteCreditTierDelIdList.add(newCreditTierDetailDAO.findById(id));
+            }
+            newCreditTierDetailDAO.delete(deleteCreditTierDelIdList);
+        }
 
         if (deleteCreditIdList != null && deleteCreditIdList.size() > 0) {
             List<NewCreditDetail> deleteCreditDetailList = new ArrayList<NewCreditDetail>();
