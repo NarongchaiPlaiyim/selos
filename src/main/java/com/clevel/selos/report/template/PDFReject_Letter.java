@@ -163,18 +163,18 @@ public class PDFReject_Letter implements Serializable {
 
 
             switch (month){
-                case 1: setMonth = msg.get("app.month.january"); break;
-                case 2: setMonth = msg.get("app.month.february"); break;
-                case 3: setMonth = msg.get("app.month.march"); break;
-                case 4: setMonth = msg.get("app.month.april"); break;
-                case 5: setMonth = msg.get("app.month.may"); break;
-                case 6: setMonth = msg.get("app.month.june"); break;
-                case 7: setMonth = msg.get("app.month.july"); break;
-                case 8: setMonth = msg.get("app.month.august"); break;
-                case 9: setMonth = msg.get("app.month.september"); break;
-                case 10: setMonth = msg.get("app.month.october"); break;
-                case 11: setMonth = msg.get("app.month.november"); break;
-                case 12: setMonth = msg.get("app.month.december"); break;
+                case 1: setMonth = msg.get("app.report.month.january"); break;
+                case 2: setMonth = msg.get("app.report.month.february"); break;
+                case 3: setMonth = msg.get("app.report.month.march"); break;
+                case 4: setMonth = msg.get("app.report.month.april"); break;
+                case 5: setMonth = msg.get("app.report.month.may"); break;
+                case 6: setMonth = msg.get("app.report.month.june"); break;
+                case 7: setMonth = msg.get("app.report.month.july"); break;
+                case 8: setMonth = msg.get("app.report.month.august"); break;
+                case 9: setMonth = msg.get("app.report.month.september"); break;
+                case 10: setMonth = msg.get("app.report.month.october"); break;
+                case 11: setMonth = msg.get("app.report.month.november"); break;
+                case 12: setMonth = msg.get("app.report.month.december"); break;
                 default:setMonth = "";
 
             }
