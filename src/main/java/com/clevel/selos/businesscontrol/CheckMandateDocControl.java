@@ -348,6 +348,7 @@ public class CheckMandateDocControl extends BusinessControl{
             ecmDetailList = Util.safetyList((List<ECMDetail>)ECMentry.getValue());
             log.debug("-- ECMDocType {} = {}.", ECMentry.getKey(), "Other Documents");
             checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(ecmDetailList, 2, userToken);
+            checkOtherDocView.readOnly();
             otherDocumentsList.add(checkOtherDocView);
         }
         checkMandateDocView.setMandatoryDocumentsList(mandatoryDocumentsList);

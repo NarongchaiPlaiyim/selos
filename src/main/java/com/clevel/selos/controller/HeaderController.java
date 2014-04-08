@@ -13,7 +13,6 @@ import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
-import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.Message;
@@ -877,18 +876,13 @@ public class HeaderController implements Serializable {
             } else {
                 checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, 0, workCasePreScreenId);
             }
-            messageHeader = "Success";
+            messageHeader = "Information";
             message = "Success";
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         } catch (Exception ex){
             log.error("Exception : {}", ex);
-            messageHeader = "Failed";
-            message = "Failed";
-//            if(ex.getCause() != null){
-//                message = "Failed " + ex.getCause().toString();
-//            } else {
-//                message = "Failed " + ex.getMessage();
-//            }
+            messageHeader = "Exception";
+            message = "Failed" + Util.getMessageException(ex); ;
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
     }
