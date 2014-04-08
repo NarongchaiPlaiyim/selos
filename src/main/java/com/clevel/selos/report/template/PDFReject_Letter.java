@@ -75,6 +75,7 @@ public class PDFReject_Letter implements Serializable {
         if (!Util.isNull(workCaseId)){
             customerInfoView = new ArrayList<CustomerInfoView>();
             customerInfoView = customerInfoControl.getBorrowerByWorkCase(workCaseId);
+            workCase = workCaseDAO.findById(workCaseId);
         }
     }
 
@@ -123,6 +124,10 @@ public class PDFReject_Letter implements Serializable {
 
         if(!Util.isNull(workCaseId)){
             log.debug("--customerInfoView. {}",customerInfoView.size());
+
+            letterReport.setAppNumber(workCase.getAppNumber());
+            log.debug("--AppNumber. {}",workCase.getAppNumber());
+
             for (CustomerInfoView view : customerInfoView){
                 Customer customer = customerDAO.findById(view.getId());
                 log.debug("--getAddressesList. {}",customer.getAddressesList().size());

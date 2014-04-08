@@ -21,7 +21,7 @@ public class Util implements Serializable {
     }
     //for Reject Report
     public static String createDateStringTH(Date date, String format){
-        Locale defaultLocaleTH = new Locale("EN", "th");
+        Locale defaultLocaleTH = new Locale("th","TH");
         SimpleDateFormat sdf = new SimpleDateFormat(format, defaultLocaleTH);
         return sdf.format(date);
     }

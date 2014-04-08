@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reject_Letter2" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="17d95c3e-3985-40bb-98c1-ddcbcc9398a9">
 	<property name="ireport.zoom" value="1.1000000000000008"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="311"/>
+	<property name="ireport.y" value="288"/>
 	<parameter name="fillRejectLetter" class="com.clevel.selos.model.report.RejectLetterReport"/>
 	<parameter name="fillAllNameReject" class="java.util.List"/>
 	<parameter name="path" class="java.lang.String"/>
@@ -163,8 +163,8 @@
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 				</textElement>
 				<text><![CDATA[	ธนาคารฯ หวังเป็นอย่างยิ่งว่า ธนาคารฯ จะมีโอกาสได้รับใช้ท่าน จากการเลือกใช้ผลิตภัณฑ์อื่นที่เหมาะสมของธนาคารฯ
-ในโอกาสต่อไป  โดยท่านสามารถศึกษารายละเอียดข้อมูลผลิตภัณฑ์อื่นๆ ได้ที่www.tmbbank.com หรือติดต่อสอบถามได้ที่ศูนย์
-ธุรกิจสัมพันธ์ลูกค้ารายย่อย(RMC: Relationship Management Center) โทร. 02828-2828 เวลา 08:00-20:00 น.วันจันทร์-วันเสาร์
+ในโอกาสต่อไป  โดยท่านสามารถศึกษารายละเอียดข้อมูลผลิตภัณฑ์อื่นๆ ได้ที่ www.tmbbank.com หรือติดต่อสอบถามได้ที่ศูนย์
+ธุรกิจสัมพันธ์ลูกค้ารายย่อย(RMC: Relationship Management Center) โทร. 02828-2828 เวลา 08:00-20:00 น. วันจันทร์ - วันเสาร์
 ยกเว้น วันอาทิตย์และวันหยุดนักขัตฤกษ์]]></text>
 			</staticText>
 		</band>

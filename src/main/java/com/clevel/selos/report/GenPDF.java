@@ -100,7 +100,7 @@ public class GenPDF extends ReportService implements Serializable {
     public void setNameReport(){
         init();
         log.info("On setNameReport()");
-        String nameOpShect = "_OpShect.pdf";
+        String nameOpShect = "_OpSheet.pdf";
         String nameExSum = "_ExSum.pdf";
         String nameRejectLetter = "_RejectLetter.pdf";
         String nameAppraisal = "_AppraisalAppointment.pdf";
