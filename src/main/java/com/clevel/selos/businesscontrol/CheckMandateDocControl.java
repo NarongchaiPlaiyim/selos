@@ -11,6 +11,7 @@ import com.clevel.selos.model.DocMandateType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.MandateDoc;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.security.encryption.EncryptionService;
 import com.clevel.selos.system.Config;
@@ -39,6 +40,9 @@ public class CheckMandateDocControl extends BusinessControl{
     private CheckMandateDocView checkMandateDocView;
     private MandateDoc mandateDoc;
     private BasicInfo basicInfo;
+    @Inject
+    private WorkCaseDAO workCaseDAO;
+    private WorkCase workCase;
     @Inject
     private ECMInterface ecmInterface;
     private ECMDataResult ecmDataResult;
@@ -201,11 +205,12 @@ public class CheckMandateDocControl extends BusinessControl{
         //ECM
         log.debug("-- ECM");
         try {
-            basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-            if(!Util.isNull(basicInfo)){
-                log.debug("-- BasicInfo.id[{}]", basicInfo.getId());
-                log.debug("-- BasicInfo.CANumber[{}]", basicInfo.getCaNumber());
-                ecmDataResult = ecmInterface.getECMDataResult(basicInfo.getCaNumber());
+
+            workCase = workCaseDAO.findById(workCaseId);
+            if(!Util.isNull(workCase)){
+                log.debug("-- WorkCase.id[{}]", workCase.getId());
+                log.debug("-- WorkCase.AppNumber[{}]", workCase.getAppNumber());
+                ecmDataResult = ecmInterface.getECMDataResult(workCase.getAppNumber());
                 if(!Util.isNull(ecmDataResult) && ActionResult.SUCCESS.equals(ecmDataResult.getActionResult())){
                     log.debug("-- ActionResult is {}", ecmDataResult.getActionResult());
                     List<ECMDetail> ecmDetailList = Util.safetyList(ecmDataResult.getEcmDetailList());
@@ -217,10 +222,10 @@ public class CheckMandateDocControl extends BusinessControl{
                         log.debug("-- EcmDetailList.size()[{}]", ecmDetailList.size());
                     }
                 } else {
-                    log.debug("-- Find by CA Number = {} ActionResult is {} and reason is {}  ", basicInfo.getCaNumber(), ecmDataResult.getActionResult(), ecmDataResult.getReason());
+                    log.debug("-- Find by CA Number = {} ActionResult is {} and reason is {}  ", workCase.getAppNumber(), ecmDataResult.getActionResult(), ecmDataResult.getReason());
                 }
             } else {
-                log.debug("-- Find by work case id = {} BasicInfo is {}   ", workCaseId, basicInfo);
+                log.debug("-- Find by work case id = {} ", workCaseId);
             }
         } catch (Exception e){
             log.error("-- Exception while call ECM {}", e);

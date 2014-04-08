@@ -83,7 +83,7 @@ public class DBExecute implements Serializable {
             stringBuilder.append("LEFT OUTER JOIN "+schema+".WCAP_MS_DOCUMENTTYPE DOCUMENTTYPE ON DOCUMENT.TYPE_CODE = DOCUMENTTYPE.TYPE_CODE ");
             stringBuilder.append("WHERE ");
             stringBuilder.append("DOCUMENT.CA_NUMBER = ? AND ");
-            stringBuilder.append("DOCUMENT.CA_NUMBER IS NULL AND DOCUMENT.TX_DETAIL_ID <> 0 ");
+            stringBuilder.append("DOCUMENT.TX_DETAIL_ID <> 0 ");
             stringBuilder.append("UNION ");
             stringBuilder.append("SELECT ");
             stringBuilder.append("DOCUMENT.ECM_DOC_ID, ");
@@ -112,7 +112,7 @@ public class DBExecute implements Serializable {
             stringBuilder.append("LEFT OUTER JOIN WCAP_MS_DOCUMENTTYPE DOCUMENTTYPE ON DOCUMENT.TYPE_CODE = DOCUMENTTYPE.TYPE_CODE ");
             stringBuilder.append("WHERE ");
             stringBuilder.append("DOCUMENT.CA_NUMBER = ? AND ");
-            stringBuilder.append("DOCUMENT.CA_NUMBER IS NULL AND DOCUMENT.TX_DETAIL_ID <> 0 ");
+            stringBuilder.append("DOCUMENT.TX_DETAIL_ID <> 0 ");
             stringBuilder.append("UNION ");
             stringBuilder.append("SELECT ");
             stringBuilder.append("DOCUMENT.ECM_DOC_ID, ");

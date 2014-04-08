@@ -1015,10 +1015,9 @@
                                 <td  colspan="2" style="text-align: left;width:10px;" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.deviation.label.applicationResult')}"/>
                                     <p:spacer width="10px;" />
-                                    <h:outputText value="#{executiveSummary.exSummaryView.applicationColorResult.code == 'R' ? 'Red'
-                                                            : executiveSummary.exSummaryView.applicationColorResult.code == 'G' ? 'Green'
-                                                            : executiveSummary.exSummaryView.applicationColorResult.code == 'Y' ? 'Yellow' : ''}"
-                                                  style="background-color: #{executiveSummary.exSummaryView.applicationColorResult.colorCode}"/>
+                                    <h:outputText class="result #{executiveSummary.exSummaryView.applicationColorResult.resultClass}"
+                                            value="#{executiveSummary.exSummaryView.applicationColorResult}"
+                                            rendered="#{executiveSummary.exSummaryView.applicationColorResult != null}"/>
                                     <p:spacer width="10px;" />
                                     <h:outputText value="#{executiveSummary.exSummaryView.applicationResult}"/>
                                 </td>
@@ -1063,8 +1062,8 @@
                                             <h:outputText value="#{rowIndex+1}"/>
                                         </p:column>
 
-                                        <p:column styleClass="center">
-                                            <h:outputText value="#{itemDecision.flag.code}" style="background-color: #{itemDecision.flag.colorCode}"/>
+                                        <p:column styleClass="center #{itemDecision.flag.resultClass}">
+                                                <h:outputText value="#{itemDecision.flag}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
@@ -1081,7 +1080,7 @@
 
                                         <p:column styleClass="center">
                                             <h:inputTextarea value="#{itemDecision.deviationReason}" style="width: 100%; margin-top: 5px; margin-left: -3px;"
-                                                             required="#{itemDecision.flag.code == 'R'}"/>
+                                                             required="#{itemDecision.flag == 'RED'}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
@@ -1092,8 +1091,8 @@
                                                                  update=":exSumDeviateDlgForm"
                                                                  oncomplete="exSumDeviateDlg.show();"
                                                                  rendered="#{itemDecision.canEdit}">
-                                                    <f:setPropertyActionListener value="#{item}"
-                                                                                 target="#{executiveSummary.selectDeviate}"/>
+                                                    <f:setPropertyActionListener value="#{itemDecision}"
+                                                                                 target="#{executiveSummary.selectDeviateDecision}"/>
                                                     <f:setPropertyActionListener value="#{rowIndex}"
                                                                                  target="#{executiveSummary.rowIndex}"/>
                                                     <p:resetInput target=":exSumDeviateDlgForm"/>
@@ -1101,12 +1100,12 @@
 
                                                 <p:commandButton title="#{msg.get('app.button.remove')}"
                                                                  icon="ui-icon-trash"
-                                                                 oncomplete="confirmDeleteDeviateDlg.show()"
+                                                                 oncomplete="confirmDeleteDeviateDecisionDlg.show()"
                                                                  update=":frmMain:decisionTable"
                                                                  process="@form"
                                                                  rendered="#{itemDecision.canEdit}">
-                                                    <f:setPropertyActionListener value="#{item}"
-                                                                                 target="#{executiveSummary.selectDeviate}"/>
+                                                    <f:setPropertyActionListener value="#{itemDecision}"
+                                                                                 target="#{executiveSummary.selectDeviateDecision}"/>
                                                 </p:commandButton>
                                             </p:column>
                                         </p:column>
@@ -1450,6 +1449,15 @@
         <ui:param name="formId" value="frmConfirmDeleteDeviate"/>
         <ui:param name="controller" value="#{executiveSummary}"/>
         <ui:param name="action" value="onDeleteDeviate"/>
+        <ui:param name="update" value=":frmMain"/>
+    </ui:include>
+
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteDeviateDecisionDialog"/>
+        <ui:param name="name" value="confirmDeleteDeviateDecisionDlg"/>
+        <ui:param name="formId" value="frmconfirmDeleteDeviateDecision"/>
+        <ui:param name="controller" value="#{executiveSummary}"/>
+        <ui:param name="action" value="onDeleteDeviateDecision"/>
         <ui:param name="update" value=":frmMain"/>
     </ui:include>
 

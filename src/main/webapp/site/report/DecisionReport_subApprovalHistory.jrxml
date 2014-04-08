@@ -136,7 +136,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{titleName}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement uuid="5640ce1c-ecd3-45b8-8a74-bc8dae01a3b7" style="detail" stretchType="RelativeToBandHeight" x="366" y="0" width="87" height="17" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
