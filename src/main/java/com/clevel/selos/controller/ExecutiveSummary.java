@@ -3,21 +3,26 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.dao.master.AuthorizationDOADAO;
 import com.clevel.selos.dao.master.ReasonDAO;
+import com.clevel.selos.dao.master.UWRuleNameDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
+import com.clevel.selos.model.db.master.UWRuleName;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.ExSumDecisionView;
 import com.clevel.selos.model.view.ExSumReasonView;
 import com.clevel.selos.model.view.ExSummaryView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.util.FacesUtil;
-
+import com.rits.cloning.Cloner;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -26,7 +31,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,8 +65,6 @@ public class ExecutiveSummary implements Serializable {
 
     private ExSummaryView exSummaryView;
 
-    private ExSumReasonView selectDeviate;
-
     @Inject
     private UserDAO userDAO;
     @Inject
@@ -71,9 +73,14 @@ public class ExecutiveSummary implements Serializable {
     private ReasonDAO reasonDAO;
     @Inject
     private AuthorizationDOADAO authorizationDOADAO;
+    @Inject
+    private UWRuleNameDAO uwRuleNameDAO;
 
     @Inject
     private ExSummaryControl exSummaryControl;
+
+    @Inject
+    CustomerTransform customerTransform;
 
     //*** Drop down List ***//
     private List<AuthorizationDOA> authorizationDOAList;
@@ -81,6 +88,20 @@ public class ExecutiveSummary implements Serializable {
 
     //
     private ExSumReasonView reason;
+
+    private List<CustomerInfoView> customerInfoViewList;
+    private long customerId;
+    private CustomerInfoView selectCustomer;
+    private ExSumDecisionView selectDeviate;
+
+    private ExSumDecisionView exSumDecisionView;
+
+    private List<UWRuleName> uwRuleNameList = new ArrayList<UWRuleName>();
+
+    private int rowIndex;
+
+    enum ModeForButton{ ADD, EDIT }
+    private ModeForButton modeForButton;
 
     public ExecutiveSummary() {
     }
@@ -132,6 +153,12 @@ public class ExecutiveSummary implements Serializable {
         authorizationDOAList = authorizationDOADAO.findAll();
 
         reason = new ExSumReasonView();
+
+        customerInfoViewList = exSummaryControl.getCustomerList(workCaseId);
+
+        exSumDecisionView = new ExSumDecisionView();
+
+        uwRuleNameList = uwRuleNameDAO.findAll();
 
         exSummaryView = exSummaryControl.getExSummaryViewByWorkCaseId(workCaseId);
 
@@ -237,6 +264,65 @@ public class ExecutiveSummary implements Serializable {
         }
     }
 
+    public void onInitAddDeviate(){
+        exSumDecisionView = new ExSumDecisionView();
+        customerId = 0;
+        modeForButton = ModeForButton.ADD;
+    }
+
+    public void onSelectEditDeviate(){
+        try {
+            customerId = 0;
+            Cloner cloner = new Cloner();
+            exSumDecisionView = cloner.deepClone(selectDeviate);
+            onChangeRuleName();
+            modeForButton = ModeForButton.EDIT;
+        } catch (Exception e) {
+            log.error("onSelectEditDeviate Exception : {}",e);
+        }
+    }
+
+    public void onAddDeviate(){
+        exSumDecisionView.setCanEdit(true);
+
+        if(customerId != 0){
+            exSumDecisionView.setCustomerId(customerId);
+            exSumDecisionView.setCusName(customerDAO.findById(customerId).getDisplayName());
+        } else {
+            exSumDecisionView.setCusName("Application");
+        }
+
+        if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
+            exSummaryView.getExSumDecisionListView().add(exSumDecisionView);
+        }else{
+            exSummaryView.getExSumDecisionListView().set(rowIndex, exSumDecisionView);
+        }
+
+        boolean complete = true;        //Change only failed to save
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.addCallbackParam("functionComplete", complete);
+    }
+
+    public void onDeleteAccount() {
+        exSummaryView.getDeleteTmpList().add(selectDeviate.getId());
+        exSummaryView.getExSumDecisionListView().remove(selectDeviate);
+    }
+
+    public void onChangeRuleName(){
+        if(exSumDecisionView.getUwRuleNameId() == 0){
+            exSumDecisionView.setGroup("");
+        } else {
+            UWRuleName uwRuleName = uwRuleNameDAO.findById(exSumDecisionView.getUwRuleNameId());
+            if(uwRuleName != null && uwRuleName.getId() != 0 && uwRuleName.getRuleGroup() != null && uwRuleName.getRuleGroup().getId() != 0){
+                exSumDecisionView.setGroup(uwRuleName.getRuleGroup().getName());
+                exSumDecisionView.setRuleName(uwRuleName.getName());
+            } else {
+                exSumDecisionView.setGroup("");
+                exSumDecisionView.setRuleName("");
+            }
+        }
+    }
+
     //GET SET
     public String getMessage() {
         return message;
@@ -286,14 +372,6 @@ public class ExecutiveSummary implements Serializable {
         this.reason = reason;
     }
 
-    public ExSumReasonView getSelectDeviate() {
-        return selectDeviate;
-    }
-
-    public void setSelectDeviate(ExSumReasonView selectDeviate) {
-        this.selectDeviate = selectDeviate;
-    }
-
     public String getSeverity() {
         return severity;
     }
@@ -308,6 +386,58 @@ public class ExecutiveSummary implements Serializable {
 
     public void setRoleUW(boolean roleUW) {
         isRoleUW = roleUW;
+    }
+
+    public List<CustomerInfoView> getCustomerInfoViewList() {
+        return customerInfoViewList;
+    }
+
+    public void setCustomerInfoViewList(List<CustomerInfoView> customerInfoViewList) {
+        this.customerInfoViewList = customerInfoViewList;
+    }
+
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
+    }
+
+    public CustomerInfoView getSelectCustomer() {
+        return selectCustomer;
+    }
+
+    public void setSelectCustomer(CustomerInfoView selectCustomer) {
+        this.selectCustomer = selectCustomer;
+    }
+
+    public ExSumDecisionView getExSumDecisionView() {
+        return exSumDecisionView;
+    }
+
+    public void setExSumDecisionView(ExSumDecisionView exSumDecisionView) {
+        this.exSumDecisionView = exSumDecisionView;
+    }
+
+    public List<UWRuleName> getUwRuleNameList() {
+        return uwRuleNameList;
+    }
+
+    public void setUwRuleNameList(List<UWRuleName> uwRuleNameList) {
+        this.uwRuleNameList = uwRuleNameList;
+    }
+
+    public void setSelectDeviate(ExSumDecisionView selectDeviate) {
+        this.selectDeviate = selectDeviate;
+    }
+
+    public int getRowIndex() {
+        return rowIndex;
+    }
+
+    public void setRowIndex(int rowIndex) {
+        this.rowIndex = rowIndex;
     }
 }
 
