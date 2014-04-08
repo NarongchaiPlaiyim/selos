@@ -19,6 +19,12 @@ public class Util implements Serializable {
         SimpleDateFormat sdf = new SimpleDateFormat(format, defaultLocale);
         return sdf.format(date);
     }
+    //for Reject Report
+    public static String createDateStringTH(Date date, String format){
+        Locale defaultLocaleTH = new Locale("EN", "th");
+        SimpleDateFormat sdf = new SimpleDateFormat(format, defaultLocaleTH);
+        return sdf.format(date);
+    }
 
     public static String replaceStringToBlank(String str, String replaceValue) {
         return str.replace(replaceValue, "");
@@ -43,7 +49,7 @@ public class Util implements Serializable {
     }
 
     public static String createDateTh(Date date) {
-        return createDateString(date, "dd MM yyyy");
+        return createDateStringTH(date, "dd MM yyyy");
     }
 
 
