@@ -14,14 +14,14 @@
                                  rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1002}"
                                  actionListener="#{headerController.onCheckMandateDialog()}"
                                  oncomplete="checkMandateDlg.show()"
-                                 update=":frmMain:checkMandatePanel">
+                                 update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
                     <p:resetInput target=":frmMain:checkMandatePanel"/>
                 </p:commandButton>
                 <p:commandButton id="btnChkMandatePreScreen" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
                                  rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1003}"
                                  actionListener="#{headerController.onCheckMandateForCheckerDialog()}"
                                  oncomplete="checkMandateDlg.show()"
-                                 update=":frmMain:checkMandatePanel">
+                                 update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
                     <p:resetInput target=":frmMain:checkMandatePanel"/>
                 </p:commandButton>
                 <!--Check Mandate Doc Prescreen-->
@@ -136,7 +136,7 @@
                                  rendered="#{headerController.checkButton('Check Mandate Doc')}"
                                  actionListener="#{headerController.onCheckMandateDialog()}"
                                  oncomplete="checkMandateDlg.show()"
-                                 update=":frmMain:checkMandatePanel">
+                                 update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
                     <p:resetInput target=":frmMain:checkMandatePanel"/>
                 </p:commandButton>
                 <!--Return to BDM -->
@@ -309,7 +309,8 @@
 				<!--Check Mandate Doc -->
                 <p:commandButton id="btnChkMandate301" value="#{msg.get('app.header.button.mandateDoc')}"
                 				 styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
-                                 rendered="#{headerController.checkButton('Check Mandate Doc')}">
+                                 rendered="#{headerController.checkButton('Check Mandate Doc')}"
+                                 update=":frmMain:msgBoxBaseMessagePanel">
                 </p:commandButton>
 
                 <!--Request for Price Reduction -->
@@ -360,6 +361,7 @@
         </div>
     </div>
     <div class="clear"></div>
+
     <p:panel id="msgBoxBaseMessagePanel" styleClass="panel">
         <p:confirmDialog id="msgBoxBaseMessageDialog" widgetVar="msgBoxBaseMessageDlg" styleClass="messageDialog"
                          header="#{headerController.messageHeader}" >
@@ -371,6 +373,7 @@
                              oncomplete="msgBoxBaseMessageDlg.hide()"/>
         </p:confirmDialog>
     </p:panel>
+
     <p:panel id="msgBoxBaseRedirectPanel" styleClass="panel">
         <p:confirmDialog id="msgBoxBaseRedirectDialog" widgetVar="msgBoxBaseRedirectDlg" styleClass="messageDialog"
                          header="#{headerController.messageHeader}" >
