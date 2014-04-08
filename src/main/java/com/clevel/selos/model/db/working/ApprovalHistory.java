@@ -46,6 +46,9 @@ public class ApprovalHistory implements Serializable {
     @Column(name = "is_submit", columnDefinition = "int default 0")
     private int isSubmit;
 
+    @Column(name = "approve_type", columnDefinition = "int default 1")
+    private int approveType;
+
     public long getId() {
         return id;
     }
@@ -118,6 +121,14 @@ public class ApprovalHistory implements Serializable {
         isSubmit = submit;
     }
 
+    public int getApproveType() {
+        return approveType;
+    }
+
+    public void setApproveType(int approveType) {
+        this.approveType = approveType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -130,6 +141,7 @@ public class ApprovalHistory implements Serializable {
                 .append("comments", comments)
                 .append("approveDecision", approveDecision)
                 .append("isSubmit", isSubmit)
+                .append("approveType", approveType)
                 .toString();
     }
 }
