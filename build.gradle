@@ -3,10 +3,10 @@ apply plugin: 'war'
 sourceCompatibility = 1.6
 
 project.ext {
-    projectRoot='D:/C-Level/SE_LOS/FullAppSpace/selos'
+    projectRoot='D:/TMB-Project/selos'
     beanXML= projectRoot+'/src/main/webapp/WEB-INF/beans.xml'
     persistenceXML = projectRoot+'/src/main/resources/META-INF/persistence.bank.xml'
-    selosLib='D:/C-Level/SE_LOS/_shared_library/_selos_lib_compile'
+    selosLib='D:/TMB-Project/gradle/compile_library'
     versionString = ''
     versionNumber = 'vvv'
     buildNumber = '0'

@@ -5,7 +5,7 @@
 	xmlns:p="http://primefaces.org/ui"
     xmlns:clv="http://clevel.com/ui">
 
-<p:panel id="reqApprDialogPanel" styleClass="panel-dialog" rendered="#{baseController.checkButton('Request Appraisal')}">
+<p:panel id="reqApprDialogPanel" styleClass="panel-dialog" rendered="#{headerController.checkButton('Request Appraisal')}">
     <table id="table_content" class="content_table_form" style="font-size: 10px;">
     <tr>
         <td class="left" colspan="2">
@@ -15,7 +15,7 @@
                              value="#{msg.get('app.button.add')}"
                              styleClass="smaller"
                              process="@this"
-                             actionListener="#{baseController.onAddAppraisalDetail()}"
+                             actionListener="#{headerController.onAddAppraisalDetail()}"
                              update=":frmMain:reqApprDetailPanel"
                              oncomplete="reqApprDetailDlg.show()"/>
         </td>
@@ -26,7 +26,7 @@
                          styleClass=""
                          id="appraisalDetailViewDialogTable"
                          var="appraisalDetailItem"
-                         value="#{baseController.appraisalDetailViewList}"
+                         value="#{headerController.appraisalDetailViewList}"
                          paginator="false"
                          rowIndexVar="rowIndex" style="font-size:11px;" >
                 <p:columnGroup type="header">
@@ -66,22 +66,22 @@
                 <p:column styleClass="center" >
                     <p:commandButton icon="ui-icon-pencil"
                                      process="@this"
-                                     action="#{baseController.onEditAppraisalDetail()}"
+                                     action="#{headerController.onEditAppraisalDetail()}"
                                      update=":frmMain:reqApprDetailPanel"
                                      oncomplete="reqApprDetailDlg.show();">
                         <f:setPropertyActionListener value="#{appraisalDetailItem}"
-                                                     target="#{baseController.appraisalDetailViewSelected}"/>
+                                                     target="#{headerController.appraisalDetailViewSelected}"/>
                         <f:setPropertyActionListener value="#{rowIndex}"
-                                                     target="#{baseController.rowIndex}"/>
+                                                     target="#{headerController.rowIndex}"/>
                     </p:commandButton>
 
                     <p:commandButton title="Remove" process="@this"
                                      icon="ui-icon-trash"
                                      oncomplete="confirmDeleteAppraisalDetailViewDlg.show()" >
                         <f:setPropertyActionListener value="#{appraisalDetailItem}"
-                                                     target="#{baseController.appraisalDetailViewSelected}"/>
+                                                     target="#{headerController.appraisalDetailViewSelected}"/>
                         <f:setPropertyActionListener value="#{rowIndex}"
-                                                     target="#{baseController.rowIndex}"/>
+                                                     target="#{headerController.rowIndex}"/>
                     </p:commandButton>
                 </p:column>
             </p:dataTable>
@@ -115,16 +115,16 @@
                         <p:outputLabel for="customerName1" value="1"/>
                     </td>
                     <td class="center">
-                        <p:inputText id="customerName1" value="#{baseController.appraisalContactDetailView.customerName1}"
-                                     style = "#{baseController.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
+                        <p:inputText id="customerName1" value="#{headerController.appraisalContactDetailView.customerName1}"
+                                     style = "#{headerController.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
                                      onkeydown="return onKeyPressName(event);"
                                      onkeypress="return onKeyPressName(event);" maxlength="50"
                                      counterTemplate="{0} characters remaining." autoResize="false"/>
                     </td>
                     <td class="center">
-                        <p:inputMask value="#{baseController.appraisalContactDetailView.contactNo1}"
+                        <p:inputMask value="#{headerController.appraisalContactDetailView.contactNo1}"
                                      mask="099-999-9999"
-                                     style = "#{baseController.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " />
+                                     style = "#{headerController.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " />
                     </td>
                 </tr>
                 <tr>
@@ -132,13 +132,13 @@
                         <p:outputLabel for="customerName2" value="2"/>
                     </td>
                     <td class="center">
-                        <p:inputText id="customerName2" value="#{baseController.appraisalContactDetailView.customerName2}"
+                        <p:inputText id="customerName2" value="#{headerController.appraisalContactDetailView.customerName2}"
                                      onkeydown="return onKeyPressName(event);"
                                      onkeypress="return onKeyPressName(event);" maxlength="50"
                                      counterTemplate="{0} characters remaining." autoResize="false"/>
                     </td>
                     <td class="center">
-                        <p:inputMask value="#{baseController.appraisalContactDetailView.contactNo2}"
+                        <p:inputMask value="#{headerController.appraisalContactDetailView.contactNo2}"
                                      mask="099-999-9999" />
                     </td>
                 </tr>
@@ -147,13 +147,13 @@
                         <p:outputLabel for="customerName3" value="3"/>
                     </td>
                     <td class="center">
-                        <p:inputText id="customerName3" value="#{baseController.appraisalContactDetailView.customerName3}"
+                        <p:inputText id="customerName3" value="#{headerController.appraisalContactDetailView.customerName3}"
                                      onkeydown="return onKeyPressName(event);"
                                      onkeypress="return onKeyPressName(event);" maxlength="50"
                                      counterTemplate="{0} characters remaining." autoResize="false"/>
                     </td>
                     <td class="center">
-                        <p:inputMask value="#{baseController.appraisalContactDetailView.contactNo3}"
+                        <p:inputMask value="#{headerController.appraisalContactDetailView.contactNo3}"
                                      mask="099-999-9999" />
                     </td>
                 </tr>
@@ -176,7 +176,7 @@
             <p:outputLabel for="zoneLocation" styleClass="title" value="#{msg.get('app.appraisal.label.zoneLocation')}"/>
         </td>
         <td>
-            <p:inputText id="zoneLocation" value="#{baseController.appraisalView.zoneLocation}" readonly="true" />
+            <p:inputText id="zoneLocation" value="#{headerController.appraisalView.zoneLocation}" readonly="true" />
         </td>
     </tr>
     <tr>
@@ -184,7 +184,7 @@
             <p:outputLabel for="bdmRemark" styleClass="title" value="#{msg.get('app.appraisal.label.bdmRemark')}"/>
         </td>
         <td>
-            <p:inputTextarea id="bdmRemark" value="#{baseController.appraisalView.bdmRemark}" rows="3" cols="90" maxlength="500"
+            <p:inputTextarea id="bdmRemark" value="#{headerController.appraisalView.bdmRemark}" rows="3" cols="90" maxlength="500"
                              counterTemplate="{0} characters remaining." autoResize="false"/>
         </td>
     </tr>
@@ -195,7 +195,7 @@
                              styleClass="medium"
                              onclick="blockReqApprDialogPanel.show()"
                              process="@form"
-                             actionListener="#{baseController.onSubmitRequestAppraisal()}"
+                             actionListener="#{headerController.onSubmitRequestAppraisal()}"
                              oncomplete="handleRequestAppraisal(xhr, status, args); blockReqApprDialogPanel.hide();"
                              update=":frmMain:reqApprDialogPanel, :frmMain:msgBoxBaseMessagePanel"/>
 

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class MandateFieldMessageView {
     private String fieldName;
+    private String fieldDesc;
     private String message;
     private String pageName;
 
@@ -14,6 +15,14 @@ public class MandateFieldMessageView {
 
     public void setFieldName(String fieldName) {
         this.fieldName = fieldName;
+    }
+
+    public String getFieldDesc() {
+        return fieldDesc;
+    }
+
+    public void setFieldDesc(String fieldDesc) {
+        this.fieldDesc = fieldDesc;
     }
 
     public String getMessage() {

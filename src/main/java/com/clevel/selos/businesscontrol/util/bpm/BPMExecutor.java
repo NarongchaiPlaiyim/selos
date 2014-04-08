@@ -245,6 +245,129 @@ public class BPMExecutor implements Serializable {
         }
     }
 
+    public void submitRM(long workCaseId, String queueName, String zmDecisionFlag, String zmPricingRequestFlag, BigDecimal totalCommercial, BigDecimal totalRetail, String resultCode, String deviationCode, int requestType, long actionCode) throws Exception{
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        Action action = actionDAO.findById(actionCode);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            fields.put("ZMDecisionFlag", zmDecisionFlag);
+            fields.put("ZMPricingRequestFlag", zmPricingRequestFlag);
+            fields.put("TotalCommercial", totalCommercial.toString());
+            fields.put("TotalRetail", totalRetail.toString());
+            fields.put("ResultCode", resultCode);
+            if(!Util.isEmpty(deviationCode)){
+                fields.put("DeviationCode", deviationCode);
+            }
+            fields.put("RequestType", String.valueOf(requestType));
+
+            log.debug("dispatch case for [Submit RM]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            if (workCase != null) {
+                execute(queueName, workCase.getWobNumber(), fields);
+            } else {
+                throw new Exception("An exception occurred, Can not find WorkCase PreScreen.");
+            }
+        }
+    }
+
+    public void submitGH(long workCaseId, String queueName, String rgmDecisionFlag, long actionCode) throws Exception{
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        Action action = actionDAO.findById(actionCode);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            fields.put("RGMDecision", rgmDecisionFlag);
+            log.debug("dispatch case for [Submit GH]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            if (workCase != null) {
+                execute(queueName, workCase.getWobNumber(), fields);
+            } else {
+                throw new Exception("An exception occurred, Can not find WorkCase PreScreen.");
+            }
+        }
+    }
+
+    public void submitCSSO(long workCaseId, String queueName, String rgmDecisionFlag, long actionCode) throws Exception{
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        Action action = actionDAO.findById(actionCode);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            fields.put("GHDecision", rgmDecisionFlag);
+            log.debug("dispatch case for [Submit CSSO]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            if (workCase != null) {
+                execute(queueName, workCase.getWobNumber(), fields);
+            } else {
+                throw new Exception("An exception occurred, Can not find WorkCase PreScreen.");
+            }
+        }
+    }
+
+    public void submitUWFromCSSO(long workCaseId, String queueName, String cssoDecisionFlag, long actionCode) throws Exception{
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        Action action = actionDAO.findById(actionCode);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            fields.put("CSSODecision", cssoDecisionFlag);
+            log.debug("dispatch case for [Submit UW]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            if (workCase != null) {
+                execute(queueName, workCase.getWobNumber(), fields);
+            } else {
+                throw new Exception("An exception occurred, Can not find WorkCase PreScreen.");
+            }
+        }
+    }
+
+    public void submitUW2(long workCaseId, String queueName, String uw2Name, String uw2DOALevel, String decisionFlag, String haveRG001, long actionCode) throws Exception{
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        Action action = actionDAO.findById(actionCode);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            fields.put("UW2UserName", uw2Name);
+            fields.put("UW2DOALevel", uw2DOALevel);
+            fields.put("UW1DecisionFlag", decisionFlag);
+            fields.put("UWRG001Flag", haveRG001);
+
+            log.debug("dispatch case for [Submit UW2]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            if (workCase != null) {
+                execute(queueName, workCase.getWobNumber(), fields);
+            } else {
+                throw new Exception("An exception occurred, Can not find WorkCase PreScreen.");
+            }
+        }
+    }
+
+    public void submitCA(long workCaseId, String queueName, String decisionFlag, String haveRG001, long actionCode) throws Exception{
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        Action action = actionDAO.findById(actionCode);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            fields.put("UW2DecisionFlag", decisionFlag);
+            fields.put("UWRG001Flag", haveRG001);
+
+            log.debug("dispatch case for [Submit UW2]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            if (workCase != null) {
+                execute(queueName, workCase.getWobNumber(), fields);
+            } else {
+                throw new Exception("An exception occurred, Can not find WorkCase PreScreen.");
+            }
+        }
+    }
+
     public void requestAppraisal(String appNumber, String borrowerName, String productGroup, int requestType, String bdmUserName) throws Exception{
         boolean success = bpmInterface.createParallelCase(appNumber, borrowerName, productGroup, requestType, bdmUserName);
         if(!success){
@@ -347,6 +470,7 @@ public class BPMExecutor implements Serializable {
         fields.put("BorrowerName", borrowerName);
         fields.put("ProductGroup", productGroup);
 
+        log.debug("updateBorrowerProductGroup : fields : {}", fields);
         bpmInterface.updateCase(queueName, wobNumber, fields);
     }
 

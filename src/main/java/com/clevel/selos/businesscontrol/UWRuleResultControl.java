@@ -6,6 +6,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.UWRuleResultSummary;
 import com.clevel.selos.model.view.UWRuleResultSummaryView;
 import com.clevel.selos.transform.UWRuleResultTransform;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -45,8 +46,11 @@ public class UWRuleResultControl extends BusinessControl{
             uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(uwRuleResultSummaryView.getWorkCasePrescreenId());
         else
             uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(uwRuleResultSummaryView.getWorkCaseId());
-        uwRuleResultDetailDAO.delete(uwRuleResultSummary.getUwRuleResultDetailList());
-        uwRuleResultSummaryDAO.delete(uwRuleResultSummary);
+        if(!Util.isNull(uwRuleResultSummary)){
+            logger.debug("uwRuleResultSummary : {}", uwRuleResultSummary);
+            uwRuleResultDetailDAO.delete(uwRuleResultSummary.getUwRuleResultDetailList());
+            uwRuleResultSummaryDAO.delete(uwRuleResultSummary);
+        }
         logger.debug("-- end deleteUWRuleResult --");
     }
 
@@ -58,4 +62,11 @@ public class UWRuleResultControl extends BusinessControl{
         return uwRuleResultSummaryView;
     }
 
+    public UWRuleResultSummaryView getUWRuleResultByWorkCaseId(long workCaseId){
+        logger.debug("-- begin getUWRuleResultByWorkCaseId {}", workCaseId);
+        UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+        UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultTransform.transformToView(uwRuleResultSummary);
+        logger.info("-- end getUWRuleResultByWorkCaseId return{}", uwRuleResultSummaryView);
+        return uwRuleResultSummaryView;
+    }
 }

@@ -567,7 +567,7 @@ public class CustomerInfoIndividual implements Serializable {
         //////////////////////////////////////////////////////////////////
 
         onChangeMaritalStatusInitial();
-        onChangeRelation();
+        onChangeRelationInitial();
         onChangeReference();
         onChangeProvinceEditForm1();
         onChangeDistrictEditForm1();
@@ -577,7 +577,7 @@ public class CustomerInfoIndividual implements Serializable {
         onChangeDistrictEditForm3();
 
         if(customerInfoView.getMaritalStatus().getSpouseFlag() == 1){ // have spouse
-            onChangeRelationSpouse();
+            onChangeRelationSpouseInitial();
             onChangeReferenceSpouse();
             onChangeProvinceEditForm4();
             onChangeDistrictEditForm4();
@@ -698,6 +698,79 @@ public class CustomerInfoIndividual implements Serializable {
 
         Relation relation = new Relation();
         customerInfoView.getSpouse().setRelation(relation);
+    }
+
+    public void onChangeRelationInitial(){
+        referenceIndividualList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationMainCusId, 1, 0);
+
+        relationSpouseList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
+
+        if(customerInfoView.getMaritalStatus().getSpouseFlag() != 0){
+            onChangeRelationSpouse();
+        }
+
+//      - การแสดง Relationship ของ Spouse ไม่สามารถเลือกได้สูงกว่า Customer เช่น A = Guarantor, B ไม่สามารถเลือกเป็น Borrower ได้ แต่เลือก Guarantor ได้
+//        int relationId = customerInfoView.getRelation().getId();
+        Relation tmp1 = new Relation();
+        Relation tmp2 = new Relation();
+        if(relationMainCusId == 3 || relationMainCusId == 4) {
+            for(Relation relationSpouse : relationSpouseList){
+                if(relationSpouse.getId() == 2){ // if main cus = 3 , 4 remove 2 only
+                    tmp1 = relationSpouse;
+                }
+                if(relationMainCusId == 4){ // if main cus = 4 remove 3
+                    if(relationSpouse.getId() == 3){
+                        tmp2 = relationSpouse;
+                    }
+                }
+            }
+            relationSpouseList.remove(tmp1);
+            if(relationMainCusId == 4){
+                relationSpouseList.remove(tmp2);
+            }
+        }
+    }
+
+    public void onChangeRelationSpouseInitial(){
+//        referenceSpouseList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, customerInfoView.getSpouse().getRelation().getId(),0,1);
+        referenceSpouseList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationSpouseCusId, 0, 1);
+
+        //this condition for spouse
+//        Reference referenceMain = referenceDAO.findById(customerInfoView.getReference().getId());
+        Reference referenceMain = referenceDAO.findById(referenceMainCusId);
+        if (caseBorrowerTypeId == 2) { // Juristic as Borrower
+//            if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){ // Bypass related
+            if(relationSpouseCusId == RelationValue.INDIRECTLY_RELATED.value()){ // Bypass related
+                int flagRelateType = 0;
+                if (referenceMain.getRelationType() == 1) { // Committee
+                    flagRelateType = 4; // remove 4 ( relation_type in db ) ( remove shareholder )
+                } else if (referenceMain.getRelationType() == 2){ // Shareholder
+                    flagRelateType = 3; // remove 3 ( relation_type in db ) ( remove committee )
+                }
+
+                if(flagRelateType == 0){
+                    Reference tmp1 = new Reference();
+                    Reference tmp2 = new Reference();
+                    for(Reference r : referenceSpouseList){
+                        if(r.getRelationType() == 3){
+                            tmp1 = r;
+                        }
+                        if(r.getRelationType() == 4){
+                            tmp2 = r;
+                        }
+                    }
+                    referenceSpouseList.remove(tmp1);
+                    referenceSpouseList.remove(tmp2);
+                } else {
+                    for(Reference r : referenceSpouseList){
+                        if(r.getRelationType() == flagRelateType){
+                            referenceSpouseList.remove(r);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void onChangeProvinceForm1() {

@@ -305,7 +305,7 @@
             <h:outputText value="#{returnUW.message}" escape="false"/>
         </f:facet>
         <p:commandButton value="OK"
-                         action="#{baseController.onGoToInbox}"
+                         action="#{headerController.onGoToInbox}"
                          process="@this"
                          update=":frmMain"
                          oncomplete="msgBoxRedirectDlg.hide()"/>

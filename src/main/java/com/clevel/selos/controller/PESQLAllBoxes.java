@@ -1,16 +1,23 @@
 package com.clevel.selos.controller;
 
 
+import com.clevel.selos.businesscontrol.HeaderControl;
 import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.dao.master.StepDAO;
+import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.dao.master.UserTeamDAO;
 import com.clevel.selos.dao.working.WorkCaseAppraisalDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.WorkCaseOwnerDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.ActionCode;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Step;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCaseAppraisal;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -64,6 +71,11 @@ public class PESQLAllBoxes implements Serializable
     PEDBExecute pedbExecute;
     @Inject
     InboxControl inboxControl;
+    @Inject
+    HeaderControl headerControl;
+
+    @Inject
+    BPMInterfaceImpl bpmInterfaceImpl;
 
     public PESQLAllBoxes() { }
 
@@ -74,6 +86,31 @@ public class PESQLAllBoxes implements Serializable
 
         //Clear all session before selectInbox
         HttpSession session = FacesUtil.getSession(false);
+        try
+        {
+            if(session.getAttribute("isLocked")!=null)
+            {
+
+                String isLocked = (String) session.getAttribute("isLocked");
+
+                if(isLocked.equalsIgnoreCase("true"))
+                {
+                    String wobNum = (String)session.getAttribute("wobNum");
+                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNum,(Integer)session.getAttribute("fetchType"));
+                }
+                else
+                {
+                    session.removeAttribute("isLocked");
+                }
+
+            }
+        }
+        catch (Exception e)
+        {
+
+            log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
+        }
+
         session.setAttribute("workCasePreScreenId", 0L);
         session.setAttribute("workCaseAppraisalId", 0L);
         session.setAttribute("workCaseId", 0L);
@@ -82,6 +119,7 @@ public class PESQLAllBoxes implements Serializable
         session.setAttribute("stageId", 0);
         session.setAttribute("requestAppraisal", 0);
         session.setAttribute("queueName","");
+        session.removeAttribute("wobNum");
 
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
@@ -91,6 +129,7 @@ public class PESQLAllBoxes implements Serializable
             inboxname =  request.getParameter("id") ;
             inboxViewList =  pedbExecute.getPEInbox(inboxname);
             log.debug("onCreation ::: inboxViewList : {}", inboxViewList);
+
         }
         catch(Exception ex)
         {
@@ -118,6 +157,7 @@ public class PESQLAllBoxes implements Serializable
         int stageId = 0;
         int requestAppraisalFlag = 0;
 
+
         if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value())
         {
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByWobNumber(inboxViewSelectItem.getFwobnumber());
@@ -129,7 +169,8 @@ public class PESQLAllBoxes implements Serializable
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
             session.setAttribute("statusId", statusId);
-        } else if (stepId == StepValue.REQUEST_APPRAISAL.value()) {     //For Parallel Appraisal
+            session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
+        } else if (stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Parallel Appraisal
             WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
             if(workCase != null){
                 wrkCaseId = workCase.getId();
@@ -160,6 +201,7 @@ public class PESQLAllBoxes implements Serializable
             session.setAttribute("workCaseId", wrkCaseId);
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
             session.setAttribute("statusId", statusId);
+            session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
         }
 
         session.setAttribute("stepId", inboxViewSelectItem.getStepId());
@@ -187,10 +229,27 @@ public class PESQLAllBoxes implements Serializable
             session.setAttribute("fetchType",inboxViewSelectItem.getFetchType());
         }
 
-        AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(inboxViewSelectItem.getStepId(), inboxViewSelectItem.getFwobnumber());
+        AppHeaderView appHeaderView = headerControl.getHeaderInformation(inboxViewSelectItem.getStepId(), inboxViewSelectItem.getFwobnumber());
+        session.setAttribute("caseOwner",inboxViewSelectItem.getAtuser());
+
+        try
+        {
+
+            bpmInterfaceImpl.lockCase(queueName,inboxViewSelectItem.getFwobnumber(),inboxViewSelectItem.getFetchType());
+            session.setAttribute("isLocked","true");
+
+        }
+        catch (Exception e)
+        {
+            //TODO Alert Box
+            log.error("Error while Locking case in queue : {}, WobNum : {}",queueName, inboxViewSelectItem.getFwobnumber(), e);
+            FacesUtil.redirect("/site/generic_inbox_mybox_post.jsf");
+            return;
+        }
+
         session.setAttribute("appHeaderInfo", appHeaderView);
 
-        String landingPage = pedbExecute.getLandingPage(stepId);
+        String landingPage = inboxControl.getLandingPage(stepId);
 
         log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
 

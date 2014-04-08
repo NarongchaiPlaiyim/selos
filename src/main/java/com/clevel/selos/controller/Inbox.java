@@ -1,27 +1,21 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.dao.master.RoleInboxDAO;
-import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.InboxType;
 import com.clevel.selos.model.db.relation.RelRoleBasedInbox;
-import com.clevel.selos.model.view.AppHeaderView;
-import com.clevel.selos.model.view.InboxView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
+
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,12 +38,6 @@ public class Inbox implements Serializable {
     @Inject
     @ExceptionMessage
     private Message exceptionMsg;
-
-    @Inject
-    private BPMInterface bpmInterface;
-
-    @Inject
-    private InboxControl inboxControl;
 
     @Inject
     private InboxType inboxType;
@@ -98,14 +86,14 @@ public class Inbox implements Serializable {
 
         inboxTypeList = new ArrayList<String>();
         inboxTypeList = roleInboxDAO.getUserBasedRole(inboxRoleId,relRoleBasedInbox,inboxType);
-        log.info("inboxTypeList:::::::::::::::::::::::"+inboxTypeList);
+        log.info("inboxTypeList::::::::::::::::::::::: {}", inboxTypeList);
 
         for(String inboxName : inboxTypeList){
             InboxType inboxType = new InboxType();
             inboxType.setInbox_name(inboxName);
             inboxTypeArrayList.add(inboxType);
         }
-        log.info("inboxTypeArrayList ::::::: {}"+inboxTypeArrayList);
+        log.info("inboxTypeArrayList ::::::: {}", inboxTypeArrayList);
     }
 
     public UserDetail getUserDetail() {

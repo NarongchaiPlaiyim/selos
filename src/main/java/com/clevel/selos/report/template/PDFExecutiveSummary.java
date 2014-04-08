@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PDFExecutive_Summary implements Serializable {
+public class PDFExecutiveSummary implements Serializable {
     @Inject
     private ExSummaryControl exSummaryControl;
 
@@ -55,7 +55,7 @@ public class PDFExecutive_Summary implements Serializable {
     long workCaseId;
 
     @Inject
-    public PDFExecutive_Summary() {
+    public PDFExecutiveSummary() {
     }
 
     public void init(){
@@ -348,7 +348,7 @@ public class PDFExecutive_Summary implements Serializable {
         if(!Util.isNull(exSumDecisionView)){
             for (ExSumDecisionView decisionView : exSumDecisionView){
                 decisionExSumReport.setId(decisionView.getId());
-                decisionExSumReport.setFlag(Util.checkNullString(decisionView.getFlag()));
+//                decisionExSumReport.setFlag(Util.checkNullString(decisionView.getFlag()));
                 decisionExSumReport.setGroup(Util.checkNullString(decisionView.getGroup()));
                 decisionExSumReport.setRuleName(Util.checkNullString(decisionView.getRuleName()));
                 decisionExSumReport.setCusName(Util.checkNullString(decisionView.getCusName()));

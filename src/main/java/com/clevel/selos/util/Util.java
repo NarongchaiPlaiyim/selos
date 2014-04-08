@@ -1,24 +1,13 @@
 package com.clevel.selos.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.text.*;
+import java.util.*;
 
 public class Util implements Serializable {
     private static Logger log = LoggerFactory.getLogger(Util.class);
@@ -28,6 +17,12 @@ public class Util implements Serializable {
 
     public static String createDateString(Date date, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format, defaultLocale);
+        return sdf.format(date);
+    }
+    //for Reject Report
+    public static String createDateStringTH(Date date, String format){
+        Locale defaultLocaleTH = new Locale("th","TH");
+        SimpleDateFormat sdf = new SimpleDateFormat(format, defaultLocaleTH);
         return sdf.format(date);
     }
 
@@ -54,7 +49,7 @@ public class Util implements Serializable {
     }
 
     public static String createDateTh(Date date) {
-        return createDateString(date, "dd MM yyyy");
+        return createDateStringTH(date, "dd MM yyyy");
     }
 
 
@@ -423,6 +418,10 @@ public class Util implements Serializable {
             return "";
         }
         return string;
+    }
+
+    public static String convertNullToZero(final String string){
+        return string == null ? "0" : string;
     }
 
     public static String checkNullString(String value){

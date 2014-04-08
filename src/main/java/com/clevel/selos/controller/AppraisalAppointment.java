@@ -57,10 +57,6 @@ public class AppraisalAppointment implements Serializable {
     Message exceptionMsg;
 
     @Inject
-    private UserDAO userDAO;
-    @Inject
-    private WorkCaseDAO workCaseDAO;
-    @Inject
     private AppraisalCompanyDAO appraisalCompanyDAO;
     @Inject
     private AppraisalDivisionDAO appraisalDivisionDAO;
@@ -68,8 +64,12 @@ public class AppraisalAppointment implements Serializable {
     private LocationPropertyDAO locationPropertyDAO;
     @Inject
     private ProvinceDAO provinceDAO;
+
     @Inject
     private AppraisalAppointmentControl appraisalAppointmentControl;
+    @Inject
+    private CustomerAcceptanceControl customerAcceptanceControl;
+
     @Inject
     private AppraisalDetailTransform appraisalDetailTransform;
 
@@ -124,13 +124,6 @@ public class AppraisalAppointment implements Serializable {
     private List<Reason> reasons;
     private boolean addDialog;
     private Status workCaseStatus;
-    //private User user;
-    @Inject
-    private CustomerAcceptanceControl customerAcceptanceControl;
-
-    @Inject
-    private ReasonDAO reasonDAO;
-
     private CustomerAcceptanceView customerAcceptanceView;
 
     public AppraisalAppointment() {
@@ -177,7 +170,7 @@ public class AppraisalAppointment implements Serializable {
         if(checkSession(session)){
             stepId = (Long)session.getAttribute("stepId");
 
-            if(stepId != StepValue.REQUEST_APPRAISAL.value()){
+            if(stepId != StepValue.REVIEW_APPRAISAL_REQUEST.value()){
                 log.debug("preRender ::: invalid stepId : [{}]", stepId);
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
@@ -196,9 +189,9 @@ public class AppraisalAppointment implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         if(checkSession(session)){
             if((Long)session.getAttribute("workCaseId") != 0){
-                workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+                workCaseId = (Long)session.getAttribute("workCaseId");
             } else if ((Long)session.getAttribute("workCasePreScreenId") != 0){
-                workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
+                workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
             }
 
             contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();

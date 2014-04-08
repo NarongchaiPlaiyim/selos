@@ -496,6 +496,10 @@ public class PrescreenChecker implements Serializable {
         }
     }
 
+    public void onCheckingPreScreen(){
+
+    }
+
     public void onCompleteChecker(){
         //TODO Show message box
         if(success){

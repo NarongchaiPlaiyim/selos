@@ -22,15 +22,14 @@ public class MandateField implements Serializable{
     @JoinColumn(name = "step_id")
     private Step step;
 
-    @ManyToOne
-    @JoinColumn(name = "status_id")
-    private Status status;
-
     @Column(name = "class_name", length = 200)
     private String className;
 
     @Column(name = "field_name", length = 50)
     private String fieldName;
+
+    @Column(name = "field_description", length = 100)
+    private String fieldDescription;
 
     @Column(name = "page_name", length = 100)
     private String page;
@@ -59,14 +58,6 @@ public class MandateField implements Serializable{
         this.step = step;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
     public String getClassName() {
         return className;
     }
@@ -83,6 +74,14 @@ public class MandateField implements Serializable{
         this.fieldName = fieldName;
     }
 
+    public String getFieldDescription() {
+        return fieldDescription;
+    }
+
+    public void setFieldDescription(String fieldDescription) {
+        this.fieldDescription = fieldDescription;
+    }
+
     public String getPage() {
         return page;
     }
@@ -97,9 +96,9 @@ public class MandateField implements Serializable{
                 .append("id", id)
                 .append("action", action)
                 .append("step", step)
-                .append("status", status)
                 .append("className", className)
                 .append("fieldName", fieldName)
+                .append("fieldDescription", fieldDescription)
                 .append("page", page)
                 .toString();
     }

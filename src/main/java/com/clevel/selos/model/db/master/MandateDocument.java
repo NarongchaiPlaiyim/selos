@@ -27,8 +27,8 @@ public class MandateDocument implements Serializable {
     private DocLevel docLevel;
 
     @ManyToOne
-    @JoinColumn(name = "customer_entity", columnDefinition = "int default 0")
-    private CustomerEntity customerEntity;
+    @JoinColumn(name = "relation_id")
+    private Relation relation;
 
     @ManyToOne
     @JoinColumn(name = "step_id")
@@ -74,12 +74,12 @@ public class MandateDocument implements Serializable {
         this.step = step;
     }
 
-    public CustomerEntity getCustomerEntity() {
-        return customerEntity;
+    public Relation getRelation() {
+        return relation;
     }
 
-    public void setCustomerEntity(CustomerEntity customerEntity) {
-        this.customerEntity = customerEntity;
+    public void setRelation(Relation relation) {
+        this.relation = relation;
     }
 
     @Override
@@ -89,6 +89,7 @@ public class MandateDocument implements Serializable {
                 .append("ecmDocId", ecmDocId)
                 .append("description", description)
                 .append("docLevel", docLevel)
+                .append("relation", relation)
                 .append("step", step)
                 .toString();
     }

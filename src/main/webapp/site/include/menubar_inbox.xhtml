@@ -26,7 +26,7 @@
                     <ul>
                         <ui:repeat value="#{inbox.inboxTypeArrayList}" var="inboxName">
                                 <li id="submnu_#{inboxName.inbox_name}">
-                                    <a href="generic_inbox_mybox_post.jsf?id=#{inboxName.inbox_name}" >#{inboxName.inbox_name}(<h:outputText value="#{peDBCount.PEInboxCount(inboxName.inbox_name)}"/>)</a>
+                                    <a href="inbox.jsf?id=#{inboxName.inbox_name}">#{inboxName.inbox_name}(<h:outputText value="#{peDBCount.PEInboxCount(inboxName.inbox_name)}"/>)</a>
                                 </li>
                         </ui:repeat>
                     </ul>

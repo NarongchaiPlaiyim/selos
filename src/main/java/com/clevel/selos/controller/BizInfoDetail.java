@@ -1,9 +1,6 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.BizInfoDetailControl;
-import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
-import com.clevel.selos.businesscontrol.CreditFacProposeControl;
-import com.clevel.selos.businesscontrol.DBRControl;
+import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.BusinessActivityDAO;
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
@@ -123,6 +120,8 @@ public class BizInfoDetail implements Serializable {
     CreditFacProposeControl creditFacProposeControl;
     @Inject
     private DBRControl dbrControl;
+    @Inject
+    private ExSummaryControl exSummaryControl;
 
     public BizInfoDetail(){
 
@@ -710,6 +709,7 @@ public class BizInfoDetail implements Serializable {
                 bizInfoDetailView.setBuyerDetailList(buyerDetailList);
                 bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId, workCaseId);
                 dbrControl.updateValueOfDBR(workCaseId);
+                exSummaryControl.calForBizInfoSummary(workCaseId);
                 messageHeader = msg.get("app.bizInfoDetail.message.header.save.success");
                 message = msg.get("app.bizInfoDetail.message.body.save.success");
 
@@ -723,7 +723,7 @@ public class BizInfoDetail implements Serializable {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } catch(Exception ex){
-            log.debug("ERROR");
+            log.error("Exception while save business description : ", ex);
             messageHeader = msg.get("app.bizInfoDetail.message.header.save.fail");
             if(ex.getCause() != null){
                 message = msg.get("app.bizInfoDetail.message.body.save.fail") + ex.getCause().toString();

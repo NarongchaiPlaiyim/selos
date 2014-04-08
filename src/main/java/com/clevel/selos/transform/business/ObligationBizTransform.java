@@ -8,11 +8,10 @@ import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
 import com.clevel.selos.integration.rlos.appin.model.CreditDetail;
 import com.clevel.selos.integration.rlos.appin.model.CustomerDetail;
-import com.clevel.selos.model.CreditCategory;
-import com.clevel.selos.model.CreditRelationType;
-import com.clevel.selos.model.QualitativeClass;
-import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.Customer;
+import com.clevel.selos.model.db.working.CustomerOblAccountInfo;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;
 import com.clevel.selos.model.view.*;
@@ -28,6 +27,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.StringTokenizer;
 
 
 public class ObligationBizTransform extends BusinessTransform {
@@ -468,6 +468,7 @@ public class ObligationBizTransform extends BusinessTransform {
             String covenantFlag = null;
             String reviewFlag = null;
             QualitativeClass qualitativeClass = null;
+            List<CustomerOblAccountInfoView> customerOblAccountInfoViewList = new ArrayList<CustomerOblAccountInfoView>();
 
             for(Obligation obligation : obligationList){
                 //Service Segment, which should be the same for all obligation record
@@ -533,6 +534,9 @@ public class ObligationBizTransform extends BusinessTransform {
                         log.debug("Adjust Class");
                     }
                 }
+
+                //Set Customfer Obl Account.
+                customerOblAccountInfoViewList.add(getCustomerOblAccountInfo(obligation));
             }
 
             customerInfoView.setServiceSegmentView(serviceSegmentTransform.transformToView(Util.isEmpty(serviceSegment)? 0 : Integer.parseInt(serviceSegment)));
@@ -579,8 +583,65 @@ public class ObligationBizTransform extends BusinessTransform {
             } else if (covenantFlag.equalsIgnoreCase("N")){
                 customerInfoView.setReviewFlag(RadioValue.NO.value());
             }
+            customerInfoView.setCustomerOblAccountInfoViewList(customerOblAccountInfoViewList);
 
         }
         return customerInfoView;
+    }
+
+    public CustomerOblAccountInfoView getCustomerOblAccountInfo(Obligation obligation){
+        log.debug("-- begin getCustomerOblAccountInfo obligation: {}", obligation);
+        if(obligation == null)
+            return null;
+
+        CustomerOblAccountInfoView customerOblAccountInfo = new CustomerOblAccountInfoView();
+        boolean accountActiveFlag = false;
+        /*if("04".equals(obligation.getDataSource())){
+            int compareResult = BigDecimal.ZERO.compareTo(obligation.getOutstanding());
+            if(compareResult < 0){
+                accountActiveFlag = true;
+            } else if(compareResult == 0){
+                boolean isMatch = false;
+                StringTokenizer tokenizer = new StringTokenizer("_blank|C|H|J|P|T","|");
+                while(tokenizer.hasMoreTokens()){
+                    String _value = tokenizer.nextToken();
+
+                    if(_value.equals(obligation.getCardBlockCode())){
+
+                    }
+                }
+                if(isMatch){
+                    accountActiveFlag = true;
+                }
+            }
+        } else if("11".equals(obligation.getDataSource())){
+            StringTokenizer tokenizer = new StringTokenizer("CL|PF", "|");
+            boolean isMatch = false;
+            while (tokenizer.hasMoreTokens()){
+                String _value = tokenizer.nextToken();
+                if(_value.equals(obligation.getAccountStatus())){
+                    isMatch = true;
+                }
+            }
+
+            if(isMatch){
+
+            } else {
+                accountActiveFlag = true;
+            }
+
+        }*/
+        customerOblAccountInfo.setAccountActiveFlag(accountActiveFlag);
+        customerOblAccountInfo.setAccountRef(obligation.getAccountRef());
+        customerOblAccountInfo.setDataSource(obligation.getDataSource());
+        customerOblAccountInfo.setCusRelAccount(obligation.getCusRelAccount());
+        customerOblAccountInfo.setTdrFlag(TMBTDRFlag.lookup(obligation.getTdrFlag()));
+        customerOblAccountInfo.setNumMonthIntPastDue(obligation.getNumMonthIntPastDue());
+        customerOblAccountInfo.setNumMonthIntPastDueTDRAcc(obligation.getNumMonthIntPastDueTDRAcc());
+        customerOblAccountInfo.setTmbDelPriDay(obligation.getTmbDelPriDay());
+        customerOblAccountInfo.setTmbDelIntDay(obligation.getTmbDelIntDay());
+        customerOblAccountInfo.setCardBlockCode(obligation.getCardBlockCode());
+        log.debug("-- end getCustomerOblAccountInfo return customerOblAccountInfo: {}", customerOblAccountInfo);
+        return customerOblAccountInfo;
     }
 }

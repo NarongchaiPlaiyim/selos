@@ -5,11 +5,12 @@ import com.clevel.selos.dao.relation.UserToAuthorizationDOADAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.BorrowerType;
+import com.clevel.selos.integration.bpm.tool.SQLDBConnection;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.*;
-import com.clevel.selos.integration.bpm.tool.SQLDBConnection;
 import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -19,12 +20,12 @@ import com.clevel.selos.transform.business.InboxBizTransform;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.PreparedStatement;
-import java.text.ParseException;
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -115,6 +116,8 @@ public class PEDBExecute extends BusinessControl
     private UserDAO userDAO;
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
+    @Inject
+    WorkCaseAppraisalDAO workCaseAppraisalDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
     @Inject
@@ -227,34 +230,28 @@ public class PEDBExecute extends BusinessControl
 
     }
 
-    public List<PEInbox> getPEInbox(String inboxname)
+    public List<PEInbox> getPEInbox(String inboxName) throws Exception
     {
         log.info("controller in getPEInbox method of pedbexecute class");
 
         inboxViewList = new ArrayList<PEInbox>();
 
-        log.info("inboxname in getPEInbox method of pedbexecute class is : {}",inboxname);
+        log.info("inboxname in getPEInbox method of pedbexecute class is : {}",inboxName);
 
-        try
-        {
-            // String inboxname = "My Box";
-
+        try {
             String peQuery[] = new String[2];
 
-            peQuery =  getSqlpeQuery(inboxname);
+            peQuery =  getSqlpeQuery(inboxName);
 
             log.info("sql query is in inbox method is  : {}", peQuery[1]);
 
             inboxViewList =  getResultSetExecution(peQuery) ;
-
-        }
-        catch(Exception e)
-        {
-            log.error("exception occurred while fetching data from pe database : {}",e);
-        }
-        finally
-        {
             sqlpequery = null;
+
+        } catch(Exception e) {
+            log.error("exception occurred while fetching data from pe database : {}",e);
+            sqlpequery = null;
+            throw e;
         }
 
         return inboxViewList;
@@ -562,140 +559,6 @@ public class PEDBExecute extends BusinessControl
         }
 
         return resultQueryList;
-    }
-
-    //Tempory to remove
-    public List<WorkCase> getWorkCase() {
-        List<WorkCase> workCases = workCaseDAO.findAll();
-
-        return workCases;
-    }
-
-    //Tempory to remove
-    public List<WorkCasePrescreen> getWorkCasePreScreen() {
-        List<WorkCasePrescreen> workCasePrescreenList = workCasePrescreenDAO.findAll();
-
-        return workCasePrescreenList;
-    }
-
-    public String getLandingPage(long stepId){
-        StepLandingPage stepLandingPage = stepLandingPageDAO.findByStepId(stepId);
-        String landingPage = "";
-        if(stepLandingPage != null){
-            landingPage = stepLandingPage.getPageName();
-        } else {
-            landingPage = "LANDING_PAGE_NOT_FOUND";
-        }
-        return landingPage;
-    }
-
-    //TODO:: To review Application Header.
-    public AppHeaderView getHeaderInformation(long stepId, String wobNumber) {
-        log.info("getHeaderInformation ::: StepId : {} , WOBNumber : {}", stepId, wobNumber);
-        AppHeaderView appHeaderView = new AppHeaderView();
-        appHeaderView.setBorrowerHeaderViewList(new ArrayList<AppBorrowerHeaderView>());
-        String bdmUserId;
-        String uwUserId = "";
-
-        List<Customer> customerList = new ArrayList<Customer>();
-        List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
-
-        if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value())
-        {
-            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByWobNumber(wobNumber);
-            log.info("getHeaderInformation ::: workCasePreScreen : {}", workCasePrescreen);
-            bdmUserId = ((User)workCasePrescreen.getCreateBy()).getId();
-
-            appHeaderView.setCaNo(workCasePrescreen.getCaNumber());
-            appHeaderView.setAppNo(workCasePrescreen.getAppNumber());
-            //appHeaderView.setAppRefNo(workCase.getAppN);
-            //appHeaderView.setAppRefDate();
-            appHeaderView.setCaseStatus(workCasePrescreen.getStatus().getDescription());
-
-            customerList = customerDAO.findBorrowerByWorkCasePreScreenId(workCasePrescreen.getId());
-            customerInfoViewList = customerTransform.transformToViewList(customerList);
-            log.debug("customerInfo size : {}", customerInfoViewList.size());
-
-        }
-
-        else
-        {
-
-            WorkCase workCase = workCaseDAO.findByWobNumber(wobNumber);
-            BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCase.getId());
-            bdmUserId = workCase.getCreateBy().getId();
-
-            appHeaderView.setCaNo(basicInfo.getCaNumber());
-            appHeaderView.setAppNo(workCase.getAppNumber());
-            appHeaderView.setCaseStatus(workCase.getStatus().getDescription());
-
-            customerList = customerDAO.findBorrowerByWorkCaseId(workCase.getId());
-            customerInfoViewList = customerTransform.transformToViewList(customerList);
-            log.debug("customerInfo size : {}", customerInfoViewList.size());
-
-        }
-
-        log.info("getHeaderInformation ::: customerInfoViewList : {}", customerInfoViewList);
-        if (customerInfoViewList != null) {
-            List<AppBorrowerHeaderView> appBorrowerHeaderViewList = new ArrayList<AppBorrowerHeaderView>();
-            for (CustomerInfoView item : customerInfoViewList) {
-                AppBorrowerHeaderView appBorrowerHeaderView = new AppBorrowerHeaderView();
-                if (item.getTitleTh() != null) {
-                    appBorrowerHeaderView.setBorrowerName(item.getTitleTh().getTitleTh() + "" + item.getFirstNameTh() + " " + item.getLastNameTh());
-                } else {
-                    appBorrowerHeaderView.setBorrowerName(item.getFirstNameTh() + " " + item.getLastNameTh());
-                }
-                if (item.getCustomerEntity().getId() == 1) {
-                    appBorrowerHeaderView.setPersonalId(item.getCitizenId());
-                } else if (item.getCustomerEntity().getId() == 2) {
-                    appBorrowerHeaderView.setPersonalId(item.getRegistrationId());
-                }
-                appBorrowerHeaderViewList.add(appBorrowerHeaderView);
-            }
-            appHeaderView.setBorrowerHeaderViewList(appBorrowerHeaderViewList);
-        }
-
-        //Find product program from WorkCasePreScreenId
-        Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePrescreenDAO.findIdByWobNumber(wobNumber));
-        if (prescreen != null) {
-            List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreenId(prescreen.getId());
-            log.info("getHeaderInformation ::: prescreenFacilityList : {}", prescreenFacilityList);
-            if (prescreenFacilityList != null) {
-                List<String> productProgram = new ArrayList<String>();
-                for (PrescreenFacility item : prescreenFacilityList) {
-                    String prdPrg = item.getProductProgram().getDescription();
-                    productProgram.add(prdPrg);
-                }
-                appHeaderView.setProductProgramList(productProgram);
-            }
-        }
-
-
-
-        if (!Util.isEmpty(bdmUserId)) {
-            User bdmUser = userDAO.findById(bdmUserId);
-            if (bdmUser != null) {
-                appHeaderView.setBdmName(bdmUser.getUserName());
-                appHeaderView.setBdmPhoneNumber(bdmUser.getPhoneNumber());
-                appHeaderView.setBdmPhoneExtNumber(bdmUser.getPhoneExt());
-                if (bdmUser.getZone() != null) {
-                    appHeaderView.setBdmZoneName(bdmUser.getZone().getName());
-                }
-                if (bdmUser.getRegion() != null) {
-                    appHeaderView.setBdmRegionName(bdmUser.getRegion().getName());
-                }
-            }
-        }
-
-        if (!Util.isEmpty(uwUserId)) {
-            User uwUser = userDAO.findById(uwUserId);
-            if (uwUser != null) {
-                appHeaderView.setUwName(uwUser.getUserName());
-                appHeaderView.setUwPhoneNumber(uwUser.getPhoneExt());
-                appHeaderView.setUwTeamName(uwUser.getTeam().getName());
-            }
-        }
-        return appHeaderView;
     }
 
     public ArrayList<PERoster> getRosterQuery(String statusType, String descriptionValues)
@@ -1357,7 +1220,7 @@ public class PEDBExecute extends BusinessControl
 
             if(tableName.contains("ROSTER"))
             {
-                fetchType = BPMConstants.FETCH_TYPE_ROSTER;
+               fetchType = BPMConstants.FETCH_TYPE_ROSTER;
             }
 
             else {

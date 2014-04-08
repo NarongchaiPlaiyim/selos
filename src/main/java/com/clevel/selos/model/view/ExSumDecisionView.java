@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.UWResultColor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -7,18 +8,21 @@ import java.io.Serializable;
 
 public class ExSumDecisionView implements Serializable {
     private long id;
-    private String flag;
+    private UWResultColor flag;
     private String group;
     private String ruleName;
     private String cusName;
     private String deviationReason;
+    private int uwRuleNameId;
+    private long customerId;
+    private boolean isCanEdit;
 
     public ExSumDecisionView() {
         reset();
     }
 
     public void reset() {
-        this.flag = "";
+//        this.flag = "";
         this.group = "";
         this.ruleName = "";
         this.cusName = "";
@@ -33,11 +37,11 @@ public class ExSumDecisionView implements Serializable {
         this.id = id;
     }
 
-    public String getFlag() {
+    public UWResultColor getFlag() {
         return flag;
     }
 
-    public void setFlag(String flag) {
+    public void setFlag(UWResultColor flag) {
         this.flag = flag;
     }
 
@@ -73,6 +77,30 @@ public class ExSumDecisionView implements Serializable {
         this.deviationReason = deviationReason;
     }
 
+    public int getUwRuleNameId() {
+        return uwRuleNameId;
+    }
+
+    public void setUwRuleNameId(int uwRuleNameId) {
+        this.uwRuleNameId = uwRuleNameId;
+    }
+
+    public boolean isCanEdit() {
+        return isCanEdit;
+    }
+
+    public void setCanEdit(boolean canEdit) {
+        isCanEdit = canEdit;
+    }
+
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -82,6 +110,9 @@ public class ExSumDecisionView implements Serializable {
                 append("ruleName", ruleName).
                 append("cusName", cusName).
                 append("deviationReason", deviationReason).
+                append("uwRuleNameId", uwRuleNameId).
+                append("customerId", customerId).
+                append("isCanEdit", isCanEdit).
                 toString();
     }
 }

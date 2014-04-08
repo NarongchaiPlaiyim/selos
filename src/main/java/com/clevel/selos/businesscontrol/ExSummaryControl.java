@@ -10,6 +10,7 @@ import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.ExSummaryTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
@@ -54,6 +55,8 @@ public class ExSummaryControl extends BusinessControl {
 
     @Inject
     private ExSummaryTransform exSummaryTransform;
+    @Inject
+    private CustomerTransform customerTransform;
 
     @Inject
     private CustomerInfoControl customerInfoControl;
@@ -67,6 +70,8 @@ public class ExSummaryControl extends BusinessControl {
     private CreditFacProposeControl creditFacProposeControl;
     @Inject
     private DecisionControl decisionControl;
+    @Inject
+    private UWRuleResultControl uwRuleResultControl;
 
     public ExSummaryView getExSummaryViewByWorkCaseId(long workCaseId) {
         log.info("getExSummaryView ::: workCaseId : {}", workCaseId);
@@ -406,9 +411,7 @@ public class ExSummaryControl extends BusinessControl {
             String worstCase = "";
             if(cusListView != null && cusListView.size() > 0){
                 for(int i = 0; i < cusListView.size() ; i++){
-                    if(i == 0){
-                        tmpWorstCase = cusListView.get(i).getAdjustClass();
-                    } else {
+                    if(cusListView.get(i).getRelation().getId() == RelationValue.BORROWER.value()){
                         tmpWorstCase = calWorstCaseBotClass(tmpWorstCase,cusListView.get(i).getAdjustClass());
                     }
                 }
@@ -493,6 +496,21 @@ public class ExSummaryControl extends BusinessControl {
         exSumCreditRiskInfoView.setExtendedReviewDate(null); //Always '-'
 
         exSummaryView.setExSumCreditRiskInfoView(exSumCreditRiskInfoView);
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultControl.getUWRuleResultByWorkCaseId(workCaseId);
+        if(uwRuleResultSummaryView != null && uwRuleResultSummaryView.getId() != 0){
+            if(uwRuleResultSummaryView.getUwDeviationFlagView() != null){
+                exSummaryView.setApplicationResult(uwRuleResultSummaryView.getUwDeviationFlagView().getName());
+            }
+            exSummaryView.setApplicationColorResult(uwRuleResultSummaryView.getUwResultColor());
+
+            List<ExSumDecisionView> exSumDecisionViewList = exSummaryTransform.transformUWRuleToExSumDecision(uwRuleResultSummaryView);
+
+            exSummaryView.setExSumDecisionListView(exSumDecisionViewList);
+        } else {
+            exSummaryView.setExSumDecisionListView(new ArrayList<ExSumDecisionView>());
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         log.info("getExSummaryView ::: exSummaryView : {}", exSummaryView);
@@ -1045,5 +1063,11 @@ public class ExSummaryControl extends BusinessControl {
         } else { //equal
             return a;
         }
+    }
+
+    public List<CustomerInfoView> getCustomerList(long workCaseId){
+        log.info("getCustomerList ::: workCaseId : {}", workCaseId);
+        List<CustomerInfoView> customerInfoViewList = customerTransform.transformToSelectList(customerDAO.findByWorkCaseId(workCaseId));
+        return customerInfoViewList;
     }
 }

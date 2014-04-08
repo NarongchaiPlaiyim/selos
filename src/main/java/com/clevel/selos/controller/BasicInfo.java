@@ -1,7 +1,6 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
-import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.businesscontrol.OpenAccountControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.CustomerDAO;
@@ -20,6 +19,7 @@ import com.clevel.selos.transform.SBFScoreTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.rits.cloning.Cloner;
+
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -29,13 +29,15 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "basicInfo")
-public class BasicInfo extends MandatoryFieldsControl {
+public class BasicInfo extends BaseController {
     @Inject
     @SELOS
     Logger log;
