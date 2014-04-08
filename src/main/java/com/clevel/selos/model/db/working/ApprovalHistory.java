@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.Role;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -28,6 +29,10 @@ public class ApprovalHistory implements Serializable {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @Column(name = "submit_date")
     private Date submitDate;
@@ -73,6 +78,14 @@ public class ApprovalHistory implements Serializable {
         this.user = user;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     public Date getSubmitDate() {
         return submitDate;
     }
@@ -112,6 +125,7 @@ public class ApprovalHistory implements Serializable {
                 .append("workCase", workCase)
                 .append("step", step)
                 .append("user", user)
+                .append("role", role)
                 .append("submitDate", submitDate)
                 .append("comments", comments)
                 .append("approveDecision", approveDecision)
