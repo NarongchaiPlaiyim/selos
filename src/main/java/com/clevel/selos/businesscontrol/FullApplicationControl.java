@@ -192,7 +192,8 @@ public class FullApplicationControl extends BusinessControl {
         BigDecimal totalRetail = BigDecimal.ZERO; //TODO
         String resultCode = "G"; //TODO
         String deviationCode = ""; //TODO
-        int requestType = 0;
+        int requestType = 1; //TEMPORARY
+        /*int requestType = 0;
         ApprovalHistory approvalHistoryEndorseCA = null;
         ApprovalHistory approvalHistoryEndorsePricing = null;
         boolean isPricingRequest = false;
@@ -243,19 +244,19 @@ public class FullApplicationControl extends BusinessControl {
 
         if(!Util.isEmpty(resultCode) && resultCode.trim().equalsIgnoreCase("R")){
             deviationCode = "AD"; //TODO:
-        }
+        }*/
 
         bpmExecutor.submitRM(workCaseId, queueName, zmDecisionFlag, zmPricingRequestFlag, totalCommercial, totalRetail, resultCode, deviationCode, requestType, ActionCode.SUBMIT_CA.getVal());
 
-        approvalHistoryDAO.persist(approvalHistoryEndorseCA);
+        /*approvalHistoryDAO.persist(approvalHistoryEndorseCA);
         if(isPricingRequest){
             approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
-        }
+        }*/
     }
 
     public void submitToGH(String queueName, long workCaseId) throws Exception {
         String rgmDecisionFlag = "E"; //TODO
-        WorkCase workCase;
+        /*WorkCase workCase;
         ApprovalHistory approvalHistoryEndorsePricing = null;
 
         if(Long.toString(workCaseId) != null && workCaseId != 0){
@@ -278,16 +279,16 @@ public class FullApplicationControl extends BusinessControl {
                     }
                 }
             }
-        }
+        }*/
 
         bpmExecutor.submitGH(workCaseId, queueName, rgmDecisionFlag, ActionCode.SUBMIT_CA.getVal());
 
-        approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
+        //approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
     }
 
     public void submitToCSSO(String queueName, long workCaseId) throws Exception {
         String ghDecisionFlag = "A"; //TODO
-        WorkCase workCase;
+        /*WorkCase workCase;
         ApprovalHistory approvalHistoryEndorsePricing = null;
 
         if(Long.toString(workCaseId) != null && workCaseId != 0){
@@ -310,16 +311,16 @@ public class FullApplicationControl extends BusinessControl {
                     }
                 }
             }
-        }
+        }*/
 
         bpmExecutor.submitCSSO(workCaseId, queueName, ghDecisionFlag, ActionCode.SUBMIT_CA.getVal());
 
-        approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
+        //approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
     }
 
     public void submitToUWFromCSSO(String queueName, long workCaseId) throws Exception {
         String cssoDecisionFlag = "A"; //TODO
-        WorkCase workCase;
+        /*WorkCase workCase;
         ApprovalHistory approvalHistoryEndorsePricing = null;
 
         if(Long.toString(workCaseId) != null && workCaseId != 0){
@@ -337,11 +338,11 @@ public class FullApplicationControl extends BusinessControl {
                     }
                 }
             }
-        }
+        }*/
 
         bpmExecutor.submitUWFromCSSO(workCaseId, queueName, cssoDecisionFlag, ActionCode.SUBMIT_CA.getVal());
 
-        approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
+        //approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
     }
 
     public void submitToUWFromZM(String queueName, long workCaseId) throws Exception {
