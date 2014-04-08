@@ -76,6 +76,8 @@ public class ExSummaryView  implements Serializable {
     //
     private int yearInBusinessMonth;
 
+    private List<Long> deleteTmpList;
+
     public  ExSummaryView(){}
 
     public void reset(){
@@ -401,6 +403,14 @@ public class ExSummaryView  implements Serializable {
         this.applicationColorResult = applicationColorResult;
     }
 
+    public List<Long> getDeleteTmpList() {
+        return deleteTmpList;
+    }
+
+    public void setDeleteTmpList(List<Long> deleteTmpList) {
+        this.deleteTmpList = deleteTmpList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -443,6 +453,7 @@ public class ExSummaryView  implements Serializable {
                 append("deviateCode", deviateCode).
                 append("uwComment", uwComment).
                 append("yearInBusinessMonth", yearInBusinessMonth).
+                append("deleteTmpList", deleteTmpList).
                 toString();
     }
 }
