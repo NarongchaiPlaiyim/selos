@@ -64,11 +64,15 @@ public class PDFDecision implements Serializable {
                 log.error("Exception :: {}",ex);
             }
         }
-//        long workCaseId = 159;
 
-        decisionView = decisionControl.getDecisionView(workCaseId);
+        decisionView = new DecisionView();
 
-        log.info("workCaseID: {}",workCaseId);
+        if(!Util.isNull(workCaseId)){
+            decisionView = decisionControl.getDecisionView(workCaseId);
+            log.debug("--decisionView. {}",decisionView);
+        } else {
+            log.debug("--workcaseId is Null. {}",workCaseId);
+        }
     }
 
     public List<BorrowerCreditDecisionReport> fillCreditBorrower(String pathsub){

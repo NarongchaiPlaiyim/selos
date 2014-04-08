@@ -32,14 +32,14 @@
 	</field>
 	<detail>
 		<band height="14" splitType="Stretch">
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement uuid="666f8439-334b-4066-b08a-4fe29e109900" style="detail" stretchType="RelativeToBandHeight" x="215" y="0" width="75" height="14"/>
 				<box>
 					<leftPen lineWidth="0.0"/>
 				</box>
 				<textElement>
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph leftIndent="2"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Guarantee Amount: "+$F{guaranteeAmount}]]></textFieldExpression>
 			</textField>
@@ -51,12 +51,12 @@
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{productProgramView}+"\n"+
 $F{creditFacilityView}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement uuid="98e5aa63-bdf9-4ccf-88e5-ccdcb9a2aa21" style="detail" stretchType="RelativeToBandHeight" x="184" y="0" width="31" height="14"/>
 				<box>
 					<leftPen lineWidth="0.0"/>
@@ -64,6 +64,7 @@ $F{creditFacilityView}]]></textFieldExpression>
 				</box>
 				<textElement>
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
 			</textField>
@@ -74,7 +75,7 @@ $F{creditFacilityView}]]></textFieldExpression>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{accountName}+"\n"+
 "Acc No.: "+$F{accountNumber}+", "+"Suf.: "+$F{accountSuf}]]></textFieldExpression>

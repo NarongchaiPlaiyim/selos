@@ -151,6 +151,7 @@
                                  update=":frmMain:returnBDMPanel">
                     <p:resetInput target=":frmMain:returnBDMPanel"/>
                 </p:commandButton>
+
                 <!--Request Appraisal Fullapp-->
                 <p:commandButton id="btnReqApprFullapp" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
                                  rendered="#{headerController.checkButton('Request Appraisal')}"
@@ -369,7 +370,7 @@
     <p:panel id="printReportPanel" styleClass="panel">
         <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"
                   onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-                  modal="true" width="750" height="200">
+                  modal="true" width="750" height="200" closable="false">
             <ui:include src="/site/dialog/printReportDialog.xhtml"/>
         </p:dialog>
     </p:panel>
