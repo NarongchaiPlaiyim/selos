@@ -48,6 +48,7 @@ public class BorrowerAppInRLOSDecisionReport extends ReportModel{
         projectCode = "";
 
         existingCreditTierDetailViewList = new ArrayList<ExistingCreditTierDetailView>();
+        existingSplitLineDetailViewList = new ArrayList<ExistingSplitLineDetailView>();
     }
 
 

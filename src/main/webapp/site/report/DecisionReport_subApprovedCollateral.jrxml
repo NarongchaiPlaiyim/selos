@@ -252,7 +252,9 @@
 				</textField>
 				<subreport>
 					<reportElement uuid="8fb05b67-bf26-42eb-96c9-e6dbc589de77" x="111" y="95" width="444" height="39"/>
-					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{proposeCreditDetailViewList})]]></dataSourceExpression>
+					<dataSourceExpression><![CDATA[$F{proposeCreditDetailViewList}.isEmpty() ?
+new net.sf.jasperreports.engine.JREmptyDataSource() :
+new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{proposeCreditDetailViewList})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$F{path} + "DecisionReport_subApprovedCollateral_subCollateral.jasper"]]></subreportExpression>
 				</subreport>
 				<staticText>
@@ -414,7 +416,9 @@
 				</staticText>
 				<subreport>
 					<reportElement uuid="ca0afef8-38ac-496f-8756-e49a89820dea" x="0" y="134" width="555" height="38"/>
-					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{subViewList})]]></dataSourceExpression>
+					<dataSourceExpression><![CDATA[$F{subViewList}.isEmpty() ?
+new net.sf.jasperreports.engine.JREmptyDataSource() :
+new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{subViewList})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$F{path} + "DecisionReport_subApprovedCollateral_subSubCollateral.jasper"]]></subreportExpression>
 				</subreport>
 				<textField isBlankWhenNull="true">

@@ -14,14 +14,14 @@
                                  rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1002}"
                                  actionListener="#{headerController.onCheckMandateDialog()}"
                                  oncomplete="checkMandateDlg.show()"
-                                 update=":frmMain:checkMandatePanel:msgBoxBaseMessagePanel">
+                                 update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
                     <p:resetInput target=":frmMain:checkMandatePanel"/>
                 </p:commandButton>
                 <p:commandButton id="btnChkMandatePreScreen" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
                                  rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1003}"
                                  actionListener="#{headerController.onCheckMandateForCheckerDialog()}"
                                  oncomplete="checkMandateDlg.show()"
-                                 update=":frmMain:checkMandatePanel:msgBoxBaseMessagePanel">
+                                 update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
                     <p:resetInput target=":frmMain:checkMandatePanel"/>
                 </p:commandButton>
                 <!--Check Mandate Doc Prescreen-->
@@ -136,7 +136,7 @@
                                  rendered="#{headerController.checkButton('Check Mandate Doc')}"
                                  actionListener="#{headerController.onCheckMandateDialog()}"
                                  oncomplete="checkMandateDlg.show()"
-                                 update=":frmMain:checkMandatePanel:msgBoxBaseMessagePanel">
+                                 update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
                     <p:resetInput target=":frmMain:checkMandatePanel"/>
                 </p:commandButton>
                 <!--Return to BDM -->

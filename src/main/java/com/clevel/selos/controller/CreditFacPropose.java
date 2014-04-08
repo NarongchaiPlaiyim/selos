@@ -1096,7 +1096,7 @@ public class CreditFacPropose implements Serializable {
 //        newCollateralView.setAadDecisionReasonDetail(selectCollateralDetailView.getAadDecisionReasonDetail());
 //        newCollateralView.setUsage(selectCollateralDetailView.getUsage());
 //        newCollateralView.setTypeOfUsage(selectCollateralDetailView.getTypeOfUsage());
-//        newCollateralView.setUwDecision(selectCollateralDetailView.getUwDecision());
+//        newCollateralView.setApproveDecision(selectCollateralDetailView.getApproveDecision());
 //        newCollateralView.setUwRemark(selectCollateralDetailView.getUwRemark());
 //        newCollateralView.setBdmComments(selectCollateralDetailView.getBdmComments());
 //        newCollateralView.setMortgageCondition(selectCollateralDetailView.getMortgageCondition());

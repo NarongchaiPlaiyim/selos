@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b568264b-3421-42fd-80e8-96aa4a75cbf6">
-	<property name="ireport.zoom" value="1.2100000000000266"/>
+	<property name="ireport.zoom" value="1.100000000000025"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="1428"/>
+	<property name="ireport.y" value="1123"/>
 	<style name="Total" mode="Opaque" forecolor="#000000" backcolor="#FCFF79" hAlign="Left" vAlign="Middle" fontSize="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -205,8 +205,11 @@
 					<text><![CDATA[    Total Commercial]]></text>
 				</staticText>
 				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement uuid="9302d668-6766-4d40-bf5b-daecb0ad0d93" style="Total" x="259" y="33" width="84" height="15"/>
+					<reportElement uuid="9302d668-6766-4d40-bf5b-daecb0ad0d93" style="Total" x="258" y="33" width="85" height="15"/>
 					<box>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Right">
@@ -218,7 +221,10 @@
 				<staticText>
 					<reportElement uuid="d91a56fc-8e46-4735-9f88-8d77ed84762c" style="Total" x="343" y="33" width="212" height="15"/>
 					<box>
-						<leftPen lineWidth="0.0"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF"/>
@@ -240,8 +246,11 @@
 					<text><![CDATA[    Total Exposure]]></text>
 				</staticText>
 				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement uuid="6f905176-c557-4e1a-895b-490070b3ff1c" style="Total" x="259" y="76" width="84" height="15"/>
+					<reportElement uuid="6f905176-c557-4e1a-895b-490070b3ff1c" style="Total" x="258" y="76" width="85" height="15"/>
 					<box>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Right">
@@ -253,7 +262,10 @@
 				<staticText>
 					<reportElement uuid="f978260e-374f-417f-bd5a-974bf7bcaf07" style="Total" x="343" y="76" width="212" height="15"/>
 					<box>
-						<leftPen lineWidth="0.0"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF"/>
@@ -275,8 +287,11 @@
 					<text><![CDATA[    Total Commercial and OBOD]]></text>
 				</staticText>
 				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement uuid="34b96e14-c97f-4f8f-bbb7-3cc5be683cf1" style="Total" x="259" y="54" width="84" height="15"/>
+					<reportElement uuid="34b96e14-c97f-4f8f-bbb7-3cc5be683cf1" style="Total" x="258" y="54" width="85" height="15"/>
 					<box>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Right">
@@ -288,7 +303,10 @@
 				<staticText>
 					<reportElement uuid="37d679d1-daae-47e5-af20-a0c3eecd6806" style="Total" x="343" y="54" width="212" height="15"/>
 					<box>
-						<leftPen lineWidth="0.0"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF"/>
@@ -310,14 +328,14 @@
 					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="ab1875e0-df16-47f1-a61d-77a9e5a1c2c9" style="Total" x="11" y="0" width="247" height="15"/>
+					<reportElement uuid="ab1875e0-df16-47f1-a61d-77a9e5a1c2c9" style="Total" x="13" y="0" width="245" height="15"/>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[  Total]]></text>
 				</staticText>
 				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement uuid="52cccbe4-c280-4d1d-9ff0-95ef7279d5a6" style="Total" x="259" y="0" width="84" height="15"/>
+					<reportElement uuid="52cccbe4-c280-4d1d-9ff0-95ef7279d5a6" style="Total" x="258" y="0" width="85" height="15"/>
 					<textElement textAlignment="Right">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1"/>
@@ -361,17 +379,6 @@
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
-				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement uuid="c78e6489-86e4-4cd1-bf67-f0716a0bed3b" style="Total" x="258" y="0" width="87" height="15"/>
-					<box>
-						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					</box>
-					<textElement textAlignment="Right">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtRelatedTotalComLimit()]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement uuid="95dc0fea-823b-4444-a9fb-e1542933ec8d" style="Total" x="11" y="0" width="247" height="15"/>
 					<textElement>
@@ -387,7 +394,7 @@
 					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="bd1716ad-ad81-4775-99ad-c8790f57db8f" style="Total" x="345" y="0" width="210" height="15"/>
+					<reportElement uuid="bd1716ad-ad81-4775-99ad-c8790f57db8f" style="Total" x="343" y="0" width="212" height="15"/>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF"/>
 					</textElement>
@@ -398,6 +405,17 @@
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillRelatedRetail})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subPersonRetail.jasper"]]></subreportExpression>
 				</subreport>
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement uuid="d9c65c81-8042-4036-afa9-368153779e84" style="Total" x="258" y="0" width="85" height="15"/>
+					<box>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					</box>
+					<textElement textAlignment="Right">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtRelatedTotalComLimit()]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 		<band height="42" splitType="Prevent">
@@ -484,7 +502,7 @@
 					<reportElement uuid="773661b7-841a-4935-9cea-b02be2e8d4ec" style="Total" x="345" y="31" width="210" height="15"/>
 					<box>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
@@ -525,7 +543,7 @@
 					<reportElement uuid="68f2a24c-a934-490b-8339-714dc6c38e21" style="Total" x="345" y="74" width="210" height="15"/>
 					<box>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
@@ -565,7 +583,7 @@
 					<reportElement uuid="9949f6d7-b18a-4636-a8b0-2d384f1d7b0b" style="Total" x="345" y="52" width="210" height="15"/>
 					<box>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
@@ -653,7 +671,7 @@
 					<reportElement uuid="2f772ed5-0fc4-4f20-8b8e-022e891dc701" style="Total" x="345" y="13" width="210" height="15"/>
 					<box>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
@@ -693,7 +711,7 @@
 					<reportElement uuid="73eb2ab9-3c8d-411d-80d2-381a92d64772" style="Total" x="345" y="55" width="210" height="15"/>
 					<box>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
@@ -733,7 +751,7 @@
 					<reportElement uuid="95af44e3-8ad1-4060-a967-8524f932a115" style="Total" x="345" y="34" width="210" height="15"/>
 					<box>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
@@ -787,7 +805,7 @@
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="e9fa1cdc-ba98-48a3-bbdb-73435cac36a7" x="1" y="18" width="82" height="13"/>
+					<reportElement uuid="e9fa1cdc-ba98-48a3-bbdb-73435cac36a7" x="1" y="22" width="82" height="13"/>
 					<textElement>
 						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
@@ -882,7 +900,7 @@
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="2184ce53-6c74-4d02-845d-3bc9dbb36e69" x="1" y="24" width="82" height="13"/>
+					<reportElement uuid="2184ce53-6c74-4d02-845d-3bc9dbb36e69" x="1" y="25" width="82" height="13"/>
 					<textElement>
 						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
@@ -1352,9 +1370,9 @@ new net.sf.jasperreports.engine.JREmptyDataSource()
 				</subreport>
 			</frame>
 		</band>
-		<band height="73" splitType="Prevent">
+		<band height="78" splitType="Prevent">
 			<frame>
-				<reportElement uuid="35480317-af83-4308-8a4d-baba0af8ffd8" x="0" y="0" width="555" height="73"/>
+				<reportElement uuid="35480317-af83-4308-8a4d-baba0af8ffd8" x="0" y="0" width="555" height="78"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
