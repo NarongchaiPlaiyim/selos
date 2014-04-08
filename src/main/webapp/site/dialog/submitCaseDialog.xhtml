@@ -6,7 +6,7 @@
         xmlns:p="http://primefaces.org/ui">
 
 <p:panel id="submitCaseDlgPanel" styleClass="panel-dialog">
-    <p:panel id="submitCaseZM" rendered="false" styleClass="panel">
+    <p:panel id="submitCaseZM" rendered="#{not headerController.requestPricing}" styleClass="panel">
         <table class="content_table_form">
             <tr>
                 <td colspan="2" class="title left">Submit CA</td>
@@ -83,7 +83,7 @@
             </tr>
         </table>
     </p:panel>
-    <p:panel id="submitCaseZMPricing" styleClass="panel">
+    <p:panel id="submitCaseZMPricing" rendered="#{headerController.requestPricing}" styleClass="panel">
         <table class="content_table_form">
             <tr>
                 <td colspan="2" class="title left">Price Reduction Approval</td>
@@ -185,7 +185,7 @@
                                          rows="5">
                         </p:inputTextarea>
                     </td>
-                </tr>
+                </tr>                                                                                                        f
             </p:panel>
             <tr>
                 <td colspan="2"></td>
@@ -207,8 +207,8 @@
         </table>
     </p:panel>
 </p:panel>
-<p:blockUI widgetVar="blockAssignABDMDlg" block="assignABDMDlgPanel"
-           trigger=":frmMain:dlgSubmitAssignABDMBtn">
+<p:blockUI widgetVar="blockSubmitCaseDlgPanel" block="submitCaseDlgPanel"
+           trigger=":frmMain:dlgSubmitCaseZMPricingBtn">
     <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>

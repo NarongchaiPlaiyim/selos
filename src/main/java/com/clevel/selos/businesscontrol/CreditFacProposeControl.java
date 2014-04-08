@@ -149,6 +149,8 @@ public class CreditFacProposeControl extends BusinessControl {
     TCGDAO tcgDAO;
     @Inject
     BankStatementSummaryDAO bankStatementSummaryDAO;
+    @Inject
+    FullApplicationControl fullApplicationControl;
 
     @Inject
     public CreditFacProposeControl() {
@@ -166,10 +168,10 @@ public class CreditFacProposeControl extends BusinessControl {
                 List<FeeDetail> feeDetailList = feeDetailDAO.findAllByWorkCaseId(workCaseId);
                 if (feeDetailList.size() > 0) {
                     log.debug("feeDetailList size:: {}", feeDetailList.size());
-//                    List<FeeDetailView> feeDetailViewList = feeTransform.transformToView(feeDetailList);
-//                    log.debug("feeDetailViewList : {}", feeDetailViewList);
-//                    List<NewFeeDetailView> newFeeDetailViewList = transFormNewFeeDetailViewList(feeDetailViewList);
-//                    newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
+                    List<FeeDetailView> feeDetailViewList = feeTransform.transformToView(feeDetailList);
+                    log.debug("feeDetailViewList : {}", feeDetailViewList);
+                    List<NewFeeDetailView> newFeeDetailViewList = transFormNewFeeDetailViewList(feeDetailViewList);
+                    newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
                 }
 
                 List<NewCreditDetail> newCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility);
@@ -1200,10 +1202,10 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //--- Save to NewFeeCredit
         if (Util.safetyList(newCreditFacilityView.getNewFeeDetailViewList()).size() > 0) {
-            List<FeeDetail> feeDetailDelList  =  feeDetailDAO.findAllByWorkCaseId(workCaseId);
-            if(feeDetailDelList.size()>0){
-                feeDetailDAO.delete(feeDetailDelList);
-            }
+//            List<FeeDetail> feeDetailDelList  =  feeDetailDAO.findAllByWorkCaseId(workCaseId);
+//            if(feeDetailDelList.size()>0){
+//                feeDetailDAO.delete(feeDetailDelList);
+//            }
 
             log.debug("saveCreditFacility ::: newCreditFacilityView.getNewFeeDetailViewList()).size() : {}", newCreditFacilityView.getNewFeeDetailViewList().size());
             List<FeeDetail> feeDetailList = feeTransform.transformToDB(newCreditFacilityView.getNewFeeDetailViewList(),workCaseId);
@@ -1292,16 +1294,26 @@ public class CreditFacProposeControl extends BusinessControl {
             log.debug("saveCreditFacility ::: persist newCollateralList : {}", newCollateralList);
         }
 
+        fullApplicationControl.calculatePricingDOA(workCaseId, newCreditFacility);
+
         return newCreditFacilityTransform.transformToView(newCreditFacility);
     }
 
 
-    public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {
+    public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList, List<Long> deleteCreditTierIdList) {
         log.info("deleteAllApproveByIdList()");
         log.info("deleteCreditIdList: {}", deleteCreditIdList);
         log.info("deleteCollIdList: {}", deleteCollIdList);
         log.info("deleteGuarantorIdList: {}", deleteGuarantorIdList);
         log.info("deleteConditionIdList: {}", deleteConditionIdList);
+
+        if (deleteCreditTierIdList != null && deleteCreditTierIdList.size() > 0) {
+            List<NewCreditTierDetail> deleteCreditTierDelIdList = new ArrayList<NewCreditTierDetail>();
+            for (Long id : deleteCreditTierIdList) {
+                deleteCreditTierDelIdList.add(newCreditTierDetailDAO.findById(id));
+            }
+            newCreditTierDetailDAO.delete(deleteCreditTierDelIdList);
+        }
 
         if (deleteCreditIdList != null && deleteCreditIdList.size() > 0) {
             List<NewCreditDetail> deleteCreditDetailList = new ArrayList<NewCreditDetail>();

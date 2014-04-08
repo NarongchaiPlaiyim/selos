@@ -72,5 +72,28 @@ public class UserToAuthorizationDOADAO extends GenericDAO<UserToAuthorizationDOA
 
     }
 
+    public List<User> getUserListFromDOALevel(long doaLevelId){
+        List<User> userList = new ArrayList<User>();
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("doa_id", doaLevelId));
+        criteria.addOrder(Order.asc("id"));
+        List<UserToAuthorizationDOA> userToAuthorizationDOAList = criteria.list();
+        if(userToAuthorizationDOAList!=null && userToAuthorizationDOAList.size()>0){
+            List<String> userNames = new ArrayList<String>();
+            for(UserToAuthorizationDOA userToAuthorizationDOA: userToAuthorizationDOAList){
+                userNames.add(userToAuthorizationDOA.getUserId());
+            }
+
+            if(userNames.size()>0){
+                Criteria criteria2 = getSession().createCriteria(User.class);
+                criteria2.add(Restrictions.in("id", userNames));
+                criteria2.addOrder(Order.asc("id"));
+                userList = criteria2.list();
+            }
+        }
+
+        return userList;
+    }
+
 
 }
