@@ -6,6 +6,7 @@ import com.clevel.selos.dao.master.SettlementStatusDAO;
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.ncb.nccrs.models.response.*;
+import com.clevel.selos.integration.ncb.nccrs.models.response.TransactionModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSOutputModel;
 import com.clevel.selos.integration.ncb.ncrs.models.response.*;
@@ -91,6 +92,14 @@ public class NCBBizTransform extends BusinessTransform {
                         NCRSResponseModel ncrsResponseModel = responseNCRSModel.getResponseModel();
                         if (ncrsResponseModel.getBodyModel() != null && ncrsResponseModel.getBodyModel().getTransaction() != null) {
                             TUEFResponseModel tuefResponseModel = null;
+                            String enquiryDateStr = ncrsResponseModel.getBodyModel().getTransaction().getEnquirydate();
+                            Date enquiryDate = null;
+                            if(enquiryDateStr!=null && enquiryDateStr.length()>=8){
+                                String dateStr = enquiryDateStr.substring(0,8);
+                                enquiryDate = Util.strYYYYMMDDtoDateFormat(dateStr);
+                            }
+                            ncbInfoView.setEnquiryDate(enquiryDate);
+
                             if (ncrsResponseModel.getBodyModel().getTransaction().getTuefresponse() != null) {
                                 tuefResponseModel = ncrsResponseModel.getBodyModel().getTransaction().getTuefresponse();
                             }
@@ -1225,6 +1234,14 @@ public class NCBBizTransform extends BusinessTransform {
                     if (responseNCCRSModel.getResponseModel() != null) {
                         NCCRSResponseModel nccrsResponseModel = responseNCCRSModel.getResponseModel();
                         if (nccrsResponseModel.getBody() != null && nccrsResponseModel.getBody().getTransaction() != null) {
+                            String enquiryDateStr = nccrsResponseModel.getBody().getTransaction().getTransactiondate();
+                            Date enquiryDate = null;
+                            if(enquiryDateStr!=null && enquiryDateStr.length()>=8){
+                                String dateStr = enquiryDateStr.substring(0,8);
+                                enquiryDate = Util.strYYYYMMDDtoDateFormat(dateStr);
+                            }
+                            ncbInfoView.setEnquiryDate(enquiryDate);
+
                             H2HResponseModel h2HResponseModel = null;
                             if (nccrsResponseModel.getBody().getTransaction().getH2hresponse() != null) {
                                 h2HResponseModel = nccrsResponseModel.getBody().getTransaction().getH2hresponse();
