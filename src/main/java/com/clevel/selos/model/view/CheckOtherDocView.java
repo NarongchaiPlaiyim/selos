@@ -37,7 +37,7 @@ public class CheckOtherDocView implements Serializable /*extends CheckMandatoryD
     }
 
     public void readOnly(){
-        isCompleteFlag = false;
+        isCompleteFlag = true;
     }
 
     public long getId() {

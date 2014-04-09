@@ -13,7 +13,6 @@ import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
-import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.Message;
@@ -89,6 +88,7 @@ public class HeaderController implements Serializable {
     private List<User> rgmUserList;
     private List<User> ghmUserList;
     private List<User> cssoUserList;
+    private List<User> aadCommiteeList;
     private boolean requestPricing;
 
     private User user;
@@ -330,12 +330,16 @@ public class HeaderController implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         long workCaseId = (Long)session.getAttribute("workCaseId");
         try{
-            int requestPricingFlag = fullApplicationControl.getRequestPricing(workCaseId);
-            requestPricing = Util.isTrue(requestPricingFlag);
+            /*int requestPricingFlag = fullApplicationControl.getRequestPricing(workCaseId);
+            requestPricing = Util.isTrue(requestPricingFlag);*/
+            //For test
+            int requestPricingFlag = 1;
+            requestPricing = true;
             //check for pricing request
             if(requestPricingFlag==1){
-                int pricingDOA = fullApplicationControl.getPricingDOALevel(workCaseId);
-                if(pricingDOA != 0){
+                //pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
+                pricingDOALevel = PricingDOAValue.CSSO_DOA.value();
+                if(pricingDOALevel != 0){
                     zmEndorseUserId = "";
                     zmUserId = "";
                     rgmUserId = "";
@@ -352,18 +356,18 @@ public class HeaderController implements Serializable {
 
                     zmUserList = fullApplicationControl.getUserList(user);
 
-                    if(pricingDOA >= PricingDOAValue.RGM_DOA.value()){
+                    if(pricingDOALevel >= PricingDOAValue.RGM_DOA.value()){
                         isSubmitToRGM = true;
                     }
 
-                    if(pricingDOA >= PricingDOAValue.GH_DOA.value()){
+                    if(pricingDOALevel >= PricingDOAValue.GH_DOA.value()){
                         isSubmitToGHM = true;
                     }
 
-                    if(pricingDOA >= PricingDOAValue.CSSO_DOA.value()){
+                    if(pricingDOALevel >= PricingDOAValue.CSSO_DOA.value()){
                         isSubmitToCSSO = true;
                     }
-                    log.debug("pricingDOALevel ::: {}", pricingDOA);
+                    log.debug("pricingDOALevel ::: {}", pricingDOALevel);
                     RequestContext.getCurrentInstance().execute("submitZMDlg.show()");
                 } else {
                     messageHeader = "Exception.";
@@ -531,6 +535,29 @@ public class HeaderController implements Serializable {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
+    public void onSubmitUWFromZM(){
+        log.debug("onSubmitUWFromZM ::: starting...");
+        boolean complete = false;
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            String queueName = session.getAttribute("queueName").toString();
+            fullApplicationControl.submitToUWFromZM(queueName, workCaseId);
+            messageHeader = "Information.";
+            message = "Submit to UW From ZM success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            complete = true;
+            log.debug("onSubmitUWFromZM ::: success.");
+        } catch (Exception ex){
+            messageHeader = "Exception.";
+            message = "Submit to UW From ZM failed, cause : " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            complete = false;
+            log.error("onSubmitUWFromZM ::: exception occurred : ", ex);
+        }
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
     public void onOpenSubmitUW2(){
         log.debug("onOpenSubmitUW ::: starting...");
         HttpSession session = FacesUtil.getSession(true);
@@ -625,7 +652,7 @@ public class HeaderController implements Serializable {
     }
 
     public void onCancelCA(){
-
+        fullApplicationControl.getUserList(user);
     }
    
 
@@ -704,8 +731,31 @@ public class HeaderController implements Serializable {
         }
     }*/
 
-    public void onSubmitAppraisalCommittee(){
-        log.debug("onSubmitAppraisalCommittee ( submit to AAD committee )");
+    public void onOpenSubmitAADCommittee(){
+        log.debug("onOpenSubmitAADCommittee ( submit to AAD committee )");
+        HttpSession session = FacesUtil.getSession(true);
+        long workCasePreScreenId = 0;
+        long workCaseId = 0;
+        if(!Util.isNull(session.getAttribute("workCaseId"))){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        }
+        if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
+            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+        }
+        if(fullApplicationControl.checkAppointmentInformation(workCaseId, workCasePreScreenId)){
+            //List AAD Admin by team structure
+            aadCommiteeList = fullApplicationControl.getUserList(user);
+            RequestContext.getCurrentInstance().execute("submitAADCDlg.show()");
+        } else {
+            //TO show error
+            messageHeader = "Exception.";
+            message = "Please input Appointment Date first.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
+    }
+
+    public void onSubmitAADCommittee(){
+        log.debug("onSubmitAADCommittee ( submit to AAD committee )");
         long workCasePreScreenId = 0;
         long workCaseId = 0;
         String queueName = "";
@@ -854,18 +904,13 @@ public class HeaderController implements Serializable {
             } else {
                 checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, 0, workCasePreScreenId);
             }
-            messageHeader = "Success";
+            messageHeader = "Information";
             message = "Success";
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         } catch (Exception ex){
             log.error("Exception : {}", ex);
-            messageHeader = "Failed";
-            message = "Failed";
-//            if(ex.getCause() != null){
-//                message = "Failed " + ex.getCause().toString();
-//            } else {
-//                message = "Failed " + ex.getMessage();
-//            }
+            messageHeader = "Exception";
+            message = "Failed" + Util.getMessageException(ex); ;
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
     }
@@ -1523,6 +1568,14 @@ public class HeaderController implements Serializable {
 
     public void setCssoUserList(List<User> cssoUserList) {
         this.cssoUserList = cssoUserList;
+    }
+
+    public List<User> getAadCommiteeList() {
+        return aadCommiteeList;
+    }
+
+    public void setAadCommiteeList(List<User> aadCommiteeList) {
+        this.aadCommiteeList = aadCommiteeList;
     }
 
     public boolean isSubmitToCSSO() {

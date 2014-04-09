@@ -37,7 +37,7 @@ public class CheckOptionalDocView implements Serializable /*extends CheckMandato
     }
 
     public void readOnly(){
-        isCompleteFlag = false;
+        isCompleteFlag = true;
     }
 
     public long getId() {

@@ -854,6 +854,12 @@ function handleConditionInfoRequest(xhr, status, args) {
     }
 }
 
+function handleSubmitAADCDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        submitAADCDlg.hide();
+    }
+}
+
 // Credit Facility Propose Credit Dialog
 function onOneClick(buttonID, isDisable){
      document.getElementById(buttonID).disabled=isDisable;
