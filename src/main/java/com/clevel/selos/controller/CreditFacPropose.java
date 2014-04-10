@@ -1784,7 +1784,7 @@ public class CreditFacPropose implements Serializable {
             // Calculate Total for BRMS
             newCreditFacilityView = creditFacProposeControl.calculateTotalForBRMS(newCreditFacilityView);
             //  Calculate Maximum SME Limit
-            newCreditFacilityView = creditFacProposeControl.calculateMaximumSMELimit(newCreditFacilityView, workCaseId);
+//            newCreditFacilityView = creditFacProposeControl.calculateMaximumSMELimit(newCreditFacilityView, workCaseId);
             // Save NewCreditFacility, ProposeCredit, Collateral, Guarantor
             newCreditFacilityView = creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
             // Calculate WC
