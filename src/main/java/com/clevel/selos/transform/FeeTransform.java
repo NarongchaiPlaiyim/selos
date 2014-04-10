@@ -117,6 +117,7 @@ public class FeeTransform extends Transform{
                 NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(newFeeDetailView.getNewCreditDetailView().getId());
                 FeeType feeType = feeTypeDAO.findByBRMSCode(newFeeDetailView.getCommitmentFee().getFeeTypeView().getBrmsCode());
                 FeePaymentMethod feePaymentMethod = feePaymentMethodDAO.findByBRMSCode(newFeeDetailView.getCommitmentFee().getFeePaymentMethodView().getBrmsCode());
+                feeDetail.setId(newFeeDetailView.getCommitmentFee().getId());
                 feeDetail.setPercentFee(newFeeDetailView.getCommitmentFee().getPercentFee());
                 feeDetail.setPercentFeeAfter(newFeeDetailView.getCommitmentFee().getPercentFeeAfter());
                 feeDetail.setFeeYear(newFeeDetailView.getCommitmentFee().getFeeYear());
