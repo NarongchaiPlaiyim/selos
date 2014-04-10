@@ -1369,6 +1369,9 @@ public class BRMSControl extends BusinessControl {
             mandateDocView.setEcmDocTypeId(mandateDocument.getEcmDocId());
             mandateDocView.setDocLevel(mandateDocument.getDocLevel());
 
+            //TODO remove -- Chai
+            mandateDocView.setDocMandateType(DocMandateType.MANDATE);
+
             //2. Set BRMS Document Description
             List<String> brmsList = mandateDocView.getBrmsDescList();
             if(brmsList == null)

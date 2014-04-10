@@ -125,18 +125,23 @@ public class CheckMandateDocControl extends BusinessControl{
 
                 for (Map.Entry<String, MandateDocView> BRMSentry : mandateDocViewMap.entrySet()) {
                     mandateDocView = (MandateDocView)BRMSentry.getValue();
-                    if(DocMandateType.MANDATE.value() == mandateDocView.getDocMandateType().value()){
-                        log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Mandatory Documents");
-                        checkMandatoryDocView = checkMandateDocTransform.transformToCheckMandatoryDocView(BRMSentry.getKey(), mandateDocView, 3);
-                        mandatoryDocumentsList.add(checkMandatoryDocView);
-                    } else if(DocMandateType.OPTIONAL.value() == mandateDocView.getDocMandateType().value()){
-                        log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Optional Documents");
-                        optionalDocView = checkMandateDocTransform.transformToCheckOptionalDocView(BRMSentry.getKey(), mandateDocView, 3);
-                        optionalDocumentsList.add(optionalDocView);
+                    if(!Util.isNull(mandateDocView)){
+                        log.debug("-- MandateDocView[{}]", mandateDocView);
+                        if(DocMandateType.MANDATE.value() == mandateDocView.getDocMandateType().value()){
+                            log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Mandatory Documents");
+                            checkMandatoryDocView = checkMandateDocTransform.transformToCheckMandatoryDocView(BRMSentry.getKey(), mandateDocView, 3);
+                            mandatoryDocumentsList.add(checkMandatoryDocView);
+                        } else if(DocMandateType.OPTIONAL.value() == mandateDocView.getDocMandateType().value()){
+                            log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Optional Documents");
+                            optionalDocView = checkMandateDocTransform.transformToCheckOptionalDocView(BRMSentry.getKey(), mandateDocView, 3);
+                            optionalDocumentsList.add(optionalDocView);
+                        } else {
+                            log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Other Documents");
+                            checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(BRMSentry.getKey(), mandateDocView, 3);
+                            otherDocumentsList.add(checkOtherDocView);
+                        }
                     } else {
-                        log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Other Documents");
-                        checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(BRMSentry.getKey(), mandateDocView, 3);
-                        otherDocumentsList.add(checkOtherDocView);
+                        log.debug("-- MandateDocView is {}", mandateDocView);
                     }
                 }
 

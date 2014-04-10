@@ -254,7 +254,11 @@ public class Decision extends BaseController {
     public Decision() {
     }
 
-    private void preRender() {
+    private void initial(){
+
+    }
+
+    public void preRender() {
         log.info("preRender ::: setSession ");
         HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
