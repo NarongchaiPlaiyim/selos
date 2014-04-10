@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subRelatedAppRLOS" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="6d210ca1-e1c1-4917-b536-15f1a6e148db">
-	<property name="ireport.zoom" value="1.1000000000000005"/>
+	<property name="ireport.zoom" value="1.331000000000002"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
@@ -91,14 +91,14 @@
 				<text><![CDATA[App in RLOS Process]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="c5c10cd2-0ba1-4fc0-8aea-2b13d25a392e" style="header" x="343" y="14" width="70" height="24"/>
+				<reportElement uuid="c5c10cd2-0ba1-4fc0-8aea-2b13d25a392e" style="header" x="344" y="14" width="69" height="24"/>
 				<textElement>
 					<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Outstanding]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="88d766d3-a729-4d61-be41-222f736029d2" style="header" x="210" y="14" width="48" height="24"/>
+				<reportElement uuid="88d766d3-a729-4d61-be41-222f736029d2" style="header" x="210" y="14" width="49" height="24"/>
 				<textElement>
 					<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
@@ -134,13 +134,6 @@
 (Months)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="1a4dc1a4-bc53-4508-a132-95f3b3eb7600" style="header" x="258" y="14" width="85" height="24"/>
-				<textElement>
-					<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-				</textElement>
-				<text><![CDATA[Limit]]></text>
-			</staticText>
-			<staticText>
 				<reportElement uuid="e015d623-2ca5-4d86-a686-e61b94e17f5f" style="header" x="0" y="14" width="13" height="24"/>
 				<textElement>
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
@@ -161,12 +154,19 @@
 				</textElement>
 				<text><![CDATA[Int/Fee(%)]]></text>
 			</staticText>
+			<staticText>
+				<reportElement uuid="1e77c90f-59fa-4375-82d2-84385e2e52d7" style="header" x="259" y="14" width="85" height="24"/>
+				<textElement>
+					<font size="7" isBold="true" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Limit]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="15" splitType="Stretch">
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="0352b800-fd20-4b74-a622-2d3fb9804dfa" style="detail" stretchType="RelativeToBandHeight" x="343" y="0" width="70" height="15"/>
+				<reportElement uuid="0352b800-fd20-4b74-a622-2d3fb9804dfa" style="detail" stretchType="RelativeToBandHeight" x="344" y="0" width="69" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
@@ -198,16 +198,8 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{creditTypeName}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="77ffda5a-0ad5-4113-8362-0aa20805739e" style="detail" stretchType="RelativeToBandHeight" x="258" y="0" width="85" height="15"/>
-				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
-					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
-			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="7186f4b5-1fa6-4d26-9911-be547261a25a" style="detail" stretchType="RelativeToBandHeight" x="210" y="0" width="48" height="15"/>
+				<reportElement uuid="7186f4b5-1fa6-4d26-9911-be547261a25a" style="detail" stretchType="RelativeToBandHeight" x="210" y="0" width="49" height="15"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
@@ -229,6 +221,14 @@ new net.sf.jasperreports.engine.JREmptyDataSource() :
 new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTierDetailViewList})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$F{path} + "DecisionReport_subPersonAppRLOS_subRelatedAppinRLOS.jasper"]]></subreportExpression>
 			</subreport>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="2795c896-dfe1-49ae-95c4-f745930600ac" style="detail" stretchType="RelativeToTallestObject" x="259" y="0" width="85" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>
