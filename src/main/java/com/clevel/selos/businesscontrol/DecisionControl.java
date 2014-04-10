@@ -176,8 +176,16 @@ public class DecisionControl extends BusinessControl {
     public ApprovalHistoryView saveApprovalHistory(ApprovalHistoryView approvalHistoryView, WorkCase workCase) {
         log.debug("saveApprovalHistory() workCase: {}", workCase);
         // Set current time for submit
-        approvalHistoryView.setSubmitDate(DateTime.now().toDate());
+        //approvalHistoryView.setSubmitDate(DateTime.now().toDate());
         ApprovalHistory returnApprovalHistory = approvalHistoryDAO.persist(approvalHistoryTransform.transformToModel(approvalHistoryView, workCase));
+        return approvalHistoryTransform.transformToView(returnApprovalHistory);
+    }
+
+    public ApprovalHistoryView saveApprovalHistoryPricing(ApprovalHistoryView approvalPricingHistoryView, WorkCase workCase) {
+        log.debug("saveApprovalHistoryPricing() workCase: {}", workCase);
+        // Set current time for submit
+        //approvalHistoryView.setSubmitDate(DateTime.now().toDate());
+        ApprovalHistory returnApprovalHistory = approvalHistoryDAO.persist(approvalHistoryTransform.transformToModel(approvalPricingHistoryView, workCase));
         return approvalHistoryTransform.transformToView(returnApprovalHistory);
     }
 

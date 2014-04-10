@@ -248,6 +248,9 @@ public class Decision implements Serializable {
     private List<PrdGroupToPrdProgramView> _prdGroupToPrdProgramAll;
     private List<PrdGroupToPrdProgramView> _prdGroupToPrdProgramByGroup;
 
+    private boolean requestPricing;
+    private boolean decisionDialog;
+
     public Decision() {
     }
 
@@ -255,10 +258,10 @@ public class Decision implements Serializable {
         log.info("preRender ::: setSession ");
         HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            workCaseId = (Long)session.getAttribute("workCaseId");
 
             if (session.getAttribute("stepId") != null) {
-                stepId = Long.parseLong(session.getAttribute("stepId").toString());
+                stepId = (Long)session.getAttribute("stepId");
             }
 
             // set role
@@ -389,6 +392,9 @@ public class Decision implements Serializable {
         } else {
             approvalHistoryView = decisionControl.getApprovalHistoryView(stepId);
         }
+
+        // ========== Approval History Pricing ========== //
+        approvalHistoryPricingView = new ApprovalHistoryView();
 
         hashSeqCredit = new HashMap<Integer, Integer>();
     }
@@ -1277,8 +1283,10 @@ public class Decision implements Serializable {
                 decisionControl.calculateTotalApprove(decisionView);
                 // Save Total Approve to Decision
                 decisionControl.saveDecision(decisionView, workCase);
-                // Save Approval History for UW
+                // Save Approval History
                 approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
+                // Save Approval History Pricing
+                approvalHistoryPricingView = decisionControl.saveApprovalHistoryPricing(approvalHistoryPricingView, workCase);
 
                 exSummaryControl.calForDecision(workCaseId);
             }
@@ -1972,5 +1980,21 @@ public class Decision implements Serializable {
 
     public void setApprovalHistoryPricingView(ApprovalHistoryView approvalHistoryPricingView) {
         this.approvalHistoryPricingView = approvalHistoryPricingView;
+    }
+
+    public boolean isRequestPricing() {
+        return requestPricing;
+    }
+
+    public void setRequestPricing(boolean requestPricing) {
+        this.requestPricing = requestPricing;
+    }
+
+    public boolean isDecisionDialog() {
+        return decisionDialog;
+    }
+
+    public void setDecisionDialog(boolean decisionDialog) {
+        this.decisionDialog = decisionDialog;
     }
 }
