@@ -305,9 +305,9 @@
 
                                     <p:columnGroup type="header">
                                         <p:row>
-                                            <p:column style="width: 10%"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.loanType')}" style="width: 30%"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.conditionDesc')}" style="width: 60%"/>
+                                            <p:column style="width: 3%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.loanType')}" style="width: 33%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.conditionDesc')}" style="width: 64%"/>
                                         </p:row>
                                     </p:columnGroup>
 
@@ -326,209 +326,122 @@
                         <tr>
                             <td class="left" colspan="2">
                                 <!-- Borrower Retail Credit -->
-                                <div class="ui-datatable ui-widget">
-                                    <div class="ui-datatable-tablewrapper">
-                                        <table style="width: 100%">
-                                            <thead>
-                                                <tr>
-                                                    <th class="ui-state-default" colspan="10">#{msg.get('app.decision.tb.th.retailCredit')}</th>
-                                                </tr>
-                                                <tr>
-                                                    <th class="ui-state-default" style="width: 3%"></th>
-                                                    <th class="ui-state-default" style="width: 30%">#{msg.get('app.decision.tb.th.account')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.productProgram')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.creditType')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.code')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.limit')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.outstanding')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.installment')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.intFeePercent')}</th>
-                                                    <th class="ui-state-default" style="width: 4%">#{msg.get('app.decision.tb.th.tenorMonths')}</th>
-                                                </tr>
-                                            </thead>
+                                <p:dataTable id="dtRetailProcessBorrower"
+                                             var="borrowerRetailCredit" value="#{decision.decisionView.extBorrowerRetailCreditList}"
+                                             paginator="false" rowIndexVar="rowIndex"
+                                             style="width: 100%">
 
-                                            <tbody class="ui-datatable-data ui-widget-content">
-                                                <ui:repeat var="borrowerCredit" value="#{decision.decisionView.extBorrowerRetailCreditList}" varStatus="i">
-                                                    <tr>
-                                                        <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(borrowerCredit.existingCreditTierDetailViewList) + fn:length(borrowerCredit.existingSplitLineDetailViewList) :
-                                                                        not empty borrowerCredit.existingSplitLineDetailViewList and fn:length(borrowerCredit.existingSplitLineDetailViewList) gt 0 ?
-                                                                        fn:length(borrowerCredit.existingSplitLineDetailViewList) + 1 : '1'}">
-                                                            #{borrowerCredit.no}
-                                                        </td>
-                                                        <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(borrowerCredit.existingCreditTierDetailViewList) + fn:length(borrowerCredit.existingSplitLineDetailViewList) :
-                                                                        not empty borrowerCredit.existingSplitLineDetailViewList and fn:length(borrowerCredit.existingSplitLineDetailViewList) gt 0 ?
-                                                                        fn:length(borrowerCredit.existingSplitLineDetailViewList) + 1 : '1'}">
-                                                            #{borrowerCredit.accountName}<br/>
-                                                            #{msg.get('app.decision.tb.td.label.accNo')} #{borrowerCredit.accountNumber}&#160;
-                                                            #{msg.get('app.decision.tb.td.label.suf')} #{borrowerCredit.accountSuf}<br/>
-                                                            #{msg.get('app.decision.tb.td.label.accStatus')} #{not empty borrowerCredit.existAccountStatusView ? borrowerCredit.existAccountStatusView.description : ''}
-                                                        </td>
-                                                        <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(borrowerCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            #{not empty borrowerCredit.existProductProgramView ? borrowerCredit.existProductProgramView.name : ''}
-                                                        </td>
-                                                        <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(borrowerCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            #{not empty borrowerCredit.existCreditTypeView ? borrowerCredit.existCreditTypeView.name : ''}
-                                                        </td>
-                                                        <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                fn:length(borrowerCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            #{msg.get('app.decision.tb.td.label.product')} #{borrowerCredit.productCode}<br/>
-                                                            #{msg.get('app.decision.tb.td.label.project')} #{borrowerCredit.projectCode}
-                                                        </td>
-                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(borrowerCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            <h:outputText value="#{borrowerCredit.limit}" rendered="#{not borrowerCredit.usePCE}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.retailCredit')}"/>
+                                        </p:row>
 
-                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.notional')}" rendered="#{borrowerCredit.usePCE}"/>
-                                                            <h:outputText value="#{borrowerCredit.limit}" rendered="#{borrowerCredit.usePCE}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                            <br/>
-                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.pce')}" rendered="#{borrowerCredit.usePCE}"/>
-                                                            <h:outputText value="#{borrowerCredit.pcePercent}" rendered="#{borrowerCredit.usePCE}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.percent')}" rendered="#{borrowerCredit.usePCE}"/>
-                                                            <br/>
-                                                            <h:outputText value="PCE Limit: " rendered="#{borrowerCredit.usePCE}"/>
-                                                            <h:outputText value="#{borrowerCredit.pceLimit}" rendered="#{borrowerCredit.usePCE}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                        </td>
-                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(borrowerCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            <h:outputText value="#{borrowerCredit.outstanding}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                        </td>
+                                        <p:row>
+                                            <p:column headerText="" styleClass="center" style="width: 3%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}" style="width: 30%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}" style="width: 4%"/>
+                                        </p:row>
+                                    </p:columnGroup>
 
-                                                        <!-- BEGIN: Credit Tier Detail [0] -->
-                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].installment : '0.00'}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                        </td>
-                                                        <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].finalBasePrice.name : ''}">
-                                                            </h:outputText>
-                                                            <h:outputText value="#{borrowerCredit.existingCreditTierDetailViewList[0].finalInterest ge 0 ? '+' : ''}">
-                                                            </h:outputText>
-                                                            <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].finalInterest : ''}">
-                                                            </h:outputText>
-                                                        </td>
-                                                        <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].tenor : '0'}">
-                                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                        </td>
-                                                        <!-- END: Credit Tier Detail [0] -->
-                                                    </tr>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="#{borrowerRetailCredit.no}"/>
+                                    </p:column>
 
-                                                    <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
-                                                    <h:panelGroup rendered="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 1}">
-                                                    <ui:repeat value="#{borrowerCredit.existingCreditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
-                                                        <tr>
-                                                            <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{creditTierDetail.installment}">
-                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="19"/>
-                                                                </h:outputText>
-                                                            </td>
-                                                            <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{creditTierDetail.finalBasePrice.name}"/>
-                                                                <h:outputText value="#{creditTierDetail.finalInterest ge 0 ? '+' : ''}"/>
-                                                                <h:outputText value="#{creditTierDetail.finalInterest}"/>
-                                                            </td>
-                                                            <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{creditTierDetail.tenor}">
-                                                                    <f:convertNumber pattern="#,##0" maxIntegerDigits="19"/>
-                                                                </h:outputText>
-                                                            </td>
-                                                        </tr>
-                                                    </ui:repeat>
-                                                    </h:panelGroup>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="#{borrowerRetailCredit.accountName}"/><br/>
+                                        <p:outputLabel value="Acc No.: #{borrowerRetailCredit.accountNumber}"/> Suff. <p:outputLabel value="#{borrowerRetailCredit.accountSuf}"/><br/>
+                                        <p:outputLabel value="Acc Status: #{borrowerRetailCredit.existAccountStatusView.description}" />
+                                    </p:column>
 
-                                                    <ui:repeat value="#{borrowerCredit.existingSplitLineDetailViewList}" var="existingSplitLineDetailView" varStatus="j">
-                                                        <tr>
-                                                            <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{existingSplitLineDetailView.productProgram.name}"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{existingSplitLineDetailView.limit}">
-                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="19"/>
-                                                                </h:outputText>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                        </tr>
-                                                    </ui:repeat>
-                                                    <!-- END: Credit Tier Detail [1]->[N-1] -->
-                                                </ui:repeat>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="#{borrowerRetailCredit.existProductProgramView.name}"/>
+                                    </p:column>
 
-                                                <h:panelGroup rendered="#{empty decision.decisionView.extBorrowerRetailCreditList}">
-                                                    <tr>
-                                                        <td colspan="10">#{msg.get('app.label.noRecordsFound')}</td>
-                                                    </tr>
-                                                </h:panelGroup>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="#{borrowerRetailCredit.existCreditTypeView.name}"/>
+                                    </p:column>
 
-                                                <tr>
-                                                    <td style="height: 10px;" colspan="10"/>
-                                                </tr>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="Product: #{borrowerRetailCredit.productCode}"/><br/>
+                                        <p:outputLabel value="Project: #{borrowerRetailCredit.projectCode}"/>
+                                    </p:column>
 
-                                                <tr>
-                                                    <td style="text-align:left; background-color:#f4f8b6;"></td>
-                                                    <td style="text-align:left; background-color:#f4f8b6;" colspan="4" class="title">
-                                                        <h:outputText value="#{msg.get('app.label.total')}"/>
-                                                    </td>
-                                                    <td style="text-align:right; background-color:#f4f8b6;" class="title">
-                                                        <h:outputText value="#{decision.decisionView.extBorrowerTotalRetailLimit}"
-                                                                      style="text-align: right;">
-                                                            <f:convertNumber pattern="#,##0"
-                                                                             minFractionDigits="2" maxFractionDigits="2"/>
-                                                        </h:outputText>
-                                                    </td>
-                                                    <td style="text-align:left; background-color:#f4f8b6;" colspan="4"></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                    <p:column styleClass="right top">
+                                        <h:outputText value="#{borrowerRetailCredit.limit}" rendered="#{not borrowerRetailCredit.usePCE}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="19"/>
+                                        </h:outputText>
+
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.notional')}" rendered="#{borrowerRetailCredit.usePCE}"/>
+                                        <h:outputText value="#{borrowerRetailCredit.limit}" rendered="#{borrowerRetailCredit.usePCE}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="19"/>
+                                        </h:outputText>
+                                        <br/>
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.pce')}" rendered="#{borrowerRetailCredit.usePCE}"/>
+                                        <h:outputText value="#{borrowerRetailCredit.pcePercent}" rendered="#{borrowerRetailCredit.usePCE}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="19"/>
+                                        </h:outputText>
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.percent')}" rendered="#{borrowerRetailCredit.usePCE}"/>
+                                        <br/>
+                                        <h:outputText value="PCE Limit: " rendered="#{borrowerRetailCredit.usePCE}"/>
+                                        <h:outputText value="#{borrowerRetailCredit.pceLimit}" rendered="#{borrowerRetailCredit.usePCE}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="19"/>
+                                        </h:outputText>
+                                    </p:column>
+
+                                    <p:column styleClass="right top">
+                                        <p:outputLabel value="#{borrowerRetailCredit.outstanding}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
+                                    </p:column>
+
+                                    <p:column styleClass="right top">
+                                        <p:outputLabel value="#{borrowerRetailCredit.installment}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
+                                    </p:column>
+
+                                    <p:column styleClass="right top">
+                                        <p:outputLabel value="#{borrowerRetailCredit.intFeePercent}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
+                                    </p:column>
+
+                                    <p:column styleClass="right top">
+                                        <p:outputLabel value="#{borrowerRetailCredit.tenor}"/>
+                                    </p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="10" style="line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column style="text-align:left; background-color:#f4f8b6;"
+                                                      colspan="4"
+                                                      footerText="#{msg.get('app.label.total')}"/>
+                                            <p:column style="background-color:#f4f8b6; text-align: right">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{decision.decisionView.extBorrowerTotalRetailLimit}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
                             </td>
                         </tr>
                         <tr>
@@ -538,269 +451,179 @@
                         <tr>
                             <td colspan="2">
                                 <!-- Borrower App In RLOS -->
-                                <div class="ui-datatable ui-widget">
-                                    <div class="ui-datatable-tablewrapper">
-                                        <table style="width: 100%">
-                                            <thead>
-                                                <tr>
-                                                    <th class="ui-state-default" colspan="10">#{msg.get('app.decision.tb.th.appInRLOSProcess')}</th>
-                                                </tr>
-                                                <tr>
-                                                    <th class="ui-state-default" style="width: 3%"></th>
-                                                    <th class="ui-state-default" style="width: 30%">#{msg.get('app.decision.tb.th.account')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.productProgram')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.creditType')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.code')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.limit')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.outstanding')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.installment')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.intFeePercent')}</th>
-                                                    <th class="ui-state-default" style="width: 4%">#{msg.get('app.decision.tb.th.tenorMonths')}</th>
-                                                </tr>
-                                            </thead>
+                                <p:dataTable id="dtRlosProcessBorrower"
+                                             var="borrowerRLOSCredit" value="#{decision.decisionView.extBorrowerAppInRLOSList}"
+                                             paginator="false" rowIndexVar="rowIndex"
+                                             style="width: 100%">
 
-                                            <tbody class="ui-datatable-data ui-widget-content">
-                                                <ui:repeat var="borrowerCredit" value="#{decision.decisionView.extBorrowerAppInRLOSList}" varStatus="i">
-                                                    <tr>
-                                                        <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(borrowerCredit.existingCreditTierDetailViewList) + fn:length(borrowerCredit.existingSplitLineDetailViewList) :
-                                                                        not empty borrowerCredit.existingSplitLineDetailViewList and fn:length(borrowerCredit.existingSplitLineDetailViewList) gt 0 ?
-                                                                        fn:length(borrowerCredit.existingSplitLineDetailViewList) + 1 : '1'}">
-                                                            #{borrowerCredit.no}
-                                                        </td>
-                                                        <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(borrowerCredit.existingCreditTierDetailViewList) + fn:length(borrowerCredit.existingSplitLineDetailViewList) :
-                                                                        not empty borrowerCredit.existingSplitLineDetailViewList and fn:length(borrowerCredit.existingSplitLineDetailViewList) gt 0 ?
-                                                                        fn:length(borrowerCredit.existingSplitLineDetailViewList) + 1 : '1'}">
-                                                            #{borrowerCredit.accountName} <br/>
-                                                            #{msg.get('app.decision.tb.td.label.accNo')} #{borrowerCredit.accountNumber}&#160;
-                                                            #{msg.get('app.decision.tb.td.label.suf')} #{borrowerCredit.accountSuf}<br/>
-                                                            #{msg.get('app.decision.tb.td.label.accStatus')} #{not empty borrowerCredit.existAccountStatusView ? borrowerCredit.existAccountStatusView.description : ''}
-                                                        </td>
-                                                        <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(borrowerCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            #{not empty borrowerCredit.existProductProgramView ? borrowerCredit.existProductProgramView.name : ''}
-                                                        </td>
-                                                        <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(borrowerCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            #{not empty borrowerCredit.existCreditTypeView ? borrowerCredit.existCreditTypeView.name : ''}
-                                                        </td>
-                                                        <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(borrowerCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            #{msg.get('app.decision.tb.td.label.product')} #{borrowerCredit.productCode}<br/>
-                                                            #{msg.get('app.decision.tb.td.label.project')} #{borrowerCredit.projectCode}
-                                                        </td>
-                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(borrowerCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            <h:outputText value="#{borrowerCredit.limit}" rendered="#{not borrowerCredit.usePCE}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.appInRLOSProcess')}" />
+                                        </p:row>
 
-                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.notional')}" rendered="#{borrowerCredit.usePCE}"/>
-                                                            <h:outputText value="#{borrowerCredit.limit}" rendered="#{borrowerCredit.usePCE}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                            <br/>
-                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.pce')}" rendered="#{borrowerCredit.usePCE}"/>
-                                                            <h:outputText value="#{borrowerCredit.pcePercent}" rendered="#{borrowerCredit.usePCE}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.percent')}" rendered="#{borrowerCredit.usePCE}"/>
-                                                            <br/>
-                                                            <h:outputText value="PCE Limit: " rendered="#{borrowerCredit.usePCE}"/>
-                                                            <h:outputText value="#{borrowerCredit.pceLimit}" rendered="#{borrowerCredit.usePCE}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                        </td>
-                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(borrowerCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            <h:outputText value="#{borrowerCredit.outstanding}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                        </td>
+                                        <p:row>
+                                            <p:column headerText="" styleClass="center" style="width: 3%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}" style="width: 30%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}" style="width: 4%"/>
+                                        </p:row>
+                                    </p:columnGroup>
 
-                                                        <!-- BEGIN: Credit Tier Detail [0] -->
-                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].installment : '0.00'}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                        </td>
-                                                        <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].finalBasePrice.name : ''}">
-                                                            </h:outputText>
-                                                            <h:outputText value="#{borrowerCredit.existingCreditTierDetailViewList[0].finalInterest ge 0 ? '+' : ''}">
-                                                            </h:outputText>
-                                                            <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].finalInterest : ''}">
-                                                            </h:outputText>
-                                                        </td>
-                                                        <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    borrowerCredit.existingCreditTierDetailViewList[0].tenor : '0'}">
-                                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                        </td>
-                                                        <!-- END: Credit Tier Detail [0] -->
-                                                    </tr>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="#{borrowerRLOSCredit.no}"/>
+                                    </p:column>
 
-                                                    <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
-                                                    <h:panelGroup rendered="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 1}">
-                                                    <ui:repeat value="#{borrowerCredit.existingCreditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
-                                                        <tr>
-                                                            <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{creditTierDetail.installment}">
-                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="19"/>
-                                                                </h:outputText>
-                                                            </td>
-                                                            <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{creditTierDetail.finalBasePrice.name}"/>
-                                                                <h:outputText value="#{creditTierDetail.finalInterest ge 0 ? '+' : ''}"/>
-                                                                <h:outputText value="#{creditTierDetail.finalInterest}"/>
-                                                            </td>
-                                                            <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{creditTierDetail.tenor}">
-                                                                    <f:convertNumber pattern="#,##0" maxIntegerDigits="19"/>
-                                                                </h:outputText>
-                                                            </td>
-                                                        </tr>
-                                                    </ui:repeat>
-                                                    </h:panelGroup>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="#{borrowerRLOSCredit.accountName}"/><br/>
+                                        <p:outputLabel value="Acc No.: #{borrowerRLOSCredit.accountNumber}"/> Suff. <p:outputLabel value="#{borrowerRLOSCredit.accountSuf}"/><br/>
+                                        <p:outputLabel value="Acc Status: #{borrowerRLOSCredit.existAccountStatusView.description}" />
+                                    </p:column>
 
-                                                    <ui:repeat value="#{borrowerCredit.existingSplitLineDetailViewList}" var="existingSplitLineDetailView" varStatus="j">
-                                                        <tr>
-                                                            <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{existingSplitLineDetailView.productProgram.name}"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{existingSplitLineDetailView.limit}">
-                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="19"/>
-                                                                </h:outputText>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                        </tr>
-                                                        </ui:repeat>
-                                                    <!-- END: Credit Tier Detail [1]->[N-1] -->
-                                                </ui:repeat>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="#{borrowerRLOSCredit.existProductProgramView.name}"/>
+                                    </p:column>
 
-                                                <h:panelGroup rendered="#{empty decision.decisionView.extBorrowerAppInRLOSList}">
-                                                    <tr>
-                                                        <td colspan="10">#{msg.get('app.label.noRecordsFound')}</td>
-                                                    </tr>
-                                                </h:panelGroup>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="#{borrowerRLOSCredit.existCreditTypeView.name}"/>
+                                    </p:column>
 
-                                                <tr>
-                                                    <td style="height: 10px;" colspan="10"/>
-                                                </tr>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="Product: #{borrowerRLOSCredit.productCode}"/><br/>
+                                        <p:outputLabel value="Project: #{borrowerRLOSCredit.projectCode}"/>
+                                    </p:column>
 
-                                                <tr>
-                                                    <td style="text-align:left; background-color:#f4f8b6;"></td>
-                                                    <td style="text-align:left; background-color:#f4f8b6;" colspan="4" class="title">
-                                                        <h:outputText value="#{msg.get('app.label.total')}"/>
-                                                    </td>
-                                                    <td style="text-align:right; background-color:#f4f8b6;" class="title">
-                                                        <h:outputText value="#{decision.decisionView.extBorrowerTotalAppInRLOSLimit}"
-                                                                      style="text-align:right;">
-                                                            <f:convertNumber pattern="#,##0"
-                                                                             minFractionDigits="2" maxFractionDigits="2"/>
-                                                        </h:outputText>
-                                                    </td>
-                                                    <td style="text-align:left; background-color:#f4f8b6;" colspan="4"></td>
-                                                </tr>
+                                    <p:column styleClass="right top">
+                                        <h:outputText value="#{borrowerRLOSCredit.limit}" rendered="#{not borrowerRLOSCredit.usePCE}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="19"/>
+                                        </h:outputText>
 
-                                                <tr>
-                                                    <td style="height: 10px;" colspan="10"/>
-                                                </tr>
-                                            </tbody>
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.notional')}" rendered="#{borrowerRLOSCredit.usePCE}"/>
+                                        <h:outputText value="#{borrowerRLOSCredit.limit}" rendered="#{borrowerRLOSCredit.usePCE}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="19"/>
+                                        </h:outputText>
+                                        <br/>
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.pce')}" rendered="#{borrowerRLOSCredit.usePCE}"/>
+                                        <h:outputText value="#{borrowerRLOSCredit.pcePercent}" rendered="#{borrowerRLOSCredit.usePCE}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="19"/>
+                                        </h:outputText>
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.percent')}" rendered="#{borrowerRLOSCredit.usePCE}"/>
+                                        <br/>
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.pceLimit')}" rendered="#{borrowerRLOSCredit.usePCE}"/>
+                                        <h:outputText value="#{borrowerRLOSCredit.pceLimit}" rendered="#{borrowerRLOSCredit.usePCE}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="19"/>
+                                        </h:outputText>
+                                    </p:column>
 
-                                            <tfoot>
-                                                <tr>
-                                                    <td class="title" style="line-height:30px; height:30px; text-align:left;" colspan="10">
-                                                        #{msg.get('app.decision.borrower')}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="summary_column"></td>
-                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
-                                                        #{msg.get('app.decision.totalCommercial')}
-                                                    </td>
-                                                    <td class="summary_column title" style="text-align: right;">
-                                                        <h:outputText value="#{decision.decisionView.extBorrowerTotalCommercial}">
-                                                            <f:convertNumber pattern="#,##0.##"
-                                                                             minFractionDigits="2" maxFractionDigits="2"
-                                                                             maxIntegerDigits="14"/>
-                                                        </h:outputText>
-                                                    </td>
-                                                    <td class="summary_column" colspan="4"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="line-height:10px; height:10px;" colspan="10"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="summary_column"></td>
-                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
-                                                        #{msg.get('app.decision.totalCommAndOBOD')}
-                                                    </td>
-                                                    <td class="summary_column title" style="text-align: right;">
-                                                        <h:outputText value="#{decision.decisionView.extBorrowerTotalComAndOBOD}">
-                                                            <f:convertNumber pattern="#,##0.##"
-                                                                             minFractionDigits="2" maxFractionDigits="2"
-                                                                             maxIntegerDigits="14"/>
-                                                        </h:outputText>
-                                                    </td>
-                                                    <td class="summary_column" colspan="4"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="line-height:10px; height:10px;" colspan="10"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="summary_column"></td>
-                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
-                                                        #{msg.get('app.decision.totalExposure')}
-                                                    </td>
-                                                    <td class="summary_column title" style="text-align: right;">
-                                                        <h:outputText value="#{decision.decisionView.extBorrowerTotalExposure}">
-                                                            <f:convertNumber pattern="#,##0.##"
-                                                                             minFractionDigits="2" maxFractionDigits="2"
-                                                                             maxIntegerDigits="14"/>
-                                                        </h:outputText>
-                                                    </td>
-                                                    <td class="summary_column" colspan="4"></td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div>
+                                    <p:column styleClass="right top">
+                                        <p:outputLabel value="#{borrowerRLOSCredit.outstanding}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
+                                    </p:column>
+
+                                    <p:column styleClass="right top">
+                                        <p:outputLabel value="#{borrowerRLOSCredit.installment}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
+                                    </p:column>
+
+                                    <p:column styleClass="right top">
+                                        <p:outputLabel value="#{borrowerRLOSCredit.intFeePercent}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
+                                    </p:column>
+
+                                    <p:column styleClass="right top">
+                                        <p:outputLabel value="#{borrowerRLOSCredit.tenor}"/>
+                                    </p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="10" style="line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column style="text-align:left; background-color:#f4f8b6;"
+                                                      colspan="4"
+                                                      footerText="#{msg.get('app.label.total')}"/>
+                                            <p:column style="background-color:#f4f8b6; text-align: right">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{decision.decisionView.extBorrowerTotalAppInRLOSLimit}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column colspan="10"
+                                                      styleClass="title" style="text-align:left; background: none !important; line-height:30px; height:30px;"
+                                                      footerText="#{msg.get('app.decision.borrower')}"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column style="text-align:left; background-color:#f4f8b6;" styleClass="title"
+                                                      colspan="4"
+                                                      footerText="#{msg.get('app.decision.totalCommercial')}"/>
+                                            <p:column style="background-color:#f4f8b6; text-align: right">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{decision.decisionView.extBorrowerTotalCommercial}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="10" style="line-height:10px; height:10px; background: none !important;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column style="text-align:left; background-color:#f4f8b6;" styleClass="title"
+                                                      colspan="4"
+                                                      footerText="#{msg.get('app.decision.totalCommAndOBOD')}"/>
+                                            <p:column style="background-color:#f4f8b6; text-align: right">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{decision.decisionView.extBorrowerTotalComAndOBOD}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="10" style="line-height:10px; height:10px; background: none !important;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column style="text-align:left; background-color:#f4f8b6;" styleClass="title"
+                                                      colspan="4"
+                                                      footerText="#{msg.get('app.decision.totalExposure')}"/>
+                                            <p:column style="background-color:#f4f8b6; text-align: right">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{decision.decisionView.extBorrowerTotalExposure}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
                             </td>
                         </tr>
 
@@ -824,7 +647,7 @@
                                                     <th class="ui-state-default" colspan="10">#{msg.get('app.decision.tb.th.commercialCredit')}</th>
                                                 </tr>
                                                 <tr>
-                                                    <th class="ui-state-default" style="width: 3%"></th>
+                                                    <th class="ui-state-default" style="width: 3%">&#160;</th>
                                                     <th class="ui-state-default" style="width: 30%">#{msg.get('app.decision.tb.th.account')}</th>
                                                     <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.productProgram')}</th>
                                                     <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.creditType')}</th>
@@ -1026,207 +849,121 @@
                         <tr>
                             <td class="left" colspan="2">
                                 <!-- Related Person - Retail Credit -->
-                                <div class="ui-datatable ui-widget">
-                                    <div class="ui-datatable-tablewrapper">
-                                        <table style="width: 100%">
-                                            <thead>
-                                                <tr>
-                                                    <th class="ui-state-default" colspan="10">#{msg.get('app.decision.tb.th.retailCredit')}</th>
-                                                </tr>
-                                                <tr>
-                                                    <th class="ui-state-default" style="width: 3%"></th>
-                                                    <th class="ui-state-default" style="width: 30%">#{msg.get('app.decision.tb.th.account')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.productProgram')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.creditType')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.code')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.limit')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.outstanding')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.installment')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.intFeePercent')}</th>
-                                                    <th class="ui-state-default" style="width: 4%">#{msg.get('app.decision.tb.th.tenorMonths')}</th>
-                                                </tr>
-                                            </thead>
+                                <p:dataTable id="dtRetailProcessRelated"
+                                             var="relatedRetailCredit" value="#{decision.decisionView.extRelatedRetailCreditList}"
+                                             paginator="false" rowIndexVar="rowIndex"
+                                             style="width: 100%">
 
-                                            <tbody class="ui-datatable-data ui-widget-content">
-                                                <ui:repeat var="relatedCredit" value="#{decision.decisionView.extRelatedRetailCreditList}" varStatus="i">
-                                                    <tr>
-                                                        <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingCreditTierDetailViewList) + fn:length(relatedCredit.existingSplitLineDetailViewList) :
-                                                                        not empty relatedCredit.existingSplitLineDetailViewList and fn:length(relatedCredit.existingSplitLineDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingSplitLineDetailViewList) + 1 : '1'}">
-                                                            #{relatedCredit.no}
-                                                        </td>
-                                                        <td class="left  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingCreditTierDetailViewList) + fn:length(relatedCredit.existingSplitLineDetailViewList) :
-                                                                        not empty relatedCredit.existingSplitLineDetailViewList and fn:length(relatedCredit.existingSplitLineDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingSplitLineDetailViewList) + 1 : '1'}">
-                                                            #{relatedCredit.accountName} <br/>
-                                                            #{msg.get('app.decision.tb.td.label.accNo')} #{relatedCredit.accountNumber}&#160;
-                                                            #{msg.get('app.decision.tb.td.label.suf')} #{relatedCredit.accountSuf}<br/>
-                                                            #{msg.get('app.decision.tb.td.label.accStatus')} #{not empty relatedCredit.existAccountStatusView ? relatedCredit.existAccountStatusView.description : ''}
-                                                        </td>
-                                                        <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            #{not empty relatedCredit.existProductProgramView ? relatedCredit.existProductProgramView.name : ''}
-                                                        </td>
-                                                        <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            #{not empty relatedCredit.existCreditTypeView ? relatedCredit.existCreditTypeView.name : ''}
-                                                        </td>
-                                                        <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            #{msg.get('app.decision.tb.td.label.product')} #{relatedCredit.productCode}<br/>
-                                                            #{msg.get('app.decision.tb.td.label.project')} #{relatedCredit.projectCode}
-                                                        </td>
-                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            <h:outputText value="#{relatedCredit.limit}" rendered="#{not relatedCredit.usePCE}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.retailCredit')}"/>
+                                        </p:row>
 
-                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.notional')}" rendered="#{relatedCredit.usePCE}"/>
-                                                            <h:outputText value="#{relatedCredit.limit}" rendered="#{relatedCredit.usePCE}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                            <br/>
-                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.pce')}" rendered="#{relatedCredit.usePCE}"/>
-                                                            <h:outputText value="#{relatedCredit.pcePercent}" rendered="#{relatedCredit.usePCE}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.percent')}" rendered="#{relatedCredit.usePCE}"/>
-                                                            <br/>
-                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.pceLimit')}" rendered="#{relatedCredit.usePCE}"/>
-                                                            <h:outputText value="#{relatedCredit.pceLimit}" rendered="#{relatedCredit.usePCE}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                        </td>
-                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            <h:outputText value="#{relatedCredit.outstanding}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
-                                                            </h:outputText>
-                                                        </td>
+                                        <p:row>
+                                            <p:column headerText="" styleClass="center" style="width: 3%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}" style="width: 30%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}" style="width: 4%"/>
+                                        </p:row>
+                                    </p:columnGroup>
 
-                                                        <!-- BEGIN: Credit Tier Detail [0] -->
-                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    relatedCredit.existingCreditTierDetailViewList[0].installment : '0.00'}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
-                                                            </h:outputText>
-                                                        </td>
-                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    relatedCredit.existingCreditTierDetailViewList[0].finalBasePrice.name : ''}">
-                                                            </h:outputText>
-                                                            <h:outputText value="#{relatedCredit.existingCreditTierDetailViewList[0].finalInterest ge 0 ? '+' : ''}"/>
-                                                            <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    relatedCredit.existingCreditTierDetailViewList[0].finalInterest : ''}">
-                                                            </h:outputText>
-                                                        </td>
-                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    relatedCredit.existingCreditTierDetailViewList[0].tenor : '0'}">
-                                                                <f:convertNumber pattern="#,##0"/>
-                                                            </h:outputText>
-                                                        </td>
-                                                        <!-- END: Credit Tier Detail [0] -->
-                                                    </tr>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="#{relatedRetailCredit.no}"/>
+                                    </p:column>
 
-                                                    <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
-                                                    <h:panelGroup rendered="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 1}">
-                                                    <ui:repeat value="#{relatedCredit.existingCreditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
-                                                        <tr>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{creditTierDetail.installment}">
-                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
-                                                                </h:outputText>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{creditTierDetail.finalBasePrice.name}"/>
-                                                                <h:outputText value="#{creditTierDetail.finalInterest ge 0 ? '+' : ''}"/>
-                                                                <h:outputText value="#{creditTierDetail.finalInterest}"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{creditTierDetail.tenor}">
-                                                                    <f:convertNumber pattern="#,##0"/>
-                                                                </h:outputText>
-                                                            </td>
-                                                        </tr>
-                                                    </ui:repeat>
-                                                    </h:panelGroup>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="#{relatedRetailCredit.accountName}"/><br/>
+                                        <p:outputLabel value="Acc No.: #{relatedRetailCredit.accountNumber}"/> Suff. <p:outputLabel value="#{relatedRetailCredit.accountSuf}"/><br/>
+                                        <p:outputLabel value="Acc Status: #{relatedRetailCredit.existAccountStatusView.description}"/>
+                                    </p:column>
 
-                                                    <ui:repeat value="#{relatedCredit.existingSplitLineDetailViewList}" var="existingSplitLineDetailView" varStatus="j">
-                                                        <tr>
-                                                            <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{existingSplitLineDetailView.productProgram.name}"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{existingSplitLineDetailView.limit}">
-                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
-                                                                </h:outputText>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                        </tr>
-                                                    </ui:repeat>
-                                                    <!-- END: Credit Tier Detail [1]->[N-1] -->
-                                                </ui:repeat>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="#{relatedRetailCredit.existProductProgramView.name}"/>
+                                    </p:column>
 
-                                                <h:panelGroup rendered="#{empty decision.decisionView.extRelatedRetailCreditList}">
-                                                    <tr>
-                                                        <td colspan="10">#{msg.get('app.label.noRecordsFound')}</td>
-                                                    </tr>
-                                                </h:panelGroup>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="#{relatedRetailCredit.existCreditTypeView.name}"/>
+                                    </p:column>
 
-                                                <tr>
-                                                    <td style="height: 10px;" colspan="10"/>
-                                                </tr>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="Product: #{relatedRetailCredit.productCode}" /><br/>
+                                        <p:outputLabel value="Project: #{relatedRetailCredit.projectCode}" />
+                                    </p:column>
 
-                                                <tr>
-                                                    <td style="text-align:left; background-color:#f4f8b6;"></td>
-                                                    <td style="text-align:left; background-color:#f4f8b6;" colspan="4" class="title">
-                                                        <h:outputText value="#{msg.get('app.label.total')}"/>
-                                                    </td>
-                                                    <td style="text-align:right; background-color:#f4f8b6;" class="title">
-                                                        <h:outputText value="#{decision.decisionView.extRelatedTotalRetailLimit}"
-                                                                      style="text-align: right;">
-                                                            <f:convertNumber pattern="#,##0"
-                                                                             minFractionDigits="2" maxFractionDigits="2"/>
-                                                        </h:outputText>
-                                                    </td>
-                                                    <td style="text-align:left; background-color:#f4f8b6;" colspan="4"></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                    <p:column styleClass="right top">
+                                        <h:outputText value="#{relatedRetailCredit.limit}" rendered="#{not relatedRetailCredit.usePCE}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="19"/>
+                                        </h:outputText>
+
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.notional')}" rendered="#{relatedRetailCredit.usePCE}"/>
+                                        <h:outputText value="#{relatedRetailCredit.limit}" rendered="#{relatedRetailCredit.usePCE}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="19"/>
+                                        </h:outputText>
+                                        <br/>
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.pce')}" rendered="#{relatedRetailCredit.usePCE}"/>
+                                        <h:outputText value="#{relatedRetailCredit.pcePercent}" rendered="#{relatedRetailCredit.usePCE}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="19"/>
+                                        </h:outputText>
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.percent')}" rendered="#{relatedRetailCredit.usePCE}"/>
+                                        <br/>
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.pceLimit')}" rendered="#{relatedRetailCredit.usePCE}"/>
+                                        <h:outputText value="#{relatedRetailCredit.pceLimit}" rendered="#{relatedRetailCredit.usePCE}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="19"/>
+                                        </h:outputText>
+                                    </p:column>
+
+                                    <p:column styleClass="right top">
+                                        <p:outputLabel value="#{relatedRetailCredit.outstanding}" >
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
+                                    </p:column>
+
+                                    <p:column styleClass="right top">
+                                        <p:outputLabel value="#{relatedRetailCredit.installment}" >
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
+                                    </p:column>
+
+                                    <p:column styleClass="right top">
+                                        <p:outputLabel value="#{relatedRetailCredit.intFeePercent}" >
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
+                                    </p:column>
+
+                                    <p:column styleClass="right top">
+                                        <p:outputLabel value="#{relatedRetailCredit.tenor}" />
+                                    </p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="10" style="line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" style="text-align:left; background-color:#f4f8b6;"
+                                                      footerText="#{msg.get('app.label.total')}"/>
+                                            <p:column style="background-color:#f4f8b6; text-align: right">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{decision.decisionView.extRelatedTotalRetailLimit}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
                             </td>
                         </tr>
                         <tr>
@@ -1236,327 +973,238 @@
                         <tr>
                             <td colspan="2">
                                 <!-- Related Person - App In RLOS -->
-                                <div class="ui-datatable ui-widget">
-                                    <div class="ui-datatable-tablewrapper">
-                                        <table style="width: 100%">
-                                            <thead>
-                                                <tr>
-                                                    <th class="ui-state-default" colspan="10">#{msg.get('app.decision.tb.th.appInRLOSProcess')}</th>
-                                                </tr>
-                                                <tr>
-                                                    <th class="ui-state-default" style="width: 3%"></th>
-                                                    <th class="ui-state-default" style="width: 30%">#{msg.get('app.decision.tb.th.account')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.productProgram')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.creditType')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.code')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.limit')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.outstanding')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.installment')}</th>
-                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.intFeePercent')}</th>
-                                                    <th class="ui-state-default" style="width: 4%">#{msg.get('app.decision.tb.th.tenorMonths')}</th>
-                                                </tr>
-                                            </thead>
+                                <p:dataTable id="dtRlosProcessRelatedPerson"
+                                             var="relatedRLOSCredit" value="#{decision.decisionView.extRelatedAppInRLOSList}"
+                                             paginator="false" rowIndexVar="rowIndex"
+                                             style="width: 100%">
 
-                                            <tbody class="ui-datatable-data ui-widget-content">
-                                                <ui:repeat var="relatedCredit" value="#{decision.decisionView.extRelatedAppInRLOSList}" varStatus="i">
-                                                    <tr>
-                                                        <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingCreditTierDetailViewList) + fn:length(relatedCredit.existingSplitLineDetailViewList) :
-                                                                        not empty relatedCredit.existingSplitLineDetailViewList and fn:length(relatedCredit.existingSplitLineDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingSplitLineDetailViewList) + 1 : '1'}">
-                                                            #{relatedCredit.no}
-                                                        </td>
-                                                        <td class="left  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingCreditTierDetailViewList) + fn:length(relatedCredit.existingSplitLineDetailViewList) :
-                                                                        not empty relatedCredit.existingSplitLineDetailViewList and fn:length(relatedCredit.existingSplitLineDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingSplitLineDetailViewList) + 1 : '1'}">
-                                                            #{relatedCredit.accountName} <br/>
-                                                            #{msg.get('app.decision.tb.td.label.accNo')} #{relatedCredit.accountNumber}&#160;
-                                                            #{msg.get('app.decision.tb.td.label.suf')} #{relatedCredit.accountSuf}<br/>
-                                                            #{msg.get('app.decision.tb.td.label.accStatus')} #{not empty relatedCredit.existAccountStatusView ? relatedCredit.existAccountStatusView.description : ''}
-                                                        </td>
-                                                        <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            #{not empty relatedCredit.existProductProgramView ? relatedCredit.existProductProgramView.name : ''}
-                                                        </td>
-                                                        <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            #{not empty relatedCredit.existCreditTypeView ? relatedCredit.existCreditTypeView.name : ''}
-                                                        </td>
-                                                        <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            #{msg.get('app.decision.tb.td.label.product')} #{relatedCredit.productCode}<br/>
-                                                            #{msg.get('app.decision.tb.td.label.project')} #{relatedCredit.projectCode}
-                                                        </td>
-                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            <h:outputText value="#{relatedCredit.limit}" rendered="#{not relatedCredit.usePCE}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.appInRLOSProcess')}" />
+                                        </p:row>
 
-                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.notional')}" rendered="#{relatedCredit.usePCE}"/>
-                                                            <h:outputText value="#{relatedCredit.limit}" rendered="#{relatedCredit.usePCE}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                            <br/>
-                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.pce')}" rendered="#{relatedCredit.usePCE}"/>
-                                                            <h:outputText value="#{relatedCredit.pcePercent}" rendered="#{relatedCredit.usePCE}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.percent')}" rendered="#{relatedCredit.usePCE}"/>
-                                                            <br/>
-                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.pceLimit')}" rendered="#{relatedCredit.usePCE}"/>
-                                                            <h:outputText value="#{relatedCredit.pceLimit}" rendered="#{relatedCredit.usePCE}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="19"/>
-                                                            </h:outputText>
-                                                        </td>
-                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                            rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                        fn:length(relatedCredit.existingCreditTierDetailViewList) : '1'}">
-                                                            <h:outputText value="#{relatedCredit.outstanding}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
-                                                            </h:outputText>
-                                                        </td>
+                                        <p:row>
+                                            <p:column headerText="" styleClass="center" style="width: 3%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}" style="width: 30%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}" style="width: 4%"/>
+                                        </p:row>
+                                    </p:columnGroup>
 
-                                                        <!-- BEGIN: Credit Tier Detail [0] -->
-                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    relatedCredit.existingCreditTierDetailViewList[0].installment : '0.00'}">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
-                                                            </h:outputText>
-                                                        </td>
-                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    relatedCredit.existingCreditTierDetailViewList[0].finalBasePrice.name : ''}">
-                                                            </h:outputText>
-                                                            <h:outputText value="#{relatedCredit.existingCreditTierDetailViewList[0].finalInterest ge 0 ? '+' : ''}"/>
-                                                            <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    relatedCredit.existingCreditTierDetailViewList[0].finalInterest : ''}">
-                                                            </h:outputText>
-                                                        </td>
-                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
-                                                                                    relatedCredit.existingCreditTierDetailViewList[0].tenor : '0'}">
-                                                                <f:convertNumber pattern="#,##0"/>
-                                                            </h:outputText>
-                                                        </td>
-                                                        <!-- END: Credit Tier Detail [0] -->
-                                                    </tr>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="#{relatedRLOSCredit.no}"/>
+                                    </p:column>
 
-                                                    <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
-                                                    <h:panelGroup rendered="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 1}">
-                                                    <ui:repeat value="#{relatedCredit.existingCreditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
-                                                        <tr>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{creditTierDetail.installment}">
-                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
-                                                                </h:outputText>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{creditTierDetail.finalBasePrice.name}"/>
-                                                                <h:outputText value="#{creditTierDetail.finalInterest ge 0 ? '+' : ''}"/>
-                                                                <h:outputText value="#{creditTierDetail.finalInterest}"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{creditTierDetail.tenor}">
-                                                                    <f:convertNumber pattern="#,##0"/>
-                                                                </h:outputText>
-                                                            </td>
-                                                        </tr>
-                                                    </ui:repeat>
-                                                    </h:panelGroup>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="#{relatedRLOSCredit.accountName}"/><br/>
+                                        <p:outputLabel value="Acc No.: #{relatedRLOSCredit.accountNumber}"/> Suff. <p:outputLabel value="#{relatedRLOSCredit.accountSuf}"/><br/>
+                                        <p:outputLabel value="Acc Status: #{relatedRLOSCredit.existAccountStatusView.description}"/>
+                                    </p:column>
 
-                                                    <ui:repeat value="#{relatedCredit.existingSplitLineDetailViewList}" var="existingSplitLineDetailView" varStatus="j">
-                                                        <tr>
-                                                            <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{existingSplitLineDetailView.productProgram.name}"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <h:outputText value="#{existingSplitLineDetailView.limit}">
-                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
-                                                                </h:outputText>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                            <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                <p:spacer width="5px"/>
-                                                            </td>
-                                                        </tr>
-                                                    </ui:repeat>
-                                                    <!-- END: Credit Tier Detail [1]->[N-1] -->
-                                                </ui:repeat>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="#{relatedRLOSCredit.existProductProgramView.name}"/>
+                                    </p:column>
 
-                                                <h:panelGroup rendered="#{empty decision.decisionView.extRelatedAppInRLOSList}">
-                                                    <tr>
-                                                        <td colspan="10">#{msg.get('app.label.noRecordsFound')}</td>
-                                                    </tr>
-                                                </h:panelGroup>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="#{relatedRLOSCredit.existCreditTypeView.name}"/>
+                                    </p:column>
 
-                                                <tr>
-                                                    <td style="height: 10px;" colspan="10"/>
-                                                </tr>
+                                    <p:column styleClass="left top">
+                                        <p:outputLabel value="Product: #{relatedRLOSCredit.productCode}" /><br/>
+                                        <p:outputLabel value="Project: #{relatedRLOSCredit.projectCode}" />
+                                    </p:column>
 
-                                                <tr>
-                                                    <td style="text-align:left; background-color:#f4f8b6;"></td>
-                                                    <td style="text-align:left; background-color:#f4f8b6;" colspan="4" class="title">
-                                                        <h:outputText value="#{msg.get('app.label.total')}"/>
-                                                    </td>
-                                                    <td style="text-align: right;background-color:#f4f8b6;" class="title">
-                                                        <h:outputText value="#{decision.decisionView.extRelatedTotalAppInRLOSLimit}"
-                                                                      style="text-align: right;">
-                                                            <f:convertNumber pattern="#,##0"
-                                                                             minFractionDigits="2" maxFractionDigits="2"/>
-                                                        </h:outputText>
-                                                    </td>
-                                                    <td style="text-align:left; background-color:#f4f8b6;" colspan="4"></td>
-                                                </tr>
+                                    <p:column styleClass="left top">
+                                        <h:outputText value="#{relatedRLOSCredit.limit}" rendered="#{not relatedRLOSCredit.usePCE}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="19"/>
+                                        </h:outputText>
 
-                                                <tr>
-                                                    <td style="height: 10px;" colspan="10"/>
-                                                </tr>
-                                            </tbody>
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.notional')}" rendered="#{relatedRLOSCredit.usePCE}"/>
+                                        <h:outputText value="#{relatedRLOSCredit.limit}" rendered="#{relatedRLOSCredit.usePCE}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="19"/>
+                                        </h:outputText>
+                                        <br/>
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.pce')}" rendered="#{relatedRLOSCredit.usePCE}"/>
+                                        <h:outputText value="#{relatedRLOSCredit.pcePercent}" rendered="#{relatedRLOSCredit.usePCE}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="19"/>
+                                        </h:outputText>
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.percent')}" rendered="#{relatedRLOSCredit.usePCE}"/>
+                                        <br/>
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.pceLimit')}" rendered="#{relatedRLOSCredit.usePCE}"/>
+                                        <h:outputText value="#{relatedRLOSCredit.pceLimit}" rendered="#{relatedRLOSCredit.usePCE}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="19"/>
+                                        </h:outputText>
+                                    </p:column>
 
-                                            <tfoot>
-                                                <!-- Total Related -->
-                                                <tr>
-                                                    <td class="title" style="line-height:30px; height:30px; text-align:left;" colspan="10">
-                                                        #{msg.get('app.decision.related')}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="summary_column"></td>
-                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
-                                                        #{msg.get('app.decision.totalCommercial')}
-                                                    </td>
-                                                    <td class="summary_column title" style="text-align: right;">
-                                                        <h:outputText value="#{decision.decisionView.extRelatedTotalCommercial}">
-                                                            <f:convertNumber pattern="#,##0.##"
-                                                                             minFractionDigits="2" maxFractionDigits="2"
-                                                                             maxIntegerDigits="14"/>
-                                                        </h:outputText>
-                                                    </td>
-                                                    <td class="summary_column" colspan="4"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="line-height:10px; height:10px;" colspan="10"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="summary_column"></td>
-                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
-                                                        #{msg.get('app.decision.totalCommAndOBOD')}
-                                                    </td>
-                                                    <td class="summary_column title" style="text-align: right;">
-                                                        <h:outputText value="#{decision.decisionView.extRelatedTotalComAndOBOD}">
-                                                            <f:convertNumber pattern="#,##0.##"
-                                                                             minFractionDigits="2" maxFractionDigits="2"
-                                                                             maxIntegerDigits="14"/>
-                                                        </h:outputText>
-                                                    </td>
-                                                    <td class="summary_column" colspan="4"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="line-height:10px; height:10px;" colspan="10"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="summary_column"></td>
-                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
-                                                        #{msg.get('app.decision.totalExposure')}
-                                                    </td>
-                                                    <td class="summary_column title" style="text-align: right;">
-                                                        <h:outputText value="#{decision.decisionView.extRelatedTotalExposure}">
-                                                            <f:convertNumber pattern="#,##0.##"
-                                                                             minFractionDigits="2" maxFractionDigits="2"
-                                                                             maxIntegerDigits="14"/>
-                                                        </h:outputText>
-                                                    </td>
-                                                    <td class="summary_column" colspan="4"></td>
-                                                </tr>
+                                    <p:column styleClass="right top">
+                                        <p:outputLabel value="#{relatedRLOSCredit.outstanding}" >
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
+                                    </p:column>
 
-                                                <tr>
-                                                    <td style="line-height:10px; height:10px;" colspan="10"></td>
-                                                </tr>
+                                    <p:column styleClass="right top">
+                                        <p:outputLabel value="#{relatedRLOSCredit.installment}" >
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
+                                    </p:column>
 
-                                                <!-- Total Group -->
-                                                <tr>
-                                                    <td class="title" style="line-height:30px; height:30px; text-align:left;" colspan="10">
-                                                        #{msg.get('app.decision.group')}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="summary_column"></td>
-                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
-                                                        #{msg.get('app.decision.totalCommercial')}
-                                                    </td>
-                                                    <td class="summary_column title" style="text-align: right;">
-                                                        <h:outputText value="#{decision.decisionView.extGroupTotalCommercial}">
-                                                            <f:convertNumber pattern="#,##0.##"
-                                                                             minFractionDigits="2" maxFractionDigits="2"
-                                                                             maxIntegerDigits="14"/>
-                                                        </h:outputText>
-                                                    </td>
-                                                    <td class="summary_column" colspan="4"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="line-height:10px; height:10px;" colspan="10"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="summary_column"></td>
-                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
-                                                        #{msg.get('app.decision.totalCommAndOBOD')}
-                                                    </td>
-                                                    <td class="summary_column title" style="text-align: right;">
-                                                        <h:outputText value="#{decision.decisionView.extGroupTotalComAndOBOD}">
-                                                            <f:convertNumber pattern="#,##0.##"
-                                                                             minFractionDigits="2" maxFractionDigits="2"
-                                                                             maxIntegerDigits="14"/>
-                                                        </h:outputText>
-                                                    </td>
-                                                    <td class="summary_column" colspan="4"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="line-height:10px; height:10px;" colspan="10"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="summary_column"></td>
-                                                    <td class="summary_column title" style="text-align: left;" colspan="4">
-                                                        #{msg.get('app.decision.totalExposure')}
-                                                    </td>
-                                                    <td class="summary_column title" style="text-align: right;">
-                                                        <h:outputText value="#{decision.decisionView.extGroupTotalExposure}">
-                                                            <f:convertNumber pattern="#,##0.##"
-                                                                             minFractionDigits="2" maxFractionDigits="2"
-                                                                             maxIntegerDigits="14"/>
-                                                        </h:outputText>
-                                                    </td>
-                                                    <td class="summary_column" colspan="4"></td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div>
+                                    <p:column styleClass="right top">
+                                        <p:outputLabel value="#{relatedRLOSCredit.intFeePercent}" >
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
+                                    </p:column>
+
+                                    <p:column styleClass="right top">
+                                        <p:outputLabel value="#{relatedRLOSCredit.tenor}" />
+                                    </p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="10" style="line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" style="text-align:left; background-color:#f4f8b6;"
+                                                      footerText="#{msg.get('app.label.total')}"/>
+                                            <p:column style="background-color:#f4f8b6; text-align: right">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{decision.decisionView.extRelatedTotalAppInRLOSLimit}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column colspan="10" style="line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <!-- Total Related -->
+                                        <p:row>
+                                            <p:column colspan="10"
+                                                      styleClass="title" style="text-align:left; background: none !important; line-height:30px; height:30px;"
+                                                      footerText="#{msg.get('app.decision.related')}"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" style="text-align:left; background-color:#f4f8b6;"
+                                                      footerText="#{msg.get('app.decision.totalCommercial')}"/>
+                                            <p:column style="background-color:#f4f8b6; text-align: right">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{decision.decisionView.extRelatedTotalCommercial}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="10" style="line-height:10px; height:10px; background: none !important;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" style="text-align:left; background-color:#f4f8b6;"
+                                                      footerText="#{msg.get('app.decision.totalCommAndOBOD')}"/>
+                                            <p:column style="background-color:#f4f8b6; text-align: right">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{decision.decisionView.extRelatedTotalComAndOBOD}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="10" style="line-height:10px; height:10px; background: none !important;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" style="text-align:left; background-color:#f4f8b6;"
+                                                      footerText="#{msg.get('app.decision.totalExposure')}"/>
+                                            <p:column style="background-color:#f4f8b6; text-align: right">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{decision.decisionView.extRelatedTotalExposure}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="10" style="line-height:10px; height:10px; background: none !important;"/>
+                                        </p:row>
+
+                                        <!-- Total Group -->
+                                        <p:row>
+                                            <p:column colspan="10"
+                                                      styleClass="title" style="text-align:left; background: none !important; line-height:30px; height:30px;"
+                                                      footerText="#{msg.get('app.decision.group')}"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" style="text-align:left; background-color:#f4f8b6;"
+                                                      footerText="#{msg.get('app.decision.grpTotalCommercial')}"/>
+                                            <p:column style="background-color:#f4f8b6; text-align: right">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{decision.decisionView.extGroupTotalCommercial}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="10" style="line-height:10px; height:10px; background: none !important;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" style="text-align:left; background-color:#f4f8b6;"
+                                                      footerText="#{msg.get('app.decision.grpTotalCommAndOBOD')}"/>
+                                            <p:column style="background-color:#f4f8b6; text-align: right">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{decision.decisionView.extGroupTotalComAndOBOD}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="10" style="line-height:10px; height:10px; background: none !important;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" style="text-align:left; background-color:#f4f8b6;"
+                                                      footerText="#{msg.get('app.decision.grpTotalExposure')}"/>
+                                            <p:column style="background-color:#f4f8b6; text-align: right">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{decision.decisionView.extGroupTotalExposure}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
                             </td>
                         </tr>
                         <tr>
@@ -2346,8 +1994,8 @@
                                                         <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                     fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
-                                                            #{proposeCredit.uwDecision eq 'APPROVED' ? msg.get('app.label.approved')
-                                                            : proposeCredit.uwDecision eq 'REJECTED' ? msg.get('app.label.rejected')
+                                                            #{proposeCredit.approveDecision eq 'APPROVED' ? msg.get('app.label.approved')
+                                                            : proposeCredit.approveDecision eq 'REJECTED' ? msg.get('app.label.rejected')
                                                             : ''}
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
@@ -2659,8 +2307,8 @@
                                                     <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                     fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
-                                                        #{proposeCredit.uwDecision eq 'APPROVED' ? msg.get('app.label.approved') :
-                                                          proposeCredit.uwDecision eq 'REJECTED' ? msg.get('app.label.rejected') : ''}
+                                                        #{proposeCredit.approveDecision eq 'APPROVED' ? msg.get('app.label.approved') :
+                                                          proposeCredit.approveDecision eq 'REJECTED' ? msg.get('app.label.rejected') : ''}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -3300,8 +2948,8 @@
                                                 <tr>
                                                     <td class="title">#{msg.get('app.decision.label.approved')}</td>
                                                     <td class="left">
-                                                        #{proposeColl.uwDecision eq 'APPROVED' ? msg.get('app.button.yes')
-                                                        : proposeColl.uwDecision eq 'REJECTED' ? msg.get('app.button.no')
+                                                        #{proposeColl.approveDecision eq 'APPROVED' ? msg.get('app.button.yes')
+                                                        : proposeColl.approveDecision eq 'REJECTED' ? msg.get('app.button.no')
                                                         : ''}
                                                     </td>
                                                 </tr>
@@ -3704,8 +3352,8 @@
                                         <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                         <p:column styleClass="center top">
-                                            #{guarantor.uwDecision eq 'APPROVED' ? msg.get('app.label.approved')
-                                            : guarantor.uwDecision eq 'REJECTED' ? msg.get('app.label.rejected')
+                                            #{guarantor.approveDecision eq 'APPROVED' ? msg.get('app.label.approved')
+                                            : guarantor.approveDecision eq 'REJECTED' ? msg.get('app.label.rejected')
                                             : ''}
                                         </p:column>
 
@@ -4128,7 +3776,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td class="center">
-                                                            <p:selectOneRadio value="#{decision.approvalHistoryView.uwDecision}"
+                                                            <p:selectOneRadio value="#{decision.approvalHistoryView.approveDecision}"
                                                                               required="#{decision.roleUW and not empty param[saveDecisionBtn.clientId]}"
                                                                               styleClass="ovr-border">
                                                                 <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
