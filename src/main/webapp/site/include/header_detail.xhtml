@@ -11,14 +11,14 @@
             <p:panel id="header_panel_prescreen" rendered="#{headerController.stageId == 101}" styleClass="panel">
                 <!--Check Mandate Doc Prescreen-->
                 <p:commandButton id="btnChkMandatePreScreenChecker" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
-                                 rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1002}"
+                                 rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1003}"
                                  actionListener="#{headerController.onCheckMandateDialog()}"
                                  oncomplete="checkMandateDlg.show()"
                                  update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
                     <p:resetInput target=":frmMain:checkMandatePanel"/>
                 </p:commandButton>
                 <p:commandButton id="btnChkMandatePreScreen" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
-                                 rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1003}"
+                                 rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1002}"
                                  actionListener="#{headerController.onCheckMandateForCheckerDialog()}"
                                  oncomplete="checkMandateDlg.show()"
                                  update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
@@ -169,7 +169,7 @@
                 <p:commandButton id="btnSubmitCaseToZM" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
                                  rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2001}"
                                  action="#{headerController.onOpenSubmitZM}"
-                                 update=":frmMain:submitZMPanel, :frmMain:msgBoxBaseMessagePanel" >
+                                 update=":frmMain:submitZMPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel" >
                 </p:commandButton>
                 <!--Submit To Region Manager-->
                 <p:commandButton id="btnSubmitCaseToRGM" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"

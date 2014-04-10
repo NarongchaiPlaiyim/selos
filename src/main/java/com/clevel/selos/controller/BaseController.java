@@ -3,8 +3,11 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.FieldsControlView;
+import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
@@ -55,5 +58,33 @@ public class BaseController implements Serializable {
         if (field == null)
             return false;
         return field.isReadOnly();
+    }
+
+    public boolean checkSession(HttpSession session){
+        boolean checkSession = false;
+        if(( (Long)session.getAttribute("workCaseId") != 0 || (Long)session.getAttribute("workCasePreScreenId") != 0 ) &&
+                (Long)session.getAttribute("stepId") != 0){
+            checkSession = true;
+        }
+
+        return checkSession;
+    }
+
+    public long getCurrentStep(HttpSession session){
+        long stepId = 0;
+        if(!Util.isNull(session.getAttribute("stepId"))){
+            stepId = (Long)session.getAttribute("stepId");
+        }
+
+        return stepId;
+    }
+
+    public long getCurrentStatus(HttpSession session){
+        long statusId = 0;
+        if(!Util.isNull(session.getAttribute("statusId"))){
+            statusId = (Long)session.getAttribute("statusId");
+        }
+
+        return statusId;
     }
 }

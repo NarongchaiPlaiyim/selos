@@ -40,7 +40,7 @@ import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "decision")
-public class Decision implements Serializable {
+public class Decision extends BaseController {
     @Inject
     @SELOS
     Logger log;
@@ -274,6 +274,10 @@ public class Decision implements Serializable {
             }
             else if (RoleValue.ZM.id() == roleId || RoleValue.RGM.id() == roleId) {
                 roleZM_RGM = true;
+            }
+
+            if(!roleBDM){
+                decisionDialog = true;
             }
 
         } else {
