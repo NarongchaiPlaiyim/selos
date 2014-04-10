@@ -83,17 +83,17 @@
                         </p:selectOneRadio>
                     </td>
                     <td class="left">
-                        <p:selectBooleanCheckbox value="#{mandatoryItem.incomplete}" disabled="#{headerController.checkMandateDocView.reasonFlag}"/>
+                        <p:selectBooleanCheckbox value="#{mandatoryItem.incomplete}" disabled="#{headerController.checkMandateDocView.reasonFlag or mandatoryItem.reasonFlag}"/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.a')}" /> <br />
-                        <p:selectBooleanCheckbox value="#{mandatoryItem.indistinct}" disabled="#{headerController.checkMandateDocView.reasonFlag}"/>
+                        <p:selectBooleanCheckbox value="#{mandatoryItem.indistinct}" disabled="#{headerController.checkMandateDocView.reasonFlag or mandatoryItem.reasonFlag}"/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.b')}"/> <br />
-                        <p:selectBooleanCheckbox value="#{mandatoryItem.incorrect}"  disabled="#{headerController.checkMandateDocView.reasonFlag}"/>
+                        <p:selectBooleanCheckbox value="#{mandatoryItem.incorrect}"  disabled="#{headerController.checkMandateDocView.reasonFlag or mandatoryItem.reasonFlag}"/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.c')}"/> <br />
-                        <p:selectBooleanCheckbox value="#{mandatoryItem.expire}"     disabled="#{headerController.checkMandateDocView.reasonFlag}"/>
+                        <p:selectBooleanCheckbox value="#{mandatoryItem.expire}"     disabled="#{headerController.checkMandateDocView.reasonFlag or mandatoryItem.reasonFlag}"/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.d')}"/>
                     </td>
                     <td class="center">
-                        <p:inputTextarea value="#{mandatoryItem.remark}" rows="3" cols="25" readonly="#{headerController.checkMandateDocView.remarkFlag}"/>
+                        <p:inputTextarea value="#{mandatoryItem.remark}" rows="3" cols="25" readonly="#{headerController.checkMandateDocView.remarkFlag or mandatoryItem.remarkFlag}"/>
                     </td>
                 </tr>
             </ui:repeat>
@@ -143,20 +143,20 @@
                         </p:selectOneRadio>
                     </td>
                     <td class="left">
-                        <p:selectBooleanCheckbox value="#{optionalItem.incomplete}" disabled="#{headerController.checkMandateDocView.reasonFlag}"/>
+                        <p:selectBooleanCheckbox value="#{optionalItem.incomplete}" disabled="#{headerController.checkMandateDocView.reasonFlag or optionalItem.reasonFlag}"/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.a')} "  /> <br />
 
-                        <p:selectBooleanCheckbox value="#{optionalItem.indistinct}" disabled="#{headerController.checkMandateDocView.reasonFlag}"/>
+                        <p:selectBooleanCheckbox value="#{optionalItem.indistinct}" disabled="#{headerController.checkMandateDocView.reasonFlag or optionalItem.reasonFlag}"/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.b')} "/> <br />
 
-                        <p:selectBooleanCheckbox value="#{optionalItem.incorrect}"  disabled="#{headerController.checkMandateDocView.reasonFlag}"/>
+                        <p:selectBooleanCheckbox value="#{optionalItem.incorrect}"  disabled="#{headerController.checkMandateDocView.reasonFlag or optionalItem.reasonFlag}"/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.c')}"/> <br />
 
-                        <p:selectBooleanCheckbox value="#{optionalItem.expire}"     disabled="#{headerController.checkMandateDocView.reasonFlag}"/>
+                        <p:selectBooleanCheckbox value="#{optionalItem.expire}"     disabled="#{headerController.checkMandateDocView.reasonFlag or optionalItem.reasonFlag}"/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.d')}"/>
                     </td>
                     <td class="center">
-                        <p:inputTextarea value="#{optionalItem.remark}" rows="3" cols="25" readonly="#{headerController.checkMandateDocView.remarkFlag}"/>
+                        <p:inputTextarea value="#{optionalItem.remark}" rows="3" cols="25" readonly="#{headerController.checkMandateDocView.remarkFlag or optionalItem.remarkFlag}"/>
                     </td>
                 </tr>
             </ui:repeat>
@@ -205,17 +205,17 @@
                         </p:selectOneRadio>
                     </td>
                     <td class="left">
-                        <p:selectBooleanCheckbox value="#{otherItem.incomplete}" disabled="#{headerController.checkMandateDocView.reasonFlag}"/>
+                        <p:selectBooleanCheckbox value="#{otherItem.incomplete}" disabled="#{headerController.checkMandateDocView.reasonFlag or otherItem.reasonFlag}"/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.a')}"/> <br />
-                        <p:selectBooleanCheckbox value="#{otherItem.indistinct}" disabled="#{headerController.checkMandateDocView.reasonFlag}"/>
+                        <p:selectBooleanCheckbox value="#{otherItem.indistinct}" disabled="#{headerController.checkMandateDocView.reasonFlag or otherItem.reasonFlag}"/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.b')}"/> <br />
-                        <p:selectBooleanCheckbox value="#{otherItem.incorrect}"  disabled="#{headerController.checkMandateDocView.reasonFlag}"/>
+                        <p:selectBooleanCheckbox value="#{otherItem.incorrect}"  disabled="#{headerController.checkMandateDocView.reasonFlag or otherItem.reasonFlag}"/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.c')}"/> <br />
-                        <p:selectBooleanCheckbox value="#{otherItem.expire}"     disabled="#{headerController.checkMandateDocView.reasonFlag}"/>
+                        <p:selectBooleanCheckbox value="#{otherItem.expire}"     disabled="#{headerController.checkMandateDocView.reasonFlag or otherItem.reasonFlag}"/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.d')}"/>
                     </td>
                     <td class="center">
-                        <p:inputTextarea value="#{otherItem.remark}" rows="3" cols="25" readonly="#{headerController.checkMandateDocView.remarkFlag}"/>
+                        <p:inputTextarea value="#{otherItem.remark}" rows="3" cols="25" readonly="#{headerController.checkMandateDocView.remarkFlag or otherItem.remarkFlag}"/>
                     </td>
                 </tr>
             </ui:repeat>
