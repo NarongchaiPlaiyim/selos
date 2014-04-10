@@ -9,6 +9,7 @@ import java.util.List;
 
 public class CheckMandatoryDocView implements Serializable /*extends CheckMandatoryDocAbstractView*/  {
     private long id;
+    private String key;
     private String documentType;
     private List<MandateDocBRMSView> BRMSDocumentTypeList;
     private List<MandateDocCustView> ownewList;
@@ -20,6 +21,9 @@ public class CheckMandatoryDocView implements Serializable /*extends CheckMandat
     private boolean expire;
     private String remark;
     private boolean isCompleteFlag;
+    private boolean isRemarkFlag;
+    private boolean isReasonFlag;
+
     public CheckMandatoryDocView() {
 //        super();
         init();
@@ -34,10 +38,17 @@ public class CheckMandatoryDocView implements Serializable /*extends CheckMandat
         Incorrect = false;
         expire = false;
         isCompleteFlag = false;
+        isRemarkFlag = false;
+        isReasonFlag = false;
     }
 
     public void readOnly(){
         isCompleteFlag = true;
+    }
+
+    public void readOnlyRemarkAndReason(){
+        isRemarkFlag = true;
+        isReasonFlag = true;
     }
 
     public long getId() {
@@ -135,10 +146,36 @@ public class CheckMandatoryDocView implements Serializable /*extends CheckMandat
     public void setCompleteFlag(boolean completeFlag) {
         isCompleteFlag = completeFlag;
     }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public boolean isRemarkFlag() {
+        return isRemarkFlag;
+    }
+
+    public void setRemarkFlag(boolean remarkFlag) {
+        isRemarkFlag = remarkFlag;
+    }
+
+    public boolean isReasonFlag() {
+        return isReasonFlag;
+    }
+
+    public void setReasonFlag(boolean reasonFlag) {
+        isReasonFlag = reasonFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
+                .append("key", key)
                 .append("documentType", documentType)
                 .append("BRMSDocumentTypeList", BRMSDocumentTypeList)
                 .append("ownewList", ownewList)
@@ -149,6 +186,9 @@ public class CheckMandatoryDocView implements Serializable /*extends CheckMandat
                 .append("Incorrect", Incorrect)
                 .append("expire", expire)
                 .append("remark", remark)
+                .append("isCompleteFlag", isCompleteFlag)
+                .append("isRemarkFlag", isRemarkFlag)
+                .append("isReasonFlag", isReasonFlag)
                 .toString();
     }
 }
