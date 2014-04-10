@@ -15,9 +15,8 @@ public class ApprovalHistoryView implements Serializable {
     private RoleView roleView;
     private Date submitDate;
     private String comments;
-    private DecisionType approveDecision;
+    private DecisionType uwDecision;
     private int isSubmit;
-    private int approveType;
 
     public ApprovalHistoryView() {
         reset();
@@ -29,9 +28,7 @@ public class ApprovalHistoryView implements Serializable {
         this.roleView = new RoleView();
         this.submitDate = DateTime.now().toDate();
         this.comments = "";
-        this.approveDecision = DecisionType.NO_DECISION;
-        this.isSubmit = 0;
-        this.approveType = 0;
+        this.uwDecision = DecisionType.NO_DECISION;
     }
 
     public long getId() {
@@ -82,12 +79,12 @@ public class ApprovalHistoryView implements Serializable {
         this.comments = comments;
     }
 
-    public DecisionType getApproveDecision() {
-        return approveDecision;
+    public DecisionType getUwDecision() {
+        return uwDecision;
     }
 
-    public void setApproveDecision(DecisionType approveDecision) {
-        this.approveDecision = approveDecision;
+    public void setUwDecision(DecisionType uwDecision) {
+        this.uwDecision = uwDecision;
     }
 
     public int getSubmit() {
@@ -96,14 +93,6 @@ public class ApprovalHistoryView implements Serializable {
 
     public void setSubmit(int submit) {
         isSubmit = submit;
-    }
-
-    public int getApproveType() {
-        return approveType;
-    }
-
-    public void setApproveType(int approveType) {
-        this.approveType = approveType;
     }
 
     @Override
@@ -115,7 +104,7 @@ public class ApprovalHistoryView implements Serializable {
                 .append("roleView", roleView)
                 .append("submitDate", submitDate)
                 .append("comments", comments)
-                .append("approveDecision", approveDecision)
+                .append("uwDecision", uwDecision)
                 .append("isSubmit", isSubmit)
                 .toString();
     }

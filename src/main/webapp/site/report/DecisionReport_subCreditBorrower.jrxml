@@ -81,6 +81,9 @@
 	<field name="code" class="java.lang.String">
 		<fieldDescription><![CDATA[code]]></fieldDescription>
 	</field>
+	<field name="existingSplitLineDetailViewList" class="java.util.List">
+		<fieldDescription><![CDATA[existingSplitLineDetailViewList]]></fieldDescription>
+	</field>
 	<columnHeader>
 		<band height="38" splitType="Stretch">
 			<staticText>
@@ -228,6 +231,13 @@
 new net.sf.jasperreports.engine.JREmptyDataSource() :
 new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTierDetailViewList})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$F{path}+ "DecisionReport_subCreditBorrower_subCreditBorrower.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="f2c77573-8453-4d95-a29a-95744ed8ff75" positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="96" y="0" width="459" height="18" isRemoveLineWhenBlank="true"/>
+				<dataSourceExpression><![CDATA[$F{existingSplitLineDetailViewList}.isEmpty() ?
+new net.sf.jasperreports.engine.JREmptyDataSource() :
+new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingSplitLineDetailViewList})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$F{path} + "DecisionReport_subCreditBorrower_subExistingSplitLineDetailView.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

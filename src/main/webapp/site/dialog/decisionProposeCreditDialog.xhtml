@@ -14,7 +14,7 @@
                     <h:outputText value="#{msg.get('app.decision.header')} :"/>
                 </td>
                 <td class="left" colspan="3" style="width: 80%">
-                    <p:selectOneRadio id="dlgRadioApprove" value="#{decision.selectedApproveCredit.approveDecision}"
+                    <p:selectOneRadio id="dlgRadioApprove" value="#{decision.selectedApproveCredit.uwDecision}"
                                       required="#{not empty param[saveAppProposeCreditButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
                         <f:selectItem itemLabel="#{msg.get('app.button.notApprove')}" itemValue="#{decision.decisionREJECTED}"/>

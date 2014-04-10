@@ -168,10 +168,10 @@ public class CreditFacProposeControl extends BusinessControl {
                 List<FeeDetail> feeDetailList = feeDetailDAO.findAllByWorkCaseId(workCaseId);
                 if (feeDetailList.size() > 0) {
                     log.debug("feeDetailList size:: {}", feeDetailList.size());
-                    List<FeeDetailView> feeDetailViewList = feeTransform.transformToView(feeDetailList);
-                    log.debug("feeDetailViewList : {}", feeDetailViewList);
-                    List<NewFeeDetailView> newFeeDetailViewList = transFormNewFeeDetailViewList(feeDetailViewList);
-                    newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
+//                    List<FeeDetailView> feeDetailViewList = feeTransform.transformToView(feeDetailList);
+//                    log.debug("feeDetailViewList : {}", feeDetailViewList);
+//                    List<NewFeeDetailView> newFeeDetailViewList = transFormNewFeeDetailViewList(feeDetailViewList);
+//                    newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
                 }
 
                 List<NewCreditDetail> newCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility);
@@ -667,14 +667,15 @@ public class CreditFacProposeControl extends BusinessControl {
                                           Sum of [(HeadCollateral-Appraisal of nonCoreAsset/50%)-ภาระสินเชื่อเดิม(collHeadView.getExistingCredit())] +
                                           Sum of [(HeadCollateral-Appraisal of cashCollateral/BE(คือฟิลล์ไหน ???)/30%)-ภาระสินเชื่อเดิม(collHeadView.getExistingCredit())]
                                          */
-                                        if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
-                                            potentialCollValue = Util.subtract((Util.divide(collHeadView.getAppraisalValue(), thirtyPercent)), collHeadView.getExistingCredit());
-                                        } else if (PotentialCollateralValue.NONE_CORE_ASSET.id() == potentialCollateral.getId()) {
-                                            potentialCollValue = Util.subtract((Util.divide(collHeadView.getAppraisalValue(), fiftyPercent)), collHeadView.getExistingCredit());
-                                        } else if (PotentialCollateralValue.CASH_COLLATERAL.id() == potentialCollateral.getId()) {
-                                            potentialCollValue = Util.subtract((Util.divide(collHeadView.getAppraisalValue(), thirtyPercent)), collHeadView.getExistingCredit());
+                                        if(potentialCollateral.getId()!=0){
+                                            if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
+                                                potentialCollValue = Util.subtract((Util.divide(collHeadView.getAppraisalValue(), thirtyPercent)), collHeadView.getExistingCredit());
+                                            } else if (PotentialCollateralValue.NONE_CORE_ASSET.id() == potentialCollateral.getId()) {
+                                                potentialCollValue = Util.subtract((Util.divide(collHeadView.getAppraisalValue(), fiftyPercent)), collHeadView.getExistingCredit());
+                                            } else if (PotentialCollateralValue.CASH_COLLATERAL.id() == potentialCollateral.getId()) {
+                                                potentialCollValue = Util.subtract((Util.divide(collHeadView.getAppraisalValue(), thirtyPercent)), collHeadView.getExistingCredit());
+                                            }
                                         }
-
                                         summaryOne.add(potentialCollValue);
                                     }
                                 }
@@ -699,10 +700,11 @@ public class CreditFacProposeControl extends BusinessControl {
                                     for (NewCollateralHeadView collHeadView : collHeadViewList) {
                                         PotentialCollateral potentialCollateral = collHeadView.getPotentialCollateral();
 
-                                        if (PotentialCollateralValue.CASH_COLLATERAL.id() == potentialCollateral.getId()) {
-                                            potentialCollValue = Util.subtract(collHeadView.getAppraisalValue(),collHeadView.getExistingCredit());
+                                        if(potentialCollateral.getId()!=0){
+                                            if (PotentialCollateralValue.CASH_COLLATERAL.id() == potentialCollateral.getId()) {
+                                                potentialCollValue = Util.subtract(collHeadView.getAppraisalValue(),collHeadView.getExistingCredit());
+                                            }
                                         }
-
                                         summaryOne.add(potentialCollValue);   // Sum of [Head Coll - Appraisal of Cash Collateral / BE - ภาระสินเชื่อเดิม]
                                     }
                                 }
@@ -832,9 +834,11 @@ public class CreditFacProposeControl extends BusinessControl {
                     for (NewCollateralHeadView collHeadView : collHeadViewList) {
                         PotentialCollateral potentialCollateral = collHeadView.getPotentialCollateral();
 
-                        if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
-                            flag_for_core_asset = true;
-                            break;
+                        if(potentialCollateral.getId()!=0){
+                            if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
+                                flag_for_core_asset = true;
+                                break;
+                            }
                         }
                     }
                 }
@@ -845,7 +849,7 @@ public class CreditFacProposeControl extends BusinessControl {
         if (!Util.isNull(basicInfo)) {
             if (((!Util.isNull(basicInfo.getBorrowerType())) && (basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value())) &&
                 ((!Util.isNull(basicInfo.getSbfScore())) && (basicInfo.getSbfScore().getScore() <= 13)) &&
-                (basicInfo.getHaveLoanInOneYear() == RadioValue.YES.value()) &&
+                ((!Util.isNull(basicInfo.getSbfScore())) && (basicInfo.getHaveLoanInOneYear() == RadioValue.YES.value())) &&
                 (sumBank.doubleValue()>=numBank.doubleValue()) &&
                 (flag_for_core_asset))     //TODO  Core Asset in proposed/approved
             {
@@ -1291,22 +1295,21 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
 
-    public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList, List<Long> deleteCreditTierIdList) {
+    public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {
         log.debug("deleteAllApproveByIdList()");
         log.debug("deleteCreditIdList: {}", deleteCreditIdList);
         log.debug("deleteCollIdList: {}", deleteCollIdList);
         log.debug("deleteGuarantorIdList: {}", deleteGuarantorIdList);
         log.debug("deleteConditionIdList: {}", deleteConditionIdList);
-        log.debug("deleteCreditTierIdList: {}", deleteCreditTierIdList);
 
 
-        if (deleteCreditTierIdList != null && deleteCreditTierIdList.size() > 0) {
-            List<NewCreditTierDetail> deleteCreditTierDelIdList = new ArrayList<NewCreditTierDetail>();
-            for (Long id : deleteCreditTierIdList) {
-                deleteCreditTierDelIdList.add(newCreditTierDetailDAO.findById(id));
-            }
-            newCreditTierDetailDAO.delete(deleteCreditTierDelIdList);
-        }
+//        if (deleteCreditTierIdList != null && deleteCreditTierIdList.size() > 0) {
+//            List<NewCreditTierDetail> deleteCreditTierDelIdList = new ArrayList<NewCreditTierDetail>();
+//            for (Long id : deleteCreditTierIdList) {
+//                deleteCreditTierDelIdList.add(newCreditTierDetailDAO.findById(id));
+//            }
+//            newCreditTierDetailDAO.delete(deleteCreditTierDelIdList);
+//        }
 
         if (deleteCreditIdList != null && deleteCreditIdList.size() > 0) {
             List<NewCreditDetail> deleteCreditDetailList = new ArrayList<NewCreditDetail>();
