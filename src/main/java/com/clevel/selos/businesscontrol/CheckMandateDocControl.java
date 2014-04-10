@@ -416,7 +416,7 @@ public class CheckMandateDocControl extends BusinessControl{
                     for(ECMDetail ecmDetail : ecmDetailList){
                         for(MandateDoc mandateDoc :  mandateDocList){
                             if(ecmDetail.getEcmDocId().equals(mandateDoc.getEcmDocType())){
-                                  //todo check retive
+
                                 int isComplete = 2;
                                 try {
                                     if(!Util.isNull(mandateDoc.getMandateDocFileNameList())){
