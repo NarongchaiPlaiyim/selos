@@ -279,7 +279,7 @@ public class BPMExecutor implements Serializable {
             HashMap<String, String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
-            fields.put("RGMDecision", rgmDecisionFlag);
+            fields.put("RGMDecisionFlag", rgmDecisionFlag);
             log.debug("dispatch case for [Submit GH]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
             if (workCase != null) {
@@ -297,7 +297,7 @@ public class BPMExecutor implements Serializable {
             HashMap<String, String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
-            fields.put("GHDecision", rgmDecisionFlag);
+            fields.put("GHDecisionFlag", rgmDecisionFlag);
             log.debug("dispatch case for [Submit CSSO]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
             if (workCase != null) {
@@ -315,7 +315,7 @@ public class BPMExecutor implements Serializable {
             HashMap<String, String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
-            fields.put("CSSODecision", cssoDecisionFlag);
+            fields.put("CSSODecisionFlag", cssoDecisionFlag);
             log.debug("dispatch case for [Submit UW]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
             if (workCase != null) {
@@ -333,7 +333,7 @@ public class BPMExecutor implements Serializable {
             HashMap<String, String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
-            fields.put("ZMDecision", zmDecisionFlag);
+            fields.put("ZMDecisionFlag", zmDecisionFlag);
             log.debug("dispatch case for [Submit UW]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
             if (workCase != null) {
