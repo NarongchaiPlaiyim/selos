@@ -642,7 +642,7 @@ public class CreditFacProposeControl extends BusinessControl {
             TCGView tcg = tcgInfoControl.getTcgView(workCaseId);
             BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
 
-            if (bankStatementSummary != null && tcg != null && basicInfoView != null && workCase != null) {
+            if (workCase.getProductGroup() != null && bankStatementSummary != null && tcg != null && basicInfoView != null && workCase != null) {
                 log.debug("workCase ::: {}", workCase);
                 log.debug("workCase.getProductGroup ::: {}", workCase.getProductGroup().getId());
                 log.debug("basicInfoView ::: {}", basicInfoView.getId());

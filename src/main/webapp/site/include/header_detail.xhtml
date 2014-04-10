@@ -105,7 +105,7 @@
             </p:panel>
 
             <!--Stage for FullApplication-->
-            <p:panel id="header_panel_fullapplication" rendered="#{headerController.stageId == 201}" styleClass="panel">
+            <p:panel id="header_panel_fullapplication" rendered="#{headerController.stageId == 201 || headerController.stageId == 207}" styleClass="panel">
                 <!--Print Report-->
                 <p:commandButton id="btnPrintReport" value="#{msg.get('app.header.button.printReport')}" styleClass="blueButton" title="#{msg.get('app.header.button.printReport')}"
                                  oncomplete="printReportDlg.show()"
