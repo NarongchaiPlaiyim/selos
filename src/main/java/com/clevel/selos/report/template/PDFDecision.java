@@ -113,11 +113,10 @@ public class PDFDecision implements Serializable {
                 decisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
                 decisionReport.setOutstanding(Util.convertNullToZERO(detailView.getOutstanding()));
 
-                if (Util.safetyList(Util.safetyList(detailView.getExistingCreditTierDetailViewList())).size() > 0){
-                    decisionReport.setExistingCreditTierDetailViewList(detailView.getExistingCreditTierDetailViewList());
-                } else {
-                    log.debug("getExistingCreditTierDetailViewList is Null. {}",detailView.getExistingCreditTierDetailViewList());
-                }
+                decisionReport.setExistingCreditTierDetailViewList(Util.safetyList(detailView.getExistingCreditTierDetailViewList()));
+                log.debug("--ExistingCreditTierDetailViewList. {}",detailView.getExistingCreditTierDetailViewList());
+                decisionReport.setExistingSplitLineDetailViewList(Util.safetyList(detailView.getExistingSplitLineDetailViewList()));
+                log.debug("--ExistingSplitLineDetailViewList. {}",detailView.getExistingSplitLineDetailViewList());
 
                 borrowerCreditDecisionReportList.add(decisionReport);
             }
@@ -191,6 +190,7 @@ public class PDFDecision implements Serializable {
                 borrowerRetailDecisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
                 borrowerRetailDecisionReport.setOutstanding(Util.convertNullToZERO(detailView.getOutstanding()));
                 borrowerRetailDecisionReport.setExistingCreditTierDetailViewList(Util.safetyList(detailView.getExistingCreditTierDetailViewList()));
+                log.debug("--ExistingCreditTierDetailViewList. {}",detailView.getExistingCreditTierDetailViewList());
                 retailDecisionReportList.add(borrowerRetailDecisionReport);
             }
         } else {
