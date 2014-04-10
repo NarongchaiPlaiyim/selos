@@ -113,8 +113,11 @@ public class PDFDecision implements Serializable {
                 decisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
                 decisionReport.setOutstanding(Util.convertNullToZERO(detailView.getOutstanding()));
 
-                decisionReport.setExistingCreditTierDetailViewList(Util.safetyList(detailView.getExistingCreditTierDetailViewList()));
-                log.debug("--ExistingCreditTierDetailViewList. {}",detailView.getExistingCreditTierDetailViewList());
+                if (Util.safetyList(Util.safetyList(detailView.getExistingCreditTierDetailViewList())).size() > 0){
+                    decisionReport.setExistingCreditTierDetailViewList(detailView.getExistingCreditTierDetailViewList());
+                } else {
+                    log.debug("getExistingCreditTierDetailViewList is Null. {}",detailView.getExistingCreditTierDetailViewList());
+                }
 
                 borrowerCreditDecisionReportList.add(decisionReport);
             }
@@ -188,7 +191,6 @@ public class PDFDecision implements Serializable {
                 borrowerRetailDecisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
                 borrowerRetailDecisionReport.setOutstanding(Util.convertNullToZERO(detailView.getOutstanding()));
                 borrowerRetailDecisionReport.setExistingCreditTierDetailViewList(Util.safetyList(detailView.getExistingCreditTierDetailViewList()));
-                log.debug("--ExistingCreditTierDetailViewList. {}",detailView.getExistingCreditTierDetailViewList());
                 retailDecisionReportList.add(borrowerRetailDecisionReport);
             }
         } else {
@@ -726,7 +728,7 @@ public class PDFDecision implements Serializable {
                 approvedCollateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
                 approvedCollateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
                 approvedCollateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
-//                approvedCollateralDecisionReport.setApproveDecision(Util.checkNullString(view.getApproveDecision().getValue()));
+//                approvedCollateralDecisionReport.setUwDecision(Util.checkNullString(view.getUwDecision().getValue()));
                 if (view.getUwDecision().equals("APPROVED")){
                     approvedCollateralDecisionReport.setApproved("Approved");
                 } else if(view.getUwDecision().equals("REJECTED")){
