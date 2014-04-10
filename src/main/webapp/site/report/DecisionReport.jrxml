@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b568264b-3421-42fd-80e8-96aa4a75cbf6">
-	<property name="ireport.zoom" value="1.100000000000025"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="1123"/>
+	<property name="ireport.zoom" value="1.771561000000041"/>
+	<property name="ireport.x" value="71"/>
+	<property name="ireport.y" value="1599"/>
 	<style name="Total" mode="Opaque" forecolor="#000000" backcolor="#FCFF79" hAlign="Left" vAlign="Middle" fontSize="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -978,7 +978,7 @@
 					<text><![CDATA[ประเทศที่ต้องการนำเงินไปลงทุน :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="36c66c44-ab22-440f-9aac-e6575cef7397" x="1" y="99" width="222" height="13"/>
+					<reportElement uuid="36c66c44-ab22-440f-9aac-e6575cef7397" x="1" y="99" width="210" height="13"/>
 					<textElement>
 						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
@@ -1006,8 +1006,8 @@
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getCountryName()]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement uuid="81f24cd1-133c-4fa3-a187-761b1f06bdea" mode="Opaque" x="223" y="99" width="75" height="13" backcolor="#CCCCFF"/>
-					<textElement verticalAlignment="Middle">
+					<reportElement uuid="81f24cd1-133c-4fa3-a187-761b1f06bdea" mode="Opaque" x="211" y="99" width="75" height="13" backcolor="#CCCCFF"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExistingSMELimit()]]></textFieldExpression>

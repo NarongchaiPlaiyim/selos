@@ -115,6 +115,8 @@ public class PDFDecision implements Serializable {
 
                 decisionReport.setExistingCreditTierDetailViewList(Util.safetyList(detailView.getExistingCreditTierDetailViewList()));
                 log.debug("--ExistingCreditTierDetailViewList. {}",detailView.getExistingCreditTierDetailViewList());
+                decisionReport.setExistingSplitLineDetailViewList(Util.safetyList(detailView.getExistingSplitLineDetailViewList()));
+                log.debug("--ExistingSplitLineDetailViewList. {}",detailView.getExistingSplitLineDetailViewList());
 
                 borrowerCreditDecisionReportList.add(decisionReport);
             }

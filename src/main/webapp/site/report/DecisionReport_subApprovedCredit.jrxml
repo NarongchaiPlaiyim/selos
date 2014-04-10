@@ -218,7 +218,7 @@ Fee(%)]]></text>
 			</textField>
 			<textField isStretchWithOverflow="true" evaluationTime="Page" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="6e0a3df7-cebe-4663-93f3-0c1116ad5a3a" style="detail" stretchType="RelativeToBandHeight" mode="Opaque" x="514" y="0" width="41" height="18"/>
-				<textElement textAlignment="Left">
+				<textElement textAlignment="Right">
 					<font isItalic="false" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>

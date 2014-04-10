@@ -240,7 +240,7 @@ new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{newCreditTier
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Top">
+				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
