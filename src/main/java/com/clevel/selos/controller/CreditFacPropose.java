@@ -50,6 +50,7 @@ public class CreditFacPropose implements Serializable {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     @NormalMessage
     Message msg;
@@ -65,7 +66,6 @@ public class CreditFacPropose implements Serializable {
     private Long workCaseId;
 
     enum ModeForButton {ADD, EDIT}
-
     enum ModeForDB {ADD_DB, EDIT_DB, CANCEL_DB}
 
     private ModeForButton modeForButton;
@@ -843,16 +843,16 @@ public class CreditFacPropose implements Serializable {
         log.debug("  complete >>>>  :  {}", complete);
 
         //todo : remove & check on ui repeat only
-        if (newCreditFacilityView.getNewCreditDetailViewList() != null && newCreditFacilityView.getNewCreditDetailViewList().size() > 0) {
-            for (NewCreditDetailView newCreditView : newCreditFacilityView.getNewCreditDetailViewList()) {
-                log.debug("newCreditDetail : {} ", newCreditView);
-                if (newCreditView.getNewCreditTierDetailViewList() != null && newCreditView.getNewCreditTierDetailViewList().size() == 0) {
-                    log.debug("set null");
-                    newCreditView.setNewCreditTierDetailViewList(null);
-                }
-                log.debug("after tier : {}", newCreditView.getNewCreditTierDetailViewList());
-            }
-        }
+//        if (newCreditFacilityView.getNewCreditDetailViewList() != null && newCreditFacilityView.getNewCreditDetailViewList().size() > 0) {
+//            for (NewCreditDetailView newCreditView : newCreditFacilityView.getNewCreditDetailViewList()) {
+//                log.debug("newCreditDetail : {} ", newCreditView);
+//                if (newCreditView.getNewCreditTierDetailViewList() != null && newCreditView.getNewCreditTierDetailViewList().size() == 0) {
+//                    log.debug("set null");
+//                    newCreditView.setNewCreditTierDetailViewList(null);
+//                }
+//                log.debug("after tier : {}", newCreditView.getNewCreditTierDetailViewList());
+//            }
+//        }
 
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
@@ -1587,7 +1587,7 @@ public class CreditFacPropose implements Serializable {
         selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
         proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(), existingCreditDetailViewList, workCaseId);
         newGuarantorDetailView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
-//        }
+
         if (newGuarantorDetailViewItem.getProposeCreditDetailViewList() != null && newGuarantorDetailViewItem.getProposeCreditDetailViewList().size() > 0) {
             // set selected credit type items (check/uncheck)
             selectedGuarantorCrdTypeItems = newGuarantorDetailViewItem.getProposeCreditDetailViewList();
