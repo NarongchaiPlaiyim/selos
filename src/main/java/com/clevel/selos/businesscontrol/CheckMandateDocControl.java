@@ -172,7 +172,7 @@ public class CheckMandateDocControl extends BusinessControl{
                 log.debug("-- Find by work pre screen case id = {} ActionResult is {} and reason is {}  ", workCasePreScreenId, mandateDocResponseView.getActionResult(), mandateDocResponseView.getReason());
             }
         } catch (Exception e){
-            log.error("-- Exception while call BRMS {}", e.getMessage());
+            log.error("-- Exception while call BRMS ", e);
 //            throw new Exception(e);
         }
         return checkMandateDocView;
