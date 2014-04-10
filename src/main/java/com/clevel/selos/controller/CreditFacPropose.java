@@ -332,6 +332,7 @@ public class CreditFacPropose implements Serializable {
             deleteGuarantorIdList = new ArrayList<Long>();
             deleteSubCollIdList = new ArrayList<Long>();
             deleteConditionIdList = new ArrayList<Long>();
+            deleteCreditTierIdList = new ArrayList<Long>();
 
             try {
                 WorkCase workCase = workCaseDAO.findById(workCaseId);
@@ -586,16 +587,16 @@ public class CreditFacPropose implements Serializable {
                                 stringId = String.valueOf(newCreditView.getId());
                                 log.debug("newCreditView.getId() toString :: {}", newCreditView.getId());
 
-//                                if (newCreditView.getNewCreditTierDetailViewList().size() > 0) {
-//                                    deleteCreditTierIdList = new ArrayList<Long>();
-//                                    for (NewCreditTierDetailView newCreditTierDetailView : newCreditView.getNewCreditTierDetailViewList()) {
-//                                        if (newCreditTierDetailView.getId() != 0) {
-//                                            deleteCreditTierIdList.add(newCreditTierDetailView.getId());
-//                                        }
-//                                    }
-//
-//                                    log.debug("deleteCreditTierIdList :: {}", deleteCreditTierIdList.size());
-//                                }
+                                if (newCreditView.getNewCreditTierDetailViewList().size() > 0) {
+
+                                    for (NewCreditTierDetailView newCreditTierDetailView : newCreditView.getNewCreditTierDetailViewList()) {
+                                        if (newCreditTierDetailView.getId() != 0) {
+                                            deleteCreditTierIdList.add(newCreditTierDetailView.getId());
+                                        }
+                                    }
+
+                                    log.debug("deleteCreditTierIdList :: {}", deleteCreditTierIdList.size());
+                                }
                                 if (stringId.equals(creditTypeId)) {
                                     newCreditView.setNewCreditTierDetailViewList(newCreditTierViewList);
                                     break;
@@ -1778,13 +1779,13 @@ public class CreditFacPropose implements Serializable {
 
         try {
             //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
-            creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList, deleteCreditTierIdList);
+            creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
             // Calculate Total Propose
             newCreditFacilityView = creditFacProposeControl.calculateTotalProposeAmount(newCreditFacilityView, basicInfoView, tcgView, workCaseId);
             // Calculate Total for BRMS
             newCreditFacilityView = creditFacProposeControl.calculateTotalForBRMS(newCreditFacilityView);
             //  Calculate Maximum SME Limit
-//            newCreditFacilityView = creditFacProposeControl.calculateMaximumSMELimit(newCreditFacilityView, workCaseId);
+            newCreditFacilityView = creditFacProposeControl.calculateMaximumSMELimit(newCreditFacilityView, workCaseId);
             // Save NewCreditFacility, ProposeCredit, Collateral, Guarantor
             newCreditFacilityView = creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
             // Calculate WC
