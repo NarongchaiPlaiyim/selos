@@ -36,7 +36,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "appraisalRequest")
-public class AppraisalRequest implements Serializable {
+public class AppraisalRequest extends BaseController {
 
     @Inject
     @SELOS
@@ -108,21 +108,11 @@ public class AppraisalRequest implements Serializable {
         contactFlag3 = false;
     }
 
-    public boolean checkSession(HttpSession session){
-        boolean checkSession = false;
-        if(( (Long)session.getAttribute("workCaseId") != 0 || (Long)session.getAttribute("workCasePreScreenId") != 0 ) &&
-                (Long)session.getAttribute("stepId") != 0){
-            checkSession = true;
-        }
-
-        return checkSession;
-    }
-
     public void preRender(){
         log.debug("preRender...");
         HttpSession session = FacesUtil.getSession(true);
         if(checkSession(session)){
-            stepId = (Long)session.getAttribute("stepId");
+            stepId = getCurrentStep(session);
             if(stepId != StepValue.PRESCREEN_MAKER.value() && stepId != StepValue.FULLAPP_BDM_SSO_ABDM.value()){
                 log.debug("preRender ::: Invalid step id : {}", stepId);
                 FacesUtil.redirect("/site/inbox.jsf");

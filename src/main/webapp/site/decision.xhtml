@@ -44,6 +44,7 @@
 
 <h:body>
 <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+    <f:event type="preRenderView" listener="#{decision.preRender()}" />
     <h:form id="frmMain">
         <div id="main_container">
         <!-- Start Header Logo -->
@@ -3736,7 +3737,7 @@
                         <tr>
                             <td colspan="2" style="height:28px;"></td>
                         </tr>
-                        <h:panelGroup render="#{not decision.roleBDM}">
+                        <h:panelGroup render="#{decision.decisionDialog}">
                         <!--APPROVE FOR ENDORSE CA-->
                         <tr>
                             <td class="center" colspan="2">

@@ -1213,7 +1213,7 @@ public class CreditFacProposeControl extends BusinessControl {
 
             log.debug("saveCreditFacility ::: newCreditFacilityView.getNewFeeDetailViewList()).size() : {}", newCreditFacilityView.getNewFeeDetailViewList().size());
             List<FeeDetail> feeDetailList = feeTransform.transformToDB(newCreditFacilityView.getNewFeeDetailViewList(),workCaseId);
-            feeDetailDAO.persist(feeDetailList);
+//            feeDetailDAO.persist(feeDetailList);
             log.debug("persist :: feeDetailList ::");
         }
 
