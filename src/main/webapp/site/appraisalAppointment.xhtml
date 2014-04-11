@@ -12,6 +12,13 @@
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
     <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
+    <style type="text/css">
+        .ui-selectonemenu-items-wrapper{
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+            width: 270px !important;
+        }
+    </style>
 </h:head>
 <h:body>
     <!--<f:event type="preRenderView" listener="#{appraisalAppointment.preRender()}" />-->
@@ -532,7 +539,7 @@
 <p:dialog id='contactRecordViewDialog' widgetVar="contactRecordViewDlg"
           header="#{msg.get('app.cusaccept.dialog.contactRecord.title')}"
           onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()' resizable="false"
-          modal='true' closeOnEscape="true" closable="true"
+          modal='true' closeOnEscape="true" closable="false"
           dynamic="true">
     <ui:include src="dialog/contactRecordDetailViewAppraisalDialog.xhtml"/>
 </p:dialog>
