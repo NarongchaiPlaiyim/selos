@@ -2,7 +2,7 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.ECMInterface;
-import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.model.ECMDataResult;
 import com.clevel.selos.integration.filenet.ce.connection.CESessionToken;
@@ -32,7 +32,7 @@ import java.util.Map;
 @Stateless
 public class CheckMandateDocControl extends BusinessControl{
     @Inject
-    @NCB
+    @SELOS
     private Logger log;
     @Inject
     private MandateDocDAO mandateDocDAO;
