@@ -11,6 +11,7 @@ public class AppHeaderView implements Serializable {
     private String submitDate;
     private String requestType;
     private String refinance;
+    private String refinanceOut;
     private String bdmName;
     private String bdmPhoneNumber;
     private String bdmPhoneExtNumber;
@@ -195,6 +196,14 @@ public class AppHeaderView implements Serializable {
 
     public void setProductGroup(String productGroup) {
         this.productGroup = productGroup;
+    }
+
+    public String getRefinanceOut() {
+        return refinanceOut;
+    }
+
+    public void setRefinanceOut(String refinanceOut) {
+        this.refinanceOut = refinanceOut;
     }
 
     @Override
