@@ -833,7 +833,7 @@ public class HeaderController implements Serializable {
         }
     }
 
-
+    //Checker
     public void onCheckMandateForCheckerDialog(){
         log.debug("onCheckMandateForCheckerDialog ::: starting...");
         HttpSession session = FacesUtil.getSession(true);
@@ -868,6 +868,7 @@ public class HeaderController implements Serializable {
         }
     }
 
+    //ECM+DB
     public void onCheckMandateDialog(){
         log.debug("onCheckMandateDialog ::: starting...");
         HttpSession session = FacesUtil.getSession(true);
