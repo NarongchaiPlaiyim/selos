@@ -60,34 +60,45 @@
                                             <tr>
                                                 <td class="title" style="width: 200px;">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.appNo')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('applicationNo')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td style="width: 200px;">
                                                     <p:inputText value="#{basicInfo.basicInfoView.appNo}" styleClass="larger"
-                                                                 disabled="#{basicInfo.disApplicationNo}" required="#{basicInfo.reqApplicationNo}"/>
+                                                                 disabled="#{basicInfo.isDisabled('applicationNo')}"
+                                                                 required="#{basicInfo.reqApplicationNo}"/>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.refAppNo')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('refAppliationNo')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td>
                                                     <p:inputText value="#{basicInfo.basicInfoView.refAppNo}" styleClass="larger"
-                                                                 disabled="#{basicInfo.disRefApplicationNo}" required="#{basicInfo.reqRefApplicationNo}"/>
+                                                                 disabled="#{basicInfo.isDisabled('refAppNo')}"
+                                                                 required="#{basicInfo.reqRefApplicationNo}"/>
                                                 </td>
                                                 <td class="title" style="width: 300px; padding-left: 30px;">
-                                                    <h:outputText value="#{msg.get('app.basicInfo.content.CANo')}" style="margin-right: 10px;"/>
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.CANo')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('caNo')}" styleClass="require-field"/>
+                                                    <h:outputText value=" : "/>
                                                     <p:inputText value="#{basicInfo.basicInfoView.caNo}" styleClass="larger"
-                                                                 disabled="#{basicInfo.disCaNo}" required="#{basicInfo.reqCaNo}"/>
+                                                                 disabled="#{basicInfo.isDisabled('caNo')}"
+                                                                 required="#{basicInfo.reqCaNo}"/>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.requestType')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('requestType')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td>
                                                     <p:selectOneMenu styleClass="largest" size="1"
                                                                      value="#{basicInfo.basicInfoView.requestType.id}"
-                                                                     disabled="#{basicInfo.disRequestType}"
+                                                                     disabled="#{basicInfo.isDisabled('requestType')}"
                                                                      required="#{basicInfo.reqRequestType and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{basicInfo.requestTypeList}"
@@ -100,11 +111,13 @@
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.productGroup')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('productGroup')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td>
                                                     <p:selectOneMenu styleClass="largest" size="1"
                                                                      value="#{basicInfo.basicInfoView.productGroup.id}"
-                                                                     disabled="#{basicInfo.disProductGroup}"
+                                                                     disabled="#{basicInfo.isDisabled('productGroup')}"
                                                                      required="#{basicInfo.reqProductGroup and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{basicInfo.productGroupList}"
@@ -129,17 +142,19 @@
                                                                     <tr>
                                                                         <td style="padding-left: 100px;">
                                                                             <p:selectBooleanCheckbox value="#{basicInfo.basicInfoView.charNoUnPaid}"
-                                                                                                     disabled="#{basicInfo.disUnpaidFeeInsurance}"
+                                                                                                     disabled="#{basicInfo.isDisabled('unpaidFeeInsurance')}"
                                                                                                      required="#{basicInfo.reqUnpaidFeeInsurance and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristic.unpaid')}"/>
+                                                                            <h:outputText value="#{basicInfo.mandate('unpaidFeeInsurance')}" styleClass="require-field"/>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="padding-left: 100px;">
                                                                             <p:selectBooleanCheckbox value="#{basicInfo.basicInfoView.charNoPending}"
-                                                                                                     disabled="#{basicInfo.disNoPendingClaimLG}"
+                                                                                                     disabled="#{basicInfo.isDisabled('noPendingClaimLG')}"
                                                                                                      required="#{basicInfo.reqNoPendingClaimLG and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristic.noPending')}"/>
+                                                                            <h:outputText value="#{basicInfo.mandate('noPendingClaimLG')}" styleClass="require-field"/>
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -158,12 +173,13 @@
                                                                     <tr>
                                                                         <td style="padding-left: 50px;">
                                                                             <p:selectBooleanCheckbox value="#{basicInfo.basicInfoView.charFCLG}"
-                                                                                                     disabled="#{basicInfo.disIsConstructionRequestLG}"
+                                                                                                     disabled="#{basicInfo.isDisabled('isConstructionRequestLG')}"
                                                                                                      required="#{basicInfo.reqIsConstructionRequestLG and not empty param[saveBtn.clientId]}">
                                                                                 <p:ajax update="checkBoxIns,checkBoxCom,checkBoxAba,checkBoxLate,checkBoxFund"
                                                                                         listener="#{basicInfo.onChangeReqLG()}"/>
                                                                             </p:selectBooleanCheckbox>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg')}"/>
+                                                                            <h:outputText value="#{basicInfo.mandate('isConstructionRequestLG')}" styleClass="require-field"/>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -172,6 +188,7 @@
                                                                                                      disabled="#{basicInfo.disIsAbleToGettingGuarantorJob}"
                                                                                                      required="#{basicInfo.reqIsAbleToGettingGuarantorJob and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.insurance')}"/>
+                                                                            <h:outputText value="#{basicInfo.mandate('isAbleToGettingGuarantorJob')}" styleClass="require-field"/>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -180,6 +197,7 @@
                                                                                                      disabled="#{basicInfo.disNoClaimLGHistory}"
                                                                                                      required="#{basicInfo.reqNoClaimLGHistory and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.complaint')}"/>
+                                                                            <h:outputText value="#{basicInfo.mandate('noClaimLGHistory')}" styleClass="require-field"/>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -188,6 +206,7 @@
                                                                                                      disabled="#{basicInfo.disNoRevokedLicense}"
                                                                                                      required="#{basicInfo.reqNoRevokedLicense and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.abandon')}"/>
+                                                                            <h:outputText value="#{basicInfo.mandate('noRevokedLicense')}" styleClass="require-field"/>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -196,6 +215,7 @@
                                                                                                      disabled="#{basicInfo.disNoLateWorkDelivery}"
                                                                                                      required="#{basicInfo.reqNoLateWorkDelivery and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.late')}"/>
+                                                                            <h:outputText value="#{basicInfo.mandate('noLateWorkDelivery')}" styleClass="require-field"/>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -204,6 +224,7 @@
                                                                                                      disabled="#{basicInfo.disIsAdequateOfCapitalResource}"
                                                                                                      required="#{basicInfo.reqIsAdequateOfCapitalResource and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.fund')}"/>
+                                                                            <h:outputText value="#{basicInfo.mandate('isAdequateOfCapitalResource')}" styleClass="require-field"/>
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -215,13 +236,15 @@
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.specProgram')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('isApplySpecialProgram')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td style="width: 120px;">
                                                                 <p:selectOneRadio id="spProgram" value="#{basicInfo.basicInfoView.spProgram}"
-                                                                                  disabled="#{basicInfo.disIsApplySpecialProgram}"
+                                                                                  disabled="#{basicInfo.isDisabled('isApplySpecialProgram')}"
                                                                                   required="#{basicInfo.reqIsApplySpecialProgram and not empty param[saveBtn.clientId]}">
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
@@ -247,13 +270,15 @@
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.refIn')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('isRefinanceIN')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td style="width: 120px;">
                                                                 <p:selectOneRadio id="refIn" value="#{basicInfo.basicInfoView.refIn}"
-                                                                                  disabled="#{basicInfo.disIsRefinanceIN}"
+                                                                                  disabled="#{basicInfo.isDisabled('isRefinanceIN')}"
                                                                                   required="#{basicInfo.reqIsRefinanceIN and not empty param[saveBtn.clientId]}">
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
@@ -279,13 +304,15 @@
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.refOut')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('isRefinanceOUT')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td style="width: 120px;">
                                                                 <p:selectOneRadio id="refOut" value="#{basicInfo.basicInfoView.refOut}"
-                                                                                  disabled="#{basicInfo.disIsRefinanceOUT}"
+                                                                                  disabled="#{basicInfo.isDisabled('isRefinanceOUT')}"
                                                                                   required="#{basicInfo.reqIsRefinanceOUT and not empty param[saveBtn.clientId]}">
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
@@ -311,11 +338,13 @@
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.risk')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('riskCustomerType')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td>
                                                     <p:selectOneMenu styleClass="largest" size="1"
                                                                      value="#{basicInfo.basicInfoView.riskType.id}"
-                                                                     disabled="#{basicInfo.disRiskCustomerType}"
+                                                                     disabled="#{basicInfo.isDisabled('riskCustomerType')}"
                                                                      required="#{basicInfo.reqRiskCustomerType and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{basicInfo.riskTypeList}"
@@ -328,6 +357,8 @@
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.qualitative')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('qualitativeType')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <p:selectOneRadio value="#{basicInfo.basicInfoView.qualitative}"
@@ -341,10 +372,12 @@
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.existing')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('isExistingSMECustomer')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <p:selectOneRadio value="#{basicInfo.basicInfoView.existingSME}"
-                                                                      disabled="#{basicInfo.disIsExistingSMECustomer}"
+                                                                      disabled="#{basicInfo.isDisabled('isExistingSMECustomer')}"
                                                                       required="#{basicInfo.reqIsExistingSMECustomer and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
@@ -355,6 +388,8 @@
                                             <tr>
                                                 <td class="title" style="width: 200px;">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.since')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('existingSMECustomerSince')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td>
                                                     <p:selectOneMenu styleClass="largest" size="1" id="since"
@@ -372,6 +407,8 @@
                                             <tr>
                                                 <td class="title" style="width: 200px;">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.lastRev')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('lastReviewDate')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td>
                                                     <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
@@ -381,13 +418,15 @@
                                                                     defaultdate="#{basicInfo.currentDateDDMMYY}"
                                                                     maxdate="#{basicInfo.currentDateDDMMYY}"
                                                                     value="#{basicInfo.basicInfoView.lastReviewDate}"
-                                                                    disabled="#{basicInfo.disLastReviewDate}"
+                                                                    disabled="#{basicInfo.isDisabled('lastReviewDate')}"
                                                                     required="#{basicInfo.reqLastReviewDate and not empty param[saveBtn.clientId]}"/>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="title" style="width: 200px;">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.extRev')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('extendedReviewDate')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td>
                                                     <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
@@ -397,18 +436,20 @@
                                                                     defaultdate="#{basicInfo.currentDateDDMMYY}"
                                                                     maxdate="#{basicInfo.currentDateDDMMYY}"
                                                                     value="#{basicInfo.basicInfoView.extReviewDate}"
-                                                                    disabled="#{basicInfo.disExtendedReviewDate}"
+                                                                    disabled="#{basicInfo.isDisabled('extendedReviewDate')}"
                                                                     required="#{basicInfo.reqExtendedReviewDate and not empty param[saveBtn.clientId]}"/>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.sbf')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('SCFScore')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td>
                                                     <p:selectOneMenu styleClass="largest" size="1"
                                                                      value="#{basicInfo.basicInfoView.sbfScoreView.id}"
-                                                                     disabled="#{basicInfo.disSCFScore}"
+                                                                     disabled="#{basicInfo.isDisabled('SCFScore')}"
                                                                      required="#{basicInfo.reqSCFScore and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                                         <f:selectItems value="#{basicInfo.sbfScoreViewList}"
@@ -421,10 +462,12 @@
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.loan')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('requestLoanWithSameName')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <p:selectOneRadio value="#{basicInfo.basicInfoView.loan}"
-                                                                      disabled="#{basicInfo.disRequestLoanWithSameName}"
+                                                                      disabled="#{basicInfo.isDisabled('requestLoanWithSameName')}"
                                                                       required="#{basicInfo.reqRequestLoanWithSameName and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
@@ -434,10 +477,12 @@
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.moreOneYear')}" style="white-space: pre"/>
+                                                    <h:outputText value="#{basicInfo.mandate('haveLoanInOneYear')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <p:selectOneRadio value="#{basicInfo.basicInfoView.moreOneYear}"
-                                                                      disabled="#{basicInfo.disHaveLoanInOneYear}"
+                                                                      disabled="#{basicInfo.isDisabled('haveLoanInOneYear')}"
                                                                       required="#{basicInfo.reqHaveLoanInOneYear and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
@@ -447,10 +492,12 @@
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.annual')}" style="white-space: pre"/>
+                                                    <h:outputText value="#{basicInfo.mandate('passAnnualReview')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <p:selectOneRadio value="#{basicInfo.basicInfoView.annual}"
-                                                                      disabled="#{basicInfo.disPassAnnualReview}"
+                                                                      disabled="#{basicInfo.isDisabled('passAnnualReview')}"
                                                                       required="#{basicInfo.reqPassAnnualReview and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
@@ -460,11 +507,13 @@
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.style')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('loanRequestPattern')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td>
                                                     <p:selectOneMenu styleClass="largest" size="1"
                                                                      value="#{basicInfo.basicInfoView.loanRequestPattern.id}"
-                                                                     disabled="#{basicInfo.disLoanRequestPattern}"
+                                                                     disabled="#{basicInfo.isDisabled('loanRequestPattern')}"
                                                                      required="#{basicInfo.reqLoanRequestPattern and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{basicInfo.borrowingTypeList}"
@@ -477,18 +526,22 @@
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.refName')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('referalName')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td>
                                                     <p:inputText value="#{basicInfo.basicInfoView.refName}" styleClass="larger"
-                                                                 disabled="#{basicInfo.disReferralName}"
+                                                                 disabled="#{basicInfo.isDisabled('referalName')}"
                                                                  required="#{basicInfo.reqReferralName and not empty param[saveBtn.clientId]}"/>
                                                 </td>
                                                 <td class="title" style="width: 200px; padding-left: 30px;">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.id')}" style="margin-right: 10px;"/>
+                                                    <h:outputText value="#{basicInfo.mandate('referalID')}" styleClass="require-field"/>
+                                                    <h:outputText value=": "/>
                                                     <p:inputText value="#{basicInfo.basicInfoView.refId}" styleClass="larger"
                                                                  onkeydown="return onKeyDownNumber(event);"
                                                                  onkeypress="return onKeyPressNumber(event);"
-                                                                 disabled="#{basicInfo.disReferralID}"
+                                                                 disabled="#{basicInfo.isDisabled('referalID')}"
                                                                  required="#{basicInfo.reqReferralID and not empty param[saveBtn.clientId]}"/>
                                                 </td>
                                             </tr>
@@ -604,10 +657,12 @@
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.baInfo.apply')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('isApplyBA')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <p:selectOneRadio id="appBA" value="#{basicInfo.basicInfoView.applyBA}"
-                                                                      disabled="#{basicInfo.disIsApplyBA}"
+                                                                      disabled="#{basicInfo.isDisabled('isApplyBA')}"
                                                                       required="#{basicInfo.reqIsApplyBA and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
@@ -618,6 +673,8 @@
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.baInfo.ba')}"/>
+                                                    <h:outputText value="#{basicInfo.mandate('baPaymentMethod')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <p:selectOneRadio id="baValue" value="#{basicInfo.basicInfoView.baPaymentMethodValue}"
