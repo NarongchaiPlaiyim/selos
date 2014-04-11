@@ -149,7 +149,7 @@
                 </p:commandButton>
                 <!--Request Appraisal Fullapp-->
                 <p:commandButton id="btnReqApprFullapp" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
-                                 rendered="#{headerController.checkButton('Request Appraisal')}"
+                                 rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
                                  process="@this"
                                  actionListener="#{headerController.onOpenRequestAppraisal()}"
                                  update=":frmMain:reqApprDialogPanel"

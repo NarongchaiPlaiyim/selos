@@ -176,4 +176,21 @@ public class HeaderControl extends BusinessControl {
         }
         return appHeaderView;
     }
+
+    public boolean getRequestAppraisalFlag(long workCaseId, long workCasePreScreenId){
+        boolean requestAppraisal = false;
+        if(workCaseId != 0){
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            if(!Util.isNull(workCase)){
+                requestAppraisal = Util.isTrue(workCase.getRequestAppraisal());
+            }
+        } else if (workCasePreScreenId != 0){
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            if(!Util.isNull(workCasePrescreen)){
+                requestAppraisal = Util.isTrue(workCasePrescreen.getRequestAppraisal());
+            }
+        }
+
+        return requestAppraisal;
+    }
 }

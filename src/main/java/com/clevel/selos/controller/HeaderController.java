@@ -73,6 +73,8 @@ public class HeaderController implements Serializable {
     private BRMSControl brmsControl;
     @Inject
     private UWRuleResultControl uwRuleResultControl;
+    @Inject
+    private HeaderControl headerControl;
 
     private ManageButton manageButton;
     private AppHeaderView appHeaderView;
@@ -194,9 +196,6 @@ public class HeaderController implements Serializable {
         }
         if (!Util.isNull(session.getAttribute("requestAppraisal"))){
             requestAppraisal = Integer.valueOf(session.getAttribute("requestAppraisal").toString());
-            if((stepId == StepValue.REQUEST_APPRAISAL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) && requestAppraisal == 2){
-                requestAppraisal = 1;
-            }
         }
         log.debug("Current Page : {}", Util.getCurrentPage());
         if (Util.getCurrentPage().equals("appraisalRequest.jsf")){
@@ -1100,36 +1099,43 @@ public class HeaderController implements Serializable {
 
         log.debug("onSubmitRequestAppraisal ::: workCaseId : {}, workCasePreScreenId : {}", session.getAttribute("workCaseId"), session.getAttribute("workCasePreScreenId"));
 
-        if(checkAppraisalContact()){
-            if(appraisalDetailViewList.size() > 0){
-                try{
-                    //Save Appraisal Request
-                    appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
-                    appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
+        if(!headerControl.getRequestAppraisalFlag(workCaseId, workCasePreScreenId)){
+            if(checkAppraisalContact()){
+                if(appraisalDetailViewList.size() > 0){
+                    try{
+                        //Save Appraisal Request
+                        appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
+                        appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
 
-                    //Submit Appraisal - Create WRK_Appraisal And Launch new Workflow
-                    fullApplicationControl.requestAppraisal(appraisalView, workCasePreScreenId, workCaseId);
-                    log.debug("onSubmitRequestAppraisal ::: create new Work Case Appraisal, Launch new workflow.");
+                        //Submit Appraisal - Create WRK_Appraisal And Launch new Workflow
+                        fullApplicationControl.requestAppraisal(appraisalView, workCasePreScreenId, workCaseId);
+                        log.debug("onSubmitRequestAppraisal ::: create new Work Case Appraisal, Launch new workflow.");
 
-                    complete = true;
+                        complete = true;
 
+                        messageHeader = "Information.";
+                        message = "Request appraisal completed.";
+
+                        context.execute("msgBoxBaseMessageDlg.show()");
+                    } catch(Exception ex){
+                        log.error("Exception while submitRequestAppraisal : ", ex);
+                        messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
+                        message = msg.get("app.appraisal.request.message.body.save.fail") + Util.getMessageException(ex);
+
+                        context.execute("msgBoxBaseMessageDlg.show()");
+                    }
+                } else {
                     messageHeader = "Information.";
-                    message = "Request appraisal completed.";
-
-                    context.execute("msgBoxBaseMessageDlg.show()");
-                } catch(Exception ex){
-                    log.error("Exception while submitRequestAppraisal : ", ex);
-                    messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-                    message = msg.get("app.appraisal.request.message.body.save.fail") + Util.getMessageException(ex);
+                    message = "Please add information in Appraisal Detail at least 1.";
 
                     context.execute("msgBoxBaseMessageDlg.show()");
                 }
-            } else {
-                messageHeader = "Information.";
-                message = "Please add information in Appraisal Detail at least 1.";
-
-                context.execute("msgBoxBaseMessageDlg.show()");
             }
+        } else {
+            messageHeader = "Information.";
+            message = "This case already Request Appraisal. Please contact to AAD Admin";
+
+            context.execute("msgBoxBaseMessageDlg.show()");
         }
 
         context.addCallbackParam("functionComplete", complete);
