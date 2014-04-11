@@ -180,7 +180,7 @@
                                      widgetVar="confirmSubmitSubmitRGM" global="false" showEffect="fade"
                                      rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2002}">
                         <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                                         update=":frmMain:msgBoxBaseMessagePanel"
+                                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                          actionListener="#{headerController.onSubmitRM()}"
                                          process="@this" oncomplete="confirmSubmitSubmitRGM.hide()"/>
                         <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitRGM.hide()"
@@ -195,7 +195,7 @@
                                      widgetVar="confirmSubmitSubmitGH" global="false" showEffect="fade"
                                      rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2020}">
                         <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                                         update=":frmMain:msgBoxBaseMessagePanel"
+                                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                          actionListener="#{headerController.onSubmitGH()}"
                                          process="@this" oncomplete="confirmSubmitSubmitGH.hide()"/>
                         <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitGH.hide()"
@@ -210,7 +210,7 @@
                                      widgetVar="confirmSubmitSubmitCSSO" global="false" showEffect="fade"
                                      rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2021}">
                         <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                                         update=":frmMain:msgBoxBaseMessagePanel"
+                                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                          actionListener="#{headerController.onSubmitCSSO()}"
                                          process="@this" oncomplete="confirmSubmitSubmitCSSO.hide()"/>
                         <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitCSSO.hide()"
@@ -225,7 +225,7 @@
                                      widgetVar="confirmSubmitSubmitUW" global="false" showEffect="fade"
                                      rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2022}">
                         <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                                         update=":frmMain:msgBoxBaseMessagePanel"
+                                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                          actionListener="#{headerController.onSubmitUWFromCSSO()}"
                                          process="@this" oncomplete="confirmSubmitSubmitUW.hide()"/>
                         <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitUW.hide()"
@@ -235,7 +235,7 @@
                 <p:commandButton id="btnSubmitCaseToUW" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
                                  rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2003}"
                                  action="#{headerController.onOpenSubmitUW2()}"
-                                 update=":frmMain:submitUWPanel, :frmMain:msgBoxBaseMessagePanel" />
+                                 update=":frmMain:submitUWPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel" />
                 <!---->
             </p:panel>
             <!--Stage for Appraisal-->
