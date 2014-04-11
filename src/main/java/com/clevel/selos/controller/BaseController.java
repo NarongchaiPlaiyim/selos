@@ -87,4 +87,13 @@ public class BaseController implements Serializable {
 
         return statusId;
     }
+
+    protected  long getCurrentWorkCaseId(HttpSession session){
+        long workCaseId = 0;
+        if(!Util.isNull(session.getAttribute("workCaseId"))){
+            workCaseId = (Long)session.getAttribute("workCaseId");
+        }
+
+        return workCaseId;
+    }
 }
