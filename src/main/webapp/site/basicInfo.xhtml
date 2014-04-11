@@ -54,7 +54,8 @@
                                                     <p:commandButton value="#{msg.get('app.basicInfo.content.button.duplicate')}"
                                                                      process="@form" styleClass="largest" id="dupBtn"
                                                                      actionListener="#{basicInfo.onDuplicateApplication()}"
-                                                                     update=":msgBoxSystemMessagePanel,:frmMain"/>
+                                                                     update=":msgBoxSystemMessagePanel,:frmMain"
+                                                                     disabled="#{basicInfo.isDisabled('duplicateApplicationButton')}"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -185,7 +186,7 @@
                                                                     <tr>
                                                                         <td style="padding-left: 100px;">
                                                                             <p:selectBooleanCheckbox id="checkBoxIns" value="#{basicInfo.basicInfoView.charFCIns}"
-                                                                                                     disabled="#{basicInfo.disIsAbleToGettingGuarantorJob}"
+                                                                                                     disabled="#{basicInfo.isDisabled('isAbleToGettingGuarantorJob')}"
                                                                                                      required="#{basicInfo.reqIsAbleToGettingGuarantorJob and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.insurance')}"/>
                                                                             <h:outputText value="#{basicInfo.mandate('isAbleToGettingGuarantorJob')}" styleClass="require-field"/>
@@ -194,7 +195,7 @@
                                                                     <tr>
                                                                         <td style="padding-left: 100px;">
                                                                             <p:selectBooleanCheckbox id="checkBoxCom" value="#{basicInfo.basicInfoView.charFCCom}"
-                                                                                                     disabled="#{basicInfo.disNoClaimLGHistory}"
+                                                                                                     disabled="#{basicInfo.isDisabled('noClaimLGHistory')}"
                                                                                                      required="#{basicInfo.reqNoClaimLGHistory and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.complaint')}"/>
                                                                             <h:outputText value="#{basicInfo.mandate('noClaimLGHistory')}" styleClass="require-field"/>
@@ -203,7 +204,7 @@
                                                                     <tr>
                                                                         <td style="padding-left: 100px;">
                                                                             <p:selectBooleanCheckbox id="checkBoxAba" value="#{basicInfo.basicInfoView.charFCAba}"
-                                                                                                     disabled="#{basicInfo.disNoRevokedLicense}"
+                                                                                                     disabled="#{basicInfo.isDisabled('noRevokedLicense')}"
                                                                                                      required="#{basicInfo.reqNoRevokedLicense and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.abandon')}"/>
                                                                             <h:outputText value="#{basicInfo.mandate('noRevokedLicense')}" styleClass="require-field"/>
@@ -212,7 +213,7 @@
                                                                     <tr>
                                                                         <td style="padding-left: 100px;">
                                                                             <p:selectBooleanCheckbox id="checkBoxLate" value="#{basicInfo.basicInfoView.charFCLate}"
-                                                                                                     disabled="#{basicInfo.disNoLateWorkDelivery}"
+                                                                                                     disabled="#{basicInfo.isDisabled('noLateWorkDelivery')}"
                                                                                                      required="#{basicInfo.reqNoLateWorkDelivery and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.late')}"/>
                                                                             <h:outputText value="#{basicInfo.mandate('noLateWorkDelivery')}" styleClass="require-field"/>
@@ -221,7 +222,7 @@
                                                                     <tr>
                                                                         <td style="padding-left: 100px;">
                                                                             <p:selectBooleanCheckbox id="checkBoxFund" value="#{basicInfo.basicInfoView.charFCFund}"
-                                                                                                     disabled="#{basicInfo.disIsAdequateOfCapitalResource}"
+                                                                                                     disabled="#{basicInfo.isDisabled('isAdequateOfCapitalResource')}"
                                                                                                      required="#{basicInfo.reqIsAdequateOfCapitalResource and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.fund')}"/>
                                                                             <h:outputText value="#{basicInfo.mandate('isAdequateOfCapitalResource')}" styleClass="require-field"/>
@@ -254,7 +255,7 @@
                                                             <td>
                                                                 <p:selectOneMenu id="specialProgram" styleClass="largest" size="1"
                                                                                  value="#{basicInfo.basicInfoView.specialProgram.id}"
-                                                                                 disabled="#{basicInfo.disSpecialProgramValue}"
+                                                                                 disabled="#{basicInfo.isDisabled('specialProgramValue')}"
                                                                                  required="#{basicInfo.reqSpecialProgramValue and not empty param[saveBtn.clientId]}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                     <f:selectItems value="#{basicInfo.specialProgramList}"
@@ -288,7 +289,7 @@
                                                             <td>
                                                                 <p:selectOneMenu id="referIn" styleClass="largest"
                                                                                  size="1" value="#{basicInfo.basicInfoView.refinanceIn.code}"
-                                                                                 disabled="#{basicInfo.disRefinanceInValue}"
+                                                                                 disabled="#{basicInfo.isDisabled('refinanceInValue')}"
                                                                                  required="#{basicInfo.reqRefinanceInValue and not empty param[saveBtn.clientId]}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                     <f:selectItems value="#{basicInfo.bankList}"
@@ -322,7 +323,7 @@
                                                             <td>
                                                                 <p:selectOneMenu id="referOut" styleClass="largest"
                                                                                  size="1" value="#{basicInfo.basicInfoView.refinanceOut.code}"
-                                                                                 disabled="#{basicInfo.disRefinanceOutValue}"
+                                                                                 disabled="#{basicInfo.isDisabled('refinanceOutValue')}"
                                                                                  required="#{basicInfo.reqRefinanceOutValue and not empty param[saveBtn.clientId]}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                     <f:selectItems value="#{basicInfo.bankList}"
@@ -362,7 +363,7 @@
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <p:selectOneRadio value="#{basicInfo.basicInfoView.qualitative}"
-                                                                      disabled="#{basicInfo.disQualitativeType}"
+                                                                      disabled="#{basicInfo.isDisabled('qualitativeType')}"
                                                                       required="#{basicInfo.reqQualitativeType and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.a')}" itemValue="1"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.b')}" itemValue="2"/>
@@ -394,7 +395,7 @@
                                                 <td>
                                                     <p:selectOneMenu styleClass="largest" size="1" id="since"
                                                                      value="#{basicInfo.basicInfoView.since}"
-                                                                     disabled="#{basicInfo.disExistingSMECustomerSince}"
+                                                                     disabled="#{basicInfo.isDisabled('existingSMECustomerSince')}"
                                                                      required="#{basicInfo.reqExistingSMECustomerSince and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{basicInfo.yearList}"
@@ -572,6 +573,7 @@
                                                                      process="@this"
                                                                      actionListener="#{basicInfo.onInitAddAccount}"
                                                                      update=":basicInfoAccountDlgForm"
+                                                                     disabled="#{basicInfo.isDisabled('addOpeningAccountButton')}"
                                                                      oncomplete="basicInfoAccountDlg.show();">
                                                         <p:resetInput target=":basicInfoAccountDlgForm"/>
                                                     </p:commandButton>
@@ -678,7 +680,7 @@
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <p:selectOneRadio id="baValue" value="#{basicInfo.basicInfoView.baPaymentMethodValue}"
-                                                                      disabled="#{basicInfo.disBaPaymentMethod}"
+                                                                      disabled="#{basicInfo.isDisabled('baPaymentMethod')}"
                                                                       required="#{basicInfo.reqBaPaymentMethod and not empty param[saveBtn.clientId]}">
                                                         <f:selectItems value="#{app.getBAPaymentMethodValues('TOPUP|DIRECT')}"
                                                                        var="bapaymentVar" itemLabel="#{bapaymentVar.shortName()}" itemValue="#{bapaymentVar}"/>
@@ -699,9 +701,11 @@
                                     <td colspan="4" class="center">
                                         <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" styleClass="small"
                                                          process="@form" update=":frmMain,:msgBoxSystemMessagePanel"
-                                                         actionListener="#{basicInfo.onSave}"  binding="#{saveBtn}"/>
+                                                         actionListener="#{basicInfo.onSave}" binding="#{saveBtn}"
+                                                         disabled="#{basicInfo.isDisabled('saveButton')}"/>
                                         <p:commandButton value="#{msg.get('app.button.cancel')}" id="cancelBtn"
                                                          styleClass="small" process="@form" update=":frmMain"
+                                                         disabled="#{basicInfo.isDisabled('cancelButton')}"
                                                          actionListener="#{basicInfo.onCreation}"/>
                                     </td>
                                 </tr>

@@ -42,8 +42,15 @@ public class BaseController implements Serializable {
     public boolean isDisabled(String name) {
         FieldsControlView field = fieldMap.get(name);
         if (field == null)
-            return false;
+            return true;
         return field.isReadOnly();
+    }
+
+    public void setDisabledValue(String name, boolean disabled){
+        FieldsControlView field = fieldMap.get(name);
+        if (field == null)
+            return;
+        field.setReadOnly(disabled);
     }
 
     public boolean isDialogMandate(String name) {
@@ -56,7 +63,7 @@ public class BaseController implements Serializable {
     public boolean isDialogDisable(String name) {
         FieldsControlView field = dialogFieldMap.get(name);
         if (field == null)
-            return false;
+            return true;
         return field.isReadOnly();
     }
 
@@ -88,7 +95,7 @@ public class BaseController implements Serializable {
         return statusId;
     }
 
-    protected  long getCurrentWorkCaseId(HttpSession session){
+    protected long getCurrentWorkCaseId(HttpSession session){
         long workCaseId = 0;
         if(!Util.isNull(session.getAttribute("workCaseId"))){
             workCaseId = (Long)session.getAttribute("workCaseId");

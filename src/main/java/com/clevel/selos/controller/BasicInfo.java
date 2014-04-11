@@ -158,19 +158,6 @@ public class BasicInfo extends BaseController {
     private boolean reqIsApplyBA;
     private boolean reqBaPaymentMethod;
 
-    //for readOnly
-    private boolean disQualitativeType;
-    private boolean disSpecialProgramValue;
-    private boolean disRefinanceInValue;
-    private boolean disRefinanceOutValue;
-    private boolean disExistingSMECustomerSince;
-    private boolean disBaPaymentMethod;
-    private boolean disIsAbleToGettingGuarantorJob;
-    private boolean disNoClaimLGHistory;
-    private boolean disNoRevokedLicense;
-    private boolean disNoLateWorkDelivery;
-    private boolean disIsAdequateOfCapitalResource;
-
     //tmp for radio button
     private int tmpSpecialProgram;
     private int tmpRefinanceIN;
@@ -187,10 +174,6 @@ public class BasicInfo extends BaseController {
     private CustomerInfoView selectAccountName;
 
     public BasicInfo(){
-//        todo:this field for mandate or not is special type !?
-//        specialProgramValue
-//        refinanceInValue
-//        refinanceOutValue
     }
 
     public boolean checkSession(HttpSession session){
@@ -272,9 +255,9 @@ public class BasicInfo extends BaseController {
                 basicInfoView.setQualitative(customerEntity.getDefaultQualitative());
             }
 
-            disQualitativeType = false;
+            setDisabledValue("qualitativeType",false);
             if(!customerEntity.isChangeQualtiEnable()){
-                disQualitativeType = true;
+                setDisabledValue("qualitativeType",true);
             }
 
             openAccountView = new OpenAccountView();
@@ -381,10 +364,10 @@ public class BasicInfo extends BaseController {
 
         if(basicInfoView.getSpProgram() == 2){ // yes
             reqSpecialProgramValue = true;
-            disSpecialProgramValue = false;
+            setDisabledValue("specialProgramValue",false);
         } else {
             reqSpecialProgramValue = false;
-            disSpecialProgramValue = true;
+            setDisabledValue("specialProgramValue",true);
         }
     }
 
@@ -400,10 +383,10 @@ public class BasicInfo extends BaseController {
 
         if(basicInfoView.getRefIn() == 2){ // yes
             reqRefinanceInValue = true;
-            disRefinanceInValue = false;
+            setDisabledValue("refinanceInValue",false);
         } else {
             reqRefinanceInValue = false;
-            disRefinanceInValue = true;
+            setDisabledValue("refinanceInValue",true);
         }
     }
 
@@ -419,21 +402,21 @@ public class BasicInfo extends BaseController {
 
         if(basicInfoView.getRefOut() == 2){ // yes
             reqRefinanceOutValue = true;
-            disRefinanceOutValue = false;
+            setDisabledValue("refinanceOutValue",false);
         } else {
             reqRefinanceOutValue = false;
-            disRefinanceOutValue = true;
+            setDisabledValue("refinanceOutValue",true);
         }
     }
 
     public void onChangeExistingSME(){
         if(basicInfoView.getExistingSME() == 2){ // yes
             reqExistingSMECustomerSince = true;
-            disExistingSMECustomerSince = false;
+            setDisabledValue("existingSMECustomerSince",false);
             basicInfoView.setExistingSME(0);
         } else {
             reqExistingSMECustomerSince = false;
-            disExistingSMECustomerSince = true;
+            setDisabledValue("existingSMECustomerSince",true);
             basicInfoView.setExistingSME(0);
         }
     }
@@ -454,20 +437,20 @@ public class BasicInfo extends BaseController {
 
         if(basicInfoView.getApplyBA() == 2){ // yes
             reqBaPaymentMethod = true;
-            disBaPaymentMethod = false;
+            setDisabledValue("baPaymentMethod",false);
         } else {
             reqBaPaymentMethod = false;
-            disBaPaymentMethod = true;
+            setDisabledValue("baPaymentMethod",true);
         }
     }
 
     public void onChangeReqLG(){
         if(basicInfoView.isCharFCLG()){
-            disIsAbleToGettingGuarantorJob = false;
-            disNoClaimLGHistory = false;
-            disNoRevokedLicense = false;
-            disNoLateWorkDelivery = false;
-            disIsAdequateOfCapitalResource = false;
+            setDisabledValue("isAbleToGettingGuarantorJob",false);
+            setDisabledValue("noClaimLGHistory",false);
+            setDisabledValue("noRevokedLicense",false);
+            setDisabledValue("noLateWorkDelivery",false);
+            setDisabledValue("isAdequateOfCapitalResource",false);
             basicInfoView.setCharFCIns(false);
             basicInfoView.setCharFCCom(false);
             basicInfoView.setCharFCAba(false);
@@ -475,11 +458,11 @@ public class BasicInfo extends BaseController {
             basicInfoView.setCharFCFund(false);
 
         } else {
-            disIsAbleToGettingGuarantorJob = true;
-            disNoClaimLGHistory = true;
-            disNoRevokedLicense = true;
-            disNoLateWorkDelivery = true;
-            disIsAdequateOfCapitalResource = true;
+            setDisabledValue("isAbleToGettingGuarantorJob",true);
+            setDisabledValue("noClaimLGHistory",true);
+            setDisabledValue("noRevokedLicense",true);
+            setDisabledValue("noLateWorkDelivery",true);
+            setDisabledValue("isAdequateOfCapitalResource",true);
             basicInfoView.setCharFCIns(false);
             basicInfoView.setCharFCCom(false);
             basicInfoView.setCharFCAba(false);
@@ -499,10 +482,10 @@ public class BasicInfo extends BaseController {
 
         if(basicInfoView.getSpProgram() == 2){ // yes
             reqSpecialProgramValue = true;
-            disSpecialProgramValue = false;
+            setDisabledValue("specialProgramValue",false);
         } else {
             reqSpecialProgramValue = false;
-            disSpecialProgramValue = true;
+            setDisabledValue("specialProgramValue",true);
         }
     }
 
@@ -516,10 +499,10 @@ public class BasicInfo extends BaseController {
 
         if(basicInfoView.getRefIn() == 2){ // yes
             reqRefinanceInValue = true;
-            disRefinanceInValue = false;
+            setDisabledValue("refinanceInValue",false);
         } else {
             reqRefinanceInValue = false;
-            disRefinanceInValue = true;
+            setDisabledValue("refinanceInValue",true);
         }
     }
 
@@ -533,20 +516,20 @@ public class BasicInfo extends BaseController {
 
         if(basicInfoView.getRefOut() == 2){ // yes
             reqRefinanceOutValue = true;
-            disRefinanceOutValue = false;
+            setDisabledValue("refinanceOutValue",false);
         } else {
             reqRefinanceOutValue = false;
-            disRefinanceOutValue = true;
+            setDisabledValue("refinanceOutValue",true);
         }
     }
 
     public void onChangeExistingSMEInit(){
         if(basicInfoView.getExistingSME() == 2){ // yes
             reqExistingSMECustomerSince = true;
-            disExistingSMECustomerSince = false;
+            setDisabledValue("existingSMECustomerSince",false);
         } else {
             reqExistingSMECustomerSince = false;
-            disExistingSMECustomerSince = true;
+            setDisabledValue("existingSMECustomerSince",true);
         }
     }
 
@@ -560,26 +543,26 @@ public class BasicInfo extends BaseController {
 
         if(basicInfoView.getApplyBA() == 2){ // yes
             reqBaPaymentMethod = true;
-            disBaPaymentMethod = false;
+            setDisabledValue("baPaymentMethod",false);
         } else {
             reqBaPaymentMethod = false;
-            disBaPaymentMethod = true;
+            setDisabledValue("baPaymentMethod",true);
         }
     }
 
     public void onChangeReqLGInit(){
         if(basicInfoView.isCharFCLG()){
-            disIsAbleToGettingGuarantorJob = false;
-            disNoClaimLGHistory = false;
-            disNoRevokedLicense = false;
-            disNoLateWorkDelivery = false;
-            disIsAdequateOfCapitalResource = false;
+            setDisabledValue("isAbleToGettingGuarantorJob",false);
+            setDisabledValue("noClaimLGHistory",false);
+            setDisabledValue("noRevokedLicense",false);
+            setDisabledValue("noLateWorkDelivery",false);
+            setDisabledValue("isAdequateOfCapitalResource",false);
         } else {
-            disIsAbleToGettingGuarantorJob = true;
-            disNoClaimLGHistory = true;
-            disNoRevokedLicense = true;
-            disNoLateWorkDelivery = true;
-            disIsAdequateOfCapitalResource = true;
+            setDisabledValue("isAbleToGettingGuarantorJob",true);
+            setDisabledValue("noClaimLGHistory",true);
+            setDisabledValue("noRevokedLicense",true);
+            setDisabledValue("noLateWorkDelivery",true);
+            setDisabledValue("isAdequateOfCapitalResource",true);
         }
     }
 
@@ -637,18 +620,6 @@ public class BasicInfo extends BaseController {
         reqReferralID = false;
         reqIsApplyBA = false;
         reqBaPaymentMethod = false;
-
-        disIsAbleToGettingGuarantorJob = false;
-        disNoClaimLGHistory = false;
-        disNoRevokedLicense = false;
-        disNoLateWorkDelivery = false;
-        disIsAdequateOfCapitalResource = false;
-        disSpecialProgramValue = false;
-        disRefinanceInValue = false;
-        disRefinanceOutValue = false;
-        disQualitativeType = false;
-        disExistingSMECustomerSince = false;
-        disBaPaymentMethod = false;
     }
 
     public void onAddAccountName(){
@@ -1154,94 +1125,6 @@ public class BasicInfo extends BaseController {
 
     public void setReqBaPaymentMethod(boolean reqBaPaymentMethod) {
         this.reqBaPaymentMethod = reqBaPaymentMethod;
-    }
-
-    public boolean isDisIsAbleToGettingGuarantorJob() {
-        return disIsAbleToGettingGuarantorJob;
-    }
-
-    public void setDisIsAbleToGettingGuarantorJob(boolean disIsAbleToGettingGuarantorJob) {
-        this.disIsAbleToGettingGuarantorJob = disIsAbleToGettingGuarantorJob;
-    }
-
-    public boolean isDisNoClaimLGHistory() {
-        return disNoClaimLGHistory;
-    }
-
-    public void setDisNoClaimLGHistory(boolean disNoClaimLGHistory) {
-        this.disNoClaimLGHistory = disNoClaimLGHistory;
-    }
-
-    public boolean isDisNoRevokedLicense() {
-        return disNoRevokedLicense;
-    }
-
-    public void setDisNoRevokedLicense(boolean disNoRevokedLicense) {
-        this.disNoRevokedLicense = disNoRevokedLicense;
-    }
-
-    public boolean isDisNoLateWorkDelivery() {
-        return disNoLateWorkDelivery;
-    }
-
-    public void setDisNoLateWorkDelivery(boolean disNoLateWorkDelivery) {
-        this.disNoLateWorkDelivery = disNoLateWorkDelivery;
-    }
-
-    public boolean isDisIsAdequateOfCapitalResource() {
-        return disIsAdequateOfCapitalResource;
-    }
-
-    public void setDisIsAdequateOfCapitalResource(boolean disIsAdequateOfCapitalResource) {
-        this.disIsAdequateOfCapitalResource = disIsAdequateOfCapitalResource;
-    }
-
-    public boolean isDisSpecialProgramValue() {
-        return disSpecialProgramValue;
-    }
-
-    public void setDisSpecialProgramValue(boolean disSpecialProgramValue) {
-        this.disSpecialProgramValue = disSpecialProgramValue;
-    }
-
-    public boolean isDisRefinanceInValue() {
-        return disRefinanceInValue;
-    }
-
-    public void setDisRefinanceInValue(boolean disRefinanceInValue) {
-        this.disRefinanceInValue = disRefinanceInValue;
-    }
-
-    public boolean isDisRefinanceOutValue() {
-        return disRefinanceOutValue;
-    }
-
-    public void setDisRefinanceOutValue(boolean disRefinanceOutValue) {
-        this.disRefinanceOutValue = disRefinanceOutValue;
-    }
-
-    public boolean isDisQualitativeType() {
-        return disQualitativeType;
-    }
-
-    public void setDisQualitativeType(boolean disQualitativeType) {
-        this.disQualitativeType = disQualitativeType;
-    }
-
-    public boolean isDisExistingSMECustomerSince() {
-        return disExistingSMECustomerSince;
-    }
-
-    public void setDisExistingSMECustomerSince(boolean disExistingSMECustomerSince) {
-        this.disExistingSMECustomerSince = disExistingSMECustomerSince;
-    }
-
-    public boolean isDisBaPaymentMethod() {
-        return disBaPaymentMethod;
-    }
-
-    public void setDisBaPaymentMethod(boolean disBaPaymentMethod) {
-        this.disBaPaymentMethod = disBaPaymentMethod;
     }
 
     public String getCurrentDateDDMMYY() {
