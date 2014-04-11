@@ -115,6 +115,22 @@ public class CheckMandateDocControl extends BusinessControl{
         log.debug("-- getMandateDocViewByWorkCasePreScreenId WorkCasePreScreenId : {}", workCasePreScreenId);
 
 //            try {
+
+        //BRMS
+        log.debug("-- BRMS");
+        try {
+            mandateDocResponseView = brmsControl.getDocCustomerForPrescreen(workCasePreScreenId);
+            if(!Util.isNull(mandateDocResponseView) && ActionResult.SUCCESS.equals(mandateDocResponseView.getActionResult())){
+                log.debug("-- ActionResult is {}", mandateDocResponseView.getActionResult());
+                mandateDocViewMap =  mandateDocResponseView.getMandateDocViewMap();
+                log.debug("-- BRMS MandateDocViewMap.size()[{}]", mandateDocViewMap.size());
+            } else {
+                log.debug("-- Find by work case perscreen id = {} ActionResult is {} and reason is {}  ", workCasePreScreenId, mandateDocResponseView.getActionResult(), mandateDocResponseView.getReason());
+            }
+        } catch (Exception e){
+            log.error("-- Exception while call BRMS ", e);
+        }
+
         //ECM
         log.debug("-- ECM");
         try {
@@ -141,21 +157,6 @@ public class CheckMandateDocControl extends BusinessControl{
             }
         } catch (Exception e){
             log.error("-- Exception while call ECM {}", e);
-        }
-
-        //BRMS
-        log.debug("-- BRMS");
-        try {
-            mandateDocResponseView = brmsControl.getDocCustomerForPrescreen(workCasePreScreenId);
-            if(!Util.isNull(mandateDocResponseView) && ActionResult.SUCCESS.equals(mandateDocResponseView.getActionResult())){
-                log.debug("-- ActionResult is {}", ecmDataResult.getActionResult());
-                mandateDocViewMap =  mandateDocResponseView.getMandateDocViewMap();
-                log.debug("-- BRMS MandateDocViewMap.size()[{}]", mandateDocViewMap.size());
-            } else {
-                log.debug("-- Find by work case perscreen id = {} ActionResult is {} and reason is {}  ", workCasePreScreenId, mandateDocResponseView.getActionResult(), mandateDocResponseView.getReason());
-            }
-        } catch (Exception e){
-            log.error("-- Exception while call BRMS ", e);
         }
 
         if(!Util.isNull(mandateDocViewMap) && !Util.isNull(listECMDetailMap)){
