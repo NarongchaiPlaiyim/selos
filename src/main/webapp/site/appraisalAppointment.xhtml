@@ -363,7 +363,9 @@
                                                      process="@this"
                                                      actionListener="#{appraisalAppointment.onAddAppraisalContactDetailView()}"
                                                      update=":contactRecordViewDlgForm"
-                                                     oncomplete="contactRecordViewDlg.show()"/>
+                                                     oncomplete="contactRecordViewDlg.show()">
+                                            <p:resetInput target=":contactRecordViewDlgForm"/>
+                                    </p:commandButton>
                                 </td>
                             </tr>
 

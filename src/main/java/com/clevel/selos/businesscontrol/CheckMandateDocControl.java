@@ -155,7 +155,7 @@ public class CheckMandateDocControl extends BusinessControl{
                 log.debug("-- Find by work case perscreen id = {} ActionResult is {} and reason is {}  ", workCasePreScreenId, mandateDocResponseView.getActionResult(), mandateDocResponseView.getReason());
             }
         } catch (Exception e){
-            log.error("-- Exception while call BRMS {}", e.getMessage());
+            log.error("-- Exception while call BRMS ", e);
         }
 
         if(!Util.isNull(mandateDocViewMap) && !Util.isNull(listECMDetailMap)){
