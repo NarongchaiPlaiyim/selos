@@ -1211,10 +1211,10 @@ public class CreditFacProposeControl extends BusinessControl {
 //                feeDetailDAO.delete(feeDetailDelList);
 //            }
 
-            log.debug("saveCreditFacility ::: newCreditFacilityView.getNewFeeDetailViewList()).size() : {}", newCreditFacilityView.getNewFeeDetailViewList().size());
-            List<FeeDetail> feeDetailList = feeTransform.transformToDB(newCreditFacilityView.getNewFeeDetailViewList(),workCaseId);
+//            log.debug("saveCreditFacility ::: newCreditFacilityView.getNewFeeDetailViewList()).size() : {}", newCreditFacilityView.getNewFeeDetailViewList().size());
+//            List<FeeDetail> feeDetailList = feeTransform.transformToDB(newCreditFacilityView.getNewFeeDetailViewList(),workCaseId);
 //            feeDetailDAO.persist(feeDetailList);
-            log.debug("persist :: feeDetailList ::");
+//            log.debug("persist :: feeDetailList ::");
         }
 
         //--- Save to NewConditionCredit

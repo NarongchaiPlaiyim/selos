@@ -362,6 +362,16 @@ public class DecisionControl extends BusinessControl {
         return decisionView;
     }
 
+    public ApprovalHistoryView getCurrentApprovalHistory(long workCaseId, int approvalType){
+        ApprovalHistoryView approvalHistoryView = new ApprovalHistoryView();
+        ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), approvalType);
+        if(!Util.isNull(approvalHistory)){
+            approvalHistoryView = approvalHistoryTransform.transformToView(approvalHistory);
+        }
+
+        return approvalHistoryView;
+    }
+
     public void deleteAllApproveByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {
         log.debug("deleteAllApproveByIdList()");
         log.debug("deleteCreditIdList: {}", deleteCreditIdList);

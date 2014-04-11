@@ -60,7 +60,7 @@ public class BaseController implements Serializable {
         return field.isReadOnly();
     }
 
-    public boolean checkSession(HttpSession session){
+    protected boolean checkSession(HttpSession session){
         boolean checkSession = false;
         if(( (Long)session.getAttribute("workCaseId") != 0 || (Long)session.getAttribute("workCasePreScreenId") != 0 ) &&
                 (Long)session.getAttribute("stepId") != 0){
@@ -70,7 +70,7 @@ public class BaseController implements Serializable {
         return checkSession;
     }
 
-    public long getCurrentStep(HttpSession session){
+    protected long getCurrentStep(HttpSession session){
         long stepId = 0;
         if(!Util.isNull(session.getAttribute("stepId"))){
             stepId = (Long)session.getAttribute("stepId");
@@ -79,12 +79,21 @@ public class BaseController implements Serializable {
         return stepId;
     }
 
-    public long getCurrentStatus(HttpSession session){
+    protected long getCurrentStatus(HttpSession session){
         long statusId = 0;
         if(!Util.isNull(session.getAttribute("statusId"))){
             statusId = (Long)session.getAttribute("statusId");
         }
 
         return statusId;
+    }
+
+    protected  long getCurrentWorkCaseId(HttpSession session){
+        long workCaseId = 0;
+        if(!Util.isNull(session.getAttribute("workCaseId"))){
+            workCaseId = (Long)session.getAttribute("workCaseId");
+        }
+
+        return workCaseId;
     }
 }

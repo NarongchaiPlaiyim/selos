@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.MandateDocumentDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BRMSInterface;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.*;
 import com.clevel.selos.model.*;
@@ -26,7 +27,7 @@ import java.util.*;
 public class BRMSControl extends BusinessControl {
 
     @Inject
-    @com.clevel.selos.integration.NCB
+    @SELOS
     private Logger logger;
 
     @Inject
@@ -1368,6 +1369,9 @@ public class BRMSControl extends BusinessControl {
 
             mandateDocView.setEcmDocTypeId(mandateDocument.getEcmDocId());
             mandateDocView.setDocLevel(mandateDocument.getDocLevel());
+
+            //TODO remove -- Chai
+            mandateDocView.setDocMandateType(DocMandateType.MANDATE);
 
             //2. Set BRMS Document Description
             List<String> brmsList = mandateDocView.getBrmsDescList();
