@@ -78,15 +78,35 @@ public class ActionValidationControl extends BusinessControl{
     public boolean validate(Object object){
         if(object != null){
             Class objectClass = object.getClass();
-            logger.info("object class {}", objectClass.getName());
-            List<MandateFieldView> mandateFieldViewList = mandateFieldViewMap.get(objectClass.getName());
-            Field[] fields = objectClass.getDeclaredFields();
-            for(Field field : fields){
-                logger.info("check for field name {}", field.getName());
-                field.setAccessible(true);
-                for(MandateFieldView mandateFieldView : mandateFieldViewList){
+            String className = null;
+            for(String key : mandateFieldViewMap.keySet()){
+                if(objectClass.getName().startsWith(key)){
+                    logger.debug("find class Name {}", key);
+                    className = key;
+                }
+            }
+
+            List<MandateFieldView> mandateFieldViewList = mandateFieldViewMap.get(className);
+
+            for(MandateFieldView mandateFieldView : mandateFieldViewList){
+                Field field = null;
+                try{
+                    field = objectClass.getDeclaredField(mandateFieldView.getFieldName());
+                }catch (NoSuchFieldException ex){
+                    logger.debug("Cannot find field from original class {}", mandateFieldView.getFieldName());
+                    try{
+                        if(objectClass.getSuperclass() != null){
+                            field = objectClass.getSuperclass().getDeclaredField(mandateFieldView.getFieldName());
+                        }
+                    } catch (NoSuchFieldException sex){
+                        logger.debug("Also not found field in super class {}", mandateFieldView.getFieldName());
+                    }
+                }
+
+                if(field != null) {
+                    field.setAccessible(true);
                     logger.info("loop for mandateFieldView name {}", mandateFieldView);
-                    if(field.getName().equals(mandateFieldView.getFieldName())){
+                    if(field.getName().startsWith(mandateFieldView.getFieldName())){
                         logger.info("found name matched field: {}, mandateFieldView: {}", field.getName(), mandateFieldView.getFieldName());
                         mandateFieldView.setChecked(Boolean.TRUE);
                         boolean failed = false;
@@ -126,7 +146,57 @@ public class ActionValidationControl extends BusinessControl{
                         break;
                     }
                 }
+
             }
+
+            /*Field[] fields = objectClass.getDeclaredFields();
+            logger.info("fields from objectClass {}", fields);
+            for(Field field : fields){
+                logger.info("check for field name {}", field.getName());
+                field.setAccessible(true);
+                for(MandateFieldView mandateFieldView : mandateFieldViewList){
+                    logger.info("loop for mandateFieldView name {}", mandateFieldView);
+                    if(field.getName().startsWith(mandateFieldView.getFieldName())){
+                        logger.info("found name matched field: {}, mandateFieldView: {}", field.getName(), mandateFieldView.getFieldName());
+                        mandateFieldView.setChecked(Boolean.TRUE);
+                        boolean failed = false;
+
+                        try{
+                            Object _fieldObj = field.get(object);
+                            if(_fieldObj == null){
+                                failed = true;
+                            } else {
+                                Class _fieldObjClass = _fieldObj.getClass();
+                                if(_fieldObjClass.equals(Integer.class.getName())){
+                                    if((Integer)_fieldObj == 0){
+                                        failed = true;
+                                    }
+                                } else if(_fieldObjClass.equals(Long.class.getName())){
+                                    if((Long)_fieldObj == 0){
+                                        failed = true;
+                                    }
+                                } else if(_fieldObjClass.equals(BigDecimal.class.getName())){
+                                    if(BigDecimal.ZERO.equals((BigDecimal)_fieldObj)){
+                                        failed = true;
+                                    }
+                                } else if(_fieldObjClass.equals(List.class.getClass())){
+                                    if(((List)_fieldObj).size() == 0){
+                                        failed = true;
+                                    }
+                                }
+                            }
+                        } catch (IllegalAccessException iae){
+                            logger.debug("Cannot validate Field to validate Field {}", field.getName());
+                            failed = true;
+                        }
+
+                        if(failed){
+                            addMandateFieldMessageView(mandateFieldView.getFieldDesc(), mandateFieldView.getFieldDesc(),validationMsg.get(ACTION_DATA_REQUIRED, field.getName()), mandateFieldView.getPage());
+                        }
+                        break;
+                    }
+                }
+            }*/
         }
         return true;
     }
