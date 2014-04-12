@@ -496,7 +496,9 @@ public class ReassignTeamNames implements Serializable
 
             if(selectedTeamName != "" && selectedTeamName.length() > 0 && queryusername.length() > 0 && queryusername != "")
             {
-            reassignSearchViewList = pedbExecute.getReassignSearch(selectedTeamName,queryusername);
+                reassignSearchViewList = pedbExecute.getReassignSearch(selectedTeamName,queryusername);
+                checked.clear();
+                setChecked(checked);
             }
             log.info("reassignsearchviewlist size is :::::: {}",reassignSearchViewList.size());
 
@@ -700,6 +702,8 @@ public class ReassignTeamNames implements Serializable
 
             if(selectedTeamName != "" && selectedTeamName.length() > 0 && queryusername.length() > 0 && queryusername != "")
             {
+                checked.clear();
+                setChecked(checked);
                 reassignSearchViewList = pedbExecute.getReassignSearch(selectedTeamName,queryusername);
             }
             log.info("reassignsearchviewlist size is :::::: {}",reassignSearchViewList.size());

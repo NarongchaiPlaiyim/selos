@@ -15,7 +15,6 @@ import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.ApprovalHistory;
-import com.clevel.selos.model.db.working.FeeDetail;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
@@ -41,7 +40,7 @@ import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "decision")
-public class Decision implements Serializable {
+public class Decision extends BaseController {
     @Inject
     @SELOS
     Logger log;
@@ -78,6 +77,8 @@ public class Decision implements Serializable {
     private ProductControl productControl;
     @Inject
     private BRMSControl brmsControl;
+    @Inject
+    private FullApplicationControl fullApplicationControl;
 
     //DAO
     @Inject
@@ -243,51 +244,60 @@ public class Decision implements Serializable {
 
     // Approval History
     private ApprovalHistoryView approvalHistoryView;
+    private ApprovalHistoryView approvalHistoryPricingView;
 
     // List One Time Query on init
     private List<PrdGroupToPrdProgramView> _prdGroupToPrdProgramAll;
     private List<PrdGroupToPrdProgramView> _prdGroupToPrdProgramByGroup;
 
+    private boolean requestPricing;
+    private boolean decisionDialog;
+
     public Decision() {
     }
 
-    private void preRender() {
+    private void initial(){
+        //Initial value for onCreation
+        HttpSession session = FacesUtil.getSession(true);
+        workCaseId = getCurrentWorkCaseId(session);
+        stepId = getCurrentStep(session);
+
+        //Set role for UI
+        int roleId = decisionControl.getUserRoleId();
+        if (RoleValue.ABDM.id() == roleId || RoleValue.BDM.id() == roleId) {
+            roleBDM = true;
+        } else if (RoleValue.UW.id() == roleId) {
+            roleUW = true;
+        } else if (RoleValue.ZM.id() == roleId || RoleValue.RGM.id() == roleId) {
+            roleZM_RGM = true;
+        }
+
+        if(roleBDM){
+            decisionDialog = false;
+        } else {
+            decisionDialog = true;
+        }
+
+        log.debug("Initial role of user - roleBDM : {}, roleUW : {}, roleZM_RGM : {}, decisionDialog : {}", roleBDM, roleUW, roleZM_RGM, decisionDialog);
+
+    }
+
+    public void preRender() {
         log.info("preRender ::: setSession ");
         HttpSession session = FacesUtil.getSession(true);
-        if (session.getAttribute("workCaseId") != null) {
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-
-            if (session.getAttribute("stepId") != null) {
-                stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            }
-
-            // set role
-            int roleId = decisionControl.getUserRoleId();
-            if (RoleValue.ABDM.id() == roleId || RoleValue.BDM.id() == roleId) {
-                roleBDM = true;
-            }
-            else if (RoleValue.UW.id() == roleId) {
-                roleUW = true;
-            }
-            else if (RoleValue.ZM.id() == roleId || RoleValue.RGM.id() == roleId) {
-                roleZM_RGM = true;
-            }
-
+        if(checkSession(session)) {
+            //Check valid Step
+            log.debug("check valid step.");
         } else {
-            //TODO return to inbox
-            log.info("preRender ::: workCaseId is null.");
-            try {
-                FacesUtil.redirect("/site/inbox.jsf");
-                return;
-            } catch (Exception e) {
-                log.info("Exception :: {}", e);
-            }
+            log.debug("check session failed. redirect to inbox.");
+            FacesUtil.redirect("/site/inbox.jsf");
+            return;
         }
     }
 
     @PostConstruct
     public void onCreation() {
-        preRender();
+        initial();
 
         decisionView = decisionControl.getDecisionView(workCaseId);
         if (decisionView.getId() == 0) {
@@ -382,12 +392,14 @@ public class Decision implements Serializable {
         decisionFollowConditionView = new DecisionFollowConditionView();
         followConditionViewList = followConditionTransform.transformToView(followConditionDAO.findAll());
 
-        // ========== Approval History ========== //
-        List<ApprovalHistory> approvalHistories = approvalHistoryDAO.findByWorkCase(workCaseId, false);
-        if (approvalHistories != null && !approvalHistories.isEmpty()) {
-            approvalHistoryView = approvalHistoryTransform.transformToView(approvalHistories.get(0));
-        } else {
-            approvalHistoryView = decisionControl.getApprovalHistoryView(stepId);
+        // ========== Check Request Pricing =========== //
+        requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
+
+        // ========== Approval History Endorse CA ========== //
+        approvalHistoryView = decisionControl.getCurrentApprovalHistory(workCaseId, ApprovalType.CA_APPROVAL.value());
+
+        if(requestPricing){
+            approvalHistoryPricingView = decisionControl.getCurrentApprovalHistory(workCaseId, ApprovalType.PRICING_APPROVAL.value());
         }
 
         hashSeqCredit = new HashMap<Integer, Integer>();
@@ -442,8 +454,8 @@ public class Decision implements Serializable {
                         }
                     }
                 }
-                List<FeeDetail> feeDetailList = feeTransform.transformToDB(standardPricingResponse.getPricingFeeList(),workCaseId);
-                feeDetailDAO.persist(feeDetailList);
+//                List<FeeDetail> feeDetailList = feeTransform.transformToDB(standardPricingResponse.getPricingFeeList(),workCaseId);
+//                feeDetailDAO.persist(feeDetailList);
 
                 List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
                 if (newFeeDetailViewMap != null && newFeeDetailViewMap.size() > 0) {
@@ -1277,9 +1289,15 @@ public class Decision implements Serializable {
                 decisionControl.calculateTotalApprove(decisionView);
                 // Save Total Approve to Decision
                 decisionControl.saveDecision(decisionView, workCase);
-                // Save Approval History for UW
-                approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
 
+                if(decisionDialog){
+                    // Save Approval History
+                    approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
+                    if(requestPricing){
+                        // Save Approval History Pricing
+                        approvalHistoryPricingView = decisionControl.saveApprovalHistoryPricing(approvalHistoryPricingView, workCase);
+                    }
+                }
                 exSummaryControl.calForDecision(workCaseId);
             }
 
@@ -1964,5 +1982,29 @@ public class Decision implements Serializable {
 
     public void setNotRetrievePricing(boolean notRetrievePricing) {
         this.notRetrievePricing = notRetrievePricing;
+    }
+
+    public ApprovalHistoryView getApprovalHistoryPricingView() {
+        return approvalHistoryPricingView;
+    }
+
+    public void setApprovalHistoryPricingView(ApprovalHistoryView approvalHistoryPricingView) {
+        this.approvalHistoryPricingView = approvalHistoryPricingView;
+    }
+
+    public boolean isRequestPricing() {
+        return requestPricing;
+    }
+
+    public void setRequestPricing(boolean requestPricing) {
+        this.requestPricing = requestPricing;
+    }
+
+    public boolean isDecisionDialog() {
+        return decisionDialog;
+    }
+
+    public void setDecisionDialog(boolean decisionDialog) {
+        this.decisionDialog = decisionDialog;
     }
 }

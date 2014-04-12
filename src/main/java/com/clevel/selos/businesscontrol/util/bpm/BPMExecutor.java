@@ -279,7 +279,7 @@ public class BPMExecutor implements Serializable {
             HashMap<String, String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
-            fields.put("RGMDecision", rgmDecisionFlag);
+            fields.put("RGMDecisionFlag", rgmDecisionFlag);
             log.debug("dispatch case for [Submit GH]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
             if (workCase != null) {
@@ -297,7 +297,7 @@ public class BPMExecutor implements Serializable {
             HashMap<String, String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
-            fields.put("GHDecision", rgmDecisionFlag);
+            fields.put("GHDecisionFlag", rgmDecisionFlag);
             log.debug("dispatch case for [Submit CSSO]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
             if (workCase != null) {
@@ -315,7 +315,25 @@ public class BPMExecutor implements Serializable {
             HashMap<String, String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
-            fields.put("CSSODecision", cssoDecisionFlag);
+            fields.put("CSSODecisionFlag", cssoDecisionFlag);
+            log.debug("dispatch case for [Submit UW]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            if (workCase != null) {
+                execute(queueName, workCase.getWobNumber(), fields);
+            } else {
+                throw new Exception("An exception occurred, Can not find WorkCase PreScreen.");
+            }
+        }
+    }
+
+    public void submitUWFromZM(long workCaseId, String queueName, String zmDecisionFlag, long actionCode) throws Exception{
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        Action action = actionDAO.findById(actionCode);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            fields.put("ZMDecisionFlag", zmDecisionFlag);
             log.debug("dispatch case for [Submit UW]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
             if (workCase != null) {

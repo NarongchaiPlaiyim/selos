@@ -86,6 +86,8 @@ public class DecisionControl extends BusinessControl {
     private CountryTransform countryTransform;
     @Inject
     private StepTransform stepTransform;
+    @Inject
+    private RoleTransform roleTransform;
 
     //Other Business Control
     @Inject
@@ -174,8 +176,16 @@ public class DecisionControl extends BusinessControl {
     public ApprovalHistoryView saveApprovalHistory(ApprovalHistoryView approvalHistoryView, WorkCase workCase) {
         log.debug("saveApprovalHistory() workCase: {}", workCase);
         // Set current time for submit
-        approvalHistoryView.setSubmitDate(DateTime.now().toDate());
+        //approvalHistoryView.setSubmitDate(DateTime.now().toDate());
         ApprovalHistory returnApprovalHistory = approvalHistoryDAO.persist(approvalHistoryTransform.transformToModel(approvalHistoryView, workCase));
+        return approvalHistoryTransform.transformToView(returnApprovalHistory);
+    }
+
+    public ApprovalHistoryView saveApprovalHistoryPricing(ApprovalHistoryView approvalPricingHistoryView, WorkCase workCase) {
+        log.debug("saveApprovalHistoryPricing() workCase: {}", workCase);
+        // Set current time for submit
+        //approvalHistoryView.setSubmitDate(DateTime.now().toDate());
+        ApprovalHistory returnApprovalHistory = approvalHistoryDAO.persist(approvalHistoryTransform.transformToModel(approvalPricingHistoryView, workCase));
         return approvalHistoryTransform.transformToView(returnApprovalHistory);
     }
 
@@ -352,6 +362,16 @@ public class DecisionControl extends BusinessControl {
         return decisionView;
     }
 
+    public ApprovalHistoryView getCurrentApprovalHistory(long workCaseId, int approvalType){
+        ApprovalHistoryView approvalHistoryView = new ApprovalHistoryView();
+        ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), approvalType);
+        if(!Util.isNull(approvalHistory)){
+            approvalHistoryView = approvalHistoryTransform.transformToView(approvalHistory);
+        }
+
+        return approvalHistoryView;
+    }
+
     public void deleteAllApproveByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {
         log.debug("deleteAllApproveByIdList()");
         log.debug("deleteCreditIdList: {}", deleteCreditIdList);
@@ -403,15 +423,21 @@ public class DecisionControl extends BusinessControl {
 
         User user = getCurrentUser();
         UserView userView = new UserView();
+        RoleView roleView = new RoleView();
         if (user != null) {
             userView.setId(user.getId());
             userView.setUserName(user.getUserName());
             userView.setTitleName(user.getTitle() != null ? user.getTitle().getName() : "");
             userView.setRoleDescription(user.getRole() != null ? user.getRole().getDescription() : "");
+
+            if (user.getRole() != null) {
+                roleView = roleTransform.transformRoleToView(user.getRole());
+            }
         }
 
         approvalHistoryView.setStepView(stepView);
         approvalHistoryView.setUserView(userView);
+        approvalHistoryView.setRoleView(roleView);
         return approvalHistoryView;
     }
 

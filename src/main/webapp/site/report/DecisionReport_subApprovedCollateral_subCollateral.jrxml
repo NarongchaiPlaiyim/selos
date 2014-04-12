@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subApprovedCollateral_subCollateral" pageWidth="445" pageHeight="802" columnWidth="445" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8893297b-3270-4179-ae8d-73f118a64476">
-	<property name="ireport.zoom" value="1.4641000000000017"/>
+	<property name="ireport.zoom" value="2.3579476910000046"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
@@ -90,9 +90,9 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="14" splitType="Stretch">
+		<band height="21" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="8d17dd25-f1a8-4a17-9c9a-647796235cfc" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="25" height="14"/>
+				<reportElement uuid="8d17dd25-f1a8-4a17-9c9a-647796235cfc" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="25" height="21"/>
 				<textElement verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
@@ -100,7 +100,7 @@
 "" : $V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="5fbfd8fa-27f0-434b-a3cc-9a37e8943907" style="detail" stretchType="RelativeToBandHeight" x="217" y="0" width="77" height="14"/>
+				<reportElement uuid="5fbfd8fa-27f0-434b-a3cc-9a37e8943907" style="detail" stretchType="RelativeToBandHeight" x="217" y="0" width="77" height="21"/>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
@@ -108,16 +108,7 @@
 				<textFieldExpression><![CDATA[$F{productProgramView}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="1d8db674-0549-4cb1-aa8c-e3bf61812a37" style="detail" stretchType="RelativeToBandHeight" x="25" y="0" width="143" height="14"/>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{accountName}+"\n"+
-"Acc No.: "+$F{accountNumber}+" , Suf.: "+$F{accountSuf}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="8ecd601e-fe19-430b-9dbc-4cc2ff360024" style="detail" stretchType="RelativeToBandHeight" x="168" y="0" width="49" height="14"/>
+				<reportElement uuid="8ecd601e-fe19-430b-9dbc-4cc2ff360024" style="detail" stretchType="RelativeToBandHeight" x="168" y="0" width="49" height="21"/>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
@@ -125,8 +116,8 @@
 				<textFieldExpression><![CDATA[$F{requestType}.intValue() == 1 ? "Change" :
 $F{requestType}.intValue() == 2 ? "New" : ""]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="3c69907a-c70b-4021-89ec-36d5cf88e07d" style="detail" stretchType="RelativeToBandHeight" x="374" y="0" width="72" height="14"/>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="3c69907a-c70b-4021-89ec-36d5cf88e07d" style="detail" stretchType="RelativeToBandHeight" x="374" y="0" width="72" height="21"/>
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
@@ -134,12 +125,47 @@ $F{requestType}.intValue() == 2 ? "New" : ""]]></textFieldExpression>
 				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="ae8a67a4-5f75-4309-9a77-4248bd9c56cb" style="detail" stretchType="RelativeToBandHeight" x="294" y="0" width="80" height="14"/>
+				<reportElement uuid="ae8a67a4-5f75-4309-9a77-4248bd9c56cb" style="detail" stretchType="RelativeToBandHeight" x="294" y="0" width="80" height="21"/>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{creditFacilityView}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="41737688-13c9-4545-996e-4096448a65a4" style="detail" stretchType="RelativeToBandHeight" x="25" y="0" width="143" height="10"/>
+				<box>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{accountName}.equals( null ) ? "" : $F{accountName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="8f748745-956a-486b-b004-4ac847163cda" style="detail" stretchType="RelativeToBandHeight" x="25" y="11" width="74" height="10"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{accountNumber}.equals( null ) ? "Acc No.: " : "Acc No.: " + $F{accountNumber}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="cfa32062-c603-4abd-9ba8-99afaa5c95e3" style="detail" stretchType="RelativeToBandHeight" x="99" y="11" width="69" height="10"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{accountSuf}.equals( null ) ? " , Suf.: " : " , Suf.: " + $F{accountSuf}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

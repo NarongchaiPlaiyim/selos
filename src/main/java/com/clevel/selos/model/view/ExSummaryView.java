@@ -76,15 +76,21 @@ public class ExSummaryView  implements Serializable {
     //
     private int yearInBusinessMonth;
 
-    public  ExSummaryView(){}
+    private List<Long> deleteTmpList;
+    private Long uwRuleSummaryId;
+
+    public  ExSummaryView(){
+        reset();
+    }
 
     public void reset(){
-        borrowerListView = new ArrayList<CustomerInfoView>();
-        ncbInfoListView = new ArrayList<NCBInfoView>();
-        exSumDecisionListView = new ArrayList<ExSumDecisionView>();
-        exSumCharacteristicView = new ExSumCharacteristicView();
-        exSumBusinessInfoView = new ExSumBusinessInfoView();
-        exSumAccMovementViewList = new ArrayList<ExSumAccountMovementView>();
+        this.borrowerListView = new ArrayList<CustomerInfoView>();
+        this.ncbInfoListView = new ArrayList<NCBInfoView>();
+        this.exSumDecisionListView = new ArrayList<ExSumDecisionView>();
+        this.exSumCharacteristicView = new ExSumCharacteristicView();
+        this.exSumBusinessInfoView = new ExSumBusinessInfoView();
+        this.exSumAccMovementViewList = new ArrayList<ExSumAccountMovementView>();
+        this.deleteTmpList = new ArrayList<Long>();
     }
 
     public long getId() {
@@ -401,6 +407,22 @@ public class ExSummaryView  implements Serializable {
         this.applicationColorResult = applicationColorResult;
     }
 
+    public List<Long> getDeleteTmpList() {
+        return deleteTmpList;
+    }
+
+    public void setDeleteTmpList(List<Long> deleteTmpList) {
+        this.deleteTmpList = deleteTmpList;
+    }
+
+    public Long getUwRuleSummaryId() {
+        return uwRuleSummaryId;
+    }
+
+    public void setUwRuleSummaryId(Long uwRuleSummaryId) {
+        this.uwRuleSummaryId = uwRuleSummaryId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -443,6 +465,7 @@ public class ExSummaryView  implements Serializable {
                 append("deviateCode", deviateCode).
                 append("uwComment", uwComment).
                 append("yearInBusinessMonth", yearInBusinessMonth).
+                append("deleteTmpList", deleteTmpList).
                 toString();
     }
 }

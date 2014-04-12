@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PDFExecutive_Summary implements Serializable {
+public class PDFExecutiveSummary implements Serializable {
     @Inject
     private ExSummaryControl exSummaryControl;
 
@@ -55,7 +55,7 @@ public class PDFExecutive_Summary implements Serializable {
     long workCaseId;
 
     @Inject
-    public PDFExecutive_Summary() {
+    public PDFExecutiveSummary() {
     }
 
     public void init(){
@@ -73,7 +73,8 @@ public class PDFExecutive_Summary implements Serializable {
                 log.error("Exception :: {}",ex);
             }
         }
-        log.info("workCaseID: {}",workCaseId);
+
+        exSummaryView = new ExSummaryView();
 
         if(!Util.isNull(workCaseId) && !Util.isZero(workCaseId)){
             exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
@@ -83,7 +84,6 @@ public class PDFExecutive_Summary implements Serializable {
         } else {
             log.debug("workCaseId is Null. {}",workCaseId);
         }
-
     }
 
     public List<BorrowerExsumReport> fillBorrowerRelatedProfile(){

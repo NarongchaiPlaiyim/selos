@@ -12,6 +12,7 @@ public class ApprovalHistoryView implements Serializable {
     private long id;
     private StepView stepView;
     private UserView userView;
+    private RoleView roleView;
     private Date submitDate;
     private String comments;
     private DecisionType uwDecision;
@@ -24,6 +25,7 @@ public class ApprovalHistoryView implements Serializable {
     public void reset() {
         this.stepView = new StepView();
         this.userView = new UserView();
+        this.roleView = new RoleView();
         this.submitDate = DateTime.now().toDate();
         this.comments = "";
         this.uwDecision = DecisionType.NO_DECISION;
@@ -51,6 +53,14 @@ public class ApprovalHistoryView implements Serializable {
 
     public void setUserView(UserView userView) {
         this.userView = userView;
+    }
+
+    public RoleView getRoleView() {
+        return roleView;
+    }
+
+    public void setRoleView(RoleView roleView) {
+        this.roleView = roleView;
     }
 
     public Date getSubmitDate() {
@@ -91,6 +101,7 @@ public class ApprovalHistoryView implements Serializable {
                 .append("id", id)
                 .append("stepView", stepView)
                 .append("userView", userView)
+                .append("roleView", roleView)
                 .append("submitDate", submitDate)
                 .append("comments", comments)
                 .append("uwDecision", uwDecision)

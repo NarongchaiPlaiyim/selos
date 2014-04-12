@@ -9,10 +9,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "wrk_uwresult_detail")
-public class UWRuleResultDetail {
+public class UWRuleResultDetail implements Serializable {
 
     @Id
     @SequenceGenerator(name = "SEQ_WRK_UW_RULE_RESULT_DET_ID", sequenceName = "SEQ_WRK_UW_RULE_RESULT_DET_ID", allocationSize = 1)
@@ -49,6 +50,9 @@ public class UWRuleResultDetail {
     @ManyToOne
     @JoinColumn(name = "uw_rule_result_sum_id")
     private UWRuleResultSummary uwRuleResultSummary;
+
+    @Column(name = "reason")
+    private String reason;
 
     public long getId() {
         return id;
@@ -122,18 +126,27 @@ public class UWRuleResultDetail {
         this.uwRuleResultSummary = uwRuleResultSummary;
     }
 
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("uwRuleName", uwRuleName)
-                .append("ruleOrder", ruleOrder)
-                .append("customer", customer)
-                .append("uwResultColor", uwResultColor)
-                .append("uwRuleType", uwRuleType)
-                .append("uwDeviationFlag", uwDeviationFlag)
-                .append("rejectGroup", rejectGroup)
-                .append("uwRuleResultSummary", uwRuleResultSummary)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("uwRuleName", uwRuleName).
+                append("ruleOrder", ruleOrder).
+                append("customer", customer).
+                append("uwResultColor", uwResultColor).
+                append("uwRuleType", uwRuleType).
+                append("uwDeviationFlag", uwDeviationFlag).
+                append("rejectGroup", rejectGroup).
+                append("uwRuleResultSummary", uwRuleResultSummary).
+                append("reason", reason).
+                toString();
     }
 }

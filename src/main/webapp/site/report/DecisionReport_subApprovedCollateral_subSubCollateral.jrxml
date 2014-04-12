@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subApprovedCollateral_subSubCollateral" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="0e516ec7-21dc-48ec-a688-1c26f9f5e17c">
-	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.zoom" value="1.6105100000000017"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
@@ -125,26 +125,28 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="28" splitType="Stretch">
+		<band height="31" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="1546d8d0-471e-46ea-9ffc-ef23d93b8e2f" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="25" height="28"/>
+				<reportElement uuid="1546d8d0-471e-46ea-9ffc-ef23d93b8e2f" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="25" height="31"/>
 				<textElement verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{no}+1]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="3edd9b1d-ea42-447e-b513-4f18b24ec27c" style="detail" stretchType="RelativeToBandHeight" x="25" y="0" width="125" height="28"/>
+				<reportElement uuid="3edd9b1d-ea42-447e-b513-4f18b24ec27c" style="detail" stretchType="RelativeToBandHeight" x="25" y="0" width="125" height="10"/>
+				<box>
+					<bottomPen lineWidth="0.0"/>
+				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{subCollateralType}+"\n"+
-"Address : "+$F{address}+"\n"+
-"Land Office : "+$F{landOffice}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{subCollateralType}.equals( null ) ?
+"" : $F{subCollateralType}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="0a6e6cda-9620-46a2-b416-e9fb02e37edb" style="detail" stretchType="RelativeToBandHeight" x="150" y="0" width="50" height="28"/>
+				<reportElement uuid="0a6e6cda-9620-46a2-b416-e9fb02e37edb" style="detail" stretchType="RelativeToBandHeight" x="150" y="0" width="50" height="31"/>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
@@ -152,44 +154,23 @@
 				<textFieldExpression><![CDATA[$F{titleDeed}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="bff8be1b-3bad-4f97-a906-4bdba8efd499" style="detail" stretchType="RelativeToBandHeight" x="200" y="0" width="71" height="28"/>
+				<reportElement uuid="bff8be1b-3bad-4f97-a906-4bdba8efd499" style="detail" stretchType="RelativeToBandHeight" x="200" y="0" width="71" height="31"/>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{collateralOwnerAAD}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="8e2eb127-157d-42b4-a796-c2304e47c1fc" style="detail" stretchType="RelativeToBandHeight" x="271" y="0" width="72" height="28"/>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
-				</textElement>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="2124d7cd-1fe1-49a0-b2d2-b37dee3c5ce7" style="detail" stretchType="RelativeToBandHeight" x="343" y="0" width="55" height="28"/>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
-				</textElement>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="f6157af0-636b-4e67-b272-4e62b3530fba" style="detail" stretchType="RelativeToBandHeight" x="398" y="0" width="57" height="28"/>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
-				</textElement>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="4939a6f2-b23f-447c-b6dd-da7de5482b79" style="detail" stretchType="RelativeToBandHeight" x="507" y="0" width="48" height="28"/>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="4939a6f2-b23f-447c-b6dd-da7de5482b79" style="detail" stretchType="RelativeToBandHeight" x="507" y="0" width="48" height="31"/>
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{mortgageValue}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="b469be18-ff60-4ebb-8073-c7ec909f1a66" style="detail" stretchType="RelativeToBandHeight" x="455" y="0" width="52" height="28"/>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="b469be18-ff60-4ebb-8073-c7ec909f1a66" style="detail" stretchType="RelativeToBandHeight" x="455" y="0" width="52" height="31"/>
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
@@ -197,20 +178,70 @@
 				<textFieldExpression><![CDATA[$F{appraisalValue}]]></textFieldExpression>
 			</textField>
 			<subreport>
-				<reportElement uuid="8b7a8d88-830a-4ad7-af08-b8709b7fad9a" x="271" y="0" width="72" height="28"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{collateralOwnerUWList})]]></dataSourceExpression>
+				<reportElement uuid="8b7a8d88-830a-4ad7-af08-b8709b7fad9a" x="271" y="0" width="72" height="31"/>
+				<dataSourceExpression><![CDATA[$F{collateralOwnerUWList}.isEmpty() ?
+new net.sf.jasperreports.engine.JREmptyDataSource() :
+new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{collateralOwnerUWList})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DecisionReport_subApprovedCollateral_subSubCollateral_subcollateralOwnerUWList.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement uuid="dde47143-4ce3-486e-85ea-a5f54f2b460c" x="343" y="0" width="55" height="28"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{mortgageList})]]></dataSourceExpression>
+				<reportElement uuid="dde47143-4ce3-486e-85ea-a5f54f2b460c" x="343" y="0" width="55" height="31"/>
+				<dataSourceExpression><![CDATA[$F{mortgageList}.isEmpty() ?
+new net.sf.jasperreports.engine.JREmptyDataSource() :
+new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{mortgageList})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DecisionReport_subApprovedCollateral_subSubCollateral_submortgageList.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement uuid="638b8b2b-69df-4c7d-a407-e88d2ce7d750" x="398" y="0" width="57" height="28"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{relatedWithList})]]></dataSourceExpression>
+				<reportElement uuid="638b8b2b-69df-4c7d-a407-e88d2ce7d750" x="398" y="0" width="57" height="31"/>
+				<dataSourceExpression><![CDATA[$F{relatedWithList}.isEmpty() ?
+new net.sf.jasperreports.engine.JREmptyDataSource() :
+new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{relatedWithList})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DecisionReport_subApprovedCollateral_subSubCollateral_subrelatedWithList.jasper"]]></subreportExpression>
 			</subreport>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="901e901e-f0e7-4ac2-9f98-892bb9e0d051" style="detail" stretchType="RelativeToBandHeight" x="25" y="10" width="125" height="10"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address}.equals( null ) ? "Address : " : "Address : " + $F{address}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="e93e075f-16d2-46e0-82d0-f8bc266f34bd" style="detail" stretchType="RelativeToBandHeight" x="25" y="21" width="125" height="10"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{landOffice}.equals( null ) ? "Land Office : " : "Land Office : " + $F{landOffice}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a4958de5-a957-4ae2-bc8a-9888c7919525" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="271" y="0" width="72" height="31"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="53f332f9-8732-4254-be75-d822a47824a8" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="343" y="0" width="55" height="31"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="738f5507-e0d4-4177-bf0e-cd0769749b1d" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="398" y="0" width="57" height="31"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

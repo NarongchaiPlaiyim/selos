@@ -34,6 +34,34 @@ public class PEInbox implements Serializable
     private String queuename;
     private int fetchType;
     private Integer locked;
+    private String createDate;
+    private String createBy;
+    private String terminateDate;
+
+
+    public String getTerminateDate() {
+        return terminateDate;
+    }
+
+    public void setTerminateDate(String terminateDate) {
+        this.terminateDate = terminateDate;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
 
     public Integer getLocked()
     {

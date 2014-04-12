@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 public class NewFeeDetailView implements Serializable {
     private long id;
+    private NewCreditDetailView newCreditDetailView;
     private String productProgram;
     private FeeDetailView standardFrontEndFee;
     private FeeDetailView commitmentFee;
@@ -26,6 +27,7 @@ public class NewFeeDetailView implements Serializable {
         this.extensionFee = new FeeDetailView();
         this.prepaymentFee = new FeeDetailView();
         this.cancellationFee = new FeeDetailView();
+        this.newCreditDetailView = new NewCreditDetailView();
     }
 
     public long getId() {
@@ -82,6 +84,14 @@ public class NewFeeDetailView implements Serializable {
 
     public void setCancellationFee(FeeDetailView cancellationFee) {
         this.cancellationFee = cancellationFee;
+    }
+
+    public NewCreditDetailView getNewCreditDetailView() {
+        return newCreditDetailView;
+    }
+
+    public void setNewCreditDetailView(NewCreditDetailView newCreditDetailView) {
+        this.newCreditDetailView = newCreditDetailView;
     }
 
     @Override

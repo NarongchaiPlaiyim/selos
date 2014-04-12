@@ -46,6 +46,7 @@ public class BorrowerCreditDecisionReport extends ReportModel{
         productCode = "";
         projectCode = "";
         existingCreditTierDetailViewList = new ArrayList<ExistingCreditTierDetailView>();
+        existingSplitLineDetailViewList = new ArrayList<ExistingSplitLineDetailView>();
     }
 
 

@@ -144,11 +144,6 @@
                                 <h:outputText value="#{item.receivedDate}"/>
                             </p:column>
 
-                            <p:column headerText="At User Team" styleClass="center"
-                                      style="width: 130px;" sortBy="#{item.teamName}">
-                                <h:outputText value="#{item.teamName}"/>
-                            </p:column>
-
                             <p:column headerText="Application Number" styleClass="center"
                                       style="width: 110px;" sortBy="#{item.appNumber}" >
                                 <h:outputText value="#{item.appNumber}"/>
@@ -180,6 +175,11 @@
                             <p:column headerText="At User" styleClass="center"
                                       style="width: 110px;" sortBy="#{item.currentUser}">
                                 <h:outputText value="#{item.currentUser}"/>
+                            </p:column>
+
+                            <p:column headerText="At User Team" styleClass="center"
+                                      style="width: 130px;" sortBy="#{item.teamName}">
+                                <h:outputText value="#{item.teamName}"/>
                             </p:column>
 
                             <p:column headerText="Total Time Spent At User" styleClass="center"

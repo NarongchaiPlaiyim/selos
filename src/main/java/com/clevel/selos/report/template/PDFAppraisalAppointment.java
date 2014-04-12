@@ -51,13 +51,16 @@ public class PDFAppraisalAppointment implements Serializable {
         } else if ((Long)session.getAttribute("workCasePreScreenId") != 0){
             workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
         }
-        log.info("workCaseID: {}",workCaseId);
 
+
+        appraisalView = new AppraisalView();
 
         if (!Util.isNull(workCaseId)){
-            appraisalView = new AppraisalView();
+            log.info("workCaseID: {}",workCaseId);
             appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId,workCasePreScreenId);
             log.debug("--appraisalView. {}",appraisalView);
+        } else {
+            log.debug("--workcase is Null. {}",workCaseId);
         }
 
     }

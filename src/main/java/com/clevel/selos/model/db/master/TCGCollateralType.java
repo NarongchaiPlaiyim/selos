@@ -25,6 +25,9 @@ public class TCGCollateralType implements Serializable {
     @Column(name = "active")
     private int active;
 
+    @Column(name = "code", length = 6)
+    private String code;
+
     public int getId() {
         return id;
     }
@@ -57,6 +60,14 @@ public class TCGCollateralType implements Serializable {
         this.active = active;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -64,6 +75,7 @@ public class TCGCollateralType implements Serializable {
                 .append("name", name)
                 .append("description", description)
                 .append("active", active)
+                .append("code", code)
                 .toString();
     }
 }

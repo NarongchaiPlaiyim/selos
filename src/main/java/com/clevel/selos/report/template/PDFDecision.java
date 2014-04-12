@@ -64,11 +64,15 @@ public class PDFDecision implements Serializable {
                 log.error("Exception :: {}",ex);
             }
         }
-//        long workCaseId = 159;
 
-        decisionView = decisionControl.getDecisionView(workCaseId);
+        decisionView = new DecisionView();
 
-        log.info("workCaseID: {}",workCaseId);
+        if(!Util.isNull(workCaseId)){
+            decisionView = decisionControl.getDecisionView(workCaseId);
+            log.debug("--decisionView. {}",decisionView);
+        } else {
+            log.debug("--workcaseId is Null. {}",workCaseId);
+        }
     }
 
     public List<BorrowerCreditDecisionReport> fillCreditBorrower(String pathsub){
@@ -109,11 +113,10 @@ public class PDFDecision implements Serializable {
                 decisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
                 decisionReport.setOutstanding(Util.convertNullToZERO(detailView.getOutstanding()));
 
-                if (Util.safetyList(Util.safetyList(detailView.getExistingCreditTierDetailViewList())).size() > 0){
-                    decisionReport.setExistingCreditTierDetailViewList(detailView.getExistingCreditTierDetailViewList());
-                } else {
-                    log.debug("getExistingCreditTierDetailViewList is Null. {}",detailView.getExistingCreditTierDetailViewList());
-                }
+                decisionReport.setExistingCreditTierDetailViewList(Util.safetyList(detailView.getExistingCreditTierDetailViewList()));
+                log.debug("--ExistingCreditTierDetailViewList. {}",detailView.getExistingCreditTierDetailViewList());
+                decisionReport.setExistingSplitLineDetailViewList(Util.safetyList(detailView.getExistingSplitLineDetailViewList()));
+                log.debug("--ExistingSplitLineDetailViewList. {}",detailView.getExistingSplitLineDetailViewList());
 
                 borrowerCreditDecisionReportList.add(decisionReport);
             }
@@ -187,6 +190,7 @@ public class PDFDecision implements Serializable {
                 borrowerRetailDecisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
                 borrowerRetailDecisionReport.setOutstanding(Util.convertNullToZERO(detailView.getOutstanding()));
                 borrowerRetailDecisionReport.setExistingCreditTierDetailViewList(Util.safetyList(detailView.getExistingCreditTierDetailViewList()));
+                log.debug("--ExistingCreditTierDetailViewList. {}",detailView.getExistingCreditTierDetailViewList());
                 retailDecisionReportList.add(borrowerRetailDecisionReport);
             }
         } else {

@@ -369,6 +369,7 @@ public class UWRuleResultTransform extends Transform{
         uwRuleResultDetailView.setRejectGroupCode(transformToView(uwRuleResultDetail.getRejectGroup()));
         uwRuleResultDetailView.setUwRuleType(uwRuleResultDetail.getUwRuleType());
         uwRuleResultDetailView.setRuleColorResult(uwRuleResultDetail.getUwResultColor());
+        uwRuleResultDetailView.setReason(uwRuleResultDetail.getReason());
         if(uwRuleResultDetail.getCustomer() != null){
             CustomerInfoSimpleView customerInfoSimpleView = customerTransform.transformToSimpleView(uwRuleResultDetail.getCustomer());
             uwRuleResultDetailView.setCustomerInfoSimpleView(customerInfoSimpleView);

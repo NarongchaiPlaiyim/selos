@@ -23,6 +23,7 @@ import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import javax.annotation.PostConstruct;
@@ -256,6 +257,8 @@ public class PESearch implements Serializable
     @Inject
     UserTeamDAO userTeamDAO;
 
+    String message;
+
     @PostConstruct
     public void onCreation()
     {
@@ -263,7 +266,7 @@ public class PESearch implements Serializable
 
         //Clear all session before selectInbox
         HttpSession session = FacesUtil.getSession(false);
-        try
+        /*try
         {
             if(session.getAttribute("isLocked")!=null)
             {
@@ -273,6 +276,7 @@ public class PESearch implements Serializable
                 if(isLocked.equalsIgnoreCase("true"))
                 {
                     String wobNum = (String)session.getAttribute("wobNum");
+                    log.info("unlocking case queue: {}, WobNum : {}, fetchtype: {}",session.getAttribute("queueName"), session.getAttribute("wobNum"),session.getAttribute("fetchType"));
                     bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNum,(Integer)session.getAttribute("fetchType"));
                 }
                 else
@@ -286,7 +290,7 @@ public class PESearch implements Serializable
         {
 
             log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
-        }
+        }*/
 
         session.setAttribute("workCasePreScreenId", 0L);
         session.setAttribute("workCaseId", 0L);
@@ -366,9 +370,12 @@ public class PESearch implements Serializable
                 {
 
                     //TODO Alert Box
+
+                    message = "You are not Authorised to view this case!";
+                    RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
                     log.info("You are not authorised to view this case.(BDM)");
-                    FacesUtil.redirect("/site/generic_search.jsf");
-                    return;
+                    /*FacesUtil.redirect("/site/generic_search.jsf");
+                    return;*/
                 }
 
             }
@@ -417,8 +424,8 @@ public class PESearch implements Serializable
                     {
                         //TODO Alert Box
                         log.info("You are not authorised to view this case.(Team type 3,2)");
-                        FacesUtil.redirect("/site/generic_search.jsf");
-                        return;
+                        message = "You are not Authorised to view this case!";
+                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
                     }
 
                 }
@@ -433,9 +440,9 @@ public class PESearch implements Serializable
                     else
                     {
                         //TODO Alert Box
-                        log.info("You are not authorised to view this case.");
-                        FacesUtil.redirect("/site/generic_search.jsf");
-                        return;
+                        log.info("You are not authorised to view this case. else after 3 2 ");
+                        message = "You are not Authorised to view this case!";
+                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
                     }
 
                 }
@@ -455,9 +462,9 @@ public class PESearch implements Serializable
                 else
                 {
                     //TODO Alert Box
-                    log.info("You are not authorised to view this case.");
-                    FacesUtil.redirect("/site/generic_search.jsf");
-                    return;
+                    log.info("You are not authorised to view this case. BDM");
+                    message = "You are not Authorised to view this case!";
+                    RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
                 }
 
             }
@@ -490,16 +497,24 @@ public class PESearch implements Serializable
 
                     List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(new Long(workCase.getId()).intValue());
 
+                    log.info("Users List work case : "+usersList.toString());
+
+                    log.info("WorkCaseOwnerUsers List :"+workCaseOwnerUsersList.toString());
+
+                    log.info("Users List Size before"+usersList.size());
+
                     usersList.retainAll(workCaseOwnerUsersList);
+
+                    log.info("Users List Size after"+usersList.size());
 
                     if(usersList.size()>0){}
 
                     else
                     {
                         //TODO Alert Box
-                        log.info("You are not authorised to view this case.");
-                        FacesUtil.redirect("/site/generic_search.jsf");
-                        return;
+                        log.info("You are not authorised to view this case.3 2 ");
+                        message = "You are not Authorised to view this case!";
+                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
                     }
 
                 }
@@ -514,9 +529,9 @@ public class PESearch implements Serializable
                     else
                     {
                         //TODO Alert Box
-                        log.info("You are not authorised to view this case.");
-                        FacesUtil.redirect("/site/generic_search.jsf");
-                        return;
+                        log.info("You are not authorised to view this case. after 3 2");
+                        message = "You are not Authorised to view this case!";
+                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
                     }
 
                 }
@@ -577,9 +592,9 @@ public class PESearch implements Serializable
             session.setAttribute("queueName",searchViewSelectItem.getQueuename());
         }
 
-        try
+       /* try
         {
-
+            log.info("locking case queue: {}, WobNum : {}, fetchtype: {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
             bpmInterfaceImpl.lockCase(searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
             session.setAttribute("isLocked","true");
 
@@ -587,9 +602,10 @@ public class PESearch implements Serializable
         catch (Exception e)
         {
             log.error("Error while Locking case in queue : {}, WobNum : {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(), e);
-            FacesUtil.redirect("/site/generic_search.jsf");
-            return;
-        }
+            message = "Another User is Working on this case!! Please Retry Later.";
+            RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+            //return;
+        }*/
 
 		AppHeaderView appHeaderView = headerControl.getHeaderInformation(searchViewSelectItem.getStepId(), searchViewSelectItem.getFwobnumber());        session.setAttribute("appHeaderInfo", appHeaderView);
 
