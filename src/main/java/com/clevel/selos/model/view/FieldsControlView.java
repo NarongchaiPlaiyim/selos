@@ -3,7 +3,10 @@ package com.clevel.selos.model.view;
 import java.io.Serializable;
 
 public class FieldsControlView implements Serializable {
-    private long id;
+    private static final long serialVersionUID = -753952325364113377L;
+    public static final boolean DEFAULT_READONLY = true;
+    public static final boolean DEFAULT_MANDATE = false;
+	private long id;
     private String fieldName;
     private boolean isMandate;
     private boolean isReadOnly;

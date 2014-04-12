@@ -25,6 +25,10 @@ public class FieldsControl implements Serializable {
     private Role role;
 
     @OneToOne
+    @JoinColumn(name = "status_id")
+    private Status status;
+
+    @OneToOne
     @JoinColumn(name = "step_id")
     private Step step;
 
@@ -124,6 +128,12 @@ public class FieldsControl implements Serializable {
     public void setSpecialTypeId(int specialTypeId) {
         this.specialTypeId = specialTypeId;
     }
+    public Status getStatus() {
+		return status;
+	}
+    public void setStatus(Status status) {
+		this.status = status;
+	}
 
     @Override
     public String toString() {
@@ -133,6 +143,7 @@ public class FieldsControl implements Serializable {
                 .append("screenId", screenId)
                 .append("role", role)
                 .append("step", step)
+                .append("status", status)
                 .append("mandate", mandate)
                 .append("readonly", readonly)
                 .append("productGroup", productGroup)
