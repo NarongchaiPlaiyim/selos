@@ -11,13 +11,12 @@
 			<td class="title" style="width:140px">
 				<p:outputLabel
 					for="type"
-					value="#{msg.get('app.baInfo.bapa.dialog.type')}" />
+					value="#{msg.get('app.baInfo.bapa.dialog.type')}#{baInfo.mandateDialogBAPA('type')}" />
 			</td>
 			<td>
 				<p:selectOneMenu id='type' style="width:160px"
 					value="#{baInfo.bapaInfoCreditView.type}"
-					disabled="#{baInfo.bapaInfoCreditView.fromCredit}"
-					required="true" requiredMessage="#{msg.get('app.baInfo.bapa.baType.validate')}"
+					disabled="#{baInfo.bapaInfoCreditView.fromCredit} or #{baInfo.isDialogBAPADisable('type')}"
 					>
 					<p:ajax update='morepay' listener="#{baInfo.onCalculateExpense()}" />
 					<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -33,7 +32,7 @@
 			<td>
 				<p:dataTable id='credittype_tbl' value="#{baInfo.creditDataModel}" var="credit"
 					selection="#{baInfo.selectedCredit}"
-					disabledSelection="#{baInfo.bapaInfoCreditView.fromCredit}"
+					disabledSelection="#{baInfo.bapaInfoCreditView.fromCredit} or #{baInfo.isDialogBAPADisable('creditType.checked')}"
 					>
 					<p:ajax event="rowSelectRadio" update=':bapaApplyInfoDlgForm:morepay' listener="#{baInfo.onCalculateExpense()}" />
 					<p:column styleClass="center" style="width:30px"
@@ -68,13 +67,13 @@
 		<tr>
 			<td class="title">
 				<p:outputLabel
-					for="premium"
-					value="#{msg.get('app.baInfo.bapa.dialog.premium')}" />
+					for="premium" 
+					value="#{msg.get('app.baInfo.bapa.dialog.premium')}#{baInfo.mandateDialogBAPA('creditType.premium')}" />
 			</td>
 			<td>
 				<p:inputText id='premium' style="large"
 					value="#{baInfo.bapaInfoCreditView.premiumAmount}"
-					required="true" requiredMessage="#{msg.get('app.baInfo.bapa.premium.validate')}"
+					readonly="#{baInfo.isDialogBAPADisable('creditType.premium')}"
 					converterMessage="#{msg.get('app.baInfo.bapa.premium.validate')}"
 					validatorMessage="#{msg.get('app.baInfo.bapa.premium.validate')}"
 					
@@ -114,6 +113,7 @@
                         oncomplete="handleDialogRequest(xhr, status, args,'p_bapaApplyInfoDlg')"
                         styleClass="small"
                         rendered="#{baInfo.addCreditDialog}"
+                        disabled="#{baInfo.isDialogBAPADisable('okButton')}"
                         />
 				 <p:commandButton
                         id="updateBtn"
@@ -123,9 +123,11 @@
                         oncomplete="handleDialogRequest(xhr, status, args,'p_bapaApplyInfoDlg')"
                         styleClass="small"
                         rendered="#{not baInfo.addCreditDialog}"
+                        disabled="#{baInfo.isDialogBAPADisable('okButton')}"
                         />
 				<p:commandButton
-                   	type='button' styleClass="small" 
+                   	type='button' styleClass="small"
+                   	disabled="#{baInfo.isDialogBAPADisable('cancelButton')}" 
                    	value="#{msg.get('app.button.cancel')}" onclick="p_bapaApplyInfoDlg.hide()"/>
 			</td>
 		</tr>

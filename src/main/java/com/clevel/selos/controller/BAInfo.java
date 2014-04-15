@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -25,10 +26,12 @@ import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.BAPAInfoControl;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.BAPAType;
 import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.BAResultHC;
 import com.clevel.selos.model.db.master.InsuranceCompany;
 import com.clevel.selos.model.view.BAPAInfoCreditToSelectView;
@@ -36,6 +39,7 @@ import com.clevel.selos.model.view.BAPAInfoCreditView;
 import com.clevel.selos.model.view.BAPAInfoCustomerView;
 import com.clevel.selos.model.view.BAPAInfoView;
 import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
@@ -57,6 +61,7 @@ public class BAInfo implements Serializable {
     private boolean preRenderCheck = false;
     private long workCaseId = -1;
     private long stepId = -1;
+	private long stageId = -1;
     private BasicInfoView basicInfoView;
     private List<BAPAInfoCreditView> deleteCreditList;
     private List<BAPAInfoCreditToSelectView> toSelectCredits;
@@ -99,6 +104,9 @@ public class BAInfo implements Serializable {
         else
             return basicInfoView.getApproveType();
     }
+    public void setApproveType(ApproveType type) {
+		//DO NOTHING
+	}
     public String getMinCheckDate() {
         SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
         return dFmt.format(new Date());
@@ -133,7 +141,7 @@ public class BAInfo implements Serializable {
     }
 
     public boolean canUpdateBAInfoTable() {
-        return RadioValue.YES.equals(bapaInfoView.getApplyBA());
+        return RadioValue.YES.equals(bapaInfoView.getApplyBA()) && !isDisabled("ba.checked");
     }
     public BAPAInfoCustomerView getBapaInfoCustomerView() {
         return bapaInfoCustomerView;
@@ -191,6 +199,8 @@ public class BAInfo implements Serializable {
         int id = bapaInfoCustomerView.getUpdBAResultHC();
         if (id <= 0)
             return false;
+        if (isDialogBADisable("ba.checkDate"))
+        	return false;
         for (BAResultHC data : baResultHCs) {
             if (data.getId() == id)
                 return data.isRequiredCheckDate();
@@ -207,12 +217,14 @@ public class BAInfo implements Serializable {
         if (session != null) {
             workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
             stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+            stageId = Util.parseLong(session.getAttribute("stageId"), -1);
         }
         insuranceCompanies = bapaInfoControl.getInsuranceCompanies();
         baResultHCs = bapaInfoControl.getBAResultHCs();
         toSelectCredits = bapaInfoControl.getBAPAInfoCreditToSelectView(workCaseId);
         creditDataModel = new CreditSelectedDataModel();
         creditDataModel.setWrappedData(toSelectCredits);
+        _loadFieldControl();
         _loadInitData();
     }
 
@@ -223,8 +235,7 @@ public class BAInfo implements Serializable {
 
         String redirectPage = null;
         if (workCaseId > 0) {
-            //TODO Validate step
-            if (stepId <= 0) {
+			if (stepId <= 0 || stageId != 301) {
                 redirectPage = "/site/inbox.jsf";
             } else {
                 return;
@@ -352,6 +363,10 @@ public class BAInfo implements Serializable {
         _loadInitData();
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
     }
+    public void onCancelBAInformation() {
+		_loadInitData();
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
 
     public void onCalculateExpense() {
         if (bapaInfoCreditView == null)
@@ -400,7 +415,7 @@ public class BAInfo implements Serializable {
         bapaInfoCreditView = null;
         deleteCreditList = new ArrayList<BAPAInfoCreditView>();
         deleteCreditRowId = -1;
-
+        
         _calculateTotal();
     }
     private void _calculateTotal() {
@@ -443,8 +458,73 @@ public class BAInfo implements Serializable {
         public Object getRowKey(BAPAInfoCreditToSelectView data) {
             return data.getId();
         }
-
     }
+    
+    /*
+	 * Mandate and read-only
+	 */
+	@Inject MandatoryFieldsControl mandatoryFieldsControl;
+	private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
+	private final HashMap<String, FieldsControlView> dialogBAFieldMap = new HashMap<String, FieldsControlView>();
+	private final HashMap<String, FieldsControlView> dialogBAPAFieldMap = new HashMap<String, FieldsControlView>();
+	private void _loadFieldControl() {
+		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.BAInfo);
+		List<FieldsControlView> dialogBAFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.applyBAinfoDialog);
+		List<FieldsControlView> dialogBAPAFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.addBAPAInfoDialog);
+		fieldMap.clear();
+		dialogBAFieldMap.clear();
+		dialogBAPAFieldMap.clear();
+		for (FieldsControlView field : fields) {
+			fieldMap.put(field.getFieldName(), field);
+		}
+		for (FieldsControlView field : dialogBAFields) {
+			dialogBAFieldMap.put(field.getFieldName(), field);
+		}
+		for (FieldsControlView field : dialogBAPAFields) {
+			dialogBAPAFieldMap.put(field.getFieldName(), field);
+		}
+		
+	}
+	public String mandate(String name) {
+		boolean isMandate = FieldsControlView.DEFAULT_MANDATE;
+		FieldsControlView field = fieldMap.get(name);
+		if (field != null)
+			isMandate = field.isMandate();
+		return isMandate ? " *" : "";
+	}
+	
+	public boolean isDisabled(String name) {
+		FieldsControlView field = fieldMap.get(name);
+		if (field == null)
+			return FieldsControlView.DEFAULT_READONLY;
+		return field.isReadOnly();
+	}
+	public String mandateDialogBA(String name) {
+		boolean isMandate = FieldsControlView.DEFAULT_MANDATE;
+		FieldsControlView field = dialogBAFieldMap.get(name);
+		if (field != null)
+			isMandate = field.isMandate();
+		return isMandate ? " *" : "";
+	}
+	public boolean isDialogBADisable(String name) {
+		FieldsControlView field = dialogBAFieldMap.get(name);
+		if (field == null)
+			return FieldsControlView.DEFAULT_READONLY;
+		return field.isReadOnly();
+	}
+	public String mandateDialogBAPA(String name) {
+		boolean isMandate = FieldsControlView.DEFAULT_MANDATE;
+		FieldsControlView field = dialogBAPAFieldMap.get(name);
+		if (field != null)
+			isMandate = field.isMandate();
+		return isMandate ? " *" : "";
+	}
+	public boolean isDialogBAPADisable(String name) {
+		FieldsControlView field = dialogBAPAFieldMap.get(name);
+		if (field == null)
+			return FieldsControlView.DEFAULT_READONLY;
+		return field.isReadOnly();
+	}
 }
 
 
