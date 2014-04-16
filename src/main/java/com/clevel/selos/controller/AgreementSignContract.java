@@ -3,6 +3,8 @@ package com.clevel.selos.controller;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -17,10 +19,13 @@ import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.AgreementSignContractControl;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.AgreementInfoView;
 import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
@@ -39,7 +44,7 @@ public class AgreementSignContract implements Serializable {
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
-	
+	private long stageId = -1;
 	private BasicInfoView basicInfoView;
 	
 	//Property
@@ -60,6 +65,9 @@ public class AgreementSignContract implements Serializable {
 		else
 			return basicInfoView.getApproveType();
 	}
+	public void setApproveType(ApproveType type) {
+		//DO NOTHING
+	}
 	public AgreementInfoView getAgreement() {
 		return agreement;
 	}
@@ -74,7 +82,9 @@ public class AgreementSignContract implements Serializable {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+			stageId = Util.parseLong(session.getAttribute("stageId"), -1);
 		}
+		_loadFieldControl();
 		_loadInitData();
 	}
 	
@@ -109,6 +119,11 @@ public class AgreementSignContract implements Serializable {
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
+	public void onCancelAgreementContract() {
+		
+		_loadInitData();
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
 	
 	/*
 	 * Private method
@@ -120,5 +135,31 @@ public class AgreementSignContract implements Serializable {
 		}
 		
 		agreement = agreementSignContractControl.getAgreementInfoView(workCaseId);
+	}
+	/*
+	 * Mandate and read-only
+	 */
+	@Inject MandatoryFieldsControl mandatoryFieldsControl;
+	private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
+	private void _loadFieldControl() {
+		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.AgreementSign);
+		fieldMap.clear();
+		for (FieldsControlView field : fields) {
+			fieldMap.put(field.getFieldName(), field);
+		}
+	}
+	public String mandate(String name) {
+		boolean isMandate = FieldsControlView.DEFAULT_MANDATE;
+		FieldsControlView field = fieldMap.get(name);
+		if (field != null)
+			isMandate = field.isMandate();
+		return isMandate ? " *" : "";
+	}
+	
+	public boolean isDisabled(String name) {
+		FieldsControlView field = fieldMap.get(name);
+		if (field == null)
+			return FieldsControlView.DEFAULT_READONLY;
+		return field.isReadOnly();
 	}
 }

@@ -10,16 +10,16 @@
             <!-- Stage PreScreen -->
             <p:panel id="header_panel_prescreen" rendered="#{headerController.stageId == 101}" styleClass="panel">
                 <!--Check Mandate Doc Prescreen-->
-                <p:commandButton id="btnChkMandatePreScreenChecker" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
+                <p:commandButton id="btnChkMandatePreScreenMaker" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
                                  rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1003}"
-                                 actionListener="#{headerController.onCheckMandateDialog()}"
+                                 actionListener="#{headerController.onCheckMandateForMaker()}"
                                  oncomplete="checkMandateDlg.show()"
                                  update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
                     <p:resetInput target=":frmMain:checkMandatePanel"/>
                 </p:commandButton>
-                <p:commandButton id="btnChkMandatePreScreen" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
+                <p:commandButton id="btnChkMandatePreScreenChecker" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
                                  rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1002}"
-                                 actionListener="#{headerController.onCheckMandateForCheckerDialog()}"
+                                 actionListener="#{headerController.onCheckMandateForChecker()}"
                                  oncomplete="checkMandateDlg.show()"
                                  update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
                     <p:resetInput target=":frmMain:checkMandatePanel"/>
@@ -134,7 +134,7 @@
                 <!--Mandate Document FullApplication-->
                 <p:commandButton id="btnMandateDocFullApp" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
                                  rendered="#{headerController.checkButton('Check Mandate Doc')}"
-                                 actionListener="#{headerController.onCheckMandateDialog()}"
+                                 actionListener="#{headerController.onCheckMandateForFullApp()}"
                                  oncomplete="checkMandateDlg.show()"
                                  update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
                     <p:resetInput target=":frmMain:checkMandatePanel"/>

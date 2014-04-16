@@ -1,8 +1,16 @@
 package com.clevel.selos.businesscontrol;
 
+import java.util.Collections;
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+
 import com.clevel.selos.dao.master.FieldsControlDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.FieldsControl;
@@ -13,18 +21,11 @@ import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.transform.FieldsControlTransform;
 import com.clevel.selos.util.FacesUtil;
 
-import org.slf4j.Logger;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
-
-import java.util.Collections;
-import java.util.List;
-
 @Stateless
 public class MandatoryFieldsControl extends BusinessControl {
-    @Inject
+    private static final long serialVersionUID = 910567548215853330L;
+
+	@Inject
     @SELOS
     private Logger log;
 
