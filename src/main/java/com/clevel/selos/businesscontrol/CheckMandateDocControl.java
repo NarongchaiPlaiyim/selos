@@ -123,9 +123,9 @@ public class CheckMandateDocControl extends BusinessControl{
             mandateDocList = Util.safetyList(getMandateDocByWorkCasePreScreenIdAndRoleId(workCasePreScreenId, roleId));
         }
 
+        getToken();
+        log.debug("-- UserToken = {}", userToken);
         if(!Util.isNull(mandateDocViewMap) && !Util.isNull(listECMDetailMap)){
-            getToken();
-            log.debug("-- UserToken = {}", userToken);
             log.debug("-- BRMS MandateDocViewMap.size()[{}]", mandateDocViewMap.size());
             log.debug("-- ECM ListECMDetailMap.size()[{}]", listECMDetailMap.size());
             checkMandateDocView = checkMap();
@@ -160,9 +160,9 @@ public class CheckMandateDocControl extends BusinessControl{
             mandateDocList = Util.safetyList(getMandateDocByWorkCasePreScreenIdAndRoleId(workCasePreScreenId, roleId));
         }
 
+        getToken();
+        log.debug("-- UserToken = {}", userToken);
         if(!Util.isNull(mandateDocViewMap) && !Util.isNull(listECMDetailMap)){
-            getToken();
-            log.debug("-- UserToken = {}", userToken);
             log.debug("-- BRMS MandateDocViewMap.size()[{}]", mandateDocViewMap.size());
             log.debug("-- ECM ListECMDetailMap.size()[{}]", listECMDetailMap.size());
             checkMandateDocView = checkMap();
@@ -212,9 +212,9 @@ public class CheckMandateDocControl extends BusinessControl{
 
         }
 
+        getToken();
+        log.debug("-- UserToken = {}", userToken);
         if(!Util.isNull(mandateDocViewMap) && !Util.isNull(listECMDetailMap)){
-            getToken();
-            log.debug("-- UserToken = {}", userToken);
             log.debug("-- BRMS MandateDocViewMap.size()[{}]", mandateDocViewMap.size());
             log.debug("-- ECM ListECMDetailMap.size()[{}]", listECMDetailMap.size());
             checkMandateDocView = checkMap();
