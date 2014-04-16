@@ -288,7 +288,7 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public void submitToCSSO(String queueName, long workCaseId) throws Exception {
-        String ghDecisionFlag = "A"; //TODO
+        String ghDecisionFlag = "E"; //TODO
         /*WorkCase workCase;
         ApprovalHistory approvalHistoryEndorsePricing = null;
 
