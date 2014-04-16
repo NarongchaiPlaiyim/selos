@@ -429,7 +429,6 @@ public class CheckMandateDocTransform extends Transform {
         log.debug("-- CheckOtherDocView.Complete[{}]", checkMandatoryDocView.getComplete());
         return checkMandatoryDocView;
     }
-
     public CheckOptionalDocView transformToCheckOptionalDocView(final String key, final MandateDocView mandateDocView, final int complete){
         log.debug("-- transformToCheckOptionalDocView(MandateDocView.EcmDocTypeId[{}], complete[{}])", mandateDocView.getEcmDocTypeId(), complete);
         checkOptionalDocView = new CheckOptionalDocView();
@@ -622,7 +621,6 @@ public class CheckMandateDocTransform extends Transform {
         log.debug("-- CheckMandatoryDocView.Complete[{}]", checkMandatoryDocView.getComplete());
         return checkMandatoryDocView;
     }
-
     public CheckOptionalDocView transformToCheckOptionalDocView(final String key, final MandateDoc mandateDoc, final List<ECMDetail> ecmDetailList, final int complete, final String userToken ){
         checkOptionalDocView = new CheckOptionalDocView();
 
@@ -698,7 +696,6 @@ public class CheckMandateDocTransform extends Transform {
         log.debug("-- CheckOptionalDocView.Complete[{}]", checkOptionalDocView.getComplete());
         return checkOptionalDocView;
     }
-
     public CheckOtherDocView transformToCheckOtherDocView(final String key, final MandateDoc mandateDoc, final List<ECMDetail> ecmDetailList, final int complete, final String userToken ){
         checkOtherDocView = new CheckOtherDocView();
 
@@ -782,7 +779,6 @@ public class CheckMandateDocTransform extends Transform {
     //URL
     private String getURLByFNId(final String FNId, final String token){
         return address+"/getContent?objectStoreName="+objectStore+"&id="+FNId+"&objectType=document&ut=" + token;
-//        return address+"/getContent?objectStoreName="+objectStore+"&vsId="+FNId+"&objectType=document&id=" + token;
     }
 
 }

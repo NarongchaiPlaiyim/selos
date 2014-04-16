@@ -607,7 +607,7 @@ public class BRMSControl extends BusinessControl {
         return uwRuleResponseView;
     }
 
-    public MandateDocResponseView getDocCustomerForPrescreen(long workCasePrescreenId){
+    public MandateDocResponseView  getDocCustomerForPrescreen(long workCasePrescreenId){
         logger.debug("-- getDocCustomerForPrescreen from workCaseId {}", workCasePrescreenId);
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
         List<MandateDocument> mandateDocumentList = null;
