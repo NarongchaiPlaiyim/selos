@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b568264b-3421-42fd-80e8-96aa4a75cbf6">
-	<property name="ireport.zoom" value="1.771561000000041"/>
-	<property name="ireport.x" value="71"/>
-	<property name="ireport.y" value="1599"/>
+	<property name="ireport.zoom" value="1.3310000000000313"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Total" mode="Opaque" forecolor="#000000" backcolor="#FCFF79" hAlign="Left" vAlign="Middle" fontSize="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -426,7 +426,7 @@
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement uuid="be09122d-4bf5-42eb-b27a-009226b9f937" style="Total" x="259" y="0" width="85" height="15"/>
+					<reportElement uuid="be09122d-4bf5-42eb-b27a-009226b9f937" style="Total" x="259" y="0" width="86" height="15"/>
 					<box>
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
@@ -479,7 +479,7 @@
 					<text><![CDATA[Related]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="9c0db1b0-c7b9-4ef7-9861-204742c5c6e4" style="Total" x="11" y="31" width="248" height="15"/>
+					<reportElement uuid="9c0db1b0-c7b9-4ef7-9861-204742c5c6e4" style="Total" x="13" y="31" width="246" height="15"/>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
@@ -512,14 +512,14 @@
 					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="153cbf39-70c9-4252-8aa5-e5f5fb890850" style="Total" x="0" y="31" width="11" height="15"/>
+					<reportElement uuid="153cbf39-70c9-4252-8aa5-e5f5fb890850" style="Total" x="0" y="31" width="13" height="15"/>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="fc7a3f29-928a-4b28-8dd0-35691f77d273" style="Total" x="11" y="74" width="248" height="15"/>
+					<reportElement uuid="fc7a3f29-928a-4b28-8dd0-35691f77d273" style="Total" x="13" y="74" width="246" height="15"/>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
@@ -553,14 +553,14 @@
 					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="c1e8b7a3-357c-45b0-8b4a-c986492b2c0b" style="Total" x="0" y="74" width="11" height="15"/>
+					<reportElement uuid="c1e8b7a3-357c-45b0-8b4a-c986492b2c0b" style="Total" x="0" y="74" width="13" height="15"/>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="f952e185-f2df-408c-bca0-84001c36b5ce" style="Total" x="11" y="52" width="248" height="15"/>
+					<reportElement uuid="f952e185-f2df-408c-bca0-84001c36b5ce" style="Total" x="13" y="52" width="246" height="15"/>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
@@ -593,14 +593,28 @@
 					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="c8044af7-6c4c-438b-8764-931f0f581e28" style="Total" x="0" y="52" width="11" height="15"/>
+					<reportElement uuid="c8044af7-6c4c-438b-8764-931f0f581e28" style="Total" x="0" y="52" width="13" height="15"/>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[]]></text>
 				</staticText>
+				<staticText>
+					<reportElement uuid="6d97f5a8-43d6-40b5-850f-d78e066b0ff8" style="Total" x="0" y="0" width="13" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="88ed8351-eb7b-4b80-99a9-5c2c704546ed" style="Total" x="344" y="0" width="211" height="15"/>
+					<textElement>
+						<font pdfFontName="fonts/TAHOMA.TTF"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
 				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement uuid="4ef81310-1d5a-4159-98cc-666cd1d4a68b" style="Total" x="259" y="0" width="85" height="15"/>
+					<reportElement uuid="692149d3-5dd4-4f0a-af93-aadeef17983d" style="Total" x="259" y="0" width="85" height="15"/>
 					<box>
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
@@ -611,25 +625,11 @@
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExtRelatedTotalAppInRLOSLimit()]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="12fff4f3-0772-47a0-b2bb-ba6f50f4e47b" style="Total" x="11" y="0" width="248" height="15"/>
+					<reportElement uuid="9b29267e-9bc9-4d52-be5a-38736d908639" style="Total" x="13" y="0" width="246" height="15"/>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[  Total]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="a62c72a7-0d46-4ba4-8a83-32e7d9209372" style="Total" x="0" y="0" width="11" height="15"/>
-					<textElement>
-						<font pdfFontName="fonts/TAHOMA.TTF"/>
-					</textElement>
-					<text><![CDATA[]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="0cc6fe70-9fdb-42d5-94bf-5f6169269da9" style="Total" x="344" y="0" width="211" height="15"/>
-					<textElement>
-						<font pdfFontName="fonts/TAHOMA.TTF"/>
-					</textElement>
-					<text><![CDATA[]]></text>
 				</staticText>
 			</frame>
 		</band>
@@ -648,7 +648,7 @@
 					<text><![CDATA[Group]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="b9132524-e9c8-41e8-b894-5ffacfbbec6e" style="Total" x="11" y="13" width="248" height="15"/>
+					<reportElement uuid="b9132524-e9c8-41e8-b894-5ffacfbbec6e" style="Total" x="13" y="13" width="246" height="15"/>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
@@ -681,14 +681,14 @@
 					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="b9d4bc31-66ad-4603-9d78-fd756b3daabf" style="Total" x="0" y="13" width="11" height="15"/>
+					<reportElement uuid="b9d4bc31-66ad-4603-9d78-fd756b3daabf" style="Total" x="0" y="13" width="13" height="15"/>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="1ec79705-5bbc-446b-bd41-41f246a0af72" style="Total" x="11" y="55" width="248" height="15"/>
+					<reportElement uuid="1ec79705-5bbc-446b-bd41-41f246a0af72" style="Total" x="13" y="55" width="246" height="15"/>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
@@ -721,14 +721,14 @@
 					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="e3519ea5-515f-4d3e-b004-0c521872deeb" style="Total" x="0" y="55" width="11" height="15"/>
+					<reportElement uuid="e3519ea5-515f-4d3e-b004-0c521872deeb" style="Total" x="0" y="55" width="13" height="15"/>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="808ef7d2-a08c-4334-b7a6-a5eed7ea657f" style="Total" x="11" y="34" width="248" height="15"/>
+					<reportElement uuid="808ef7d2-a08c-4334-b7a6-a5eed7ea657f" style="Total" x="13" y="34" width="246" height="15"/>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
@@ -761,7 +761,7 @@
 					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="80d5bb39-3ade-451e-8851-cd7aee882ba8" style="Total" x="0" y="34" width="11" height="15"/>
+					<reportElement uuid="80d5bb39-3ade-451e-8851-cd7aee882ba8" style="Total" x="0" y="34" width="13" height="15"/>
 					<textElement>
 						<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
@@ -1006,7 +1006,7 @@
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getCountryName()]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement uuid="81f24cd1-133c-4fa3-a187-761b1f06bdea" mode="Opaque" x="211" y="99" width="75" height="13" backcolor="#CCCCFF"/>
+					<reportElement uuid="81f24cd1-133c-4fa3-a187-761b1f06bdea" mode="Opaque" x="206" y="99" width="75" height="13" backcolor="#CCCCFF"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
@@ -1410,7 +1410,7 @@ new net.sf.jasperreports.engine.JREmptyDataSource()
 				</textField>
 				<staticText>
 					<reportElement uuid="2f4f3dff-d5a9-4f79-8169-3f98ac70c419" x="191" y="21" width="12" height="13"/>
-					<textElement>
+					<textElement verticalAlignment="Middle">
 						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
@@ -1434,7 +1434,7 @@ new net.sf.jasperreports.engine.JREmptyDataSource()
 				</textField>
 				<staticText>
 					<reportElement uuid="022aaa4b-99d0-4a11-8fb3-acde0793795d" x="411" y="21" width="12" height="13"/>
-					<textElement>
+					<textElement verticalAlignment="Middle">
 						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>

@@ -196,7 +196,7 @@
 				<textFieldExpression><![CDATA[$F{mortgageValue}]]></textFieldExpression>
 			</textField>
 			<subreport>
-				<reportElement uuid="6d8d396d-bdb5-4e6d-9c26-cf1da0494033" x="191" y="0" width="144" height="16"/>
+				<reportElement uuid="6d8d396d-bdb5-4e6d-9c26-cf1da0494033" stretchType="RelativeToBandHeight" x="191" y="0" width="144" height="16"/>
 				<dataSourceExpression><![CDATA[$F{existingCreditTypeDetailViews}.isEmpty() ?
 new net.sf.jasperreports.engine.JREmptyDataSource() :
 new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTypeDetailViews})]]></dataSourceExpression>
