@@ -234,7 +234,8 @@ public class PESQLInbox implements Serializable
                 FacesUtil.redirect(landingPage);
                 return;
             } else {
-                //TODO Show dialog
+                log.debug("onSelectInbox :: LANDING_PAGE_NOT_FOUND");
+                FacesUtil.redirect("/site/inbox.jsf");
             }
 
         } catch (Exception e) {
