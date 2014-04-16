@@ -950,7 +950,7 @@ public class HeaderController implements Serializable {
         } catch (Exception ex){
             log.error("Exception : {}", ex);
             messageHeader = "Exception";
-            message = "Failed" + Util.getMessageException(ex); ;
+            message = "Failed" + Util.getMessageException(ex);
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
     }
