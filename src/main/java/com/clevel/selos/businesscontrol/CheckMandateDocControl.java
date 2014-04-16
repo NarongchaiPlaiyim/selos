@@ -246,7 +246,9 @@ public class CheckMandateDocControl extends BusinessControl{
             mandateDocList = Util.safetyList(mandateDocDAO.findByWorkCasePreScreenIdAndRole(workCasePreScreenId, user.getRole().getId()));
         }
 
-        delete(mandateDocList);
+        if(!Util.isZero(mandateDocList.size())){
+            delete(mandateDocList);
+        }
         mandateDocList = null;
         mandateDocList = Util.safetyList(checkMandateDocTransform.transformToModel(checkMandateDocView, workCaseId, user.getRole()));
         save(mandateDocList);
