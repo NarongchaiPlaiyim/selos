@@ -58,10 +58,10 @@
                                     <table>
                                         <tr>
                                             <td class="title" style="width:200px;">
-                                                <p:outputLabel value="#{msg.get('app.approveType')}" styleClass="center"/>
+                                                <p:outputLabel value="#{msg.get('app.approveType')}#{postCustomerInfoSummary.mandate('approvedType')}" styleClass="center"/>
                                             </td>
                                             <td style="width:200px;">
-                                                <p:selectOneRadio disabled="true" value="#{accountInfo.approveType}">
+                                                <p:selectOneRadio disabled="#{postCustomerInfoSummary.isDisabled('approvedType')}" value="#{accountInfo.approveType}">
                                                 	<f:selectItems value="#{enumGeneralControl.approveTypes}" var="approveType"
                                                 		itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}" 
                                                 		/>
@@ -225,6 +225,7 @@
 			                                        action="#{postCustomerInfoSummary.onClickLink()}"
 			                                        onstart="p_loading_dialog.show()"
 			                                        process="@this"
+			                                        disabled="#{postCustomerInfoSummary.isDisabledGroup(group,'actionList')}"
 			                                        >
 			                                        <f:setPropertyActionListener value="#{item}" target="#{postCustomerInfoSummary.selectedCustomer}"/>
 			                                    </p:commandButton>

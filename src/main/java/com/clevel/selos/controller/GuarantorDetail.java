@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -20,9 +22,12 @@ import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.GuarantorDetailControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.model.view.GuarantorInfoFullView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -44,6 +49,7 @@ public class GuarantorDetail implements Serializable {
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
+	private long stageId = -1;
 	private long guarantorId = -1;
 	private BasicInfoView basicInfoView;
 	
@@ -68,6 +74,9 @@ public class GuarantorDetail implements Serializable {
 		else
 			return basicInfoView.getApproveType();
 	}
+	public void setApproveType(ApproveType type) {
+		//DO NOTHING
+	}
 	public String getMinDate() {
 		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
 		return dFmt.format(new Date());
@@ -87,9 +96,11 @@ public class GuarantorDetail implements Serializable {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+			stageId = Util.parseLong(session.getAttribute("stageId"), -1);
 		}
 		Map<String,Object> params =  FacesUtil.getParamMapFromFlash("guarantorParams");
 		guarantorId = Util.parseLong(params.get("guarantorId"),-1);
+		_loadFieldControl();
 		_loadInitData();
 	}
 	
@@ -100,8 +111,7 @@ public class GuarantorDetail implements Serializable {
 		
 		String redirectPage = null;
 		if (workCaseId > 0) {
-			//TODO Validate step 
-			if (stepId <= 0) {
+			if (stepId <= 0 || stageId != 301) {
 				redirectPage = "/site/inbox.jsf";
 			} else {
 				if (guarantorId <= 0) {
@@ -117,7 +127,8 @@ public class GuarantorDetail implements Serializable {
 				redirectPage = "/site/inbox.jsf";
 			}
 			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-			ec.redirect(ec.getRequestContextPath()+redirectPage);
+			if (!ec.isResponseCommitted())
+				ec.redirect(ec.getRequestContextPath()+redirectPage);
 		} catch (IOException e) {
 			log.error("Fail to redirect screen to "+redirectPage,e);
 		}
@@ -140,6 +151,10 @@ public class GuarantorDetail implements Serializable {
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
+	public void onCancelGuarantor() {
+		_loadInitData();
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
 	
 	/*
 	 * Private method
@@ -155,10 +170,38 @@ public class GuarantorDetail implements Serializable {
 			String redirectPage = "/site/mortgageSummary.jsf";
 			try {
 				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-				ec.redirect(ec.getRequestContextPath()+redirectPage);
+				if (!ec.isResponseCommitted())
+					ec.redirect(ec.getRequestContextPath()+redirectPage);
 			} catch (IOException e) {
 				log.error("Fail to redirect screen to "+redirectPage,e);
 			}
 		}
+	}
+	
+	/*
+	 * Mandate and read-only
+	 */
+	@Inject MandatoryFieldsControl mandatoryFieldsControl;
+	private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
+	private void _loadFieldControl() {
+		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.GuarantorDetail);
+		fieldMap.clear();
+		for (FieldsControlView field : fields) {
+			fieldMap.put(field.getFieldName(), field);
+		}
+	}
+	public String mandate(String name) {
+		boolean isMandate = FieldsControlView.DEFAULT_MANDATE;
+		FieldsControlView field = fieldMap.get(name);
+		if (field != null)
+			isMandate = field.isMandate();
+		return isMandate ? " *" : "";
+	}
+	
+	public boolean isDisabled(String name) {
+		FieldsControlView field = fieldMap.get(name);
+		if (field == null)
+			return FieldsControlView.DEFAULT_READONLY;
+		return field.isReadOnly();
 	}
 }
