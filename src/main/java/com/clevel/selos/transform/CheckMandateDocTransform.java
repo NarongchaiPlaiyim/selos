@@ -2,7 +2,7 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.working.MandateDocDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.model.DocMandateType;
 import com.clevel.selos.model.db.master.Role;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class CheckMandateDocTransform extends Transform {
     @Inject
-    @NCB
+    @SELOS
     private Logger log;
     @Inject
     @Config(name = "interface.workplace.address")

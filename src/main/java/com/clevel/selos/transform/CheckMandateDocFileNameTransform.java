@@ -1,7 +1,6 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.working.MandateDocFileNameDAO;
-import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.MandateDoc;
 import com.clevel.selos.model.db.working.MandateDocFileName;
@@ -15,7 +14,7 @@ import java.util.List;
 
 public class CheckMandateDocFileNameTransform extends Transform {
     @Inject
-    @NCB
+    @@SELOS
     private Logger log;
     @Inject
     private MandateDocFileNameDAO mandateDocFileNameDAO;

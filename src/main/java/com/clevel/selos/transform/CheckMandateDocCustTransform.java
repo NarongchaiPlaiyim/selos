@@ -1,13 +1,11 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.working.MandateDocCustDAO;
-import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.MandateDoc;
 import com.clevel.selos.model.db.working.MandateDocCust;
 import com.clevel.selos.model.view.CustomerInfoSimpleView;
 import com.clevel.selos.model.view.MandateDocCustView;
-import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -16,7 +14,7 @@ import java.util.List;
 
 public class CheckMandateDocCustTransform extends Transform {
     @Inject
-    @NCB
+    @@SELOS
     private Logger log;
     @Inject
     private MandateDocCustDAO mandateDocCustDAO;

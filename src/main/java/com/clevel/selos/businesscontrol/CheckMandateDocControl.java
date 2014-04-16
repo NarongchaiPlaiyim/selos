@@ -107,7 +107,6 @@ public class CheckMandateDocControl extends BusinessControl{
         mandateDocResponseView = null;
     }
 
-
     public CheckMandateDocView getMandateDocViewByChecker(final long workCasePreScreenId) throws Exception{
         log.debug("-- getMandateDocViewByChecker WorkCasePreScreenId : {}", workCasePreScreenId);
         listECMDetailMap = callECMByWorkCasePreScreenId(workCasePreScreenId);
@@ -121,7 +120,7 @@ public class CheckMandateDocControl extends BusinessControl{
             roleName = user.getRole().getName();
             log.debug("-- User.id[{}]", user.getId());
             log.debug("-- User.Role[{}]", roleName);
-            mandateDocList = getMandateDocByWorkCasePreScreenIdAndRoleId(workCasePreScreenId, roleId);
+            mandateDocList = Util.safetyList(getMandateDocByWorkCasePreScreenIdAndRoleId(workCasePreScreenId, roleId));
         }
 
         if(!Util.isNull(mandateDocViewMap) && !Util.isNull(listECMDetailMap)){
@@ -137,6 +136,12 @@ public class CheckMandateDocControl extends BusinessControl{
         } else {
             log.debug("-- MandateDocViewMap is {} and ListECMDetailMap is {}", mandateDocViewMap, listECMDetailMap);
         }
+
+        log.debug("-- MandateDocList.size()[{}]", mandateDocList.size());
+        if(!Util.isZero(mandateDocList.size())){
+            checkMandateDocView = compareToCheckMandateDocView(checkMandateDocView, mandateDocList);
+        }
+
         return setReadOnlyByRole(checkMandateDocView, roleName);
     }
     public CheckMandateDocView getMandateDocViewByMaker(final long workCasePreScreenId) throws Exception{
@@ -152,7 +157,7 @@ public class CheckMandateDocControl extends BusinessControl{
             roleName = user.getRole().getName();
             log.debug("-- User.id[{}]", user.getId());
             log.debug("-- User.Role[{}]", roleName);
-            mandateDocList = getMandateDocByWorkCasePreScreenIdAndRoleId(workCasePreScreenId, roleId);
+            mandateDocList = Util.safetyList(getMandateDocByWorkCasePreScreenIdAndRoleId(workCasePreScreenId, roleId));
         }
 
         if(!Util.isNull(mandateDocViewMap) && !Util.isNull(listECMDetailMap)){
@@ -168,6 +173,12 @@ public class CheckMandateDocControl extends BusinessControl{
         } else {
             log.debug("-- MandateDocViewMap is {} and ListECMDetailMap is {}", mandateDocViewMap, listECMDetailMap);
         }
+
+        log.debug("-- MandateDocList.size()[{}]", mandateDocList.size());
+        if(!Util.isZero(mandateDocList.size())){
+            checkMandateDocView = compareToCheckMandateDocView(checkMandateDocView, mandateDocList);
+        }
+
         return setReadOnlyByRole(checkMandateDocView, roleName);
     }
     public CheckMandateDocView getMandateDocViewByFullApp(final long workCaseId) throws Exception{
@@ -183,6 +194,8 @@ public class CheckMandateDocControl extends BusinessControl{
             roleId = user.getRole().getId();
             roleName = user.getRole().getName();
             log.debug("-- User.Role.id[{}]", roleId);
+            mandateDocList = Util.safetyList(getMandateDocByWorkCaseIdAndRoleId(workCaseId, roleId));
+
             if( SYSTEM.equalsIgnoreCase(user.getRole().getName())       ||
                     ISA.equalsIgnoreCase(user.getRole().getName())      ||
                     ZM.equalsIgnoreCase(user.getRole().getName())       ||
@@ -196,8 +209,9 @@ public class CheckMandateDocControl extends BusinessControl{
                 log.debug("-- {} Role[read]", user.getRole().getName());
                 return getObjectFromDB(workCaseId, roleId);
             }
+
         }
-        mandateDocList = getMandateDocByWorkCaseIdAndRoleId(workCaseId, roleId);
+
         if(!Util.isNull(mandateDocViewMap) && !Util.isNull(listECMDetailMap)){
             getToken();
             log.debug("-- UserToken = {}", userToken);
@@ -211,8 +225,16 @@ public class CheckMandateDocControl extends BusinessControl{
         } else {
             log.debug("-- MandateDocViewMap is {} and ListECMDetailMap is {}", mandateDocViewMap, listECMDetailMap);
         }
+
+        log.debug("-- MandateDocList.size()[{}]", mandateDocList.size());
+        if(!Util.isZero(mandateDocList.size())){
+            checkMandateDocView = compareToCheckMandateDocView(checkMandateDocView, mandateDocList);
+        }
+
         return setReadOnlyByRole(checkMandateDocView, roleName);
     }
+
+
 
     public void onSaveMandateDoc(final CheckMandateDocView checkMandateDocView, final long workCaseId, final long workCasePreScreenId){
         List<MandateDoc> mandateDocList = null;
@@ -229,6 +251,9 @@ public class CheckMandateDocControl extends BusinessControl{
         mandateDocList = Util.safetyList(checkMandateDocTransform.transformToModel(checkMandateDocView, workCaseId, user.getRole()));
         save(mandateDocList);
     }
+
+
+
 
     private CheckMandateDocView getObjectFromDB(final long workCaseId,final  int roleId){
         log.debug("-- getObjectFromDB(workCaseId {}, roleId {})", workCaseId, roleId);
@@ -365,57 +390,6 @@ public class CheckMandateDocControl extends BusinessControl{
         }
         return checkMandateDocView;
     }
-
-
-
-
-
-
-    private CheckMandateDocView compareToCheckMandateDocView(final CheckMandateDocView checkMandateDocView ,final List<MandateDoc> mandateDocList){
-        List<CheckMandatoryDocView> mandatoryDocumentsList = null;
-        List<CheckOptionalDocView> optionalDocumentsList = null;
-        List<CheckOtherDocView> otherDocumentsList = null;
-
-        mandatoryDocumentsList = Util.safetyList(checkMandateDocView.getMandatoryDocumentsList());
-        optionalDocumentsList = Util.safetyList(checkMandateDocView.getOptionalDocumentsList());
-        otherDocumentsList = Util.safetyList(checkMandateDocView.getOtherDocumentsList());
-
-        String key = "";
-        pointer :
-        for (MandateDoc mandateDoc : Util.safetyList(mandateDocList)){
-            key = mandateDoc.getEcmDocType();
-            for (CheckMandatoryDocView checkMandatoryDocView : mandatoryDocumentsList){
-                if(key.equals(checkMandatoryDocView.getKey())){
-                    log.debug("-- KEY[{}] Mandatory", key);
-
-                    mandateDocList.remove(mandateDoc);
-                    continue pointer;
-                } else {
-                    continue;
-                }
-            }
-            for (CheckOptionalDocView checkOptionalDocView : optionalDocumentsList){
-                if(key.equals(checkOptionalDocView.getKey())){
-                    log.debug("-- KEY[{}] Optional", key);
-                    mandateDocList.remove(mandateDoc);
-                    continue pointer;
-                } else {
-                    continue;
-                }
-            }
-            for (CheckOtherDocView checkOtherDocView : otherDocumentsList){
-                if(key.equals(checkOtherDocView.getKey())){
-                    log.debug("-- KEY[{}] Other", key);
-                    mandateDocList.remove(mandateDoc);
-                    continue pointer;
-                } else {
-                    continue;
-                }
-            }
-        }
-        return checkMandateDocView;
-    }
-
 
 
 
@@ -607,6 +581,9 @@ public class CheckMandateDocControl extends BusinessControl{
         if(Util.isNull(checkMandateDocView)){
             return checkMandateDocView;
         }
+        if(Util.isNull(role)){
+            return checkMandateDocView;
+        }
         if(ABDM.equalsIgnoreCase(role)){
             //view [ABDM]
             log.debug("-- {} Role[read]", ABDM);
@@ -777,7 +754,111 @@ public class CheckMandateDocControl extends BusinessControl{
         log.debug("-- OtherDocumentsList.size()[{}] added to CheckMandateDocView", otherDocumentsList.size());
         return checkMandateDocView;
     }
+    private CheckMandateDocView compareToCheckMandateDocView(final CheckMandateDocView checkMandateDocView, final List<MandateDoc> mandateDocList){
+        log.debug("-- compareToCheckMandateDocView()");
+        List<CheckMandatoryDocView> mandatoryDocumentsList = null;
+        List<CheckOptionalDocView> optionalDocumentsList = null;
+        List<CheckOtherDocView> otherDocumentsList = null;
 
+        mandatoryDocumentsList = Util.safetyList(checkMandateDocView.getMandatoryDocumentsList());
+        optionalDocumentsList = Util.safetyList(checkMandateDocView.getOptionalDocumentsList());
+        otherDocumentsList = Util.safetyList(checkMandateDocView.getOtherDocumentsList());
+
+        String key = "";
+        pointer :
+        for (MandateDoc mandateDoc : Util.safetyList(mandateDocList)){
+            key = mandateDoc.getEcmDocType();
+            for (CheckMandatoryDocView checkMandatoryDocView : mandatoryDocumentsList){
+                if(key.equals(checkMandatoryDocView.getKey())){
+                    log.debug("-- KEY[{}] Mandatory", key);
+                    if(!Util.isNull(mandateDoc.getReasonIncomplete())){
+                        checkMandatoryDocView.setIncomplete(Util.isTrue(mandateDoc.getReasonIncomplete()));
+                        log.debug("-- CheckMandatoryDocView.Incomplete[{}]", checkMandatoryDocView.isIncomplete());
+                    }
+                    if(!Util.isNull(mandateDoc.getReasonIndistinct())){
+                        checkMandatoryDocView.setIndistinct(Util.isTrue(mandateDoc.getReasonIndistinct()));
+                        log.debug("-- CheckMandatoryDocView.Indistinct[{}]", checkMandatoryDocView.isIndistinct());
+                    }
+                    if(!Util.isNull(mandateDoc.getReasonIncorrect())){
+                        checkMandatoryDocView.setIncorrect(Util.isTrue(mandateDoc.getReasonIncorrect()));
+                        log.debug("-- CheckMandatoryDocView.Incorrect[{}]", checkMandatoryDocView.isIncorrect());
+                    }
+                    if(!Util.isNull(mandateDoc.getReasonExpire())){
+                        checkMandatoryDocView.setExpire(Util.isTrue(mandateDoc.getReasonExpire()));
+                        log.debug("-- CheckMandatoryDocView.Expire[{}]", checkMandatoryDocView.isExpire());
+                    }
+                    if(!Util.isNull(mandateDoc.getRemark())){
+                        checkMandatoryDocView.setRemark(mandateDoc.getRemark());
+                        log.debug("-- CheckMandatoryDocView.Remark[{}]", checkMandatoryDocView.getRemark());
+                    }
+                    mandateDocList.remove(mandateDoc);
+                    continue pointer;
+                } else {
+                    continue;
+                }
+            }
+            for (CheckOptionalDocView checkOptionalDocView : optionalDocumentsList){
+                if(key.equals(checkOptionalDocView.getKey())){
+                    log.debug("-- KEY[{}] Optional", key);
+                    if(!Util.isNull(mandateDoc.getReasonIncomplete())){
+                        checkOptionalDocView.setIncomplete(Util.isTrue(mandateDoc.getReasonIncomplete()));
+                        log.debug("-- CheckOptionalDocView.Incomplete[{}]", checkOptionalDocView.isIncomplete());
+                    }
+                    if(!Util.isNull(mandateDoc.getReasonIndistinct())){
+                        checkOptionalDocView.setIndistinct(Util.isTrue(mandateDoc.getReasonIndistinct()));
+                        log.debug("-- CheckOptionalDocView.Indistinct[{}]", checkOptionalDocView.isIndistinct());
+                    }
+                    if(!Util.isNull(mandateDoc.getReasonIncorrect())){
+                        checkOptionalDocView.setIncorrect(Util.isTrue(mandateDoc.getReasonIncorrect()));
+                        log.debug("-- CheckOptionalDocView.Incorrect[{}]", checkOptionalDocView.isIncorrect());
+                    }
+                    if(!Util.isNull(mandateDoc.getReasonExpire())){
+                        checkOptionalDocView.setExpire(Util.isTrue(mandateDoc.getReasonExpire()));
+                        log.debug("-- CheckOptionalDocView.Expire[{}]", checkOptionalDocView.isExpire());
+                    }
+                    if(!Util.isNull(mandateDoc.getRemark())){
+                        checkOptionalDocView.setRemark(mandateDoc.getRemark());
+                        log.debug("-- CheckOptionalDocView.Remark[{}]", checkOptionalDocView.getRemark());
+                    }
+                    mandateDocList.remove(mandateDoc);
+                    continue pointer;
+                } else {
+                    continue;
+                }
+            }
+            for (CheckOtherDocView checkOtherDocView : otherDocumentsList){
+                if(key.equals(checkOtherDocView.getKey())){
+                    log.debug("-- KEY[{}] Other", key);
+                    log.debug("-- KEY[{}] Optional", key);
+                    if(!Util.isNull(mandateDoc.getReasonIncomplete())){
+                        checkOtherDocView.setIncomplete(Util.isTrue(mandateDoc.getReasonIncomplete()));
+                        log.debug("-- CheckOtherDocView.Incomplete[{}]", checkOtherDocView.isIncomplete());
+                    }
+                    if(!Util.isNull(mandateDoc.getReasonIndistinct())){
+                        checkOtherDocView.setIndistinct(Util.isTrue(mandateDoc.getReasonIndistinct()));
+                        log.debug("-- CheckOtherDocView.Indistinct[{}]", checkOtherDocView.isIndistinct());
+                    }
+                    if(!Util.isNull(mandateDoc.getReasonIncorrect())){
+                        checkOtherDocView.setIncorrect(Util.isTrue(mandateDoc.getReasonIncorrect()));
+                        log.debug("-- CheckOtherDocView.Incorrect[{}]", checkOtherDocView.isIncorrect());
+                    }
+                    if(!Util.isNull(mandateDoc.getReasonExpire())){
+                        checkOtherDocView.setExpire(Util.isTrue(mandateDoc.getReasonExpire()));
+                        log.debug("-- CheckOtherDocView.Expire[{}]", checkOtherDocView.isExpire());
+                    }
+                    if(!Util.isNull(mandateDoc.getRemark())){
+                        checkOtherDocView.setRemark(mandateDoc.getRemark());
+                        log.debug("-- CheckOtherDocView.Remark[{}]", checkOtherDocView.getRemark());
+                    }
+                    mandateDocList.remove(mandateDoc);
+                    continue pointer;
+                } else {
+                    continue;
+                }
+            }
+        }
+        return checkMandateDocView;
+    }
     private String updateToken(String oldUrl){
         String newUrl = null;
         final String PARAM = "document&ut=";
