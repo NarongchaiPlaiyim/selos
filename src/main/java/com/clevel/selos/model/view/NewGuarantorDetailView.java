@@ -139,4 +139,21 @@ public class NewGuarantorDetailView implements Serializable {
     public void setGuarantorCategory(GuarantorCategory guarantorCategory) {
         this.guarantorCategory = guarantorCategory;
     }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("guarantorName", guarantorName).
+                append("tcgLgNo", tcgLgNo).
+                append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount).
+                append("proposeType", proposeType).
+                append("uwDecision", uwDecision).
+                append("guarantorCategory", guarantorCategory).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                toString();
+    }
 }
