@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.ApprovalType;
 import com.clevel.selos.model.DecisionType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -16,6 +17,7 @@ public class ApprovalHistoryView implements Serializable {
     private Date submitDate;
     private String comments;
     private DecisionType uwDecision;
+    private int approvalType;
     private int isSubmit;
 
     public ApprovalHistoryView() {
@@ -87,6 +89,14 @@ public class ApprovalHistoryView implements Serializable {
         this.uwDecision = uwDecision;
     }
 
+    public int getApprovalType() {
+        return approvalType;
+    }
+
+    public void setApprovalType(int approvalType) {
+        this.approvalType = approvalType;
+    }
+
     public int getSubmit() {
         return isSubmit;
     }
@@ -105,6 +115,7 @@ public class ApprovalHistoryView implements Serializable {
                 .append("submitDate", submitDate)
                 .append("comments", comments)
                 .append("uwDecision", uwDecision)
+                .append("approvalType", approvalType)
                 .append("isSubmit", isSubmit)
                 .toString();
     }

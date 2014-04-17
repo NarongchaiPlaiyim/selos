@@ -207,23 +207,36 @@ public class FullApplicationControl extends BusinessControl {
                     approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
                     approvalHistoryEndorsePricing = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.PRICING_APPROVAL.value());
 
-                    if(approvalHistoryEndorseCA==null || approvalHistoryEndorsePricing==null){
-                        throw new Exception("Please make decision before submit.");
-                    } else {
-                        if(approvalHistoryEndorseCA.getApproveDecision()==0 || approvalHistoryEndorsePricing.getApproveDecision()==0){
-                            throw new Exception("Please make decision before submit.");
-                        }
+                    if(approvalHistoryEndorseCA != null){
+                        if(approvalHistoryEndorseCA.getApproveDecision() != DecisionType.NO_DECISION.value()){
+                            zmDecisionFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
+                            approvalHistoryEndorseCA.setSubmit(1);
+                            approvalHistoryEndorseCA.setSubmitDate(new Date());
 
-                        zmDecisionFlag = approvalHistoryEndorseCA.getApproveDecision()==1?"R":"A";
-                        approvalHistoryEndorseCA.setSubmit(1);
-                        approvalHistoryEndorseCA.setSubmitDate(new Date());
-                        if(priceDOALevel>PricingDOAValue.ZM_DOA.value()){
-                            zmPricingRequestFlag = approvalHistoryEndorseCA.getApproveDecision()==1?"R":"E";
+                            if(approvalHistoryEndorsePricing != null){
+                                if(approvalHistoryEndorsePricing.getApproveDecision() != DecisionType.NO_DECISION.value()){
+                                    if(approvalHistoryEndorseCA.getApproveDecision() == DecisionType.REJECTED.value()){
+                                        zmPricingRequestFlag = "NA";
+                                    } else {
+                                        if(priceDOALevel > PricingDOAValue.ZM_DOA.value()){
+                                            zmPricingRequestFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"E":"R";
+                                        } else {
+                                            zmPricingRequestFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
+                                        }
+                                    }
+                                    approvalHistoryEndorsePricing.setSubmit(1);
+                                    approvalHistoryEndorsePricing.setSubmitDate(new Date());
+                                } else {
+                                    throw new Exception("Please make decision ( Endorse Pricing ) before submit.");
+                                }
+                            } else {
+                                throw new Exception("Please make decision ( Endorse Pricing ) before submit.");
+                            }
                         } else {
-                            zmPricingRequestFlag = approvalHistoryEndorseCA.getApproveDecision()==1?"R":"A";
+                            throw new Exception("Please make decision ( Endorse CA ) before submit.");
                         }
-                        approvalHistoryEndorsePricing.setSubmit(1);
-                        approvalHistoryEndorsePricing.setSubmitDate(new Date());
+                    } else {
+                        throw new Exception("Please make decision before submit.");
                     }
                 } else {
                     approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
@@ -234,7 +247,8 @@ public class FullApplicationControl extends BusinessControl {
                             throw new Exception("Please make decision before submit.");
                         }
 
-                        zmDecisionFlag = approvalHistoryEndorseCA.getApproveDecision()==1?"R":"A";
+                        zmDecisionFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
+                        zmPricingRequestFlag = "NA";
                         approvalHistoryEndorseCA.setSubmit(1);
                         approvalHistoryEndorseCA.setSubmitDate(new Date());
                     }
@@ -269,11 +283,11 @@ public class FullApplicationControl extends BusinessControl {
                     if(approvalHistoryEndorsePricing==null){
                         throw new Exception("Please make decision before submit.");
                     } else {
-                        if(approvalHistoryEndorsePricing.getApproveDecision() != RadioValue.NOT_SELECTED.value()){
+                        if(approvalHistoryEndorsePricing.getApproveDecision() != DecisionType.NO_DECISION.value()){
                             if(priceDOALevel>PricingDOAValue.RGM_DOA.value()){
-                                rgmDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"E";
+                                rgmDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision() == DecisionType.APPROVED.value()?"E":"R";
                             } else {
-                                rgmDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"A";
+                                rgmDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
                             }
                             approvalHistoryEndorsePricing.setSubmit(1);
                             approvalHistoryEndorsePricing.setSubmitDate(new Date());
