@@ -54,7 +54,7 @@
                 <!--Check PreScreen (BRMS)-->
                 <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkPreScreen')}"
                                  rendered="#{headerController.checkButton('Check Prescreen') and not headerController.requestAppraisalPage}"
-                                 update=":frmMain:msgBoxBaseMessagePanel"
+                                 update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxMandateMessagePanel"
                                  actionListener="#{headerController.onCheckPreScreen}">
                 </p:commandButton>
                 <!--Request Appraisal Prescreen-->
@@ -149,7 +149,7 @@
                 </p:commandButton>
                 <!--Request Appraisal Fullapp-->
                 <p:commandButton id="btnReqApprFullapp" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
-                                 rendered="#{headerController.checkButton('Request Appraisal')}"
+                                 rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
                                  process="@this"
                                  actionListener="#{headerController.onOpenRequestAppraisal()}"
                                  update=":frmMain:reqApprDialogPanel"
@@ -372,6 +372,19 @@
                              process="@this"
                              oncomplete="msgBoxBaseMessageDlg.hide()"/>
         </p:confirmDialog>
+    </p:panel>
+
+    <p:panel id="msgBoxMandateMessagePanel" styleClass="panel">
+        <p:dialog id="msgBoxMandateMessageDialog" widgetVar="msgBoxMandateMessageDlg" styleClass="messageDialog"
+                         header="#{headerController.messageHeader}" width="800" closable="false" modal="true">
+            <f:facet name="message">
+                <h:outputText value="#{headerController.message}" escape="false"/>
+            </f:facet>
+            <ui:include src="/site/dialog/mandateFieldDialog.xhtml"/>
+            <p:commandButton value="OK"
+                             process="@this"
+                             oncomplete="msgBoxMandateMessageDlg.hide()"/>
+        </p:dialog>
     </p:panel>
 
     <p:panel id="msgBoxBaseRedirectPanel" styleClass="panel">

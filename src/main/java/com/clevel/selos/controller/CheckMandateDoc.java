@@ -1,7 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CheckMandateDocControl;
-import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.CheckMandateDocView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -18,7 +18,7 @@ import java.io.Serializable;
 @ManagedBean(name = "checkMandateDoc")
 public class CheckMandateDoc implements Serializable {
     @Inject
-    @NCB
+    @SELOS
     private Logger log;
     @Inject
     @NormalMessage

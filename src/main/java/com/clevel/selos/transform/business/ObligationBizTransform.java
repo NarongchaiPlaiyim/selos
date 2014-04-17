@@ -595,7 +595,8 @@ public class ObligationBizTransform extends BusinessTransform {
             return null;
 
         CustomerOblAccountInfoView customerOblAccountInfo = new CustomerOblAccountInfoView();
-        boolean accountActiveFlag = false;
+        boolean accountActiveFlag = true;
+
         /*if("04".equals(obligation.getDataSource())){
             int compareResult = BigDecimal.ZERO.compareTo(obligation.getOutstanding());
             if(compareResult < 0){
