@@ -155,7 +155,8 @@ public class Decision extends BaseController {
     // User Role
     private boolean roleBDM;
     private boolean roleZM_RGM;
-    private boolean roleUW;    
+    private boolean roleUW;
+    private
 
     // Mode
     enum ModeForButton {

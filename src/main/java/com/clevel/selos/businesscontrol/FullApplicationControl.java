@@ -7,10 +7,7 @@ import com.clevel.selos.dao.relation.RelTeamUserDetailsDAO;
 import com.clevel.selos.dao.relation.UserToAuthorizationDOADAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ActionCode;
-import com.clevel.selos.model.ApprovalType;
-import com.clevel.selos.model.PricingDOAValue;
-import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.UserToAuthorizationDOA;
 import com.clevel.selos.model.db.working.*;
@@ -195,8 +192,8 @@ public class FullApplicationControl extends BusinessControl {
         BigDecimal totalRetail = BigDecimal.ZERO; //TODO
         String resultCode = "G"; //TODO
         String deviationCode = ""; //TODO
-        int requestType = 1; //TEMPORARY
-        /*int requestType = 0;
+        //int requestType = 1; //TEMPORARY
+        int requestType = 0;
         ApprovalHistory approvalHistoryEndorseCA = null;
         ApprovalHistory approvalHistoryEndorsePricing = null;
         boolean isPricingRequest = false;
@@ -207,8 +204,8 @@ public class FullApplicationControl extends BusinessControl {
             if(workCase.getProductGroup()!=null){
                 requestType = workCase.getRequestType().getId();
                 if(isPricingRequest){
-                    approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserAndApproveTypeForZMSubmit(workCaseId,getCurrentUser(),1);
-                    approvalHistoryEndorsePricing = approvalHistoryDAO.findByWorkCaseAndUserAndApproveTypeForZMSubmit(workCaseId,getCurrentUser(),2);
+                    approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
+                    approvalHistoryEndorsePricing = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.PRICING_APPROVAL.value());
 
                     if(approvalHistoryEndorseCA==null || approvalHistoryEndorsePricing==null){
                         throw new Exception("Please make decision before submit.");
@@ -229,7 +226,7 @@ public class FullApplicationControl extends BusinessControl {
                         approvalHistoryEndorsePricing.setSubmitDate(new Date());
                     }
                 } else {
-                    approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserAndApproveTypeForZMSubmit(workCaseId,getCurrentUser(),1);
+                    approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
                     if(approvalHistoryEndorseCA==null){
                         throw new Exception("Please make decision before submit.");
                     } else {
@@ -247,19 +244,19 @@ public class FullApplicationControl extends BusinessControl {
 
         if(!Util.isEmpty(resultCode) && resultCode.trim().equalsIgnoreCase("R")){
             deviationCode = "AD"; //TODO:
-        }*/
+        }
 
         bpmExecutor.submitRM(workCaseId, queueName, zmDecisionFlag, zmPricingRequestFlag, totalCommercial, totalRetail, resultCode, deviationCode, requestType, ActionCode.SUBMIT_CA.getVal());
 
-        /*approvalHistoryDAO.persist(approvalHistoryEndorseCA);
+        approvalHistoryDAO.persist(approvalHistoryEndorseCA);
         if(isPricingRequest){
             approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
-        }*/
+        }
     }
 
     public void submitToGH(String queueName, long workCaseId) throws Exception {
         String rgmDecisionFlag = "E"; //TODO
-        /*WorkCase workCase;
+        WorkCase workCase;
         ApprovalHistory approvalHistoryEndorsePricing = null;
 
         if(Long.toString(workCaseId) != null && workCaseId != 0){
@@ -267,31 +264,35 @@ public class FullApplicationControl extends BusinessControl {
             int priceDOALevel = workCase.getPricingDoaLevel();
             if(workCase.getProductGroup()!=null){
                 if(Util.isTrue(workCase.getRequestPricing())){
-                    approvalHistoryEndorsePricing = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId,getCurrentUser());
+                    approvalHistoryEndorsePricing = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.PRICING_APPROVAL.value());
 
                     if(approvalHistoryEndorsePricing==null){
                         throw new Exception("Please make decision before submit.");
                     } else {
-                        if(priceDOALevel>PricingDOAValue.RGM_DOA.value()){
-                            rgmDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"E";
+                        if(approvalHistoryEndorsePricing.getApproveDecision() != RadioValue.NOT_SELECTED.value()){
+                            if(priceDOALevel>PricingDOAValue.RGM_DOA.value()){
+                                rgmDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"E";
+                            } else {
+                                rgmDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"A";
+                            }
+                            approvalHistoryEndorsePricing.setSubmit(1);
+                            approvalHistoryEndorsePricing.setSubmitDate(new Date());
                         } else {
-                            rgmDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"A";
+                            throw new Exception("Please make decision before submit.");
                         }
-                        approvalHistoryEndorsePricing.setSubmit(1);
-                        approvalHistoryEndorsePricing.setSubmitDate(new Date());
                     }
                 }
             }
-        }*/
+        }
 
         bpmExecutor.submitGH(workCaseId, queueName, rgmDecisionFlag, ActionCode.SUBMIT_CA.getVal());
 
-        //approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
+        approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
     }
 
     public void submitToCSSO(String queueName, long workCaseId) throws Exception {
         String ghDecisionFlag = "E"; //TODO
-        /*WorkCase workCase;
+        WorkCase workCase;
         ApprovalHistory approvalHistoryEndorsePricing = null;
 
         if(Long.toString(workCaseId) != null && workCaseId != 0){
@@ -299,53 +300,61 @@ public class FullApplicationControl extends BusinessControl {
             int priceDOALevel = workCase.getPricingDoaLevel();
             if(workCase.getProductGroup()!=null){
                 if(Util.isTrue(workCase.getRequestPricing())){
-                    approvalHistoryEndorsePricing = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId,getCurrentUser());
+                    approvalHistoryEndorsePricing = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.PRICING_APPROVAL.value());
 
                     if(approvalHistoryEndorsePricing==null){
                         throw new Exception("Please make decision before submit.");
                     } else {
-                        if(priceDOALevel>PricingDOAValue.GH_DOA.value()){
-                            ghDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"E";
+                        if(approvalHistoryEndorsePricing.getApproveDecision() != RadioValue.NOT_SELECTED.value()){
+                            if(priceDOALevel>PricingDOAValue.GH_DOA.value()){
+                                ghDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"E";
+                            } else {
+                                ghDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"A";
+                            }
+                            approvalHistoryEndorsePricing.setSubmit(1);
+                            approvalHistoryEndorsePricing.setSubmitDate(new Date());
                         } else {
-                            ghDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"A";
+                            throw new Exception("Please make decision before submit.");
                         }
-                        approvalHistoryEndorsePricing.setSubmit(1);
-                        approvalHistoryEndorsePricing.setSubmitDate(new Date());
                     }
                 }
             }
-        }*/
+        }
 
         bpmExecutor.submitCSSO(workCaseId, queueName, ghDecisionFlag, ActionCode.SUBMIT_CA.getVal());
 
-        //approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
+        approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
     }
 
     public void submitToUWFromCSSO(String queueName, long workCaseId) throws Exception {
         String cssoDecisionFlag = "A"; //TODO
-        /*WorkCase workCase;
+        WorkCase workCase;
         ApprovalHistory approvalHistoryEndorsePricing = null;
 
         if(Long.toString(workCaseId) != null && workCaseId != 0){
             workCase = workCaseDAO.findById(workCaseId);
             if(workCase.getProductGroup()!=null){
                 if(Util.isTrue(workCase.getRequestPricing())){
-                    approvalHistoryEndorsePricing = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId,getCurrentUser());
+                    approvalHistoryEndorsePricing = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.PRICING_APPROVAL.value());
 
                     if(approvalHistoryEndorsePricing==null){
                         throw new Exception("Please make decision before submit.");
                     } else {
-                        cssoDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"A";
-                        approvalHistoryEndorsePricing.setSubmit(1);
-                        approvalHistoryEndorsePricing.setSubmitDate(new Date());
+                        if(approvalHistoryEndorsePricing.getApproveDecision() != 0){
+                            cssoDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"A";
+                            approvalHistoryEndorsePricing.setSubmit(1);
+                            approvalHistoryEndorsePricing.setSubmitDate(new Date());
+                        } else {
+                            throw new Exception("Please make decision before submit.");
+                        }
                     }
                 }
             }
-        }*/
+        }
 
         bpmExecutor.submitUWFromCSSO(workCaseId, queueName, cssoDecisionFlag, ActionCode.SUBMIT_CA.getVal());
 
-        //approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
+        approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
     }
 
     public void submitToUWFromZM(String queueName, long workCaseId) throws Exception {
@@ -357,14 +366,18 @@ public class FullApplicationControl extends BusinessControl {
             workCase = workCaseDAO.findById(workCaseId);
             if(workCase.getProductGroup()!=null){
                 if(Util.isTrue(workCase.getRequestPricing())){
-                    approvalHistoryEndorsePricing = approvalHistoryDAO.findByWorkCaseAndUserAndApproveTypeForZMSubmit(workCaseId,getCurrentUser(),3);
+                    approvalHistoryEndorsePricing = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId,getCurrentUser(),ApprovalType.PRICING_APPROVAL_FINAL.value());
 
                     if(approvalHistoryEndorsePricing==null){
                         throw new Exception("Please make decision before submit.");
                     } else {
-                        zmDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"A";
-                        approvalHistoryEndorsePricing.setSubmit(1);
-                        approvalHistoryEndorsePricing.setSubmitDate(new Date());
+                        if(approvalHistoryEndorsePricing.getApproveDecision() != 0){
+                            zmDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"A";
+                            approvalHistoryEndorsePricing.setSubmit(1);
+                            approvalHistoryEndorsePricing.setSubmitDate(new Date());
+                        } else {
+                            throw new Exception("Please make decision before submit.");
+                        }
                     }
                 }
             }
