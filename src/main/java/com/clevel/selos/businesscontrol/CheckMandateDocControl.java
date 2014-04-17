@@ -138,10 +138,11 @@ public class CheckMandateDocControl extends BusinessControl{
         }
 
         log.debug("-- MandateDocList.size()[{}]", mandateDocList.size());
-        if(!Util.isZero(mandateDocList.size())){
+        if(!Util.isZero(mandateDocList.size()) && !Util.isNull(mandateDocViewMap) || !Util.isNull(listECMDetailMap)){
             checkMandateDocView = compareToCheckMandateDocView(checkMandateDocView, mandateDocList);
+        } else if(!Util.isZero(mandateDocList.size()) && Util.isNull(mandateDocViewMap) && !Util.isNull(listECMDetailMap)){
+            checkMandateDocView = createCheckMandateDocViewByDB();
         }
-
         return setReadOnlyByRole(checkMandateDocView, roleName);
     }
     public CheckMandateDocView getMandateDocViewByMaker(final long workCasePreScreenId) throws Exception{
@@ -175,10 +176,11 @@ public class CheckMandateDocControl extends BusinessControl{
         }
 
         log.debug("-- MandateDocList.size()[{}]", mandateDocList.size());
-        if(!Util.isZero(mandateDocList.size())){
+        if(!Util.isZero(mandateDocList.size()) && !Util.isNull(mandateDocViewMap) || !Util.isNull(listECMDetailMap)){
             checkMandateDocView = compareToCheckMandateDocView(checkMandateDocView, mandateDocList);
+        } else if(!Util.isZero(mandateDocList.size()) && Util.isNull(mandateDocViewMap) && !Util.isNull(listECMDetailMap)){
+            checkMandateDocView = createCheckMandateDocViewByDB();
         }
-
         return setReadOnlyByRole(checkMandateDocView, roleName);
     }
     public CheckMandateDocView getMandateDocViewByFullApp(final long workCaseId) throws Exception{
@@ -209,7 +211,6 @@ public class CheckMandateDocControl extends BusinessControl{
                 log.debug("-- {} Role[read]", user.getRole().getName());
                 return getObjectFromDB(workCaseId, roleId);
             }
-
         }
 
         getToken();
@@ -227,10 +228,11 @@ public class CheckMandateDocControl extends BusinessControl{
         }
 
         log.debug("-- MandateDocList.size()[{}]", mandateDocList.size());
-        if(!Util.isZero(mandateDocList.size())){
+        if(!Util.isZero(mandateDocList.size()) && !Util.isNull(mandateDocViewMap) || !Util.isNull(listECMDetailMap)){
             checkMandateDocView = compareToCheckMandateDocView(checkMandateDocView, mandateDocList);
+        } else if(!Util.isZero(mandateDocList.size()) && Util.isNull(mandateDocViewMap) && !Util.isNull(listECMDetailMap)){
+            checkMandateDocView = createCheckMandateDocViewByDB();
         }
-
         return setReadOnlyByRole(checkMandateDocView, roleName);
     }
 
@@ -253,10 +255,6 @@ public class CheckMandateDocControl extends BusinessControl{
         mandateDocList = Util.safetyList(checkMandateDocTransform.transformToModel(checkMandateDocView, workCaseId, user.getRole()));
         save(mandateDocList);
     }
-
-
-
-
     private CheckMandateDocView getObjectFromDB(final long workCaseId,final  int roleId){
         log.debug("-- getObjectFromDB(workCaseId {}, roleId {})", workCaseId, roleId);
         checkMandateDocView = new CheckMandateDocView();
@@ -392,6 +390,10 @@ public class CheckMandateDocControl extends BusinessControl{
         }
         return checkMandateDocView;
     }
+
+
+
+
 
 
 
@@ -579,6 +581,38 @@ public class CheckMandateDocControl extends BusinessControl{
         log.debug("-- OtherDocumentsList.size()[{}] added to CheckMandateDocView", otherDocumentsList.size());
         return checkMandateDocView;
     }
+    private CheckMandateDocView createCheckMandateDocViewByDB(){
+        log.debug("-- got data from DB");
+        CheckMandateDocView checkMandateDocView = new CheckMandateDocView();
+        List<CheckMandatoryDocView> mandatoryDocumentsList = new ArrayList<CheckMandatoryDocView>();
+        List<CheckOptionalDocView> optionalDocumentsList = new ArrayList<CheckOptionalDocView>();
+        List<CheckOtherDocView> otherDocumentsList = new ArrayList<CheckOtherDocView>();
+        getToken();
+        log.debug("-- UserToken[{}]", userToken);
+        mandatoryDocumentsList = checkMandateDocView.getMandatoryDocumentsList();
+        for(CheckMandatoryDocView view : mandatoryDocumentsList){
+            List<MandateDocFileNameView> fileNameViewList = Util.safetyList(view.getFileNameViewList());
+            for(MandateDocFileNameView fileNameView : fileNameViewList){
+                fileNameView.setUrl(updateToken(fileNameView.getUrl()));
+            }
+        }
+        optionalDocumentsList = checkMandateDocView.getOptionalDocumentsList();
+        for(CheckOptionalDocView view : optionalDocumentsList){
+            List<MandateDocFileNameView> fileNameViewList = Util.safetyList(view.getFileNameViewList());
+            for(MandateDocFileNameView fileNameView : fileNameViewList){
+                fileNameView.setUrl(updateToken(fileNameView.getUrl()));
+            }
+        }
+        otherDocumentsList = checkMandateDocView.getOtherDocumentsList();
+        for(CheckOtherDocView view : otherDocumentsList){
+            List<MandateDocFileNameView> fileNameViewList = Util.safetyList(view.getFileNameViewList());
+            for(MandateDocFileNameView fileNameView : fileNameViewList){
+                fileNameView.setUrl(updateToken(fileNameView.getUrl()));
+            }
+        }
+        checkMandateDocView = checkMandateDocTransform.transformToView(mandateDocList);
+        return checkMandateDocView;
+    }
     private CheckMandateDocView setReadOnlyByRole(final CheckMandateDocView checkMandateDocView, final String role){
         if(Util.isNull(checkMandateDocView)){
             return checkMandateDocView;
@@ -758,6 +792,8 @@ public class CheckMandateDocControl extends BusinessControl{
     }
     private CheckMandateDocView compareToCheckMandateDocView(final CheckMandateDocView checkMandateDocView, final List<MandateDoc> mandateDocList){
         log.debug("-- compareToCheckMandateDocView()");
+
+
         List<CheckMandatoryDocView> mandatoryDocumentsList = null;
         List<CheckOptionalDocView> optionalDocumentsList = null;
         List<CheckOtherDocView> otherDocumentsList = null;
