@@ -156,7 +156,8 @@ public class Decision extends BaseController {
     private boolean roleBDM;
     private boolean roleZM_RGM;
     private boolean roleUW;
-    private
+    private int roleId;
+    private RoleValue roleValue;
 
     // Mode
     enum ModeForButton {
@@ -264,7 +265,7 @@ public class Decision extends BaseController {
         stepId = getCurrentStep(session);
 
         //Set role for UI
-        int roleId = decisionControl.getUserRoleId();
+        roleId = decisionControl.getUserRoleId();
         if (RoleValue.ABDM.id() == roleId || RoleValue.BDM.id() == roleId) {
             roleBDM = true;
         } else if (RoleValue.UW.id() == roleId) {
@@ -1291,15 +1292,16 @@ public class Decision extends BaseController {
                 // Save Total Approve to Decision
                 decisionControl.saveDecision(decisionView, workCase);
 
-                if(decisionDialog){
-                    // Save Approval History
-                    approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
-                    if(requestPricing){
-                        // Save Approval History Pricing
-                        approvalHistoryPricingView = decisionControl.saveApprovalHistoryPricing(approvalHistoryPricingView, workCase);
-                    }
-                }
                 exSummaryControl.calForDecision(workCaseId);
+            }
+
+            if(decisionDialog){
+                // Save Approval History
+                approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
+                if(requestPricing){
+                    // Save Approval History Pricing
+                    approvalHistoryPricingView = decisionControl.saveApprovalHistoryPricing(approvalHistoryPricingView, workCase);
+                }
             }
 
             messageHeader = msg.get("app.messageHeader.info");
@@ -2007,5 +2009,21 @@ public class Decision extends BaseController {
 
     public void setDecisionDialog(boolean decisionDialog) {
         this.decisionDialog = decisionDialog;
+    }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public RoleValue getRoleValue() {
+        return roleValue;
+    }
+
+    public void setRoleValue(RoleValue roleValue) {
+        this.roleValue = roleValue;
     }
 }
