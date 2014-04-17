@@ -227,7 +227,7 @@ public class BRMSControl extends BusinessControl {
         return applicationInfo;
     }
 
-    public UWRuleResponseView getPrescreenResult(long workcasePrescreenId) throws Exception{
+    public UWRuleResponseView getPrescreenResult(long workcasePrescreenId, long actionId) throws Exception{
         logger.debug("getPrescreenReult from workcasePrescreenId {}", workcasePrescreenId);
         Date checkDate = Calendar.getInstance().getTime();
         logger.debug("check at date {}", checkDate);
@@ -236,7 +236,7 @@ public class BRMSControl extends BusinessControl {
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workcasePrescreenId);
         Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workcasePrescreenId);
 
-        actionValidationControl.loadActionValidation(workCasePrescreen.getStep().getId(), 1006);
+        actionValidationControl.loadActionValidation(workCasePrescreen.getStep().getId(), actionId);
         logger.info("-- load Action Validation");
         actionValidationControl.validate(workCasePrescreen);
         actionValidationControl.validate(prescreen);
@@ -264,8 +264,8 @@ public class BRMSControl extends BusinessControl {
 
         BigDecimal borrowerGroupIncome = BigDecimal.ZERO;
 
-        boolean appExistingSMECustomer = Boolean.TRUE;
         List<Customer> customerList = customerDAO.findByWorkCasePreScreenId(workcasePrescreenId);
+        actionValidationControl.validate(customerList);
         List<BRMSCustomerInfo> customerInfoList = new ArrayList<BRMSCustomerInfo>();
         for(Customer customer : customerList) {
             if(customer.getRelation().getId() == RelationValue.BORROWER.value()){

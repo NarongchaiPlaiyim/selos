@@ -155,6 +155,7 @@ public class HeaderController implements Serializable {
 
     private String messageHeader;
     private String message;
+    private List<MandateFieldMessageView> mandateFieldMessageViewList;
 
     //UW submit dialog
     private List<User> uw2UserList;
@@ -794,7 +795,7 @@ public class HeaderController implements Serializable {
         if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             try{
-                UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePreScreenId);
+                UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePreScreenId, 1006);
                 log.info("onCheckPreScreen uwRulesResponse : {}", uwRuleResponseView);
                 if(uwRuleResponseView != null){
                     if(uwRuleResponseView.getActionResult().equals(ActionResult.SUCCESS)){
@@ -807,28 +808,32 @@ public class HeaderController implements Serializable {
                             log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                             messageHeader = "Exception.";
                             message = Util.getMessageException(ex);
-                            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
                         }
                         messageHeader = "Information.";
                         message = "Request for Check Pre-Screen success";
-                        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
                     }else {
                         messageHeader = "Exception.";
                         message = uwRuleResponseView.getReason();
-                        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                        mandateFieldMessageViewList = uwRuleResponseView.getMandateFieldMessageViewList();
                     }
                 } else {
                     uwRuleResultControl.saveNewUWRuleResult(uwRuleResponseView.getUwRuleResultSummaryView());
                     messageHeader = "Information.";
-                    message = "No. I'm";
-                    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                    message = "There is no data returned from getPrescreen. Please contact system administrator";
                 }
             } catch (Exception ex){
                 log.error("Exception while getPrescreenResult : ", ex);
                 messageHeader = "Exception.";
                 message = Util.getMessageException(ex);
-                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
             }
+
+            if(mandateFieldMessageViewList == null || mandateFieldMessageViewList.size() == 0)
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            else
+                RequestContext.getCurrentInstance().execute("msgBoxMandateMessageDlg.show()");
+
+
 
         }
     }
@@ -1737,5 +1742,9 @@ public class HeaderController implements Serializable {
 
     public void setSelectedUW2User(String selectedUW2User) {
         this.selectedUW2User = selectedUW2User;
+    }
+
+    public List<MandateFieldMessageView> getMandateFieldMessageViewList() {
+        return mandateFieldMessageViewList;
     }
 }
