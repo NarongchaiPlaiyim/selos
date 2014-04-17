@@ -27,6 +27,19 @@ public enum Screen {
     PledgeDetail(8000),
     AddDepInfoDialog(8100),
     GuarantorDetail(8200),
+    BAInfo(8300),
+    applyBAinfoDialog(8400),
+    addBAPAInfoDialog(8500),
+    AccountInfo(8500),
+    AddAccountInfoDialog(8600),
+    
+    PostCustomerInfoSum(5300),
+    PostCustomerInfoIndv(0),
+    PostCustomerInfoJuris(9100),
+    AgreementAndMortgageConfirm(9800),
+    AgreementSign(9900),
+    PledgeConfirm(10000),
+    
     ;
     int value;
 

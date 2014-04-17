@@ -10,6 +10,7 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class ProductFormulaDAO extends GenericDAO<ProductFormula, Integer> {
     @Inject
@@ -42,22 +43,33 @@ public class ProductFormulaDAO extends GenericDAO<ProductFormula, Integer> {
     }
 
     public ProductFormula findProductFormulaPropose(PrdProgramToCreditType programToCreditType,int creditCusType, SpecialProgram specialProgram,int applyTcg) {
+        log.debug("findProductFormulaPropose :: programToCreditType : {}, creditCusType : {}, specialProgram : {}, applyTcg : {}"
+                ,programToCreditType, creditCusType, specialProgram, applyTcg);
         String query = "SELECT productFormula FROM ProductFormula productFormula WHERE ( creditCusType = " + creditCusType + " OR creditCusType = 0 ) AND ";
         query = query + "( applyTCG = " + applyTcg + " OR applyTCG = 0 ) AND ( specialProgram = " + specialProgram.getId() + " OR specialProgram = 3 ) AND ";
         query = query + "programToCreditType.id = " + programToCreditType.getId();
-        ProductFormula productFormula = (ProductFormula)getSession().createQuery(query).uniqueResult();
+        log.debug("findProductFormulaPropose :: query : {}",query);
+        List<ProductFormula> productFormulaList = getSession().createQuery(query).list();
 
-        return productFormula;
-
+        if(productFormulaList != null && productFormulaList.size() > 0){
+            return productFormulaList.get(0);
+        }
+        return null;
     }
 
     public ProductFormula findProductFormulaPropose(PrdProgramToCreditType programToCreditType,int creditCusType, int specialProgramId,int applyTcg) {
+        log.debug("findProductFormulaPropose :: programToCreditType : {}, creditCusType : {}, specialProgramId : {}, applyTcg : {}"
+                ,programToCreditType, creditCusType, specialProgramId, applyTcg);
         String query = "SELECT productFormula FROM ProductFormula productFormula WHERE ( creditCusType = " + creditCusType + " OR creditCusType = 0 ) AND ";
         query = query + "( applyTCG = " + applyTcg + " OR applyTCG = 0 ) AND ( specialProgram = " + specialProgramId + " OR specialProgram = 3 ) AND ";
         query = query + "programToCreditType.id = " + programToCreditType.getId();
-        ProductFormula productFormula = (ProductFormula)getSession().createQuery(query).uniqueResult();
+        log.debug("findProductFormulaPropose :: query : {}",query);
+        List<ProductFormula> productFormulaList = getSession().createQuery(query).list();
 
-        return productFormula;
+        if(productFormulaList != null && productFormulaList.size() > 0){
+            return productFormulaList.get(0);
+        }
+        return null;
 
     }
 

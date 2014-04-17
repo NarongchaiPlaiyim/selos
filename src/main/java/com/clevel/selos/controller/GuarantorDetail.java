@@ -74,6 +74,9 @@ public class GuarantorDetail implements Serializable {
 		else
 			return basicInfoView.getApproveType();
 	}
+	public void setApproveType(ApproveType type) {
+		//DO NOTHING
+	}
 	public String getMinDate() {
 		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
 		return dFmt.format(new Date());
@@ -124,7 +127,8 @@ public class GuarantorDetail implements Serializable {
 				redirectPage = "/site/inbox.jsf";
 			}
 			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-			ec.redirect(ec.getRequestContextPath()+redirectPage);
+			if (!ec.isResponseCommitted())
+				ec.redirect(ec.getRequestContextPath()+redirectPage);
 		} catch (IOException e) {
 			log.error("Fail to redirect screen to "+redirectPage,e);
 		}
@@ -166,7 +170,8 @@ public class GuarantorDetail implements Serializable {
 			String redirectPage = "/site/mortgageSummary.jsf";
 			try {
 				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-				ec.redirect(ec.getRequestContextPath()+redirectPage);
+				if (!ec.isResponseCommitted())
+					ec.redirect(ec.getRequestContextPath()+redirectPage);
 			} catch (IOException e) {
 				log.error("Fail to redirect screen to "+redirectPage,e);
 			}

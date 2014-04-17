@@ -19,9 +19,9 @@ public class BaseController implements Serializable {
     private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
     private final HashMap<String, FieldsControlView> dialogFieldMap = new HashMap<String, FieldsControlView>();
 
-    private void loadFieldControl(long workCaseId, Screen screenId) {
-        List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.ContactRecord);
-        List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.CallingRecordDialog);
+    protected void loadFieldControl(long workCaseId, Screen screenId) {
+        List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, screenId);
+        List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, screenId);
         fieldMap.clear();
         dialogFieldMap.clear();
         for (FieldsControlView field : fields) {
@@ -42,8 +42,15 @@ public class BaseController implements Serializable {
     public boolean isDisabled(String name) {
         FieldsControlView field = fieldMap.get(name);
         if (field == null)
-            return false;
+            return true;
         return field.isReadOnly();
+    }
+
+    public void setDisabledValue(String name, boolean disabled){
+        FieldsControlView field = fieldMap.get(name);
+        if (field == null)
+            return;
+        field.setReadOnly(disabled);
     }
 
     public boolean isDialogMandate(String name) {
@@ -56,7 +63,7 @@ public class BaseController implements Serializable {
     public boolean isDialogDisable(String name) {
         FieldsControlView field = dialogFieldMap.get(name);
         if (field == null)
-            return false;
+            return true;
         return field.isReadOnly();
     }
 
@@ -88,7 +95,7 @@ public class BaseController implements Serializable {
         return statusId;
     }
 
-    protected  long getCurrentWorkCaseId(HttpSession session){
+    protected long getCurrentWorkCaseId(HttpSession session){
         long workCaseId = 0;
         if(!Util.isNull(session.getAttribute("workCaseId"))){
             workCaseId = (Long)session.getAttribute("workCaseId");

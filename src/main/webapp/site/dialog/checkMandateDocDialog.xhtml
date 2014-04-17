@@ -226,7 +226,8 @@
                                      value="#{msg.get('app.saveButton')}"
                                      styleClass="medium"
                                      process="@form"
-                                     action="#{headerController.onSaveCheckMandateDoc()}" />
+                                     action="#{headerController.onSaveCheckMandateDoc()}"
+                                     update=":frmMain:msgBoxBaseMessagePanel"/>
 
                     <p:commandButton value="#{msg.get('app.cancelButton')}"
                                      id="btnCancelMandateDoc"

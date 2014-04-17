@@ -57,10 +57,10 @@
                                     <table>
                                         <tr>
                                             <td class="title" style="width:200px;">
-                                                <p:outputLabel value="#{msg.get('app.approveType')}" styleClass="center"/>
+                                                <p:outputLabel value="#{msg.get('app.approveType')}#{mortgageConfirm.mandate('approvedType')}" styleClass="center"/>
                                             </td>
                                             <td style="width:200px;">
-                                                <p:selectOneRadio disabled="true" value="#{mortgageConfirm.approveType}">
+                                                <p:selectOneRadio disabled="#{mortgageConfirm.isDisabled('approvedType')}" value="#{mortgageConfirm.approveType}">
                                                 	<f:selectItems value="#{enumGeneralControl.approveTypes}" var="approveType"
                                                 		itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}" 
                                                 		/>
@@ -85,10 +85,12 @@
                                         <tr>
                                             <td class="title" style="width:200px;">
                                                 <p:outputLabel for="agreeCfm" 
-                                                	value="#{msg.get('app.mortgageReviewContract.agreementConfirm.complete')}" styleClass="center"/>
+                                                	value="#{msg.get('app.mortgageReviewContract.agreementConfirm.complete')}#{mortgageConfirm.mandate('ageementComplete')}" styleClass="center"/>
                                             </td>
                                             <td>
-                                                <p:selectOneRadio id="agreeCfm" value="#{mortgageConfirm.summary.confirmed}">
+                                                <p:selectOneRadio id="agreeCfm" value="#{mortgageConfirm.summary.confirmed}"
+                                                	disabled="#{mortgageConfirm.isDisabled('ageementComplete')}"
+                                                	>
                                                 	<f:selectItems value="#{enumGeneralControl.mortgageConfirmedTypes}" var="confirmType"
                                                 		itemLabel="#{msg.get(confirmType.msgKey)}" itemValue="#{confirmType}" 
                                                 		/>
@@ -122,6 +124,7 @@
                         					headerText="#{msg.get('app.mortgageReviewContract.mortgageConfirm.table.confirm')}"
                         					>
                         					<p:selectOneRadio value="#{mortgage.confirmed}" 
+                        						disabled="#{mortgageConfirm.isDisabled('mortgage.confirm')}"
                         						style="margin:0 auto">
 	                        					<f:selectItems value="#{enumGeneralControl.mortgageConfirmedTypes}" var="radio"
 			                                       	itemLabel="#{msg.get(radio.msgKey)}" 
@@ -216,9 +219,12 @@
 										onstart="handleOnStartOpenCfmDlg();"
 										oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveMortgageConfirmDlg);"
 										update=":frmMain:full_main_container,:result_dialog"
+										disabled="#{mortgageConfirm.isDisabled('saveButton')}"
 	                                 	 />
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"
+										oncomplete="p_cancelDlg.show()"
+										disabled="#{mortgageConfirm.isDisabled('cancelButton')}"
 										/>
 	                             </td>
 	                        </tr>
@@ -243,6 +249,14 @@
 		<ui:param name="formId" value="saveMortgageConfirmFrm"/>
 		<ui:param name="controller" value="#{mortgageConfirm}"/>
 		<ui:param name="action" value="onSaveMortgageConfirm"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
+	</ui:include>
+	<ui:include src="dialog/confirmCancelDlg.xhtml">
+		<ui:param name="id" value="cancelDlg"/>
+		<ui:param name="name" value="p_cancelDlg"/>
+		<ui:param name="formId" value="cancelFrm"/>
+		<ui:param name="controller" value="#{mortgageConfirm}"/>
+		<ui:param name="action" value="onCancelMortgageConfirm"/>
 		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
 </h:body>

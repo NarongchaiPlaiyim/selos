@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -19,11 +20,14 @@ import org.slf4j.Logger;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.GeneralPeopleInfoControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.model.view.LastUpdateDataView;
 import com.clevel.selos.model.view.PostCustomerInfoGroupView;
 import com.clevel.selos.util.FacesUtil;
@@ -45,6 +49,7 @@ public class PostCustomerInfoSummary implements Serializable {
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
+	private long stageId = -1;
 	private BasicInfoView basicInfoView;
 	private LastUpdateDataView lastUpdateView;
 	
@@ -67,6 +72,9 @@ public class PostCustomerInfoSummary implements Serializable {
 		else
 			return basicInfoView.getApproveType();
 	}
+	public void setApproveType(ApproveType type) {
+		//DO NOTHING
+	}
 	public List<PostCustomerInfoGroupView> getGroups() {
 		return groups;
 	}
@@ -87,7 +95,9 @@ public class PostCustomerInfoSummary implements Serializable {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+			stageId = Util.parseLong(session.getAttribute("stageId"), -1);
 		}
+		_loadFieldControl();
 		_loadInitData();
 	}
 	public void preRender() {
@@ -97,8 +107,7 @@ public class PostCustomerInfoSummary implements Serializable {
 		
 		String redirectPage = null;
 		if (workCaseId > 0) {
-			//TODO Validate step 
-			if (stepId <= 0) {
+			if (stepId <= 0 || !(stageId >= 300 && stageId < 400)) {
 				redirectPage = "/site/inbox.jsf";
 			} else {
 				return;
@@ -157,5 +166,41 @@ public class PostCustomerInfoSummary implements Serializable {
 			guarantorGroup.setCustomers(summary.getGuarantorCustomerViewList());
 			relatedGroup.setCustomers(summary.getRelatedCustomerViewList());
 		}
+	}
+	
+	/*
+	 * Mandate and read-only
+	 */
+	@Inject MandatoryFieldsControl mandatoryFieldsControl;
+	private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
+	private void _loadFieldControl() {
+		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.PostCustomerInfoSum);
+		fieldMap.clear();
+		for (FieldsControlView field : fields) {
+			fieldMap.put(field.getFieldName(), field);
+		}
+	}
+	public String mandate(String name) {
+		boolean isMandate = FieldsControlView.DEFAULT_MANDATE;
+		FieldsControlView field = fieldMap.get(name);
+		if (field != null)
+			isMandate = field.isMandate();
+		return isMandate ? " *" : "";
+	}
+	
+	public boolean isDisabled(String name) {
+		FieldsControlView field = fieldMap.get(name);
+		if (field == null)
+			return FieldsControlView.DEFAULT_READONLY;
+		return field.isReadOnly();
+	}
+	public boolean isDisabledGroup(PostCustomerInfoGroupView group,String name) {
+		String prefix = "borrower.";
+		if (group.getTitleKey().equals("app.custInfoSummary.content.related")) {
+			prefix = "related.";
+		} else if (group.getTitleKey().equals("app.custInfoSummary.content.guarantor")) {
+			prefix = "guarantor.";
+		} 
+		return isDisabled(prefix+name);
 	}
 }

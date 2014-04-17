@@ -838,9 +838,46 @@ public class HeaderController implements Serializable {
         }
     }
 
+
+
+    //Maker
+    public void onCheckMandateForMaker(){
+        log.debug("onCheckMandateForMaker ::: start...");
+        HttpSession session = FacesUtil.getSession(true);
+        try {
+            workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
+            workCaseId = 0;
+        } catch (Exception e) {
+            workCasePreScreenId = 0;
+        }
+
+        try {
+            stepId = (Long)session.getAttribute("stepId");
+        } catch (Exception e) {
+            stepId = 0;
+        }
+
+        checkMandateDocView = null;
+        try{
+            checkMandateDocView = checkMandateDocControl.getMandateDocViewByMaker(workCasePreScreenId);
+            if(!Util.isNull(checkMandateDocView)){
+                log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
+            } else {
+                log.debug("-- Find by work case id = {} CheckMandateDocView is {}   ", workCaseId, checkMandateDocView);
+                checkMandateDocView = new CheckMandateDocView();
+                log.debug("-- CheckMandateDocView[New] created");
+            }
+            log.debug("stop...");
+        } catch (Exception e) {
+            log.error("-- Exception : {}", e.getMessage());
+        }
+
+        log.debug("onCheckMandateForMaker ::: stop...");
+    }
+
     //Checker
-    public void onCheckMandateForCheckerDialog(){
-        log.debug("onCheckMandateForCheckerDialog ::: starting...");
+    public void onCheckMandateForChecker(){
+        log.debug("onCheckMandateForChecker ::: start...");
         HttpSession session = FacesUtil.getSession(true);
         try {
             workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
@@ -858,7 +895,7 @@ public class HeaderController implements Serializable {
         String result = null;
         checkMandateDocView = null;
         try{
-            checkMandateDocView = checkMandateDocControl.getMandateDocViewByWorkCasePreScreenId(workCasePreScreenId);
+            checkMandateDocView = checkMandateDocControl.getMandateDocViewByChecker(workCasePreScreenId);
             if(!Util.isNull(checkMandateDocView)){
                 log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
             } else {
@@ -868,14 +905,15 @@ public class HeaderController implements Serializable {
             }
             log.debug("stop...");
         } catch (Exception e) {
-            log.error("-- Exception : {}", e.getMessage());
+            log.error("-- Exception : ", e);
             result = e.getMessage();
         }
+        log.debug("onCheckMandateForChecker ::: stop...");
     }
 
-    //ECM+DB
-    public void onCheckMandateDialog(){
-        log.debug("onCheckMandateDialog ::: starting...");
+    //Full App
+    public void onCheckMandateForFullApp(){
+        log.debug("onCheckMandateForFullApp ::: start...");
         HttpSession session = FacesUtil.getSession(true);
         try {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
@@ -887,7 +925,7 @@ public class HeaderController implements Serializable {
         String result = null;
         checkMandateDocView = null;
         try{
-            checkMandateDocView = checkMandateDocControl.getMandateDocView(workCaseId);
+            checkMandateDocView = checkMandateDocControl.getMandateDocViewByFullApp(workCaseId);
             if(!Util.isNull(checkMandateDocView)){
                 log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
             } else {
@@ -897,9 +935,10 @@ public class HeaderController implements Serializable {
             }
             log.debug("stop...");
         } catch (Exception e) {
-            log.error("-- Exception : {}", e.getMessage());
+            log.error("-- Exception : ", e);
             result = e.getMessage();
         }
+        log.debug("onCheckMandateForFullApp ::: stop...");
     }
 
     public void onSaveCheckMandateDoc(){
@@ -916,10 +955,12 @@ public class HeaderController implements Serializable {
         } catch (Exception ex){
             log.error("Exception : {}", ex);
             messageHeader = "Exception";
-            message = "Failed" + Util.getMessageException(ex); ;
+            message = "Failed" + Util.getMessageException(ex);
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
     }
+
+
 
     public void onCancelCheckMandateDoc(){
 

@@ -25,7 +25,7 @@ public class FieldsControlDAO extends GenericDAO<FieldsControl, Long> {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("screenId", screenId));
         criteria.add(Restrictions.eq("role", role));
-        criteria.add(Restrictions.eq("status", status));
+//        criteria.add(Restrictions.eq("status", status));
         criteria.add(Restrictions.eq("step.id", stepId));
         List<FieldsControl> fieldsControlList = criteria.list();
 

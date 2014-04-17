@@ -48,11 +48,12 @@
 				<td class="title">
 					<p:outputLabel
 						for="healthcheck"
-						value="#{msg.get('app.baInfo.ba.dialog.resultHealthcheck')}" />
+						value="#{msg.get('app.baInfo.ba.dialog.resultHealthcheck')}#{baInfo.mandateDialogBA('ba.resultHealthcheck')}" />
 				</td>
 				<td>
 					<p:selectOneMenu id='healthcheck' style="width:160px"
 						value="#{baInfo.bapaInfoCustomerView.updBAResultHC}"
+						disabled="#{baInfo.isDialogBADisable('ba.resultHealthcheck')}"
 						>
 						<p:ajax update="checkdate"/>
 						<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -67,7 +68,7 @@
 				<td class="title">
 					<p:outputLabel
 						for="checkdate"
-						value="#{msg.get('app.baInfo.ba.dialog.checkDate')}" />
+						value="#{msg.get('app.baInfo.ba.dialog.checkDate')}#{baInfo.mandateDialogBA('ba.checkDate')}" />
 				</td>
 				<td>
 					<p:calendar id='checkdate'
@@ -92,9 +93,11 @@
                          update=":frmMain:bainfo_tbl,:baApplyInfoDlgForm"
                          oncomplete="handleDialogRequest(xhr, status, args,'p_baApplyInfoDlg')"
                          styleClass="small"
+                         disabled="#{baInfo.isDialogBADisable('okButton')}"
                          />
 					<p:commandButton
-                    	type='button' styleClass="small" 
+                    	type='button' styleClass="small"
+                    	disabled="#{baInfo.isDialogBADisable('cancelButton')}" 
                     	value="#{msg.get('app.button.cancel')}" onclick="p_baApplyInfoDlg.hide()"/>
 				</td>
 			</tr>
