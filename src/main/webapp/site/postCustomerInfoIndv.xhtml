@@ -58,10 +58,10 @@
                                     <table>
                                         <tr>
                                             <td class="title" style="width:200px;">
-                                                <p:outputLabel value="#{msg.get('app.approveType')}" styleClass="center"/>
+                                                <p:outputLabel value="#{msg.get('app.approveType')}#{postCustomerInfoIndv.mandate('approvedType')}" styleClass="center"/>
                                             </td>
                                             <td style="width:200px;">
-                                                <p:selectOneRadio disabled="true" value="#{postCustomerInfoIndv.approveType}">
+                                                <p:selectOneRadio disabled="#{postCustomerInfoIndv.isDisabled('approvedType')}" value="#{postCustomerInfoIndv.approveType}">
                                                 	<f:selectItems value="#{enumGeneralControl.approveTypes}" var="approveType"
                                                 		itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}" 
                                                 		/>
@@ -85,20 +85,20 @@
 	<tr>
 		<td class="title" style="width: 180px">
 			<p:outputLabel  for="relation"
-				value="#{msg.get('app.custInfoIndi.content.relationship')}" />
+				value="#{msg.get('app.custInfoIndi.content.relationship')}#{postCustomerInfoIndv.mandate('ind.relationship')}" />
 		</td>
 		<td style="width:300px">
 			<p:inputText id='relation'
 				value="#{postCustomerInfoIndv.customer.displayRelation}"
-				readonly="true"
+				readonly="#{postCustomerInfoIndv.isDisabled('ind.relationship')}"
 				/>
 		</td>
 		<td class="title" style="width:150px">
 			<p:outputLabel  for="coll_owner"
-				value="#{msg.get('app.custInfoIndi.content.collOwner')}" />
+				value="#{msg.get('app.custInfoIndi.content.collOwner')}#{postCustomerInfoIndv.mandate('ind.collOwner')}" />
 		</td>
 		<td>
-			<p:selectOneRadio id='coll_owner' disabled="true" value="#{postCustomerInfoIndv.customer.collateralOwner}">
+			<p:selectOneRadio id='coll_owner' disabled="#{postCustomerInfoIndv.isDisabled('ind.collOwner')}" value="#{postCustomerInfoIndv.customer.collateralOwner}">
             	<f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="yesNoEnum"
             		itemLabel="#{msg.get(yesNoEnum.msgKey)}" itemValue="#{yesNoEnum}" 
             		/>
@@ -108,37 +108,36 @@
 	<tr>
 		<td class="title">
 			<p:outputLabel  for="doctype"
-				value="#{msg.get('app.custInfoIndi.content.docType')}" />
+				value="#{msg.get('app.custInfoIndi.content.docType')}#{postCustomerInfoIndv.mandate('ind.documentType')}" />
 		</td>
 		<td colspan="3">
 			<p:inputText id='doctype'
 				value="#{postCustomerInfoIndv.customer.displayDocumentType}"
-				readonly="true"
+				readonly="#{postCustomerInfoIndv.isDisabled('ind.documentType')}"
 				/>
 		</td>
 	</tr>
 	<tr>
 		<td class="title">
 			<p:outputLabel  for="personalid"
-				value="#{msg.get('app.custInfoIndi.content.citiId')}" />
+				value="#{msg.get('app.custInfoIndi.content.citiId')}#{postCustomerInfoIndv.mandate('ind.id')}" />
 		</td>
 		<td colspan="3">
 			<p:inputText id='personalid' styleClass="large"
 				value="#{postCustomerInfoIndv.customer.personalId}"
-				readonly="true"
+				readonly="#{postCustomerInfoIndv.isDisabled('ind.id')}"
 				 />
 		</td>
 	</tr>
 	<tr>
 		<td class="title">
 			<p:outputLabel  for="title"
-				value="#{msg.get('app.custInfoIndi.content.nameTh')}" />
+				value="#{msg.get('app.custInfoIndi.content.nameTh')}#{postCustomerInfoIndv.mandate('ind.firstnameTH')}" />
 		</td>
 		<td colspan="3">
 			<p:selectOneMenu id='title' styleClass="inline_select"
 				value="#{postCustomerInfoIndv.customer.titleId}"
-				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
-				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.nameTh.required')}"
+				rendered="#{not postCustomerInfoIndv.isDisabled('ind.titleTH')}"
 				>
 				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				<f:selectItems value="#{postCustomerInfoIndv.titles}" />
@@ -146,22 +145,22 @@
 			<p:inputText styleClass="small"
 				value="#{postCustomerInfoIndv.customer.displayTitle}"
 				readonly="true"
-				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				rendered="#{postCustomerInfoIndv.isDisabled('ind.titleTH')}"
 				/>
 			<p:spacer width="5"/>
 			<p:inputText id='nameTH' styleClass="large" 
 				value="#{postCustomerInfoIndv.customer.nameTH}"
-				readonly="true"/>
+				readonly="#{postCustomerInfoIndv.isDisabled('ind.firstnameTH')}"/>
 			<p:spacer width="5"/>
 			<p:inputText id='lastNameTH' styleClass="largest"
 				value="#{postCustomerInfoIndv.customer.lastNameTH}"
-				readonly="true"/>
+				readonly="#{postCustomerInfoIndv.isDisabled('ind.lastnameTH')}"/>
 		</td>
 	</tr>
 	<tr>
 		<td class="title">
 			<p:outputLabel  for="birthdate"
-				value="#{msg.get('app.custInfoIndi.content.dob')}" />
+				value="#{msg.get('app.custInfoIndi.content.dob')}#{postCustomerInfoIndv.mandate('ind.dateOfBirth')}" />
 		</td>
 		<td>
 			<clv:BECalendar id='birthdate' navigator="true" 
@@ -170,8 +169,7 @@
 				value="#{postCustomerInfoIndv.customer.birthDate}"
 				pattern="dd/MM/yyyy" showOn="button"
 				autocomplete="false" locale="th_TH"
-				disabled="#{not postCustomerInfoIndv.canUpdateInfo}"
-				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.dob.required')}"
+				disabled="#{postCustomerInfoIndv.isDisabled('ind.dateOfBirth')}"
 				>
 				<p:ajax update="age" event="dateSelect" 
 					listener="#{postCustomerInfoIndv.handleBirthDay}"
@@ -180,7 +178,7 @@
 		</td>
 		<td class="title">
 			<p:outputLabel  for="age"
-				value="#{msg.get('app.custInfoIndi.content.age')}" />
+				value="#{msg.get('app.custInfoIndi.content.age')}#{postCustomerInfoIndv.mandate('ind.age')}" />
 		</td>
 		<td>
 			<p:inputText id="age" styleClass="smaller"
@@ -192,13 +190,12 @@
 	<tr>
 		<td class="title">
 			<p:outputLabel  for="gender"
-				value="#{msg.get('app.custInfoIndi.content.gender')}" />
+				value="#{msg.get('app.custInfoIndi.content.gender')}#{postCustomerInfoIndv.mandate('ind.gender')}" />
 		</td>
 		<td colspan="3">
 			<p:selectOneMenu id='gender'
 				value="#{postCustomerInfoIndv.customer.gender}"
-				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
-				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.gender.required')}"
+				rendered="#{not postCustomerInfoIndv.isDisabled('ind.gender')}"
 				>
 				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				<f:selectItems value="#{enumGeneralControl.genders}" var="gender"
@@ -207,7 +204,7 @@
 			</p:selectOneMenu>
 			<p:inputText
 				value="#{msg.get(postCustomerInfoIndv.customer.gender.msgKey)}"
-				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				rendered="#{postCustomerInfoIndv.isDisabled('ind.gender')}"
 				readonly="true"
 				/>
 		</td>
@@ -215,39 +212,37 @@
 	<tr>
 		<td class="title">
 			<p:outputLabel  for="race"
-				value="#{msg.get('app.custInfoIndi.content.origin')}" />
+				value="#{msg.get('app.custInfoIndi.content.origin')}#{postCustomerInfoIndv.mandate('ind.race')}" />
 		</td>
 		<td>
 			<p:selectOneMenu id='race'
 				value="#{postCustomerInfoIndv.customer.raceId}"
-				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
-				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.origin.required')}"
+				rendered="#{not postCustomerInfoIndv.isDisabled('ind.race')}"
 				>
 				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				<f:selectItems value="#{postCustomerInfoIndv.races}"/>
 			</p:selectOneMenu>
 			<p:inputText
 				value="#{postCustomerInfoIndv.customer.displayRace}"
-				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				rendered="#{postCustomerInfoIndv.isDisabled('ind.race')}"
 				readonly="true"
 				/>
 		</td>
 		<td class="title">
 			<p:outputLabel  for="nationality"
-				value="#{msg.get('app.custInfoIndi.content.nation')}" />
+				value="#{msg.get('app.custInfoIndi.content.nation')}#{postCustomerInfoIndv.mandate('ind.nationality')}" />
 		</td>
 		<td>
 			<p:selectOneMenu id='nationality'
 				value="#{postCustomerInfoIndv.customer.nationalityId}"
-				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
-				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.nation.required')}"
+				rendered="#{not postCustomerInfoIndv.isDisabled('ind.nationality')}"
 				>
 				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				<f:selectItems value="#{postCustomerInfoIndv.nationalities}"/>
 			</p:selectOneMenu>
 			<p:inputText
 				value="#{postCustomerInfoIndv.customer.displayNationality}"
-				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				rendered="#{postCustomerInfoIndv.isDisabled('ind.nationality')}"
 				readonly="true"
 				/>
 		</td>
@@ -262,7 +257,7 @@
 			<td colspan="3">
 				<p:selectOneRadio value="#{address.addressFlag}"
 					rendered="#{not empty address.availableFlagList}"
-					disabled="#{not postCustomerInfoIndv.canUpdateInfo}"
+					disabled="#{postCustomerInfoIndv.isDisabled('registrationAddress')}"
 					>
 					<p:ajax update="address_detail" 
 						listener="#{postCustomerInfoIndv.onSelectAddressFlag(repeatStatus.index)}"
@@ -281,41 +276,41 @@
 					<h:panelGroup layout="block" styleClass="div_row">
 						<div style="width:120px;display:inline-block">
 							<p:outputLabel for="addressno" styleClass="title"
-								value="#{msg.get('app.custInfoIndi.content.no')}" />
+								value="#{msg.get('app.custInfoIndi.content.no')}#{postCustomerInfoIndv.mandateAddress(address,'addressNo')}" />
 						</div>
 						<p:inputText id='addressno' styleClass="smaller"
 							value="#{address.addressNo}"
-							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							readonly="#{postCustomerInfoIndv.isAddressDisabled(address,'addressNo')}"
 							/>
 						<p:spacer width="30" height="10"/>
 						<p:outputLabel for="addressmoo" styleClass="title"
-							value="#{msg.get('app.custInfoIndi.content.moo')}" />
+							value="#{msg.get('app.custInfoIndi.content.moo')}#{postCustomerInfoIndv.mandateAddress(address,'addressMoo')}" />
 						<p:spacer width="8"/>
 						<p:inputText id='addressmoo'
 							value="#{address.moo}"
-							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							readonly="#{postCustomerInfoIndv.isAddressDisabled(address,'addressMoo')}"
 							onkeydown="return onKeyDownNumber(event);"
 							onkeypress="return onKeyPressNumber(event);"
 							size="5" maxlength="5"
 							/>
 						<p:spacer width="30" height="10"/>
 						<p:outputLabel for="addressbuilding" styleClass="title"
-							value="#{msg.get('app.custInfoIndi.content.building')}" />
+							value="#{msg.get('app.custInfoIndi.content.building')}#{postCustomerInfoIndv.mandateAddress(address,'addressBuilding')}" />
 						<p:spacer width="8"/>
 						<p:inputText id='addressbuilding'
 							value="#{address.building}"
-							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							readonly="#{postCustomerInfoIndv.isAddressDisabled(address,'addressBuilding')}"
 							/>
 					</h:panelGroup>
 					
 					<h:panelGroup layout="block" styleClass="div_row">
 						<div style="width:120px;display:inline-block">
 							<p:outputLabel for="addressstreet" styleClass="title"
-								value="#{msg.get('app.custInfoIndi.content.road')}" />
+								value="#{msg.get('app.custInfoIndi.content.road')}#{postCustomerInfoIndv.mandateAddress(address,'addressStreet')}" />
 						</div>
 						<p:inputText id='addressstreet' style="width:500px"
 							value="#{address.road}"
-							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"		
+							readonly="#{postCustomerInfoIndv.isAddressDisabled(address,'addressStreet')}"		
 							/>
 					</h:panelGroup>
 					
@@ -323,7 +318,7 @@
 						<div style="width:120px;height: 10px;float:left"></div>
 						<p:selectOneMenu id="province" styleClass="inline_select"
 							value="#{address.provinceId}"
-							rendered="#{(postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							rendered="#{not postCustomerInfoIndv.isAddressDisabled(address,'province')}"
 							>
 							<p:ajax update="district,subdistrict" 
 								listener="#{postCustomerInfoIndv.onSelectProvince(repeatStatus.index)}"/>
@@ -334,13 +329,13 @@
 						<p:inputText
 							value="#{address.displayProvince}"
 							readonly="true"
-							rendered="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							rendered="#{postCustomerInfoIndv.isAddressDisabled(address,'province')}"
 							/>
 						
 						<p:selectOneMenu id="district" styleClass="inline_select"
 							style="margin-left:4px;margin-right:4px"
 							value="#{address.districtId}"
-							rendered="#{(postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							rendered="#{not postCustomerInfoIndv.isAddressDisabled(address,'district')}"
 							>
 							<p:ajax update="subdistrict" 
 								listener="#{postCustomerInfoIndv.onSelectDistrict(repeatStatus.index)}"/>
@@ -351,12 +346,12 @@
 							value="#{address.displayDistrict}"
 							style="margin-left:4px !important;margin-right:4px !important;"
 							readonly="true"
-							rendered="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							rendered="#{postCustomerInfoIndv.isAddressDisabled(address,'district')}"
 							/>
 						
 						<p:selectOneMenu id="subdistrict" styleClass="inline_select"
 							value="#{address.subDistrictId}"
-							rendered="#{(postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							rendered="#{not postCustomerInfoIndv.isAddressDisabled(address,'subdistrict')}"
 							>
 							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 							<f:selectItems value="#{address.subDistrictList}"/>
@@ -364,18 +359,18 @@
 						<p:inputText
 							value="#{address.displaySubDistrict}"
 							readonly="true"
-							rendered="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							rendered="#{postCustomerInfoIndv.isAddressDisabled(address,'subdistrict')}"
 							/>
 					</h:panelGroup>
 					
 					<h:panelGroup layout="block" styleClass="div_row">
 						<div style="width:120px;display:inline-block">
 							<p:outputLabel for="addresspostcode" styleClass="title"
-								value="#{msg.get('app.custInfoIndi.content.postalCode')}" />
+								value="#{msg.get('app.custInfoIndi.content.postalCode')}#{postCustomerInfoIndv.mandateAddress(address,'postcode')}" />
 						</div>
 						<p:inputText id='addresspostcode'
 							value="#{address.postalCode}"
-							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							readonly="#{postCustomerInfoIndv.isAddressDisabled(address,'postcode')}"
 							onkeydown="return onKeyDownNumber(event);"
 							onkeypress="return onKeyPressNumber(event);"
 							size="5" maxlength="5"
@@ -385,11 +380,11 @@
 					<h:panelGroup layout="block" styleClass="div_row">
 						<div style="width:120px;height: 10px;float:left">
 							<p:outputLabel for="addresscountry" styleClass="title"
-								value="#{msg.get('app.custInfoIndi.content.country')}" />
+								value="#{msg.get('app.custInfoIndi.content.country')}#{postCustomerInfoIndv.mandateAddress(address,'country')}" />
 						</div>
 						<p:selectOneMenu id="addresscountry" styleClass="inline_select"
 							value="#{address.countryId}"
-							rendered="#{(postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							rendered="#{not postCustomerInfoIndv.isAddressDisabled(address,'country')}"
 							>
 							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 							<f:selectItems value="#{postCustomerInfoIndv.countries}"/>
@@ -397,25 +392,25 @@
 						<p:inputText
 							value="#{address.displayCountry}"
 							readonly="true"
-							rendered="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							rendered="#{postCustomerInfoIndv.isAddressDisabled(address,'country')}"
 							/>
 					</h:panelGroup>
 					
 					<h:panelGroup layout="block" styleClass="div_row">
 						<div style="width:120px;display:inline-block">
 							<p:outputLabel for="addressphone" styleClass="title"
-								value="#{msg.get('app.custInfoIndi.content.tel')}" />
+								value="#{msg.get('app.custInfoIndi.content.tel')}#{postCustomerInfoIndv.mandateAddress(address,'phoneNo')}" />
 						</div>
 						<p:inputText id='addressphone'
 							value="#{address.phoneNumber}"
-							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"
+							readonly="#{postCustomerInfoIndv.isAddressDisabled(address,'phoneNo')}"
 							onkeydown="return onKeyDownNumber(event);"
                             onkeypress="return onKeyPressNumber(event);"
                             maxlength="10"
 							/>
 						<p:spacer width="10"/>
 						<p:outputLabel for="addressphoneext" 
-							value="#{msg.get('app.custInfoIndi.content.telTo')}" />
+							value="#{msg.get('app.custInfoIndi.content.telTo')}#{postCustomerInfoIndv.mandateAddress(address,'extension')}" />
 						<p:spacer width="5"/>
 						<p:inputText id='addressphoneext'
 							value="#{address.phoneExt}"
@@ -423,7 +418,7 @@
 							onkeydown="return onKeyDownNumber(event);"
                             onkeypress="return onKeyPressNumber(event);"
                             maxlength="10"
-							readonly="#{not (postCustomerInfoIndv.canUpdateInfo and address.canUpdate())}"	
+							readonly="#{postCustomerInfoIndv.isAddressDisabled(address,'extension')}"	
 						/>
 					</h:panelGroup>
 				</h:panelGroup>
@@ -434,20 +429,19 @@
 	<tr>
 		<td class="title">
 			<p:outputLabel for="mailing_addresstype"
-				value="#{msg.get('app.custInfoIndi.content.mailAdd')}" />
+				value="#{msg.get('app.custInfoIndi.content.mailAdd')}#{postCustomerInfoIndv.mandate('mailingAddress')}" />
 		</td>
 		<td colspan="3">
 			<p:selectOneMenu id='mailing_addresstype'
 				value="#{postCustomerInfoIndv.customer.mailingAddressTypeId}"
-				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
-				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.mailAdd.required')}"
+				rendered="#{not postCustomerInfoIndv.isDisabled('mailingAddress')}"
 				>
 				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				<f:selectItems value="#{postCustomerInfoIndv.addressTypes}"/>
 			</p:selectOneMenu>
 			<p:inputText 
 				value="#{postCustomerInfoIndv.customer.displayMailingAddressType}"
-				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				rendered="#{postCustomerInfoIndv.isDisabled('mailingAddress')}"
 				readonly="true"
 				/>
 		</td>
@@ -455,57 +449,55 @@
 	<tr>
 		<td class="title">
 			<p:outputLabel for="mobile"
-				value="#{msg.get('app.custInfoIndi.content.mobile')}" />
+				value="#{msg.get('app.custInfoIndi.content.mobile')}#{postCustomerInfoIndv.mandate('mobileNumber')}" />
 		</td>
 		<td colspan="3">
 			<p:inputText id='mobile'
 				value="#{postCustomerInfoIndv.customer.mobile}"
-				readonly="true"
+				readonly="#{postCustomerInfoIndv.isDisabled('mobileNumber')}"
 				/>
 		</td>
 	</tr>
 	<tr>
 		<td class="title">
 			<p:outputLabel for="fax"
-				value="#{msg.get('app.custInfoIndi.content.fax')}" />
+				value="#{msg.get('app.custInfoIndi.content.fax')}#{postCustomerInfoIndv.mandate('faxNumber')}" />
 		</td>
 		<td colspan="3">
 			<p:inputText id='fax'
 				value="#{postCustomerInfoIndv.customer.fax}"
-				readonly="true"
+				readonly="#{postCustomerInfoIndv.isDisabled('faxNumber')}"
 				/>
 		</td>
 	</tr>
 	<tr>
 		<td class="title">
 			<p:outputLabel for="email"
-				value="#{msg.get('app.custInfoIndi.content.email')}" />
+				value="#{msg.get('app.custInfoIndi.content.email')}#{postCustomerInfoIndv.mandate('email')}" />
 		</td>
 		<td colspan="3">
 			<p:inputText id='email'
 				value="#{postCustomerInfoIndv.customer.email}"
-				readonly="true"
+				readonly="#{postCustomerInfoIndv.isDisabled('email')}"
 				/>
 		</td>
 	</tr>
 	<tr>
 		<td class="title">
 			<p:outputLabel for="businesstype"
-				value="#{msg.get('app.custInfoIndi.content.bussType')}" />
+				value="#{msg.get('app.custInfoIndi.content.bussType')}#{postCustomerInfoIndv.mandateBusinessType()}" />
 		</td>
 		<td colspan="3">
 			<p:selectOneMenu id='businesstype'
 				value="#{postCustomerInfoIndv.customer.businessTypeId}"
-				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
-				required="#{postCustomerInfoIndv.requiredBusinessType}"
-				requiredMessage="#{msg.get('app.custInfoIndi.content.bussType.required')}"
+				rendered="#{not postCustomerInfoIndv.isDisabled('buzType')}"
 				>
 				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				<f:selectItems value="#{postCustomerInfoIndv.businessTypes}"/>
 			</p:selectOneMenu>
 			<p:inputText
 				value="#{postCustomerInfoIndv.customer.displayBusinessType}"
-				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				rendered="#{postCustomerInfoIndv.isDisabled('buzType')}"
 				readonly="true"
 				/>
 		</td>
@@ -513,7 +505,7 @@
 	<tr>
 		<td class="title">
 			<p:outputLabel for="marital"
-				value="#{msg.get('app.custInfoIndi.content.maritalStatus')}" />
+				value="#{msg.get('app.custInfoIndi.content.maritalStatus')}#{postCustomerInfoIndv.mandate('marriageStatus')}" />
 		</td>
 		<td colspan="3">
 			<p:inputText id="marital"
@@ -530,29 +522,25 @@
 		<td colspan="3">
 			<p:selectOneMenu id='marriagetitle' styleClass="inline_select"
 				value="#{postCustomerInfoIndv.customer.spouseTitleId}"
-				disabled="#{not postCustomerInfoIndv.canUpdateSpouse}"
-				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
-				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.spouseTitleTH.required')}"
+				rendered="#{not postCustomerInfoIndv.isDisabled('marriage.titleTH') and postCustomerInfoIndv.canUpdateSpouse}"
 				>
 				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				<f:selectItems value="#{postCustomerInfoIndv.titles}"/>
 			</p:selectOneMenu>
 			<p:inputText styleClass="small"
 				value="#{postCustomerInfoIndv.customer.displaySpouseTitle}"
-				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				rendered="#{postCustomerInfoIndv.isDisabled('marriage.titleTH') or not postCustomerInfoIndv.canUpdateSpouse}"
 				readonly="true"
 				/>
 			<p:spacer width="5"/>
 			<p:inputText id='marriagename' styleClass="large" 
 				value="#{postCustomerInfoIndv.customer.spouseNameTH}"
-				readonly="#{not postCustomerInfoIndv.canUpdateSpouse}"
-				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.spouseNameTH.required')}"
+				readonly="#{postCustomerInfoIndv.isDisabled('marriage.firstnameTH') or not postCustomerInfoIndv.canUpdateSpouse}"
 				/>
 			<p:spacer width="5"/>
 			<p:inputText id='marriagelastname' styleClass="largest"
 				value="#{postCustomerInfoIndv.customer.spouseLastNameTH}"
-				readonly="#{not postCustomerInfoIndv.canUpdateSpouse}"
-				required="true" requiredMessage="#{msg.get('app.custInfoIndi.content.spouseLastNameTH.required')}"
+				readonly="#{postCustomerInfoIndv.isDisabled('marriage.lastnameTH') or not postCustomerInfoIndv.canUpdateSpouse}"
 				/>
 		</td>
 	</tr>
@@ -564,25 +552,25 @@
 		<td colspan="3">
 			<p:selectOneMenu id='fathertitle' styleClass="inline_select"
 				value="#{postCustomerInfoIndv.customer.fatherTitleId}"
-				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
+				rendered="#{not postCustomerInfoIndv.isDisabled('father.titleTH')}"
 				>
 				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				<f:selectItems value="#{postCustomerInfoIndv.titles}"/>
 			</p:selectOneMenu>
 			<p:inputText styleClass="small"
 				value="#{postCustomerInfoIndv.customer.displayFatherTitle}"
-				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				rendered="#{postCustomerInfoIndv.isDisabled('father.titleTH')}"
 				readonly="true"
 				/>
 			<p:spacer width="5"/>
 			<p:inputText id='fathername' styleClass="large" 
 				value="#{postCustomerInfoIndv.customer.fatherNameTH}"
-				readonly="#{not postCustomerInfoIndv.canUpdateInfo}"
+				readonly="#{postCustomerInfoIndv.isDisabled('father.firstnameTH')}"
 				/>
 			<p:spacer width="5"/>
 			<p:inputText id='fatherlastname' styleClass="largest"
 				value="#{postCustomerInfoIndv.customer.fatherLastNameTH}"
-				readonly="#{not postCustomerInfoIndv.canUpdateInfo}"
+				readonly="#{postCustomerInfoIndv.isDisabled('father.lastnameTH')}"
 				/>	
 		</td>
 	</tr>
@@ -594,25 +582,25 @@
 		<td colspan="3">
 			<p:selectOneMenu id='mothertitle' styleClass="inline_select"
 				value="#{postCustomerInfoIndv.customer.motherTitleId}"
-				rendered="#{postCustomerInfoIndv.canUpdateInfo}"
+				rendered="#{not postCustomerInfoIndv.isDisabled('mother.titleTH')}"
 				>
 				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				<f:selectItems value="#{postCustomerInfoIndv.titles}"/>
 			</p:selectOneMenu>
 			<p:inputText styleClass="small"
 				value="#{postCustomerInfoIndv.customer.displayMotherTitle}"
-				rendered="#{not postCustomerInfoIndv.canUpdateInfo}"
+				rendered="#{postCustomerInfoIndv.isDisabled('mother.titleTH')}"
 				readonly="true"
 				/>
 			<p:spacer width="5"/>
 			<p:inputText id='mothername' styleClass="large" 
 				value="#{postCustomerInfoIndv.customer.motherNameTH}"
-				readonly="#{not postCustomerInfoIndv.canUpdateInfo}"
+				readonly="#{postCustomerInfoIndv.isDisabled('mother.firstnameTH')}"
 				/>
 			<p:spacer width="5"/>
 			<p:inputText id='motherlastname' styleClass="largest"
 				value="#{postCustomerInfoIndv.customer.motherLastNameTH}"
-				readonly="#{not postCustomerInfoIndv.canUpdateInfo}"
+				readonly="#{postCustomerInfoIndv.isDisabled('mother.lastnameTH')}"
 				/>	
 		</td>
 	</tr>
@@ -633,11 +621,11 @@
 <tr>
 	<td class="title" style="width:180px">
 		<p:outputLabel for='right'
-			value="#{msg.get('app.custInfoIndi.appointee.right')}" />						
+			value="#{msg.get('app.custInfoIndi.appointee.right')}#{postCustomerInfoIndv.mandate('agentDetail.agent')}" />						
 	</td>
 	<td colspan="3">
 		<p:selectOneRadio id='right' value="#{postCustomerInfoIndv.customer.attorneyRequired}"
-			disabled="#{not postCustomerInfoIndv.canUpdateInfo}"
+			disabled="#{postCustomerInfoIndv.isDisabled('agentDetail.agent')}"
 			>
 			<p:ajax update="appointee_owner_tbl,appointee_relation,attorney_pane"
 				process="@this"
@@ -654,12 +642,12 @@
 <tr>
 	<td class="title" >
 		<p:outputLabel for="appointee_relation"
-			value="#{msg.get('app.custInfoIndi.appointee.relationship')}" />						
+			value="#{msg.get('app.custInfoIndi.appointee.relationship')}#{postCustomerInfoIndv.mandate('agentDetail.related')}" />						
 	</td>
 	<td colspan="3"> 
 		<p:selectOneRadio id='appointee_relation' 
 			value="#{postCustomerInfoIndv.customer.attorneyRelationType}"
-			disabled="#{not postCustomerInfoIndv.enableAttorneyRight}">
+			disabled="#{not postCustomerInfoIndv.enableAttorneyRight or postCustomerInfoIndv.isDisabled('agentDetail.related')}">
 			<p:ajax update="appointee_owner_tbl,attorney_pane"
 				process="@this"
 				partialSubmit="true"
@@ -678,7 +666,7 @@
 	<td colspan="3">
 		<p:dataTable id='appointee_owner_tbl'
 			value="#{postCustomerInfoIndv.attorneySelectDataModel}" var="attorney" 
-			rowIndexVar="rowIdx" disabledSelection="#{not postCustomerInfoIndv.appointeeOwnerSelectable}"
+			rowIndexVar="rowIdx" disabledSelection="#{not postCustomerInfoIndv.appointeeOwnerSelectable or postCustomerInfoIndv.isDisabled('related.checked')}"
 			selection="#{postCustomerInfoIndv.selectedAttorney}"
 			>
 			<p:ajax event="rowSelectRadio" update=":frmMain:attorney_pane"
@@ -719,12 +707,12 @@
 	    	<tr>
 	    		<td class="title" style="width: 180px">
 					<p:outputLabel  for="att_name"
-						value="#{msg.get('app.custInfoIndi.attorneyInRight.customerNameTH')}" />
+						value="#{msg.get('app.custInfoIndi.attorneyInRight.customerNameTH')}#{postCustomerInfoIndv.mandate('agent.firstnameTH')}" />
 				</td>
 				<td colspan="3">
 					<p:selectOneMenu id='att_title' styleClass="inline_select"
 						value="#{postCustomerInfoIndv.attorneyView.titleId}"
-						rendered="#{postCustomerInfoIndv.attorneyDetailEditable}"
+						rendered="#{postCustomerInfoIndv.attorneyDetailEditable and not postCustomerInfoIndv.isDisabled('agent.titleTH')}"
 						>
 	    				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 	    				<f:selectItems value="#{postCustomerInfoIndv.titles}" />
@@ -732,17 +720,17 @@
 	    			<p:inputText styleClass="small"
 						value="#{postCustomerInfoIndv.attorneyView.displayTitle}"
 						readonly="true"
-						rendered="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+						rendered="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('agent.titleTH')}"
 						/>
 	       			<p:spacer width="5"/>
 					<p:inputText id='att_name' styleClass="large" 
 						value="#{postCustomerInfoIndv.attorneyView.nameTH}"
-						readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+						readonly="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('agent.firstnameTH')}"
 						/>
 					<p:spacer width="5"/>
 					<p:inputText id='att_surname' styleClass="largest"
 						value="#{postCustomerInfoIndv.attorneyView.lastNameTH}"
-						readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+						readonly="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('agent.lastnameTH')}"
 						/>
 	       		</td>
 	       	</tr>
@@ -756,63 +744,63 @@
 						<h:panelGroup layout="block" styleClass="div_row">
 							<div style="width:120px;display:inline-block">
 								<p:outputLabel for="att_addressno" styleClass="title"
-	                 					value="#{msg.get('app.custInfoIndi.attorneyInRight.address.addressNo')}" />
+	                 					value="#{msg.get('app.custInfoIndi.attorneyInRight.address.addressNo')}#{postCustomerInfoIndv.mandate('agent.addressNo')}" />
 							</div>
 							<p:inputText id='att_addressno' styleClass="smaller"
 	                   			value="#{postCustomerInfoIndv.attorneyView.addressNo}"
-	                   			readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+	                   			readonly="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('agent.addressNo')}"
 	                   			/>	
 							<p:spacer width="30" height="10"/>
 							<p:outputLabel for="att_addressmoo" styleClass="title"
-	                  			value="#{msg.get('app.custInfoIndi.attorneyInRight.address.moo')}" />
+	                  			value="#{msg.get('app.custInfoIndi.attorneyInRight.address.moo')}#{postCustomerInfoIndv.mandate('agent.addressMoo')}" />
 							<p:spacer width="8"/>
 							<p:inputText id='att_addressmoo'
 	     						value="#{postCustomerInfoIndv.attorneyView.moo}"
-	      						readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+	      						readonly="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('agent.addressMoo')}"
 	      						onkeydown="return onKeyDownNumber(event);"
 								onkeypress="return onKeyPressNumber(event);"
 								size="5" maxlength="5"
 								/>	
 							<p:spacer width="30" height="10"/>
 							<p:outputLabel for="att_addressbuilding" styleClass="title"
-	                  			value="#{msg.get('app.custInfoIndi.attorneyInRight.address.building')}" />
+	                  			value="#{msg.get('app.custInfoIndi.attorneyInRight.address.building')}#{postCustomerInfoIndv.mandate('agent.addressBuilding')}" />
 							<p:spacer width="8"/>
 							<p:inputText id='att_addressbuilding'
 	                  			value="#{postCustomerInfoIndv.attorneyView.building}"
-	                   			readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+	                   			readonly="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('agent.addressBuilding')}"
 	                   			/>
 						</h:panelGroup>
 						
 						<h:panelGroup layout="block" styleClass="div_row">
 							<div style="width:120px;display:inline-block">
 								<p:outputLabel for="att_addressstreet" styleClass="title"
-	                   				value="#{msg.get('app.custInfoIndi.attorneyInRight.address.street')}" />
+	                   				value="#{msg.get('app.custInfoIndi.attorneyInRight.address.street')}#{postCustomerInfoIndv.mandate('agent.addressStreet')}" />
 							</div>
 							<p:inputText id='att_addressstreet' style="width:500px"
 	                   			value="#{postCustomerInfoIndv.attorneyView.road}"
-	                   			readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+	                   			readonly="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('agent.addressStreet')}"
 	                   		/>	
 						</h:panelGroup>
 						
 						<h:panelGroup layout="block" styleClass="div_row">
 							<div style="width:120px;height: 10px;float:left"></div>
-							<p:selectOneMenu id="att_province" styleClass="inline_select"
-								value="#{postCustomerInfoIndv.attorneyView.provinceId}"
-								rendered="#{postCustomerInfoIndv.attorneyDetailEditable}"
-								>
-								<p:ajax update="att_district,att_subdistrict" listener="#{postCustomerInfoIndv.onSelectAttorneyProvince()}"/>
-	                     			<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-	                     			<f:selectItems value="#{postCustomerInfoIndv.provinces}"/>
+								<p:selectOneMenu id="att_province" styleClass="inline_select"
+									value="#{postCustomerInfoIndv.attorneyView.provinceId}"
+									rendered="#{postCustomerInfoIndv.attorneyDetailEditable and not postCustomerInfoIndv.isDisabled('agent.province')}"
+									>
+									<p:ajax update="att_district,att_subdistrict" listener="#{postCustomerInfoIndv.onSelectAttorneyProvince()}"/>
+		                     			<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+		                     			<f:selectItems value="#{postCustomerInfoIndv.provinces}"/>
 	                     		</p:selectOneMenu>
 	                     		<p:inputText
 									value="#{postCustomerInfoIndv.attorneyView.displayProvince}"
-									rendered="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+									rendered="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('agent.province')}"
 									readonly="true"
 									/>
 	                     		<p:selectOneMenu id="att_district" styleClass="inline_select"
 	                     			style="margin-left:4px;margin-right:4px"
 	                   				value="#{postCustomerInfoIndv.attorneyView.districtId}"
-									rendered="#{postCustomerInfoIndv.attorneyDetailEditable}"
+									rendered="#{postCustomerInfoIndv.attorneyDetailEditable and not postCustomerInfoIndv.isDisabled('agent.district')}"
 									>
 									<p:ajax update="att_subdistrict" listener="#{postCustomerInfoIndv.onSelectAttorneyDistrict()}"/>
 	                     			<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -820,20 +808,20 @@
 	                     		</p:selectOneMenu>
 	                     		<p:inputText
 									value="#{postCustomerInfoIndv.attorneyView.displayDistrict}"
-									rendered="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+									rendered="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('agent.district')}"
 									style="margin-left:4px !important;margin-right:4px !important;"
 									readonly="true"
 									/>
 	                     		<p:selectOneMenu id="att_subdistrict" styleClass="inline_select"
 	                   				value="#{postCustomerInfoIndv.attorneyView.subDistrictId}"
-									rendered="#{postCustomerInfoIndv.attorneyDetailEditable}"
+									rendered="#{postCustomerInfoIndv.attorneyDetailEditable and not postCustomerInfoIndv.isDisabled('agent.subdistrict')}"
 									>
 									<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 	                     				<f:selectItems value="#{postCustomerInfoIndv.attorneySubdistricts}"/>
 	                   			</p:selectOneMenu>
 	                   			<p:inputText
 									value="#{postCustomerInfoIndv.attorneyView.displaySubDistrict}"
-									rendered="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+									rendered="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('agent.subdistrict')}"
 									readonly="true"
 									/>
 						</h:panelGroup>
@@ -841,11 +829,11 @@
 						<h:panelGroup layout="block" styleClass="div_row">
 							<div style="width:120px;display:inline-block">
 								<p:outputLabel for="att_addresspostcode" styleClass="title"
-	                   				value="#{msg.get('app.custInfoIndi.attorneyInRight.address.postcode')}" />
+	                   				value="#{msg.get('app.custInfoIndi.attorneyInRight.address.postcode')}#{postCustomerInfoIndv.mandate('agent.postcode')}" />
 	                   		</div>
 							<p:inputText id='att_addresspostcode'
 	       						value="#{postCustomerInfoIndv.attorneyView.postalCode}"
-	       						readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+	       						readonly="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('agent.postcode')}"
 	       						onkeydown="return onKeyDownNumber(event);"
 								onkeypress="return onKeyPressNumber(event);"
 								size="5" maxlength="5"
@@ -855,11 +843,11 @@
 						<h:panelGroup layout="block" styleClass="div_row">
 							<div style="width:120px;height: 10px;float:left">
 								<p:outputLabel for="att_addresscountry" styleClass="title"
-	                   				value="#{msg.get('app.custInfoIndi.attorneyInRight.address.country')}" />
+	                   				value="#{msg.get('app.custInfoIndi.attorneyInRight.address.country')}#{postCustomerInfoIndv.mandate('agent.country')}" />
 	                   		</div>
 							<p:selectOneMenu id="att_addresscountry" styleClass="inline_select"
 	                   			value="#{postCustomerInfoIndv.attorneyView.countryId}"
-	                   			rendered="#{postCustomerInfoIndv.attorneyDetailEditable}"
+	                   			rendered="#{postCustomerInfoIndv.attorneyDetailEditable and not postCustomerInfoIndv.isDisabled('agent.country')}"
 	                   			>
 								<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 	                     		<f:selectItems value="#{postCustomerInfoIndv.countries}"/>
@@ -867,25 +855,25 @@
 							<p:inputText
 								value="#{postCustomerInfoIndv.attorneyView.displayCountry}"
 								readonly="true"
-								rendered="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+								rendered="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('agent.country')}"
 								/>
 						</h:panelGroup>
 						
 						<h:panelGroup layout="block" styleClass="div_row">
 							<div style="width:120px;display:inline-block">
 								<p:outputLabel for="att_addressphone" styleClass="title"
-	                   				value="#{msg.get('app.custInfoIndi.attorneyInRight.address.phone')}" />
+	                   				value="#{msg.get('app.custInfoIndi.attorneyInRight.address.phone')}#{postCustomerInfoIndv.mandate('agent.phoneNo')}" />
 	                   		</div>
 							<p:inputText id='att_addressphone'
 								value="#{postCustomerInfoIndv.attorneyView.phoneNumber}"
-								readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+								readonly="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('agent.phoneNo')}"
 								onkeydown="return onKeyDownNumber(event);"
 	                            onkeypress="return onKeyPressNumber(event);"
 	                            maxlength="10"
 								/>
 							<p:spacer width="10"/>
 							<p:outputLabel for="att_addressphoneext" 
-	                   			value="#{msg.get('app.custInfoIndi.attorneyInRight.address.phoneext')}" />
+	                   			value="#{msg.get('app.custInfoIndi.attorneyInRight.address.phoneext')}#{postCustomerInfoIndv.mandate('agent.extension')}" />
 							<p:spacer width="5"/>
 							<p:inputText id='att_addressphoneext'
 	                   			value="#{postCustomerInfoIndv.attorneyView.phoneExt}"
@@ -893,7 +881,7 @@
 								onkeydown="return onKeyDownNumber(event);"
 	                            onkeypress="return onKeyPressNumber(event);"
 	                            maxlength="10"
-								readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+								readonly="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('agent.extension')}"
 							/>
 						</h:panelGroup>
 					</h:panelGroup>
@@ -908,27 +896,27 @@
 	                 	value="#{msg.get('app.custInfoIndi.attorneyInRight.contactNumber')}" />
 	            </td>
 				<td colspan="3">
-					<div class="title" style="width:100px;float:left">
+					<div class="title" style="width:130px;float:left">
 						<p:outputLabel for="att_homenumber"
-		                	value="#{msg.get('app.custInfoIndi.attorneyInRight.homeNumber')}" />
+		                	value="#{msg.get('app.custInfoIndi.attorneyInRight.homeNumber')}#{postCustomerInfoIndv.mandate('contact.homeNumber')}" />
 					</div>
 		   			<div style="width:180px;float:left">
 		            	<p:inputText id="att_homenumber"
 		                	value="#{postCustomerInfoIndv.attorneyView.homePhoneNumber}"
-		                 	readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+		                 	readonly="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('contact.homeNumber')}"
 							onkeydown="return onKeyDownNumber(event);"
 							onkeypress="return onKeyPressNumber(event);"
 							maxlength="10"
 		                	/>
 					</div>
-		            <div class="title" style="width:100px;float:left">
+		            <div class="title" style="width:130px;float:left">
 						<p:outputLabel for="att_extnumber"
-							value="#{msg.get('app.custInfoIndi.attorneyInRight.extNumber')}" />
+							value="#{msg.get('app.custInfoIndi.attorneyInRight.extNumber')}#{postCustomerInfoIndv.mandate('contact.extension')}" />
 					</div>
 					<div style="width:180px;float:left">
 						<p:inputText id="att_extnumber" 
 							value="#{postCustomerInfoIndv.attorneyView.homePhoneExt}"
-							readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+							readonly="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('contact.extension')}"
 							onkeydown="return onKeyDownNumber(event);"
 							onkeypress="return onKeyPressNumber(event);"
 							size="5" maxlength="10"
@@ -941,12 +929,12 @@
 				<td colspan="3">
 					<div class="title" style="width:100px;float:left">
 						<p:outputLabel for="att_mobile1"
-							value="#{msg.get('app.custInfoIndi.attorneyInRight.mobile1Number')}" />
+							value="#{msg.get('app.custInfoIndi.attorneyInRight.mobile1Number')}#{postCustomerInfoIndv.mandate('contact.moblile1Number')}" />
 					</div>
 					<div style="width:180px;float:left">
 						<p:inputText id="att_mobile1" 
 							value="#{postCustomerInfoIndv.attorneyView.mobile1}"
-							readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+							readonly="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('contact.moblile1Number')}"
 							onkeydown="return onKeyDownNumber(event);"
 							onkeypress="return onKeyPressNumber(event);"
 							maxlength="15"
@@ -954,12 +942,12 @@
 					</div>
 					<div class="title" style="width:100px;float:left">
 						<p:outputLabel for="att_mobile2"
-							value="#{msg.get('app.custInfoIndi.attorneyInRight.mobile2Number')}" />
+							value="#{msg.get('app.custInfoIndi.attorneyInRight.mobile2Number')}#{postCustomerInfoIndv.mandate('contact.moblile2Number')}" />
 					</div>
 					<div style="width:180px;float:left">
 						<p:inputText id="att_mobile2"
 							value="#{postCustomerInfoIndv.attorneyView.mobile2}" 
-	              			readonly="#{not postCustomerInfoIndv.attorneyDetailEditable}"
+	              			readonly="#{not postCustomerInfoIndv.attorneyDetailEditable or postCustomerInfoIndv.isDisabled('contact.moblile2Number')}"
 							onkeydown="return onKeyDownNumber(event);"
 							onkeypress="return onKeyPressNumber(event);"
 							maxlength="15"
@@ -986,11 +974,12 @@
 	                                 	onstart="handleOnStartOpenCfmDlg();"
 	                                 	oncomplete="handleOnCompleteOpenCfmDlg(args,p_savePostCustIndvDlg);"
 	                                 	update=":frmMain:full_main_container,:result_dialog"
+	                                 	disabled="#{postCustomerInfoIndv.isDisabled('saveButton')}"
 	                                 	 />
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"
-										onstart="p_loading_dialog.show()"
-										action="#{postCustomerInfoIndv.onCancelCustomerInfo()}"
+										oncomplete="p_cancelDlg.show()"
+										disabled="#{postCustomerInfoIndv.isDisabled('cancelButton')}"
 										/>
 	                             </td>
 	                        </tr>
@@ -1017,6 +1006,14 @@
 		<ui:param name="formId" value="savePostCustIndvFrm"/>
 		<ui:param name="controller" value="#{postCustomerInfoIndv}"/>
 		<ui:param name="action" value="onSaveCustomerInfo"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
+	</ui:include>
+	<ui:include src="dialog/confirmCancelDlg.xhtml">
+		<ui:param name="id" value="cancelDlg"/>
+		<ui:param name="name" value="p_cancelDlg"/>
+		<ui:param name="formId" value="cancelFrm"/>
+		<ui:param name="controller" value="#{postCustomerInfoIndv}"/>
+		<ui:param name="action" value="onCancelCustomerInfo"/>
 		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
 </h:body>

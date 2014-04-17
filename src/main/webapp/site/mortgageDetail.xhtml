@@ -57,10 +57,10 @@
                                     <table>
                                         <tr>
                                             <td class="title" style="width:200px;">
-                                                <p:outputLabel value="#{msg.get('app.approveType')}" styleClass="center"/>
+                                                <p:outputLabel value="#{msg.get('app.approveType')}#{mortgageDetail.mandate('approvedType')}" styleClass="center"/>
                                             </td>
                                             <td style="width:200px;">
-                                                <p:selectOneRadio disabled="true" value="#{mortgageDetail.approveType}">
+                                                <p:selectOneRadio disabled="#{mortgageDetail.isDisabled('approvedType')}" value="#{mortgageDetail.approveType}">
                                                 	<f:selectItems value="#{enumGeneralControl.approveTypes}" var="approveType"
                                                 		itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}" 
                                                 		/>
@@ -82,7 +82,7 @@
                         	<tr>
                         		<td class="title" style="width: 180px">
                         			<p:outputLabel  for="mortgage_signingdate"
-                        				value="#{msg.get('app.mortgageDetail.detail.signingDate')}" />	
+                        				value="#{msg.get('app.mortgageDetail.detail.signingDate')}#{mortgageDetail.mandate('mortSignDate')}" />	
                         		</td>
                         		<td colspan="3">
                         			<clv:BECalendar id='mortgage_signingdate'
@@ -90,17 +90,19 @@
                         					pattern="dd/MM/yyyy" showOn="button"
                                        		mindate="#{mortgageDetail.currentDate}"
                                        		autocomplete="false" locale="th_TH"
+                                       		disabled="#{mortgageDetail.isDisabled('mortSignDate')}"
                                        		/>
                         		</td>
                         	</tr>
                         	<tr>
                         		<td class="title" style="width: 180px">
                         			<p:outputLabel  for="mortgage_outsource"
-                        				value="#{msg.get('app.mortgageDetail.detail.outsource')}" />	
+                        				value="#{msg.get('app.mortgageDetail.detail.outsource')}#{mortgageDetail.mandate('outsourceCompany')}" />	
                         		</td>
                         		<td style="width:300px">
                         			<p:selectOneMenu id='mortgage_outsource'
                         				value="#{mortgageDetail.mortgageInfoView.osCompanyId}"
+                        				disabled="#{mortgageDetail.isDisabled('outsourceCompany')}"
                         				>
                         				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         				<f:selectItems value="#{mortgageDetail.outsourceCompaines}" />
@@ -108,11 +110,12 @@
                         		</td>
                         		<td class="title" style="width: 180px">
                         			<p:outputLabel  for="mortgage_landoffice"
-                        				value="#{msg.get('app.mortgageDetail.detail.landOffice')}" />	
+                        				value="#{msg.get('app.mortgageDetail.detail.landOffice')}#{mortgageDetail.mandate('landOffice')}" />	
                         		</td>
                         		<td>
                         			<p:selectOneMenu id='mortgage_landoffice'
                         				value="#{mortgageDetail.mortgageInfoView.landOfficeId}"
+                        				disabled="#{mortgageDetail.isDisabled('landOffice')}"
                         				>
                         				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         				<f:selectItems value="#{mortgageDetail.landOffices}" />
@@ -129,11 +132,12 @@
                         		</td>
                         		<td class="title" style="width: 180px">
                         			<p:outputLabel  for="mortgage_order"
-                        				value="#{msg.get('app.mortgageDetail.detail.mortgageOrder')}" />	
+                        				value="#{msg.get('app.mortgageDetail.detail.mortgageOrder')}#{mortgageDetail.mandate('mortgageOrder')}" />	
                         		</td>
                         		<td>
                         			<p:selectOneMenu id='mortgage_order'
                         				value="#{mortgageDetail.mortgageInfoView.mortgageOrder}"
+                        				disabled="#{mortgageDetail.isDisabled('mortgageOrder')}"
                         				>
                         				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         				<f:selectItems value="#{mortgageDetail.mortgageOrderList}" />
@@ -273,10 +277,12 @@
                         	<tr>
                         		<td class="title" >
                         			<p:outputLabel for='poa'
-                        				value="#{msg.get('app.mortgageDetail.appointee.poa')}" />						
+                        				value="#{msg.get('app.mortgageDetail.appointee.poa')}#{mortgageDetail.mandate('poa')}" />						
                         		</td>
                         		<td colspan="3">
-                        			<p:selectOneRadio id='poa' value="#{mortgageDetail.mortgageInfoView.poa}">
+                        			<p:selectOneRadio id='poa' value="#{mortgageDetail.mortgageInfoView.poa}"
+                        				disabled="#{mortgageDetail.isDisabled('poa')}"
+                        				>
                         				<p:ajax update="coll_owner_tbl,appointee_owner_tbl,appointee_relation,attorney_pane"
                         					process="@this"
                         					onstart="p_loading_dialog.show()"
@@ -422,19 +428,19 @@
                         					<tr>
 	                        					<td class="title" style="width: 180px">
 	                        						<p:outputLabel  for="att_doctype"
-                        								value="#{msg.get('app.mortgageDetail.powerattorney.documentType')}" />
+                        								value="#{msg.get('app.mortgageDetail.powerattorney.documentType')}#{mortgageDetail.mandate('documentType')}" />
 	                        					</td>
 	                        					<td colspan="3">
 				                        			<p:selectOneMenu id='att_doctype'
 				                        				value="#{mortgageDetail.attorneyView.documentTypeId}"
-				                        				rendered="#{mortgageDetail.attorneyDetailEditable}"
+				                        				rendered="#{mortgageDetail.attorneyDetailEditable and not mortgageDetail.isDisabled('documentType')}"
 				                        				>
 				                        				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				                        				<f:selectItems value="#{mortgageDetail.documentTypes}" />
 				                        			</p:selectOneMenu>
 				                        			<p:inputText id='doctype'
 														value="#{mortgageDetail.attorneyView.displayDocumentType}"
-														rendered="#{not mortgageDetail.attorneyDetailEditable}"
+														rendered="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('documentType')}"
 														readonly="true"
 														/>
 				                        		</td>
@@ -442,24 +448,24 @@
 				                        	<tr>
 				                        		<td class="title">
 	                        						<p:outputLabel  for="att_personalid"
-                        								value="#{msg.get('app.mortgageDetail.powerattorney.personalID')}" />
+                        								value="#{msg.get('app.mortgageDetail.powerattorney.personalID')}#{mortgageDetail.mandate('personalID')}" />
 	                        					</td>
 	                        					<td colspan="3">
 	                        						<p:inputText id='att_personalid' styleClass="large"
 	                        							value="#{mortgageDetail.attorneyView.personalId}"
-	                        							readonly="#{not mortgageDetail.attorneyDetailEditable}"
+	                        							readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('personalID')}"
 	                        							 />
 				                        		</td>
 				                        	</tr>
 				                        	<tr>
 				                        		<td class="title">
 	                        						<p:outputLabel  for="att_name"
-                        								value="#{msg.get('app.mortgageDetail.powerattorney.customerNameTH')}" />
+                        								value="#{msg.get('app.mortgageDetail.powerattorney.customerNameTH')}#{mortgageDetail.mandate('firstnameTH')}" />
 	                        					</td>
 	                        					<td colspan="3">
 	                        						<p:selectOneMenu id='att_title' styleClass="inline_select"
 	                        							value="#{mortgageDetail.attorneyView.titleId}"
-	                        							rendered="#{mortgageDetail.attorneyDetailEditable}"
+	                        							rendered="#{mortgageDetail.attorneyDetailEditable and not mortgageDetail.isDisabled('titleTH')}"
 	                        							>
 				                        				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				                        				<f:selectItems value="#{mortgageDetail.titles}" />
@@ -467,24 +473,24 @@
 				                        			<p:inputText styleClass="small"
 														value="#{mortgageDetail.attorneyView.displayTitle}"
 														readonly="true"
-														rendered="#{not mortgageDetail.attorneyDetailEditable}"
+														rendered="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('titleTH')}"
 														/>
 				                        			<p:spacer width="5"/>
 	                        						<p:inputText id='att_name' styleClass="large" 
 	                        							value="#{mortgageDetail.attorneyView.nameTH}"
-	                        							readonly="#{not mortgageDetail.attorneyDetailEditable}"
+	                        							readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('firstnameTH')}"
 	                        							/>
 	                        						<p:spacer width="5"/>
 	                        						<p:inputText id='att_surname' styleClass="largest"
 	                        							value="#{mortgageDetail.attorneyView.lastNameTH}"
-	                        							readonly="#{not mortgageDetail.attorneyDetailEditable}"
+	                        							readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('lastnameTH')}"
 	                        							/>
 				                        		</td>
 				                        	</tr>
 				                        	<tr>
 				                        		<td class="title">
 	                        						<p:outputLabel  for="att_dateofbirth"
-                        								value="#{msg.get('app.mortgageDetail.powerattorney.dateOfBirth')}" />
+                        								value="#{msg.get('app.mortgageDetail.powerattorney.dateOfBirth')}#{mortgageDetail.mandate('dateOfBirth')}" />
 	                        					</td>
 	                        					<td style="width:350px">
 	                        						<clv:BECalendar id='att_dateofbirth' navigator="true" 
@@ -493,7 +499,7 @@
 	                        							value="#{mortgageDetail.attorneyView.birthDate}"
 			                        					pattern="dd/MM/yyyy" showOn="button"
 			                                       		autocomplete="false" locale="th_TH"
-			                                       		disabled="#{not mortgageDetail.attorneyDetailEditable}"
+			                                       		disabled="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('dateOfBirth')}"
 			                                       		>
 			                                       		<p:ajax update="att_age" event="dateSelect" 
 															listener="#{mortgageDetail.handleBirthDay}"
@@ -515,12 +521,12 @@
 				                        	<tr>
 				                        		<td class="title">
 	                        						<p:outputLabel  for="att_gender"
-                        								value="#{msg.get('app.mortgageDetail.powerattorney.gender')}" />
+                        								value="#{msg.get('app.mortgageDetail.powerattorney.gender')}#{mortgageDetail.mandate('gender')}" />
 	                        					</td>
 	                        					<td colspan="3">
 	                        						<p:selectOneMenu id='att_gender'
 	                        							value="#{mortgageDetail.attorneyView.gender}"
-														rendered="#{mortgageDetail.attorneyDetailEditable}"
+														rendered="#{mortgageDetail.attorneyDetailEditable and not mortgageDetail.isDisabled('gender')}"
 														>
 				                        				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				                        				<f:selectItems value="#{enumGeneralControl.genders}" var="gender"
@@ -529,7 +535,7 @@
 				                        			</p:selectOneMenu>
 				                        			<p:inputText
 														value="#{msg.get(mortgageDetail.attorneyView.gender.msgKey)}"
-														rendered="#{not mortgageDetail.attorneyDetailEditable}"
+														rendered="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('gender')}"
 														readonly="true"
 														/>
 				                        		</td>
@@ -537,37 +543,37 @@
 				                        	<tr>
 				                        		<td class="title">
 	                        						<p:outputLabel  for="att_race"
-                        								value="#{msg.get('app.mortgageDetail.powerattorney.race')}" />
+                        								value="#{msg.get('app.mortgageDetail.powerattorney.race')}#{mortgageDetail.mandate('race')}" />
 	                        					</td>
 	                        					<td style="width:300px">
 	                        						<p:selectOneMenu id='att_race'
 	                        							value="#{mortgageDetail.attorneyView.raceId}"
-	                        							rendered="#{mortgageDetail.attorneyDetailEditable}"
+	                        							rendered="#{mortgageDetail.attorneyDetailEditable and not mortgageDetail.isDisabled('race')}"
 	                        							>
 				                        				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				                        				<f:selectItems value="#{mortgageDetail.races}"/>
 				                        			</p:selectOneMenu>
 				                        			<p:inputText
 														value="#{mortgageDetail.attorneyView.displayRace}"
-														rendered="#{not mortgageDetail.attorneyDetailEditable}"
+														rendered="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('race')}"
 														readonly="true"
 														/>
 				                        		</td>
 				                        		<td class="title" style="width:180px">
 				                        			<p:outputLabel  for="att_nationality"
-				                        				value="#{msg.get('app.mortgageDetail.powerattorney.nationality')}" />
+				                        				value="#{msg.get('app.mortgageDetail.powerattorney.nationality')}#{mortgageDetail.mandate('nationality')}" />
 				                        		</td>
 				                        		<td>
 				                        			<p:selectOneMenu id='att_nationality'
 				                        				value="#{mortgageDetail.attorneyView.nationalityId}"
-														rendered="#{mortgageDetail.attorneyDetailEditable}"
+														rendered="#{mortgageDetail.attorneyDetailEditable and not mortgageDetail.isDisabled('nationality')}"
 														>
 				                        				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				                        				<f:selectItems value="#{mortgageDetail.nationalities}"/>
 				                        			</p:selectOneMenu>
 				                        			<p:inputText
 														value="#{mortgageDetail.attorneyView.displayNationality}"
-														rendered="#{not mortgageDetail.attorneyDetailEditable}"
+														rendered="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('nationality')}"
 														readonly="true"
 														/>
 				                        		</td>
@@ -584,41 +590,41 @@
 														<h:panelGroup layout="block" styleClass="div_row">
 															<div style="width:120px;display:inline-block">
 																<p:outputLabel for="att_addressno" styleClass="title"
-		                        									value="#{msg.get('app.mortgageDetail.powerattorney.address.addressNo')}" />
+		                        									value="#{msg.get('app.mortgageDetail.powerattorney.address.addressNo')}#{mortgageDetail.mandate('registration.addressNo')}" />
 															</div>
 															<p:inputText id='att_addressno' styleClass="smaller"
 				                        						value="#{mortgageDetail.attorneyView.addressNo}"
-				                        						readonly="#{not mortgageDetail.attorneyDetailEditable}"
+				                        						readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('registration.addressNo')}"
 				                        						/>	
 															<p:spacer width="30" height="10"/>
 															<p:outputLabel for="att_addressmoo" styleClass="title"
-			                        							value="#{msg.get('app.mortgageDetail.powerattorney.address.moo')}" />
+			                        							value="#{msg.get('app.mortgageDetail.powerattorney.address.moo')}#{mortgageDetail.mandate('registration.addressMoo')}" />
 															<p:spacer width="8"/>
 															<p:inputText id='att_addressmoo'
 			                        							value="#{mortgageDetail.attorneyView.moo}"
-				                        						readonly="#{not mortgageDetail.attorneyDetailEditable}"
+				                        						readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('registration.addressMoo')}"
 				                        						onkeydown="return onKeyDownNumber(event);"
 																onkeypress="return onKeyPressNumber(event);"
 																size="5" maxlength="5"
 																/>	
 															<p:spacer width="30" height="10"/>
 															<p:outputLabel for="att_addressbuilding" styleClass="title"
-			                        							value="#{msg.get('app.mortgageDetail.powerattorney.address.building')}" />
+			                        							value="#{msg.get('app.mortgageDetail.powerattorney.address.building')}#{mortgageDetail.mandate('registration.addressBuilding')}" />
 															<p:spacer width="8"/>
 															<p:inputText id='att_addressbuilding'
 			                        							value="#{mortgageDetail.attorneyView.building}"
-				                        						readonly="#{not mortgageDetail.attorneyDetailEditable}"
+				                        						readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('registration.addressBuilding')}"
 				                        						/>
 														</h:panelGroup>
 														
 														<h:panelGroup layout="block" styleClass="div_row">
 															<div style="width:120px;display:inline-block">
 																<p:outputLabel for="att_addressstreet" styleClass="title"
-				                        							value="#{msg.get('app.mortgageDetail.powerattorney.address.street')}" />
+				                        							value="#{msg.get('app.mortgageDetail.powerattorney.address.street')}#{mortgageDetail.mandate('registration.addressStreet')}" />
 															</div>
 															<p:inputText id='att_addressstreet' style="width:500px"
 				                        						value="#{mortgageDetail.attorneyView.road}"
-				                        						readonly="#{not mortgageDetail.attorneyDetailEditable}"
+				                        						readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('registration.addressStreet')}"
 				                        						/>	
 														</h:panelGroup>
 														
@@ -626,7 +632,7 @@
 															<div style="width:120px;height: 10px;float:left"></div>
 															<p:selectOneMenu id="att_province" styleClass="inline_select"
 				                        						value="#{mortgageDetail.attorneyView.provinceId}"
-																rendered="#{mortgageDetail.attorneyDetailEditable}"
+																rendered="#{mortgageDetail.attorneyDetailEditable and not mortgageDetail.isDisabled('registration.province')}"
 																>
 																<p:ajax update="att_district,att_subdistrict" listener="#{mortgageDetail.onSelectProvince()}"/>
 						                        				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -634,13 +640,13 @@
 						                        			</p:selectOneMenu>
 						                        			<p:inputText
 																value="#{mortgageDetail.attorneyView.displayProvince}"
-																rendered="#{not mortgageDetail.attorneyDetailEditable}"
+																rendered="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('registration.province')}"
 																readonly="true"
 																/>
 						                        			<p:selectOneMenu id="att_district" styleClass="inline_select"
 						                        				style="margin-left:4px;margin-right:4px"
 				                        						value="#{mortgageDetail.attorneyView.districtId}"
-																rendered="#{mortgageDetail.attorneyDetailEditable}"
+																rendered="#{mortgageDetail.attorneyDetailEditable and not mortgageDetail.isDisabled('registration.district')}"
 																>
 																<p:ajax update="att_subdistrict" listener="#{mortgageDetail.onSelectDistrict()}"/>
 						                        				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -648,20 +654,20 @@
 						                        			</p:selectOneMenu>
 						                        			<p:inputText
 																value="#{mortgageDetail.attorneyView.displayDistrict}"
-																rendered="#{not mortgageDetail.attorneyDetailEditable}"
+																rendered="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('registration.district')}"
 																style="margin-left:4px !important;margin-right:4px !important;"
 																readonly="true"
 																/>
 						                        			<p:selectOneMenu id="att_subdistrict" styleClass="inline_select"
 				                        						value="#{mortgageDetail.attorneyView.subDistrictId}"
-																rendered="#{mortgageDetail.attorneyDetailEditable}"
+																rendered="#{mortgageDetail.attorneyDetailEditable and not mortgageDetail.isDisabled('registration.subdistrict')}"
 																>
 																<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 						                        				<f:selectItems value="#{mortgageDetail.subdistricts}"/>
 						                        			</p:selectOneMenu>
 						                        			<p:inputText
 																value="#{mortgageDetail.attorneyView.displaySubDistrict}"
-																rendered="#{not mortgageDetail.attorneyDetailEditable}"
+																rendered="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('registration.subdistrict')}"
 																readonly="true"
 																/>
 														</h:panelGroup>
@@ -669,11 +675,11 @@
 														<h:panelGroup layout="block" styleClass="div_row">
 															<div style="width:120px;display:inline-block">
 																<p:outputLabel for="att_addresspostcode" styleClass="title"
-				                        							value="#{msg.get('app.mortgageDetail.powerattorney.address.postcode')}" />
+				                        							value="#{msg.get('app.mortgageDetail.powerattorney.address.postcode')}#{mortgageDetail.mandate('registration.postcode')}" />
 				                        					</div>
 															<p:inputText id='att_addresspostcode'
 				                        						value="#{mortgageDetail.attorneyView.postalCode}"
-				                        						readonly="#{not mortgageDetail.attorneyDetailEditable}"
+				                        						readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('registration.postcode')}"
 				                        						onkeydown="return onKeyDownNumber(event);"
 																onkeypress="return onKeyPressNumber(event);"
 																size="5" maxlength="5"
@@ -683,11 +689,11 @@
 														<h:panelGroup layout="block" styleClass="div_row">
 															<div style="width:120px;height: 10px;float:left">
 																<p:outputLabel for="att_addresscountry" styleClass="title"
-				                        							value="#{msg.get('app.mortgageDetail.powerattorney.address.country')}" />
+				                        							value="#{msg.get('app.mortgageDetail.powerattorney.address.country')}#{mortgageDetail.mandate('registration.country')}" />
 				                        					</div>
 															<p:selectOneMenu id="att_addresscountry" styleClass="inline_select"
 				                        						value="#{mortgageDetail.attorneyView.countryId}"
-				                        						rendered="#{mortgageDetail.attorneyDetailEditable}"
+				                        						rendered="#{mortgageDetail.attorneyDetailEditable and not mortgageDetail.isDisabled('registration.country')}"
 				                        						>
 																<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 						                        				<f:selectItems value="#{mortgageDetail.countries}"/>
@@ -695,25 +701,25 @@
 															<p:inputText
 																value="#{mortgageDetail.attorneyView.displayCountry}"
 																readonly="true"
-																rendered="#{not mortgageDetail.attorneyDetailEditable}"
+																rendered="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('registration.country')}"
 																/>
 														</h:panelGroup>
 														
 														<h:panelGroup layout="block" styleClass="div_row">
 															<div style="width:120px;display:inline-block">
 																<p:outputLabel for="att_addressphone" styleClass="title"
-				                        							value="#{msg.get('app.mortgageDetail.powerattorney.address.phone')}" />
+				                        							value="#{msg.get('app.mortgageDetail.powerattorney.address.phone')}#{mortgageDetail.mandate('registration.phoneNo')}" />
 				                        					</div>
 															<p:inputText id='att_addressphone'
 																value="#{mortgageDetail.attorneyView.phoneNumber}"
-																readonly="#{not mortgageDetail.attorneyDetailEditable}"
+																readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('registration.phoneNo')}"
 																onkeydown="return onKeyDownNumber(event);"
 									                            onkeypress="return onKeyPressNumber(event);"
 									                            maxlength="10"
 																/>
 															<p:spacer width="10"/>
 															<p:outputLabel for="att_addressphoneext" 
-				                        						value="#{msg.get('app.mortgageDetail.powerattorney.address.phoneext')}" />
+				                        						value="#{msg.get('app.mortgageDetail.powerattorney.address.phoneext')}#{mortgageDetail.mandate('registration.extension')}" />
 															<p:spacer width="5"/>
 															<p:inputText id='att_addressphoneext'
 				                        						value="#{mortgageDetail.attorneyView.phoneExt}"
@@ -721,7 +727,7 @@
 																onkeydown="return onKeyDownNumber(event);"
 									                            onkeypress="return onKeyPressNumber(event);"
 									                            maxlength="10"
-																readonly="#{not mortgageDetail.attorneyDetailEditable}"
+																readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('registration.extension')}"
 															/>
 														</h:panelGroup>
 													</h:panelGroup>
@@ -733,12 +739,12 @@
 				                        	<tr>
 				                        		<td class="title">
 	                        						<p:outputLabel for="att_marital"
-                        								value="#{msg.get('app.mortgageDetail.powerattorney.marital')}" />
+                        								value="#{msg.get('app.mortgageDetail.powerattorney.marital')}#{mortgageDetail.mandate('marriageStatus')}" />
 	                        					</td>
 	                        					<td colspan="3">
 	                        						<p:selectOneMenu id='att_marital'
 	                        							value="#{mortgageDetail.attorneyView.maritalStatusId}"
-														rendered="#{mortgageDetail.attorneyDetailEditable}"
+														rendered="#{mortgageDetail.attorneyDetailEditable and not mortgageDetail.isDisabled('marriageStatus')}"
 														>
 														<p:ajax update="att_marriagetitle,att_marriagename,att_marriagesurname" />
 				                        				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -746,7 +752,7 @@
 				                        			</p:selectOneMenu>
 				                        			<p:inputText
 														value="#{mortgageDetail.attorneyView.displayMaritalStatus}"
-														rendered="#{not mortgageDetail.attorneyDetailEditable}"
+														rendered="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('marriageStatus')}"
 														readonly="true"
 														/>
 				                        		</td>
@@ -754,91 +760,91 @@
 				                        	<tr>
 				                        		<td class="title">
 	                        						<p:outputLabel for="att_marriagename"
-                        								value="#{msg.get('app.mortgageDetail.powerattorney.marriageNameTH')}" />
+                        								value="#{msg.get('app.mortgageDetail.powerattorney.marriageNameTH')}#{mortgageDetail.mandate('firstnameTH')}" />
 	                        					</td>
 	                        					<td colspan="3">
 	                        						<p:selectOneMenu id='att_marriagetitle' styleClass="inline_select"
 	                        							value="#{mortgageDetail.attorneyView.spouseTitleId}"
 														disabled="#{not mortgageDetail.canUpdateSpouse()}"
-														rendered="#{mortgageDetail.attorneyDetailEditable}"
+														rendered="#{mortgageDetail.attorneyDetailEditable and not mortgageDetail.isDisabled('titleTH')}"
 														>
 				                        				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				                        				<f:selectItems value="#{mortgageDetail.titles}"/>
 				                        			</p:selectOneMenu>
 				                        			<p:inputText
 														value="#{mortgageDetail.attorneyView.displaySpouseTitle}"
-														rendered="#{not mortgageDetail.attorneyDetailEditable}"
+														rendered="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('titleTH')}"
 														readonly="true"
 														/>
 				                        			<p:spacer width="5"/>
 	                        						<p:inputText id='att_marriagename' styleClass="large" 
 	                        							value="#{mortgageDetail.attorneyView.spouseNameTH}"
-	                        							readonly="#{not mortgageDetail.canUpdateSpouse()}"
+	                        							readonly="#{not mortgageDetail.canUpdateSpouse() or mortgageDetail.isDisabled('firstnameTH')}"
 	                        							/>
 	                        						<p:spacer width="5"/>
 	                        						<p:inputText id='att_marriagesurname' styleClass="largest"
 	                        							value="#{mortgageDetail.attorneyView.spouseLastNameTH}"
-	                        							readonly="#{not mortgageDetail.canUpdateSpouse()}"
+	                        							readonly="#{not mortgageDetail.canUpdateSpouse() or mortgageDetail.isDisabled('lastnameTH')}"
 	                        							/>
 				                        		</td>
 				                        	</tr>
 				                        	<tr>
 				                        	<td class="title">
 	                        						<p:outputLabel for="att_fathername"
-                        								value="#{msg.get('app.mortgageDetail.powerattorney.fatherNameTH')}" />
+                        								value="#{msg.get('app.mortgageDetail.powerattorney.fatherNameTH')}#{mortgageDetail.mandate('firstnameTH')}" />
 	                        					</td>
 	                        					<td colspan="3">
 	                        						<p:selectOneMenu id='att_fathertitle' styleClass="inline_select"
 	                        							value="#{mortgageDetail.attorneyView.fatherTitleId}"
-														rendered="#{mortgageDetail.attorneyDetailEditable}"
+														rendered="#{mortgageDetail.attorneyDetailEditable and not mortgageDetail.isDisabled('titleTH')}"
 														>
 				                        				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				                        				<f:selectItems value="#{mortgageDetail.titles}"/>
 				                        			</p:selectOneMenu>
 				                        			<p:inputText
 														value="#{mortgageDetail.attorneyView.displayFatherTitle}"
-														rendered="#{not mortgageDetail.attorneyDetailEditable}"
+														rendered="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('titleTH')}"
 														readonly="true"
 														/>
 				                        			<p:spacer width="5"/>
 	                        						<p:inputText id='att_fathername' styleClass="large" 
 	                        							value="#{mortgageDetail.attorneyView.fatherNameTH}"
-	                        							readonly="#{not mortgageDetail.attorneyDetailEditable}"
+	                        							readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('firstnameTH')}"
 	                        							/>
 	                        						<p:spacer width="5"/>
 	                        						<p:inputText id='att_fathersurname' styleClass="largest"
 	                        							value="#{mortgageDetail.attorneyView.fatherLastNameTH}"
-	                        							readonly="#{not mortgageDetail.attorneyDetailEditable}"
+	                        							readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('lastnameTH')}"
 	                        							/>
 				                        		</td>
 				                        	</tr>
 				                        	<tr>
 				                        		<td class="title">
 	                        						<p:outputLabel for="att_mothername"
-                        								value="#{msg.get('app.mortgageDetail.powerattorney.motherNameTH')}" />
+                        								value="#{msg.get('app.mortgageDetail.powerattorney.motherNameTH')}#{mortgageDetail.mandate('firstnameTH')}" />
 	                        					</td>
 	                        					<td colspan="3">
 	                        						<p:selectOneMenu id='att_mothertitle' styleClass="inline_select"
 	                        							value="#{mortgageDetail.attorneyView.motherTitleId}"
-														rendered="#{mortgageDetail.attorneyDetailEditable}"
+														rendered="#{mortgageDetail.attorneyDetailEditable and not mortgageDetail.isDisabled('titleTH')}"
 														>
 				                        				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				                        				<f:selectItems value="#{mortgageDetail.titles}"/>
 				                        			</p:selectOneMenu>
 				                        			<p:inputText
 														value="#{mortgageDetail.attorneyView.displayMotherTitle}"
-														rendered="#{not mortgageDetail.attorneyDetailEditable}"
+														rendered="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('titleTH')}"
 														readonly="true"
 														/>
 				                        			<p:spacer width="5"/>
 	                        						<p:inputText id='att_mothername' styleClass="large" 
 	                        							value="#{mortgageDetail.attorneyView.motherNameTH}"
-	                        							readonly="#{not mortgageDetail.attorneyDetailEditable}"
+	                        							readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('firstnameTH')}"
 	                        							/>
 	                        						<p:spacer width="5"/>
 	                        						<p:inputText id='att_mothersurname' styleClass="largest"
 	                        							value="#{mortgageDetail.attorneyView.motherLastNameTH}"
-	                        							readonly="#{not mortgageDetail.attorneyDetailEditable}"
+	                        							readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('lastnameTH')}"
 	                        							/>
 				                        		</td>
 				                        	</tr>
@@ -850,12 +856,12 @@
 	                        					<td colspan="3">
                        								<div class="title" style="width:100px;float:left">
                        									<p:outputLabel for="att_homenumber"
-                      											value="#{msg.get('app.mortgageDetail.powerattorney.homeNumber')}" />
+                      											value="#{msg.get('app.mortgageDetail.powerattorney.homeNumber')}#{mortgageDetail.mandate('homeNumber')}" />
                        								</div>
                        								<div style="width:180px;float:left">
                        									<p:inputText id="att_homenumber"
                        										value="#{mortgageDetail.attorneyView.homePhoneNumber}"
-                       										readonly="#{not mortgageDetail.attorneyDetailEditable}"
+                       										readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('homeNumber')}"
 															onkeydown="return onKeyDownNumber(event);"
 															onkeypress="return onKeyPressNumber(event);"
 															maxlength="10"
@@ -864,12 +870,12 @@
                        								</div>
                        								<div class="title" style="width:100px;float:left">
 	                        								<p:outputLabel for="att_extnumber"
-                        										value="#{msg.get('app.mortgageDetail.powerattorney.extNumber')}" />
+                        										value="#{msg.get('app.mortgageDetail.powerattorney.extNumber')}#{mortgageDetail.mandate('extNumber')}" />
                        								</div>
                        								<div style="width:180px;float:left">
                        									<p:inputText id="att_extnumber" 
                        										value="#{mortgageDetail.attorneyView.homePhoneExt}"
-					                        				readonly="#{not mortgageDetail.attorneyDetailEditable}"
+					                        				readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('extNumber')}"
 															onkeydown="return onKeyDownNumber(event);"
 															onkeypress="return onKeyPressNumber(event);"
 															size="5" maxlength="10"
@@ -882,12 +888,12 @@
                        							<td colspan="3">
                        								<div class="title" style="width:100px;float:left">
                        									<p:outputLabel for="att_mobile1"
-                        											value="#{msg.get('app.mortgageDetail.powerattorney.mobile1Number')}" />
+                        											value="#{msg.get('app.mortgageDetail.powerattorney.mobile1Number')}#{mortgageDetail.mandate('mobile1Number')}" />
                        								</div>
                        								<div style="width:180px;float:left">
                        									<p:inputText id="att_mobile1" 
                        										value="#{mortgageDetail.attorneyView.mobile1}"
-							                        		readonly="#{not mortgageDetail.attorneyDetailEditable}"
+							                        		readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('mobile1Number')}"
 															onkeydown="return onKeyDownNumber(event);"
 															onkeypress="return onKeyPressNumber(event);"
 															maxlength="15"
@@ -895,12 +901,12 @@
                        								</div>
                        								<div class="title" style="width:100px;float:left">
 	                        								<p:outputLabel for="att_mobile2"
-                        											value="#{msg.get('app.mortgageDetail.powerattorney.mobile2Number')}" />
+                        											value="#{msg.get('app.mortgageDetail.powerattorney.mobile2Number')}#{mortgageDetail.mandate('mobile2Number')}" />
                        								</div>
                        								<div style="width:180px;float:left">
                        									<p:inputText id="att_mobile2"
                        										value="#{mortgageDetail.attorneyView.mobile2}" 
-					                        				readonly="#{not mortgageDetail.attorneyDetailEditable}"
+					                        				readonly="#{not mortgageDetail.attorneyDetailEditable or mortgageDetail.isDisabled('mobile2Number')}"
 															onkeydown="return onKeyDownNumber(event);"
 															onkeypress="return onKeyPressNumber(event);"
 															maxlength="15"
@@ -928,9 +934,12 @@
 										onstart="handleOnStartOpenCfmDlg();"
 										oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveMortgageDetailDlg);"
 										update=":frmMain:full_main_container,:result_dialog"
+										disabled="#{mortgageDetail.isDisabled('saveButton')}"
 	                                 	 />
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"
+										oncomplete="p_cancelDlg.show()"
+										disabled="#{mortgageDetail.isDisabled('cancelButton')}"
 										/>
 	                             </td>
 	                        </tr>
@@ -956,6 +965,14 @@
 		<ui:param name="formId" value="saveMortgageDetailFrm"/>
 		<ui:param name="controller" value="#{mortgageDetail}"/>
 		<ui:param name="action" value="onSaveMortgageDetail"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
+	</ui:include>
+	<ui:include src="dialog/confirmCancelDlg.xhtml">
+		<ui:param name="id" value="cancelDlg"/>
+		<ui:param name="name" value="p_cancelDlg"/>
+		<ui:param name="formId" value="cancelFrm"/>
+		<ui:param name="controller" value="#{mortgageDetail}"/>
+		<ui:param name="action" value="onCancelMortgage"/>
 		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
 </h:body>

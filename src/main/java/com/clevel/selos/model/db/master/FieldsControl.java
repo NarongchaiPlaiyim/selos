@@ -45,6 +45,10 @@ public class FieldsControl implements Serializable {
     @Column(name = "special_type_id")
     private int specialTypeId;
 
+    @OneToOne
+    @JoinColumn(name = "status_id")
+    Status status;
+
     public long getId() {
         return id;
     }
@@ -125,19 +129,28 @@ public class FieldsControl implements Serializable {
         this.specialTypeId = specialTypeId;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("fieldName", fieldName)
-                .append("screenId", screenId)
-                .append("role", role)
-                .append("step", step)
-                .append("mandate", mandate)
-                .append("readonly", readonly)
-                .append("productGroup", productGroup)
-                .append("productProgram", productProgram)
-                .append("specialTypeId", specialTypeId)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("fieldName", fieldName).
+                append("screenId", screenId).
+                append("role", role).
+                append("step", step).
+                append("mandate", mandate).
+                append("readonly", readonly).
+                append("productGroup", productGroup).
+                append("productProgram", productProgram).
+                append("specialTypeId", specialTypeId).
+                append("status", status).
+                toString();
     }
 }

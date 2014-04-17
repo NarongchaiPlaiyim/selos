@@ -114,7 +114,6 @@ public class FeeCalculation implements Serializable {
 		if (preRenderCheck)
 			return;
 		preRenderCheck = true;
-		System.err.println("STEP = "+stepId+" < STAGE "+stageId);
 		String redirectPage = null;
 		if (workCaseId > 0) {
 			if (stepId <= 0 || stageId != 301) {
@@ -213,15 +212,17 @@ public class FeeCalculation implements Serializable {
 		}
 	}
 	public String mandate(String name) {
+		boolean isMandate = FieldsControlView.DEFAULT_MANDATE;
 		FieldsControlView field = fieldMap.get(name);
-		if (field == null)
-			return "";
-		return field.isMandate() ? " *" : "";
+		if (field != null)
+			isMandate = field.isMandate();
+		return isMandate ? " *" : "";
 	}
+	
 	public boolean isDisabled(String name) {
 		FieldsControlView field = fieldMap.get(name);
 		if (field == null)
-			return false;
+			return FieldsControlView.DEFAULT_READONLY;
 		return field.isReadOnly();
 	}
 }

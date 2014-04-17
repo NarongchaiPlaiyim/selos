@@ -36,7 +36,6 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -309,14 +308,6 @@ public class TestNCRS implements Serializable {
 
     public void onClickCallECM(){
         log.debug("-- onClickCallECM()");
-        System.out.println("-- onClickCallECM");
-
-        log.debug("----------------------------");
-        String date = Util.createDateTh(new Date());
-        log.debug("--date {}",date);
-        String[] month = date.split("");
-        log.debug("--month {}",month);
-
         try{
             ECMDataResult ecmDataResult = ecmInterface.getECMDataResult(caNumberECM);
             if(!Util.isNull(ecmDataResult) && ActionResult.SUCCESS.equals(ecmDataResult.getActionResult())){

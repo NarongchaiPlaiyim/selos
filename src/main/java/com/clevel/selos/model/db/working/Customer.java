@@ -81,10 +81,10 @@ public class Customer implements Serializable {
     @Column(name = "csi_checked", nullable = false, columnDefinition = "int default 0")
     private int csiFlag;
 
-    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL,fetch=FetchType.LAZY)
     private Individual individual;
 
-    @OneToOne(mappedBy="customer", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy="customer", cascade = CascadeType.ALL,fetch=FetchType.LAZY)
     private Juristic juristic;
 
     @OneToMany(mappedBy="customer", cascade = CascadeType.ALL)

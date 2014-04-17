@@ -102,6 +102,9 @@ public class CustomerAcceptance implements Serializable {
 		else
 			return basicInfoView.getApproveType();
 	}
+	public void setApproveType(ApproveType type) {
+		//DO NOTHING
+	}
 	public String getMinDate() {
 		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
 		return dFmt.format(new Date());
@@ -278,28 +281,29 @@ public class CustomerAcceptance implements Serializable {
 		
 	}
 	public String mandate(String name) {
+		boolean isMandate = FieldsControlView.DEFAULT_MANDATE;
 		FieldsControlView field = fieldMap.get(name);
-		if (field == null)
-			return "";
-		return field.isMandate() ? " *" : "";
+		if (field != null)
+			isMandate = field.isMandate();
+		return isMandate ? " *" : "";
 	}
 	
 	public boolean isDisabled(String name) {
 		FieldsControlView field = fieldMap.get(name);
 		if (field == null)
-			return false;
+			return FieldsControlView.DEFAULT_READONLY;
 		return field.isReadOnly();
 	}
 	public boolean isDialogMandate(String name) {
 		FieldsControlView field = dialogFieldMap.get(name);
 		if (field == null)
-			return false;
+			return FieldsControlView.DEFAULT_MANDATE;
 		return field.isMandate();
 	}
 	public boolean isDialogDisable(String name) {
 		FieldsControlView field = dialogFieldMap.get(name);
 		if (field == null)
-			return false;
+			return FieldsControlView.DEFAULT_READONLY;
 		return field.isReadOnly();
 	}
 }

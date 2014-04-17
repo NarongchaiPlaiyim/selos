@@ -57,10 +57,10 @@
                                     <table>
                                         <tr>
                                             <td class="title" style="width:200px;">
-                                                <p:outputLabel value="#{msg.get('app.approveType')}" styleClass="center"/>
+                                                <p:outputLabel value="#{msg.get('app.approveType')}#{pledgeDetail.mandate('approvedType')}" styleClass="center"/>
                                             </td>
                                             <td style="width:200px;">
-                                                <p:selectOneRadio disabled="true" value="#{pledgeDetail.approveType}">
+                                                <p:selectOneRadio disabled="#{pledgeDetail.isDisabled('approvedType')}" value="#{pledgeDetail.approveType}">
                                                 	<f:selectItems value="#{enumGeneralControl.approveTypes}" var="approveType"
                                                 		itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}" 
                                                 		/>
@@ -82,7 +82,7 @@
                         	<tr>
                         		<td class="title" style="width: 180px">
                         			<p:outputLabel  for="pledge_signingdate"
-                        				value="#{msg.get('app.pledgeDetail.detail.signingDate')}" />	
+                        				value="#{msg.get('app.pledgeDetail.detail.signingDate')}#{pledgeDetail.mandate('pledgeSignDate')}" />	
                         		</td>
                         		<td>
                         			<clv:BECalendar id='pledge_signingdate'
@@ -90,6 +90,7 @@
                         					pattern="dd/MM/yyyy" showOn="button"
                                        		mindate="#{pledgeDetail.minDate}"
                                        		autocomplete="false" locale="th_TH"
+                                       		disabled="#{pledgeDetail.isDisabled('pledgeSignDate')}"
                                        		/>
                         		</td>
                         	</tr>
@@ -176,7 +177,7 @@
                         		</td>
                         		<td>
                         			<p:inputText value="#{pledgeDetail.pledgeInfoView.accountNo}"
-                        				styleClass="readonly large" readonly="true" 
+                        				styleClass="large" readonly="true" 
                         				/>
                         		</td>
                         	</tr>
@@ -187,7 +188,7 @@
                         		</td>
                         		<td>
                         			<p:inputText id='number_of_pledge' value="#{pledgeDetail.numberOfPledgeAC}" 
-                        				styleClass="readonly large" readonly="true" 
+                        				styleClass="large" readonly="true" 
                         				/>
                         			<p:spacer width="10"/>
                         			<p:commandButton id='addBtn' value="#{msg.get('app.button.add')}"
@@ -196,6 +197,7 @@
 			                                  	action="#{pledgeDetail.onOpenAddPledgeACDepDialog()}"
 				                                oncomplete="p_pledgeACDepDlg.show()"
 				                                update=":pledgeACDepDlg"
+				                                disabled="#{pledgeDetail.isDisabled('addButton')}"
 				                                >
 										<p:resetInput target=":pledgeACDepDlg" />
 				                   	</p:commandButton>
@@ -229,6 +231,7 @@
                            						update=":pledgeACDepDlg"
                            						style="margin-right:0px !important"
                            						rendered="#{pledgeAC.updatable}"
+                           						disabled="#{pledgeDetail.isDisabled('dep.actionList')}"
                            						>
                            						<f:setPropertyActionListener target="#{pledgeDetail.selectedRowId}" value="#{rowIdx}" />
                            						<p:resetInput target=":pledgeACDepDlg" />
@@ -239,6 +242,7 @@
                                             	oncomplete="p_delPledgeACDepDlg.show();"
                            						style="margin-right:0px !important"
                            						rendered="#{pledgeAC.deletable}"
+                           						disabled="#{pledgeDetail.isDisabled('dep.actionList')}"
                                             	>
                                             	<f:setPropertyActionListener target="#{pledgeDetail.selectedRowId}" value="#{rowIdx}" />
                                             </p:commandButton>
@@ -318,9 +322,12 @@
 										onstart="handleOnStartOpenCfmDlg();"
 										oncomplete="handleOnCompleteOpenCfmDlg(args,p_savePledgeDetailDlg);"
 										update=":frmMain:full_main_container,:result_dialog"
+										disabled="#{pledgeDetail.isDisabled('saveButton')}"
 	                                 	 />
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"
+										oncomplete="p_cancelDlg.show()"
+										disabled="#{pledgeDetail.isDisabled('cancelButton')}"
 										/>
 	                             </td>
 	                        </tr>
@@ -361,6 +368,14 @@
 		<ui:param name="formId" value="savePledgeDetailFrm"/>
 		<ui:param name="controller" value="#{pledgeDetail}"/>
 		<ui:param name="action" value="onSavePledgeDetail"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
+	</ui:include>
+	<ui:include src="dialog/confirmCancelDlg.xhtml">
+		<ui:param name="id" value="cancelDlg"/>
+		<ui:param name="name" value="p_cancelDlg"/>
+		<ui:param name="formId" value="cancelFrm"/>
+		<ui:param name="controller" value="#{pledgeDetail}"/>
+		<ui:param name="action" value="onCancelPledge"/>
 		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
 </h:body>

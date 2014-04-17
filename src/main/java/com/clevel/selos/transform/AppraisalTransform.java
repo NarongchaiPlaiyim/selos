@@ -9,14 +9,12 @@ import com.clevel.selos.model.db.working.AppraisalContactDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.AppraisalContactDetailView;
-import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import java.util.Date;
 import java.util.List;
 
 public class AppraisalTransform extends Transform {
@@ -85,11 +83,11 @@ public class AppraisalTransform extends Transform {
         appraisal.setAppointmentDate(appraisalView.getAppointmentDate());
         appraisal.setAppointmentTime(appraisalView.getAppointmentTime());
 
-        if(!Util.isNull(appraisalView.getBdmRemark()) && appraisalView.getBdmRemark().length() < 501){
+//        if(!Util.isNull(appraisalView.getBdmRemark()) && appraisalView.getBdmRemark().length() < 501){
+//            appraisal.setBdmRemark(appraisalView.getBdmRemark().substring(0, 499));
+//        } else {
             appraisal.setBdmRemark(appraisalView.getBdmRemark());
-        } else {
-            appraisal.setBdmRemark(appraisalView.getBdmRemark().substring(0, 499));
-        }
+//        }
 
         appraisal.setCancelAppointment(appraisalView.getCancelAppointment());
         appraisal.setAppointmentRemark(appraisalView.getAppointmentRemark());

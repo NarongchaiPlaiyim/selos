@@ -62,7 +62,6 @@ import com.clevel.selos.model.db.working.NewCollateralSub;
 import com.clevel.selos.model.db.working.NewCollateralSubMortgage;
 import com.clevel.selos.model.db.working.NewCollateralSubOwner;
 import com.clevel.selos.model.db.working.NewCollateralSubRelated;
-import com.clevel.selos.model.db.working.NewGuarantorDetail;
 import com.clevel.selos.model.db.working.OpenAccount;
 import com.clevel.selos.model.db.working.OpenAccountCredit;
 import com.clevel.selos.model.db.working.OpenAccountDeposit;
@@ -637,7 +636,8 @@ public class MortgageSummaryControl extends BusinessControl {
     		defaultType = mortgageTypes.get(0);
     		
     	}
-    	List<NewGuarantorDetail> newGuarantors = newGuarantorDetailDAO.findGuarantorByProposeType(workCase.getId(), ProposeType.A);
+//    	List<NewGuarantorDetail> newGuarantors = newGuarantorDetailDAO.findGuarantorByProposeType(workCase.getId(), ProposeType.A);
+    	List<Long> newGuarantorIds = newGuarantorDetailDAO.findGuarantorIdByProposeType(workCase.getId(), ProposeType.A);
     	List<GuarantorInfo> guarantorInfos = guarantorInfoDAO.findAllByWorkCaseId(workCase.getId());
     	
     	HashMap<Long,GuarantorInfo> guarantorMap = new HashMap<Long, GuarantorInfo>();
@@ -645,23 +645,19 @@ public class MortgageSummaryControl extends BusinessControl {
     		guarantorMap.put(info.getNewGuarantorDetail().getId(), info);
     	}
     	
-    	for (NewGuarantorDetail newGuarantor : newGuarantors) {
-    		MortgageType type = null;
-    		if (newGuarantor.getGuarantorName() != null)
-    			type = defaultType;
-    		
-    		GuarantorInfo guarantorInfo = guarantorMap.get(newGuarantor.getId());
+    	for (Long newGuarantorId : newGuarantorIds) {
+    		GuarantorInfo guarantorInfo = guarantorMap.get(newGuarantorId);
     		if (guarantorInfo == null) {
     			guarantorInfo = guarantorInfoTransform.createGuaratorInfo(user, workCase);
-    			guarantorInfo.setNewGuarantorDetail(newGuarantor);
-    			guarantorInfo.setGuarantorType(type);
+    			guarantorInfo.setNewGuarantorDetail(newGuarantorDetailDAO.findRefById(newGuarantorId));
+    			guarantorInfo.setGuarantorType(defaultType);
     			guarantorInfoDAO.save(guarantorInfo);
     		} else {
-    			guarantorMap.remove(newGuarantor.getId());
+    			guarantorMap.remove(newGuarantorId);
     			
     			guarantorInfo.setModifyBy(user);
     			guarantorInfo.setModifyDate(new Date());
-    			guarantorInfo.setGuarantorType(type);
+    			guarantorInfo.setGuarantorType(defaultType);
     			guarantorInfoDAO.persist(guarantorInfo);
     		}
     	}

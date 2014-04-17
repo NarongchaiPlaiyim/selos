@@ -843,6 +843,9 @@ tfoot {
 }
 
 /** Add for post app **/
+.div_row {
+	height : 28px;
+}
 table.ui-selectoneradio td {
     line-height: normal;
     padding: 0 8px 0 0;

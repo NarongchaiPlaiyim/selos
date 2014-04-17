@@ -10,16 +10,16 @@
             <!-- Stage PreScreen -->
             <p:panel id="header_panel_prescreen" rendered="#{headerController.stageId == 101}" styleClass="panel">
                 <!--Check Mandate Doc Prescreen-->
-                <p:commandButton id="btnChkMandatePreScreenChecker" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
+                <p:commandButton id="btnChkMandatePreScreenMaker" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
                                  rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1003}"
-                                 actionListener="#{headerController.onCheckMandateDialog()}"
+                                 actionListener="#{headerController.onCheckMandateForMaker()}"
                                  oncomplete="checkMandateDlg.show()"
                                  update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
                     <p:resetInput target=":frmMain:checkMandatePanel"/>
                 </p:commandButton>
-                <p:commandButton id="btnChkMandatePreScreen" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
+                <p:commandButton id="btnChkMandatePreScreenChecker" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
                                  rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1002}"
-                                 actionListener="#{headerController.onCheckMandateForCheckerDialog()}"
+                                 actionListener="#{headerController.onCheckMandateForChecker()}"
                                  oncomplete="checkMandateDlg.show()"
                                  update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
                     <p:resetInput target=":frmMain:checkMandatePanel"/>
@@ -54,7 +54,7 @@
                 <!--Check PreScreen (BRMS)-->
                 <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkPreScreen')}"
                                  rendered="#{headerController.checkButton('Check Prescreen') and not headerController.requestAppraisalPage}"
-                                 update=":frmMain:msgBoxBaseMessagePanel"
+                                 update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxMandateMessagePanel"
                                  actionListener="#{headerController.onCheckPreScreen}">
                 </p:commandButton>
                 <!--Request Appraisal Prescreen-->
@@ -134,7 +134,7 @@
                 <!--Mandate Document FullApplication-->
                 <p:commandButton id="btnMandateDocFullApp" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
                                  rendered="#{headerController.checkButton('Check Mandate Doc')}"
-                                 actionListener="#{headerController.onCheckMandateDialog()}"
+                                 actionListener="#{headerController.onCheckMandateForFullApp()}"
                                  oncomplete="checkMandateDlg.show()"
                                  update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
                     <p:resetInput target=":frmMain:checkMandatePanel"/>
@@ -372,6 +372,19 @@
                              process="@this"
                              oncomplete="msgBoxBaseMessageDlg.hide()"/>
         </p:confirmDialog>
+    </p:panel>
+
+    <p:panel id="msgBoxMandateMessagePanel" styleClass="panel">
+        <p:dialog id="msgBoxMandateMessageDialog" widgetVar="msgBoxMandateMessageDlg" styleClass="messageDialog"
+                         header="#{headerController.messageHeader}" width="800" closable="false" modal="true">
+            <f:facet name="message">
+                <h:outputText value="#{headerController.message}" escape="false"/>
+            </f:facet>
+            <ui:include src="/site/dialog/mandateFieldDialog.xhtml"/>
+            <p:commandButton value="OK"
+                             process="@this"
+                             oncomplete="msgBoxMandateMessageDlg.hide()"/>
+        </p:dialog>
     </p:panel>
 
     <p:panel id="msgBoxBaseRedirectPanel" styleClass="panel">
