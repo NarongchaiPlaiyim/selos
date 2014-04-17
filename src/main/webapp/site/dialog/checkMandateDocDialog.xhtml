@@ -76,7 +76,7 @@
                         </ui:repeat>
                     </td>
                     <td class="center">
-                        <p:selectOneRadio layout="grid" value="#{mandatoryItem.complete}" columns="1" disabled="#{mandatoryItem.completeFlag}">
+                        <p:selectOneRadio layout="grid" value="#{mandatoryItem.complete}" columns="1" disabled="#{headerController.checkMandateDocView.completeFlag or mandatoryItem.completeFlag}">
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')}" itemValue="1"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.no')}" itemValue="2"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.enable')}" itemValue="3"/>
@@ -136,7 +136,7 @@
                         </ui:repeat>
                     </td>
                     <td class="center">
-                        <p:selectOneRadio layout="grid" value="#{optionalItem.complete}" columns="1" disabled="#{optionalItem.completeFlag}">
+                        <p:selectOneRadio layout="grid" value="#{optionalItem.complete}" columns="1" disabled="#{headerController.checkMandateDocView.completeFlag or optionalItem.completeFlag}">
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')}" itemValue="1"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.no')}" itemValue="2"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.enable')}" itemValue="3"/>
@@ -198,7 +198,7 @@
                         </ui:repeat>
                     </td>
                     <td class="center">
-                        <p:selectOneRadio layout="grid" value="#{otherItem.complete}" columns="1" disabled="#{otherItem.completeFlag}">
+                        <p:selectOneRadio layout="grid" value="#{otherItem.complete}" columns="1" disabled="#{headerController.checkMandateDocView.completeFlag or otherItem.completeFlag}">
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')}" itemValue="1"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.no')}" itemValue="2"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.enable')}" itemValue="3"/>

@@ -60,6 +60,8 @@ public class FullApplicationControl extends BusinessControl {
     @Inject
     ReturnInfoDAO returnInfoDAO;
     @Inject
+    CustomerDAO customerDAO;
+    @Inject
     ReturnInfoHistoryDAO returnInfoHistoryDAO;
     @Inject
     ReturnInfoTransform returnInfoTransform;
@@ -450,7 +452,17 @@ public class FullApplicationControl extends BusinessControl {
 
         log.debug("requestAppraisal ::: workCaseAppraisal : {}", workCaseAppraisal);
         try{
-            bpmExecutor.requestAppraisal(workCaseAppraisal.getAppNumber(), "", workCaseAppraisal.getProductGroup().getName(), workCaseAppraisal.getRequestType().getId(), getCurrentUserID());
+            //Get Customer Name
+            List<Customer> customerList = customerDAO.getBorrowerByWorkCaseId(workCaseId, workCasePreScreenId);
+            String borrowerName = "";
+            if(customerList != null && customerList.size() > 0){
+                Customer customer = customerList.get(0);
+                borrowerName = customer.getNameTh();
+                if(customer.getLastNameTh() != null){
+                    borrowerName = borrowerName.concat(" ").concat(customer.getLastNameTh());
+                }
+            }
+            bpmExecutor.requestAppraisal(workCaseAppraisal.getAppNumber(), borrowerName, workCaseAppraisal.getProductGroup().getName(), workCaseAppraisal.getRequestType().getId(), getCurrentUserID());
             log.debug("requestAppraisal ::: Create Work Item for appraisal complete.");
         } catch (Exception ex){
             log.error("Exception while Create Work Item for Appraisal.");
@@ -633,46 +645,50 @@ public class FullApplicationControl extends BusinessControl {
                 } else {
                     //Check for Exceptional Case
                     boolean exceptionalFlow = false;
-                    for(NewCreditDetail newCreditDetail : newCreditDetailList){
-                        BigDecimal standardPrice = null;
-                        BigDecimal suggestPrice = null;
-                        BigDecimal finalPrice = null;
-                        BigDecimal tmpStandardPrice = null;
-                        BigDecimal tmpSuggestPrice = null;
-                        BigDecimal tmpFinalPrice = null;
-                        int reducePricing = newCreditDetail.getReducePriceFlag();
-                        int reduceFrontEndFee = newCreditDetail.getReduceFrontEndFee();
-                        for(NewCreditTierDetail newCreditTierDetail : newCreditDetail.getProposeCreditTierDetailList()){
-                            //Check for Final Price first...
-                            if(finalPrice != null){
-                                tmpFinalPrice = newCreditTierDetail.getFinalInterest().add(newCreditTierDetail.getFinalBasePrice().getValue());
-                                tmpStandardPrice = newCreditTierDetail.getStandardInterest().add(newCreditTierDetail.getStandardBasePrice().getValue());
-                                tmpSuggestPrice = newCreditTierDetail.getSuggestInterest().add(newCreditTierDetail.getSuggestBasePrice().getValue());
+                    if(newCreditDetailList != null && newCreditDetailList.size() > 0){
+                        for(NewCreditDetail newCreditDetail : newCreditDetailList){
+                            BigDecimal standardPrice = null;
+                            BigDecimal suggestPrice = null;
+                            BigDecimal finalPrice = null;
+                            BigDecimal tmpStandardPrice = null;
+                            BigDecimal tmpSuggestPrice = null;
+                            BigDecimal tmpFinalPrice = null;
+                            int reducePricing = newCreditDetail.getReducePriceFlag();
+                            int reduceFrontEndFee = newCreditDetail.getReduceFrontEndFee();
+                            if(newCreditDetail.getProposeCreditTierDetailList() != null){
+                                for(NewCreditTierDetail newCreditTierDetail : newCreditDetail.getProposeCreditTierDetailList()){
+                                    //Check for Final Price first...
+                                    if(finalPrice != null){
+                                        tmpFinalPrice = newCreditTierDetail.getFinalInterest().add(newCreditTierDetail.getFinalBasePrice().getValue());
+                                        tmpStandardPrice = newCreditTierDetail.getStandardInterest().add(newCreditTierDetail.getStandardBasePrice().getValue());
+                                        tmpSuggestPrice = newCreditTierDetail.getSuggestInterest().add(newCreditTierDetail.getSuggestBasePrice().getValue());
 
-                                if(reducePricing == 1){
-                                    tmpFinalPrice = tmpFinalPrice.subtract(priceReduceDOA);
-                                }
-                                if(tmpFinalPrice.compareTo(finalPrice) > 0){
-                                    finalPrice = tmpFinalPrice;
-                                    standardPrice = tmpStandardPrice;
-                                    suggestPrice = tmpSuggestPrice;
-                                }
-                            }else{
-                                finalPrice = newCreditTierDetail.getFinalInterest().add(newCreditTierDetail.getFinalBasePrice().getValue());
-                                standardPrice = newCreditTierDetail.getStandardInterest().add(newCreditTierDetail.getStandardBasePrice().getValue());
-                                suggestPrice = newCreditTierDetail.getSuggestInterest().add(newCreditTierDetail.getSuggestBasePrice().getValue());
-                                if(reducePricing == 1){
-                                    finalPrice = finalPrice.subtract(priceReduceDOA);
+                                        if(reducePricing == 1){
+                                            tmpFinalPrice = tmpFinalPrice.subtract(priceReduceDOA);
+                                        }
+                                        if(tmpFinalPrice.compareTo(finalPrice) > 0){
+                                            finalPrice = tmpFinalPrice;
+                                            standardPrice = tmpStandardPrice;
+                                            suggestPrice = tmpSuggestPrice;
+                                        }
+                                    }else{
+                                        finalPrice = newCreditTierDetail.getFinalInterest().add(newCreditTierDetail.getFinalBasePrice().getValue());
+                                        standardPrice = newCreditTierDetail.getStandardInterest().add(newCreditTierDetail.getStandardBasePrice().getValue());
+                                        suggestPrice = newCreditTierDetail.getSuggestInterest().add(newCreditTierDetail.getSuggestBasePrice().getValue());
+                                        if(reducePricing == 1){
+                                            finalPrice = finalPrice.subtract(priceReduceDOA);
+                                        }
+                                    }
+
+                                    if(finalPrice.compareTo(suggestPrice) < 0){
+                                        exceptionalFlow = true;
+                                        break;
+                                    }
                                 }
                             }
-
-                            if(finalPrice.compareTo(suggestPrice) < 0){
-                                exceptionalFlow = true;
+                            if(exceptionalFlow){
                                 break;
                             }
-                        }
-                        if(exceptionalFlow){
-                            break;
                         }
                     }
 

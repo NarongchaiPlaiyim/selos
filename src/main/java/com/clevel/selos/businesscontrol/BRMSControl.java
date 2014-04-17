@@ -95,6 +95,9 @@ public class BRMSControl extends BusinessControl {
     private UWRuleResultTransform uwRuleResultTransform;
 
     @Inject
+    private ActionValidationControl actionValidationControl;
+
+    @Inject
     public BRMSControl(){}
 
     public StandardPricingResponse getPriceFeeInterest(long workCaseId){
@@ -224,15 +227,19 @@ public class BRMSControl extends BusinessControl {
         return applicationInfo;
     }
 
-    public UWRuleResponseView getPrescreenResult(long workcasePrescreenId) throws Exception{
+    public UWRuleResponseView getPrescreenResult(long workcasePrescreenId, long actionId) throws Exception{
         logger.debug("getPrescreenReult from workcasePrescreenId {}", workcasePrescreenId);
-
         Date checkDate = Calendar.getInstance().getTime();
         logger.debug("check at date {}", checkDate);
 
         Date now = Calendar.getInstance().getTime();
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workcasePrescreenId);
         Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workcasePrescreenId);
+
+        actionValidationControl.loadActionValidation(workCasePrescreen.getStep().getId(), actionId);
+        logger.info("-- load Action Validation");
+        actionValidationControl.validate(workCasePrescreen);
+        actionValidationControl.validate(prescreen);
 
         BRMSApplicationInfo applicationInfo = new BRMSApplicationInfo();
         applicationInfo.setApplicationNo(workCasePrescreen.getAppNumber());
@@ -257,8 +264,8 @@ public class BRMSControl extends BusinessControl {
 
         BigDecimal borrowerGroupIncome = BigDecimal.ZERO;
 
-        boolean appExistingSMECustomer = Boolean.TRUE;
         List<Customer> customerList = customerDAO.findByWorkCasePreScreenId(workcasePrescreenId);
+        actionValidationControl.validate(customerList);
         List<BRMSCustomerInfo> customerInfoList = new ArrayList<BRMSCustomerInfo>();
         for(Customer customer : customerList) {
             if(customer.getRelation().getId() == RelationValue.BORROWER.value()){
@@ -327,19 +334,26 @@ public class BRMSControl extends BusinessControl {
         if(prescreen.getReferredExperience() != null)
             applicationInfo.setReferredDocType(prescreen.getReferredExperience().getBrmsCode());
 
-        /** To Change to use test Data using second line**/
-        UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
-        //UWRulesResponse uwRulesResponse = getTestUWRulesResponse();
-
-         //Transform to View//
         UWRuleResponseView uwRuleResponseView = new UWRuleResponseView();
-        uwRuleResponseView.setActionResult(uwRulesResponse.getActionResult());
-        uwRuleResponseView.setReason(uwRulesResponse.getReason());
-        if(uwRulesResponse.getUwRulesResultMap() != null && uwRulesResponse.getUwRulesResultMap().size() > 0){
-            UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultTransform.transformToView(uwRulesResponse.getUwRulesResultMap(), customerList);
-            uwRuleResponseView.setUwRuleResultSummaryView(uwRuleResultSummaryView);
-        }
+        ActionValidationResult actionValidationResult = actionValidationControl.getFinalValidationResult();
+        if(actionValidationResult.getActionResult().equals(ActionResult.SUCCESS)){
 
+            /** To Change to use test Data using second line**/
+            UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
+            //UWRulesResponse uwRulesResponse = getTestUWRulesResponse();
+
+             //Transform to View//
+            uwRuleResponseView.setActionResult(uwRulesResponse.getActionResult());
+            uwRuleResponseView.setReason(uwRulesResponse.getReason());
+            if(uwRulesResponse.getUwRulesResultMap() != null && uwRulesResponse.getUwRulesResultMap().size() > 0){
+                UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultTransform.transformToView(uwRulesResponse.getUwRulesResultMap(), customerList);
+                uwRuleResponseView.setUwRuleResultSummaryView(uwRuleResultSummaryView);
+            }
+        } else {
+            uwRuleResponseView.setActionResult(actionValidationResult.getActionResult());
+            uwRuleResponseView.setReason("Mandatory fields are missing!!");
+            uwRuleResponseView.setMandateFieldMessageViewList(actionValidationResult.getMandateFieldMessageViewList());
+        }
         return uwRuleResponseView;
     }
 

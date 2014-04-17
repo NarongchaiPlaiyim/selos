@@ -620,13 +620,6 @@ public class PrescreenMaker implements Serializable {
 
     }
 
-    public boolean validateCheckPrescreen(List<CustomerInfoView> vCustomerInfoViewList){
-        //boolean validate = false;
-        boolean validate = true;
-
-        return validate;
-    }
-
     public void onCloseSale(){
         log.debug("onCloseSale ::: queueName : {}", queueName);
         try{
