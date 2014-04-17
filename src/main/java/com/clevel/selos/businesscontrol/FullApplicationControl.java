@@ -8,6 +8,7 @@ import com.clevel.selos.dao.relation.UserToAuthorizationDOADAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionCode;
+import com.clevel.selos.model.ApprovalType;
 import com.clevel.selos.model.PricingDOAValue;
 import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.*;
@@ -287,7 +288,7 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public void submitToCSSO(String queueName, long workCaseId) throws Exception {
-        String ghDecisionFlag = "A"; //TODO
+        String ghDecisionFlag = "E"; //TODO
         /*WorkCase workCase;
         ApprovalHistory approvalHistoryEndorsePricing = null;
 
@@ -381,7 +382,7 @@ public class FullApplicationControl extends BusinessControl {
         AuthorizationDOA authorizationDOA = authorizationDOADAO.findById(uw2DOALevelId);
 
         if(Long.toString(workCaseId) != null && workCaseId != 0){
-            approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId,getCurrentUser());
+            approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
 
             if(approvalHistoryEndorseCA==null){
                 throw new Exception("Please make decision before submit.");
@@ -404,7 +405,7 @@ public class FullApplicationControl extends BusinessControl {
         ApprovalHistory approvalHistoryEndorseCA = null;
 
         if(Long.toString(workCaseId) != null && workCaseId != 0){
-            approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId,getCurrentUser());
+            approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId,getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
 
             if(approvalHistoryEndorseCA==null){
                 throw new Exception("Please make decision before submit.");
@@ -700,12 +701,18 @@ public class FullApplicationControl extends BusinessControl {
         }
     }
 
-    public int getRequestPricing(long workCaseId) throws Exception{
+    public boolean getRequestPricing(long workCaseId){
+        boolean requestPricing = false;
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        if(workCase!=null){
-            return workCase.getRequestPricing();
+        try {
+            if(!Util.isNull(workCase)){
+                requestPricing = Util.isTrue(workCase.getRequestPricing());
+            }
+        } catch (Exception ex){
+            log.error("Exception while getRequestPricing : ", ex);
         }
-        return 0;
+
+        return requestPricing;
     }
 
     public int getPricingDOALevel(long workCaseId) throws Exception{
@@ -756,4 +763,5 @@ public class FullApplicationControl extends BusinessControl {
         }
         bpmExecutor.cancelCase(0, workCaseId, queueName, ActionCode.CANCEL_CA.getVal(), reasonTxt, remark);
     }
+
 }

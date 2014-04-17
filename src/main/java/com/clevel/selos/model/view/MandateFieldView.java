@@ -17,6 +17,10 @@ public class MandateFieldView implements Serializable{
     private String fieldDesc;
     private String page;
     private boolean checked = false;
+    private String minValue;
+    private String maxValue;
+    private String matchedValue;
+    private String notMatchedValue;
 
     public long getId() {
         return id;
@@ -82,6 +86,38 @@ public class MandateFieldView implements Serializable{
         this.checked = checked;
     }
 
+    public String getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(String minValue) {
+        this.minValue = minValue;
+    }
+
+    public String getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(String maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    public String getMatchedValue() {
+        return matchedValue;
+    }
+
+    public void setMatchedValue(String matchedValue) {
+        this.matchedValue = matchedValue;
+    }
+
+    public String getNotMatchedValue() {
+        return notMatchedValue;
+    }
+
+    public void setNotMatchedValue(String notMatchedValue) {
+        this.notMatchedValue = notMatchedValue;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -90,7 +126,13 @@ public class MandateFieldView implements Serializable{
                 .append("stepView", stepView)
                 .append("className", className)
                 .append("fieldName", fieldName)
+                .append("fieldDesc", fieldDesc)
                 .append("page", page)
+                .append("checked", checked)
+                .append("minValue", minValue)
+                .append("maxValue", maxValue)
+                .append("matchedValue", matchedValue)
+                .append("notMatchedValue", notMatchedValue)
                 .toString();
     }
 }

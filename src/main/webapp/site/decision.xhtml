@@ -44,6 +44,7 @@
 
 <h:body>
 <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+    <f:event type="preRenderView" listener="#{decision.preRender()}" />
     <h:form id="frmMain">
         <div id="main_container">
         <!-- Start Header Logo -->
@@ -3736,96 +3737,95 @@
                         <tr>
                             <td colspan="2" style="height:28px;"></td>
                         </tr>
-                        <h:panelGroup render="#{not decision.roleBDM}">
-                        <!--APPROVE FOR ENDORSE CA-->
-                        <tr>
-                            <td class="center" colspan="2">
-                                <div class="ui-datatable ui-widget">
-                                    <div class="ui-datatable-tablewrapper">
-                                        <table style="margin: 0 auto; width: 500px !important;">
-                                            <thead>
-                                                <tr>
-                                                    <th class="ui-state-default">
-                                                        <h:outputText value="#{decision.approvalHistoryView.userView.roleDescription}"
-                                                                      rendered="#{not empty decision.approvalHistoryView.userView.roleDescription}"/>
-                                                        <h:outputText value=" - "/>
-                                                        <h:outputText value="Endorse CA"/>
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="ui-datatable-data ui-widget-content">
-                                                <tr>
-                                                    <td>
-                                                        <table border="0" style="margin: 0 auto;">
-                                                            <tr>
-                                                                <td class="title left" style="border-style: none !important;">
-                                                                    #{msg.get('app.decision.tb.td.label.comment')}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="center" style="border-style: none !important;">
-                                                                    <p:inputTextarea value="#{decision.approvalHistoryView.comments}"
-                                                                                     rows="5"
-                                                                                     style="font-size: 12px !important; width: 450px"/>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="center">
-                                                        <p:selectOneRadio value="#{decision.approvalHistoryView.uwDecision}"
-                                                                          required="#{decision.roleUW and not empty param[saveDecisionBtn.clientId]}"
-                                                                          styleClass="ovr-border">
-                                                            <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
-                                                            <f:selectItem itemLabel="#{msg.get('app.button.reject')}" itemValue="#{decision.decisionREJECTED}"/>
-                                                        </p:selectOneRadio>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <table border="0">
-                                                            <tr>
-                                                                <td class="title left" style="border-style: none !important; width: 120px;">
-                                                                    #{msg.get('app.decision.tb.td.label.approvalName')}
-                                                                </td>
-                                                                <td class="left" style="border-style: none !important;">
-                                                                    <h:outputText value="#{decision.approvalHistoryView.userView.userName}"
-                                                                                  rendered="#{not empty decision.approvalHistoryView.userView}"/>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="title left" style="border-style: none !important;">
-                                                                    #{msg.get('app.decision.tb.td.label.position')}
-                                                                </td>
-                                                                <td class="left" style="border-style: none !important;">
-                                                                    <h:outputText value="#{decision.approvalHistoryView.userView.titleName}"
-                                                                                  rendered="#{not empty decision.approvalHistoryView.userView}"/>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="title left" style="border-style:none !important;">
-                                                                    #{msg.get('app.decision.tb.td.label.date')}
-                                                                </td>
-                                                                <td class="left" style="border-style:none !important;">
-                                                                    <h:outputText value="#{decision.approvalHistoryView.submitDate}">
-                                                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
-                                                                    </h:outputText>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                        <h:panelGroup rendered="#{decision.decisionDialog}">
+                            <!--APPROVE FOR ENDORSE CA-->
+                            <tr>
+                                <td class="center" colspan="2">
+                                    <div class="ui-datatable ui-widget">
+                                        <div class="ui-datatable-tablewrapper">
+                                            <table style="margin: 0 auto; width: 500px !important;">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="ui-state-default">
+                                                            <h:outputText value="#{decision.approvalHistoryView.userView.roleDescription}"
+                                                                          rendered="#{not empty decision.approvalHistoryView.userView.roleDescription}"/>
+                                                            <h:outputText value=" - "/>
+                                                            <h:outputText value="Endorse CA"/>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="ui-datatable-data ui-widget-content">
+                                                    <tr>
+                                                        <td>
+                                                            <table border="0" style="margin: 0 auto;">
+                                                                <tr>
+                                                                    <td class="title left" style="border-style: none !important;">
+                                                                        #{msg.get('app.decision.tb.td.label.comment')}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="center" style="border-style: none !important;">
+                                                                        <p:inputTextarea value="#{decision.approvalHistoryView.comments}"
+                                                                                         rows="5"
+                                                                                         style="font-size: 12px !important; width: 450px"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="center">
+                                                            <p:selectOneRadio value="#{decision.approvalHistoryView.uwDecision}"
+                                                                              required="#{decision.roleUW and not empty param[saveDecisionBtn.clientId]}"
+                                                                              styleClass="ovr-border">
+                                                                <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
+                                                                <f:selectItem itemLabel="#{msg.get('app.button.reject')}" itemValue="#{decision.decisionREJECTED}"/>
+                                                            </p:selectOneRadio>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <table border="0">
+                                                                <tr>
+                                                                    <td class="title left" style="border-style: none !important; width: 120px;">
+                                                                        #{msg.get('app.decision.tb.td.label.approvalName')}
+                                                                    </td>
+                                                                    <td class="left" style="border-style: none !important;">
+                                                                        <h:outputText value="#{decision.approvalHistoryView.userView.userName}"
+                                                                                      rendered="#{not empty decision.approvalHistoryView.userView}"/>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="title left" style="border-style: none !important;">
+                                                                        #{msg.get('app.decision.tb.td.label.position')}
+                                                                    </td>
+                                                                    <td class="left" style="border-style: none !important;">
+                                                                        <h:outputText value="#{decision.approvalHistoryView.userView.titleName}"
+                                                                                      rendered="#{not empty decision.approvalHistoryView.userView}"/>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="title left" style="border-style:none !important;">
+                                                                        #{msg.get('app.decision.tb.td.label.date')}
+                                                                    </td>
+                                                                    <td class="left" style="border-style:none !important;">
+                                                                        <h:outputText value="#{decision.approvalHistoryView.submitDate}">
+                                                                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
+                                                                        </h:outputText>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" style="height:28px;"></td>
-                        </tr>
-
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="height:28px;"></td>
+                            </tr>
                             <h:panelGroup rendered="#{decision.requestPricing}">
                                 <tr>
                                     <td class="center" colspan="2">

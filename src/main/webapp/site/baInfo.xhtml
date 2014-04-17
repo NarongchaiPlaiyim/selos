@@ -57,10 +57,10 @@
                                     <table>
                                         <tr>
                                             <td class="title" style="width:200px;">
-                                                <p:outputLabel value="#{msg.get('app.approveType')}" styleClass="center"/>
+                                                <p:outputLabel value="#{msg.get('app.approveType')}#{baInfo.mandate('approvedType')}" styleClass="center"/>
                                             </td>
                                             <td style="width:200px;">
-                                                <p:selectOneRadio disabled="true" value="#{baInfo.approveType}">
+                                                <p:selectOneRadio disabled="#{baInfo.isDisabled('approvedType')}" value="#{baInfo.approveType}">
                                                 	<f:selectItems value="#{enumGeneralControl.approveTypes}" var="approveType"
                                                 		itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}" 
                                                 		/>
@@ -80,10 +80,12 @@
                         	</tr>
                         	<tr>
                         		<td class="title" style="width: 180px">
-                        			<h:outputText value="#{msg.get('app.baInfo.ba.applyBA')}" />			
+                        			<h:outputText value="#{msg.get('app.baInfo.ba.applyBA')}#{baInfo.mandate('applyBA')}" />			
                         		</td>
                         		<td>
-             			            <p:selectOneRadio value="#{baInfo.bapaInfoView.applyBA}">
+             			            <p:selectOneRadio value="#{baInfo.bapaInfoView.applyBA}"
+             			            	disabled="#{baInfo.isDisabled('applyBA')}"
+             			            	>
              			            	<p:ajax update="bainfo_tbl" listener="#{baInfo.onChangeApplyToBA()}"/>
                                        <f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="radio"
 	                                       	itemLabel="#{msg.get(radio.msgKey)}" 
@@ -93,10 +95,12 @@
                         	</tr>
                         	<tr>
                         		<td class="title">
-                        			<h:outputText value="#{msg.get('app.baInfo.ba.payToInsuranceCompany')}" />			
+                        			<h:outputText value="#{msg.get('app.baInfo.ba.payToInsuranceCompany')}#{baInfo.mandate('baPaymentMethod')}" />			
                         		</td>
                         		<td>
-                        			<p:selectOneRadio value="#{baInfo.bapaInfoView.payToInsuranceCompany}">
+                        			<p:selectOneRadio value="#{baInfo.bapaInfoView.payToInsuranceCompany}"
+                        				disabled="#{baInfo.isDisabled('baPaymentMethod')}"
+                        				>
                                        <f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="radio"
 	                                       	itemLabel="#{msg.get(radio.msgKey)}" 
     	                                   	itemValue="#{radio}"/>
@@ -180,6 +184,7 @@
 			                                actionListener="#{baInfo.onOpenAddBAPAInformationDialog()}"
 			                                oncomplete="p_bapaApplyInfoDlg.show()"
 			                                update=":bapaApplyInfoDlg"
+			                                disabled="#{baInfo.isDisabled('addButton')}"
 			                                >
 										<p:resetInput target=":bapaApplyInfoDlg" />
 				                   	</p:commandButton>
@@ -253,6 +258,7 @@
 	                           						actionListener="#{baInfo.onOpenUpdateBAPAInformaionDialog(credit)}"
 	                           						update=":bapaApplyInfoDlg"
 	                           						style="margin-right:0px !important"
+	                           						disabled="#{baInfo.isDisabled('bapa.actionList')}"
 	                           						>
 	                           						<p:resetInput target=":bapaApplyInfoDlg" />
                            					</p:commandButton>
@@ -262,6 +268,7 @@
                            							style="margin-right:0px !important"
                            							rendered="#{not credit.fromCredit}"
                            							update=":bapaApplyInfoDlg"
+                           							disabled="#{baInfo.isDisabled('bapa.actionList')}"
                                             	>
                                             	<f:setPropertyActionListener target="#{baInfo.deleteCreditRowId}" value="#{rowIdx}" />
                                             </p:commandButton>
@@ -316,11 +323,12 @@
                         	</tr>
                         	<tr>
                         		<td class="title">
-                        			<h:outputText value="#{msg.get('app.baInfo.insurance.company')}" />			
+                        			<h:outputText value="#{msg.get('app.baInfo.insurance.company')}#{baInfo.mandate('insureName')}" />			
                         		</td>
                         		<td>
                         			<p:selectOneMenu id='insurance_company' widgetVar="p_insurance_company" style="width:160px"
                         				value="#{baInfo.bapaInfoView.updInsuranceCompany}"
+                        				disabled="#{baInfo.isDisabled('insureName')}"
                         				>
                         				<p:ajax update="insurance_acc"/>
                         				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -333,7 +341,7 @@
                         	</tr>
                         	<tr>
                         		<td class="title">
-                        			<h:outputText value="#{msg.get('app.baInfo.insurance.accountNumber')}" />			
+                        			<h:outputText value="#{msg.get('app.baInfo.insurance.accountNumber')}#{baInfo.mandate('insureAccountNumber')}" />			
                         		</td>
                         		<td>
              			            <p:inputText id='insurance_acc' widgetVar="p_insurance_acc" 
@@ -358,9 +366,12 @@
 										onstart="handleOnStartOpenCfmDlg();"
 										oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveBAInformationDlg);"
 										update=":frmMain:full_main_container,:result_dialog"
+										disabled="#{baInfo.isDisabled('saveButton')}"
 										/>
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"
+										oncomplete="p_cancelBADlg.show()"
+										disabled="#{baInfo.isDisabled('cancelButton')}"
 										/>
 	                             </td>
 	                        </tr>
@@ -410,6 +421,14 @@
 		<ui:param name="action" value="onSaveBAInformation"/>
 		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
+	 <ui:include src="dialog/confirmCancelDlg.xhtml">
+        <ui:param name="id" value="cancelBADlg"/>
+        <ui:param name="name" value="p_cancelBADlg"/>
+        <ui:param name="formId" value="cancelBAFrm"/>
+        <ui:param name="controller" value="#{baInfo}"/>
+        <ui:param name="action" value="onCancelBAInformation"/>
+        <ui:param name="update" value=":frmMain:full_main_container"/>
+     </ui:include>
 </h:body>
 </f:view>
 </html>
