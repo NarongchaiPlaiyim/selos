@@ -1229,6 +1229,18 @@ public class CreditFacProposeControl extends BusinessControl {
         //--- Save to NewCreditDetail
         if (Util.safetyList(newCreditFacilityView.getNewCreditDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCreditDetailViewList : {}", newCreditFacilityView.getNewCreditDetailViewList());
+            if(newCreditFacilityView.getNewCreditDetailViewList() != null && newCreditFacilityView.getNewCreditDetailViewList().size() > 0){
+                for (NewCreditDetailView ncdv : newCreditFacilityView.getNewCreditDetailViewList()){
+                    if(ncdv.getDeleteTmpList() != null && ncdv.getDeleteTmpList().size() > 0){
+                        for(Long l : ncdv.getDeleteTmpList()){
+                            if(l != 0){
+                                NewCreditTierDetail newCreditTierDetail = newCreditTierDetailDAO.findById(l);
+                                newCreditTierDetailDAO.delete(newCreditTierDetail);
+                            }
+                        }
+                    }
+                }
+            }
             List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, currentUser, workCase, ProposeType.P);
             newCreditFacility.setNewCreditDetailList(newCreditDetailList);
             newCreditDetailDAO.persist(newCreditDetailList);

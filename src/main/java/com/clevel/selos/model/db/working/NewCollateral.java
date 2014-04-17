@@ -338,8 +338,8 @@ public class NewCollateral implements Serializable {
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
                 .append("newCreditFacility", newCreditFacility)
-                .append("newCollateralHeadList", newCollateralHeadList)
-                .append("newCollateralCreditList", newCollateralCreditList)
+//                .append("newCollateralHeadList", newCollateralHeadList)
+//                .append("newCollateralCreditList", newCollateralCreditList)
                 .append("premiumAmount", premiumAmount)
                 .append("workCase", workCase)
                 .toString();
