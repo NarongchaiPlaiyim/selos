@@ -276,9 +276,9 @@ public class ExecutiveSummary implements Serializable {
 
     public void onSelectEditDeviate(){
         try {
-            customerId = 0;
             Cloner cloner = new Cloner();
             exSumDecisionView = cloner.deepClone(selectDeviateDecision);
+            customerId = exSumDecisionView.getCustomerId();
             onChangeRuleName();
             modeForButton = ModeForButton.EDIT;
         } catch (Exception e) {
@@ -293,6 +293,7 @@ public class ExecutiveSummary implements Serializable {
             exSumDecisionView.setCustomerId(customerId);
             exSumDecisionView.setCusName(customerDAO.findById(customerId).getDisplayName());
         } else {
+            exSumDecisionView.setCustomerId(0);
             exSumDecisionView.setCusName("Application");
         }
 
@@ -308,7 +309,9 @@ public class ExecutiveSummary implements Serializable {
     }
 
     public void onDeleteDeviateDecision() {
-        exSummaryView.getDeleteTmpList().add(selectDeviateDecision.getId());
+        if(selectDeviateDecision.getId() != 0){
+            exSummaryView.getDeleteTmpList().add(selectDeviateDecision.getId());
+        }
         exSummaryView.getExSumDecisionListView().remove(selectDeviateDecision);
     }
 

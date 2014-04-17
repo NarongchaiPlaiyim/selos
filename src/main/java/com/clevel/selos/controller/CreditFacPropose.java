@@ -368,12 +368,12 @@ public class CreditFacPropose implements Serializable {
                     log.info("lastSeqNumber :: {}", lastSeqNumber);
 
                     newCreditDetailSeqList = newCreditFacilityView.getNewCreditDetailViewList();
-
+                    notRetrievePricing = false;
 //                    for (int i = 0; i < newCreditDetailSeqList.size(); i++) {
 //                        hashSeqCredit.put(i, newCreditDetailSeqList.get(i).getUseCount());
 //                    }
 
-                    notRetrievePricing = false;
+//                    notRetrievePricing = true;
                 }
 
             } catch (Exception ex) {
@@ -582,17 +582,7 @@ public class CreditFacPropose implements Serializable {
                             for (NewCreditDetailView newCreditView : newCreditFacilityView.getNewCreditDetailViewList()) {
                                 stringId = String.valueOf(newCreditView.getId());
                                 log.debug("newCreditView.getId() toString :: {}", newCreditView.getId());
-                                if (newCreditView.getNewCreditTierDetailViewList().size() > 0) {
-
-                                    for (NewCreditTierDetailView newCreditTierDetailView : newCreditView.getNewCreditTierDetailViewList()) {
-                                        if (newCreditTierDetailView.getId() != 0) {
-                                            deleteCreditTierIdList.add(newCreditTierDetailView.getId());
-                                        }
-                                    }
-
-                                    log.debug("deleteCreditTierIdList :: {}", deleteCreditTierIdList.size());
-                                }
-
+                             
                                 if (stringId.equals(creditTypeId)) {
                                     if(newCreditView.getNewCreditTierDetailViewList() != null && newCreditView.getNewCreditTierDetailViewList().size() > 0){
                                         for(NewCreditTierDetailView nctdv : newCreditView.getNewCreditTierDetailViewList()){
@@ -621,6 +611,7 @@ public class CreditFacPropose implements Serializable {
             }
         }
     }
+/*
 
     public void onRetrievePricingFeeTest() {
         if(newCreditFacilityView.getNewCreditDetailViewList() != null && newCreditFacilityView.getNewCreditDetailViewList().size() > 0){
@@ -654,6 +645,7 @@ public class CreditFacPropose implements Serializable {
             }
         }
     }
+*/
 
     // **************************************** Start Propose Credit Information   ****************************************//
     public void onChangeProductProgram() {
@@ -784,6 +776,12 @@ public class CreditFacPropose implements Serializable {
             }
             suggestInterestDlg = BigDecimal.ZERO;
             standardInterestDlg = BigDecimal.ZERO;
+
+            if (newCreditDetailView.getNewCreditTierDetailViewList() != null && newCreditDetailView.getNewCreditTierDetailViewList().size() > 0) {
+                for(NewCreditTierDetailView newCreditTierDetailView:newCreditDetailView.getNewCreditTierDetailViewList()){
+                    newCreditTierDetailView.setCanEdit(true);
+                }
+            }
         }
     }
 
@@ -903,7 +901,8 @@ public class CreditFacPropose implements Serializable {
 //        if (used == 0) {
 //            log.info("used ::: {} ", used);
             if (newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId() != 0) {
-                deleteCreditIdList.add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
+//                deleteCreditIdList.add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
+//                newCreditFacilityView.getNewCreditViewDelList().add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
                 newCreditFacilityView.getNewCreditDetailViewList().remove(newCreditDetailSelected);
             }
 //        } else {
@@ -997,7 +996,9 @@ public class CreditFacPropose implements Serializable {
 
         creditTierDetailAdd.setCanEdit(true);
 
-        if (newCreditDetailView.getRequestType() == 2) {
+
+        if (newCreditDetailView.getRequestType()== RequestTypes.NEW.value()) {
+            creditTierDetailAdd.setCanEdit(false);
             log.debug("newCreditDetailView.getRequestType() ::: {}", newCreditDetailView.getRequestType());
             if (newCreditDetailView.getNewCreditTierDetailViewList() != null) {
                 newCreditDetailView.getNewCreditTierDetailViewList().add(0, creditTierDetailAdd);
@@ -1006,7 +1007,8 @@ public class CreditFacPropose implements Serializable {
                 tierDetailViewList.add(0, creditTierDetailAdd);
                 newCreditDetailView.setNewCreditTierDetailViewList(tierDetailViewList);
             }
-        } else if (newCreditDetailView.getRequestType() == 1) {
+        } else if (newCreditDetailView.getRequestType() == RequestTypes.CHANGE.value()) {
+            creditTierDetailAdd.setCanEdit(true);
             if (newCreditDetailView.getNewCreditTierDetailViewList() != null) {
                 newCreditDetailView.getNewCreditTierDetailViewList().add(creditTierDetailAdd);
             } else {
@@ -1018,7 +1020,8 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void onDeleteProposeTierInfo(int row) {
-        log.debug("onDeleteProposeTierInfo::");
+        log.info("onDeleteProposeTierInfo : : :{}",newCreditDetailView.getNewCreditTierDetailViewList().get(row).getId());
+        newCreditDetailView.getDeleteTmpList().add(newCreditDetailView.getNewCreditTierDetailViewList().get(row).getId());
         newCreditDetailView.getNewCreditTierDetailViewList().remove(row);
     }
 
@@ -1822,7 +1825,7 @@ public class CreditFacPropose implements Serializable {
 
         try {
             //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
-            creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
+//            creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
             // Calculate Total Propose
             newCreditFacilityView = creditFacProposeControl.calculateTotalProposeAmount(newCreditFacilityView, basicInfoView, tcgView, workCaseId);
             // Calculate Total for BRMS

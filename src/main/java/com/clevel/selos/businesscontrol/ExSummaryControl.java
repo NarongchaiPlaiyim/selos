@@ -535,8 +535,10 @@ public class ExSummaryControl extends BusinessControl {
         //Delete By Tmp DeviateDecision
         if(exSummaryView.getDeleteTmpList() != null && exSummaryView.getDeleteTmpList().size() > 0){
             for(Long tmpId : exSummaryView.getDeleteTmpList()){
-                UWRuleResultDetail uwRuleResultDetail = uwRuleResultDetailDAO.findById(tmpId);
-                uwRuleResultDetailDAO.delete(uwRuleResultDetail);
+                if(tmpId != null && tmpId != 0){
+                    UWRuleResultDetail uwRuleResultDetail = uwRuleResultDetailDAO.findById(tmpId);
+                    uwRuleResultDetailDAO.delete(uwRuleResultDetail);
+                }
             }
         }
         //Save Deviate
