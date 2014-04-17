@@ -1233,7 +1233,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 for (NewCreditDetailView ncdv : newCreditFacilityView.getNewCreditDetailViewList()){
                     if(ncdv.getDeleteTmpList() != null && ncdv.getDeleteTmpList().size() > 0){
                         for(Long l : ncdv.getDeleteTmpList()){
-                            if(l != 0){
+                            if(l != null && l != 0){
                                 NewCreditTierDetail newCreditTierDetail = newCreditTierDetailDAO.findById(l);
                                 newCreditTierDetailDAO.delete(newCreditTierDetail);
                             }
@@ -1307,21 +1307,13 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
 
-    public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList , List<Long> deleteCreditTierIdList) {
+    public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {
         log.debug("deleteAllApproveByIdList()");
         log.debug("deleteCreditIdList: {}", deleteCreditIdList);
         log.debug("deleteCollIdList: {}", deleteCollIdList);
         log.debug("deleteGuarantorIdList: {}", deleteGuarantorIdList);
         log.debug("deleteConditionIdList: {}", deleteConditionIdList);
 
-
-//        if (deleteCreditTierIdList != null && deleteCreditTierIdList.size() > 0) {
-//            List<NewCreditTierDetail> deleteCreditTierDelIdList = new ArrayList<NewCreditTierDetail>();
-//            for (Long id : deleteCreditTierIdList) {
-//                deleteCreditTierDelIdList.add(newCreditTierDetailDAO.findById(id));
-//            }
-//            newCreditTierDetailDAO.delete(deleteCreditTierDelIdList);
-//        }
 
         if (deleteCreditIdList != null && deleteCreditIdList.size() > 0) {
             List<NewCreditDetail> deleteCreditDetailList = new ArrayList<NewCreditDetail>();

@@ -368,12 +368,12 @@ public class CreditFacPropose implements Serializable {
                     log.info("lastSeqNumber :: {}", lastSeqNumber);
 
                     newCreditDetailSeqList = newCreditFacilityView.getNewCreditDetailViewList();
-
+                    notRetrievePricing = false;
 //                    for (int i = 0; i < newCreditDetailSeqList.size(); i++) {
 //                        hashSeqCredit.put(i, newCreditDetailSeqList.get(i).getUseCount());
 //                    }
 
-                    notRetrievePricing = false;
+//                    notRetrievePricing = true;
                 }
 
             } catch (Exception ex) {
@@ -611,6 +611,7 @@ public class CreditFacPropose implements Serializable {
             }
         }
     }
+/*
 
     public void onRetrievePricingFeeTest() {
         if(newCreditFacilityView.getNewCreditDetailViewList() != null && newCreditFacilityView.getNewCreditDetailViewList().size() > 0){
@@ -644,6 +645,7 @@ public class CreditFacPropose implements Serializable {
             }
         }
     }
+*/
 
     // **************************************** Start Propose Credit Information   ****************************************//
     public void onChangeProductProgram() {
@@ -899,7 +901,8 @@ public class CreditFacPropose implements Serializable {
 //        if (used == 0) {
 //            log.info("used ::: {} ", used);
             if (newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId() != 0) {
-                deleteCreditIdList.add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
+//                deleteCreditIdList.add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
+//                newCreditFacilityView.getNewCreditViewDelList().add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
                 newCreditFacilityView.getNewCreditDetailViewList().remove(newCreditDetailSelected);
             }
 //        } else {
@@ -1017,8 +1020,8 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void onDeleteProposeTierInfo(int row) {
-        log.debug("onDeleteProposeTierInfo::");
-        deleteCreditTierIdList.add(newCreditDetailView.getNewCreditTierDetailViewList().get(row).getId());
+        log.info("onDeleteProposeTierInfo : : :{}",newCreditDetailView.getNewCreditTierDetailViewList().get(row).getId());
+        newCreditDetailView.getDeleteTmpList().add(newCreditDetailView.getNewCreditTierDetailViewList().get(row).getId());
         newCreditDetailView.getNewCreditTierDetailViewList().remove(row);
     }
 
@@ -1822,7 +1825,7 @@ public class CreditFacPropose implements Serializable {
 
         try {
             //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
-            creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList,deleteCreditTierIdList);
+//            creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
             // Calculate Total Propose
             newCreditFacilityView = creditFacProposeControl.calculateTotalProposeAmount(newCreditFacilityView, basicInfoView, tcgView, workCaseId);
             // Calculate Total for BRMS
