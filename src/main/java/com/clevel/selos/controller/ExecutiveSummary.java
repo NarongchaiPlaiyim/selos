@@ -308,7 +308,9 @@ public class ExecutiveSummary implements Serializable {
     }
 
     public void onDeleteDeviateDecision() {
-        exSummaryView.getDeleteTmpList().add(selectDeviateDecision.getId());
+        if(selectDeviateDecision.getId() != 0){
+            exSummaryView.getDeleteTmpList().add(selectDeviateDecision.getId());
+        }
         exSummaryView.getExSumDecisionListView().remove(selectDeviateDecision);
     }
 
