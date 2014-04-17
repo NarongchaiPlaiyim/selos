@@ -1295,7 +1295,7 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
 
-    public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {
+    public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList , List<Long> deleteCreditTierIdList) {
         log.debug("deleteAllApproveByIdList()");
         log.debug("deleteCreditIdList: {}", deleteCreditIdList);
         log.debug("deleteCollIdList: {}", deleteCollIdList);
@@ -1322,7 +1322,7 @@ public class CreditFacProposeControl extends BusinessControl {
         if (deleteCollIdList != null && deleteCollIdList.size() > 0) {
             List<NewCollateral> deleteCollateralList = new ArrayList<NewCollateral>();
             for (Long id : deleteCollIdList) {
-                deleteCollateralList.add(newCollateralDAO.findById(id));
+                deleteCollateralList.add(newCollateralDAO.findNewCollateralId(id,ProposeType.P));
             }
             newCollateralDAO.delete(deleteCollateralList);
         }
