@@ -493,7 +493,7 @@ public class CheckMandateDocControl extends BusinessControl{
         try {
             mandateDocResponseView = brmsControl.getDocCustomerForFullApp(workCaseId);
             if(!Util.isNull(mandateDocResponseView) && ActionResult.SUCCESS.equals(mandateDocResponseView.getActionResult())){
-                log.debug("-- ActionResult is {}", ecmDataResult.getActionResult());
+                log.debug("-- ActionResult is {}", mandateDocResponseView.getActionResult());
                 mandateDocViewMap =  mandateDocResponseView.getMandateDocViewMap();
                 log.debug("-- BRMS MandateDocViewMap.size()[{}]", mandateDocViewMap.size());
             } else {
@@ -787,22 +787,23 @@ public class CheckMandateDocControl extends BusinessControl{
         log.debug("-- OtherDocumentsList.size()[{}] added to CheckMandateDocView", otherDocumentsList.size());
         return checkMandateDocView;
     }
-    private CheckMandateDocView compareToCheckMandateDocView(final CheckMandateDocView checkMandateDocView, final List<MandateDoc> mandateDocList){
+    private CheckMandateDocView compareToCheckMandateDocView(final CheckMandateDocView checkMandateDocView, List<MandateDoc> mandateDocList){
         log.debug("-- compareToCheckMandateDocView()");
-
-
         List<CheckMandatoryDocView> mandatoryDocumentsList = null;
         List<CheckOptionalDocView> optionalDocumentsList = null;
         List<CheckOtherDocView> otherDocumentsList = null;
-
         mandatoryDocumentsList = Util.safetyList(checkMandateDocView.getMandatoryDocumentsList());
+        log.debug("-- MandatoryDocumentsList.size()[{}]", mandatoryDocumentsList.size());
         optionalDocumentsList = Util.safetyList(checkMandateDocView.getOptionalDocumentsList());
+        log.debug("-- OptionalDocumentsList.size()[{}]", optionalDocumentsList.size());
         otherDocumentsList = Util.safetyList(checkMandateDocView.getOtherDocumentsList());
+        log.debug("-- OtherDocumentsList.size()[{}]", otherDocumentsList.size());
 
         String key = "";
         pointer :
-        for (MandateDoc mandateDoc : Util.safetyList(mandateDocList)){
+        for (MandateDoc mandateDoc : mandateDocList){
             key = mandateDoc.getEcmDocType();
+            log.debug("-- MandateDoc.ECMDoctype[{}]", mandateDoc.getEcmDocType());
             for (CheckMandatoryDocView checkMandatoryDocView : mandatoryDocumentsList){
                 if(key.equals(checkMandatoryDocView.getKey())){
                     log.debug("-- KEY[{}] Mandatory", key);
@@ -826,7 +827,7 @@ public class CheckMandateDocControl extends BusinessControl{
                         checkMandatoryDocView.setRemark(mandateDoc.getRemark());
                         log.debug("-- CheckMandatoryDocView.Remark[{}]", checkMandatoryDocView.getRemark());
                     }
-                    mandateDocList.remove(mandateDoc);
+//                    mandateDocList.remove(mandateDoc);
                     continue pointer;
                 } else {
                     continue;
@@ -855,7 +856,7 @@ public class CheckMandateDocControl extends BusinessControl{
                         checkOptionalDocView.setRemark(mandateDoc.getRemark());
                         log.debug("-- CheckOptionalDocView.Remark[{}]", checkOptionalDocView.getRemark());
                     }
-                    mandateDocList.remove(mandateDoc);
+//                    mandateDocList.remove(mandateDoc);
                     continue pointer;
                 } else {
                     continue;
@@ -864,7 +865,6 @@ public class CheckMandateDocControl extends BusinessControl{
             for (CheckOtherDocView checkOtherDocView : otherDocumentsList){
                 if(key.equals(checkOtherDocView.getKey())){
                     log.debug("-- KEY[{}] Other", key);
-                    log.debug("-- KEY[{}] Optional", key);
                     if(!Util.isNull(mandateDoc.getReasonIncomplete())){
                         checkOtherDocView.setIncomplete(Util.isTrue(mandateDoc.getReasonIncomplete()));
                         log.debug("-- CheckOtherDocView.Incomplete[{}]", checkOtherDocView.isIncomplete());
@@ -885,7 +885,7 @@ public class CheckMandateDocControl extends BusinessControl{
                         checkOtherDocView.setRemark(mandateDoc.getRemark());
                         log.debug("-- CheckOtherDocView.Remark[{}]", checkOtherDocView.getRemark());
                     }
-                    mandateDocList.remove(mandateDoc);
+//                    mandateDocList.remove(mandateDoc);
                     continue pointer;
                 } else {
                     continue;
