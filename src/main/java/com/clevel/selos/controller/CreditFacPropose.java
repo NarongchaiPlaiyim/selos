@@ -508,7 +508,6 @@ public class CreditFacPropose implements Serializable {
         flagButtonCollateral = true;
     }
 
-
     public void onRetrievePricingFee() {
         log.debug("onRetrievePricingFee ::workCaseId :::  {}", workCaseId);
         if (!Util.isNull(workCaseId)) {
@@ -516,7 +515,6 @@ public class CreditFacPropose implements Serializable {
                 List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
                 StandardPricingResponse standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
                 if (ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
-
                     Map<Long, NewFeeDetailView> newFeeDetailViewMap = new HashMap<Long, NewFeeDetailView>();
                     NewFeeDetailView newFeeDetailView;
                     for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()) {
@@ -554,7 +552,6 @@ public class CreditFacPropose implements Serializable {
                                 } else if ("22".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=22,(CommitmentFee)
                                     newFeeDetailView.setCommitmentFee(feeDetailView);
                                 }
-
                                 log.debug("FeePaymentMethodView():::: {}", feeDetailView.getFeePaymentMethodView().getBrmsCode());
                             }
                         }
@@ -583,10 +580,8 @@ public class CreditFacPropose implements Serializable {
                             List<NewCreditTierDetailView> newCreditTierViewList = newCreditTierTransform.transformPricingIntTierToView(pricingIntTierList);
                             //assign tier view to credit detail view mapping by creditTypeId
                             for (NewCreditDetailView newCreditView : newCreditFacilityView.getNewCreditDetailViewList()) {
-
                                 stringId = String.valueOf(newCreditView.getId());
                                 log.debug("newCreditView.getId() toString :: {}", newCreditView.getId());
-
                                 if (newCreditView.getNewCreditTierDetailViewList().size() > 0) {
 
                                     for (NewCreditTierDetailView newCreditTierDetailView : newCreditView.getNewCreditTierDetailViewList()) {
@@ -599,15 +594,18 @@ public class CreditFacPropose implements Serializable {
                                 }
 
                                 if (stringId.equals(creditTypeId)) {
+                                    if(newCreditView.getNewCreditTierDetailViewList() != null && newCreditView.getNewCreditTierDetailViewList().size() > 0){
+                                        for(NewCreditTierDetailView nctdv : newCreditView.getNewCreditTierDetailViewList()){
+                                            newCreditView.getDeleteTmpList().add(nctdv.getId());
+                                        }
+                                    }
                                     newCreditView.setNewCreditTierDetailViewList(newCreditTierViewList);
                                     break;
                                 }
-
                             }
                         }
                         cannotAddTier = false;
                     }
-
                 } else if (ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
                     messageHeader = msg.get("app.messageHeader.error");
                     message = standardPricingResponse.getReason();
@@ -620,6 +618,39 @@ public class CreditFacPropose implements Serializable {
                 message = e.getMessage();
                 severity = MessageDialogSeverity.ALERT.severity();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
+        }
+    }
+
+    public void onRetrievePricingFeeTest() {
+        if(newCreditFacilityView.getNewCreditDetailViewList() != null && newCreditFacilityView.getNewCreditDetailViewList().size() > 0){
+            for(NewCreditDetailView newCreditView : newCreditFacilityView.getNewCreditDetailViewList()){
+                if(newCreditView.getNewCreditTierDetailViewList() != null && newCreditView.getNewCreditTierDetailViewList().size() > 0){
+                    for(NewCreditTierDetailView nctdv : newCreditView.getNewCreditTierDetailViewList()){
+                        newCreditView.getDeleteTmpList().add(nctdv.getId());
+                    }
+                }
+
+                List<NewCreditTierDetailView> newCreditTierViewList = new ArrayList<NewCreditTierDetailView>();
+                NewCreditTierDetailView newCreditTierDetailView = new NewCreditTierDetailView();
+                BaseRateView baseRateView = new BaseRateView();
+                baseRateView.setName("name");
+                baseRateView.setValue(BigDecimal.ONE);
+
+                newCreditTierDetailView.setStandardBasePrice(baseRateView);
+                newCreditTierDetailView.setSuggestBasePrice(baseRateView);
+                newCreditTierDetailView.setFinalBasePrice(baseRateView);
+
+                newCreditTierDetailView.setStandardPriceLabel("Standard Label");
+                newCreditTierDetailView.setSuggestPriceLabel("Suggest Label");
+                newCreditTierDetailView.setFinalPriceLabel("Final Label");
+
+                newCreditTierDetailView.setStandardInterest(BigDecimal.ZERO);
+                newCreditTierDetailView.setSuggestInterest(BigDecimal.ZERO);
+                newCreditTierDetailView.setFinalInterest(BigDecimal.ZERO);
+
+                newCreditTierViewList.add(newCreditTierDetailView);
+                newCreditView.setNewCreditTierDetailViewList(newCreditTierViewList);
             }
         }
     }
