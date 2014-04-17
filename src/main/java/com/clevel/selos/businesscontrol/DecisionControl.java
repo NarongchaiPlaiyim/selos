@@ -88,6 +88,8 @@ public class DecisionControl extends BusinessControl {
     private StepTransform stepTransform;
     @Inject
     private RoleTransform roleTransform;
+    @Inject
+    private UserTransform userTransform;
 
     //Other Business Control
     @Inject
@@ -367,6 +369,11 @@ public class DecisionControl extends BusinessControl {
         ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), approvalType);
         if(!Util.isNull(approvalHistory)){
             approvalHistoryView = approvalHistoryTransform.transformToView(approvalHistory);
+        }else{
+            User user = getCurrentUser();
+            UserView userView = userTransform.transformToView(user);
+            approvalHistoryView.setUserView(userView);
+            approvalHistoryView.setSubmitDate(null);
         }
 
         return approvalHistoryView;
