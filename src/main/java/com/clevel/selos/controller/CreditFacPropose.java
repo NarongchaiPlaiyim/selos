@@ -587,16 +587,17 @@ public class CreditFacPropose implements Serializable {
                                 stringId = String.valueOf(newCreditView.getId());
                                 log.debug("newCreditView.getId() toString :: {}", newCreditView.getId());
 
-//                                if (newCreditView.getNewCreditTierDetailViewList().size() > 0) {
-//
-//                                    for (NewCreditTierDetailView newCreditTierDetailView : newCreditView.getNewCreditTierDetailViewList()) {
-//                                        if (newCreditTierDetailView.getId() != 0) {
-//                                            deleteCreditTierIdList.add(newCreditTierDetailView.getId());
-//                                        }
-//                                    }
-//
-//                                    log.debug("deleteCreditTierIdList :: {}", deleteCreditTierIdList.size());
-//                                }
+                                if (newCreditView.getNewCreditTierDetailViewList().size() > 0) {
+
+                                    for (NewCreditTierDetailView newCreditTierDetailView : newCreditView.getNewCreditTierDetailViewList()) {
+                                        if (newCreditTierDetailView.getId() != 0) {
+                                            deleteCreditTierIdList.add(newCreditTierDetailView.getId());
+                                        }
+                                    }
+
+                                    log.debug("deleteCreditTierIdList :: {}", deleteCreditTierIdList.size());
+                                }
+
                                 if (stringId.equals(creditTypeId)) {
                                     newCreditView.setNewCreditTierDetailViewList(newCreditTierViewList);
                                     break;
@@ -997,8 +998,14 @@ public class CreditFacPropose implements Serializable {
         log.info("onChangeHeadCollType :: ");
         if (newCollateralHeadView.getHeadCollType().getId() != 0) {
             CollateralType collateralType = collateralTypeDAO.findById(newCollateralHeadView.getHeadCollType().getId());
-            SubCollateralType subCollateralType = subCollateralTypeDAO.findByHeadAndSubColDefaultType(collateralType);
-            newCollateralHeadView.setSubCollType(subCollateralType);
+            List<SubCollateralType> subCollateralTypeResult = subCollateralTypeDAO.findByHeadAndSubColDefaultType(collateralType);
+            if(subCollateralTypeResult!=null && subCollateralTypeResult.size()>0){
+               SubCollateralType subCollateralType = subCollateralTypeDAO.findById(subCollateralTypeResult.get(0).getId());
+               newCollateralHeadView.setSubCollType(subCollateralType);
+            }else{
+                newCollateralHeadView.setSubCollType(null);
+            }
+
         }
 
     }
@@ -1258,9 +1265,14 @@ public class CreditFacPropose implements Serializable {
                     PotentialCollateral potentialCollateralEdit = potentialCollateralDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(i).getPotentialCollateral().getId());
                     TCGCollateralType tcgCollateralType = tcgCollateralTypeDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(i).getTcgCollateralType().getId());
                     CollateralType headCollTypeEdit = collateralTypeDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(i).getHeadCollType().getId());
-                    SubCollateralType subCollateralTypeEdit = subCollateralTypeDAO.findByHeadAndSubColDefaultType(headCollTypeEdit);
+//                    SubCollateralType subCollateralTypeEdit = subCollateralTypeDAO.findByHeadAndSubColDefaultType(headCollTypeEdit);
+                    List<SubCollateralType> subCollateralTypeResult = subCollateralTypeDAO.findByHeadAndSubColDefaultType(headCollTypeEdit);
+                    if(subCollateralTypeResult!=null && subCollateralTypeResult.size()>0){
+                        SubCollateralType subCollateralTypeEdit = subCollateralTypeDAO.findById(subCollateralTypeResult.get(0).getId());
+                        newCollateralView.getNewCollateralHeadViewList().get(i).setSubCollType(subCollateralTypeEdit);
+                    }
 
-                    newCollateralView.getNewCollateralHeadViewList().get(i).setSubCollType(subCollateralTypeEdit);
+
                     newCollateralView.getNewCollateralHeadViewList().get(i).setPotentialCollateral(potentialCollateralEdit);
                     newCollateralView.getNewCollateralHeadViewList().get(i).setHeadCollType(headCollTypeEdit);
                     newCollateralView.getNewCollateralHeadViewList().get(i).setTcgCollateralType(tcgCollateralType);
@@ -1388,7 +1400,7 @@ public class CreditFacPropose implements Serializable {
 
         } else {
             messageHeader = msg.get("app.messageHeader.error");
-            message = "Please to choose Coll Type (%LTV)";
+            message = "Please to choose Head Collateral Type";
             severity = MessageDialogSeverity.ALERT.severity();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
@@ -1785,7 +1797,7 @@ public class CreditFacPropose implements Serializable {
             // Calculate Total for BRMS
             newCreditFacilityView = creditFacProposeControl.calculateTotalForBRMS(newCreditFacilityView);
             //  Calculate Maximum SME Limit
-//            newCreditFacilityView = creditFacProposeControl.calculateMaximumSMELimit(newCreditFacilityView, workCaseId);
+            newCreditFacilityView = creditFacProposeControl.calculateMaximumSMELimit(newCreditFacilityView, workCaseId);
             // Save NewCreditFacility, ProposeCredit, Collateral, Guarantor
             newCreditFacilityView = creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
             // Calculate WC
