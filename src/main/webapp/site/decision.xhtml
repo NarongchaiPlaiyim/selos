@@ -3838,7 +3838,7 @@
                                                             <h:outputText value="#{decision.approvalHistoryPricingView.userView.roleDescription}"
                                                                           rendered="#{not empty decision.approvalHistoryPricingView.userView.roleDescription}"/>
                                                             <h:outputText value=" - "/>
-                                                            <h:outputText value="Endorse CA"/>
+                                                            <h:outputText value="Endorse Price"/>
                                                         </th>
                                                     </tr>
                                                     </thead>
@@ -4063,7 +4063,7 @@
                      severity="#{decision.severity}"
                      header="#{decision.messageHeader}" message="#{decision.message}"
                      closable="false" closeOnEscape="false">
-        <p:commandButton value="OK"
+        <p:commandButton value="#{msg.get('app.button.ok')}"
                          process="@this"
                          update="frmMain"
                          oncomplete="msgBoxSystemMessageDlg.hide()"/>
