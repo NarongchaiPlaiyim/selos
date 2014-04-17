@@ -1054,6 +1054,8 @@ public class CustomerInfoIndividual implements Serializable {
                 enableAllFieldCusSpouse = false;
             }
         }
+
+        maritalStatusFlagTmp = maritalStatusFlag;
     }
 
     public void onChangeMaritalStatus(){
@@ -2101,9 +2103,9 @@ public class CustomerInfoIndividual implements Serializable {
         RequestContext.getCurrentInstance().execute("rmtCmd10()");
     }
 
-    public void updateRmtCmd11(){
-        RequestContext.getCurrentInstance().execute("rmtCmd11()");
-    }
+//    public void updateRmtCmd11(){
+//        RequestContext.getCurrentInstance().execute("rmtCmd11()");
+//    }
 
     public void updateRmtCmdSpouse01(){
         if(maritalStatusFlagTmp || maritalStatusFlag){
@@ -2153,9 +2155,9 @@ public class CustomerInfoIndividual implements Serializable {
         RequestContext.getCurrentInstance().execute("rmtCmdSpouse10()");
     }
 
-    public void updateRmtCmdSpouse11(){
-        RequestContext.getCurrentInstance().execute("rmtCmdSpouse11()");
-    }
+//    public void updateRmtCmdSpouse11(){
+//        RequestContext.getCurrentInstance().execute("rmtCmdSpouse11()");
+//    }
 
     public void updateRmtCmdCommon(){
         RequestContext.getCurrentInstance().execute("rmtCmdCommon()");
