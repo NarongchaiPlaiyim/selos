@@ -79,6 +79,8 @@ public class Decision extends BaseController {
     private BRMSControl brmsControl;
     @Inject
     private FullApplicationControl fullApplicationControl;
+    @Inject
+    private StepStatusControl stepStatusControl;
 
     //DAO
     @Inject
@@ -155,7 +157,9 @@ public class Decision extends BaseController {
     // User Role
     private boolean roleBDM;
     private boolean roleZM_RGM;
-    private boolean roleUW;    
+    private boolean roleUW;
+    private int roleId;
+    private RoleValue roleValue;
 
     // Mode
     enum ModeForButton {
@@ -263,7 +267,7 @@ public class Decision extends BaseController {
         stepId = getCurrentStep(session);
 
         //Set role for UI
-        int roleId = decisionControl.getUserRoleId();
+        roleId = decisionControl.getUserRoleId();
         if (RoleValue.ABDM.id() == roleId || RoleValue.BDM.id() == roleId) {
             roleBDM = true;
         } else if (RoleValue.UW.id() == roleId) {
@@ -396,10 +400,10 @@ public class Decision extends BaseController {
         requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
 
         // ========== Approval History Endorse CA ========== //
-        approvalHistoryView = decisionControl.getCurrentApprovalHistory(workCaseId, ApprovalType.CA_APPROVAL.value());
+        approvalHistoryView = decisionControl.getCurrentApprovalHistory(workCaseId, ApprovalType.CA_APPROVAL.value(), stepId);
 
         if(requestPricing){
-            approvalHistoryPricingView = decisionControl.getCurrentApprovalHistory(workCaseId, ApprovalType.PRICING_APPROVAL.value());
+            approvalHistoryPricingView = decisionControl.getCurrentApprovalHistory(workCaseId, ApprovalType.PRICING_APPROVAL.value(), stepId);
         }
 
         hashSeqCredit = new HashMap<Integer, Integer>();
@@ -1290,16 +1294,39 @@ public class Decision extends BaseController {
                 // Save Total Approve to Decision
                 decisionControl.saveDecision(decisionView, workCase);
 
-                if(decisionDialog){
-                    // Save Approval History
-                    approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
-                    if(requestPricing){
-                        // Save Approval History Pricing
-                        approvalHistoryPricingView = decisionControl.saveApprovalHistoryPricing(approvalHistoryPricingView, workCase);
-                    }
-                }
                 exSummaryControl.calForDecision(workCaseId);
             }
+
+            //Check valid step to Save Approval
+            HttpSession session = FacesUtil.getSession(true);
+            long stepId = 0;
+            long statusId = 0;
+            if (!Util.isNull(session.getAttribute("stepId"))) {
+                stepId = (Long)session.getAttribute("stepId");
+            }
+            if(!Util.isNull(session.getAttribute("statusId"))) {
+                statusId = (Long)session.getAttribute("statusId");
+            }
+            HashMap<String, Integer> stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId);
+
+            if(stepStatusMap != null){
+                if(stepStatusMap.containsKey("Submit CA") || stepStatusMap.containsKey("Submit to UW1")
+                        || stepStatusMap.containsKey("Submit to UW2") || stepStatusMap.containsKey("Submit to ZM")){
+                    if(decisionDialog){
+                        // Save Approval History
+                        if(roleId == RoleValue.ZM.id() || roleId == RoleValue.UW.id()){
+                            approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
+                        }
+                        if(requestPricing){
+                            // Save Approval History Pricing
+                            approvalHistoryPricingView = decisionControl.saveApprovalHistoryPricing(approvalHistoryPricingView, workCase);
+                        }
+                    }
+                }
+            }
+
+
+
 
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save Decision data success.";
@@ -2006,5 +2033,21 @@ public class Decision extends BaseController {
 
     public void setDecisionDialog(boolean decisionDialog) {
         this.decisionDialog = decisionDialog;
+    }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public RoleValue getRoleValue() {
+        return roleValue;
+    }
+
+    public void setRoleValue(RoleValue roleValue) {
+        this.roleValue = roleValue;
     }
 }
