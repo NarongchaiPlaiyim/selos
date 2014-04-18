@@ -415,4 +415,48 @@ public class NewCreditDetailView implements Serializable {
     public void setDeleteTmpList(List<Long> deleteTmpList) {
         this.deleteTmpList = deleteTmpList;
     }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("noFlag", noFlag).
+                append("guaranteeAmount", guaranteeAmount).
+                append("accountName", accountName).
+                append("accountNumber", accountNumber).
+                append("accountSuf", accountSuf).
+                append("useCount", useCount).
+                append("seq", seq).
+                append("requestType", requestType).
+                append("isSetupCompleted", isSetupCompleted).
+                append("isRefinance", isRefinance).
+                append("productProgramView", productProgramView).
+                append("creditTypeView", creditTypeView).
+                append("productCode", productCode).
+                append("projectCode", projectCode).
+                append("borrowerName", borrowerName).
+                append("limit", limit).
+                append("PCEPercent", PCEPercent).
+                append("PCEAmount", PCEAmount).
+                append("reducePriceFlag", reducePriceFlag).
+                append("reduceFrontEndFee", reduceFrontEndFee).
+                append("frontEndFee", frontEndFee).
+                append("remark", remark).
+                append("holdLimitAmount", holdLimitAmount).
+                append("finalPrice", finalPrice).
+                append("tenor", tenor).
+                append("disbursementTypeView", disbursementTypeView).
+                append("loanPurposeView", loanPurposeView).
+                append("purpose", purpose).
+                append("uwDecision", uwDecision).
+                append("installment", installment).
+                append("outstanding", outstanding).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                append("proposeType", proposeType).
+                append("modeSaved", modeSaved).
+                toString();
+    }
 }

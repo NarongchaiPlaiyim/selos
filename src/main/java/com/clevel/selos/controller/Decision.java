@@ -14,7 +14,6 @@ import com.clevel.selos.integration.brms.model.response.PricingInterest;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.ApprovalHistory;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
@@ -34,7 +33,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -79,6 +77,8 @@ public class Decision extends BaseController {
     private BRMSControl brmsControl;
     @Inject
     private FullApplicationControl fullApplicationControl;
+    @Inject
+    private StepStatusControl stepStatusControl;
 
     //DAO
     @Inject
@@ -398,10 +398,10 @@ public class Decision extends BaseController {
         requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
 
         // ========== Approval History Endorse CA ========== //
-        approvalHistoryView = decisionControl.getCurrentApprovalHistory(workCaseId, ApprovalType.CA_APPROVAL.value());
+        approvalHistoryView = decisionControl.getCurrentApprovalHistory(workCaseId, ApprovalType.CA_APPROVAL.value(), stepId);
 
         if(requestPricing){
-            approvalHistoryPricingView = decisionControl.getCurrentApprovalHistory(workCaseId, ApprovalType.PRICING_APPROVAL.value());
+            approvalHistoryPricingView = decisionControl.getCurrentApprovalHistory(workCaseId, ApprovalType.PRICING_APPROVAL.value(), stepId);
         }
 
         hashSeqCredit = new HashMap<Integer, Integer>();
@@ -1282,7 +1282,7 @@ public class Decision extends BaseController {
 
         try {
 
-            if (roleUW) {
+            /*if (roleUW) {
                 // Delete List
                 decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
                 // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
@@ -1293,16 +1293,37 @@ public class Decision extends BaseController {
                 decisionControl.saveDecision(decisionView, workCase);
 
                 exSummaryControl.calForDecision(workCaseId);
-            }
+            }*/
 
-            if(decisionDialog){
-                // Save Approval History
-                approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
-                if(requestPricing){
-                    // Save Approval History Pricing
-                    approvalHistoryPricingView = decisionControl.saveApprovalHistoryPricing(approvalHistoryPricingView, workCase);
+            //Check valid step to Save Approval
+            HttpSession session = FacesUtil.getSession(true);
+            long stepId = 0;
+            long statusId = 0;
+            if (!Util.isNull(session.getAttribute("stepId"))) {
+                stepId = (Long)session.getAttribute("stepId");
+            }
+            if(!Util.isNull(session.getAttribute("statusId"))) {
+                statusId = (Long)session.getAttribute("statusId");
+            }
+            HashMap<String, Integer> stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId);
+
+            if(stepStatusMap != null){
+                if(stepStatusMap.containsKey("Submit CA") || stepStatusMap.containsKey("Submit to UW1")
+                        || stepStatusMap.containsKey("Submit to UW2") || stepStatusMap.containsKey("Submit to ZM")){
+                    if(decisionDialog){
+                        // Save Approval History
+                        if(roleId == RoleValue.ZM.id() || roleId == RoleValue.UW.id()){
+                            approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
+                        }
+                        if(requestPricing){
+                            // Save Approval History Pricing
+                            approvalHistoryPricingView = decisionControl.saveApprovalHistoryPricing(approvalHistoryPricingView, workCase);
+                        }
+                    }
                 }
             }
+
+            onCreation();
 
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save Decision data success.";
@@ -1311,11 +1332,7 @@ public class Decision extends BaseController {
         catch (Exception e) {
             messageHeader = msg.get("app.messageHeader.error");
             severity = MessageDialogSeverity.ALERT.severity();
-            if (e.getCause() != null) {
-                message = "Save Decision data failed. Cause : " + e.getCause().toString();
-            } else {
-                message = "Save Decision data failed. Cause : " + e.getMessage();
-            }
+            message = "Save Decision data failed. Cause : " + Util.getMessageException(e);
         }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
