@@ -268,13 +268,27 @@ public class AppraisalAppointment implements Serializable {
 
     public void onSaveContactRecordDetailView(){
         log.debug("-- onSaveContactRecordDetailView() flag = {}", modeForButton);
-        boolean complete = true;
+        boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
+        Cloner cloner = new Cloner();
+        if(Util.isZero(contactRecordDetailViewList.size())){
+            contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
+            log.debug("-- [NEW]ContactRecordDetailViewList created");
+        }
+
         if(ModeForButton.ADD.equals(modeForButton)){
-            contactRecordDetailViewList.add(contactRecord);
+            log.debug("-- [AFTER]ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
+            contactRecordDetailView = cloner.deepClone(contactRecord);
+            contactRecordDetailViewList.add(contactRecordDetailView);
+            complete = true;
+            log.debug("-- [BEFORE]ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
         }else if(ModeForButton.EDIT.equals(modeForButton)){
             log.debug("-- RowIndex[{}]", rowIndex);
-            contactRecordDetailViewList.set(rowIndex, contactRecord);
+            log.debug("-- [AFTER]ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
+            contactRecordDetailView = cloner.deepClone(contactRecord);
+            contactRecordDetailViewList.add(contactRecordDetailView);
+            complete = true;
+            log.debug("-- [BEFORE]ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
         }
         context.addCallbackParam("functionComplete", complete);
 
@@ -398,14 +412,10 @@ public class AppraisalAppointment implements Serializable {
     }
 
     public void onEditAppraisalContactDetailView(){
-        log.info( " onEditAppraisalContactDetailView " + selectAppraisalContactDetailView);
         modeForButton = ModeForButton.EDIT;
-        appraisalContactDetailView = new AppraisalContactDetailView();
-        //*** Check list size ***//
-        if( rowIndex < appraisalContactDetailViewList.size() ) {
-//            appraisalContactDetailView.setCustomerName(selectAppraisalContactDetailView.getCustomerName());
-//            appraisalContactDetailView.setContactNo(selectAppraisalContactDetailView.getContactNo());
-        }
+        log.debug("-- onEditAppraisalContactDetailView() RowIndex[{}]", rowIndex);
+        Cloner cloner = new Cloner();
+        contactRecord = cloner.deepClone(contactRecord);
     }
 
     public void onAddAppraisalDetailView(){
