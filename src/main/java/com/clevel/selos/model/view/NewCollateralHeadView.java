@@ -206,26 +206,24 @@ public class NewCollateralHeadView implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("no", no)
-                .append("titleDeed", titleDeed)
-                .append("collateralLocation", collateralLocation)
-                .append("appraisalValue", appraisalValue)
-                .append("headCollType", headCollType)
-                .append("subCollType", subCollType)
-                .append("collTypePercentLTV", collTypePercentLTV)
-                .append("potentialCollateral", potentialCollateral)
-                .append("tcgCollateralType", tcgCollateralType)
-                .append("collID", collID)
-                .append("existingCredit", existingCredit)
-                .append("insuranceCompany", insuranceCompany)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
-                .append("newCollateralSubViewList", newCollateralSubViewList)
-                .append("newCollateralSubDeleteList", newCollateralSubDeleteList)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("no", no).
+                append("titleDeed", titleDeed).
+                append("collateralLocation", collateralLocation).
+                append("appraisalValue", appraisalValue).
+                append("headCollType", headCollType).
+                append("subCollType", subCollType).
+                append("collTypePercentLTV", collTypePercentLTV).
+                append("potentialCollateral", potentialCollateral).
+                append("tcgCollateralType", tcgCollateralType).
+                append("collID", collID).
+                append("existingCredit", existingCredit).
+                append("insuranceCompany", insuranceCompany).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                toString();
     }
 }

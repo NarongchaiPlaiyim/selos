@@ -1054,6 +1054,8 @@ public class CustomerInfoIndividual implements Serializable {
                 enableAllFieldCusSpouse = false;
             }
         }
+
+        maritalStatusFlagTmp = maritalStatusFlag;
     }
 
     public void onChangeMaritalStatus(){
@@ -1842,6 +1844,7 @@ public class CustomerInfoIndividual implements Serializable {
             }
         }
 
+        //update address
         if(customerInfoView.getRegisterAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2
             AddressView addressView = new AddressView(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress().getId());
             addressView.setAddressTypeFlag(1);
@@ -1916,6 +1919,26 @@ public class CustomerInfoIndividual implements Serializable {
     public String onSaveFromJuristic(){
         log.debug("onSaveFromJuristic");
         //check citizen id
+        if(customerInfoView.getSpouse() != null){
+            if(customerInfoView.getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId())){
+                messageHeader = "Information.";
+                message = "Citizen Id is already exist";
+                severity = "info";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                return "";
+            }
+            Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getSpouse().getCitizenId(),workCaseId);
+            if(customer != null && customer.getId() != 0){
+                if(customer.getId() != customerInfoView.getSpouse().getId()){
+                    messageHeader = "Information.";
+                    message = "Citizen Id is already exist";
+                    severity = "info";
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    return "";
+                }
+            }
+        }
+
         Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getCitizenId(),workCaseId);
         if(customer != null && customer.getId() != 0){
             if(customer.getId() != customerInfoView.getId()){
@@ -1988,9 +2011,40 @@ public class CustomerInfoIndividual implements Serializable {
             }
         }
 
-        //customerInfoView = individual
-        customerInfoView.getTitleTh().setTitleTh(titleDAO.findById(customerInfoView.getTitleTh().getId()).getTitleTh());
-        customerInfoView.getRelation().setDescription(relationDAO.findById(relationMainCusId).getDescription());
+        //update address
+        if(customerInfoView.getRegisterAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2
+            AddressView addressView = new AddressView(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress().getId());
+            addressView.setAddressTypeFlag(1);
+            customerInfoView.setRegisterAddress(addressView);
+        }
+
+        if(customerInfoView.getWorkAddress().getAddressTypeFlag() == 1){
+            AddressView addressView = new AddressView(customerInfoView.getCurrentAddress(),customerInfoView.getWorkAddress().getId());
+            addressView.setAddressTypeFlag(1);
+            customerInfoView.setWorkAddress(addressView);
+        }else if(customerInfoView.getWorkAddress().getAddressTypeFlag() == 2){
+            AddressView addressView = new AddressView(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress().getId());
+            addressView.setAddressTypeFlag(2);
+            customerInfoView.setWorkAddress(addressView);
+        }
+
+        if(customerInfoView.getMaritalStatus().getSpouseFlag() == 1){
+            if(customerInfoView.getSpouse().getRegisterAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2
+                AddressView addressView = new AddressView(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress().getId());
+                addressView.setAddressTypeFlag(1);
+                customerInfoView.getSpouse().setRegisterAddress(addressView);
+            }
+
+            if(customerInfoView.getSpouse().getWorkAddress().getAddressTypeFlag() == 1){
+                AddressView addressView = new AddressView(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getWorkAddress().getId());
+                addressView.setAddressTypeFlag(1);
+                customerInfoView.getSpouse().setWorkAddress(addressView);
+            }else if(customerInfoView.getSpouse().getWorkAddress().getAddressTypeFlag() == 2){
+                AddressView addressView = new AddressView(customerInfoView.getSpouse().getRegisterAddress(),customerInfoView.getSpouse().getWorkAddress().getId());
+                addressView.setAddressTypeFlag(2);
+                customerInfoView.getSpouse().setWorkAddress(addressView);
+            }
+        }
 
         //calculate age
         customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
@@ -2006,6 +2060,10 @@ public class CustomerInfoIndividual implements Serializable {
             customerInfoView.getSpouse().setRelation(spouseRel);
             customerInfoView.getSpouse().setReference(spouseRef);
         }
+
+        //customerInfoView = individual
+        customerInfoView.getTitleTh().setTitleTh(titleDAO.findById(customerInfoView.getTitleTh().getId()).getTitleTh());
+        customerInfoView.getRelation().setDescription(relationDAO.findById(relationMainCusId).getDescription());
 
         if(isEditFromJuristic){
             cusInfoJuristic.getIndividualViewList().set(rowIndex,customerInfoView);
@@ -2101,9 +2159,9 @@ public class CustomerInfoIndividual implements Serializable {
         RequestContext.getCurrentInstance().execute("rmtCmd10()");
     }
 
-    public void updateRmtCmd11(){
-        RequestContext.getCurrentInstance().execute("rmtCmd11()");
-    }
+//    public void updateRmtCmd11(){
+//        RequestContext.getCurrentInstance().execute("rmtCmd11()");
+//    }
 
     public void updateRmtCmdSpouse01(){
         if(maritalStatusFlagTmp || maritalStatusFlag){
@@ -2153,9 +2211,9 @@ public class CustomerInfoIndividual implements Serializable {
         RequestContext.getCurrentInstance().execute("rmtCmdSpouse10()");
     }
 
-    public void updateRmtCmdSpouse11(){
-        RequestContext.getCurrentInstance().execute("rmtCmdSpouse11()");
-    }
+//    public void updateRmtCmdSpouse11(){
+//        RequestContext.getCurrentInstance().execute("rmtCmdSpouse11()");
+//    }
 
     public void updateRmtCmdCommon(){
         RequestContext.getCurrentInstance().execute("rmtCmdCommon()");

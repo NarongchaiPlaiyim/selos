@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.ApprovalHistoryDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ApprovalType;
 import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.db.working.ApprovalHistory;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -74,6 +75,7 @@ public class ApprovalHistoryTransform extends Transform {
         approvalHistory.setWorkCase(workCase);
         approvalHistory.setSubmitDate(approvalHistoryView.getSubmitDate());
         approvalHistory.setComments(approvalHistoryView.getComments());
+        approvalHistory.setApproveType(approvalHistoryView.getApprovalType());
         approvalHistory.setApproveDecision(DecisionType.APPROVED == approvalHistoryView.getUwDecision() ? 1 : 0);
         approvalHistory.setSubmit(approvalHistoryView.getSubmit());
         return approvalHistory;
@@ -103,6 +105,7 @@ public class ApprovalHistoryTransform extends Transform {
         approvalHistoryView.setSubmitDate(approvalHistory.getSubmitDate());
         approvalHistoryView.setComments(approvalHistory.getComments());
         approvalHistoryView.setUwDecision(approvalHistory.getApproveDecision() == 1 ? DecisionType.APPROVED : DecisionType.REJECTED);
+        approvalHistoryView.setApprovalType(approvalHistory.getApproveType());
         approvalHistoryView.setSubmit(approvalHistory.getSubmit());
         return approvalHistoryView;
     }

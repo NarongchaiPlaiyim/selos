@@ -12,6 +12,21 @@
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
     <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
+
+    <script type="text/javascript">
+        RepeatingOperation = function(op, yieldEveryIteration) {
+            var count = 0;
+            var instance = this;
+            this.step = function(args) {
+                if (++count >= yieldEveryIteration) {
+                    count = 0;
+                    setTimeout(function() { op(args); }, 1, [])
+                    return;
+                }
+                op(args);
+            };
+        };
+    </script>
 </h:head>
 
 <h:body onload="loadComplete()">
@@ -2187,7 +2202,7 @@
                                                                                          onkeypress="return onKeyPressNumber(event);"
                                                                                          maxlength="10"/>
                                                                             <h:outputText value=" #{msg.get('app.custInfoIndi.content.telTo')} " styleClass="title"/>
-                                                                            <p:inputText id="regAddTelExSpouse"
+                                                                            <p:inputText id="regAddTelExtSpouse"
                                                                                          styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.extension}"
                                                                                          disabled="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.addressTypeFlag != 3}"
                                                                                          onkeydown="return onKeyDownNumber(event);"
@@ -2600,55 +2615,69 @@
 
             <p:remoteCommand name="rmtCmd02" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmd03()}"
-                             update=":frmMain:relation,:frmMain:collateral,:frmMain:reference,:frmMain:shareCust"/>
+                             update=":frmMain:collateral,:frmMain:shareCust,
+                                     :frmMain:citiId,:frmMain:docAutBy,:frmMain:dob,
+                                     :frmMain:docAutDate,:frmMain:docExpDate,
+                                     :frmMain:firstNameTh,:frmMain:lastNameTh,
+                                     :frmMain:firstNameEn,:frmMain:lastNameEn,
+                                     :frmMain:age,:frmMain:approxIncome,:frmMain:numbOfChild,
+                                     :frmMain:curAddNo,:frmMain:curAddMoo,:frmMain:curAddBuilding,
+                                     :frmMain:curAddRoad,:frmMain:curPostCode,:frmMain:curAddAddress,
+                                     :frmMain:curAddTel,:frmMain:curAddTelExt,
+                                     :frmMain:regAddFlag,:frmMain:regAddNo,:frmMain:regAddMoo,
+                                     :frmMain:regAddBuilding,:frmMain:regAddRoad,:frmMain:curPostCode,
+                                     :frmMain:regAddAddress,:frmMain:regAddTel,:frmMain:regAddTelExt,
+                                     :frmMain:workAddFlag,:frmMain:workAddNo,:frmMain:workAddMoo,
+                                     :frmMain:workAddBuilding,:frmMain:workAddRoad,:frmMain:curPostCode,
+                                     :frmMain:workAddCountry,:frmMain:workAddTel,:frmMain:workAddTelExt,
+                                     :frmMain:mobileNumber,:frmMain:fax,:frmMain:email,
+                                     :frmMain:tmbCustId,:frmMain:serviceSegment,:frmMain:kycReason,
+                                     :frmMain:covenantFlag,:frmMain:reviewFlag,:frmMain:reason,
+                                     :frmMain:worthiness,:frmMain:customerCSI"/>
 
             <p:remoteCommand name="rmtCmd03" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmd04()}"
-                             update=":frmMain:docType,:frmMain:citiId,:frmMain:docAutBy,:frmMain:dob,:frmMain:citiCountry,:frmMain:docAutDate,:frmMain:docExpDate"/>
+                             update=":frmMain:relation,:frmMain:reference,:frmMain:docType,:frmMain:citiCountry"/>
 
             <p:remoteCommand name="rmtCmd04" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmd05()}"
-                             update=":frmMain:titleTh,:frmMain:firstNameTh,:frmMain:lastNameTh,:frmMain:titleEn,:frmMain:firstNameEn,:frmMain:lastNameEn,:frmMain:gender,
-                                     :frmMain:age"/>
+                             update=":frmMain:titleTh,:frmMain:titleEn,:frmMain:gender,:frmMain:origin"/>
 
             <p:remoteCommand name="rmtCmd05" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmd06()}"
-                             update=":frmMain:origin,:frmMain:nationality,:frmMain:sndNationality,:frmMain:education,:frmMain:occupation"/>
+                             update=":frmMain:nationality,:frmMain:sndNationality,:frmMain:education,:frmMain:occupation"/>
 
             <p:remoteCommand name="rmtCmd06" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmd07()}"
-                             update=":frmMain:businessType,:frmMain:approxIncome,:frmMain:income,:frmMain:incomeCountry,:frmMain:maritalStatus,:frmMain:numbOfChild"/>
+                             update=":frmMain:businessType,:frmMain:income,:frmMain:incomeCountry,:frmMain:maritalStatus"/>
 
             <p:remoteCommand name="rmtCmd07" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmd08()}"
-                             update=":frmMain:curAddNo,:frmMain:curAddMoo,:frmMain:curAddBuilding,:frmMain:curAddRoad,:frmMain:curAddPro,:frmMain:districtForm1,
-                                     :frmMain:subDistrictForm1,:frmMain:curPostCode,:frmMain:curAddCountry,:frmMain:curAddAddress,:frmMain:curAddTel,:frmMain:curAddTelExt"/>
+                             update=":frmMain:curAddPro,:frmMain:districtForm1,:frmMain:subDistrictForm1,:frmMain:curAddCountry"/>
 
             <p:remoteCommand name="rmtCmd08" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmd09()}"
-                             update=":frmMain:regAddFlag,:frmMain:adForm2"/>
-                             <!--update=":frmMain:regAddFlag,:frmMain:regAddNo,:frmMain:regAddMoo,:frmMain:regAddBuilding,:frmMain:regAddRoad,:frmMain:regAddPro,:frmMain:districtForm2,
-                                     :frmMain:subDistrictForm2,:frmMain:curPostCode,:frmMain:regAddCountry,:frmMain:regAddAddress,:frmMain:regAddTel,:frmMain:regAddTelExt"/>-->
+                             update=":frmMain:regAddPro,:frmMain:districtForm2,:frmMain:subDistrictForm2,:frmMain:regAddCountry"/>
+                             <!--update=":frmMain:regAddFlag,:frmMain:adForm2"/>-->
 
             <p:remoteCommand name="rmtCmd09" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmd10()}"
-                             update=":frmMain:workAddFlag,:frmMain:adForm3"/>
-                             <!--update=":frmMain:workAddFlag,:frmMain:workAddNo,:frmMain:workAddMoo,:frmMain:workAddBuilding,:frmMain:workAddRoad,:frmMain:workAddPro,
-                                     :frmMain:districtForm3,:frmMain:subDistrictForm3,:frmMain:curPostCode,:frmMain:workAddCountry,:frmMain:workAddAddress,
-                                     :frmMain:workAddTel,:frmMain:workAddTelExt"/>-->
+                             update=":frmMain:workAddPro,:frmMain:districtForm3,:frmMain:subDistrictForm3,:frmMain:workAddAddress"/>
+                            <!--update=":frmMain:workAddFlag,:frmMain:adForm3"/>-->
 
             <p:remoteCommand name="rmtCmd10" process="@this"
-                             action="#{custInfoSumIndi.updateRmtCmd11()}"
-                             update=":frmMain:mailAdd,:frmMain:mobileNumber,:frmMain:fax,:frmMain:email"/>
-
-            <p:remoteCommand name="rmtCmd11" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmdSpouse01()}"
-                             update=":frmMain:tmbCustId,:frmMain:serviceSegment,:frmMain:kycLv,:frmMain:kycReason,:frmMain:covenantFlag,:frmMain:reviewFlag,
-                                     :frmMain:reason,:frmMain:worthiness,:frmMain:customerCSI"/>
+                             update=":frmMain:mailAdd,:frmMain:kycLv"/>
+                             <!--action="#{custInfoSumIndi.updateRmtCmd11()}"-->
+
+            <!--<p:remoteCommand name="rmtCmd11" process="@this"-->
+                             <!--action="#{custInfoSumIndi.updateRmtCmdSpouse01()}"-->
+                             <!--update=""/>-->
 
             <p:remoteCommand name="rmtCmdOnlySpouse01" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmdSpouse02()}"
-                             update=":frmMain:docTypeSearch,:frmMain:searchBySearch,:frmMain:inputSearch,:frmMain:btnSearch"
+                             update=":frmMain:docTypeSearchSpouse,:frmMain:searchBySearchSpouse,
+                                     :frmMain:inputSearchSpouse,:frmMain:btnSearch2"
                              onstart="blockUI.show()"/>
 
             <p:remoteCommand name="rmtCmdSpouse01" process="@this"
@@ -2658,54 +2687,70 @@
 
             <p:remoteCommand name="rmtCmdSpouse02" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmdSpouse03()}"
-                             update=":frmMain:docTypeSearchSpouse,:frmMain:searchBySearchSpouse,:frmMain:inputSearchSpouse,:frmMain:btnSearch2,
-                                     :frmMain:relationSpouse,:frmMain:collateralSpouse,:frmMain:referenceSpouse,:frmMain:shareCustSpouse"/>
+                             update=":frmMain:docTypeSearchSpouse,:frmMain:searchBySearchSpouse,
+                                     :frmMain:inputSearchSpouse,:frmMain:btnSearch2"/>
 
             <p:remoteCommand name="rmtCmdSpouse03" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmdSpouse04()}"
-                             update=":frmMain:docTypeSpouse,:frmMain:citiIdSpouse,:frmMain:docAutBySpouse,:frmMain:dobSpouse,:frmMain:citiCountrySpouse,
-                                     :frmMain:docAutDateSpouse,:frmMain:docExpDateSpouse"/>
+                             update=":frmMain:collateralSpouse,:frmMain:shareCustSpouse,
+                                     :frmMain:citiIdSpouse,:frmMain:docAutBySpouse,:frmMain:dobSpouse,
+                                     :frmMain:docAutDateSpouse,:frmMain:docExpDateSpouse,:frmMain:firstNameThSpouse,
+                                     :frmMain:lastNameThSpouse,:frmMain:firstNameEnSpouse,:frmMain:lastNameEnSpouse,
+                                     :frmMain:ageSpouse,:frmMain:approxIncomeSpouse,:frmMain:numbOfChildSpouse,
+                                     :frmMain:curAddNoSpouse,:frmMain:curAddMooSpouse,:frmMain:curAddBuildingSpouse,
+                                     :frmMain:curAddRoadSpouse,:frmMain:curPostCodeSpouse,:frmMain:curAddAddressSpouse,
+                                     :frmMain:curAddTelSpouse,:frmMain:curAddTelExtSpouse,:frmMain:regAddFlagSpouse,
+                                     :frmMain:regAddNoSpouse,:frmMain:regAddMooSpouse,:frmMain:regAddBuildingSpouse,
+                                     :frmMain:regAddRoadSpouse,:frmMain:curPostCodeSpouse,:frmMain:regAddAddressSpouse,
+                                     :frmMain:regAddTelSpouse,:frmMain:regAddTelExtSpouse,:frmMain:workAddFlagSpouse,
+                                     :frmMain:workAddNoSpouse,:frmMain:workAddMooSpouse,:frmMain:workAddBuildingSpouse,
+                                     :frmMain:workAddRoadSpouse,:frmMain:curPostCodeSpouse,:frmMain:workAddAddressSpouse,
+                                     :frmMain:workAddTelSpouse,:frmMain:workAddTelExtSpouse,:frmMain:mobileNumberSpouse,
+                                     :frmMain:tmbCustIdSpouse,:frmMain:serviceSegmentSpouse,:frmMain:kycReasonSpouse,
+                                     :frmMain:covenantFlagSpouse,:frmMain:reviewFlagSpouse,:frmMain:reasonSpouse,
+                                     :frmMain:worthinessSpouse,:frmMain:customerCSISpouse,"/>
 
             <p:remoteCommand name="rmtCmdSpouse04" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmdSpouse05()}"
-                             update=":frmMain:titleThSpouse,:frmMain:firstNameThSpouse,:frmMain:lastNameThSpouse,:frmMain:titleEnSpouse,:frmMain:firstNameEnSpouse,
-                                     :frmMain:lastNameEnSpouse,:frmMain:genderSpouse,:frmMain:ageSpouse"/>
+                             update=":frmMain:relationSpouse,:frmMain:referenceSpouse,
+                                     :frmMain:docTypeSpouse,:frmMain:citiCountrySpouse"/>
 
             <p:remoteCommand name="rmtCmdSpouse05" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmdSpouse06()}"
-                             update=":frmMain:originSpouse,:frmMain:nationalitySpouse,:frmMain:sndNationalitySpouse,:frmMain:educationSpouse,:frmMain:occupationSpouse"/>
+                             update=":frmMain:titleThSpouse,:frmMain:titleEnSpouse,
+                                     :frmMain:genderSpouse,:frmMain:originSpouse"/>
 
             <p:remoteCommand name="rmtCmdSpouse06" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmdSpouse07()}"
-                             update=":frmMain:businessTypeSpouse,:frmMain:approxIncomeSpouse,:frmMain:incomeSpouse,:frmMain:incomeCountrySpouse,:frmMain:numbOfChildSpouse"/>
+                             update=":frmMain:nationalitySpouse,:frmMain:sndNationalitySpouse,
+                                     :frmMain:educationSpouse,:frmMain:occupationSpouse"/>
 
             <p:remoteCommand name="rmtCmdSpouse07" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmdSpouse08()}"
-                             update=":frmMain:curAddNoSpouse,:frmMain:curAddMooSpouse,:frmMain:curAddBuildingSpouse,:frmMain:curAddRoadSpouse,:frmMain:curAddProSpouse,
-                                     :frmMain:districtForm4,:frmMain:subDistrictForm4,:frmMain:curPostCodeSpouse,:frmMain:curAddCountrySpouse,:frmMain:curAddAddressSpouse,
-                                     :frmMain:curAddTelSpouse,:frmMain:curAddTelExtSpouse"/>
+                             update=":frmMain:businessTypeSpouse,:frmMain:incomeSpouse,
+                                     :frmMain:incomeCountrySpouse,:frmMain:curAddProSpouse"/>
 
             <p:remoteCommand name="rmtCmdSpouse08" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmdSpouse09()}"
-                             update=":frmMain:regAddFlag,:frmMain:adForm5"/>
-                             <!--update=":frmMain:regAddFlag,:frmMain:regAddNo,:frmMain:regAddMoo,:frmMain:regAddBuilding,:frmMain:regAddRoad,:frmMain:regAddPro,:frmMain:districtForm2,
-                                     :frmMain:subDistrictForm2,:frmMain:curPostCode,:frmMain:regAddCountry,:frmMain:regAddAddress,:frmMain:regAddTel,:frmMain:regAddTelExt"/>-->
+                             update=":frmMain:districtForm4,:frmMain:subDistrictForm4,
+                                     :frmMain:curAddCountrySpouse,:frmMain:regAddProSpouse"/>
+                             <!--update=":frmMain:regAddFlagSpouse,:frmMain:adForm5"/>-->
 
             <p:remoteCommand name="rmtCmdSpouse09" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmdSpouse10()}"
-                             update=":frmMain:workAddFlag,:frmMain:adForm6"/>
-                             <!--update=":frmMain:workAddFlag,:frmMain:workAddNo,:frmMain:workAddMoo,:frmMain:workAddBuilding,:frmMain:workAddRoad,:frmMain:workAddPro,
-                                     :frmMain:districtForm3,:frmMain:subDistrictForm3,:frmMain:curPostCode,:frmMain:workAddCountry,:frmMain:workAddAddress,
-                                     :frmMain:workAddTel,:frmMain:workAddTelExt"/>-->
+                             update=":frmMain:districtForm5,:frmMain:subDistrictForm5,
+                                     :frmMain:regAddCountrySpouse,:frmMain:workAddProSpouse"/>
+                             <!--update=":frmMain:workAddFlagSpouse,:frmMain:adForm6"/>-->
 
             <p:remoteCommand name="rmtCmdSpouse10" process="@this"
-                             action="#{custInfoSumIndi.updateRmtCmdSpouse11()}"
-                             update=":frmMain:mobileNumberSpouse"/>
-
-            <p:remoteCommand name="rmtCmdSpouse11" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmdCommon()}"
-                             update=":frmMain:tmbCustIdSpouse,:frmMain:serviceSegmentSpouse,:frmMain:kycLvSpouse,:frmMain:kycReasonSpouse,:frmMain:covenantFlagSpouse,
-                                     :frmMain:reviewFlagSpouse,:frmMain:reasonSpouse,:frmMain:worthinessSpouse,:frmMain:customerCSISpouse"/>
+                             update=":frmMain:districtForm6,:frmMain:subDistrictForm6,
+                                     :frmMain:workAddCountrySpouse,:frmMain:kycLvSpouse"/>
+            <!--action="#{custInfoSumIndi.updateRmtCmdSpouse11()}"-->
+
+            <!--<p:remoteCommand name="rmtCmdSpouse11" process="@this"-->
+                             <!--action="#{custInfoSumIndi.updateRmtCmdCommon()}"-->
+                             <!--update=""/>-->
 
             <p:remoteCommand name="rmtCmdCommon" process="@this"
                              update=":frmMain:btnSave,:frmMain:btnSave2,:frmMain:btnCancel,:frmMain:btnCancel2"
