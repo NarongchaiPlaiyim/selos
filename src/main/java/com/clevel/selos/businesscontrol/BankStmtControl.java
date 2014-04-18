@@ -723,6 +723,7 @@ public class BankStmtControl extends BusinessControl {
         BigDecimal sumCreditAmountBDM = BigDecimal.ZERO;
         BigDecimal sumCreditAmountUW = BigDecimal.ZERO;
         BigDecimal sumDebitAmount = BigDecimal.ZERO;
+        BigDecimal sumGrossInflowPerLimit = BigDecimal.ZERO;
 
         int numMonthNonOvrLmtAmt = 0;
 
@@ -751,7 +752,7 @@ public class BankStmtControl extends BusinessControl {
                 }
 
                 // grossInflowPerLimit(%) = [ grossCreditBalance / limit ] x 100
-                tmpGrossInflowLimit = Util.multiply(Util.divide(detailView.getGrossCreditBalance(), limit), Util.ONE_HUNDRED);
+                tmpGrossInflowLimit = Util.multiply(Util.divide(detailView.getGrossCreditBalance(), detailView.getOverLimitAmount()), Util.ONE_HUNDRED);
                 if (tmpGrossInflowLimit != null) {
                     tmpGrossInflowLimit = tmpGrossInflowLimit.setScale(2, RoundingMode.HALF_UP);
                 }
@@ -769,6 +770,7 @@ public class BankStmtControl extends BusinessControl {
                 sumGrossCreditBalance = Util.add(sumGrossCreditBalance, detailView.getGrossCreditBalance());
                 sumCreditAmountUW = Util.add(sumCreditAmountUW, detailView.getCreditAmountUW());
                 sumDebitAmount = Util.add(sumDebitAmount, detailView.getDebitAmount());
+                sumGrossInflowPerLimit = Util.add(sumGrossInflowPerLimit, detailView.getGrossInflowPerLimit());
             }
 
             sumCreditAmountBDM = null;
@@ -794,7 +796,7 @@ public class BankStmtControl extends BusinessControl {
                 }
 
                 // grossInflowPerLimit(%) = [ grossCreditBalance / limit ] x 100
-                tmpGrossInflowLimit = Util.multiply(Util.divide(detailView.getGrossCreditBalance(), limit), Util.ONE_HUNDRED);
+                tmpGrossInflowLimit = Util.multiply(Util.divide(detailView.getGrossCreditBalance(), detailView.getOverLimitAmount()), Util.ONE_HUNDRED);
                 if (tmpGrossInflowLimit != null) {
                     tmpGrossInflowLimit = tmpGrossInflowLimit.setScale(2, RoundingMode.HALF_UP);
                 }
@@ -812,6 +814,7 @@ public class BankStmtControl extends BusinessControl {
                 sumGrossCreditBalance = Util.add(sumGrossCreditBalance, detailView.getGrossCreditBalance());
                 sumCreditAmountBDM = Util.add(sumCreditAmountBDM, detailView.getCreditAmountBDM());
                 sumDebitAmount = Util.add(sumDebitAmount, detailView.getDebitAmount());
+                sumGrossInflowPerLimit = Util.add(sumGrossInflowPerLimit, detailView.getGrossInflowPerLimit());
             }
 
             sumCreditAmountUW = null;
@@ -902,7 +905,8 @@ public class BankStmtControl extends BusinessControl {
         BigDecimal avgUtilizationPercent = Util.divide(sumUtilPctOfLastSixM, numMonthOvrLmtAmtOfLastSixM).setScale(2, RoundingMode.HALF_UP);
 
         // avgGrossInflowPerLimit(%) = ([ SUM(grossCreditBalance) / Limit ] / [ 6 - NumberOfNonODLimit]) x 100
-        BigDecimal avgGrossInflowPerLimit = Util.multiply(Util.divide( Util.divide(sumGrossCreditBalance, limit) , 6 - numMonthNonOvrLmtAmt), Util.ONE_HUNDRED);
+        //BigDecimal avgGrossInflowPerLimit = Util.multiply(Util.divide( Util.divide(sumGrossCreditBalance, limit) , 6 - numMonthNonOvrLmtAmt), Util.ONE_HUNDRED);
+        BigDecimal avgGrossInflowPerLimit = Util.divide(sumGrossInflowPerLimit , (6 - numMonthNonOvrLmtAmt));
         if (avgGrossInflowPerLimit != null) {
             avgGrossInflowPerLimit = avgGrossInflowPerLimit.setScale(2, RoundingMode.HALF_UP);
         }

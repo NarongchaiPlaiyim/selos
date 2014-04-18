@@ -73,6 +73,8 @@ public class HeaderController implements Serializable {
     private BRMSControl brmsControl;
     @Inject
     private UWRuleResultControl uwRuleResultControl;
+    @Inject
+    private HeaderControl headerControl;
 
     private ManageButton manageButton;
     private AppHeaderView appHeaderView;
@@ -155,6 +157,7 @@ public class HeaderController implements Serializable {
 
     private String messageHeader;
     private String message;
+    private List<MandateFieldMessageView> mandateFieldMessageViewList;
 
     //UW submit dialog
     private List<User> uw2UserList;
@@ -194,9 +197,6 @@ public class HeaderController implements Serializable {
         }
         if (!Util.isNull(session.getAttribute("requestAppraisal"))){
             requestAppraisal = Integer.valueOf(session.getAttribute("requestAppraisal").toString());
-            if((stepId == StepValue.REQUEST_APPRAISAL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) && requestAppraisal == 2){
-                requestAppraisal = 1;
-            }
         }
         log.debug("Current Page : {}", Util.getCurrentPage());
         if (Util.getCurrentPage().equals("appraisalRequest.jsf")){
@@ -330,15 +330,15 @@ public class HeaderController implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         long workCaseId = (Long)session.getAttribute("workCaseId");
         try{
-            /*int requestPricingFlag = fullApplicationControl.getRequestPricing(workCaseId);
-            requestPricing = Util.isTrue(requestPricingFlag);*/
+            requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
+            //requestPricing = Util.isTrue(requestPricingFlag);
             //For test
-            int requestPricingFlag = 1;
-            requestPricing = true;
+            //int requestPricingFlag = 1;
+            //requestPricing = true;
             //check for pricing request
-            if(requestPricingFlag==1){
-                //pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
-                pricingDOALevel = PricingDOAValue.CSSO_DOA.value();
+            if(requestPricing){
+                pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
+                //pricingDOALevel = PricingDOAValue.CSSO_DOA.value();
                 if(pricingDOALevel != 0){
                     zmEndorseUserId = "";
                     zmUserId = "";
@@ -375,6 +375,7 @@ public class HeaderController implements Serializable {
                     RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
                 }
             } else {
+                zmUserList = fullApplicationControl.getUserList(user);
                 log.debug("No pricing request");
                 RequestContext.getCurrentInstance().execute("submitZMDlg.show()");
             }
@@ -794,7 +795,7 @@ public class HeaderController implements Serializable {
         if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             try{
-                UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePreScreenId);
+                UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePreScreenId, 1006);
                 log.info("onCheckPreScreen uwRulesResponse : {}", uwRuleResponseView);
                 if(uwRuleResponseView != null){
                     if(uwRuleResponseView.getActionResult().equals(ActionResult.SUCCESS)){
@@ -807,28 +808,32 @@ public class HeaderController implements Serializable {
                             log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                             messageHeader = "Exception.";
                             message = Util.getMessageException(ex);
-                            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
                         }
                         messageHeader = "Information.";
                         message = "Request for Check Pre-Screen success";
-                        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
                     }else {
                         messageHeader = "Exception.";
                         message = uwRuleResponseView.getReason();
-                        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                        mandateFieldMessageViewList = uwRuleResponseView.getMandateFieldMessageViewList();
                     }
                 } else {
                     uwRuleResultControl.saveNewUWRuleResult(uwRuleResponseView.getUwRuleResultSummaryView());
                     messageHeader = "Information.";
-                    message = "No. I'm";
-                    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                    message = "There is no data returned from getPrescreen. Please contact system administrator";
                 }
             } catch (Exception ex){
                 log.error("Exception while getPrescreenResult : ", ex);
                 messageHeader = "Exception.";
                 message = Util.getMessageException(ex);
-                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
             }
+
+            if(mandateFieldMessageViewList == null || mandateFieldMessageViewList.size() == 0)
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            else
+                RequestContext.getCurrentInstance().execute("msgBoxMandateMessageDlg.show()");
+
+
 
         }
     }
@@ -1141,36 +1146,43 @@ public class HeaderController implements Serializable {
 
         log.debug("onSubmitRequestAppraisal ::: workCaseId : {}, workCasePreScreenId : {}", session.getAttribute("workCaseId"), session.getAttribute("workCasePreScreenId"));
 
-        if(checkAppraisalContact()){
-            if(appraisalDetailViewList.size() > 0){
-                try{
-                    //Save Appraisal Request
-                    appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
-                    appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
+        if(!headerControl.getRequestAppraisalFlag(workCaseId, workCasePreScreenId)){
+            if(checkAppraisalContact()){
+                if(appraisalDetailViewList.size() > 0){
+                    try{
+                        //Save Appraisal Request
+                        appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
+                        appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
 
-                    //Submit Appraisal - Create WRK_Appraisal And Launch new Workflow
-                    fullApplicationControl.requestAppraisal(appraisalView, workCasePreScreenId, workCaseId);
-                    log.debug("onSubmitRequestAppraisal ::: create new Work Case Appraisal, Launch new workflow.");
+                        //Submit Appraisal - Create WRK_Appraisal And Launch new Workflow
+                        fullApplicationControl.requestAppraisal(appraisalView, workCasePreScreenId, workCaseId);
+                        log.debug("onSubmitRequestAppraisal ::: create new Work Case Appraisal, Launch new workflow.");
 
-                    complete = true;
+                        complete = true;
 
+                        messageHeader = "Information.";
+                        message = "Request appraisal completed.";
+
+                        context.execute("msgBoxBaseMessageDlg.show()");
+                    } catch(Exception ex){
+                        log.error("Exception while submitRequestAppraisal : ", ex);
+                        messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
+                        message = msg.get("app.appraisal.request.message.body.save.fail") + Util.getMessageException(ex);
+
+                        context.execute("msgBoxBaseMessageDlg.show()");
+                    }
+                } else {
                     messageHeader = "Information.";
-                    message = "Request appraisal completed.";
-
-                    context.execute("msgBoxBaseMessageDlg.show()");
-                } catch(Exception ex){
-                    log.error("Exception while submitRequestAppraisal : ", ex);
-                    messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-                    message = msg.get("app.appraisal.request.message.body.save.fail") + Util.getMessageException(ex);
+                    message = "Please add information in Appraisal Detail at least 1.";
 
                     context.execute("msgBoxBaseMessageDlg.show()");
                 }
-            } else {
-                messageHeader = "Information.";
-                message = "Please add information in Appraisal Detail at least 1.";
-
-                context.execute("msgBoxBaseMessageDlg.show()");
             }
+        } else {
+            messageHeader = "Information.";
+            message = "This case already Request Appraisal. Please contact to AAD Admin";
+
+            context.execute("msgBoxBaseMessageDlg.show()");
         }
 
         context.addCallbackParam("functionComplete", complete);
@@ -1778,5 +1790,9 @@ public class HeaderController implements Serializable {
 
     public void setSelectedUW2User(String selectedUW2User) {
         this.selectedUW2User = selectedUW2User;
+    }
+
+    public List<MandateFieldMessageView> getMandateFieldMessageViewList() {
+        return mandateFieldMessageViewList;
     }
 }
