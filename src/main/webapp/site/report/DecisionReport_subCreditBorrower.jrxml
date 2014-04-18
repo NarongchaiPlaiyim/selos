@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subBorrower" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="01878717-8056-48cf-8f9c-b868e0a58edd">
-	<property name="ireport.zoom" value="1.1000000000000052"/>
+	<property name="ireport.zoom" value="0.8264462809917396"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
@@ -167,16 +167,8 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="207">
-			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement uuid="7c0f9e7f-4f2b-440e-9e84-7ee2e840664f" style="detail" stretchType="RelativeToBandHeight" mode="Opaque" x="13" y="0" width="83" height="36" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
-					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2" tabStopWidth="40"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{account}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+		<band height="215">
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="c376a312-de13-47c1-a987-eda07a26fd34" style="detail" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="13" height="36" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
 				<textElement verticalAlignment="Top">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
@@ -184,6 +176,14 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{count}.intValue() == 0 ?
 "" : $F{count}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement uuid="7c0f9e7f-4f2b-440e-9e84-7ee2e840664f" style="detail" stretchType="RelativeToBandHeight" mode="Opaque" x="13" y="0" width="83" height="36" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2" tabStopWidth="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{account}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="a507d67f-5755-4301-84ab-64f23a10a73f" style="detail" stretchType="RelativeToBandHeight" mode="Opaque" x="160" y="0" width="50" height="18" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
@@ -236,9 +236,9 @@ new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCredi
 				</subreport>
 			</frame>
 			<frame>
-				<reportElement uuid="da69b486-2f78-47c1-b405-f16aaf6f775d" positionType="FixRelativeToBottom" x="96" y="18" width="459" height="18" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
-				<subreport isUsingCache="true" runToBottom="true">
-					<reportElement uuid="f2c77573-8453-4d95-a29a-95744ed8ff75" mode="Transparent" x="0" y="0" width="459" height="18" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="da69b486-2f78-47c1-b405-f16aaf6f775d" style="detail" positionType="FixRelativeToBottom" mode="Opaque" x="96" y="18" width="459" height="18" isRemoveLineWhenBlank="true"/>
+				<subreport isUsingCache="true" runToBottom="false">
+					<reportElement uuid="f2c77573-8453-4d95-a29a-95744ed8ff75" mode="Transparent" x="0" y="0" width="459" height="18" isRemoveLineWhenBlank="true"/>
 					<dataSourceExpression><![CDATA[$F{existingSplitLineDetailViewList}.isEmpty() ?
 new net.sf.jasperreports.engine.JREmptyDataSource() :
 new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingSplitLineDetailViewList})]]></dataSourceExpression>
