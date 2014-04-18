@@ -375,6 +375,7 @@ public class HeaderController implements Serializable {
                     RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
                 }
             } else {
+                zmUserList = fullApplicationControl.getUserList(user);
                 log.debug("No pricing request");
                 RequestContext.getCurrentInstance().execute("submitZMDlg.show()");
             }
