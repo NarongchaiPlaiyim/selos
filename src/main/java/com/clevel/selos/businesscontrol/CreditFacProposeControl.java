@@ -290,6 +290,7 @@ public class CreditFacProposeControl extends BusinessControl {
         log.debug("start :: calculateTotalProposeAmount :::");
         if (newCreditFacilityView != null) {
             BigDecimal sumTotalOBOD = BigDecimal.ZERO;         // OBOD of Propose
+            BigDecimal sumTotalCommercial = BigDecimal.ZERO;   // Commercial of Propose
             BigDecimal sumTotalPropose = BigDecimal.ZERO;      // All Propose
             BigDecimal sumTotalBorrowerCommercial = BigDecimal.ZERO;   // Without : OBOD  Propose and Existing
             BigDecimal sumTotalBorrowerCommercialAndOBOD = BigDecimal.ZERO;  //All Propose and Existing
@@ -337,21 +338,20 @@ public class CreditFacProposeControl extends BusinessControl {
                                 productFormula = productFormulaDAO.findProductFormulaPropose(
                                         prdProgramToCreditType, newCreditFacilityView.getCreditCustomerType(), basicInfoView.getSpecialProgram(), tcgView.getTCG());
                                 if (productFormula != null) {
-                                    log.debug("productFormula id :: {}", productFormula.getId());
-                                    log.debug("productFormula.getProgramToCreditType().getCreditType().getCreditGroup():::{}", productFormula.getProgramToCreditType().getCreditType().getCreditGroup());
+                                    log.info("productFormula id :: {}", productFormula.getId());
+                                    log.info("productFormula.getProgramToCreditType().getCreditType().getCreditGroup():::{}", productFormula.getProgramToCreditType().getCreditType().getCreditGroup());
                                     //OBOD or CASH_IN
                                     if (CreditTypeGroup.CASH_IN.value() == (productFormula.getProgramToCreditType().getCreditType().getCreditGroup())) {
-                                        log.debug("OBOD ::: CASH_IN");
+                                        log.info("OBOD ::: CASH_IN");
                                         //ExposureMethod for check to use limit or limit*PCE%
                                         if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
-                                            log.debug("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                            log.info("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                             sumTotalOBOD = sumTotalOBOD.add(BigDecimal.ZERO);
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
-                                            log.debug("LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                            log.info("LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                             sumTotalOBOD = sumTotalOBOD.add(newCreditDetailView.getLimit());
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) { //(limit * %PCE)/100
-                                            log.debug("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
-//                                            sumTotalOBOD = sumTotalOBOD.add(Util.multiply(newCreditDetailView.getLimit(), newCreditDetailView.getPCEPercent()));
+                                            log.info("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                             sumTotalOBOD = sumTotalOBOD.add(newCreditDetailView.getPCEAmount());
                                         }
                                         log.debug("sumTotalOBOD :: {}", sumTotalOBOD);
@@ -359,17 +359,19 @@ public class CreditFacProposeControl extends BusinessControl {
                                         //ExposureMethod for check to use limit or limit*PCE%
                                         if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
                                             log.debug("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
-                                            sumTotalPropose = sumTotalPropose.add(BigDecimal.ZERO);
+                                            sumTotalCommercial = sumTotalCommercial.add(BigDecimal.ZERO);
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
                                             log.debug("LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
-                                            sumTotalPropose = sumTotalPropose.add(newCreditDetailView.getLimit());
+                                            sumTotalCommercial = sumTotalCommercial.add(newCreditDetailView.getLimit());
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //(limit * %PCE)/100
                                             log.debug("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
-//                                            sumTotalPropose = sumTotalPropose.add(Util.multiply(newCreditDetailView.getLimit(), newCreditDetailView.getPCEPercent()));
-                                            sumTotalPropose = sumTotalPropose.add(newCreditDetailView.getPCEAmount());
+                                            sumTotalCommercial = sumTotalCommercial.add(newCreditDetailView.getPCEAmount());
                                         }
-                                        log.debug("sumTotalPropose :: {}", sumTotalPropose);  // Commercial + OBOD
+                                        log.debug("sumTotalCommercial :: {}", sumTotalCommercial);  // Commercial
                                     }
+
+                                    sumTotalPropose = Util.add(sumTotalCommercial, sumTotalOBOD);// Commercial+ OBOD
+                                    log.debug("sumTotalPropose :: {}", sumTotalBorrowerCommercial);
 
                                     sumTotalBorrowerCommercial = Util.subtract(sumTotalPropose, sumTotalOBOD);  // Commercial - OBOD
                                     log.debug("sumTotalBorrowerCommercial :: {}", sumTotalBorrowerCommercial);
