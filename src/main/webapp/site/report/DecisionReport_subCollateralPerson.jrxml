@@ -174,22 +174,13 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{mortgageValue}]]></textFieldExpression>
 			</textField>
-			<frame>
-				<reportElement uuid="8500e49d-c417-4ae8-8740-730b9e99a6c9" stretchType="RelativeToBandHeight" x="191" y="0" width="144" height="16"/>
-				<box>
-					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-				</box>
-				<subreport>
-					<reportElement uuid="c3f7b926-db84-4c76-843b-723c8a833fcc" positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="0" width="144" height="16"/>
-					<dataSourceExpression><![CDATA[$F{existingCreditTypeDetailViews}.isEmpty() ?
+			<subreport>
+				<reportElement uuid="c3f7b926-db84-4c76-843b-723c8a833fcc" stretchType="RelativeToTallestObject" mode="Transparent" x="191" y="0" width="144" height="16"/>
+				<dataSourceExpression><![CDATA[$F{existingCreditTypeDetailViews}.isEmpty() ?
 new net.sf.jasperreports.engine.JREmptyDataSource() :
 new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTypeDetailViews})]]></dataSourceExpression>
-					<subreportExpression><![CDATA[$F{path} + "DecisionReport_subCollateralPerson_subExtRelated.jasper"]]></subreportExpression>
-				</subreport>
-			</frame>
+				<subreportExpression><![CDATA[$F{path} + "DecisionReport_subCollateralPerson_subExtRelated.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 </jasperReport>

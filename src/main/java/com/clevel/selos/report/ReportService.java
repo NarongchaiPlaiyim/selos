@@ -35,11 +35,9 @@ public class ReportService implements Serializable {
 
 
         print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+        log.debug("--Pring report.");
 
         try {
-
-            System.out.println("-------------"+pdfName);
-
             HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
             response.addHeader("Content-disposition", "attachment; filename="+pdfName+".pdf");
             ServletOutputStream servletOutputStream=response.getOutputStream();

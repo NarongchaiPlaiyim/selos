@@ -40,7 +40,7 @@
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement/>
+				<textElement textAlignment="Left"/>
 				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
@@ -51,7 +51,7 @@
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement/>
+				<textElement textAlignment="Left"/>
 				<textFieldExpression><![CDATA[$F{creditFacilityView}.equals( null ) ? "" : $F{creditFacilityView}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
@@ -62,7 +62,7 @@
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement/>
+				<textElement textAlignment="Left"/>
 				<textFieldExpression><![CDATA[$F{accountNumber}.equals( null ) ? "Suf.:" : "Suf.:" +$F{accountNumber}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
@@ -73,7 +73,7 @@
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement>
+				<textElement textAlignment="Left">
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{guaranteeAmount}.equals( null ) ? "" : "Guarantee Amount: " + $F{guaranteeAmount}]]></textFieldExpression>
@@ -85,7 +85,7 @@
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement/>
+				<textElement textAlignment="Left"/>
 				<textFieldExpression><![CDATA[$F{accountName}.equals( null ) ? "" : $F{accountName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
@@ -96,7 +96,7 @@
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement/>
+				<textElement textAlignment="Left"/>
 				<textFieldExpression><![CDATA[$F{productProgramView}.equals( null ) ? "" : $F{productProgramView}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
@@ -107,7 +107,7 @@
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement/>
+				<textElement textAlignment="Left"/>
 				<textFieldExpression><![CDATA[$F{accountNumber}.equals( null ) ? "Acc No.:" : "Acc No " +$F{accountNumber}]]></textFieldExpression>
 			</textField>
 		</band>

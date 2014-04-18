@@ -315,33 +315,31 @@ public class NewCollateral implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("proposeType", proposeType)
-                .append("appraisalRequest", appraisalRequest)
-                .append("coms", coms)
-                .append("jobID", jobID)
-                .append("appraisalDate", appraisalDate)
-                .append("numberMonthsFromApprDate", numberMonthsFromApprDate)
-                .append("aadDecision", aadDecision)
-                .append("aadDecisionReason", aadDecisionReason)
-                .append("aadDecisionReasonDetail", aadDecisionReasonDetail)
-                .append("usage", usage)
-                .append("typeOfUsage", typeOfUsage)
-                .append("uwDecision", uwDecision)
-                .append("uwRemark", uwRemark)
-                .append("mortgageCondition", mortgageCondition)
-                .append("mortgageConditionDetail", mortgageConditionDetail)
-                .append("bdmComments", bdmComments)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
-                .append("newCreditFacility", newCreditFacility)
-                .append("newCollateralHeadList", newCollateralHeadList)
-                .append("newCollateralCreditList", newCollateralCreditList)
-                .append("premiumAmount", premiumAmount)
-                .append("workCase", workCase)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("proposeType", proposeType).
+                append("appraisalRequest", appraisalRequest).
+                append("coms", coms).
+                append("jobID", jobID).
+                append("appraisalDate", appraisalDate).
+                append("numberMonthsFromApprDate", numberMonthsFromApprDate).
+                append("aadDecision", aadDecision).
+                append("aadDecisionReason", aadDecisionReason).
+                append("aadDecisionReasonDetail", aadDecisionReasonDetail).
+                append("usage", usage).
+                append("typeOfUsage", typeOfUsage).
+                append("uwDecision", uwDecision).
+                append("uwRemark", uwRemark).
+                append("mortgageCondition", mortgageCondition).
+                append("mortgageConditionDetail", mortgageConditionDetail).
+                append("bdmComments", bdmComments).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                append("newCreditFacility", newCreditFacility).
+                append("premiumAmount", premiumAmount).
+                append("workCase", workCase).
+                toString();
     }
 }

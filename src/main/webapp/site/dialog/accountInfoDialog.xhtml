@@ -13,13 +13,12 @@
 					<td class="title" style="width:180px">
 						<p:outputLabel
 							for="requestType"
-							value="#{msg.get('app.accountInfo.account.dialog.requestAccountType')}" />
+							value="#{msg.get('app.accountInfo.account.dialog.requestAccountType')}#{accountInfo.mandateDialog('reqAccountType')}" />
 					</td>
 					<td>
 						<p:selectOneRadio id="requestType"
-							disabled="#{accountInfo.openAccount.fromPledge}" 
+							disabled="#{accountInfo.openAccount.fromPledge or accountInfo.isDialogDisable('reqAccountType')}" 
 							value="#{accountInfo.openAccount.requestAccountType}"
-							required="true" requiredMessage="#{msg.get('app.accountInfo.account.requestType.validate')}"
 							>
 							<p:ajax update="confirmOpenAccount"/>
                         	<f:selectItems value="#{enumGeneralControl.requestAccountTypes}" var="requesttype"
@@ -32,12 +31,11 @@
 					<td class="title">
 						<p:outputLabel
 							for="accountNo"
-							value="#{msg.get('app.accountInfo.account.dialog.accountNo')}" />
+							value="#{msg.get('app.accountInfo.account.dialog.accountNo')}#{accountInfo.mandateDialog('accountNumber')}" />
 					</td>
 					<td>
 						<p:inputText id="accountNo"
-							required="true" requiredMessage="#{msg.get('app.accountInfo.account.accountNo.validate')}" 
-							readonly="#{accountInfo.openAccount.fromPledge}"
+							readonly="#{accountInfo.openAccount.fromPledge or accountInfo.isDialogDisable('accountNumber')}"
 							value="#{accountInfo.openAccount.accountNo}"
 							/>
 					</td>
@@ -46,12 +44,12 @@
 					<td class="title">
 						<p:outputLabel
 							for="branch"
-							value="#{msg.get('app.accountInfo.account.dialog.branch')}" />
+							value="#{msg.get('app.accountInfo.account.dialog.branch')}#{accountInfo.mandateDialog('branch')}" />
 					</td>
 					<td>
 						<p:selectOneMenu id="branch" style="width:200px"
 							value="#{accountInfo.openAccount.branchId}"
-							required="true" requiredMessage="#{msg.get('app.accountInfo.account.branch.validate')}"
+							disabled="#{accountInfo.isDialogDisable('branch')}"
 							>
 							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 							<f:selectItems value="#{accountInfo.branches}"/>
@@ -62,13 +60,13 @@
 					<td class="title">
 						<p:outputLabel
 							for="accountType"
-							value="#{msg.get('app.accountInfo.account.dialog.accountType')}" />
+							value="#{msg.get('app.accountInfo.account.dialog.accountType')}#{accountInfo.mandateDialog('accountType')}" />
 					</td>
 					<td>
 						<p:selectOneMenu id="accountType" style="width:200px"
 							value="#{accountInfo.openAccount.accountTypeId}"
 							binding="#{accountInfo.accountTypeBind}"
-							required="true" requiredMessage="#{msg.get('app.accountInfo.account.accountType.validate')}"
+							diabled="#{accountInfo.isDialogDisable('accountType')}"
 							>
 							<p:ajax update="productType" listener="#{accountInfo.onSelectAccountType()}"
 								/>
@@ -81,13 +79,13 @@
 					<td class="title">
 						<p:outputLabel
 							for="productType"
-							value="#{msg.get('app.accountInfo.account.dialog.productType')}" />
+							value="#{msg.get('app.accountInfo.account.dialog.productType')}#{accountInfo.mandateDialog('productType')}" />
 					</td>
 					<td>
 						<p:selectOneMenu id="productType" style="width:200px"
 							value="#{accountInfo.openAccount.productTypeId}"
 							binding="#{accountInfo.productTypeBind}"
-							required="true" requiredMessage="#{msg.get('app.accountInfo.account.productType.validate')}"
+							disabled="#{accountInfo.isDialogDisable('productType')}"
 							>
 							<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="-1"/>
 							<f:selectItems value="#{accountInfo.productTypes}"/>
@@ -98,7 +96,7 @@
 					<td class="title">
 						<p:outputLabel
 							for="term" 
-							value="#{msg.get('app.accountInfo.account.dialog.term')}" />
+							value="#{msg.get('app.accountInfo.account.dialog.term')}#{accountInfo.mandateDialog('term')}" />
 					</td>
 					<td>
 						<p:inputText id="term" styleClass="smaller"
@@ -106,18 +104,19 @@
 							value="#{accountInfo.openAccount.term}"
 							onkeydown="return onKeyDownNumber(event)"
 							onkeypress="return onKeyPressNumber(event)"
-							required="true" requiredMessage="#{msg.get('app.accountInfo.account.term.validate')}"
+							readonly="#{accountInfo.isDialogDisable('term')}"
 							/>
 					</td>
 				</tr>
 				<tr>
 					<td class="title">
 						<p:outputLabel for="accountName"
-							value="#{msg.get('app.accountInfo.account.dialog.accountName')}" />
+							value="#{msg.get('app.accountInfo.account.dialog.accountName')}#{accountInfo.mandateDialog('accountName')}" />
 					</td>
 					<td class="middle">
 						<p:selectOneMenu id="accountName" style="width:200px;margin-right:10px"
 							styleClass="inline_select"
+							disabled="#{empty accountInfo.toAddAccountNameList  or accountInfo.isDialogDisable('accountName')}"
 							value="#{accountInfo.selectedAddAccountNameId}"
 							>
 							<p:ajax update="addNameBtn" />
@@ -132,8 +131,8 @@
 							partialSubmit="true"
 							immediate="true"
 							actionListener="#{accountInfo.onAddOpenAccountName()}"
-							disabled="#{accountInfo.selectedAddAccountNameId le 0}"
-							update="accountname_tbl,accountName"
+							disabled="#{empty accountInfo.toAddAccountNameList  or accountInfo.isDialogDisable('addButton')}"
+							update="accountname_tbl,accountName,addNameBtn"
 							/>
 					</td>
 				</tr>
@@ -159,6 +158,7 @@
                 					rendered="#{not name.fromPledge}"
                 					actionListener="#{accountInfo.onDeleteOpenAccountName(name.customerId)}"
                 					update="accountname_tbl,:openAccountFrm:accountName,:openAccountFrm:addNameBtn"
+                					disabled="#{accountInfo.isDialogDisable('accName.actionList')}"
                                  	>
                                  </p:commandButton>
 							</p:column>
@@ -168,14 +168,14 @@
 				<tr>
 					<td class="title top">
 						<p:outputLabel for="purpose_pane"
-							value="#{msg.get('app.accountInfo.account.dialog.purpose')}" />
+							value="#{msg.get('app.accountInfo.account.dialog.purpose')}#{accountInfo.mandateDialog('purpose')}" />
 					</td>
 					<td>
 						<h:panelGroup id="purpose_pane" layout="block">
 							<ui:repeat var="purpose" value="#{accountInfo.openAccount.purposes}">
 								<p:selectBooleanCheckbox itemLabel="#{purpose.purpose}"
 									styleClass="normal_checkbox" style="display:block;margin-top:4px;margin-bottom:4px"
-									value="#{purpose.checked}" disabled="#{not purpose.editable}" 
+									value="#{purpose.checked}" disabled="#{not purpose.editable  or accountInfo.isDialogDisable('purpose')}" 
 									/>
 							</ui:repeat>
 						</h:panelGroup>
@@ -185,11 +185,11 @@
 					<td class="title">
 						<p:outputLabel
 							for="confirmOpenAccount"
-							value="#{msg.get('app.accountInfo.account.dialog.confirmOpenAccount')}" />
+							value="#{msg.get('app.accountInfo.account.dialog.confirmOpenAccount')}#{accountInfo.mandateDialog('openAccount')}" />
 					</td>
 					<td>
 						<p:selectOneRadio
-							id="confirmOpenAccount" disabled="true" 
+							id="confirmOpenAccount" disabled="#{accountInfo.isDialogDisable('openAccount')}" 
 							value="#{accountInfo.openAccount.confirmAccountType}">
 							<f:selectItems value="#{enumGeneralControl.confirmAccountTypes}" var="confirmtype"
                         		itemLabel="#{msg.get(confirmtype.msgKey)}" itemValue="#{confirmtype}" 
@@ -248,6 +248,7 @@
 	                         update=":frmMain:accountinfo_tbl,:openAccountFrm"
 	                         oncomplete="handleDialogRequest(xhr, status, args,'p_openAccountDlg')"
 	                         styleClass="small"
+	                         disabled="#{accountInfo.isDialogDisable('okButton')}"
 	                         rendered="#{accountInfo.addDialog}"/>
 	                     <p:commandButton
 	                         id="updOpenAccountBtn"
@@ -256,9 +257,11 @@
 	                         update=":frmMain:accountinfo_tbl,:openAccountFrm"
 	                         oncomplete="handleDialogRequest(xhr, status, args,'p_openAccountDlg')"
 	                         styleClass="small"
+	                         disabled="#{accountInfo.isDialogDisable('okButton')}"
 	                         rendered="#{not accountInfo.addDialog}"/>
 	                    <p:commandButton
 	                    	type='button' styleClass="small" 
+	                    	disabled="#{accountInfo.isDialogDisable('cancelButton')}"
 	                    	value="#{msg.get('app.button.cancel')}" onclick="p_openAccountDlg.hide()"/>
 	                    
 					</td>

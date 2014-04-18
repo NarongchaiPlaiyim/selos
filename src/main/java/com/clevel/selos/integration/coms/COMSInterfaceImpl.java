@@ -10,6 +10,7 @@ import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.util.Util;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
@@ -17,7 +18,7 @@ import java.io.Serializable;
 public class COMSInterfaceImpl implements COMSInterface, Serializable {
     @Inject
     @COMS
-    org.slf4j.Logger log;
+    private Logger log;
 
     @Inject
     @ExceptionMessage
