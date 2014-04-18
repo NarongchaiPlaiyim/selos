@@ -231,8 +231,6 @@ public class CheckMandateDocControl extends BusinessControl{
         return setReadOnlyByRole(checkMandateDocView, roleName);
     }
 
-
-
     public void onSaveMandateDoc(final CheckMandateDocView checkMandateDocView, final long workCaseId, final long workCasePreScreenId){
         List<MandateDoc> mandateDocList = null;
         if(!Util.isZero(workCaseId)){
@@ -250,101 +248,6 @@ public class CheckMandateDocControl extends BusinessControl{
         mandateDocList = Util.safetyList(checkMandateDocTransform.transformToModel(checkMandateDocView, workCaseId, user.getRole()));
         save(mandateDocList);
     }
-
-
-
-
-    private CheckMandateDocView getCheckMandateDocViewFromDB(final long workCaseId, final List<MandateDoc> mandateDocList){
-        log.debug("-- getCheckMandateDocViewFromDB(workCaseId {}, mandateDocList.size()[{}]", workCaseId, mandateDocList.size());
-        CheckMandateDocView checkMandateDocView = new CheckMandateDocView();
-        List<CheckMandatoryDocView> mandatoryDocumentsList = new ArrayList<CheckMandatoryDocView>();
-        CheckMandatoryDocView checkMandatoryDocView = null;
-        List<CheckOptionalDocView> optionalDocumentsList = new ArrayList<CheckOptionalDocView>();
-        CheckOptionalDocView optionalDocView = null;
-        List<CheckOtherDocView> otherDocumentsList = new ArrayList<CheckOtherDocView>();
-        CheckOtherDocView checkOtherDocView = null;
-        List<String> keyECMList = null;
-        String keyECM = null;
-        listECMDetailMap = callECMByWorkCaseId(workCaseId);
-        if(!Util.isNull(listECMDetailMap) && !Util.isZero(mandateDocList.size())){
-            log.debug("-- ECM ListECMDetailMap.size()[{}]", listECMDetailMap.size());
-            keyECMList = new ArrayList<String>();
-            for (Map.Entry<String, List<ECMDetail>> ECMentry : listECMDetailMap.entrySet()) {
-                keyECM = ECMentry.getKey();
-                log.debug("-- The key of ECM map is {}", keyECM);
-                ecmDetailList = Util.safetyList((List<ECMDetail>)ECMentry.getValue());
-                log.debug("-- The NumberOfDoc of ECM  is {}", ecmDetailList.size());
-                for(ECMDetail ecmDetail : ecmDetailList){
-                    for(MandateDoc mandateDoc :  mandateDocList){
-                        if(ecmDetail.getEcmDocId().equals(mandateDoc.getEcmDocType())){
-                            int isComplete = 2;
-                            try {
-                                if(!Util.isNull(mandateDoc.getMandateDocFileNameList())){
-                                    if(mandateDoc.getMandateDocFileNameList().size() == ecmDetailList.size()){
-                                        isComplete = 1;
-                                    }
-                                }
-                            } catch (Exception e){
-                                isComplete = 3;
-                            }
-                            log.debug("-- MandateDocFileNameList.size()[{}]", mandateDoc.getMandateDocFileNameList().size());
-                            log.debug("-- EcmDetailList.size()[{}]", ecmDetailList.size());
-                            log.debug("-- IsCompleted {}", isComplete);
-                            if(DocMandateType.MANDATE.value() == mandateDoc.getMandateType()){
-                                log.debug("-- ECMDocType {} = {}.", ECMentry.getKey(), "Mandatory Documents");
-                                checkMandatoryDocView = checkMandateDocTransform.transformToCheckMandatoryDocView(ECMentry.getKey(), mandateDoc, ecmDetailList, isComplete, userToken);
-                                mandatoryDocumentsList.add(checkMandatoryDocView);
-                            } else if(DocMandateType.OPTIONAL.value() == mandateDoc.getMandateType()){
-                                log.debug("-- ECMDocType {} = {}.", ECMentry.getKey(), "Optional Documents");
-                                optionalDocView = checkMandateDocTransform.transformToCheckOptionalDocView(       ECMentry.getKey(), mandateDoc, ecmDetailList, isComplete, userToken);
-                                optionalDocumentsList.add(optionalDocView);
-                            } else {
-                                log.debug("-- ECMDocType {} = {}.", ECMentry.getKey(), "Other Documents");
-                                checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(        ECMentry.getKey(), mandateDoc, ecmDetailList, isComplete, userToken);
-                                otherDocumentsList.add(checkOtherDocView);
-                            }
-                            mandateDocList.remove(mandateDoc);
-                            keyECMList.add(keyECM);
-                        } else {
-                            continue;
-                        }
-                    }
-                }
-            }
-
-            log.debug("-- [BEFORE] Remove ListECMDetailMap.size()[{}]", listECMDetailMap.size());
-            log.debug("-- KeyECMList.size()[{}]", keyECMList.size());
-            for(String key : keyECMList){
-                listECMDetailMap.remove(key);
-                log.debug("-- ECM key {} was removed.", key);
-            }
-            log.debug("-- [AFTER] Remove ListECMDetailMap.size()[{}]", listECMDetailMap.size());
-
-            //ECM
-            for (Map.Entry<String, List<ECMDetail>> ECMentry : listECMDetailMap.entrySet()) {
-                ecmDetailList = Util.safetyList((List<ECMDetail>)ECMentry.getValue());
-                log.debug("-- ECMDocType {} = {}.", ECMentry.getKey(), "Other Documents");
-                checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(ECMentry.getKey(), ecmDetailList, 2, userToken);
-                otherDocumentsList.add(checkOtherDocView);
-            }
-
-            checkMandateDocView.setMandatoryDocumentsList(mandatoryDocumentsList);
-            log.debug("-- MandatoryDocumentsList.size()[{}] added to CheckMandateDocView", mandatoryDocumentsList.size());
-            checkMandateDocView.setOptionalDocumentsList(optionalDocumentsList);
-            log.debug("-- OptionalDocumentsList.size()[{}] added to CheckMandateDocView", optionalDocumentsList.size());
-            checkMandateDocView.setOtherDocumentsList(otherDocumentsList);
-            log.debug("-- OtherDocumentsList.size()[{}] added to CheckMandateDocView", otherDocumentsList.size());
-        } else if(!Util.isNull(listECMDetailMap) && Util.isZero(mandateDocList.size())){
-            log.debug("-- ECM ListECMDetailMap.size()[{}]", listECMDetailMap.size());
-            checkMandateDocView = createCheckMandateDocViewByECM();
-        } else if(Util.isNull(listECMDetailMap) && !Util.isZero(mandateDocList.size())){
-            checkMandateDocView = createCheckMandateDocViewByDB();
-        }
-        return checkMandateDocView;
-    }
-
-
-
 
 
     private Map<String, List<ECMDetail>> createMapByECM(final List<ECMDetail> ecmDetailList){
@@ -846,6 +749,94 @@ public class CheckMandateDocControl extends BusinessControl{
                     continue;
                 }
             }
+        }
+        return checkMandateDocView;
+    }
+    private CheckMandateDocView getCheckMandateDocViewFromDB(final long workCaseId, final List<MandateDoc> mandateDocList){
+        log.debug("-- getCheckMandateDocViewFromDB(workCaseId {}, mandateDocList.size()[{}]", workCaseId, mandateDocList.size());
+        CheckMandateDocView checkMandateDocView = new CheckMandateDocView();
+        List<CheckMandatoryDocView> mandatoryDocumentsList = new ArrayList<CheckMandatoryDocView>();
+        CheckMandatoryDocView checkMandatoryDocView = null;
+        List<CheckOptionalDocView> optionalDocumentsList = new ArrayList<CheckOptionalDocView>();
+        CheckOptionalDocView optionalDocView = null;
+        List<CheckOtherDocView> otherDocumentsList = new ArrayList<CheckOtherDocView>();
+        CheckOtherDocView checkOtherDocView = null;
+        List<String> keyECMList = null;
+        String keyECM = null;
+        listECMDetailMap = callECMByWorkCaseId(workCaseId);
+        if(!Util.isNull(listECMDetailMap) && !Util.isZero(mandateDocList.size())){
+            log.debug("-- ECM ListECMDetailMap.size()[{}]", listECMDetailMap.size());
+            keyECMList = new ArrayList<String>();
+            for (Map.Entry<String, List<ECMDetail>> ECMentry : listECMDetailMap.entrySet()) {
+                keyECM = ECMentry.getKey();
+                log.debug("-- The key of ECM map is {}", keyECM);
+                ecmDetailList = Util.safetyList((List<ECMDetail>)ECMentry.getValue());
+                log.debug("-- The NumberOfDoc of ECM  is {}", ecmDetailList.size());
+                for(ECMDetail ecmDetail : ecmDetailList){
+                    for(MandateDoc mandateDoc :  mandateDocList){
+                        if(ecmDetail.getEcmDocId().equals(mandateDoc.getEcmDocType())){
+                            int isComplete = 2;
+                            try {
+                                if(!Util.isNull(mandateDoc.getMandateDocFileNameList())){
+                                    if(mandateDoc.getMandateDocFileNameList().size() == ecmDetailList.size()){
+                                        isComplete = 1;
+                                    }
+                                }
+                            } catch (Exception e){
+                                isComplete = 3;
+                            }
+                            log.debug("-- MandateDocFileNameList.size()[{}]", mandateDoc.getMandateDocFileNameList().size());
+                            log.debug("-- EcmDetailList.size()[{}]", ecmDetailList.size());
+                            log.debug("-- IsCompleted {}", isComplete);
+                            if(DocMandateType.MANDATE.value() == mandateDoc.getMandateType()){
+                                log.debug("-- ECMDocType {} = {}.", ECMentry.getKey(), "Mandatory Documents");
+                                checkMandatoryDocView = checkMandateDocTransform.transformToCheckMandatoryDocView(ECMentry.getKey(), mandateDoc, ecmDetailList, isComplete, userToken);
+                                mandatoryDocumentsList.add(checkMandatoryDocView);
+                            } else if(DocMandateType.OPTIONAL.value() == mandateDoc.getMandateType()){
+                                log.debug("-- ECMDocType {} = {}.", ECMentry.getKey(), "Optional Documents");
+                                optionalDocView = checkMandateDocTransform.transformToCheckOptionalDocView(       ECMentry.getKey(), mandateDoc, ecmDetailList, isComplete, userToken);
+                                optionalDocumentsList.add(optionalDocView);
+                            } else {
+                                log.debug("-- ECMDocType {} = {}.", ECMentry.getKey(), "Other Documents");
+                                checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(        ECMentry.getKey(), mandateDoc, ecmDetailList, isComplete, userToken);
+                                otherDocumentsList.add(checkOtherDocView);
+                            }
+                            mandateDocList.remove(mandateDoc);
+                            keyECMList.add(keyECM);
+                        } else {
+                            continue;
+                        }
+                    }
+                }
+            }
+
+            log.debug("-- [BEFORE] Remove ListECMDetailMap.size()[{}]", listECMDetailMap.size());
+            log.debug("-- KeyECMList.size()[{}]", keyECMList.size());
+            for(String key : keyECMList){
+                listECMDetailMap.remove(key);
+                log.debug("-- ECM key {} was removed.", key);
+            }
+            log.debug("-- [AFTER] Remove ListECMDetailMap.size()[{}]", listECMDetailMap.size());
+
+            //ECM
+            for (Map.Entry<String, List<ECMDetail>> ECMentry : listECMDetailMap.entrySet()) {
+                ecmDetailList = Util.safetyList((List<ECMDetail>)ECMentry.getValue());
+                log.debug("-- ECMDocType {} = {}.", ECMentry.getKey(), "Other Documents");
+                checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(ECMentry.getKey(), ecmDetailList, 2, userToken);
+                otherDocumentsList.add(checkOtherDocView);
+            }
+
+            checkMandateDocView.setMandatoryDocumentsList(mandatoryDocumentsList);
+            log.debug("-- MandatoryDocumentsList.size()[{}] added to CheckMandateDocView", mandatoryDocumentsList.size());
+            checkMandateDocView.setOptionalDocumentsList(optionalDocumentsList);
+            log.debug("-- OptionalDocumentsList.size()[{}] added to CheckMandateDocView", optionalDocumentsList.size());
+            checkMandateDocView.setOtherDocumentsList(otherDocumentsList);
+            log.debug("-- OtherDocumentsList.size()[{}] added to CheckMandateDocView", otherDocumentsList.size());
+        } else if(!Util.isNull(listECMDetailMap) && Util.isZero(mandateDocList.size())){
+            log.debug("-- ECM ListECMDetailMap.size()[{}]", listECMDetailMap.size());
+            checkMandateDocView = createCheckMandateDocViewByECM();
+        } else if(Util.isNull(listECMDetailMap) && !Util.isZero(mandateDocList.size())){
+            checkMandateDocView = createCheckMandateDocViewByDB();
         }
         return checkMandateDocView;
     }
