@@ -14,7 +14,6 @@ import com.clevel.selos.integration.brms.model.response.PricingInterest;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.ApprovalHistory;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
@@ -34,7 +33,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -1284,7 +1282,7 @@ public class Decision extends BaseController {
 
         try {
 
-            if (roleUW) {
+            /*if (roleUW) {
                 // Delete List
                 decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
                 // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
@@ -1295,7 +1293,7 @@ public class Decision extends BaseController {
                 decisionControl.saveDecision(decisionView, workCase);
 
                 exSummaryControl.calForDecision(workCaseId);
-            }
+            }*/
 
             //Check valid step to Save Approval
             HttpSession session = FacesUtil.getSession(true);
@@ -1325,8 +1323,7 @@ public class Decision extends BaseController {
                 }
             }
 
-
-
+            onCreation();
 
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save Decision data success.";
@@ -1335,11 +1332,7 @@ public class Decision extends BaseController {
         catch (Exception e) {
             messageHeader = msg.get("app.messageHeader.error");
             severity = MessageDialogSeverity.ALERT.severity();
-            if (e.getCause() != null) {
-                message = "Save Decision data failed. Cause : " + e.getCause().toString();
-            } else {
-                message = "Save Decision data failed. Cause : " + e.getMessage();
-            }
+            message = "Save Decision data failed. Cause : " + Util.getMessageException(e);
         }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }

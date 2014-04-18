@@ -1,7 +1,7 @@
 package com.clevel.selos.integration.coms;
 
 import com.clevel.selos.exception.COMSInterfaceException;
-import com.clevel.selos.integration.RLOS;
+import com.clevel.selos.integration.COMS;
 import com.clevel.selos.integration.coms.db.CollateralDecisionDetail;
 import com.clevel.selos.integration.coms.db.CollateralJobLevel;
 import com.clevel.selos.integration.coms.db.HeadCollateral;
@@ -15,7 +15,6 @@ import com.clevel.selos.integration.coms.module.DBExecute;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
-import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -26,7 +25,7 @@ import java.util.List;
 
 public class COMSService implements Serializable {
     @Inject
-    @RLOS
+    @COMS
     Logger log;
 
     @Inject

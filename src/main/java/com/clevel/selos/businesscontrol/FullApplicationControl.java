@@ -321,9 +321,9 @@ public class FullApplicationControl extends BusinessControl {
                     } else {
                         if(approvalHistoryEndorsePricing.getApproveDecision() != RadioValue.NOT_SELECTED.value()){
                             if(priceDOALevel>PricingDOAValue.GH_DOA.value()){
-                                ghDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"E";
+                                ghDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision() == DecisionType.APPROVED.value()?"E":"R";
                             } else {
-                                ghDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"A";
+                                ghDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
                             }
                             approvalHistoryEndorsePricing.setSubmit(1);
                             approvalHistoryEndorsePricing.setSubmitDate(new Date());
@@ -355,7 +355,7 @@ public class FullApplicationControl extends BusinessControl {
                         throw new Exception("Please make decision before submit.");
                     } else {
                         if(approvalHistoryEndorsePricing.getApproveDecision() != 0){
-                            cssoDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"A";
+                            cssoDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
                             approvalHistoryEndorsePricing.setSubmit(1);
                             approvalHistoryEndorsePricing.setSubmitDate(new Date());
                         } else {
@@ -386,7 +386,7 @@ public class FullApplicationControl extends BusinessControl {
                         throw new Exception("Please make decision before submit.");
                     } else {
                         if(approvalHistoryEndorsePricing.getApproveDecision() != 0){
-                            zmDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision()==1?"R":"A";
+                            zmDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
                             approvalHistoryEndorsePricing.setSubmit(1);
                             approvalHistoryEndorsePricing.setSubmitDate(new Date());
                         } else {
@@ -416,14 +416,14 @@ public class FullApplicationControl extends BusinessControl {
             if(approvalHistoryEndorseCA==null){
                 throw new Exception("Please make decision before submit.");
             } else {
-                decisionFlag = approvalHistoryEndorseCA.getApproveDecision()==1?"R":"A";
+                decisionFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
                 approvalHistoryEndorseCA.setSubmit(1);
                 approvalHistoryEndorseCA.setSubmitDate(new Date());
                 approvalHistoryEndorseCA.setComments(remark);
             }
         }
 
-        bpmExecutor.submitUW2(workCaseId, queueName, uw2Name, authorizationDOA.getDescription(), decisionFlag, haveRG001, ActionCode.SUBMIT_TO_UW2.getVal());
+        bpmExecutor.submitUW2(workCaseId, queueName, uw2Name, authorizationDOA.getDescription(), decisionFlag, haveRG001, ActionCode.SUBMIT_CA.getVal());
         approvalHistoryDAO.persist(approvalHistoryEndorseCA);
     }
 
@@ -439,7 +439,7 @@ public class FullApplicationControl extends BusinessControl {
             if(approvalHistoryEndorseCA==null){
                 throw new Exception("Please make decision before submit.");
             } else {
-                decisionFlag = approvalHistoryEndorseCA.getApproveDecision()==1?"R":"A";
+                decisionFlag = approvalHistoryEndorseCA.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
                 approvalHistoryEndorseCA.setSubmit(1);
                 approvalHistoryEndorseCA.setSubmitDate(new Date());
             }
@@ -644,7 +644,7 @@ public class FullApplicationControl extends BusinessControl {
 
     }
 
-    public void calculatePricingDOA(long workCaseId, NewCreditFacility newCreditFacility){
+    /*public void calculatePricingDOA(long workCaseId, NewCreditFacility newCreditFacility){
         log.debug("calculatePricingDOA ::: newCreditFacility : {}", newCreditFacility);
         PricingDOAValue pricingDOALevel = PricingDOAValue.NO_DOA;
 
@@ -736,6 +736,129 @@ public class FullApplicationControl extends BusinessControl {
             if(pricingDOALevel == PricingDOAValue.NO_DOA){
                 requestPricing = 0;
             }
+            log.debug("calculatePricingDOA ::: requestPricing : {}", requestPricing);
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setRequestPricing(requestPricing);
+            workCase.setPricingDoaLevel(pricingDOALevel.value());
+            workCaseDAO.persist(workCase);
+        }
+    }*/
+
+    public void calculatePricingDOA(long workCaseId, NewCreditFacility newCreditFacility){
+        log.debug("calculatePricingDOA ::: newCreditFacility : {}", newCreditFacility);
+        PricingDOAValue pricingDOALevel = PricingDOAValue.NO_DOA;
+
+        if(newCreditFacility != null){
+            //List of Credit detail
+            List<NewCreditDetail> newCreditDetailList = newCreditFacility.getNewCreditDetailList();
+            //List of Credit tier ( find by Credit detail )
+            BigDecimal priceReduceDOA = newCreditFacility.getIntFeeDOA();
+            BigDecimal frontEndFeeReduceDOA = newCreditFacility.getFrontendFeeDOA();
+            int requestPricing = 0;
+
+            //Check Case Have request pricing or not?
+            log.debug("calculatePricingDOA ::: Check Request Pricing and Fee : priceReduce : {}, frontEndFee : {}", priceReduceDOA, frontEndFeeReduceDOA);
+
+            //Check for Exceptional Case
+            boolean exceptionalFlow = false;
+            if(newCreditDetailList != null && newCreditDetailList.size() > 0){
+                //Check for Request Price Reduction
+                for(NewCreditDetail itemCreditDetail : newCreditDetailList){
+                    if(itemCreditDetail.getReduceFrontEndFee() == 1 || itemCreditDetail.getReducePriceFlag() == 1){
+                        requestPricing = 1;
+                        break;
+                    }
+                }
+
+                for(NewCreditDetail newCreditDetail : newCreditDetailList){
+                    BigDecimal standardPrice = null;
+                    BigDecimal suggestPrice = null;
+                    BigDecimal finalPrice = null;
+                    BigDecimal tmpStandardPrice = null;
+                    BigDecimal tmpSuggestPrice = null;
+                    BigDecimal tmpFinalPrice = null;
+                    BigDecimal tmpBigDecimal = null;
+                    int reducePricing = newCreditDetail.getReducePriceFlag();
+                    //int reduceFrontEndFee = newCreditDetail.getReduceFrontEndFee();
+                    if(newCreditDetail.getReduceFrontEndFee() == 1 || newCreditDetail.getReducePriceFlag() == 1){
+                        if(newCreditDetail.getProposeCreditTierDetailList() != null){
+                            for(NewCreditTierDetail newCreditTierDetail : newCreditDetail.getProposeCreditTierDetailList()){
+                                //Check for Final Price first...
+                                if(finalPrice != null){
+                                    tmpFinalPrice = newCreditTierDetail.getFinalInterest().add(newCreditTierDetail.getFinalBasePrice().getValue());
+                                    tmpStandardPrice = newCreditTierDetail.getStandardInterest().add(newCreditTierDetail.getStandardBasePrice().getValue());
+                                    tmpSuggestPrice = newCreditTierDetail.getSuggestInterest().add(newCreditTierDetail.getSuggestBasePrice().getValue());
+
+                                    if(tmpStandardPrice.compareTo(tmpSuggestPrice) > 0){
+                                        tmpBigDecimal = tmpStandardPrice;
+                                    }else{
+                                        tmpBigDecimal = tmpSuggestPrice;
+                                    }
+
+                                    if(reducePricing == 1){
+                                        tmpFinalPrice = tmpBigDecimal.subtract(priceReduceDOA);
+                                    }
+                                    if(tmpFinalPrice.compareTo(finalPrice) > 0){
+                                        finalPrice = tmpFinalPrice;
+                                        standardPrice = tmpStandardPrice;
+                                        suggestPrice = tmpSuggestPrice;
+                                    }
+                                }else{
+                                    finalPrice = newCreditTierDetail.getFinalInterest().add(newCreditTierDetail.getFinalBasePrice().getValue());
+                                    standardPrice = newCreditTierDetail.getStandardInterest().add(newCreditTierDetail.getStandardBasePrice().getValue());
+                                    suggestPrice = newCreditTierDetail.getSuggestInterest().add(newCreditTierDetail.getSuggestBasePrice().getValue());
+
+                                    if(standardPrice.compareTo(suggestPrice) > 0){
+                                        tmpBigDecimal = standardPrice;
+                                    }else{
+                                        tmpBigDecimal = suggestPrice;
+                                    }
+
+                                    if(reducePricing == 1){
+                                        finalPrice = tmpBigDecimal.subtract(priceReduceDOA);
+                                    }
+                                }
+
+                                if(finalPrice.compareTo(suggestPrice) < 0){
+                                    exceptionalFlow = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if(exceptionalFlow){
+                        break;
+                    }
+                }
+            }
+
+            if(!exceptionalFlow){
+                //Checking for GenericDOA
+                if(priceReduceDOA != null && frontEndFeeReduceDOA != null){
+                    if(priceReduceDOA.compareTo(BigDecimal.ONE) <= 0){
+                        if(frontEndFeeReduceDOA.compareTo(BigDecimal.ONE) > 0){
+                            //GH DOA Level
+                            pricingDOALevel = PricingDOAValue.GH_DOA;
+                            log.debug("calculatePricingDOA Level [GROUP HEAD] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
+                        } else {
+                            //RGM DOA Level
+                            pricingDOALevel = PricingDOAValue.RGM_DOA;
+                            log.debug("calculatePricingDOA Level [REGION MANAGER] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
+                        }
+
+                    } else {
+                        //CSSO DOA Level
+                        pricingDOALevel = PricingDOAValue.CSSO_DOA;
+                        log.debug("calculatePricingDOA Level [CSSO MANAGER] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
+                    }
+                }
+
+            }
+
+            /*if(pricingDOALevel == PricingDOAValue.NO_DOA){
+                requestPricing = 0;
+            }*/
+
             log.debug("calculatePricingDOA ::: requestPricing : {}", requestPricing);
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             workCase.setRequestPricing(requestPricing);
