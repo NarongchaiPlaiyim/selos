@@ -1206,10 +1206,11 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //--- Save to NewFeeCredit
         if (Util.safetyList(newCreditFacilityView.getNewFeeDetailViewList()).size() > 0) {
-//            List<FeeDetail> feeDetailDelList  =  feeDetailDAO.findAllByWorkCaseId(workCaseId);
-//            if(feeDetailDelList.size()>0){
+            List<FeeDetail> feeDetailDelList  =  feeDetailDAO.findAllByWorkCaseId(workCaseId);
+            if(feeDetailDelList.size()>0){
+                log.debug(" :: feeDetailDelList ::{}",feeDetailDelList.size());
 //                feeDetailDAO.delete(feeDetailDelList);
-//            }
+            }
 
 //            log.debug("saveCreditFacility ::: newCreditFacilityView.getNewFeeDetailViewList()).size() : {}", newCreditFacilityView.getNewFeeDetailViewList().size());
 //            List<FeeDetail> feeDetailList = feeTransform.transformToDB(newCreditFacilityView.getNewFeeDetailViewList(),workCaseId);
@@ -1309,19 +1310,11 @@ public class CreditFacProposeControl extends BusinessControl {
 
     public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {
         log.debug("deleteAllApproveByIdList()");
-        log.debug("deleteCreditIdList: {}", deleteCreditIdList);
-        log.debug("deleteCollIdList: {}", deleteCollIdList);
-        log.debug("deleteGuarantorIdList: {}", deleteGuarantorIdList);
-        log.debug("deleteConditionIdList: {}", deleteConditionIdList);
+        log.debug("deleteCreditIdList: {}", deleteCreditIdList.size());
+        log.debug("deleteCollIdList: {}", deleteCollIdList.size());
+        log.debug("deleteGuarantorIdList: {}", deleteGuarantorIdList.size());
+        log.debug("deleteConditionIdList: {}", deleteConditionIdList.size());
 
-
-        if (deleteCreditIdList != null && deleteCreditIdList.size() > 0) {
-            List<NewCreditDetail> deleteCreditDetailList = new ArrayList<NewCreditDetail>();
-            for (Long id : deleteCreditIdList) {
-                deleteCreditDetailList.add(newCreditDetailDAO.findById(id));
-            }
-            newCreditDetailDAO.delete(deleteCreditDetailList);
-        }
 
         if (deleteCollIdList != null && deleteCollIdList.size() > 0) {
             List<NewCollateral> deleteCollateralList = new ArrayList<NewCollateral>();
@@ -1346,6 +1339,15 @@ public class CreditFacProposeControl extends BusinessControl {
             }
             newConditionDetailDAO.delete(deleteConditionList);
         }
+
+        //TODO cannot delete NewCreditDetail
+//        if (deleteCreditIdList != null && deleteCreditIdList.size() > 0) {
+//            List<NewCreditDetail> deleteCreditDetailList = new ArrayList<NewCreditDetail>();
+//            for (Long id : deleteCreditIdList) {
+//                deleteCreditDetailList.add(newCreditDetailDAO.findById(id));
+//            }
+//            newCreditDetailDAO.delete(deleteCreditDetailList);
+//        }
     }
 
 
