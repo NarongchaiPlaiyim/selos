@@ -723,10 +723,12 @@ public class CustomerInfoJuristic implements Serializable {
     }
 
     public void onChangeTitleTh(){
+        customerInfoView.setTitleEn(new Title());
         customerInfoView.getTitleEn().setId(customerInfoView.getTitleTh().getId());
     }
 
     public void onChangeTitleEn(){
+        customerInfoView.setTitleTh(new Title());
         customerInfoView.getTitleTh().setId(customerInfoView.getTitleEn().getId());
     }
 
