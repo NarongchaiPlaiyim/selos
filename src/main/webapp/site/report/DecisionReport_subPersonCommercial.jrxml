@@ -235,7 +235,7 @@ new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCredi
 				<frame>
 					<reportElement uuid="3445112d-6328-4dab-a4d1-74b89ea895e9" positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" x="96" y="15" width="459" height="13" isPrintWhenDetailOverflows="true"/>
 					<subreport>
-						<reportElement uuid="6b52a0ba-bea8-47de-b807-2ce7e5994e95" x="0" y="0" width="459" height="13" isPrintWhenDetailOverflows="true"/>
+						<reportElement uuid="6b52a0ba-bea8-47de-b807-2ce7e5994e95" stretchType="RelativeToBandHeight" x="0" y="0" width="459" height="13" isPrintWhenDetailOverflows="true"/>
 						<dataSourceExpression><![CDATA[$F{existingSplitLineDetailViewList}.isEmpty() ? new net.sf.jasperreports.engine.JREmptyDataSource() : new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingSplitLineDetailViewList})]]></dataSourceExpression>
 						<subreportExpression><![CDATA[$F{path} + "DecisionReport_subPersonCommercial_subExistingSplitLineDetailViewList.jasper"]]></subreportExpression>
 					</subreport>
