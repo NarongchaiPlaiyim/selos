@@ -279,6 +279,16 @@ public class AppraisalAppointment implements Serializable {
         if(ModeForButton.ADD.equals(modeForButton)){
             log.debug("-- [AFTER]ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
             contactRecordDetailView = cloner.deepClone(contactRecord);
+            if(!Util.isNull(reasons) && !Util.isZero(reasons.size())){
+                log.debug("-- ReasonList.size()[{}]", reasons.size());
+                for(Reason reason : reasons){
+                    if(reason.getId() == contactRecordDetailView.getUpdReasonId()){
+                        log.debug("-- ContactRecordDetailView.UpdReasonId[{}]", contactRecordDetailView.getUpdReasonId());
+                        contactRecordDetailView.setReason(reason);
+                        break;
+                    }
+                }
+            }
             contactRecordDetailViewList.add(contactRecordDetailView);
             complete = true;
             log.debug("-- [BEFORE]ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
@@ -286,6 +296,16 @@ public class AppraisalAppointment implements Serializable {
             log.debug("-- RowIndex[{}]", rowIndex);
             log.debug("-- [AFTER]ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
             contactRecordDetailView = cloner.deepClone(contactRecord);
+            if(!Util.isNull(reasons) && !Util.isZero(reasons.size())){
+                log.debug("-- ReasonList.size()[{}]", reasons.size());
+                for(Reason reason : reasons){
+                    if(reason.getId() == contactRecordDetailView.getUpdReasonId()){
+                        log.debug("-- ContactRecordDetailView.UpdReasonId[{}]", contactRecordDetailView.getUpdReasonId());
+                        contactRecordDetailView.setReason(reason);
+                        break;
+                    }
+                }
+            }
             contactRecordDetailViewList.add(contactRecordDetailView);
             complete = true;
             log.debug("-- [BEFORE]ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
