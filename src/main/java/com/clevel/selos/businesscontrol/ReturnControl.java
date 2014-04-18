@@ -122,11 +122,9 @@ public class ReturnControl extends BusinessControl {
             }
 
             if(returnInfoViewMap!=null && returnInfoViewMap.size()>0){
-                Iterator it = returnInfoViewMap.entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry pairs = (Map.Entry)it.next();
-                    returnInfoViews.add((ReturnInfoView) pairs.getValue());
-                    it.remove(); // avoids a ConcurrentModificationException
+                SortedSet<String> keys = new TreeSet<String>(returnInfoViewMap.keySet());
+                for (String key : keys) {
+                    returnInfoViews.add(returnInfoViewMap.get(key));
                 }
             }
         }
