@@ -94,6 +94,7 @@ public class CheckMandateDocControl extends BusinessControl{
     private final String AAD_ADMIN = "AAD ADMIN";
     private final String AAD_COMMITTEE = "AAD COMMITTEE";
     private User user;
+
     @Inject
     public CheckMandateDocControl() {
 
