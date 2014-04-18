@@ -340,8 +340,8 @@ public class CreditFacProposeControl extends BusinessControl {
                                 if (productFormula != null) {
                                     log.info("productFormula id :: {}", productFormula.getId());
                                     log.info("productFormula.getProgramToCreditType().getCreditType().getCreditGroup():::{}", productFormula.getProgramToCreditType().getCreditType().getCreditGroup());
-                                    //OBOD or CASH_IN
-                                    if (CreditTypeGroup.CASH_IN.value() == (productFormula.getProgramToCreditType().getCreditType().getCreditGroup())) {
+
+                                    if (CreditTypeGroup.CASH_IN.value() == (productFormula.getProgramToCreditType().getCreditType().getCreditGroup())) { //OBOD or CASH_IN
                                         log.info("OBOD ::: CASH_IN");
                                         //ExposureMethod for check to use limit or limit*PCE%
                                         if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
@@ -355,7 +355,7 @@ public class CreditFacProposeControl extends BusinessControl {
                                             sumTotalOBOD = sumTotalOBOD.add(newCreditDetailView.getPCEAmount());
                                         }
                                         log.debug("sumTotalOBOD :: {}", sumTotalOBOD);
-                                    } else {//All Credit
+                                    } else {
                                         //ExposureMethod for check to use limit or limit*PCE%
                                         if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
                                             log.debug("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
@@ -370,11 +370,8 @@ public class CreditFacProposeControl extends BusinessControl {
                                         log.debug("sumTotalCommercial :: {}", sumTotalCommercial);  // Commercial
                                     }
 
-                                    sumTotalPropose = Util.add(sumTotalCommercial, sumTotalOBOD);// Commercial+ OBOD
-                                    log.debug("sumTotalPropose :: {}", sumTotalBorrowerCommercial);
-
-                                    sumTotalBorrowerCommercial = Util.subtract(sumTotalPropose, sumTotalOBOD);  // Commercial - OBOD
-                                    log.debug("sumTotalBorrowerCommercial :: {}", sumTotalBorrowerCommercial);
+                                    sumTotalPropose = Util.add(sumTotalCommercial, sumTotalOBOD);// Commercial + OBOD  All Credit
+                                    log.debug("sumTotalPropose :: {}", sumTotalPropose);
 
                                     //For DBR  sumTotalLoanDbr and sumTotalNonLoanDbr
                                     if (productFormula.getDbrCalculate() == 1) {// No
@@ -401,7 +398,7 @@ public class CreditFacProposeControl extends BusinessControl {
                     }
 
                     sumTotalBorrowerCommercialAndOBOD = Util.add(borrowerComOBOD, sumTotalPropose); // Total Commercial&OBOD  ของ Borrower (จาก Existing credit) +Total Propose Credit
-                    sumTotalBorrowerCommercial = Util.add(borrowerCom, sumTotalBorrowerCommercial); //Total Commercial  ของ Borrower (จาก Existing credit) + *Commercial ของ propose
+                    sumTotalBorrowerCommercial = Util.add(borrowerCom, sumTotalCommercial); //Total Commercial  ของ Borrower (จาก Existing credit) + *Commercial ของ propose
                     sumTotalGroupExposure = Util.add(groupExposure, sumTotalBorrowerCommercialAndOBOD); //ได้มาจาก  Total Exposure ของ Group  (จาก Existing credit) +  Total Borrower Commercial&OBOD (Propose credit)
 
                     log.debug("sumTotalCommercial after include Existing:: {}", sumTotalBorrowerCommercial);
