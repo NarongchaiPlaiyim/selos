@@ -57,11 +57,6 @@ public class NewGuarantorRelationDAO extends GenericDAO<NewGuarantorCredit, Long
         log.info("getList. (result size: {})", newGuarantorCreditList.size());
 
         return newGuarantorCreditList;
-//        Criteria criteria = createCriteria();
-//        String query = "SELECT newGuarantorCredit FROM NewGuarantorCredit newGuarantorCredit WHERE newCreditDetail.id  = " + newCreditDetail.getId() + " AND proposeType = "+ proposeType;
-//        List<NewGuarantorCredit> newGuarantorCreditList = getSession().createQuery(query).list();
-//        criteria.setFetchMode("newGuarantorDetail", FetchMode.LAZY);
-//        return newGuarantorCreditList;
     }
 
 }
