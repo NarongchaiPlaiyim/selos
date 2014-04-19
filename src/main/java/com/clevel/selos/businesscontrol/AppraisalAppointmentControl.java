@@ -182,6 +182,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
 
             //From P'LK CustomerAcceptanceControl
             CustomerAcceptance cusAccept = null;
+            log.debug("-- 111111111111111111111111111111111");
             if (cusAcceptView.getId() <= 0) { //new
                 cusAccept = customerAcceptanceTransform.transformToNewModel(cusAcceptView, workCase, workCasePrescreen, getCurrentUser());
                 customerAcceptanceDAO.save(cusAccept);
@@ -193,7 +194,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
                 customerAcceptanceDAO.persist(cusAccept);
                 customerAcceptance = cusAccept;
             }
-
+            log.debug("-- 2222222222222222222222222222222222");
             //Add and update first
             for (ContactRecordDetailView view : contactRecordDetailViewList) {
                 if (view.isNew()) {
@@ -206,14 +207,14 @@ public class AppraisalAppointmentControl extends BusinessControl {
                     contactRecordDetailDAO.persist(model);
                 }
             }
-
+            log.debug("-- 33333333333333333333333333333333");
             //Delete
             for (ContactRecordDetailView view : contactRecordDetailViewList) {
                 if (view.isNew())
                     continue;
                 contactRecordDetailDAO.deleteById(view.getId());
             }
-
+            log.debug("-- 444444444444444444444444444444444");
 
 
             appraisalDetailViewList = Util.safetyList(appraisalView.getAppraisalDetailViewList());
