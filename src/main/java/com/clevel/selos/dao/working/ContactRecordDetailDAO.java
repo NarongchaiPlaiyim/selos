@@ -68,7 +68,7 @@ public class ContactRecordDetailDAO extends GenericDAO<ContactRecordDetail, Long
     }
 
     public List<ContactRecordDetail> findByWorkCaseId(final long workCaseId){
-        log.info("-- findContactRecordDetailListByAppraisalId : {}", workCaseId);
+        log.info("-- findByWorkCaseId : {}", workCaseId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.addOrder(Order.asc("id"));
@@ -77,7 +77,7 @@ public class ContactRecordDetailDAO extends GenericDAO<ContactRecordDetail, Long
     }
 
     public List<ContactRecordDetail> findByWorkCasePrescreenId(final long workCasePreScreenId){
-        log.info("-- findContactRecordDetailListByAppraisalId : {}", workCasePreScreenId);
+        log.info("-- findByWorkCasePrescreenId : {}", workCasePreScreenId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
         criteria.addOrder(Order.asc("id"));

@@ -28,14 +28,14 @@ public class CustomerAcceptanceDAO extends GenericDAO<CustomerAcceptance, Long> 
         customerAcceptance = (CustomerAcceptance) criteria.uniqueResult();
         return customerAcceptance;
     }
-    public CustomerAcceptance findCustomerAcceptanceByWorkCase(long workCaseId) {
+    public CustomerAcceptance findCustomerAcceptanceByWorkCaseId(long workCaseId) {
         CustomerAcceptance customerAcceptance;
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         customerAcceptance = (CustomerAcceptance) criteria.uniqueResult();
         return customerAcceptance;
     }
-    public CustomerAcceptance findCustomerAcceptanceByWorkCasePrescreen(final long workCasePrescreen) {
+    public CustomerAcceptance findCustomerAcceptanceByWorkCasePrescreenId(final long workCasePrescreen) {
         CustomerAcceptance customerAcceptance;
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreen));
