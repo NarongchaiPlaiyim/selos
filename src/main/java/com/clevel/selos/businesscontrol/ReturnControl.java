@@ -262,6 +262,6 @@ public class ReturnControl extends BusinessControl {
             returnInfoDAO.persist(returnInfoList);
         }
 
-        //bpmExecutor.returnBDM(workCaseId, queueName, ActionCode.RETURN_TO_BDM_FULLAPP.getVal());
+        bpmExecutor.submitUW1(workCaseId, queueName, ActionCode.SUBMIT_TO_UW1.getVal());
     }
 }

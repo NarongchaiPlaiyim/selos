@@ -237,6 +237,23 @@
                                  action="#{headerController.onOpenSubmitUW2()}"
                                  update=":frmMain:submitUWPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel" />
                 <!---->
+
+                <!--Submit To UW1 (Submit Return)-->
+                <p:commandButton id="btnSubmitCaseToBDMUW1" value="#{msg.get('app.header.button.submitToUW1')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitToUW1')}"
+                                 rendered="#{headerController.checkButton('Submit to UW1') and headerController.stepId == 2004}"
+                                 onclick="confirmSubmitSubmitUW1.show()" />
+                <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmSubmitSubmitUW1" global="false" showEffect="fade"
+                                 rendered="#{headerController.checkButton('Submit to UW1') and headerController.stepId == 2004}">
+                    <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{headerController.onSubmitReturnUW1()}"
+                                     process="@this" oncomplete="confirmSubmitSubmitUW1.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitUW1.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+                <!---->
             </p:panel>
             <!--Stage for Appraisal-->
             <p:panel id="header_panel_appraisal" rendered="#{headerController.stageId == 203}" styleClass="panel">
