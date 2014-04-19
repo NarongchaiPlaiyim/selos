@@ -546,7 +546,6 @@ public class CreditFacProposeControl extends BusinessControl {
         return newCreditFacilityView;
     }
 
-
     public void calculatePCEAmount(NewCreditDetailView creditDetailView) {
         log.info("creditDetailView : {}", creditDetailView);
         BigDecimal sumOfPCE = BigDecimal.ZERO;
@@ -1191,7 +1190,6 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
     }
-
 
     public NewCreditFacilityView saveCreditFacility(NewCreditFacilityView newCreditFacilityView, long workCaseId) {
         log.debug("Starting saveCreditFacility...");
