@@ -5,7 +5,7 @@ public enum ActionCode {
     CHECK_MANDATE_DOC(1002, "Check Mandate Doc"),
     CANCEL_CA(1003, "Cancel CA"),
     CHECK_NCB(1004, "Check NCB"),
-    RETURN_TO_BDM_PRESCREEN(1005, "Return to BDM"),
+    RETURN_TO_BDM(1005, "Return to BDM"),
     CHECK_PRESCREEN(1006, "Check Prescreen"),
     REQUEST_APPRAISAL(1007, "Request Appraisal"),
     CLOSE_SALES(1008, "Close Sales"),
@@ -15,7 +15,6 @@ public enum ActionCode {
     REPLY_TO_AAD(1012, "Reply to AAD"),
     PRINT_OP_SHEET(1013, "Print PDF"),
     SUBMIT_CA(1015, "Submit CA"),
-    RETURN_TO_BDM_FULLAPP(1016, "Return to BDM 2"),
     VIEW_RELATE_APP(1017, "View Related Application CA"),
     SUBMIT_TO_UW1(1018, "Submit to UW1"),
     COMPLETE(1019, "Complete"),
@@ -26,9 +25,9 @@ public enum ActionCode {
     REPLY_TO_AAD_ADMIN(1024, "Reply to AAD Admin"),
     CANCEL_APPRAISAL(1025, "Cancel Appraisal request"),
     SUBMIT_TO_ZM(1026, "Submit to ZM"),
-    CUSTOMER_ACCEPT(1027, "Assign To Me"),
-    REQUEST_PRICE_REDUCE(1028, ""),
-    PENDING_FOR_DECISION(1029, ""),
+    CUSTOMER_ACCEPT(1027, "Customer Accepted"),
+    REQUEST_PRICE_REDUCE(1028, "Request for Price Reduction"),
+    PENDING_FOR_DECISION(1029, "Pending for Decision"),
     ASSIGN_TO_ME(1030, "Assign To Me");
 
     long val;

@@ -451,6 +451,24 @@ public class BPMExecutor implements Serializable {
             throw new Exception("An exception occurred, Can not find Action.");
         }
     }
+
+    public void submitCustomerAcceptance(String queueName, String wobNumber, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+
+        if(!Util.isNull(action)){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+
+            log.debug("dispatch case for [Submit Customer Acceptance Pre-Approve]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            if(!Util.isEmpty(queueName)){
+                execute(queueName, wobNumber, fields);
+            } else {
+                throw new Exception("An exception occurred, Could not found wobNumber.");
+            }
+        }
+    }
     
     public void executeBPM(long workCaseId, String queueName, long actionCode, String reason, String remark) throws Exception {
     	WorkCase workCase = null;
@@ -507,7 +525,7 @@ public class BPMExecutor implements Serializable {
         log.debug("dispatch case for [Select Case]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
         execute(queueName, wobNumber, fields);
     }
-    
+
     private void execute(String queueName, String wobNumber, HashMap<String, String> fields) throws Exception{
         log.debug("BPM Execute ::: queueName : {}, wobNumber : {}, fields : {}", queueName, wobNumber, fields);
         bpmInterface.dispatchCase(queueName, wobNumber, fields);

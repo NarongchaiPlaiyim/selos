@@ -97,50 +97,26 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public List<User> getUserList(User currentUser){
-        List<User> zmUserList = null;
-        List<UserTeam> zmUserTeamList = relTeamUserDetailsDAO.getTeamHeadLeadByTeamId(currentUser.getTeam().getId());
-        if(zmUserTeamList!=null && zmUserTeamList.size()>0){
-            zmUserList = userDAO.findUserZoneList(zmUserTeamList);
+        List<User> userList = null;
+        List<UserTeam> userTeamList = relTeamUserDetailsDAO.getTeamHeadLeadByTeamId(currentUser.getTeam().getId());
+        if(userTeamList != null && userTeamList.size() > 0){
+            userList = userDAO.findUserList(userTeamList);
         }
 
-        if(zmUserList == null){
-            zmUserList = new ArrayList<User>();
+        if(userList == null){
+            userList = new ArrayList<User>();
         }
 
-        return zmUserList;
+        return userList;
     }
 
-    public List<User> getRMUserList(){
-        User currentUser = getCurrentUser();
-
-        List<User> rmUserList = userDAO.findUserRegionList(currentUser);
-        if(rmUserList == null){
-            rmUserList = new ArrayList<User>();
+    public List<User> getAADCommitteeList(RoleValue roleValue){
+        List<User> userList = userDAO.findUserListByRoleId(getCurrentUser(), roleValue.id());
+        if(userList == null){
+            userList = new ArrayList<User>();
         }
 
-        return rmUserList;
-    }
-
-    public List<User> getHeadUserList(){
-        User currentUser = getCurrentUser();
-
-        List<User> ghUserList = userDAO.findUserHeadList(currentUser);
-        if(ghUserList == null){
-            ghUserList = new ArrayList<User>();
-        }
-
-        return ghUserList;
-    }
-
-    public List<User> getCSSOUserList(){
-        User currentUser = getCurrentUser();
-
-        List<User> ghUserList = userDAO.findCSSOList(currentUser);
-        if(ghUserList == null){
-            ghUserList = new ArrayList<User>();
-        }
-
-        return ghUserList;
+        return userList;
     }
 
     public void assignToABDM(String abdmUserId, String queueName, long workCaseId) throws Exception {
@@ -588,7 +564,7 @@ public class FullApplicationControl extends BusinessControl {
             appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
             log.debug("checkAppointmentInformation ::: find appraisal by workCase : {}", appraisal);
         }else if(!Util.isNull(workCasePreScreenId) && workCasePreScreenId != 0){
-            appraisal = appraisalDAO.findByWorkCasePreScreenId(workCaseId);
+            appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             log.debug("checkAppointmentInformation ::: find appraisal by workCasePrescreen: {}", appraisal);
         }
 
@@ -612,7 +588,7 @@ public class FullApplicationControl extends BusinessControl {
             log.debug("submitToAADCommittee ::: find appraisal by workCase : {}", appraisal);
             log.debug("submitToAADCommittee ::: find workCase : {}", workCase);
         }else if(!Util.isNull(workCasePreScreenId) && workCasePreScreenId != 0){
-            appraisal = appraisalDAO.findByWorkCasePreScreenId(workCaseId);
+            appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             appNumber = workCasePrescreen.getAppNumber();
             log.debug("submitToAADCommittee ::: find appraisal by workCasePrescreen: {}", appraisal);
@@ -636,12 +612,34 @@ public class FullApplicationControl extends BusinessControl {
                 }
                 bpmExecutor.submitAADCommittee(appNumber, aadCommitteeUserId, appraisal.getAppointmentDate(), appraisalLocationCode, queueName, ActionCode.SUBMIT_TO_ADD_COMMITTEE.getVal(), workCaseAppraisal.getWobNumber());
             }
+        } else {
+            throw new Exception("Submit case failed, could not find appraisal data.");
         }
         log.debug("submitToAADCommittee ::: end...");
     }
 
+    public String getAADCommittee(long workCaseId, long workCasePreScreenId){
+        String aadCommitteeName = "";
+        Appraisal appraisal;
+        if(!Util.isNull(workCaseId) && workCaseId != 0){
+            appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
+            aadCommitteeName = appraisal.getAadCommittee()!=null?appraisal.getAadCommittee().getUserName():"";
+            log.debug("submitToAADCommittee ::: find appraisal by workCase : {}", appraisal);
+        }else if(!Util.isNull(workCasePreScreenId) && workCasePreScreenId != 0){
+            appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+            aadCommitteeName = appraisal.getAadCommittee()!=null?appraisal.getAadCommittee().getUserName():"";
+            log.debug("submitToAADCommittee ::: find appraisal by workCasePrescreen: {}", appraisal);
+        }
+
+        return aadCommitteeName;
+    }
+
     public void submitUW2FromAAD(){
 
+    }
+
+    public void submitCustomerAcceptance(String queueName, String wobNumber) throws Exception{
+        bpmExecutor.submitCustomerAcceptance(queueName, wobNumber, ActionCode.CUSTOMER_ACCEPT.getVal());
     }
 
     /*public void calculatePricingDOA(long workCaseId, NewCreditFacility newCreditFacility){
