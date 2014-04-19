@@ -1205,16 +1205,16 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //--- Save to NewFeeCredit
         if (Util.safetyList(newCreditFacilityView.getNewFeeDetailViewList()).size() > 0) {
-            List<FeeDetail> feeDetailDelList  =  feeDetailDAO.findAllByWorkCaseId(workCaseId);
-            if(feeDetailDelList.size()>0){
-                log.debug(" :: feeDetailDelList ::{}",feeDetailDelList.size());
-                feeDetailDAO.delete(feeDetailDelList);
-            }
+//            List<FeeDetail> feeDetailDelList  =  feeDetailDAO.findAllByWorkCaseId(workCaseId);
+//            if(feeDetailDelList.size()>0){
+//                log.debug(" :: feeDetailDelList ::{}",feeDetailDelList.size());
+//                feeDetailDAO.delete(feeDetailDelList);
+//            }
 
-//            log.debug("saveCreditFacility ::: newCreditFacilityView.getNewFeeDetailViewList()).size() : {}", newCreditFacilityView.getNewFeeDetailViewList().size());
-//            List<FeeDetail> feeDetailList = feeTransform.transformToDB(newCreditFacilityView.getNewFeeDetailViewList(),workCaseId);
-//            feeDetailDAO.persist(feeDetailList);
-//            log.debug("persist :: feeDetailList ::");
+            log.debug("saveCreditFacility ::: newCreditFacilityView.getNewFeeDetailViewList()).size() : {}", newCreditFacilityView.getNewFeeDetailViewList().size());
+            List<FeeDetail> feeDetailList = feeTransform.transformToDB(newCreditFacilityView.getNewFeeDetailViewList(),workCaseId);
+            feeDetailDAO.persist(feeDetailList);
+            log.debug("persist :: feeDetailList ::");
         }
 
         //--- Save to NewConditionCredit
@@ -1307,13 +1307,18 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
 
-    public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {
+    public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList,long workCaseId) {
         log.debug("deleteAllApproveByIdList()");
         log.debug("deleteCreditIdList: {}", deleteCreditIdList.size());
         log.debug("deleteCollIdList: {}", deleteCollIdList.size());
         log.debug("deleteGuarantorIdList: {}", deleteGuarantorIdList.size());
         log.debug("deleteConditionIdList: {}", deleteConditionIdList.size());
 
+        List<FeeDetail> feeDetailDelList  =  feeDetailDAO.findAllByWorkCaseId(workCaseId);
+        if(feeDetailDelList != null && feeDetailDelList.size()>0){
+            log.debug(" :: feeDetailDelList ::{}",feeDetailDelList.size());
+            feeDetailDAO.delete(feeDetailDelList);
+        }
 
         if (deleteCollIdList != null && deleteCollIdList.size() > 0) {
             List<NewCollateral> deleteCollateralList = new ArrayList<NewCollateral>();
