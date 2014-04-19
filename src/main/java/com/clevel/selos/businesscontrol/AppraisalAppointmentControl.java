@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -84,7 +83,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
             log.debug("getAppraisalAppointment by workCaseId - appraisal: {}", appraisal);
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
             log.debug("getAppraisalAppointment by workCaseId - creditFacility : {}", newCreditFacility);
-            customerAcceptance = customerAcceptanceDAO.findCustomerAcceptanceByWorkCase(workCaseId);
+            customerAcceptance = customerAcceptanceDAO.findCustomerAcceptanceByWorkCaseId(workCaseId);
             if(!Util.isNull(customerAcceptance)){
                 log.debug("getAppraisalAppointment by workCaseId - CustomerAcceptance : {}", customerAcceptance);
                 log.debug("-- CustomerAcceptance.id[{}]", customerAcceptance.getId());
@@ -98,7 +97,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
             log.debug("getAppraisalAppointment by workCasePreScreenId : {}", appraisal);
             newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             log.debug("getAppraisalAppointment by workCasePreScreenId - creditFacility : {}", newCreditFacility);
-            customerAcceptance = customerAcceptanceDAO.findCustomerAcceptanceByWorkCasePrescreen(workCasePreScreenId);
+            customerAcceptance = customerAcceptanceDAO.findCustomerAcceptanceByWorkCasePrescreenId(workCasePreScreenId);
             if(!Util.isNull(customerAcceptance)){
                 log.debug("getAppraisalAppointment by workCasePreScreenId - CustomerAcceptance : {}", customerAcceptance);
                 log.debug("-- CustomerAcceptance.id[{}]", customerAcceptance.getId());
@@ -153,10 +152,12 @@ public class AppraisalAppointmentControl extends BusinessControl {
             workCase = workCaseDAO.findById(workCaseId);
             workCasePrescreen = null;
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+            customerAcceptance = customerAcceptanceDAO.findCustomerAcceptanceByWorkCaseId(workCaseId);
         } else if (!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
             workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             workCase = null;
             newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+            customerAcceptance = customerAcceptanceDAO.findCustomerAcceptanceByWorkCasePrescreenId(workCasePreScreenId);
         }
 
         if(!Util.isNull(workCase) || !Util.isNull(workCasePrescreen)){
@@ -182,40 +183,55 @@ public class AppraisalAppointmentControl extends BusinessControl {
 
             //From P'LK CustomerAcceptanceControl
             CustomerAcceptance cusAccept = null;
-            log.debug("-- 111111111111111111111111111111111");
-            if (cusAcceptView.getId() <= 0) { //new
-                cusAccept = customerAcceptanceTransform.transformToNewModel(cusAcceptView, workCase, workCasePrescreen, getCurrentUser());
-                customerAcceptanceDAO.save(cusAccept);
-                customerAcceptance = cusAccept;
-            } else {
-                cusAccept = customerAcceptanceDAO.findById(cusAcceptView.getId());
-                cusAccept.setModifyBy(getCurrentUser());
-                cusAccept.setModifyDate(new Date());
-                customerAcceptanceDAO.persist(cusAccept);
-                customerAcceptance = cusAccept;
-            }
-            log.debug("-- 2222222222222222222222222222222222");
-            //Add and update first
-            for (ContactRecordDetailView view : contactRecordDetailViewList) {
-                if (view.isNew()) {
-                    ContactRecordDetail model = contactRecordDetailTransform.transformToNewModel(view, getCurrentUser(), cusAccept);
-                    contactRecordDetailDAO.save(model);
-                } else if (view.isNeedUpdate()) {
-                    //get from db
-                    ContactRecordDetail model = contactRecordDetailDAO.findById(view.getId());
-                    contactRecordDetailTransform.updateModelFromView(model, view, getCurrentUser());
-                    contactRecordDetailDAO.persist(model);
-                }
-            }
-            log.debug("-- 33333333333333333333333333333333");
-            //Delete
-            for (ContactRecordDetailView view : contactRecordDetailViewList) {
-                if (view.isNew())
-                    continue;
-                contactRecordDetailDAO.deleteById(view.getId());
-            }
-            log.debug("-- 444444444444444444444444444444444");
+            //            if (cusAcceptView.getId() <= 0) { //new
+//                cusAccept = customerAcceptanceTransform.transformToNewModel(cusAcceptView, workCase, workCasePrescreen, getCurrentUser());
+//                customerAcceptanceDAO.save(cusAccept);
+//                customerAcceptance = cusAccept;
+//            } else {
+//                cusAccept = customerAcceptanceDAO.findById(cusAcceptView.getId());
+//                cusAccept.setModifyBy(getCurrentUser());
+//                cusAccept.setModifyDate(new Date());
+//                customerAcceptanceDAO.persist(cusAccept);
+//                customerAcceptance = cusAccept;
+//            }
 
+            //Add and update first
+//            for (ContactRecordDetailView view : contactRecordDetailViewList) {
+//                if (view.isNew()) {
+//                    ContactRecordDetail model = contactRecordDetailTransform.transformToNewModel(view, getCurrentUser(), cusAccept);
+//                    contactRecordDetailDAO.save(model);
+//                } else if (view.isNeedUpdate()) {
+//                    //get from db
+//                    ContactRecordDetail model = contactRecordDetailDAO.findById(view.getId());
+//                    contactRecordDetailTransform.updateModelFromView(model, view, getCurrentUser());
+//                    contactRecordDetailDAO.persist(model);
+//                }
+//            }
+            //Delete
+//            for (ContactRecordDetailView view : contactRecordDetailViewList) {
+//                if (view.isNew())
+//                    continue;
+//                contactRecordDetailDAO.deleteById(view.getId());
+//            }
+
+
+
+
+
+
+            if(!Util.isNull(customerAcceptance) && !Util.isZero(customerAcceptance.getId())){
+                customerAcceptanceDAO.delete(customerAcceptance);
+                log.debug("-- CustomerAcceptance.id[{}] deleted", customerAcceptance.getId());
+                customerAcceptance = new CustomerAcceptance();
+                customerAcceptance = customerAcceptanceTransform.transformToModel(cusAcceptView, workCase, workCasePrescreen, getCurrentUser());
+                customerAcceptanceDAO.save(customerAcceptance);
+                log.debug("-- CustomerAcceptance.id[{}] saved", customerAcceptance.getId());
+            } else {
+                customerAcceptance = new CustomerAcceptance();
+                customerAcceptance = customerAcceptanceTransform.transformToModel(cusAcceptView, workCase, workCasePrescreen, getCurrentUser());
+                customerAcceptanceDAO.save(customerAcceptance);
+                log.debug("-- CustomerAcceptance.id[{}] saved", customerAcceptance.getId());
+            }
 
             appraisalDetailViewList = Util.safetyList(appraisalView.getAppraisalDetailViewList());
             log.debug("onSaveAppraisalAppointment ::: appraisalDetailViewList : {}", appraisalDetailViewList);
@@ -236,8 +252,21 @@ public class AppraisalAppointmentControl extends BusinessControl {
                 }
                 newCollateralHeadDAO.persist(newCollateralHeadList);
             }
+            //transform collateral head from view
+            newCollateralList.clear();
+            newCollateralList = Util.safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, getCurrentUser()));
+            log.debug("onSaveAppraisalAppointment ::: before persist newCreditfacility : {}", newCreditFacility);
+            newCreditFacilityDAO.persist(newCreditFacility);
+            log.debug("onSaveAppraisalAppointment ::: after persist newCreditfacility : {}", newCreditFacility);
+
+            log.debug("onSaveAppraisalAppointment ::: before persist newCollateralList : {}", newCollateralList);
+            newCollateralDAO.persist(newCollateralList);
+            log.debug("onSaveAppraisalAppointment ::: after persist newCollateralList : {}", newCollateralList);
+
+
 
             //TODO
+            log.debug("-- CustomerAcceptance.id[{}]", customerAcceptance.getId());
             if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
                 //remove all contactRecordDetailViewList
                 contactRecordDetailList = Util.safetyList(contactRecordDetailDAO.findByWorkCaseId(workCaseId));
@@ -262,18 +291,8 @@ public class AppraisalAppointmentControl extends BusinessControl {
             }
 
 
-            //transform collateral head from view
-            newCollateralList.clear();
-            newCollateralList = Util.safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, getCurrentUser()));
-            log.debug("onSaveAppraisalAppointment ::: before persist newCreditfacility : {}", newCreditFacility);
-            newCreditFacilityDAO.persist(newCreditFacility);
-            log.debug("onSaveAppraisalAppointment ::: after persist newCreditfacility : {}", newCreditFacility);
 
-            log.debug("onSaveAppraisalAppointment ::: before persist newCollateralList : {}", newCollateralList);
-            newCollateralDAO.persist(newCollateralList);
-            log.debug("onSaveAppraisalAppointment ::: after persist newCollateralList : {}", newCollateralList);
             log.debug("-- onSaveAppraisalAppointment end");
-
         }
     }
 }

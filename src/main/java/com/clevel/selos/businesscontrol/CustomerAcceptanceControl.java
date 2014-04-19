@@ -86,7 +86,7 @@ public class CustomerAcceptanceControl extends BusinessControl {
 		CustomerAcceptance result = null;
 		try {
 			if (workCaseId > 0)
-				result = customerAcceptanceDAO.findCustomerAcceptanceByWorkCase(workCaseId);
+				result = customerAcceptanceDAO.findCustomerAcceptanceByWorkCaseId(workCaseId);
 		} catch (Throwable e) {
 			log.debug("Found error getCustomerAcceptanceView "+workCaseId,e);
 		}
@@ -101,9 +101,9 @@ public class CustomerAcceptanceControl extends BusinessControl {
         CustomerAcceptance result = null;
         try {
             if(!Util.isNull(Long.toString(workCaseId)) && !Util.isZero(workCasePreScreenId)){
-                result = customerAcceptanceDAO.findCustomerAcceptanceByWorkCase(workCaseId);
+                result = customerAcceptanceDAO.findCustomerAcceptanceByWorkCaseId(workCaseId);
             }else if(!Util.isNull(Long.toString(workCasePreScreenId)) && !Util.isZero(workCasePreScreenId)){
-                result = customerAcceptanceDAO.findCustomerAcceptanceByWorkCasePrescreen(workCasePreScreenId);
+                result = customerAcceptanceDAO.findCustomerAcceptanceByWorkCasePrescreenId(workCasePreScreenId);
             }
         } catch (Throwable e) {
             log.debug("Found error getCustomerAcceptanceView "+workCaseId,e);
