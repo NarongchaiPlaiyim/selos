@@ -891,28 +891,28 @@ public class CreditFacPropose implements Serializable {
 
     public void onDeleteCreditInfo() {
         log.debug("delete :: rowIndex :: {}", rowIndex);
-        int used;
-        log.info("onDeleteCreditInfo ::: seq is : {} " + newCreditDetailSelected.getSeq());
-
-        log.info("onDeleteCreditInfo ::: use is : {} " + Integer.parseInt(hashSeqCredit.get(newCreditDetailSelected.getSeq()).toString()));
-
-        used = Integer.parseInt(hashSeqCredit.get(newCreditDetailSelected.getSeq()).toString());
-
-        log.info("before del use is  " + used);
-        if (used == 0) {
-            log.info("used ::: {} ", used);
+//        int used;
+//        log.info("onDeleteCreditInfo ::: seq is : {} " + newCreditDetailSelected.getSeq());
+//
+//        log.info("onDeleteCreditInfo ::: use is : {} " + Integer.parseInt(hashSeqCredit.get(newCreditDetailSelected.getSeq()).toString()));
+//
+//        used = Integer.parseInt(hashSeqCredit.get(newCreditDetailSelected.getSeq()).toString());
+//
+//        log.info("before del use is  " + used);
+//        if (used == 0) {
+//            log.info("used ::: {} ", used);
             if (newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId() != 0) {
-                deleteCreditIdList.add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
+                deleteCreditIdList.add(newCreditDetailSelected.getId());
 //                newCreditFacilityView.getNewCreditViewDelList().add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
                 newCreditFacilityView.getNewCreditDetailViewList().remove(newCreditDetailSelected);
             }
-        } else {
-            log.info("used::: {}", used);
-            messageHeader = msg.get("app.propose.exception");
-            message = msg.get("app.propose.error.delete.credit");
-            severity = MessageDialogSeverity.ALERT.severity();
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        }
+//        } else {
+//            log.info("used::: {}", used);
+//            messageHeader = msg.get("app.propose.exception");
+//            message = msg.get("app.propose.error.delete.credit");
+//            severity = MessageDialogSeverity.ALERT.severity();
+//            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//        }
 
 
     }
@@ -1230,24 +1230,24 @@ public class CreditFacPropose implements Serializable {
             if (selectedCollateralCrdTypeItems != null && selectedCollateralCrdTypeItems.size() > 0) {
 
                 List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
-//                for (int i = 0; i < selectedCollateralCrdTypeItems.size(); i++) {
-//                    selectedCollateralCrdTypeItems.get(i).setNoFlag(true);
-//                    proposeCreditDetailViewList.add(selectedCollateralCrdTypeItems.get(i));
-//                    seqTemp = selectedCollateralCrdTypeItems.get(i).getSeq();
+                for (int i = 0; i < selectedCollateralCrdTypeItems.size(); i++) {
+                    selectedCollateralCrdTypeItems.get(i).setNoFlag(true);
+                    proposeCreditDetailViewList.add(selectedCollateralCrdTypeItems.get(i));
+                    seqTemp = selectedCollateralCrdTypeItems.get(i).getSeq();
 //                    hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
-//                }
+                }
 
                 proposeCollateralInfoAdd.setProposeCreditDetailViewList(proposeCreditDetailViewList);
                 complete3 = true;
 
-                for (int j = 0; j < proposeCollateralInfoAdd.getProposeCreditDetailViewList().size(); j++) {
-                    seqTemp = proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).getSeq();
-                    if (proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).isNoFlag()) {
-                        hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(j).toString()) + 1);
-                    } else {
-                        hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(j).toString()) - 1);
-                    }
-                }
+//                for (int j = 0; j < proposeCollateralInfoAdd.getProposeCreditDetailViewList().size(); j++) {
+//                    seqTemp = proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).getSeq();
+//                    if (proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).isNoFlag()) {
+//                        hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(j).toString()) + 1);
+//                    } else {
+//                        hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(j).toString()) - 1);
+//                    }
+//                }
 
             } else {
                 messageHeader = msg.get("app.propose.exception");
@@ -1578,10 +1578,10 @@ public class CreditFacPropose implements Serializable {
     public void onAddRelatedWith() {
         log.info("onAddRelatedWith() relatedWithSelected.getId = {}", relatedWithSelected.getId());
         NewCollateralSubView relatedWith = getIdNewSubCollateralDetail(relatedWithSelected.getId());
-        if (relatedWithSelected.getId() == 0) {
-            log.debug("Can not add relatedWith because id = 0!");
-            return;
-        }
+//        if (relatedWithSelected.getId() == 0) {
+//            log.debug("Can not add relatedWith because id = 0!");
+//            return;
+//        }
         newCollateralSubView.getRelatedWithList().add(relatedWith);
     }
 
