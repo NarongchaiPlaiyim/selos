@@ -286,6 +286,9 @@ public class PDFDecision implements Serializable {
                 relatedCommercialDecisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
                 relatedCommercialDecisionReport.setOutstanding(Util.convertNullToZERO(detailView.getOutstanding()));
                 relatedCommercialDecisionReport.setExistingCreditTierDetailViewList(Util.safetyList(detailView.getExistingCreditTierDetailViewList()));
+                log.debug("--ExistingCreditTierDetailViewList. {}",detailView.getExistingCreditTierDetailViewList());
+                relatedCommercialDecisionReport.setExistingSplitLineDetailViewList(Util.safetyList(detailView.getExistingSplitLineDetailViewList()));
+                log.debug("--ExistingSplitLineDetailViewList. {}",detailView.getExistingSplitLineDetailViewList());
                 relatedCommercialDecisionReportList.add(relatedCommercialDecisionReport);
             }
         } else {
@@ -333,7 +336,10 @@ public class PDFDecision implements Serializable {
                 relatedRetailDecisionReport.setPcePercent(Util.convertNullToZERO(detailView.getPceLimit()));
                 relatedRetailDecisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
                 relatedRetailDecisionReport.setOutstanding(Util.convertNullToZERO(detailView.getOutstanding()));
+
                 relatedRetailDecisionReport.setExistingCreditTierDetailViewList(Util.safetyList(detailView.getExistingCreditTierDetailViewList()));
+                log.debug("--ExistingCreditTierDetailViewList. {}",detailView.getExistingCreditTierDetailViewList());
+
                 relatedRetailDecisionReportList.add(relatedRetailDecisionReport);
             }
         } else {
@@ -656,6 +662,7 @@ public class PDFDecision implements Serializable {
                 collateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
                 collateralDecisionReport.setPath(pathsub);
                 collateralDecisionReport.setAppraisalDate(view.getAppraisalDate());
+                log.debug("---Date. {}");
                 collateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecision()));
                 collateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
                 collateralDecisionReport.setAadDecisionReasonDetail(Util.checkNullString(view.getAadDecisionReasonDetail()));

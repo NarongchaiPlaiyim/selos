@@ -120,7 +120,6 @@ public class BasicInfo extends BaseController {
 
     //session
     private long workCaseId;
-//    private long stepId;
 
     //for mandate
     private boolean reqApplicationNo;

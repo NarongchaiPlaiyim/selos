@@ -155,7 +155,6 @@ public class CreditFacPropose implements Serializable {
     private List<Long> deleteCollIdList;
     private List<Long> deleteSubCollIdList;
 
-
     // for  control Guarantor Information Dialog
     private NewGuarantorDetailView newGuarantorDetailView;
     private NewGuarantorDetailView newGuarantorDetailViewItem;
@@ -297,8 +296,7 @@ public class CreditFacPropose implements Serializable {
     @Inject
     private TCGCollateralTypeDAO tcgCollateralTypeDAO;
 
-    public CreditFacPropose() {
-    }
+    public CreditFacPropose(){}
 
     public void preRender() {
         log.debug("preRender ::: setSession ");
@@ -373,7 +371,6 @@ public class CreditFacPropose implements Serializable {
 //                        hashSeqCredit.put(i, newCreditDetailSeqList.get(i).getUseCount());
 //                    }
 
-//                    notRetrievePricing = true;
                 }
 
             } catch (Exception ex) {
@@ -820,6 +817,7 @@ public class CreditFacPropose implements Serializable {
                 creditDetailAdd.setDisbursementTypeView(disbursementTypeView);
                 creditDetailAdd.setHoldLimitAmount(newCreditDetailView.getHoldLimitAmount());
                 creditDetailAdd.setNewCreditTierDetailViewList(newCreditDetailView.getNewCreditTierDetailViewList());
+                creditDetailAdd.setDeleteTmpList(newCreditDetailView.getDeleteTmpList());
                 creditDetailAdd.setSeq(seq);
 
                 creditFacProposeControl.calculateInstallment(creditDetailAdd);
@@ -855,6 +853,9 @@ public class CreditFacPropose implements Serializable {
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setHoldLimitAmount(newCreditDetailView.getHoldLimitAmount());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setSeq(newCreditDetailView.getSeq());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setNewCreditTierDetailViewList(newCreditDetailView.getNewCreditTierDetailViewList());
+                newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setDeleteTmpList(newCreditDetailView.getDeleteTmpList());
+
+                log.debug("detail list ::: {}",newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getNewCreditTierDetailViewList());
 
                 creditFacProposeControl.calculateInstallment(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex));
             } else {
@@ -901,7 +902,7 @@ public class CreditFacPropose implements Serializable {
 //        if (used == 0) {
 //            log.info("used ::: {} ", used);
             if (newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId() != 0) {
-//                deleteCreditIdList.add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
+                deleteCreditIdList.add(newCreditDetailSelected.getId());
 //                newCreditFacilityView.getNewCreditViewDelList().add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
                 newCreditFacilityView.getNewCreditDetailViewList().remove(newCreditDetailSelected);
             }
@@ -994,11 +995,8 @@ public class CreditFacPropose implements Serializable {
         creditTierDetailAdd.setStandardInterest(new BigDecimal(standardInterestDlg.doubleValue()));
         creditTierDetailAdd.setStandardBasePrice(baseRateTransform.transformToView(standardBase));
 
-        creditTierDetailAdd.setCanEdit(true);
-
 
         if (newCreditDetailView.getRequestType()== RequestTypes.NEW.value()) {
-            creditTierDetailAdd.setCanEdit(false);
             log.debug("newCreditDetailView.getRequestType() ::: {}", newCreditDetailView.getRequestType());
             if (newCreditDetailView.getNewCreditTierDetailViewList() != null) {
                 newCreditDetailView.getNewCreditTierDetailViewList().add(0, creditTierDetailAdd);
@@ -1008,7 +1006,6 @@ public class CreditFacPropose implements Serializable {
                 newCreditDetailView.setNewCreditTierDetailViewList(tierDetailViewList);
             }
         } else if (newCreditDetailView.getRequestType() == RequestTypes.CHANGE.value()) {
-            creditTierDetailAdd.setCanEdit(true);
             if (newCreditDetailView.getNewCreditTierDetailViewList() != null) {
                 newCreditDetailView.getNewCreditTierDetailViewList().add(creditTierDetailAdd);
             } else {
@@ -1020,7 +1017,7 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void onDeleteProposeTierInfo(int row) {
-        log.info("onDeleteProposeTierInfo : : :{}",newCreditDetailView.getNewCreditTierDetailViewList().get(row).getId());
+        log.info("onDeleteProposeTierInfo ::: {}",newCreditDetailView.getNewCreditTierDetailViewList().get(row).getId());
         newCreditDetailView.getDeleteTmpList().add(newCreditDetailView.getNewCreditTierDetailViewList().get(row).getId());
         newCreditDetailView.getNewCreditTierDetailViewList().remove(row);
     }
@@ -1239,15 +1236,16 @@ public class CreditFacPropose implements Serializable {
                     seqTemp = selectedCollateralCrdTypeItems.get(i).getSeq();
 //                    hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
                 }
+
                 proposeCollateralInfoAdd.setProposeCreditDetailViewList(proposeCreditDetailViewList);
                 complete3 = true;
 
 //                for (int j = 0; j < proposeCollateralInfoAdd.getProposeCreditDetailViewList().size(); j++) {
 //                    seqTemp = proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).getSeq();
 //                    if (proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).isNoFlag()) {
-//                        hashSeqCredit.put(seqTemp, hashSeqCredit.get(j) + 1);
+//                        hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(j).toString()) + 1);
 //                    } else {
-//                        hashSeqCredit.put(seqTemp, hashSeqCredit.get(j) - 1);
+//                        hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(j).toString()) - 1);
 //                    }
 //                }
 
@@ -1580,10 +1578,10 @@ public class CreditFacPropose implements Serializable {
     public void onAddRelatedWith() {
         log.info("onAddRelatedWith() relatedWithSelected.getId = {}", relatedWithSelected.getId());
         NewCollateralSubView relatedWith = getIdNewSubCollateralDetail(relatedWithSelected.getId());
-        if (relatedWithSelected.getId() == 0) {
-            log.debug("Can not add relatedWith because id = 0!");
-            return;
-        }
+//        if (relatedWithSelected.getId() == 0) {
+//            log.debug("Can not add relatedWith because id = 0!");
+//            return;
+//        }
         newCollateralSubView.getRelatedWithList().add(relatedWith);
     }
 
@@ -1775,7 +1773,6 @@ public class CreditFacPropose implements Serializable {
         }
 
         newCreditFacilityView.getNewGuarantorDetailViewList().remove(newGuarantorDetailViewItem);
-        log.debug("delete success");
         newCreditFacilityView.setTotalGuaranteeAmount(creditFacProposeControl.calTotalGuaranteeAmount(newCreditFacilityView.getNewGuarantorDetailViewList()));
     }
     //****************************************************END Guarantor ****************************************************//
@@ -1825,7 +1822,7 @@ public class CreditFacPropose implements Serializable {
 
         try {
             //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
-//            creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
+            creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList,workCaseId);
             // Calculate Total Propose
             newCreditFacilityView = creditFacProposeControl.calculateTotalProposeAmount(newCreditFacilityView, basicInfoView, tcgView, workCaseId);
             // Calculate Total for BRMS

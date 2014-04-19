@@ -49,7 +49,7 @@ public class Util implements Serializable {
     }
 
     public static String createDateTh(Date date) {
-        return createDateStringTH(date, "dd MM yyyy");
+        return createDateStringTH(date, "dd/MM/yyyy");
     }
 
 

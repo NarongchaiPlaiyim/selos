@@ -1,19 +1,18 @@
 package com.clevel.selos.transform;
 
-import java.util.Date;
-
 import com.clevel.selos.dao.working.CustomerAcceptanceDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.CustomerAcceptance;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.CustomerAcceptanceView;
 import com.clevel.selos.util.Util;
-
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.util.Date;
 
 public class CustomerAcceptanceTransform extends Transform {
     private static final long serialVersionUID = -1413018148590835051L;
@@ -28,7 +27,7 @@ public class CustomerAcceptanceTransform extends Transform {
     public CustomerAcceptanceTransform() {
 
     }
-	public CustomerAcceptance transformToNewModel(CustomerAcceptanceView view,WorkCase workCase,User user) {
+	public CustomerAcceptance transformToNewModel(CustomerAcceptanceView view,WorkCase workCase, User user) {
     	Date now = new Date();
         CustomerAcceptance model = new CustomerAcceptance();
         model.setApproveResult(view.getApproveResult());
@@ -39,6 +38,20 @@ public class CustomerAcceptanceTransform extends Transform {
         model.setWorkCase(workCase);
         return model;
     }
+
+    public CustomerAcceptance transformToNewModel(CustomerAcceptanceView view,WorkCase workCase, WorkCasePrescreen workCasePrescreen, User user) {
+        Date now = new Date();
+        CustomerAcceptance model = new CustomerAcceptance();
+        model.setApproveResult(view.getApproveResult());
+        model.setCreateBy(user);
+        model.setCreateDate(now);
+        model.setModifyBy(user);
+        model.setModifyDate(now);
+        model.setWorkCase(workCase);
+        model.setWorkCasePrescreen(workCasePrescreen);
+        return model;
+    }
+
     public CustomerAcceptance transformToModel(CustomerAcceptanceView customerAcceptanceView) {
         CustomerAcceptance customerAcceptance = new CustomerAcceptance();
         if (customerAcceptanceView.getId() != 0) {
@@ -54,7 +67,7 @@ public class CustomerAcceptanceTransform extends Transform {
         return customerAcceptance;
     }
 
-    public CustomerAcceptance transformToModel(final CustomerAcceptanceView view, final WorkCase workCase, final User user) {
+    public CustomerAcceptance transformToModel(final CustomerAcceptanceView view, final WorkCase workCase, final WorkCasePrescreen workCasePrescreen, final User user) {
         log.debug("-- transform customerAcceptanceView to CustomerAcceptance [{}]", ""+view.toString());
         if(!Util.isZero(view.getId())){
             model = customerAcceptanceDAO.findCustomerAcceptanceByWorkCase(workCase);
@@ -63,12 +76,14 @@ public class CustomerAcceptanceTransform extends Transform {
                 model.setCreateDate(DateTime.now().toDate());
                 model.setCreateBy(user);
                 model.setWorkCase(workCase);
+                model.setWorkCasePrescreen(workCasePrescreen);
             }
         } else {
             model = new CustomerAcceptance();
             model.setCreateDate(DateTime.now().toDate());
             model.setCreateBy(user);
             model.setWorkCase(workCase);
+            model.setWorkCasePrescreen(workCasePrescreen);
         }
         model.setApproveResult(view.getApproveResult());
         model.setModifyBy(user);
