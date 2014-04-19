@@ -111,7 +111,7 @@ public class PDFRejectLetter implements Serializable {
         RejectLetterReport letterReport = new RejectLetterReport();
         String date = Util.createDateTh(new Date());
         log.debug("--date. {}",date);
-        String[] spDate = date.split(" ");
+        String[] spDate = date.split("/");
         int month = Integer.valueOf(spDate[1]);
         String setMonth = null;
         StringBuilder addressTH = null;
