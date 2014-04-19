@@ -74,6 +74,10 @@ public class ContactRecordDetail implements Serializable {
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
+    @ManyToOne
+    @JoinColumn(name = "workcase_prescreen_id")
+    private WorkCasePrescreen workCasePrescreen;
+
     public long getId() {
         return id;
     }
@@ -194,6 +198,14 @@ public class ContactRecordDetail implements Serializable {
         this.workCase = workCase;
     }
 
+    public WorkCasePrescreen getWorkCasePrescreen() {
+        return workCasePrescreen;
+    }
+
+    public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
+        this.workCasePrescreen = workCasePrescreen;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -212,6 +224,7 @@ public class ContactRecordDetail implements Serializable {
                 .append("modifyBy", modifyBy)
                 .append("customerAcceptance", customerAcceptance)
                 .append("workCase", workCase)
+                .append("workCasePrescreen", workCasePrescreen)
                 .toString();
     }
 }

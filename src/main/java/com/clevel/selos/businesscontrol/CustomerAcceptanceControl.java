@@ -1,14 +1,5 @@
 package com.clevel.selos.businesscontrol;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.working.ContactRecordDetailDAO;
 import com.clevel.selos.dao.working.CustomerAcceptanceDAO;
@@ -28,6 +19,14 @@ import com.clevel.selos.model.view.TCGInfoView;
 import com.clevel.selos.transform.ContactRecordDetailTransform;
 import com.clevel.selos.transform.CustomerAcceptanceTransform;
 import com.clevel.selos.transform.TCGInfoTransform;
+import com.clevel.selos.util.Util;
+import org.slf4j.Logger;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 @Stateless
 public class CustomerAcceptanceControl extends BusinessControl {
@@ -97,6 +96,24 @@ public class CustomerAcceptanceControl extends BusinessControl {
 		else
 			return customerAcceptanceTransform.transformToView(result);
 	}
+
+    public CustomerAcceptanceView getCustomerAcceptanceView(long workCaseId, long workCasePreScreenId) {
+        CustomerAcceptance result = null;
+        try {
+            if(!Util.isNull(Long.toString(workCaseId)) && !Util.isZero(workCasePreScreenId)){
+                result = customerAcceptanceDAO.findCustomerAcceptanceByWorkCase(workCaseId);
+            }else if(!Util.isNull(Long.toString(workCasePreScreenId)) && !Util.isZero(workCasePreScreenId)){
+                result = customerAcceptanceDAO.findCustomerAcceptanceByWorkCasePrescreen(workCasePreScreenId);
+            }
+        } catch (Throwable e) {
+            log.debug("Found error getCustomerAcceptanceView "+workCaseId,e);
+        }
+
+        if (result == null)
+            return new CustomerAcceptanceView();
+        else
+            return customerAcceptanceTransform.transformToView(result);
+    }
 	
 	public List<ContactRecordDetailView> getContactRecordDetails(long customerAcceptanceId) {
 		List<ContactRecordDetail> details = contactRecordDetailDAO.findRecordCallingByCustomerAcceptance(customerAcceptanceId);
