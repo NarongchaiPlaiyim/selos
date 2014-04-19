@@ -155,7 +155,6 @@ public class CreditFacPropose implements Serializable {
     private List<Long> deleteCollIdList;
     private List<Long> deleteSubCollIdList;
 
-
     // for  control Guarantor Information Dialog
     private NewGuarantorDetailView newGuarantorDetailView;
     private NewGuarantorDetailView newGuarantorDetailViewItem;
@@ -297,8 +296,7 @@ public class CreditFacPropose implements Serializable {
     @Inject
     private TCGCollateralTypeDAO tcgCollateralTypeDAO;
 
-    public CreditFacPropose() {
-    }
+    public CreditFacPropose(){}
 
     public void preRender() {
         log.debug("preRender ::: setSession ");
@@ -889,28 +887,28 @@ public class CreditFacPropose implements Serializable {
 
     public void onDeleteCreditInfo() {
         log.debug("delete :: rowIndex :: {}", rowIndex);
-//        int used;
-//        log.info("onDeleteCreditInfo ::: seq is : {} " + newCreditDetailSelected.getSeq());
-//
-//        log.info("onDeleteCreditInfo ::: use is : {} " + Integer.parseInt(hashSeqCredit.get(newCreditDetailSelected.getSeq()).toString()));
-//
-//        used = Integer.parseInt(hashSeqCredit.get(newCreditDetailSelected.getSeq()).toString());
-//
-//        log.info("before del use is  " + used);
-//        if (used == 0) {
-//            log.info("used ::: {} ", used);
+        int used;
+        log.info("onDeleteCreditInfo ::: seq is : {} " + newCreditDetailSelected.getSeq());
+
+        log.info("onDeleteCreditInfo ::: use is : {} " + Integer.parseInt(hashSeqCredit.get(newCreditDetailSelected.getSeq()).toString()));
+
+        used = Integer.parseInt(hashSeqCredit.get(newCreditDetailSelected.getSeq()).toString());
+
+        log.info("before del use is  " + used);
+        if (used == 0) {
+            log.info("used ::: {} ", used);
             if (newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId() != 0) {
                 deleteCreditIdList.add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
 //                newCreditFacilityView.getNewCreditViewDelList().add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
                 newCreditFacilityView.getNewCreditDetailViewList().remove(newCreditDetailSelected);
             }
-//        } else {
-//            log.info("used::: {}", used);
-//            messageHeader = msg.get("app.propose.exception");
-//            message = msg.get("app.propose.error.delete.credit");
-//            severity = MessageDialogSeverity.ALERT.severity();
-//            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-//        }
+        } else {
+            log.info("used::: {}", used);
+            messageHeader = msg.get("app.propose.exception");
+            message = msg.get("app.propose.error.delete.credit");
+            severity = MessageDialogSeverity.ALERT.severity();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
 
 
     }
@@ -993,11 +991,9 @@ public class CreditFacPropose implements Serializable {
         creditTierDetailAdd.setStandardInterest(new BigDecimal(standardInterestDlg.doubleValue()));
         creditTierDetailAdd.setStandardBasePrice(baseRateTransform.transformToView(standardBase));
 
-        creditTierDetailAdd.setCanEdit(true);
 
 
         if (newCreditDetailView.getRequestType()== RequestTypes.NEW.value()) {
-            creditTierDetailAdd.setCanEdit(false);
             log.debug("newCreditDetailView.getRequestType() ::: {}", newCreditDetailView.getRequestType());
             if (newCreditDetailView.getNewCreditTierDetailViewList() != null) {
                 newCreditDetailView.getNewCreditTierDetailViewList().add(0, creditTierDetailAdd);
@@ -1232,23 +1228,24 @@ public class CreditFacPropose implements Serializable {
             if (selectedCollateralCrdTypeItems != null && selectedCollateralCrdTypeItems.size() > 0) {
 
                 List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
-                for (int i = 0; i < selectedCollateralCrdTypeItems.size(); i++) {
-                    selectedCollateralCrdTypeItems.get(i).setNoFlag(true);
-                    proposeCreditDetailViewList.add(selectedCollateralCrdTypeItems.get(i));
-                    seqTemp = selectedCollateralCrdTypeItems.get(i).getSeq();
+//                for (int i = 0; i < selectedCollateralCrdTypeItems.size(); i++) {
+//                    selectedCollateralCrdTypeItems.get(i).setNoFlag(true);
+//                    proposeCreditDetailViewList.add(selectedCollateralCrdTypeItems.get(i));
+//                    seqTemp = selectedCollateralCrdTypeItems.get(i).getSeq();
 //                    hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
-                }
+//                }
+
                 proposeCollateralInfoAdd.setProposeCreditDetailViewList(proposeCreditDetailViewList);
                 complete3 = true;
 
-//                for (int j = 0; j < proposeCollateralInfoAdd.getProposeCreditDetailViewList().size(); j++) {
-//                    seqTemp = proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).getSeq();
-//                    if (proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).isNoFlag()) {
-//                        hashSeqCredit.put(seqTemp, hashSeqCredit.get(j) + 1);
-//                    } else {
-//                        hashSeqCredit.put(seqTemp, hashSeqCredit.get(j) - 1);
-//                    }
-//                }
+                for (int j = 0; j < proposeCollateralInfoAdd.getProposeCreditDetailViewList().size(); j++) {
+                    seqTemp = proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).getSeq();
+                    if (proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).isNoFlag()) {
+                        hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(j).toString()) + 1);
+                    } else {
+                        hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(j).toString()) - 1);
+                    }
+                }
 
             } else {
                 messageHeader = msg.get("app.propose.exception");

@@ -1205,12 +1205,6 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //--- Save to NewFeeCredit
         if (Util.safetyList(newCreditFacilityView.getNewFeeDetailViewList()).size() > 0) {
-//            List<FeeDetail> feeDetailDelList  =  feeDetailDAO.findAllByWorkCaseId(workCaseId);
-//            if(feeDetailDelList.size()>0){
-//                log.debug(" :: feeDetailDelList ::{}",feeDetailDelList.size());
-//                feeDetailDAO.delete(feeDetailDelList);
-//            }
-
             log.debug("saveCreditFacility ::: newCreditFacilityView.getNewFeeDetailViewList()).size() : {}", newCreditFacilityView.getNewFeeDetailViewList().size());
             List<FeeDetail> feeDetailList = feeTransform.transformToDB(newCreditFacilityView.getNewFeeDetailViewList(),workCaseId);
             feeDetailDAO.persist(feeDetailList);
@@ -1345,13 +1339,20 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         //TODO cannot delete NewCreditDetail
-//        if (deleteCreditIdList != null && deleteCreditIdList.size() > 0) {
-//            List<NewCreditDetail> deleteCreditDetailList = new ArrayList<NewCreditDetail>();
-//            for (Long id : deleteCreditIdList) {
-//                deleteCreditDetailList.add(newCreditDetailDAO.findById(id));
-//            }
-//            newCreditDetailDAO.delete(deleteCreditDetailList);
-//        }
+        if (deleteCreditIdList != null && deleteCreditIdList.size() > 0) {
+            List<NewCreditDetail> deleteCreditDetailList = new ArrayList<NewCreditDetail>();
+            for (Long id : deleteCreditIdList) {
+                NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(id);
+                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditDAO.getListCollRelationByNewCreditDetail(newCreditDetail,ProposeType.P);
+                log.info("newCollateralCreditList :: {}",newCollateralCreditList.size());
+                List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorRelationDAO.getListByNewCreditDetail(newCreditDetail,ProposeType.P);
+                log.info("newGuarantorCreditList :: {}",newGuarantorCreditList.size());
+                if(Util.isNull(newCollateralCreditList) && Util.isNull(newGuarantorCreditList)){
+                    deleteCreditDetailList.add(newCreditDetail);
+                }
+            }
+            newCreditDetailDAO.delete(deleteCreditDetailList);
+        }
     }
 
 
