@@ -39,6 +39,10 @@ public class CustomerAcceptance implements Serializable {
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
+    @OneToOne
+    @JoinColumn(name = "workcase_prescreen_id")
+    private WorkCasePrescreen workCasePrescreen;
+
     public long getId() {
         return id;
     }
@@ -95,6 +99,14 @@ public class CustomerAcceptance implements Serializable {
         this.workCase = workCase;
     }
 
+    public WorkCasePrescreen getWorkCasePrescreen() {
+        return workCasePrescreen;
+    }
+
+    public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
+        this.workCasePrescreen = workCasePrescreen;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -105,6 +117,7 @@ public class CustomerAcceptance implements Serializable {
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
                 .append("workCase", workCase)
+                .append("workCasePrescreen", workCasePrescreen)
                 .toString();
     }
 }

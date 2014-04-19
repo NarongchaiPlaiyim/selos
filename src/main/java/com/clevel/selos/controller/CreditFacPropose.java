@@ -817,6 +817,7 @@ public class CreditFacPropose implements Serializable {
                 creditDetailAdd.setDisbursementTypeView(disbursementTypeView);
                 creditDetailAdd.setHoldLimitAmount(newCreditDetailView.getHoldLimitAmount());
                 creditDetailAdd.setNewCreditTierDetailViewList(newCreditDetailView.getNewCreditTierDetailViewList());
+                creditDetailAdd.setDeleteTmpList(newCreditDetailView.getDeleteTmpList());
                 creditDetailAdd.setSeq(seq);
 
                 creditFacProposeControl.calculateInstallment(creditDetailAdd);
@@ -852,6 +853,9 @@ public class CreditFacPropose implements Serializable {
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setHoldLimitAmount(newCreditDetailView.getHoldLimitAmount());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setSeq(newCreditDetailView.getSeq());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setNewCreditTierDetailViewList(newCreditDetailView.getNewCreditTierDetailViewList());
+                newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setDeleteTmpList(newCreditDetailView.getDeleteTmpList());
+
+                log.debug("detail list ::: {}",newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getNewCreditTierDetailViewList());
 
                 creditFacProposeControl.calculateInstallment(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex));
             } else {
@@ -992,7 +996,6 @@ public class CreditFacPropose implements Serializable {
         creditTierDetailAdd.setStandardBasePrice(baseRateTransform.transformToView(standardBase));
 
 
-
         if (newCreditDetailView.getRequestType()== RequestTypes.NEW.value()) {
             log.debug("newCreditDetailView.getRequestType() ::: {}", newCreditDetailView.getRequestType());
             if (newCreditDetailView.getNewCreditTierDetailViewList() != null) {
@@ -1003,7 +1006,6 @@ public class CreditFacPropose implements Serializable {
                 newCreditDetailView.setNewCreditTierDetailViewList(tierDetailViewList);
             }
         } else if (newCreditDetailView.getRequestType() == RequestTypes.CHANGE.value()) {
-            creditTierDetailAdd.setCanEdit(true);
             if (newCreditDetailView.getNewCreditTierDetailViewList() != null) {
                 newCreditDetailView.getNewCreditTierDetailViewList().add(creditTierDetailAdd);
             } else {
@@ -1015,7 +1017,7 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void onDeleteProposeTierInfo(int row) {
-        log.info("onDeleteProposeTierInfo : : :{}",newCreditDetailView.getNewCreditTierDetailViewList().get(row).getId());
+        log.info("onDeleteProposeTierInfo ::: {}",newCreditDetailView.getNewCreditTierDetailViewList().get(row).getId());
         newCreditDetailView.getDeleteTmpList().add(newCreditDetailView.getNewCreditTierDetailViewList().get(row).getId());
         newCreditDetailView.getNewCreditTierDetailViewList().remove(row);
     }

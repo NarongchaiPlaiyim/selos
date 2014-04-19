@@ -53,6 +53,13 @@ public class BaseController implements Serializable {
         field.setReadOnly(disabled);
     }
 
+    public void setMandateValue(String name, boolean madate){
+        FieldsControlView field = fieldMap.get(name);
+        if (field == null)
+            return;
+        field.setMandate(madate);
+    }
+
     public boolean isDialogMandate(String name) {
         FieldsControlView field = dialogFieldMap.get(name);
         if (field == null)

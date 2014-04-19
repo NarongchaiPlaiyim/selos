@@ -4,9 +4,11 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
-import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.AppraisalDetailView;
+import com.clevel.selos.model.view.AppraisalView;
+import com.clevel.selos.model.view.ContactRecordDetailView;
+import com.clevel.selos.model.view.CustomerAcceptanceView;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -33,15 +35,11 @@ public class AppraisalAppointmentControl extends BusinessControl {
     @Inject
     private AppraisalContactDetailDAO appraisalContactDetailDAO;
     @Inject
-    private ContactRecordDetailDAO contactRecordDetailDAO;
-    @Inject
     private AppraisalTransform appraisalTransform;
     @Inject
     private AppraisalDetailTransform appraisalDetailTransform;
     @Inject
     private AppraisalContactDetailTransform appraisalContactDetailTransform;
-    @Inject
-    private ContactRecordDetailTransform contactRecordDetailTransform;
     @Inject
     private NewCreditFacilityDAO newCreditFacilityDAO;
     @Inject
@@ -54,6 +52,10 @@ public class AppraisalAppointmentControl extends BusinessControl {
     private CustomerAcceptanceTransform customerAcceptanceTransform;
     @Inject
     private CustomerAcceptanceDAO customerAcceptanceDAO;
+    @Inject
+    private ContactRecordDetailTransform contactRecordDetailTransform;
+    @Inject
+    private ContactRecordDetailDAO contactRecordDetailDAO;
 
     private Appraisal appraisal;
     private AppraisalView appraisalView;
@@ -67,6 +69,8 @@ public class AppraisalAppointmentControl extends BusinessControl {
     private WorkCase workCase;
     private WorkCasePrescreen workCasePrescreen;
     private NewCreditFacility newCreditFacility;
+    private CustomerAcceptance customerAcceptance;
+    private ContactRecordDetail contactRecordDetail;
 
     @Inject
     public AppraisalAppointmentControl(){
@@ -80,11 +84,29 @@ public class AppraisalAppointmentControl extends BusinessControl {
             log.debug("getAppraisalAppointment by workCaseId - appraisal: {}", appraisal);
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
             log.debug("getAppraisalAppointment by workCaseId - creditFacility : {}", newCreditFacility);
+            customerAcceptance = customerAcceptanceDAO.findCustomerAcceptanceByWorkCase(workCaseId);
+            if(!Util.isNull(customerAcceptance)){
+                log.debug("getAppraisalAppointment by workCaseId - CustomerAcceptance : {}", customerAcceptance);
+                log.debug("-- CustomerAcceptance.id[{}]", customerAcceptance.getId());
+            }
+            contactRecordDetailList = contactRecordDetailDAO.findByWorkCaseId(workCaseId);
+            if(!Util.isNull(contactRecordDetailList)){
+                log.debug("getAppraisalAppointment by workCaseId - ContactRecordDetailList.size()[{}]", contactRecordDetailList.size());
+            }
         }else if(!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
             appraisal  = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             log.debug("getAppraisalAppointment by workCasePreScreenId : {}", appraisal);
             newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
-            log.debug("getAppraisalAppointment by workCaseId - creditFacility : {}", newCreditFacility);
+            log.debug("getAppraisalAppointment by workCasePreScreenId - creditFacility : {}", newCreditFacility);
+            customerAcceptance = customerAcceptanceDAO.findCustomerAcceptanceByWorkCasePrescreen(workCasePreScreenId);
+            if(!Util.isNull(customerAcceptance)){
+                log.debug("getAppraisalAppointment by workCasePreScreenId - CustomerAcceptance : {}", customerAcceptance);
+                log.debug("-- CustomerAcceptance.id[{}]", customerAcceptance.getId());
+            }
+            contactRecordDetailList = contactRecordDetailDAO.findByWorkCasePrescreenId(workCasePreScreenId);
+            if(!Util.isNull(contactRecordDetailList)){
+                log.debug("getAppraisalAppointment by workCasePreScreenId - ContactRecordDetailList.size()[{}]", contactRecordDetailList.size());
+            }
         }
 
         if(!Util.isNull(appraisal)){
@@ -92,12 +114,6 @@ public class AppraisalAppointmentControl extends BusinessControl {
             appraisal.setAppraisalContactDetailList(appraisalContactDetailList);
             appraisalView = appraisalTransform.transformToView(appraisal, getCurrentUser());
 
-            //TODO : wrk_contact_record waiting for .....................
-//            contactRecordDetailList = Util.safetyList(contactRecordDetailDAO.findByWorkCaseId(workCaseId));
-//            if(!Util.isZero(contactRecordDetailList.size())){
-//                contactRecordDetailViewList = contactRecordDetailTransform.transformToView(contactRecordDetailList);
-//                appraisalView.setContactRecordDetailViewList(Util.safetyList(contactRecordDetailViewList));
-//            }
             if(!Util.isNull(newCreditFacility)){
                 newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
                 for(NewCollateral newCollateral : newCollateralList){
@@ -106,6 +122,19 @@ public class AppraisalAppointmentControl extends BusinessControl {
                 }
                 appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralList);
                 appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
+
+                if(!Util.isNull(contactRecordDetailList) && !Util.isZero(contactRecordDetailList.size())){
+                    contactRecordDetailViewList = contactRecordDetailTransform.transformToView(contactRecordDetailList);
+                    if(!Util.isNull(contactRecordDetailViewList) && !Util.isZero(contactRecordDetailViewList.size())){
+                        appraisalView.setContactRecordDetailViewList(contactRecordDetailViewList);
+                        log.debug("-- AppraisalView.ContactRecordDetailViewList.size()[{}]", appraisalView.getContactRecordDetailViewList().size());
+                    }
+                } else {
+                    contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
+                    log.debug("-- [NEW]ContactRecordDetailViewList created");
+                    appraisalView.setContactRecordDetailViewList(contactRecordDetailViewList);
+                }
+
                 log.info("-- getAppraisalRequest ::: AppraisalView : {}", appraisalView.toString());
                 return appraisalView;
             } else {
@@ -151,19 +180,18 @@ public class AppraisalAppointmentControl extends BusinessControl {
             }
             log.debug("-- NewCreditFacility.id[{}]", newCreditFacility.getId());
 
-
-
             //From P'LK CustomerAcceptanceControl
-
             CustomerAcceptance cusAccept = null;
             if (cusAcceptView.getId() <= 0) { //new
-                cusAccept = customerAcceptanceTransform.transformToNewModel(cusAcceptView, workCase, getCurrentUser());
+                cusAccept = customerAcceptanceTransform.transformToNewModel(cusAcceptView, workCase, workCasePrescreen, getCurrentUser());
                 customerAcceptanceDAO.save(cusAccept);
+                customerAcceptance = cusAccept;
             } else {
                 cusAccept = customerAcceptanceDAO.findById(cusAcceptView.getId());
                 cusAccept.setModifyBy(getCurrentUser());
                 cusAccept.setModifyDate(new Date());
                 customerAcceptanceDAO.persist(cusAccept);
+                customerAcceptance = cusAccept;
             }
 
             //Add and update first
@@ -207,6 +235,31 @@ public class AppraisalAppointmentControl extends BusinessControl {
                 }
                 newCollateralHeadDAO.persist(newCollateralHeadList);
             }
+
+            //TODO
+            if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
+                //remove all contactRecordDetailViewList
+                contactRecordDetailList = Util.safetyList(contactRecordDetailDAO.findByWorkCaseId(workCaseId));
+                contactRecordDetailDAO.delete(contactRecordDetailList);
+                log.debug("-- ContactRecordDetailList.size()[{}] deleted", contactRecordDetailList.size());
+
+                if(!Util.isNull(contactRecordDetailViewList) && !Util.isZero(contactRecordDetailViewList.size())){
+                    contactRecordDetailList = contactRecordDetailTransform.transformToModel(contactRecordDetailViewList, workCase, getCurrentUser(), workCasePrescreen, workCase.getStep(), customerAcceptance);
+                    contactRecordDetailDAO.persist(contactRecordDetailList);
+                    log.debug("-- ContactRecordDetailList.size()[{}] saved", contactRecordDetailList.size());
+                }
+            }else if(!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
+                contactRecordDetailList = Util.safetyList(contactRecordDetailDAO.findByWorkCasePrescreenId(workCasePreScreenId));
+                contactRecordDetailDAO.delete(contactRecordDetailList);
+                log.debug("-- ContactRecordDetailList.size()[{}] deleted", contactRecordDetailList.size());
+
+                if(!Util.isNull(contactRecordDetailViewList) && !Util.isZero(contactRecordDetailViewList.size())){
+                    contactRecordDetailList = contactRecordDetailTransform.transformToModel(contactRecordDetailViewList, workCase, getCurrentUser(), workCasePrescreen, workCasePrescreen.getStep(), customerAcceptance);
+                    contactRecordDetailDAO.persist(contactRecordDetailList);
+                    log.debug("-- ContactRecordDetailList.size()[{}] saved", contactRecordDetailList.size());
+                }
+            }
+
 
             //transform collateral head from view
             newCollateralList.clear();
