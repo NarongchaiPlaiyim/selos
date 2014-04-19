@@ -1824,7 +1824,7 @@ public class CreditFacPropose implements Serializable {
 
         try {
             //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
-            creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
+            creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList,workCaseId);
             // Calculate Total Propose
             newCreditFacilityView = creditFacProposeControl.calculateTotalProposeAmount(newCreditFacilityView, basicInfoView, tcgView, workCaseId);
             // Calculate Total for BRMS

@@ -410,16 +410,22 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void returnBDM(long workCaseId, String queueName, long actionCode) throws Exception{
+    public void returnBDM(long workCaseId, String queueName, long actionCode, boolean hasRG001) throws Exception{
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         Action action = actionDAO.findById(actionCode);
-
+        String uwRG001Flag = "N";
         if(action != null){
             HashMap<String,String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
+            if(hasRG001){
+                uwRG001Flag = "Y";
+            } else {
+                uwRG001Flag = "N";
+            }
+            fields.put("UWRG001Flag", uwRG001Flag);
 
-            log.debug("dispatch case for [Return BDM]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+            log.debug("dispatch case for [Return BDM]..., Action_Code : {}, Action_Name : {}, UWRG001Flag : {}", action.getId(), action.getName(), uwRG001Flag);
 
             if (workCase != null) {
                 execute(queueName, workCase.getWobNumber(), fields);
