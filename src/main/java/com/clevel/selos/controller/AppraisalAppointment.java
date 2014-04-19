@@ -496,7 +496,7 @@ public class AppraisalAppointment implements Serializable {
             message = msg.get("app.appraisal.request.message.body.save.success");
 
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            onCreation();
+//            onCreation();
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
