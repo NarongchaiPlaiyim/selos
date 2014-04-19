@@ -662,6 +662,7 @@ public class PDFDecision implements Serializable {
                 collateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
                 collateralDecisionReport.setPath(pathsub);
                 collateralDecisionReport.setAppraisalDate(view.getAppraisalDate());
+                log.debug("---Date. {}");
                 collateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecision()));
                 collateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
                 collateralDecisionReport.setAadDecisionReasonDetail(Util.checkNullString(view.getAadDecisionReasonDetail()));

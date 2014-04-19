@@ -345,9 +345,9 @@ public class ExSummaryControl extends BusinessControl {
                             if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
                                 tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
                             } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
-                                tmpCoreAsset = Util.add(tmpCashColl,nch.getAppraisalValue());
+                                tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
                             } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
-                                tmpNonCore = Util.add(tmpCashColl,nch.getAppraisalValue());
+                                tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
                             }
                         }
                     }

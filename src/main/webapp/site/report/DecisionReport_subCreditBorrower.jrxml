@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subBorrower" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="01878717-8056-48cf-8f9c-b868e0a58edd">
-	<property name="ireport.zoom" value="0.8264462809917396"/>
+	<property name="ireport.zoom" value="1.2100000000000064"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
@@ -167,7 +167,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="215">
+		<band height="36">
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="c376a312-de13-47c1-a987-eda07a26fd34" style="detail" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="13" height="36" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
 				<textElement verticalAlignment="Top">
