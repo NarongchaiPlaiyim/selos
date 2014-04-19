@@ -1208,7 +1208,7 @@ public class CreditFacProposeControl extends BusinessControl {
             List<FeeDetail> feeDetailDelList  =  feeDetailDAO.findAllByWorkCaseId(workCaseId);
             if(feeDetailDelList.size()>0){
                 log.debug(" :: feeDetailDelList ::{}",feeDetailDelList.size());
-//                feeDetailDAO.delete(feeDetailDelList);
+                feeDetailDAO.delete(feeDetailDelList);
             }
 
 //            log.debug("saveCreditFacility ::: newCreditFacilityView.getNewFeeDetailViewList()).size() : {}", newCreditFacilityView.getNewFeeDetailViewList().size());
