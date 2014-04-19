@@ -239,7 +239,7 @@
                 <!---->
 
                 <!--Submit To UW1 (Submit Return)-->
-                <p:commandButton id="btnSubmitCaseToUW1" value="#{msg.get('app.header.button.submitToUW1')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitToUW1')}"
+                <p:commandButton id="btnSubmitCaseToBDMUW1" value="#{msg.get('app.header.button.submitToUW1')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitToUW1')}"
                                  rendered="#{headerController.checkButton('Submit to UW1') and headerController.stepId == 2004}"
                                  onclick="confirmSubmitSubmitUW1.show()" />
                 <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
