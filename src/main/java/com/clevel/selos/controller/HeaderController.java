@@ -168,6 +168,9 @@ public class HeaderController implements Serializable {
     private long selectedDOALevel;
     private String selectedUW2User;
 
+    //Customer Acceptance
+
+
     public HeaderController() {
     }
 
@@ -807,6 +810,10 @@ public class HeaderController implements Serializable {
         }
     }
 
+    public void onSubmitReturnAADAdmin(){
+
+    }
+
     public void onSubmitAppraisalToUW(){
 
     }
@@ -838,6 +845,28 @@ public class HeaderController implements Serializable {
             messageHeader = "Exception.";
             message = "Could not find session to submit case";
         }
+    }
+
+    public void onOpenPendingDecision(){
+        long workCaseId = 0;
+        String wobNumber = "";
+        String queueName = "";
+
+        HttpSession session = FacesUtil.getSession(true);
+        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        queueName = Util.parseString(session.getAttribute("queueName"), "");
+        wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+    }
+
+    public void onSubmitPendingDecision(){
+        long workCaseId = 0;
+        String wobNumber = "";
+        String queueName = "";
+
+        HttpSession session = FacesUtil.getSession(true);
+        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        queueName = Util.parseString(session.getAttribute("queueName"), "");
+        wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
     }
 
     public void onCheckPreScreen(){

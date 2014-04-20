@@ -240,7 +240,7 @@
 
                 <!--Submit To UW1 (Submit Return)-->
                 <p:commandButton id="btnSubmitCaseToBDMUW1" value="#{msg.get('app.header.button.submitToUW1')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitToUW1')}"
-                                 rendered="#{headerController.checkButton('Submit to UW1') and headerController.stepId == 2004}"
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2004}"
                                  onclick="confirmSubmitSubmitUW1.show()" />
                 <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                                  icon="ui-icon-alert"
@@ -269,7 +269,7 @@
                 </p:commandButton>
                 <!-- Submit to AADC (AAD Admin)-->
                 <p:commandButton id="btnSubmitAADC_AADM" value="Submit to AAD Commitee" title="Submit to AAD Commitee" styleClass="blueButton"
-                                 rendered="#{headerController.checkButton('Submit to AAD Committee')}"
+                                 rendered="#{headerController.checkButton('Submit CA')}"
                                  actionListener="#{headerController.onOpenSubmitAADCommittee()}"
                                  update=":frmMain:msgBoxBaseMessagePanel, :frmMain:submitAADCPanel">
 
