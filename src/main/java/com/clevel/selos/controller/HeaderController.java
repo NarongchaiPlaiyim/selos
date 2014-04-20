@@ -1171,7 +1171,7 @@ public class HeaderController implements Serializable {
     }
 
     public void onSubmitReturnUW1(){ //Submit Reply From BDM to UW1
-        log.debug("onSubmitReturnReply");
+        log.debug("onSubmitReturnUW1");
 
         try{
             HttpSession session = FacesUtil.getSession(true);
@@ -1186,7 +1186,7 @@ public class HeaderController implements Serializable {
                 message = "Submit Return fail. Please check return information again.";
                 RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
 
-                log.error("onSumbitReturnReply ::: fail.");
+                log.error("onSubmitReturnUW1 ::: fail.");
             } else {
                 returnControl.submitReturnUW1(workCaseId, queueName);
 
@@ -1201,7 +1201,55 @@ public class HeaderController implements Serializable {
             message = "Submit Return fail, cause : " + Util.getMessageException(ex);
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
 
-            log.error("onSumbitReturnReply ::: exception occurred : ", ex);
+            log.error("onSubmitReturnUW1 ::: exception occurred : ", ex);
+        }
+    }
+
+    public void onRestartCase(){ //UW Restart case
+        log.debug("onRestartCase");
+
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            String queueName = session.getAttribute("queueName").toString();
+
+            fullApplicationControl.restartCase(queueName,workCaseId);
+
+            messageHeader = "Information.";
+            message = "Restart Success";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+
+            log.debug("onRestartCase ::: success.");
+        } catch (Exception ex){
+            messageHeader = "Information.";
+            message = "Restart fail, cause : " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+            log.error("onRestartCase ::: exception occurred : ", ex);
+        }
+    }
+
+    public void onCompleteCase(){ //UW Complete case
+        log.debug("onCompleteCase");
+
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            String queueName = session.getAttribute("queueName").toString();
+
+            fullApplicationControl.completeCase(queueName,workCaseId);
+
+            messageHeader = "Information.";
+            message = "Complete Success";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+
+            log.debug("onCompleteCase ::: success.");
+        } catch (Exception ex){
+            messageHeader = "Information.";
+            message = "Complete fail, cause : " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+            log.error("onCompleteCase ::: exception occurred : ", ex);
         }
     }
 

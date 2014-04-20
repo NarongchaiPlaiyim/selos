@@ -696,6 +696,14 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.submitCustomerAcceptance(queueName, wobNumber, ActionCode.CUSTOMER_ACCEPT.getVal());
     }
 
+    public void completeCase(String queueName, long workCaseId) throws Exception {
+        bpmExecutor.completeCase(workCaseId, queueName, ActionCode.COMPLETE.getVal());
+    }
+
+    public void restartCase(String queueName, long workCaseId) throws Exception {
+        bpmExecutor.completeCase(workCaseId, queueName, ActionCode.RESTART.getVal());
+    }
+
     public void calculatePricingDOA(long workCaseId, NewCreditFacility newCreditFacility){
         log.debug("calculatePricingDOA ::: newCreditFacility : {}", newCreditFacility);
         PricingDOAValue pricingDOALevel = PricingDOAValue.NO_DOA;

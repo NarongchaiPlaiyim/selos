@@ -28,7 +28,8 @@ public enum ActionCode {
     CUSTOMER_ACCEPT(1027, "Customer Accepted"),
     REQUEST_PRICE_REDUCE(1028, "Request for Price Reduction"),
     PENDING_FOR_DECISION(1029, "Pending for Decision"),
-    ASSIGN_TO_ME(1030, "Assign To Me");
+    ASSIGN_TO_ME(1030, "Assign To Me"),
+    RESTART(1031, "Restart");
 
     long val;
     String actionName;
