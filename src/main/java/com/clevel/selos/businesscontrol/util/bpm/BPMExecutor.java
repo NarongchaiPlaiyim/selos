@@ -394,7 +394,7 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void submitAADCommittee(String appNumber, String aadCommitteeUserId, Date appointmentDate, long appraisalLocationCode, String queueName, long actionCode, String wobNumber) throws Exception{
+    public void submitAADCommittee(String appNumber, String aadCommitteeUserId, String appointmentDate, long appraisalLocationCode, String queueName, long actionCode, String wobNumber) throws Exception{
         Action action = actionDAO.findById(actionCode);
         if(action != null){
             HashMap<String, String> fields = new HashMap<String, String>();

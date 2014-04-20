@@ -300,7 +300,7 @@
 
                 </p:commandButton>
                 <!-- Submit to AADC (AAD Admin)-->
-                <p:commandButton id="btnSubmitAADC_AADM" value="Submit to AAD Commitee" title="Submit to AAD Commitee" styleClass="blueButton"
+                <p:commandButton id="btnSubmitAADC_AADM" value="Submit CA" title="Submit CA" styleClass="blueButton"
                                  rendered="#{headerController.checkButton('Submit CA')}"
                                  actionListener="#{headerController.onOpenSubmitAADCommittee()}"
                                  update=":frmMain:msgBoxBaseMessagePanel, :frmMain:submitAADCPanel">
@@ -316,7 +316,7 @@
                 </p:commandButton>
                 <!-- Submit (AADC)-->
                 <p:commandButton id="btnSubmit_AADC" value="Submit" title="Submit" styleClass="Submit"
-                                 rendered="#{headerController.checkButton('Submit to UW2')}">
+                                 rendered="#{headerController.checkButton('Submit CA')}">
 
                 </p:commandButton>
             </p:panel>
@@ -429,7 +429,7 @@
                 <!--Submit to BDM -->
                 <p:commandButton id="btnSubmitCase301" value="#{msg.get('app.header.button.submit')}"
                 				 styleClass="blueButton" title="#{msg.get('app.header.button.submit')}"
-                                 rendered="#{headerController.checkButton('Submit to BDM')}"
+                                 rendered="#{headerController.checkButton('Submit CA')}"
                                 >
                 </p:commandButton>
 
@@ -566,6 +566,10 @@
                   modal="true" width="500" height="200" closable="false" >
             <ui:include src="/site/dialog/reqApprDetailDialog.xhtml"/>
         </p:dialog>
+    </p:panel>
+
+    <p:panel id="pendingDecisionPanel" styleClass="panel" rendered="#{headerController.checkButton('Pending for Decision')}">
+
     </p:panel>
 
 </ui:composition>

@@ -5,10 +5,7 @@ import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.ManageButton;
-import com.clevel.selos.model.PricingDOAValue;
-import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
@@ -169,6 +166,7 @@ public class HeaderController implements Serializable {
     private String selectedUW2User;
 
     //Customer Acceptance
+    private List<Reason> reasonList;
 
 
     public HeaderController() {
@@ -859,14 +857,8 @@ public class HeaderController implements Serializable {
     }
 
     public void onSubmitPendingDecision(){
-        long workCaseId = 0;
-        String wobNumber = "";
-        String queueName = "";
+        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.PENDING_REASON);
 
-        HttpSession session = FacesUtil.getSession(true);
-        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-        queueName = Util.parseString(session.getAttribute("queueName"), "");
-        wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
     }
 
     public void onCheckPreScreen(){
