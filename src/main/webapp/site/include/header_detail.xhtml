@@ -245,7 +245,7 @@
                 <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                                  icon="ui-icon-alert"
                                  widgetVar="confirmSubmitSubmitUW1" global="false" showEffect="fade"
-                                 rendered="#{headerController.checkButton('Submit to UW1') and headerController.stepId == 2004}">
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2004}">
                     <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                      actionListener="#{headerController.onSubmitReturnUW1()}"
