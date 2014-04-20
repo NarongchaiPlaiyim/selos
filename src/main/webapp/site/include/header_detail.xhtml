@@ -309,7 +309,7 @@
                     <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                                      icon="ui-icon-alert"
                                      widgetVar="confirmSubmitCustomerAccept" global="false" showEffect="fade"
-                                     rendered="#{headerController.checkButton('Customer Accepted')">
+                                     rendered="#{headerController.checkButton('Customer Accepted')}">
                         <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                          update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                          actionListener="#{headerController.onSubmitCustomerAcceptance()}"
