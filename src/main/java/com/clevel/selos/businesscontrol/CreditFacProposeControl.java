@@ -1291,13 +1291,42 @@ public class CreditFacProposeControl extends BusinessControl {
             newCreditFacility.setNewCollateralDetailList(newCollateralList);
             newCollateralDetailDAO.persist(newCollateralList);
             log.debug("saveCreditFacility ::: persist newCollateralList : {}", newCollateralList);
+
+            //remove all relate in this work case
+            List<NewCollateralSubRelated> newCollateralSubRelatedList = newCollateralSubRelatedDAO.getListByWorkCase(workCase,ProposeType.P);
+            newCollateralSubRelatedDAO.delete(newCollateralSubRelatedList);
+
+            //save related sub coll
+            if(newCreditFacilityView.getNewCollateralViewList() != null && newCreditFacilityView.getNewCollateralViewList().size() > 0){
+                for(NewCollateralView newCollateralView : newCreditFacilityView.getNewCollateralViewList()){
+                    if(newCollateralView.getNewCollateralHeadViewList() != null && newCollateralView.getNewCollateralHeadViewList().size() > 0){
+                        for(NewCollateralHeadView newCollateralHeadView : newCollateralView.getNewCollateralHeadViewList()){
+                            if(newCollateralHeadView.getNewCollateralSubViewList() != null && newCollateralHeadView.getNewCollateralSubViewList().size() > 0){
+                                for(NewCollateralSubView newCollateralSubView : newCollateralHeadView.getNewCollateralSubViewList()){
+                                    NewCollateralSub mainNewCollSub = newCollateralSubDetailDAO.findBySubId(newCollateralSubView.getSubId());
+                                    if(newCollateralSubView.getRelatedWithList() != null && newCollateralSubView.getRelatedWithList().size() > 0){
+                                        for(NewCollateralSubView related : newCollateralSubView.getRelatedWithList()){
+                                            NewCollateralSub relatedNewCollSub = newCollateralSubDetailDAO.findBySubId(related.getSubId());
+                                            NewCollateralSubRelated newCollateralSubRelated = new NewCollateralSubRelated();
+                                            newCollateralSubRelated.setWorkCase(workCase);
+                                            newCollateralSubRelated.setNewCollateralSub(mainNewCollSub);
+                                            newCollateralSubRelated.setNewCollateralSubRelated(relatedNewCollSub);
+                                            newCollateralSubRelated.setProposeType(ProposeType.P);
+                                            newCollateralSubRelatedDAO.persist(newCollateralSubRelated);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         fullApplicationControl.calculatePricingDOA(workCaseId, newCreditFacility);
 
         return newCreditFacilityTransform.transformToView(newCreditFacility);
     }
-
 
     public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList,long workCaseId) {
         log.debug("deleteAllApproveByIdList()");
