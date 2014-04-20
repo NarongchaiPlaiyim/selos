@@ -215,19 +215,15 @@ public class AppraisalAppointmentControl extends BusinessControl {
 //            }
 
 
-
-
-
-
             if(!Util.isNull(customerAcceptance) && !Util.isZero(customerAcceptance.getId())){
                 customerAcceptanceDAO.delete(customerAcceptance);
                 log.debug("-- CustomerAcceptance.id[{}] deleted", customerAcceptance.getId());
-                customerAcceptance = new CustomerAcceptance();
+//                customerAcceptance = new CustomerAcceptance();
                 customerAcceptance = customerAcceptanceTransform.transformToModel(cusAcceptView, workCase, workCasePrescreen, getCurrentUser());
                 customerAcceptanceDAO.save(customerAcceptance);
                 log.debug("-- CustomerAcceptance.id[{}] saved", customerAcceptance.getId());
             } else {
-                customerAcceptance = new CustomerAcceptance();
+//                customerAcceptance = new CustomerAcceptance();
                 customerAcceptance = customerAcceptanceTransform.transformToModel(cusAcceptView, workCase, workCasePrescreen, getCurrentUser());
                 customerAcceptanceDAO.save(customerAcceptance);
                 log.debug("-- CustomerAcceptance.id[{}] saved", customerAcceptance.getId());
@@ -244,28 +240,51 @@ public class AppraisalAppointmentControl extends BusinessControl {
             }
 
             //set flag 0 for all collateral
-            log.debug("onSaveAppraisalAppointment ::: newCollateralList from database : {}", newCollateralList);
-            for(NewCollateral newCollateral : newCollateralList){
-                newCollateralHeadList = Util.safetyList(newCollateralHeadDAO.findByNewCollateralId(newCollateral.getId()));
-                for(NewCollateralHead newCollateralHead : newCollateralHeadList){
-                    newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
+            try {
+                log.debug("onSaveAppraisalAppointment ::: newCollateralList from database : {}", newCollateralList);
+                for(NewCollateral newCollateral : newCollateralList){
+                    log.debug("-- NewCollateral.id[{}]", newCollateral.getId());
+                    newCollateralHeadList = Util.safetyList(newCollateralHeadDAO.findByNewCollateralId(newCollateral.getId()));
+                    for(NewCollateralHead newCollateralHead : newCollateralHeadList){
+                        log.debug("-- NewCollateralHead.id[{}]", newCollateralHead.getId());
+                        newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
+                        log.debug("-- NewCollateralHead.AppraisalRequest[{}]", newCollateralHead.getAppraisalRequest());
+                    }
+                    if(!newCollateralHeadList.isEmpty()){
+                        newCollateralHeadDAO.persist(newCollateralHeadList);
+                        log.debug("-- NewCollateralHeadList.size()[{}]", newCollateralHeadList.size());
+                    }
                 }
-                newCollateralHeadDAO.persist(newCollateralHeadList);
+            } catch (Exception e) {
+                log.debug("-- Exception while call NewCollateralHeadDAO ", e);
             }
-            //transform collateral head from view
-            newCollateralList.clear();
-            newCollateralList = Util.safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, getCurrentUser()));
-            log.debug("onSaveAppraisalAppointment ::: before persist newCreditfacility : {}", newCreditFacility);
-            newCreditFacilityDAO.persist(newCreditFacility);
-            log.debug("onSaveAppraisalAppointment ::: after persist newCreditfacility : {}", newCreditFacility);
 
-            log.debug("onSaveAppraisalAppointment ::: before persist newCollateralList : {}", newCollateralList);
-            newCollateralDAO.persist(newCollateralList);
-            log.debug("onSaveAppraisalAppointment ::: after persist newCollateralList : {}", newCollateralList);
+            try {
+                //transform collateral head from view
+                newCollateralList.clear();
+                newCollateralList = Util.safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, getCurrentUser()));
+                log.debug("onSaveAppraisalAppointment ::: before persist newCreditfacility : {}", newCreditFacility);
+                if(!Util.isNull(newCreditFacility)){
+                    newCreditFacilityDAO.persist(newCreditFacility);
+                    log.debug("-- NewCreditFacility.id[{}]", newCreditFacility.getId());
+                }
+                log.debug("onSaveAppraisalAppointment ::: after persist newCreditfacility : {}", newCreditFacility);
+            } catch (Exception e) {
+                log.debug("-- Exception while call NewCreditFacilityDAO ", e);
+            }
+
+            try {
+                log.debug("onSaveAppraisalAppointment ::: before persist newCollateralList : {}", newCollateralList);
+                if(!Util.isNull(newCollateralList) && !Util.isZero(newCollateralList.size())){
+                    newCollateralDAO.persist(newCollateralList);
+                    log.debug("-- NewCollateralList.size()[{}]", newCollateralList.size());
+                }
+                log.debug("onSaveAppraisalAppointment ::: after persist newCollateralList : {}", newCollateralList);
+            } catch (Exception e) {
+                log.debug("-- Exception while call NewCollateralDAO ", e);
+            }
 
 
-
-            //TODO
             log.debug("-- CustomerAcceptance.id[{}]", customerAcceptance.getId());
             if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
                 //remove all contactRecordDetailViewList
@@ -289,8 +308,6 @@ public class AppraisalAppointmentControl extends BusinessControl {
                     log.debug("-- ContactRecordDetailList.size()[{}] saved", contactRecordDetailList.size());
                 }
             }
-
-
 
             log.debug("-- onSaveAppraisalAppointment end");
         }
