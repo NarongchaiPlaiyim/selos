@@ -394,6 +394,11 @@ public class BPMExecutor implements Serializable {
         }
     }
 
+    //Step after customerAcceptance
+    public void requestAppraisal(){
+
+    }
+
     public void submitAADCommittee(String appNumber, String aadCommitteeUserId, String appointmentDate, long appraisalLocationCode, String queueName, long actionCode, String wobNumber) throws Exception{
         Action action = actionDAO.findById(actionCode);
         if(action != null){
@@ -404,7 +409,20 @@ public class BPMExecutor implements Serializable {
             fields.put("AppraisalLocationCode", Long.toString(appraisalLocationCode));
             fields.put("AADCommitteeUserName", aadCommitteeUserId);
 
-            log.debug("dispatch case for [Submit AAD Committee]..., Action_Code : {}, Action_Name : {}");
+            log.debug("dispatch case for [Submit AAD Committee]..., Action_Code : {}, Action_Name : {}, AppointmentDate : {}, AppraisalLocationCode : {}, AADCommitteeUserName : {}", actionCode, action.getDescription(), appointmentDate, appraisalLocationCode, aadCommitteeUserId);
+
+            execute(queueName, wobNumber, fields);
+        }
+    }
+
+    public void submitUW2FromCommittee(String queueName, String wobNumber, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+        if(!Util.isNull(action)){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+
+            log.debug("dispatch case for [Submit to UW2 from AAD Committee]... Action_Code : {}, Action_Name : {}", actionCode, action.getDescription());
 
             execute(queueName, wobNumber, fields);
         }

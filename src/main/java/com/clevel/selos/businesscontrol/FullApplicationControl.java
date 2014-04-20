@@ -511,6 +511,53 @@ public class FullApplicationControl extends BusinessControl {
         log.debug("requestAppraisal ::: Save Appraisal Request Complete.");
     }
 
+    public void requestAppraisal(long workCaseId) throws Exception{
+        //Update Request Appraisal Flag
+        WorkCase workCase;
+        String appNumber = "";
+        ProductGroup productGroup = null;
+        RequestType requestType = null;
+
+        if(workCaseId != 0) {
+            //Create WorkCaseAppraisal
+            WorkCaseAppraisal workCaseAppraisal = createWorkCaseAppraisal(0, workCaseId);
+            log.debug("requestAppraisal ::: Create WorkCaseAppraisal Complete.");
+
+            log.debug("requestAppraisal ::: workCaseAppraisal : {}", workCaseAppraisal);
+            try{
+                //Get Customer Name
+                List<Customer> customerList = customerDAO.getBorrowerByWorkCaseId(workCaseId, 0);
+                String borrowerName = "";
+                if(customerList != null && customerList.size() > 0){
+                    Customer customer = customerList.get(0);
+                    borrowerName = customer.getNameTh();
+                    if(customer.getLastNameTh() != null){
+                        borrowerName = borrowerName.concat(" ").concat(customer.getLastNameTh());
+                    }
+                }
+                bpmExecutor.requestAppraisal();
+                log.debug("requestAppraisal ::: Create Work Item for appraisal complete.");
+            } catch (Exception ex){
+                log.error("Exception while Create Work Item for Appraisal.");
+                workCaseAppraisalDAO.delete(workCaseAppraisal);
+                throw new Exception("Exception while Create Work Item for Appraisal.");
+            }
+
+            workCase = workCaseDAO.findById(workCaseId);
+
+            if(workCase != null){
+                workCase.setRequestAppraisal(1);
+                workCaseDAO.persist(workCase);
+            } else{
+                throw new Exception("exception while request appraisal, cause can not find data from full application");
+            }
+        } else {
+            log.error("exception while Request Appraisal (BDM), can not find workcase or workcaseprescreen.");
+            throw new Exception("exception while Request Appraisal, can not find case.");
+        }
+        log.debug("requestAppraisal ::: Update Request Appraisal Flag Complete.");
+    }
+
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public WorkCaseAppraisal createWorkCaseAppraisal(long workCasePreScreenId, long workCaseId) throws Exception {
         //Find all data in WorkCase or WorkCasePreScreen
@@ -619,6 +666,10 @@ public class FullApplicationControl extends BusinessControl {
             throw new Exception("Submit case failed, could not find appraisal data.");
         }
         log.debug("submitToAADCommittee ::: end...");
+    }
+
+    public void submitToUWFromCommittee(String queueName, String wobNumber) throws Exception{
+        bpmExecutor.submitUW2FromCommittee(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
     }
 
     public String getAADCommittee(long workCaseId, long workCasePreScreenId){

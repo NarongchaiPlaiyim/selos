@@ -269,7 +269,7 @@
                 </p:commandButton>
                 <!-- Submit to AADC (AAD Admin)-->
                 <p:commandButton id="btnSubmitAADC_AADM" value="Submit CA" title="Submit CA" styleClass="blueButton"
-                                 rendered="#{headerController.checkButton('Submit CA')}"
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2006}"
                                  actionListener="#{headerController.onOpenSubmitAADCommittee()}"
                                  update=":frmMain:msgBoxBaseMessagePanel, :frmMain:submitAADCPanel">
 
@@ -283,10 +283,20 @@
 
                 </p:commandButton>
                 <!-- Submit (AADC)-->
-                <p:commandButton id="btnSubmit_AADC" value="Submit" title="Submit" styleClass="Submit"
-                                 rendered="#{headerController.checkButton('Submit CA')}">
-
-                </p:commandButton>
+                <p:commandButton id="btnSubmit_AADC" value="Submit CA" title="Submit CA" styleClass="blueButton"
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2008}"
+                                 onclick="confirmSubmitApprToUw.show()"/>
+                    <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmSubmitApprToUw" global="false" showEffect="fade"
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2008}">
+                    <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{headerController.onSubmitAppraisalToUW()}"
+                                     process="@this" oncomplete="confirmSubmitApprToUw.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitCustomerAccept.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
             </p:panel>
             <!--Customer Acceptance Stage-->
             <p:panel id="header_panel_customer_accept" rendered="#{headerController.stageId == 205}" styleClass="panel">

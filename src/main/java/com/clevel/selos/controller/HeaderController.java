@@ -766,15 +766,9 @@ public class HeaderController implements Serializable {
         String queueName = "";
         try{
             HttpSession session = FacesUtil.getSession(true);
-            if(!Util.isNull(session.getAttribute("workCaseId"))){
-                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            }
-            if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
-                workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
-            }
-            if(!Util.isNull(session.getAttribute("queueName"))){
-                queueName = session.getAttribute("queueName").toString();
-            }
+            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+            workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+            queueName = Util.parseString(session.getAttribute("queueName"), "");
 
             //TODO Save AADCommittee user id to appraisal
             fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName);
@@ -813,10 +807,29 @@ public class HeaderController implements Serializable {
     }
 
     public void onSubmitAppraisalToUW(){
+        log.debug("onSubmitAppraisalToUW ( appraisal to uw )");
+        String wobNumber = "";
+        String queueName = "";
 
+        HttpSession session = FacesUtil.getSession(true);
+        queueName = Util.parseString(session.getAttribute("queueName"), "");
+        wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+
+        try{
+
+            fullApplicationControl.submitToUWFromCommittee(queueName, wobNumber);
+
+            messageHeader = "Information.";
+            message = "Submit case success.";
+        } catch (Exception ex){
+            log.error("exception while submit case to uw2 : ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+        }
     }
 
     public void onSubmitCustomerAcceptance(){
+        log.debug("onSubmitCustomerAcceptance ( BDM submit to UW )");
         long workCaseId = 0;
         String wobNumber = "";
         String queueName = "";
@@ -859,6 +872,26 @@ public class HeaderController implements Serializable {
     public void onSubmitPendingDecision(){
         reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.PENDING_REASON);
 
+    }
+
+    public void onRequestAppraisal(){
+        log.debug("onRequestAppraisal by BDM ( after customer acceptance");
+        HttpSession session = FacesUtil.getSession(true);
+        RequestContext context = RequestContext.getCurrentInstance();
+        boolean complete = false;
+        long workCaseId = 0;
+
+        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+
+        //Check appraisal request saved.
+        try {
+            fullApplicationControl.requestAppraisal(workCaseId);
+        } catch (Exception ex){
+            log.error("exception while request appraisal : ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
     }
 
     public void onCheckPreScreen(){
@@ -1208,13 +1241,8 @@ public class HeaderController implements Serializable {
         long workCaseId = 0;
         long workCasePreScreenId = 0;
 
-        if(!Util.isNull(session.getAttribute("workCaseId"))){
-            workCaseId = (Long)session.getAttribute("workCaseId");
-        }
-
-        if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
-            workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
-        }
+        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
 
         log.debug("onSubmitRequestAppraisal ::: workCaseId : {}, workCasePreScreenId : {}", session.getAttribute("workCaseId"), session.getAttribute("workCasePreScreenId"));
 
