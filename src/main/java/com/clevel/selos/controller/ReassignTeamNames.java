@@ -361,7 +361,7 @@ public class ReassignTeamNames implements Serializable
 
                 if(isLocked.equalsIgnoreCase("true"))
                 {
-                    String wobNum = (String)session.getAttribute("wobNum");
+                    String wobNum = (String)session.getAttribute("wobNumber");
                     bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNum,(Integer)session.getAttribute("fetchType"));
                 }
                 else
@@ -373,7 +373,7 @@ public class ReassignTeamNames implements Serializable
         }
         catch (Exception e)
         {
-            log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
+            log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"), e);
         }
 
         reasignteamnames = new ArrayList<ReassignTeamNameId>();

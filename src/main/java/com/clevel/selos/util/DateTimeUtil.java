@@ -388,4 +388,11 @@ public class DateTimeUtil implements Serializable {
             return null;
         }
     }
+
+    public static String convertDateWorkFlowFormat(Date date){
+        SimpleDateFormat dtFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a", Locale.UK);
+        String dateString = dtFormat.format(date);
+
+        return dateString;
+    }
 }
