@@ -476,8 +476,7 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void restartCase(long workCaseId, String queueName, long actionCode) throws Exception{
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
+    public void restartCase(String queueName, long actionCode, String wobNumber) throws Exception{
         Action action = actionDAO.findById(actionCode);
 
         if(action != null){
@@ -487,18 +486,13 @@ public class BPMExecutor implements Serializable {
 
             log.debug("dispatch case for [Restart Case]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
-            if (workCase != null) {
-                execute(queueName, workCase.getWobNumber(), fields);
-            } else {
-                throw new Exception("An exception occurred, Can not find WorkCase.");
-            }
+            execute(queueName, wobNumber, fields);
         } else {
             throw new Exception("An exception occurred, Can not find Action.");
         }
     }
 
-    public void completeCase(long workCaseId, String queueName, long actionCode) throws Exception{
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
+    public void completeCase(String queueName, long actionCode, String wobNumber) throws Exception{
         Action action = actionDAO.findById(actionCode);
 
         if(action != null){
@@ -508,11 +502,7 @@ public class BPMExecutor implements Serializable {
 
             log.debug("dispatch case for [Complete Case]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
-            if (workCase != null) {
-                execute(queueName, workCase.getWobNumber(), fields);
-            } else {
-                throw new Exception("An exception occurred, Can not find WorkCase.");
-            }
+            execute(queueName, wobNumber, fields);
         } else {
             throw new Exception("An exception occurred, Can not find Action.");
         }

@@ -1179,8 +1179,9 @@ public class HeaderController implements Serializable {
             HttpSession session = FacesUtil.getSession(true);
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             String queueName = session.getAttribute("queueName").toString();
+            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
-            fullApplicationControl.restartCase(queueName,workCaseId);
+            fullApplicationControl.restartCase(queueName,wobNumber);
 
             messageHeader = "Information.";
             message = "Restart Success";
@@ -1203,8 +1204,9 @@ public class HeaderController implements Serializable {
             HttpSession session = FacesUtil.getSession(true);
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             String queueName = session.getAttribute("queueName").toString();
+            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
-            fullApplicationControl.completeCase(queueName,workCaseId);
+            fullApplicationControl.completeCase(queueName,wobNumber);
 
             messageHeader = "Information.";
             message = "Complete Success";

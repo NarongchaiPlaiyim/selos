@@ -645,12 +645,12 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.submitCustomerAcceptance(queueName, wobNumber, ActionCode.CUSTOMER_ACCEPT.getVal());
     }
 
-    public void completeCase(String queueName, long workCaseId) throws Exception {
-        bpmExecutor.completeCase(workCaseId, queueName, ActionCode.COMPLETE.getVal());
+    public void completeCase(String queueName, String wobNumber) throws Exception {
+        bpmExecutor.completeCase(queueName, ActionCode.COMPLETE.getVal(), wobNumber);
     }
 
-    public void restartCase(String queueName, long workCaseId) throws Exception {
-        bpmExecutor.completeCase(workCaseId, queueName, ActionCode.RESTART.getVal());
+    public void restartCase(String queueName, String wobNumber) throws Exception {
+        bpmExecutor.completeCase(queueName, ActionCode.RESTART.getVal(), wobNumber);
     }
 
     public void calculatePricingDOA(long workCaseId, NewCreditFacility newCreditFacility){
