@@ -593,6 +593,10 @@ public class CreditFacPropose implements Serializable {
                         }
                         cannotAddTier = false;
                     }
+                    messageHeader = msg.get("app.messageHeader.info");
+                    message = "Retrieve Pricing/Fee Success";
+                    severity = MessageDialogSeverity.INFO.severity();
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 } else if (ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
                     messageHeader = msg.get("app.messageHeader.error");
                     message = standardPricingResponse.getReason();
