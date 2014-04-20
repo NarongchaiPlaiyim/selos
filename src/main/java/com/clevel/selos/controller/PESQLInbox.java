@@ -202,7 +202,7 @@ public class PESQLInbox implements Serializable
             }
 
             session.setAttribute("wobNum", inboxViewSelectItem.getFwobnumber());
-            session.setAttribute("statusId", inboxViewSelectItem.getStatuscode());
+            session.setAttribute("statusId", Util.parseLong(inboxViewSelectItem.getStatuscode(), 0));
 
             if(Util.isNull(inboxViewSelectItem.getFetchType())) {
                 session.setAttribute("fetchType",0);
