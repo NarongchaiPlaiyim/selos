@@ -67,7 +67,7 @@ public class CustomerAcceptanceTransform extends Transform {
         return customerAcceptance;
     }
 
-    public CustomerAcceptance transformToModel(final CustomerAcceptanceView view, final WorkCase workCase, final User user) {
+    public CustomerAcceptance transformToModel(final CustomerAcceptanceView view, final WorkCase workCase, final WorkCasePrescreen workCasePrescreen, final User user) {
         log.debug("-- transform customerAcceptanceView to CustomerAcceptance [{}]", ""+view.toString());
         if(!Util.isZero(view.getId())){
             model = customerAcceptanceDAO.findCustomerAcceptanceByWorkCase(workCase);
@@ -76,12 +76,14 @@ public class CustomerAcceptanceTransform extends Transform {
                 model.setCreateDate(DateTime.now().toDate());
                 model.setCreateBy(user);
                 model.setWorkCase(workCase);
+                model.setWorkCasePrescreen(workCasePrescreen);
             }
         } else {
             model = new CustomerAcceptance();
             model.setCreateDate(DateTime.now().toDate());
             model.setCreateBy(user);
             model.setWorkCase(workCase);
+            model.setWorkCasePrescreen(workCasePrescreen);
         }
         model.setApproveResult(view.getApproveResult());
         model.setModifyBy(user);

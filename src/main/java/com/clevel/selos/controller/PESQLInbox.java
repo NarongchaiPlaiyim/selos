@@ -167,7 +167,7 @@ public class PESQLInbox implements Serializable
                 session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
                 session.setAttribute("requestAppraisal", requestAppraisalFlag);
                 session.setAttribute("statusId", statusId);
-                session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
+
             } else if (stepId == StepValue.REQUEST_APPRAISAL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Case in Stage Parallel Appraisal
                 WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
                 if(workCase != null){
@@ -199,8 +199,10 @@ public class PESQLInbox implements Serializable
                 session.setAttribute("workCaseId", wrkCaseId);
                 session.setAttribute("requestAppraisal", requestAppraisalFlag);
                 session.setAttribute("statusId", statusId);
-                session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
             }
+
+            session.setAttribute("wobNum", inboxViewSelectItem.getFwobnumber());
+            session.setAttribute("statusId", Util.parseLong(inboxViewSelectItem.getStatuscode(), 0));
 
             if(Util.isNull(inboxViewSelectItem.getFetchType())) {
                 session.setAttribute("fetchType",0);
@@ -223,7 +225,7 @@ public class PESQLInbox implements Serializable
                 session.setAttribute("queueName", queueName);
             }
 
-            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, inboxViewSelectItem.getFwobnumber());
+            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, inboxViewSelectItem.getApplicationno());
             session.setAttribute("appHeaderInfo", appHeaderView);
 
             String landingPage = inboxControl.getLandingPage(stepId);

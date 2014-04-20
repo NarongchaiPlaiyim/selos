@@ -240,7 +240,7 @@
 
                 <!--Submit To UW1 (Submit Return)-->
                 <p:commandButton id="btnSubmitCaseToBDMUW1" value="#{msg.get('app.header.button.submitToUW1')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitToUW1')}"
-                                 rendered="#{headerController.checkButton('Submit to UW1') and headerController.stepId == 2004}"
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2004}"
                                  onclick="confirmSubmitSubmitUW1.show()" />
                 <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                                  icon="ui-icon-alert"
@@ -269,7 +269,7 @@
                 </p:commandButton>
                 <!-- Submit to AADC (AAD Admin)-->
                 <p:commandButton id="btnSubmitAADC_AADM" value="Submit to AAD Commitee" title="Submit to AAD Commitee" styleClass="blueButton"
-                                 rendered="#{headerController.checkButton('Submit to AAD Committee')}"
+                                 rendered="#{headerController.checkButton('Submit CA')}"
                                  actionListener="#{headerController.onOpenSubmitAADCommittee()}"
                                  update=":frmMain:msgBoxBaseMessagePanel, :frmMain:submitAADCPanel">
 
@@ -277,6 +277,8 @@
 
                 <!-- Return to AAD Admin (AADC)-->
                 <p:commandButton id="btnReturnAADM_AADC" value="Return to AAD Admin" title="Return to AAD Admin" styleClass="blueButton"
+                                 actionListener="#{headerController.onOpenReturnAADAdmin()}"
+                                 update=":frmMain:addReturnInfoPanel"
                                  rendered="#{headerController.checkButton('Return to AAD Admin')}">
 
                 </p:commandButton>
@@ -286,7 +288,36 @@
 
                 </p:commandButton>
             </p:panel>
+            <!--Customer Acceptance Stage-->
+            <p:panel id="header_panel_customer_accept" rendered="#{headerController.stageId == 205}" styleClass="panel">
+                <p:commandButton id="btnRequestPrice_Pre" value="#{msg.get('app.header.button.requestPriceReduction')}" title="#{msg.get('app.header.button.requestPriceReduction')}" styleClass="blueButton"
+                                 rendered="#{headerController.checkButton('Request for Price Reduction')}">
 
+                </p:commandButton>
+
+                <p:commandButton id="btnCancelCase_Pre" value="#{msg.get('app.header.button.cancelCA')}" title="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
+                                 rendered="#{headerController.checkButton('Cancel CA')}">
+
+                </p:commandButton>
+
+                <p:commandButton id="btnPendingForDecision_Pre" value="#{msg.get('app.header.button.pendingForDecision')}" title="#{msg.get('app.header.button.pendingForDecision')}" styleClass="blueButton"
+                                 rendered="#{headerController.checkButton('Pending for Decision')}"/>
+                <!-- Customer Accept ( Submit to next Step ) -->
+                <p:commandButton id="btnCustomerAccept_Pre" value="#{msg.get('app.header.button.customerAccept')}" title="#{msg.get('app.header.button.customerAccept')}" styleClass="blueButton"
+                                 onclick="confirmSubmitCustomerAccept.show()"
+                                 rendered="#{headerController.checkButton('Customer Accepted')}"/>
+                    <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
+                                     icon="ui-icon-alert"
+                                     widgetVar="confirmSubmitCustomerAccept" global="false" showEffect="fade"
+                                     rendered="#{headerController.checkButton('Customer Accepted')}">
+                        <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                         actionListener="#{headerController.onSubmitCustomerAcceptance()}"
+                                         process="@this" oncomplete="confirmSubmitCustomerAccept.hide()"/>
+                        <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitCustomerAccept.hide()"
+                                         styleClass="ui-confirmdialog-no"/>
+                    </p:confirmDialog>
+            </p:panel>
 
             <!--Request Appraisal [Submit to AAD Admin]-->
             <!--<p:commandButton id="btnRequestAppraisalAADADmin" value="Request for Appraisal" styleClass="blueButton" title="Request for Appraisal"
@@ -449,9 +480,9 @@
     </p:panel>
 
     <p:panel id="submitAADCPanel" styleClass="panel">
-        <p:dialog id="submitAADCDialog" widgetVar="submitAADCDlg" header="Submit to UW"
+        <p:dialog id="submitAADCDialog" widgetVar="submitAADCDlg" header="Submit case to AAD Committee"
                   onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-                  modal="true" width="550" height="450">
+                  modal="true" width="550" height="260">
             <ui:include src="/site/dialog/submitAADCDialog.xhtml"/>
         </p:dialog>
     </p:panel>

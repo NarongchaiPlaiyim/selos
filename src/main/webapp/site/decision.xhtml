@@ -3829,7 +3829,7 @@
                             <tr>
                                 <td colspan="2" style="height:28px;"></td>
                             </tr>
-                            <h:panelGroup rendered="#{decision.requestPricing}">
+                            <h:panelGroup rendered="#{decision.requestPricing and not decision.roleUW}">
                                 <tr>
                                     <td class="center" colspan="2">
                                         <div class="ui-datatable ui-widget">
