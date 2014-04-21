@@ -1375,7 +1375,7 @@ public class CreditFacProposeControl extends BusinessControl {
 //                List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorRelationDAO.getListByNewCreditDetail(newCreditDetail,ProposeType.P);
 //                log.info("newGuarantorCreditList :: {}",newGuarantorCreditList.size());
 //                if(Util.isNull(newCollateralCreditList) && Util.isNull(newGuarantorCreditList)){
-                    deleteCreditDetailList.add(newCreditDetail);
+//                    deleteCreditDetailList.add(newCreditDetail);
 //                }
             }
             newCreditDetailDAO.delete(deleteCreditDetailList);
