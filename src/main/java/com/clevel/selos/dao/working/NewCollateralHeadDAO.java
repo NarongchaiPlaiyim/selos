@@ -6,6 +6,7 @@ import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.working.NewCollateral;
 import com.clevel.selos.model.db.working.NewCollateralHead;
+import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -61,6 +62,24 @@ public class NewCollateralHeadDAO extends GenericDAO<NewCollateralHead, Long> {
         criteria.addOrder(Order.asc("id"));
         List<NewCollateralHead> newCollateralHeadDetails = (List<NewCollateralHead>) criteria.list();
         return newCollateralHeadDetails;
+    }
+
+    public boolean setAppraisalRequest(final List<NewCollateralHead> newCollateralHeadList){
+        log.debug("-- setAppraisalRequest");
+        boolean result = false;
+        if(Util.isNull(newCollateralHeadList) || Util.isZero(newCollateralHeadList.size())){
+            return result;
+        }
+        log.debug("-- NewCollateralHeadList.size()[{}]", newCollateralHeadList.size());
+        for(NewCollateralHead newCollateralHead : newCollateralHeadList){
+            log.debug("-- NewCollateralHead.id[{}]", newCollateralHead.getId());
+            log.debug("-- NewCollateralHead.NewCollateral.id[{}]", newCollateralHead.getNewCollateral().getId());
+            newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
+            log.debug("-- NewCollateralHead.AppraisalRequest[{}]", newCollateralHead.getAppraisalRequest());
+        }
+        persist(newCollateralHeadList);
+        log.debug("-- saved");
+        return !result;
     }
 
 }
