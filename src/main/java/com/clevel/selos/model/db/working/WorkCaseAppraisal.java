@@ -191,6 +191,7 @@ public class WorkCaseAppraisal extends AbstractWorkCase {
                 .append("workCase", workCase)
                 .append("productGroup", productGroup)
                 .append("requestType", requestType)
+                .append("appNumber", appNumber)
                 .toString();
     }
 }

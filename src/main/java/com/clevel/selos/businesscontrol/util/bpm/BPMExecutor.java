@@ -394,7 +394,7 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void submitAADCommittee(String appNumber, String aadCommitteeUserId, Date appointmentDate, long appraisalLocationCode, String queueName, long actionCode, String wobNumber) throws Exception{
+    public void submitAADCommittee(String appNumber, String aadCommitteeUserId, String appointmentDate, long appraisalLocationCode, String queueName, long actionCode, String wobNumber) throws Exception{
         Action action = actionDAO.findById(actionCode);
         if(action != null){
             HashMap<String, String> fields = new HashMap<String, String>();
@@ -410,16 +410,22 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void returnBDM(long workCaseId, String queueName, long actionCode) throws Exception{
+    public void returnBDM(long workCaseId, String queueName, long actionCode, boolean hasRG001) throws Exception{
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         Action action = actionDAO.findById(actionCode);
-
+        String uwRG001Flag = "N";
         if(action != null){
             HashMap<String,String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
+            if(hasRG001){
+                uwRG001Flag = "Y";
+            } else {
+                uwRG001Flag = "N";
+            }
+            fields.put("UWRG001Flag", uwRG001Flag);
 
-            log.debug("dispatch case for [Return BDM]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+            log.debug("dispatch case for [Return BDM]..., Action_Code : {}, Action_Name : {}, UWRG001Flag : {}", action.getId(), action.getName(), uwRG001Flag);
 
             if (workCase != null) {
                 execute(queueName, workCase.getWobNumber(), fields);
@@ -447,6 +453,56 @@ public class BPMExecutor implements Serializable {
             } else {
                 throw new Exception("An exception occurred, Can not find WorkCase.");
             }
+        } else {
+            throw new Exception("An exception occurred, Can not find Action.");
+        }
+    }
+
+    public void submitCustomerAcceptance(String queueName, String wobNumber, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+
+        if(!Util.isNull(action)){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+
+            log.debug("dispatch case for [Submit Customer Acceptance Pre-Approve]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            if(!Util.isEmpty(queueName)){
+                execute(queueName, wobNumber, fields);
+            } else {
+                throw new Exception("An exception occurred, Could not found wobNumber.");
+            }
+        }
+    }
+
+    public void restartCase(String queueName, long actionCode, String wobNumber) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+
+        if(action != null){
+            HashMap<String,String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+
+            log.debug("dispatch case for [Restart Case]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            execute(queueName, wobNumber, fields);
+        } else {
+            throw new Exception("An exception occurred, Can not find Action.");
+        }
+    }
+
+    public void completeCase(String queueName, long actionCode, String wobNumber) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+
+        if(action != null){
+            HashMap<String,String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+
+            log.debug("dispatch case for [Complete Case]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            execute(queueName, wobNumber, fields);
         } else {
             throw new Exception("An exception occurred, Can not find Action.");
         }
@@ -507,7 +563,7 @@ public class BPMExecutor implements Serializable {
         log.debug("dispatch case for [Select Case]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
         execute(queueName, wobNumber, fields);
     }
-    
+
     private void execute(String queueName, String wobNumber, HashMap<String, String> fields) throws Exception{
         log.debug("BPM Execute ::: queueName : {}, wobNumber : {}, fields : {}", queueName, wobNumber, fields);
         bpmInterface.dispatchCase(queueName, wobNumber, fields);

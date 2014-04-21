@@ -155,7 +155,6 @@ public class CreditFacPropose implements Serializable {
     private List<Long> deleteCollIdList;
     private List<Long> deleteSubCollIdList;
 
-
     // for  control Guarantor Information Dialog
     private NewGuarantorDetailView newGuarantorDetailView;
     private NewGuarantorDetailView newGuarantorDetailViewItem;
@@ -297,8 +296,7 @@ public class CreditFacPropose implements Serializable {
     @Inject
     private TCGCollateralTypeDAO tcgCollateralTypeDAO;
 
-    public CreditFacPropose() {
-    }
+    public CreditFacPropose(){}
 
     public void preRender() {
         log.debug("preRender ::: setSession ");
@@ -595,6 +593,10 @@ public class CreditFacPropose implements Serializable {
                         }
                         cannotAddTier = false;
                     }
+                    messageHeader = msg.get("app.messageHeader.info");
+                    message = "Retrieve Pricing/Fee Success";
+                    severity = MessageDialogSeverity.INFO.severity();
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 } else if (ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
                     messageHeader = msg.get("app.messageHeader.error");
                     message = standardPricingResponse.getReason();
@@ -819,6 +821,7 @@ public class CreditFacPropose implements Serializable {
                 creditDetailAdd.setDisbursementTypeView(disbursementTypeView);
                 creditDetailAdd.setHoldLimitAmount(newCreditDetailView.getHoldLimitAmount());
                 creditDetailAdd.setNewCreditTierDetailViewList(newCreditDetailView.getNewCreditTierDetailViewList());
+                creditDetailAdd.setDeleteTmpList(newCreditDetailView.getDeleteTmpList());
                 creditDetailAdd.setSeq(seq);
 
                 creditFacProposeControl.calculateInstallment(creditDetailAdd);
@@ -854,6 +857,9 @@ public class CreditFacPropose implements Serializable {
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setHoldLimitAmount(newCreditDetailView.getHoldLimitAmount());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setSeq(newCreditDetailView.getSeq());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setNewCreditTierDetailViewList(newCreditDetailView.getNewCreditTierDetailViewList());
+                newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setDeleteTmpList(newCreditDetailView.getDeleteTmpList());
+
+                log.debug("detail list ::: {}",newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getNewCreditTierDetailViewList());
 
                 creditFacProposeControl.calculateInstallment(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex));
             } else {
@@ -900,7 +906,7 @@ public class CreditFacPropose implements Serializable {
 //        if (used == 0) {
 //            log.info("used ::: {} ", used);
             if (newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId() != 0) {
-                deleteCreditIdList.add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
+                deleteCreditIdList.add(newCreditDetailSelected.getId());
 //                newCreditFacilityView.getNewCreditViewDelList().add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
                 newCreditFacilityView.getNewCreditDetailViewList().remove(newCreditDetailSelected);
             }
@@ -993,11 +999,8 @@ public class CreditFacPropose implements Serializable {
         creditTierDetailAdd.setStandardInterest(new BigDecimal(standardInterestDlg.doubleValue()));
         creditTierDetailAdd.setStandardBasePrice(baseRateTransform.transformToView(standardBase));
 
-        creditTierDetailAdd.setCanEdit(true);
-
 
         if (newCreditDetailView.getRequestType()== RequestTypes.NEW.value()) {
-            creditTierDetailAdd.setCanEdit(false);
             log.debug("newCreditDetailView.getRequestType() ::: {}", newCreditDetailView.getRequestType());
             if (newCreditDetailView.getNewCreditTierDetailViewList() != null) {
                 newCreditDetailView.getNewCreditTierDetailViewList().add(0, creditTierDetailAdd);
@@ -1007,7 +1010,6 @@ public class CreditFacPropose implements Serializable {
                 newCreditDetailView.setNewCreditTierDetailViewList(tierDetailViewList);
             }
         } else if (newCreditDetailView.getRequestType() == RequestTypes.CHANGE.value()) {
-            creditTierDetailAdd.setCanEdit(true);
             if (newCreditDetailView.getNewCreditTierDetailViewList() != null) {
                 newCreditDetailView.getNewCreditTierDetailViewList().add(creditTierDetailAdd);
             } else {
@@ -1019,7 +1021,7 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void onDeleteProposeTierInfo(int row) {
-        log.info("onDeleteProposeTierInfo : : :{}",newCreditDetailView.getNewCreditTierDetailViewList().get(row).getId());
+        log.info("onDeleteProposeTierInfo ::: {}",newCreditDetailView.getNewCreditTierDetailViewList().get(row).getId());
         newCreditDetailView.getDeleteTmpList().add(newCreditDetailView.getNewCreditTierDetailViewList().get(row).getId());
         newCreditDetailView.getNewCreditTierDetailViewList().remove(row);
     }
@@ -1238,15 +1240,16 @@ public class CreditFacPropose implements Serializable {
                     seqTemp = selectedCollateralCrdTypeItems.get(i).getSeq();
 //                    hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
                 }
+
                 proposeCollateralInfoAdd.setProposeCreditDetailViewList(proposeCreditDetailViewList);
                 complete3 = true;
 
 //                for (int j = 0; j < proposeCollateralInfoAdd.getProposeCreditDetailViewList().size(); j++) {
 //                    seqTemp = proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).getSeq();
 //                    if (proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).isNoFlag()) {
-//                        hashSeqCredit.put(seqTemp, hashSeqCredit.get(j) + 1);
+//                        hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(j).toString()) + 1);
 //                    } else {
-//                        hashSeqCredit.put(seqTemp, hashSeqCredit.get(j) - 1);
+//                        hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(j).toString()) - 1);
 //                    }
 //                }
 
@@ -1425,11 +1428,15 @@ public class CreditFacPropose implements Serializable {
 
             newCollateralSubView = new NewCollateralSubView();
             newCollateralSubView.setHeadCollType(collateralType);
-            relatedWithSelected = new NewCollateralSubView();
             modeForSubColl = ModeForButton.ADD;
             log.debug(" newCreditFacilityView.getNewCollateralViewList().size ::{}", newCreditFacilityView.getNewCollateralViewList().size());
-            newCollateralSubView.setRelatedWithList(new ArrayList<NewCollateralSubView>());
+
+            relatedWithSelected = new NewCollateralSubView();
             relatedWithAllList = creditFacProposeControl.findNewCollateralSubView(newCreditFacilityView.getNewCollateralViewList());
+            newCollateralSubView.setRelatedWithList(new ArrayList<NewCollateralSubView>());
+
+            UUID uid = UUID.fromString("38400000-8cf0-11bd-b23e-10b96e4ef00d");
+            newCollateralSubView.setSubId(uid.randomUUID().toString());
 
         } else {
             messageHeader = msg.get("app.messageHeader.error");
@@ -1445,6 +1452,17 @@ public class CreditFacPropose implements Serializable {
         log.info("rowSubIndex :: {}", rowSubIndex);
         modeForSubColl = ModeForButton.EDIT;
         newCollateralSubView = new NewCollateralSubView();
+
+        relatedWithSelected = new NewCollateralSubView();
+        relatedWithAllList = creditFacProposeControl.findNewCollateralSubView(newCreditFacilityView.getNewCollateralViewList());
+        if(relatedWithAllList != null && relatedWithAllList.size() > 0){
+            for(NewCollateralSubView ncsv : relatedWithAllList){
+                if(ncsv.getSubId().equalsIgnoreCase(subCollateralDetailItem.getSubId())){
+                    relatedWithAllList.remove(ncsv);
+                    break;
+                }
+            }
+        }
 
         if (newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId() != 0) {
             CollateralType collateralType = collateralTypeDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId());
@@ -1465,19 +1483,23 @@ public class CreditFacPropose implements Serializable {
         newCollateralSubView.setCollateralOwnerUWList(subCollateralDetailItem.getCollateralOwnerUWList());
         newCollateralSubView.setMortgageList(subCollateralDetailItem.getMortgageList());
         newCollateralSubView.setRelatedWithList(subCollateralDetailItem.getRelatedWithList());
+        newCollateralSubView.setSubId(subCollateralDetailItem.getSubId());
     }
 
     public void onSaveSubCollateral() {
         log.info("onSaveSubCollateral ::: mode : {}", modeForSubColl);
-        boolean complete = false;
-        RequestContext context = RequestContext.getCurrentInstance();
+        boolean complete;
         if (modeForSubColl != null && modeForSubColl.equals(ModeForButton.ADD)) {
             log.debug("modeForSubColl ::: {}", modeForSubColl);
             log.debug("newCollateralSubView.getRelatedWithList() :: {}", newCollateralSubView.getRelatedWithList().size());
             NewCollateralSubView subCollAdd = new NewCollateralSubView();
+
             SubCollateralType subCollateralType = subCollateralTypeDAO.findById(newCollateralSubView.getSubCollateralType().getId());
-            CollateralType headCollType = collateralTypeDAO.findById(newCollateralSubView.getHeadCollType().getId());
             subCollAdd.setSubCollateralType(subCollateralType);
+
+            CollateralType headCollType = collateralTypeDAO.findById(newCollateralSubView.getHeadCollType().getId());
+            subCollAdd.setHeadCollType(headCollType);
+
             subCollAdd.setTitleDeed(newCollateralSubView.getTitleDeed());
             subCollAdd.setAddress(newCollateralSubView.getAddress());
             subCollAdd.setLandOffice(newCollateralSubView.getLandOffice());
@@ -1487,14 +1509,18 @@ public class CreditFacPropose implements Serializable {
             subCollAdd.setCollateralOwnerUWList(newCollateralSubView.getCollateralOwnerUWList());
             subCollAdd.setMortgageList(newCollateralSubView.getMortgageList());
             subCollAdd.setRelatedWithList(newCollateralSubView.getRelatedWithList());
-            subCollAdd.setHeadCollType(headCollType);
+            subCollAdd.setSubId(newCollateralSubView.getSubId());
+
             newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().add(subCollAdd);
             complete = true;
         } else if (modeForSubColl != null && modeForSubColl.equals(ModeForButton.EDIT)) {
             log.info("modeForSubColl ::: {}", modeForSubColl);
             SubCollateralType subCollateralType = subCollateralTypeDAO.findById(newCollateralSubView.getSubCollateralType().getId());
-            CollateralType headCollType = collateralTypeDAO.findById(newCollateralSubView.getHeadCollType().getId());
             newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().get(rowSubIndex).setSubCollateralType(subCollateralType);
+
+            CollateralType headCollType = collateralTypeDAO.findById(newCollateralSubView.getHeadCollType().getId());
+            newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().get(rowSubIndex).setHeadCollType(headCollType);
+
             newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().get(rowSubIndex).setTitleDeed(newCollateralSubView.getTitleDeed());
             newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().get(rowSubIndex).setAddress(newCollateralSubView.getAddress());
             newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().get(rowSubIndex).setLandOffice(newCollateralSubView.getLandOffice());
@@ -1503,15 +1529,16 @@ public class CreditFacPropose implements Serializable {
             newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().get(rowSubIndex).setMortgageValue(newCollateralSubView.getMortgageValue());
             newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().get(rowSubIndex).setCollateralOwnerUWList(newCollateralSubView.getCollateralOwnerUWList());
             newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().get(rowSubIndex).setMortgageList(newCollateralSubView.getMortgageList());
-//            newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().get(rowSubIndex).setRelatedWithList(newCollateralSubView.getRelatedWithList());
-            newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().get(rowSubIndex).setHeadCollType(headCollType);
+            newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().get(rowSubIndex).setRelatedWithList(newCollateralSubView.getRelatedWithList());
+//            newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().get(rowSubIndex).setSubId(uid.randomUUID().toString()); // only gen UUID in add new
+            newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getNewCollateralSubViewList().get(rowSubIndex).setSubId(newCollateralSubView.getSubId());
+
             complete = true;
         } else {
             log.debug("onSaveSubCollateral ::: Undefined modeForButton !!");
             complete = false;
         }
-
-        log.debug("  complete >>>>  :  {}", complete);
+        log.debug("complete >>>> :::: {}", complete);
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
@@ -1577,35 +1604,50 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void onAddRelatedWith() {
-        log.info("onAddRelatedWith() relatedWithSelected.getId = {}", relatedWithSelected.getId());
-        NewCollateralSubView relatedWith = getIdNewSubCollateralDetail(relatedWithSelected.getId());
-        if (relatedWithSelected.getId() == 0) {
-            log.debug("Can not add relatedWith because id = 0!");
-            return;
+        log.info("onAddRelatedWith() relatedWithSelected ::: {}", relatedWithSelected);
+        if(newCollateralSubView.getRelatedWithList() != null){
+            if(newCollateralSubView.getRelatedWithList().size() > 0){
+                for(NewCollateralSubView relateList : newCollateralSubView.getRelatedWithList()){
+                    if(relatedWithSelected.getSubId().equalsIgnoreCase(relateList.getSubId())){
+                        return;
+                    }
+                }
+                NewCollateralSubView relatedWith = getNewSubCollDetailBySubId(relatedWithSelected.getSubId());
+                if(relatedWith != null){
+                    newCollateralSubView.getRelatedWithList().add(relatedWith);
+                }
+            } else {
+                NewCollateralSubView relatedWith = getNewSubCollDetailBySubId(relatedWithSelected.getSubId());
+                if(relatedWith != null){
+                    newCollateralSubView.getRelatedWithList().add(relatedWith);
+                }
+            }
         }
-        newCollateralSubView.getRelatedWithList().add(relatedWith);
     }
 
     public void onDeleteRelatedWith(int row) {
         newCollateralSubView.getRelatedWithList().remove(row);
     }
 
-    public NewCollateralSubView getIdNewSubCollateralDetail(long newSubCollateralId) {
-        NewCollateralSubView newSubCollateralReturn = new NewCollateralSubView();
-        if (newCreditFacilityView.getNewCollateralViewList().size() > 0) {
-            for (NewCollateralView newCollateralView : Util.safetyList(newCreditFacilityView.getNewCollateralViewList())) {
-                for (NewCollateralHeadView newCollateralHeadView : newCollateralView.getNewCollateralHeadViewList()) {
-                    for (NewCollateralSubView newSubCollateralDetailOnAdded : newCollateralHeadView.getNewCollateralSubViewList()) {
-                        log.debug("newSubCollateralDetailView1 id ::: {}", newSubCollateralDetailOnAdded.getNo());
-                        log.debug("newSubCollateralDetailView1 title deed ::: {}", newSubCollateralDetailOnAdded.getTitleDeed());
-                        if (newSubCollateralId == newSubCollateralDetailOnAdded.getId()) {
-                            newSubCollateralReturn = newSubCollateralDetailOnAdded;
+    public NewCollateralSubView getNewSubCollDetailBySubId(String subId) {
+        if(newCreditFacilityView != null){
+            if (newCreditFacilityView.getNewCollateralViewList() != null && newCreditFacilityView.getNewCollateralViewList().size() > 0) {
+                for (NewCollateralView newCollateralView : newCreditFacilityView.getNewCollateralViewList()) {
+                    if(newCollateralView.getNewCollateralHeadViewList() != null && newCollateralView.getNewCollateralHeadViewList().size() > 0){
+                        for (NewCollateralHeadView newCollateralHeadView : newCollateralView.getNewCollateralHeadViewList()) {
+                            if(newCollateralHeadView.getNewCollateralSubViewList() != null && newCollateralHeadView.getNewCollateralSubViewList().size() > 0){
+                                for (NewCollateralSubView newCollateralSubView : newCollateralHeadView.getNewCollateralSubViewList()) {
+                                    if(newCollateralSubView.getSubId().equalsIgnoreCase(subId)){
+                                        return newCollateralSubView;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
         }
-        return newSubCollateralReturn;
+        return null;
     }
     // ****************************************************END Add SUB Collateral **************************************************** //
 
@@ -1823,7 +1865,7 @@ public class CreditFacPropose implements Serializable {
 
         try {
             //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
-            creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
+            creditFacProposeControl.deleteAllNewCreditFacilityByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList,workCaseId);
             // Calculate Total Propose
             newCreditFacilityView = creditFacProposeControl.calculateTotalProposeAmount(newCreditFacilityView, basicInfoView, tcgView, workCaseId);
             // Calculate Total for BRMS

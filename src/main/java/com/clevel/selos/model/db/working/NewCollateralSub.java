@@ -90,8 +90,11 @@ public class NewCollateralSub implements Serializable {
     @OneToMany(mappedBy = "newCollateralSub",cascade=CascadeType.ALL)
     private List<NewCollateralSubOwner> newCollateralSubOwnerList;
 
-    @OneToMany(mappedBy = "newCollateralSub",cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "newCollateralSub")
     private List<NewCollateralSubRelated> newCollateralSubRelatedList;    // when save to database must to transform view to DB
+
+    @Column(name = "sub_id")
+    private String subId;
 
     public long getId() {
         return id;
@@ -277,6 +280,14 @@ public class NewCollateralSub implements Serializable {
         this.typeOfUsage = typeOfUsage;
     }
 
+    public String getSubId() {
+        return subId;
+    }
+
+    public void setSubId(String subId) {
+        this.subId = subId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -303,6 +314,7 @@ public class NewCollateralSub implements Serializable {
                 .append("newCollateralSubMortgageList", newCollateralSubMortgageList)
                 .append("newCollateralSubOwnerList", newCollateralSubOwnerList)
                 .append("newCollateralSubRelatedList", newCollateralSubRelatedList)
+                .append("subId", subId)
                 .toString();
     }
 }

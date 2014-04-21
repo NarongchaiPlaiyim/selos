@@ -242,8 +242,6 @@
     </td>
 </tr>
 
-
-<!--
 <tr>
     <td class="title">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.relatedWith')}"/>
@@ -253,13 +251,13 @@
             <tr>
                 <td>
                     <p:selectOneMenu id="dlgRelatedWith"
-                                     value="#{creditFacPropose.relatedWithSelected.id}"
+                                     value="#{creditFacPropose.relatedWithSelected.subId}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{creditFacPropose.relatedWithAllList}"
                                        var="relatedWithItem"
                                        itemLabel="#{relatedWithItem.titleDeed}"
-                                       itemValue="#{relatedWithItem.id}"/>
+                                       itemValue="#{relatedWithItem.subId}"/>
                         <p:ajax event="change"
                                 process="@this"
                                 update="@this"/>
@@ -272,8 +270,7 @@
                             styleClass="smaller"
                             action="#{creditFacPropose.onAddRelatedWith()}"
                             process="@form"
-                            update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
-                            disabled="true">
+                            update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
                     </p:commandButton>
                 </td>
             </tr>
@@ -320,7 +317,6 @@
         </p:dataTable>
     </td>
 </tr>
--->
 
 <tr>
     <td class="title">
@@ -366,6 +362,7 @@
 <tr>
     <td class="center" colspan="2">
         <p:commandButton
+                styleClass="small"
                 id="saveSubColl"
                 value="#{msg.get('app.credit.facility.propose.okButton')}"
                 binding="#{addSubCollDlg}"

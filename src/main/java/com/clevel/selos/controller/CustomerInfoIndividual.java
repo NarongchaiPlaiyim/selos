@@ -31,7 +31,6 @@ import javax.faces.context.Flash;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.*;
 
 @ViewScoped
@@ -1102,47 +1101,6 @@ public class CustomerInfoIndividual implements Serializable {
         reqIndLastNameTh = true;
         reqIndGender = true;
         reqIndMarriage = true;
-
-        //Test Mandate
-//        reqIndDOB = true;
-//        reqIndCOB = true;
-//        reqIndDID = true;
-//        reqIndDED = true;
-//        reqIndTitEn = true;
-//        reqIndStNameEn = true;
-//        reqIndLastNameEn = true;
-//        reqIndRace = true;
-//        reqIndNation = true;
-//        reqIndEdu = true;
-//        reqIndOcc = true;
-//        reqIndBizType = true;
-//        reqIndAppInc = true;
-//        reqIndSouInc = true;
-//        reqIndCouSouInc = true;
-//        reqIndCurNo = true;
-//        reqIndCurPro = true;
-//        reqIndCurDis = true;
-//        reqIndCurSub = true;
-//        reqIndCurPos = true;
-//        reqIndCurCou = true;
-//        reqIndCurPhone = true;
-//        reqIndRegNo = true;
-//        reqIndRegPro = true;
-//        reqIndRegDis = true;
-//        reqIndRegSub = true;
-//        reqIndRegPos = true;
-//        reqIndRegCou = true;
-//        reqIndRegPhone = true;
-//        reqIndWorNo = true;
-//        reqIndWorPro = true;
-//        reqIndWorDis = true;
-//        reqIndWorSub = true;
-//        reqIndWorPos = true;
-//        reqIndWorCou = true;
-//        reqIndWorPhone = true;
-//        reqIndAddMail = true;
-//        reqIndMobNo = true;
-//        reqIndKYCLev = true;
     }
 
     public void onChangeReferenceSpouse(){
@@ -1153,42 +1111,6 @@ public class CustomerInfoIndividual implements Serializable {
         reqSpoTitTh = true;
         reqSpoStNameTh = true;
         reqSpoLastNameTh = true;
-
-//        reqSpoDOB =
-//        reqSpoCOB =
-//        reqSpoDID =
-//        reqSpoTitEn =
-//        reqSpoStNameEn =
-//        reqSpoLastNameEn =
-//        reqSpoNation =
-//        reqSpoEdu =
-//        reqSpoOcc =
-//        reqSpoBizType =
-//        reqSpoSouInc =
-//        reqSpoCouSouInc =
-//        reqSpoCurNo =
-//        reqSpoCurPro =
-//        reqSpoCurDis =
-//        reqSpoCurSub =
-//        reqSpoCurPos =
-//        reqSpoCurCou =
-//        reqSpoCurPhone =
-//        reqSpoRegNo =
-//        reqSpoRegPro =
-//        reqSpoRegDis =
-//        reqSpoRegSub =
-//        reqSpoRegPos =
-//        reqSpoRegCou =
-//        reqSpoRegPhone =
-//        reqSpoWorNo =
-//        reqSpoWorPro =
-//        reqSpoWorDis =
-//        reqSpoWorSub =
-//        reqSpoWorPos =
-//        reqSpoWorCou =
-//        reqSpoWorPhone =
-//        reqSpoMobNo =
-//        reqSpoKYCLev =
     }
 
     public void onChangeDOB(){
@@ -1235,6 +1157,15 @@ public class CustomerInfoIndividual implements Serializable {
                         Country country = new Country();
                         country.setId(211);
                         customerInfoView.setCitizenCountry(country);
+                    }
+
+                    //set default source of income country
+                    if(customerInfoView.getCountryIncome() != null){
+                        customerInfoView.getCountryIncome().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.setCountryIncome(country);
                     }
 
                     if(customerInfoView.getDateOfBirth() != null){
@@ -1300,6 +1231,15 @@ public class CustomerInfoIndividual implements Serializable {
                                         Country country = new Country();
                                         country.setId(211);
                                         customerInfoView.getSpouse().setCitizenCountry(country);
+                                    }
+
+                                    //set default source of income country
+                                    if(customerInfoView.getSpouse().getCountryIncome() != null){
+                                        customerInfoView.getSpouse().getCountryIncome().setId(211);
+                                    } else {
+                                        Country country = new Country();
+                                        country.setId(211);
+                                        customerInfoView.getSpouse().setCountryIncome(country);
                                     }
 
                                     if(customerInfoView.getSpouse().getDateOfBirth() != null){
@@ -1474,6 +1414,15 @@ public class CustomerInfoIndividual implements Serializable {
                             customerInfoView.setCitizenCountry(country);
                         }
 
+                        //set default source of income country
+                        if(customerInfoView.getCountryIncome() != null){
+                            customerInfoView.getCountryIncome().setId(211);
+                        } else {
+                            Country country = new Country();
+                            country.setId(211);
+                            customerInfoView.setCountryIncome(country);
+                        }
+
                         if(customerInfoView.getCurrentAddress() != null && customerInfoView.getRegisterAddress() != null){
                             if(customerInfoControl.checkAddress(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress()) == 1){
                                 customerInfoView.getRegisterAddress().setAddressTypeFlag(1);
@@ -1517,6 +1466,15 @@ public class CustomerInfoIndividual implements Serializable {
                                         Country country = new Country();
                                         country.setId(211);
                                         customerInfoView.getSpouse().setCitizenCountry(country);
+                                    }
+
+                                    //set default source of income country
+                                    if(customerInfoView.getSpouse().getCountryIncome() != null){
+                                        customerInfoView.getSpouse().getCountryIncome().setId(211);
+                                    } else {
+                                        Country country = new Country();
+                                        country.setId(211);
+                                        customerInfoView.getSpouse().setCountryIncome(country);
                                     }
 
                                     if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
@@ -1679,6 +1637,15 @@ public class CustomerInfoIndividual implements Serializable {
                         Country country = new Country();
                         country.setId(211);
                         customerInfoView.getSpouse().setCitizenCountry(country);
+                    }
+
+                    //set default source of income country
+                    if(customerInfoView.getSpouse().getCountryIncome() != null){
+                        customerInfoView.getSpouse().getCountryIncome().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.getSpouse().setCountryIncome(country);
                     }
 
                     if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){

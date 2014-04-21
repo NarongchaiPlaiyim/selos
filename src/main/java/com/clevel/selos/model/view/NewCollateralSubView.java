@@ -39,6 +39,7 @@ public class NewCollateralSubView implements Serializable {
     private String usage;
     private String typeOfUsage;
     private int lineNo;
+    private String subId;
 
     public NewCollateralSubView() {
         reset();
@@ -269,35 +270,41 @@ public class NewCollateralSubView implements Serializable {
         this.headCollType = headCollType;
     }
 
+    public String getSubId() {
+        return subId;
+    }
+
+    public void setSubId(String subId) {
+        this.subId = subId;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("no", no)
-                .append("collID", collID)
-                .append("headCollID", headCollID)
-                .append("subCollateralType", subCollateralType)
-                .append("headCollType", headCollType)
-                .append("address", address)
-                .append("landOffice", landOffice)
-                .append("titleDeed", titleDeed)
-                .append("collateralOwner", collateralOwner)
-                .append("collateralOwnerAAD", collateralOwnerAAD)
-                .append("collateralOwnerUW", collateralOwnerUW)
-                .append("collateralOwnerUWList", collateralOwnerUWList)
-                .append("mortgageType", mortgageType)
-                .append("mortgageList", mortgageList)
-                .append("relatedWithId", relatedWithId)
-                .append("relatedWithList", relatedWithList)
-                .append("appraisalValue", appraisalValue)
-                .append("mortgageValue", mortgageValue)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
-                .append("usage", usage)
-                .append("typeOfUsage", typeOfUsage)
-                .append("lineNo", lineNo)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("no", no).
+                append("collID", collID).
+                append("headCollID", headCollID).
+                append("subCollateralType", subCollateralType).
+                append("headCollType", headCollType).
+                append("address", address).
+                append("landOffice", landOffice).
+                append("titleDeed", titleDeed).
+                append("collateralOwner", collateralOwner).
+                append("collateralOwnerAAD", collateralOwnerAAD).
+                append("collateralOwnerUW", collateralOwnerUW).
+                append("mortgageType", mortgageType).
+                append("relatedWithId", relatedWithId).
+                append("appraisalValue", appraisalValue).
+                append("mortgageValue", mortgageValue).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                append("usage", usage).
+                append("typeOfUsage", typeOfUsage).
+                append("lineNo", lineNo).
+                append("subId", subId).
+                toString();
     }
 }

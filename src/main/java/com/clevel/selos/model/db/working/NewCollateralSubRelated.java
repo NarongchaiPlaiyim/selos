@@ -1,6 +1,8 @@
 package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.ProposeType;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -54,7 +56,6 @@ public class NewCollateralSubRelated implements Serializable {
         this.proposeType = proposeType;
     }
 
-
     public NewCollateralSub getNewCollateralSub() {
         return newCollateralSub;
     }
@@ -69,5 +70,16 @@ public class NewCollateralSubRelated implements Serializable {
 
     public void setNewCollateralSubRelated(NewCollateralSub newCollateralSubRelated) {
         this.newCollateralSubRelated = newCollateralSubRelated;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("newCollateralSub", newCollateralSub).
+                append("newCollateralSubRelated", newCollateralSubRelated).
+                append("workCase", workCase).
+                append("proposeType", proposeType).
+                toString();
     }
 }

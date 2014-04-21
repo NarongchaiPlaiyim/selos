@@ -213,8 +213,11 @@ public class AppraisalAppointment implements Serializable {
                     appraisalContactDetailView = new AppraisalContactDetailView();
                 }
 
-                customerAcceptanceView = customerAcceptanceControl.getCustomerAcceptanceView(workCaseId);
-                contactRecordDetailViewList = Util.safetyList(customerAcceptanceControl.getContactRecordDetails(customerAcceptanceView.getId()));
+                contactRecordDetailViewList = appraisalView.getContactRecordDetailViewList();
+
+                customerAcceptanceView = customerAcceptanceControl.getCustomerAcceptanceView(workCaseId, workCasePreScreenId);
+
+//                contactRecordDetailViewList = Util.safetyList(customerAcceptanceControl.getContactRecordDetails(customerAcceptanceView.getId()));
 
                 updateContractFlag(appraisalContactDetailView);
             } else {
@@ -306,7 +309,7 @@ public class AppraisalAppointment implements Serializable {
                     }
                 }
             }
-            contactRecordDetailViewList.add(contactRecordDetailView);
+            contactRecordDetailViewList.set(rowIndex, contactRecordDetailView);
             complete = true;
             log.debug("-- [BEFORE]ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
         }
@@ -491,8 +494,9 @@ public class AppraisalAppointment implements Serializable {
             appraisalAppointmentControl.onSaveAppraisalAppointment(appraisalView, workCaseId, workCasePreScreenId, contactRecordDetailViewList, customerAcceptanceView);
             messageHeader = msg.get("app.appraisal.request.message.header.save.success");
             message = msg.get("app.appraisal.request.message.body.save.success");
-            onCreation();
+
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            onCreation();
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.appraisal.request.message.header.save.fail");

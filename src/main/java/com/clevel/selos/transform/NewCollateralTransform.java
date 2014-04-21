@@ -187,6 +187,7 @@ public class NewCollateralTransform extends Transform {
             newCollateralSub.setCollateralOwnerAAD(newCollateralSubView.getCollateralOwnerAAD());
             newCollateralSub.setSubCollateralType(newCollateralSubView.getSubCollateralType());
             newCollateralSub.setCollateralTypeType(newCollateralSubView.getHeadCollType());
+            newCollateralSub.setSubId(newCollateralSubView.getSubId());
 
             if (newCollateralSubView.getMortgageList() != null) {
                 List<NewCollateralSubMortgage> newCollateralSubMortgageList = new ArrayList<NewCollateralSubMortgage>();
@@ -218,30 +219,12 @@ public class NewCollateralTransform extends Transform {
                 newCollateralSub.setNewCollateralSubOwnerList(newCollateralSubOwnerList);
             }
 
-            if (newCollateralSubView.getRelatedWithList() != null) {
-                List<NewCollateralSubRelated> newCollateralSubRelatedList = new ArrayList<NewCollateralSubRelated>();
-
-//                NewCollateralSubRelated newCollateralSubRelate;
-//                for (NewCollateralSubView relatedView : newCollateralSubView.getRelatedWithList()) {
-//                    NewCollateralSub newCollateralSubRelated = transformNewCollateralSub(relatedView, newCollateralHead, user, workCase);
-//                    newCollateralSubRelate = new NewCollateralSubRelated();
-//                    newCollateralSubRelate.setNewCollateralSubRelated(newCollateralSubRelated);
-//                    newCollateralSubRelate.setNewCollateralSub(newCollateralSub);
-//                    newCollateralSubRelate.setWorkCase(workCase);
-//                    newCollateralSubRelate.setProposeType(ProposeType.P);
-//                    newCollateralSubRelatedList.add(newCollateralSubRelate);
-//                }
-
-                newCollateralSub.setNewCollateralSubRelatedList(newCollateralSubRelatedList);
-            }
-
             newCollateralSub.setNewCollateralHead(newCollateralHead);
             newCollateralSubList.add(newCollateralSub);
         }
 
         return newCollateralSubList;
     }
-
 
     public NewCollateralSub transformNewCollateralSub(NewCollateralSubView newCollateralSubView, NewCollateralHead newCollateralHead, User user, WorkCase workCase) {
 
@@ -490,6 +473,7 @@ public class NewCollateralTransform extends Transform {
             newCollateralSubView.setModifyBy(subCollateralDetail.getModifyBy());
             newCollateralSubView.setModifyDate(subCollateralDetail.getModifyDate());
             newCollateralSubView.setHeadCollType(subCollateralDetail.getCollateralTypeType());
+            newCollateralSubView.setSubId(subCollateralDetail.getSubId());
 
             List<NewCollateralSubOwner> newCollateralSubCustomerList = newCollateralSubOwnerDAO.getListNewCollateralSubCustomer(subCollateralDetail);
             if (newCollateralSubCustomerList != null) {
@@ -512,15 +496,14 @@ public class NewCollateralTransform extends Transform {
             List<NewCollateralSubRelated> newCollateralSubRelateList = newCollateralSubRelatedDAO.getListNewCollateralSubRelate(subCollateralDetail);
             List<NewCollateralSubView> relateList = new ArrayList<NewCollateralSubView>();
             if (newCollateralSubRelateList != null) {
-//                for (NewCollateralSubRelated newCollateralSubRelate : newCollateralSubRelateList) {
-//                    log.info("newCollateralSubRelate id ::{}",newCollateralSubRelate.getId());
-//                    NewCollateralSub newCollateralSub = newCollateralSubDAO.findById(newCollateralSubRelate.getId());
-//                    NewCollateralSubView newCollSubView = transformCollateralSubToView(newCollateralSub);
-//                    relateList.add(newCollSubView);
-//                }
-//                newCollateralSubView.setRelatedWithList(relateList);
+                for (NewCollateralSubRelated newCollateralSubRelate : newCollateralSubRelateList) {
+                    log.info("newCollateralSubRelate id ::{}",newCollateralSubRelate.getId());
+                    NewCollateralSub newCollateralSubRelated = newCollateralSubDAO.findById(newCollateralSubRelate.getNewCollateralSubRelated().getId());
+                    NewCollateralSubView newCollSubView = transformCollateralSubRelateToView(newCollateralSubRelated);
+                    relateList.add(newCollSubView);
+                }
+                newCollateralSubView.setRelatedWithList(relateList);
             }
-
 
             newCollateralSubViewList.add(newCollateralSubView);
         }
@@ -540,7 +523,7 @@ public class NewCollateralTransform extends Transform {
         return collateralOwnerUWList;
     }
 
-    public NewCollateralSubView transformCollateralSubToView(NewCollateralSub subCollateralDetail) {
+    public NewCollateralSubView transformCollateralSubRelateToView(NewCollateralSub subCollateralDetail) {
         log.info(" transformCollateralSubToView :: subCollateralDetail :: {} ", subCollateralDetail.getId());
 
         NewCollateralSubView newCollateralSubView = new NewCollateralSubView();
@@ -555,7 +538,8 @@ public class NewCollateralTransform extends Transform {
         newCollateralSubView.setCreateDate(subCollateralDetail.getCreateDate());
         newCollateralSubView.setModifyBy(subCollateralDetail.getModifyBy());
         newCollateralSubView.setModifyDate(subCollateralDetail.getModifyDate());
-
+        newCollateralSubView.setSubId(subCollateralDetail.getSubId());
+/*
         List<NewCollateralSubOwner> newCollateralSubCustomerList = newCollateralSubOwnerDAO.getListNewCollateralSubCustomer(subCollateralDetail);
         List<CustomerInfoView> collateralOwnerUWList = new ArrayList<CustomerInfoView>();
         if (newCollateralSubCustomerList != null) {
@@ -585,7 +569,7 @@ public class NewCollateralTransform extends Transform {
                 relateList.add(newCollSubView);
             }
             newCollateralSubView.setRelatedWithList(relateList);
-        }
+        }*/
 
         return newCollateralSubView;
     }

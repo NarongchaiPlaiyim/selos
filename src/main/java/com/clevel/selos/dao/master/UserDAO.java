@@ -120,11 +120,10 @@ public class UserDAO extends GenericDAO<User,String> {
 
     }
 
-    public List<User> findUserListByRole(User user, Role role){
+    public List<User> findUserListByRoleId(User user, int roleId){
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.ne("id", user.getId()));
-        criteria.add(Restrictions.eq("role", role));
-        criteria.add(Restrictions.eq("team", user.getTeam()));
+        criteria.add(Restrictions.eq("role.id", roleId));
         criteria.addOrder(Order.asc("id"));
 
         List<User> userList = criteria.list();
@@ -132,46 +131,9 @@ public class UserDAO extends GenericDAO<User,String> {
         return userList;
     }
 
-    public List<User> findUserZoneList(List<UserTeam> userTeams){
+    public List<User> findUserList(List<UserTeam> userTeams){
         Criteria criteria = createCriteria();
-        //criteria.add(Restrictions.eq("role.id", RoleValue.ZM.id()));
         criteria.add(Restrictions.in("team", userTeams));
-        criteria.addOrder(Order.asc("userName"));
-
-        List<User> userList = criteria.list();
-
-        return userList;
-    }
-
-    public List<User> findUserRegionList(User user){
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.ne("id", user.getId()));
-        criteria.add(Restrictions.eq("role.id", RoleValue.RGM.id()));
-        criteria.add(Restrictions.eq("team", user.getTeam()));
-        criteria.addOrder(Order.asc("userName"));
-
-        List<User> userList = criteria.list();
-
-        return userList;
-    }
-
-    public List<User> findUserHeadList(User user){
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.ne("id", user.getId()));
-        criteria.add(Restrictions.eq("role.id", RoleValue.GH.id()));
-        criteria.add(Restrictions.eq("team", user.getTeam()));
-        criteria.addOrder(Order.asc("userName"));
-
-        List<User> userList = criteria.list();
-
-        return userList;
-    }
-
-    public List<User> findCSSOList(User user){
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.ne("id", user.getId()));
-        criteria.add(Restrictions.eq("role.id", RoleValue.CSSO.id()));
-        criteria.add(Restrictions.eq("team", user.getTeam()));
         criteria.addOrder(Order.asc("userName"));
 
         List<User> userList = criteria.list();
