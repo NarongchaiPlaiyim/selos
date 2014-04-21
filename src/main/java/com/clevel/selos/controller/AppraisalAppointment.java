@@ -309,7 +309,7 @@ public class AppraisalAppointment implements Serializable {
                     }
                 }
             }
-            contactRecordDetailViewList.add(contactRecordDetailView);
+            contactRecordDetailViewList.set(rowIndex, contactRecordDetailView);
             complete = true;
             log.debug("-- [BEFORE]ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
         }

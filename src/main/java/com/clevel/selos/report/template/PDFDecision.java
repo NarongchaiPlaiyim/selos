@@ -1,17 +1,16 @@
 package com.clevel.selos.report.template;
 
 import com.clevel.selos.businesscontrol.DecisionControl;
-import com.clevel.selos.controller.Decision;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
-import com.clevel.selos.model.db.working.NewGuarantorDetail;
 import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -20,8 +19,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -419,7 +416,7 @@ public class PDFDecision implements Serializable {
                     collateralType = collateralType.append(msg.get("app.decision.tb.td.label.collateralType")).append((Util.checkNullString(detailView.getCollateralType().getDescription()))).append("\n");
                     collateralType = collateralType.append(msg.get("app.decision.tb.td.label.owner")).append((Util.checkNullString(detailView.getOwner()))).append("\n");
                     collateralType = collateralType.append(msg.get("app.decision.tb.td.label.relationship")).append((Util.checkNullString(detailView.getRelation().getDescription()))).append("\n");
-                    collateralType = collateralType.append(msg.get("app.decision.tb.td.label.appraisalDate")).append((detailView.getAppraisalDate()) == null ? "" : detailView.getAppraisalDate()).append("\n");
+                    collateralType = collateralType.append(msg.get("app.decision.tb.td.label.appraisalDate")).append(DateTimeUtil.getCurrentDateTH((detailView.getAppraisalDate())) == null ? "" : DateTimeUtil.getCurrentDateTH(detailView.getAppraisalDate())).append("\n");
                     collateralType = collateralType.append(msg.get("app.decision.tb.td.label.collateralNumber")).append((Util.checkNullString(detailView.getCollateralNumber()))).append("\n");
                     collateralType = collateralType.append(msg.get("app.decision.tb.td.label.collateralLocation")).append((Util.checkNullString(detailView.getCollateralLocation()))).append("\n");
                     collateralType = collateralType.append(msg.get("app.decision.tb.td.label.remark")).append((Util.checkNullString(detailView.getRemark())));
@@ -468,7 +465,7 @@ public class PDFDecision implements Serializable {
                 collateralType = collateralType.append(msg.get("app.decision.tb.td.label.collateralType")).append((Util.checkNullString(detailView.getCollateralType().getDescription()))).append("\n");
                 collateralType = collateralType.append(msg.get("app.decision.tb.td.label.owner")).append((Util.checkNullString(detailView.getOwner()))).append("\n");
                 collateralType = collateralType.append(msg.get("app.decision.tb.td.label.relationship")).append((Util.checkNullString(detailView.getRelation().getDescription()))).append("\n");
-                collateralType = collateralType.append(msg.get("app.decision.tb.td.label.appraisalDate")).append((detailView.getAppraisalDate()) == null ? "" : detailView.getAppraisalDate()).append("\n");
+                collateralType = collateralType.append(msg.get("app.decision.tb.td.label.appraisalDate")).append(DateTimeUtil.getCurrentDateTH((detailView.getAppraisalDate())) == null ? "" : DateTimeUtil.getCurrentDateTH(detailView.getAppraisalDate())).append("\n");
                 collateralType = collateralType.append(msg.get("app.decision.tb.td.label.collateralNumber")).append((Util.checkNullString(detailView.getCollateralNumber()))).append("\n");
                 collateralType = collateralType.append(msg.get("app.decision.tb.td.label.collateralLocation")).append((Util.checkNullString(detailView.getCollateralLocation()))).append("\n");
                 collateralType = collateralType.append(msg.get("app.decision.tb.td.label.remark")).append((Util.checkNullString(detailView.getRemark())));
@@ -661,8 +658,7 @@ public class PDFDecision implements Serializable {
                 ProposedCollateralDecisionReport collateralDecisionReport = new ProposedCollateralDecisionReport();
                 collateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
                 collateralDecisionReport.setPath(pathsub);
-                collateralDecisionReport.setAppraisalDate(view.getAppraisalDate());
-                log.debug("---Date. {}");
+                collateralDecisionReport.setAppraisalDate(DateTimeUtil.getCurrentDateTH(view.getAppraisalDate()));
                 collateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecision()));
                 collateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
                 collateralDecisionReport.setAadDecisionReasonDetail(Util.checkNullString(view.getAadDecisionReasonDetail()));
@@ -728,7 +724,7 @@ public class PDFDecision implements Serializable {
                 ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
                 approvedCollateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
                 approvedCollateralDecisionReport.setPath(pathsub);
-                approvedCollateralDecisionReport.setAppraisalDate(view.getAppraisalDate());
+                approvedCollateralDecisionReport.setAppraisalDate(DateTimeUtil.getCurrentDateTH(view.getAppraisalDate()));
                 approvedCollateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecision()));
                 approvedCollateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
                 approvedCollateralDecisionReport.setAadDecisionReasonDetail(Util.checkNullString(view.getAadDecisionReasonDetail()));
@@ -865,7 +861,7 @@ public class PDFDecision implements Serializable {
                 followUpConditionDecisionReport.setCount(count++);
                 followUpConditionDecisionReport.setConditionView(Util.checkNullString(view.getConditionView().getName()));
                 followUpConditionDecisionReport.setDetail(Util.checkNullString(view.getDetail()));
-                followUpConditionDecisionReport.setFollowDate(view.getFollowDate());
+                followUpConditionDecisionReport.setFollowDate(DateTimeUtil.getCurrentDateTH(view.getFollowDate()));
                 followUpConditionDecisionReportList.add(followUpConditionDecisionReport);
             }
         } else {
@@ -891,7 +887,7 @@ public class PDFDecision implements Serializable {
                 approvalHistoryDecisionReport.setUserName(Util.checkNullString(view.getUserView().getUserName()));
                 approvalHistoryDecisionReport.setRoleDescription(Util.checkNullString(view.getUserView().getRoleDescription()));
                 approvalHistoryDecisionReport.setTitleName(Util.checkNullString(view.getUserView().getTitleName()));
-                approvalHistoryDecisionReport.setSubmitDate(view.getSubmitDate());
+                approvalHistoryDecisionReport.setSubmitDate(DateTimeUtil.getCurrentDateTH(view.getSubmitDate()));
                 approvalHistoryDecisionReport.setComments(Util.checkNullString(view.getComments()));
                 approvalHistoryDecisionReportArrayList.add(approvalHistoryDecisionReport);
             }
@@ -987,7 +983,7 @@ public class PDFDecision implements Serializable {
         for (DecisionFollowConditionView view : decisionView.getDecisionFollowConditionViewList()){
             followUpConditionDecisionReport.setConditionView(Util.checkNullString(view.getConditionView().getName()));
             followUpConditionDecisionReport.setDetail(Util.checkNullString(view.getDetail()));
-            followUpConditionDecisionReport.setFollwDateDetaill(view.getFollowDate());
+            followUpConditionDecisionReport.setFollwDateDetaill(DateTimeUtil.getCurrentDateTH(view.getFollowDate()));
         }
 
         return followUpConditionDecisionReport;

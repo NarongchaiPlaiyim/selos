@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b568264b-3421-42fd-80e8-96aa4a75cbf6">
-	<property name="ireport.zoom" value="1.21000000000003"/>
+	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="1200"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Total" mode="Opaque" forecolor="#000000" backcolor="#FCFF79" hAlign="Left" vAlign="Middle" fontSize="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -57,7 +57,7 @@
 	<detail>
 		<band height="30" splitType="Prevent">
 			<frame>
-				<reportElement uuid="b2752ea6-344f-4090-ae01-2234246f6c8b" mode="Opaque" x="0" y="0" width="555" height="30"/>
+				<reportElement uuid="b2752ea6-344f-4090-ae01-2234246f6c8b" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="555" height="30" isPrintWhenDetailOverflows="true"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -69,8 +69,8 @@
 					</textElement>
 					<text><![CDATA[Borrower :]]></text>
 				</staticText>
-				<subreport>
-					<reportElement uuid="3eeac197-c6d6-431e-9d11-ebd858892477" x="0" y="15" width="555" height="15"/>
+				<subreport runToBottom="false">
+					<reportElement uuid="3eeac197-c6d6-431e-9d11-ebd858892477" stretchType="RelativeToBandHeight" x="0" y="15" width="555" height="15" isPrintWhenDetailOverflows="true"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillCreditBorrower})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subCreditBorrower.jasper"]]></subreportExpression>
 				</subreport>
