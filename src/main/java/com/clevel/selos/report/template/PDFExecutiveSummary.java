@@ -7,6 +7,7 @@ import com.clevel.selos.dao.master.TitleDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.ExSummaryDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.UWResultColor;
 import com.clevel.selos.model.db.working.ExSummary;
 import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.*;
@@ -348,7 +349,20 @@ public class PDFExecutiveSummary implements Serializable {
         if(!Util.isNull(exSumDecisionView)){
             for (ExSumDecisionView decisionView : exSumDecisionView){
                 decisionExSumReport.setId(decisionView.getId());
+
+                if (decisionView.getFlag().code() == "Y"){
+                    decisionExSumReport.setFlag("YELLOW");
+                } else  if (decisionView.getFlag().code() == "R"){
+                    decisionExSumReport.setFlag("RED");
+                } else {
+                    decisionExSumReport.setFlag("GREEN");
+                }
 //                decisionExSumReport.setFlag(Util.checkNullString(decisionView.getFlag()));
+                log.debug("--Flag. {}", decisionView.getFlag().code());
+                log.debug("--GREEN. {}", UWResultColor.GREEN.code());
+                log.debug("--RED. {}",UWResultColor.RED.getResultClass());
+                log.debug("--YELLOW. {}",UWResultColor.YELLOW.colorCode());
+
                 decisionExSumReport.setGroup(Util.checkNullString(decisionView.getGroup()));
                 decisionExSumReport.setRuleName(Util.checkNullString(decisionView.getRuleName()));
                 decisionExSumReport.setCusName(Util.checkNullString(decisionView.getCusName()));
