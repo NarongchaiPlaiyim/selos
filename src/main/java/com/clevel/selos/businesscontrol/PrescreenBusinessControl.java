@@ -454,10 +454,23 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         for(CustomerInfoView customerItem : customerInfoViewList){
             log.info("customerItem : {}", customerItem);
-            if(customerItem.getCustomerEntity().getId() == 1
+            if(customerItem.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()
                     && customerItem.getNcbFlag() == 0){
                 log.info("customerItem ::: NcbFlag : {}", customerItem.getNcbFlag());
                 NCRSModel ncrsModel = new NCRSModel();
+
+                /*if(customerItem.getGender() == Gender.MALE.value()){
+                    ncrsModel.setTitleNameCode(TitleName.Mr);
+                } else if (customerItem.getGender() == Gender.FEMALE.value()){
+                    if(customerItem.getMaritalStatus() != null && customerItem.getMaritalStatus().getSpouseFlag() == 1){
+                        ncrsModel.setTitleNameCode(TitleName.Mrs);
+                    } else {
+                        ncrsModel.setTitleNameCode(TitleName.Miss);
+                    }
+                } else {
+                    //TODO Return with Error
+                    ncrsModel.setTitleNameCode(TitleName.Mr);
+                }*/
 
                 if(customerItem.getTitleTh() != null){
                     if(customerItem.getTitleTh().getCode().equals("1")){

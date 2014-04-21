@@ -696,12 +696,28 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.submitCustomerAcceptance(queueName, wobNumber, ActionCode.CUSTOMER_ACCEPT.getVal());
     }
 
+    public void submitPendingDecision(String queueName, String wobNumber, String remark, String reason) throws Exception{
+        bpmExecutor.submitPendingDecision(queueName, wobNumber, remark, reason, ActionCode.PENDING_FOR_DECISION.getVal());
+    }
+
+    public void returnBDMByAAD(String queueName, String wobNumber, String remark, String reason) throws Exception{
+        bpmExecutor.returnCase(queueName, wobNumber, remark, reason, ActionCode.RETURN_TO_BDM.getVal());
+    }
+
+    public void returnAADAdminByAADCommittee(String queueName, String wobNumber, String remark, String reason) throws Exception{
+        bpmExecutor.returnCase(queueName, wobNumber, remark, reason, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
+    }
+
     public void completeCase(String queueName, String wobNumber) throws Exception {
         bpmExecutor.completeCase(queueName, ActionCode.COMPLETE.getVal(), wobNumber);
     }
 
     public void restartCase(String queueName, String wobNumber) throws Exception {
         bpmExecutor.completeCase(queueName, ActionCode.RESTART.getVal(), wobNumber);
+    }
+
+    public void submitToBDM(String queueName, String wobNumber) throws Exception{
+        bpmExecutor.submitCase(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
     }
 
     public void calculatePricingDOA(long workCaseId, NewCreditFacility newCreditFacility){
