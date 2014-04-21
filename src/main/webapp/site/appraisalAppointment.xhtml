@@ -87,7 +87,7 @@
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalName')}"/>
                                 </td>
                                 <td>
-                                    <p:inputText value="#{appraisalAppointment.appraisalView.appraisalName}" required="#{not empty param[saveButton.clientId]}" />
+                                    <p:inputText value="#{appraisalAppointment.appraisalView.appraisalName}" required="#{not empty param[saveButton.clientId]}" maxlength="50" />
                                 </td>
                             </tr>
                             <tr>
@@ -484,7 +484,7 @@
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.zoneLocation')}"/>
                                 </td>
                                 <td>
-                                    <p:inputText value="#{appraisalAppointment.appraisalView.zoneLocation}" />
+                                    <p:inputText value="#{appraisalAppointment.appraisalView.zoneLocation}" maxlength="50" />
                                 </td>
                             </tr>
                             <tr>
