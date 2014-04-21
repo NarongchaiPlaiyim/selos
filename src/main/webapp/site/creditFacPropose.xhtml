@@ -1952,7 +1952,7 @@
 <p:dialog id="creditInfoDialog"
           header="Propose Credit Information"
           widgetVar="creditInfoDlg"
-          modal="true"
+          modal="true" resizable="false"
           width="900" height="500"
           onShow="hideWindowsScrollBar()"
           onHide="showWindowsScrollBar()"
@@ -1994,7 +1994,7 @@
 <!-- Sub-Collateral Dialog  -->
 <p:dialog id="subCollateralInfoDialog" widgetVar="subCollateralInfoDlg"
           header="Sub Collateral Information"
-          modal="true"
+          modal="true" resizable="false"
           width="600" height="500"
           onShow="hideWindowsScrollBar()"
           onHide="showWindowsScrollBar()"
@@ -2015,7 +2015,7 @@
 <!-- Propose Guarantor Dialog -->
 <p:dialog id="guarantorDialog" widgetVar="guarantorInfoDlg"
           header="Propose Guarantor Information"
-          modal="true"
+          modal="true" resizable="false"
           width="900"
           onShow="hideWindowsScrollBar()"
           onHide="showWindowsScrollBar()"
@@ -2035,7 +2035,7 @@
 
 <!-- Condition Dialog -->
 <p:dialog id="conditionDialog" header="Condition Information" widgetVar="conditionDlg"
-          modal="true"
+          modal="true" resizable="false"
           width="600"
           onShow="hideWindowsScrollBar()"
           onHide="showWindowsScrollBar()"
@@ -2059,7 +2059,7 @@
                      severity="#{creditFacPropose.severity}"
                      header="#{creditFacPropose.messageHeader}"
                      message="#{creditFacPropose.message}"
-                     closable="false"
+                     closable="false" resizable="false"
                      closeOnEscape="false">
         <p:commandButton value="OK"
                          process="@this"

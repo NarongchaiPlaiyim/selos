@@ -5,10 +5,7 @@ import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.ManageButton;
-import com.clevel.selos.model.PricingDOAValue;
-import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
@@ -167,6 +164,10 @@ public class HeaderController implements Serializable {
     private List<AuthorizationDOA> authorizationDOAList;
     private long selectedDOALevel;
     private String selectedUW2User;
+
+    //Customer Acceptance
+    private List<Reason> reasonList;
+
 
     public HeaderController() {
     }
@@ -807,6 +808,10 @@ public class HeaderController implements Serializable {
         }
     }
 
+    public void onSubmitReturnAADAdmin(){
+
+    }
+
     public void onSubmitAppraisalToUW(){
 
     }
@@ -838,6 +843,22 @@ public class HeaderController implements Serializable {
             messageHeader = "Exception.";
             message = "Could not find session to submit case";
         }
+    }
+
+    public void onOpenPendingDecision(){
+        long workCaseId = 0;
+        String wobNumber = "";
+        String queueName = "";
+
+        HttpSession session = FacesUtil.getSession(true);
+        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        queueName = Util.parseString(session.getAttribute("queueName"), "");
+        wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+    }
+
+    public void onSubmitPendingDecision(){
+        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.PENDING_REASON);
+
     }
 
     public void onCheckPreScreen(){
@@ -1117,7 +1138,7 @@ public class HeaderController implements Serializable {
     }
 
     public void onSubmitReturnUW1(){ //Submit Reply From BDM to UW1
-        log.debug("onSubmitReturnReply");
+        log.debug("onSubmitReturnUW1");
 
         try{
             HttpSession session = FacesUtil.getSession(true);
@@ -1132,7 +1153,7 @@ public class HeaderController implements Serializable {
                 message = "Submit Return fail. Please check return information again.";
                 RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
 
-                log.error("onSumbitReturnReply ::: fail.");
+                log.error("onSubmitReturnUW1 ::: fail.");
             } else {
                 returnControl.submitReturnUW1(workCaseId, queueName);
 
@@ -1147,7 +1168,57 @@ public class HeaderController implements Serializable {
             message = "Submit Return fail, cause : " + Util.getMessageException(ex);
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
 
-            log.error("onSumbitReturnReply ::: exception occurred : ", ex);
+            log.error("onSubmitReturnUW1 ::: exception occurred : ", ex);
+        }
+    }
+
+    public void onRestartCase(){ //UW Restart case
+        log.debug("onRestartCase");
+
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            String queueName = session.getAttribute("queueName").toString();
+            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+
+            fullApplicationControl.restartCase(queueName,wobNumber);
+
+            messageHeader = "Information.";
+            message = "Restart Success";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+
+            log.debug("onRestartCase ::: success.");
+        } catch (Exception ex){
+            messageHeader = "Information.";
+            message = "Restart fail, cause : " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+            log.error("onRestartCase ::: exception occurred : ", ex);
+        }
+    }
+
+    public void onCompleteCase(){ //UW Complete case
+        log.debug("onCompleteCase");
+
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            String queueName = session.getAttribute("queueName").toString();
+            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+
+            fullApplicationControl.completeCase(queueName,wobNumber);
+
+            messageHeader = "Information.";
+            message = "Complete Success";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+
+            log.debug("onCompleteCase ::: success.");
+        } catch (Exception ex){
+            messageHeader = "Information.";
+            message = "Complete fail, cause : " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+            log.error("onCompleteCase ::: exception occurred : ", ex);
         }
     }
 

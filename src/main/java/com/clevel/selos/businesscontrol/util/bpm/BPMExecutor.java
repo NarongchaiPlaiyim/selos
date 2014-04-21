@@ -394,7 +394,7 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void submitAADCommittee(String appNumber, String aadCommitteeUserId, Date appointmentDate, long appraisalLocationCode, String queueName, long actionCode, String wobNumber) throws Exception{
+    public void submitAADCommittee(String appNumber, String aadCommitteeUserId, String appointmentDate, long appraisalLocationCode, String queueName, long actionCode, String wobNumber) throws Exception{
         Action action = actionDAO.findById(actionCode);
         if(action != null){
             HashMap<String, String> fields = new HashMap<String, String>();
@@ -473,6 +473,38 @@ public class BPMExecutor implements Serializable {
             } else {
                 throw new Exception("An exception occurred, Could not found wobNumber.");
             }
+        }
+    }
+
+    public void restartCase(String queueName, long actionCode, String wobNumber) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+
+        if(action != null){
+            HashMap<String,String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+
+            log.debug("dispatch case for [Restart Case]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            execute(queueName, wobNumber, fields);
+        } else {
+            throw new Exception("An exception occurred, Can not find Action.");
+        }
+    }
+
+    public void completeCase(String queueName, long actionCode, String wobNumber) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+
+        if(action != null){
+            HashMap<String,String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+
+            log.debug("dispatch case for [Complete Case]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            execute(queueName, wobNumber, fields);
+        } else {
+            throw new Exception("An exception occurred, Can not find Action.");
         }
     }
     

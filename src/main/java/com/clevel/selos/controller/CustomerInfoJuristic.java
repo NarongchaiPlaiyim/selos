@@ -502,6 +502,15 @@ public class CustomerInfoJuristic implements Serializable {
                         customerInfoView.setCitizenCountry(country);
                     }
 
+                    //set default source of income country
+                    if(customerInfoView.getCountryIncome() != null){
+                        customerInfoView.getCountryIncome().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.setCountryIncome(country);
+                    }
+
                     if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
                         if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
                             customerInfoView.getWorkAddress().setAddressTypeFlag(1);
@@ -597,6 +606,15 @@ public class CustomerInfoJuristic implements Serializable {
                             Country country = new Country();
                             country.setId(211);
                             customerInfoView.setCitizenCountry(country);
+                        }
+
+                        //set default source of income country
+                        if(customerInfoView.getCountryIncome() != null){
+                            customerInfoView.getCountryIncome().setId(211);
+                        } else {
+                            Country country = new Country();
+                            country.setId(211);
+                            customerInfoView.setCountryIncome(country);
                         }
 
                         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){

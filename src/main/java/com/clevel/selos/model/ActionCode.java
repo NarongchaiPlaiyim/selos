@@ -11,7 +11,7 @@ public enum ActionCode {
     CLOSE_SALES(1008, "Close Sales"),
     CHECK_CRITERIA(1009, "Check Criteria"),
     ASSIGN_TO_ABDM(1010, "Assign to ABDM"),
-    SUBMIT_TO_BDM(1011, "Submit to BDM"),
+    //SUBMIT_TO_BDM(1011, "Submit to BDM"),
     REPLY_TO_AAD(1012, "Reply to AAD"),
     PRINT_OP_SHEET(1013, "Print PDF"),
     SUBMIT_CA(1015, "Submit CA"),
@@ -19,7 +19,7 @@ public enum ActionCode {
     //SUBMIT_TO_UW1(1018, "Submit to UW1"),
     COMPLETE(1019, "Complete"),
     REVISE_CA(1020, "Revise CA"),
-    SUBMIT_TO_ADD_COMMITTEE(1021, "Submit to AAD Committee"),
+    //SUBMIT_TO_ADD_COMMITTEE(1021, "Submit to AAD Committee"),
     //SUBMIT_TO_UW2(1022, "Submit to UW2"),
     RETURN_TO_AAD_ADMIN(1023, "Return to AAD Admin"),
     REPLY_TO_AAD_ADMIN(1024, "Reply to AAD Admin"),
@@ -28,7 +28,8 @@ public enum ActionCode {
     CUSTOMER_ACCEPT(1027, "Customer Accepted"),
     REQUEST_PRICE_REDUCE(1028, "Request for Price Reduction"),
     PENDING_FOR_DECISION(1029, "Pending for Decision"),
-    ASSIGN_TO_ME(1030, "Assign To Me");
+    ASSIGN_TO_ME(1030, "Assign To Me"),
+    RESTART(1031, "Restart");
 
     long val;
     String actionName;

@@ -15,6 +15,7 @@ import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.transform.StepTransform;
 import com.clevel.selos.transform.UserTransform;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -24,9 +25,11 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @Stateless
 public class FullApplicationControl extends BusinessControl {
@@ -610,7 +613,7 @@ public class FullApplicationControl extends BusinessControl {
                 if(appraisal.getLocationOfProperty() != null){
                     appraisalLocationCode = appraisal.getLocationOfProperty().getCode();
                 }
-                bpmExecutor.submitAADCommittee(appNumber, aadCommitteeUserId, appraisal.getAppointmentDate(), appraisalLocationCode, queueName, ActionCode.SUBMIT_TO_ADD_COMMITTEE.getVal(), workCaseAppraisal.getWobNumber());
+                bpmExecutor.submitAADCommittee(appNumber, aadCommitteeUserId, DateTimeUtil.convertDateWorkFlowFormat(appraisal.getAppointmentDate()), appraisalLocationCode, queueName, ActionCode.SUBMIT_CA.getVal(), workCaseAppraisal.getWobNumber());
             }
         } else {
             throw new Exception("Submit case failed, could not find appraisal data.");
@@ -642,105 +645,13 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.submitCustomerAcceptance(queueName, wobNumber, ActionCode.CUSTOMER_ACCEPT.getVal());
     }
 
-    /*public void calculatePricingDOA(long workCaseId, NewCreditFacility newCreditFacility){
-        log.debug("calculatePricingDOA ::: newCreditFacility : {}", newCreditFacility);
-        PricingDOAValue pricingDOALevel = PricingDOAValue.NO_DOA;
+    public void completeCase(String queueName, String wobNumber) throws Exception {
+        bpmExecutor.completeCase(queueName, ActionCode.COMPLETE.getVal(), wobNumber);
+    }
 
-        if(newCreditFacility != null){
-            //List of Credit detail
-            List<NewCreditDetail> newCreditDetailList = newCreditFacility.getNewCreditDetailList();
-            //List of Credit tier ( find by Credit detail )
-            BigDecimal priceReduceDOA = newCreditFacility.getIntFeeDOA();
-            BigDecimal frontEndFeeReduceDOA = newCreditFacility.getFrontendFeeDOA();
-            int requestPricing = 0;
-
-            //Check Case Have request pricing or not?
-            log.debug("calculatePricingDOA ::: Check Request Pricing and Fee : priceReduce : {}, frontEndFee : {}", priceReduceDOA, frontEndFeeReduceDOA);
-            if(priceReduceDOA != null && frontEndFeeReduceDOA != null){
-                if(priceReduceDOA.compareTo(BigDecimal.ZERO) == 0
-                        && (frontEndFeeReduceDOA.compareTo(BigDecimal.ZERO) >= 0 && frontEndFeeReduceDOA.compareTo(new BigDecimal("0.75")) <= 0)){
-                    //DOA Level equals ZM
-                    pricingDOALevel = PricingDOAValue.ZM_DOA;
-                    requestPricing = 1;
-                    log.debug("calculatePricingDOA Level [ZONE MANAGER] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
-                } else if(priceReduceDOA.compareTo(BigDecimal.ONE) > 0 && frontEndFeeReduceDOA.compareTo(BigDecimal.ONE) > 0) {
-                    pricingDOALevel = PricingDOAValue.CSSO_DOA;
-                    requestPricing = 1;
-                    log.debug("calculatePricingDOA Level [CSSO MANAGER] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
-                } else {
-                    //Check for Exceptional Case
-                    boolean exceptionalFlow = false;
-                    if(newCreditDetailList != null && newCreditDetailList.size() > 0){
-                        for(NewCreditDetail newCreditDetail : newCreditDetailList){
-                            BigDecimal standardPrice = null;
-                            BigDecimal suggestPrice = null;
-                            BigDecimal finalPrice = null;
-                            BigDecimal tmpStandardPrice = null;
-                            BigDecimal tmpSuggestPrice = null;
-                            BigDecimal tmpFinalPrice = null;
-                            int reducePricing = newCreditDetail.getReducePriceFlag();
-                            int reduceFrontEndFee = newCreditDetail.getReduceFrontEndFee();
-                            if(newCreditDetail.getProposeCreditTierDetailList() != null){
-                                for(NewCreditTierDetail newCreditTierDetail : newCreditDetail.getProposeCreditTierDetailList()){
-                                    //Check for Final Price first...
-                                    if(finalPrice != null){
-                                        tmpFinalPrice = newCreditTierDetail.getFinalInterest().add(newCreditTierDetail.getFinalBasePrice().getValue());
-                                        tmpStandardPrice = newCreditTierDetail.getStandardInterest().add(newCreditTierDetail.getStandardBasePrice().getValue());
-                                        tmpSuggestPrice = newCreditTierDetail.getSuggestInterest().add(newCreditTierDetail.getSuggestBasePrice().getValue());
-
-                                        if(reducePricing == 1){
-                                            tmpFinalPrice = tmpFinalPrice.subtract(priceReduceDOA);
-                                        }
-                                        if(tmpFinalPrice.compareTo(finalPrice) > 0){
-                                            finalPrice = tmpFinalPrice;
-                                            standardPrice = tmpStandardPrice;
-                                            suggestPrice = tmpSuggestPrice;
-                                        }
-                                    }else{
-                                        finalPrice = newCreditTierDetail.getFinalInterest().add(newCreditTierDetail.getFinalBasePrice().getValue());
-                                        standardPrice = newCreditTierDetail.getStandardInterest().add(newCreditTierDetail.getStandardBasePrice().getValue());
-                                        suggestPrice = newCreditTierDetail.getSuggestInterest().add(newCreditTierDetail.getSuggestBasePrice().getValue());
-                                        if(reducePricing == 1){
-                                            finalPrice = finalPrice.subtract(priceReduceDOA);
-                                        }
-                                    }
-
-                                    if(finalPrice.compareTo(suggestPrice) < 0){
-                                        exceptionalFlow = true;
-                                        break;
-                                    }
-                                }
-                            }
-                            if(exceptionalFlow){
-                                break;
-                            }
-                        }
-                    }
-
-                    if(!exceptionalFlow){
-                        if((priceReduceDOA.compareTo(BigDecimal.ZERO) >= 0 && priceReduceDOA.compareTo(new BigDecimal("0.25")) <= 0)
-                                && (frontEndFeeReduceDOA.compareTo(BigDecimal.ZERO) > 0 && frontEndFeeReduceDOA.compareTo(BigDecimal.ONE) <= 0)){
-                            pricingDOALevel = PricingDOAValue.RGM_DOA;
-                            requestPricing = 1;
-                        }else if((priceReduceDOA.compareTo(BigDecimal.ZERO) >= 0 && priceReduceDOA.compareTo(BigDecimal.ONE) <= 0)
-                                && frontEndFeeReduceDOA.compareTo(BigDecimal.ONE) > 0){
-                            pricingDOALevel = PricingDOAValue.GH_DOA;
-                            requestPricing = 1;
-                        }
-                    }
-                }
-            }
-
-            if(pricingDOALevel == PricingDOAValue.NO_DOA){
-                requestPricing = 0;
-            }
-            log.debug("calculatePricingDOA ::: requestPricing : {}", requestPricing);
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
-            workCase.setRequestPricing(requestPricing);
-            workCase.setPricingDoaLevel(pricingDOALevel.value());
-            workCaseDAO.persist(workCase);
-        }
-    }*/
+    public void restartCase(String queueName, String wobNumber) throws Exception {
+        bpmExecutor.completeCase(queueName, ActionCode.RESTART.getVal(), wobNumber);
+    }
 
     public void calculatePricingDOA(long workCaseId, NewCreditFacility newCreditFacility){
         log.debug("calculatePricingDOA ::: newCreditFacility : {}", newCreditFacility);
@@ -851,6 +762,8 @@ public class FullApplicationControl extends BusinessControl {
                     }
                 }
 
+            } else {
+                pricingDOALevel = PricingDOAValue.CSSO_DOA;
             }
 
             /*if(pricingDOALevel == PricingDOAValue.NO_DOA){
@@ -928,4 +841,13 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.cancelCase(0, workCaseId, queueName, ActionCode.CANCEL_CA.getVal(), reasonTxt, remark);
     }
 
+    public List<Reason> getReasonList(ReasonTypeValue reasonTypeValue){
+        ReasonType reasonType = reasonTypeDAO.findById(reasonTypeValue.value());
+        List<Reason> reasonList = reasonDAO.getList(reasonType);
+        if(!Util.isNull(reasonList) && reasonList.size() > 0){
+            reasonList = new ArrayList<Reason>();
+        }
+
+        return reasonList;
+    }
 }

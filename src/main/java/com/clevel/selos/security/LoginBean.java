@@ -282,7 +282,7 @@ public class LoginBean {
 
                 if(isLocked.equalsIgnoreCase("true"))
                 {
-                    String wobNum = (String)httpSession.getAttribute("wobNum");
+                    String wobNum = (String)httpSession.getAttribute("wobNumber");
                     bpmInterfaceImpl.unLockCase((String)httpSession.getAttribute("queueName"),wobNum,(Integer)httpSession.getAttribute("fetchType"));
                 }
                 else
@@ -294,7 +294,7 @@ public class LoginBean {
         }
         catch (Exception e)
         {
-            log.error("Error while unlocking case in queue : {}, WobNum : {}",httpSession.getAttribute("queueName"), httpSession.getAttribute("wobNum"), e);
+            log.error("Error while unlocking case in queue : {}, WobNum : {}",httpSession.getAttribute("queueName"), httpSession.getAttribute("wobNumber"), e);
         }
 
         httpSession.setAttribute("user", null);
