@@ -37,6 +37,7 @@ public class NewCollateralHeadDAO extends GenericDAO<NewCollateralHead, Long> {
         criteria.add(Restrictions.eq("newCollateral.id", newCollateralId));
         criteria.addOrder(Order.asc("id"));
         List<NewCollateralHead> newCollateralHeadDetails = (List<NewCollateralHead>) criteria.list();
+        log.debug("-- NewCollateralHeadDetailList[{}]", newCollateralHeadDetails);
         return newCollateralHeadDetails;
     }
 
