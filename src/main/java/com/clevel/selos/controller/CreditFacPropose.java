@@ -1658,7 +1658,6 @@ public class CreditFacPropose implements Serializable {
         newGuarantorDetailView = new NewGuarantorDetailView();
         modeForButton = ModeForButton.ADD;
         selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
-//        guarantorCreditTypeList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
         newGuarantorDetailView.setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
         guarantorCreditTypeList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(), existingCreditDetailViewList, workCaseId);
         newGuarantorDetailView.setProposeCreditDetailViewList(guarantorCreditTypeList);

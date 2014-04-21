@@ -1,20 +1,52 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui"
-        xmlns:clv="http://clevel.com/ui">
-    <p:panel id="ncbDlgPanel" styleClass="panel-dialog">
+        xmlns:p="http://primefaces.org/ui">
+    <p:panel id="pendingDecisionDlgPanel" styleClass="panel-dialog">
         <table class="content_form">
             <tr>
                 <td class="title">Reason for Pending :</td>
-                <td></td>
+                <td>
+                    <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
+                                     value="#{headerController.reasonId}"
+                                     required="#{not empty param[btnSubmitPendingDecision.clientId]}">
+                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                        <f:selectItems value="#{headerController.reasonList}"
+                                       var="reasonItem"
+                                       itemLabel="#{reasonItem.description}"
+                                       itemValue="#{reasonItem.id}"/>
+                    </p:selectOneMenu>
+                </td>
             </tr>
             <tr>
                 <td class="title">Remark :</td>
-                <td></td>
+                <td>
+                    <p:inputTextarea value="#{headerController.pendingRemark}"
+                                     autoResize="false"
+                                     cols="35"
+                                     rows="5">
+                    </p:inputTextarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p:commandButton id="btnSubmitPendingDecisionDlg"
+                                     binding="#{btnSubmitPendingDecision}"
+                                     value="#{msg.get('app.button.submit')}"
+                                     styleClass="small"
+                                     actionListener="#{headerController.onSubmitPendingDecision()}"
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'pendingDecisionDlg')"
+                                     process="@form"
+                                     update=":frmMain:pendingDecisionPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
+                                     styleClass="small" onclick="pendingDecisionDlg.hide()"/>
+                </td>
             </tr>
         </table>
     </p:panel>
+    <p:blockUI block="pendingDecisionDlgPanel" trigger=":frmMain:btnSubmitPendingDecisionDlg">
+        LOADING<br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </ui:composition>
