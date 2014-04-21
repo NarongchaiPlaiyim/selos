@@ -244,16 +244,21 @@ public class AppraisalAppointmentControl extends BusinessControl {
                 log.debug("onSaveAppraisalAppointment ::: newCollateralList from database : {}", newCollateralList);
                 for(NewCollateral newCollateral : newCollateralList){
                     log.debug("-- NewCollateral.id[{}]", newCollateral.getId());
-                    newCollateralHeadList = Util.safetyList(newCollateralHeadDAO.findByNewCollateralId(newCollateral.getId()));
-                    for(NewCollateralHead newCollateralHead : newCollateralHeadList){
-                        log.debug("-- NewCollateralHead.id[{}]", newCollateralHead.getId());
-                        newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
-                        log.debug("-- NewCollateralHead.AppraisalRequest[{}]", newCollateralHead.getAppraisalRequest());
+                    newCollateralHeadList = newCollateralHeadDAO.findByNewCollateralId(newCollateral.getId());
+                    log.debug("-- NewCollateralHeadList.size()[{}]", newCollateralHeadList.size());
+                    if(!Util.isNull(newCollateralHeadList) && !Util.isZero(newCollateralHeadList.size())){
+                        for(NewCollateralHead newCollateralHead : newCollateralHeadList){
+                            log.debug("-- NewCollateralHead.id[{}]", newCollateralHead.getId());
+                            newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
+                            log.debug("-- NewCollateralHead.AppraisalRequest[{}]", newCollateralHead.getAppraisalRequest());
+                            newCollateralHeadDAO.persist(newCollateralHead);
+                            log.debug("-- Saved");
+                        }
                     }
-                    if(!newCollateralHeadList.isEmpty()){
-                        newCollateralHeadDAO.persist(newCollateralHeadList);
-                        log.debug("-- NewCollateralHeadList.size()[{}]", newCollateralHeadList.size());
-                    }
+//                    if(!Util.isNull(newCollateralHeadList) && !Util.isZero(newCollateralHeadList.size())){
+//                        newCollateralHeadDAO.persist(newCollateralHeadList);
+//                        log.debug("-- NewCollateralHeadList.size()[{}] saved", newCollateralHeadList.size());
+//                    }
                 }
             } catch (Exception e) {
                 log.debug("-- Exception while call NewCollateralHeadDAO ", e);
