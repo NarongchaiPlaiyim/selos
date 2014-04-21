@@ -167,7 +167,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="36">
+		<band height="36" splitType="Prevent">
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="c376a312-de13-47c1-a987-eda07a26fd34" style="detail" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="13" height="36" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
 				<textElement verticalAlignment="Top">
@@ -236,9 +236,9 @@ new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCredi
 				</subreport>
 			</frame>
 			<frame>
-				<reportElement uuid="da69b486-2f78-47c1-b405-f16aaf6f775d" style="detail" positionType="FixRelativeToBottom" mode="Opaque" x="96" y="18" width="459" height="18" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="da69b486-2f78-47c1-b405-f16aaf6f775d" style="detail" positionType="FixRelativeToBottom" mode="Opaque" x="96" y="18" width="459" height="18" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
 				<subreport isUsingCache="true" runToBottom="false">
-					<reportElement uuid="f2c77573-8453-4d95-a29a-95744ed8ff75" mode="Transparent" x="0" y="0" width="459" height="18" isRemoveLineWhenBlank="true"/>
+					<reportElement uuid="f2c77573-8453-4d95-a29a-95744ed8ff75" mode="Transparent" x="0" y="0" width="459" height="18" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
 					<dataSourceExpression><![CDATA[$F{existingSplitLineDetailViewList}.isEmpty() ?
 new net.sf.jasperreports.engine.JREmptyDataSource() :
 new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingSplitLineDetailViewList})]]></dataSourceExpression>
