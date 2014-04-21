@@ -166,7 +166,7 @@
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.AADAdminRemark')}"/>
                                 </td>
                                 <td colspan="3">
-                                    <p:inputTextarea cols="69" rows="4" value="#{appraisalAppointment.appraisalView.AADAdminRemark}" />
+                                    <p:inputTextarea cols="69" rows="4" value="#{appraisalAppointment.appraisalView.AADAdminRemark}" maxlength="150" />
                                 </td>
                             </tr>
                             <tr>
@@ -337,7 +337,7 @@
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.appointmentCusName')}"/>
                                 </td>
                                 <td >
-                                    <p:inputText value="#{appraisalAppointment.appraisalView.appointmentCusName}"/>
+                                    <p:inputText value="#{appraisalAppointment.appraisalView.appointmentCusName}" maxlength="50" />
                                 </td>
                             </tr>
                             <tr>
@@ -357,7 +357,7 @@
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.appointmentRemark')}"/>
                                 </td>
                                 <td colspan="3">
-                                    <p:inputTextarea cols="69" rows="4" value="#{appraisalAppointment.appraisalView.appointmentRemark}" />
+                                    <p:inputTextarea cols="69" rows="4" value="#{appraisalAppointment.appraisalView.appointmentRemark}" maxlength="150" />
                                 </td>
                             </tr>
 

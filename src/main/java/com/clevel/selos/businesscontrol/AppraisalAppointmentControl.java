@@ -245,10 +245,13 @@ public class AppraisalAppointmentControl extends BusinessControl {
                 for(NewCollateral newCollateral : newCollateralList){
                     log.debug("-- NewCollateral.id[{}]", newCollateral.getId());
                     newCollateralHeadList = Util.safetyList(newCollateralHeadDAO.findByNewCollateralId(newCollateral.getId()));
-                    for(NewCollateralHead newCollateralHead : newCollateralHeadList){
-                        log.debug("-- NewCollateralHead.id[{}]", newCollateralHead.getId());
-                        newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
-                        log.debug("-- NewCollateralHead.AppraisalRequest[{}]", newCollateralHead.getAppraisalRequest());
+                    log.debug("-- NewCollateralHeadList.size()[{}]", newCollateralHeadList.size());
+                    if(!Util.isZero(newCollateralHeadList.size())){
+                        for(NewCollateralHead newCollateralHead : newCollateralHeadList){
+                            log.debug("-- NewCollateralHead.id[{}]", newCollateralHead.getId());
+                            newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
+                            log.debug("-- NewCollateralHead.AppraisalRequest[{}]", newCollateralHead.getAppraisalRequest());
+                        }
                     }
                     if(!newCollateralHeadList.isEmpty()){
                         newCollateralHeadDAO.persist(newCollateralHeadList);
