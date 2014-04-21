@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="992d94ee-ab0e-458e-a59a-046b96b4a957">
-	<property name="ireport.zoom" value="1.6500000000000268"/>
+	<property name="ireport.zoom" value="0.9313819845887477"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="2367"/>
+	<property name="ireport.y" value="658"/>
 	<style name="Frame" backcolor="#CCFFFF">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -10,6 +10,26 @@
 			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
 			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 		</box>
+	</style>
+	<style name="Color" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[($P{decision}.getFlag()) == "RED"]]></conditionExpression>
+			<style mode="Opaque" forecolor="#000000" backcolor="#FF0000" hAlign="Center" vAlign="Middle" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true">
+				<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+			</style>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[($P{decision}.getFlag()) == "YELLOW"]]></conditionExpression>
+			<style mode="Opaque" forecolor="#000000" backcolor="#FFFF00" hAlign="Center" vAlign="Middle" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+				<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+			</style>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[($P{decision}.getFlag()) == "GREEN"]]></conditionExpression>
+			<style forecolor="#000000" backcolor="#33FF00" hAlign="Center" vAlign="Middle" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
+				<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+			</style>
+		</conditionalStyle>
 	</style>
 	<parameter name="path" class="java.lang.String"/>
 	<parameter name="borrower" class="java.util.Collection"/>
@@ -2102,7 +2122,7 @@ Asset]]></text>
 					<text><![CDATA[(Red : ต้องชี้แจง, Yellow : สามารถเลือกที่จะชี้แจงได้)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="3ae31b89-bb76-4df6-aa85-e003a4e9d6b1" x="0" y="26" width="140" height="13"/>
+					<reportElement uuid="3ae31b89-bb76-4df6-aa85-e003a4e9d6b1" x="0" y="26" width="122" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2166,9 +2186,9 @@ Asset]]></text>
 						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{decision}.getDeviationReason()]]></textFieldExpression>
 				</textField>
@@ -2187,7 +2207,7 @@ Asset]]></text>
 					<text><![CDATA[]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="ea1b4ed3-80da-4d56-88a0-7bee76bec52d" stretchType="RelativeToBandHeight" mode="Opaque" x="28" y="70" width="56" height="20"/>
+					<reportElement uuid="ea1b4ed3-80da-4d56-88a0-7bee76bec52d" style="Color" stretchType="RelativeToBandHeight" mode="Opaque" x="28" y="70" width="56" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2287,6 +2307,21 @@ Asset]]></text>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{decision}.getGroup()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="8d43bff0-7bd2-416f-b469-12d3fd436323" style="Color" stretchType="RelativeToBandHeight" mode="Opaque" x="112" y="26" width="56" height="13"/>
+					<box>
+						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{decision}.getFlag()]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

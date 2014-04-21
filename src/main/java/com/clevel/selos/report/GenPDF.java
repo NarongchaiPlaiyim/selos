@@ -123,17 +123,17 @@ public class GenPDF extends ReportService implements Serializable {
 
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
-//        map.put("borrower", pdfExecutiveSummary.fillBorrowerRelatedProfile());
-//        map.put("businessLocation", pdfExecutiveSummary.fillBorrower());
-//        map.put("tradeFinance", pdfExecutiveSummary.fillTradeFinance());
-//        map.put("borrowerCharacteristic", pdfExecutiveSummary.fillBorrowerCharacteristic());
-//        map.put("ncbRecord", pdfExecutiveSummary.fillNCBRecord());
-//        map.put("accountMovement", pdfExecutiveSummary.fillAccountMovement());
-//        map.put("collateral", pdfExecutiveSummary.fillCollateral());
-//        map.put("creditRisk", pdfExecutiveSummary.fillBorrowerRelatedProfile());
-//        map.put("bizSupport", pdfExecutiveSummary.fillBizSupport());
-//        map.put("uwDecision", pdfExecutiveSummary.fillUWDecision());
-//        map.put("creditRisk", pdfExecutiveSummary.fillCreditRisk());
+        map.put("borrower", pdfExecutiveSummary.fillBorrowerRelatedProfile());
+        map.put("businessLocation", pdfExecutiveSummary.fillBorrower());
+        map.put("tradeFinance", pdfExecutiveSummary.fillTradeFinance());
+        map.put("borrowerCharacteristic", pdfExecutiveSummary.fillBorrowerCharacteristic());
+        map.put("ncbRecord", pdfExecutiveSummary.fillNCBRecord());
+        map.put("accountMovement", pdfExecutiveSummary.fillAccountMovement());
+        map.put("collateral", pdfExecutiveSummary.fillCollateral());
+        map.put("creditRisk", pdfExecutiveSummary.fillBorrowerRelatedProfile());
+        map.put("bizSupport", pdfExecutiveSummary.fillBizSupport());
+        map.put("uwDecision", pdfExecutiveSummary.fillUWDecision());
+        map.put("creditRisk", pdfExecutiveSummary.fillCreditRisk());
         map.put("decision", pdfExecutiveSummary.fillDecision());
 
 //        pdfName = "Executive_Summary_Report_";
