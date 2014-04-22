@@ -1371,7 +1371,7 @@ public class CreditFacProposeControl extends BusinessControl {
             for (Long id : deleteCreditIdList) {
                 deleteCreditDetailList.add(newCreditDetailDAO.findById(id));
             }
-//            newCreditDetailDAO.delete(deleteCreditDetailList);
+            newCreditDetailDAO.delete(deleteCreditDetailList);
 
         }
     }
