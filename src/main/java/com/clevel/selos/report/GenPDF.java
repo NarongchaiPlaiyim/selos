@@ -121,6 +121,8 @@ public class GenPDF extends ReportService implements Serializable {
     public void onPrintExsumReport() throws Exception {
         log.debug("onPrintExsumReport");
 
+        pdfExecutiveSummary.init();
+
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
         map.put("borrower", pdfExecutiveSummary.fillBorrowerRelatedProfile());
