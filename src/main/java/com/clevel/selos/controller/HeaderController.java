@@ -1119,6 +1119,36 @@ public class HeaderController implements Serializable {
         log.debug("onCheckMandateForFullApp ::: stop...");
     }
 
+    //Appraisal
+    public void onCheckMandateForAppraisal(){
+        log.debug("onCheckMandateForAppraisal ::: start...");
+        HttpSession session = FacesUtil.getSession(true);
+        try {
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            workCasePreScreenId = 0;
+        } catch (Exception e) {
+            workCaseId = 0;
+        }
+
+        String result = null;
+        checkMandateDocView = null;
+        try{
+            checkMandateDocView = checkMandateDocControl.getMandateDocViewByFullApp(workCaseId);
+            if(!Util.isNull(checkMandateDocView)){
+                log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
+            } else {
+                log.debug("-- Find by work case id = {} CheckMandateDocView is {}   ", workCaseId, checkMandateDocView);
+                checkMandateDocView = new CheckMandateDocView();
+                log.debug("-- CheckMandateDocView[New] created");
+            }
+            log.debug("stop...");
+        } catch (Exception e) {
+            log.error("-- Exception : ", e);
+            result = e.getMessage();
+        }
+        log.debug("onCheckMandateForFullApp ::: stop...");
+    }
+
     public void onSaveCheckMandateDoc(){
         log.debug("-- onSaveCheckMandateDoc().");
         try {
