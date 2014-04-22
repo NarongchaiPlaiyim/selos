@@ -827,11 +827,11 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="title left" style="width: 120px; min-width: 120px; max-width: 120px;">
-                                                        <h:outputText id="regAddRoad"
-                                                                value="#{msg.get('app.custInfoIndi.content.road')}"/>
+                                                        <h:outputText value="#{msg.get('app.custInfoIndi.content.road')}"/>
                                                     </td>
                                                     <td class="left" colspan="5">
-                                                        <p:inputText style="width:500px;" value="#{custInfoSumIndi.customerInfoView.registerAddress.road}"
+                                                        <p:inputText style="width:500px;" id="regAddRoad"
+                                                                     value="#{custInfoSumIndi.customerInfoView.registerAddress.road}"
                                                                      disabled="#{custInfoSumIndi.customerInfoView.registerAddress.addressTypeFlag != 3}"/>
                                                     </td>
                                                 </tr>
