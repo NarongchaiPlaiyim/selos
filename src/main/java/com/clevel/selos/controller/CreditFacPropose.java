@@ -278,8 +278,6 @@ public class CreditFacPropose implements Serializable {
     @Inject
     private ProposeCreditDetailTransform proposeCreditDetailTransform;
     @Inject
-    private NewFeeDetailTransform newFeeDetailTransform;
-    @Inject
     private NewCreditTierTransform newCreditTierTransform;
     @Inject
     private FeeTransform feeTransform;
