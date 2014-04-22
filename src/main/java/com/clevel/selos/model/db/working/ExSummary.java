@@ -175,7 +175,7 @@ public class ExSummary implements Serializable {
 
     //Collateral
     //exSumCollateralView;
-    @Column(name = "cash_collateral_value")
+    /*@Column(name = "cash_collateral_value")
     private BigDecimal cashCollateralValue;
 
     @Column(name = "core_asset_value")
@@ -188,7 +188,7 @@ public class ExSummary implements Serializable {
     private BigDecimal limitApprove;
 
     @Column(name = "percent_ltv")
-    private BigDecimal percentLTV;
+    private BigDecimal percentLTV;*/
 
     ///////////////////////////////////////////////////////////////
     //Credit Risk Information
@@ -532,46 +532,6 @@ public class ExSummary implements Serializable {
         this.nextReviewDate = nextReviewDate;
     }
 
-    public BigDecimal getCashCollateralValue() {
-        return cashCollateralValue;
-    }
-
-    public void setCashCollateralValue(BigDecimal cashCollateralValue) {
-        this.cashCollateralValue = cashCollateralValue;
-    }
-
-    public BigDecimal getCoreAssetValue() {
-        return coreAssetValue;
-    }
-
-    public void setCoreAssetValue(BigDecimal coreAssetValue) {
-        this.coreAssetValue = coreAssetValue;
-    }
-
-    public BigDecimal getNoneCoreAssetValue() {
-        return noneCoreAssetValue;
-    }
-
-    public void setNoneCoreAssetValue(BigDecimal noneCoreAssetValue) {
-        this.noneCoreAssetValue = noneCoreAssetValue;
-    }
-
-    public BigDecimal getLimitApprove() {
-        return limitApprove;
-    }
-
-    public void setLimitApprove(BigDecimal limitApprove) {
-        this.limitApprove = limitApprove;
-    }
-
-    public BigDecimal getPercentLTV() {
-        return percentLTV;
-    }
-
-    public void setPercentLTV(BigDecimal percentLTV) {
-        this.percentLTV = percentLTV;
-    }
-
     public BigDecimal getIncomeFactorBDM() {
         return incomeFactorBDM;
     }
@@ -609,11 +569,6 @@ public class ExSummary implements Serializable {
                 append("groupExposureUW", groupExposureUW).
                 append("incomeFactorBDM", incomeFactorBDM).
                 append("incomeFactorUW", incomeFactorUW).
-                append("cashCollateralValue", cashCollateralValue).
-                append("coreAssetValue", coreAssetValue).
-                append("noneCoreAssetValue", noneCoreAssetValue).
-                append("limitApprove", limitApprove).
-                append("percentLTV", percentLTV).
                 append("lastReviewDate", lastReviewDate).
                 append("nextReviewDate", nextReviewDate).
                 append("natureOfBusiness", natureOfBusiness).

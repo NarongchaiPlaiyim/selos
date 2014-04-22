@@ -112,6 +112,7 @@
                                 <td>
                                     <clv:BECalendar id="receivedTaskDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
                                                     value="#{appraisalAppointment.appraisalView.receivedTaskDate}"
+                                                    readonlyInput="true"
                                                     pattern="dd/MM/yyyy"
                                                     defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
                                                     mindate="#{appraisalAppointment.currentDateDDMMYY}"
@@ -153,6 +154,7 @@
                                 <td>
                                     <clv:BECalendar id="appraisalDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
                                                     value="#{appraisalAppointment.appraisalView.appraisalDate}"
+                                                    readonlyInput="true"
                                                     pattern="dd/MM/yyyy"
                                                     defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
                                                     mindate="#{appraisalAppointment.currentDateDDMMYY}"
@@ -167,6 +169,7 @@
                                 <td>
                                     <clv:BECalendar id="dueDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
                                                     value="#{appraisalAppointment.appraisalView.dueDate}"
+                                                    readonlyInput="true"
                                                     pattern="dd/MM/yyyy"
                                                     defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
                                                     mindate="#{appraisalAppointment.currentDateDDMMYY}"
@@ -341,6 +344,7 @@
                                 <td>
                                     <clv:BECalendar id="appointmentDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
                                                     value="#{appraisalAppointment.appraisalView.appointmentDate}"
+                                                    readonlyInput="true"
                                                     pattern="dd/MM/yyyy"
                                                     defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
                                                     mindate="#{appraisalAppointment.currentDateDDMMYY}"
@@ -433,7 +437,7 @@
                                         <p:column style='width:100px' styleClass="center"
                                                   headerText="#{msg.get('app.cusaccept.contactRecord.nextCallDateTime')}" escape="false" >
                                             <h:outputText value="#{detail.nextCallingDate}">
-                                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
+                                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                             </h:outputText>
                                             <h:outputText value="-" rendered="#{empty detail.nextCallingDate}"/>
                                         </p:column>

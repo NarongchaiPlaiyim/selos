@@ -341,8 +341,20 @@
     <!-- Check Mandate Doc (AAD Admin)-->
     <p:commandButton id="btnCheckMandate_AADM" value="Check Mandate Doc" title="Check Mandate Doc"
                      styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 2006}">
-
+                     rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 2006}"
+                     actionListener="#{headerController.onCheckMandateForAADAdmin()}"
+                     oncomplete="checkMandateDlg.show()"
+                     update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
+        <p:resetInput target=":frmMain:checkMandatePanel"/>
+    </p:commandButton>
+    <!-- Check Mandate Doc (AAD Committee)-->
+    <p:commandButton id="btnCheckMandate_AADC" value="Check Mandate Doc" title="Check Mandate Doc"
+                     styleClass="blueButton"
+                     rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 2008}"
+                     actionListener="#{headerController.onCheckMandateForAADCommittee()}"
+                     oncomplete="checkMandateDlg.show()"
+                     update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
+        <p:resetInput target=":frmMain:checkMandatePanel"/>
     </p:commandButton>
     <!-- Submit to AADC (AAD Admin)-->
     <p:commandButton id="btnSubmitAADC_AADM" value="Submit CA" title="Submit CA" styleClass="blueButton"

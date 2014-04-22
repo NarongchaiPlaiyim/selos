@@ -1093,6 +1093,39 @@ public class HeaderController implements Serializable {
     public void onCheckMandateForFullApp(){
         log.debug("onCheckMandateForFullApp ::: start...");
         HttpSession session = FacesUtil.getSession(true);
+        try{
+            callFullApp();
+            log.debug("stop...");
+        } catch (Exception e) {
+            log.error("-- Exception : ", e);
+        }
+        log.debug("onCheckMandateForFullApp ::: stop...");
+    }
+    //AAD Admin
+    public void onCheckMandateForAADAdmin(){
+        log.debug("onCheckMandateForAADAdmin ::: start...");
+        try{
+            callFullApp();
+            log.debug("stop...");
+        } catch (Exception e) {
+            log.error("-- Exception : ", e);
+        }
+        log.debug("onCheckMandateForFullApp ::: stop...");
+    }
+    //AAD Committee
+    public void onCheckMandateForAADCommittee(){
+        log.debug("onCheckMandateForAADCommittee ::: start...");
+        try{
+            callFullApp();
+            log.debug("stop...");
+        } catch (Exception e) {
+            log.error("-- Exception : ", e);
+        }
+        log.debug("onCheckMandateForFullApp ::: stop...");
+    }
+
+    private void callFullApp() throws Exception{
+        HttpSession session = FacesUtil.getSession(true);
         try {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             workCasePreScreenId = 0;
@@ -1114,10 +1147,10 @@ public class HeaderController implements Serializable {
             log.debug("stop...");
         } catch (Exception e) {
             log.error("-- Exception : ", e);
-            result = e.getMessage();
+            throw e;
         }
-        log.debug("onCheckMandateForFullApp ::: stop...");
     }
+
 
     public void onSaveCheckMandateDoc(){
         log.debug("-- onSaveCheckMandateDoc().");

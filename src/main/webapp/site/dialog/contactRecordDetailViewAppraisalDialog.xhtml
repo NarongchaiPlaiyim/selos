@@ -65,9 +65,10 @@
                         <clv:BECalendar id="nextcalling_datetime" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
                                         timeOnly=""
                                         value="#{appraisalAppointment.contactRecord.nextCallingDate}"
-                                        pattern="dd/MM/yyyy HH:mm"
-                                        defaultdate="#{appraisalAppointment.contactRecord.nextCallingDate}"
-                                        mindate="#{appraisalAppointment.contactRecord.nextCallingDate}"
+                                        readonlyInput="true"
+                                        pattern="dd/MM/yyyy"
+                                        defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
+                                        mindate="#{appraisalAppointment.currentDateDDMMYY}"
                                         yearRange="1950:2100">
                             <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                         </clv:BECalendar>

@@ -259,9 +259,6 @@ public class NewCreditFacility implements Serializable {
     private User modifyBy;
 
     @OneToMany(mappedBy = "newCreditFacility", cascade = CascadeType.ALL)
-    private List<NewFeeDetail> newFeeDetailList;
-
-    @OneToMany(mappedBy = "newCreditFacility", cascade = CascadeType.ALL)
     private List<NewCreditDetail> newCreditDetailList;
 
     @OneToMany(mappedBy = "newCreditFacility", cascade = CascadeType.ALL)
@@ -713,14 +710,6 @@ public class NewCreditFacility implements Serializable {
         this.workCasePrescreen = workCasePrescreen;
     }
 
-    public List<NewFeeDetail> getNewFeeDetailList() {
-        return newFeeDetailList;
-    }
-
-    public void setNewFeeDetailList(List<NewFeeDetail> newFeeDetailList) {
-        this.newFeeDetailList = newFeeDetailList;
-    }
-
     public List<NewCreditDetail> getNewCreditDetailList() {
         return newCreditDetailList;
     }
@@ -874,7 +863,6 @@ public class NewCreditFacility implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
-                .append("newFeeDetailList", newFeeDetailList)
                 .append("newCreditDetailList", newCreditDetailList)
                 .append("newCollateralDetailList", newCollateralDetailList)
                 .append("newGuarantorDetailList", newGuarantorDetailList)

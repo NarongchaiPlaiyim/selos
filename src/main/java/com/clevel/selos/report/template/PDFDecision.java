@@ -74,7 +74,7 @@ public class PDFDecision implements Serializable {
 
     public List<BorrowerCreditDecisionReport> fillCreditBorrower(String pathsub){
         log.debug("on fillCreditBorrower. {}");
-        init();
+//        init();
         List<ExistingCreditDetailView> existingCreditDetailViews = decisionView.getExtBorrowerComCreditList();
         List<BorrowerCreditDecisionReport> borrowerCreditDecisionReportList = new ArrayList<BorrowerCreditDecisionReport>();
 
@@ -128,7 +128,7 @@ public class PDFDecision implements Serializable {
 
     public List<ConditionDecisionReport> fillCondition(){
         log.debug("on fillCondition. {}");
-        init();
+//        init();
         List<ConditionDecisionReport> conditionDecisionReportList = new ArrayList<ConditionDecisionReport>();
         List<ExistingConditionDetailView> existingConditionDetailViews = decisionView.getExtConditionComCreditList();
         int count =1;
@@ -152,7 +152,7 @@ public class PDFDecision implements Serializable {
 
     public List<BorrowerRetailDecisionReport> fillBorrowerRetail(String pathsub){
         log.debug("on fillBorrowerRetail. {}");
-        init();
+//        init();
         List<BorrowerRetailDecisionReport> retailDecisionReportList = new ArrayList<BorrowerRetailDecisionReport>();
         List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtBorrowerRetailCreditList();
 
@@ -200,7 +200,7 @@ public class PDFDecision implements Serializable {
     }
 
     public List<BorrowerAppInRLOSDecisionReport> fillAppInRLOS(String pathsub){
-        init();
+//        init();
         List<BorrowerAppInRLOSDecisionReport> borrowerAppInRLOSDecisionReportList = new ArrayList<BorrowerAppInRLOSDecisionReport>();
         List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtBorrowerAppInRLOSList();
 
@@ -398,7 +398,7 @@ public class PDFDecision implements Serializable {
     }
 
     public List<ExistingCollateralBorrowerDecisionReport> fillExistingCollateralBorrower(String path) throws UnsupportedEncodingException {
-        init();
+//        init();
         List<ExistingCollateralBorrowerDecisionReport> collateralBorrowerDecisionReportList = new ArrayList<ExistingCollateralBorrowerDecisionReport>();
         List<ExistingCollateralDetailView> conditionDetailViews = decisionView.getExtBorrowerCollateralList();
 
@@ -448,7 +448,7 @@ public class PDFDecision implements Serializable {
     }
 
     public List<ExistingCollateralRelatedDecisionReport> fillExistingCollateralRelated(String path){
-        init();
+//        init();
         List<ExistingCollateralRelatedDecisionReport> collateralRelatedDecisionReportArrayList = new ArrayList<ExistingCollateralRelatedDecisionReport>();
         List<ExistingCollateralDetailView> conditionDetailViews = decisionView.getExtRelatedCollateralList();
 
@@ -493,7 +493,7 @@ public class PDFDecision implements Serializable {
     }
 
     public List<GuarantorBorrowerDecisionReport> fillGuarantorBorrower(String pathsub){
-        init();
+//        init();
         List<GuarantorBorrowerDecisionReport> guarantorBorrowerDecisionReportList = new ArrayList<GuarantorBorrowerDecisionReport>();
         List<ExistingGuarantorDetailView> extGuarantorList = decisionView.getExtGuarantorList();
         int count = 1;
@@ -521,7 +521,7 @@ public class PDFDecision implements Serializable {
 
     public List<ProposedCreditDecisionReport> fillProposedCredit(String pathsub){
         log.debug("on fillProposedCredit. {}");
-        init();
+//        init();
         newCreditDetailViewList = decisionView.getProposeCreditList();
         List<ProposedCreditDecisionReport> proposedCreditDecisionReportList = new ArrayList<ProposedCreditDecisionReport>();
 
@@ -592,7 +592,7 @@ public class PDFDecision implements Serializable {
     }
 
     public List<ProposeFeeInformationDecisionReport> fillProposeFeeInformation(){
-        init();
+//        init();
         List<ProposeFeeInformationDecisionReport> proposeFeeInformationDecisionReportList = new ArrayList<ProposeFeeInformationDecisionReport>();
         List<NewFeeDetailView> feeDetailViewList = decisionView.getProposeFeeInfoList();
 
@@ -647,7 +647,7 @@ public class PDFDecision implements Serializable {
     }
 
     public List<ProposedCollateralDecisionReport> fillProposedCollateral(String pathsub){
-        init();
+//        init();
         List<ProposedCollateralDecisionReport> proposedCollateralDecisionReportList = new ArrayList<ProposedCollateralDecisionReport>();
         List<NewCollateralView> newCollateralViews = decisionView.getProposeCollateralList();
         List<NewCollateralHeadView> collateralHeadViewList = new ArrayList<NewCollateralHeadView>();
@@ -713,7 +713,7 @@ public class PDFDecision implements Serializable {
     }
 
     public List<ApprovedCollateralDecisionReport> fillApprovedCollaterral(String pathsub){
-        init();
+//        init();
         List<ApprovedCollateralDecisionReport> approvedCollateralDecisionReportArrayList = new ArrayList<ApprovedCollateralDecisionReport>();
         List<NewCollateralView> newCollateralViews = decisionView.getApproveCollateralList();
         List<NewCollateralHeadView> collateralHeadViewList = new ArrayList<NewCollateralHeadView>();
@@ -787,7 +787,7 @@ public class PDFDecision implements Serializable {
     }
 
     public List<ProposedGuarantorDecisionReport> fillProposedGuarantor(String pathsub){
-        init();
+//        init();
         List<ProposedGuarantorDecisionReport> proposedGuarantorDecisionReportList = new ArrayList<ProposedGuarantorDecisionReport>();
         List<NewGuarantorDetailView> detailViews = decisionView.getApproveGuarantorList();
 
@@ -814,7 +814,7 @@ public class PDFDecision implements Serializable {
     }
 
     public List<ApprovedGuarantorDecisionReport> fillApprovedGuarantor(String pathsub){
-        init();
+//        init();
         List<ApprovedGuarantorDecisionReport> approvedGuarantorDecisionReportList = new ArrayList<ApprovedGuarantorDecisionReport>();
         List<NewGuarantorDetailView> newGuarantorDetails = decisionView.getApproveGuarantorList();
 
@@ -849,7 +849,7 @@ public class PDFDecision implements Serializable {
     }
 
     public List<FollowUpConditionDecisionReport> fillFollowUpCondition(){
-        init();
+//        init();
         List<FollowUpConditionDecisionReport> followUpConditionDecisionReportList = new ArrayList<FollowUpConditionDecisionReport>();
         List<DecisionFollowConditionView> decisionFollowConditionViews = decisionView.getDecisionFollowConditionViewList();
 
@@ -873,7 +873,7 @@ public class PDFDecision implements Serializable {
     }
 
     public List<ApprovalHistoryDecisionReport> fillApprovalHistory(){
-        init();
+//        init();
         List<ApprovalHistoryDecisionReport> approvalHistoryDecisionReportArrayList = new ArrayList<ApprovalHistoryDecisionReport>();
         List<ApprovalHistoryView> approvalHistoryViews = decisionView.getApprovalHistoryList();
 
@@ -901,7 +901,7 @@ public class PDFDecision implements Serializable {
     }
 
     public TotalDecisionReport fillTotalMasterReport(){
-        init();
+//        init();
         TotalDecisionReport totalDecisionReport = new TotalDecisionReport();
 
         //Existing Credit Borrower
@@ -977,7 +977,7 @@ public class PDFDecision implements Serializable {
     }
 
     public FollowUpConditionDecisionReport fillFollowDetail(){
-        init();
+//        init();
         FollowUpConditionDecisionReport followUpConditionDecisionReport = new FollowUpConditionDecisionReport();
 
         for (DecisionFollowConditionView view : decisionView.getDecisionFollowConditionViewList()){
@@ -990,7 +990,7 @@ public class PDFDecision implements Serializable {
     }
 
     public PriceFeeDecisionReport fillPriceFee(){
-        init();
+//        init();
         PriceFeeDecisionReport priceFeeDecisionReport = new PriceFeeDecisionReport();
         priceFeeDecisionReport.setIntFeeDOA(Util.convertNullToZERO(decisionView.getIntFeeDOA()));
         priceFeeDecisionReport.setFrontendFeeDOA(Util.convertNullToZERO(decisionView.getFrontendFeeDOA()));

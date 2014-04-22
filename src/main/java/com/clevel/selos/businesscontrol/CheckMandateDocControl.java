@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.RoleDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.ECMInterface;
 import com.clevel.selos.integration.SELOS;
@@ -8,6 +9,7 @@ import com.clevel.selos.integration.ecm.model.ECMDataResult;
 import com.clevel.selos.integration.filenet.ce.connection.CESessionToken;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.DocMandateType;
+import com.clevel.selos.model.db.master.Role;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.MandateDoc;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -73,6 +75,9 @@ public class CheckMandateDocControl extends BusinessControl{
     private MandateDocBRMSDAO mandateDocBRMSDAO;
     @Inject
     private MandateDocCustDAO mandateDocCustDAO;
+    @Inject
+    private RoleDAO roleDAO;
+    private Role role;
 
     private String passwordEncrypt;
     private String userToken;
@@ -189,24 +194,26 @@ public class CheckMandateDocControl extends BusinessControl{
         if(!Util.isNull(user)){
             roleId = user.getRole().getId();
             roleName = user.getRole().getName();
-            log.debug("-- User.Role.id[{}]", roleId);
+            log.debug("-- User.id[{}]", user.getId());
+            log.debug("-- User.Role[{}]", roleName);
             mandateDocList = Util.safetyList(getMandateDocByWorkCaseIdAndRoleId(workCaseId, roleId));
-
-            if( SYSTEM.equalsIgnoreCase(user.getRole().getName())       ||
-                    ISA.equalsIgnoreCase(user.getRole().getName())      ||
-                    ZM.equalsIgnoreCase(user.getRole().getName())       ||
-                    RGM.equalsIgnoreCase(user.getRole().getName())      ||
-                    GH.equalsIgnoreCase(user.getRole().getName())       ||
-                    CSSO.equalsIgnoreCase(user.getRole().getName())     ||
-                    AAD_ADMIN.equalsIgnoreCase(user.getRole().getName())||
-                    AAD_COMMITTEE.equalsIgnoreCase(user.getRole().getName())
-                    ){
-                //view [DB]
-                log.debug("-- {} Role[read]", user.getRole().getName());
-                checkMandateDocView = getCheckMandateDocViewFromDB(workCaseId, mandateDocList);
-                return checkMandateDocView;
-            }
         }
+//            //ZM, RGM, GH, CSSO
+//            if(ZM.equalsIgnoreCase(user.getRole().getName()) || RGM.equalsIgnoreCase(user.getRole().getName()) || GH.equalsIgnoreCase(user.getRole().getName()) || CSSO.equalsIgnoreCase(user.getRole().getName())){
+//                role = roleDAO.findRoleByName(BDM);
+//                if(!Util.isNull(role)){
+//                    mandateDocList = Util.safetyList(getMandateDocByWorkCaseIdAndRoleId(workCaseId, role.getId()));
+//                }
+//                checkMandateDocView = getCheckMandateDocViewFromDB(workCaseId, mandateDocList);
+//                return checkMandateDocView;
+//            } else if(SYSTEM.equalsIgnoreCase(user.getRole().getName()) || ISA.equalsIgnoreCase(user.getRole().getName())){ //SYSTEM, ISA
+//                mandateDocList = Util.safetyList(getMandateDocByWorkCaseIdAndRoleId(workCaseId, roleId));
+//                checkMandateDocView = getCheckMandateDocViewFromDB(workCaseId, mandateDocList);
+//                return checkMandateDocView;
+//            } else if(AAD_ADMIN.equalsIgnoreCase(user.getRole().getName()) || AAD_COMMITTEE.equalsIgnoreCase(user.getRole().getName())){//AAD ADMIN, AAD COMMITTEE
+//
+//            }
+//        }
 
 
         listECMDetailMap = callECMByWorkCaseId(workCaseId);
@@ -231,6 +238,11 @@ public class CheckMandateDocControl extends BusinessControl{
         }
         return setReadOnlyByRole(checkMandateDocView, roleName);
     }
+
+
+
+
+
 
     public void onSaveMandateDoc(final CheckMandateDocView checkMandateDocView, final long workCaseId, final long workCasePreScreenId){
         List<MandateDoc> mandateDocList = null;
