@@ -15,6 +15,7 @@ import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
@@ -60,8 +61,6 @@ public class PDFExecutiveSummary implements Serializable {
     }
 
     public void init(){
-
-
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCaseId") != null){
@@ -88,7 +87,7 @@ public class PDFExecutiveSummary implements Serializable {
     }
 
     public List<BorrowerExsumReport> fillBorrowerRelatedProfile(){
-        init();
+//        init();
         List<BorrowerExsumReport> reports = new ArrayList<BorrowerExsumReport>();
         List<CustomerInfoView> customerInfoViewList = exSummaryView.getBorrowerListView();
 
@@ -147,7 +146,7 @@ public class PDFExecutiveSummary implements Serializable {
     }
 
     public List<TradeFinanceExsumReport> fillTradeFinance(){
-        init();
+//        init();
         List<TradeFinanceExsumReport> financeExsumReports = new ArrayList<TradeFinanceExsumReport>();
 
         List<NewCreditFacilityView>  newCreditFacilityViewArrayList = new ArrayList<NewCreditFacilityView>();
@@ -181,7 +180,7 @@ public class PDFExecutiveSummary implements Serializable {
     }
 
     public List<NCBRecordExsumReport> fillNCBRecord(){
-        init();
+//        init();
         List<NCBRecordExsumReport> recordExsumReports = new ArrayList<NCBRecordExsumReport>();
         List<NCBInfoView> ncbInfoViewList = exSummaryView.getNcbInfoListView();
 
@@ -206,7 +205,7 @@ public class PDFExecutiveSummary implements Serializable {
     }
 
     public BorrowerExsumReport fillBorrower(){
-        init();
+//        init();
         BorrowerExsumReport borrowerExsumReport = new BorrowerExsumReport();
 
         if(!Util.isNull(exSummaryView)){
@@ -222,7 +221,7 @@ public class PDFExecutiveSummary implements Serializable {
     }
 
     public BorrowerCharacteristicExSumReport fillBorrowerCharacteristic(){
-        init();
+//        init();
         BorrowerCharacteristicExSumReport characteristicExSumReport = new BorrowerCharacteristicExSumReport();
         ExSumCharacteristicView exSumCharacteristicView = exSummaryView.getExSumCharacteristicView();
         log.debug("exSumCharacteristicView: {}",exSumCharacteristicView);
@@ -282,7 +281,7 @@ public class PDFExecutiveSummary implements Serializable {
     }
 
     public AccountMovementExSumReport fillAccountMovement(){
-        init();
+//        init();
         AccountMovementExSumReport movementExSumReport = new AccountMovementExSumReport();
         List<ExSumAccountMovementView> movementViewList = exSummaryView.getExSumAccMovementViewList();
 
@@ -306,23 +305,24 @@ public class PDFExecutiveSummary implements Serializable {
     }
 
     public CollateralExSumReport fillCollateral(){
-        init();
+//        init();
         CollateralExSumReport collateralExSumReport = new CollateralExSumReport();
+        ExSumCollateralView exSumCollateralView = exSummaryView.getExSumCollateralView();
 
-        if (!Util.isNull(exSummary)){
-            collateralExSumReport.setCashCollateralValue(Util.convertNullToZERO(exSummary.getCashCollateralValue()));
-            collateralExSumReport.setCoreAssetValue(Util.convertNullToZERO(exSummary.getCoreAssetValue()));
-            collateralExSumReport.setNoneCoreAssetValue(Util.convertNullToZERO(exSummary.getNoneCoreAssetValue()));
-            collateralExSumReport.setLimitApprove(Util.convertNullToZERO(exSummary.getLimitApprove()));
-            collateralExSumReport.setPercentLTV(Util.convertNullToZERO(exSummary.getPercentLTV()));
+        if (!Util.isNull(exSumCollateralView)){
+            collateralExSumReport.setCashCollateralValue(Util.convertNullToZERO(exSumCollateralView.getCashCollateralValue()));
+            collateralExSumReport.setCoreAssetValue(Util.convertNullToZERO(exSumCollateralView.getCoreAssetValue()));
+            collateralExSumReport.setNoneCoreAssetValue(Util.convertNullToZERO(exSumCollateralView.getNoneCoreAssetValue()));
+            collateralExSumReport.setLimitApprove(Util.convertNullToZERO(exSumCollateralView.getLimitApprove()));
+            collateralExSumReport.setPercentLTV(Util.convertNullToZERO(exSumCollateralView.getPercentLTV()));
         } else {
-            log.debug("exSummary is Method fillCollateral is Null. {}",exSummary);
+            log.debug("exSummary is Method fillCollateral is Null. {}",exSumCollateralView);
         }
         return collateralExSumReport;
     }
 
     public CreditRiskInfoExSumReport fillCreditRisk(){
-        init();
+//        init();
         CreditRiskInfoExSumReport riskInfoExSumReport = new CreditRiskInfoExSumReport();
         ExSumCreditRiskInfoView exSumCreditRiskInfoView = exSummaryView.getExSumCreditRiskInfoView();
 
@@ -342,7 +342,7 @@ public class PDFExecutiveSummary implements Serializable {
     }
 
     public DecisionExSumReport fillDecision(){
-        init();
+//        init();
         DecisionExSumReport decisionExSumReport = new DecisionExSumReport();
         List<ExSumDecisionView> exSumDecisionView = exSummaryView.getExSumDecisionListView();
 
@@ -375,7 +375,7 @@ public class PDFExecutiveSummary implements Serializable {
     }
 
     public BizSupportExSumReport fillBizSupport(){
-        init();
+//        init();
         BizSupportExSumReport bizSupportExSumReport = new BizSupportExSumReport();
 
         if (!Util.isNull(exSummaryView)){
@@ -396,7 +396,7 @@ public class PDFExecutiveSummary implements Serializable {
     }
 
     public UWDecisionExSumReport fillUWDecision(){
-        init();
+//        init();
         UWDecisionExSumReport uwDecisionExSumReport = new UWDecisionExSumReport();
         List<ExSumReasonView> exSumReasonViews = exSummaryView.getDeviateCode();
 
