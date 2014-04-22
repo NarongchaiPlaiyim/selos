@@ -56,8 +56,6 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     NewCollateralCreditDAO newCollateralCreditDAO;
     @Inject
-    NewFeeCreditDAO newFeeCreditDAO;
-    @Inject
     NewConditionDetailDAO newConditionDetailDAO;
     @Inject
     NewCreditDetailDAO newCreditDetailDAO;
@@ -127,8 +125,6 @@ public class CreditFacProposeControl extends BusinessControl {
     NewCollateralDAO newCollateralDAO;
     @Inject
     NewCollateralSubRelatedDAO newCollateralSubRelatedDAO;
-    @Inject
-    NewFeeDetailTransform newFeeDetailTransform;
     @Inject
     FeeTransform feeTransform;
     @Inject
