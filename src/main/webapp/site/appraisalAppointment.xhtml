@@ -433,7 +433,7 @@
                                         <p:column style='width:100px' styleClass="center"
                                                   headerText="#{msg.get('app.cusaccept.contactRecord.nextCallDateTime')}" escape="false" >
                                             <h:outputText value="#{detail.nextCallingDate}">
-                                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
+                                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                             </h:outputText>
                                             <h:outputText value="-" rendered="#{empty detail.nextCallingDate}"/>
                                         </p:column>
