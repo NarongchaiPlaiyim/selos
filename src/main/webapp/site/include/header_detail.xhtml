@@ -335,7 +335,9 @@
 <p:panel id="header_panel_appraisal" rendered="#{headerController.stageId == 203}" styleClass="panel">
     <!-- Return to BDM (AAD Admin)-->
     <p:commandButton id="btnReturnBDM_AADM" value="Return to BDM" title="Return to BDM" styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Return to BDM') and headerController.stepId == 2006}">
+                     update=":frmMain:returnBDM_AADAdminPanel"
+                     rendered="#{headerController.checkButton('Return to BDM') and headerController.stepId == 2006}"
+                     actionListener="#{headerController.onOpenReturnBDMByAAD()}">
 
     </p:commandButton>
     <!-- Check Mandate Doc (AAD Admin)-->
@@ -356,7 +358,7 @@
     <p:commandButton id="btnReturnAADM_AADC" value="Return to AAD Admin" title="Return to AAD Admin"
                      styleClass="blueButton"
                      actionListener="#{headerController.onOpenReturnAADAdmin()}"
-                     update=":frmMain:addReturnInfoPanel"
+                     update=":frmMain:returnAADM_AADCPanel"
                      rendered="#{headerController.checkButton('Return to AAD Admin')}">
 
     </p:commandButton>
@@ -645,7 +647,7 @@
          rendered="#{headerController.checkButton('Return to BDM') and headerController.stepId == 2006}">
     <p:dialog id="returnBDM_AADAdminDialog" widgetVar="returnBDM_AADAdminDlg" header="Return to BDM"
               resizable="false"
-              modal="true" width="500" height="200" closable="false">
+              modal="true" width="430" height="160" closable="false">
         <ui:include src="/site/dialog/returnBDMByAADDialog.xhtml"/>
     </p:dialog>
 </p:panel>
