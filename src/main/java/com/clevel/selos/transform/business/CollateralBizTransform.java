@@ -7,10 +7,11 @@ import com.clevel.selos.integration.coms.model.AppraisalData;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
-import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.SubCollateralType;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.NewCollateralHeadView;
+import com.clevel.selos.model.view.NewCollateralSubView;
+import com.clevel.selos.model.view.NewCollateralView;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -68,6 +69,7 @@ public class CollateralBizTransform extends BusinessTransform {
                     if(!Util.isNull(collateralType) && !Util.isZero(collateralType.getId())){
                         SubCollateralType subCollateralType = subCollateralTypeDAO.findByHeadAndSubColCode(collateralType,headCollateralData.getSubCollType());
                         log.debug("-- SubCollateralType.id[{}]", subCollateralType.getId());
+                        newCollateralHeadView.setSubCollType(subCollateralType);
                     }
                     //TODO: add field : subCollType  [HEAD]
 
@@ -79,6 +81,7 @@ public class CollateralBizTransform extends BusinessTransform {
                             if(!Util.isNull(collateralType) && !Util.isZero(collateralType.getId())){
                                 SubCollateralType subCollateralType = subCollateralTypeDAO.findByHeadAndSubColCode(collateralType,subCollateralData.getSubCollType());
                                 newCollateralSubView.setSubCollateralType(subCollateralType);
+                                newCollateralSubView.setHeadCollType(collateralType);
                             }
                             newCollateralSubView.setAddress(subCollateralData.getAddress());
                             newCollateralSubView.setTitleDeed(subCollateralData.getTitleDeed());

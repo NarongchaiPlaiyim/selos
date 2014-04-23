@@ -133,7 +133,6 @@ public class CreditFacPropose implements Serializable {
     private boolean cannotEditStandard;
     private boolean notRetrievePricing;
     private List<Long> deleteCreditIdList;
-    private List<Long> deleteCreditTierIdList;
 
     // for control Propose Collateral
     private NewCollateralView newCollateralView;
@@ -149,11 +148,9 @@ public class CreditFacPropose implements Serializable {
     private CustomerInfoView collateralOwnerUW;
     private List<NewCollateralView> newCollateralViewDelList;
     private boolean flagComs;
-    private boolean disableComs;
     private boolean flagButtonCollateral;
     private boolean editProposeColl;
     private List<Long> deleteCollIdList;
-    private List<Long> deleteSubCollIdList;
 
     // for  control Guarantor Information Dialog
     private NewGuarantorDetailView newGuarantorDetailView;
@@ -326,9 +323,7 @@ public class CreditFacPropose implements Serializable {
             deleteCreditIdList = new ArrayList<Long>();
             deleteCollIdList = new ArrayList<Long>();
             deleteGuarantorIdList = new ArrayList<Long>();
-            deleteSubCollIdList = new ArrayList<Long>();
             deleteConditionIdList = new ArrayList<Long>();
-            deleteCreditTierIdList = new ArrayList<Long>();
 
             try {
                 WorkCase workCase = workCaseDAO.findById(workCaseId);
@@ -577,7 +572,7 @@ public class CreditFacPropose implements Serializable {
                             for (NewCreditDetailView newCreditView : newCreditFacilityView.getNewCreditDetailViewList()) {
                                 stringId = String.valueOf(newCreditView.getId());
                                 log.debug("newCreditView.getId() toString :: {}", newCreditView.getId());
-                             
+
                                 if (stringId.equals(creditTypeId)) {
                                     if(newCreditView.getNewCreditTierDetailViewList() != null && newCreditView.getNewCreditTierDetailViewList().size() > 0){
                                         for(NewCreditTierDetailView nctdv : newCreditView.getNewCreditTierDetailViewList()){
