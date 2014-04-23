@@ -707,6 +707,7 @@ public class PDFDecision implements Serializable {
             log.debug("newCollateralViews is Null by fillProposedCollateral. {}",newCollateralViews);
             ProposedCollateralDecisionReport collateralDecisionReport = new ProposedCollateralDecisionReport();
             collateralDecisionReport.setPath(pathsub);
+            collateralDecisionReport.setPath(pathsub);
             proposedCollateralDecisionReportList.add(collateralDecisionReport);
         }
         return proposedCollateralDecisionReportList;
