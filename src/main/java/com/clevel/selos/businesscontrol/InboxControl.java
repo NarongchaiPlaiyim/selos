@@ -67,15 +67,20 @@ public class InboxControl extends BusinessControl {
 
     }
 
-    public String getLandingPage(long stepId){
-        StepLandingPage stepLandingPage = stepLandingPageDAO.findByStepId(stepId);
-        String landingPage = "";
-        if(stepLandingPage != null){
-            landingPage = stepLandingPage.getPageName();
+    public String getLandingPage(long stepId, long status){
+        User user = getCurrentUser();
+        if(user!=null){
+            StepLandingPage stepLandingPage = stepLandingPageDAO.findByStepStatusAndRole(stepId,status,user.getRole().getId());
+            String landingPage = "";
+            if(stepLandingPage != null){
+                landingPage = stepLandingPage.getPageName();
+            } else {
+                landingPage = "LANDING_PAGE_NOT_FOUND";
+            }
+            return landingPage;
         } else {
-            landingPage = "LANDING_PAGE_NOT_FOUND";
+            return "LANDING_PAGE_NOT_FOUND";
         }
-        return landingPage;
     }
 
     public void selectCasePoolBox(String queueName, String wobNumber, long actionCode) throws Exception{

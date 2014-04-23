@@ -650,7 +650,7 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public void restartCase(String queueName, String wobNumber) throws Exception {
-        bpmExecutor.completeCase(queueName, ActionCode.RESTART.getVal(), wobNumber);
+        bpmExecutor.restartCase(queueName, ActionCode.RESTART.getVal(), wobNumber);
     }
 
     public void calculatePricingDOA(long workCaseId, NewCreditFacility newCreditFacility){

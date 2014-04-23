@@ -544,7 +544,7 @@ public class ReassignTeamNames implements Serializable
         }
 
         session.setAttribute("wobNum",searchViewSelectItem.getFwobnumber());
-
+        session.setAttribute("statusId", Util.parseLong(searchViewSelectItem.getStatuscode(), 0));
         session.setAttribute("stepId", searchViewSelectItem.getStepId());
         session.setAttribute("queuename",searchViewSelectItem.getQueuename());
         session.setAttribute("fetchType",searchViewSelectItem.getFetchType());
@@ -566,7 +566,7 @@ public class ReassignTeamNames implements Serializable
         session.setAttribute("appHeaderInfo", appHeaderView);*/
 
         long selectedStepId = searchViewSelectItem.getStepId();
-        String landingPage = inboxControl.getLandingPage(selectedStepId);
+        String landingPage = inboxControl.getLandingPage(selectedStepId,Util.parseLong(searchViewSelectItem.getStatuscode(), 0));
 
         if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
             FacesUtil.redirect(landingPage);

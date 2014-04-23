@@ -154,7 +154,6 @@ public class PESQLAllBoxes implements Serializable
         long wrkCasePreScreenId = 0L;
         long wrkCaseAppraisalId = 0L;
         long wrkCaseId = 0L;
-        long statusId = 0L;
         int stageId = 0;
         int requestAppraisalFlag = 0;
 
@@ -165,11 +164,9 @@ public class PESQLAllBoxes implements Serializable
             if(workCasePrescreen != null){
                 wrkCasePreScreenId = workCasePrescreen.getId();
                 requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
-                statusId = workCasePrescreen.getStatus().getId();
             }
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
-            session.setAttribute("statusId", statusId);
             session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
         } else if (stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Parallel Appraisal
             WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
@@ -187,9 +184,7 @@ public class PESQLAllBoxes implements Serializable
             }
             WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
             if(workCaseAppraisal != null){
-                statusId = workCaseAppraisal.getStatus().getId();
                 wrkCaseAppraisalId = workCaseAppraisal.getId();
-                session.setAttribute("statusId", statusId);
                 session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
             }
         } else {
@@ -197,15 +192,14 @@ public class PESQLAllBoxes implements Serializable
             if(workCase != null){
                 wrkCaseId = workCase.getId();
                 requestAppraisalFlag = workCase.getRequestAppraisal();
-                statusId = workCase.getStatus().getId();
             }
             session.setAttribute("workCaseId", wrkCaseId);
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
-            session.setAttribute("statusId", statusId);
             session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
         }
 
         session.setAttribute("stepId", inboxViewSelectItem.getStepId());
+        session.setAttribute("statusId", Util.parseLong(inboxViewSelectItem.getStatuscode(), 0));
 
         if(stepId != 0){
             Step step = stepDAO.findById(stepId);
@@ -251,7 +245,7 @@ public class PESQLAllBoxes implements Serializable
 
         session.setAttribute("appHeaderInfo", appHeaderView);
 
-        String landingPage = inboxControl.getLandingPage(stepId);
+        String landingPage = inboxControl.getLandingPage(stepId,Util.parseLong(inboxViewSelectItem.getStatuscode(), 0));
 
         log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
 
