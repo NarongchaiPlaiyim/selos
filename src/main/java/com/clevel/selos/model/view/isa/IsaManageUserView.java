@@ -1,6 +1,5 @@
 package com.clevel.selos.model.view.isa;
 
-import com.clevel.selos.model.ManageUserAction;
 import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -24,7 +23,6 @@ public class IsaManageUserView implements Serializable {
     private UserZone userZone;
     private int active;
 
-    private ManageUserAction flag;
     private boolean readOnlyUserId;
 
     public void reset() {
@@ -159,14 +157,6 @@ public class IsaManageUserView implements Serializable {
         this.active = active;
     }
 
-    public ManageUserAction getFlag() {
-        return flag;
-    }
-
-    public void setFlag(ManageUserAction flag) {
-        this.flag = flag;
-    }
-
     public boolean isReadOnlyUserId() {
         return readOnlyUserId;
     }
@@ -192,7 +182,6 @@ public class IsaManageUserView implements Serializable {
                 .append("userTitle", userTitle)
                 .append("userZone", userZone)
                 .append("active", active)
-                .append("flag", flag)
                 .toString();
     }
 }
