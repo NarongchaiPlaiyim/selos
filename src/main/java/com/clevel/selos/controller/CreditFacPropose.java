@@ -591,6 +591,7 @@ public class CreditFacPropose implements Serializable {
                     severity = MessageDialogSeverity.INFO.severity();
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 } else if (ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
+                    log.debug("standardPricingResponse.getReason() :: {}",standardPricingResponse.getReason());
                     messageHeader = msg.get("app.messageHeader.error");
                     message = standardPricingResponse.getReason();
                     severity = MessageDialogSeverity.ALERT.severity();
@@ -710,6 +711,14 @@ public class CreditFacPropose implements Serializable {
                 }
             }
         }
+
+//        if(newCreditDetailView.getNewCreditTierDetailViewList() != null && newCreditDetailView.getNewCreditTierDetailViewList().size() > 0){
+//            for(NewCreditTierDetailView nctdv : newCreditDetailView.getNewCreditTierDetailViewList()){
+//                newCreditDetailView.getDeleteTmpList().add(nctdv.getId());
+//                newCreditDetailView.getNewCreditTierDetailViewList().remove(nctdv);
+//            }
+//        }
+
     }
 
     public void onCalInstallment(NewCreditDetailView newCreditDetailView) {

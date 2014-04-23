@@ -274,7 +274,7 @@ public class DBRControl extends BusinessControl {
         }
         debt = Util.add(debt, totalPurposeForDBR);
         result = Util.divide(debt, netMonthlyIncome);
-
+        result = Util.divide(result, BigDecimal.valueOf(100));
         return result;
     }
 
