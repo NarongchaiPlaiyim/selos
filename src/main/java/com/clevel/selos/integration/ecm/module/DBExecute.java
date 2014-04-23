@@ -1,8 +1,8 @@
 package com.clevel.selos.integration.ecm.module;
 
 import com.clevel.selos.exception.ECMInterfaceException;
-import com.clevel.selos.integration.ECM;
 import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.ecm.db.ECMCAPShare;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.tool.DBContext;
 import com.clevel.selos.system.Config;
@@ -11,10 +11,11 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
-import java.sql.PreparedStatement;
+
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -38,6 +39,21 @@ public class DBExecute implements Serializable {
     private String schema;
     @Inject
     private DBContext dbContext;
+
+    //FOR UPDATE AND INSERT
+    @Inject
+    @Config(name = "interface.ecm.cap.share.oracle.conn")
+    private String connECMCAPShare;
+    @Inject
+    @Config(name = "interface.ecm.cap.share.oracle.username")
+    private String ecmUserCAPShare;
+    @Inject
+    @Config(name = "interface.ecm.cap.share.oracle.password")
+    private String ecmPasswordCAPShare;
+    @Inject
+    @Config(name = "interface.ecm.cap.share.oracle.schema")
+    private String schemaCAPShare;
+
     @Inject
     @ExceptionMessage
     private Message msg;
@@ -67,7 +83,7 @@ public class DBExecute implements Serializable {
             stringBuilder.append("LEFT OUTER JOIN "+schema+".WCAP_MS_DOCUMENTTYPE DOCUMENTTYPE ON DOCUMENT.TYPE_CODE = DOCUMENTTYPE.TYPE_CODE ");
             stringBuilder.append("WHERE ");
             stringBuilder.append("DOCUMENT.CA_NUMBER = ? AND ");
-            stringBuilder.append("DOCUMENT.CA_NUMBER IS NULL AND DOCUMENT.TX_DETAIL_ID <> 0 ");
+            stringBuilder.append("DOCUMENT.TX_DETAIL_ID <> 0 ");
             stringBuilder.append("UNION ");
             stringBuilder.append("SELECT ");
             stringBuilder.append("DOCUMENT.ECM_DOC_ID, ");
@@ -96,7 +112,7 @@ public class DBExecute implements Serializable {
             stringBuilder.append("LEFT OUTER JOIN WCAP_MS_DOCUMENTTYPE DOCUMENTTYPE ON DOCUMENT.TYPE_CODE = DOCUMENTTYPE.TYPE_CODE ");
             stringBuilder.append("WHERE ");
             stringBuilder.append("DOCUMENT.CA_NUMBER = ? AND ");
-            stringBuilder.append("DOCUMENT.CA_NUMBER IS NULL AND DOCUMENT.TX_DETAIL_ID <> 0 ");
+            stringBuilder.append("DOCUMENT.TX_DETAIL_ID <> 0 ");
             stringBuilder.append("UNION ");
             stringBuilder.append("SELECT ");
             stringBuilder.append("DOCUMENT.ECM_DOC_ID, ");
@@ -153,6 +169,117 @@ public class DBExecute implements Serializable {
             closeConnection();
         }
         return ecmDetailList;
+    }
+
+    public boolean updateECM(final ECMCAPShare ecmcapShare){
+        log.debug("-- updateECM.[{}]", ecmcapShare.getCrsUKCANumber());
+        boolean result = false;
+        StringBuilder stringBuilder = null;
+        stringBuilder = new StringBuilder();
+        if(!Util.isNull(schemaCAPShare) && !Util.isZero(schemaCAPShare.length())){
+            stringBuilder.append("UPDATE ")
+                    .append(schemaCAPShare).append(".CRS_CRSLOOKUP ").append("SET ")
+                    .append("CRS_LASTUPDATE = ?, ")
+                    .append("CRS_CANCEL_CA = ? ")
+                    .append("WHERE ")
+                    .append("CRS_UK_CANUMBER = ?");
+        } else {
+            stringBuilder.append("UPDATE ")
+                    .append("CRS_CRSLOOKUP ").append("SET ")
+                    .append("CRS_LASTUPDATE = ?, ")
+                    .append("CRS_CANCEL_CA = ? ")
+                    .append("WHERE ")
+                    .append("CRS_UK_CANUMBER = ?");
+        }
+        try{
+            connection = dbContext.getConnection(connECMCAPShare, ecmUserCAPShare, ecmPasswordCAPShare);
+        } catch (ECMInterfaceException ex){
+            throw ex;
+        }
+        try {
+            log.debug("open connection.");
+            String sql = stringBuilder.toString();
+            log.debug("-- SQL[{}]", sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setDate(1, ecmcapShare.getCrsLastUpdate());
+            statement.setString(2, ecmcapShare.getCrsCancelCA());
+            statement.setString(3, ecmcapShare.getCrsUKCANumber());
+            int flag = statement.executeUpdate();
+            if(flag != -1){
+                return !result;
+            }
+            connection.close();
+            connection = null;
+            log.debug("connection closed.");
+        } catch (SQLException e) {
+            log.error("execute query exception!",e);
+            throw new ECMInterfaceException(e, ExceptionMapping.ECM_UPDATEDATA_ERROR, msg.get(ExceptionMapping.ECM_UPDATEDATA_ERROR));
+        } finally {
+            closeConnection();
+        }
+        return result;
+    }
+
+    public boolean insertIntoECM(final ECMCAPShare ecmcapShare){
+        boolean result = false;
+        log.debug("-- insertIntoECM.[{}]", ecmcapShare.getCrsUKCANumber());
+        StringBuilder stringBuilder = null;
+        stringBuilder = new StringBuilder();
+        if(!Util.isNull(schemaCAPShare) && !Util.isZero(schemaCAPShare.length())){
+            stringBuilder.append("INSERT INTO ")
+                    .append(schemaCAPShare).append(".CRS_CRSLOOKUP")
+                    .append("(CRS_BRANCHCODE, ")
+                    .append("CRS_CANCEL_CA, ").append("CRS_CRATEDATE, ")
+                    .append("CRS_CUSTNAME, ").append("CRS_CUSTTYPE, ")
+                    .append("CRS_HUBCODE, ").append("CRS_LASTUPDATE, ")
+                    .append("CRS_REGIONCODE, ").append("CRS_ROCODE, ")
+                    .append("CRS_UK_CANUMBER )")
+                    .append("VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        } else {
+            stringBuilder.append("INSERT INTO ")
+                    .append("CRS_CRSLOOKUP")
+                    .append("(CRS_BRANCHCODE, ")
+                    .append("CRS_CANCEL_CA, ").append("CRS_CRATEDATE, ")
+                    .append("CRS_CUSTNAME, ").append("CRS_CUSTTYPE, ")
+                    .append("CRS_HUBCODE, ").append("CRS_LASTUPDATE, ")
+                    .append("CRS_REGIONCODE, ").append("CRS_ROCODE, ")
+                    .append("CRS_UK_CANUMBER)")
+                    .append("VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        }
+        try{
+            connection = dbContext.getConnection(connECMCAPShare, ecmUserCAPShare, ecmPasswordCAPShare);
+        } catch (ECMInterfaceException ex){
+            throw ex;
+        }
+        try {
+            log.debug("open connection.");
+            String sql = stringBuilder.toString();
+            log.debug("-- SQL[{}]", sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, Util.convertNullToZero(ecmcapShare.getCrsBranchCode()));
+            statement.setString(2,  ecmcapShare.getCrsCancelCA() == null ? "N" : ecmcapShare.getCrsCancelCA());
+            statement.setDate(3, ecmcapShare.getCrsCreateDate());
+            statement.setString(4, ecmcapShare.getCrsCustName());
+            statement.setString(5,  Util.convertNullToZero(ecmcapShare.getCrsCusType()));
+            statement.setString(6,  Util.convertNullToZero(ecmcapShare.getCrsHubCode()));
+            statement.setDate(7, ecmcapShare.getCrsLastUpdate());
+            statement.setString(8,  Util.convertNullToZero(ecmcapShare.getCrsRegionCode()));
+            statement.setString(9,  Util.convertNullToZero(ecmcapShare.getCrsRoCode()));
+            statement.setString(10, ecmcapShare.getCrsUKCANumber());
+            int flag = statement.executeUpdate();
+            if(flag != -1){
+                return !result;
+            }
+            connection.close();
+            connection = null;
+            log.debug("connection closed.");
+        } catch (SQLException e) {
+            log.error("execute query exception!",e);
+            throw new ECMInterfaceException(e, ExceptionMapping.ECM_INSERTDATA_ERROR, msg.get(ExceptionMapping.ECM_INSERTDATA_ERROR));
+        } finally {
+            closeConnection();
+        }
+        return result;
     }
 
     private void closeConnection() {

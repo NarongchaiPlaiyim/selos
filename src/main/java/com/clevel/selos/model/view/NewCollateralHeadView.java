@@ -1,8 +1,6 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.CollateralType;
-import com.clevel.selos.model.db.master.PotentialCollateral;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -19,8 +17,10 @@ public class NewCollateralHeadView implements Serializable {
     private String collateralLocation;
     private BigDecimal appraisalValue;
     private CollateralType headCollType;
+    private SubCollateralType subCollType;
     private CollateralType collTypePercentLTV;
     private PotentialCollateral potentialCollateral ;
+    private TCGCollateralType tcgCollateralType;
     private String collID;
     private BigDecimal existingCredit;
     private int insuranceCompany;
@@ -48,6 +48,8 @@ public class NewCollateralHeadView implements Serializable {
         this.titleDeed = "";
         this.newCollateralSubViewList = new ArrayList<NewCollateralSubView>();
         this.newCollateralSubDeleteList = new ArrayList<NewCollateralSubView>();
+        this.tcgCollateralType = new TCGCollateralType();
+        this.subCollType = new SubCollateralType();
     }
 
     public long getId() {
@@ -186,25 +188,42 @@ public class NewCollateralHeadView implements Serializable {
         this.newCollateralSubDeleteList = newCollateralSubDeleteList;
     }
 
+    public TCGCollateralType getTcgCollateralType() {
+        return tcgCollateralType;
+    }
+
+    public void setTcgCollateralType(TCGCollateralType tcgCollateralType) {
+        this.tcgCollateralType = tcgCollateralType;
+    }
+
+    public SubCollateralType getSubCollType() {
+        return subCollType;
+    }
+
+    public void setSubCollType(SubCollateralType subCollType) {
+        this.subCollType = subCollType;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("no", no)
-                .append("titleDeed", titleDeed)
-                .append("collateralLocation", collateralLocation)
-                .append("appraisalValue", appraisalValue)
-                .append("headCollType", headCollType)
-                .append("collTypePercentLTV", collTypePercentLTV)
-                .append("potentialCollateral", potentialCollateral)
-                .append("collID", collID)
-                .append("existingCredit", existingCredit)
-                .append("insuranceCompany", insuranceCompany)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
-                .append("newCollateralSubViewList", newCollateralSubViewList)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("no", no).
+                append("titleDeed", titleDeed).
+                append("collateralLocation", collateralLocation).
+                append("appraisalValue", appraisalValue).
+                append("headCollType", headCollType).
+                append("subCollType", subCollType).
+                append("collTypePercentLTV", collTypePercentLTV).
+                append("potentialCollateral", potentialCollateral).
+                append("tcgCollateralType", tcgCollateralType).
+                append("collID", collID).
+                append("existingCredit", existingCredit).
+                append("insuranceCompany", insuranceCompany).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                toString();
     }
 }

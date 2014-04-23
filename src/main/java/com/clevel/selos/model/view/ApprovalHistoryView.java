@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.ApprovalType;
 import com.clevel.selos.model.DecisionType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -12,9 +13,11 @@ public class ApprovalHistoryView implements Serializable {
     private long id;
     private StepView stepView;
     private UserView userView;
+    private RoleView roleView;
     private Date submitDate;
     private String comments;
     private DecisionType uwDecision;
+    private int approvalType;
     private int isSubmit;
 
     public ApprovalHistoryView() {
@@ -24,6 +27,7 @@ public class ApprovalHistoryView implements Serializable {
     public void reset() {
         this.stepView = new StepView();
         this.userView = new UserView();
+        this.roleView = new RoleView();
         this.submitDate = DateTime.now().toDate();
         this.comments = "";
         this.uwDecision = DecisionType.NO_DECISION;
@@ -53,6 +57,14 @@ public class ApprovalHistoryView implements Serializable {
         this.userView = userView;
     }
 
+    public RoleView getRoleView() {
+        return roleView;
+    }
+
+    public void setRoleView(RoleView roleView) {
+        this.roleView = roleView;
+    }
+
     public Date getSubmitDate() {
         return submitDate;
     }
@@ -77,6 +89,14 @@ public class ApprovalHistoryView implements Serializable {
         this.uwDecision = uwDecision;
     }
 
+    public int getApprovalType() {
+        return approvalType;
+    }
+
+    public void setApprovalType(int approvalType) {
+        this.approvalType = approvalType;
+    }
+
     public int getSubmit() {
         return isSubmit;
     }
@@ -91,9 +111,11 @@ public class ApprovalHistoryView implements Serializable {
                 .append("id", id)
                 .append("stepView", stepView)
                 .append("userView", userView)
+                .append("roleView", roleView)
                 .append("submitDate", submitDate)
                 .append("comments", comments)
                 .append("uwDecision", uwDecision)
+                .append("approvalType", approvalType)
                 .append("isSubmit", isSubmit)
                 .toString();
     }

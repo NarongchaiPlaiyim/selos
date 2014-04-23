@@ -20,17 +20,6 @@ public class MandateFieldDAO extends GenericDAO<MandateField, Long> {
     public MandateFieldDAO() {
     }
 
-    public List<MandateField> findByAction(long stepId, long statusId, String actionId){
-        logger.debug("findByCriteria Step:{}, Status:{}, Action:{}", stepId, statusId, actionId);
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("step.id", stepId));
-        criteria.add(Restrictions.eq("status.id", statusId));
-        criteria.add(Restrictions.eq("action.id", actionId));
-        List<MandateField> mandateFieldConfigureList = criteria.list();
-        logger.debug("retrun List<MandateFieldConfigure> {}", mandateFieldConfigureList);
-        return mandateFieldConfigureList;
-    }
-
     public List<MandateField> findByAction(Step step, Status status, Action action){
         logger.debug("findByCriteria Step:{}, Status:{}, Action:{}", step, status, action);
         Criteria criteria = createCriteria();

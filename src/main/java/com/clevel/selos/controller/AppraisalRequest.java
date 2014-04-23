@@ -36,7 +36,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "appraisalRequest")
-public class AppraisalRequest implements Serializable {
+public class AppraisalRequest extends BaseController {
 
     @Inject
     @SELOS
@@ -108,22 +108,12 @@ public class AppraisalRequest implements Serializable {
         contactFlag3 = false;
     }
 
-    public boolean checkSession(HttpSession session){
-        boolean checkSession = false;
-        if(( (Long)session.getAttribute("workCaseId") != 0 || (Long)session.getAttribute("workCasePreScreenId") != 0 ) &&
-                (Long)session.getAttribute("stepId") != 0){
-            checkSession = true;
-        }
-
-        return checkSession;
-    }
-
     public void preRender(){
         log.debug("preRender...");
         HttpSession session = FacesUtil.getSession(true);
         if(checkSession(session)){
-            stepId = (Long)session.getAttribute("stepId");
-            if(stepId != StepValue.PRESCREEN_MAKER.value() && stepId != StepValue.FULLAPP_BDM_SSO_ABDM.value()){
+            stepId = getCurrentStep(session);
+            if(stepId != StepValue.REQUEST_APPRAISAL_RETURN.value() || stepId != StepValue.REQUEST_APPRAISAL_BDM.value()) {
                 log.debug("preRender ::: Invalid step id : {}", stepId);
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
@@ -142,13 +132,10 @@ public class AppraisalRequest implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         if(checkSession(session)){
             stepId = (Long)session.getAttribute("stepId");
-            if(stepId == StepValue.PRESCREEN_MAKER.value()){
-                workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
-                log.debug("onCreation ::: workCasePreScreenId : [{}]", workCasePreScreenId);
-            }else if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){
-                workCaseId = (Long)session.getAttribute("workCaseId");
-                log.debug("onCreation ::: workCaseId : [{}]", workCaseId);
-            }
+            workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+
+            log.debug("onCreation ::: workCasePreScreenId : [{}], workCaseId : [{}]", workCasePreScreenId, workCaseId);
 
             appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, workCasePreScreenId);
             log.debug("onCreation ::: appraisalView : {}", appraisalView);
@@ -270,13 +257,18 @@ public class AppraisalRequest implements Serializable {
 
 
     public boolean appraisalDetailViewMandate(){
-        log.debug("-- appraisalDetailViewMandate()");
+        log.debug("-- appraisalDetailViewMandate() ::: appraisalDetailViewDialog : {}", appraisalDetailViewDialog);
         boolean result = true;
-        if(Util.isZero(appraisalDetailViewDialog.getTitleDeed().length())){
+        if(!Util.isNull(appraisalDetailViewDialog.getTitleDeed())){
+            if(Util.isZero(appraisalDetailViewDialog.getTitleDeed().length())){
+                titleDeedFlag = true;
+                result = false;
+            } else {
+                titleDeedFlag = false;
+            }
+        } else {
             titleDeedFlag = true;
             result = false;
-        } else {
-            titleDeedFlag = false;
         }
         if(!appraisalDetailViewDialog.isPurposeNewAppraisalB() && !appraisalDetailViewDialog.isPurposeReviewAppraisalB() && !appraisalDetailViewDialog.isPurposeReviewBuildingB()){
             purposeFlag = true;

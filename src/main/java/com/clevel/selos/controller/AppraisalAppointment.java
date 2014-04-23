@@ -4,7 +4,6 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.AppraisalAppointmentControl;
 import com.clevel.selos.businesscontrol.CustomerAcceptanceControl;
 import com.clevel.selos.dao.master.*;
-import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
@@ -57,10 +56,6 @@ public class AppraisalAppointment implements Serializable {
     Message exceptionMsg;
 
     @Inject
-    private UserDAO userDAO;
-    @Inject
-    private WorkCaseDAO workCaseDAO;
-    @Inject
     private AppraisalCompanyDAO appraisalCompanyDAO;
     @Inject
     private AppraisalDivisionDAO appraisalDivisionDAO;
@@ -69,7 +64,13 @@ public class AppraisalAppointment implements Serializable {
     @Inject
     private ProvinceDAO provinceDAO;
     @Inject
+    private ReasonDAO reasonDAO;
+
+    @Inject
     private AppraisalAppointmentControl appraisalAppointmentControl;
+    @Inject
+    private CustomerAcceptanceControl customerAcceptanceControl;
+
     @Inject
     private AppraisalDetailTransform appraisalDetailTransform;
 
@@ -124,13 +125,8 @@ public class AppraisalAppointment implements Serializable {
     private List<Reason> reasons;
     private boolean addDialog;
     private Status workCaseStatus;
-    //private User user;
-    @Inject
-    private CustomerAcceptanceControl customerAcceptanceControl;
-    @Inject
-    private ReasonDAO reasonDAO;
     private CustomerAcceptanceView customerAcceptanceView;
-    @Inject
+
     public AppraisalAppointment() {
 
     }
@@ -175,7 +171,7 @@ public class AppraisalAppointment implements Serializable {
         if(checkSession(session)){
             stepId = (Long)session.getAttribute("stepId");
 
-            if(stepId != StepValue.REQUEST_APPRAISAL.value()){
+            if(stepId != StepValue.REVIEW_APPRAISAL_REQUEST.value()){
                 log.debug("preRender ::: invalid stepId : [{}]", stepId);
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
@@ -194,12 +190,15 @@ public class AppraisalAppointment implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         if(checkSession(session)){
             if((Long)session.getAttribute("workCaseId") != 0){
-                workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+                workCaseId = (Long)session.getAttribute("workCaseId");
             } else if ((Long)session.getAttribute("workCasePreScreenId") != 0){
-                workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
+                workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
             }
 
+            reasons = reasonDAO.findAll();
+
             contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
+
 
             appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId, workCasePreScreenId);
             workCaseStatus = customerAcceptanceControl.getWorkCaseStatus(workCaseId);
@@ -214,8 +213,11 @@ public class AppraisalAppointment implements Serializable {
                     appraisalContactDetailView = new AppraisalContactDetailView();
                 }
 
-                customerAcceptanceView = customerAcceptanceControl.getCustomerAcceptanceView(workCaseId);
-                contactRecordDetailViewList = Util.safetyList(customerAcceptanceControl.getContactRecordDetails(customerAcceptanceView.getId()));
+                contactRecordDetailViewList = appraisalView.getContactRecordDetailViewList();
+
+                customerAcceptanceView = customerAcceptanceControl.getCustomerAcceptanceView(workCaseId, workCasePreScreenId);
+
+//                contactRecordDetailViewList = Util.safetyList(customerAcceptanceControl.getContactRecordDetails(customerAcceptanceView.getId()));
 
                 updateContractFlag(appraisalContactDetailView);
             } else {
@@ -269,13 +271,47 @@ public class AppraisalAppointment implements Serializable {
 
     public void onSaveContactRecordDetailView(){
         log.debug("-- onSaveContactRecordDetailView() flag = {}", modeForButton);
-        boolean complete = true;
+        boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
+        Cloner cloner = new Cloner();
+        if(Util.isZero(contactRecordDetailViewList.size())){
+            contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
+            log.debug("-- [NEW]ContactRecordDetailViewList created");
+        }
+
         if(ModeForButton.ADD.equals(modeForButton)){
-            contactRecordDetailViewList.add(contactRecord);
+            log.debug("-- [AFTER]ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
+            contactRecordDetailView = cloner.deepClone(contactRecord);
+            if(!Util.isNull(reasons) && !Util.isZero(reasons.size())){
+                log.debug("-- ReasonList.size()[{}]", reasons.size());
+                for(Reason reason : reasons){
+                    if(reason.getId() == contactRecordDetailView.getUpdReasonId()){
+                        log.debug("-- ContactRecordDetailView.UpdReasonId[{}]", contactRecordDetailView.getUpdReasonId());
+                        contactRecordDetailView.setReason(reason);
+                        break;
+                    }
+                }
+            }
+            contactRecordDetailViewList.add(contactRecordDetailView);
+            complete = true;
+            log.debug("-- [BEFORE]ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
         }else if(ModeForButton.EDIT.equals(modeForButton)){
             log.debug("-- RowIndex[{}]", rowIndex);
-            contactRecordDetailViewList.set(rowIndex, contactRecord);
+            log.debug("-- [AFTER]ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
+            contactRecordDetailView = cloner.deepClone(contactRecord);
+            if(!Util.isNull(reasons) && !Util.isZero(reasons.size())){
+                log.debug("-- ReasonList.size()[{}]", reasons.size());
+                for(Reason reason : reasons){
+                    if(reason.getId() == contactRecordDetailView.getUpdReasonId()){
+                        log.debug("-- ContactRecordDetailView.UpdReasonId[{}]", contactRecordDetailView.getUpdReasonId());
+                        contactRecordDetailView.setReason(reason);
+                        break;
+                    }
+                }
+            }
+            complete = true;
+            contactRecordDetailViewList.set(rowIndex, contactRecordDetailView);
+            log.debug("-- [BEFORE]ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
         }
         context.addCallbackParam("functionComplete", complete);
 
@@ -399,14 +435,10 @@ public class AppraisalAppointment implements Serializable {
     }
 
     public void onEditAppraisalContactDetailView(){
-        log.info( " onEditAppraisalContactDetailView " + selectAppraisalContactDetailView);
         modeForButton = ModeForButton.EDIT;
-        appraisalContactDetailView = new AppraisalContactDetailView();
-        //*** Check list size ***//
-        if( rowIndex < appraisalContactDetailViewList.size() ) {
-//            appraisalContactDetailView.setCustomerName(selectAppraisalContactDetailView.getCustomerName());
-//            appraisalContactDetailView.setContactNo(selectAppraisalContactDetailView.getContactNo());
-        }
+        log.debug("-- onEditAppraisalContactDetailView() RowIndex[{}]", rowIndex);
+        Cloner cloner = new Cloner();
+        contactRecord = cloner.deepClone(contactRecord);
     }
 
     public void onAddAppraisalDetailView(){
@@ -462,8 +494,9 @@ public class AppraisalAppointment implements Serializable {
             appraisalAppointmentControl.onSaveAppraisalAppointment(appraisalView, workCaseId, workCasePreScreenId, contactRecordDetailViewList, customerAcceptanceView);
             messageHeader = msg.get("app.appraisal.request.message.header.save.success");
             message = msg.get("app.appraisal.request.message.body.save.success");
-            onCreation();
+
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            onCreation();
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.appraisal.request.message.header.save.fail");

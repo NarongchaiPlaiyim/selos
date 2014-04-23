@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary_subreportNCB_Record" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="dcba34d2-b608-4991-9c80-ac1439bd7fe6">
-	<property name="ireport.zoom" value="1.9487171000000123"/>
+	<property name="ireport.zoom" value="1.4641000000000088"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
@@ -174,9 +174,9 @@ TDR]]></text>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<frame>
-				<reportElement uuid="af9e4609-55de-4c5d-835d-cac3e6302738" mode="Opaque" x="0" y="0" width="555" height="20" backcolor="#FFFFFF"/>
+				<reportElement uuid="af9e4609-55de-4c5d-835d-cac3e6302738" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="555" height="20" backcolor="#FFFFFF"/>
 				<textField>
-					<reportElement uuid="f887abc4-fba8-4730-af81-d032558c1d14" mode="Opaque" x="0" y="0" width="84" height="20" forecolor="#000000"/>
+					<reportElement uuid="f887abc4-fba8-4730-af81-d032558c1d14" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="84" height="20" forecolor="#000000"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -186,11 +186,12 @@ TDR]]></text>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
-					<textFieldExpression><![CDATA[" "+$F{ncbCusName}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{ncbCusName}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement uuid="c638a41e-5d46-4fab-a385-f30cf4d58d9d" mode="Opaque" x="84" y="0" width="55" height="20" forecolor="#000000"/>
+					<reportElement uuid="c638a41e-5d46-4fab-a385-f30cf4d58d9d" stretchType="RelativeToBandHeight" mode="Opaque" x="84" y="0" width="55" height="20" forecolor="#000000"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -204,7 +205,7 @@ TDR]]></text>
 					<textFieldExpression><![CDATA[$F{checkIn6Month}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="36249ee7-d863-4768-9678-b54574eefda2" mode="Opaque" x="139" y="0" width="74" height="20" forecolor="#000000"/>
+					<reportElement uuid="36249ee7-d863-4768-9678-b54574eefda2" stretchType="RelativeToBandHeight" mode="Opaque" x="139" y="0" width="74" height="20" forecolor="#000000"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -218,7 +219,7 @@ TDR]]></text>
 					<textFieldExpression><![CDATA[$F{currentPaymentType}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="865f098a-2e41-4bdd-9381-0d2ffa6fcc5e" mode="Opaque" x="213" y="0" width="79" height="20" forecolor="#000000"/>
+					<reportElement uuid="865f098a-2e41-4bdd-9381-0d2ffa6fcc5e" stretchType="RelativeToBandHeight" mode="Opaque" x="213" y="0" width="79" height="20" forecolor="#000000"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -232,7 +233,7 @@ TDR]]></text>
 					<textFieldExpression><![CDATA[$F{historyPaymentType}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement uuid="1501078d-4e0e-46a3-b3e7-9fabc0849cd2" mode="Opaque" x="292" y="0" width="46" height="20" forecolor="#000000"/>
+					<reportElement uuid="1501078d-4e0e-46a3-b3e7-9fabc0849cd2" stretchType="RelativeToBandHeight" mode="Opaque" x="292" y="0" width="46" height="20" forecolor="#000000"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -246,7 +247,7 @@ TDR]]></text>
 					<textFieldExpression><![CDATA[$F{nplFlagText}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement uuid="6c5839c9-b21f-4dbd-8d38-900ea768e4b5" mode="Opaque" x="338" y="0" width="66" height="20" forecolor="#000000"/>
+					<reportElement uuid="6c5839c9-b21f-4dbd-8d38-900ea768e4b5" stretchType="RelativeToBandHeight" mode="Opaque" x="338" y="0" width="66" height="20" forecolor="#000000"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -260,7 +261,7 @@ TDR]]></text>
 					<textFieldExpression><![CDATA[$F{tdrFlagText}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="bb6bdb78-4936-4c7c-80da-d703f029cc20" mode="Opaque" x="404" y="0" width="74" height="20" forecolor="#000000"/>
+					<reportElement uuid="bb6bdb78-4936-4c7c-80da-d703f029cc20" stretchType="RelativeToBandHeight" mode="Opaque" x="404" y="0" width="74" height="20" forecolor="#000000"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -274,7 +275,7 @@ TDR]]></text>
 					<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="3c181391-a20a-4207-af35-20e8d04ec1cf" mode="Opaque" x="478" y="0" width="77" height="20" forecolor="#000000"/>
+					<reportElement uuid="3c181391-a20a-4207-af35-20e8d04ec1cf" stretchType="RelativeToBandHeight" mode="Opaque" x="478" y="0" width="77" height="20" forecolor="#000000"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>

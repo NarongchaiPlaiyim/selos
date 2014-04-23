@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subPersonCommercial_subPersonCommercial" pageWidth="113" pageHeight="802" columnWidth="113" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="4fac7855-8763-4dfa-a205-28d2345a7045">
-	<property name="ireport.zoom" value="4.177248169415658"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subPersonCommercial_subPersonCommercial" pageWidth="141" pageHeight="802" columnWidth="141" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="4fac7855-8763-4dfa-a205-28d2345a7045">
+	<property name="ireport.zoom" value="2.5937424601000076"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="detail" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF" hAlign="Center" vAlign="Middle" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
@@ -24,26 +24,27 @@
 		<fieldDescription><![CDATA[finalInterest]]></fieldDescription>
 	</field>
 	<detail>
-		<band height="16" splitType="Stretch">
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="481134be-25ae-45a8-a97e-3464f6e1473b" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="38" height="16"/>
-				<textElement textAlignment="Right">
+		<band height="29" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="481134be-25ae-45a8-a97e-3464f6e1473b" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="56" height="29"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{installment}.equals( null ) ? 0 : $F{installment}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{installment}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="36bcd156-1ed2-46b7-acc2-0fbb23dd3b43" style="detail" stretchType="RelativeToBandHeight" x="38" y="0" width="41" height="16"/>
-				<textElement textAlignment="Right">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
+				<reportElement uuid="36bcd156-1ed2-46b7-acc2-0fbb23dd3b43" style="detail" stretchType="RelativeToBandHeight" x="56" y="0" width="41" height="29"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{finalBasePrice}+"+"+$F{finalInterest}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{finalBasePrice}+
+($F{finalInterest}.intValue() > 0 ? "+" + $F{finalInterest} : "" )]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="4d71734e-bd52-4719-8f5d-a59b49c9bbbe" style="detail" stretchType="RelativeToBandHeight" x="79" y="0" width="38" height="16"/>
-				<textElement textAlignment="Right">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="4d71734e-bd52-4719-8f5d-a59b49c9bbbe" style="detail" stretchType="RelativeToBandHeight" x="97" y="0" width="44" height="29"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>

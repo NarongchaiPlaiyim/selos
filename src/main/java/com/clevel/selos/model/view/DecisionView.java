@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class DecisionView implements Serializable {
+    private long id;
     // Existing
     private List<ExistingConditionDetailView> extConditionComCreditList;
     private List<ExistingCreditDetailView> extBorrowerComCreditList;
@@ -85,6 +86,14 @@ public class DecisionView implements Serializable {
     private List<ApprovalHistoryView> approvalHistoryList;
 
     public DecisionView() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public List<ExistingConditionDetailView> getExtConditionComCreditList() {

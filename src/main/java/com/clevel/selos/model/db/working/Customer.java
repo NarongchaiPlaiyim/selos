@@ -81,10 +81,10 @@ public class Customer implements Serializable {
     @Column(name = "csi_checked", nullable = false, columnDefinition = "int default 0")
     private int csiFlag;
 
-    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL,fetch=FetchType.LAZY)
     private Individual individual;
 
-    @OneToOne(mappedBy="customer", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy="customer", cascade = CascadeType.ALL,fetch=FetchType.LAZY)
     private Juristic juristic;
 
     @OneToMany(mappedBy="customer", cascade = CascadeType.ALL)
@@ -93,6 +93,10 @@ public class Customer implements Serializable {
     @OneToOne
     @JoinColumn(name="businesstype_id")
     private BusinessType businessType;
+
+    @OneToOne
+    @JoinColumn(name="business_sub_type_id")
+    private BusinessSubType businessSubType;
 
     @OneToOne
     @JoinColumn(name="relation_id")
@@ -202,9 +206,6 @@ public class Customer implements Serializable {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<CustomerAccountName> customerAccountNameList;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<CustomerOblAccountInfo> customerOblAccountInfoList;
-    
     public Customer() {
     }
 
@@ -656,12 +657,12 @@ public class Customer implements Serializable {
         this.customerAccountNameList = customerAccountNameList;
     }
 
-    public List<CustomerOblAccountInfo> getCustomerOblAccountInfoList() {
-        return customerOblAccountInfoList;
+    public BusinessSubType getBusinessSubType() {
+        return businessSubType;
     }
 
-    public void setCustomerOblAccountInfoList(List<CustomerOblAccountInfo> customerOblAccountInfoList) {
-        this.customerOblAccountInfoList = customerOblAccountInfoList;
+    public void setBusinessSubType(BusinessSubType businessSubType) {
+        this.businessSubType = businessSubType;
     }
 
     @Override

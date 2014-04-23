@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -19,13 +20,16 @@ import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.GeneralPeopleInfoControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.businesscontrol.PostCustomerInfoJurisControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.CustomerInfoPostAddressView;
 import com.clevel.selos.model.view.CustomerInfoPostJurisView;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.FacesUtil;
@@ -50,6 +54,7 @@ public class PostCustomerInfoJuris  implements Serializable {
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
+	private long stageId = -1;
 	private BasicInfoView basicInfoView;
 	
 	private long customerId = -1;
@@ -83,6 +88,9 @@ public class PostCustomerInfoJuris  implements Serializable {
 			return ApproveType.NA;
 		else
 			return basicInfoView.getApproveType();
+	}
+	public void setApproveType(ApproveType type) {
+		//DO NOTHING
 	}
 	public CustomerInfoPostJurisView getCustomer() {
 		return customer;
@@ -127,6 +135,7 @@ public class PostCustomerInfoJuris  implements Serializable {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+			stageId = Util.parseLong(session.getAttribute("stageId"), -1);
 		}
 		
 		customerId = Util.parseLong(FacesUtil.getFlash().get("customerId"),-1L);
@@ -135,7 +144,7 @@ public class PostCustomerInfoJuris  implements Serializable {
 		fromJuristic = "true".equals(FacesUtil.getFlash().get("customer_fromjuris"));
 		
 		canUpdateInfo = true; //TODO
-		
+		_loadFieldControl();
 		_loadDropdown();
 		_loadInitData();
 	}
@@ -146,8 +155,7 @@ public class PostCustomerInfoJuris  implements Serializable {
 		
 		String redirectPage = null;
 		if (workCaseId > 0) {
-			//TODO Validate step 
-			if (stepId <= 0) {
+			if (stepId <= 0 || !(stageId >= 300 && stageId < 400)) {
 				redirectPage = "/site/inbox.jsf";
 			} else {
 				if (customerId <= 0) {
@@ -162,7 +170,8 @@ public class PostCustomerInfoJuris  implements Serializable {
 				redirectPage = "/site/inbox.jsf";
 			}
 			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-			ec.redirect(ec.getRequestContextPath()+redirectPage);
+			if (!ec.isResponseCommitted())
+				ec.redirect(ec.getRequestContextPath()+redirectPage);
 		} catch (IOException e) {
 			log.error("Fail to redirect screen to "+redirectPage,e);
 		}
@@ -263,7 +272,8 @@ public class PostCustomerInfoJuris  implements Serializable {
 			String redirectPage = "/site/postCustomerInfoSummary.jsf";
 			try {
 				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-				ec.redirect(ec.getRequestContextPath()+redirectPage);
+				if (!ec.isResponseCommitted())
+					ec.redirect(ec.getRequestContextPath()+redirectPage);
 			} catch (IOException e) {
 				log.error("Fail to redirect screen to "+redirectPage,e);
 			}
@@ -301,6 +311,49 @@ public class PostCustomerInfoJuris  implements Serializable {
 			address.setDistrictList(null);
 			address.setSubDistrictList(null);
 		}
+		
+	}
+	/*
+	 * Mandate and read-only
+	 */
+	@Inject MandatoryFieldsControl mandatoryFieldsControl;
+	private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
+	private void _loadFieldControl() {
+		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.PostCustomerInfoJuris);
+		fieldMap.clear();
+		for (FieldsControlView field : fields) {
+			fieldMap.put(field.getFieldName(), field);
+		}
+	}
+	public String mandate(String name) {
+		boolean isMandate = FieldsControlView.DEFAULT_MANDATE;
+		FieldsControlView field = fieldMap.get(name);
+		if (field != null)
+			isMandate = field.isMandate();
+		return isMandate ? " *" : "";
 	}
 	
+	public boolean isDisabled(String name) {
+		FieldsControlView field = fieldMap.get(name);
+		if (field == null)
+			return FieldsControlView.DEFAULT_READONLY;
+		return field.isReadOnly();
+	}
+	
+	public String mandateAddress(CustomerInfoPostAddressView address,String name) {
+		int type = address.getAddressType();
+		String prefix = "registration.";
+		if (type == 5) {
+			prefix = "bizlocation.";
+		}
+		return mandate(prefix+name);	
+	}
+	public boolean isAddressDisabled(CustomerInfoPostAddressView address,String name) {
+		int type = address.getAddressType();
+		String prefix = "registration.";
+		if (type == 5) {
+			prefix = "bizlocation.";
+		}
+		return isDisabled(prefix+name) || !address.canUpdate();	
+	}
 }

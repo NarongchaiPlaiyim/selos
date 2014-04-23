@@ -6,6 +6,7 @@ import com.clevel.selos.dao.working.BizInfoSummaryDAO;
 import com.clevel.selos.dao.working.BizProductDetailDAO;
 import com.clevel.selos.dao.working.BizStakeHolderDetailDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.StatusValue;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.User;
@@ -164,6 +165,7 @@ public class BizInfoDetailControl extends BusinessControl {
         }
     }
 
+
     public void onSaveSumOnSummary(long bizInfoSummaryId , long workCaseId){
         BankStmtSummaryView bankStmtSummaryView;
         List<BizInfoDetail> bizInfoDetailList;
@@ -232,7 +234,9 @@ public class BizInfoDetailControl extends BusinessControl {
 
                 inComeTotalNet = Util.divide(Util.multiply(incomeAmountCal,incomePercentD),oneHundred);
 
-                bizInfoDetail.setIncomeAmount(inComeTotalNet.setScale(2, RoundingMode.HALF_UP));
+                if(inComeTotalNet != null){
+                    bizInfoDetail.setIncomeAmount(inComeTotalNet.setScale(2, RoundingMode.HALF_UP));
+                }
 
                 adjustIncome = bizInfoDetail.getAdjustedIncomeFactor();
                 adjustIncomeCal = Util.divide(Util.multiply(adjustIncome,incomePercentD),oneHundred);
@@ -261,25 +265,46 @@ public class BizInfoDetailControl extends BusinessControl {
             BizInfoSummary  bizInfoSummary = bizInfoSummaryDAO.findById(bizInfoSummaryId);
 
             sumIncomeAmountD = Util.multiply(bankStatementAvg,twenty);
-            BigDecimal sumIncomeAmount = sumIncomeAmountD.setScale(2, RoundingMode.HALF_UP);
-            BigDecimal sumIncomePercent = sumIncomePercentD.setScale(2,RoundingMode.HALF_UP);
-            BigDecimal SumWeightAR = sumAR.setScale(2,RoundingMode.HALF_UP);
-            BigDecimal SumWeightAP = sumAP.setScale(2,RoundingMode.HALF_UP);
-            BigDecimal SumWeightINV = sumINV.setScale(2,RoundingMode.HALF_UP);
-            BigDecimal SumWeightIntIncomeFactor = sumAdjust.setScale(2,RoundingMode.HALF_UP);
-            BigDecimal SumWeightIncFactor = sumIncomeFactor.setScale(2,RoundingMode.HALF_UP);
+            BigDecimal sumIncomeAmount = null;
+            BigDecimal sumIncomePercent = null;
+            BigDecimal sumWeightAR = null;
+            BigDecimal sumWeightAP = null;
+            BigDecimal sumWeightINV = null;
+            BigDecimal sumWeightIntIncomeFactor = null;
+            BigDecimal sumWeightIncFactor = null;
 
+            if(sumIncomeAmountD != null){
+                sumIncomeAmount = sumIncomeAmountD.setScale(2, RoundingMode.HALF_UP);
+            }
+            if(sumIncomePercentD != null){
+                sumIncomePercent = sumIncomePercentD.setScale(2,RoundingMode.HALF_UP);
+            }
+            if(sumAR != null){
+                sumWeightAR = sumAR.setScale(2,RoundingMode.HALF_UP);
+            }
+            if(sumAP != null){
+                sumWeightAP = sumAP.setScale(2,RoundingMode.HALF_UP);
+            }
+            if(sumINV != null){
+                sumWeightINV = sumINV.setScale(2,RoundingMode.HALF_UP);
+            }
+            if(sumAdjust != null){
+                sumWeightIntIncomeFactor = sumAdjust.setScale(2,RoundingMode.HALF_UP);
+            }
+            if(sumIncomeFactor != null){
+                sumWeightIncFactor = sumIncomeFactor.setScale(2,RoundingMode.HALF_UP);
+            }
 //            bizInfoSummary.setCirculationAmount(sumIncomeAmount); //?????  BankStatementSummary.grandTotal
 //            bizInfoSummary.setCirculationPercentage(oneHundred); //?????
             bizInfoSummary.setSumIncomeAmount(sumIncomeAmount); //?????
             bizInfoSummary.setSumIncomePercent(sumIncomePercent);
-            bizInfoSummary.setSumWeightAR(SumWeightAR);
-            bizInfoSummary.setSumWeightAP(SumWeightAP);
-            bizInfoSummary.setSumWeightINV(SumWeightINV);
-            bizInfoSummary.setSumWeightInterviewedIncomeFactorPercent(SumWeightIntIncomeFactor);
-            bizInfoSummary.setWeightIncomeFactor(SumWeightIncFactor);
+            bizInfoSummary.setSumWeightAR(sumWeightAR);
+            bizInfoSummary.setSumWeightAP(sumWeightAP);
+            bizInfoSummary.setSumWeightINV(sumWeightINV);
+            bizInfoSummary.setSumWeightInterviewedIncomeFactorPercent(sumWeightIntIncomeFactor);
+            bizInfoSummary.setWeightIncomeFactor(sumWeightIncFactor);
 
-            System.out.println("SumWeightIncFactor {},"+SumWeightIncFactor);
+            System.out.println("SumWeightIncFactor {},"+sumWeightIncFactor);
 
             log.debug("bizInfoSummary : {}",bizInfoSummary);
 
@@ -371,6 +396,20 @@ public class BizInfoDetailControl extends BusinessControl {
             bizInfoDetailView.setBuyerDetailList(buyerDetailList);
             log.info("buyer size {}",bizInfoDetailView.getBuyerDetailList().size());
 
+            //for hidden field on status below UW
+            Long statusId = 0L;
+            HttpSession session = FacesUtil.getSession(true);
+            if(session.getAttribute("statusId") != null){
+                statusId = Long.parseLong(session.getAttribute("statusId").toString());
+            }
+
+            if(statusId >= StatusValue.REVIEW_CA.value()){
+                bizInfoDetailView.setSupplierUWAdjustPercentCredit(null);
+                bizInfoDetailView.setSupplierUWAdjustCreditTerm(null);
+                bizInfoDetailView.setBuyerUWAdjustPercentCredit(null);
+                bizInfoDetailView.setBuyerUWAdjustCreditTerm(null);
+            }
+
             return bizInfoDetailView;
 
         } catch (Exception e) {
@@ -405,6 +444,14 @@ public class BizInfoDetailControl extends BusinessControl {
 
             log.info("onDeleteBizInfoToDB end");
         }
+    }
+
+    public int getUserRoleId() {
+        User user = getCurrentUser();
+        if (user != null && user.getRole() != null) {
+            return user.getRole().getId();
+        }
+        return 0;
     }
 
 }

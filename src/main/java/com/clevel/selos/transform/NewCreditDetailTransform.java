@@ -57,6 +57,7 @@ public class NewCreditDetailTransform extends Transform {
             if (newCreditDetailView.getId() != 0) {
                 //newCreditDetail.setId(newCreditDetailView.getId());
                 newCreditDetail = newCreditDetailDAO.findById(newCreditDetailView.getId());
+                newCreditDetail.setProposeCreditTierDetailList(new ArrayList<NewCreditTierDetail>());
                 newCreditDetail.setModifyDate(DateTime.now().toDate());
                 newCreditDetail.setModifyBy(user);
             } else { // id = 0 create new

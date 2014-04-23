@@ -47,39 +47,18 @@ public class BorrowerCharacteristicExSumReport extends ReportModel{
 
 
     public BorrowerCharacteristicExSumReport() {
-        this.customer = getDefaultString();
-        this.currentDBR = getDefaultBigDecimal();
-        this.finalDBR = getDefaultBigDecimal();
-        this.income = getDefaultBigDecimal();
-        this.recommendedWCNeed = getDefaultBigDecimal();
-        this.actualWC = getDefaultBigDecimal();
-        this.startBusinessDate = getDefaultDate();
-        this.yearInBusiness = getDefaultString();
-        this.salePerYearBDM = getDefaultBigDecimal();
-        this.salePerYearUW = getDefaultBigDecimal();
-        this.groupSaleBDM = getDefaultBigDecimal();
-        this.groupSaleUW = getDefaultBigDecimal();
-        this.groupExposureBDM = getDefaultBigDecimal();
-        this.groupExposureUW = getDefaultBigDecimal();
+        this.customer = "";
+        this.yearInBusiness = "";
 
-        this.netFixAsset = getDefaultBigDecimal();
-        this.noOfEmployee = getDefaultBigDecimal();
-        this.bizProvince = getDefaultString();
-        this.bizType = getDefaultString();
-        this.bizGroup = getDefaultString();
-        this.bizCode = getDefaultString();
-        this.bizDesc = getDefaultString();
-        this.qualitativeClass = getDefaultString();
-        this.bizSize = getDefaultBigDecimal();
-        this.BDM = getDefaultBigDecimal();
-        this.UW = getDefaultBigDecimal();
-        this.AR = getDefaultBigDecimal();
-        this.AP = getDefaultBigDecimal();
-        this.INV = getDefaultBigDecimal();
+        this.bizProvince = "";
+        this.bizType = "";
+        this.bizGroup = "";
+        this.bizCode = "";
+        this.bizDesc = "";
+        this.qualitativeClass = "";
 
-        this.businessOperationActivity = getDefaultString();
-        this.businessPermission = getDefaultString();
-        this.expiryDate = getDefaultDate();
+        this.businessOperationActivity = "";
+        this.businessPermission = "";
     }
 
     public String getCustomer() {

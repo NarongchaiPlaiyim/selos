@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -22,15 +23,18 @@ import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.CustomerAcceptanceControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveResult;
 import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.ContactRecordDetailView;
 import com.clevel.selos.model.view.CustomerAcceptanceView;
+import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.model.view.TCGInfoView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -52,6 +56,7 @@ public class CustomerAcceptance implements Serializable {
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
+	private long stageId = -1;
 	private User user;
 	private Status workCaseStatus;
 	private List<ContactRecordDetailView> deleteList;
@@ -97,6 +102,9 @@ public class CustomerAcceptance implements Serializable {
 		else
 			return basicInfoView.getApproveType();
 	}
+	public void setApproveType(ApproveType type) {
+		//DO NOTHING
+	}
 	public String getMinDate() {
 		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
 		return dFmt.format(new Date());
@@ -136,8 +144,10 @@ public class CustomerAcceptance implements Serializable {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+			stageId = Util.parseLong(session.getAttribute("stageId"), -1);
 			user = (User) session.getAttribute("user");
 		}
+		_loadFieldControl();
 		_loadInitData();
 	}
 	
@@ -149,15 +159,13 @@ public class CustomerAcceptance implements Serializable {
 		String redirectPage = null;
 		log.info("preRender workCase Id = "+workCaseId);
 		if (workCaseId > 0) {
-			//TODO Validate step
-			if (stepId <= 0) {
+			if (stepId <= 0 || stageId != 301) {
 				redirectPage = "/site/inbox.jsf";
 			} else {
 				return;
 			}
 		}
 		try {
-			log.info("preRender "+redirectPage);
 			if (redirectPage == null) {
 				redirectPage = "/site/inbox.jsf";
 			}
@@ -169,7 +177,6 @@ public class CustomerAcceptance implements Serializable {
 	}
 	
 	public void onOpenAddContactRecordDialog() {
-		log.info("Open Contact Record Dialog");
 		contactRecord = new ContactRecordDetailView();
 		contactRecord.setId(0);
 		contactRecord.setCallingDate(new Date());
@@ -181,14 +188,12 @@ public class CustomerAcceptance implements Serializable {
 		addDialog = true;
 	}
 	public void onOpenUpdateContactRecordDialog() {
-		log.info("Open Update Contact Record Dialog");
 		if (reasons == null) {
 			reasons = customerAcceptanceControl.getContactRecordReasons();
 		}
 		addDialog = false;
 	}
 	public void onAddContactRecord() {
-		log.info("Add Contact Record Dialog");
 		Reason reason = _retrieveReasonFromId(contactRecord.getUpdReasonId());
 		contactRecord.setReason(reason);
 		contactRecordDetailViews.add(contactRecord);
@@ -197,7 +202,6 @@ public class CustomerAcceptance implements Serializable {
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
 	public void onUpdateContactRecord() {
-		log.info("Update Contact Record Dialog");
 		Reason reason = _retrieveReasonFromId(contactRecord.getUpdReasonId());
 		contactRecord.setReason(reason);
 		contactRecord.setNeedUpdate(true);
@@ -228,6 +232,10 @@ public class CustomerAcceptance implements Serializable {
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
+	public void onCancelCustomerAcceptance() {
+		_loadInitData();
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
 	/*
 	 * Private method
 	 */
@@ -253,4 +261,49 @@ public class CustomerAcceptance implements Serializable {
 		preRenderCheck = false;
 	}
 	
+	/*
+	 * Mandate and read-only
+	 */
+	@Inject MandatoryFieldsControl mandatoryFieldsControl;
+	private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
+	private final HashMap<String, FieldsControlView> dialogFieldMap = new HashMap<String, FieldsControlView>();
+	private void _loadFieldControl() {
+		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.ContactRecord);
+		List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.CallingRecordDialog);
+		fieldMap.clear();
+		dialogFieldMap.clear();
+		for (FieldsControlView field : fields) {
+			fieldMap.put(field.getFieldName(), field);
+		}
+		for (FieldsControlView field : dialogFields) {
+			dialogFieldMap.put(field.getFieldName(), field);
+		}
+		
+	}
+	public String mandate(String name) {
+		boolean isMandate = FieldsControlView.DEFAULT_MANDATE;
+		FieldsControlView field = fieldMap.get(name);
+		if (field != null)
+			isMandate = field.isMandate();
+		return isMandate ? " *" : "";
+	}
+	
+	public boolean isDisabled(String name) {
+		FieldsControlView field = fieldMap.get(name);
+		if (field == null)
+			return FieldsControlView.DEFAULT_READONLY;
+		return field.isReadOnly();
+	}
+	public boolean isDialogMandate(String name) {
+		FieldsControlView field = dialogFieldMap.get(name);
+		if (field == null)
+			return FieldsControlView.DEFAULT_MANDATE;
+		return field.isMandate();
+	}
+	public boolean isDialogDisable(String name) {
+		FieldsControlView field = dialogFieldMap.get(name);
+		if (field == null)
+			return FieldsControlView.DEFAULT_READONLY;
+		return field.isReadOnly();
+	}
 }

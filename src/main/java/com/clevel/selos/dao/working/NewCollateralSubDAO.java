@@ -104,4 +104,13 @@ public class NewCollateralSubDAO extends GenericDAO<NewCollateralSub, Long> {
     	criteria.addOrder(Order.asc("id"));
     	return criteria.list();
     }
+
+    public NewCollateralSub findBySubId(String subId){
+        log.debug("findBySubId ::: subId : {}", subId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("subId", subId));
+        NewCollateralSub newCollateralSub = (NewCollateralSub) criteria.uniqueResult();
+
+        return newCollateralSub;
+    }
 }

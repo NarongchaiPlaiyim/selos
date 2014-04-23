@@ -19,16 +19,6 @@ import java.math.BigDecimal;
     private BigDecimal tradeChequeReturnPercent;
 
     public AccountMovementExSumReport() {
-        this.odLimit = getDefaultBigDecimal();
-        this.utilization = getDefaultBigDecimal();
-        this.swing = getDefaultBigDecimal();
-        this.overLimitTimes = getDefaultBigDecimal();
-        this.overLimitDays = getDefaultBigDecimal();
-        this.chequeReturn = getDefaultBigDecimal();
-        this.cashFlow = getDefaultBigDecimal();
-        this.cashFlowLimit = getDefaultBigDecimal();
-        this.tradeChequeReturnAmount = getDefaultBigDecimal();
-        this.tradeChequeReturnPercent = getDefaultBigDecimal();
     }
 
     public BigDecimal getOdLimit() {

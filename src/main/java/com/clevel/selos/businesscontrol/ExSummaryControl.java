@@ -10,7 +10,9 @@ import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.ExSummaryTransform;
+import com.clevel.selos.transform.UWRuleResultTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -51,9 +53,13 @@ public class ExSummaryControl extends BusinessControl {
     private RiskTypeDAO riskTypeDAO;
     @Inject
     private DecisionDAO decisionDAO;
+    @Inject
+    UWRuleResultDetailDAO uwRuleResultDetailDAO;
 
     @Inject
     private ExSummaryTransform exSummaryTransform;
+    @Inject
+    private CustomerTransform customerTransform;
 
     @Inject
     private CustomerInfoControl customerInfoControl;
@@ -65,6 +71,10 @@ public class ExSummaryControl extends BusinessControl {
     private QualitativeControl qualitativeControl;
     @Inject
     private CreditFacProposeControl creditFacProposeControl;
+    @Inject
+    private DecisionControl decisionControl;
+    @Inject
+    private UWRuleResultControl uwRuleResultControl;
 
     public ExSummaryView getExSummaryViewByWorkCaseId(long workCaseId) {
         log.info("getExSummaryView ::: workCaseId : {}", workCaseId);
@@ -90,6 +100,12 @@ public class ExSummaryControl extends BusinessControl {
         }
 
         ExSummaryView exSummaryView = exSummaryTransform.transformToView(exSummary);
+
+        Long statusId = 0L;
+        HttpSession session = FacesUtil.getSession(true);
+        if(session.getAttribute("statusId") != null){
+            statusId = Long.parseLong(session.getAttribute("statusId").toString());
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -164,9 +180,7 @@ public class ExSummaryControl extends BusinessControl {
         List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
         if(bizInfoSummaryView != null && bizInfoSummaryView.getId() != 0){
             bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryView.getId());
-        }
 
-        if(bizInfoSummaryView != null && bizInfoSummaryView.getId() != 0){
             if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // id = 1 use bank stmt
                 if(bankStatementSummary != null && bankStatementSummary.getGrdTotalIncomeGross() != null){
                     bizSize = bankStatementSummary.getGrdTotalIncomeGross();
@@ -183,7 +197,10 @@ public class ExSummaryControl extends BusinessControl {
                 }
             }
 
-            ExSumBusinessInfoView exSumBusinessInfoView = exSummaryTransform.transformBizInfoSumToExSumBizView(bizInfoSummaryView,qualitativeView,bizSize);
+            ExSumBusinessInfoView exSumBusinessInfoView = exSummaryTransform.transformBizInfoSumToExSumBizView(bizInfoSummaryView,qualitativeView,bizSize,exSummary);
+            if(statusId < StatusValue.REVIEW_CA.value()){
+                exSumBusinessInfoView.setUW(null);
+            }
             exSummaryView.setExSumBusinessInfoView(exSumBusinessInfoView);
 
             exSummaryView.setBusinessLocationName(bizInfoSummaryView.getBizLocationName());
@@ -265,7 +282,7 @@ public class ExSummaryControl extends BusinessControl {
         ExSumCharacteristicView exSumCharacteristicView = new ExSumCharacteristicView();
         DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
         if(dbr != null && dbr.getId() != 0){
-            exSumCharacteristicView.setCurrentDBR(dbr.getCurrentDBR());
+            exSumCharacteristicView.setCurrentDBR(dbr.getDbrBeforeRequest());
             exSumCharacteristicView.setFinalDBR(dbr.getFinalDBR());
         }
 
@@ -284,10 +301,16 @@ public class ExSummaryControl extends BusinessControl {
         exSumCharacteristicView.setSalePerYearBDM(exSummary.getSalePerYearBDM());
         exSumCharacteristicView.setGroupSaleBDM(exSummary.getGroupSaleBDM());
         exSumCharacteristicView.setGroupExposureBDM(exSummary.getGroupExposureBDM());
-        //todo:check role or step or status for show UW Value !?
-        exSumCharacteristicView.setSalePerYearUW(exSummary.getSalePerYearUW());
-        exSumCharacteristicView.setGroupSaleUW(exSummary.getGroupSaleUW());
-        exSumCharacteristicView.setGroupExposureUW(exSummary.getGroupExposureUW());
+
+        if(statusId >= StatusValue.REVIEW_CA.value()){
+            exSumCharacteristicView.setSalePerYearUW(exSummary.getSalePerYearUW());
+            exSumCharacteristicView.setGroupSaleUW(exSummary.getGroupSaleUW());
+            exSumCharacteristicView.setGroupExposureUW(exSummary.getGroupExposureUW());
+        } else {
+            exSumCharacteristicView.setSalePerYearUW(null);
+            exSumCharacteristicView.setGroupSaleUW(null);
+            exSumCharacteristicView.setGroupExposureUW(null);
+        }
 
         if(newCreditFacilityView != null && newCreditFacilityView.getId() != 0){
             if(newCreditFacilityView.getCreditCustomerType() == 1){ // normal 1, prime 2
@@ -310,6 +333,53 @@ public class ExSummaryControl extends BusinessControl {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Collateral
+        DecisionView decisionView = decisionControl.getDecisionView(workCaseId);
+        BigDecimal tmpCashColl = null;
+        BigDecimal tmpCoreAsset = null;
+        BigDecimal tmpNonCore = null;
+        if(decisionView != null){
+            if(decisionView.getApproveCollateralList() != null && decisionView.getApproveCollateralList().size() > 0){
+                for(NewCollateralView acl : decisionView.getApproveCollateralList()){
+                    if(acl.getNewCollateralHeadViewList() != null && acl.getNewCollateralHeadViewList().size() > 0){
+                        for(NewCollateralHeadView nch : acl.getNewCollateralHeadViewList()){
+                            if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
+                                tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
+                            } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
+                                tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
+                            } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
+                                tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        ExSumCollateralView exSumCollateralView = new ExSumCollateralView();
+        exSumCollateralView.setCashCollateralValue(tmpCashColl);
+        exSumCollateralView.setCoreAssetValue(tmpCoreAsset);
+        exSumCollateralView.setNoneCoreAssetValue(tmpNonCore);
+
+//        Sum of (Propose/PreApprove/Approve Limit)
+        if(decisionView != null && newCreditFacilityView != null){
+            exSumCollateralView.setLimitApprove(Util.add(decisionView.getApproveTotalCreditLimit(),newCreditFacilityView.getTotalPropose()));
+        }else if(decisionView != null){
+            exSumCollateralView.setLimitApprove(decisionView.getApproveTotalCreditLimit());
+        }else if(newCreditFacilityView != null){
+            exSumCollateralView.setLimitApprove(newCreditFacilityView.getTotalPropose());
+        }else{
+            exSumCollateralView.setLimitApprove(null);
+        }
+
+        //Todo: Percent LTV
+//        (limitApprove + Sum(วงเงิน/ภาระสินเชื่อเดิม)) หาร (cashCollateralValue + coreAssetValue + noneCoreAssetValue)
+        BigDecimal existingSMELimit = null;
+        if(newCreditFacilityView != null){
+            existingSMELimit = newCreditFacilityView.getExistingSMELimit();
+        }
+        exSumCollateralView.setPercentLTV(Util.multiply(Util.divide(Util.add(exSumCollateralView.getLimitApprove(),existingSMELimit),Util.add(Util.add(tmpCashColl,tmpCoreAsset),tmpNonCore)),BigDecimal.valueOf(100)));
+
+        exSummaryView.setExSumCollateralView(exSumCollateralView);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Credit Risk Type
@@ -339,9 +409,33 @@ public class ExSummaryControl extends BusinessControl {
                     exSumCreditRiskInfoView.setBotClass("-");
                 }
             }
-        } else {
-            exSumCreditRiskInfoView.setBotClass("-");
-            exSumCreditRiskInfoView.setReason("-");
+        } else { // (Bot Class = P,SM,SS,D,DL) DL is the worst.
+            String tmpWorstCase = "";
+            String worstCase = "";
+            if(cusListView != null && cusListView.size() > 0){
+                for(int i = 0; i < cusListView.size() ; i++){
+                    if(cusListView.get(i).getRelation().getId() == RelationValue.BORROWER.value()){
+                        tmpWorstCase = calWorstCaseBotClass(tmpWorstCase,cusListView.get(i).getAdjustClass());
+                    }
+                }
+            }
+
+            if(qualitativeView != null && qualitativeView.getId() != 0){
+                if(qualitativeView.getQualityLevel().getDescription() != null){
+                    exSumCreditRiskInfoView.setReason(qualitativeView.getQualityLevel().getDescription());
+                } else {
+                    exSumCreditRiskInfoView.setReason("-");
+                }
+
+                if(qualitativeView.getQualityResult() != null && !qualitativeView.getQualityResult().trim().equalsIgnoreCase("")){
+                    worstCase = calWorstCaseBotClass(tmpWorstCase,qualitativeView.getQualityResult());
+                    if(worstCase.trim().equalsIgnoreCase("")){
+                        exSumCreditRiskInfoView.setBotClass("-");
+                    } else {
+                        exSumCreditRiskInfoView.setBotClass(worstCase);
+                    }
+                }
+            }
         }
 
         //find highest percent biz
@@ -406,6 +500,22 @@ public class ExSummaryControl extends BusinessControl {
 
         exSummaryView.setExSumCreditRiskInfoView(exSumCreditRiskInfoView);
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultControl.getUWRuleResultByWorkCaseId(workCaseId);
+        if(uwRuleResultSummaryView != null && uwRuleResultSummaryView.getId() != 0){
+            if(uwRuleResultSummaryView.getUwDeviationFlagView() != null){
+                exSummaryView.setApplicationResult(uwRuleResultSummaryView.getUwDeviationFlagView().getName());
+            }
+            exSummaryView.setApplicationColorResult(uwRuleResultSummaryView.getUwResultColor());
+            exSummaryView.setUwRuleSummaryId(uwRuleResultSummaryView.getId());
+
+            List<ExSumDecisionView> exSumDecisionViewList = exSummaryTransform.transformUWRuleToExSumDecision(uwRuleResultSummaryView);
+
+            exSummaryView.setExSumDecisionListView(exSumDecisionViewList);
+        } else {
+            exSummaryView.setExSumDecisionListView(new ArrayList<ExSumDecisionView>());
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         log.info("getExSummaryView ::: exSummaryView : {}", exSummaryView);
 
@@ -421,6 +531,36 @@ public class ExSummaryControl extends BusinessControl {
 
         ExSummary exSummary = exSummaryTransform.transformToModel(exSummaryView, workCase, user);
         exSummaryDAO.persist(exSummary);
+
+        //Delete By Tmp DeviateDecision
+        if(exSummaryView.getDeleteTmpList() != null && exSummaryView.getDeleteTmpList().size() > 0){
+            for(Long tmpId : exSummaryView.getDeleteTmpList()){
+                if(tmpId != null && tmpId != 0){
+                    UWRuleResultDetail uwRuleResultDetail = uwRuleResultDetailDAO.findById(tmpId);
+                    uwRuleResultDetailDAO.delete(uwRuleResultDetail);
+                }
+            }
+        }
+        //Save Deviate
+        log.debug("workCaseId :: {}, UwRuleSummaryId :: {} , ExSumDecisionListView :: {}",workCaseId, exSummaryView.getUwRuleSummaryId(), exSummaryView.getExSumDecisionListView());
+        List<UWRuleResultDetail> uwRuleResultDetails = exSummaryTransform.transformExSumDecisionToUWRuleResultDetailModelList(workCaseId, exSummaryView.getUwRuleSummaryId(), exSummaryView.getExSumDecisionListView());
+        int tmpMostOrder = 90000;
+        for(UWRuleResultDetail uw : uwRuleResultDetails){
+            if(uw.getUwResultColor() == null){ // add new only not from BRMS
+                if(uw.getRuleOrder() == 0){ //for find most order
+                    for(int i = 0 ; i < uwRuleResultDetails.size() ; i++){
+                        if(uwRuleResultDetails.get(i).getRuleOrder() > 90000){
+                            if(uwRuleResultDetails.get(i).getRuleOrder() > tmpMostOrder){
+                                tmpMostOrder = uwRuleResultDetails.get(i).getRuleOrder();
+                            }
+                        }
+                    }
+                    tmpMostOrder = tmpMostOrder + 1;
+                    uw.setRuleOrder(tmpMostOrder);
+                }
+            }
+        }
+        uwRuleResultDetailDAO.persist(uwRuleResultDetails);
 
         //Delete All Deviate
         List<ExSumDeviate> esdList = exSumDeviateDAO.findByExSumId(exSummary.getId());
@@ -440,7 +580,6 @@ public class ExSummaryControl extends BusinessControl {
         calIncomeBorrowerCharacteristic(workCaseId);
         calActualWCBorrowerCharacteristic(workCaseId);
         calGroupExposureBorrowerCharacteristic(workCaseId);
-        calAppraisalValue(workCaseId);
     }
 
     public void calForBankStmtSummary(long workCaseId){
@@ -454,6 +593,7 @@ public class ExSummaryControl extends BusinessControl {
 
     public void calForBizInfoSummary(long workCaseId){
         calYearInBusinessBorrowerCharacteristic(workCaseId);
+        calIncomeFactor(workCaseId);
     }
 
     public void calForCustomerInfoJuristic(long workCaseId){
@@ -539,7 +679,7 @@ public class ExSummaryControl extends BusinessControl {
         }
 
         if(basicInfo != null && basicInfo.getId() != 0 && newCreditFacility != null && newCreditFacility.getId() != 0){
-            if(basicInfo.getRefinanceIN() == 1){
+            if(basicInfo.getRefinanceIN() == RadioValue.YES.value()){
                 if(newCreditFacility.getCreditCustomerType() == CreditCustomerType.PRIME.value()){
                     recommendedWCNeed = getMinBigDecimal(value2,value3);
                 } else {
@@ -836,31 +976,8 @@ public class ExSummaryControl extends BusinessControl {
         exSummaryDAO.persist(exSummary);
     }
 
-    public void calAppraisalValue(long workCaseId){ //todo: decision pls call me !? or other !?
-        BigDecimal cashColl = BigDecimal.ZERO;
-        BigDecimal coreColl = BigDecimal.ZERO;
-        BigDecimal noneCoreColl = BigDecimal.ZERO;
-        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-        if(newCreditFacility != null && newCreditFacility.getNewCollateralDetailList() != null && newCreditFacility.getNewCollateralDetailList().size() > 0){
-            for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
-                if (newCollateral.getProposeType() != null && newCollateral.getProposeType().equals("A")){
-                    if(newCollateral.getNewCollateralHeadList() != null && newCollateral.getNewCollateralHeadList().size() > 0){
-                        for (NewCollateralHead newCollateralHead : newCollateral.getNewCollateralHeadList()){
-                            //todo:check this !? or not
-//                            if (newCollateralHead.getProposeType() != null && newCollateralHead.getProposeType().equals("A")){
-                                if(newCollateralHead.getPotential().getId() == PotentialCollateralValue.CASH_COLLATERAL.id()){
-                                    cashColl = Util.add(cashColl,newCollateralHead.getAppraisalValue());
-                                } else if(newCollateralHead.getPotential().getId() == PotentialCollateralValue.CORE_ASSET.id()){
-                                    coreColl = Util.add(coreColl,newCollateralHead.getAppraisalValue());
-                                } else if(newCollateralHead.getPotential().getId() == PotentialCollateralValue.NONE_CORE_ASSET.id()){
-                                    noneCoreColl = Util.add(noneCoreColl,newCollateralHead.getAppraisalValue());
-                                }
-//                            }
-                        }
-                    }
-                }
-            }
-        }
+    public void calIncomeFactor(long workCaseId){ //TODO: Business Info Summary , Pls Call me !!
+        BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         if(exSummary == null){
@@ -869,12 +986,79 @@ public class ExSummaryControl extends BusinessControl {
             workCase.setId(workCaseId);
             exSummary.setWorkCase(workCase);
         }
-        exSummary.setCashCollateralValue(cashColl);
-        exSummary.setCoreAssetValue(coreColl);
-        exSummary.setNoneCoreAssetValue(noneCoreColl);
-//        exSummary.setLimitApprove();
-//        exSummary.setPercentLTV();
+
+        User user = getCurrentUser();
+
+        if(user.getRole().getId() == RoleValue.UW.id()){
+            exSummary.setIncomeFactorUW(bizInfoSummaryView.getWeightIncomeFactor());
+        } else {
+            exSummary.setIncomeFactorBDM(bizInfoSummaryView.getWeightIncomeFactor());
+        }
 
         exSummaryDAO.persist(exSummary);
+    }
+
+//        (Qualitative Class = P,SM,SS,D,DL) DL is the worst.
+    public String calWorstCaseBotClass(String a, String b){
+        if(a != null && b != null){
+            if(a.trim().equalsIgnoreCase("") && b.trim().equalsIgnoreCase("")){
+                return "";
+            } else if(a.trim().equalsIgnoreCase("")){
+                return b;
+            } else if(b.trim().equalsIgnoreCase("")){
+                return a;
+            }
+        } else if(a != null){
+            return a;
+        } else if(b != null){
+            return b;
+        } else {
+            return "";
+        }
+
+        int aInt;
+        int bInt;
+
+        if(a.trim().equalsIgnoreCase("P")){
+            aInt = 1;
+        } else if(a.trim().equalsIgnoreCase("SM")){
+            aInt = 2;
+        } else if(a.trim().equalsIgnoreCase("SS")){
+            aInt = 3;
+        } else if(a.trim().equalsIgnoreCase("D")){
+            aInt = 4;
+        } else if(a.trim().equalsIgnoreCase("DL")){
+            aInt = 5;
+        } else {
+            aInt = 0;
+        }
+
+        if(b.trim().equalsIgnoreCase("P")){
+            bInt = 1;
+        } else if(b.trim().equalsIgnoreCase("SM")){
+            bInt = 2;
+        } else if(b.trim().equalsIgnoreCase("SS")){
+            bInt = 3;
+        } else if(b.trim().equalsIgnoreCase("D")){
+            bInt = 4;
+        } else if(b.trim().equalsIgnoreCase("DL")){
+            bInt = 5;
+        } else {
+            bInt = 0;
+        }
+
+        if(aInt > bInt){
+            return a;
+        } else if (aInt < bInt){
+            return b;
+        } else { //equal
+            return a;
+        }
+    }
+
+    public List<CustomerInfoView> getCustomerList(long workCaseId){
+        log.info("getCustomerList ::: workCaseId : {}", workCaseId);
+        List<CustomerInfoView> customerInfoViewList = customerTransform.transformToSelectList(customerDAO.findByWorkCaseId(workCaseId));
+        return customerInfoViewList;
     }
 }

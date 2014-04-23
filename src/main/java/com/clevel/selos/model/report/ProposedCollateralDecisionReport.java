@@ -25,7 +25,7 @@ public class ProposedCollateralDecisionReport extends ReportModel{
     private String bdmComments;
     private String path;
 
-    private List<ProposeCreditDetailView> proposeCreditDetailViewList;
+    private List<ProposeCreditDetailView> detailViewList;
 
     //Coll Head
     private String collateralDescription;
@@ -39,30 +39,28 @@ public class ProposedCollateralDecisionReport extends ReportModel{
     private String insuranceCompany;
 
     //Sub Collateral
-    private List<NewCollateralSubView> subViewList;
+    private List<NewCollateralSubView> collateralSubViewList;
 
 
     public ProposedCollateralDecisionReport() {
-        jobID = getDefaultString();
-        aadDecision = getDefaultString();
-        aadDecisionReason = getDefaultString();
-        aadDecisionReasonDetail = getDefaultString();
-        usage = getDefaultString();
-        typeOfUsage = getDefaultString();
-        mortgageCondition = getDefaultString();
-        mortgageConditionDetail = getDefaultString();
-        proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
-        subViewList = new ArrayList<NewCollateralSubView>();
-        bdmComments = getDefaultString();
-        collateralDescription = getDefaultString();
-        percentLTVDescription = getDefaultString();
-        existingCredit = getDefaultBigDecimal();
-        titleDeed = getDefaultString();
-        collateralLocation = getDefaultString();
-        appraisalValue = getDefaultBigDecimal();
-        collTypeDescription = getDefaultString();
-        headCollTypeDescription = getDefaultString();
-        insuranceCompany = getDefaultString();
+        jobID = "";
+        aadDecision = "";
+        aadDecisionReason = "";
+        aadDecisionReasonDetail = "";
+        usage = "";
+        typeOfUsage = "";
+        mortgageCondition = "";
+        mortgageConditionDetail = "";
+        detailViewList = new ArrayList<ProposeCreditDetailView>();
+        collateralSubViewList = new ArrayList<NewCollateralSubView>();
+        bdmComments = "";
+        collateralDescription = "";
+        percentLTVDescription = "";
+        titleDeed = "";
+        collateralLocation = "";
+        collTypeDescription = "";
+        headCollTypeDescription = "";
+        insuranceCompany = "";
     }
 
     public String getAadDecision() {
@@ -186,12 +184,12 @@ public class ProposedCollateralDecisionReport extends ReportModel{
         this.percentLTVDescription = percentLTVDescription;
     }
 
-    public List<ProposeCreditDetailView> getProposeCreditDetailViewList() {
-        return proposeCreditDetailViewList;
+    public List<ProposeCreditDetailView> getDetailViewList() {
+        return detailViewList;
     }
 
-    public void setProposeCreditDetailViewList(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
-        this.proposeCreditDetailViewList = proposeCreditDetailViewList;
+    public void setDetailViewList(List<ProposeCreditDetailView> detailViewList) {
+        this.detailViewList = detailViewList;
     }
 
     public String getTitleDeed() {
@@ -222,10 +220,6 @@ public class ProposedCollateralDecisionReport extends ReportModel{
         return new ArrayList<NewCollateralSubView>();
     }
 
-    public void setSubViewList(List<NewCollateralSubView> subViewList) {
-        this.subViewList = subViewList;
-    }
-
     public String getHeadCollTypeDescription() {
         return headCollTypeDescription;
     }
@@ -242,6 +236,14 @@ public class ProposedCollateralDecisionReport extends ReportModel{
         this.path = path;
     }
 
+    public List<NewCollateralSubView> getCollateralSubViewList() {
+        return collateralSubViewList;
+    }
+
+    public void setCollateralSubViewList(List<NewCollateralSubView> collateralSubViewList) {
+        this.collateralSubViewList = collateralSubViewList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -254,7 +256,7 @@ public class ProposedCollateralDecisionReport extends ReportModel{
                 .append("typeOfUsage", typeOfUsage)
                 .append("mortgageCondition", mortgageCondition)
                 .append("mortgageConditionDetail", mortgageConditionDetail)
-                .append("proposeCreditDetailViewList", proposeCreditDetailViewList)
+                .append("detailViewList", detailViewList)
                 .append("bdmComments", bdmComments)
                 .append("collateralDescription", collateralDescription)
                 .append("percentLTVDescription", percentLTVDescription)
@@ -265,7 +267,7 @@ public class ProposedCollateralDecisionReport extends ReportModel{
                 .append("collTypeDescription", collTypeDescription)
                 .append("insuranceCompany", insuranceCompany)
                 .append("headCollTypeDescription", headCollTypeDescription)
-                .append("subViewList", subViewList)
+                .append("collateralSubViewList", collateralSubViewList)
                 .toString();
     }
 }

@@ -123,6 +123,10 @@ public class ExistingCreditDetail implements Serializable {
     @OneToMany(mappedBy = "existingCreditDetail", cascade = CascadeType.ALL)
     private List<ExistingSplitLineDetail> existingSplitLineDetailList;
 
+    @OneToOne
+    @JoinColumn(name = "exist_product_segment_id")
+    private ProductSegment existProductSegment;
+
     public long getId() {
         return id;
     }
@@ -387,6 +391,14 @@ public class ExistingCreditDetail implements Serializable {
         this.existingSplitLineDetailList = existingSplitLineDetailList;
     }
 
+    public ProductSegment getExistProductSegment() {
+        return existProductSegment;
+    }
+
+    public void setExistProductSegment(ProductSegment existProductSegment) {
+        this.existProductSegment = existProductSegment;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -417,6 +429,7 @@ public class ExistingCreditDetail implements Serializable {
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
                 .append("existingCreditFacility", existingCreditFacility)
+                .append("existProductSegment", existProductSegment)
                 .toString();
     }
 }

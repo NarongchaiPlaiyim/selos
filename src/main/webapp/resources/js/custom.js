@@ -27,7 +27,7 @@ PrimeFaces.locales ['th_TH'] = {
 };
 
 function showCheckedValue(){
-    alert(document.getElementById('jsfForm1:chkRememberMe').checked);
+    alert(document.getElementById('frmMain:checkBoxId').checked);
 }
 
 function gotoInbox(contextUrl) {
@@ -583,6 +583,12 @@ function handleSubmitZMDialogRequest(xhr, status, args) {
     }
 }
 
+function handleSubmitUWDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        submitUWDlg.hide();
+    }
+}
+
 function handleAssignABDMDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
         assignABDMDlg.hide();
@@ -721,6 +727,18 @@ function handleAppraisalDetailRequest(xhr, status, args) {
     }
 }
 
+function handleRequestAppraisal(xhr, status, args) {
+    if(args.functionComplete){
+        reqApprDlg.hide();
+    }
+}
+
+function handleRequestAppraisalDetail(xhr, status, args) {
+    if(args.functionComplete){
+        reqApprDetailDlg.hide();
+    }
+}
+
 function handleAppraisalContactDetailRequest(xhr, status, args) {
     if(args.functionComplete){
         contactRecordViewDlg.hide();
@@ -730,6 +748,12 @@ function handleAppraisalContactDetailRequest(xhr, status, args) {
 function handleCollateralDetailRequest(xhr, status, args) {
     if(args.functionComplete){
         appraisalComsViewDlg.hide();
+    }
+}
+
+function handleExSumDeviateRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        exSumDeviateDlg.hide();
     }
 }
 
@@ -827,6 +851,12 @@ function handlePrintRerportDialogRequest(xhr, status, args) {
 function handleConditionInfoRequest(xhr, status, args) {
     if (args.functionComplete) {
         conditionDlg.hide();
+    }
+}
+
+function handleSubmitAADCDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        submitAADCDlg.hide();
     }
 }
 
@@ -973,4 +1003,17 @@ function isValidateComplete(args) {
 	if (!args)
 		return false;
 	return !args.validationFailed;
+}
+
+function collapseDetail() {
+    var currentState = $("#header_collapse").attr("class");
+    if (currentState == 'close') {
+        $("#header_collapse").removeAttr("class");
+        $("#header_collapse").attr("class", "open");
+        $("#header_information").fadeOut();
+    } else {
+        $("#header_collapse").removeAttr("class");
+        $("#header_collapse").attr("class", "close");
+        $("#header_information").fadeIn();
+    }
 }

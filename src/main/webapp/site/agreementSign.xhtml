@@ -57,10 +57,10 @@
                                     <table>
                                         <tr>
                                             <td class="title" style="width:200px;">
-                                                <p:outputLabel value="#{msg.get('app.approveType')}" styleClass="center"/>
+                                                <p:outputLabel value="#{msg.get('app.approveType')}#{agreementSignContract.mandate('approvedType')}" styleClass="center"/>
                                             </td>
                                             <td style="width:200px;">
-                                                <p:selectOneRadio disabled="true" value="#{agreementSignContract.approveType}">
+                                                <p:selectOneRadio disabled="#{agreementSignContract.isDisabled('approvedType')}" value="#{agreementSignContract.approveType}">
                                                 	<f:selectItems value="#{enumGeneralControl.approveTypes}" var="approveType"
                                                 		itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}" 
                                                 		/>
@@ -81,10 +81,11 @@
                         	<tr>
                         		<td class="title" style="width: 180px">
                         			<p:outputLabel for="iscomplete" 
-                        				value="#{msg.get('app.agreement.complete')}" />			
+                        				value="#{msg.get('app.agreement.complete')}#{agreementSignContract.mandate('agreement.complete')}" />			
                         		</td>
                         		<td>
              			            <p:selectOneRadio id="iscomplete" value="#{agreementSignContract.agreement.confirmed}"
+             			            disabled="#{agreementSignContract.isDisabled('agreement.complete')}"
              			            	>
              			               <f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="radio"
 	                                       	itemLabel="#{msg.get(radio.msgKey)}" 
@@ -94,11 +95,12 @@
                         	</tr>
                         	<tr>
                         		<td class="title top">
-                        			<p:outputLabel for="remark" 
-                        				value="#{msg.get('app.agreement.remark')}" />			
+                        			<p:outputLabel for="agreement_remark" 
+                        				value="#{msg.get('app.agreement.remark')}#{agreementSignContract.mandate('agreement.remark')}" />			
                         		</td>
                         		<td>
-             			            <p:inputTextarea id="remark" value="#{agreementSignContract.agreement.remark}" 
+             			            <p:inputTextarea id="agreement_remark" value="#{agreementSignContract.agreement.remark}"
+             			            	readonly="#{agreementSignContract.isDisabled('agreement.remark')}" 
              			            	rows="3" cols="130" />
                         		</td>                     		
                         	</tr>
@@ -118,9 +120,12 @@
 										onstart="handleOnStartOpenCfmDlg();"
 										oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveAgreementContractDlg);"
 										update=":frmMain:full_main_container,:result_dialog"
+										disabled="#{agreementSignContract.isDisabled('saveButton')}"
 	                                 	 />
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"
+										oncomplete="p_cancelDlg.show()"
+										disabled="#{agreementSignContract.isDisabled('cancelButton')}"
 										/>
 	                             </td>
 	                        </tr>
@@ -145,6 +150,14 @@
 		<ui:param name="formId" value="saveAgreementContractFrm"/>
 		<ui:param name="controller" value="#{agreementSignContract}"/>
 		<ui:param name="action" value="onSaveAgreementContract"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
+	</ui:include>
+	<ui:include src="dialog/confirmCancelDlg.xhtml">
+		<ui:param name="id" value="cancelDlg"/>
+		<ui:param name="name" value="p_cancelDlg"/>
+		<ui:param name="formId" value="cancelFrm"/>
+		<ui:param name="controller" value="#{agreementSignContract}"/>
+		<ui:param name="action" value="onCancelAgreementContract"/>
 		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
 </h:body>

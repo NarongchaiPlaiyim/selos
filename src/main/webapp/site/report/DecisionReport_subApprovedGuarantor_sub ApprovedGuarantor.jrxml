@@ -32,52 +32,83 @@
 	</field>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<textField>
-				<reportElement uuid="a991e360-54c6-421c-a3bd-d3111eaa1a9f" style="detail" x="215" y="0" width="75" height="20"/>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="640983d8-bdcf-47a5-b6af-3ecc85edf855" style="detail" stretchType="RelativeToBandHeight" x="186" y="0" width="40" height="19"/>
 				<box>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0"/>
-				</box>
-				<textElement>
-					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph leftIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Guarantee Amount: "+$F{guaranteeAmount}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="6a108bbb-f378-4651-8a9e-05b26dd404e7" style="detail" x="95" y="0" width="89" height="20"/>
-				<box>
-					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{productProgramView}+"\n"+
-$F{creditFacilityView}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="c045fa7c-cd69-4555-9261-4813d3b126ee" style="detail" x="184" y="0" width="31" height="20"/>
-				<box>
-					<leftPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement>
-					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-				</textElement>
+				<textElement textAlignment="Left"/>
 				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="529f9285-b7f1-486c-a21d-76d9a78c2353" style="detail" x="0" y="0" width="95" height="20"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="865fdb05-b4a6-4c86-9f4c-a9a9ec7bf3e9" style="detail" stretchType="RelativeToBandHeight" x="102" y="9" width="84" height="10"/>
 				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{creditFacilityView}.equals( null ) ? "" : $F{creditFacilityView}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="65b885e2-ac5d-4c1b-bd07-e1fd91aa2ad0" style="detail" stretchType="RelativeToBandHeight" x="49" y="9" width="49" height="10"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{accountNumber}.equals( null ) ? "Suf.:" : "Suf.:" +$F{accountNumber}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="6152bece-b8fa-42fb-afc5-83d92b4564cb" style="detail" stretchType="RelativeToBandHeight" x="226" y="0" width="63" height="19"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left">
+					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{accountName}+"\n"+
-"Acc No.: "+$F{accountNumber}+", "+"Suf.: "+$F{accountSuf}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{guaranteeAmount}.equals( null ) ? "" : "Guarantee Amount: " + $F{guaranteeAmount}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="07ae2a57-c5cf-4112-b31b-c5850887562c" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="94" height="11"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{accountName}.equals( null ) ? "" : $F{accountName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="f81c28b8-994e-4c5a-aae0-fa8f6c0241c4" style="detail" stretchType="RelativeToBandHeight" x="102" y="0" width="84" height="11"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{productProgramView}.equals( null ) ? "" : $F{productProgramView}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="62c398d7-2596-4261-84a2-7cb4e9f4b9af" style="detail" stretchType="RelativeToBandHeight" x="0" y="9" width="49" height="10"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{accountNumber}.equals( null ) ? "Acc No.:" : "Acc No " +$F{accountNumber}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

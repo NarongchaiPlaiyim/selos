@@ -7,7 +7,6 @@ import com.clevel.selos.model.db.working.NewCollateralSub;
 import com.clevel.selos.model.db.working.NewCollateralSubRelated;
 import com.clevel.selos.model.db.working.WorkCase;
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -62,12 +61,7 @@ public class NewCollateralSubRelatedDAO extends GenericDAO<NewCollateralSubRelat
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase", workCase));
         criteria.add(Restrictions.eq("proposeType", proposeType));
-        criteria.setFetchMode("newCollateralHead", FetchMode.LAZY);
-        criteria.setFetchMode("newCollateralSubMortgageList", FetchMode.LAZY);
-        criteria.setFetchMode("newCollateralSubOwnerList", FetchMode.LAZY);
         List<NewCollateralSubRelated> newCollateralSubRelatedList = criteria.list();
         return newCollateralSubRelatedList;
     }
-
-
 }

@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.UWResultColor;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -48,6 +49,7 @@ public class ExSummaryView  implements Serializable {
 
     //Deviate
     private String applicationResult;
+    private UWResultColor applicationColorResult;
     private List<ExSumDecisionView> exSumDecisionListView;
 
     //Business Overview and Support Decision
@@ -74,15 +76,21 @@ public class ExSummaryView  implements Serializable {
     //
     private int yearInBusinessMonth;
 
-    public  ExSummaryView(){}
+    private List<Long> deleteTmpList;
+    private Long uwRuleSummaryId;
+
+    public  ExSummaryView(){
+        reset();
+    }
 
     public void reset(){
-        borrowerListView = new ArrayList<CustomerInfoView>();
-        ncbInfoListView = new ArrayList<NCBInfoView>();
-        exSumDecisionListView = new ArrayList<ExSumDecisionView>();
-        exSumCharacteristicView = new ExSumCharacteristicView();
-        exSumBusinessInfoView = new ExSumBusinessInfoView();
-        exSumAccMovementViewList = new ArrayList<ExSumAccountMovementView>();
+        this.borrowerListView = new ArrayList<CustomerInfoView>();
+        this.ncbInfoListView = new ArrayList<NCBInfoView>();
+        this.exSumDecisionListView = new ArrayList<ExSumDecisionView>();
+        this.exSumCharacteristicView = new ExSumCharacteristicView();
+        this.exSumBusinessInfoView = new ExSumBusinessInfoView();
+        this.exSumAccMovementViewList = new ArrayList<ExSumAccountMovementView>();
+        this.deleteTmpList = new ArrayList<Long>();
     }
 
     public long getId() {
@@ -391,6 +399,30 @@ public class ExSummaryView  implements Serializable {
         this.exSumCreditRiskInfoView = exSumCreditRiskInfoView;
     }
 
+    public UWResultColor getApplicationColorResult() {
+        return applicationColorResult;
+    }
+
+    public void setApplicationColorResult(UWResultColor applicationColorResult) {
+        this.applicationColorResult = applicationColorResult;
+    }
+
+    public List<Long> getDeleteTmpList() {
+        return deleteTmpList;
+    }
+
+    public void setDeleteTmpList(List<Long> deleteTmpList) {
+        this.deleteTmpList = deleteTmpList;
+    }
+
+    public Long getUwRuleSummaryId() {
+        return uwRuleSummaryId;
+    }
+
+    public void setUwRuleSummaryId(Long uwRuleSummaryId) {
+        this.uwRuleSummaryId = uwRuleSummaryId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -415,6 +447,7 @@ public class ExSummaryView  implements Serializable {
                 append("exSumCollateralView", exSumCollateralView).
                 append("exSumCreditRiskInfoView", exSumCreditRiskInfoView).
                 append("applicationResult", applicationResult).
+                append("applicationColorResult", applicationColorResult).
                 append("exSumDecisionListView", exSumDecisionListView).
                 append("natureOfBusiness", natureOfBusiness).
                 append("historicalAndReasonOfChange", historicalAndReasonOfChange).
@@ -432,6 +465,7 @@ public class ExSummaryView  implements Serializable {
                 append("deviateCode", deviateCode).
                 append("uwComment", uwComment).
                 append("yearInBusinessMonth", yearInBusinessMonth).
+                append("deleteTmpList", deleteTmpList).
                 toString();
     }
 }

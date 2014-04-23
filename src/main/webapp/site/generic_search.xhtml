@@ -87,6 +87,7 @@ function resetter()
     <td style="width: 20px;"></td>
     <td>
         <h:messages style="color:red;margin:8px;" />
+
         <table>
 
             <tr>
@@ -103,7 +104,7 @@ function resetter()
 
             <tr>
                 <td class="title" style="width: 150px;">Application No. :</td>
-                <td><h:inputText size="20" value="#{peSearch.applicationNumber}" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;"> </h:inputText></td>
+                <td><h:inputText size="20" value="#{peSearch.applicationNumber}" onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"> </h:inputText></td>
 
             </tr>
             <tr>
@@ -303,8 +304,8 @@ function resetter()
                                 <h:outputText value="#{item.receiveddate}"/>
                             </p:column>
 
-                            <p:column headerText="At User Team" styleClass="center" style="width: 130px;" sortBy="#{item.atuserteam}">
-                                <h:outputText value="#{item.atuserteam}" />
+                            <p:column headerText="Terminate Date" styleClass="center" style="width: 110px;" >
+                                <h:outputText value="#{item.terminateDate}"/>
                             </p:column>
 
                             <p:column headerText="Application Number" styleClass="center" style="width: 110px;" sortBy="#{item.applicationno}">
@@ -337,6 +338,10 @@ function resetter()
 
                             <p:column headerText="At User" styleClass="center" style="width: 110px;" sortBy="#{item.atuser}">
                                 <h:outputText value="#{item.atuser}"/>
+                            </p:column>
+
+                            <p:column headerText="At User Team" styleClass="center" style="width: 130px;" sortBy="#{item.atuserteam}">
+                                <h:outputText value="#{item.atuserteam}" />
                             </p:column>
 
                             <p:column headerText="Appointment Date" styleClass="center" style="width: 110px;" sortBy="#{item.appointmentdate}">

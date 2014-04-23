@@ -1,20 +1,13 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.integration.SELOS;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.slf4j.Logger;
 
-import javax.inject.Inject;
 import java.io.Serializable;
 
 
 public class PEInbox implements Serializable
 {
-
-    @Inject
-    @SELOS
-    Logger log;
 
     private String receiveddate;
     private String atuserteam;
@@ -41,6 +34,34 @@ public class PEInbox implements Serializable
     private String queuename;
     private int fetchType;
     private Integer locked;
+    private String createDate;
+    private String createBy;
+    private String terminateDate;
+
+
+    public String getTerminateDate() {
+        return terminateDate;
+    }
+
+    public void setTerminateDate(String terminateDate) {
+        this.terminateDate = terminateDate;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
 
     public Integer getLocked()
     {

@@ -27,7 +27,21 @@ public class WorkCase extends AbstractWorkCase{
 
     @Column(name = "request_appraisal", columnDefinition = "int default 0")
     private int requestAppraisal;
-	
+
+    @Column(name = "request_pricing", columnDefinition = "int default 0")
+    private int requestPricing;
+
+    @Column(name = "pricing_doa_level", columnDefinition = "int default 0")
+    private int pricingDoaLevel;
+
+    @OneToOne
+    @JoinColumn(name = "uw_doa1")
+    private AuthorizationDOA uwDOA1;
+
+    @OneToOne
+    @JoinColumn(name = "uw_doa2")
+    private AuthorizationDOA uwDOA2;
+
     public long getId() {
         return id;
     }
@@ -68,14 +82,49 @@ public class WorkCase extends AbstractWorkCase{
         this.requestAppraisal = requestAppraisal;
     }
 
+    public int getRequestPricing() {
+        return requestPricing;
+    }
+
+    public void setRequestPricing(int requestPricing) {
+        this.requestPricing = requestPricing;
+    }
+
+    public int getPricingDoaLevel() {
+        return pricingDoaLevel;
+    }
+
+    public void setPricingDoaLevel(int pricingDoaLevel) {
+        this.pricingDoaLevel = pricingDoaLevel;
+    }
+
+    public AuthorizationDOA getUwDOA1() {
+        return uwDOA1;
+    }
+
+    public void setUwDOA1(AuthorizationDOA uwDOA1) {
+        this.uwDOA1 = uwDOA1;
+    }
+
+    public AuthorizationDOA getUwDOA2() {
+        return uwDOA2;
+    }
+
+    public void setUwDOA2(AuthorizationDOA uwDOA2) {
+        this.uwDOA2 = uwDOA2;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("wobNumber", wobNumber)
                 .append("stepOwner", stepOwner)
                 .append("workCasePrescreen", workCasePrescreen)
-                .append("bpmActive", bpmActive)
+                .append("requestAppraisal", requestAppraisal)
+                .append("requestPricing", requestPricing)
+                .append("pricingDoaLevel", pricingDoaLevel)
+                .append("uwDOA1", uwDOA1)
+                .append("uwDOA2", uwDOA2)
                 .toString();
     }
 }

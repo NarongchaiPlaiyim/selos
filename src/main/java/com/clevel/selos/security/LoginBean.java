@@ -6,6 +6,7 @@ import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.LDAPInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.Language;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
@@ -85,6 +86,9 @@ public class LoginBean {
     private SimpleAuthenticationManager authenticationManager;
     @ManagedProperty(value = "#{sessionRegistry}")
     private SessionRegistry sessionRegistry;
+
+    @Inject
+    BPMInterfaceImpl bpmInterfaceImpl;
 
     @PostConstruct
     public void onCreation(){
@@ -269,6 +273,30 @@ public class LoginBean {
     public String logout() {
         log.debug("logging out.");
         HttpSession httpSession = FacesUtil.getSession(false);
+        try
+        {
+            if(httpSession.getAttribute("isLocked")!=null)
+            {
+
+                String isLocked = (String) httpSession.getAttribute("isLocked");
+
+                if(isLocked.equalsIgnoreCase("true"))
+                {
+                    String wobNum = (String)httpSession.getAttribute("wobNumber");
+                    bpmInterfaceImpl.unLockCase((String)httpSession.getAttribute("queueName"),wobNum,(Integer)httpSession.getAttribute("fetchType"));
+                }
+                else
+                {
+                    httpSession.removeAttribute("isLocked");
+                }
+
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("Error while unlocking case in queue : {}, WobNum : {}",httpSession.getAttribute("queueName"), httpSession.getAttribute("wobNumber"), e);
+        }
+
         httpSession.setAttribute("user", null);
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SecurityContextHolder.clearContext();

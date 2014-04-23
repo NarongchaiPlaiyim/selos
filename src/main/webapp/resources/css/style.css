@@ -672,6 +672,11 @@ table.table_content {
     background-color: red;
 }
 
+.result {
+    border: 1px solid;
+    padding: 5px;
+}
+
 .deleteButton {
     /*background-image: url('../images/table/delete_icon.gif');*/
     background-image: url(#{resource['images:table/delete_icon.gif']});
@@ -771,6 +776,10 @@ tfoot {
     margin-top: -18px !important;
 }
 
+.hide-column-names table thead tr {
+    display: none;
+}
+
 /*////////////////////////////////////////////////////////// ISA    */
 
 .subject {
@@ -834,6 +843,9 @@ tfoot {
 }
 
 /** Add for post app **/
+.div_row {
+	height : 28px;
+}
 table.ui-selectoneradio td {
     line-height: normal;
     padding: 0 8px 0 0;
@@ -892,3 +904,15 @@ table tbody tr.grandtotal_summary td {
     border-color: transparent!important;
 }
 
+.dataTableRequestAppraisal{
+    padding: 5px 5px !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-color: #868686;
+}
+
+#reqApprDialogPanel label{
+    font-size: 10px !important;
+}

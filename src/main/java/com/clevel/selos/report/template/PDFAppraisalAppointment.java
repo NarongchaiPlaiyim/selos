@@ -51,18 +51,22 @@ public class PDFAppraisalAppointment implements Serializable {
         } else if ((Long)session.getAttribute("workCasePreScreenId") != 0){
             workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
         }
-        log.info("workCaseID: {}",workCaseId);
 
+
+        appraisalView = new AppraisalView();
 
         if (!Util.isNull(workCaseId)){
-            appraisalView = new AppraisalView();
+            log.info("workCaseID: {}",workCaseId);
             appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId,workCasePreScreenId);
+            log.debug("--appraisalView. {}",appraisalView);
+        } else {
+            log.debug("--workcase is Null. {}",workCaseId);
         }
 
     }
 
     public AppraisalViewReport fillAppraisalDetailReport(){
-        init();
+//        init();
         AppraisalViewReport report = new AppraisalViewReport();
 
         if (!Util.isNull(appraisalView)){
@@ -91,12 +95,12 @@ public class PDFAppraisalAppointment implements Serializable {
     }
 
     public List<AppraisalDetailViewReport> fillAppraisalDetailViewReport(){
-        init();
+//        init();
         List<AppraisalDetailViewReport> appraisalDetailViewReportList = new ArrayList<AppraisalDetailViewReport>();
 
         int count = 1;
-
-        if (!Util.isNull(appraisalView.getAppraisalDetailViewList())){
+        log.debug("--AppraisalDetailViewList. {}",appraisalView.getAppraisalDetailViewList());
+        if (Util.safetyList(appraisalView.getAppraisalDetailViewList()).size() > 0 && !Util.isNull(appraisalView.getAppraisalDetailViewList())){
             log.debug("--AppraisalDetailViewList. {}",appraisalView.getAppraisalDetailViewList());
             for (AppraisalDetailView view : appraisalView.getAppraisalDetailViewList()){
                 AppraisalDetailViewReport report = new AppraisalDetailViewReport();
@@ -119,7 +123,7 @@ public class PDFAppraisalAppointment implements Serializable {
     }
 
     public AppraisalContactDetailViewReport fillAppraisalContactDetailViewReport(){
-        init();
+//        init();
         AppraisalContactDetailView view = new AppraisalContactDetailView();
         view = appraisalView.getAppraisalContactDetailView();
         AppraisalContactDetailViewReport report = new AppraisalContactDetailViewReport();
@@ -143,7 +147,7 @@ public class PDFAppraisalAppointment implements Serializable {
     }
 
     public List<ContactRecordDetailViewReport> fillContactRecordDetailViewReport(){
-        init();
+//        init();
         List<ContactRecordDetailViewReport> contactRecordDetailViewReports = new ArrayList<ContactRecordDetailViewReport>();
         List<ContactRecordDetailView> detailViewList = new ArrayList<ContactRecordDetailView>();
         detailViewList = appraisalView.getContactRecordDetailViewList();

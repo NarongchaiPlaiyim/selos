@@ -32,6 +32,7 @@ public class DateTimeUtil implements Serializable {
     }
 
     public static int compareDate(Date targetDate,Date referenceDate) {
+        log.debug("compareDate() targetDate: {}, referenceDate: {}", targetDate, referenceDate);
         DateTime referenceDateTime = new DateTime(getOnlyDate(referenceDate));
         DateTime targetDateTime = new DateTime(getOnlyDate(targetDate));
         return targetDateTime.compareTo(referenceDateTime);
@@ -157,6 +158,10 @@ public class DateTimeUtil implements Serializable {
 
     public static Date getCurrentDateTH(){
         return convertToDateTH(new Date());
+    }
+
+    public static Date getCurrentDateTH(final Date date){
+        return convertToDateTH(date);
     }
 
     public static int daysBetween2Dates(Date date1, Date date2) {
@@ -386,5 +391,12 @@ public class DateTimeUtil implements Serializable {
         } else {
             return null;
         }
+    }
+
+    public static String convertDateWorkFlowFormat(Date date){
+        SimpleDateFormat dtFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a", Locale.UK);
+        String dateString = dtFormat.format(date);
+
+        return dateString;
     }
 }

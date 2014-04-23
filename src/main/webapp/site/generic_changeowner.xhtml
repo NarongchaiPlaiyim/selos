@@ -42,10 +42,6 @@
         .full_table table.ui-selectoneradio {
             width : auto !important;
         }
-        .ui-icon {
-            width: 16px!important;
-            height: 8px!important;
-        }
         .ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td {
             padding: 1px 10px !important;
             overflow: hidden !important;
@@ -85,7 +81,7 @@
                                       label="TeamId"
                                       value="#{change.selectTeam}" onchange="submit()" valueChangeListener="#{change.getRoleNameForSelectedTeam}">
                     <f:selectItem itemValue="" itemLabel="--Please Select--"/>
-                    <f:selectItems value="#{change.teamTypeName}" var="teamName" itemValue="#{teamName.id}" itemLabel="#{teamName.user}"/>
+                    <f:selectItems value="#{change.teamTypeName}" var="teamName" itemValue="#{teamName.id}" itemLabel="#{teamName.id} - #{teamName.user}"/>
 
                 </h:selectOneMenu>  </td>
             </tr>
@@ -104,7 +100,7 @@
                                      label="UserList"
                                      value="#{change.selectuser}">
                     <f:selectItem itemValue="" itemLabel="--Please Select--"/>
-                    <f:selectItems value="#{change.userList1}" id="ALL"/>
+                    <f:selectItems value="#{change.usersIdNameList}" id="ALL" var="username1" itemValue="#{username1.userName}" itemLabel="#{username1.id} - #{username1.userName}"/>
                 </h:selectOneMenu>
 
                     <p:spacer width="15px"/>
@@ -148,11 +144,6 @@
                                 <h:outputText value="#{item.receivedDate}"/>
                             </p:column>
 
-                            <p:column headerText="At User Team" styleClass="center"
-                                      style="width: 130px;" sortBy="#{item.teamName}">
-                                <h:outputText value="#{item.teamName}"/>
-                            </p:column>
-
                             <p:column headerText="Application Number" styleClass="center"
                                       style="width: 110px;" sortBy="#{item.appNumber}" >
                                 <h:outputText value="#{item.appNumber}"/>
@@ -168,7 +159,7 @@
                             </p:column>
 
                             <p:column headerText="Request Type" style="width: 120px;" sortBy="#{item.requestType}">
-                                <h:outputText value="#{item.receivedDate}"/>
+                                <h:outputText value="#{item.requestType}"/>
                             </p:column>
 
                             <p:column headerText="Step" styleClass="center"
@@ -186,6 +177,11 @@
                                 <h:outputText value="#{item.currentUser}"/>
                             </p:column>
 
+                            <p:column headerText="At User Team" styleClass="center"
+                                      style="width: 130px;" sortBy="#{item.teamName}">
+                                <h:outputText value="#{item.teamName}"/>
+                            </p:column>
+
                             <p:column headerText="Total Time Spent At User" styleClass="center"
                                       style="width: 110px;" sortBy="#{item.totalTimeAtUser}">
                                 <h:outputText value="#{item.totalTimeAtUser}"/>
@@ -199,10 +195,10 @@
                                       style="width: 110px;" sortBy="#{item.totalTimeAtProcess}">
                                 <h:outputText value="#{item.totalTimeAtProcess}"/>
                             </p:column>
-                            <p:column headerText="F_WOBNumber" styleClass="center"
-                                      style="width: 110px;" sortBy="#{item.f_WobNum}">
-                                <h:outputText value="#{item.f_WobNum}"/>
-                            </p:column>
+                           <!-- <p:column headerText="F_WOBNumber" styleClass="center"
+                                      style="width: 110px;" sortBy="{item.f_WobNum}">
+                                <h:outputText value="{item.f_WobNum}"/>
+                            </p:column>-->
 
                         </p:dataTable>
                     </td>
@@ -227,7 +223,7 @@
                                          label="teamIdChangeOwner"
                                          value="#{change.selectTeamNameChangeOwner}">
                             <f:selectItem itemValue="" itemLabel="--Please Select--"/>
-                            <f:selectItems value="#{change.teamNamesForChangeOwerTo}" var="teamNamesChangeOwner" itemLabel="#{teamNamesChangeOwner.user}" itemValue="#{teamNamesChangeOwner.id}"/>
+                            <f:selectItems value="#{change.teamNamesForChangeOwerTo}" var="teamNamesChangeOwner" itemLabel="#{teamNamesChangeOwner.id} - #{teamNamesChangeOwner.user}" itemValue="#{teamNamesChangeOwner.id}"/>
                             <f:ajax listener="#{change.userNamesForChangeTo}" render="userListChangeOwner" execute="@this"/>
                         </h:selectOneMenu> </td>
                         </tr>
@@ -237,7 +233,7 @@
                                          label="UserListChangeOwner"
                                          value="#{change.selectUserChangeOwner}">
                             <f:selectItem itemValue="" itemLabel="--Please Select--"/>
-                            <f:selectItems id="selectednames" value="#{change.userNamesForChangeOwnerList}"/>
+                            <f:selectItems id="selectednames" value="#{change.usersIdNameList1}" var="username" itemLabel="#{username.id} - #{username.userName}" itemValue="#{username.userName}"/>
                         </h:selectOneMenu> </td>
                         </tr>
 

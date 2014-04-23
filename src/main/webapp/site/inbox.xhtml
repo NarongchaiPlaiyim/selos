@@ -7,9 +7,8 @@
         xmlns:p="http://primefaces.org/ui">
 
     <h:head>
-        <title>SE-LOS : INBOX</title>
+        <title>#{msg.get('app.name')} : #{msg.get('app.page.inbox')}</title>
         <h:outputStylesheet name="css/style.css" />
-        <!--<h:outputStylesheet name="css/style-inbox.css" />-->
         <h:outputScript library="js" name="custom.js" />
 
         <style type="text/css">
@@ -44,10 +43,6 @@
             .full_table table.ui-selectoneradio {
                 width : auto !important;
             }
-            .ui-icon {
-                width: 16px!important;
-                height: 8px!important;
-            }
             .ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td {
                 padding: 1px 10px !important;
                 overflow: hidden !important;
@@ -63,29 +58,90 @@
     <h:body>
         <p:panel id="pnl_maincontainer">
             <h:form id="frmMain" style="position: relative; min-height: 100%; height: 100%;">
+                <p:messages id="messages" autoUpdate="true" />
                 <div id="main_container">
                     <!-- Start Header Logo -->
                     <ui:include src="include/header_logo.xhtml"/>
                     <ui:include src="include/menubar_inbox.xhtml"/>
                     <div id="content_container">
-                        <div id="content_name" style="margin-top: 5px;">Inbox</div>
+                        <div id="content_name" style="margin-top: 5px;"><h:outputText value="#{peInbox.inboxName}"/></div>
                         <div id="content">
                             <table class="content_form">
                                 <tr>
                                     <td>
-                                        <p:dataTable id="resultInbox" var="item"
-                                                     value="#{peinbox.inboxViewList}"
-                                                     selection="#{peinbox.inboxViewSelectItem}"
+                                        <!-- Result for MyBox and ReturnBox-->
+                                        <p:dataTable id="resultInbox" value="#{peInbox.inboxViewList}" var="item" tableStyle="width:auto"
+                                                     rendered="#{peInbox.inboxName != 'Pool Box'}"
+                                                     selection="#{peInbox.inboxViewSelectItem}"
                                                      selectionMode="single"
-                                                     resizableColumns="true"
-                                                     paginator="true"
-                                                     rows="20"
-                                                     rowsPerPageTemplate="20,40,60"
-                                                     rowKey="#{item.fwobnumber}"
-                                                     rowIndexVar="rowIndex"
-                                                     tableStyle="width:auto" >
-                                            <p:ajax event="rowSelect" update=":frmMain:resultInbox"
-                                                    listener="#{peinbox.onSelectInbox}" onstart="blockInbox.show()"/>
+                                                     resizableColumns="true" paginator="true" rows="20" rowsPerPageTemplate="20,40,60"
+                                                     rowKey="#{item.fwobnumber}" rowIndexVar="rowIndex">
+                                            <p:ajax event="rowSelect" update=":frmMain:resultInbox, :frmMain:msgBoxErrorPanel" listener="#{peInbox.onSelectInbox}" onstart="blockInbox.show()"/>
+                                            <p:column headerText="" styleClass="center" style="width:22px;"  >
+                                                <h:outputText value="#{rowIndex+1}"/>
+                                            </p:column>
+                                            <p:column headerText="Received Date" styleClass="center" style="width: 60px;" sortBy="#{item.receiveddate}" >
+                                                <h:outputText value="#{item.receiveddate}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Application Number" styleClass="center" style="width: 60px;" sortBy="#{item.applicationno}">
+                                                <h:outputText value="#{item.applicationno}"/>
+                                            </p:column>
+                                            <p:column headerText="Name" styleClass="center" style="width: 60px;">
+                                                <h:outputText value="#{item.name}"/>
+                                            </p:column>
+                                            <p:column headerText="Product Group" style="width: 60px;" styleClass="center" sortBy="#{item.productgroup}">
+                                                <h:outputText value="#{item.productgroup}"/>
+                                            </p:column>
+                                            <p:column headerText="Request Type" style="width: 60px;" styleClass="center" >
+                                                <h:outputText value="#{item.requestTypeStr}"/>
+                                            </p:column>
+                                            <p:column headerText="Step" styleClass="center" style="width: 60px;" sortBy="#{item.step}">
+                                                <h:outputText  value="#{item.step}"/>
+                                            </p:column>
+                                            <p:column headerText="Status" styleClass="center" style="width: 60px;" sortBy="#{item.status}">
+                                                <h:outputText value="#{item.status}"/>
+                                            </p:column>
+                                            <p:column headerText="From User" styleClass="center" style="width: 60px;" >
+                                                <h:outputText value="#{item.fromuser}"/>
+                                            </p:column>
+                                            <p:column headerText="At User" styleClass="center" style="width: 60px;" >
+                                                <h:outputText value="#{item.atuser}"/>
+                                            </p:column>
+
+                                            <p:column headerText="At User Team" styleClass="center" style="width: 60px;">
+                                                <h:outputText value="#{item.atuserteam}" />
+                                            </p:column>
+                                            <p:column headerText="Appointment Date" styleClass="center" style="width: 60px;" >
+                                                <h:outputText value="#{item.appointmentdate}"/>
+                                            </p:column>
+                                            <p:column headerText="DOA Level" styleClass="center" style="width: 60px;" >
+                                                <h:outputText value="#{item.doalevel}"/>
+                                            </p:column>
+                                            <p:column headerText="Action" styleClass="center" style="width: 60px;"  >
+                                                <h:outputText  value="#{item.action}"/>
+                                            </p:column>
+                                            <p:column headerText="SLA End Date" styleClass="center" style="width: 60px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="#{item.slaenddate}">
+                                                <h:outputText style="" value="#{item.slaenddate}"/>
+                                            </p:column>
+                                            <p:column headerText="Total Time Spent At User " styleClass="center" style="width: 60px;" sortBy="#{item.totaltimespentatuser}">
+                                                <h:outputText  value="#{item.totaltimespentatuser}"/>
+                                            </p:column>
+                                            <p:column headerText="Total Time Spent At Process" styleClass="center" style="width: 60px;" sortBy="#{item.totaltimespentatprocess}">
+                                                <h:outputText value="#{item.totaltimespentatprocess}"/>
+                                            </p:column>
+                                        </p:dataTable>
+
+                                        <!--Result for Pool Box-->
+                                        <p:dataTable id="resultPoolBox" value="#{peInbox.inboxViewList}" var="item" tableStyle="width:auto"
+                                                     rendered="#{peInbox.inboxName == 'Pool Box'}"
+                                                     selection="#{peInbox.inboxViewSelectItem}"
+                                                     selectionMode="single"
+                                                     resizableColumns="true" paginator="true" rows="20" rowsPerPageTemplate="20,40,60"
+                                                     rowKey="#{item.fwobnumber}" rowIndexVar="rowIndex">
+                                            <p:ajax event="rowSelect" update=":frmMain:resultPoolBox" listener="#{peInbox.onClickPickUpCase()}">
+                                                <f:setPropertyActionListener value="#{item}" target="#{peInbox.inboxViewSelectItem}"/>
+                                            </p:ajax>
                                             <p:column headerText="" styleClass="center" style="width:22px;"  >
                                                 <h:outputText value="#{rowIndex+1}"/>
                                             </p:column>
@@ -146,9 +202,36 @@
                     <!-- Start Footer -->
                     <ui:include src="include/footer_inbox.xhtml"/>
                     <!-- End Footer -->
-                    <h:inputHidden id="pagename" value="mnuprescreen"/>
-                    <h:inputHidden id="subpagename" value="submnuprescreen"/>
                 </div>
+                <p:confirmDialog id="msgBoxConfirmDialog" widgetVar="msgBoxConfirmDlg" styleClass="messageDialog"
+                                 closable="false"
+                                 header="Information.">
+                    <f:facet name="message">
+                        <h:outputText value="Are you want to pickup this case." escape="false"/>
+                    </f:facet>
+                    <p:commandButton value="Yes"
+                                     actionListener="#{peInbox.onPickUpCase()}"
+                                     process="@this"
+                                     update="frmMain"
+                                     onstart="blockInbox.show()"
+                                     oncomplete="msgBoxConfirmDlg.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.no')}"
+                                     process="@this"
+                                     oncomplete="msgBoxConfirmDlg.hide()"/>
+                </p:confirmDialog>
+                <p:panel id="msgBoxErrorPanel" styleClass="panel">
+                    <p:confirmDialog id="msgBoxErrorDialog" widgetVar="msgBoxErrorDlg" styleClass="messageDialog"
+                                     closable="false"
+                                     header="Exception.">
+                        <f:facet name="message">
+                            <h:outputText value="#{peInbox.message}" escape="false"/>
+                        </f:facet>
+                        <p:commandButton value="#{msg.get('app.button.ok')}"
+                                         process="@this"
+                                         update="frmMain"
+                                         oncomplete="msgBoxErrorDlg.hide()"/>
+                    </p:confirmDialog>
+                </p:panel>
             </h:form>
         </p:panel>
         <p:blockUI widgetVar="blockInbox" block=":frmMain">

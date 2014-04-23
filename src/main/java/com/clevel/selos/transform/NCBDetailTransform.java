@@ -52,9 +52,11 @@ public class NCBDetailTransform extends Transform {
             }
 
             if (ncbDetailViewItem.getHistoryPayment() != null && ncbDetailViewItem.getHistoryPayment().getId() != 0) {
-                //ncbDetail.setHistoryPayment(settlementStatusDAO.findById(ncbDetailViewItem.getHistoryPayment().getId()));
+                ncbDetail.setHistorySixPayment(settlementStatusDAO.findById(ncbDetailViewItem.getHistoryPayment().getId()));
+                ncbDetail.setHistoryTwelvePayment(settlementStatusDAO.findById(ncbDetailViewItem.getHistoryPayment().getId()));
             } else {
-                //ncbDetail.setHistoryPayment(null);
+                ncbDetail.setHistorySixPayment(null);
+                ncbDetail.setHistoryTwelvePayment(null);
             }
 
             ncbDetail.setAsOfDate(ncbDetailViewItem.getDateOfInfo());
@@ -86,7 +88,7 @@ public class NCBDetailTransform extends Transform {
         ncbDetailView.setAccountOpenDate(ncbDetail.getAccountOpenDate());
         ncbDetailView.setTMBAccount(ncbDetail.getAccountTMBFlag());
         ncbDetailView.setCurrentPayment(ncbDetail.getCurrentPayment());
-        //ncbDetailView.setHistoryPayment(ncbDetail.getHistoryPayment());
+        ncbDetailView.setHistoryPayment(ncbDetail.getHistorySixPayment());
         ncbDetailView.setDateOfInfo(ncbDetail.getAsOfDate());
         ncbDetailView.setDateOfDebtRestructuring(ncbDetail.getLastReStructureDate());
         ncbDetailView.setInstallment(ncbDetail.getInstallment());

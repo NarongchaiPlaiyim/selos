@@ -620,41 +620,34 @@ public class PrescreenMaker implements Serializable {
 
     }
 
-    // *** Function for PreScreen *** //
-    public void onCheckPreScreen(){
-        // *** Validate Data for Check PreScreen *** //
-        boolean validate = validateCheckPrescreen(customerInfoViewList);
-        if(validate){
-            preScreenResponseViewList = prescreenBusinessControl.getPreScreenResultFromBRMS(customerInfoViewList);
-            prescreenBusinessControl.savePreScreenResult(preScreenResponseViewList, workCasePreScreenId, 0, stepId, user);
-            preScreenResponseCustomerList = prescreenBusinessControl.getPreScreenCustomerResult(preScreenResponseViewList);
-            preScreenResponseGroupList = prescreenBusinessControl.getPreScreenGroupResult(preScreenResponseViewList);
-        }else{
-            // *** MessageBox show validation Failed. *** //
-        }
-    }
-
-    public boolean validateCheckPrescreen(List<CustomerInfoView> vCustomerInfoViewList){
-        boolean validate = false;
-
-        return validate;
-    }
-
     public void onCloseSale(){
         log.debug("onCloseSale ::: queueName : {}", queueName);
         try{
-            prescreenBusinessControl.duplicateData(workCasePreScreenId, queueName, ActionCode.CLOSE_SALES.getVal());
-            //prescreenBusinessControl.closeSale(workCasePreScreenId, queueName, ActionCode.CLOSE_SALES.getVal());
+            //TODO Check Modified flag
+            int modifyFlag = prescreenBusinessControl.getModifyValue(workCasePreScreenId);
+            if(modifyFlag == 1){
+                messageHeader = "Exception";
+                message = "Some of data has been changed. Please Retrive Interface before Closesale.";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            } else if(modifyFlag == 2){
+                messageHeader = "Exception";
+                message = "Could not get data for PreScreen.";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            } else {
+                prescreenBusinessControl.duplicateData(workCasePreScreenId, queueName, ActionCode.CLOSE_SALES.getVal());
+                //prescreenBusinessControl.closeSale(workCasePreScreenId, queueName, ActionCode.CLOSE_SALES.getVal());
 
-            messageHeader = "Information";
-            message = "Close Sales Complete.";
+                messageHeader = "Information";
+                message = "Close Sales Complete.";
+
+                RequestContext.getCurrentInstance().execute("msgBoxRedirectDlg.show()");
+            }
         } catch (Exception ex){
             messageHeader = "Exception";
             message = "Close Sales Failed, " + ex.getMessage();
 
             log.error("onCloseSale failed : ", ex);
-        } finally {
-            RequestContext.getCurrentInstance().execute("msgBoxRedirectDlg.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
 
@@ -960,10 +953,24 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onChangeDistrictBorrower(){
-        if(borrowerInfo.getCurrentAddress().getDistrict() != null && borrowerInfo.getCurrentAddress().getDistrict().getId() != 0){
+        /*if(borrowerInfo.getCurrentAddress().getDistrict() != null && borrowerInfo.getCurrentAddress().getDistrict().getId() != 0){
             subDistrictList = subDistrictDAO.getListByDistrict(borrowerInfo.getCurrentAddress().getDistrict());
         } else {
             subDistrictList = new ArrayList<SubDistrict>();
+        }*/
+
+        if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+            if(borrowerInfo.getCurrentAddress().getDistrict() != null && borrowerInfo.getCurrentAddress().getDistrict().getId() != 0){
+                subDistrictList = subDistrictDAO.getListByDistrict(borrowerInfo.getCurrentAddress().getDistrict());
+            } else {
+                subDistrictList = new ArrayList<SubDistrict>();
+            }
+        } else {
+            if(borrowerInfo.getRegisterAddress().getDistrict() != null && borrowerInfo.getRegisterAddress().getDistrict().getId() != 0){
+                subDistrictList = subDistrictDAO.getListByDistrict(borrowerInfo.getRegisterAddress().getDistrict());
+            } else {
+                subDistrictList = new ArrayList<SubDistrict>();
+            }
         }
     }
 
@@ -1198,16 +1205,22 @@ public class PrescreenMaker implements Serializable {
                                         spouseInfo.setListName("BORROWER");
                                         spouseInfo.setSubIndex(borrowerInfoViewList.size());
                                         borrowerInfoViewList.add(spouseInfo);
+                                        //Add flag for popup when save
+                                        customerModifyFlag = customerModifyFlag + 1;
                                     } else if(spouseInfo.getRelation().getId() == RelationValue.GUARANTOR.value()) {
                                         //Spouse - Guarantor
                                         spouseInfo.setListName("GUARANTOR");
                                         spouseInfo.setSubIndex(guarantorInfoViewList.size());
                                         guarantorInfoViewList.add(spouseInfo);
+                                        //Add flag for popup when save
+                                        customerModifyFlag = customerModifyFlag + 1;
                                     } else if(spouseInfo.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value() || spouseInfo.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()) {
                                         //Spouse - Relate Person
                                         spouseInfo.setListName("RELATED");
                                         spouseInfo.setSubIndex(relatedInfoViewList.size());
                                         relatedInfoViewList.add(spouseInfo);
+                                        //Add flag for popup when save
+                                        customerModifyFlag = customerModifyFlag + 1;
                                     } else {
                                         complete = false;
                                         messageHeader = "Save customer (Spouse) failed.";
@@ -1525,14 +1538,20 @@ public class PrescreenMaker implements Serializable {
                                             newSpouse.setListName("BORROWER");
                                             newSpouse.setSubIndex(borrowerInfoViewList.size());
                                             borrowerInfoViewList.add(newSpouse);
+                                            //Add flag for popup when save
+                                            customerModifyFlag = customerModifyFlag + 1;
                                         } else if(newSpouse.getRelation() != null && newSpouse.getRelation().getId() == RelationValue.GUARANTOR.value()){
                                             newSpouse.setListName("GUARANTOR");
                                             newSpouse.setSubIndex(guarantorInfoViewList.size());
                                             guarantorInfoViewList.add(newSpouse);
+                                            //Add flag for popup when save
+                                            customerModifyFlag = customerModifyFlag + 1;
                                         } else if(newSpouse.getRelation() != null && (newSpouse.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value() || newSpouse.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value())){
                                             newSpouse.setListName("RELATED");
                                             newSpouse.setSubIndex(relatedInfoViewList.size());
                                             relatedInfoViewList.add(newSpouse);
+                                            //Add flag for popup when save
+                                            customerModifyFlag = customerModifyFlag + 1;
                                         }
                                     }
                                 }
@@ -1545,14 +1564,20 @@ public class PrescreenMaker implements Serializable {
                                     newSpouse.setListName("BORROWER");
                                     newSpouse.setSubIndex(borrowerInfoViewList.size());
                                     borrowerInfoViewList.add(newSpouse);
+                                    //Add flag for popup when save
+                                    customerModifyFlag = customerModifyFlag + 1;
                                 } else if (newSpouse.getRelation() != null && newSpouse.getRelation().getId() == RelationValue.GUARANTOR.value()){
                                     newSpouse.setListName("GUARANTOR");
                                     newSpouse.setSubIndex(guarantorInfoViewList.size());
                                     guarantorInfoViewList.add(newSpouse);
+                                    //Add flag for popup when save
+                                    customerModifyFlag = customerModifyFlag + 1;
                                 } else if (newSpouse.getRelation() != null && ( newSpouse.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value() || newSpouse.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value())){
                                     newSpouse.setListName("RELATED");
                                     newSpouse.setSubIndex(relatedInfoViewList.size());
                                     relatedInfoViewList.add(newSpouse);
+                                    //Add flag for popup when save
+                                    customerModifyFlag = customerModifyFlag + 1;
                                 }
                             }
                         } else if(borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getSpouseFlag() == 0) {
@@ -1772,12 +1797,18 @@ public class PrescreenMaker implements Serializable {
             if(selectCustomerInfoItem.getRelation().getId() == 1){
                 borrowerInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.BORROWER);
+                //Add flag for popup when save
+                customerModifyFlag = customerModifyFlag + 1;
             } else if(selectCustomerInfoItem.getRelation().getId() == 2){
                 guarantorInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.GUARANTOR);
+                //Add flag for popup when save
+                customerModifyFlag = customerModifyFlag + 1;
             } else if(selectCustomerInfoItem.getRelation().getId() == 3 || selectCustomerInfoItem.getRelation().getId() == 4){
                 relatedInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.RELATED);
+                //Add flag for popup when save
+                customerModifyFlag = customerModifyFlag + 1;
             }
             //Add to delete for delete from database
             if(selectCustomerInfoItem.getId() != 0){
@@ -1794,14 +1825,20 @@ public class PrescreenMaker implements Serializable {
                 //Remove Borrower List
                 borrowerInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.BORROWER);
+                //Add flag for popup when save
+                customerModifyFlag = customerModifyFlag + 1;
             } else if(selectCustomerInfoItem.getRelation().getId() == RelationValue.GUARANTOR.value()){
                 //Remove Guarantor List
                 guarantorInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.GUARANTOR);
+                //Add flag for popup when save
+                customerModifyFlag = customerModifyFlag + 1;
             } else if(selectCustomerInfoItem.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value() || selectCustomerInfoItem.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                 //Remove Related List
                 relatedInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.RELATED);
+                //Add flag for popup when save
+                customerModifyFlag = customerModifyFlag + 1;
             }
 
             customerInfoViewList.remove(customerInfoView);
@@ -2188,6 +2225,8 @@ public class PrescreenMaker implements Serializable {
 
     public void onChangeMaritalStatus(){
         log.debug("onChangeMaritalStatus ::: Marriage Status : {}", borrowerInfo.getMaritalStatus().getId());
+        //TODO Check Spouse.. if any spouse remove it
+
     }
 
     public void onChangeDocType(){
@@ -2388,12 +2427,18 @@ public class PrescreenMaker implements Serializable {
             prescreenView.setRefinanceInBank(null);
             prescreenView.setRefinanceOutBank(null);
             prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, deleteCustomerInfoViewList, workCasePreScreenId, caseBorrowerTypeId, user);
+            String productGroupName = "";
+            if(prescreenView.getProductGroup() != null){
+                ProductGroup productGroup = productGroupDAO.findById(prescreenView.getProductGroup().getId());
+                productGroupName = productGroup.getName();
+            }
+            prescreenBusinessControl.updateBorrowerProductGroupForBPM(borrowerInfoViewList, productGroupName, queueName, workCasePreScreenId);
 
             //TODO show messageBox success
             messageHeader = "Save PreScreen Success.";
             message = "Save PreScreen data success.";
 
-            /*BaseController baseController = new BaseController();
+            /*HeaderController baseController = new HeaderController();
             baseController.setAppHeaderView(inboxControl.getHeaderInformation(workCasePreScreenId, new Long(0)));*/
             //setAppHeaderView(inboxControl.getHeaderInformation(workCasePreScreenId, new Long(0)));
 
@@ -2467,6 +2512,12 @@ public class PrescreenMaker implements Serializable {
         try{
             customerModifyFlag = customerModifyFlag + prescreenBusinessControl.checkModifyValue(prescreenView, workCasePreScreenId);
             boolean modifyFlag = prescreenBusinessControl.savePreScreen(prescreenView, facilityViewList, customerInfoViewList, deleteCustomerInfoViewList, bizInfoViewList, proposePrescreenCollateralViewList, workCasePreScreenId, customerModifyFlag, user);
+            String productGroupName = "";
+            if(prescreenView.getProductGroup() != null){
+                ProductGroup productGroup = productGroupDAO.findById(prescreenView.getProductGroup().getId());
+                productGroupName = productGroup.getName();
+            }
+            prescreenBusinessControl.updateBorrowerProductGroupForBPM(borrowerInfoViewList, productGroupName, queueName, workCasePreScreenId);
 
             messageHeader = "Save PreScreen Success.";
             message = "Save PreScreen data success.";
@@ -2481,7 +2532,7 @@ public class PrescreenMaker implements Serializable {
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
-            log.error("onSavePreScreenInitial ::: exception : {}", ex);
+            log.error("onSavePrescreen ::: exception : {}", ex);
             //TODO show messageBox error
             messageHeader = "Save PreScreen Failed.";
             if(ex.getCause() != null){

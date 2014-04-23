@@ -42,7 +42,54 @@ public class UserDAO extends GenericDAO<User,String> {
     public UserDAO() {
     }
 
+    public String getUserNameById(String userId)
+    {
+
+        Criteria criteria1 = getSession().createCriteria(User.class);
+        criteria1.setProjection(Projections.projectionList().add(Projections.property("userName"), "userName"));
+        criteria1.add(Restrictions.eq("id",userId).ignoreCase()).setResultTransformer(Transformers.aliasToBean(User.class));
+        List usernamebasedteamid = criteria1.list();
+        Iterator iterator1 = usernamebasedteamid.iterator();
+        String username = null;
+        while(iterator1.hasNext() == true)
+        {
+            User user = new User();
+            user = (User)iterator1.next();
+            username = user.getUserName();
+            user = null;
+        }
+
+        username = userId+" - "+username;
+
+        return username;
+
+    }
+
+    public String getUserIdByName(String userName)
+    {
+
+        Criteria criteria1 = getSession().createCriteria(User.class);
+        criteria1.setProjection(Projections.projectionList().add(Projections.property("id"), "id"));
+        criteria1.add(Restrictions.eq("userName",userName).ignoreCase()).setResultTransformer(Transformers.aliasToBean(User.class));
+        List usernamebasedteamid = criteria1.list();
+        Iterator iterator1 = usernamebasedteamid.iterator();
+        String userId = null;
+        while(iterator1.hasNext() == true)
+        {
+            User user = new User();
+            user = (User)iterator1.next();
+            userId = user.getId();
+            user = null;
+        }
+
+        //userName = userId+" - "+userName;
+
+        return userId;
+
+    }
+
     public User findByUserName(String userName) {
+
         //log.debug("findByUserName. (userName: {})",userName);
         return findOneByCriteria(Restrictions.eq("userName",userName));
     }
@@ -73,11 +120,10 @@ public class UserDAO extends GenericDAO<User,String> {
 
     }
 
-    public List<User> findUserListByRole(User user, Role role){
+    public List<User> findUserListByRoleId(User user, int roleId){
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.ne("id", user.getId()));
-        criteria.add(Restrictions.eq("role", role));
-        criteria.add(Restrictions.eq("team", user.getTeam()));
+        criteria.add(Restrictions.eq("role.id", roleId));
         criteria.addOrder(Order.asc("id"));
 
         List<User> userList = criteria.list();
@@ -85,46 +131,9 @@ public class UserDAO extends GenericDAO<User,String> {
         return userList;
     }
 
-    public List<User> findUserZoneList(List<UserTeam> userTeams){
+    public List<User> findUserList(List<UserTeam> userTeams){
         Criteria criteria = createCriteria();
-        //criteria.add(Restrictions.eq("role.id", RoleValue.ZM.id()));
         criteria.add(Restrictions.in("team", userTeams));
-        criteria.addOrder(Order.asc("userName"));
-
-        List<User> userList = criteria.list();
-
-        return userList;
-    }
-
-    public List<User> findUserRegionList(User user){
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.ne("id", user.getId()));
-        criteria.add(Restrictions.eq("role.id", RoleValue.RGM.id()));
-        criteria.add(Restrictions.eq("team", user.getTeam()));
-        criteria.addOrder(Order.asc("userName"));
-
-        List<User> userList = criteria.list();
-
-        return userList;
-    }
-
-    public List<User> findUserHeadList(User user){
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.ne("id", user.getId()));
-        criteria.add(Restrictions.eq("role.id", RoleValue.GH.id()));
-        criteria.add(Restrictions.eq("team", user.getTeam()));
-        criteria.addOrder(Order.asc("userName"));
-
-        List<User> userList = criteria.list();
-
-        return userList;
-    }
-
-    public List<User> findCSSOList(User user){
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.ne("id", user.getId()));
-        criteria.add(Restrictions.eq("role.id", RoleValue.CSSO.id()));
-        criteria.add(Restrictions.eq("team", user.getTeam()));
         criteria.addOrder(Order.asc("userName"));
 
         List<User> userList = criteria.list();
@@ -556,11 +565,15 @@ public class UserDAO extends GenericDAO<User,String> {
 
                 }
 
-                workCasePrescreenId = (long)workCaseOwner.getWorkCasePrescreenId();
+                if(workCaseOwner.getWorkCasePrescreenId()!=null)
+                {
+                    workCasePrescreenId = (long)workCaseOwner.getWorkCasePrescreenId();
 
-                log.info("workCasePrescreenId is ::::::{}" , workCasePrescreenId);
+                    log.info("workCasePrescreenId is ::::::{}" , workCasePrescreenId);
 
-                WorkCasePrescreenList.add(workCasePrescreenId);
+                    WorkCasePrescreenList.add(workCasePrescreenId);
+                }
+
                 workCaseOwner = null;
             }
             log.info("WorkCaseList is ::::::" + WorkCaseList.size());

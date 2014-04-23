@@ -4,11 +4,17 @@ import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.ApprovalHistoryDAO;
+import com.clevel.selos.dao.working.FeeDetailDAO;
+import com.clevel.selos.dao.working.NewCreditDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.brms.model.response.PricingFee;
+import com.clevel.selos.integration.brms.model.response.PricingIntTier;
+import com.clevel.selos.integration.brms.model.response.PricingInterest;
+import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.ApprovalHistory;
+import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -27,16 +33,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "decision")
-public class Decision implements Serializable {
+public class Decision extends BaseController {
     @Inject
     @SELOS
     Logger log;
@@ -71,6 +73,12 @@ public class Decision implements Serializable {
     private DisbursementTypeControl disbursementTypeControl;
     @Inject
     private ProductControl productControl;
+    @Inject
+    private BRMSControl brmsControl;
+    @Inject
+    private FullApplicationControl fullApplicationControl;
+    @Inject
+    private StepStatusControl stepStatusControl;
 
     //DAO
     @Inject
@@ -99,6 +107,12 @@ public class Decision implements Serializable {
     private SpecialProgramDAO specialProgramDAO;
     @Inject
     private WorkCaseDAO workCaseDAO;
+    @Inject
+    private NewCreditDetailDAO newCreditDetailDAO;
+    @Inject
+    private ProductProgramDAO productProgramDAO;
+    @Inject
+    private FeeDetailDAO feeDetailDAO;
 
     //Transform
     @Inject
@@ -128,7 +142,11 @@ public class Decision implements Serializable {
     @Inject
     private NewCollateralSubTransform newCollateralSubTransform;
     @Inject
-    BaseRateTransform baseRateTransform;
+    private BaseRateTransform baseRateTransform;
+    @Inject
+    private FeeTransform feeTransform;
+    @Inject
+    private NewCreditTierTransform newCreditTierTransform;
 
     // Session
     private long workCaseId;
@@ -137,7 +155,9 @@ public class Decision implements Serializable {
     // User Role
     private boolean roleBDM;
     private boolean roleZM_RGM;
-    private boolean roleUW;    
+    private boolean roleUW;
+    private int roleId;
+    private RoleValue roleValue;
 
     // Mode
     enum ModeForButton {
@@ -178,6 +198,7 @@ public class Decision implements Serializable {
     private boolean modeEditReducePricing;
     private boolean modeEditReduceFrontEndFee;
     private boolean cannotEditStandard;
+    private boolean notRetrievePricing;
     private boolean cannotAddTier;
     private List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewList;
     private List<PrdProgramToCreditTypeView> prdProgramToCreditTypeViewList;
@@ -225,53 +246,69 @@ public class Decision implements Serializable {
 
     // Approval History
     private ApprovalHistoryView approvalHistoryView;
+    private ApprovalHistoryView approvalHistoryPricingView;
 
     // List One Time Query on init
     private List<PrdGroupToPrdProgramView> _prdGroupToPrdProgramAll;
     private List<PrdGroupToPrdProgramView> _prdGroupToPrdProgramByGroup;
 
+    private boolean requestPricing;
+    private boolean decisionDialog;
+
     public Decision() {
     }
 
-    private void preRender() {
+    private void initial(){
+        //Initial value for onCreation
+        HttpSession session = FacesUtil.getSession(true);
+        workCaseId = getCurrentWorkCaseId(session);
+        stepId = getCurrentStep(session);
+
+        //Set role for UI
+        roleId = decisionControl.getUserRoleId();
+        if (RoleValue.ABDM.id() == roleId || RoleValue.BDM.id() == roleId) {
+            roleBDM = true;
+        } else if (RoleValue.UW.id() == roleId) {
+            roleUW = true;
+        } else if (RoleValue.ZM.id() == roleId || RoleValue.RGM.id() == roleId) {
+            roleZM_RGM = true;
+        }
+
+        if(roleBDM){
+            decisionDialog = false;
+        } else {
+            decisionDialog = true;
+        }
+
+        log.debug("Initial role of user - roleBDM : {}, roleUW : {}, roleZM_RGM : {}, decisionDialog : {}", roleBDM, roleUW, roleZM_RGM, decisionDialog);
+
+    }
+
+    public void preRender() {
         log.info("preRender ::: setSession ");
         HttpSession session = FacesUtil.getSession(true);
-        if (session.getAttribute("workCaseId") != null) {
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-
-            if (session.getAttribute("stepId") != null) {
-                stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            }
-
-            // set role
-            int roleId = decisionControl.getUserRoleId();
-            if (RoleValue.ABDM.id() == roleId || RoleValue.BDM.id() == roleId) {
-                roleBDM = true;
-            }
-            else if (RoleValue.UW.id() == roleId) {
-                roleUW = true;
-            }
-            else if (RoleValue.ZM.id() == roleId || RoleValue.RGM.id() == roleId) {
-                roleZM_RGM = true;
-            }
-
+        if(checkSession(session)) {
+            //Check valid Step
+            log.debug("check valid step.");
         } else {
-            //TODO return to inbox
-            log.info("preRender ::: workCaseId is null.");
-            try {
-                FacesUtil.redirect("/site/inbox.jsf");
-                return;
-            } catch (Exception e) {
-                log.info("Exception :: {}", e);
-            }
+            log.debug("check session failed. redirect to inbox.");
+            FacesUtil.redirect("/site/inbox.jsf");
+            return;
         }
     }
 
     @PostConstruct
     public void onCreation() {
-        preRender();
+        initial();
 
         decisionView = decisionControl.getDecisionView(workCaseId);
+        if (decisionView.getId() == 0) {
+//            reducePricePanelRendered = false;
+            cannotEditStandard = true;
+            notRetrievePricing = true;
+        } else {
+            notRetrievePricing = false;
+        }
 
         // delete list on save
         deleteCreditIdList = new ArrayList<Long>();
@@ -357,12 +394,14 @@ public class Decision implements Serializable {
         decisionFollowConditionView = new DecisionFollowConditionView();
         followConditionViewList = followConditionTransform.transformToView(followConditionDAO.findAll());
 
-        // ========== Approval History ========== //
-        List<ApprovalHistory> approvalHistories = approvalHistoryDAO.findByWorkCase(workCaseId, false);
-        if (approvalHistories != null && !approvalHistories.isEmpty()) {
-            approvalHistoryView = approvalHistoryTransform.transformToView(approvalHistories.get(0));
-        } else {
-            approvalHistoryView = decisionControl.getApprovalHistoryView(stepId);
+        // ========== Check Request Pricing =========== //
+        requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
+
+        // ========== Approval History Endorse CA ========== //
+        approvalHistoryView = decisionControl.getCurrentApprovalHistory(workCaseId, ApprovalType.CA_APPROVAL.value(), stepId);
+
+        if(requestPricing){
+            approvalHistoryPricingView = decisionControl.getCurrentApprovalHistory(workCaseId, ApprovalType.PRICING_APPROVAL.value(), stepId);
         }
 
         hashSeqCredit = new HashMap<Integer, Integer>();
@@ -370,7 +409,111 @@ public class Decision implements Serializable {
 
     public void onRetrievePricingFee() {
         log.debug("onRetrievePricingFee()");
-        //todo: Call BRMS to get data Propose Credit Info
+        try {
+            StandardPricingResponse standardPricingResponse = brmsControl.getPriceFeeInterest(workCaseId);
+            if (ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
+                Map<Long, NewFeeDetailView> newFeeDetailViewMap = new HashMap<Long, NewFeeDetailView>();
+                NewFeeDetailView newFeeDetailView;
+
+                if (standardPricingResponse.getPricingFeeList() != null && standardPricingResponse.getPricingFeeList().size() > 0) {
+                    for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()) {
+                        FeeDetailView feeDetailView = feeTransform.transformToView(pricingFee);
+                        if (FeeLevel.CREDIT_LEVEL.equals(feeDetailView.getFeeLevel())) {
+                            if (newFeeDetailViewMap.containsKey(feeDetailView.getCreditDetailViewId())) {
+                                newFeeDetailView = newFeeDetailViewMap.get(feeDetailView.getCreditDetailViewId());
+                            } else {
+                                newFeeDetailView = new NewFeeDetailView();
+                                newFeeDetailViewMap.put(feeDetailView.getCreditDetailViewId(), newFeeDetailView);
+                            }
+
+                            NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(feeDetailView.getCreditDetailViewId());
+                            if (newCreditDetail != null &&
+                                newCreditDetail.getProductProgram() != null &&
+                                newCreditDetail.getProductProgram().getId() != 0)
+                            {
+                                ProductProgram productProgram = productProgramDAO.findById(newCreditDetail.getProductProgram().getId());
+                                log.debug("productProgram: {}", productProgram);
+                                if (productProgram != null)
+                                    newFeeDetailView.setProductProgram(productProgram.getName());
+                            }
+
+                            if ("9".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=9,(Front-End-Fee)
+                                newFeeDetailView.setStandardFrontEndFee(feeDetailView);
+                            }
+                            else if ("15".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=15,(Prepayment Fee)
+                                newFeeDetailView.setPrepaymentFee(feeDetailView);
+                            }
+                            else if ("20".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=20,(CancellationFee)
+                                newFeeDetailView.setCancellationFee(feeDetailView);
+                            }
+                            else if ("21".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=21,(ExtensionFee)
+                                newFeeDetailView.setExtensionFee(feeDetailView);
+                            }
+                            else if ("22".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=22,(CommitmentFee)
+                                newFeeDetailView.setCommitmentFee(feeDetailView);
+                            }
+
+                        }
+                    }
+                }
+//                List<FeeDetail> feeDetailList = feeTransform.transformToDB(standardPricingResponse.getPricingFeeList(),workCaseId);
+//                feeDetailDAO.persist(feeDetailList);
+
+                List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
+                if (newFeeDetailViewMap != null && newFeeDetailViewMap.size() > 0) {
+                    Iterator it = newFeeDetailViewMap.entrySet().iterator();
+                    while (it.hasNext()) {
+                        Map.Entry<Long, NewFeeDetailView> entry = (Map.Entry<Long, NewFeeDetailView>) it.next();
+                        newFeeDetailViewList.add(entry.getValue());
+                        it.remove();
+                    }
+                }
+
+                decisionView.setProposeFeeInfoList(newFeeDetailViewList);
+
+                if (standardPricingResponse.getPricingInterest() != null && standardPricingResponse.getPricingInterest().size() > 0) {
+                    for(PricingInterest pricingInterest: standardPricingResponse.getPricingInterest()){
+                        log.debug("pricingInterest : {}",pricingInterest);
+                        String creditTypeId = pricingInterest.getCreditDetailId();
+                        String stringId ;
+
+                        log.debug("getPricingInterest :: creditTypeId :: {}",creditTypeId);
+                        List<PricingIntTier> pricingIntTierList = pricingInterest.getPricingIntTierList();
+                        List<NewCreditTierDetailView> newCreditTierViewList = newCreditTierTransform.transformPricingIntTierToView(pricingIntTierList);
+
+                        for(NewCreditDetailView newCreditView: decisionView.getApproveCreditList()){
+                            stringId = String.valueOf(newCreditView.getId());
+                            log.debug("newCreditView.getId() toString :: {}",newCreditView.getId());
+                            if(stringId.equals(creditTypeId)){
+                                newCreditView.setNewCreditTierDetailViewList(newCreditTierViewList);
+                                break;
+                            }
+
+                        }
+                    }
+
+                    cannotAddTier = false;
+                }
+
+            }
+            else {
+                messageHeader = msg.get("app.messageHeader.error");
+                message = standardPricingResponse.getReason();
+                severity = MessageDialogSeverity.ALERT.severity();
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
+        }
+        catch (Exception e) {
+            log.debug("", e);
+            messageHeader = msg.get("app.messageHeader.error");
+            if (e.getCause() != null) {
+                message = e.getCause().getMessage();
+            } else {
+                message = e.getMessage();
+            }
+            severity = MessageDialogSeverity.ALERT.severity();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
     }
 
     // ==================== Approve Credit - Actions ==================== //
@@ -1139,7 +1282,7 @@ public class Decision implements Serializable {
 
         try {
 
-            if (roleUW) {
+            /*if (roleUW) {
                 // Delete List
                 decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
                 // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
@@ -1148,11 +1291,41 @@ public class Decision implements Serializable {
                 decisionControl.calculateTotalApprove(decisionView);
                 // Save Total Approve to Decision
                 decisionControl.saveDecision(decisionView, workCase);
-                // Save Approval History for UW
-                approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
 
-                //exSummaryControl.calForDecision(workCaseId);
+                exSummaryControl.calForDecision(workCaseId);
+            }*/
+
+            //Check valid step to Save Approval
+            HttpSession session = FacesUtil.getSession(true);
+            long stepId = 0;
+            long statusId = 0;
+            if (!Util.isNull(session.getAttribute("stepId"))) {
+                stepId = (Long)session.getAttribute("stepId");
             }
+            if(!Util.isNull(session.getAttribute("statusId"))) {
+                statusId = (Long)session.getAttribute("statusId");
+            }
+            HashMap<String, Integer> stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId);
+
+            if(stepStatusMap != null){
+                if(stepStatusMap.containsKey("Submit CA") || stepStatusMap.containsKey("Submit to UW1")
+                        || stepStatusMap.containsKey("Submit to UW2") || stepStatusMap.containsKey("Submit to ZM")){
+                    if(decisionDialog){
+                        // Save Approval History
+                        if(roleId == RoleValue.ZM.id() || roleId == RoleValue.UW.id()){
+                            approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
+                        }
+                        if(requestPricing){
+                            // Save Approval History Pricing
+                            if(roleId != RoleValue.UW.id()){
+                                approvalHistoryPricingView = decisionControl.saveApprovalHistoryPricing(approvalHistoryPricingView, workCase);
+                            }
+                        }
+                    }
+                }
+            }
+
+            onCreation();
 
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save Decision data success.";
@@ -1161,11 +1334,7 @@ public class Decision implements Serializable {
         catch (Exception e) {
             messageHeader = msg.get("app.messageHeader.error");
             severity = MessageDialogSeverity.ALERT.severity();
-            if (e.getCause() != null) {
-                message = "Save Decision data failed. Cause : " + e.getCause().toString();
-            } else {
-                message = "Save Decision data failed. Cause : " + e.getMessage();
-            }
+            message = "Save Decision data failed. Cause : " + Util.getMessageException(e);
         }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
@@ -1827,5 +1996,53 @@ public class Decision implements Serializable {
 
     public void setSeverity(String severity) {
         this.severity = severity;
+    }
+
+    public boolean isNotRetrievePricing() {
+        return notRetrievePricing;
+    }
+
+    public void setNotRetrievePricing(boolean notRetrievePricing) {
+        this.notRetrievePricing = notRetrievePricing;
+    }
+
+    public ApprovalHistoryView getApprovalHistoryPricingView() {
+        return approvalHistoryPricingView;
+    }
+
+    public void setApprovalHistoryPricingView(ApprovalHistoryView approvalHistoryPricingView) {
+        this.approvalHistoryPricingView = approvalHistoryPricingView;
+    }
+
+    public boolean isRequestPricing() {
+        return requestPricing;
+    }
+
+    public void setRequestPricing(boolean requestPricing) {
+        this.requestPricing = requestPricing;
+    }
+
+    public boolean isDecisionDialog() {
+        return decisionDialog;
+    }
+
+    public void setDecisionDialog(boolean decisionDialog) {
+        this.decisionDialog = decisionDialog;
+    }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public RoleValue getRoleValue() {
+        return roleValue;
+    }
+
+    public void setRoleValue(RoleValue roleValue) {
+        this.roleValue = roleValue;
     }
 }

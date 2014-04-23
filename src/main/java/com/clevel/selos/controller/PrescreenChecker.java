@@ -227,7 +227,7 @@ public class PrescreenChecker implements Serializable {
         boolean complete = false;
         try{
             if(returnReason != null && returnReason.getId() != 0 && !Integer.toString(returnReason.getId()).equals("")){
-                prescreenBusinessControl.returnBDM(workCasePreScreenId, queueName, ActionCode.RETURN_TO_BDM_PRESCREEN.getVal());
+                prescreenBusinessControl.returnBDM(workCasePreScreenId, queueName, ActionCode.RETURN_TO_BDM.getVal());
                 messageHeader = "Information.";
                 message = "Return to BDM Maker success. Click 'OK' return to inbox.";
                 complete = true;
@@ -494,6 +494,11 @@ public class PrescreenChecker implements Serializable {
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             log.error("onCheckCSI ::: Exception : ", ex);
         }
+    }
+
+    //TODO Check PreScreen Before Submit Case
+    public void onCheckingPreScreen(){
+
     }
 
     public void onCompleteChecker(){

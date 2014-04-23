@@ -11,6 +11,7 @@ public class AppHeaderView implements Serializable {
     private String submitDate;
     private String requestType;
     private String refinance;
+    private String refinanceOut;
     private String bdmName;
     private String bdmPhoneNumber;
     private String bdmPhoneExtNumber;
@@ -27,6 +28,7 @@ public class AppHeaderView implements Serializable {
     private String preScreenResult;
     private List<AppBorrowerHeaderView> borrowerHeaderViewList;
     private List<String> productProgramList;
+    private String productGroup;
 
     public String getCaseStatus() {
         return caseStatus;
@@ -188,6 +190,22 @@ public class AppHeaderView implements Serializable {
         this.productProgramList = productProgramList;
     }
 
+    public String getProductGroup() {
+        return productGroup;
+    }
+
+    public void setProductGroup(String productGroup) {
+        this.productGroup = productGroup;
+    }
+
+    public String getRefinanceOut() {
+        return refinanceOut;
+    }
+
+    public void setRefinanceOut(String refinanceOut) {
+        this.refinanceOut = refinanceOut;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -211,6 +229,7 @@ public class AppHeaderView implements Serializable {
                 .append("preScreenResult", preScreenResult)
                 .append("borrowerHeaderViewList", borrowerHeaderViewList)
                 .append("productProgramList", productProgramList)
+                .append("productGroup", productGroup)
                 .toString();
     }
 }

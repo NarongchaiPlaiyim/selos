@@ -3,7 +3,9 @@ package com.clevel.selos.dao.master;
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.StepNameId;
+import com.clevel.selos.system.Config;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 import javax.inject.Inject;
@@ -18,6 +20,10 @@ public class StepNameIdDAO  extends GenericDAO<StepNameId,Integer>
     @SELOS
     Logger log;
 
+    @Inject
+    @Config(name = "interface.pe.sql.inbox.stepnames")
+    String stepNames;
+
     public StepNameIdDAO()
     {
 
@@ -31,7 +37,16 @@ public class StepNameIdDAO  extends GenericDAO<StepNameId,Integer>
 
         Criteria criteria = getSession().createCriteria(StepNameId.class);
 
-        criteria.setProjection( Projections.projectionList().add(Projections.property("id"),"id").add(Projections.projectionList().add(Projections.property("description"),"description"))).setResultTransformer(Transformers.aliasToBean(StepNameId.class));
+        String[] numberStrs = stepNames.split(",");
+        List<Integer> numbers = new ArrayList<Integer>();
+        for(int i = 0;i < numberStrs.length;i++)
+        {
+            numbers.add(Integer.parseInt(numberStrs[i].trim()));
+        }
+
+        criteria.setProjection( Projections.projectionList().add(Projections.property("id"),"id").add(Projections.projectionList().add(Projections.property("description"),"description")));
+        criteria.add(Restrictions.not(Restrictions.in("id",numbers)));
+        criteria.setResultTransformer(Transformers.aliasToBean(StepNameId.class));
 
         //criteria.setProjection( Projections.projectionList().add(Projections.property("description"),"description"));
 
@@ -59,6 +74,13 @@ public class StepNameIdDAO  extends GenericDAO<StepNameId,Integer>
 
              log.info("step desc : {}",stepNameid.getDescription());
 
+            /*if(stepNames.contains(stepNameid.getDescription()))
+            {
+                stepNameidsList.remove(stepNameid);
+
+                log.info("Step Name Removed");
+            }
+*/
             //stepnameidlist.add(String.valueOf(stepNameid.getId()));
 
         }

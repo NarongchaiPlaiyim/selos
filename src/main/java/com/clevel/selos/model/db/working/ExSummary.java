@@ -112,15 +112,15 @@ public class ExSummary implements Serializable {
     private String qualitativeClass;
 
     @Column(name = "biz_size")
-    private BigDecimal bizSize;
+    private BigDecimal bizSize;*/
 
-    @Column(name = "bdm")
-    private BigDecimal BDM;
+    @Column(name = "income_factor_bdm")
+    private BigDecimal incomeFactorBDM;
 
-    @Column(name = "uw")
-    private BigDecimal UW;
+    @Column(name = "income_factor_uw")
+    private BigDecimal incomeFactorUW;
 
-    @Column(name = "ar")
+    /*@Column(name = "ar")
     private BigDecimal AR;
 
     @Column(name = "ap")
@@ -175,7 +175,7 @@ public class ExSummary implements Serializable {
 
     //Collateral
     //exSumCollateralView;
-    @Column(name = "cash_collateral_value")
+    /*@Column(name = "cash_collateral_value")
     private BigDecimal cashCollateralValue;
 
     @Column(name = "core_asset_value")
@@ -188,7 +188,7 @@ public class ExSummary implements Serializable {
     private BigDecimal limitApprove;
 
     @Column(name = "percent_ltv")
-    private BigDecimal percentLTV;
+    private BigDecimal percentLTV;*/
 
     ///////////////////////////////////////////////////////////////
     //Credit Risk Information
@@ -532,44 +532,20 @@ public class ExSummary implements Serializable {
         this.nextReviewDate = nextReviewDate;
     }
 
-    public BigDecimal getCashCollateralValue() {
-        return cashCollateralValue;
+    public BigDecimal getIncomeFactorBDM() {
+        return incomeFactorBDM;
     }
 
-    public void setCashCollateralValue(BigDecimal cashCollateralValue) {
-        this.cashCollateralValue = cashCollateralValue;
+    public void setIncomeFactorBDM(BigDecimal incomeFactorBDM) {
+        this.incomeFactorBDM = incomeFactorBDM;
     }
 
-    public BigDecimal getCoreAssetValue() {
-        return coreAssetValue;
+    public BigDecimal getIncomeFactorUW() {
+        return incomeFactorUW;
     }
 
-    public void setCoreAssetValue(BigDecimal coreAssetValue) {
-        this.coreAssetValue = coreAssetValue;
-    }
-
-    public BigDecimal getNoneCoreAssetValue() {
-        return noneCoreAssetValue;
-    }
-
-    public void setNoneCoreAssetValue(BigDecimal noneCoreAssetValue) {
-        this.noneCoreAssetValue = noneCoreAssetValue;
-    }
-
-    public BigDecimal getLimitApprove() {
-        return limitApprove;
-    }
-
-    public void setLimitApprove(BigDecimal limitApprove) {
-        this.limitApprove = limitApprove;
-    }
-
-    public BigDecimal getPercentLTV() {
-        return percentLTV;
-    }
-
-    public void setPercentLTV(BigDecimal percentLTV) {
-        this.percentLTV = percentLTV;
+    public void setIncomeFactorUW(BigDecimal incomeFactorUW) {
+        this.incomeFactorUW = incomeFactorUW;
     }
 
     @Override
@@ -591,11 +567,8 @@ public class ExSummary implements Serializable {
                 append("groupSaleUW", groupSaleUW).
                 append("groupExposureBDM", groupExposureBDM).
                 append("groupExposureUW", groupExposureUW).
-                append("cashCollateralValue", cashCollateralValue).
-                append("coreAssetValue", coreAssetValue).
-                append("noneCoreAssetValue", noneCoreAssetValue).
-                append("limitApprove", limitApprove).
-                append("percentLTV", percentLTV).
+                append("incomeFactorBDM", incomeFactorBDM).
+                append("incomeFactorUW", incomeFactorUW).
                 append("lastReviewDate", lastReviewDate).
                 append("nextReviewDate", nextReviewDate).
                 append("natureOfBusiness", natureOfBusiness).

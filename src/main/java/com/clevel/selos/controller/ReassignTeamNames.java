@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.dao.master.ActionDAO;
@@ -8,6 +9,7 @@ import com.clevel.selos.filenet.bpm.services.exception.SELOSBPMException;
 import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.PEInbox;
 import com.clevel.selos.model.view.ReassignTeamNameId;
 import com.clevel.selos.security.UserDetail;
@@ -17,7 +19,8 @@ import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
-import java.util.Arrays;
+
+import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -28,10 +31,6 @@ import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @ViewScoped
 @ManagedBean(name = "reassignteamnames")
@@ -76,9 +75,11 @@ public class ReassignTeamNames implements Serializable
 
     @Inject
     PEDBExecute pedbExecute;
+    @Inject
+    InboxControl inboxControl;
 
-    /*@Inject
-    BPMInterfaceImpl bpmInterfaceImpl;*/
+    @Inject
+    BPMInterfaceImpl bpmInterfaceImpl;
 
     public BPMExecutor getBpmExecutor() {
         return bpmExecutor;
@@ -325,9 +326,55 @@ public class ReassignTeamNames implements Serializable
 
     }
 
+    List<User> usersIdNameList1 = new ArrayList<User>();
+
+    List<User> usersIdNameList = new ArrayList<User>();
+
+    public List<User> getUsersIdNameList1() {
+        return usersIdNameList1;
+    }
+
+    public void setUsersIdNameList1(List<User> usersIdNameList1) {
+        this.usersIdNameList1 = usersIdNameList1;
+    }
+
+    public List<User> getUsersIdNameList() {
+        return usersIdNameList;
+    }
+
+    public void setUsersIdNameList(List<User> usersIdNameList) {
+        this.usersIdNameList = usersIdNameList;
+    }
+
     @PostConstruct
     public void init()
     {
+
+        //Clear all session before selectInbox
+        HttpSession session = FacesUtil.getSession(false);
+        try
+        {
+            if(session.getAttribute("isLocked")!=null)
+            {
+
+                String isLocked = (String) session.getAttribute("isLocked");
+
+                if(isLocked.equalsIgnoreCase("true"))
+                {
+                    String wobNum = (String)session.getAttribute("wobNumber");
+                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNum,(Integer)session.getAttribute("fetchType"));
+                }
+                else
+                {
+                    session.removeAttribute("isLocked");
+                }
+
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"), e);
+        }
 
         reasignteamnames = new ArrayList<ReassignTeamNameId>();
 
@@ -347,7 +394,7 @@ public class ReassignTeamNames implements Serializable
 
     }
 
-    public List<String> valueChangeMethod(ValueChangeEvent e)
+    public List<User> valueChangeMethod(ValueChangeEvent e)
     {
         log.info("controller comes to valueChangeMethod of ReassignTeamNames class");
 
@@ -357,13 +404,29 @@ public class ReassignTeamNames implements Serializable
 
         changedteamid = Integer.parseInt(e.getNewValue().toString());
 
+        usersIdNameList = new ArrayList<User>();
+
         if(changedteamid != 0 )
         {
 
-        teamuserslist = userTeamDAO.getUsers(changedteamid);
+            teamuserslist = userTeamDAO.getUsers(changedteamid);
+
+            Iterator<String> it = teamuserslist.iterator();
+            while (it.hasNext())
+            {
+                User user1= new User();
+                user1.setUserName(it.next());
+                user1.setId(userTeamDAO.getUserIdByName(user1.getUserName()));
+                usersIdNameList.add(user1);
+                user1 = null;
+            }
+
+
         }
 
-        return teamuserslist;
+        //return teamuserslist;
+
+        return usersIdNameList;
 
     }
 
@@ -433,7 +496,9 @@ public class ReassignTeamNames implements Serializable
 
             if(selectedTeamName != "" && selectedTeamName.length() > 0 && queryusername.length() > 0 && queryusername != "")
             {
-            reassignSearchViewList = pedbExecute.getReassignSearch(selectedTeamName,queryusername);
+                reassignSearchViewList = pedbExecute.getReassignSearch(selectedTeamName,queryusername);
+                checked.clear();
+                setChecked(checked);
             }
             log.info("reassignsearchviewlist size is :::::: {}",reassignSearchViewList.size());
 
@@ -478,16 +543,30 @@ public class ReassignTeamNames implements Serializable
             session.setAttribute("workCaseId", 0);
         }
 
+        session.setAttribute("wobNum",searchViewSelectItem.getFwobnumber());
+
         session.setAttribute("stepId", searchViewSelectItem.getStepId());
         session.setAttribute("queuename",searchViewSelectItem.getQueuename());
+        session.setAttribute("fetchType",searchViewSelectItem.getFetchType());
+        session.setAttribute("caseOwner",searchViewSelectItem.getAtuser());
 
+        try
+        {
 
+            bpmInterfaceImpl.lockCase(searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
+            session.setAttribute("isLocked","true");
+
+        }
+        catch (Exception e)
+        {
+            log.error("Error while Locking case in queue : {}, WobNum : {}",searchViewSelectItem.getQueuename(), searchViewSelectItem.getFwobnumber(), e);
+        }
 
        /* AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(searchViewSelectItem.getWorkCasePreScreenId(), searchViewSelectItem.getWorkCaseId());
         session.setAttribute("appHeaderInfo", appHeaderView);*/
 
         long selectedStepId = searchViewSelectItem.getStepId();
-        String landingPage = pedbExecute.getLandingPage(selectedStepId);
+        String landingPage = inboxControl.getLandingPage(selectedStepId);
 
         if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
             FacesUtil.redirect(landingPage);
@@ -498,7 +577,7 @@ public class ReassignTeamNames implements Serializable
 
     }
 
-    public List<String> changeUserNameBasedOnTeamName(AjaxBehaviorEvent ajaxBehaviorEvent)
+    public List<User> changeUserNameBasedOnTeamName(AjaxBehaviorEvent ajaxBehaviorEvent)
     {
         log.info("controller comes to changeUserNameBasedOnTeamName of ReassignTeamNames class ");
 
@@ -516,7 +595,24 @@ public class ReassignTeamNames implements Serializable
 
         poupreasignUsernames = userTeamDAO.getPopUsers(selectTeamNameid);
 
-        return poupreasignUsernames;
+        Iterator<String> it = poupreasignUsernames.iterator();
+        usersIdNameList1 = new ArrayList<User>();
+
+        while (it.hasNext())
+        {
+
+            User user1 = new User();
+            user1.setUserName(it.next());
+            user1.setId(userTeamDAO.getUserIdByName(user1.getUserName()));
+
+            usersIdNameList1.add(user1);
+
+            user1= null;
+        }
+
+        return usersIdNameList1;
+
+        //return poupreasignUsernames;
     }
 
 
@@ -606,6 +702,8 @@ public class ReassignTeamNames implements Serializable
 
             if(selectedTeamName != "" && selectedTeamName.length() > 0 && queryusername.length() > 0 && queryusername != "")
             {
+                checked.clear();
+                setChecked(checked);
                 reassignSearchViewList = pedbExecute.getReassignSearch(selectedTeamName,queryusername);
             }
             log.info("reassignsearchviewlist size is :::::: {}",reassignSearchViewList.size());

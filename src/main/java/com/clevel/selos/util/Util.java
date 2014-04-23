@@ -1,24 +1,13 @@
 package com.clevel.selos.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.text.*;
+import java.util.*;
 
 public class Util implements Serializable {
     private static Logger log = LoggerFactory.getLogger(Util.class);
@@ -28,6 +17,12 @@ public class Util implements Serializable {
 
     public static String createDateString(Date date, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format, defaultLocale);
+        return sdf.format(date);
+    }
+    //for Reject Report
+    public static String createDateStringTH(Date date, String format){
+        Locale defaultLocaleTH = new Locale("th","TH");
+        SimpleDateFormat sdf = new SimpleDateFormat(format, defaultLocaleTH);
         return sdf.format(date);
     }
 
@@ -54,7 +49,7 @@ public class Util implements Serializable {
     }
 
     public static String createDateTh(Date date) {
-        return createDateString(date, "dd MM yyyy");
+        return createDateStringTH(date, "dd/MM/yyyy");
     }
 
 
@@ -135,7 +130,6 @@ public class Util implements Serializable {
             return false;
         }
     }
-
 
     public static String getLinkKey(String userId) {
         return userId + "_" + System.currentTimeMillis();
@@ -318,15 +312,11 @@ public class Util implements Serializable {
     }
 
     public static int returnNumForFlag(boolean flag) {
-        if (flag == true) {
-            return 1;
-        } else {
-            return 0;
-        }
+        return flag ? 1 : 0;
     }
 
     public static boolean isTrueForCheckBox(int value){
-       return (value == 2)?true:false;
+       return value == 2;
     }
 
     public static String getMessageException(Exception ex){
@@ -350,7 +340,7 @@ public class Util implements Serializable {
 
     public static boolean isZero(int id){
         try {
-            return id == 0 ? true : false;
+            return id == 0;
         } catch (NullPointerException e) {
             return false;
         }
@@ -358,7 +348,7 @@ public class Util implements Serializable {
 
     public static boolean isZero(BigDecimal bigDecimal){
         try {
-            return bigDecimal == BigDecimal.ZERO ? true : false;
+            return BigDecimal.ZERO.compareTo(bigDecimal) == 0;
         } catch (NullPointerException e) {
             return false;
         }
@@ -366,7 +356,7 @@ public class Util implements Serializable {
 
     public static boolean isZero(long id){
         try {
-            return id == 0 ? true : false;
+            return id == 0;
         } catch (NullPointerException e) {
             return false;
         }
@@ -382,7 +372,7 @@ public class Util implements Serializable {
 
     public static boolean isLengthZero(String string){
         try{
-            return string.length() == 0 ? true : false;
+            return string.length() == 0;
         } catch (NullPointerException e) {
             return true;
         }
@@ -402,6 +392,24 @@ public class Util implements Serializable {
 	    		return defaultValue;
 	    	}
     	}
+    }
+
+    public static String parseString(Object input, String defaultValue){
+        if(input == null)
+            return defaultValue;
+        else if (input instanceof String)
+            return (String) input;
+        else {
+            try{
+                if(isEmpty(input.toString())){
+                    return defaultValue;
+                } else {
+                    return input.toString();
+                }
+            } catch (ClassCastException e){
+                return defaultValue;
+            }
+        }
     }
     
     public static int compareLong(long l1,long l2) {
@@ -430,6 +438,10 @@ public class Util implements Serializable {
         return string;
     }
 
+    public static String convertNullToZero(final String string){
+        return string == null ? "0" : string;
+    }
+
     public static String checkNullString(String value){
         if (value == null){
             return "-";
@@ -442,5 +454,20 @@ public class Util implements Serializable {
             return BigDecimal.ZERO;
         }
         return value;
+    }
+
+    public static boolean compareDateByMonthAndYear(Date date1, Date date2) {
+        Calendar d1 = Calendar.getInstance();
+        d1.setTime(date1);
+        Calendar d2 = Calendar.getInstance();
+        d2.setTime(date2);
+        log.debug("compareDateByMonthAndYear() d1.month: {}, d2.month: {}", d1.get(Calendar.MONTH), d2.get(Calendar.MONTH));
+        if (d1.get(Calendar.MONTH) != d2.get(Calendar.MONTH)) {
+            return false;
+        }
+        else if (d1.get(Calendar.YEAR) != d2.get(Calendar.YEAR)) {
+            return false;
+        }
+        return true;
     }
 }

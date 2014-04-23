@@ -1,9 +1,6 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.CollateralType;
-import com.clevel.selos.model.db.master.PotentialCollateral;
-import com.clevel.selos.model.db.master.SubCollateralType;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -27,6 +24,10 @@ public class NewCollateralHead implements Serializable {
     @OneToOne
     @JoinColumn(name = "collateral_type_id")
     private CollateralType  headCollType;
+
+    @OneToOne
+    @JoinColumn(name = "tcg_collateral_type_id")
+    private TCGCollateralType headTcgCollType;
 
     @OneToOne
     @JoinColumn(name = "sub_coll_type_id")
@@ -315,6 +316,14 @@ public class NewCollateralHead implements Serializable {
 
     public void setPurposeReviewBuilding(int purposeReviewBuilding) {
         this.purposeReviewBuilding = purposeReviewBuilding;
+    }
+
+    public TCGCollateralType getHeadTcgCollType() {
+        return headTcgCollType;
+    }
+
+    public void setHeadTcgCollType(TCGCollateralType headTcgCollType) {
+        this.headTcgCollType = headTcgCollType;
     }
 
     @Override

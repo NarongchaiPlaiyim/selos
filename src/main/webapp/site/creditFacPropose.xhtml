@@ -1107,38 +1107,48 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{not empty tradeTableItem.standardFrontEndFee.percentFee ?
-                                                 tradeTableItem.standardFrontEndFee.percentFee : '0.00%'},
-                                     #{not empty tradeTableItem.standardFrontEndFee.feeYear ?
-                                                 tradeTableItem.standardFrontEndFee.feeYear : '-'}"/>
+                <h:outputText value="#{not empty tradeTableItem.standardFrontEndFee ? not empty tradeTableItem.standardFrontEndFee.percentFee ?
+                                                 tradeTableItem.standardFrontEndFee.percentFee : '0.00' : '0.00'} % ,
+                                     #{not empty tradeTableItem.standardFrontEndFee ? not empty tradeTableItem.standardFrontEndFee.feeYear ?
+                                                 tradeTableItem.standardFrontEndFee.feeYear : '-' : '-'}
+                                     #{not empty tradeTableItem.standardFrontEndFee ? not empty tradeTableItem.standardFrontEndFee.feeYear ?
+                                                 ' Years' : '' : ''}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{not empty tradeTableItem.commitmentFee.percentFee ?
-                                                 tradeTableItem.commitmentFee.percentFee : '0.00%'},
-                                     #{not empty tradeTableItem.commitmentFee.feeYear ?
-                                                 tradeTableItem.commitmentFee.feeYear : '-'}"/>
+                <h:outputText value="#{not empty tradeTableItem.commitmentFee ? not empty tradeTableItem.commitmentFee.percentFee ?
+                                                 tradeTableItem.commitmentFee.percentFee : '0.00' : '0.00'} %,
+                                     #{not empty tradeTableItem.commitmentFee ? not empty tradeTableItem.commitmentFee.feeYear ?
+                                                 tradeTableItem.commitmentFee.feeYear : '-' : '-'}
+                                     #{not empty tradeTableItem.commitmentFee ? not empty tradeTableItem.commitmentFee.feeYear ?
+                                                 ' Years' : '' : ''}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{not empty tradeTableItem.extensionFee.percentFee ?
-                                                 tradeTableItem.extensionFee.percentFee : '0.00%'},
-                                     #{not empty tradeTableItem.extensionFee.feeYear ?
-                                                 tradeTableItem.extensionFee.feeYear : '-'}"/>
+                <h:outputText value="#{not empty tradeTableItem.extensionFee ? not empty tradeTableItem.extensionFee.percentFee ?
+                                                 tradeTableItem.extensionFee.percentFee : '0.00' : '0.00'} %,
+                                     #{not empty tradeTableItem.extensionFee ? not empty tradeTableItem.extensionFee.feeYear ?
+                                                 tradeTableItem.extensionFee.feeYear : '-' : '-'}
+                                     #{not empty tradeTableItem.extensionFee ? not empty tradeTableItem.extensionFee.feeYear ?
+                                                 ' Years' : '' : ''}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{not empty tradeTableItem.prepaymentFee.percentFee ?
-                                                 tradeTableItem.prepaymentFee.percentFee : '0.00%'},
-                                     #{not empty tradeTableItem.prepaymentFee.feeYear ?
-                                                 tradeTableItem.prepaymentFee.feeYear : '-'}"/>
+                <h:outputText value="#{not empty tradeTableItem.prepaymentFee ? not empty tradeTableItem.prepaymentFee.percentFee ?
+                                                 tradeTableItem.prepaymentFee.percentFee : '0.00' : '0.00'} %,
+                                     #{not empty tradeTableItem.prepaymentFee ? not empty tradeTableItem.prepaymentFee.feeYear ?
+                                                 tradeTableItem.prepaymentFee.feeYear : '-' : '-'}
+                                     #{not empty tradeTableItem.prepaymentFee ? not empty tradeTableItem.prepaymentFee.feeYear ?
+                                                 ' Years' : '' : ''}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{not empty tradeTableItem.cancellationFee.percentFee ?
-                                                 tradeTableItem.cancellationFee.percentFee : '0.00%'},
-                                     #{not empty tradeTableItem.cancellationFee.feeYear ?
-                                                 tradeTableItem.cancellationFee.feeYear : '-'}"/>
+                <h:outputText value="#{not empty tradeTableItem.cancellationFee ? not empty tradeTableItem.cancellationFee.percentFee ?
+                                                 tradeTableItem.cancellationFee.percentFee : '0.00' : '0.00'} %,
+                                     #{not empty tradeTableItem.cancellationFee ? not empty tradeTableItem.cancellationFee.feeYear ?
+                                                 tradeTableItem.cancellationFee.feeYear : '-' : '-'}
+                                     #{not empty tradeTableItem.cancellationFee ? not empty tradeTableItem.cancellationFee.feeYear ?
+                                                 ' Years' : '' : ''}"/>
             </p:column>
 
         </p:dataTable>
@@ -1388,8 +1398,10 @@
                 <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.headcoll.collTypePercentLTV')}"/>
             </td>
             <td class="left">
-                <h:outputText value="#{not empty CollateralHeaderDetailView.collTypePercentLTV ?
-                                                               CollateralHeaderDetailView.collTypePercentLTV.description : ''}"/>
+                <h:outputText value="#{not empty CollateralHeaderDetailView.tcgCollateralType ?
+                                                               CollateralHeaderDetailView.tcgCollateralType.description : ''}"/>
+<!--                <h:outputText value="#{not empty CollateralHeaderDetailView.collTypePercentLTV ?
+                                                               CollateralHeaderDetailView.collTypePercentLTV.description : ''}"/>-->
             </td>
         </tr>
 
@@ -1637,11 +1649,11 @@
                               headerText="#{msg.get('app.credit.facility.propose.label.guarantor.guarantorName')}"/>
                     <p:column style="width: 10%"
                               headerText="#{msg.get('app.credit.facility.propose.label.guarantor.TCGLGNo')}"/>
-                    <p:column style="width: 40%"
+                    <p:column style="width: 45%"
                               headerText="#{msg.get('app.credit.facility.propose.label.guarantor.creditType')}"/>
                     <p:column style="width: 15%"
                               headerText="#{msg.get('app.credit.facility.propose.label.guarantor.totalGuaranteeAmount')}"/>
-                    <p:column style="width: 10%"/>
+                    <p:column style="width: 5%"/>
                 </p:row>
             </p:columnGroup>
 
@@ -1950,7 +1962,7 @@
 <p:dialog id="creditInfoDialog"
           header="Propose Credit Information"
           widgetVar="creditInfoDlg"
-          modal="true"
+          modal="true" resizable="false"
           width="900" height="500"
           onShow="hideWindowsScrollBar()"
           onHide="showWindowsScrollBar()"
@@ -1992,7 +2004,7 @@
 <!-- Sub-Collateral Dialog  -->
 <p:dialog id="subCollateralInfoDialog" widgetVar="subCollateralInfoDlg"
           header="Sub Collateral Information"
-          modal="true"
+          modal="true" resizable="false"
           width="600" height="500"
           onShow="hideWindowsScrollBar()"
           onHide="showWindowsScrollBar()"
@@ -2013,7 +2025,7 @@
 <!-- Propose Guarantor Dialog -->
 <p:dialog id="guarantorDialog" widgetVar="guarantorInfoDlg"
           header="Propose Guarantor Information"
-          modal="true"
+          modal="true" resizable="false"
           width="900"
           onShow="hideWindowsScrollBar()"
           onHide="showWindowsScrollBar()"
@@ -2033,7 +2045,7 @@
 
 <!-- Condition Dialog -->
 <p:dialog id="conditionDialog" header="Condition Information" widgetVar="conditionDlg"
-          modal="true"
+          modal="true" resizable="false"
           width="600"
           onShow="hideWindowsScrollBar()"
           onHide="showWindowsScrollBar()"
@@ -2055,7 +2067,10 @@
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
                      severity="#{creditFacPropose.severity}"
-                     header="#{creditFacPropose.messageHeader}" message="#{creditFacPropose.message}">
+                     header="#{creditFacPropose.messageHeader}"
+                     message="#{creditFacPropose.message}"
+                     closable="false" resizable="false"
+                     closeOnEscape="false">
         <p:commandButton value="OK"
                          process="@this"
                          update="frmMain"

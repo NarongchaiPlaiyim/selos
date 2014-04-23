@@ -42,7 +42,7 @@ public class WorkCaseAppraisal extends AbstractWorkCase {
     @JoinColumn(name = "step_owner")
     private User stepOwner;
 
-    @Column(name = "appraisal_result", length = 2)
+    @Column(name = "appraisal_result", columnDefinition="int default 1", length = 2)
     private int appraisalResult;
 
     @OneToOne
@@ -191,6 +191,7 @@ public class WorkCaseAppraisal extends AbstractWorkCase {
                 .append("workCase", workCase)
                 .append("productGroup", productGroup)
                 .append("requestType", requestType)
+                .append("appNumber", appNumber)
                 .toString();
     }
 }

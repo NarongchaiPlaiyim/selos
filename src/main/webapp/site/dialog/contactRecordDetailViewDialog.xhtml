@@ -6,20 +6,19 @@
         xmlns:p="http://primefaces.org/ui"
         xmlns:clv="http://clevel.com/ui">
 <h:form id="contactRecordViewDlgFrm">   
-    <p:panel styleClass="panel-dialog" rendered="#{not empty customerAcceptance.contactRecord}">
+    <p:panel styleClass="panel-dialog" rendered="#{not empty customerAcceptancePre.contactRecord}">
     	<p:messages/>
         <table class="content_form">
             <tr>
-                <td class="title">
+                <td class="title" style="width:180px">
                 	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.callDateTime')}"
                 		for='calling_datetime'
                 		/>
                 </td>
                 <td>
                 	<p:inputText id='calling_datetime' readonly="true"
-                	     value="#{customerAcceptance.contactRecord.callingDate}"
-                	     styleClass="readonly"
-                         >
+                	     value="#{customerAcceptancePre.contactRecord.callingDate}"
+                	     >
                          <f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
                       </p:inputText>
                 </td>
@@ -31,24 +30,12 @@
                 		/>
                 </td>
                 <td>
-                    <p:selectOneRadio id="calling_result" value="#{customerAcceptance.contactRecord.callingResult}"
-                    	required="true" requiredMessage="#{msg.get('app.cusaccept.validate.callResult')}"
+                    <p:selectOneRadio id="calling_result" value="#{customerAcceptancePre.contactRecord.callingResult}"
+                    	required="#{customerAcceptancePre.isDialogMandate('callResult')}" requiredMessage="#{msg.get('app.cusaccept.validate.callResult')}"
+
                     	>
                         <f:selectItem itemLabel="#{msg.get('app.cusaccept.callResult.radio.cancontact')}"  itemValue="2" />
                         <f:selectItem itemLabel="#{msg.get('app.cusaccept.callResult.radio.cannotcontact')}" itemValue="1" />
-                    </p:selectOneRadio>
-                </td>
-            </tr>
-            <tr>
-             	<td class="title">
-                	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.acceptResult')}"
-                		for='accept_result'
-                		/>
-                </td>
-                <td>
-                    <p:selectOneRadio id="accept_result" value="#{customerAcceptance.contactRecord.acceptResult}">
-                        <f:selectItem itemLabel="#{msg.get('app.cusaccept.acceptResult.radio.accept')}"  itemValue="2" />
-                        <f:selectItem itemLabel="#{msg.get('app.cusaccept.acceptResult.radio.notaccept')}" itemValue="1" />
                     </p:selectOneRadio>
                 </td>
             </tr>
@@ -62,10 +49,12 @@
                 	 <clv:BECalendar id='nextcalling_datetime' 
                          pattern="dd/MM/yyyy HH:mm" 
                          showOn="button" 
-                         value="#{customerAcceptance.contactRecord.nextCallingDate}"
+                         value="#{customerAcceptancePre.contactRecord.nextCallingDate}"
                          locale='th_TH'
-                         mindate="#{customerAcceptance.minDate}"
+                         mindate="#{customerAcceptancePre.minDate}"
                          autocomplete="false"
+                         required="#{customerAcceptancePre.isDialogMandate('nextCall')}" requiredMessage="#{msg.get('app.cusaccept.validate.nextCallDateTime')}"
+
                         />
                        
                 </td>
@@ -77,11 +66,12 @@
                 		/>
                 </td>
                 <td>
-                	<p:selectOneMenu id='reason' value='#{customerAcceptance.contactRecord.updReasonId}'
-                		required="true"  requiredMessage="#{msg.get('app.cusaccept.validate.reason')}"
+                	<p:selectOneMenu id='reason' value='#{customerAcceptancePre.contactRecord.updReasonId}'
+                		required="#{customerAcceptancePre.isDialogMandate('reason')}"  requiredMessage="#{msg.get('app.cusaccept.validate.reason')}"
+
                 		>
                 		<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                		<f:selectItems value="#{customerAcceptance.reasons}" var="contactReason"
+                		<f:selectItems value="#{customerAcceptancePre.reasons}" var="contactReason"
                 			itemLabel="#{contactReason.description}" itemValue="#{contactReason.id}" 
                 			/>
                 	</p:selectOneMenu>
@@ -95,8 +85,10 @@
                 </td>
                 <td>
                     <p:inputTextarea id='remark' 
-                    	value="#{customerAcceptance.contactRecord.remark}"
-                    	autoResize="false" 
+                    	value="#{customerAcceptancePre.contactRecord.remark}"
+                    	autoResize="false"
+                    	required="#{customerAcceptancePre.isDialogMandate('remark')}"  requiredMessage="#{msg.get('app.cusaccept.validate.remark')}"
+                		readonly="#{customerAcceptancePre.isDialogDisable('remark')}"
                     	rows="3" cols="40" />
                 </td>
             </tr>
@@ -110,21 +102,24 @@
                     <p:commandButton
                          id="addContactRecordBtn"
                          value="#{msg.get('app.button.ok')}"
-                         actionListener="#{customerAcceptance.onAddContactRecord()}"
+                         actionListener="#{customerAcceptancePre.onAddContactRecord()}"
                          update=":frmMain:contact_record_tbl,:contactRecordViewDlgFrm"
                          oncomplete="handleDialogRequest(xhr, status, args,'p_contactRecordDlg')"
                          styleClass="small"
-                         rendered="#{customerAcceptance.addDialog}"/>
+
+                         rendered="#{customerAcceptancePre.addDialog}"/>
                      <p:commandButton
                          id="updContactRecordBtn"
                          value="#{msg.get('app.button.ok')}"
-                         actionListener="#{customerAcceptance.onUpdateContactRecord()}"
+                         actionListener="#{customerAcceptancePre.onUpdateContactRecord()}"
                          update=":frmMain:contact_record_tbl,:contactRecordViewDlgFrm"
                          oncomplete="handleDialogRequest(xhr, status, args,'p_contactRecordDlg')"
                          styleClass="small"
-                         rendered="#{not customerAcceptance.addDialog}"/>
+
+                         rendered="#{not customerAcceptancePre.addDialog}"/>
                     <p:commandButton
                     	type='button' styleClass="small" 
+
                     	value="#{msg.get('app.button.cancel')}" onclick="p_contactRecordDlg.hide()"/>
                     
                 </td>

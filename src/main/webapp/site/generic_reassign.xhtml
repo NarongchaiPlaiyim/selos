@@ -43,10 +43,7 @@
         .full_table table.ui-selectoneradio {
             width : auto !important;
         }
-        .ui-icon {
-            width: 16px!important;
-            height: 8px!important;
-        }
+
         .ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td {
             padding: 1px 10px !important;
             overflow: hidden !important;
@@ -87,7 +84,7 @@
                                            <td>
                                                 <h:selectOneMenu id="teamnameselectbox" class="largest" value="#{reassignteamnames.selectedTeamName}"  valueChangeListener="#{reassignteamnames.valueChangeMethod}" >
                                                     <f:selectItem itemValue="" itemLabel="-Please Select-"  />
-                                                    <f:selectItems value="#{reassignteamnames.reasignteamnames}" var="reassign" itemValue="#{reassign.teamid}" itemLabel="#{reassign.teamname}"/>
+                                                    <f:selectItems value="#{reassignteamnames.reasignteamnames}" var="reassign" itemValue="#{reassign.teamid}" itemLabel="#{reassign.teamid} - #{reassign.teamname}"/>
                                                     <p:ajax event="change" update="@form" />
                                                 </h:selectOneMenu>
                                            </td>
@@ -100,7 +97,7 @@
                                         <td>
                                             <h:selectOneMenu id="usernameselectbox" class="largest" value="#{reassignteamnames.selectedUserName}" >
                                                 <f:selectItem itemValue="" itemLabel="-Please Select-" />
-                                                <f:selectItems value="#{reassignteamnames.teamuserslist}" />
+                                                <f:selectItems value="#{reassignteamnames.usersIdNameList}" var="username" itemLabel="#{username.id} - #{username.userName}" itemValue="#{username.userName}" />
 
                                             </h:selectOneMenu>
                                             <p:spacer width="15px"/>
@@ -134,7 +131,7 @@
                          <table>
 
                         <tr>
-                            <td colspan="100%" style="color: red;"><p:commandButton value="Reassign" styleClass="medium" onclick="reassignDlg.show()" readonly="#{reassignteamnames.selectedUserName eq 'ALL' }" disabled="#{reassignteamnames.selectedUserName eq 'ALL'}" /><p:spacer width="20px;"/> </td>
+                            <td colspan="100%" style="color: red;"><p:commandButton value="Reassign" id="reassignButtonId" styleClass="medium" onclick="reassignDlg.show()" readonly="#{reassignteamnames.selectedUserName eq 'ALL' or !param['frmMain:checkBoxId']}" disabled="#{reassignteamnames.selectedUserName eq 'ALL'}" /><p:spacer width="20px;"/> </td>
                         </tr>
 
                         <tr>
@@ -163,7 +160,7 @@
                                     </p:column>
 
                                     <p:column headerText="" styleClass="center" style="width:22px;" >
-                                        <h:selectBooleanCheckbox disabled="false" value="#{reassignteamnames.checked[item.fwobnumber]}"/>
+                                        <h:selectBooleanCheckbox id="checkBoxId" onclick="onOneClick('frmMain:reassignButtonId',false);" disabled="false" value="#{reassignteamnames.checked[item.fwobnumber]}"/>
                                     </p:column>
 
                                     <p:column headerText="Lock" styleClass="center" style="width:8px;" >
@@ -172,10 +169,6 @@
 
                                     <p:column headerText="Received Date" styleClass="center" style="width: 130px;" sortBy="#{item.receiveddate}" >
                                         <h:outputText value="#{item.receiveddate}"/>
-                                    </p:column>
-
-                                    <p:column headerText="At User Team" styleClass="center" style="width: 130px;">
-                                        <h:outputText value="#{item.atuserteam}" />
                                     </p:column>
 
                                     <p:column headerText="Application Number" styleClass="center" style="width: 110px;" sortBy="#{item.applicationno}">
@@ -209,6 +202,10 @@
                                     <p:column headerText="At User" styleClass="center" style="width: 110px;" >
                                         <h:outputText value="#{item.atuser}"/>
                                     </p:column>
+
+                                   <p:column headerText="At User Team" styleClass="center" style="width: 130px;">
+                                       <h:outputText value="#{item.atuserteam}" />
+                                   </p:column>
 
                                     <p:column headerText="Appointment Date" styleClass="center" style="width: 110px;" >
                                         <h:outputText value="#{item.appointmentdate}"/>
@@ -259,7 +256,7 @@
                                     <td>
                                         <h:selectOneMenu class="largest" id="teamNameReassign" label="teamNameReassign" value="#{reassignteamnames.popupselectedteamname}" >
                                             <f:selectItem itemValue="" itemLabel="-Please Select-"/>
-                                            <f:selectItems value="#{reassignteamnames.popupreasignteamnames}" var="popupreassign" itemValue="#{popupreassign.teamid}" itemLabel="#{popupreassign.teamname}"/>
+                                            <f:selectItems value="#{reassignteamnames.popupreasignteamnames}" var="popupreassign" itemValue="#{popupreassign.teamid}" itemLabel="#{popupreassign.teamid} - #{popupreassign.teamname}"/>
                                             <f:ajax listener="#{reassignteamnames.changeUserNameBasedOnTeamName}" render="userNameReassign" execute="@this"/>
                                         </h:selectOneMenu>
                                     </td>
@@ -271,7 +268,7 @@
                                     <td>
                                         <h:selectOneMenu class="largest" id="userNameReassign" label="userNameReassign" value="#{reassignteamnames.popupselectedusername}">
                                             <f:selectItem itemValue="" itemLabel="-Please Select-"/>
-                                            <f:selectItems value="#{reassignteamnames.poupreasignUsernames}" />
+                                            <f:selectItems value="#{reassignteamnames.usersIdNameList1}" var="username1" itemLabel="#{username1.id} - #{username1.userName}" itemValue="#{username1.userName}"/>
                                         </h:selectOneMenu>
                                     </td>
                                 </tr>

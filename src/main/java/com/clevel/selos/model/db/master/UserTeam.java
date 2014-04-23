@@ -29,7 +29,7 @@ public class UserTeam implements Serializable
     @Column(name = "team_code")
     private String team_code;
 
-    @Column(name = "team_type")
+    @Column(name = "team_type", columnDefinition = "int default 0")
     private int team_type;
 
     /*@Column(name = "role")

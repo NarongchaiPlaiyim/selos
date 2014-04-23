@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.AddressDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.dao.working.CustomerOblAccountInfoDAO;
 import com.clevel.selos.dao.working.CustomerOblInfoDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.AttorneyRelationType;
@@ -11,14 +12,7 @@ import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.AddressView;
-import com.clevel.selos.model.view.CustomerCSIView;
-import com.clevel.selos.model.view.CustomerInfoPostAddressView;
-import com.clevel.selos.model.view.CustomerInfoPostBaseView;
-import com.clevel.selos.model.view.CustomerInfoPostIndvView;
-import com.clevel.selos.model.view.CustomerInfoPostJurisView;
-import com.clevel.selos.model.view.CustomerInfoSimpleView;
-import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.Util;
 
 import org.joda.time.DateTime;
@@ -79,6 +73,8 @@ public class CustomerTransform extends Transform {
     @Inject
     private BusinessTypeDAO businessTypeDAO;
     @Inject
+    private BusinessSubTypeDAO businessSubTypeDAO;
+    @Inject
     private WarningCodeDAO warningCodeDAO;
     @Inject
     private KYCLevelDAO kycLevelDAO;
@@ -86,6 +82,8 @@ public class CustomerTransform extends Transform {
     private RaceDAO raceDAO;
     @Inject
     private CustomerOblInfoDAO customerOblInfoDAO;
+    @Inject
+    private CustomerOblAccountInfoDAO customerOblAccountInfoDAO;
     @Inject
     private IncomeSourceDAO incomeSourceDAO;
 
@@ -141,6 +139,11 @@ public class CustomerTransform extends Transform {
             customerInfoView.setBusinessType(new BusinessType());
         }
 
+        customerInfoView.setBusinessSubType(customer.getBusinessSubType());
+        if(customerInfoView.getBusinessSubType() == null){
+            customerInfoView.setBusinessSubType(new BusinessSubType());
+        }
+
         customerInfoView.setRelation(customer.getRelation());
         if(customerInfoView.getRelation() == null){
             customerInfoView.setRelation(new Relation());
@@ -178,6 +181,7 @@ public class CustomerTransform extends Transform {
         customerInfoView.setMailingAddressType(customer.getMailingAddressType());
         if(customerInfoView.getMailingAddressType() == null){
             customerInfoView.setMailingAddressType(new AddressType());
+        }
 
 		customerInfoView.setMailingAddressType(customer.getMailingAddressType());
         if(customerInfoView.getMailingAddressType() == null){
@@ -196,16 +200,13 @@ public class CustomerTransform extends Transform {
 
         customerInfoView.setIsCommittee(customer.getIsCommittee());
         customerInfoView.setCommitteeId(customer.getJuristicId());
-        }
+
         customerInfoView.setValidId(2);
 
         customerInfoView.setCollateralOwner(customer.getCollateralOwner());
-        customerInfoView.setPercentShare(customer.getPercentShare());
 
         customerInfoView.setSearchBy(customer.getSearchBy());
         customerInfoView.setSearchId(customer.getSearchId());
-
-        customerInfoView.setPercentShare(customer.getPercentShare());
 
 		customerInfoView.setCsiFlag(customer.getCsiFlag());
 
@@ -448,7 +449,7 @@ public class CustomerTransform extends Transform {
         customer.setTmbCustomerId(customerInfoView.getTmbCustomerId());
         customer.setDocumentAuthorizeBy(customerInfoView.getDocumentAuthorizeBy());
         customer.setCollateralOwner(customerInfoView.getCollateralOwner());
-        customer.setPercentShare(customerInfoView.getPercentShare());
+        customer.setShares(customerInfoView.getShares());
         customer.setApproxIncome(customerInfoView.getApproxIncome());
         customer.setDocumentExpiredDate(customerInfoView.getDocumentExpiredDate());
 
@@ -471,6 +472,12 @@ public class CustomerTransform extends Transform {
             customer.setBusinessType(businessTypeDAO.findById(customerInfoView.getBusinessType().getId()));
         } else {
             customer.setBusinessType(null);
+        }
+
+        if(customerInfoView.getBusinessSubType() != null && customerInfoView.getBusinessSubType().getId() != 0){
+            customer.setBusinessSubType(businessSubTypeDAO.findById(customerInfoView.getBusinessSubType().getId()));
+        } else {
+            customer.setBusinessSubType(null);
         }
 
         if(customerInfoView.getRelation() != null && customerInfoView.getRelation().getId() != 0){
@@ -526,8 +533,6 @@ public class CustomerTransform extends Transform {
         customer.setJuristicId(customerInfoView.getCommitteeId());
 
 		customer.setCsiFlag(customerInfoView.getCsiFlag());
-
-		customer.setShares(customerInfoView.getShares());
 
 //        log.info("transformToModel : customer before adding address : {}", customer);
 
@@ -835,12 +840,46 @@ public class CustomerTransform extends Transform {
 
             customerOblInfo.setCustomer(customer);
             customer.setCustomerOblInfo(customerOblInfo);
+
+
+
         } else {
             customer.setCustomerOblInfo(null);
         }
         log.info("############# - transformToModel ::: customer.getCustomerOblInfo : {}", customer.getCustomerOblInfo());
         log.info("Return - transformToModel ::: customer : {}", customer);
         return customer;
+    }
+
+    public List<CustomerOblAccountInfo> getCustomerOblAccountInfo(CustomerInfoView customerInfoView, Customer customer){
+        List<CustomerOblAccountInfo> customerOblAccountInfoList = new ArrayList<CustomerOblAccountInfo>();
+        if(customerInfoView.getCustomerOblAccountInfoViewList() != null && customerInfoView.getCustomerOblAccountInfoViewList().size() > 0){
+            for(CustomerOblAccountInfoView customerOblAccountInfoView : customerInfoView.getCustomerOblAccountInfoViewList()){
+
+                CustomerOblAccountInfo customerOblAccountInfo = null;
+                if(customerOblAccountInfoView.getId() != 0) {
+                    try{
+                        customerOblAccountInfo = customerOblAccountInfoDAO.findById(customerOblAccountInfoView.getId());
+                    }catch (Exception ex){
+                        log.debug("cannot find customerOblInfo with id {}", customerInfoView.getCustomerOblInfoID());
+                        customerOblAccountInfo = new CustomerOblAccountInfo();
+                    }
+                }
+
+                customerOblAccountInfo.setAccountRef(customerOblAccountInfoView.getAccountRef());
+                customerOblAccountInfo.setAccountActiveFlag(customerOblAccountInfoView.isAccountActiveFlag());
+                customerOblAccountInfo.setCardBlockCode(customerOblAccountInfoView.getCardBlockCode());
+                customerOblAccountInfo.setTmbDelIntDay(customerOblAccountInfoView.getTmbDelIntDay());
+                customerOblAccountInfo.setCusRelAccount(customerOblAccountInfoView.getCusRelAccount());
+                customerOblAccountInfo.setDataSource(customerOblAccountInfoView.getDataSource());
+                customerOblAccountInfo.setNumMonthIntPastDue(customerOblAccountInfoView.getNumMonthIntPastDue());
+                customerOblAccountInfo.setNumMonthIntPastDueTDRAcc(customerOblAccountInfoView.getNumMonthIntPastDueTDRAcc());
+                customerOblAccountInfo.setTdrFlag(customerOblAccountInfoView.getTdrFlag());
+                customerOblAccountInfo.setTmbDelPriDay(customerOblAccountInfoView.getTmbDelPriDay());
+                customerOblAccountInfo.setCustomer(customer);
+            }
+        }
+        return customerOblAccountInfoList;
     }
 
     public List<CustomerInfoView> transformToViewList(List<Customer> customers){

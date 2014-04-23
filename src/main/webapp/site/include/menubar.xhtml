@@ -22,41 +22,39 @@
     <div id="selosmenu" class="selosmenu">
         <ul>
             <li id="mnuinbox"><a href="inbox.jsf" title="#{msg.get('app.menu.inbox')}">#{msg.get('app.menu.inbox')}</a></li>
-            <h:panelGroup id="pnl_menu_prescreen" rendered="#{baseController.stepId == 1001 || baseController.stepId == 1002 || baseController.stepId == 1003}"
-                     styleClass="panel">
-            <li id="mnuprescreen">
-                <a href="prescreen.jsf" title="#{msg.get('app.menu.prescreen')}">#{msg.get('app.menu.prescreen')}</a>
-                <ul>
-                    <li id="submnuprescreen"><a href="prescreen.jsf" title="#{msg.get('app.menu.prescreen')}">#{msg.get('app.menu.prescreen')}</a></li>
-                    <p:panel id="pnl_menu_prescreen_result" rendered="#{baseController.stepId == 1003}"
-                             styleClass="panel">
-                        <li id="submnuprescreenresult"><a href="prescreenResult.jsf"
-                                                          title="#{msg.get('app.menu.prescreenResult')}">#{msg.get('app.menu.prescreenResult')}</a></li>
-                    </p:panel>
-                </ul>
-            </li>
+            <h:panelGroup id="pnl_menu_prescreen" rendered="#{headerController.stepId == 1001 || headerController.stepId == 1002 || headerController.stepId == 1003}" styleClass="panel">
+                <li id="mnuprescreen">
+                    <a href="prescreen.jsf" title="#{msg.get('app.menu.prescreen')}">#{msg.get('app.menu.prescreen')}</a>
+                    <ul>
+                        <li id="submnuprescreen"><a href="prescreen.jsf" title="#{msg.get('app.menu.prescreen')}">#{msg.get('app.menu.prescreen')}</a></li>
+                        <p:panel id="pnl_menu_prescreen_result" rendered="#{headerController.stepId == 1003}"
+                                 styleClass="panel">
+                            <li id="submnuprescreenresult"><a href="prescreenResult.jsf"
+                                                              title="#{msg.get('app.menu.prescreenResult')}">#{msg.get('app.menu.prescreenResult')}</a></li>
+                        </p:panel>
+                    </ul>
+                </li>
             </h:panelGroup>
-            <h:panelGroup id="pnl_menu_request_appraisal" rendered="#{baseController.requestAppraisal == 1}" styleClass="panel">
+            <h:panelGroup id="pnl_menu_request_appraisal" rendered="#{headerController.stepId == 2006}" styleClass="panel">
                 <li id="mnu_appraisal">
                     <a href="#" title="#{msg.get('app.menu.appraisal')}">#{msg.get('app.menu.appraisal')}</a>
                     <ul>
-                        <p:panel id="pnlMmenu_appraisal_request" rendered="#{baseController.stepId == 1003 || baseController.stepId == 2001}" styleClass="panel">
+                        <p:panel id="pnlMmenu_appraisal_request" styleClass="panel">
                             <li id="submnuappraisalrequest"><a href="appraisalRequest.jsf"
                                                               title="#{msg.get('app.menu.appraisalRequest')}">#{msg.get('app.menu.appraisalRequest')}</a></li>
                         </p:panel>
-                        <p:panel id="pnlMmenu_appraisal_appointment" rendered="#{baseController.stepId == 2005}" styleClass="panel">
+                        <p:panel id="pnlMmenu_appraisal_appointment" rendered="#{headerController.stepId == 2006}" styleClass="panel">
                             <li id="submnuappraisalappointment"><a href="appraisalAppointment.jsf"
                                                                title="#{msg.get('app.menu.appraisalAppointment')}">#{msg.get('app.menu.appraisalAppointment')}</a></li>
                         </p:panel>
-                        <p:panel id="pnlMmenu_appraisal_result" rendered="#{baseController.stepId == 2006}" styleClass="panel">
+                        <p:panel id="pnlMmenu_appraisal_result" rendered="#{headerController.stepId == 2008}" styleClass="panel">
                             <li id="submnuappraisalresult"><a href="appraisalResult.jsf"
                                                                    title="#{msg.get('app.menu.appraisalResult')}">#{msg.get('app.menu.appraisalResult')}</a></li>
                         </p:panel>
                     </ul>
                 </li>
             </h:panelGroup>
-            <h:panelGroup id="pnl_menu_fullapp" rendered="#{baseController.stepId == 2001}"
-                     styleClass="panel">
+            <h:panelGroup id="pnl_menu_fullapp" rendered="#{headerController.stageId == 201 || headerController.stageId == 202 || headerController.stageId == 204 || headerController.stageId == 207}" styleClass="panel">
                 <li id="mnubasicinfo"><a href="basicInfo.jsf" title="#{msg.get('app.menu.basicInfo')}">#{msg.get('app.menu.basicInfo')}</a></li>
                 <li id="mnuborrowerinfo">
                     <a href="customerInfoSummary.jsf" title="#{msg.get('app.menu.borrowerInfo')}">#{msg.get('app.menu.borrowerInfo')}</a>
@@ -85,8 +83,12 @@
                     </ul>
                 </li>
             </h:panelGroup>
-            
-            <h:panelGroup id="pnl_menu_step3" rendered="#{baseController.step3Screen}"
+            <h:panelGroup id="pnl_menu_custacceptance" rendered="#{headerController.stageId == 205}" styleClass="panel">
+                <li id="mnucustacceptpre">
+                    <a href="customerAcceptancePre.jsf" title="#{msg.get('app.menu.customerAcceptancePre')}">#{msg.get('app.menu.customerAcceptancePre')}</a>
+                </li>
+            </h:panelGroup>
+            <h:panelGroup id="pnl_menu_step3" rendered="#{headerController.step3Screen}"
                      styleClass="panel">
                 <li>
                 	<a href="insuranceInfo.jsf" title="#{msg.get('app.menu.insurance_info')}">
