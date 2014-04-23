@@ -214,49 +214,50 @@ public class AppraisalAppointmentControl extends BusinessControl {
 //                contactRecordDetailDAO.deleteById(view.getId());
 //            }
 
-
-            if(!Util.isNull(customerAcceptance) && !Util.isZero(customerAcceptance.getId())){
-                customerAcceptanceDAO.delete(customerAcceptance);
-                log.debug("-- CustomerAcceptance.id[{}] deleted", customerAcceptance.getId());
-//                customerAcceptance = new CustomerAcceptance();
-                customerAcceptance = customerAcceptanceTransform.transformToModel(cusAcceptView, workCase, workCasePrescreen, getCurrentUser());
-                customerAcceptanceDAO.save(customerAcceptance);
-                log.debug("-- CustomerAcceptance.id[{}] saved", customerAcceptance.getId());
-            } else {
-//                customerAcceptance = new CustomerAcceptance();
-                customerAcceptance = customerAcceptanceTransform.transformToModel(cusAcceptView, workCase, workCasePrescreen, getCurrentUser());
-                customerAcceptanceDAO.save(customerAcceptance);
-                log.debug("-- CustomerAcceptance.id[{}] saved", customerAcceptance.getId());
-            }
-
             appraisalDetailViewList = Util.safetyList(appraisalView.getAppraisalDetailViewList());
             log.debug("onSaveAppraisalAppointment ::: appraisalDetailViewList : {}", appraisalDetailViewList);
 
             //remove all collateral head from list in database
             if(newCreditFacility.getId() != 0){
                 newCollateralList = newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
+                log.debug("-- newCollateralList.size()[{}]", newCollateralList.size());
+                try {
+                    for(NewCollateral newCollateral : newCollateralList){
+                        log.debug("-- NewCollateral.id[{}]", newCollateral.getId());
+                        newCollateralHeadList = newCollateralHeadDAO.findByNewCollateralId(newCollateral.getId());
+                        newCollateralHeadDAO.setAppraisalRequest(newCollateralHeadList);
+                    }
+                } catch (Exception e) {
+                    log.debug("-- Exception while call NewCollateralHeadDAO ", e);
+                }
+
+                //set flag 0 for all collateral
+//                try {
+//                    log.debug("onSaveAppraisalAppointment ::: newCollateralList from database : {}", newCollateralList);
+//                    for(NewCollateral newCollateral : newCollateralList){
+//                        log.debug("-- NewCollateral.id[{}]", newCollateral.getId());
+//                        newCollateralHeadList = newCollateralHeadDAO.findByNewCollateralId(newCollateral.getId());
+//                        log.debug("-- NewCollateralHeadList.size()[{}]", newCollateralHeadList.size());
+//                        if(!Util.isNull(newCollateralHeadList) && !Util.isZero(newCollateralHeadList.size())){
+//                            for(NewCollateralHead newCollateralHead : newCollateralHeadList){
+//                                log.debug("-- NewCollateralHead.id[{}]", newCollateralHead.getId());
+//                                newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
+//                                log.debug("-- NewCollateralHead.AppraisalRequest[{}]", newCollateralHead.getAppraisalRequest());
+//                                newCollateralHeadDAO.persist(newCollateralHead);
+//                                log.debug("-- Saved");
+//                            }
+//                        }
+////                    if(!Util.isNull(newCollateralHeadList) && !Util.isZero(newCollateralHeadList.size())){
+////                        newCollateralHeadDAO.persist(newCollateralHeadList);
+////                        log.debug("-- NewCollateralHeadList.size()[{}] saved", newCollateralHeadList.size());
+////                    }
+//                    }
+//
+//                } catch (Exception e) {
+//                    log.debug("-- Exception while call NewCollateralHeadDAO ", e);
+//                }
             }else{
                 newCollateralList = new ArrayList<NewCollateral>();
-            }
-
-            //set flag 0 for all collateral
-            try {
-                log.debug("onSaveAppraisalAppointment ::: newCollateralList from database : {}", newCollateralList);
-                for(NewCollateral newCollateral : newCollateralList){
-                    log.debug("-- NewCollateral.id[{}]", newCollateral.getId());
-                    newCollateralHeadList = Util.safetyList(newCollateralHeadDAO.findByNewCollateralId(newCollateral.getId()));
-                    for(NewCollateralHead newCollateralHead : newCollateralHeadList){
-                        log.debug("-- NewCollateralHead.id[{}]", newCollateralHead.getId());
-                        newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
-                        log.debug("-- NewCollateralHead.AppraisalRequest[{}]", newCollateralHead.getAppraisalRequest());
-                    }
-                    if(!newCollateralHeadList.isEmpty()){
-                        newCollateralHeadDAO.persist(newCollateralHeadList);
-                        log.debug("-- NewCollateralHeadList.size()[{}]", newCollateralHeadList.size());
-                    }
-                }
-            } catch (Exception e) {
-                log.debug("-- Exception while call NewCollateralHeadDAO ", e);
             }
 
             try {
@@ -284,6 +285,20 @@ public class AppraisalAppointmentControl extends BusinessControl {
                 log.debug("-- Exception while call NewCollateralDAO ", e);
             }
 
+
+            if(!Util.isNull(customerAcceptance) && !Util.isZero(customerAcceptance.getId())){
+                customerAcceptanceDAO.delete(customerAcceptance);
+                log.debug("-- CustomerAcceptance.id[{}] deleted", customerAcceptance.getId());
+//                customerAcceptance = new CustomerAcceptance();
+                customerAcceptance = customerAcceptanceTransform.transformToModel(cusAcceptView, workCase, workCasePrescreen, getCurrentUser());
+                customerAcceptanceDAO.save(customerAcceptance);
+                log.debug("-- CustomerAcceptance.id[{}] saved", customerAcceptance.getId());
+            } else {
+//                customerAcceptance = new CustomerAcceptance();
+                customerAcceptance = customerAcceptanceTransform.transformToModel(cusAcceptView, workCase, workCasePrescreen, getCurrentUser());
+                customerAcceptanceDAO.save(customerAcceptance);
+                log.debug("-- CustomerAcceptance.id[{}] saved", customerAcceptance.getId());
+            }
 
             log.debug("-- CustomerAcceptance.id[{}]", customerAcceptance.getId());
             if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){

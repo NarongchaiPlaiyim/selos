@@ -149,7 +149,6 @@ public class NewCreditDetail implements Serializable {
     @JoinColumn(name="modify_user_id")
     private User modifyBy;
 
-
     public long getId() {
         return id;
     }
