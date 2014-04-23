@@ -453,6 +453,9 @@ public class CustomerInfoIndividual implements Serializable {
             isEditForm = true;
         } else {
             isEditForm = false;
+            if(isEditFromJuristic){
+                isEditForm = true;
+            }
         }
 
         enableAllFieldCus = true;

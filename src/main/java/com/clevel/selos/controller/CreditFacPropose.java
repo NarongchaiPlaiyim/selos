@@ -133,7 +133,6 @@ public class CreditFacPropose implements Serializable {
     private boolean cannotEditStandard;
     private boolean notRetrievePricing;
     private List<Long> deleteCreditIdList;
-    private List<Long> deleteCreditTierIdList;
 
     // for control Propose Collateral
     private NewCollateralView newCollateralView;
@@ -149,11 +148,9 @@ public class CreditFacPropose implements Serializable {
     private CustomerInfoView collateralOwnerUW;
     private List<NewCollateralView> newCollateralViewDelList;
     private boolean flagComs;
-    private boolean disableComs;
     private boolean flagButtonCollateral;
     private boolean editProposeColl;
     private List<Long> deleteCollIdList;
-    private List<Long> deleteSubCollIdList;
 
     // for  control Guarantor Information Dialog
     private NewGuarantorDetailView newGuarantorDetailView;
@@ -278,8 +275,6 @@ public class CreditFacPropose implements Serializable {
     @Inject
     private ProposeCreditDetailTransform proposeCreditDetailTransform;
     @Inject
-    private NewFeeDetailTransform newFeeDetailTransform;
-    @Inject
     private NewCreditTierTransform newCreditTierTransform;
     @Inject
     private FeeTransform feeTransform;
@@ -328,9 +323,7 @@ public class CreditFacPropose implements Serializable {
             deleteCreditIdList = new ArrayList<Long>();
             deleteCollIdList = new ArrayList<Long>();
             deleteGuarantorIdList = new ArrayList<Long>();
-            deleteSubCollIdList = new ArrayList<Long>();
             deleteConditionIdList = new ArrayList<Long>();
-            deleteCreditTierIdList = new ArrayList<Long>();
 
             try {
                 WorkCase workCase = workCaseDAO.findById(workCaseId);
@@ -579,7 +572,7 @@ public class CreditFacPropose implements Serializable {
                             for (NewCreditDetailView newCreditView : newCreditFacilityView.getNewCreditDetailViewList()) {
                                 stringId = String.valueOf(newCreditView.getId());
                                 log.debug("newCreditView.getId() toString :: {}", newCreditView.getId());
-                             
+
                                 if (stringId.equals(creditTypeId)) {
                                     if(newCreditView.getNewCreditTierDetailViewList() != null && newCreditView.getNewCreditTierDetailViewList().size() > 0){
                                         for(NewCreditTierDetailView nctdv : newCreditView.getNewCreditTierDetailViewList()){
@@ -894,7 +887,7 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void onDeleteCreditInfo() {
-        log.debug("delete :: rowIndex :: {}", rowIndex);
+//        log.debug("delete :: rowIndex :: {}", rowIndex);
 //        int used;
 //        log.info("onDeleteCreditInfo ::: seq is : {} " + newCreditDetailSelected.getSeq());
 //
@@ -902,12 +895,11 @@ public class CreditFacPropose implements Serializable {
 //
 //        used = Integer.parseInt(hashSeqCredit.get(newCreditDetailSelected.getSeq()).toString());
 //
-//        log.info("before del use is  " + used);
+//        log.info("before del use is  " +  used);
 //        if (used == 0) {
 //            log.info("used ::: {} ", used);
             if (newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId() != 0) {
                 deleteCreditIdList.add(newCreditDetailSelected.getId());
-//                newCreditFacilityView.getNewCreditViewDelList().add(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getId());
                 newCreditFacilityView.getNewCreditDetailViewList().remove(newCreditDetailSelected);
             }
 //        } else {
@@ -1237,8 +1229,6 @@ public class CreditFacPropose implements Serializable {
                 for (int i = 0; i < selectedCollateralCrdTypeItems.size(); i++) {
                     selectedCollateralCrdTypeItems.get(i).setNoFlag(true);
                     proposeCreditDetailViewList.add(selectedCollateralCrdTypeItems.get(i));
-                    seqTemp = selectedCollateralCrdTypeItems.get(i).getSeq();
-//                    hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
                 }
 
                 proposeCollateralInfoAdd.setProposeCreditDetailViewList(proposeCreditDetailViewList);
@@ -1246,6 +1236,7 @@ public class CreditFacPropose implements Serializable {
 
 //                for (int j = 0; j < proposeCollateralInfoAdd.getProposeCreditDetailViewList().size(); j++) {
 //                    seqTemp = proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).getSeq();
+//                    log.info("seqTemp :: {}",seqTemp);
 //                    if (proposeCollateralInfoAdd.getProposeCreditDetailViewList().get(j).isNoFlag()) {
 //                        hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(j).toString()) + 1);
 //                    } else {
@@ -1337,6 +1328,7 @@ public class CreditFacPropose implements Serializable {
 //                        seqTemp = proposeCreditDetailViewList.get(i).getSeq();
 //                        checkPlus = true;
 //
+//                        log.info("seqTemp edit :: {}",seqTemp);
 //                        for (int j = 0; j < selectedCollateralCrdTypeItems.size(); j++) {
 //                            if (selectedCollateralCrdTypeItems.get(j).getSeq() == seqTemp) {
 //                                checkPlus = false;
@@ -1352,29 +1344,6 @@ public class CreditFacPropose implements Serializable {
 //                            hashSeqCredit.put(i, Integer.parseInt(hashSeqCredit.get(i).toString()) - 1);
 //                        }
 //                    }
-
-
-
-                    /*if (selectedCollateralCrdTypeItems.get(i).isNoFlag() == true) {
-                        seqTemp=selectedCollateralCrdTypeItems.get(i).getSeq();
-                        checkPlus = true;
-
-                        for (int j = 0; j < selectedCollateralCrdTypeItems.size(); j++) {
-                            if (selectedCollateralCrdTypeItems.get(j).getSeq() == seqTemp) {
-                                checkPlus = false;
-                            }
-                        }
-
-                        if (checkPlus) {
-                            hashSeqCredit.put(seqTemp,hashSeqCredit.get(seqTemp) + 1);
-                        }
-
-                    }else if(selectedCollateralCrdTypeItems.get(i).isNoFlag() == false) {
-                        if (hashSeqCredit.get(i) > 0) {
-                            hashSeqCredit.put(i, hashSeqCredit.get(i) - 1);
-                        }
-
-                    }*/
 
                 }
 
@@ -1725,14 +1694,23 @@ public class CreditFacPropose implements Serializable {
                         newCreditTypeItems.add(creditTypeItem);
                         log.debug("creditTypeItem.getGuaranteeAmount() :: {}", creditTypeItem.getGuaranteeAmount());
                         summary = Util.add(summary, creditTypeItem.getGuaranteeAmount());
-                        seqTemp = creditTypeItem.getSeq();
-//                        hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
                     }
 
                     guarantorDetailAdd.setProposeCreditDetailViewList(newCreditTypeItems);
                     guarantorDetailAdd.setTotalLimitGuaranteeAmount(summary);
                     newCreditFacilityView.getNewGuarantorDetailViewList().add(guarantorDetailAdd);
                     complete = true;
+
+//                    for (int j = 0; j < guarantorDetailAdd.getProposeCreditDetailViewList().size(); j++) {
+//                        seqTemp = guarantorDetailAdd.getProposeCreditDetailViewList().get(j).getSeq();
+//                        log.info("seqTemp :: {}",seqTemp);
+//                        if (guarantorDetailAdd.getProposeCreditDetailViewList().get(j).isNoFlag()) {
+//                            hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(j).toString()) + 1);
+//                        } else {
+//                            hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(j).toString()) - 1);
+//                        }
+//                    }
+
                 } else {
                     messageHeader = msg.get("app.propose.exception");
                     message = msg.get("app.propose.desc.add.data");
@@ -1765,20 +1743,12 @@ public class CreditFacPropose implements Serializable {
 //
 //                        if (checkPlus) {
 //                            hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
+//                        }else{
+//                            hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) - 1);
 //                        }
                     }
                     newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setTotalLimitGuaranteeAmount(summary);
                     complete = true;
-
-//                    for (int i = 0; i < newGuarantorDetailView.getProposeCreditDetailViewList().size(); i++) {
-//                        seqTemp = newGuarantorDetailView.getProposeCreditDetailViewList().get(i).getSeq();
-//                        if (newGuarantorDetailView.getProposeCreditDetailViewList().get(i).isNoFlag()) {
-//                            hashSeqCredit.put(seqTemp, hashSeqCredit.get(i) + 1);
-//                        } else {
-//                            hashSeqCredit.put(seqTemp, hashSeqCredit.get(i) - 1);
-//                        }
-//                    }
-
 
                 } else {
                     messageHeader = msg.get("app.propose.exception");

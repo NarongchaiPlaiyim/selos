@@ -1107,38 +1107,48 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{not empty tradeTableItem.standardFrontEndFee.percentFee ?
-                                                 tradeTableItem.standardFrontEndFee.percentFee  : '0.00'} %,
-                                     #{not empty tradeTableItem.standardFrontEndFee.feeYear ?
-                                                 tradeTableItem.standardFrontEndFee.feeYear +' Years' : '-'}"/>
+                <h:outputText value="#{not empty tradeTableItem.standardFrontEndFee ? not empty tradeTableItem.standardFrontEndFee.percentFee ?
+                                                 tradeTableItem.standardFrontEndFee.percentFee : '0.00' : '0.00'} % ,
+                                     #{not empty tradeTableItem.standardFrontEndFee ? not empty tradeTableItem.standardFrontEndFee.feeYear ?
+                                                 tradeTableItem.standardFrontEndFee.feeYear : '-' : '-'}
+                                     #{not empty tradeTableItem.standardFrontEndFee ? not empty tradeTableItem.standardFrontEndFee.feeYear ?
+                                                 ' Years' : '' : ''}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{not empty tradeTableItem.commitmentFee.percentFee ?
-                                                 tradeTableItem.commitmentFee.percentFee : '0.00'} %,
-                                     #{not empty tradeTableItem.commitmentFee.feeYear ?
-                                                 tradeTableItem.commitmentFee.feeYear +' Years': '-'}"/>
+                <h:outputText value="#{not empty tradeTableItem.commitmentFee ? not empty tradeTableItem.commitmentFee.percentFee ?
+                                                 tradeTableItem.commitmentFee.percentFee : '0.00' : '0.00'} %,
+                                     #{not empty tradeTableItem.commitmentFee ? not empty tradeTableItem.commitmentFee.feeYear ?
+                                                 tradeTableItem.commitmentFee.feeYear : '-' : '-'}
+                                     #{not empty tradeTableItem.commitmentFee ? not empty tradeTableItem.commitmentFee.feeYear ?
+                                                 ' Years' : '' : ''}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{not empty tradeTableItem.extensionFee.percentFee ?
-                                                 tradeTableItem.extensionFee.percentFee : '0.00'} %,
-                                     #{not empty tradeTableItem.extensionFee.feeYear ?
-                                                 tradeTableItem.extensionFee.feeYear +' Years': '-'}"/>
+                <h:outputText value="#{not empty tradeTableItem.extensionFee ? not empty tradeTableItem.extensionFee.percentFee ?
+                                                 tradeTableItem.extensionFee.percentFee : '0.00' : '0.00'} %,
+                                     #{not empty tradeTableItem.extensionFee ? not empty tradeTableItem.extensionFee.feeYear ?
+                                                 tradeTableItem.extensionFee.feeYear : '-' : '-'}
+                                     #{not empty tradeTableItem.extensionFee ? not empty tradeTableItem.extensionFee.feeYear ?
+                                                 ' Years' : '' : ''}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{not empty tradeTableItem.prepaymentFee.percentFee ?
-                                                 tradeTableItem.prepaymentFee.percentFee : '0.00'} %,
-                                     #{not empty tradeTableItem.prepaymentFee.feeYear ?
-                                                 tradeTableItem.prepaymentFee.feeYear +' Years': '-'}"/>
+                <h:outputText value="#{not empty tradeTableItem.prepaymentFee ? not empty tradeTableItem.prepaymentFee.percentFee ?
+                                                 tradeTableItem.prepaymentFee.percentFee : '0.00' : '0.00'} %,
+                                     #{not empty tradeTableItem.prepaymentFee ? not empty tradeTableItem.prepaymentFee.feeYear ?
+                                                 tradeTableItem.prepaymentFee.feeYear : '-' : '-'}
+                                     #{not empty tradeTableItem.prepaymentFee ? not empty tradeTableItem.prepaymentFee.feeYear ?
+                                                 ' Years' : '' : ''}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{not empty tradeTableItem.cancellationFee.percentFee ?
-                                                 tradeTableItem.cancellationFee.percentFee : '0.00%'} %,
-                                     #{not empty tradeTableItem.cancellationFee.feeYear ?
-                                                 tradeTableItem.cancellationFee.feeYear +' Years' : '-'}"/>
+                <h:outputText value="#{not empty tradeTableItem.cancellationFee ? not empty tradeTableItem.cancellationFee.percentFee ?
+                                                 tradeTableItem.cancellationFee.percentFee : '0.00' : '0.00'} %,
+                                     #{not empty tradeTableItem.cancellationFee ? not empty tradeTableItem.cancellationFee.feeYear ?
+                                                 tradeTableItem.cancellationFee.feeYear : '-' : '-'}
+                                     #{not empty tradeTableItem.cancellationFee ? not empty tradeTableItem.cancellationFee.feeYear ?
+                                                 ' Years' : '' : ''}"/>
             </p:column>
 
         </p:dataTable>

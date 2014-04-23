@@ -214,15 +214,16 @@ public class FeeTransform extends Transform{
         FeeDetailView feeDetailView;
        for(FeeDetail feeDetail:feeDetailList){
            feeDetailView = new FeeDetailView();
-//           feeDetailView.setId(feeDetail.getId());
+           feeDetailView.setId(feeDetail.getId());
+           feeDetailView.setFeeYear(feeDetail.getFeeYear());
+           feeDetailView.setPercentFee(feeDetail.getPercentFee());
+
            feeDetailView.setCreditDetailViewId(feeDetail.getNewCreditDetail().getId());
            feeDetailView.setDescription(feeDetail.getDescription());
            feeDetailView.setFeeLevel(feeDetail.getFeeLevel());
            feeDetailView.setFeePaymentMethodView(getFeePaymentMethodView(feeDetail.getPaymentMethod().getBrmsCode()));
            feeDetailView.setFeeTypeView(getFeeTypeView(feeDetail.getFeeType().getBrmsCode()));
-           feeDetailView.setPercentFee(feeDetail.getPercentFee());
            feeDetailView.setPercentFeeAfter(feeDetail.getPercentFeeAfter());
-           feeDetailView.setFeeYear(feeDetail.getFeeYear());
            feeDetailView.setFeeAmount(feeDetail.getAmount());
            feeDetailViewList.add(feeDetailView);
         }
