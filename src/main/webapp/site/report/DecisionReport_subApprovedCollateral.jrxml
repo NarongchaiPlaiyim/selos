@@ -25,7 +25,7 @@
 	<field name="jobID" class="java.lang.String">
 		<fieldDescription><![CDATA[jobID]]></fieldDescription>
 	</field>
-	<field name="appraisalDate" class="java.lang.String">
+	<field name="appraisalDate" class="java.util.Date">
 		<fieldDescription><![CDATA[appraisalDate]]></fieldDescription>
 	</field>
 	<field name="aadDecision" class="java.lang.String">

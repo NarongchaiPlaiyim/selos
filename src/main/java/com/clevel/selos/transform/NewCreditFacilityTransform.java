@@ -38,8 +38,6 @@ public class NewCreditFacilityTransform extends Transform {
     @Inject
     NewCollateralCreditDAO newCollateralCreditDAO;
     @Inject
-    NewFeeCreditDAO newFeeCreditDAO;
-    @Inject
     NewConditionDetailDAO newConditionDetailDAO;
     @Inject
     NewCreditDetailDAO newCreditDetailDAO;
@@ -55,8 +53,6 @@ public class NewCreditFacilityTransform extends Transform {
     NewCollateralSubDAO newCollateralSubDetailDAO;
     @Inject
     NewCollateralHeadDAO newCollateralHeadDetailDAO;
-    @Inject
-    private NewFeeDetailTransform newFeeDetailTransform;
     @Inject
     private NewCreditDetailTransform newCreditDetailTransform;
     @Inject

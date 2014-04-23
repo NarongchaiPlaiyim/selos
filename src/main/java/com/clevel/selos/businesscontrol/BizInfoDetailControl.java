@@ -165,6 +165,7 @@ public class BizInfoDetailControl extends BusinessControl {
         }
     }
 
+
     public void onSaveSumOnSummary(long bizInfoSummaryId , long workCaseId){
         BankStmtSummaryView bankStmtSummaryView;
         List<BizInfoDetail> bizInfoDetailList;

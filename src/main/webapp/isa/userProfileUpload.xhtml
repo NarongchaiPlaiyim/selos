@@ -32,7 +32,7 @@
                                 <p:fileUpload fileUploadListener="#{isaUpload.uploadUserFile}"
                                               mode="advanced"
                                               showButtons="false"
-                                              update=":useruploadForm"
+                                              update=":useruploadForm,:sdsd"
                                               allowTypes="/(\.|\/)(csv)$/"
                                               sizeLimit="5000000"
                                         />
@@ -44,7 +44,7 @@
 
                             </p:fieldset>
 
-                            <p:dataTable value="#{isaUpload.userUploadViews}" var="o" widgetVar="okl" style="width: 700px">
+                            <p:dataTable id="sdsd" value="#{isaUpload.userUploadViews}" var="o" widgetVar="ok1"  style="width: 700px" >
                                 <p:column>
                                    Upload Time:
                                 </p:column>

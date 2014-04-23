@@ -117,7 +117,6 @@ public class FeeTransform extends Transform{
                 NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(newFeeDetailView.getNewCreditDetailView().getId());
                 FeeType feeType = feeTypeDAO.findByBRMSCode(newFeeDetailView.getCommitmentFee().getFeeTypeView().getBrmsCode());
                 FeePaymentMethod feePaymentMethod = feePaymentMethodDAO.findByBRMSCode(newFeeDetailView.getCommitmentFee().getFeePaymentMethodView().getBrmsCode());
-                feeDetail.setId(newFeeDetailView.getCommitmentFee().getId());
                 feeDetail.setPercentFee(newFeeDetailView.getCommitmentFee().getPercentFee());
                 feeDetail.setPercentFeeAfter(newFeeDetailView.getCommitmentFee().getPercentFeeAfter());
                 feeDetail.setFeeYear(newFeeDetailView.getCommitmentFee().getFeeYear());
@@ -216,14 +215,15 @@ public class FeeTransform extends Transform{
        for(FeeDetail feeDetail:feeDetailList){
            feeDetailView = new FeeDetailView();
            feeDetailView.setId(feeDetail.getId());
+           feeDetailView.setFeeYear(feeDetail.getFeeYear());
+           feeDetailView.setPercentFee(feeDetail.getPercentFee());
+
            feeDetailView.setCreditDetailViewId(feeDetail.getNewCreditDetail().getId());
            feeDetailView.setDescription(feeDetail.getDescription());
            feeDetailView.setFeeLevel(feeDetail.getFeeLevel());
            feeDetailView.setFeePaymentMethodView(getFeePaymentMethodView(feeDetail.getPaymentMethod().getBrmsCode()));
            feeDetailView.setFeeTypeView(getFeeTypeView(feeDetail.getFeeType().getBrmsCode()));
-           feeDetailView.setPercentFee(feeDetail.getPercentFee());
            feeDetailView.setPercentFeeAfter(feeDetail.getPercentFeeAfter());
-           feeDetailView.setFeeYear(feeDetail.getFeeYear());
            feeDetailView.setFeeAmount(feeDetail.getAmount());
            feeDetailViewList.add(feeDetailView);
         }

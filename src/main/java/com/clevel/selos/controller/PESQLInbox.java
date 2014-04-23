@@ -165,7 +165,7 @@ public class PESQLInbox implements Serializable
                 session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
                 session.setAttribute("requestAppraisal", requestAppraisalFlag);
 
-            } else if (stepId == StepValue.REQUEST_APPRAISAL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Case in Stage Parallel Appraisal
+            } else if (stepId == StepValue.REQUEST_APPRAISAL_POOL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Case in Stage Parallel Appraisal
                 WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
                 if(workCase != null){
                     wrkCaseId = workCase.getId();
