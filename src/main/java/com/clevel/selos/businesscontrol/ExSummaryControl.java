@@ -282,7 +282,7 @@ public class ExSummaryControl extends BusinessControl {
         ExSumCharacteristicView exSumCharacteristicView = new ExSumCharacteristicView();
         DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
         if(dbr != null && dbr.getId() != 0){
-            exSumCharacteristicView.setCurrentDBR(dbr.getCurrentDBR());
+            exSumCharacteristicView.setCurrentDBR(dbr.getDbrBeforeRequest());
             exSumCharacteristicView.setFinalDBR(dbr.getFinalDBR());
         }
 

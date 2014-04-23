@@ -56,8 +56,6 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     NewCollateralCreditDAO newCollateralCreditDAO;
     @Inject
-    NewFeeCreditDAO newFeeCreditDAO;
-    @Inject
     NewConditionDetailDAO newConditionDetailDAO;
     @Inject
     NewCreditDetailDAO newCreditDetailDAO;
@@ -127,8 +125,6 @@ public class CreditFacProposeControl extends BusinessControl {
     NewCollateralDAO newCollateralDAO;
     @Inject
     NewCollateralSubRelatedDAO newCollateralSubRelatedDAO;
-    @Inject
-    NewFeeDetailTransform newFeeDetailTransform;
     @Inject
     FeeTransform feeTransform;
     @Inject
@@ -243,15 +239,39 @@ public class CreditFacProposeControl extends BusinessControl {
                     }
                     if ("9".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=9,(Front-End-Fee)
                         newFeeDetailView.setStandardFrontEndFee(feeDetailView);
+                        newFeeDetailView.setPrepaymentFee(null);
+                        newFeeDetailView.setCancellationFee(null);
+                        newFeeDetailView.setExtensionFee(null);
+                        newFeeDetailView.setCommitmentFee(null);
                     } else if ("15".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=15,(Prepayment Fee)
                         newFeeDetailView.setPrepaymentFee(feeDetailView);
+                        newFeeDetailView.setStandardFrontEndFee(null);
+                        newFeeDetailView.setCancellationFee(null);
+                        newFeeDetailView.setExtensionFee(null);
+                        newFeeDetailView.setCommitmentFee(null);
                     } else if ("20".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=20,(CancellationFee)
                         newFeeDetailView.setCancellationFee(feeDetailView);
+                        newFeeDetailView.setStandardFrontEndFee(null);
+                        newFeeDetailView.setPrepaymentFee(null);
+                        newFeeDetailView.setExtensionFee(null);
+                        newFeeDetailView.setCommitmentFee(null);
                     } else if ("21".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=21,(ExtensionFee)
                         newFeeDetailView.setExtensionFee(feeDetailView);
+                        newFeeDetailView.setStandardFrontEndFee(null);
+                        newFeeDetailView.setPrepaymentFee(null);
+                        newFeeDetailView.setCancellationFee(null);
+                        newFeeDetailView.setCommitmentFee(null);
                     } else if ("22".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=22,(CommitmentFee)
                         newFeeDetailView.setCommitmentFee(feeDetailView);
+                        newFeeDetailView.setStandardFrontEndFee(null);
+                        newFeeDetailView.setPrepaymentFee(null);
+                        newFeeDetailView.setCancellationFee(null);
+                        newFeeDetailView.setExtensionFee(null);
                     }
+
+                    NewCreditDetailView newCreditDetailView = new NewCreditDetailView();
+                    newCreditDetailView.setId(newCreditDetail.getId());
+                    newFeeDetailView.setNewCreditDetailView(newCreditDetailView);
 
                     log.debug("FeePaymentMethodView():::: {}", feeDetailView.getFeePaymentMethodView().getBrmsCode());
                 }
@@ -381,7 +401,7 @@ public class CreditFacProposeControl extends BusinessControl {
                                         log.info("DbrCalculate YES :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
                                         if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
                                             log.info("NOT_CALCULATE :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
-                                            sumTotalLoanDbr = BigDecimal.ZERO;
+                                            sumTotalLoanDbr = sumTotalLoanDbr.add(BigDecimal.ZERO);
                                         } else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
                                             log.info("INSTALLMENT :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
                                             log.info("INSTALLMENT :: newCreditDetailView.getInstallment() :: {}", newCreditDetailView.getInstallment());
@@ -1201,12 +1221,16 @@ public class CreditFacProposeControl extends BusinessControl {
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.persist(newCreditFacilityTransform.transformToModelDB(newCreditFacilityView, workCase, currentUser));
         log.debug("saveCreditFacility ::: persist newCreditFacility : {}", newCreditFacility);
 
+        //remove all fee
+        List<FeeDetail> fdl = feeDetailDAO.findAllByWorkCaseId(workCaseId);
+        feeDetailDAO.delete(fdl);
+
         //--- Save to NewFeeCredit
         if (Util.safetyList(newCreditFacilityView.getNewFeeDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCreditFacilityView.getNewFeeDetailViewList()).size() : {}", newCreditFacilityView.getNewFeeDetailViewList().size());
             List<FeeDetail> feeDetailList = feeTransform.transformToDB(newCreditFacilityView.getNewFeeDetailViewList(), workCaseId);
-//            feeDetailDAO.persist(feeDetailList);
-//            log.debug("persist :: feeDetailList ::");
+            feeDetailDAO.persist(feeDetailList);
+            log.debug("persist :: feeDetailList ::");
         }
 
         //--- Save to NewConditionCredit
@@ -1371,7 +1395,7 @@ public class CreditFacProposeControl extends BusinessControl {
             for (Long id : deleteCreditIdList) {
                 deleteCreditDetailList.add(newCreditDetailDAO.findById(id));
             }
-//            newCreditDetailDAO.delete(deleteCreditDetailList);
+            newCreditDetailDAO.delete(deleteCreditDetailList);
 
         }
     }

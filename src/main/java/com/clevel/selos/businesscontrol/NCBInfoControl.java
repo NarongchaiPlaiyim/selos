@@ -85,10 +85,14 @@ public class NCBInfoControl extends BusinessControl {
     }
 
     public NCB calculateLoanCredit(NCB ncb, List<NCBDetail> ncbDetailList){
-        BigDecimal loanCredit = new BigDecimal(0);
-        BigDecimal loanCreditWC = new BigDecimal(0);
-        BigDecimal loanCreditTMB = new BigDecimal(0);
-        BigDecimal loanCreditWCTMB = new BigDecimal(0);
+        // วงเงินสินเชื่อหมุนเวียนจากหน้า NCB
+        BigDecimal loanCredit = BigDecimal.ZERO;
+        // ภาระสินเชื่อประเภทอื่นๆ จากหน้า NCB ที่มี flag W/C = Yes
+        BigDecimal loanCreditWC = BigDecimal.ZERO;
+        // วงเงินสินเชื่อหมุนเวียนใน NCB ที่ flag เป็น TMB
+        BigDecimal loanCreditTMB = BigDecimal.ZERO;
+        // ภาระสินเชื่อประเภทอื่น ที่ flag TMB และ flag W/C
+        BigDecimal loanCreditWCTMB = BigDecimal.ZERO;
 
         for(NCBDetail item : ncbDetailList){
             if(item.getAccountType() != null && item.getAccountType().getWcFlag() == 1){
@@ -97,7 +101,7 @@ public class NCBInfoControl extends BusinessControl {
             if(item.getWcFlag() == RadioValue.YES.value()){
                 loanCreditWC = loanCreditWC.add(item.getOutstanding());
             }
-            if(item.getAccountTMBFlag() == RadioValue.YES.value()){
+            if(item.getAccountType() != null && item.getAccountType().getWcFlag() == 1 && item.getAccountTMBFlag() == RadioValue.YES.value()){
                 loanCreditTMB = loanCreditTMB.add(item.getOutstanding());
             }
             if(item.getAccountTMBFlag() == RadioValue.YES.value() && item.getWcFlag() == RadioValue.YES.value()){
