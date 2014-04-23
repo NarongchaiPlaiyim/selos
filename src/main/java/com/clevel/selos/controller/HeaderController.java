@@ -169,6 +169,9 @@ public class HeaderController implements Serializable {
     private List<Reason> reasonList;
     private String pendingRemark;
 
+    //Request Appraisal ( After Customer Acceptance )
+    private List<User> aadAdminList;
+
 
     public HeaderController() {
     }
@@ -750,7 +753,7 @@ public class HeaderController implements Serializable {
         }
         if(fullApplicationControl.checkAppointmentInformation(workCaseId, workCasePreScreenId)){
             //List AAD Admin by team structure
-            aadCommiteeList = fullApplicationControl.getAADCommitteeList(RoleValue.AAD_COMITTEE);
+            aadCommiteeList = fullApplicationControl.getUserListByRole(RoleValue.AAD_COMITTEE);
             RequestContext.getCurrentInstance().execute("submitAADCDlg.show()");
         } else {
             //TO show error
@@ -871,18 +874,34 @@ public class HeaderController implements Serializable {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
-    public void onRequestAppraisal(){
-        log.debug("onRequestAppraisal by BDM ( after customer acceptance");
+    //Request Appraisal after Customer Acceptance
+    public void onOpenRequestAppraisalCustomerAccepted(){
+        log.debug("onOpenRequestAppraisalCustomerAccepted ( after customer acceptance )");
         HttpSession session = FacesUtil.getSession(true);
-        RequestContext context = RequestContext.getCurrentInstance();
-        boolean complete = false;
-        long workCaseId = 0;
+        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
 
-        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        //Check Appraisal data exist.
+        if(fullApplicationControl.checkAppraisalInformation(workCaseId)) {
+            aadAdminList = fullApplicationControl.getUserListByRole(RoleValue.AAD_ADMIN);
+            aadAdminId = "";
+            RequestContext.getCurrentInstance().execute("reqAppr_BDMDialog.show()");
+        } else {
+            log.debug("onOpenRequestAppraisalCustomerAccepted : check appraisal information failed. do not open dialog.");
+            messageHeader = "Information.";
+            message = "Please complete request appraisal form.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
 
-        //Check appraisal request saved.
+    }
+    public void onRequestAppraisalCustomerAccepted(){
+        log.debug("onRequestAppraisal by BDM ( after customer acceptance )");
+        HttpSession session = FacesUtil.getSession(true);
+        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        String queueName = Util.parseString(session.getAttribute("queueName"), "");
+        String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+
         try {
-            fullApplicationControl.requestAppraisal(workCaseId);
+            fullApplicationControl.requestAppraisal(queueName, wobNumber, aadAdminId);
         } catch (Exception ex){
             log.error("exception while request appraisal : ", ex);
             messageHeader = "Exception.";
@@ -1354,6 +1373,29 @@ public class HeaderController implements Serializable {
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
 
             log.error("onRestartCase ::: exception occurred : ", ex);
+        }
+    }
+
+    //STEP AFTER RETURN FROM AAD ADMIN
+    public void onReturnToAADAdminByBDM(){
+        log.debug("onReturnToAADAdminByBDM");
+
+        try {
+            HttpSession session = FacesUtil.getSession(true);
+            String queueName = Util.parseString(session.getAttribute("queueName"), "");
+            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+
+            messageHeader = "Information.";
+            message = "Return to AAD Admin success.";
+
+            fullApplicationControl.returnAADAdminByBDM(queueName, wobNumber);
+
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+        } catch (Exception ex) {
+            log.debug("Exception while Return to AAD Admin : ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
     }
 
@@ -2103,5 +2145,13 @@ public class HeaderController implements Serializable {
 
     public void setPendingRemark(String pendingRemark) {
         this.pendingRemark = pendingRemark;
+    }
+
+    public List<User> getAadAdminList() {
+        return aadAdminList;
+    }
+
+    public void setAadAdminList(List<User> aadAdminList) {
+        this.aadAdminList = aadAdminList;
     }
 }
