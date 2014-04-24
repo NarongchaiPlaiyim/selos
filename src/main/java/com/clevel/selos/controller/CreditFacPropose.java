@@ -591,14 +591,14 @@ public class CreditFacPropose implements Serializable {
                     severity = MessageDialogSeverity.INFO.severity();
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 } else if (ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
-                    log.debug("standardPricingResponse.getReason() :: {}",standardPricingResponse.getReason());
+                    log.debug("ActionResult.FAILED. standardPricingResponse.getReason() :: {}",standardPricingResponse.getReason());
                     messageHeader = msg.get("app.messageHeader.error");
                     message = standardPricingResponse.getReason();
                     severity = MessageDialogSeverity.ALERT.severity();
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
             } catch (BRMSInterfaceException e) {
-                log.debug("BRMSInterfaceException :: ");
+                log.debug("BRMSInterfaceException ::{}",e);
                 messageHeader = msg.get("app.messageHeader.error");
                 message = e.getMessage();
                 severity = MessageDialogSeverity.ALERT.severity();
