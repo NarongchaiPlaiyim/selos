@@ -279,6 +279,23 @@
                          styleClass="ui-confirmdialog-no"/>
     </p:confirmDialog>
 
+    <!--Submit CA (UW2)-->
+    <p:commandButton id="btnSubmitCaseUW2" value="#{msg.get('app.header.button.submitCA')}"
+                     styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
+                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2016}"
+                     onclick="confirmSubmitSubmitCAUW2.show()"/>
+    <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
+                     icon="ui-icon-alert"
+                     widgetVar="confirmSubmitSubmitCAUW2" global="false" showEffect="fade"
+                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2016}">
+        <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                         actionListener="#{headerController.onSubmitCA()}"
+                         process="@this" oncomplete="confirmSubmitSubmitCAUW2.hide()"/>
+        <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitCAUW2.hide()"
+                         styleClass="ui-confirmdialog-no"/>
+    </p:confirmDialog>
+
     <!-- Submit to BDM ( submit from ABDM ) -->
     <p:commandButton id="btnSubmitCaseToBDM_ABDM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2023}"

@@ -98,13 +98,17 @@ public class NCBInfoControl extends BusinessControl {
             if(item.getAccountType() != null && item.getAccountType().getWcFlag() == 1){
                 loanCredit = loanCredit.add(item.getLimit());
             }
-            if(item.getWcFlag() == RadioValue.YES.value()){
+            if(item.getAccountType() != null && item.getAccountType().getWcFlag() == 1 &&
+                    item.getWcFlag() == RadioValue.YES.value()){
                 loanCreditWC = loanCreditWC.add(item.getOutstanding());
             }
-            if(item.getAccountType() != null && item.getAccountType().getWcFlag() == 1 && item.getAccountTMBFlag() == RadioValue.YES.value()){
+            if(item.getAccountType() != null && item.getAccountType().getWcFlag() == 1 &&
+                    item.getAccountTMBFlag() == RadioValue.YES.value()){
                 loanCreditTMB = loanCreditTMB.add(item.getOutstanding());
             }
-            if(item.getAccountTMBFlag() == RadioValue.YES.value() && item.getWcFlag() == RadioValue.YES.value()){
+            if(item.getAccountType() != null && item.getAccountType().getWcFlag() == 1 &&
+                    item.getAccountTMBFlag() == RadioValue.YES.value() &&
+                    item.getWcFlag() == RadioValue.YES.value()){
                 loanCreditWCTMB = loanCreditWCTMB.add(item.getLimit());
             }
         }

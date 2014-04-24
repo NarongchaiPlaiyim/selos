@@ -663,28 +663,66 @@ public class HeaderController implements Serializable {
     public void onCancelCA(){
         fullApplicationControl.getUserList(user);
     }
-   
 
-    public void onSubmitCA(){ //From UW2
-        log.debug("onSubmitCA ::: starting...");
+    public void onSubmitCA(){ //Submit From UW2
+        log.debug("onSubmitCA begin");
         boolean complete = false;
         try{
             HttpSession session = FacesUtil.getSession(true);
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             String queueName = session.getAttribute("queueName").toString();
-            fullApplicationControl.submitCA(queueName, workCaseId);
-            messageHeader = "Information.";
-            message = "Submit case success.";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-            complete = true;
-            log.debug("onSubmitCA ::: success.");
+            User user = (User) session.getAttribute("user");
+
+            if(selectedUW2User != null && !selectedUW2User.equals("")){
+                List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
+
+                if(returnInfoViews!=null && returnInfoViews.size()>0){
+                    messageHeader = "Information.";
+                    message = "Submit case fail. Please check return information before submit again.";
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+                    log.error("onSubmitCA ::: fail.");
+                } else {
+                    //check if have return not accept
+                    List<ReturnInfoView> returnInfoViewsNoAccept = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
+                    if(returnInfoViewsNoAccept!=null && returnInfoViewsNoAccept.size()>0){
+                        messageHeader = "Information.";
+                        message = "Submit case fail. Please check return information before submit again.";
+                        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+                        log.error("onSubmitCA ::: fail.");
+                    } else {
+                        returnControl.saveReturnHistory(workCaseId,user);
+
+                        fullApplicationControl.submitCA(queueName, workCaseId);
+
+                        messageHeader = "Information.";
+                        message = "Submit case success";
+                        RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+
+                        log.debug("onSubmitCA ::: success.");
+                    }
+                }
+                messageHeader = "Information.";
+                message = "Submit case success.";
+                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+                complete = true;
+                log.debug("onSubmitCA ::: success.");
+            } else {
+                messageHeader = "Exception.";
+                message = "Submit case failed, cause : UW2 was not selected";
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                complete = false;
+                log.error("onSubmitCA ::: submit failed (UW2 not selected)");
+            }
         } catch (Exception ex){
-            messageHeader = "Exception.";
-            message = "Submit case failed, cause : " + Util.getMessageException(ex);
+            messageHeader = "Information.";
+            message = "Submit case fail, cause : " + Util.getMessageException(ex);
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-            complete = false;
+
             log.error("onSubmitCA ::: exception occurred : ", ex);
         }
+
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
