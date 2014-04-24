@@ -2555,7 +2555,8 @@
                                                          action="#{custInfoSumIndi.onSaveFromJuristic()}" binding="#{saveCustomer2}"
                                                          rendered="#{custInfoSumIndi.fromJuristic}"
                                                          disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
-                                        <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel" styleClass="small" process="@form"
+                                        <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel"
+                                                         styleClass="small" process="@form" update=":msgBoxSystemMessagePanel"
                                                          actionListener="#{custInfoSumIndi.onCancelForm(false)}"
                                                          rendered="#{not custInfoSumIndi.fromJuristic}"/>
                                         <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" id="btnCancel2"

@@ -1166,7 +1166,9 @@
                                                      process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
                                                      actionListener="#{custInfoSumJuris.onSave}" binding="#{saveCustomer}"
                                                      disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
-                                    <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel" styleClass="small" process="@form" update=":frmMain"
+                                    <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel"
+                                                     styleClass="small" process="@form"
+                                                     update=":msgBoxSystemMessagePanel"
                                                      actionListener="#{custInfoSumJuris.onCancelForm(false)}"/>
                                 </td>
                             </tr>
