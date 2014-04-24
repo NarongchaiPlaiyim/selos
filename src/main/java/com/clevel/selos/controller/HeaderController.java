@@ -578,7 +578,7 @@ public class HeaderController implements Serializable {
             RequestContext.getCurrentInstance().execute("submitUWDlg.show()");
         } catch (Exception ex){
             messageHeader = "Exception.";
-            message = "Exception is occured, cause : "+ex.getMessage();
+            message = "Exception is occurred, cause : "+ex.getMessage();
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
     }
@@ -739,6 +739,31 @@ public class HeaderController implements Serializable {
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
     }*/
+
+    public void onOpenReturnAADMByUW2(){
+        log.debug("onOpenReturnAADCommittee ( return to AAD Admin from UW2 [ Open dialog ] )");
+        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
+        returnRemark = "";
+
+        RequestContext.getCurrentInstance().execute("returnAADM_UW2Dlg.show()");
+    }
+
+    public void onReturnAADMByUW2(){
+        log.debug("onReturnAADCommittee ( return to AAD Committee from UW2 )");
+        HttpSession session = FacesUtil.getSession(true);
+        String queueName = Util.parseString(session.getAttribute("queueName"), "");
+        String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+
+        try {
+
+            messageHeader = "Information.";
+            message = "Return case success.";
+        } catch (Exception ex) {
+            log.error("Exception while return to aad committee : ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+        }
+    }
 
     public void onOpenSubmitAADCommittee(){
         log.debug("onOpenSubmitAADCommittee ( submit to AAD committee )");

@@ -9,8 +9,6 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
-import java.beans.XMLEncoder;
-import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.net.URL;
 
@@ -105,12 +103,6 @@ public class EndPoint implements Serializable {
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, prescreenAddress);
             logger.debug("callPrescreenUnderwritingRulesService() Calling...{}", request);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            XMLEncoder xmlEncoder = new XMLEncoder(baos);
-            xmlEncoder.writeObject(request);
-            xmlEncoder.close();
-            String xml = baos.toString();
-            logger.debug("callPrescreenUnderwritingRulesService() Calling... XML {}", xml);
             response = port.executeDecisionService(request);
             logger.debug("callPrescreenUnderwritingRulesService() Done...{}", response);
             return response;
@@ -176,13 +168,6 @@ public class EndPoint implements Serializable {
             ((BindingProvider) port).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,timeout);
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, interestAddress);
             logger.debug("callStandardPricingInterestRulesService() Calling...{}", request);
-            logger.debug("callStandardPricingInterestRulesService() Calling...{}", request);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            XMLEncoder xmlEncoder = new XMLEncoder(baos);
-            xmlEncoder.writeObject(request);
-            xmlEncoder.close();
-            String xml = baos.toString();
-            logger.debug("callPrescreenUnderwritingRulesService() Calling... XML {}", xml);
             response = port.executeDecisionService(request);
             logger.debug("callStandardPricingFeeRulesService() Done...{}", response);
             return response;

@@ -149,6 +149,7 @@ public class FullApplicationControl extends BusinessControl {
 
         //TODO: get total com and retail
 
+
         bpmExecutor.submitZM(workCaseId, queueName, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, ActionCode.SUBMIT_CA.getVal());
 
         //Insert Approval History
@@ -656,6 +657,10 @@ public class FullApplicationControl extends BusinessControl {
 
     public void submitToUWFromCommittee(String queueName, String wobNumber) throws Exception{
         bpmExecutor.submitUW2FromCommittee(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
+    }
+
+    public void returnAADCommittee(String queueName, String wobNumber, String reason, String remark) throws Exception {
+        bpmExecutor.returnCase(queueName, wobNumber, remark, reason, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
     }
 
     public String getAADCommittee(long workCaseId, long workCasePreScreenId){
