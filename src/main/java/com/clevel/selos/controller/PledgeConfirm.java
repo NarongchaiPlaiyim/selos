@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -17,10 +18,13 @@ import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.businesscontrol.PledgeConfirmControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.model.view.PledgeInfoView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -41,6 +45,7 @@ public class PledgeConfirm implements Serializable {
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
+	private long stageId = -1;
 	
 	private BasicInfoView basicInfoView;
 	private Date lastUpdateDate;
@@ -63,6 +68,9 @@ public class PledgeConfirm implements Serializable {
 		else
 			return basicInfoView.getApproveType();
 	}
+	public void setApproveType(ApproveType type) {
+		//DO NOTHING
+	}
 	public List<PledgeInfoView> getPledges() {
 		return pledges;
 	}
@@ -77,7 +85,9 @@ public class PledgeConfirm implements Serializable {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+			stageId = Util.parseLong(session.getAttribute("stageId"), -1);
 		}
+		_loadFieldControl();
 		_loadInitData();
 	}
 	
@@ -112,6 +122,10 @@ public class PledgeConfirm implements Serializable {
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
+	public void onCancelPledgeConfirm() {
+		_loadInitData();
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
 	
 	/*
 	 * Private method
@@ -142,6 +156,32 @@ public class PledgeConfirm implements Serializable {
 				
 			}
 		}
+	}
+	/*
+	 * Mandate and read-only
+	 */
+	@Inject MandatoryFieldsControl mandatoryFieldsControl;
+	private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
+	private void _loadFieldControl() {
+		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.PledgeConfirm);
+		fieldMap.clear();
+		for (FieldsControlView field : fields) {
+			fieldMap.put(field.getFieldName(), field);
+		}
+	}
+	public String mandate(String name) {
+		boolean isMandate = FieldsControlView.DEFAULT_MANDATE;
+		FieldsControlView field = fieldMap.get(name);
+		if (field != null)
+			isMandate = field.isMandate();
+		return isMandate ? " *" : "";
+	}
+	
+	public boolean isDisabled(String name) {
+		FieldsControlView field = fieldMap.get(name);
+		if (field == null)
+			return FieldsControlView.DEFAULT_READONLY;
+		return field.isReadOnly();
 	}
 }
 

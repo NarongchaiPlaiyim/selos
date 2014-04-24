@@ -121,6 +121,8 @@ public class GenPDF extends ReportService implements Serializable {
     public void onPrintExsumReport() throws Exception {
         log.debug("onPrintExsumReport");
 
+        pdfExecutiveSummary.init();
+
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
         map.put("borrower", pdfExecutiveSummary.fillBorrowerRelatedProfile());
@@ -143,6 +145,8 @@ public class GenPDF extends ReportService implements Serializable {
 
     public void onPrintDecisionReport() throws Exception {
         log.debug("onPrintDecisionReport");
+
+        pdfDecision.init();
 
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
@@ -175,6 +179,9 @@ public class GenPDF extends ReportService implements Serializable {
     }
 
     public void onPrintRejectLetter() throws Exception {
+
+        pdfReject_letter.init();
+
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
         map.put("fillAllNameReject",pdfReject_letter.fillAllNameReject());
@@ -183,6 +190,9 @@ public class GenPDF extends ReportService implements Serializable {
         generatePDF(pathRejectLetter,map,reportView.getNameReportRejectLetter());
     }
     public void onPrintAppraisal() throws Exception {
+
+        pdfAppraisalAppointment.init();
+
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
         map.put("fillAppraisalDetailReport",pdfAppraisalAppointment.fillAppraisalDetailReport());

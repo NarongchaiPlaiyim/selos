@@ -14,7 +14,6 @@ import com.clevel.selos.integration.brms.model.response.PricingInterest;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.ApprovalHistory;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
@@ -34,7 +33,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -77,6 +75,10 @@ public class Decision extends BaseController {
     private ProductControl productControl;
     @Inject
     private BRMSControl brmsControl;
+    @Inject
+    private FullApplicationControl fullApplicationControl;
+    @Inject
+    private StepStatusControl stepStatusControl;
 
     //DAO
     @Inject
@@ -153,7 +155,9 @@ public class Decision extends BaseController {
     // User Role
     private boolean roleBDM;
     private boolean roleZM_RGM;
-    private boolean roleUW;    
+    private boolean roleUW;
+    private int roleId;
+    private RoleValue roleValue;
 
     // Mode
     enum ModeForButton {
@@ -255,50 +259,47 @@ public class Decision extends BaseController {
     }
 
     private void initial(){
+        //Initial value for onCreation
+        HttpSession session = FacesUtil.getSession(true);
+        workCaseId = getCurrentWorkCaseId(session);
+        stepId = getCurrentStep(session);
+
+        //Set role for UI
+        roleId = decisionControl.getUserRoleId();
+        if (RoleValue.ABDM.id() == roleId || RoleValue.BDM.id() == roleId) {
+            roleBDM = true;
+        } else if (RoleValue.UW.id() == roleId) {
+            roleUW = true;
+        } else if (RoleValue.ZM.id() == roleId || RoleValue.RGM.id() == roleId) {
+            roleZM_RGM = true;
+        }
+
+        if(roleBDM){
+            decisionDialog = false;
+        } else {
+            decisionDialog = true;
+        }
+
+        log.debug("Initial role of user - roleBDM : {}, roleUW : {}, roleZM_RGM : {}, decisionDialog : {}", roleBDM, roleUW, roleZM_RGM, decisionDialog);
 
     }
 
     public void preRender() {
         log.info("preRender ::: setSession ");
         HttpSession session = FacesUtil.getSession(true);
-        if (session.getAttribute("workCaseId") != null) {
-            workCaseId = (Long)session.getAttribute("workCaseId");
-
-            if (session.getAttribute("stepId") != null) {
-                stepId = (Long)session.getAttribute("stepId");
-            }
-
-            // set role
-            int roleId = decisionControl.getUserRoleId();
-            if (RoleValue.ABDM.id() == roleId || RoleValue.BDM.id() == roleId) {
-                roleBDM = true;
-            }
-            else if (RoleValue.UW.id() == roleId) {
-                roleUW = true;
-            }
-            else if (RoleValue.ZM.id() == roleId || RoleValue.RGM.id() == roleId) {
-                roleZM_RGM = true;
-            }
-
-            if(!roleBDM){
-                decisionDialog = true;
-            }
-
+        if(checkSession(session)) {
+            //Check valid Step
+            log.debug("check valid step.");
         } else {
-            //TODO return to inbox
-            log.info("preRender ::: workCaseId is null.");
-            try {
-                FacesUtil.redirect("/site/inbox.jsf");
-                return;
-            } catch (Exception e) {
-                log.info("Exception :: {}", e);
-            }
+            log.debug("check session failed. redirect to inbox.");
+            FacesUtil.redirect("/site/inbox.jsf");
+            return;
         }
     }
 
     @PostConstruct
     public void onCreation() {
-        preRender();
+        initial();
 
         decisionView = decisionControl.getDecisionView(workCaseId);
         if (decisionView.getId() == 0) {
@@ -393,16 +394,15 @@ public class Decision extends BaseController {
         decisionFollowConditionView = new DecisionFollowConditionView();
         followConditionViewList = followConditionTransform.transformToView(followConditionDAO.findAll());
 
-        // ========== Approval History ========== //
-        List<ApprovalHistory> approvalHistories = approvalHistoryDAO.findByWorkCase(workCaseId, false);
-        if (approvalHistories != null && !approvalHistories.isEmpty()) {
-            approvalHistoryView = approvalHistoryTransform.transformToView(approvalHistories.get(0));
-        } else {
-            approvalHistoryView = decisionControl.getApprovalHistoryView(stepId);
-        }
+        // ========== Check Request Pricing =========== //
+        requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
 
-        // ========== Approval History Pricing ========== //
-        approvalHistoryPricingView = new ApprovalHistoryView();
+        // ========== Approval History Endorse CA ========== //
+        approvalHistoryView = decisionControl.getCurrentApprovalHistory(workCaseId, ApprovalType.CA_APPROVAL.value(), stepId);
+
+        if(requestPricing){
+            approvalHistoryPricingView = decisionControl.getCurrentApprovalHistory(workCaseId, ApprovalType.PRICING_APPROVAL.value(), stepId);
+        }
 
         hashSeqCredit = new HashMap<Integer, Integer>();
     }
@@ -1282,7 +1282,7 @@ public class Decision extends BaseController {
 
         try {
 
-            if (roleUW) {
+            /*if (roleUW) {
                 // Delete List
                 decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
                 // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
@@ -1291,13 +1291,41 @@ public class Decision extends BaseController {
                 decisionControl.calculateTotalApprove(decisionView);
                 // Save Total Approve to Decision
                 decisionControl.saveDecision(decisionView, workCase);
-                // Save Approval History
-                approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
-                // Save Approval History Pricing
-                approvalHistoryPricingView = decisionControl.saveApprovalHistoryPricing(approvalHistoryPricingView, workCase);
 
                 exSummaryControl.calForDecision(workCaseId);
+            }*/
+
+            //Check valid step to Save Approval
+            HttpSession session = FacesUtil.getSession(true);
+            long stepId = 0;
+            long statusId = 0;
+            if (!Util.isNull(session.getAttribute("stepId"))) {
+                stepId = (Long)session.getAttribute("stepId");
             }
+            if(!Util.isNull(session.getAttribute("statusId"))) {
+                statusId = (Long)session.getAttribute("statusId");
+            }
+            HashMap<String, Integer> stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId);
+
+            if(stepStatusMap != null){
+                if(stepStatusMap.containsKey("Submit CA") || stepStatusMap.containsKey("Submit to UW1")
+                        || stepStatusMap.containsKey("Submit to UW2") || stepStatusMap.containsKey("Submit to ZM")){
+                    if(decisionDialog){
+                        // Save Approval History
+                        if(roleId == RoleValue.ZM.id() || roleId == RoleValue.UW.id()){
+                            approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
+                        }
+                        if(requestPricing){
+                            // Save Approval History Pricing
+                            if(roleId != RoleValue.UW.id()){
+                                approvalHistoryPricingView = decisionControl.saveApprovalHistoryPricing(approvalHistoryPricingView, workCase);
+                            }
+                        }
+                    }
+                }
+            }
+
+            onCreation();
 
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save Decision data success.";
@@ -1306,11 +1334,7 @@ public class Decision extends BaseController {
         catch (Exception e) {
             messageHeader = msg.get("app.messageHeader.error");
             severity = MessageDialogSeverity.ALERT.severity();
-            if (e.getCause() != null) {
-                message = "Save Decision data failed. Cause : " + e.getCause().toString();
-            } else {
-                message = "Save Decision data failed. Cause : " + e.getMessage();
-            }
+            message = "Save Decision data failed. Cause : " + Util.getMessageException(e);
         }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
@@ -2004,5 +2028,21 @@ public class Decision extends BaseController {
 
     public void setDecisionDialog(boolean decisionDialog) {
         this.decisionDialog = decisionDialog;
+    }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public RoleValue getRoleValue() {
+        return roleValue;
+    }
+
+    public void setRoleValue(RoleValue roleValue) {
+        this.roleValue = roleValue;
     }
 }

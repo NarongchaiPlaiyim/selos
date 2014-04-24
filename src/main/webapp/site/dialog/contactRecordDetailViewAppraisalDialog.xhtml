@@ -63,10 +63,12 @@
                     </td>
                     <td>
                         <clv:BECalendar id="nextcalling_datetime" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
+                                        timeOnly=""
                                         value="#{appraisalAppointment.contactRecord.nextCallingDate}"
+                                        readonlyInput="true"
                                         pattern="dd/MM/yyyy"
-                                        defaultdate="#{appraisalAppointment.contactRecord.nextCallingDate}"
-                                        mindate="#{appraisalAppointment.contactRecord.nextCallingDate}"
+                                        defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
+                                        mindate="#{appraisalAppointment.currentDateDDMMYY}"
                                         yearRange="1950:2100">
                             <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                         </clv:BECalendar>
@@ -83,10 +85,13 @@
                     <td>
                         <p:selectOneMenu id='reason' value='#{appraisalAppointment.contactRecord.updReasonId}'
                                          required="true"  requiredMessage="#{msg.get('app.cusaccept.validate.reason')}"
+                                         style="max-width: 270px; min-width: 270px; width: 270px;"
+
                                 >
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                             <f:selectItems value="#{appraisalAppointment.reasons}" var="contactReason"
                                            itemLabel="#{contactReason.description}" itemValue="#{contactReason.id}"
+
                                     />
                         </p:selectOneMenu>
                     </td>
@@ -102,7 +107,9 @@
                         <p:inputTextarea id='remark'
                                          value="#{appraisalAppointment.contactRecord.remark}"
                                          autoResize="false"
-                                         rows="3" cols="40" />
+                                         rows="3" cols="40"
+                                         maxlength="150"
+                                />
                     </td>
                 </tr>
                 <tr>

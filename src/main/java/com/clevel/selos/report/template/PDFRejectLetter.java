@@ -80,7 +80,7 @@ public class PDFRejectLetter implements Serializable {
 
     public List<RejectLetterReport> fillAllNameReject (){
         log.debug("fillAllNameReject. {}");
-        init();
+//        init();
         List<RejectLetterReport> reportList = new ArrayList<RejectLetterReport>();
         StringBuilder stringName = new StringBuilder();
 
@@ -106,12 +106,12 @@ public class PDFRejectLetter implements Serializable {
     }
 
     public RejectLetterReport fillRejectLetter(){
-        init();
+//        init();
         log.debug("fillRejectLetter. {}");
         RejectLetterReport letterReport = new RejectLetterReport();
         String date = Util.createDateTh(new Date());
         log.debug("--date. {}",date);
-        String[] spDate = date.split(" ");
+        String[] spDate = date.split("/");
         int month = Integer.valueOf(spDate[1]);
         String setMonth = null;
         StringBuilder addressTH = null;

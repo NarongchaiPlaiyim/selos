@@ -7,7 +7,7 @@
                      header="Confirm Delete"
                      message="#{msg.get('dialog.delete.confirm.message')}"
                      showEffect="fade" hideEffect="fade"
-                     width="380" height="30"
+                     width="380"
                      severity="alert"
                      closable="false" closeOnEscape="false">
         <h:form id="#{formId}">
@@ -33,11 +33,12 @@
                                  onclick="#{name}.hide()"/>
             </div>
         </h:form>
-
-        <p:blockUI widgetVar="#{id}BlockUI" block="#{id}"
+    </p:confirmDialog>
+    <!-- 
+     <p:blockUI widgetVar="#{id}BlockUI" block="#{id}"
                    trigger=":#{formId}:#{id}OkBtn">
             LOADING<br/>
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>
-    </p:confirmDialog>
+      -->
 </f:view>

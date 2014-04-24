@@ -41,8 +41,8 @@ public class HeaderControl extends BusinessControl {
     }
 
     //TODO:: To review Application Header.
-    public AppHeaderView getHeaderInformation(long stepId, String wobNumber) {
-        log.info("getHeaderInformation ::: StepId : {} , WOBNumber : {}", stepId, wobNumber);
+    public AppHeaderView getHeaderInformation(long stepId, String appNumber) {
+        log.info("getHeaderInformation ::: StepId : {} , appNumber : {}", stepId, appNumber);
         AppHeaderView appHeaderView = new AppHeaderView();
         appHeaderView.setBorrowerHeaderViewList(new ArrayList<AppBorrowerHeaderView>());
         String bdmUserId = "";
@@ -51,7 +51,7 @@ public class HeaderControl extends BusinessControl {
         List<Customer> customerList = new ArrayList<Customer>();
 
         if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {
-            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByWobNumber(wobNumber);
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
             log.info("getHeaderInformation ::: workCasePreScreen : {}", workCasePrescreen);
             if(workCasePrescreen != null){
                 bdmUserId = workCasePrescreen.getCreateBy().getId();
@@ -72,8 +72,8 @@ public class HeaderControl extends BusinessControl {
                     appHeaderView.setProductGroup(prescreen.getProductGroup() != null ? prescreen.getProductGroup().getName() : "");
                 }
             }
-        } else if(stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()){
-            WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByWobNumber(wobNumber);
+        } else if(stepId == StepValue.REQUEST_APPRAISAL_POOL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()){
+            WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
             log.debug("getHeaderInformation ::: workCaseAppraisal : {}", workCaseAppraisal);
 
             //Find workCase or workCasePreScreen
@@ -114,7 +114,7 @@ public class HeaderControl extends BusinessControl {
 
             }
         } else {
-            WorkCase workCase = workCaseDAO.findByWobNumber(wobNumber);
+            WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
 
             bdmUserId = workCase.getCreateBy().getId();
 
@@ -175,5 +175,22 @@ public class HeaderControl extends BusinessControl {
             }
         }
         return appHeaderView;
+    }
+
+    public boolean getRequestAppraisalFlag(long workCaseId, long workCasePreScreenId){
+        boolean requestAppraisal = false;
+        if(workCaseId != 0){
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            if(!Util.isNull(workCase)){
+                requestAppraisal = Util.isTrue(workCase.getRequestAppraisal());
+            }
+        } else if (workCasePreScreenId != 0){
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            if(!Util.isNull(workCasePrescreen)){
+                requestAppraisal = Util.isTrue(workCasePrescreen.getRequestAppraisal());
+            }
+        }
+
+        return requestAppraisal;
     }
 }

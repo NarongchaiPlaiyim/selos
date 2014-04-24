@@ -381,6 +381,9 @@ public class CustomerInfoJuristic implements Serializable {
 
     public void onChangeRelation(){
         referenceList = referenceDAO.findReferenceByFlag(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, relationId, 1, 0);
+        Relation relation = new Relation();
+        relation.setId(relationId);
+        customerInfoView.setRelation(relation);
     }
 
     public void onChangeProvinceForm1() {
@@ -499,6 +502,15 @@ public class CustomerInfoJuristic implements Serializable {
                         customerInfoView.setCitizenCountry(country);
                     }
 
+                    //set default source of income country
+                    if(customerInfoView.getCountryIncome() != null){
+                        customerInfoView.getCountryIncome().setId(211);
+                    } else {
+                        Country country = new Country();
+                        country.setId(211);
+                        customerInfoView.setCountryIncome(country);
+                    }
+
                     if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
                         if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
                             customerInfoView.getWorkAddress().setAddressTypeFlag(1);
@@ -596,6 +608,15 @@ public class CustomerInfoJuristic implements Serializable {
                             customerInfoView.setCitizenCountry(country);
                         }
 
+                        //set default source of income country
+                        if(customerInfoView.getCountryIncome() != null){
+                            customerInfoView.getCountryIncome().setId(211);
+                        } else {
+                            Country country = new Country();
+                            country.setId(211);
+                            customerInfoView.setCountryIncome(country);
+                        }
+
                         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
                             if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
                                 customerInfoView.getWorkAddress().setAddressTypeFlag(1);
@@ -643,12 +664,15 @@ public class CustomerInfoJuristic implements Serializable {
     }
 
     public void onChangeReference(){
-       reqRelation = true;
-       reqReference = true;
-       reqDocType = true;
-       reqRegId = true;
-       reqTitTh = true;
-       reqStNameTh = true;
+        reqRelation = true;
+        reqReference = true;
+        reqDocType = true;
+        reqRegId = true;
+        reqTitTh = true;
+        reqStNameTh = true;
+        Reference reference = new Reference();
+        reference.setId(referenceId);
+        customerInfoView.setReference(reference);
     }
 
     public void onSave(){
@@ -702,7 +726,7 @@ public class CustomerInfoJuristic implements Serializable {
             messageHeader = "Information.";
             message = "Save Customer Juristic Data Success.";
             severity = "info";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxSaveMessageDlg.show()");
         } catch(Exception ex){
             log.error("Exception :: {}",ex);
             messageHeader = "Error.";
@@ -717,10 +741,12 @@ public class CustomerInfoJuristic implements Serializable {
     }
 
     public void onChangeTitleTh(){
+        customerInfoView.setTitleEn(new Title());
         customerInfoView.getTitleEn().setId(customerInfoView.getTitleTh().getId());
     }
 
     public void onChangeTitleEn(){
+        customerInfoView.setTitleTh(new Title());
         customerInfoView.getTitleTh().setId(customerInfoView.getTitleEn().getId());
     }
 
@@ -764,6 +790,16 @@ public class CustomerInfoJuristic implements Serializable {
         return DateTime.now().toDate();
     }
 
+    public String onCancelForm(boolean isRedirect){
+        if(isRedirect){
+            return "customerInfoSummary?faces-redirect=true";
+        } else {
+            RequestContext.getCurrentInstance().execute("msgBoxCancelDlg.show()");
+            return "";
+        }
+//        onCreation();
+//        onLoadComplete();
+    }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////// Get Set ////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

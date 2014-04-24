@@ -5,6 +5,7 @@ import com.clevel.selos.integration.NCB;
 import com.clevel.selos.model.DocMandateType;
 import com.clevel.selos.model.db.working.MandateDoc;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -35,7 +36,8 @@ public class MandateDocDAO extends GenericDAO<MandateDoc, Long>{
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.add(Restrictions.eq("role.id", roleId));
         criteria.add(Restrictions.eq("mandateType", DocMandateType.MANDATE.value()));
-        criteria.add(Restrictions.eq("isCompleted", 0));
+        criteria.add(Restrictions.eq("isCompleted", 2));
+        criteria.addOrder(Order.asc("ecmDocType"));
         List<MandateDoc> mandateDocList = criteria.list();
         return mandateDocList;
 
@@ -48,7 +50,6 @@ public class MandateDocDAO extends GenericDAO<MandateDoc, Long>{
         criteria.add(Restrictions.eq("role.id", roleId));
         List<MandateDoc> mandateDocList = criteria.list();
         return mandateDocList;
-
     }
 
     public List<MandateDoc> findByWorkCasePreScreenIdAndRole(long workCasePreScreenId, int roleId) {
@@ -58,6 +59,5 @@ public class MandateDocDAO extends GenericDAO<MandateDoc, Long>{
         criteria.add(Restrictions.eq("role.id", roleId));
         List<MandateDoc> mandateDocList = criteria.list();
         return mandateDocList;
-
     }
 }

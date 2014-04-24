@@ -1,7 +1,7 @@
 package com.clevel.selos.model;
 
 public enum UserSysParameterKey {
-
+    STATIC_EMPTY("_EMPTY"),
     BRMS_ACCOUNT_ACTIVE_FLAG_CARDLINK_CODE("brms.tmb.account.active.flag.cardlink.code"),
     BRMS_ACCOUNT_ACTIVE_FLAG_CARDLINK_BLOCKCODE("brms.tmb.account.active.flag.ds.cardlink.blockcode"),
     BRMS_ACCOUNT_ACTIVE_FLAG_ALS_CODE("brms.tmb.account.active.flag.als.code"),
@@ -18,8 +18,12 @@ public enum UserSysParameterKey {
     BRMS_ACCOUNT_ACTIVE_FLAG_OPIC_CODE("brms.tmb.account.active.flag.opic.code"),
     BRMS_ACCOUNT_ACTIVE_FLAG_OPIC_STATUS("brms.tmb.account.active.flag.opic.status");
 
-    private String key;
+    private String key = null;
     private UserSysParameterKey(String key){
         this.key = key;
+    }
+
+    public String key(){
+        return this.key;
     }
 }

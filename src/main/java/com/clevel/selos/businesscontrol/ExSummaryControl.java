@@ -282,7 +282,7 @@ public class ExSummaryControl extends BusinessControl {
         ExSumCharacteristicView exSumCharacteristicView = new ExSumCharacteristicView();
         DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
         if(dbr != null && dbr.getId() != 0){
-            exSumCharacteristicView.setCurrentDBR(dbr.getCurrentDBR());
+            exSumCharacteristicView.setCurrentDBR(dbr.getDbrBeforeRequest());
             exSumCharacteristicView.setFinalDBR(dbr.getFinalDBR());
         }
 
@@ -345,9 +345,9 @@ public class ExSummaryControl extends BusinessControl {
                             if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
                                 tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
                             } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
-                                tmpCoreAsset = Util.add(tmpCashColl,nch.getAppraisalValue());
+                                tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
                             } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
-                                tmpNonCore = Util.add(tmpCashColl,nch.getAppraisalValue());
+                                tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
                             }
                         }
                     }
@@ -377,7 +377,7 @@ public class ExSummaryControl extends BusinessControl {
         if(newCreditFacilityView != null){
             existingSMELimit = newCreditFacilityView.getExistingSMELimit();
         }
-        exSumCollateralView.setPercentLTV(Util.divide(Util.add(exSumCollateralView.getLimitApprove(),existingSMELimit),Util.add(Util.add(tmpCashColl,tmpCoreAsset),tmpNonCore)));
+        exSumCollateralView.setPercentLTV(Util.multiply(Util.divide(Util.add(exSumCollateralView.getLimitApprove(),existingSMELimit),Util.add(Util.add(tmpCashColl,tmpCoreAsset),tmpNonCore)),BigDecimal.valueOf(100)));
 
         exSummaryView.setExSumCollateralView(exSumCollateralView);
 
@@ -535,8 +535,10 @@ public class ExSummaryControl extends BusinessControl {
         //Delete By Tmp DeviateDecision
         if(exSummaryView.getDeleteTmpList() != null && exSummaryView.getDeleteTmpList().size() > 0){
             for(Long tmpId : exSummaryView.getDeleteTmpList()){
-                UWRuleResultDetail uwRuleResultDetail = uwRuleResultDetailDAO.findById(tmpId);
-                uwRuleResultDetailDAO.delete(uwRuleResultDetail);
+                if(tmpId != null && tmpId != 0){
+                    UWRuleResultDetail uwRuleResultDetail = uwRuleResultDetailDAO.findById(tmpId);
+                    uwRuleResultDetailDAO.delete(uwRuleResultDetail);
+                }
             }
         }
         //Save Deviate
@@ -578,7 +580,6 @@ public class ExSummaryControl extends BusinessControl {
         calIncomeBorrowerCharacteristic(workCaseId);
         calActualWCBorrowerCharacteristic(workCaseId);
         calGroupExposureBorrowerCharacteristic(workCaseId);
-        calAppraisalValue(workCaseId);
     }
 
     public void calForBankStmtSummary(long workCaseId){
@@ -971,48 +972,6 @@ public class ExSummaryControl extends BusinessControl {
         }
 //        exSummary.setLastReviewDate();
 //        exSummary.setNextReviewDate();
-
-        exSummaryDAO.persist(exSummary);
-    }
-
-    public void calAppraisalValue(long workCaseId){ //todo: decision pls call me !? or other !?
-        BigDecimal cashColl = BigDecimal.ZERO;
-        BigDecimal coreColl = BigDecimal.ZERO;
-        BigDecimal noneCoreColl = BigDecimal.ZERO;
-        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-        if(newCreditFacility != null && newCreditFacility.getNewCollateralDetailList() != null && newCreditFacility.getNewCollateralDetailList().size() > 0){
-            for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
-                if (newCollateral.getProposeType() != null && newCollateral.getProposeType().equals("A")){
-                    if(newCollateral.getNewCollateralHeadList() != null && newCollateral.getNewCollateralHeadList().size() > 0){
-                        for (NewCollateralHead newCollateralHead : newCollateral.getNewCollateralHeadList()){
-                            //todo:check this !? or not
-//                            if (newCollateralHead.getProposeType() != null && newCollateralHead.getProposeType().equals("A")){
-                                if(newCollateralHead.getPotential().getId() == PotentialCollateralValue.CASH_COLLATERAL.id()){
-                                    cashColl = Util.add(cashColl,newCollateralHead.getAppraisalValue());
-                                } else if(newCollateralHead.getPotential().getId() == PotentialCollateralValue.CORE_ASSET.id()){
-                                    coreColl = Util.add(coreColl,newCollateralHead.getAppraisalValue());
-                                } else if(newCollateralHead.getPotential().getId() == PotentialCollateralValue.NONE_CORE_ASSET.id()){
-                                    noneCoreColl = Util.add(noneCoreColl,newCollateralHead.getAppraisalValue());
-                                }
-//                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
-        if(exSummary == null){
-            exSummary = new ExSummary();
-            WorkCase workCase = new WorkCase();
-            workCase.setId(workCaseId);
-            exSummary.setWorkCase(workCase);
-        }
-        exSummary.setCashCollateralValue(cashColl);
-        exSummary.setCoreAssetValue(coreColl);
-        exSummary.setNoneCoreAssetValue(noneCoreColl);
-//        exSummary.setLimitApprove();
-//        exSummary.setPercentLTV();
 
         exSummaryDAO.persist(exSummary);
     }

@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
@@ -22,11 +22,14 @@ import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.AccountInfoControl;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.RequestAccountType;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.AccountInfoSummaryView;
 import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.model.view.OpenAccountCreditView;
 import com.clevel.selos.model.view.OpenAccountFullView;
 import com.clevel.selos.model.view.OpenAccountNameView;
@@ -54,6 +57,7 @@ public class AccountInfo implements Serializable {
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
+	private long stageId = -1;
 	private BasicInfoView basicInfoView;
 	private AccountInfoSummaryView summaryView;
 	private boolean addDialog = false;
@@ -93,6 +97,9 @@ public class AccountInfo implements Serializable {
 			return ApproveType.NA;
 		else
 			return basicInfoView.getApproveType();
+	}
+	public void setApproveType(ApproveType type) {
+		//DO NOTHING
 	}
 	public List<SelectItem> getBranches() {
 		return branches;
@@ -150,9 +157,11 @@ public class AccountInfo implements Serializable {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+			stageId = Util.parseLong(session.getAttribute("stageId"), -1);
 		}
 		accountInfoControl.initialOpenAccount(workCaseId);
 		
+		_loadFieldControl();
 		_loadDropdown();
 		_loadInitData();
 	}
@@ -163,8 +172,7 @@ public class AccountInfo implements Serializable {
 		
 		String redirectPage = null;
 		if (workCaseId > 0) {
-			//TODO Validate step 
-			if (stepId <= 0) {
+			if (stepId <= 0 || stageId != 301) {
 				redirectPage = "/site/inbox.jsf";
 			} else {
 				return;
@@ -287,6 +295,10 @@ public class AccountInfo implements Serializable {
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
+	public void onCancelAccountInformation() {
+		_loadInitData();
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
 	
 	/*
 	 * Private method
@@ -315,6 +327,9 @@ public class AccountInfo implements Serializable {
 	private boolean _validateOpenAccount() {
 		if (openAccount == null)
 			return false;
+		return true;
+		/*
+		 * Disable validation due to requirement to validate before submit only
 		boolean isError = false;
 		FacesContext context = FacesContext.getCurrentInstance();
 		
@@ -362,6 +377,7 @@ public class AccountInfo implements Serializable {
 			isError = true;
 		}
 		return !isError;
+		*/
 	}
 	private void _calculateDisplayField() {
 		if (openAccount == null)
@@ -430,4 +446,51 @@ public class AccountInfo implements Serializable {
 			openAccount.setProductTypeId(0);
 	}
 	
+	 /*
+	 * Mandate and read-only
+	 */
+	@Inject MandatoryFieldsControl mandatoryFieldsControl;
+	private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
+	private final HashMap<String, FieldsControlView> dialogFieldMap = new HashMap<String, FieldsControlView>();
+	private void _loadFieldControl() {
+		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.AccountInfo);
+		List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.AddAccountInfoDialog);
+		
+		fieldMap.clear();
+		dialogFieldMap.clear();
+		for (FieldsControlView field : fields) {
+			fieldMap.put(field.getFieldName(), field);
+		}
+		for (FieldsControlView field : dialogFields) {
+			dialogFieldMap.put(field.getFieldName(), field);
+		}
+		
+	}
+	public String mandate(String name) {
+		boolean isMandate = FieldsControlView.DEFAULT_MANDATE;
+		FieldsControlView field = fieldMap.get(name);
+		if (field != null)
+			isMandate = field.isMandate();
+		return isMandate ? " *" : "";
+	}
+	
+	public boolean isDisabled(String name) {
+		FieldsControlView field = fieldMap.get(name);
+		if (field == null)
+			return FieldsControlView.DEFAULT_READONLY;
+		return field.isReadOnly();
+	}
+	public String mandateDialog(String name) {
+		boolean isMandate = FieldsControlView.DEFAULT_MANDATE;
+		FieldsControlView field = dialogFieldMap.get(name);
+		if (field != null)
+			isMandate = field.isMandate();
+		return isMandate ? " *" : "";
+	}
+	public boolean isDialogDisable(String name) {
+		FieldsControlView field = dialogFieldMap.get(name);
+		if (field == null)
+			return FieldsControlView.DEFAULT_READONLY;
+		return field.isReadOnly();
+	}
 }

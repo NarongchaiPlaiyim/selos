@@ -30,12 +30,15 @@ public class MandateFieldTransform extends Transform{
 
         MandateFieldView mandateFieldView = new MandateFieldView();
         mandateFieldView.setId(mandateField.getId());
-        mandateFieldView.setActionView(actionTransform.transformToView(mandateField.getAction()));
         mandateFieldView.setClassName(mandateField.getClassName());
         mandateFieldView.setFieldName(mandateField.getFieldName());
+        mandateFieldView.setFieldDesc(mandateField.getFieldDescription());
         mandateFieldView.setPage(mandateField.getPage());
-        mandateFieldView.setStepView(stepTransform.transformToView(mandateField.getStep()));
-        logger.debug("-- end return mandateFieldView: {}", mandateFieldView);
+        mandateFieldView.setMinValue(mandateField.getMinValue());
+        mandateFieldView.setMaxValue(mandateField.getMaxValue());
+        mandateFieldView.setMatchedValue(mandateField.getMatchedValue());
+        mandateFieldView.setNotMatchedValue(mandateField.getNotMatchedValue());
+        logger.debug("-- end transformToView return mandateFieldView: {}", mandateFieldView);
         return mandateFieldView;
     }
 

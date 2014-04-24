@@ -1,17 +1,27 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.Step;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.ContactRecordDetail;
+import com.clevel.selos.model.db.working.CustomerAcceptance;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
+import com.clevel.selos.model.view.ContactRecordDetailView;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.ContactRecordDetail;
-import com.clevel.selos.model.db.working.CustomerAcceptance;
-import com.clevel.selos.model.view.ContactRecordDetailView;
-
 public class ContactRecordDetailTransform extends Transform  {
     private static final long serialVersionUID = -4310732427668590367L;
+    @Inject
+    @SELOS
+    private Logger log;
 	/*
     @Inject
     @SELOS
@@ -23,6 +33,7 @@ public class ContactRecordDetailTransform extends Transform  {
     private List<ContactRecordDetailView> contactRecordDetailViewList;
     private List<ContactRecordDetail> contactRecordDetailList;
     */
+    @Inject
     public ContactRecordDetailTransform() {
 
     }
@@ -83,6 +94,57 @@ public class ContactRecordDetailTransform extends Transform  {
         return contactRecordDetailList;
     }
 */
+
+    public List<ContactRecordDetailView> transformModelToView(final List<ContactRecordDetail> contactRecordDetailList){
+        log.debug("-- transform List<ContactRecordDetailView> to List<ContactRecordDetail>(Size of list is {})", contactRecordDetailList.size());
+        List<ContactRecordDetailView> contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
+        ContactRecordDetailView view = null;
+        for(ContactRecordDetail model : contactRecordDetailList){
+            view = new ContactRecordDetailView();
+            view.setId(model.getId());
+            view.setCallingDate(model.getCallingDate());
+            view.setCallingResult(model.getCallingResult());
+            view.setAcceptResult(model.getAcceptResult());
+            view.setNextCallingDate(model.getNextCallingDate());
+            view.setReason(model.getReason());
+            view.setRemark(model.getRemark());
+            view.setStatus(model.getStatus());
+            view.setCreateBy(model.getCreateBy());
+//            view.setNeedUpdate();
+            view.setUpdReasonId(model.getReason().getId());
+            contactRecordDetailViewList.add(view);
+        }
+        log.debug("-- ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
+        return contactRecordDetailViewList;
+    }
+    public List<ContactRecordDetail> transformToModel(final List<ContactRecordDetailView> contactRecordDetailViewList, final WorkCase workCase, final User user, final WorkCasePrescreen workCasePrescreen, final Step step, final CustomerAcceptance customerAcceptance){
+        log.debug("-- transform List<ContactRecordDetailView> to List<ContactRecordDetail>(Size of list is {})", ""+contactRecordDetailViewList.size());
+        List<ContactRecordDetail> contactRecordDetailList = new ArrayList<ContactRecordDetail>();
+        ContactRecordDetail model = null;
+        for(ContactRecordDetailView view : contactRecordDetailViewList){
+            model = new ContactRecordDetail();
+            model.setCreateDate(DateTime.now().toDate());
+            model.setWorkCase(workCase);
+            model.setWorkCasePrescreen(workCasePrescreen);
+            model.setCreateBy(user);
+            model.setCallingDate(view.getCallingDate());
+            model.setCallingResult(view.getCallingResult());
+            model.setAcceptResult(view.getAcceptResult());
+            model.setNextCallingDate(view.getNextCallingDate());
+            model.setReason(view.getReason());
+            model.setRemark(view.getRemark());
+            model.setStep(step);
+            model.setStatus(view.getStatus());
+            model.setModifyDate(DateTime.now().toDate());
+            model.setModifyBy(user);
+            model.setCustomerAcceptance(customerAcceptance);
+            contactRecordDetailList.add(model);
+        }
+        return contactRecordDetailList;
+    }
+
+
+
     public List<ContactRecordDetailView> transformToView(List<ContactRecordDetail> contactRecordDetailList){
         if (contactRecordDetailList == null || contactRecordDetailList.isEmpty())
         	return Collections.emptyList();

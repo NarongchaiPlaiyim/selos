@@ -11,6 +11,9 @@ import java.util.List;
 @Table(name = "wrk_case_prescreen")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class WorkCasePrescreen extends AbstractWorkCase {
+
+    private static final long serialVersionUID = 2014041200000001L;
+
     @Id
     @SequenceGenerator(name = "SEQ_WRK_CASE_PRESCREEN_ID", sequenceName = "SEQ_WRK_CASE_PRESCREEN_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_CASE_PRESCREEN_ID")

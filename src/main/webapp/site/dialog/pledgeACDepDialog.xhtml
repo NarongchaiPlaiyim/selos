@@ -21,6 +21,7 @@
                 	     onkeydown="return onKeyDownNumber(event)"
                 	     onkeypress="return onKeyPressNumber(event)"
                     	 maxlength="2"
+                    	 readonly="#{pledgeDetail.isDialogDisable('ba.depNumber')}"
                 	     />
                 </td>
             </tr>
@@ -37,6 +38,7 @@
                 		validatorMessage="#{msg.get('app.pledgeDetail.holdAmount.validate')}"
                 		onkeydown="return onKeyDownMoney(event)"
                 	    onkeypress="return onKeyPressMoney(event)"
+                	    readonly="#{pledgeDetail.isDialogDisable('ba.Hold Amount')}"
                 	>
                 		<f:convertNumber pattern="#,##0.00"/>
                 		<f:validateDoubleRange minimum="0"/>
@@ -57,6 +59,7 @@
                          update=":frmMain:pledgeac_tbl,:pledgeACDepDlgFrm,:frmMain:number_of_pledge"
                          oncomplete="handleDialogRequest(xhr, status, args,'p_pledgeACDepDlg')"
                          styleClass="small"
+                         disabled="#{pledgeDetail.isDialogDisable('okButton')}"
                          rendered="#{pledgeDetail.addDialog}"/>
                      <p:commandButton
                          id="updPledgeACDepBtn"
@@ -65,9 +68,11 @@
                          update=":frmMain:pledgeac_tbl,:pledgeACDepDlgFrm,:frmMain:number_of_pledge"
                          oncomplete="handleDialogRequest(xhr, status, args,'p_pledgeACDepDlg')"
                          styleClass="small"
+                         disabled="#{pledgeDetail.isDialogDisable('okButton')}"
                          rendered="#{not pledgeDetail.addDialog}"/>
                     <p:commandButton
                     	type='button' styleClass="small" 
+                    	disabled="#{pledgeDetail.isDialogDisable('cancelButton')}"
                     	value="#{msg.get('app.button.cancel')}" onclick="p_pledgeACDepDlg.hide()"/>
                     
                 </td>

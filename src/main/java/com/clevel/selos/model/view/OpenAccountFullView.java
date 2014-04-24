@@ -47,6 +47,8 @@ public class OpenAccountFullView implements Serializable,Cloneable {
 	}
 
 	public RequestAccountType getRequestAccountType() {
+		if (requestAccountType == null)
+			requestAccountType = RequestAccountType.NA;
 		return requestAccountType;
 	}
 

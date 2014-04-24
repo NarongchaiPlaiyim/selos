@@ -6,7 +6,6 @@ import com.clevel.selos.dao.audit.SecurityActivityDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ManageUserAction;
 import com.clevel.selos.model.ManageUserActive;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.audit.IsaActivity;
@@ -25,9 +24,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
-import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Stateless

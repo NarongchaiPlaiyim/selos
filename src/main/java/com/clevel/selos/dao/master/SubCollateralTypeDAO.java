@@ -39,13 +39,13 @@ public class SubCollateralTypeDAO extends GenericDAO<SubCollateralType, Integer>
         return list;
     }
 
-    public SubCollateralType findByHeadAndSubColDefaultType(CollateralType collateralType) {
+    public List<SubCollateralType> findByHeadAndSubColDefaultType(CollateralType collateralType) {
         log.info("findByHeadAndSubColDefaultType collateralType ::: {})", collateralType);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("collateralType.id", collateralType.getId()));
         criteria.add(Restrictions.eq("defaultType", 1));
-        SubCollateralType subCollateralTypeResult = (SubCollateralType)criteria.uniqueResult();
-        log.info("subCollateralTypeResult :: {}",subCollateralTypeResult.getId());
+        List<SubCollateralType>  subCollateralTypeResult = (List<SubCollateralType>)criteria.list();
+        log.info("subCollateralTypeResult getList :: {}",subCollateralTypeResult.size());
         return subCollateralTypeResult;
     }
 }

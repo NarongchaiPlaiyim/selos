@@ -8,9 +8,7 @@ import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
-import com.clevel.selos.model.db.master.CustomerEntity;
-import com.clevel.selos.model.db.master.PotentialCollateral;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
@@ -88,6 +86,8 @@ public class DecisionControl extends BusinessControl {
     private StepTransform stepTransform;
     @Inject
     private RoleTransform roleTransform;
+    @Inject
+    private UserTransform userTransform;
 
     //Other Business Control
     @Inject
@@ -177,6 +177,7 @@ public class DecisionControl extends BusinessControl {
         log.debug("saveApprovalHistory() workCase: {}", workCase);
         // Set current time for submit
         //approvalHistoryView.setSubmitDate(DateTime.now().toDate());
+        approvalHistoryView.setApprovalType(ApprovalType.CA_APPROVAL.value());
         ApprovalHistory returnApprovalHistory = approvalHistoryDAO.persist(approvalHistoryTransform.transformToModel(approvalHistoryView, workCase));
         return approvalHistoryTransform.transformToView(returnApprovalHistory);
     }
@@ -185,6 +186,7 @@ public class DecisionControl extends BusinessControl {
         log.debug("saveApprovalHistoryPricing() workCase: {}", workCase);
         // Set current time for submit
         //approvalHistoryView.setSubmitDate(DateTime.now().toDate());
+        approvalPricingHistoryView.setApprovalType(ApprovalType.PRICING_APPROVAL.value());
         ApprovalHistory returnApprovalHistory = approvalHistoryDAO.persist(approvalHistoryTransform.transformToModel(approvalPricingHistoryView, workCase));
         return approvalHistoryTransform.transformToView(returnApprovalHistory);
     }
@@ -360,6 +362,24 @@ public class DecisionControl extends BusinessControl {
         decisionView.setApprovalHistoryList(approvalHistoryTransform.transformToView(submittedApprovalHistories));
 
         return decisionView;
+    }
+
+    public ApprovalHistoryView getCurrentApprovalHistory(long workCaseId, int approvalType, long stepId){
+        ApprovalHistoryView approvalHistoryView = new ApprovalHistoryView();
+        ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), approvalType);
+        if(!Util.isNull(approvalHistory)){
+            approvalHistoryView = approvalHistoryTransform.transformToView(approvalHistory);
+        }else{
+            User user = getCurrentUser();
+            Step step = stepDAO.findById(stepId);
+            Role role = user.getRole();
+            approvalHistoryView.setUserView(userTransform.transformToView(user));
+            approvalHistoryView.setStepView(stepTransform.transformToView(step));
+            approvalHistoryView.setRoleView(roleTransform.transformRoleToView(role));
+            approvalHistoryView.setSubmitDate(null);
+        }
+
+        return approvalHistoryView;
     }
 
     public void deleteAllApproveByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList) {

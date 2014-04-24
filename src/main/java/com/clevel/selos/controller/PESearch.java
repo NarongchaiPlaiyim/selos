@@ -666,6 +666,7 @@ public class PESearch implements Serializable
 
         session.setAttribute("stepId", searchViewSelectItem.getStepId());
         session.setAttribute("caseOwner",searchViewSelectItem.getAtuser());
+        session.setAttribute("statusId", Util.parseLong(searchViewSelectItem.getStatuscode(), 0));
 
         if(searchViewSelectItem.getQueuename() == null)
         {
@@ -696,7 +697,7 @@ public class PESearch implements Serializable
 
 
         long selectedStepId = searchViewSelectItem.getStepId();
-        String landingPage = inboxControl.getLandingPage(selectedStepId);
+        String landingPage = inboxControl.getLandingPage(selectedStepId,Util.parseLong(searchViewSelectItem.getStatuscode(), 0));
 
         if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
             FacesUtil.redirect(landingPage);

@@ -57,10 +57,10 @@
                                     <table>
                                         <tr>
                                             <td class="title" style="width:200px;">
-                                                <p:outputLabel value="#{msg.get('app.approveType')}" styleClass="center"/>
+                                                <p:outputLabel value="#{msg.get('app.approveType')}#{mortgageSummary.mandate('approvedType')}" styleClass="center"/>
                                             </td>
                                             <td style="width:200px;">
-                                                <p:selectOneRadio disabled="true" value="#{mortgageSummary.approveType}">
+                                                <p:selectOneRadio disabled="#{mortgageSummary.isDisabled('approvedType')}" value="#{mortgageSummary.approveType}">
                                                 	<f:selectItems value="#{enumGeneralControl.approveTypes}" var="approveType"
                                                 		itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}" 
                                                 		/>
@@ -82,26 +82,26 @@
                         	<tr>
                         		<td class="title" style="width: 180px">
                         			<p:outputLabel  for="loan_contractdate"
-                        				value="#{msg.get('app.mortgageSummary.agreement.loanDate')}" />	
+                        				value="#{msg.get('app.mortgageSummary.agreement.loanDate')}#{mortgageSummary.mandate('loanDate')}" />	
                         		</td>
                         		<td>
                         			<clv:BECalendar id='loan_contractdate' value="#{mortgageSummary.agreementInfoView.loanContractDate}"
                         					pattern="dd/MM/yyyy" showOn="button"
                                        		mindate="#{mortgageSummary.minDate}"
                                        		autocomplete="false" locale="th_TH"
-                                       		required="true" requiredMessage="#{msg.get('app.mortgageSummary.loanDate.validate')}"
+                                       		disabled="#{mortgageSummary.isDisabled('loanDate')}"
                                        		/>
                         		</td>
                         	</tr>
                         	<tr>
                         		<td class="title" >
                         			<p:outputLabel for="signcontract_type" 
-                        				value="#{msg.get('app.mortgageSummary.agreement.signContract')}" />			
+                        				value="#{msg.get('app.mortgageSummary.agreement.signContract')}#{mortgageSummary.mandate('signContract')}" />			
                         		</td>
                         		<td>
              			            <p:selectOneRadio id='signcontract_type' widgetVar="p_signcontract_type"
              			            	value="#{mortgageSummary.agreementInfoView.signingLocation}"
-             			            	required="true" requiredMessage="#{msg.get('app.mortgageSummary.signContract.validate')}"
+             			            	disabled="#{mortgageSummary.isDisabled('signContract')}"
              			            	>
              			            	<p:ajax update="signcontract_loc" 
              			            		listener="#{mortgageSummary.onSelectSignContract()}"
@@ -125,12 +125,12 @@
                         	<tr>
                         		<td class="title" >
                         			<p:outputLabel for="coms_no" 
-                        				value="#{msg.get('app.mortgageSummary.agreement.comsNo')}" />			
+                        				value="#{msg.get('app.mortgageSummary.agreement.comsNo')}#{mortgageSummary.mandate('comsNo')}" />			
                         		</td>
                         		<td>
                         			<p:inputText id='coms_no' styleClass="largest"
                         				value="#{mortgageSummary.agreementInfoView.comsNumber}"
-                        				required="true" requiredMessage="#{msg.get('app.mortgageSummary.comsNo.validate')}"
+                        				readonly="#{mortgageSummary.isDisabled('comsNo')}"
                         				/>
                         		</td>
                         	</tr>
@@ -184,6 +184,7 @@
                            						immediate="true"
                            						partialSubmit="true"
                            						style="margin-right:0px !important"
+                           						disabled="#{mortgageSummary.isDisabled('mortgageSum.actionList')}"
                            						/>
                         				</p:column>
                         			</p:dataTable>
@@ -241,6 +242,7 @@
                            						immediate="true"
                            						partialSubmit="true"
                            						style="margin-right:0px !important"
+                           						disabled="#{mortgageSummary.isDisabled('pledgeSum.actionList')}"
                            						/>
                         				</p:column>
                         			</p:dataTable>
@@ -298,6 +300,7 @@
                            						immediate="true"
                            						partialSubmit="true"
                            						style="margin-right:0px !important"
+                           						disabled="#{mortgageSummary.isDisabled('guarantorSum.actionList')}"
                            						/>
                         				</p:column>
                         			</p:dataTable>
@@ -318,9 +321,12 @@
 										onstart="handleOnStartOpenCfmDlg();"
 										oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveMortgageSummaryDlg);"
 										update=":frmMain:full_main_container,:result_dialog"
+										disabled="#{mortgageSummary.isDisabled('saveButton')}"
 	                                 	 />
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"
+										oncomplete="p_cancelDlg.show()"
+										disabled="#{mortgageSummary.isDisabled('cancelButton')}"
 										/>
 	                             </td>
 	                        </tr>
@@ -345,6 +351,14 @@
 		<ui:param name="formId" value="saveMortgageSummaryFrm"/>
 		<ui:param name="controller" value="#{mortgageSummary}"/>
 		<ui:param name="action" value="onSaveMortgageSummary"/>
+		<ui:param name="update" value=":frmMain:full_main_container"/>
+	</ui:include>
+	<ui:include src="dialog/confirmCancelDlg.xhtml">
+		<ui:param name="id" value="cancelDlg"/>
+		<ui:param name="name" value="p_cancelDlg"/>
+		<ui:param name="formId" value="cancelFrm"/>
+		<ui:param name="controller" value="#{mortgageSummary}"/>
+		<ui:param name="action" value="onCancelMortgageSummary"/>
 		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
 </h:body>

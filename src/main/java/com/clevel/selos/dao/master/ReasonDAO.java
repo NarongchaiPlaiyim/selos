@@ -21,7 +21,7 @@ public class ReasonDAO extends GenericDAO<Reason, Integer> {
     }
 
     @SuppressWarnings("unchecked")
-    private List<Reason> getList(ReasonType reasonType) {
+    public List<Reason> getList(ReasonType reasonType) {
         log.debug("getList. (reasonType: {})", reasonType);
 
         Criteria criteria = createCriteria();

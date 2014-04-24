@@ -146,7 +146,6 @@ public class PESQLInbox implements Serializable
         long wrkCasePreScreenId = 0L;
         long wrkCaseId = 0L;
         long wrkCaseAppraisalId = 0L;
-        long statusId = 0L;
         int stageId = 0;
         int requestAppraisalFlag = 0;
         String queueName = inboxViewSelectItem.getQueuename();
@@ -169,13 +168,11 @@ public class PESQLInbox implements Serializable
                 if(workCasePrescreen != null){
                     wrkCasePreScreenId = workCasePrescreen.getId();
                     requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
-                    statusId = workCasePrescreen.getStatus().getId();
                 }
                 session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
                 session.setAttribute("requestAppraisal", requestAppraisalFlag);
-                session.setAttribute("statusId", statusId);
-                session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
-            } else if (stepId == StepValue.REQUEST_APPRAISAL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Case in Stage Parallel Appraisal
+
+            } else if (stepId == StepValue.REQUEST_APPRAISAL_POOL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Case in Stage Parallel Appraisal
                 WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
                 if(workCase != null){
                     wrkCaseId = workCase.getId();
@@ -191,9 +188,7 @@ public class PESQLInbox implements Serializable
                 }
                 WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
                 if(workCaseAppraisal != null){
-                    statusId = workCaseAppraisal.getStatus().getId();
                     wrkCaseAppraisalId = workCaseAppraisal.getId();
-                    session.setAttribute("statusId", statusId);
                     session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
                 }
             } else {        //For Case in Stage FullApplication
@@ -201,13 +196,13 @@ public class PESQLInbox implements Serializable
                 if(workCase != null){
                     wrkCaseId = workCase.getId();
                     requestAppraisalFlag = workCase.getRequestAppraisal();
-                    statusId = workCase.getStatus().getId();
                 }
                 session.setAttribute("workCaseId", wrkCaseId);
                 session.setAttribute("requestAppraisal", requestAppraisalFlag);
-                session.setAttribute("statusId", statusId);
-                session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
             }
+
+            session.setAttribute("wobNumber", inboxViewSelectItem.getFwobnumber());
+            session.setAttribute("statusId", Util.parseLong(inboxViewSelectItem.getStatuscode(), 0));
 
             if(Util.isNull(inboxViewSelectItem.getFetchType())) {
                 session.setAttribute("fetchType",0);
@@ -230,10 +225,10 @@ public class PESQLInbox implements Serializable
                 session.setAttribute("queueName", queueName);
             }
 
-            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, inboxViewSelectItem.getFwobnumber());
+            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, inboxViewSelectItem.getApplicationno());
             session.setAttribute("appHeaderInfo", appHeaderView);
 
-            String landingPage = inboxControl.getLandingPage(stepId);
+            String landingPage = inboxControl.getLandingPage(stepId,Util.parseLong(inboxViewSelectItem.getStatuscode(), 0));
 
             log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
 
@@ -241,7 +236,8 @@ public class PESQLInbox implements Serializable
                 FacesUtil.redirect(landingPage);
                 return;
             } else {
-                //TODO Show dialog
+                log.debug("onSelectInbox :: LANDING_PAGE_NOT_FOUND");
+                FacesUtil.redirect("/site/inbox.jsf");
             }
 
         } catch (Exception e) {

@@ -15,6 +15,8 @@ public class MortgageSummaryTransform extends Transform {
     	MortgageSummaryView view = new MortgageSummaryView();
     	if (model != null) {
     		view.setId(model.getId());
+    		if (model.getModifyBy() != null)
+    			model.getModifyBy().getDisplayName();
     		view.setModifyBy(model.getModifyBy());
     		view.setModifyDate(model.getModifyDate());
     		view.setConfirmed(model.getConfirmed());
