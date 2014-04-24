@@ -352,6 +352,25 @@
                                  rendered="#{headerController.checkButton('Submit to BDM')}"
                                 >
                 </p:commandButton>
+                <!--Appeal-->
+                <p:commandButton id="btnAppeal" value="Appeal" styleClass="blueButton" title="Appeal"
+                                 rendered="#{headerController.checkButton('Appeal')}"
+                                 disabled="#{appealResubmit.disableAssignButton}"
+                                 process="@this"
+                                 onclick="checkNCBDlg.show()"
+                                 update=":assignCheckerDlgForm">
+                    <p:resetInput target=":assignCheckerDlgForm"/>
+                </p:commandButton>
+
+                <!--Resubmit-->
+                <p:commandButton id="btnResubmit" value="Resubmit" styleClass="blueButton" title="Resubmit"
+                                 rendered="#{headerController.checkButton('Resubmit')}"
+                                 disabled="#{appealResubmit.disableResubmitButton}"
+                                 process="@this"
+                                 onclick="checkNCBDlg.show()"
+                                 update=":assignCheckerDlgForm">
+                    <p:resetInput target=":assignCheckerDlgForm"/>
+                </p:commandButton>
 
             </p:panel>
         </div>

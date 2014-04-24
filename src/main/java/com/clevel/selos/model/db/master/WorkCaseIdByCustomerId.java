@@ -27,6 +27,17 @@ public class WorkCaseIdByCustomerId implements Serializable {
     @Column(name = "workcase_prescreen_id")
     private Integer wrokCasePreScreenId;
 
+    @Column(name = "relation_id")
+    private Integer relationId;
+
+    public Integer getRelationId() {
+        return relationId;
+    }
+
+    public void setRelationId(Integer relationId) {
+        this.relationId = relationId;
+    }
+
     public int getId() {
         return id;
     }

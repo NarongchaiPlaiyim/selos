@@ -5,6 +5,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -74,5 +75,19 @@ public class WorkCasePrescreenDAO extends GenericDAO<WorkCasePrescreen, Long> {
         WorkCasePrescreen workCasePrescreen = (WorkCasePrescreen)criteria.uniqueResult();
 
         return workCasePrescreen;
+    }
+
+    //find number of appeals
+    public Integer getAppealResubmitCount(String refAppNumber, Integer requestType)
+    {
+
+        Criteria criteria = createCriteria();
+
+        criteria.add(Restrictions.eq("refAppNumber",refAppNumber)).add(Restrictions.eq("requestTypeId",requestType));
+
+        Integer caseCount = ((Number)criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
+
+        return caseCount;
+
     }
 }

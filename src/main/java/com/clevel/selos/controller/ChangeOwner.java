@@ -413,7 +413,21 @@ public class ChangeOwner implements Serializable {
 
         }
 
+        checked.clear();
 
+        setChecked(checked);
+
+        selectTeamNameChangeOwner = "";
+
+        setSelectTeamNameChangeOwner("");
+
+        selectUserChangeOwner = "";
+
+        setSelectUserChangeOwner("");
+
+        remark = "";
+
+        setRemark("");
 
     }
 
@@ -502,6 +516,21 @@ public class ChangeOwner implements Serializable {
                 log.info("batchDispatch successful.... ");
                 changOwnerSearchQuery();
             }
+
+            checked.clear();
+            setChecked(checked);
+
+            selectTeamNameChangeOwner = "";
+
+            setSelectTeamNameChangeOwner("");
+
+            selectUserChangeOwner = "";
+
+            setSelectUserChangeOwner("");
+
+            remark = "";
+
+            setRemark("");
 
         }
         catch (Exception e)

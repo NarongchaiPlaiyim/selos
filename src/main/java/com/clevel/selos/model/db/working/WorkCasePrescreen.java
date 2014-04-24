@@ -37,9 +37,20 @@ public class WorkCasePrescreen extends AbstractWorkCase {
     @Column(name = "request_appraisal", columnDefinition = "int default 0")
     private int requestAppraisal;
 
+    /*@Column(name = "request_type_id")
+    private int requestTypeId;*/
+
     public WorkCasePrescreen() {
 
     }
+
+    /*public int getRequestTypeId() {
+        return requestTypeId;
+    }
+
+    public void setRequestTypeId(int requestTypeId) {
+        this.requestTypeId = requestTypeId;
+    }*/
 
     public long getId() {
         return id;

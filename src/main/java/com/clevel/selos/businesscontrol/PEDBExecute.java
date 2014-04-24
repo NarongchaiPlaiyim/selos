@@ -697,6 +697,12 @@ public class PEDBExecute extends BusinessControl
 
         boolean appNumberCriteria=false;
 
+        boolean citizenIdFlag = false;
+
+        boolean firstNameFlag = false;
+
+        boolean lastNameFlag = false;
+
         List totalAppNumberList = new ArrayList();
 
         if(statustype == "" || statustype.equalsIgnoreCase("InprocessCases"))
@@ -776,16 +782,20 @@ public class PEDBExecute extends BusinessControl
 
                     if(flag)
                     {
-                        wherecondition += " AND CurrentUser ='"+userid+"' ";
+                        wherecondition += " AND LOWER(CurrentUser) =LOWER('"+userid+"') ";
                     }
                     else
                     {
 
-                        wherecondition = " where CurrentUser ='"+userid+"' ";
+                        wherecondition = " where LOWER(CurrentUser) =LOWER('"+userid+"') ";
                     }
+
+
+
                     flag = true;
 
                 }
+
                 if(citizenid != null && citizenid.trim().length() >0)
                 {
                     appnumberlistavoidduplicates = new ArrayList<String>();
@@ -805,6 +815,8 @@ public class PEDBExecute extends BusinessControl
                         totalAppNumberList.addAll(appnumberlistavoidduplicates);
                     }
 
+                    citizenIdFlag = true;
+
                 }
                 if(firstname != null && firstname.trim().length() >0)
                 {
@@ -820,10 +832,16 @@ public class PEDBExecute extends BusinessControl
                         appnumberlistavoidduplicates = totalAppNumberList;
                     }
 
+                    else if(citizenIdFlag)
+                    {
+                        return searchViewList;
+                    }
                     else
                     {
                         totalAppNumberList.addAll(appnumberlistavoidduplicates);
                     }
+
+                    firstNameFlag = true;
 
                 }
 
@@ -841,10 +859,17 @@ public class PEDBExecute extends BusinessControl
                         appnumberlistavoidduplicates = totalAppNumberList;
                     }
 
+                    else if(citizenIdFlag || firstNameFlag)
+                    {
+                        return searchViewList;
+                    }
+
                     else
                     {
                         totalAppNumberList.addAll(appnumberlistavoidduplicates);
                     }
+
+                    lastNameFlag = true;
 
                 }
 
@@ -874,6 +899,13 @@ public class PEDBExecute extends BusinessControl
                         }
 
                         log.info("where condition :{}"+wherecondition);
+                    }
+
+                    else if(citizenIdFlag || lastNameFlag || firstNameFlag)
+                    {
+
+                        return searchViewList;
+
                     }
 
                     else
@@ -913,6 +945,14 @@ public class PEDBExecute extends BusinessControl
                             wherecondition = " where AppNumber IN (" +strappnumbers+ ")";
                         }
                     }
+
+                    else if(citizenIdFlag || lastNameFlag || firstNameFlag)
+                    {
+
+                        return searchViewList;
+
+                    }
+
                     else if(!flag)
                     {
                        return searchViewList;
@@ -976,6 +1016,9 @@ public class PEDBExecute extends BusinessControl
 
                     flag = true;
                 }
+
+                boolean userIdFlag = false;
+
                 if(userid != null && userid.trim().length()>0)
                 {
                     log.info("user id is not null in Completedcaes ");
@@ -984,6 +1027,8 @@ public class PEDBExecute extends BusinessControl
                     completedCasesAppNoListByUserId = getApplicationNumbers(userid,null,null,null,0);
 
                     completedCasesAppNoList.addAll(completedCasesAppNoListByUserId);
+
+                    userIdFlag = true;
                 }
                 if(citizenid != null && citizenid.trim().length()>0)
                 {
@@ -996,10 +1041,17 @@ public class PEDBExecute extends BusinessControl
                         completedCasesAppNoList.retainAll(completedCasesAppNoListByCitizenId);
                     }
 
+                    else if(userIdFlag)
+                    {
+                        return searchViewList;
+                    }
+
                     else
                     {
                         completedCasesAppNoList.addAll(completedCasesAppNoListByCitizenId);
                     }
+
+                    citizenIdFlag = true;
 
                 }
                 if(firstname != null && firstname.trim().length()>0)
@@ -1013,10 +1065,17 @@ public class PEDBExecute extends BusinessControl
                         completedCasesAppNoList.retainAll(completedCasesAppNoListByName);
                     }
 
+                    else if(citizenIdFlag || userIdFlag)
+                    {
+                        return searchViewList;
+                    }
+
                     else
                     {
                         completedCasesAppNoList.addAll(completedCasesAppNoListByName);
                     }
+
+                    firstNameFlag = true;
                 }
 
                 if(lastname != null && lastname.trim().length()>0)
@@ -1030,10 +1089,17 @@ public class PEDBExecute extends BusinessControl
                         completedCasesAppNoList.retainAll(completedCasesAppNoListByName);
                     }
 
+                    else if(citizenIdFlag || firstNameFlag || userIdFlag)
+                    {
+                        return searchViewList;
+                    }
+
                     else
                     {
                         completedCasesAppNoList.addAll(completedCasesAppNoListByName);
                     }
+
+                    lastNameFlag = true;
                 }
                 if(status != null && status.trim().length()>0)
                 {
@@ -1067,6 +1133,11 @@ public class PEDBExecute extends BusinessControl
 
                     }
 
+                    else if(citizenIdFlag || firstNameFlag || userIdFlag ||lastNameFlag)
+                    {
+                        return searchViewList;
+                    }
+
                     else
                     {
                         completedCasesAppNoList.clear();
@@ -1077,7 +1148,17 @@ public class PEDBExecute extends BusinessControl
                 }
                 else
                 {
-                    cmpltedwrkcaseitemslist = completedCasesWKItemsDAO.getCompletedCasesWKItems(completedCasesAppNoList,statuscode,date1,date2,date3,date4);
+
+                    if(citizenIdFlag || firstNameFlag || userIdFlag ||lastNameFlag)
+                    {
+                        return searchViewList;
+                    }
+
+                    else
+                    {
+                        cmpltedwrkcaseitemslist = completedCasesWKItemsDAO.getCompletedCasesWKItems(completedCasesAppNoList,statuscode,date1,date2,date3,date4);
+                    }
+
                 }
 
                 //cmpltedwrkcaseitemslist = completedCasesWKItemsDAO.getCompletedCasesWKItems(completedCasesAppNoList,statuscode,date1,date2,date3,date4);
@@ -1118,7 +1199,28 @@ public class PEDBExecute extends BusinessControl
 
                     peInbox.setApplicationno(completedCasesWKItems.getApplicationNo());
 
-                    peInbox.setName("");
+                    if(peInbox.getApplicationno()!=null)
+                    {
+
+                        WorkCase workCase = workCaseDAO.findByAppNumber(peInbox.getApplicationno());
+
+                        String names = "";
+
+                        if(workCase==null)
+                        {
+                            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(peInbox.getApplicationno());
+
+                            names = searchFirstLastNameDAO.getBorrowerNameByWorkCasePrescreenID(workCasePrescreen.getId());
+                        }
+
+                        else
+                        {
+                            names = searchFirstLastNameDAO.getBorrowerNameByWorkCaseID(workCase.getId());
+                        }
+
+                        peInbox.setName(names);
+
+                    }
 
                     if(completedCasesWKItems.getProductgroupid()!=null)
                     {
@@ -1288,10 +1390,36 @@ public class PEDBExecute extends BusinessControl
                 peInbox.setReceiveddate((rs.getObject("ReceivedDate1").toString().trim()));
                 peInbox.setAtuserteam(rs.getString("TeamName"));
                 peInbox.setApplicationno(rs.getString("AppNumber"));
-                peInbox.setName(rs.getString("BorrowerName"));
+                if(peInbox.getApplicationno()!=null)
+                {
+
+                    WorkCase workCase = workCaseDAO.findByAppNumber(peInbox.getApplicationno());
+
+                    String names = "";
+
+                    if(workCase==null)
+                    {
+                        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(peInbox.getApplicationno());
+
+                        names = searchFirstLastNameDAO.getBorrowerNameByWorkCasePrescreenID(workCasePrescreen.getId());
+                    }
+
+                    else
+                    {
+                        names = searchFirstLastNameDAO.getBorrowerNameByWorkCaseID(workCase.getId());
+                    }
+
+                    peInbox.setName(names);
+
+                }
+                //peInbox.setName(rs.getString("BorrowerName"));
                 peInbox.setProductgroup(rs.getString("ProductGroup"));
                 peInbox.setRequestTypeStr(rs.getString("RequestTypeStr"));
-                peInbox.setStepId(Long.parseLong(rs.getString("Step_Code")));
+                if(rs.getString("Step_Code")!=null)
+                {
+                    peInbox.setStepId(Long.parseLong(rs.getString("Step_Code")));
+                }
+
                 peInbox.setStatus(rs.getString("Status"));
 
                 if(rs.getString("PreviousUser") != null)
