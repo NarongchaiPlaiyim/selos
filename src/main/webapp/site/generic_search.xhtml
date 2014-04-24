@@ -64,7 +64,8 @@ function resetter()
 {
     document.getElementById('frmMain:stepNameId').value = '';
     document.getElementById('frmMain:statusNameId').value = '';
-
+    document.getElementById('frmMain:terminateformDate').value = '';
+    document.getElementById('frmMain:terminatetoDate').value = '';
 }
 </script>
 
@@ -93,7 +94,7 @@ function resetter()
             <tr>
                 <td class="title"></td>
                 <td><h:selectOneRadio id="radio"  value="#{peSearch.statusType}" required="true" requiredMessage="Please Select One Radio Button" onchange="resetter();submit();" valueChangeListener="#{statusname.valueChangeMethod1}" >
-                    <f:selectItem id="InprocessCases" itemValue="InprocessCases" itemLabel="Inprocess Cases"/>
+                    <f:selectItem id="InprocessCases" itemValue="InprocessCases" itemLabel="Inprocess Cases"  />
                     <f:selectItem id="CompletedCases" itemValue="CompletedCases" itemLabel="Completed Cases"/>
                     <!--<h:message for="radio" style="color: red;"/>-->
                 </h:selectOneRadio></td>
@@ -189,7 +190,7 @@ function resetter()
                                     value="#{peSearch.date1}"
                                     requiredMessage="Please Enter From Date"
                                     required="#{not empty param['frmMain:userIdId']}"
-                                    readonlyInput="true">
+                                    >
                     </clv:BECalendar>
                 </td>
                 <td class="title">To :</td>
@@ -202,7 +203,7 @@ function resetter()
                                     value="#{peSearch.date2}"
                                     requiredMessage="Please Enter To Date"
                                     required="#{not empty param['frmMain:userIdId']}"
-                                    readonlyInput="true">
+                                    >
                     </clv:BECalendar>
                 </td>
             </tr>
@@ -220,7 +221,7 @@ function resetter()
                                     maxdate="#{peSearch.currentDateDDMMYY}"
                                     pattern="dd/MM/yyyy"
                                     value="#{peSearch.date3}"
-                                    readonlyInput="true"
+
                                     readonly="#{peSearch.statusType eq 'InprocessCases'}" disabled="#{peSearch.statusType eq 'InprocessCases'}">
                     </clv:BECalendar>
                 </td>
@@ -232,7 +233,7 @@ function resetter()
                                     maxdate="#{peSearch.currentDateDDMMYY}"
                                     pattern="dd/MM/yyyy"
                                     value="#{peSearch.date4}"
-                                    readonlyInput="true"
+
                                     readonly="#{peSearch.statusType eq 'InprocessCases'}" disabled="#{peSearch.statusType eq 'InprocessCases'}">
                     </clv:BECalendar>
                 </td>
@@ -244,7 +245,13 @@ function resetter()
                 <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
             </tr>
             <tr>
-                <td class="title" ></td> <td class="title" style="width: 350px;"></td><td class="title"></td><td class="title"> <h:commandButton id="name1"  value="Search" ajax="false" styleClass="medium" action="#{peSearch.search()}">  </h:commandButton></td>
+                <td class="title" ></td> <td class="title" style="width: 350px;"></td>
+                <td class="title">
+                    <p:commandButton value="Reset" update="pnl_maincontainer" process="@this"  >
+                        <p:resetInput target="pnl_maincontainer" />
+                    </p:commandButton>
+                </td>
+                <td class="title"> <p:commandButton id="name1"  value="Search" ajax="false" styleClass="medium" action="#{peSearch.search()}">  </p:commandButton></td>
             </tr>
 
         </table>
@@ -368,6 +375,12 @@ function resetter()
                                 <h:outputText value="#{item.totaltimespentatprocess}"/>
                             </p:column>
 
+                            <p:column headerText="View">
+                                <p:commandButton icon="ui-icon-search" title="View" action="#{peSearch.onSelectInbox}" onclick="blockInbox.show()">
+                                    <f:setPropertyActionListener value="#{item}" target="#{peSearch.inboxViewSelectItem}"/>
+                                </p:commandButton>
+                            </p:column>
+
                         </p:dataTable>
                     </td>
                 </tr>
@@ -384,6 +397,28 @@ function resetter()
 <div class="bottom_line"><!-- --></div>
 </div>
 <div class="clear"></div>
+
+<p:confirmDialog id="msgBoxErrorDialog1" widgetVar="msgBoxErrorDlg1" styleClass="messageDialog"
+                 closable="false"
+                 header="Exception.">
+    <f:facet name="message">
+        <h:outputText value="Sorry. You are not Authorised to view this case!" escape="false"/>
+    </f:facet>
+    <p:commandButton value="Ok" styleClass="small" onclick="msgBoxErrorDlg.close();"/>
+</p:confirmDialog>
+<p:panel id="msgBoxErrorPanel" styleClass="panel">
+    <p:confirmDialog id="msgBoxErrorDialog" widgetVar="msgBoxErrorDlg" styleClass="messageDialog"
+                     closable="false"
+                     header="Exception.">
+        <f:facet name="message">
+            <h:outputText value="Another User is Working on this case!! Please Retry Later." escape="false"/>
+        </f:facet>
+        <p:commandButton value="#{msg.get('app.button.ok')}"
+                         process="@this"
+                         update="frmMain"
+                         oncomplete="msgBoxErrorDlg.hide()"/>
+    </p:confirmDialog>
+</p:panel>
 <!-- Start Footer -->
 <ui:include src="include/footer_inbox.xhtml" />
 <!-- End Footer -->

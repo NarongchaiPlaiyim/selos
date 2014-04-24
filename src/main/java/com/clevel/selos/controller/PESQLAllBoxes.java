@@ -86,31 +86,31 @@ public class PESQLAllBoxes implements Serializable
 
         //Clear all session before selectInbox
         HttpSession session = FacesUtil.getSession(false);
-        /*try
+        try
         {
-            if(session.getAttribute("isLocked")!=null)
+            /*if(session.getAttribute("isLocked")!=null)
             {
 
                 String isLocked = (String) session.getAttribute("isLocked");
 
                 if(isLocked.equalsIgnoreCase("true"))
-                {
+                {*/
                     String wobNum = (String)session.getAttribute("wobNum");
                     log.info("unlocking case queue: {}, WobNum : {}, fetchtype: {}",session.getAttribute("queueName"), session.getAttribute("wobNum"),session.getAttribute("fetchType"));
                     bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNum,(Integer)session.getAttribute("fetchType"));
-                }
+                /*}
                 else
                 {
                     session.removeAttribute("isLocked");
                 }
 
-            }
+            } */
         }
         catch (Exception e)
         {
 
             log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
-        }*/
+        }
 
         session.setAttribute("workCasePreScreenId", 0L);
         session.setAttribute("workCaseAppraisalId", 0L);
@@ -227,21 +227,21 @@ public class PESQLAllBoxes implements Serializable
         AppHeaderView appHeaderView = headerControl.getHeaderInformation(inboxViewSelectItem.getStepId(), inboxViewSelectItem.getFwobnumber());
         session.setAttribute("caseOwner",inboxViewSelectItem.getAtuser());
 
-        /*try
+        try
         {
 
             log.info("locking case queue: {}, WobNum : {}, fetchtype: {}",queueName, inboxViewSelectItem.getFwobnumber(),inboxViewSelectItem.getFetchType());
             bpmInterfaceImpl.lockCase(queueName,inboxViewSelectItem.getFwobnumber(),inboxViewSelectItem.getFetchType());
-            session.setAttribute("isLocked","true");
+            //session.setAttribute("isLocked","true");
 
         }
         catch (Exception e)
         {
             //TODO Alert Box
             log.error("Error while Locking case in queue : {}, WobNum : {}",queueName, inboxViewSelectItem.getFwobnumber(), e);
-            FacesUtil.redirect("/site/generic_inbox_mybox_post.jsf");
+            RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
             return;
-        }*/
+        }
 
         session.setAttribute("appHeaderInfo", appHeaderView);
 

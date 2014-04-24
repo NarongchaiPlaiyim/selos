@@ -1872,7 +1872,7 @@ public class CustomerInfoIndividual implements Serializable {
             messageHeader = "Information.";
             message = "Save individual data success.";
             severity = "info";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxSaveMessageDlg.show()");
         } catch (Exception ex){
             log.error("onSave Exception : {}", ex);
             messageHeader = "Error.";
@@ -2049,16 +2049,20 @@ public class CustomerInfoIndividual implements Serializable {
         return "customerInfoJuristic?faces-redirect=true";
     }
 
-    public String onCancelFromJuristic(){
+    public String onCancelFromJuristic(boolean isRedirect){
         log.debug("onCancelFromJuristic");
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("isFromIndividualParam",true);
-        map.put("isFromSummaryParam",false);
-        map.put("customerId", 0L);
-        map.put("customerInfoView", cusInfoJuristic);
-        FacesUtil.getFlash().put("cusInfoParams", map);
-        return "customerInfoJuristic?faces-redirect=true";
+        if(isRedirect){
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("isFromIndividualParam",true);
+            map.put("isFromSummaryParam",false);
+            map.put("customerId", 0L);
+            map.put("customerInfoView", cusInfoJuristic);
+            FacesUtil.getFlash().put("cusInfoParams", map);
+            return "customerInfoJuristic?faces-redirect=true";
+        } else {
+            RequestContext.getCurrentInstance().execute("msgBoxCancelJurDlg.show()");
+            return "";
+        }
     }
 
     public void onChangeTitleTh(){
@@ -2189,9 +2193,15 @@ public class CustomerInfoIndividual implements Serializable {
         RequestContext.getCurrentInstance().execute("rmtCmdCommon()");
     }
 
-    public void onCancelForm(){
-        onCreation();
-        onLoadComplete();
+    public String onCancelForm(boolean isRedirect){
+        if(isRedirect){
+            return "customerInfoSummary?faces-redirect=true";
+        } else {
+            RequestContext.getCurrentInstance().execute("msgBoxCancelDlg.show()");
+            return "";
+        }
+//        onCreation();
+//        onLoadComplete();
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
