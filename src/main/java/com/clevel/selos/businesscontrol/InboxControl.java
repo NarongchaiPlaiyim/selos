@@ -70,7 +70,8 @@ public class InboxControl extends BusinessControl {
     public String getLandingPage(long stepId, long status){
         User user = getCurrentUser();
         if(user!=null){
-            StepLandingPage stepLandingPage = stepLandingPageDAO.findByStepStatusAndRole(stepId,status,user.getRole().getId());
+//            StepLandingPage stepLandingPage = stepLandingPageDAO.findByStepStatusAndRole(stepId,status,user.getRole().getId());
+            StepLandingPage stepLandingPage = stepLandingPageDAO.findByStepId(stepId);
             String landingPage = "";
             if(stepLandingPage != null){
                 landingPage = stepLandingPage.getPageName();
