@@ -843,7 +843,7 @@
                     <td class="title">Approx. Income :</td>
                     <td colspan="3">
                         <p:inputText value="#{prescreenMaker.borrowerInfo.approxIncome}" maxlength="10" styleClass="small"
-                                     onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);" onfocus="removeComma(this)"
+                                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" onfocus="removeComma(this)"
                                      readonly="#{not prescreenMaker.enableCustomerForm}">
                             <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="10"/>
                             <p:ajax event="blur" update=":customerDlgForm" process="@form"/>
