@@ -1167,8 +1167,7 @@
                                                      actionListener="#{custInfoSumJuris.onSave}" binding="#{saveCustomer}"
                                                      disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                     <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel" styleClass="small" process="@form" update=":frmMain"
-                                                     actionListener="#{custInfoSumJuris.onCreation}"
-                                                     disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
+                                                     actionListener="#{custInfoSumJuris.onCancelForm(false)}"/>
                                 </td>
                             </tr>
                             </table>
@@ -1203,6 +1202,18 @@
                              process="@this"
                              update="frmMain"
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+
+        <p:confirmDialog id="msgBoxCancelDialog" widgetVar="msgBoxCancelDlg" styleClass="messageDialog"
+                         closable="false"
+                         header="Information." message="Do you want back to Customer Summary?">
+            <p:commandButton value="OK"
+                             process="@this"
+                             update=":msgBoxSystemMessagePanel" action="#{custInfoSumJuris.onCancelForm(true)}"/>
+            <p:commandButton value="Cancel"
+                             process="@this"
+                             update=":msgBoxSystemMessagePanel"
+                             oncomplete="msgBoxCancelDlg.hide()"/>
         </p:confirmDialog>
     </p:panel>
 
