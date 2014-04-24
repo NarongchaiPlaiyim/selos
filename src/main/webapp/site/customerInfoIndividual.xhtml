@@ -2756,6 +2756,15 @@
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
         </p:confirmDialog>
 
+        <p:confirmDialog id="msgBoxSaveMessageDialog" widgetVar="msgBoxSaveMessageDlg" closable="false"
+                         severity="#{custInfoSumIndi.severity}" header="#{custInfoSumIndi.messageHeader}">
+            <f:facet name="message">
+                <h:outputText value="#{custInfoSumIndi.message}" escape="false"/>
+            </f:facet>
+            <p:commandButton value="OK" process="@this"
+                             action="#{custInfoSumIndi.onCancelFromJuristic(true)}"/>
+        </p:confirmDialog>
+
         <p:confirmDialog id="msgBoxSystemMessageSpouseDialog" widgetVar="msgBoxSystemMessageSpouseDlg" closable="false"
                          severity="#{custInfoSumIndi.severity}" header="#{custInfoSumIndi.messageHeader}">
             <f:facet name="message">

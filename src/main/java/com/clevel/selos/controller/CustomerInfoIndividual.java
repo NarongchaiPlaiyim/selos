@@ -1872,7 +1872,7 @@ public class CustomerInfoIndividual implements Serializable {
             messageHeader = "Information.";
             message = "Save individual data success.";
             severity = "info";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxSaveMessageDlg.show()");
         } catch (Exception ex){
             log.error("onSave Exception : {}", ex);
             messageHeader = "Error.";

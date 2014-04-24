@@ -726,7 +726,7 @@ public class CustomerInfoJuristic implements Serializable {
             messageHeader = "Information.";
             message = "Save Customer Juristic Data Success.";
             severity = "info";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxSaveMessageDlg.show()");
         } catch(Exception ex){
             log.error("Exception :: {}",ex);
             messageHeader = "Error.";

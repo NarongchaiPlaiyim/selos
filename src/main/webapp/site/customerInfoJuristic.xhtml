@@ -1206,6 +1206,15 @@
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
         </p:confirmDialog>
 
+        <p:confirmDialog id="msgBoxSaveMessageDialog" widgetVar="msgBoxSaveMessageDlg" closable="false"
+                         severity="#{custInfoSumJuris.severity}" header="#{custInfoSumJuris.messageHeader}">
+            <f:facet name="message">
+                <h:outputText value="#{custInfoSumJuris.message}" escape="false"/>
+            </f:facet>
+            <p:commandButton value="OK" process="@this"
+                             action="#{custInfoSumJuris.onCancelForm(true)}"/>
+        </p:confirmDialog>
+
         <p:confirmDialog id="msgBoxCancelDialog" widgetVar="msgBoxCancelDlg" styleClass="messageDialog"
                          closable="false"
                          header="Information." message="Do you want back to Customer Summary?">
