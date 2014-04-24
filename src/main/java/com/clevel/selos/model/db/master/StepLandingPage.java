@@ -18,6 +18,9 @@ public class StepLandingPage implements Serializable {
     @OneToOne
     @JoinColumn(name = "status_id")
     private Status status;
+    @OneToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
     @Column(name= "page_name")
     private String pageName;
     @Column(name = "active")
