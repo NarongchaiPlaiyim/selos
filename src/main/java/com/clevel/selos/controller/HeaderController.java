@@ -828,17 +828,14 @@ public class HeaderController implements Serializable {
 
     public void onSubmitAADCommittee(){
         log.debug("onSubmitAADCommittee ( submit to AAD committee )");
-        long workCasePreScreenId = 0;
-        long workCaseId = 0;
-        String queueName = "";
         try{
             HttpSession session = FacesUtil.getSession(true);
-            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-            workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-            queueName = Util.parseString(session.getAttribute("queueName"), "");
+            long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+            long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+            String queueName = Util.parseString(session.getAttribute("queueName"), "");
+            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
-            //TODO Save AADCommittee user id to appraisal
-            fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName);
+            fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
 
             messageHeader = "Information.";
             message = "Request for appraisal success.";
@@ -1715,6 +1712,31 @@ public class HeaderController implements Serializable {
             }
 
         }
+    }
+
+    public boolean checkAccessStage(String stageString){
+        boolean accessible = false;
+        HttpSession session = FacesUtil.getSession(true);
+        long stageId = Util.parseLong(session.getAttribute("stageId"), 0);
+        if("PRESCREEN".equalsIgnoreCase(stageString)){
+            if(stageId == 101){
+                accessible = true;
+            }
+        } else if ("FULLAPP".equalsIgnoreCase(stageString)){
+            if(stageId == 201 || stageId == 202 || stageId == 204 || stageId == 207){
+                accessible = true;
+            }
+        } else if ("APPRAISAL".equalsIgnoreCase(stageString)){
+            if(stageId == 203){
+                accessible = true;
+            }
+        } else if ("CUSTOMERACCEPTANCE".equalsIgnoreCase(stageString)){
+            if(stageId == 205){
+                accessible = true;
+            }
+        }
+
+        return accessible;
     }
 
     public int getQualitativeType() {
