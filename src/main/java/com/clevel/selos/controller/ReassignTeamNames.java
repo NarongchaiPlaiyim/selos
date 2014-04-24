@@ -654,7 +654,8 @@ public class ReassignTeamNames implements Serializable
             AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, searchViewSelectItem.getFwobnumber());
             session.setAttribute("appHeaderInfo", appHeaderView);
 
-            String landingPage = inboxControl.getLandingPage(stepId);
+            //todo: this value for status
+            String landingPage = inboxControl.getLandingPage(stepId,0);
 
             log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
 
