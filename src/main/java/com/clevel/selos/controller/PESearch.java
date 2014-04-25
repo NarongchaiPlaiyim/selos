@@ -5,6 +5,7 @@ import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.master.UserTeamDAO;
+import com.clevel.selos.dao.working.WorkCaseAppraisalDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCaseOwnerDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
@@ -14,6 +15,7 @@ import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCaseAppraisal;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.PEInbox;
@@ -257,6 +259,9 @@ public class PESearch implements Serializable
     @Inject
     UserTeamDAO userTeamDAO;
 
+    @Inject
+    WorkCaseAppraisalDAO workCaseAppraisalDAO;
+
     String message;
 
     @PostConstruct
@@ -348,7 +353,7 @@ public class PESearch implements Serializable
 
         long stepId = searchViewSelectItem.getStepId();
 
-        long wrkCasePreScreenId;
+        long wrkCasePreScreenId =0;
 
         long wrkCaseId;
 
@@ -624,24 +629,49 @@ public class PESearch implements Serializable
             }
         }
 
-        if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value())
-        {
+        int requestAppraisalFlag = 0;
+        long wrkCaseAppraisalId = 0L;
 
-            wrkCasePreScreenId = workCasePrescreenDAO.findIdByWobNumber(searchViewSelectItem.getFwobnumber());
+        String appNumber = searchViewSelectItem.getApplicationno();
+
+        wrkCaseId = 0;
+
+        if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {     //For Case in Stage PreScreen
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
+            if(workCasePrescreen != null){
+                wrkCasePreScreenId = workCasePrescreen.getId();
+                requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+            }
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
-            log.info("Work case pre screen id : {}",wrkCasePreScreenId);
-            //session.setAttribute("workCaseId", 0);
-            session.setAttribute("wobNumber",searchViewSelectItem.getFwobnumber());
-        }
+            session.setAttribute("requestAppraisal", requestAppraisalFlag);
 
-        else
-        {
-
-            wrkCaseId = workCaseDAO.findIdByWobNumber(searchViewSelectItem.getFwobnumber());
+        } else if (stepId == StepValue.REQUEST_APPRAISAL_POOL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Case in Stage Parallel Appraisal
+            WorkCase workCase1 = workCaseDAO.findByAppNumber(appNumber);
+            if(workCase1 != null){
+                wrkCaseId = workCase1.getId();
+                requestAppraisalFlag = workCase1.getRequestAppraisal();
+                session.setAttribute("workCaseId", wrkCaseId);
+                session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            } else {
+                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
+                wrkCasePreScreenId = workCasePrescreen.getId();
+                requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+                session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
+                session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            }
+            WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
+            if(workCaseAppraisal != null){
+                wrkCaseAppraisalId = workCaseAppraisal.getId();
+                session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
+            }
+        } else {        //For Case in Stage FullApplication
+            WorkCase workCase1 = workCaseDAO.findByAppNumber(appNumber);
+            if(workCase1 != null){
+                wrkCaseId = workCase1.getId();
+                requestAppraisalFlag = workCase1.getRequestAppraisal();
+            }
             session.setAttribute("workCaseId", wrkCaseId);
-            //session.setAttribute("workCasePreScreenId", 0);
-            session.setAttribute("wobNumber",searchViewSelectItem.getFwobnumber());
-
+            session.setAttribute("requestAppraisal", requestAppraisalFlag);
         }
 
         if(Util.isNull(searchViewSelectItem.getFetchType()))
