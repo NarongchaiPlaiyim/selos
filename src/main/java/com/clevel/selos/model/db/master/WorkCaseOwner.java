@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,6 +38,16 @@ public class WorkCaseOwner implements Serializable
     private String createBy;
     @Column(name = "modify_by")
     private String modifyBy;
+    @Column(name = "create_date")
+    private Date createDate;
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
 
     public String getCreateBy() {
         return createBy;

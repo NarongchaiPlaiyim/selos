@@ -113,7 +113,7 @@ public class FullApplicationControl extends BusinessControl {
         return userList;
     }
 
-    public List<User> getAADCommitteeList(RoleValue roleValue){
+    public List<User> getUserListByRole(RoleValue roleValue){
         List<User> userList = userDAO.findUserListByRoleId(getCurrentUser(), roleValue.id());
         if(userList == null){
             userList = new ArrayList<User>();
@@ -148,6 +148,7 @@ public class FullApplicationControl extends BusinessControl {
         }
 
         //TODO: get total com and retail
+
 
         bpmExecutor.submitZM(workCaseId, queueName, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, ActionCode.SUBMIT_CA.getVal());
 
@@ -511,49 +512,21 @@ public class FullApplicationControl extends BusinessControl {
         log.debug("requestAppraisal ::: Save Appraisal Request Complete.");
     }
 
-    public void requestAppraisal(long workCaseId) throws Exception{
+    //Request appraisal after Customer Acceptance
+    public void requestAppraisal(String queueName, String wobNumber, String aadAdminUserName) throws Exception{
         //Update Request Appraisal Flag
-        WorkCase workCase;
-        String appNumber = "";
-        ProductGroup productGroup = null;
-        RequestType requestType = null;
 
-        if(workCaseId != 0) {
-            //Create WorkCaseAppraisal
-            WorkCaseAppraisal workCaseAppraisal = createWorkCaseAppraisal(0, workCaseId);
-            log.debug("requestAppraisal ::: Create WorkCaseAppraisal Complete.");
-
-            log.debug("requestAppraisal ::: workCaseAppraisal : {}", workCaseAppraisal);
+        if(!Util.isEmpty(queueName) && !Util.isEmpty(wobNumber)) {
             try{
-                //Get Customer Name
-                List<Customer> customerList = customerDAO.getBorrowerByWorkCaseId(workCaseId, 0);
-                String borrowerName = "";
-                if(customerList != null && customerList.size() > 0){
-                    Customer customer = customerList.get(0);
-                    borrowerName = customer.getNameTh();
-                    if(customer.getLastNameTh() != null){
-                        borrowerName = borrowerName.concat(" ").concat(customer.getLastNameTh());
-                    }
-                }
-                bpmExecutor.requestAppraisal();
+                bpmExecutor.requestAppraisal(queueName, wobNumber, aadAdminUserName, ActionCode.REQUEST_APPRAISAL.getVal());
                 log.debug("requestAppraisal ::: Create Work Item for appraisal complete.");
             } catch (Exception ex){
                 log.error("Exception while Create Work Item for Appraisal.");
-                workCaseAppraisalDAO.delete(workCaseAppraisal);
                 throw new Exception("Exception while Create Work Item for Appraisal.");
             }
-
-            workCase = workCaseDAO.findById(workCaseId);
-
-            if(workCase != null){
-                workCase.setRequestAppraisal(1);
-                workCaseDAO.persist(workCase);
-            } else{
-                throw new Exception("exception while request appraisal, cause can not find data from full application");
-            }
         } else {
-            log.error("exception while Request Appraisal (BDM), can not find workcase or workcaseprescreen.");
-            throw new Exception("exception while Request Appraisal, can not find case.");
+            log.error("exception while Request Appraisal (BDM), Could not find WobNumber/QueueName.");
+            throw new Exception("exception while Request Appraisal, Could not find WobNumber/QueueName.");
         }
         log.debug("requestAppraisal ::: Update Request Appraisal Flag Complete.");
     }
@@ -602,9 +575,24 @@ public class FullApplicationControl extends BusinessControl {
         workCaseAppraisal.setRequestBy(getCurrentUser());
         workCaseAppraisal.setProductGroup(productGroup);
         workCaseAppraisal.setRequestType(requestType);
+        workCaseAppraisal.setAppraisalResult(1);
         workCaseAppraisalDAO.persist(workCaseAppraisal);
 
         return workCaseAppraisal;
+    }
+
+    public boolean checkAppraisalInformation(long workCaseId){
+        Appraisal appraisal = null;
+        boolean checkAppraisal = false;
+        if(!Util.isNull(workCaseId) && workCaseId != 0){
+            appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
+            log.debug("checkAppraisalInformation ::: find appraisal by workCase : {}", appraisal);
+            if(!Util.isNull(appraisal)){
+                checkAppraisal = true;
+            }
+        }
+
+        return checkAppraisal;
     }
 
     public boolean checkAppointmentInformation(long workCaseId, long workCasePreScreenId){
@@ -627,7 +615,7 @@ public class FullApplicationControl extends BusinessControl {
         return checkAppointment;
     }
 
-    public void submitToAADCommittee(String aadCommitteeUserId, long workCaseId, long workCasePreScreenId, String queueName) throws Exception{
+    public void submitToAADCommittee(String aadCommitteeUserId, long workCaseId, long workCasePreScreenId, String queueName, String wobNumber) throws Exception{
         log.debug("submitToAADCommittee ::: starting...");
         String appNumber = "";
         Appraisal appraisal = null;
@@ -660,7 +648,7 @@ public class FullApplicationControl extends BusinessControl {
                 if(appraisal.getLocationOfProperty() != null){
                     appraisalLocationCode = appraisal.getLocationOfProperty().getCode();
                 }
-                bpmExecutor.submitAADCommittee(appNumber, aadCommitteeUserId, DateTimeUtil.convertDateWorkFlowFormat(appraisal.getAppointmentDate()), appraisalLocationCode, queueName, ActionCode.SUBMIT_CA.getVal(), workCaseAppraisal.getWobNumber());
+                bpmExecutor.submitAADCommittee(appNumber, aadCommitteeUserId, DateTimeUtil.convertDateWorkFlowFormat(appraisal.getAppointmentDate()), appraisalLocationCode, queueName, ActionCode.SUBMIT_CA.getVal(), wobNumber);
             }
         } else {
             throw new Exception("Submit case failed, could not find appraisal data.");
@@ -670,6 +658,10 @@ public class FullApplicationControl extends BusinessControl {
 
     public void submitToUWFromCommittee(String queueName, String wobNumber) throws Exception{
         bpmExecutor.submitUW2FromCommittee(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
+    }
+
+    public void returnAADCommittee(String queueName, String wobNumber, String reason, String remark) throws Exception {
+        bpmExecutor.returnCase(queueName, wobNumber, remark, reason, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
     }
 
     public String getAADCommittee(long workCaseId, long workCasePreScreenId){
@@ -708,12 +700,16 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.returnCase(queueName, wobNumber, remark, reason, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
     }
 
+    public void returnAADAdminByBDM(String queueName, String wobNumber) throws Exception{
+        bpmExecutor.submitCase(queueName, wobNumber, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
+    }
+
     public void completeCase(String queueName, String wobNumber) throws Exception {
         bpmExecutor.completeCase(queueName, ActionCode.COMPLETE.getVal(), wobNumber);
     }
 
     public void restartCase(String queueName, String wobNumber) throws Exception {
-        bpmExecutor.completeCase(queueName, ActionCode.RESTART.getVal(), wobNumber);
+        bpmExecutor.restartCase(queueName, ActionCode.RESTART.getVal(), wobNumber);
     }
 
     public void submitToBDM(String queueName, String wobNumber) throws Exception{
@@ -911,7 +907,7 @@ public class FullApplicationControl extends BusinessControl {
     public List<Reason> getReasonList(ReasonTypeValue reasonTypeValue){
         ReasonType reasonType = reasonTypeDAO.findById(reasonTypeValue.value());
         List<Reason> reasonList = reasonDAO.getList(reasonType);
-        if(!Util.isNull(reasonList) && reasonList.size() > 0){
+        if(Util.isNull(reasonList)){
             reasonList = new ArrayList<Reason>();
         }
 

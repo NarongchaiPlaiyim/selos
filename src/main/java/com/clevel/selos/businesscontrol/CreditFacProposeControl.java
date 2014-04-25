@@ -401,7 +401,7 @@ public class CreditFacProposeControl extends BusinessControl {
                                         log.info("DbrCalculate YES :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
                                         if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
                                             log.info("NOT_CALCULATE :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
-                                            sumTotalLoanDbr = BigDecimal.ZERO;
+                                            sumTotalLoanDbr = sumTotalLoanDbr.add(BigDecimal.ZERO);
                                         } else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
                                             log.info("INSTALLMENT :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
                                             log.info("INSTALLMENT :: newCreditDetailView.getInstallment() :: {}", newCreditDetailView.getInstallment());
@@ -1395,7 +1395,7 @@ public class CreditFacProposeControl extends BusinessControl {
             for (Long id : deleteCreditIdList) {
                 deleteCreditDetailList.add(newCreditDetailDAO.findById(id));
             }
-//            newCreditDetailDAO.delete(deleteCreditDetailList);
+            newCreditDetailDAO.delete(deleteCreditDetailList);
 
         }
     }

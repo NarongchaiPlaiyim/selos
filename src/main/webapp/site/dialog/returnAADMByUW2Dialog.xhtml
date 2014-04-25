@@ -8,11 +8,11 @@
 <p:panel styleClass="panel-dialog">
     <table class="content_form">
         <tr>
-            <td class="title">Reason for Pending :</td>
+            <td class="title">Reason for Return :</td>
             <td>
                 <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
                                  value="#{headerController.reasonId}"
-                                 required="#{not empty param[btnReturnBDMByAAD.clientId]}">
+                                 required="#{not empty param[btnReturnAADMByUW2.clientId]}">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                     <f:selectItems value="#{headerController.reasonList}"
                                    var="reasonItem"
@@ -33,22 +33,22 @@
         </tr>
         <tr>
             <td colspan="2" class="center">
-                <p:commandButton id="btnReturnBDMByAADDlg"
-                                 binding="#{btnReturnBDMByAAD}"
+                <p:commandButton id="btnReturnAADMByUW2Dlg"
+                                 binding="#{btnReturnAADMByUW2}"
                                  value="#{msg.get('app.button.submit')}"
                                  styleClass="small"
-                                 actionListener="#{headerController.onReturnBDMByAAD()}"
-                                 oncomplete="handleDialogRequest(xhr, status, args, 'returnBDM_AADAdminDlg')"
+                                 actionListener="#{headerController.onReturnAADMByUW2()}"
+                                 oncomplete="handleDialogRequest(xhr, status, args, 'returnAADC_UW2Dlg')"
                                  process="@form"
-                                 update=":frmMain:pendingDecisionPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
+                                 update=":frmMain:returnAADM_UW2Panel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
-                                 styleClass="small" onclick="returnBDM_AADAdminDlg.hide()"/>
+                                 styleClass="small" onclick="returnAADC_UW2Dlg.hide()"/>
             </td>
         </tr>
     </table>
 </p:panel>
 
-<p:blockUI widgetVar="blockReturnInfoDlg" block="returnBDM_AADAdminPanel" trigger=":frmMain:btnReturnBDMByAADDlg">
+<p:blockUI widgetVar="blockReturnInfoDlg" block="returnAADM_UW2Panel" trigger=":frmMain:btnReturnAADMByUW2Dlg">
     LOADING<br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>

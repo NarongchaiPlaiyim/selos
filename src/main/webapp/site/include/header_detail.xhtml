@@ -5,519 +5,496 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 <div id="header_detail">
-<div id="header_collapse" class="close" onclick="collapseDetail();"><p:spacer width="2"/></div>
-<div id="header_button_bar">
-<!-- Stage PreScreen -->
-<p:panel id="header_panel_prescreen" rendered="#{headerController.stageId == 101}" styleClass="panel">
-    <!--Check Mandate Doc Prescreen-->
-    <p:commandButton id="btnChkMandatePreScreenMaker" value="#{msg.get('app.header.button.mandateDoc')}"
-                     styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
-                     rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1003}"
-                     actionListener="#{headerController.onCheckMandateForMaker()}"
-                     oncomplete="checkMandateDlg.show()"
-                     update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
-        <p:resetInput target=":frmMain:checkMandatePanel"/>
-    </p:commandButton>
-    <p:commandButton id="btnChkMandatePreScreenChecker" value="#{msg.get('app.header.button.mandateDoc')}"
-                     styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
-                     rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1002}"
-                     actionListener="#{headerController.onCheckMandateForChecker()}"
-                     oncomplete="checkMandateDlg.show()"
-                     update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
-        <p:resetInput target=":frmMain:checkMandatePanel"/>
-    </p:commandButton>
-    <!--Check Mandate Doc Prescreen-->
-    <!--Assign To Checker-->
-    <p:commandButton id="btnAssignChecker" value="#{msg.get('app.header.button.assignChecker')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.assignChecker')}"
-                     rendered="#{headerController.checkButton('Assign to Checker')}"
-                     disabled="#{prescreenMaker.disableAssignButton}"
-                     process="@this"
-                     actionListener="#{prescreenMaker.onOpenAssignCheckerDialog()}"
-                     oncomplete="assignCheckerDlg.show()"
-                     update=":assignCheckerDlgForm">
-        <p:resetInput target=":assignCheckerDlgForm"/>
-    </p:commandButton>
-    <!--Check NCB-->
-    <p:commandButton id="btnChkNCB" value="#{msg.get('app.header.button.checkNCB')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.checkNCB')}"
-                     rendered="#{headerController.checkButton('Check NCB')}"
-                     actionListener="#{prescreenChecker.onCheckCustomer}"
-                     process="@form"
-                     oncomplete="blockUICheckCustomer.hide()"
-                     update=":frmMain :msgBoxSystemMessagePanel"
-                     onclick="blockUICheckCustomer.show()"/>
-    <!--Return to Maker-->
-    <p:commandButton id="btnReturnMaker" value="#{msg.get('app.header.button.returnMaker')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.returnMaker')}"
-                     rendered="#{headerController.checkButton('Return to BDM')}"
-                     actionListener="#{prescreenChecker.onReturnToMaker()}"
-                     oncomplete="returnMakerDlg.show()"
-                     update=":returnMakerDlgForm">
-        <p:resetInput target=":returnMakerDlgForm"/>
-    </p:commandButton>
-    <!--Check PreScreen (BRMS)-->
-    <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.checkPreScreen')}"
-                     rendered="#{headerController.checkButton('Check Prescreen') and not headerController.requestAppraisalPage}"
-                     update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxMandateMessagePanel"
-                     actionListener="#{headerController.onCheckPreScreen}">
-    </p:commandButton>
-    <!--Request Appraisal Prescreen-->
-    <p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}"
-                     styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
-                     rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
-                     process="@this"
-                     actionListener="#{headerController.onOpenRequestAppraisal()}"
-                     update=":frmMain:reqApprDialogPanel"
-                     oncomplete="reqApprDlg.show()">
-        <p:resetInput target=":frmMain:reqApprDialogPanel"/>
-    </p:commandButton>
-    <!--Cancel CA-->
-    <p:commandButton id="btnCancelCA" value="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.cancelCA')}"
-                     rendered="#{headerController.checkButton('Cancel CA')}" type="button"
-                     onclick="confrmCancelCA.show()"/>
-    <!--Confirm dialog for Cancel CA-->
-    <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.cancelCA')}" styleClass="left"
-                     icon="ui-icon-alert"
-                     widgetVar="confrmCancelCA" global="false" showEffect="fade"
-                     rendered="#{headerController.checkButton('Cancel CA')}">
-        <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                         process="@this"
-                         update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"
-                         actionListener="#{prescreenMaker.onCancelCA}"
-                         oncomplete="confrmCancelCA.hide()"/>
-        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="ui-confirmdialog-no"
-                         process="@this"
-                         onclick="confrmCancelCA.hide()"/>
-    </p:confirmDialog>
-    <!--Close Sale-->
-    <p:commandButton id="btnCloseSale" value="#{msg.get('app.header.button.closeSale')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.closeSale')}"
-                     rendered="#{headerController.checkButton('Close Sales') and !headerController.requestAppraisalPage}"
-                     type="button"
-                     onclick="confrmCloseSaleCA.show()"/>
-    <!--Confirm dialog for Close Sale-->
-    <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.closeSale')}" styleClass="left"
-                     icon="ui-icon-alert"
-                     widgetVar="confrmCloseSaleCA" global="false" showEffect="fade"
-                     rendered="#{headerController.checkButton('Close Sales') and !headerController.requestAppraisalPage}">
-        <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                         process="@this"
-                         actionListener="#{prescreenMaker.onCloseSale()}"
-                         oncomplete="confrmCloseSaleCA.hide()"
-                         update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"/>
-        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="ui-confirmdialog-no"
-                         process="@this"
-                         onclick="confrmCloseSaleCA.hide()"/>
-    </p:confirmDialog>
-</p:panel>
+    <div id="header_collapse" class="close" onclick="collapseDetail();"><p:spacer width="2"/></div>
+    <div id="header_button_bar">
+        <!--############ Stage PreScreen ############-->
+        <p:panel id="header_panel_prescreen" rendered="#{headerController.checkAccessStage('PRESCREEN')}" styleClass="panel">
+            <!-- Check Mandate Doc for Maker -->
+            <p:commandButton id="btnChkMandatePreScreenMaker" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1003}"
+                             actionListener="#{headerController.onCheckMandateForMaker()}"
+                             oncomplete="checkMandateDlg.show()"
+                             update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
+                <p:resetInput target=":frmMain:checkMandatePanel"/>
+            </p:commandButton>
+            <!-- Check Mandate Doc for Checker -->
+            <p:commandButton id="btnChkMandatePreScreenChecker" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1002}"
+                             actionListener="#{headerController.onCheckMandateForChecker()}"
+                             oncomplete="checkMandateDlg.show()"
+                             update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
+                <p:resetInput target=":frmMain:checkMandatePanel"/>
+            </p:commandButton>
+            <!-- Assign To Checker-->
+            <p:commandButton id="btnAssignChecker" value="#{msg.get('app.header.button.assignChecker')}" title="#{msg.get('app.header.button.assignChecker')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Assign to Checker')}" disabled="#{prescreenMaker.disableAssignButton}"
+                             actionListener="#{prescreenMaker.onOpenAssignCheckerDialog()}" process="@this"
+                             oncomplete="assignCheckerDlg.show()"
+                             update=":assignCheckerDlgForm">
+                <p:resetInput target=":assignCheckerDlgForm"/>
+            </p:commandButton>
+            <!-- Check NCB -->
+            <p:commandButton id="btnChkNCB" value="#{msg.get('app.header.button.checkNCB')}" title="#{msg.get('app.header.button.checkNCB')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Check NCB')}"
+                             onclick="blockUICheckCustomer.show()"
+                             actionListener="#{prescreenChecker.onCheckCustomer}" process="@form"
+                             oncomplete="blockUICheckCustomer.hide()"
+                             update=":frmMain :msgBoxSystemMessagePanel"/>
+            <!-- Return to Maker -->
+            <p:commandButton id="btnReturnMaker" value="#{msg.get('app.header.button.returnMaker')}" title="#{msg.get('app.header.button.returnMaker')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Return to BDM')}"
+                             actionListener="#{prescreenChecker.onReturnToMaker()}"
+                             oncomplete="returnMakerDlg.show()"
+                             update=":returnMakerDlgForm">
+                <p:resetInput target=":returnMakerDlgForm"/>
+            </p:commandButton>
+            <!-- Check PreScreen (BRMS)-->
+            <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" title="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Check Prescreen')}"
+                             actionListener="#{headerController.onCheckPreScreen}"
+                             update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxMandateMessagePanel">
+            </p:commandButton>
+            <!-- Request Appraisal Prescreen -->
+            <p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
+                             actionListener="#{headerController.onOpenRequestAppraisal()}" process="@this"
+                             oncomplete="reqApprDlg.show()"
+                             update=":frmMain:reqApprDialogPanel">
+                <p:resetInput target=":frmMain:reqApprDialogPanel"/>
+            </p:commandButton>
+            <!-- Cancel CA -->
+            <p:commandButton id="btnCancelCA" value="#{msg.get('app.header.button.cancelCA')}" title="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Cancel CA')}" type="button"
+                             onclick="confrmCancelCA.show()"/>
+                <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.cancelCA')}" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confrmCancelCA" global="false" showEffect="fade"
+                                 rendered="#{headerController.checkButton('Cancel CA')}">
+                    <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                     process="@this"
+                                     update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"
+                                     actionListener="#{prescreenMaker.onCancelCA}"
+                                     oncomplete="confrmCancelCA.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="ui-confirmdialog-no"
+                                     process="@this"
+                                     onclick="confrmCancelCA.hide()"/>
+                </p:confirmDialog>
+            <!--Close Sale-->
+            <p:commandButton id="btnCloseSale" value="#{msg.get('app.header.button.closeSale')}" styleClass="blueButton"
+                             title="#{msg.get('app.header.button.closeSale')}"
+                             rendered="#{headerController.checkButton('Close Sales')}"
+                             type="button"
+                             onclick="confrmCloseSaleCA.show()"/>
+                <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.closeSale')}" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confrmCloseSaleCA" global="false" showEffect="fade"
+                                 rendered="#{headerController.checkButton('Close Sales')}">
+                    <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                     process="@this"
+                                     actionListener="#{prescreenMaker.onCloseSale()}"
+                                     oncomplete="confrmCloseSaleCA.hide()"
+                                     update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="ui-confirmdialog-no"
+                                     process="@this"
+                                     onclick="confrmCloseSaleCA.hide()"/>
+                </p:confirmDialog>
+        </p:panel>
+        <!--############ Stage for FullApplication ############-->
+        <p:panel id="header_panel_fullapplication" rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
+            <!--Print Report-->
+            <p:commandButton id="btnPrintReport" value="#{msg.get('app.header.button.printReport')}" title="#{msg.get('app.header.button.printReport')}" styleClass="blueButton"
+                             actionListener="#{report.setNameReport()}"
+                             oncomplete="printReportDlg.show()"
+                             update=":frmMain:printReportPanel">
+            </p:commandButton>
+            <!--View Relate CA-->
+            <p:commandButton id="btnViewRelatedCA" value="#{msg.get('app.header.button.viewRelatedCA')}" title="#{msg.get('app.header.button.viewRelatedCA')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('View Related Application CA')}">
 
-<!--Stage for FullApplication-->
-<p:panel id="header_panel_fullapplication"
-         rendered="#{headerController.stageId == 201 || headerController.stageId == 202 || headerController.stageId == 204 || headerController.stageId == 207}"
-         styleClass="panel">
-    <!--Print Report-->
-    <p:commandButton id="btnPrintReport" value="#{msg.get('app.header.button.printReport')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.printReport')}"
-                     oncomplete="printReportDlg.show()"
-                     actionListener="#{report.setNameReport()}"
-                     update=":frmMain:printReportPanel">
-    </p:commandButton>
-    <!--View Relate CA-->
-    <p:commandButton id="btnViewRelatedCA" value="#{msg.get('app.header.button.viewRelatedCA')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.viewRelatedCA')}"
-                     rendered="#{headerController.checkButton('View Related Application CA')}">
+            </p:commandButton>
+            <!--Check Criteria (BRMS)-->
+            <p:commandButton id="btnChkCriteria" value="#{msg.get('app.header.button.checkCriteria')}" title="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Check Criteria')}"
+                             actionListener="#{headerController.onCheckCriteria}"
+                             update=":frmMain:msgBoxBaseMessagePanel">
+            </p:commandButton>
+            <!--Assign to ABDM-->
+            <p:commandButton id="btnAssignABDM" value="#{msg.get('app.header.button.assignABDM')}" title="#{msg.get('app.header.button.assignABDM')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Assign to ABDM')}"
+                             actionListener="#{headerController.onOpenAssignToABDM()}"
+                             oncomplete="assignABDMDlg.show()"
+                             update=":frmMain:assignABDMPanel">
+            </p:commandButton>
+            <!--Mandate Document FullApplication-->
+            <p:commandButton id="btnMandateDocFullApp" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Check Mandate Doc')}"
+                             actionListener="#{headerController.onCheckMandateForFullApp()}"
+                             oncomplete="checkMandateDlg.show()"
+                             update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
+                <p:resetInput target=":frmMain:checkMandatePanel"/>
+            </p:commandButton>
+            <!--Return to BDM -->
+            <p:commandButton id="btnReturnBDM" value="#{msg.get('app.header.button.returnToBDM')}" title="#{msg.get('app.header.button.returnToBDM')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Return to BDM')}"
+                             actionListener="#{headerController.onOpenReturnBDMDialog()}"
+                             oncomplete="returnBDMDlg.show()"
+                             update=":frmMain:returnBDMPanel">
+                <p:resetInput target=":frmMain:returnBDMPanel"/>
+            </p:commandButton>
+            <!--Request Appraisal Fullapp-->
+            <p:commandButton id="btnReqApprFullapp" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
+                             actionListener="#{headerController.onOpenRequestAppraisal()}" process="@this"
+                             oncomplete="reqApprDlg.show()"
+                             update=":frmMain:reqApprDialogPanel">
+                <p:resetInput target=":frmMain:reqApprDialogPanel"/>
+            </p:commandButton>
+            <!--Cancel CA FullApplication-->
+            <p:commandButton id="btnCancelCAFullApp" value="#{msg.get('app.header.button.cancelCA')}" title="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Cancel CA')}"
+                             actionListener="#{headerController.onOpenCancelCAFullApp()}"
+                             oncomplete="cancelCAFullAppDlg.show()"
+                             update=":frmMain:cancelCAFullAppPanel">
+                <p:resetInput target=":frmMain:cancelCAFullAppPanel"/>
+            </p:commandButton>
+            <!--_________ Submit Case ___________ -->
+            <!--Submit To Zone Manager [ From BDM ]-->
+            <p:commandButton id="btnSubmitCaseToZM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2001}"
+                             action="#{headerController.onOpenSubmitZM}"
+                             update=":frmMain:submitZMPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
+            </p:commandButton>
+            <!--Submit To Region Manager [ From Zone Manager - Pricing Flow ]-->
+            <p:commandButton id="btnSubmitCaseToRGM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2002}"
+                             onclick="confirmSubmitSubmitRGM.show()"/>
+                <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmSubmitSubmitRGM" global="false" showEffect="fade"
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2002}">
+                    <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{headerController.onSubmitRM()}" process="@this"
+                                     oncomplete="confirmSubmitSubmitRGM.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="ui-confirmdialog-no" type="button"
+                                     onclick="confirmSubmitSubmitRGM.hide()"/>
+                </p:confirmDialog>
+            <!--Submit To Group Head [ From Region Manager - Pricing Flow ]-->
+            <p:commandButton id="btnSubmitCaseToGH" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2020}"
+                             onclick="confirmSubmitSubmitGH.show()"/>
+                <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmSubmitSubmitGH" global="false" showEffect="fade"
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2020}">
+                    <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{headerController.onSubmitGH()}"
+                                     process="@this" oncomplete="confirmSubmitSubmitGH.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitGH.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+            <!--Submit To CSSO [ From Group Head - Pricing Flow ]-->
+            <p:commandButton id="btnSubmitCaseToCSSO" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2021}"
+                             onclick="confirmSubmitSubmitCSSO.show()"/>
+                <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmSubmitSubmitCSSO" global="false" showEffect="fade"
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2021}">
+                    <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{headerController.onSubmitCSSO()}"
+                                     process="@this" oncomplete="confirmSubmitSubmitCSSO.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitCSSO.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+            <!--Submit To UW1 [ From CSSO - Pricing Flow ]-->
+            <p:commandButton id="btnSubmitCaseToUW1" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
 
-    </p:commandButton>
-    <!--Check Criteria (BRMS)-->
-    <p:commandButton id="btnChkCriteria" value="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.checkCriteria')}"
-                     rendered="#{headerController.checkButton('Check Criteria')}"
-                     update=":frmMain:msgBoxBaseMessagePanel"
-                     actionListener="#{headerController.onCheckCriteria}">
-    </p:commandButton>
-    <!--Assign to ABDM-->
-    <p:commandButton id="btnAssignABDM" value="#{msg.get('app.header.button.assignABDM')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.assignABDM')}"
-                     rendered="#{headerController.checkButton('Assign to ABDM')}"
-                     actionListener="#{headerController.onOpenAssignToABDM()}"
-                     oncomplete="assignABDMDlg.show()"
-                     update=":frmMain:assignABDMPanel">
+                             rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2022}"
+                             onclick="confirmSubmitSubmitUW.show()"/>
+                <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmSubmitSubmitUW" global="false" showEffect="fade"
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2022}">
+                    <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{headerController.onSubmitUWFromCSSO()}"
+                                     process="@this" oncomplete="confirmSubmitSubmitUW.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitUW.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+            <!--Submit UW2 [ From UW1 ]-->
+            <p:commandButton id="btnSubmitCaseToUW" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2003}"
+                             action="#{headerController.onOpenSubmitUW2()}"
+                             update=":frmMain:submitUWPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"/>
+            <!--Submit To UW1 [ From BDM Submit return To UW1 ]-->
+            <p:commandButton id="btnSubmitCaseToBDMUW1" value="#{msg.get('app.header.button.submitToUW1')}" title="#{msg.get('app.header.button.submitToUW1')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2004}"
+                             onclick="confirmSubmitSubmitUW1.show()"/>
+                <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmSubmitSubmitUW1" global="false" showEffect="fade"
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2004}">
+                    <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{headerController.onSubmitReturnUW1()}"
+                                     process="@this" oncomplete="confirmSubmitSubmitUW1.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitUW1.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+            <!--Submit CA [ END OF CA ]-->
+            <p:commandButton id="btnSubmitCaseUW2" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2016}"
+                             onclick="confirmSubmitSubmitCAUW2.show()"/>
+                <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmSubmitSubmitCAUW2" global="false" showEffect="fade"
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2016}">
+                    <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{headerController.onSubmitCA()}"
+                                     process="@this" oncomplete="confirmSubmitSubmitCAUW2.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitCAUW2.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+            <!--Submit to BDM [ From ABDM return case to BDM ]-->
+            <p:commandButton id="btnSubmitCaseToBDM_ABDM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2023}"
+                             onclick="confirmSubmitBDM_ABDM.show()"/>
+                <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmSubmitBDM_ABDM" global="false" showEffect="fade"
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2023}">
+                    <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{headerController.onSubmitToBDM()}"
+                                     process="@this" oncomplete="confirmSubmitBDM_ABDM.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitBDM_ABDM.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+            <!--Restart case (UW)-->
+            <p:commandButton id="btnRestartCase" value="#{msg.get('app.header.button.restart')}" title="#{msg.get('app.header.button.restart')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Restart') and headerController.stepId == 2004}"
+                             onclick="confirmRestart.show()"/>
+                <p:confirmDialog header="Confirmation" message="Please click 'OK' to restart case" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmRestart" global="false" showEffect="fade"
+                                 rendered="#{headerController.checkButton('Restart') and headerController.stepId == 2004}">
+                    <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{headerController.onRestartCase()}"
+                                     process="@this" oncomplete="confirmRestart.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmRestart.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+            <!--Complete Return Parallel case (UW)-->
+            <p:commandButton id="btnCompleteCase" value="#{msg.get('app.header.button.complete')}" title="#{msg.get('app.header.button.complete')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Complete') and headerController.stepId == 2003}"
+                             onclick="confirmComplete.show()"/>
+                <p:confirmDialog header="Confirmation" message="Please click 'OK' to complete case" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmComplete" global="false" showEffect="fade"
+                                 rendered="#{headerController.checkButton('Complete') and headerController.stepId == 2003}">
+                    <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{headerController.onCompleteCase()}"
+                                     process="@this" oncomplete="confirmComplete.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmComplete.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+            <!--Return to AAD Admin ( UW2 )-->
+            <p:commandButton id="btnReturnAADC_UW2" value="#{msg.get('app.header.button.returnToAADAdmin')}"
+                             title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016}"
+                             actionListener="#{headerController.onOpenReturnAADMByUW2()}">
+            </p:commandButton>
+        </p:panel>
+        <!--############ Stage for Appraisal ############-->
+        <p:panel id="header_panel_appraisal" rendered="#{headerController.checkAccessStage('APPRAISAL')}" styleClass="panel">
+            <!-- Request Appraisal [ After Customer Accepted ]-->
+            <p:commandButton id="btnReqAppr_BDM" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Request Appraisal') and headerController.stepId == 2032}"
+                             actionListener="#{headerController.onOpenRequestAppraisalCustomerAccepted()}"
+                             update=":frmMain:reqAppr_BDMPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
+            </p:commandButton>
+            <!-- Cancel Parallel Appraisal -->
+            <p:commandButton id="btnCancelReqAppr_BDM" value="#{msg.get('app.header.button.cancelAppraisalRequest')}" title="#{msg.get('app.header.button.cancelAppraisalRequest')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Cancel Appraisal Request') and headerController.stepId == 2007}"
+                             onclick="">
+                <!--TODO SHOW CANCEL DIALOG-->
+            </p:commandButton>
+            <!-- Submit to AAD Admin [ From BDM ] -->
+            <p:commandButton id="btnReturnAADM_BDM" value="#{msg.get('app.header.button.returnToAADAdmin')}" title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2007}"
+                             onclick="confirmReturnAADM_BDM.show()"/>
+                <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmReturnAADM_BDM" global="false" showEffect="fade"
+                                 rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2007}">
+                    <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{headerController.onReturnToAADAdminByBDM()}"
+                                     process="@this" oncomplete="confirmReturnAADM_BDM.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmReturnAADM_BDM.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+            <!-- Return to BDM [ From AAD Admin ]-->
+            <p:commandButton id="btnReturnBDM_AADM" value="#{msg.get('app.header.button.returnToBDM')}" title="#{msg.get('app.header.button.returnToBDM')}" styleClass="blueButton"
+                             update=":frmMain:returnBDM_AADAdminPanel"
+                             rendered="#{headerController.checkButton('Return to BDM') and headerController.stepId == 2006}"
+                             actionListener="#{headerController.onOpenReturnBDMByAAD()}">
+            </p:commandButton>
+            <!-- Check Mandate Doc [ For AAD Admin ]-->
+            <p:commandButton id="btnCheckMandate_AADM" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 2006}"
+                             actionListener="#{headerController.onCheckMandateForAADAdmin()}"
+                             oncomplete="checkMandateDlg.show()"
+                             update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
+                <p:resetInput target=":frmMain:checkMandatePanel"/>
+            </p:commandButton>
+            <!-- Check Mandate Doc [ For AAD Committee ]-->
+            <p:commandButton id="btnCheckMandate_AADC" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 2008}"
+                             actionListener="#{headerController.onCheckMandateForAADCommittee()}"
+                             oncomplete="checkMandateDlg.show()"
+                             update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
+                <p:resetInput target=":frmMain:checkMandatePanel"/>
+            </p:commandButton>
+            <!-- Submit to AAD Committee [ From AAD Admin ]-->
+            <p:commandButton id="btnSubmitAADC_AADM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2006}"
+                             actionListener="#{headerController.onOpenSubmitAADCommittee()}"
+                             update=":frmMain:msgBoxBaseMessagePanel, :frmMain:submitAADCPanel">
+            </p:commandButton>
+            <!-- Return to AAD Admin [ FROM AAD Committee ]-->
+            <p:commandButton id="btnReturnAADM_AADC" value="#{msg.get('app.header.button.returnToAADAdmin')}" title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2008}"
+                             actionListener="#{headerController.onOpenReturnAADAdmin()}"
+                             update=":frmMain:returnAADM_AADCPanel">
+            </p:commandButton>
+            <!-- Submit to UW [ Complete Appraisal Flow - AAD Committee ]-->
+            <p:commandButton id="btnSubmit_AADC" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2008}"
+                             onclick="confirmSubmitApprToUw.show()"/>
+                <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmSubmitApprToUw" global="false" showEffect="fade"
+                                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2008}">
+                    <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{headerController.onSubmitAppraisalToUW()}"
+                                     process="@this" oncomplete="confirmSubmitApprToUw.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" type="button"
+                                     onclick="confirmSubmitCustomerAccept.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+        </p:panel>
+        <!--############ Customer Acceptance Stage ############-->
+        <p:panel id="header_panel_customer_accept" rendered="#{headerController.checkAccessStage('CUSTOMERACCEPTANCE')}" styleClass="panel">
+            <p:commandButton id="btnRequestPrice_Pre" value="#{msg.get('app.header.button.requestPriceReduction')}"
+                             title="#{msg.get('app.header.button.requestPriceReduction')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Request for Price Reduction')}">
 
-    </p:commandButton>
-    <!--Mandate Document FullApplication-->
-    <p:commandButton id="btnMandateDocFullApp" value="#{msg.get('app.header.button.mandateDoc')}"
-                     styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
-                     rendered="#{headerController.checkButton('Check Mandate Doc')}"
-                     actionListener="#{headerController.onCheckMandateForFullApp()}"
-                     oncomplete="checkMandateDlg.show()"
-                     update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
-        <p:resetInput target=":frmMain:checkMandatePanel"/>
-    </p:commandButton>
-    <!--Return to BDM -->
-    <p:commandButton id="btnReturnBDM" value="Return to BDM" styleClass="blueButton" title=""
-                     rendered="#{headerController.checkButton('Return to BDM')}"
-                     actionListener="#{headerController.onOpenReturnBDMDialog()}"
-                     oncomplete="returnBDMDlg.show()"
-                     update=":frmMain:returnBDMPanel">
-        <p:resetInput target=":frmMain:returnBDMPanel"/>
-    </p:commandButton>
-    <!--Request Appraisal Fullapp-->
-    <p:commandButton id="btnReqApprFullapp" value="#{msg.get('app.header.button.requestAppraisal')}"
-                     styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
-                     rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
-                     process="@this"
-                     actionListener="#{headerController.onOpenRequestAppraisal()}"
-                     update=":frmMain:reqApprDialogPanel"
-                     oncomplete="reqApprDlg.show()">
-        <p:resetInput target=":frmMain:reqApprDialogPanel"/>
-    </p:commandButton>
-    <!--Cancel CA FullApplication-->
-    <p:commandButton id="btnCancelCAFullApp" value="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.cancelCA')}"
-                     rendered="#{headerController.checkButton('Cancel CA')}"
-                     actionListener="#{headerController.onOpenCancelCAFullApp()}"
-                     oncomplete="cancelCAFullAppDlg.show()"
-                     update=":frmMain:cancelCAFullAppPanel">
-        <p:resetInput target=":frmMain:cancelCAFullAppPanel"/>
-    </p:commandButton>
-    <!--Submit Case-->
-    <!--Submit To Zone Manager-->
-    <p:commandButton id="btnSubmitCaseToZM" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.submitCA')}"
-                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2001}"
-                     action="#{headerController.onOpenSubmitZM}"
-                     update=":frmMain:submitZMPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
-    </p:commandButton>
-    <!--Submit To Region Manager-->
-    <p:commandButton id="btnSubmitCaseToRGM" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.submitCA')}"
-                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2002}"
-                     onclick="confirmSubmitSubmitRGM.show()"/>
-    <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
-                     icon="ui-icon-alert"
-                     widgetVar="confirmSubmitSubmitRGM" global="false" showEffect="fade"
-                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2002}">
-        <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
-                         actionListener="#{headerController.onSubmitRM()}"
-                         process="@this" oncomplete="confirmSubmitSubmitRGM.hide()"/>
-        <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitRGM.hide()"
-                         styleClass="ui-confirmdialog-no"/>
-    </p:confirmDialog>
-    <!--Submit To Group Head-->
-    <p:commandButton id="btnSubmitCaseToGH" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.submitCA')}"
-                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2020}"
-                     onclick="confirmSubmitSubmitGH.show()"/>
-    <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
-                     icon="ui-icon-alert"
-                     widgetVar="confirmSubmitSubmitGH" global="false" showEffect="fade"
-                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2020}">
-        <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
-                         actionListener="#{headerController.onSubmitGH()}"
-                         process="@this" oncomplete="confirmSubmitSubmitGH.hide()"/>
-        <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitGH.hide()"
-                         styleClass="ui-confirmdialog-no"/>
-    </p:confirmDialog>
-    <!--Submit To CSSO-->
-    <p:commandButton id="btnSubmitCaseToCSSO" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.submitCA')}"
-                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2021}"
-                     onclick="confirmSubmitSubmitCSSO.show()"/>
-    <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
-                     icon="ui-icon-alert"
-                     widgetVar="confirmSubmitSubmitCSSO" global="false" showEffect="fade"
-                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2021}">
-        <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
-                         actionListener="#{headerController.onSubmitCSSO()}"
-                         process="@this" oncomplete="confirmSubmitSubmitCSSO.hide()"/>
-        <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitCSSO.hide()"
-                         styleClass="ui-confirmdialog-no"/>
-    </p:confirmDialog>
-    <!--Submit To UW1-->
-    <p:commandButton id="btnSubmitCaseToUW1" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.submitCA')}"
-                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2022}"
-                     onclick="confirmSubmitSubmitUW.show()"/>
-    <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
-                     icon="ui-icon-alert"
-                     widgetVar="confirmSubmitSubmitUW" global="false" showEffect="fade"
-                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2022}">
-        <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
-                         actionListener="#{headerController.onSubmitUWFromCSSO()}"
-                         process="@this" oncomplete="confirmSubmitSubmitUW.hide()"/>
-        <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitUW.hide()"
-                         styleClass="ui-confirmdialog-no"/>
-    </p:confirmDialog>
-    <!--Submit UW2-->
-    <p:commandButton id="btnSubmitCaseToUW" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.submitCA')}"
-                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2003}"
-                     action="#{headerController.onOpenSubmitUW2()}"
-                     update=":frmMain:submitUWPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"/>
-    <!---->
+            </p:commandButton>
 
-    <!--Submit To UW1 (Submit Return)-->
-    <p:commandButton id="btnSubmitCaseToBDMUW1" value="#{msg.get('app.header.button.submitToUW1')}"
-                     styleClass="blueButton" title="#{msg.get('app.header.button.submitToUW1')}"
-                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2004}"
-                     onclick="confirmSubmitSubmitUW1.show()"/>
-        <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
-                         icon="ui-icon-alert"
-                         widgetVar="confirmSubmitSubmitUW1" global="false" showEffect="fade"
-                         rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2004}">
-            <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                             update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
-                             actionListener="#{headerController.onSubmitReturnUW1()}"
-                             process="@this" oncomplete="confirmSubmitSubmitUW1.hide()"/>
-            <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitUW1.hide()"
-                             styleClass="ui-confirmdialog-no"/>
-        </p:confirmDialog>
+            <p:commandButton id="btnCancelCase_Pre" value="#{msg.get('app.header.button.cancelCA')}"
+                             title="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Cancel CA')}">
 
-    <!-- Submit to BDM ( submit from ABDM ) -->
-    <p:commandButton id="btnSubmitCaseToBDM_ABDM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2023}"
-                     onclick="confirmSubmitBDM_ABDM.show()"/>
-        <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
-                         icon="ui-icon-alert"
-                         widgetVar="confirmSubmitBDM_ABDM" global="false" showEffect="fade"
-                         rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2023}">
-            <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                             update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
-                             actionListener="#{headerController.onSubmitToBDM()}"
-                             process="@this" oncomplete="confirmSubmitBDM_ABDM.hide()"/>
-            <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitBDM_ABDM.hide()"
-                             styleClass="ui-confirmdialog-no"/>
-        </p:confirmDialog>
+            </p:commandButton>
 
-    <!--Restart case (UW)-->
-    <p:commandButton id="btnRestartCase" value="#{msg.get('app.header.button.restart')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.restart')}"
-                     rendered="#{headerController.checkButton('Restart') and headerController.stepId == 2004}"
-                     onclick="confirmRestart.show()"/>
-    <p:confirmDialog header="Confirmation" message="Please click 'OK' to restart case" styleClass="left"
-                     icon="ui-icon-alert"
-                     widgetVar="confirmRestart" global="false" showEffect="fade"
-                     rendered="#{headerController.checkButton('Restart') and headerController.stepId == 2004}">
-        <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
-                         actionListener="#{headerController.onRestartCase()}"
-                         process="@this" oncomplete="confirmRestart.hide()"/>
-        <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmRestart.hide()"
-                         styleClass="ui-confirmdialog-no"/>
-    </p:confirmDialog>
+            <p:commandButton id="btnPendingForDecision_Pre" value="#{msg.get('app.header.button.pendingForDecision')}"
+                             title="#{msg.get('app.header.button.pendingForDecision')}" styleClass="blueButton"
+                             actionListener="#{headerController.onOpenPendingDecision()}"
+                             update=":frmMain:pendingDecisionPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                             rendered="#{headerController.checkButton('Pending for Decision')}"/>
+            <!-- Customer Accept ( Submit to next Step ) -->
+            <p:commandButton id="btnCustomerAccept_Pre" value="#{msg.get('app.header.button.customerAccept')}"
+                             title="#{msg.get('app.header.button.customerAccept')}" styleClass="blueButton"
+                             onclick="confirmSubmitCustomerAccept.show()"
+                             rendered="#{headerController.checkButton('Customer Accepted')}"/>
+            <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
+                             icon="ui-icon-alert"
+                             widgetVar="confirmSubmitCustomerAccept" global="false" showEffect="fade"
+                             rendered="#{headerController.checkButton('Customer Accepted')}">
+                <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                 update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                 actionListener="#{headerController.onSubmitCustomerAcceptance()}"
+                                 process="@this" oncomplete="confirmSubmitCustomerAccept.hide()"/>
+                <p:commandButton value="#{msg.get('app.button.cancel')}" type="button"
+                                 onclick="confirmSubmitCustomerAccept.hide()"
+                                 styleClass="ui-confirmdialog-no"/>
+            </p:confirmDialog>
+        </p:panel>
+    <!-- Stage 301 - Customer acceptance -->
+    <p:panel id="header_panel_301" rendered="#{headerController.stageId == 301}" styleClass="panel">
+        <!--Print Op Sheet -->
+        <p:commandButton id="btnPrintReport301" value="#{msg.get('app.header.button.printReport')}"
+                         styleClass="blueButton" title="#{msg.get('app.header.button.printReport')}"
+                         oncomplete="printReportDlg.show()"
+                         actionListener="#{report.setNameReport()}"
+                         update=":frmMain:printReportPanel"
+                         rendered="#{headerController.checkButton('Print PDF')}">
+        </p:commandButton>
+        <!--Check Mandate Doc -->
+        <p:commandButton id="btnChkMandate301" value="#{msg.get('app.header.button.mandateDoc')}"
+                         styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
+                         rendered="#{headerController.checkButton('Check Mandate Doc')}"
+                         update=":frmMain:msgBoxBaseMessagePanel">
+        </p:commandButton>
 
-    <!--Complete parallel case (UW)-->
-    <p:commandButton id="btnCompleteCase" value="#{msg.get('app.header.button.complete')}" styleClass="blueButton"
-                     title="#{msg.get('app.header.button.complete')}"
-                     rendered="#{headerController.checkButton('Complete') and headerController.stepId == 2003}"
-                     onclick="confirmComplete.show()"/>
-    <p:confirmDialog header="Confirmation" message="Please click 'OK' to complete case" styleClass="left"
-                     icon="ui-icon-alert"
-                     widgetVar="confirmComplete" global="false" showEffect="fade"
-                     rendered="#{headerController.checkButton('Complete') and headerController.stepId == 2003}">
-        <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
-                         actionListener="#{headerController.onCompleteCase()}"
-                         process="@this" oncomplete="confirmComplete.hide()"/>
-        <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmComplete.hide()"
-                         styleClass="ui-confirmdialog-no"/>
-    </p:confirmDialog>
-    <!---->
-</p:panel>
-<!--Stage for Appraisal-->
-<p:panel id="header_panel_appraisal" rendered="#{headerController.stageId == 203}" styleClass="panel">
-    <!-- Return to BDM (AAD Admin)-->
-    <p:commandButton id="btnReturnBDM_AADM" value="Return to BDM" title="Return to BDM" styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Return to BDM') and headerController.stepId == 2006}">
-
-    </p:commandButton>
-    <!-- Check Mandate Doc (AAD Admin)-->
-    <p:commandButton id="btnCheckMandate_AADM" value="Check Mandate Doc" title="Check Mandate Doc"
-                     styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 2006}"
-                     actionListener="#{headerController.onCheckMandateForAADAdmin()}"
-                     oncomplete="checkMandateDlg.show()"
-                     update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
-        <p:resetInput target=":frmMain:checkMandatePanel"/>
-    </p:commandButton>
-    <!-- Check Mandate Doc (AAD Committee)-->
-    <p:commandButton id="btnCheckMandate_AADC" value="Check Mandate Doc" title="Check Mandate Doc"
-                     styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 2008}"
-                     actionListener="#{headerController.onCheckMandateForAADCommittee()}"
-                     oncomplete="checkMandateDlg.show()"
-                     update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
-        <p:resetInput target=":frmMain:checkMandatePanel"/>
-    </p:commandButton>
-    <!-- Submit to AADC (AAD Admin)-->
-    <p:commandButton id="btnSubmitAADC_AADM" value="Submit CA" title="Submit CA" styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2006}"
-                     actionListener="#{headerController.onOpenSubmitAADCommittee()}"
-                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:submitAADCPanel">
-
-    </p:commandButton>
-
-    <!-- Return to AAD Admin (AADC)-->
-    <p:commandButton id="btnReturnAADM_AADC" value="Return to AAD Admin" title="Return to AAD Admin"
-                     styleClass="blueButton"
-                     actionListener="#{headerController.onOpenReturnAADAdmin()}"
-                     update=":frmMain:addReturnInfoPanel"
-                     rendered="#{headerController.checkButton('Return to AAD Admin')}">
-
-    </p:commandButton>
-    <!-- Submit (AADC)-->
-    <p:commandButton id="btnSubmit_AADC" value="Submit CA" title="Submit CA" styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2008}"
-                     onclick="confirmSubmitApprToUw.show()"/>
-    <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
-                     icon="ui-icon-alert"
-                     widgetVar="confirmSubmitApprToUw" global="false" showEffect="fade"
-                     rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2008}">
-        <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
-                         actionListener="#{headerController.onSubmitAppraisalToUW()}"
-                         process="@this" oncomplete="confirmSubmitApprToUw.hide()"/>
-        <p:commandButton value="#{msg.get('app.button.cancel')}" type="button"
-                         onclick="confirmSubmitCustomerAccept.hide()"
-                         styleClass="ui-confirmdialog-no"/>
-    </p:confirmDialog>
-</p:panel>
-<!--Customer Acceptance Stage-->
-<p:panel id="header_panel_customer_accept" rendered="#{headerController.stageId == 205}" styleClass="panel">
-    <p:commandButton id="btnRequestPrice_Pre" value="#{msg.get('app.header.button.requestPriceReduction')}"
-                     title="#{msg.get('app.header.button.requestPriceReduction')}" styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Request for Price Reduction')}">
-
-    </p:commandButton>
-
-    <p:commandButton id="btnCancelCase_Pre" value="#{msg.get('app.header.button.cancelCA')}"
-                     title="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Cancel CA')}">
-
-    </p:commandButton>
-
-    <p:commandButton id="btnPendingForDecision_Pre" value="#{msg.get('app.header.button.pendingForDecision')}"
-                     title="#{msg.get('app.header.button.pendingForDecision')}" styleClass="blueButton"
-                     actionListener="#{headerController.onOpenPendingDecision()}"
-                     update=":frmMain:pendingDecisionPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
-                     rendered="#{headerController.checkButton('Pending for Decision')}"/>
-    <!-- Customer Accept ( Submit to next Step ) -->
-    <p:commandButton id="btnCustomerAccept_Pre" value="#{msg.get('app.header.button.customerAccept')}"
-                     title="#{msg.get('app.header.button.customerAccept')}" styleClass="blueButton"
-                     onclick="confirmSubmitCustomerAccept.show()"
-                     rendered="#{headerController.checkButton('Customer Accepted')}"/>
-    <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
-                     icon="ui-icon-alert"
-                     widgetVar="confirmSubmitCustomerAccept" global="false" showEffect="fade"
-                     rendered="#{headerController.checkButton('Customer Accepted')}">
-        <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
-                         actionListener="#{headerController.onSubmitCustomerAcceptance()}"
-                         process="@this" oncomplete="confirmSubmitCustomerAccept.hide()"/>
-        <p:commandButton value="#{msg.get('app.button.cancel')}" type="button"
-                         onclick="confirmSubmitCustomerAccept.hide()"
-                         styleClass="ui-confirmdialog-no"/>
-    </p:confirmDialog>
-</p:panel>
-
-<!--Request Appraisal [Submit to AAD Admin]-->
-<!--<p:commandButton id="btnRequestAppraisalAADADmin" value="Request for Appraisal" styleClass="blueButton" title="Request for Appraisal"
-                 rendered="#{baseController.manageButton.submitRequestAppraisalButton}">
-    <p:confirmDialog header="Confirmation" message="Are you want to Request for Appraisal? ( Submit to AAD Admin )" styleClass="left"
-                     icon="ui-icon-alert"
-                     widgetVar="confirmRequestForAppraisal" global="false" showEffect="fade"
-                     rendered="#{baseController.manageButton.submitRequestAppraisalButton}">
-        <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
-                         update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"
-                         actionListener="#{baseController.onSubmitAppraisalAdmin()}"
-                         process="@this" oncomplete="confirmRequestForAppraisal.hide()"/>
-        <p:commandButton value="No" type="button" onclick="confirmRequestForAppraisal.hide()"
-                         styleClass="ui-confirmdialog-no"/>
-    </p:confirmDialog>
-</p:commandButton>-->
-
-
-<!--Submit Return Reply for test-->
-<!-- <p:commandButton id="btnReturnReply" value="Submit UW1" styleClass="blueButton" title="Submit Reply"
-                  action="#{baseController.onSubmitReturnUW1()}"
-                  update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"
-                  rendered="true">
-
- </p:commandButton>-->
-
-<!-- Stage 301 - Customer acceptance -->
-<p:panel id="header_panel_301" rendered="#{headerController.stageId == 301}" styleClass="panel">
-    <!--Print Op Sheet -->
-    <p:commandButton id="btnPrintReport301" value="#{msg.get('app.header.button.printReport')}"
-                     styleClass="blueButton" title="#{msg.get('app.header.button.printReport')}"
-                     oncomplete="printReportDlg.show()"
-                     actionListener="#{report.setNameReport()}"
-                     update=":frmMain:printReportPanel"
-                     rendered="#{headerController.checkButton('Print PDF')}">
-    </p:commandButton>
-    <!--Check Mandate Doc -->
-    <p:commandButton id="btnChkMandate301" value="#{msg.get('app.header.button.mandateDoc')}"
-                     styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
-                     rendered="#{headerController.checkButton('Check Mandate Doc')}"
-                     update=":frmMain:msgBoxBaseMessagePanel">
-    </p:commandButton>
-
-    <!--Request for Price Reduction -->
-    <p:commandButton id="btnPriceReduction301" value="#{msg.get('app.header.button.requestPriceReduction')}"
-                     styleClass="blueButton" title="#{msg.get('app.header.button.requestPriceReduction')}"
-                     rendered="#{headerController.checkButton('Request for Price Reduction')}">
-    </p:commandButton>
+        <!--Request for Price Reduction -->
+        <p:commandButton id="btnPriceReduction301" value="#{msg.get('app.header.button.requestPriceReduction')}"
+                         styleClass="blueButton" title="#{msg.get('app.header.button.requestPriceReduction')}"
+                         rendered="#{headerController.checkButton('Request for Price Reduction')}">
+        </p:commandButton>
 
 
-    <!--Return to BDM -->
-    <p:commandButton id="btnReturnBDM301" value="#{msg.get('app.header.button.returnToBDM')}"
-                     styleClass="blueButton" title="#{msg.get('app.header.button.returnToBDM')}"
-                     rendered="#{headerController.checkButton('Return to BDM')}"
-                     actionListener="#{headerController.onOpenReturnBDMDialog()}"
-                     oncomplete="returnBDMDlg.show()"
-                     update=":frmMain:returnBDMPanel">
-        <p:resetInput target=":frmMain:returnBDMPanel"/>
-    </p:commandButton>
+        <!--Return to BDM -->
+        <p:commandButton id="btnReturnBDM301" value="#{msg.get('app.header.button.returnToBDM')}"
+                         styleClass="blueButton" title="#{msg.get('app.header.button.returnToBDM')}"
+                         rendered="#{headerController.checkButton('Return to BDM')}"
+                         actionListener="#{headerController.onOpenReturnBDMDialog()}"
+                         oncomplete="returnBDMDlg.show()"
+                         update=":frmMain:returnBDMPanel">
+            <p:resetInput target=":frmMain:returnBDMPanel"/>
+        </p:commandButton>
 
-    <!--Return to UW2 -->
-    <p:commandButton id="btnReturnUW2_301" value="#{msg.get('app.header.button.returnToUW2')}"
-                     styleClass="blueButton" title="#{msg.get('app.header.button.returnToBDM')}"
-                     rendered="#{headerController.checkButton('Return to UW 2')}"
-            >
-    </p:commandButton>
+        <!--Return to UW2 -->
+        <p:commandButton id="btnReturnUW2_301" value="#{msg.get('app.header.button.returnToUW2')}"
+                         styleClass="blueButton" title="#{msg.get('app.header.button.returnToBDM')}"
+                         rendered="#{headerController.checkButton('Return to UW 2')}"
+                >
+        </p:commandButton>
 
-    <!--Cancel CA -->
-    <p:commandButton id="btnCancelCA301" value="#{msg.get('app.header.button.cancelCA')}"
-                     styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
-                     rendered="#{headerController.checkButton('Cancel CA')}"
-                     actionListener="#{headerController.onOpenCancelCAFullApp()}"
-                     oncomplete="cancelCAFullAppDlg.show()"
-                     update=":frmMain:cancelCAFullAppPanel">
-        <p:resetInput target=":frmMain:cancelCAFullAppPanel"/>
-    </p:commandButton>
-    <!--Submit to BDM -->
-    <p:commandButton id="btnSubmitCase301" value="#{msg.get('app.header.button.submit')}"
-                     styleClass="blueButton" title="#{msg.get('app.header.button.submit')}"
-                     rendered="#{headerController.checkButton('Submit CA')}"
-            >
-    </p:commandButton>
+        <!--Cancel CA -->
+        <p:commandButton id="btnCancelCA301" value="#{msg.get('app.header.button.cancelCA')}"
+                         styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
+                         rendered="#{headerController.checkButton('Cancel CA')}"
+                         actionListener="#{headerController.onOpenCancelCAFullApp()}"
+                         oncomplete="cancelCAFullAppDlg.show()"
+                         update=":frmMain:cancelCAFullAppPanel">
+            <p:resetInput target=":frmMain:cancelCAFullAppPanel"/>
+        </p:commandButton>
+        <!--Submit to BDM -->
+        <p:commandButton id="btnSubmitCase301" value="#{msg.get('app.header.button.submit')}"
+                         styleClass="blueButton" title="#{msg.get('app.header.button.submit')}"
+                         rendered="#{headerController.checkButton('Submit CA')}"
+                >
+        </p:commandButton>
 
-</p:panel>
+    </p:panel>
+    </div>
+    <div class="clear"></div>
+    <div id="header_information">
+        <ui:include src="header_information.xhtml"/>
+    </div>
 </div>
 <div class="clear"></div>
-<div id="header_information">
-    <ui:include src="header_information.xhtml"/>
-</div>
-</div>
-<div class="clear"></div>
-
+<!-- Start for Message Box -->
 <p:panel id="msgBoxBaseMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxBaseMessageDialog" widgetVar="msgBoxBaseMessageDlg" styleClass="messageDialog"
                      header="#{headerController.messageHeader}">
@@ -529,7 +506,6 @@
                          oncomplete="msgBoxBaseMessageDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>
-
 <p:panel id="msgBoxMandateMessagePanel" styleClass="panel">
     <p:dialog id="msgBoxMandateMessageDialog" widgetVar="msgBoxMandateMessageDlg" styleClass="messageDialog"
               header="#{headerController.messageHeader}" width="800" closable="false" modal="true">
@@ -542,7 +518,6 @@
                          oncomplete="msgBoxMandateMessageDlg.hide()"/>
     </p:dialog>
 </p:panel>
-
 <p:panel id="msgBoxBaseRedirectPanel" styleClass="panel">
     <p:confirmDialog id="msgBoxBaseRedirectDialog" widgetVar="msgBoxBaseRedirectDlg" styleClass="messageDialog"
                      header="#{headerController.messageHeader}">
@@ -554,7 +529,7 @@
                          action="#{headerController.onGoToInbox}"/>
     </p:confirmDialog>
 </p:panel>
-
+<!--End of Message Box -->
 <p:panel id="printReportPanel" styleClass="panel">
     <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
@@ -562,8 +537,7 @@
         <ui:include src="/site/dialog/printReportDialog.xhtml"/>
     </p:dialog>
 </p:panel>
-
-<p:panel id="assignABDMPanel" styleClass="panel">
+                <p:panel id="assignABDMPanel" styleClass="panel">
     <p:dialog id="assignABDMDialog" widgetVar="assignABDMDlg" header="Assign To ABDM"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="400" height="160">
@@ -657,7 +631,7 @@
          rendered="#{headerController.checkButton('Return to BDM') and headerController.stepId == 2006}">
     <p:dialog id="returnBDM_AADAdminDialog" widgetVar="returnBDM_AADAdminDlg" header="Return to BDM"
               resizable="false"
-              modal="true" width="500" height="200" closable="false">
+              modal="true" width="430" height="160" closable="false">
         <ui:include src="/site/dialog/returnBDMByAADDialog.xhtml"/>
     </p:dialog>
 </p:panel>
@@ -667,7 +641,23 @@
     <p:dialog id="returnAADM_AADCDialog" widgetVar="returnAADM_AADCDlg" header="Return to BDM"
               resizable="false"
               modal="true" width="500" height="200" closable="false">
-        <ui:include src="/site/dialog/returnBDMByAADDialog.xhtml"/>
+        <ui:include src="/site/dialog/returnAADMByAADCDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
+<p:panel id="reqAppr_BDMPanel" styleClass="panel"
+         rendered="#{headerController.checkButton('Request Appraisal') and headerController.stepId == 2006}">
+    <p:dialog id="reqAppr_BDMDialog" widgetVar="reqAppr_BDMDlg" header="Request Appraisal"
+              resizable="false" modal="true" width="430" height="160" closable="false">
+        <ui:include src="/site/dialog/submitReqApprDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
+<p:panel id="returnAADM_UW2Panel" styleClass="panel"
+         rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016}">
+    <p:dialog id="returnAADM_UW2Dialog" widgetVar="returnAADM_UW2Dlg" header="Return to AAD Committee"
+              resizable="false" modal="true" width="430" height="160" closable="false">
+        <ui:include src="/site/dialog/returnAADMByUW2Dialog.xhtml"/>
     </p:dialog>
 </p:panel>
 

@@ -9,7 +9,8 @@ public enum RoleValue {
     CSSO(106),
     UW(107),
     AAD_ADMIN(108),
-    AAD_COMITTEE(109);
+    AAD_COMITTEE(109),
+    SSO(110);
 
     int id;
 
