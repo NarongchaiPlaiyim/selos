@@ -275,26 +275,26 @@ public class LoginBean {
         HttpSession httpSession = FacesUtil.getSession(false);
         try
         {
-            if(httpSession.getAttribute("isLocked")!=null)
+            /*if(httpSession.getAttribute("isLocked")!=null)
             {
 
                 String isLocked = (String) httpSession.getAttribute("isLocked");
 
                 if(isLocked.equalsIgnoreCase("true"))
-                {
-                    String wobNum = (String)httpSession.getAttribute("wobNumber");
-                    bpmInterfaceImpl.unLockCase((String)httpSession.getAttribute("queueName"),wobNum,(Integer)httpSession.getAttribute("fetchType"));
-                }
+                {*/
+                    String wobNumber = (String)httpSession.getAttribute("wobNumber");
+                    bpmInterfaceImpl.unLockCase((String)httpSession.getAttribute("queueName"),wobNumber,(Integer)httpSession.getAttribute("fetchType"));
+               /* }
                 else
                 {
                     httpSession.removeAttribute("isLocked");
                 }
 
-            }
+            }*/
         }
         catch (Exception e)
         {
-            log.error("Error while unlocking case in queue : {}, WobNum : {}",httpSession.getAttribute("queueName"), httpSession.getAttribute("wobNumber"), e);
+            log.error("Error while unlocking case in queue : {}, wobNumber : {}",httpSession.getAttribute("queueName"), httpSession.getAttribute("wobNumber"), e);
         }
 
         httpSession.setAttribute("user", null);

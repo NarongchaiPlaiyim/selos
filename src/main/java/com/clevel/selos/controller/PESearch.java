@@ -277,9 +277,9 @@ public class PESearch implements Serializable
 
                 if(isLocked.equalsIgnoreCase("true"))
                 {      */
-                    String wobNum = (String)session.getAttribute("wobNum");
-                    log.info("unlocking case queue: {}, WobNum : {}, fetchtype: {}",session.getAttribute("queueName"), session.getAttribute("wobNum"),session.getAttribute("fetchType"));
-                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNum,(Integer)session.getAttribute("fetchType"));
+                    String wobNumber = (String)session.getAttribute("wobNumber");
+                    log.info("unlocking case queue: {}, wobNumber : {}, fetchtype: {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
+                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
                 /*}
                 else
                 {
@@ -291,7 +291,7 @@ public class PESearch implements Serializable
         catch (Exception e)
         {
 
-            log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
+            log.error("Error while unlocking case in queue : {}, wobNumber : {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"), e);
         }
 
         session.setAttribute("workCasePreScreenId", 0L);
@@ -301,7 +301,7 @@ public class PESearch implements Serializable
         session.setAttribute("stageId", 0);
         session.setAttribute("requestAppraisal", 0);
         session.setAttribute("queueName","");
-        session.removeAttribute("wobNum");
+        session.removeAttribute("wobNumber");
 
     }
 
@@ -631,7 +631,7 @@ public class PESearch implements Serializable
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
             log.info("Work case pre screen id : {}",wrkCasePreScreenId);
             //session.setAttribute("workCaseId", 0);
-            session.setAttribute("wobNum",searchViewSelectItem.getFwobnumber());
+            session.setAttribute("wobNumber",searchViewSelectItem.getFwobnumber());
         }
 
         else
@@ -640,7 +640,7 @@ public class PESearch implements Serializable
             wrkCaseId = workCaseDAO.findIdByWobNumber(searchViewSelectItem.getFwobnumber());
             session.setAttribute("workCaseId", wrkCaseId);
             //session.setAttribute("workCasePreScreenId", 0);
-            session.setAttribute("wobNum",searchViewSelectItem.getFwobnumber());
+            session.setAttribute("wobNumber",searchViewSelectItem.getFwobnumber());
 
         }
 
@@ -680,14 +680,14 @@ public class PESearch implements Serializable
 
         try
         {
-            log.info("locking case queue: {}, WobNum : {}, fetchtype: {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
+            log.info("locking case queue: {}, wobNumber : {}, fetchtype: {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
             bpmInterfaceImpl.lockCase(searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
             //session.setAttribute("isLocked","true");
 
         }
         catch (Exception e)
         {
-            log.error("Error while Locking case in queue : {}, WobNum : {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(), e);
+            log.error("Error while Locking case in queue : {}, wobNumber : {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(), e);
             message = "Another User is Working on this case!! Please Retry Later.";
             RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
             return;

@@ -95,9 +95,9 @@ public class PESQLAllBoxes implements Serializable
 
                 if(isLocked.equalsIgnoreCase("true"))
                 {*/
-                    String wobNum = (String)session.getAttribute("wobNum");
-                    log.info("unlocking case queue: {}, WobNum : {}, fetchtype: {}",session.getAttribute("queueName"), session.getAttribute("wobNum"),session.getAttribute("fetchType"));
-                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNum,(Integer)session.getAttribute("fetchType"));
+                    String wobNumber = (String)session.getAttribute("wobNumber");
+                    log.info("unlocking case queue: {}, wobNumber : {}, fetchtype: {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
+                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
                 /*}
                 else
                 {
@@ -109,7 +109,7 @@ public class PESQLAllBoxes implements Serializable
         catch (Exception e)
         {
 
-            log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
+            log.error("Error while unlocking case in queue : {}, wobNumber : {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"), e);
         }
 
         session.setAttribute("workCasePreScreenId", 0L);
@@ -120,7 +120,7 @@ public class PESQLAllBoxes implements Serializable
         session.setAttribute("stageId", 0);
         session.setAttribute("requestAppraisal", 0);
         session.setAttribute("queueName","");
-        session.removeAttribute("wobNum");
+        session.removeAttribute("wobNumber");
 
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
@@ -167,7 +167,7 @@ public class PESQLAllBoxes implements Serializable
             }
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
-            session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
+            session.setAttribute("wobNumber",inboxViewSelectItem.getFwobnumber());
         } else if (stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Parallel Appraisal
             WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
             if(workCase != null){
@@ -195,7 +195,7 @@ public class PESQLAllBoxes implements Serializable
             }
             session.setAttribute("workCaseId", wrkCaseId);
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
-            session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
+            session.setAttribute("wobNumber",inboxViewSelectItem.getFwobnumber());
         }
 
         session.setAttribute("stepId", inboxViewSelectItem.getStepId());
@@ -230,7 +230,7 @@ public class PESQLAllBoxes implements Serializable
         try
         {
 
-            log.info("locking case queue: {}, WobNum : {}, fetchtype: {}",queueName, inboxViewSelectItem.getFwobnumber(),inboxViewSelectItem.getFetchType());
+            log.info("locking case queue: {}, wobNumber : {}, fetchtype: {}",queueName, inboxViewSelectItem.getFwobnumber(),inboxViewSelectItem.getFetchType());
             bpmInterfaceImpl.lockCase(queueName,inboxViewSelectItem.getFwobnumber(),inboxViewSelectItem.getFetchType());
             //session.setAttribute("isLocked","true");
 
@@ -238,7 +238,7 @@ public class PESQLAllBoxes implements Serializable
         catch (Exception e)
         {
             //TODO Alert Box
-            log.error("Error while Locking case in queue : {}, WobNum : {}",queueName, inboxViewSelectItem.getFwobnumber(), e);
+            log.error("Error while Locking case in queue : {}, wobNumber : {}",queueName, inboxViewSelectItem.getFwobnumber(), e);
             RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
             return;
         }

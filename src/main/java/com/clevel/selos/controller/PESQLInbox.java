@@ -87,11 +87,11 @@ public class PESQLInbox implements Serializable
                 String isLocked = (String) session.getAttribute("isLocked");
 
                 if(isLocked.equalsIgnoreCase("true")) { */
-                    if(session.getAttribute("wobNum")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
+                    if(session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
                     {
-                        String wobNum = (String)session.getAttribute("wobNum");
-                        log.info("unlocking case queue: {}, WobNum : {}, fetchtype: {}",session.getAttribute("queueName"), session.getAttribute("wobNum"),session.getAttribute("fetchType"));
-                        bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNum,(Integer)session.getAttribute("fetchType"));
+                        String wobNumber = (String)session.getAttribute("wobNumber");
+                        log.info("unlocking case queue: {}, WobNum : {}, fetchtype: {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
+                        bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
                     }
 
                 /* } else {
@@ -100,7 +100,7 @@ public class PESQLInbox implements Serializable
             }  */
 
         } catch (Exception e) {
-            log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
+            log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"), e);
             message = "Error while unlocking case.";
             RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
         }

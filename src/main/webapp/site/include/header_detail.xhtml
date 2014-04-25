@@ -345,6 +345,24 @@
         <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmComplete.hide()"
                          styleClass="ui-confirmdialog-no"/>
     </p:confirmDialog>
+
+
+    <!--Resubmit-->
+    <p:commandButton id="btnResubmit" value="Resubmit" styleClass="blueButton" title="Resubmit"
+                     rendered="#{headerController.stepId == 0}"
+                     disabled="#{appealResubmit.disableResubmitButton}"
+                     process="@this"
+                     onclick="checkNCBDlg.show()"
+                     >
+    </p:commandButton>
+
+    <!--Appeal-->
+    <p:commandButton id="btnAppeal" value="Appeal" styleClass="blueButton" title="Appeal"
+                     rendered="#{headerController.stepId == 0}"
+                     disabled="#{appealResubmit.disableAppealButton}"
+                     process="@this"
+                     onclick="checkNCBDlg.show()">
+    </p:commandButton>
     <!---->
 </p:panel>
 <!--Stage for Appraisal-->
@@ -436,6 +454,7 @@
                          styleClass="ui-confirmdialog-no"/>
     </p:confirmDialog>
 </p:panel>
+
 <!--Customer Acceptance Stage-->
 <p:panel id="header_panel_customer_accept" rendered="#{headerController.stageId == 205}" styleClass="panel">
     <p:commandButton id="btnRequestPrice_Pre" value="#{msg.get('app.header.button.requestPriceReduction')}"
