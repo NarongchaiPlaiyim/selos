@@ -1,7 +1,7 @@
 package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.DocMandateType;
 import com.clevel.selos.model.db.working.MandateDoc;
 import org.hibernate.Criteria;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class MandateDocDAO extends GenericDAO<MandateDoc, Long>{
     @Inject
-    @NCB
+    @SELOS
     Logger log;
     @Inject
     public MandateDocDAO() {

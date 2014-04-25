@@ -112,12 +112,12 @@ public class AppraisalRequest extends BaseController {
         log.debug("preRender...");
         HttpSession session = FacesUtil.getSession(true);
         if(checkSession(session)){
-            stepId = getCurrentStep(session);
+            /*stepId = getCurrentStep(session);
             if(stepId != StepValue.REQUEST_APPRAISAL_RETURN.value() || stepId != StepValue.REQUEST_APPRAISAL_BDM.value()) {
                 log.debug("preRender ::: Invalid step id : {}", stepId);
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
-            }
+            }*/
         } else {
             log.debug("preRender ::: workCasePreScreenId, workCaseId, stepId is null.");
             FacesUtil.redirect("/site/inbox.jsf");

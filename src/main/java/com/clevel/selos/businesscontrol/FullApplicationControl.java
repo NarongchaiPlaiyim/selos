@@ -149,6 +149,7 @@ public class FullApplicationControl extends BusinessControl {
 
         //TODO: get total com and retail
 
+
         bpmExecutor.submitZM(workCaseId, queueName, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, ActionCode.SUBMIT_CA.getVal());
 
         //Insert Approval History
@@ -574,6 +575,7 @@ public class FullApplicationControl extends BusinessControl {
         workCaseAppraisal.setRequestBy(getCurrentUser());
         workCaseAppraisal.setProductGroup(productGroup);
         workCaseAppraisal.setRequestType(requestType);
+        workCaseAppraisal.setAppraisalResult(1);
         workCaseAppraisalDAO.persist(workCaseAppraisal);
 
         return workCaseAppraisal;
@@ -613,7 +615,7 @@ public class FullApplicationControl extends BusinessControl {
         return checkAppointment;
     }
 
-    public void submitToAADCommittee(String aadCommitteeUserId, long workCaseId, long workCasePreScreenId, String queueName) throws Exception{
+    public void submitToAADCommittee(String aadCommitteeUserId, long workCaseId, long workCasePreScreenId, String queueName, String wobNumber) throws Exception{
         log.debug("submitToAADCommittee ::: starting...");
         String appNumber = "";
         Appraisal appraisal = null;
@@ -646,7 +648,7 @@ public class FullApplicationControl extends BusinessControl {
                 if(appraisal.getLocationOfProperty() != null){
                     appraisalLocationCode = appraisal.getLocationOfProperty().getCode();
                 }
-                bpmExecutor.submitAADCommittee(appNumber, aadCommitteeUserId, DateTimeUtil.convertDateWorkFlowFormat(appraisal.getAppointmentDate()), appraisalLocationCode, queueName, ActionCode.SUBMIT_CA.getVal(), workCaseAppraisal.getWobNumber());
+                bpmExecutor.submitAADCommittee(appNumber, aadCommitteeUserId, DateTimeUtil.convertDateWorkFlowFormat(appraisal.getAppointmentDate()), appraisalLocationCode, queueName, ActionCode.SUBMIT_CA.getVal(), wobNumber);
             }
         } else {
             throw new Exception("Submit case failed, could not find appraisal data.");
@@ -656,6 +658,10 @@ public class FullApplicationControl extends BusinessControl {
 
     public void submitToUWFromCommittee(String queueName, String wobNumber) throws Exception{
         bpmExecutor.submitUW2FromCommittee(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
+    }
+
+    public void returnAADCommittee(String queueName, String wobNumber, String reason, String remark) throws Exception {
+        bpmExecutor.returnCase(queueName, wobNumber, remark, reason, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
     }
 
     public String getAADCommittee(long workCaseId, long workCasePreScreenId){

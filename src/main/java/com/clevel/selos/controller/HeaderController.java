@@ -578,7 +578,7 @@ public class HeaderController implements Serializable {
             RequestContext.getCurrentInstance().execute("submitUWDlg.show()");
         } catch (Exception ex){
             messageHeader = "Exception.";
-            message = "Exception is occured, cause : "+ex.getMessage();
+            message = "Exception is occurred, cause : "+ex.getMessage();
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
     }
@@ -778,6 +778,31 @@ public class HeaderController implements Serializable {
         }
     }*/
 
+    public void onOpenReturnAADMByUW2(){
+        log.debug("onOpenReturnAADCommittee ( return to AAD Admin from UW2 [ Open dialog ] )");
+        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
+        returnRemark = "";
+
+        RequestContext.getCurrentInstance().execute("returnAADM_UW2Dlg.show()");
+    }
+
+    public void onReturnAADMByUW2(){
+        log.debug("onReturnAADCommittee ( return to AAD Committee from UW2 )");
+        HttpSession session = FacesUtil.getSession(true);
+        String queueName = Util.parseString(session.getAttribute("queueName"), "");
+        String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+
+        try {
+
+            messageHeader = "Information.";
+            message = "Return case success.";
+        } catch (Exception ex) {
+            log.error("Exception while return to aad committee : ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+        }
+    }
+
     public void onOpenSubmitAADCommittee(){
         log.debug("onOpenSubmitAADCommittee ( submit to AAD committee )");
         HttpSession session = FacesUtil.getSession(true);
@@ -803,17 +828,14 @@ public class HeaderController implements Serializable {
 
     public void onSubmitAADCommittee(){
         log.debug("onSubmitAADCommittee ( submit to AAD committee )");
-        long workCasePreScreenId = 0;
-        long workCaseId = 0;
-        String queueName = "";
         try{
             HttpSession session = FacesUtil.getSession(true);
-            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-            workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-            queueName = Util.parseString(session.getAttribute("queueName"), "");
+            long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+            long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+            String queueName = Util.parseString(session.getAttribute("queueName"), "");
+            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
-            //TODO Save AADCommittee user id to appraisal
-            fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName);
+            fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
 
             messageHeader = "Information.";
             message = "Request for appraisal success.";
@@ -1109,7 +1131,6 @@ public class HeaderController implements Serializable {
 
         log.debug("onCheckMandateForMaker ::: stop...");
     }
-
     //Checker
     public void onCheckMandateForChecker(){
         log.debug("onCheckMandateForChecker ::: start...");
@@ -1149,7 +1170,6 @@ public class HeaderController implements Serializable {
     //Full App
     public void onCheckMandateForFullApp(){
         log.debug("onCheckMandateForFullApp ::: start...");
-        HttpSession session = FacesUtil.getSession(true);
         try{
             callFullApp();
             log.debug("stop...");
@@ -1690,6 +1710,31 @@ public class HeaderController implements Serializable {
             }
 
         }
+    }
+
+    public boolean checkAccessStage(String stageString){
+        boolean accessible = false;
+        HttpSession session = FacesUtil.getSession(true);
+        long stageId = Util.parseLong(session.getAttribute("stageId"), 0);
+        if("PRESCREEN".equalsIgnoreCase(stageString)){
+            if(stageId == 101){
+                accessible = true;
+            }
+        } else if ("FULLAPP".equalsIgnoreCase(stageString)){
+            if(stageId == 201 || stageId == 202 || stageId == 204 || stageId == 207){
+                accessible = true;
+            }
+        } else if ("APPRAISAL".equalsIgnoreCase(stageString)){
+            if(stageId == 203){
+                accessible = true;
+            }
+        } else if ("CUSTOMERACCEPTANCE".equalsIgnoreCase(stageString)){
+            if(stageId == 205){
+                accessible = true;
+            }
+        }
+
+        return accessible;
     }
 
     public int getQualitativeType() {
