@@ -669,7 +669,7 @@ public class PESearch implements Serializable
         {
 
             WorkCase workCase1 = workCaseDAO.findByAppNumber(appNumber);
-            if(workCase!= null)
+            if(workCase1!= null)
             {
                 wrkCaseId = workCase1.getId();
                 requestAppraisalFlag = workCase1.getRequestAppraisal();
