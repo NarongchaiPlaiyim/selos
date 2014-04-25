@@ -5,6 +5,7 @@ import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.master.UserTeamDAO;
+import com.clevel.selos.dao.working.WorkCaseAppraisalDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCaseOwnerDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
@@ -14,6 +15,7 @@ import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCaseAppraisal;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.PEInbox;
@@ -257,6 +259,9 @@ public class PESearch implements Serializable
     @Inject
     UserTeamDAO userTeamDAO;
 
+    @Inject
+    WorkCaseAppraisalDAO workCaseAppraisalDAO;
+
     String message;
 
     @PostConstruct
@@ -270,23 +275,23 @@ public class PESearch implements Serializable
         setStatusType("InprocessCases");
         try
         {
-           /* if(session.getAttribute("isLocked")!=null)
+            if(session.getAttribute("stepId")!=null)
             {
 
-                String isLocked = (String) session.getAttribute("isLocked");
+                //String isLocked = (String) session.getAttribute("isLocked");
 
-                if(isLocked.equalsIgnoreCase("true"))
-                {      */
+                if((Long)session.getAttribute("stepId") !=0 && session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
+                {
                     String wobNumber = (String)session.getAttribute("wobNumber");
                     log.info("unlocking case queue: {}, wobNumber : {}, fetchtype: {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
                     bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
-                /*}
-                else
+                }
+                /*else
                 {
                     session.removeAttribute("isLocked");
-                }
+                }*/
 
-            }   */
+            }
         }
         catch (Exception e)
         {
@@ -348,7 +353,7 @@ public class PESearch implements Serializable
 
         long stepId = searchViewSelectItem.getStepId();
 
-        long wrkCasePreScreenId;
+        long wrkCasePreScreenId =0;
 
         long wrkCaseId;
 
@@ -624,24 +629,71 @@ public class PESearch implements Serializable
             }
         }
 
-        if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value())
-        {
+        int requestAppraisalFlag = 0;
+        long wrkCaseAppraisalId = 0L;
 
-            wrkCasePreScreenId = workCasePrescreenDAO.findIdByWobNumber(searchViewSelectItem.getFwobnumber());
+        String appNumber = searchViewSelectItem.getApplicationno();
+
+        wrkCaseId = 0;
+
+        if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {     //For Case in Stage PreScreen
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
+            if(workCasePrescreen != null){
+                wrkCasePreScreenId = workCasePrescreen.getId();
+                requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+            }
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
-            log.info("Work case pre screen id : {}",wrkCasePreScreenId);
-            //session.setAttribute("workCaseId", 0);
-            session.setAttribute("wobNumber",searchViewSelectItem.getFwobnumber());
-        }
+            session.setAttribute("requestAppraisal", requestAppraisalFlag);
 
-        else
+        } else if (stepId == StepValue.REQUEST_APPRAISAL_POOL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Case in Stage Parallel Appraisal
+            WorkCase workCase1 = workCaseDAO.findByAppNumber(appNumber);
+            if(workCase1 != null){
+                wrkCaseId = workCase1.getId();
+                requestAppraisalFlag = workCase1.getRequestAppraisal();
+                session.setAttribute("workCaseId", wrkCaseId);
+                session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            } else {
+                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
+                wrkCasePreScreenId = workCasePrescreen.getId();
+                requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+                session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
+                session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            }
+            WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
+            if(workCaseAppraisal != null){
+                wrkCaseAppraisalId = workCaseAppraisal.getId();
+                session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
+            }
+        }
+        else if(stepId == 0) //for completed cases
         {
 
-            wrkCaseId = workCaseDAO.findIdByWobNumber(searchViewSelectItem.getFwobnumber());
-            session.setAttribute("workCaseId", wrkCaseId);
-            //session.setAttribute("workCasePreScreenId", 0);
-            session.setAttribute("wobNumber",searchViewSelectItem.getFwobnumber());
+            WorkCase workCase1 = workCaseDAO.findByAppNumber(appNumber);
+            if(workCase!= null)
+            {
+                wrkCaseId = workCase1.getId();
+                requestAppraisalFlag = workCase1.getRequestAppraisal();
+                session.setAttribute("workCaseId", wrkCaseId);
+                session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            }
+            else
+            {
+                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
+                wrkCasePreScreenId = workCasePrescreen.getId();
+                requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+                session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
+                session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            }
 
+        }
+        else {        //For Case in Stage FullApplication
+            WorkCase workCase1 = workCaseDAO.findByAppNumber(appNumber);
+            if(workCase1 != null){
+                wrkCaseId = workCase1.getId();
+                requestAppraisalFlag = workCase1.getRequestAppraisal();
+            }
+            session.setAttribute("workCaseId", wrkCaseId);
+            session.setAttribute("requestAppraisal", requestAppraisalFlag);
         }
 
         if(Util.isNull(searchViewSelectItem.getFetchType()))
@@ -680,9 +732,13 @@ public class PESearch implements Serializable
 
         try
         {
-            log.info("locking case queue: {}, wobNumber : {}, fetchtype: {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
-            bpmInterfaceImpl.lockCase(searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
-            //session.setAttribute("isLocked","true");
+            if(searchViewSelectItem.getStepId()!=null && searchViewSelectItem.getStepId() != 0)
+            {
+                log.info("locking case queue: {}, wobNumber : {}, fetchtype: {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
+                bpmInterfaceImpl.lockCase(searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
+                //session.setAttribute("isLocked","true");
+            }
+
 
         }
         catch (Exception e)
@@ -693,7 +749,8 @@ public class PESearch implements Serializable
             return;
         }
 
-		AppHeaderView appHeaderView = headerControl.getHeaderInformation(searchViewSelectItem.getStepId(), searchViewSelectItem.getFwobnumber());        session.setAttribute("appHeaderInfo", appHeaderView);
+        AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, searchViewSelectItem.getApplicationno());
+        session.setAttribute("appHeaderInfo", appHeaderView);
 
 
         long selectedStepId = searchViewSelectItem.getStepId();

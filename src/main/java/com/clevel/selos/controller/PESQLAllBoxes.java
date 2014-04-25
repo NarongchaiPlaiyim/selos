@@ -88,23 +88,23 @@ public class PESQLAllBoxes implements Serializable
         HttpSession session = FacesUtil.getSession(false);
         try
         {
-            /*if(session.getAttribute("isLocked")!=null)
+            if(session.getAttribute("stepId")!=null)
             {
 
-                String isLocked = (String) session.getAttribute("isLocked");
+                //String isLocked = (String) session.getAttribute("isLocked");
 
-                if(isLocked.equalsIgnoreCase("true"))
-                {*/
+                if((Long)session.getAttribute("stepId") !=0 && session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
+                {
                     String wobNumber = (String)session.getAttribute("wobNumber");
-                    log.info("unlocking case queue: {}, wobNumber : {}, fetchtype: {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
+                    log.info("unlocking case queue: {}, wobNumber : {}, fetchType: {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
                     bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
-                /*}
-                else
+                }
+                /*else
                 {
                     session.removeAttribute("isLocked");
-                }
+                }*/
 
-            } */
+            }
         }
         catch (Exception e)
         {

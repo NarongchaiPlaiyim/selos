@@ -1156,7 +1156,15 @@ public class PEDBExecute extends BusinessControl
 
                     else
                     {
-                        cmpltedwrkcaseitemslist = completedCasesWKItemsDAO.getCompletedCasesWKItems(completedCasesAppNoList,statuscode,date1,date2,date3,date4);
+                        if(completedCasesAppNoList!=null && completedCasesAppNoList.size()>0 && completedCasesAppNoList.get(0).length()>5)
+                        {
+                            cmpltedwrkcaseitemslist = completedCasesWKItemsDAO.getCompletedCasesWKItems(completedCasesAppNoList,statuscode,date1,date2,date3,date4);
+                        }
+                        else
+                        {
+                            cmpltedwrkcaseitemslist = completedCasesWKItemsDAO.getCompletedCasesWKItems(null,statuscode,date1,date2,date3,date4);
+                        }
+
                     }
 
                 }
@@ -1862,7 +1870,7 @@ public class PEDBExecute extends BusinessControl
     }
 
 
-    public List<PEInbox> getInboxResults(String selectedTeamId,String userName)
+/*    public List<PEInbox> getInboxResults(String selectedTeamId,String userName)
     {
         List<PEInbox> inboxViewList = new ArrayList<PEInbox>();
 
@@ -1935,7 +1943,7 @@ public class PEDBExecute extends BusinessControl
         }
 
         return inboxViewList;
-    }
+    }*/
 
     public List<PEInbox> getReassignSearch(String teamname,String username)
     {

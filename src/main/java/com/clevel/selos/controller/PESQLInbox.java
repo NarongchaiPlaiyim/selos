@@ -83,21 +83,24 @@ public class PESQLInbox implements Serializable
         HttpSession session = FacesUtil.getSession(true);
 
         try {
-             /*if(session.getAttribute("isLocked") != null) {
-                String isLocked = (String) session.getAttribute("isLocked");
 
-                if(isLocked.equalsIgnoreCase("true")) { */
-                    if(session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
-                    {
-                        String wobNumber = (String)session.getAttribute("wobNumber");
-                        log.info("unlocking case queue: {}, WobNum : {}, fetchtype: {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
-                        bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
-                    }
+            if(session.getAttribute("stepId")!=null)
+            {
 
-                /* } else {
-                    session.removeAttribute("isLocked");
+                //String isLocked = (String) session.getAttribute("isLocked");
+
+                if((Long)session.getAttribute("stepId") !=0 && session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
+                {
+                    String wobNumber = (String)session.getAttribute("wobNumber");
+                    log.info("unlocking case queue: {}, wobNumber : {}, fetchType: {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
+                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
                 }
-            }  */
+                /*else
+                {
+                    session.removeAttribute("isLocked");
+                }*/
+
+            }
 
         } catch (Exception e) {
             log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"), e);
