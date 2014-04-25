@@ -386,8 +386,8 @@ public class ReassignTeamNames implements Serializable
 
                 if(isLocked.equalsIgnoreCase("true"))
                 {*/
-                    String wobNum = (String)session.getAttribute("wobNumber");
-                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNum,(Integer)session.getAttribute("fetchType"));
+                    String wobNumber = (String)session.getAttribute("wobNumber");
+                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
                 /*}
                 else
                 {
@@ -398,7 +398,7 @@ public class ReassignTeamNames implements Serializable
         }
         catch (Exception e)
         {
-            log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"), e);
+            log.error("Error while unlocking case in queue : {}, wobNumber : {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"), e);
         }
 
         reasignteamnames = new ArrayList<ReassignTeamNameId>();
@@ -574,11 +574,11 @@ public class ReassignTeamNames implements Serializable
 
             try{
             //Try to Lock case
-            log.info("locking case queue: {}, WobNum : {}, fetchtype: {}",queueName, searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
+            log.info("locking case queue: {}, wobNumber : {}, fetchtype: {}",queueName, searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
             bpmInterfaceImpl.lockCase(queueName,searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
             /*session.setAttribute("isLocked","true");*/
             } catch (Exception e) {
-                 log.error("Error while Locking case in queue : {}, WobNum : {}",queueName, searchViewSelectItem.getFwobnumber(), e);
+                 log.error("Error while Locking case in queue : {}, wobNumber : {}",queueName, searchViewSelectItem.getFwobnumber(), e);
                  //message = "Another User is Working on this case!! Please Retry Later.";
                  RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
                 return;
@@ -595,8 +595,8 @@ public class ReassignTeamNames implements Serializable
                 session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
                 session.setAttribute("requestAppraisal", requestAppraisalFlag);
                 session.setAttribute("statusId", statusId);
-                session.setAttribute("wobNum",searchViewSelectItem.getFwobnumber());
-            } else if (stepId == StepValue.REQUEST_APPRAISAL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Case in Stage Parallel Appraisal
+                session.setAttribute("wobNumber",searchViewSelectItem.getFwobnumber());
+            } else if (stepId == StepValue.REQUEST_APPRAISAL_POOL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Case in Stage Parallel Appraisal
                 WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
                 if(workCase != null){
                     wrkCaseId = workCase.getId();
@@ -627,7 +627,7 @@ public class ReassignTeamNames implements Serializable
                 session.setAttribute("workCaseId", wrkCaseId);
                 session.setAttribute("requestAppraisal", requestAppraisalFlag);
                 session.setAttribute("statusId", statusId);
-                session.setAttribute("wobNum",searchViewSelectItem.getFwobnumber());
+                session.setAttribute("wobNumber",searchViewSelectItem.getFwobnumber());
             }
 
             if(Util.isNull(searchViewSelectItem.getFetchType())) {
@@ -654,7 +654,6 @@ public class ReassignTeamNames implements Serializable
             AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, searchViewSelectItem.getFwobnumber());
             session.setAttribute("appHeaderInfo", appHeaderView);
 
-            //todo: this value for status
             String landingPage = inboxControl.getLandingPage(stepId,0);
 
             log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
@@ -667,7 +666,7 @@ public class ReassignTeamNames implements Serializable
             }
 
         } catch (Exception e) {
-            //log.error("Error while Locking case in queue : {}, WobNum : {}",queueName, searchViewSelectItem.getFwobnumber(), e);
+            //log.error("Error while Locking case in queue : {}, wobNumber : {}",queueName, searchViewSelectItem.getFwobnumber(), e);
             //message = "Another User is Working on this case!! Please Retry Later.";
             // RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
             log.error("Error while opening case",e);
@@ -698,7 +697,7 @@ public class ReassignTeamNames implements Serializable
             session.setAttribute("workCaseId", 0);
         }
 
-        session.setAttribute("wobNum",searchViewSelectItem.getFwobnumber());
+        session.setAttribute("wobNumber",searchViewSelectItem.getFwobnumber());
         session.setAttribute("statusId", Util.parseLong(searchViewSelectItem.getStatuscode(), 0));
         session.setAttribute("stepId", searchViewSelectItem.getStepId());
         session.setAttribute("queuename",searchViewSelectItem.getQueuename());
@@ -714,7 +713,7 @@ public class ReassignTeamNames implements Serializable
         }
         catch (Exception e)
         {
-            log.error("Error while Locking case in queue : {}, WobNum : {}",searchViewSelectItem.getQueuename(), searchViewSelectItem.getFwobnumber(), e);
+            log.error("Error while Locking case in queue : {}, wobNumber : {}",searchViewSelectItem.getQueuename(), searchViewSelectItem.getFwobnumber(), e);
         }
 
        *//* AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(searchViewSelectItem.getWorkCasePreScreenId(), searchViewSelectItem.getWorkCaseId());

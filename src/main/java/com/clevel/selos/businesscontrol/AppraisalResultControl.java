@@ -155,6 +155,7 @@ public class AppraisalResultControl extends BusinessControl {
     }
 
     private void insertToDB(final List<NewCollateralView> newCollateralViewList, final User user){
+        log.debug("-- Insert into db");
         newCollateralList = Util.safetyList(newCollateralTransform.transformToNewModel(newCollateralViewList, user, newCreditFacility));
         newCollateralDAO.persistProposeTypeA(newCollateralList);
         for(NewCollateral newCollateral : newCollateralList){
@@ -173,10 +174,13 @@ public class AppraisalResultControl extends BusinessControl {
         }
     }
     private void clearDB(final List<NewCollateral> newCollateralList){
+        log.debug("-- clear db");
         long id;
         for(NewCollateral newCollateral : newCollateralList){
             id = newCollateral.getId();
+            log.debug("-- NewCollateral.id[{}]", id);
             newCollateralHeadList = Util.safetyList(newCollateralHeadDAO.findByNewCollateralId(id));
+//            newCollateralHeadDAO.delete(newCollateralHeadList);
             for(NewCollateralHead newCollateralHead : newCollateralHeadList){
                 id = newCollateralHead.getId();
                 newCollateralSubList = Util.safetyList(newCollateralSubDAO.findByNewCollateralHeadId(id));
@@ -187,7 +191,7 @@ public class AppraisalResultControl extends BusinessControl {
     }
 
     public AppraisalDataResult retrieveDataFromCOMS(final String jobID){
-        log.debug("retrieveDataFromCOMS ::: jobID : {}", jobID);
+        log.debug("-- retrieveDataFromCOMS ::: jobID : {}", jobID);
         AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(getCurrentUserID(), jobID);
         return appraisalDataResult;
     }
