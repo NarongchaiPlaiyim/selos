@@ -201,7 +201,7 @@
     <p:panel id="pnlButton" styleClass="center panel">
         <p:commandButton id="btnSaveAppraisalComs"
                          value="#{msg.get('app.button.ok')}"
-                         actionListener="#{appraisalResult.onSaveCollateralDetailView()}"
+                         action="#{appraisalResult.onSaveCollateralDetailView()}"
                          process="@form"
                          update=":appraisalComsDlgForm,:frmMain,:msgBoxSystemMessagePanel"
                          oncomplete="handleCollateralDetailRequest(xhr, status, args)"/>
