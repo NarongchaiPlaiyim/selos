@@ -90,7 +90,10 @@ public class AppraisalResultControl extends BusinessControl {
             newCollateralViewList = new ArrayList<NewCollateralView>();
             appraisalView = appraisalTransform.transformToView(appraisal, getCurrentUser());
             if(!Util.isNull(newCreditFacility)){
-                newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByTypeP(newCreditFacility));
+//                newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByTypeP(newCreditFacility));//normal query
+
+                newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByTypeP2(newCreditFacility));
+
                 List<NewCollateral> tempNewCollateralList = new ArrayList<NewCollateral>();
                 for(NewCollateral newCollateral : newCollateralList){
                     newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
