@@ -336,7 +336,7 @@
             <!-- Request Appraisal [ After Customer Accepted ]-->
             <p:commandButton id="btnReqAppr_BDM" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Request Appraisal') and headerController.stepId == 2032}"
-                             actionListener="#{headerController.onOpenRequestAppraisalCustomerAccepted()}"
+                             actionListener="#{headerController.onOpenRequestAppraisalCustomerAccepted()}" process="@this"
                              update=":frmMain:reqAppr_BDMPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
             </p:commandButton>
             <!-- Cancel Parallel Appraisal -->
@@ -676,9 +676,9 @@
 </p:panel>
 
 <p:panel id="reqAppr_BDMPanel" styleClass="panel"
-         rendered="#{headerController.checkButton('Request Appraisal') and headerController.stepId == 2006}">
+         rendered="#{headerController.checkButton('Request Appraisal') and headerController.stepId == 2032}">
     <p:dialog id="reqAppr_BDMDialog" widgetVar="reqAppr_BDMDlg" header="Request Appraisal"
-              resizable="false" modal="true" width="430" height="160" closable="false">
+              resizable="false" modal="true" width="430" height="240" closable="false">
         <ui:include src="/site/dialog/submitReqApprDialog.xhtml"/>
     </p:dialog>
 </p:panel>

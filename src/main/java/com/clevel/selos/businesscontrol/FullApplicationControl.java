@@ -521,8 +521,8 @@ public class FullApplicationControl extends BusinessControl {
                 bpmExecutor.requestAppraisal(queueName, wobNumber, aadAdminUserName, ActionCode.REQUEST_APPRAISAL.getVal());
                 log.debug("requestAppraisal ::: Create Work Item for appraisal complete.");
             } catch (Exception ex){
-                log.error("Exception while Create Work Item for Appraisal.");
-                throw new Exception("Exception while Create Work Item for Appraisal.");
+                log.error("Exception while Create Work Item for Appraisal. : ", ex);
+                throw ex;
             }
         } else {
             log.error("exception while Request Appraisal (BDM), Could not find WobNumber/QueueName.");
