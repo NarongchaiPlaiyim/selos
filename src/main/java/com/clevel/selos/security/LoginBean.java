@@ -282,8 +282,12 @@ public class LoginBean {
 
                 if(isLocked.equalsIgnoreCase("true"))
                 {*/
-                    String wobNumber = (String)httpSession.getAttribute("wobNumber");
-                    bpmInterfaceImpl.unLockCase((String)httpSession.getAttribute("queueName"),wobNumber,(Integer)httpSession.getAttribute("fetchType"));
+            if((Long)httpSession.getAttribute("stepId") !=0 && httpSession.getAttribute("wobNumber")!=null && httpSession.getAttribute("queueName")!=null && httpSession.getAttribute("fetchType")!=null)
+            {
+                String wobNumber = (String)httpSession.getAttribute("wobNumber");
+                bpmInterfaceImpl.unLockCase((String)httpSession.getAttribute("queueName"),wobNumber,(Integer)httpSession.getAttribute("fetchType"));
+            }
+
                /* }
                 else
                 {
