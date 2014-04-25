@@ -1052,7 +1052,6 @@ public class HeaderController implements Serializable {
 
         log.debug("onCheckMandateForMaker ::: stop...");
     }
-
     //Checker
     public void onCheckMandateForChecker(){
         log.debug("onCheckMandateForChecker ::: start...");
@@ -1092,7 +1091,6 @@ public class HeaderController implements Serializable {
     //Full App
     public void onCheckMandateForFullApp(){
         log.debug("onCheckMandateForFullApp ::: start...");
-        HttpSession session = FacesUtil.getSession(true);
         try{
             callFullApp();
             log.debug("stop...");
