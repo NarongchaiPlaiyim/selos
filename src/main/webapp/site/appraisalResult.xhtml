@@ -5,7 +5,7 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
-        xmlns:clv="http://clevel.com/ui">
+        >
 
 <h:head>
     <title>Appraisal Result</title>
@@ -437,6 +437,7 @@
     <ui:param name="action" value="onDeleteCollateralDetailView"/>
     <ui:param name="update" value=":frmMain"/>
 </ui:include>
+
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
                      header="#{appraisalResult.messageHeader}" >
@@ -449,6 +450,7 @@
                          oncomplete="msgBoxSystemMessageDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>
+
 <p:panel id="msgBoxRedirectPanel" styleClass="panel">
     <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
                      header="#{appraisalResult.messageHeader}" >
