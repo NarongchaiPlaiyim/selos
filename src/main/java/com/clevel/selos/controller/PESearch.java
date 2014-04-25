@@ -749,7 +749,8 @@ public class PESearch implements Serializable
             return;
         }
 
-		AppHeaderView appHeaderView = headerControl.getHeaderInformation(searchViewSelectItem.getStepId(), searchViewSelectItem.getFwobnumber());        session.setAttribute("appHeaderInfo", appHeaderView);
+        AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, searchViewSelectItem.getApplicationno());
+        session.setAttribute("appHeaderInfo", appHeaderView);
 
 
         long selectedStepId = searchViewSelectItem.getStepId();
