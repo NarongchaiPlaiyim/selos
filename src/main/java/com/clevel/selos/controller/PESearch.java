@@ -664,7 +664,29 @@ public class PESearch implements Serializable
                 wrkCaseAppraisalId = workCaseAppraisal.getId();
                 session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
             }
-        } else {        //For Case in Stage FullApplication
+        }
+        else if(stepId == 0) //for completed cases
+        {
+
+            WorkCase workCase1 = workCaseDAO.findByAppNumber(appNumber);
+            if(workCase!= null)
+            {
+                wrkCaseId = workCase1.getId();
+                requestAppraisalFlag = workCase1.getRequestAppraisal();
+                session.setAttribute("workCaseId", wrkCaseId);
+                session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            }
+            else
+            {
+                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
+                wrkCasePreScreenId = workCasePrescreen.getId();
+                requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+                session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
+                session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            }
+
+        }
+        else {        //For Case in Stage FullApplication
             WorkCase workCase1 = workCaseDAO.findByAppNumber(appNumber);
             if(workCase1 != null){
                 wrkCaseId = workCase1.getId();
