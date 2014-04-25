@@ -944,7 +944,7 @@ public class HeaderController implements Serializable {
         if(fullApplicationControl.checkAppraisalInformation(workCaseId)) {
             aadAdminList = fullApplicationControl.getUserListByRole(RoleValue.AAD_ADMIN);
             aadAdminId = "";
-            RequestContext.getCurrentInstance().execute("reqAppr_BDMDialog.show()");
+            RequestContext.getCurrentInstance().execute("reqAppr_BDMDlg.show()");
         } else {
             log.debug("onOpenRequestAppraisalCustomerAccepted : check appraisal information failed. do not open dialog.");
             messageHeader = "Information.";
@@ -1730,6 +1730,10 @@ public class HeaderController implements Serializable {
             }
         } else if ("CUSTOMERACCEPTANCE".equalsIgnoreCase(stageString)){
             if(stageId == 205){
+                accessible = true;
+            }
+        } else if ("GENERIC".equalsIgnoreCase(stageString)){
+            if(stageId == 0){
                 accessible = true;
             }
         }

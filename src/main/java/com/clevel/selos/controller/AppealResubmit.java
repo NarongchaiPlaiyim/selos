@@ -18,6 +18,7 @@ import com.clevel.selos.model.db.history.CaseCreationHistory;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import com.clevel.selos.ws.CaseCreation;
 import com.clevel.selos.ws.WSCaseCreation;
 import org.primefaces.context.RequestContext;
@@ -61,6 +62,8 @@ public class AppealResubmit implements Serializable {
     private String ncbFlag;
 
     //private List ncbReasonsList;
+    private String messageHeader;
+    private String message;
 
     @Inject
     User user;
@@ -534,27 +537,31 @@ public class AppealResubmit implements Serializable {
 
         String flag = "";
 
-        if(checkNCBFlag)
-        {
+        if(checkNCBFlag) {
             flag = "Y";
-        }
-        else
-        {
+        } else {
             flag="N";
         }
 
-        wsCaseCreation.newCase(caseCreationHistory.getJobName(),caseCreationHistory.getCaNumber(),caseCreationHistory.getOldCaNumber()
-            ,caseCreationHistory.getAccountNo1(),caseCreationHistory.getCustomerId(),caseCreationHistory.getCustomerName(),caseCreationHistory.getCitizenId()
-            , 2,caseCreationHistory.getCustomerType(),caseCreationHistory.getBdmId(),caseCreationHistory.getHubCode()
-            ,caseCreationHistory.getRegionCode(),caseCreationHistory.getUwId(),caseCreationHistory.getAppInDateBDM(),caseCreationHistory.getFinalApproved()
-            ,caseCreationHistory.getParallel(),caseCreationHistory.getPending(),caseCreationHistory.getCaExist(),caseCreationHistory.getCaEnd()
-            ,caseCreationHistory.getAccountNo2(),caseCreationHistory.getAccountNo3(),caseCreationHistory.getAccountNo4(),caseCreationHistory.getAccountNo5()
-            ,caseCreationHistory.getAccountNo6(),caseCreationHistory.getAccountNo7(),caseCreationHistory.getAccountNo8(),caseCreationHistory.getAccountNo9()
-            ,caseCreationHistory.getAccountNo10(),caseCreationHistory.getAppInDateUW(),caseCreationHistory.getRefAppNumber(),ncbReason
-            ,flag,caseCreationHistory.getSsoId());
+        try{
+            wsCaseCreation.newCase(caseCreationHistory.getJobName(),caseCreationHistory.getCaNumber(),caseCreationHistory.getOldCaNumber()
+                    ,caseCreationHistory.getAccountNo1(),caseCreationHistory.getCustomerId(),caseCreationHistory.getCustomerName(),caseCreationHistory.getCitizenId()
+                    , 2,caseCreationHistory.getCustomerType(),caseCreationHistory.getBdmId(),caseCreationHistory.getHubCode()
+                    ,caseCreationHistory.getRegionCode(),caseCreationHistory.getUwId(),caseCreationHistory.getAppInDateBDM(),caseCreationHistory.getFinalApproved()
+                    ,caseCreationHistory.getParallel(),caseCreationHistory.getPending(),caseCreationHistory.getCaExist(),caseCreationHistory.getCaEnd()
+                    ,caseCreationHistory.getAccountNo2(),caseCreationHistory.getAccountNo3(),caseCreationHistory.getAccountNo4(),caseCreationHistory.getAccountNo5()
+                    ,caseCreationHistory.getAccountNo6(),caseCreationHistory.getAccountNo7(),caseCreationHistory.getAccountNo8(),caseCreationHistory.getAccountNo9()
+                    ,caseCreationHistory.getAccountNo10(),caseCreationHistory.getAppInDateUW(),caseCreationHistory.getRefAppNumber(),ncbReason
+                    ,flag,caseCreationHistory.getSsoId());
 
-        RequestContext.getCurrentInstance().execute("successDlg.show()");
-
+            messageHeader = "Information.";
+            message = "Appeal case success.";
+        } catch (Exception ex){
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+        }
+        RequestContext.getCurrentInstance().execute("appealReSubmitDlg.hide()");
+        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
     }
 
     public void resubmitCase()
@@ -567,27 +574,46 @@ public class AppealResubmit implements Serializable {
 
         String flag = "";
 
-        if(checkNCBFlag)
-        {
+        if(checkNCBFlag) {
             flag = "Y";
-        }
-        else
-        {
+        } else {
             flag="N";
         }
 
-        wsCaseCreation.newCase(caseCreationHistory.getJobName(),caseCreationHistory.getCaNumber(),caseCreationHistory.getOldCaNumber()
-                ,caseCreationHistory.getAccountNo1(),caseCreationHistory.getCustomerId(),caseCreationHistory.getCustomerName(),caseCreationHistory.getCitizenId()
-                , 3,caseCreationHistory.getCustomerType(),caseCreationHistory.getBdmId(),caseCreationHistory.getHubCode()
-                ,caseCreationHistory.getRegionCode(),caseCreationHistory.getUwId(),caseCreationHistory.getAppInDateBDM(),caseCreationHistory.getFinalApproved()
-                ,caseCreationHistory.getParallel(),caseCreationHistory.getPending(),caseCreationHistory.getCaExist(),caseCreationHistory.getCaEnd()
-                ,caseCreationHistory.getAccountNo2(),caseCreationHistory.getAccountNo3(),caseCreationHistory.getAccountNo4(),caseCreationHistory.getAccountNo5()
-                ,caseCreationHistory.getAccountNo6(),caseCreationHistory.getAccountNo7(),caseCreationHistory.getAccountNo8(),caseCreationHistory.getAccountNo9()
-                ,caseCreationHistory.getAccountNo10(),caseCreationHistory.getAppInDateUW(),caseCreationHistory.getRefAppNumber(),ncbReason
-                ,flag,caseCreationHistory.getSsoId());
+        try{
+            wsCaseCreation.newCase(caseCreationHistory.getJobName(),caseCreationHistory.getCaNumber(),caseCreationHistory.getOldCaNumber()
+                    ,caseCreationHistory.getAccountNo1(),caseCreationHistory.getCustomerId(),caseCreationHistory.getCustomerName(),caseCreationHistory.getCitizenId()
+                    , 3,caseCreationHistory.getCustomerType(),caseCreationHistory.getBdmId(),caseCreationHistory.getHubCode()
+                    ,caseCreationHistory.getRegionCode(),caseCreationHistory.getUwId(),caseCreationHistory.getAppInDateBDM(),caseCreationHistory.getFinalApproved()
+                    ,caseCreationHistory.getParallel(),caseCreationHistory.getPending(),caseCreationHistory.getCaExist(),caseCreationHistory.getCaEnd()
+                    ,caseCreationHistory.getAccountNo2(),caseCreationHistory.getAccountNo3(),caseCreationHistory.getAccountNo4(),caseCreationHistory.getAccountNo5()
+                    ,caseCreationHistory.getAccountNo6(),caseCreationHistory.getAccountNo7(),caseCreationHistory.getAccountNo8(),caseCreationHistory.getAccountNo9()
+                    ,caseCreationHistory.getAccountNo10(),caseCreationHistory.getAppInDateUW(),caseCreationHistory.getRefAppNumber(),ncbReason
+                    ,flag,caseCreationHistory.getSsoId());
 
-        RequestContext.getCurrentInstance().execute("successDlg.show()");
-
+            messageHeader = "Information.";
+            message = "Resubmit case success.";
+        } catch (Exception ex){
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+        }
+        RequestContext.getCurrentInstance().execute("appealReSubmitDlg.hide()");
+        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
     }
 
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

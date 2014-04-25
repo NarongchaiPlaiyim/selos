@@ -733,10 +733,7 @@
         <ui:include src="dialog/basicInfoAccountDialog.xhtml"/>
     </p:dialog>
 
-    <p:dialog id="checkNCBDialog" header="Check NCB" widgetVar="checkNCBDlg" resizable="false"
-              modal="true" width="580" height="320" closable="true">
-        <ui:include src="dialog/checkNCBDialog.xhtml"/>
-    </p:dialog>
+
 
     <ui:include src="dialog/confirmDeleteDlg.xhtml">
         <ui:param name="id" value="confirmDeleteAccountDialog"/>
@@ -775,15 +772,6 @@
                              onclick="msgBoxSystemMessageDlg2.hide()"/>
         </p:confirmDialog>
     </p:panel>
-    <p:confirmDialog id="successDialog" widgetVar="successDlg" styleClass="messageDialog"
-                     closable="false"
-                     header="Success.">
-        <f:facet name="message">
-            <h:outputText value="Appeal/Resubmit Successfull!!" escape="false"/>
-        </f:facet>
-        <p:commandButton value="Ok" styleClass="small" onclick="successDlg.close();"/>
-    </p:confirmDialog>
-
 </h:body>
 </f:view>
 </html>
