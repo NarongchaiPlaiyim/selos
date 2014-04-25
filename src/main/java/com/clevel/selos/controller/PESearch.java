@@ -270,23 +270,23 @@ public class PESearch implements Serializable
         setStatusType("InprocessCases");
         try
         {
-           /* if(session.getAttribute("isLocked")!=null)
+            if(session.getAttribute("stepId")!=null)
             {
 
-                String isLocked = (String) session.getAttribute("isLocked");
+                //String isLocked = (String) session.getAttribute("isLocked");
 
-                if(isLocked.equalsIgnoreCase("true"))
-                {      */
+                if((Long)session.getAttribute("stepId") !=0 && session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
+                {
                     String wobNumber = (String)session.getAttribute("wobNumber");
                     log.info("unlocking case queue: {}, wobNumber : {}, fetchtype: {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
                     bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
-                /*}
-                else
+                }
+                /*else
                 {
                     session.removeAttribute("isLocked");
-                }
+                }*/
 
-            }   */
+            }
         }
         catch (Exception e)
         {
@@ -680,9 +680,13 @@ public class PESearch implements Serializable
 
         try
         {
-            log.info("locking case queue: {}, wobNumber : {}, fetchtype: {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
-            bpmInterfaceImpl.lockCase(searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
-            //session.setAttribute("isLocked","true");
+            if(searchViewSelectItem.getStepId()!=null && searchViewSelectItem.getStepId() != 0)
+            {
+                log.info("locking case queue: {}, wobNumber : {}, fetchtype: {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
+                bpmInterfaceImpl.lockCase(searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
+                //session.setAttribute("isLocked","true");
+            }
+
 
         }
         catch (Exception e)
