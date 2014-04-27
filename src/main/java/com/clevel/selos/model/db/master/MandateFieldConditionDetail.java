@@ -22,6 +22,9 @@ public class MandateFieldConditionDetail implements Serializable{
     @JoinColumn(name = "mandate_fields_id")
     private MandateField mandateField;
 
+    @Column(name = "base_value")
+    private String baseValue;
+
     public long getId() {
         return id;
     }
@@ -44,6 +47,14 @@ public class MandateFieldConditionDetail implements Serializable{
 
     public void setMandateField(MandateField mandateField) {
         this.mandateField = mandateField;
+    }
+
+    public String getBaseValue() {
+        return baseValue;
+    }
+
+    public void setBaseValue(String baseValue) {
+        this.baseValue = baseValue;
     }
 
     @Override

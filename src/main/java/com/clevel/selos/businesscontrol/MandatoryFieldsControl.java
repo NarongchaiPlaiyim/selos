@@ -41,6 +41,7 @@ public class MandatoryFieldsControl extends BusinessControl {
     User user;
     long stepId;
 
+
     protected List<FieldsControlView> initialCreation(Screen screen) {
         log.debug("initialCreation - Screen : {}",screen);
         HttpSession session = FacesUtil.getSession(true);

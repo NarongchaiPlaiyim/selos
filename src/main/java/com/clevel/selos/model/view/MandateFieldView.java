@@ -1,6 +1,7 @@
 package com.clevel.selos.model.view;
 
 
+import com.clevel.selos.model.MandateFieldType;
 import com.clevel.selos.model.db.master.Action;
 import com.clevel.selos.model.db.master.Step;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,15 +13,17 @@ public class MandateFieldView implements Serializable{
     private long id;
     private ActionView actionView;
     private StepView stepView;
-    private String className;
+    private MandateFieldClassView mandateFieldClassView;
     private String fieldName;
     private String fieldDesc;
     private String page;
-    private boolean checked = false;
+    private MandateFieldType mandateFieldType;
     private String minValue;
     private String maxValue;
     private String matchedValue;
+    private int matchedEmpty;
     private String notMatchedValue;
+    private int notMatchedEmpty;
 
     public long getId() {
         return id;
@@ -46,12 +49,12 @@ public class MandateFieldView implements Serializable{
         this.stepView = stepView;
     }
 
-    public String getClassName() {
-        return className;
+    public MandateFieldClassView getMandateFieldClassView() {
+        return mandateFieldClassView;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setMandateFieldClassView(MandateFieldClassView mandateFieldClassView) {
+        this.mandateFieldClassView = mandateFieldClassView;
     }
 
     public String getFieldName() {
@@ -78,12 +81,12 @@ public class MandateFieldView implements Serializable{
         this.page = page;
     }
 
-    public boolean isChecked() {
-        return checked;
+    public MandateFieldType getMandateFieldType() {
+        return mandateFieldType;
     }
 
-    public void setChecked(boolean checked) {
-        this.checked = checked;
+    public void setMandateFieldType(MandateFieldType mandateFieldType) {
+        this.mandateFieldType = mandateFieldType;
     }
 
     public String getMinValue() {
@@ -110,6 +113,14 @@ public class MandateFieldView implements Serializable{
         this.matchedValue = matchedValue;
     }
 
+    public int getMatchedEmpty() {
+        return matchedEmpty;
+    }
+
+    public void setMatchedEmpty(int matchedEmpty) {
+        this.matchedEmpty = matchedEmpty;
+    }
+
     public String getNotMatchedValue() {
         return notMatchedValue;
     }
@@ -118,21 +129,47 @@ public class MandateFieldView implements Serializable{
         this.notMatchedValue = notMatchedValue;
     }
 
+    public int getNotMatchedEmpty() {
+        return notMatchedEmpty;
+    }
+
+    public void setNotMatchedEmpty(int notMatchedEmpty) {
+        this.notMatchedEmpty = notMatchedEmpty;
+    }
+
+    public void updateValues(MandateFieldView view){
+        id = view.id;
+        fieldName = view.fieldName;
+        fieldDesc = view.fieldDesc;
+        page = view.page;
+        minValue = view.minValue;
+        maxValue = view.maxValue;
+        matchedValue = view.matchedValue;
+        matchedEmpty = view.matchedEmpty;
+        notMatchedValue = view.notMatchedValue;
+        notMatchedEmpty = view.notMatchedEmpty;
+
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("actionView", actionView)
                 .append("stepView", stepView)
-                .append("className", className)
+                .append("mandateFieldClassView", mandateFieldClassView)
                 .append("fieldName", fieldName)
                 .append("fieldDesc", fieldDesc)
                 .append("page", page)
-                .append("checked", checked)
+                .append("mandateFieldType", mandateFieldType)
                 .append("minValue", minValue)
                 .append("maxValue", maxValue)
                 .append("matchedValue", matchedValue)
+                .append("matchedEmpty", matchedEmpty)
                 .append("notMatchedValue", notMatchedValue)
+                .append("notMatchedEmpty", notMatchedEmpty)
                 .toString();
     }
+
+
 }

@@ -375,11 +375,9 @@
     </p:panel>
 
     <p:panel id="msgBoxMandateMessagePanel" styleClass="panel">
-        <p:dialog id="msgBoxMandateMessageDialog" widgetVar="msgBoxMandateMessageDlg" styleClass="messageDialog"
-                         header="#{headerController.messageHeader}" width="800" closable="false" modal="true">
-            <f:facet name="message">
-                <h:outputText value="#{headerController.message}" escape="false"/>
-            </f:facet>
+        <p:dialog id="msgBoxMandateMessageDialog" widgetVar="msgBoxMandateMessageDlg"
+                         header="#{headerController.messageHeader}" resizable="false" width="880" closable="true" modal="true">
+
             <ui:include src="/site/dialog/mandateFieldDialog.xhtml"/>
             <p:commandButton value="OK"
                              process="@this"

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+
+    <h:head>
+        <title>SE-LOS : Manage Mandate Field</title>
+        <h:outputStylesheet name="css/style.css" />
+        <h:outputScript library="js" name="custom.js" />
+        <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
+    </h:head>
+
+    <h:body>
+        <f:event type="preRenderView" listener="#{manageMandateSubmit.preRender()}" />
+
+        <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+            <h:form id="frmMain">
+                <div id="main_container">
+                    <!-- Start Header Logo -->
+                    <ui:include src="include/header_admin.xhtml" />
+                    <!-- End Header Logo -->
+                    <!-- Start Menu -->
+                    <ui:include src="include/menubar_admin.xhtml" />
+                    <!-- End Menu -->
+                    <div id="content_container">
+                        <div id="content_name">#{msg.get('app.mandateField.header')}</div>
+                        <div id="content">
+                            <div id="content_info">
+                                <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>,
+                                    <h:outputText id="lastupdateTime" value="18/08/2556 11:11:01"/>
+                                </div>
+                            </div>
+                            <div id="content_form">
+                                <!-- start content -->
+                                <table class="content_table_form">
+                                    <tr></tr>
+                                    <tr>
+                                        <td colspan="100%">
+                                            <p:dataTable id='className_tbl' value="#{manageMandateSubmit.mandateFieldClassViewList}" var="mandateClassView" rowIndexVar="rowIndex">
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{rowIndex+1}"
+                                                              style="min-width: 20px; max-width: 20px; width: 20px;"/>
+                                            </p:column>
+                                            <p:column
+                                                    headerText="#{msg.get('app.mandateField.class.name')}">
+                                                #{mandateClassView.className}
+                                            </p:column>
+                                            <p:column
+                                                    headerText="#{msg.get('app.mandateField.class.description')}">
+                                                #{mandateClassView.classDescription}
+                                            </p:column>
+
+                                            <p:column style="width:250px;"
+                                                      headerText="#{msg.get('app.mandateField.class.pageName')}">
+                                                #{mandateClassView.pageName}
+                                            </p:column>
+                                            <p:column styleClass="center" style="width:30px;">
+                                                <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                                 icon="ui-icon-pencil"
+                                                                 action="#{manageMandateSubmit.onLinkEditMandateFieldDetail()}" onclick="blockUI.show()">
+                                                    <f:setPropertyActionListener value="#{mandateClassView}"
+                                                                                 target="#{manageMandateSubmit.selectedMandateClassView}"/>
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:dataTable>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="separate"><!-- --></div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+
+                                    </tr>
+                                </table>
+                                <!-- end content -->
+                            </div>
+                        </div>
+                        <div id="bottom_line"><!-- --></div>
+                    </div>
+                    <div class="clear"></div>
+                    <!-- Start Footer -->
+                    <ui:include src="include/footer_admin.xhtml" />
+                    <!-- End Footer -->
+                </div>
+
+
+            </h:form>
+        </p:panel>
+        <p:blockUI block=":frmMain" widgetVar="blockUI">
+            LOADING<br />
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
+    </h:body>
+</f:view>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+
+    <h:head>
+        <title>SE-LOS : Manage Mandate Field Detail</title>
+        <h:outputStylesheet name="css/style.css" />
+        <h:outputScript library="js" name="custom.js" />
+        <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
+    </h:head>
+
+    <h:body>
+        <f:event type="preRenderView" listener="#{manageMandateSubmit.preRender()}" />
+
+        <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+            <h:form id="frmMain">
+                <div id="main_container">
+                    <!-- Start Header Logo -->
+                    <ui:include src="include/header_admin.xhtml" />
+                    <!-- End Header Logo -->
+                    <!-- Start Menu -->
+                    <ui:include src="include/menubar_admin.xhtml" />
+                    <!-- End Menu -->
+                    <div id="content_container">
+                        <div id="content_name">#{msg.get('app.mandateField.header')}</div>
+                        <div id="content">
+                            <div id="content_info">
+                                <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>,
+                                    <h:outputText id="lastupdateTime" value="18/08/2556 11:11:01"/>
+                                </div>
+                            </div>
+                            <div id="content_form">
+                                <!-- start content -->
+                                <table class="content_table_form">
+                                    <tr>
+                                        <td colspan="100%">
+                                            <h2><h:outputText value="#{msg.get('app.baInfo.bapa.title')}" /></h2>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:250px;" class="title">
+                                            <h:outputText value="#{msg.get('app.mandateField.class.name')}"/>
+                                        </td>
+                                        <td>
+                                            <p:inputText value="#{manageMandateSubmit.selectedMandateClassView.className}" id="className"
+                                                         readonly="true" style="width: 300px; max-width: 300px; min-width: 300px;"></p:inputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.mandateField.class.description')}"/>
+                                        </td>
+                                        <td>
+                                            <p:inputText value="#{manageMandateSubmit.selectedMandateClassView.classDescription}" id="classDescription"
+                                                          style="width: 200px; max-width: 200px; min-width: 200px;"></p:inputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.mandateField.class.pageName')}"/>
+                                        </td>
+                                        <td>
+                                            <p:inputText value="#{manageMandateSubmit.selectedMandateClassView.pageName}" id="pageName"
+                                                         onkeypress="return onKeyPressName(event);" onkeydown="return onKeyDownName(event);"
+                                                         style="width: 200px; max-width: 200px; min-width: 200px;"></p:inputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.mandateField.class.active')}"/>
+                                        </td>
+                                        <td>
+                                            <p:selectOneRadio id="radio" value="#{manageMandateSubmit.selectedMandateClassView.active}" layout="grid" columns="2">
+                                                <f:selectItem itemLabel="No" itemValue="false"/>
+                                                <f:selectItem itemLabel="Yes" itemValue="true"/>
+                                            </p:selectOneRadio>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="separate"><!-- --></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="100%">
+                                            <h:outputText value="#{msg.get('app.mandateField.field.header')}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="100%">
+                                            <p:dataTable id='fieldName_tbl' value="#{manageMandateSubmit.mandateFieldViewList}" var="mandateFieldView" rowIndexVar="rowIndex">
+                                                <p:column styleClass="center">
+                                                    <h:outputText value="#{rowIndex+1}"
+                                                                  style="min-width: 20px; max-width: 20px; width: 20px;"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.mandateField.field.name')}">
+                                                    <h:outputText value="#{mandateFieldView.fieldName}"/>
+                                                </p:column>
+                                                <p:column
+                                                        headerText="#{msg.get('app.mandateField.field.desc')}">
+                                                    <h:outputText value="#{mandateFieldView.fieldDesc}"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.mandateField.field.pageName')}">
+                                                    <h:outputText value="#{mandateFieldView.page}"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.mandateField.field.min')}">
+                                                    <h:outputText value="#{mandateFieldView.minValue}"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.mandateField.field.max')}">
+                                                    <h:outputText value="#{mandateFieldView.maxValue}"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.mandateField.field.match')}">
+                                                    <h:outputText value="#{mandateFieldView.matchedValue}"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.mandateField.field.notmatch')}">
+                                                    <h:outputText value="#{mandateFieldView.notMatchedValue}"/>
+                                                </p:column>
+                                                <p:column style='width:50px' styleClass="center">
+                                                    <p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
+                                                                     process="@this"
+                                                                     oncomplete="p_mandateFieldDlg.show();"
+                                                                     action="#{manageMandateSubmit.onOpenUpdateMandateFieldDetail}"
+                                                                     update=":mandateFieldDlg"
+                                                                     style="margin-right:0px !important">
+                                                            <f:setPropertyActionListener target="#{manageMandateSubmit.selectedMandateFieldViewId}" value="#{rowIndex}" />
+                                                        <p:resetInput target=":mandateFieldDlg" />
+                                                    </p:commandButton>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="100%" class="center">
+                                            <!--p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}"
+                                                             styleClass="medium"
+                                                             onstart="handleOnStartOpenCfmDlg();"
+                                                             oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveBAInformationDlg);"
+                                                             update=":frmMain:full_main_container,:result_dialog"
+                                                             disabled="#{baInfo.isDisabled('saveButton')}"
+                                                    />
+                                            <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}"
+                                                             styleClass="medium"
+                                                             oncomplete="p_cancelBADlg.show()"
+                                                             disabled="#{baInfo.isDisabled('cancelButton')}"
+                                                    /-->
+                                        </td>
+                                    </tr>
+                                </table>
+                                <!-- end content -->
+                            </div>
+                        </div>
+                        <div id="bottom_line"><!-- --></div>
+                    </div>
+                    <div class="clear"></div>
+                    <!-- Start Footer -->
+                    <ui:include src="include/footer_admin.xhtml" />
+                    <!-- End Footer -->
+                </div>
+
+
+            </h:form>
+        </p:panel>
+        <p:blockUI block=":frmMain" widgetVar="blockUI">
+            LOADING<br />
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
+
+        <!--<ui:include src="dialog/confirmEditDlg.xhtml">
+            <ui:param name="id" value="saveBAInformationDlg"/>
+            <ui:param name="name" value="p_saveBAInformationDlg"/>
+            <ui:param name="formId" value="saveBAInformationFrm"/>
+            <ui:param name="controller" value="#{baInfo}"/>
+            <ui:param name="action" value="onSaveBAInformation"/>
+            <ui:param name="update" value=":frmMain:full_main_container"/>
+        </ui:include-->
+        <p:dialog id='mandateFieldDlg' widgetVar="p_mandateFieldDlg"
+                  header="#{msg.get('app.mandateField.field.update.header')}"
+                  onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()' resizable="false"
+                  modal='true' closeOnEscape="true" closable="true"
+                  dynamic="true" width="550">
+            <ui:include src="dialog/mandateFieldDetailDlg.xhtml" />
+        </p:dialog>
+    </h:body>
+</f:view>
+</html>

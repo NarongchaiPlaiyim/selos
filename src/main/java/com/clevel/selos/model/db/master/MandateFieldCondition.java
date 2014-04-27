@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.master;
 
-import com.clevel.selos.model.ConditionType;
+import com.clevel.selos.model.MandateConditionType;
+import com.clevel.selos.model.MandateDependType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -18,13 +19,20 @@ public class MandateFieldCondition implements Serializable{
 
     @Column(name = "condition_type", length = 100)
     @Enumerated(EnumType.STRING)
-    private ConditionType conditionType;
+    private MandateConditionType mandateConditionType;
 
     @Column(name = "description", length = 200)
     private String conditionDesc;
 
     @Column(name = "class_name", length = 200)
     private String className;
+
+    @Column(name = "depend_type", length = 100)
+    @Enumerated(EnumType.STRING)
+    private MandateDependType dependType;
+
+    @Column(name = "depent_con_id", length = 100)
+    private MandateFieldCondition dependCondition;
 
     @OneToMany(mappedBy = "mandateFieldCondition")
     private List<MandateFieldConditionDetail> mandateFieldConditionDetailList;
@@ -37,12 +45,12 @@ public class MandateFieldCondition implements Serializable{
         this.id = id;
     }
 
-    public ConditionType getConditionType() {
-        return conditionType;
+    public MandateConditionType getMandateConditionType() {
+        return mandateConditionType;
     }
 
-    public void setConditionType(ConditionType conditionType) {
-        this.conditionType = conditionType;
+    public void setMandateConditionType(MandateConditionType mandateConditionType) {
+        this.mandateConditionType = mandateConditionType;
     }
 
     public String getConditionDesc() {
@@ -61,6 +69,22 @@ public class MandateFieldCondition implements Serializable{
         this.className = className;
     }
 
+    public MandateDependType getDependType() {
+        return dependType;
+    }
+
+    public void setDependType(MandateDependType dependType) {
+        this.dependType = dependType;
+    }
+
+    public MandateFieldCondition getDependCondition() {
+        return dependCondition;
+    }
+
+    public void setDependCondition(MandateFieldCondition dependCondition) {
+        this.dependCondition = dependCondition;
+    }
+
     public List<MandateFieldConditionDetail> getMandateFieldConditionDetailList() {
         return mandateFieldConditionDetailList;
     }
@@ -73,7 +97,7 @@ public class MandateFieldCondition implements Serializable{
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("conditionType", conditionType)
+                .append("mandateConditionType", mandateConditionType)
                 .append("conditionDesc", conditionDesc)
                 .append("className", className)
                 .append("mandateFieldConditionDetailList", mandateFieldConditionDetailList)
