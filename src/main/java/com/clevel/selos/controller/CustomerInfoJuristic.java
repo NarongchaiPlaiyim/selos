@@ -757,7 +757,7 @@ public class CustomerInfoJuristic implements Serializable {
                 boolean isExist = customerInfoControl.checkExistingAll(selectEditIndividual.getId());
                 if(isExist){
                     messageHeader = "Information.";
-                    message = msg.get("app.message.customer.existing.error");
+                    message = msg.get("app.message.customer.existing.error2");
                     severity = "info";
                 } else {
                     customerInfoView.getIndividualViewList().remove(selectEditIndividual);
