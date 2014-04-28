@@ -143,6 +143,7 @@ public class PrescreenMaker implements Serializable {
     private long workCasePreScreenId;
     private long stepId;
     private String queueName;
+    private String wobNumber;
     private Date currentDate;
     private String currentDateDDMMYY;
     private int previousProductGroupId;
@@ -245,8 +246,8 @@ public class PrescreenMaker implements Serializable {
         log.debug("preRender ::: setSession ");
 
         if(session.getAttribute("workCasePreScreenId") != null){
-            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
+            workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+            stepId = Util.parseLong(session.getAttribute("stepId"), 0);
             String page = Util.getCurrentPage();
             boolean checkPage = false;
 
@@ -301,11 +302,13 @@ public class PrescreenMaker implements Serializable {
             log.debug("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));
             log.debug("onCreation ::: getAttrubute stepId : {}", session.getAttribute("stepId"));
 
-            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
+            workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+            stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+            queueName = Util.parseString(session.getAttribute("queueName"), "");
+            wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
             caseBorrowerTypeId = prescreenBusinessControl.getCaseBorrowerTypeId(workCasePreScreenId);
             log.debug("onCreation ::: caseBorrowerTYpeId : {}", caseBorrowerTypeId);
-            queueName = session.getAttribute("queueName").toString();
+
 
             log.debug("onCreation ::: workCasePreScreenId : {}", workCasePreScreenId);
             log.debug("onCreation ::: stepId : {}", stepId);
@@ -2492,7 +2495,7 @@ public class PrescreenMaker implements Serializable {
     public void onCancelCA(){
         try{
             //TODO : set reason and remark from screen.
-            prescreenBusinessControl.cancelCase(workCasePreScreenId, queueName, ActionCode.CANCEL_CA.getVal(), "", "");
+            prescreenBusinessControl.cancelCase(queueName, wobNumber, ActionCode.CANCEL_CA.getVal(), "", "");
             messageHeader = "Information.";
             message = "Cancel CA Complete.";
 

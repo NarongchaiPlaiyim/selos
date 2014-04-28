@@ -401,7 +401,7 @@
             <!-- Submit to UW [ Complete Appraisal Flow - AAD Committee ]-->
             <p:commandButton id="btnSubmit_AADC" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2008}"
-                             onclick="confirmSubmitApprToUw.show()"/>
+                             onclick="PF('confirmSubmitApprToUw').show()"/>
             <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                              icon="ui-icon-alert"
                              widgetVar="confirmSubmitApprToUw" global="false" showEffect="fade"
@@ -411,29 +411,12 @@
                                  actionListener="#{headerController.onSubmitAppraisalToUW()}"
                                  process="@this" oncomplete="confirmSubmitApprToUw.hide()"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" type="button"
-                                 onclick="confirmSubmitCustomerAccept.hide()"
+                                 onclick="PF('confirmSubmitApprToUw').hide()"
                                  styleClass="ui-confirmdialog-no"/>
             </p:confirmDialog>
         </p:panel>
         <!--############ Customer Acceptance Stage ############-->
         <p:panel id="header_panel_customer_accept" rendered="#{headerController.checkAccessStage('CUSTOMERACCEPTANCE')}" styleClass="panel">
-            <p:commandButton id="btnRequestPrice_Pre" value="#{msg.get('app.header.button.requestPriceReduction')}"
-                             title="#{msg.get('app.header.button.requestPriceReduction')}" styleClass="blueButton"
-                             rendered="#{headerController.checkButton('Request for Price Reduction')}"
-                             onclick="PF('confirmRequestPriceReduction').show()"/>
-            <p:confirmDialog header="Confirmation" message="Please click 'OK' to Request for Price Reduction" styleClass="left"
-                             icon="ui-icon-alert"
-                             widgetVar="confirmRequestPriceReduction" global="false" showEffect="fade"
-                             rendered="#{headerController.checkButton('Request for Price Reduction')}">
-                <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                                 update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
-                                 actionListener="#{headerController.onRequestPriceReduction()}"
-                                 process="@this" oncomplete="PF('confirmRequestPriceReduction').hide()"/>
-                <p:commandButton value="#{msg.get('app.button.cancel')}" type="button"
-                                 onclick="PF('confirmRequestPriceReduction').hide()"
-                                 styleClass="ui-confirmdialog-no"/>
-            </p:confirmDialog>
-
             <p:commandButton id="btnCancelCA_Pre" value="#{msg.get('app.header.button.cancelCA')}" title="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Cancel CA')}"
                              actionListener="#{headerController.onOpenCancelCA()}"
@@ -441,7 +424,24 @@
                              update=":frmMain:cancelCAPanel">
                 <p:resetInput target=":frmMain:cancelCAPanel"/>
             </p:commandButton>
-
+            <!--Request for Price Reduction-->
+            <p:commandButton id="btnRequestPrice_Pre" value="#{msg.get('app.header.button.requestPriceReduction')}"
+                             title="#{msg.get('app.header.button.requestPriceReduction')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Request for Price Reduction')}"
+                             onclick="PF('confirmRequestPriceReduction').show()"/>
+                <p:confirmDialog header="Confirmation" message="Please click 'OK' to Request for Price Reduction" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmRequestPriceReduction" global="false" showEffect="fade"
+                                 rendered="#{headerController.checkButton('Request for Price Reduction')}">
+                    <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                     actionListener="#{headerController.onRequestPriceReduction()}"
+                                     process="@this" oncomplete="PF('confirmRequestPriceReduction').hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" type="button"
+                                     onclick="PF('confirmRequestPriceReduction').hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+            <!-- Pending for Decision -->
             <p:commandButton id="btnPendingForDecision_Pre" value="#{msg.get('app.header.button.pendingForDecision')}"
                              title="#{msg.get('app.header.button.pendingForDecision')}" styleClass="blueButton"
                              actionListener="#{headerController.onOpenPendingDecision()}"
@@ -619,7 +619,7 @@
 <p:panel id="cancelCAPanel" styleClass="panel">
     <p:dialog id="cancelCADialog" widgetVar="cancelCADlg" header="Cancel CA"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="460" height="160">
+              modal="true" width="460" height="160" closable="false">
         <ui:include src="/site/dialog/cancelCA.xhtml"/>
     </p:dialog>
 </p:panel>

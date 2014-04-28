@@ -300,13 +300,13 @@ public class HeaderController implements Serializable {
         cancelRemark = "";
         reasonId = 0;
         try {
-            cancelReason = fullApplicationControl.getCancelReasonList();
+            reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.CANCEL_REASON);
         } catch (Exception ex){
-            cancelReason = new ArrayList<Reason>();
+            reasonList = new ArrayList<Reason>();
             log.error("onOpenCancelCA Exception : ",ex);
         }
 
-        log.debug("onOpenCancelCA ::: cancelReason size : {}", cancelReason.size());
+        log.debug("onOpenCancelCA ::: cancelReason size : {}", reasonList.size());
     }
 
     public void onCancelCA(){
@@ -314,9 +314,9 @@ public class HeaderController implements Serializable {
         boolean complete = false;
         try{
             HttpSession session = FacesUtil.getSession(true);
-            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            String queueName = session.getAttribute("queueName").toString();
-            fullApplicationControl.cancelCAFullApp(workCaseId, queueName, reasonId, cancelRemark);
+            String queueName = Util.parseString(session.getAttribute("queueName"), "");
+            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+            fullApplicationControl.cancelCAFullApp(queueName, wobNumber, reasonId, cancelRemark);
             messageHeader = "Information.";
             message = "Cancel CA success.";
             RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
@@ -908,10 +908,9 @@ public class HeaderController implements Serializable {
         queueName = Util.parseString(session.getAttribute("queueName"), "");
         wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
-        Reason reason = reasonDAO.findById(reasonId);
-        if(!Util.isNull(reason)){
+        if(!Util.isNull(reasonId) && !Util.isZero(reasonId)){
             try{
-                fullApplicationControl.submitPendingDecision(queueName, wobNumber, pendingRemark, reason.getDescription());
+                fullApplicationControl.submitPendingDecision(queueName, wobNumber, pendingRemark, reasonId);
                 messageHeader = "Information.";
                 message = "Submit case success.";
                 complete = true;
@@ -960,10 +959,9 @@ public class HeaderController implements Serializable {
         String queueName = Util.parseString(session.getAttribute("queueName"), "");
         String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
-        Reason reason = reasonDAO.findById(reasonId);
-        if(!Util.isNull(reason)){
+        if(!Util.isNull(reasonId) && !Util.isZero(reasonId)){
             try{
-                fullApplicationControl.cancelRequestPriceReduction(queueName, wobNumber, reason.getDescription(), cancelRemark);
+                fullApplicationControl.cancelRequestPriceReduction(queueName, wobNumber, reasonId, cancelRemark);
                 messageHeader = "Information.";
                 message = "Cancel Request Price Reduction success.";
                 RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
@@ -1079,10 +1077,9 @@ public class HeaderController implements Serializable {
         queueName = Util.parseString(session.getAttribute("queueName"), "");
         wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
-        Reason reason = reasonDAO.findById(reasonId);
-        if(!Util.isNull(reason)){
+        if(!Util.isNull(reasonId) && !Util.isZero(reasonId)){
             try{
-                fullApplicationControl.returnBDMByAAD(queueName, wobNumber, returnRemark, reason.getDescription());
+                fullApplicationControl.returnBDMByAAD(queueName, wobNumber, returnRemark, reasonId);
                 messageHeader = "Information.";
                 message = "Return case success.";
                 complete = true;
@@ -1105,7 +1102,7 @@ public class HeaderController implements Serializable {
         long workCaseId = 0;
         workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
         workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-        aadAdminName = fullApplicationControl.getAADCommittee(workCaseId, workCasePreScreenId);
+        aadAdminName = fullApplicationControl.getAADAdmin(workCaseId, workCasePreScreenId);
         reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
         reasonId = 0;
         returnRemark = "";
@@ -1127,10 +1124,9 @@ public class HeaderController implements Serializable {
         queueName = Util.parseString(session.getAttribute("queueName"), "");
         wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
-        Reason reason = reasonDAO.findById(reasonId);
-        if(!Util.isNull(reason)){
+        if(!Util.isNull(reasonId) && !Util.isZero(reasonId)){
             try{
-                fullApplicationControl.returnBDMByAAD(queueName, wobNumber, returnRemark, reason.getDescription());
+                fullApplicationControl.returnBDMByAAD(queueName, wobNumber, returnRemark, reasonId);
                 messageHeader = "Information.";
                 message = "Return case success.";
                 complete = true;
