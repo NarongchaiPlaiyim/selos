@@ -1721,7 +1721,13 @@
                                                         <ui:repeat value="#{existingGuarantor.existingCreditTypeDetailViewList}" var="creditFacility">
                                                             <p:outputLabel value="#{creditFacility.accountName}"/><br/>
                                                             <p:outputLabel value="#{creditFacility.accountNumber}"/> Suff <p:outputLabel value="#{creditFacility.accountSuf}"/><br/>
-                                                            <p:outputLabel value="#{creditFacility.productProgram}"/> , <p:outputLabel value="#{creditFacility.creditFacility}"/><p:spacer width="10px"/><p:outputLabel value="#{creditFacility.limit}"/><br/>
+                                                            <p:outputLabel value="#{creditFacility.productProgram}"/> , <p:outputLabel value="#{creditFacility.creditFacility}"/><p:spacer width="5px"/>
+                                                                <p:outputLabel value="#{creditFacility.limit}">
+                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                                                </p:outputLabel> <p:spacer width="5px"/><br/>Garantee Amt.
+                                                                <p:outputLabel value="#{creditFacility.guaranteeAmount}">
+                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                                                                </p:outputLabel><br/>
                                                         </ui:repeat>
                                                     </p:panel>
                                                 </p:column>

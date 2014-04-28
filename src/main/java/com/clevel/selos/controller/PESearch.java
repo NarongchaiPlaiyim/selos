@@ -5,6 +5,7 @@ import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.master.UserTeamDAO;
+import com.clevel.selos.dao.working.WorkCaseAppraisalDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCaseOwnerDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
@@ -14,6 +15,7 @@ import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCaseAppraisal;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.PEInbox;
@@ -257,6 +259,9 @@ public class PESearch implements Serializable
     @Inject
     UserTeamDAO userTeamDAO;
 
+    @Inject
+    WorkCaseAppraisalDAO workCaseAppraisalDAO;
+
     String message;
 
     @PostConstruct
@@ -266,31 +271,33 @@ public class PESearch implements Serializable
 
         //Clear all session before selectInbox
         HttpSession session = FacesUtil.getSession(false);
-        /*try
+
+        setStatusType("InprocessCases");
+        try
         {
-            if(session.getAttribute("isLocked")!=null)
+            if(session.getAttribute("stepId")!=null)
             {
 
-                String isLocked = (String) session.getAttribute("isLocked");
+                //String isLocked = (String) session.getAttribute("isLocked");
 
-                if(isLocked.equalsIgnoreCase("true"))
+                if((Long)session.getAttribute("stepId") !=0 && session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
                 {
-                    String wobNum = (String)session.getAttribute("wobNum");
-                    log.info("unlocking case queue: {}, WobNum : {}, fetchtype: {}",session.getAttribute("queueName"), session.getAttribute("wobNum"),session.getAttribute("fetchType"));
-                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNum,(Integer)session.getAttribute("fetchType"));
+                    String wobNumber = (String)session.getAttribute("wobNumber");
+                    log.info("unlocking case queue: {}, wobNumber : {}, fetchtype: {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
+                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
                 }
-                else
+                /*else
                 {
                     session.removeAttribute("isLocked");
-                }
+                }*/
 
             }
         }
         catch (Exception e)
         {
 
-            log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
-        }*/
+            log.error("Error while unlocking case in queue : {}, wobNumber : {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"), e);
+        }
 
         session.setAttribute("workCasePreScreenId", 0L);
         session.setAttribute("workCaseId", 0L);
@@ -299,7 +306,7 @@ public class PESearch implements Serializable
         session.setAttribute("stageId", 0);
         session.setAttribute("requestAppraisal", 0);
         session.setAttribute("queueName","");
-        session.removeAttribute("wobNum");
+        session.removeAttribute("wobNumber");
 
     }
 
@@ -346,7 +353,7 @@ public class PESearch implements Serializable
 
         long stepId = searchViewSelectItem.getStepId();
 
-        long wrkCasePreScreenId;
+        long wrkCasePreScreenId =0;
 
         long wrkCaseId;
 
@@ -364,7 +371,39 @@ public class PESearch implements Serializable
             else if(userDetail.getRoleId() == RoleValue.BDM.id())
             {
 
+                List<String> usersList = new ArrayList<String>();
+
                 if(workCasePrescreen.getCreateBy().getUserName().equalsIgnoreCase(userDetail.getUserName())){}
+
+                else if(!workCasePrescreen.getCreateBy().getUserName().equalsIgnoreCase(userDetail.getUserName()))
+                {
+                    usersList.add(userDetail.getUserName());
+
+                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(new Long(workCase.getId()).intValue());
+
+                    log.info("Users List work case : "+usersList.toString());
+
+                    log.info("WorkCaseOwnerUsers List :"+workCaseOwnerUsersList.toString());
+
+                    log.info("Users List Size before"+usersList.size());
+
+                    usersList.retainAll(workCaseOwnerUsersList);
+
+                    log.info("Users List Size after"+usersList.size());
+
+                    if(usersList.size()>0){
+
+                    }
+
+                    else
+                    {
+                        log.info("You are not authorised to view this case. BDM");
+                        message = "You are not Authorised to view this case!";
+                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
+                        return;
+                    }
+
+                }
 
                 else
                 {
@@ -372,8 +411,9 @@ public class PESearch implements Serializable
                     //TODO Alert Box
 
                     message = "You are not Authorised to view this case!";
-                    RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+                    RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
                     log.info("You are not authorised to view this case.(BDM)");
+                    return;
                     /*FacesUtil.redirect("/site/generic_search.jsf");
                     return;*/
                 }
@@ -406,6 +446,11 @@ public class PESearch implements Serializable
 
                     }
 
+                    if(!usersList.contains(userDetail.getUserName()))
+                    {
+                        usersList.add(userDetail.getUserName());
+                    }
+
                     List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCasePrescreenId(new Long(workCasePrescreen.getId()).intValue());
 
                     log.info("Users List : "+usersList.toString());
@@ -425,7 +470,8 @@ public class PESearch implements Serializable
                         //TODO Alert Box
                         log.info("You are not authorised to view this case.(Team type 3,2)");
                         message = "You are not Authorised to view this case!";
-                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
+                        return;
                     }
 
                 }
@@ -442,7 +488,8 @@ public class PESearch implements Serializable
                         //TODO Alert Box
                         log.info("You are not authorised to view this case. else after 3 2 ");
                         message = "You are not Authorised to view this case!";
-                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
+                        return;
                     }
 
                 }
@@ -457,14 +504,50 @@ public class PESearch implements Serializable
             else if(userDetail.getRoleId() == RoleValue.BDM.id())
             {
 
+                List<String> usersList = new ArrayList<String>();
+
+                //if(usersList.size()>0){}
+
                 if(workCase.getCreateBy().getUserName().equalsIgnoreCase(userDetail.getUserName())){}
+
+                else if(!workCase.getCreateBy().getUserName().equalsIgnoreCase(userDetail.getUserName())){
+
+                    usersList.add(userDetail.getUserName());
+
+                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(new Long(workCase.getId()).intValue());
+
+                    log.info("Users List work case : "+usersList.toString());
+
+                    log.info("WorkCaseOwnerUsers List :"+workCaseOwnerUsersList.toString());
+
+                    log.info("Users List Size before"+usersList.size());
+
+                    usersList.retainAll(workCaseOwnerUsersList);
+
+                    log.info("Users List Size after"+usersList.size());
+
+                    if(usersList.size()>0){
+
+                    }
+
+                    else
+                    {
+                        log.info("You are not authorised to view this case. BDM");
+                        message = "You are not Authorised to view this case!";
+                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
+                        return;
+                    }
+
+
+                }
 
                 else
                 {
                     //TODO Alert Box
                     log.info("You are not authorised to view this case. BDM");
                     message = "You are not Authorised to view this case!";
-                    RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+                    RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
+                    return;
                 }
 
             }
@@ -495,6 +578,11 @@ public class PESearch implements Serializable
 
                     }
 
+                    if(!usersList.contains(userDetail.getUserName()))
+                    {
+                        usersList.add(userDetail.getUserName());
+                    }
+
                     List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(new Long(workCase.getId()).intValue());
 
                     log.info("Users List work case : "+usersList.toString());
@@ -514,7 +602,8 @@ public class PESearch implements Serializable
                         //TODO Alert Box
                         log.info("You are not authorised to view this case.3 2 ");
                         message = "You are not Authorised to view this case!";
-                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
+                        return;
                     }
 
                 }
@@ -531,7 +620,8 @@ public class PESearch implements Serializable
                         //TODO Alert Box
                         log.info("You are not authorised to view this case. after 3 2");
                         message = "You are not Authorised to view this case!";
-                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+                        RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
+                        return;
                     }
 
                 }
@@ -539,24 +629,71 @@ public class PESearch implements Serializable
             }
         }
 
-        if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value())
-        {
+        int requestAppraisalFlag = 0;
+        long wrkCaseAppraisalId = 0L;
 
-            wrkCasePreScreenId = workCasePrescreenDAO.findIdByWobNumber(searchViewSelectItem.getFwobnumber());
+        String appNumber = searchViewSelectItem.getApplicationno();
+
+        wrkCaseId = 0;
+
+        if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {     //For Case in Stage PreScreen
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
+            if(workCasePrescreen != null){
+                wrkCasePreScreenId = workCasePrescreen.getId();
+                requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+            }
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
-            log.info("Work case pre screen id : {}",wrkCasePreScreenId);
-            //session.setAttribute("workCaseId", 0);
-            session.setAttribute("wobNum",searchViewSelectItem.getFwobnumber());
-        }
+            session.setAttribute("requestAppraisal", requestAppraisalFlag);
 
-        else
+        } else if (stepId == StepValue.REQUEST_APPRAISAL_POOL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Case in Stage Parallel Appraisal
+            WorkCase workCase1 = workCaseDAO.findByAppNumber(appNumber);
+            if(workCase1 != null){
+                wrkCaseId = workCase1.getId();
+                requestAppraisalFlag = workCase1.getRequestAppraisal();
+                session.setAttribute("workCaseId", wrkCaseId);
+                session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            } else {
+                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
+                wrkCasePreScreenId = workCasePrescreen.getId();
+                requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+                session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
+                session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            }
+            WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
+            if(workCaseAppraisal != null){
+                wrkCaseAppraisalId = workCaseAppraisal.getId();
+                session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
+            }
+        }
+        else if(stepId == 0) //for completed cases
         {
 
-            wrkCaseId = workCaseDAO.findIdByWobNumber(searchViewSelectItem.getFwobnumber());
-            session.setAttribute("workCaseId", wrkCaseId);
-            //session.setAttribute("workCasePreScreenId", 0);
-            session.setAttribute("wobNum",searchViewSelectItem.getFwobnumber());
+            WorkCase workCase1 = workCaseDAO.findByAppNumber(appNumber);
+            if(workCase1!= null)
+            {
+                wrkCaseId = workCase1.getId();
+                requestAppraisalFlag = workCase1.getRequestAppraisal();
+                session.setAttribute("workCaseId", wrkCaseId);
+                session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            }
+            else
+            {
+                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
+                wrkCasePreScreenId = workCasePrescreen.getId();
+                requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+                session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
+                session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            }
 
+        }
+        else {        //For Case in Stage FullApplication
+            WorkCase workCase1 = workCaseDAO.findByAppNumber(appNumber);
+            if(workCase1 != null){
+                wrkCaseId = workCase1.getId();
+                requestAppraisalFlag = workCase1.getRequestAppraisal();
+            }
+            session.setAttribute("workCaseId", wrkCaseId);
+            session.setAttribute("requestAppraisal", requestAppraisalFlag);
         }
 
         if(Util.isNull(searchViewSelectItem.getFetchType()))
@@ -581,6 +718,7 @@ public class PESearch implements Serializable
 
         session.setAttribute("stepId", searchViewSelectItem.getStepId());
         session.setAttribute("caseOwner",searchViewSelectItem.getAtuser());
+        session.setAttribute("statusId", Util.parseLong(searchViewSelectItem.getStatuscode(), 0));
 
         if(searchViewSelectItem.getQueuename() == null)
         {
@@ -592,26 +730,31 @@ public class PESearch implements Serializable
             session.setAttribute("queueName",searchViewSelectItem.getQueuename());
         }
 
-       /* try
+        try
         {
-            log.info("locking case queue: {}, WobNum : {}, fetchtype: {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
-            bpmInterfaceImpl.lockCase(searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
-            session.setAttribute("isLocked","true");
+            if(searchViewSelectItem.getStepId()!=null && searchViewSelectItem.getStepId() != 0)
+            {
+                log.info("locking case queue: {}, wobNumber : {}, fetchtype: {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
+                bpmInterfaceImpl.lockCase(searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
+                //session.setAttribute("isLocked","true");
+            }
+
 
         }
         catch (Exception e)
         {
-            log.error("Error while Locking case in queue : {}, WobNum : {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(), e);
+            log.error("Error while Locking case in queue : {}, wobNumber : {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(), e);
             message = "Another User is Working on this case!! Please Retry Later.";
             RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
-            //return;
-        }*/
+            return;
+        }
 
-		AppHeaderView appHeaderView = headerControl.getHeaderInformation(searchViewSelectItem.getStepId(), searchViewSelectItem.getFwobnumber());        session.setAttribute("appHeaderInfo", appHeaderView);
+        AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, searchViewSelectItem.getApplicationno());
+        session.setAttribute("appHeaderInfo", appHeaderView);
 
 
         long selectedStepId = searchViewSelectItem.getStepId();
-        String landingPage = inboxControl.getLandingPage(selectedStepId);
+        String landingPage = inboxControl.getLandingPage(selectedStepId,Util.parseLong(searchViewSelectItem.getStatuscode(), 0));
 
         if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
             FacesUtil.redirect(landingPage);

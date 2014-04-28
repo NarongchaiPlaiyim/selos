@@ -1166,9 +1166,10 @@
                                                      process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
                                                      actionListener="#{custInfoSumJuris.onSave}" binding="#{saveCustomer}"
                                                      disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
-                                    <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel" styleClass="small" process="@form" update=":frmMain"
-                                                     actionListener="#{custInfoSumJuris.onCreation}"
-                                                     disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
+                                    <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel"
+                                                     styleClass="small" process="@form"
+                                                     update=":msgBoxSystemMessagePanel"
+                                                     actionListener="#{custInfoSumJuris.onCancelForm(false)}"/>
                                 </td>
                             </tr>
                             </table>
@@ -1203,6 +1204,27 @@
                              process="@this"
                              update="frmMain"
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+
+        <p:confirmDialog id="msgBoxSaveMessageDialog" widgetVar="msgBoxSaveMessageDlg" closable="false"
+                         severity="#{custInfoSumJuris.severity}" header="#{custInfoSumJuris.messageHeader}">
+            <f:facet name="message">
+                <h:outputText value="#{custInfoSumJuris.message}" escape="false"/>
+            </f:facet>
+            <p:commandButton value="OK" process="@this"
+                             action="#{custInfoSumJuris.onCancelForm(true)}"/>
+        </p:confirmDialog>
+
+        <p:confirmDialog id="msgBoxCancelDialog" widgetVar="msgBoxCancelDlg" styleClass="messageDialog"
+                         closable="false"
+                         header="Information." message="Do you want back to Customer Summary?">
+            <p:commandButton value="OK"
+                             process="@this"
+                             update=":msgBoxSystemMessagePanel" action="#{custInfoSumJuris.onCancelForm(true)}"/>
+            <p:commandButton value="Cancel"
+                             process="@this"
+                             update=":msgBoxSystemMessagePanel"
+                             oncomplete="msgBoxCancelDlg.hide()"/>
         </p:confirmDialog>
     </p:panel>
 

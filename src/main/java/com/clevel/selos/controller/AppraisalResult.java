@@ -14,7 +14,10 @@ import com.clevel.selos.integration.coms.model.SubCollateralData;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.StepValue;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.AppraisalCompany;
+import com.clevel.selos.model.db.master.AppraisalDivision;
+import com.clevel.selos.model.db.master.LocationProperty;
+import com.clevel.selos.model.db.master.Province;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -259,6 +262,7 @@ public class AppraisalResult implements Serializable {
                     flag = checkJobIdExist(newCollateralViewList, jobID);
                     if(flag){
                         AppraisalDataResult appraisalDataResult = callCOM_S(jobID);
+                        log.debug("appraisalDataResult ::: {}",appraisalDataResult);
                         if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())){
                             newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
                             saveAndEditFlag = true;
@@ -286,14 +290,20 @@ public class AppraisalResult implements Serializable {
                     }
                 }
             } catch (COMSInterfaceException e){
+                log.error("COMSInterfaceException ::: {}",e);
+                messageHeader = "Exception";
+                message = e.getMessage();
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            } catch (Exception e){
+                log.error("Exception ::: {}",e);
                 messageHeader = "Exception";
                 message = e.getMessage();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
-
         } else {
             messageHeader = "Exception";
             message = "Job ID Search is empty or null";
+            log.debug("messageHeader ::: {}, message ::: {}",messageHeader,message);
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }

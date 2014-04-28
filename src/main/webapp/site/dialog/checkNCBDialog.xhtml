@@ -1,0 +1,63 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <p:panel id="checkNCBDlgPanel" styleClass="panel-dialog">
+
+
+        <table class="content_form" style="width: 600px;">
+            <tr>
+                <td>
+                    <h:panelGrid columns="2">
+                        <tr>
+                            <td class="title" style="width: 220px;"></td>
+                            <td>
+                                <h:selectOneRadio id="radio"
+                                                  value="#{appealResubmit.ncbFlag}"
+                                                  required="true" requiredMessage="Please Select One Radio Button"
+                                                  valueChangeListener="#{statusname.valueChangeMethod1}"
+                                                  readonly="#{appealResubmit.checkNCBFlag}">
+                                    <f:selectItem id="CheckNCB" itemValue="CheckNCB" itemLabel="Check NCB"  />
+                                    <f:selectItem id="SkipNCB" itemValue="SkipNCB" itemLabel="Skip NCB"/>
+                                </h:selectOneRadio>
+                            </td>
+                        </tr>
+
+                        <tr>
+
+                            <td class="title" style="width: 220px;"> Reason </td>
+                            <td>
+                                <h:selectOneMenu class="largest" id="userNameReassign" label="userNameReassign" value="#{appealResubmit.ncbReason}">
+                                    <f:selectItem itemValue="" itemLabel="-Please Select-"/>
+                                    <f:selectItem  itemLabel="Reason 1" itemValue="Reason 1"/>
+                                    <f:selectItem  itemLabel="Reason 2" itemValue="Reason 2"/>
+                                    <f:selectItem  itemLabel="Reason 3" itemValue="Reason 3"/>
+                                    <!-- value="{appealResubmit.ncbReasonsList} var="username1" {username1.userName}" -->
+                                </h:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">Remark : </td>
+                            <td><h:inputTextarea cols="50" rows="3" value="#{appealResubmit.ncbRemarks}" ></h:inputTextarea></td>
+                        </tr>
+
+                    </h:panelGrid>
+
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" align="center">
+                    <p:commandButton value="Submit" styleClass="small" actionListener="#{appealResubmit.appealCase()}" onclick="checkNCBDlg.close();"/>
+                    <p:commandButton value="Cancel" styleClass="small" onclick="checkNCBDlg.close();"/>
+                </td>
+            </tr>
+        </table>
+
+
+    </p:panel>
+
+</ui:composition>

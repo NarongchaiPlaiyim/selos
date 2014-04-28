@@ -6,8 +6,8 @@ public enum NCBPaymentCode {
     CODE___Y("Y", 3),
     CODE_001("001", 4),
     CODE_002("002", 5),
-    CODE_003("003", 6),
-    CODE_004("004", 7),
+    CODE_003("003", 6), // >90 day, individual
+    CODE_004("004", 7), // >90 day, juristic
     CODE_005("005", 8),
     CODE_006("006", 9),
     CODE_007("007", 10),
