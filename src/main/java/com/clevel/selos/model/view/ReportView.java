@@ -9,6 +9,7 @@ public class ReportView implements Serializable {
     private String nameReportExSum;
     private String nameReportRejectLetter;
     private String nameReportAppralsal;
+    private String nameReportOfferLetter;
 
 
     public ReportView() {
@@ -44,5 +45,13 @@ public class ReportView implements Serializable {
 
     public void setNameReportAppralsal(String nameReportAppralsal) {
         this.nameReportAppralsal = nameReportAppralsal;
+    }
+
+    public String getNameReportOfferLetter() {
+        return nameReportOfferLetter;
+    }
+
+    public void setNameReportOfferLetter(String nameReportOfferLetter) {
+        this.nameReportOfferLetter = nameReportOfferLetter;
     }
 }
