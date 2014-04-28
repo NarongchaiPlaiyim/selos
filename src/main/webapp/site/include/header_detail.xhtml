@@ -83,7 +83,7 @@
             <!-- Cancel CA -->
             <p:commandButton id="btnCancelCA" value="#{msg.get('app.header.button.cancelCA')}" title="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Cancel CA')}" type="button"
-                             onclick="confrmCancelCA.show()"/>
+                             onclick="PF('confrmCancelCA').show()"/>
             <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.cancelCA')}" styleClass="left"
                              icon="ui-icon-alert"
                              widgetVar="confrmCancelCA" global="false" showEffect="fade"
@@ -171,7 +171,7 @@
             <p:commandButton id="btnCancelCAFullApp" value="#{msg.get('app.header.button.cancelCA')}" title="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Cancel CA')}"
                              actionListener="#{headerController.onOpenCancelCA()}"
-                             oncomplete="cancelCA.show()"
+                             oncomplete="cancelCADlg.show()"
                              update=":frmMain:cancelCAPanel">
                 <p:resetInput target=":frmMain:cancelCAPanel"/>
             </p:commandButton>
@@ -437,7 +437,7 @@
             <p:commandButton id="btnCancelCA_Pre" value="#{msg.get('app.header.button.cancelCA')}" title="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Cancel CA')}"
                              actionListener="#{headerController.onOpenCancelCA()}"
-                             oncomplete="cancelCA.show()"
+                             oncomplete="cancelCADlg.show()"
                              update=":frmMain:cancelCAPanel">
                 <p:resetInput target=":frmMain:cancelCAPanel"/>
             </p:commandButton>
@@ -511,7 +511,7 @@
                              styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
                              rendered="#{headerController.checkButton('Cancel CA')}"
                              actionListener="#{headerController.onOpenCancelCA()}"
-                             oncomplete="cancelCA.show()"
+                             oncomplete="cancelCADlg.show()"
                              update=":frmMain:cancelCAPanel">
                 <p:resetInput target=":frmMain:cancelCAPanel"/>
             </p:commandButton>
@@ -723,7 +723,7 @@
     <p:dialog id="cancelRequestPriceReduceDialog" header="Confirmation." widgetVar="cancelRequestPriceReduceDlg"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="580" height="320" closable="true">
-        <ui:include src="/site/dialog/requestPriceReduce.xhtml"/>
+        <ui:include src="/site/dialog/cancelRequestPriceReduceDialog.xhtml"/>
     </p:dialog>
 </p:panel>
 
