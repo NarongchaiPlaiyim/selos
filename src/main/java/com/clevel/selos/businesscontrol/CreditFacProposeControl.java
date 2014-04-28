@@ -27,6 +27,7 @@ public class CreditFacProposeControl extends BusinessControl {
     @SELOS
     @Inject
     Logger log;
+
     @Inject
     CustomerTransform customerTransform;
     @Inject
@@ -45,6 +46,15 @@ public class CreditFacProposeControl extends BusinessControl {
     NewCreditTierTransform newCreditTierTransform;
     @Inject
     ProposeCreditDetailTransform proposeCreditDetailTransform;
+    @Inject
+    NewCollateralCreditTransform newCollateralCreditTransform;
+    @Inject
+    NewGuarantorCreditTransform newGuarantorCreditTransform;
+    @Inject
+    FeeTransform feeTransform;
+    @Inject
+    ProductTransform productTransform;
+
     @Inject
     SubCollateralTypeDAO subCollateralTypeDAO;
     @Inject
@@ -80,17 +90,9 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     PrdProgramToCreditTypeDAO prdProgramToCreditTypeDAO;
     @Inject
-    BasicInfoControl basicInfoControl;
-    @Inject
-    CustomerInfoControl customerInfoControl;
-    @Inject
-    TCGInfoControl tcgInfoControl;
-    @Inject
     ProductProgramDAO productProgramDAO;
     @Inject
     CreditTypeDAO creditTypeDAO;
-    @Inject
-    NewGuarantorRelationDAO newGuarantorRelationDAO;
     @Inject
     NewCollateralCreditDAO newCollateralRelationDAO;
     @Inject
@@ -106,29 +108,11 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     NewCollateralSubOwnerDAO newCollateralSubOwnerDAO;
     @Inject
-    NewCollateralCreditTransform newCollateralCreditTransform;
-    @Inject
-    NewGuarantorCreditTransform newGuarantorCreditTransform;
-    @Inject
-    DBRControl dbrControl;
-    @Inject
-    BizInfoSummaryControl bizInfoSummaryControl;
-    @Inject
-    NCBInfoControl ncbInfoControl;
-    @Inject
     ExistingCollateralDetailDAO existingCollateralDetailDAO;
-    @Inject
-    COMSInterface comsInterface;
-    @Inject
-    BRMSControl brmsControl;
     @Inject
     NewCollateralDAO newCollateralDAO;
     @Inject
     NewCollateralSubRelatedDAO newCollateralSubRelatedDAO;
-    @Inject
-    FeeTransform feeTransform;
-    @Inject
-    ProductTransform productTransform;
     @Inject
     FeeDetailDAO feeDetailDAO;
     @Inject
@@ -146,7 +130,27 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     BankStatementSummaryDAO bankStatementSummaryDAO;
     @Inject
+    private NewGuarantorRelationDAO newGuarantorRelationDAO;
+
+    @Inject
+    BasicInfoControl basicInfoControl;
+    @Inject
+    CustomerInfoControl customerInfoControl;
+    @Inject
+    TCGInfoControl tcgInfoControl;
+    @Inject
+    DBRControl dbrControl;
+    @Inject
+    BizInfoSummaryControl bizInfoSummaryControl;
+    @Inject
+    NCBInfoControl ncbInfoControl;
+    @Inject
+    BRMSControl brmsControl;
+    @Inject
     FullApplicationControl fullApplicationControl;
+
+    @Inject
+    COMSInterface comsInterface;
 
     @Inject
     public CreditFacProposeControl() {
@@ -594,6 +598,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 // Installment = (อัตราดอกเบี้ยต่อเดือน * Limit * (1 + อัตราดอกเบี้ยต่อเดือน)ยกกำลัง tenors(month)) / ((1 + อัตราดอกเบี้ยต่อเดือน) ยกกำลัง tenors(month) - 1)
                 // อัตราดอกเบี้ยต่อเดือน = baseRate.value +  interest + 1% / 12
                 BigDecimal twelve = new BigDecimal(12);
+                BigDecimal oneHundred = new BigDecimal(100);
                 BigDecimal baseRate = BigDecimal.ZERO;
                 BigDecimal interest = BigDecimal.ZERO;
 
@@ -604,14 +609,17 @@ public class CreditFacProposeControl extends BusinessControl {
                     interest = newCreditTierDetailView.getFinalInterest();
                 }
 
-                BigDecimal interestPerMonth = Util.divide(Util.add(baseRate, Util.add(interest, BigDecimal.ONE)), twelve);
+                //old
+                //BigDecimal interestPerMonth = Util.divide(Util.add(baseRate, Util.add(interest, BigDecimal.ONE)), twelve);
+                //new
+                BigDecimal interestPerMonth = Util.divide(Util.add(Util.divide(baseRate,oneHundred),Util.divide(interest,oneHundred)),twelve);
                 log.info("baseRate :: {}", baseRate);
                 log.info("interest :: {}", interest);
                 log.info("interestPerMonth :: {}", interestPerMonth);
 
                 BigDecimal limit = BigDecimal.ZERO;
                 int tenor = newCreditTierDetailView.getTenor();
-                BigDecimal installment = BigDecimal.ZERO;
+                BigDecimal installment;
 
                 if (creditDetailView.getLimit() != null) {
                     limit = creditDetailView.getLimit();
@@ -621,7 +629,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 log.info("tenor :: {}", tenor);
 
                 installment = Util.divide(Util.multiply(Util.multiply(interestPerMonth, limit), (Util.add(BigDecimal.ONE, interestPerMonth)).pow(tenor)),
-                        Util.subtract(Util.add(BigDecimal.ONE, interestPerMonth).pow(tenor), BigDecimal.ONE));
+                        Util.add(BigDecimal.ONE, interestPerMonth).pow(Util.subtract(BigDecimal.valueOf(tenor), BigDecimal.ONE).intValue()));
                 log.info("installment : {}", installment);
 
                 if (installment != null) {
@@ -1400,5 +1408,27 @@ public class CreditFacProposeControl extends BusinessControl {
         }
     }
 
+    public boolean findUsagesCredit(long creditId){
+        log.debug("findUsagesCredit - creditId :: {}",creditId);
+        boolean usagesCredit = false;
+        if(creditId != 0){
+            NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(creditId);
+            if(newCreditDetail != null){
+                //todo:find on guarantor
+                List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorRelationDAO.getListByNewCreditDetail(newCreditDetail,ProposeType.P);
+                if(newGuarantorCreditList != null && newGuarantorCreditList.size() > 0){
+                    usagesCredit = true;
+                    return usagesCredit;
+                }
 
+                //todo:find on collateral
+                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditDAO.getListCollRelationByNewCreditDetail(newCreditDetail,ProposeType.P);
+                if(newCollateralCreditList != null && newCollateralCreditList.size() > 0){
+                    usagesCredit = true;
+                    return usagesCredit;
+                }
+            }
+        }
+        return usagesCredit;
+    }
 }
