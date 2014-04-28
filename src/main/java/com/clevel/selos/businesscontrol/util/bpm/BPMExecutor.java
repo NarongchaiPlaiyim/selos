@@ -162,6 +162,22 @@ public class BPMExecutor implements Serializable {
         }
     }
 
+    public void cancelRequestPriceReduction(String queueName, String wobNumber, String reason, String remark, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+        if(!Util.isNull(action)){
+            HashMap<String,String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            if(!Util.isEmpty(remark)) {
+                fields.put("Remarks", remark);
+            }
+            fields.put("Reason", reason);
+
+            log.debug("dispatch case for [Cancel Request Price Reduction]");
+            execute(queueName, wobNumber, fields);
+        }
+    }
+
     public void returnMaker(long workCasePreScreenId, String queueName, long actionCode) throws Exception{
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         Action action = actionDAO.findById(actionCode);

@@ -513,11 +513,12 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     //Request appraisal after Customer Acceptance
-    public void requestAppraisal(String queueName, String wobNumber, String aadAdminUserName) throws Exception{
+    public void requestAppraisal(long workCasePreScreenId, long workCaseId, String queueName, String wobNumber, String aadAdminUserName) throws Exception{
         //Update Request Appraisal Flag
 
         if(!Util.isEmpty(queueName) && !Util.isEmpty(wobNumber)) {
             try{
+                log.debug("requestAppraisal ::: Create WorkCaseAppraisal Complete.");
                 bpmExecutor.requestAppraisal(queueName, wobNumber, aadAdminUserName, ActionCode.REQUEST_APPRAISAL.getVal());
                 log.debug("requestAppraisal ::: Create Work Item for appraisal complete.");
             } catch (Exception ex){
@@ -641,9 +642,11 @@ public class FullApplicationControl extends BusinessControl {
             if(!Util.isEmpty(appNumber)){
                 WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
                 log.debug("submitToAADCommittee ::: find workCaseAppraisal : {}", workCaseAppraisal);
-                workCaseAppraisal.setAppointmentDate(appraisal.getAppointmentDate());
-                workCaseAppraisalDAO.persist(workCaseAppraisal);
-                log.debug("submitToAADCommittee ::: save workCaseAppraisal : {}", workCaseAppraisal);
+                if(!Util.isNull(workCaseAppraisal)) {
+                    workCaseAppraisal.setAppointmentDate(appraisal.getAppointmentDate());
+                    workCaseAppraisalDAO.persist(workCaseAppraisal);
+                    log.debug("submitToAADCommittee ::: save workCaseAppraisal : {}", workCaseAppraisal);
+                }
                 long appraisalLocationCode = 0;
                 if(appraisal.getLocationOfProperty() != null){
                     appraisalLocationCode = appraisal.getLocationOfProperty().getCode();
@@ -690,6 +693,10 @@ public class FullApplicationControl extends BusinessControl {
 
     public void submitPendingDecision(String queueName, String wobNumber, String remark, String reason) throws Exception{
         bpmExecutor.submitPendingDecision(queueName, wobNumber, remark, reason, ActionCode.PENDING_FOR_DECISION.getVal());
+    }
+
+    public void submitRequestPriceReduction(String queueName, String wobNumber) throws Exception{
+        bpmExecutor.submitCase(queueName, wobNumber, ActionCode.REQUEST_PRICE_REDUCE.getVal());
     }
 
     public void returnBDMByAAD(String queueName, String wobNumber, String remark, String reason) throws Exception{
@@ -902,6 +909,10 @@ public class FullApplicationControl extends BusinessControl {
             }
         }
         bpmExecutor.cancelCase(0, workCaseId, queueName, ActionCode.CANCEL_CA.getVal(), reasonTxt, remark);
+    }
+
+    public void cancelRequestPriceReduction(String queueName, String wobNumber, String reason, String remark) throws Exception {
+        bpmExecutor.cancelRequestPriceReduction(queueName, wobNumber, reason, remark, ActionCode.CANCEL_REQUEST_PRICE_REDUCTION.getVal());
     }
 
     public List<Reason> getReasonList(ReasonTypeValue reasonTypeValue){

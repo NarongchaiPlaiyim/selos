@@ -117,7 +117,7 @@ public class HeaderController implements Serializable {
 
     //Cancel CA FullApp
     private List<Reason> cancelReason;
-    private String cancalCARemark;
+    private String cancelRemark;
     private int reasonId;
 
     //Return BDM Dialog
@@ -295,39 +295,39 @@ public class HeaderController implements Serializable {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
-    public void onOpenCancelCAFullApp(){
-        log.debug("onOpenCancelCAFullApp ::: starting...");
-        cancalCARemark = "";
+    public void onOpenCancelCA(){
+        log.debug("onOpenCancelCA ::: starting...");
+        cancelRemark = "";
         reasonId = 0;
         try {
             cancelReason = fullApplicationControl.getCancelReasonList();
         } catch (Exception ex){
             cancelReason = new ArrayList<Reason>();
-            log.error("onOpenCancelCAFullApp Exception : ",ex);
+            log.error("onOpenCancelCA Exception : ",ex);
         }
 
-        log.debug("onOpenCancelCAFullApp ::: cancelReason size : {}", cancelReason.size());
+        log.debug("onOpenCancelCA ::: cancelReason size : {}", cancelReason.size());
     }
 
-    public void onCancelCAFullApp(){
-        log.debug("onCancelCAFullApp ::: starting...");
+    public void onCancelCA(){
+        log.debug("onCancelCA ::: starting...");
         boolean complete = false;
         try{
             HttpSession session = FacesUtil.getSession(true);
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             String queueName = session.getAttribute("queueName").toString();
-            fullApplicationControl.cancelCAFullApp(workCaseId, queueName, reasonId, cancalCARemark);
+            fullApplicationControl.cancelCAFullApp(workCaseId, queueName, reasonId, cancelRemark);
             messageHeader = "Information.";
             message = "Cancel CA success.";
             RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
             complete = true;
-            log.debug("onCancelCAFullApp ::: success.");
+            log.debug("onCancelCA ::: success.");
         } catch (Exception ex){
             messageHeader = "Information.";
             message = "Cancel CA failed, cause : " + Util.getMessageException(ex);
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
             complete = false;
-            log.error("onCancelCAFullApp ::: exception occurred : ", ex);
+            log.error("onCancelCA ::: exception occurred : ", ex);
         }
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
@@ -660,9 +660,9 @@ public class HeaderController implements Serializable {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
-    public void onCancelCA(){
+    /*public void onCancelCA(){
         fullApplicationControl.getUserList(user);
-    }
+    }*/
 
     public void onSubmitCA(){ //Submit From UW2
         log.debug("onSubmitCA begin");
@@ -673,48 +673,40 @@ public class HeaderController implements Serializable {
             String queueName = session.getAttribute("queueName").toString();
             User user = (User) session.getAttribute("user");
 
-            if(selectedUW2User != null && !selectedUW2User.equals("")){
-                List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
+            List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
 
-                if(returnInfoViews!=null && returnInfoViews.size()>0){
+            if(returnInfoViews!=null && returnInfoViews.size()>0){
+                messageHeader = "Information.";
+                message = "Submit case fail. Please check return information before submit again.";
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+                log.error("onSubmitCA ::: fail.");
+            } else {
+                //check if have return not accept
+                List<ReturnInfoView> returnInfoViewsNoAccept = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
+                if(returnInfoViewsNoAccept!=null && returnInfoViewsNoAccept.size()>0){
                     messageHeader = "Information.";
                     message = "Submit case fail. Please check return information before submit again.";
                     RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
 
                     log.error("onSubmitCA ::: fail.");
                 } else {
-                    //check if have return not accept
-                    List<ReturnInfoView> returnInfoViewsNoAccept = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
-                    if(returnInfoViewsNoAccept!=null && returnInfoViewsNoAccept.size()>0){
-                        messageHeader = "Information.";
-                        message = "Submit case fail. Please check return information before submit again.";
-                        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                    returnControl.saveReturnHistory(workCaseId,user);
 
-                        log.error("onSubmitCA ::: fail.");
-                    } else {
-                        returnControl.saveReturnHistory(workCaseId,user);
+                    fullApplicationControl.submitCA(queueName, workCaseId);
 
-                        fullApplicationControl.submitCA(queueName, workCaseId);
+                    messageHeader = "Information.";
+                    message = "Submit case success";
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
 
-                        messageHeader = "Information.";
-                        message = "Submit case success";
-                        RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-
-                        log.debug("onSubmitCA ::: success.");
-                    }
+                    log.debug("onSubmitCA ::: success.");
                 }
-                messageHeader = "Information.";
-                message = "Submit case success.";
-                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-                complete = true;
-                log.debug("onSubmitCA ::: success.");
-            } else {
-                messageHeader = "Exception.";
-                message = "Submit case failed, cause : UW2 was not selected";
-                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-                complete = false;
-                log.error("onSubmitCA ::: submit failed (UW2 not selected)");
             }
+            messageHeader = "Information.";
+            message = "Submit case success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            complete = true;
+            log.debug("onSubmitCA ::: success.");
         } catch (Exception ex){
             messageHeader = "Information.";
             message = "Submit case fail, cause : " + Util.getMessageException(ex);
@@ -925,6 +917,7 @@ public class HeaderController implements Serializable {
                 complete = true;
                 RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
             } catch (Exception ex) {
+                log.error("Exception while submit pending decision, ", ex);
                 messageHeader = "Exception.";
                 message = Util.getMessageException(ex);
                 complete = true;
@@ -932,6 +925,54 @@ public class HeaderController implements Serializable {
             }
         }
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
+    public void onRequestPriceReduction(){
+        log.debug("onRequestPriceReduction ( in step Customer Acceptance )");
+        HttpSession session = FacesUtil.getSession(true);
+        String queueName = Util.parseString(session.getAttribute("queueName"), "");
+        String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+
+        try {
+            fullApplicationControl.submitRequestPriceReduction(queueName, wobNumber);
+            messageHeader = "Information.";
+            message = "Request for Price Reduction success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+        } catch (Exception ex){
+            log.error("Exception while submit request price reduction, ", ex);
+            messageHeader = "Exception";
+            message = Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
+    }
+
+    public void onOpenCancelRequestPriceReduction(){
+        log.debug("onOpenCancelRequestPriceReduction");
+        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.CANCEL_REASON);
+        reasonId = 0;
+        cancelRemark = "";
+        RequestContext.getCurrentInstance().execute("cancelRequestPriceReduceDlg.show()");
+    }
+
+    public void onCancelRequestPriceReduction(){
+        log.debug("onCancelRequestPriceReduction");
+        HttpSession session = FacesUtil.getSession(true);
+        String queueName = Util.parseString(session.getAttribute("queueName"), "");
+        String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+
+        Reason reason = reasonDAO.findById(reasonId);
+        if(!Util.isNull(reason)){
+            try{
+                fullApplicationControl.cancelRequestPriceReduction(queueName, wobNumber, reason.getDescription(), cancelRemark);
+                messageHeader = "Information.";
+                message = "Cancel Request Price Reduction success.";
+                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            } catch (Exception ex){
+                messageHeader = "Exception.";
+                message = Util.getMessageException(ex);
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            }
+        }
     }
 
     //Request Appraisal after Customer Acceptance
@@ -961,7 +1002,10 @@ public class HeaderController implements Serializable {
         String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
         try {
-            fullApplicationControl.requestAppraisal(queueName, wobNumber, aadAdminId);
+            fullApplicationControl.requestAppraisal(workCaseId, 0, queueName, wobNumber, aadAdminId);
+            messageHeader = "Information.";
+            message = "Submit case success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
         } catch (Exception ex){
             log.error("exception while request appraisal : ", ex);
             messageHeader = "Exception.";
@@ -1062,8 +1106,11 @@ public class HeaderController implements Serializable {
         workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
         workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
         aadAdminName = fullApplicationControl.getAADCommittee(workCaseId, workCasePreScreenId);
+        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
+        reasonId = 0;
+        returnRemark = "";
         if(!Util.isEmpty(aadAdminName)){
-            RequestContext.getCurrentInstance().execute("addReturnInfoDlg.show()");
+            RequestContext.getCurrentInstance().execute("returnAADM_AADCDlg.show()");
         } else {
             messageHeader = "Exception.";
             message = "Could not find AAD Admin name.";
@@ -1721,7 +1768,7 @@ public class HeaderController implements Serializable {
                 accessible = true;
             }
         } else if ("FULLAPP".equalsIgnoreCase(stageString)){
-            if(stageId == 201 || stageId == 202 || stageId == 204 || stageId == 207){
+            if(stageId == 201 || stageId == 202 || stageId == 204 || stageId == 206 || stageId == 207){
                 accessible = true;
             }
         } else if ("APPRAISAL".equalsIgnoreCase(stageString)){
@@ -1929,12 +1976,12 @@ public class HeaderController implements Serializable {
         this.cancelReason = cancelReason;
     }
 
-    public String getCancalCARemark() {
-        return cancalCARemark;
+    public String getCancelRemark() {
+        return cancelRemark;
     }
 
-    public void setCancalCARemark(String cancalCARemark) {
-        this.cancalCARemark = cancalCARemark;
+    public void setCancelRemark(String cancelRemark) {
+        this.cancelRemark = cancelRemark;
     }
 
     public int getReasonId() {

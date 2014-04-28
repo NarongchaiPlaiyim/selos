@@ -5,16 +5,16 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
-<p:panel id="cancelCAFullAppDlgPanel" styleClass="panel-dialog">
+<p:panel id="cancelCADlgPanel" styleClass="panel-dialog">
     <table class="content_form">
         <tr>
             <td class="title right" style="min-width: 140px; width: 80px;">Cancel Reason :</td>
             <td>
                 <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
                                  value="#{headerController.reasonId}"
-                                 required="#{not empty param[btnSubmitCancelCAFullApp.clientId]}">
+                                 required="#{not empty param[btnSubmitCancelCA.clientId]}">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                    <f:selectItems value="#{headerController.cancelReason}"
+                    <f:selectItems value="#{headerController.reasonList}"
                                    var="reasonItem"
                                    itemLabel="#{reasonItem.code} - #{reasonItem.description}"
                                    itemValue="#{reasonItem.id}"/>
@@ -25,28 +25,26 @@
         <tr>
             <td class="title right top">Remark :</td>
             <td>
-                <p:inputTextarea value="#{headerController.cancalCARemark}" autoResize="false" cols="35"
+                <p:inputTextarea value="#{headerController.cancelRemark}" autoResize="false" cols="35"
                                  rows="5"></p:inputTextarea>
             </td>
         </tr>
         <tr>
             <td colspan="2" class="center">
-                <p:commandButton id="dlgCancelCAFullAppBtn"
-                                 binding="#{btnSubmitCancelCAFullApp}"
+                <p:commandButton id="dlgCancelCABtn" styleClass="small"
+                                 binding="#{btnSubmitCancelCA}"
                                  value="#{msg.get('app.button.submit')}"
-                                 styleClass="small"
-                                 actionListener="#{headerController.onCancelCAFullApp()}"
-                                 oncomplete="handleCancelFullAppDialogRequest(xhr, status, args)"
+                                 actionListener="#{headerController.onCancelCA()}"
+                                 oncomplete="handleRequestDialog(xhr, status, args, 'cancelCADlg')"
                                  process="@form"
-                                 update=":frmMain:cancelCAFullAppDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
+                                 update=":frmMain:cancelCADlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
-                                 styleClass="small" onclick="cancelCAFullAppDlg.hide()"/>
+                                 styleClass="small" onclick="PF('cancelCA').hide()"/>
             </td>
         </tr>
     </table>
 </p:panel>
-<p:blockUI widgetVar="blockCancelCAFullAppDlg" block="cancelCAFullAppDlgPanel"
-           trigger=":frmMain:dlgCancelCAFullAppBtn">
+<p:blockUI block="cancelCADlgPanel" trigger=":frmMain:dlgCancelCABtn">
     <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>
