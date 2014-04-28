@@ -45,6 +45,10 @@ public class GenPDF extends ReportService implements Serializable {
     @Config(name = "report.appraisal")
     String pathAppraisal;
 
+    @Inject
+    @Config(name = "report.offerletter")
+    String pathOfferLetter;
+
 
     @Inject
     private WorkCaseDAO workCaseDAO;
@@ -99,22 +103,44 @@ public class GenPDF extends ReportService implements Serializable {
     public void setNameReport(){
         init();
         log.info("On setNameReport()");
-        String nameOpShect = "_OpSheet.pdf";
-        String nameExSum = "_ExSum.pdf";
-        String nameRejectLetter = "_RejectLetter.pdf";
-        String nameAppraisal = "_AppraisalAppointment.pdf";
+//        String nameOpShect = "_OpSheet.pdf";
+//        String nameExSum = "_ExSum.pdf";
+//        String nameRejectLetter = "_RejectLetter.pdf";
+//        String nameAppraisal = "_AppraisalAppointment.pdf";
+//        String nameOfferLetter = "_OfferLetter.pdf";
         String date = Util.createDateTime(new Date());
         String[] month = date.split("");
         log.debug("--month. {}",month);
+
+
 
         if(!Util.isNull(workCaseId)){
             workCase = workCaseDAO.findById(workCaseId);
             String appNumber = workCase.getAppNumber();
             reportView = new ReportView();
-            reportView.setNameReportOpShect(appNumber+"_"+date+nameOpShect);
-            reportView.setNameReportExSum(appNumber + "_" + date + nameExSum);
-            reportView.setNameReportRejectLetter(appNumber + "_" + date + nameRejectLetter);
-            reportView.setNameReportAppralsal(appNumber + "_" + date + nameAppraisal);
+
+            StringBuilder nameOpShect =new StringBuilder();
+            nameOpShect = nameOpShect.append(appNumber).append("_").append(date).append("_OpSheet.pdf");
+
+            StringBuilder nameExSum =new StringBuilder();
+            nameExSum = nameExSum.append(appNumber).append("_").append(date).append("_ExSum.pdf");
+
+            StringBuilder nameRejectLetter =new StringBuilder();
+            nameRejectLetter = nameRejectLetter.append(appNumber).append("_").append(date).append("_RejectLetter.pdf");
+
+            StringBuilder nameAppraisal =new StringBuilder();
+            nameAppraisal = nameAppraisal.append(appNumber).append("_").append(date).append("_AppraisalAppointment.pdf");
+
+            StringBuilder nameOfferLetter =new StringBuilder();
+            nameOfferLetter = nameOfferLetter.append(appNumber).append("_").append(date).append("_OfferLetter.pdf");
+
+
+
+            reportView.setNameReportOpShect(nameOpShect.toString());
+            reportView.setNameReportExSum(nameExSum.toString());
+            reportView.setNameReportRejectLetter(nameRejectLetter.toString());
+            reportView.setNameReportAppralsal(nameAppraisal.toString());
+            reportView.setNameReportOfferLetter(nameOfferLetter.toString());
         }
     }
 
@@ -201,6 +227,13 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillContactRecordDetailViewReport",pdfAppraisalAppointment.fillContactRecordDetailViewReport());
 
         generatePDF(pathAppraisal,map,reportView.getNameReportAppralsal());
+    }
+
+    public void onPrintOfferletter() throws Exception {
+
+
+        HashMap map = new HashMap<String, Object>();
+        generatePDF(pathAppraisal,map,reportView.getNameReportOfferLetter());
     }
 
     public ReportView getReportView() {
