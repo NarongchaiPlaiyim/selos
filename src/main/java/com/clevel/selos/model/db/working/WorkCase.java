@@ -42,6 +42,17 @@ public class WorkCase extends AbstractWorkCase{
     @JoinColumn(name = "uw_doa2")
     private AuthorizationDOA uwDOA2;
 
+    @Column(name = "ref_app_number")
+    private String refAppNumber;
+
+    public String getRefAppNumber() {
+        return refAppNumber;
+    }
+
+    public void setRefAppNumber(String refAppNumber) {
+        this.refAppNumber = refAppNumber;
+    }
+
     public long getId() {
         return id;
     }
@@ -125,6 +136,7 @@ public class WorkCase extends AbstractWorkCase{
                 .append("pricingDoaLevel", pricingDoaLevel)
                 .append("uwDOA1", uwDOA1)
                 .append("uwDOA2", uwDOA2)
+                .append("refAppNumber",refAppNumber)
                 .toString();
     }
 }

@@ -66,7 +66,7 @@ public class PDFAppraisalAppointment implements Serializable {
     }
 
     public AppraisalViewReport fillAppraisalDetailReport(){
-        init();
+//        init();
         AppraisalViewReport report = new AppraisalViewReport();
 
         if (!Util.isNull(appraisalView)){
@@ -95,7 +95,7 @@ public class PDFAppraisalAppointment implements Serializable {
     }
 
     public List<AppraisalDetailViewReport> fillAppraisalDetailViewReport(){
-        init();
+//        init();
         List<AppraisalDetailViewReport> appraisalDetailViewReportList = new ArrayList<AppraisalDetailViewReport>();
 
         int count = 1;
@@ -123,7 +123,7 @@ public class PDFAppraisalAppointment implements Serializable {
     }
 
     public AppraisalContactDetailViewReport fillAppraisalContactDetailViewReport(){
-        init();
+//        init();
         AppraisalContactDetailView view = new AppraisalContactDetailView();
         view = appraisalView.getAppraisalContactDetailView();
         AppraisalContactDetailViewReport report = new AppraisalContactDetailViewReport();
@@ -147,7 +147,7 @@ public class PDFAppraisalAppointment implements Serializable {
     }
 
     public List<ContactRecordDetailViewReport> fillContactRecordDetailViewReport(){
-        init();
+//        init();
         List<ContactRecordDetailViewReport> contactRecordDetailViewReports = new ArrayList<ContactRecordDetailViewReport>();
         List<ContactRecordDetailView> detailViewList = new ArrayList<ContactRecordDetailView>();
         detailViewList = appraisalView.getContactRecordDetailViewList();

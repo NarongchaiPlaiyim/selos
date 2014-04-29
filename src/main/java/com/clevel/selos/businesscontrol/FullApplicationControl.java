@@ -15,6 +15,7 @@ import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.transform.StepTransform;
 import com.clevel.selos.transform.UserTransform;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -24,9 +25,11 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @Stateless
 public class FullApplicationControl extends BusinessControl {
@@ -97,50 +100,26 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public List<User> getUserList(User currentUser){
-        List<User> zmUserList = null;
-        List<UserTeam> zmUserTeamList = relTeamUserDetailsDAO.getTeamHeadLeadByTeamId(currentUser.getTeam().getId());
-        if(zmUserTeamList!=null && zmUserTeamList.size()>0){
-            zmUserList = userDAO.findUserZoneList(zmUserTeamList);
+        List<User> userList = null;
+        List<UserTeam> userTeamList = relTeamUserDetailsDAO.getTeamHeadLeadByTeamId(currentUser.getTeam().getId());
+        if(userTeamList != null && userTeamList.size() > 0){
+            userList = userDAO.findUserList(userTeamList);
         }
 
-        if(zmUserList == null){
-            zmUserList = new ArrayList<User>();
+        if(userList == null){
+            userList = new ArrayList<User>();
         }
 
-        return zmUserList;
+        return userList;
     }
 
-    public List<User> getRMUserList(){
-        User currentUser = getCurrentUser();
-
-        List<User> rmUserList = userDAO.findUserRegionList(currentUser);
-        if(rmUserList == null){
-            rmUserList = new ArrayList<User>();
+    public List<User> getUserListByRole(RoleValue roleValue){
+        List<User> userList = userDAO.findUserListByRoleId(getCurrentUser(), roleValue.id());
+        if(userList == null){
+            userList = new ArrayList<User>();
         }
 
-        return rmUserList;
-    }
-
-    public List<User> getHeadUserList(){
-        User currentUser = getCurrentUser();
-
-        List<User> ghUserList = userDAO.findUserHeadList(currentUser);
-        if(ghUserList == null){
-            ghUserList = new ArrayList<User>();
-        }
-
-        return ghUserList;
-    }
-
-    public List<User> getCSSOUserList(){
-        User currentUser = getCurrentUser();
-
-        List<User> ghUserList = userDAO.findCSSOList(currentUser);
-        if(ghUserList == null){
-            ghUserList = new ArrayList<User>();
-        }
-
-        return ghUserList;
+        return userList;
     }
 
     public void assignToABDM(String abdmUserId, String queueName, long workCaseId) throws Exception {
@@ -169,6 +148,7 @@ public class FullApplicationControl extends BusinessControl {
         }
 
         //TODO: get total com and retail
+
 
         bpmExecutor.submitZM(workCaseId, queueName, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, ActionCode.SUBMIT_CA.getVal());
 
@@ -532,6 +512,25 @@ public class FullApplicationControl extends BusinessControl {
         log.debug("requestAppraisal ::: Save Appraisal Request Complete.");
     }
 
+    //Request appraisal after Customer Acceptance
+    public void requestAppraisal(String queueName, String wobNumber, String aadAdminUserName) throws Exception{
+        //Update Request Appraisal Flag
+
+        if(!Util.isEmpty(queueName) && !Util.isEmpty(wobNumber)) {
+            try{
+                bpmExecutor.requestAppraisal(queueName, wobNumber, aadAdminUserName, ActionCode.REQUEST_APPRAISAL.getVal());
+                log.debug("requestAppraisal ::: Create Work Item for appraisal complete.");
+            } catch (Exception ex){
+                log.error("Exception while Create Work Item for Appraisal. : ", ex);
+                throw ex;
+            }
+        } else {
+            log.error("exception while Request Appraisal (BDM), Could not find WobNumber/QueueName.");
+            throw new Exception("exception while Request Appraisal, Could not find WobNumber/QueueName.");
+        }
+        log.debug("requestAppraisal ::: Update Request Appraisal Flag Complete.");
+    }
+
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public WorkCaseAppraisal createWorkCaseAppraisal(long workCasePreScreenId, long workCaseId) throws Exception {
         //Find all data in WorkCase or WorkCasePreScreen
@@ -576,9 +575,24 @@ public class FullApplicationControl extends BusinessControl {
         workCaseAppraisal.setRequestBy(getCurrentUser());
         workCaseAppraisal.setProductGroup(productGroup);
         workCaseAppraisal.setRequestType(requestType);
+        workCaseAppraisal.setAppraisalResult(1);
         workCaseAppraisalDAO.persist(workCaseAppraisal);
 
         return workCaseAppraisal;
+    }
+
+    public boolean checkAppraisalInformation(long workCaseId){
+        Appraisal appraisal = null;
+        boolean checkAppraisal = false;
+        if(!Util.isNull(workCaseId) && workCaseId != 0){
+            appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
+            log.debug("checkAppraisalInformation ::: find appraisal by workCase : {}", appraisal);
+            if(!Util.isNull(appraisal)){
+                checkAppraisal = true;
+            }
+        }
+
+        return checkAppraisal;
     }
 
     public boolean checkAppointmentInformation(long workCaseId, long workCasePreScreenId){
@@ -588,7 +602,7 @@ public class FullApplicationControl extends BusinessControl {
             appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
             log.debug("checkAppointmentInformation ::: find appraisal by workCase : {}", appraisal);
         }else if(!Util.isNull(workCasePreScreenId) && workCasePreScreenId != 0){
-            appraisal = appraisalDAO.findByWorkCasePreScreenId(workCaseId);
+            appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             log.debug("checkAppointmentInformation ::: find appraisal by workCasePrescreen: {}", appraisal);
         }
 
@@ -601,7 +615,7 @@ public class FullApplicationControl extends BusinessControl {
         return checkAppointment;
     }
 
-    public void submitToAADCommittee(String aadCommitteeUserId, long workCaseId, long workCasePreScreenId, String queueName) throws Exception{
+    public void submitToAADCommittee(String aadCommitteeUserId, long workCaseId, long workCasePreScreenId, String queueName, String wobNumber) throws Exception{
         log.debug("submitToAADCommittee ::: starting...");
         String appNumber = "";
         Appraisal appraisal = null;
@@ -612,7 +626,7 @@ public class FullApplicationControl extends BusinessControl {
             log.debug("submitToAADCommittee ::: find appraisal by workCase : {}", appraisal);
             log.debug("submitToAADCommittee ::: find workCase : {}", workCase);
         }else if(!Util.isNull(workCasePreScreenId) && workCasePreScreenId != 0){
-            appraisal = appraisalDAO.findByWorkCasePreScreenId(workCaseId);
+            appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             appNumber = workCasePrescreen.getAppNumber();
             log.debug("submitToAADCommittee ::: find appraisal by workCasePrescreen: {}", appraisal);
@@ -634,115 +648,73 @@ public class FullApplicationControl extends BusinessControl {
                 if(appraisal.getLocationOfProperty() != null){
                     appraisalLocationCode = appraisal.getLocationOfProperty().getCode();
                 }
-                bpmExecutor.submitAADCommittee(appNumber, aadCommitteeUserId, appraisal.getAppointmentDate(), appraisalLocationCode, queueName, ActionCode.SUBMIT_TO_ADD_COMMITTEE.getVal(), workCaseAppraisal.getWobNumber());
+                bpmExecutor.submitAADCommittee(appNumber, aadCommitteeUserId, DateTimeUtil.convertDateWorkFlowFormat(appraisal.getAppointmentDate()), appraisalLocationCode, queueName, ActionCode.SUBMIT_CA.getVal(), wobNumber);
             }
+        } else {
+            throw new Exception("Submit case failed, could not find appraisal data.");
         }
         log.debug("submitToAADCommittee ::: end...");
+    }
+
+    public void submitToUWFromCommittee(String queueName, String wobNumber) throws Exception{
+        bpmExecutor.submitUW2FromCommittee(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
+    }
+
+    public void returnAADCommittee(String queueName, String wobNumber, String reason, String remark) throws Exception {
+        bpmExecutor.returnCase(queueName, wobNumber, remark, reason, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
+    }
+
+    public String getAADCommittee(long workCaseId, long workCasePreScreenId){
+        String aadCommitteeName = "";
+        Appraisal appraisal;
+        if(!Util.isNull(workCaseId) && workCaseId != 0){
+            appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
+            aadCommitteeName = appraisal.getAadCommittee()!=null?appraisal.getAadCommittee().getUserName():"";
+            log.debug("submitToAADCommittee ::: find appraisal by workCase : {}", appraisal);
+        }else if(!Util.isNull(workCasePreScreenId) && workCasePreScreenId != 0){
+            appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+            aadCommitteeName = appraisal.getAadCommittee()!=null?appraisal.getAadCommittee().getUserName():"";
+            log.debug("submitToAADCommittee ::: find appraisal by workCasePrescreen: {}", appraisal);
+        }
+
+        return aadCommitteeName;
     }
 
     public void submitUW2FromAAD(){
 
     }
 
-    /*public void calculatePricingDOA(long workCaseId, NewCreditFacility newCreditFacility){
-        log.debug("calculatePricingDOA ::: newCreditFacility : {}", newCreditFacility);
-        PricingDOAValue pricingDOALevel = PricingDOAValue.NO_DOA;
+    public void submitCustomerAcceptance(String queueName, String wobNumber) throws Exception{
+        bpmExecutor.submitCustomerAcceptance(queueName, wobNumber, ActionCode.CUSTOMER_ACCEPT.getVal());
+    }
 
-        if(newCreditFacility != null){
-            //List of Credit detail
-            List<NewCreditDetail> newCreditDetailList = newCreditFacility.getNewCreditDetailList();
-            //List of Credit tier ( find by Credit detail )
-            BigDecimal priceReduceDOA = newCreditFacility.getIntFeeDOA();
-            BigDecimal frontEndFeeReduceDOA = newCreditFacility.getFrontendFeeDOA();
-            int requestPricing = 0;
+    public void submitPendingDecision(String queueName, String wobNumber, String remark, String reason) throws Exception{
+        bpmExecutor.submitPendingDecision(queueName, wobNumber, remark, reason, ActionCode.PENDING_FOR_DECISION.getVal());
+    }
 
-            //Check Case Have request pricing or not?
-            log.debug("calculatePricingDOA ::: Check Request Pricing and Fee : priceReduce : {}, frontEndFee : {}", priceReduceDOA, frontEndFeeReduceDOA);
-            if(priceReduceDOA != null && frontEndFeeReduceDOA != null){
-                if(priceReduceDOA.compareTo(BigDecimal.ZERO) == 0
-                        && (frontEndFeeReduceDOA.compareTo(BigDecimal.ZERO) >= 0 && frontEndFeeReduceDOA.compareTo(new BigDecimal("0.75")) <= 0)){
-                    //DOA Level equals ZM
-                    pricingDOALevel = PricingDOAValue.ZM_DOA;
-                    requestPricing = 1;
-                    log.debug("calculatePricingDOA Level [ZONE MANAGER] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
-                } else if(priceReduceDOA.compareTo(BigDecimal.ONE) > 0 && frontEndFeeReduceDOA.compareTo(BigDecimal.ONE) > 0) {
-                    pricingDOALevel = PricingDOAValue.CSSO_DOA;
-                    requestPricing = 1;
-                    log.debug("calculatePricingDOA Level [CSSO MANAGER] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
-                } else {
-                    //Check for Exceptional Case
-                    boolean exceptionalFlow = false;
-                    if(newCreditDetailList != null && newCreditDetailList.size() > 0){
-                        for(NewCreditDetail newCreditDetail : newCreditDetailList){
-                            BigDecimal standardPrice = null;
-                            BigDecimal suggestPrice = null;
-                            BigDecimal finalPrice = null;
-                            BigDecimal tmpStandardPrice = null;
-                            BigDecimal tmpSuggestPrice = null;
-                            BigDecimal tmpFinalPrice = null;
-                            int reducePricing = newCreditDetail.getReducePriceFlag();
-                            int reduceFrontEndFee = newCreditDetail.getReduceFrontEndFee();
-                            if(newCreditDetail.getProposeCreditTierDetailList() != null){
-                                for(NewCreditTierDetail newCreditTierDetail : newCreditDetail.getProposeCreditTierDetailList()){
-                                    //Check for Final Price first...
-                                    if(finalPrice != null){
-                                        tmpFinalPrice = newCreditTierDetail.getFinalInterest().add(newCreditTierDetail.getFinalBasePrice().getValue());
-                                        tmpStandardPrice = newCreditTierDetail.getStandardInterest().add(newCreditTierDetail.getStandardBasePrice().getValue());
-                                        tmpSuggestPrice = newCreditTierDetail.getSuggestInterest().add(newCreditTierDetail.getSuggestBasePrice().getValue());
+    public void returnBDMByAAD(String queueName, String wobNumber, String remark, String reason) throws Exception{
+        bpmExecutor.returnCase(queueName, wobNumber, remark, reason, ActionCode.RETURN_TO_BDM.getVal());
+    }
 
-                                        if(reducePricing == 1){
-                                            tmpFinalPrice = tmpFinalPrice.subtract(priceReduceDOA);
-                                        }
-                                        if(tmpFinalPrice.compareTo(finalPrice) > 0){
-                                            finalPrice = tmpFinalPrice;
-                                            standardPrice = tmpStandardPrice;
-                                            suggestPrice = tmpSuggestPrice;
-                                        }
-                                    }else{
-                                        finalPrice = newCreditTierDetail.getFinalInterest().add(newCreditTierDetail.getFinalBasePrice().getValue());
-                                        standardPrice = newCreditTierDetail.getStandardInterest().add(newCreditTierDetail.getStandardBasePrice().getValue());
-                                        suggestPrice = newCreditTierDetail.getSuggestInterest().add(newCreditTierDetail.getSuggestBasePrice().getValue());
-                                        if(reducePricing == 1){
-                                            finalPrice = finalPrice.subtract(priceReduceDOA);
-                                        }
-                                    }
+    public void returnAADAdminByAADCommittee(String queueName, String wobNumber, String remark, String reason) throws Exception{
+        bpmExecutor.returnCase(queueName, wobNumber, remark, reason, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
+    }
 
-                                    if(finalPrice.compareTo(suggestPrice) < 0){
-                                        exceptionalFlow = true;
-                                        break;
-                                    }
-                                }
-                            }
-                            if(exceptionalFlow){
-                                break;
-                            }
-                        }
-                    }
+    public void returnAADAdminByBDM(String queueName, String wobNumber) throws Exception{
+        bpmExecutor.submitCase(queueName, wobNumber, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
+    }
 
-                    if(!exceptionalFlow){
-                        if((priceReduceDOA.compareTo(BigDecimal.ZERO) >= 0 && priceReduceDOA.compareTo(new BigDecimal("0.25")) <= 0)
-                                && (frontEndFeeReduceDOA.compareTo(BigDecimal.ZERO) > 0 && frontEndFeeReduceDOA.compareTo(BigDecimal.ONE) <= 0)){
-                            pricingDOALevel = PricingDOAValue.RGM_DOA;
-                            requestPricing = 1;
-                        }else if((priceReduceDOA.compareTo(BigDecimal.ZERO) >= 0 && priceReduceDOA.compareTo(BigDecimal.ONE) <= 0)
-                                && frontEndFeeReduceDOA.compareTo(BigDecimal.ONE) > 0){
-                            pricingDOALevel = PricingDOAValue.GH_DOA;
-                            requestPricing = 1;
-                        }
-                    }
-                }
-            }
+    public void completeCase(String queueName, String wobNumber) throws Exception {
+        bpmExecutor.completeCase(queueName, ActionCode.COMPLETE.getVal(), wobNumber);
+    }
 
-            if(pricingDOALevel == PricingDOAValue.NO_DOA){
-                requestPricing = 0;
-            }
-            log.debug("calculatePricingDOA ::: requestPricing : {}", requestPricing);
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
-            workCase.setRequestPricing(requestPricing);
-            workCase.setPricingDoaLevel(pricingDOALevel.value());
-            workCaseDAO.persist(workCase);
-        }
-    }*/
+    public void restartCase(String queueName, String wobNumber) throws Exception {
+        bpmExecutor.restartCase(queueName, ActionCode.RESTART.getVal(), wobNumber);
+    }
+
+    public void submitToBDM(String queueName, String wobNumber) throws Exception{
+        bpmExecutor.submitCase(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
+    }
 
     public void calculatePricingDOA(long workCaseId, NewCreditFacility newCreditFacility){
         log.debug("calculatePricingDOA ::: newCreditFacility : {}", newCreditFacility);
@@ -853,6 +825,8 @@ public class FullApplicationControl extends BusinessControl {
                     }
                 }
 
+            } else {
+                pricingDOALevel = PricingDOAValue.CSSO_DOA;
             }
 
             /*if(pricingDOALevel == PricingDOAValue.NO_DOA){
@@ -930,4 +904,13 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.cancelCase(0, workCaseId, queueName, ActionCode.CANCEL_CA.getVal(), reasonTxt, remark);
     }
 
+    public List<Reason> getReasonList(ReasonTypeValue reasonTypeValue){
+        ReasonType reasonType = reasonTypeDAO.findById(reasonTypeValue.value());
+        List<Reason> reasonList = reasonDAO.getList(reasonType);
+        if(Util.isNull(reasonList)){
+            reasonList = new ArrayList<Reason>();
+        }
+
+        return reasonList;
+    }
 }

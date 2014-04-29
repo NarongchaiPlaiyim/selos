@@ -209,6 +209,8 @@ public class ReturnControl extends BusinessControl {
 
     public void submitReturnBDM(long workCaseId, String queueName, User user, long stepId, List<ReturnInfoView> returnInfoViewList) throws Exception {
         if(returnInfoViewList!=null && returnInfoViewList.size()>0){
+            boolean hasRG001 = false;
+
             //Move Return Info in Working to History
             saveReturnHistory(workCaseId,user);
 
@@ -224,12 +226,15 @@ public class ReturnControl extends BusinessControl {
                 returnInfoView.setDateOfReturn(returnDate);
                 returnInfoView.setChallenge(0); //not selected
                 returnInfoView.setAcceptChallenge(0); //not selected
+                if(returnInfoView.getReturnCode()!=null && returnInfoView.getReturnCode().equalsIgnoreCase("RG001")){
+                    hasRG001 = true;
+                }
                 ReturnInfo returnInfo = returnInfoTransform.transformToModel(returnInfoView, workCase, user);
                 returnInfoList.add(returnInfo);
             }
 
             returnInfoDAO.persist(returnInfoList);
-            bpmExecutor.returnBDM(workCaseId, queueName, ActionCode.RETURN_TO_BDM_PRESCREEN.getVal());
+            bpmExecutor.returnBDM(workCaseId, queueName, ActionCode.RETURN_TO_BDM.getVal(),hasRG001);
         }
     }
 
@@ -257,6 +262,6 @@ public class ReturnControl extends BusinessControl {
             returnInfoDAO.persist(returnInfoList);
         }
 
-        //bpmExecutor.returnBDM(workCaseId, queueName, ActionCode.RETURN_TO_BDM_FULLAPP.getVal());
+        bpmExecutor.submitUW1(workCaseId, queueName, ActionCode.SUBMIT_CA.getVal());
     }
 }

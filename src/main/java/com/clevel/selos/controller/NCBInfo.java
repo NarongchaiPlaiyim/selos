@@ -418,7 +418,7 @@ public class NCBInfo implements Serializable {
         try {
             //Remove checked NCB Detail list
             //if (ncbDetailViewList.size() > 0) {
-                ncbInfoControl.onSaveNCBToDB(ncbInfoView, ncbDetailViewList);
+                ncbInfoControl.onSaveNCBToDB(ncbInfoView, ncbDetailViewList, customerInfo);
                 dbrControl.updateValueOfDBR(workCaseId);
                 messageHeader = msg.get("app.header.save.success");
                 message = msg.get("app.ncb.response.save.success");

@@ -32,4 +32,12 @@ public class CaseCreationHistoryDAO extends GenericDAO<CaseCreationHistory, Long
         return exist;
     }
 
+    public CaseCreationHistory getCaseDetails(String appNumber)
+    {
+
+        createCriteria().add(Restrictions.eq("appNumber",appNumber));
+
+        return (CaseCreationHistory) createCriteria().uniqueResult();
+    }
+
 }

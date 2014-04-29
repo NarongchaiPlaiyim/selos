@@ -112,12 +112,12 @@ public class AppraisalRequest extends BaseController {
         log.debug("preRender...");
         HttpSession session = FacesUtil.getSession(true);
         if(checkSession(session)){
-            stepId = getCurrentStep(session);
-            if(stepId != StepValue.PRESCREEN_MAKER.value() && stepId != StepValue.FULLAPP_BDM_SSO_ABDM.value()){
+            /*stepId = getCurrentStep(session);
+            if(stepId != StepValue.REQUEST_APPRAISAL_RETURN.value() || stepId != StepValue.REQUEST_APPRAISAL_BDM.value()) {
                 log.debug("preRender ::: Invalid step id : {}", stepId);
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
-            }
+            }*/
         } else {
             log.debug("preRender ::: workCasePreScreenId, workCaseId, stepId is null.");
             FacesUtil.redirect("/site/inbox.jsf");
@@ -132,13 +132,10 @@ public class AppraisalRequest extends BaseController {
         HttpSession session = FacesUtil.getSession(true);
         if(checkSession(session)){
             stepId = (Long)session.getAttribute("stepId");
-            if(stepId == StepValue.PRESCREEN_MAKER.value()){
-                workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
-                log.debug("onCreation ::: workCasePreScreenId : [{}]", workCasePreScreenId);
-            }else if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){
-                workCaseId = (Long)session.getAttribute("workCaseId");
-                log.debug("onCreation ::: workCaseId : [{}]", workCaseId);
-            }
+            workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+
+            log.debug("onCreation ::: workCasePreScreenId : [{}], workCaseId : [{}]", workCasePreScreenId, workCaseId);
 
             appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, workCasePreScreenId);
             log.debug("onCreation ::: appraisalView : {}", appraisalView);

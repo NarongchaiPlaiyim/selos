@@ -118,7 +118,11 @@
                     <td colspan="100%"><p:separator/></td>
                 </tr>
                 <tr>
-                    <td colspan="100%" style="color: red;"><p:commandButton value="Change Owner" id="change" disabled="#{change.selectuser eq 'ALL'}" readonly="#{change.selectuser eq 'ALL'}" styleClass="large" onclick="changeOwnerDlg.show()"/>เลือก Change Owner ได้ไม่เกินครั้งละ 5 cases.</td>
+                    <td colspan="100%" style="color: red;">
+                        <p:commandButton value="Change Owner" id="change" disabled="#{change.selectuser eq 'ALL'}" readonly="#{change.selectuser eq 'ALL'}" styleClass="large" onclick="changeOwnerDlg.show()">
+                            <p:resetInput target=":changeOwnerDialog" />
+                        </p:commandButton>เลือก Change Owner ได้ไม่เกินครั้งละ 5 cases.
+                    </td>
                 </tr>
 
                 <tr>
@@ -127,7 +131,7 @@
                                      value="#{change.changeOwerViewList}"
                                      selectionMode="single"
                                      paginator="true"
-                                     rows ="10"
+                                     rows ="20"
                                      rowKey="#{item.receivedDate}"
                                      rowIndexVar="rowIndex"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -182,13 +186,14 @@
                                 <h:outputText value="#{item.teamName}"/>
                             </p:column>
 
-                            <p:column headerText="Total Time Spent At User" styleClass="center"
-                                      style="width: 110px;" sortBy="#{item.totalTimeAtUser}">
-                                <h:outputText value="#{item.totalTimeAtUser}"/>
-                            </p:column>
                             <p:column headerText="SLAEndDate" styleClass="center"
                                       style="width: 110px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="#{item.SLAEndTime}">
                                 <h:outputText value="#{item.SLAEndTime}" />
+                            </p:column>
+
+                            <p:column headerText="Total Time Spent At User" styleClass="center"
+                                      style="width: 110px;" sortBy="#{item.totalTimeAtUser}">
+                                <h:outputText value="#{item.totalTimeAtUser}"/>
                             </p:column>
 
                             <p:column headerText="Total Time Spent At Process" styleClass="center"
@@ -245,7 +250,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="2" align="center">
                     <p:commandButton value="Submit" styleClass="small" action="#{change.onReassignBulk}" onclick="appealDlg.close();"/>
                     <p:commandButton value="Cancel" styleClass="small" onclick="appealDlg.close();"/>
                 </td>

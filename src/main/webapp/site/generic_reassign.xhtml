@@ -131,7 +131,14 @@
                          <table>
 
                         <tr>
-                            <td colspan="100%" style="color: red;"><p:commandButton value="Reassign" id="reassignButtonId" styleClass="medium" onclick="reassignDlg.show()" readonly="#{reassignteamnames.selectedUserName eq 'ALL' or !param['frmMain:checkBoxId']}" disabled="#{reassignteamnames.selectedUserName eq 'ALL'}" /><p:spacer width="20px;"/> </td>
+                            <td colspan="100%" style="color: red;">
+                                <p:commandButton value="Reassign"
+                                                 id="reassignButtonId" styleClass="medium" onclick="reassignDlg.show()"
+                                                 readonly="#{reassignteamnames.selectedUserName eq 'ALL'}"
+                                                 disabled="#{reassignteamnames.selectedUserName eq 'ALL' or !param['frmMain:checkBoxId']}">
+                                        <p:resetInput target=":reassignDialog"></p:resetInput>
+                                </p:commandButton>
+                                <p:spacer width="20px;"/> </td>
                         </tr>
 
                         <tr>
@@ -147,7 +154,7 @@
 
                                              paginator="true"
 
-                                             rows ="10"
+                                             rows ="20"
 
                                              rowKey="#{item.fwobnumber}"
 
@@ -231,6 +238,12 @@
                                         <h:outputText value="#{item.totaltimespentatprocess}"/>
                                     </p:column>
 
+                                    <p:column headerText="View">
+                                        <p:commandButton icon="ui-icon-search" title="View" action="#{reassignteamnames.onSelectInbox}" onclick="blockInbox.show()">
+                                            <f:setPropertyActionListener value="#{item}" target="#{reassignteamnames.searchViewSelectItem}"/>
+                                        </p:commandButton>
+                                    </p:column>
+
                                 </p:dataTable>
 
 
@@ -245,6 +258,40 @@
                 <div class="bottom_line"><!-- --></div>
             </div>
             <div class="clear"></div>
+
+
+            <p:confirmDialog id="successDialog" widgetVar="successDlg" styleClass="messageDialog"
+                             closable="false"
+                             header="Success.">
+                <f:facet name="message">
+                    <h:outputText value="Reassign Successfull!!" escape="false"/>
+                </f:facet>
+                <p:commandButton value="Ok" styleClass="small" onclick="successDlg.close();"/>
+            </p:confirmDialog>
+
+            <p:confirmDialog id="msgBoxErrorDialog1" widgetVar="msgBoxErrorDlg1" styleClass="messageDialog"
+                             closable="false"
+                             header="Exception.">
+                <f:facet name="message">
+                    <h:outputText value="Please Select 5 or less cases" escape="false"/>
+                </f:facet>
+                <p:commandButton value="Ok" styleClass="small" onclick="msgBoxErrorDlg.close();"/>
+            </p:confirmDialog>
+
+            <p:panel id="msgBoxErrorPanel" styleClass="panel">
+                <p:confirmDialog id="msgBoxErrorDialog" widgetVar="msgBoxErrorDlg" styleClass="messageDialog"
+                                 closable="false"
+                                 header="Exception.">
+                    <f:facet name="message">
+                        <h:outputText value="Another User is Working on this case!! Please Retry Later." escape="false"/>
+                    </f:facet>
+                    <p:commandButton value="#{msg.get('app.button.ok')}"
+                                     process="@this"
+                                     update="frmMain"
+                                     oncomplete="msgBoxErrorDlg.hide()"/>
+                </p:confirmDialog>
+            </p:panel>
+
             <p:dialog id="reassignDialog" header="Reassign Information" widgetVar="reassignDlg" modal="true" >
 
                     <table class="content_form" style="width: 600px;">
@@ -264,7 +311,7 @@
 
                                 <tr>
 
-                                    <td class="title" style="width: 220px;"> User Name : </td>
+                                    <td class="title" style="width: 220px;"> Assign To : </td>
                                     <td>
                                         <h:selectOneMenu class="largest" id="userNameReassign" label="userNameReassign" value="#{reassignteamnames.popupselectedusername}">
                                             <f:selectItem itemValue="" itemLabel="-Please Select-"/>
@@ -284,7 +331,7 @@
 
                     <tr>
                         <td colspan="2" align="center">
-                            <p:commandButton value="Submit" styleClass="small" action="#{reassignteamnames.reassignDisptchRecords()}" onclick="reassignDlg.close();"/>
+                            <p:commandButton value="Submit" styleClass="small" actionListener="#{reassignteamnames.reassignDisptchRecords()}" onclick="reassignDlg.close();"/>
                             <p:commandButton value="Cancel" styleClass="small" onclick="reassignDlg.close();"/>
                         </td>
                     </tr>
@@ -298,6 +345,11 @@
 </p:panel>
     </h:form>
 
+<p:blockUI widgetVar="blockInbox" block=":frmMain">
+    LOADING<br/>
+    <!--<p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>-->
+    <h:graphicImage library="images" name="shared/ajax-loader.gif" />
+</p:blockUI>
 </h:body>
 
 </f:view>

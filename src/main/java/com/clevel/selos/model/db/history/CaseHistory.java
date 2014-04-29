@@ -15,7 +15,7 @@ public class CaseHistory implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_HIS_CASE_ID")
     private long id;
     @Column(name = "step_id")
-    private int stepId;
+    private Integer stepId;
     @Column(name = "step_name")
     private String stepName;
     @Column(name = "user_id")
@@ -28,8 +28,38 @@ public class CaseHistory implements Serializable {
     private String caNumber;
     @Column(name = "app_number")
     private String appNumber;
+    @Column(name = "status_id")
+    private Integer statusId;
+    @Column(name = "remarks")
+    private String remarks;
+    @Column(name = "reason")
+    private String reason;
 
     public CaseHistory() {
+    }
+
+    public Integer getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(Integer statusId) {
+        this.statusId = statusId;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     public long getId() {
@@ -40,11 +70,11 @@ public class CaseHistory implements Serializable {
         this.id = id;
     }
 
-    public int getStepId() {
+    public Integer getStepId() {
         return stepId;
     }
 
-    public void setStepId(int stepId) {
+    public void setStepId(Integer stepId) {
         this.stepId = stepId;
     }
 
@@ -107,6 +137,9 @@ public class CaseHistory implements Serializable {
                 append("createDate", createDate).
                 append("caNumber", caNumber).
                 append("appNumber", appNumber).
+                append("statusId",statusId).
+                append("reason",reason).
+                append("remarks",remarks).
                 toString();
     }
 }

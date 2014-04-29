@@ -3,6 +3,7 @@ package com.clevel.selos.dao.master;
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.SearchFirstLastName;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
@@ -102,5 +103,213 @@ public class SearchFirstLastNameDAO extends GenericDAO<SearchFirstLastName,Strin
         }
 
         return lastNameList;
+    }
+
+    public String getBorrowerNameByWorkCaseID(Long workCaseID)
+    {
+        Criteria criteria = getSession().createCriteria(SearchFirstLastName.class);
+
+        criteria.setProjection(Projections.projectionList().add(Projections.property("firstnametai"),"firstnametai").add(Projections.property("lastnametai"),"lastnametai").add(Projections.property("relationId"),"relationId"));
+
+        criteria.add(Restrictions.in("relationId",relationIdList));
+
+        criteria.add(Restrictions.eq("workCaseId",workCaseID.intValue())).addOrder(Order.asc("relationId")).setResultTransformer(Transformers.aliasToBean(SearchFirstLastName.class));
+
+        List namesList = criteria.list();
+
+        Iterator namesIterator = namesList.iterator();
+
+        StringBuffer names = new StringBuffer();
+
+        while (namesIterator.hasNext())
+        {
+
+            SearchFirstLastName searchFirstLastName = (SearchFirstLastName) namesIterator.next();
+
+            if(searchFirstLastName.getRelationId()==1)
+            {
+                if(searchFirstLastName.getFirstnametai() != null && searchFirstLastName.getLastnametai() !=null)
+                {
+                    names.append("(B) "+searchFirstLastName.getFirstnametai()+" "+searchFirstLastName.getLastnametai()+",");
+                }
+
+                else if(searchFirstLastName.getFirstnametai()!=null)
+                {
+                    names.append("(B) "+searchFirstLastName.getFirstnametai());
+                }
+
+                else if(searchFirstLastName.getLastnametai()!=null)
+                {
+                    names.append("(B) "+searchFirstLastName.getLastnametai());
+                }
+                else
+                {
+                    if(searchFirstLastName.getFirstnameenglish()!=null && searchFirstLastName.getLastnameenglish()!=null)
+                    {
+                        names.append("(B) "+searchFirstLastName.getFirstnameenglish()+" "+searchFirstLastName.getLastnameenglish()+", ");
+                    }
+                    if(searchFirstLastName.getFirstnameenglish()!=null)
+                    {
+                        names.append("(B) "+searchFirstLastName.getFirstnameenglish()+", ");
+                    }
+                    else if(searchFirstLastName.getLastnameenglish()!=null)
+                    {
+                        names.append("(B) "+searchFirstLastName.getLastnameenglish()+", ");
+                    }
+
+                }
+
+            }
+
+            else if(searchFirstLastName.getRelationId()==2)
+            {
+
+                if(searchFirstLastName.getFirstnametai() != null && searchFirstLastName.getLastnametai() !=null)
+                {
+                    names.append("(G) "+searchFirstLastName.getFirstnametai()+" "+searchFirstLastName.getLastnametai()+",");
+                }
+
+                else if(searchFirstLastName.getFirstnametai()!=null)
+                {
+                    names.append("(G) "+searchFirstLastName.getFirstnametai());
+                }
+
+                else if(searchFirstLastName.getLastnametai()!=null)
+                {
+                    names.append("(G) "+searchFirstLastName.getLastnametai());
+                }
+                else
+                {
+                    if(searchFirstLastName.getFirstnameenglish()!=null && searchFirstLastName.getLastnameenglish()!=null)
+                    {
+                        names.append("(G) "+searchFirstLastName.getFirstnameenglish()+" "+searchFirstLastName.getLastnameenglish()+", ");
+                    }
+                    if(searchFirstLastName.getFirstnameenglish()!=null)
+                    {
+                        names.append("(G) "+searchFirstLastName.getFirstnameenglish()+", ");
+                    }
+                    else if(searchFirstLastName.getLastnameenglish()!=null)
+                    {
+                        names.append("(G) "+searchFirstLastName.getLastnameenglish()+", ");
+                    }
+
+                }
+
+            }
+        }
+
+        String strNames = "";
+
+        if(names.indexOf(",")>0)
+        {
+            strNames = names.substring(0,names.length()-1);
+        }
+
+        return strNames;
+    }
+
+    public String getBorrowerNameByWorkCasePrescreenID(Long wrokCasePreScreenId)
+    {
+        Criteria criteria = getSession().createCriteria(SearchFirstLastName.class);
+
+        criteria.setProjection(Projections.projectionList().add(Projections.property("firstnameenglish"),"firstnameenglish").add(Projections.property("lastnameenglish"),"lastnameenglish").add(Projections.property("firstnametai"),"firstnametai").add(Projections.property("lastnametai"),"lastnametai").add(Projections.property("relationId"),"relationId"));
+
+        criteria.add(Restrictions.in("relationId",relationIdList));
+
+        criteria.add(Restrictions.eq("wrokCasePreScreenId",wrokCasePreScreenId.intValue())).addOrder(Order.asc("relationId")).setResultTransformer(Transformers.aliasToBean(SearchFirstLastName.class));
+
+        List namesList = criteria.list();
+
+        Iterator namesIterator = namesList.iterator();
+
+        StringBuffer names = new StringBuffer();
+
+        while (namesIterator.hasNext())
+        {
+
+            SearchFirstLastName searchFirstLastName = (SearchFirstLastName) namesIterator.next();
+
+            if(searchFirstLastName.getRelationId()==1)
+            {
+                if(searchFirstLastName.getFirstnametai() != null && searchFirstLastName.getLastnametai() !=null)
+                {
+                    names.append("(B) "+searchFirstLastName.getFirstnametai()+" "+searchFirstLastName.getLastnametai()+",");
+                }
+
+                else if(searchFirstLastName.getFirstnametai()!=null)
+                {
+                    names.append("(B) "+searchFirstLastName.getFirstnametai());
+                }
+
+                else if(searchFirstLastName.getLastnametai()!=null)
+                {
+                    names.append("(B) "+searchFirstLastName.getLastnametai());
+                }
+                else
+                {
+                    if(searchFirstLastName.getFirstnameenglish()!=null && searchFirstLastName.getLastnameenglish()!=null)
+                    {
+                        names.append("(B) "+searchFirstLastName.getFirstnameenglish()+" "+searchFirstLastName.getLastnameenglish()+", ");
+                    }
+                    if(searchFirstLastName.getFirstnameenglish()!=null)
+                    {
+                        names.append("(B) "+searchFirstLastName.getFirstnameenglish()+", ");
+                    }
+                    else if(searchFirstLastName.getLastnameenglish()!=null)
+                    {
+                        names.append("(B) "+searchFirstLastName.getLastnameenglish()+", ");
+                    }
+
+                }
+
+            }
+
+            else if(searchFirstLastName.getRelationId()==2)
+            {
+
+                if(searchFirstLastName.getFirstnametai() != null && searchFirstLastName.getLastnametai() !=null)
+                {
+                    names.append("(G) "+searchFirstLastName.getFirstnametai()+" "+searchFirstLastName.getLastnametai()+",");
+                }
+
+                else if(searchFirstLastName.getFirstnametai()!=null)
+                {
+                    names.append("(G) "+searchFirstLastName.getFirstnametai());
+                }
+
+                else if(searchFirstLastName.getLastnametai()!=null)
+                {
+                    names.append("(G) "+searchFirstLastName.getLastnametai());
+                }
+                else
+                {
+                    if(searchFirstLastName.getFirstnameenglish()!=null && searchFirstLastName.getLastnameenglish()!=null)
+                    {
+                        names.append("(G) "+searchFirstLastName.getFirstnameenglish()+" "+searchFirstLastName.getLastnameenglish()+", ");
+                    }
+                    if(searchFirstLastName.getFirstnameenglish()!=null)
+                    {
+                        names.append("(G) "+searchFirstLastName.getFirstnameenglish()+", ");
+                    }
+                    else if(searchFirstLastName.getLastnameenglish()!=null)
+                    {
+                        names.append("(G) "+searchFirstLastName.getLastnameenglish()+", ");
+                    }
+
+                }
+
+
+            }
+
+        }
+
+        String strNames = "";
+
+        if(names.indexOf(",")>0)
+        {
+            strNames = names.substring(0,names.length()-1);
+        }
+
+        return strNames;
     }
 }

@@ -393,6 +393,24 @@ public class Util implements Serializable {
 	    	}
     	}
     }
+
+    public static String parseString(Object input, String defaultValue){
+        if(input == null)
+            return defaultValue;
+        else if (input instanceof String)
+            return (String) input;
+        else {
+            try{
+                if(isEmpty(input.toString())){
+                    return defaultValue;
+                } else {
+                    return input.toString();
+                }
+            } catch (ClassCastException e){
+                return defaultValue;
+            }
+        }
+    }
     
     public static int compareLong(long l1,long l2) {
     	long value = l1 - l2;

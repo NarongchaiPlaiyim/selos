@@ -1317,7 +1317,9 @@ public class Decision extends BaseController {
                         }
                         if(requestPricing){
                             // Save Approval History Pricing
-                            approvalHistoryPricingView = decisionControl.saveApprovalHistoryPricing(approvalHistoryPricingView, workCase);
+                            if(roleId != RoleValue.UW.id()){
+                                approvalHistoryPricingView = decisionControl.saveApprovalHistoryPricing(approvalHistoryPricingView, workCase);
+                            }
                         }
                     }
                 }

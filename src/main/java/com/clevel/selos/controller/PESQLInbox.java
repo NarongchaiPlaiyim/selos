@@ -82,28 +82,31 @@ public class PESQLInbox implements Serializable
         //Clear all session before selectInbox
         HttpSession session = FacesUtil.getSession(true);
 
-        /*try {
-            if(session.getAttribute("isLocked") != null) {
-                String isLocked = (String) session.getAttribute("isLocked");
+        try {
 
-                if(isLocked.equalsIgnoreCase("true")) {
-                    if(session.getAttribute("wobNum")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
-                    {
-                        String wobNum = (String)session.getAttribute("wobNum");
-                        log.info("unlocking case queue: {}, WobNum : {}, fetchtype: {}",session.getAttribute("queueName"), session.getAttribute("wobNum"),session.getAttribute("fetchType"));
-                        bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNum,(Integer)session.getAttribute("fetchType"));
-                    }
+            if(session.getAttribute("stepId")!=null)
+            {
 
-                } else {
-                    session.removeAttribute("isLocked");
+                //String isLocked = (String) session.getAttribute("isLocked");
+
+                if((Long)session.getAttribute("stepId") !=0 && session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
+                {
+                    String wobNumber = (String)session.getAttribute("wobNumber");
+                    log.info("unlocking case queue: {}, wobNumber : {}, fetchType: {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
+                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
                 }
+                /*else
+                {
+                    session.removeAttribute("isLocked");
+                }*/
+
             }
 
         } catch (Exception e) {
-            log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNum"), e);
+            log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"), e);
             message = "Error while unlocking case.";
             RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
-        }*/
+        }
 
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
         try {
@@ -146,29 +149,33 @@ public class PESQLInbox implements Serializable
         long wrkCasePreScreenId = 0L;
         long wrkCaseId = 0L;
         long wrkCaseAppraisalId = 0L;
-        long statusId = 0L;
         int stageId = 0;
         int requestAppraisalFlag = 0;
         String queueName = inboxViewSelectItem.getQueuename();
 
         try {
-            /*//Try to Lock case
-            log.info("locking case queue: {}, WobNum : {}, fetchtype: {}",queueName, inboxViewSelectItem.getFwobnumber(),inboxViewSelectItem.getFetchType());
-            bpmInterfaceImpl.lockCase(queueName,inboxViewSelectItem.getFwobnumber(),inboxViewSelectItem.getFetchType());
-            session.setAttribute("isLocked","true");*/
+
+            try{
+                //Try to Lock case
+                log.info("locking case queue: {}, WobNum : {}, fetchtype: {}",queueName, inboxViewSelectItem.getFwobnumber(),inboxViewSelectItem.getFetchType());
+                bpmInterfaceImpl.lockCase(queueName,inboxViewSelectItem.getFwobnumber(),inboxViewSelectItem.getFetchType());
+                /*session.setAttribute("isLocked","true");*/
+            } catch (Exception e) {
+                log.error("Error while Locking case in queue : {}, WobNum : {}",queueName, inboxViewSelectItem.getFwobnumber(), e);
+                message = "Another User is Working on this case!! Please Retry Later.";
+                RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+            }
 
             if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {     //For Case in Stage PreScreen
                 WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
                 if(workCasePrescreen != null){
                     wrkCasePreScreenId = workCasePrescreen.getId();
                     requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
-                    statusId = workCasePrescreen.getStatus().getId();
                 }
                 session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
                 session.setAttribute("requestAppraisal", requestAppraisalFlag);
-                session.setAttribute("statusId", statusId);
-                session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
-            } else if (stepId == StepValue.REQUEST_APPRAISAL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Case in Stage Parallel Appraisal
+
+            } else if (stepId == StepValue.REQUEST_APPRAISAL_POOL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Case in Stage Parallel Appraisal
                 WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
                 if(workCase != null){
                     wrkCaseId = workCase.getId();
@@ -184,9 +191,7 @@ public class PESQLInbox implements Serializable
                 }
                 WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
                 if(workCaseAppraisal != null){
-                    statusId = workCaseAppraisal.getStatus().getId();
                     wrkCaseAppraisalId = workCaseAppraisal.getId();
-                    session.setAttribute("statusId", statusId);
                     session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
                 }
             } else {        //For Case in Stage FullApplication
@@ -194,13 +199,13 @@ public class PESQLInbox implements Serializable
                 if(workCase != null){
                     wrkCaseId = workCase.getId();
                     requestAppraisalFlag = workCase.getRequestAppraisal();
-                    statusId = workCase.getStatus().getId();
                 }
                 session.setAttribute("workCaseId", wrkCaseId);
                 session.setAttribute("requestAppraisal", requestAppraisalFlag);
-                session.setAttribute("statusId", statusId);
-                session.setAttribute("wobNum",inboxViewSelectItem.getFwobnumber());
             }
+
+            session.setAttribute("wobNumber", inboxViewSelectItem.getFwobnumber());
+            session.setAttribute("statusId", Util.parseLong(inboxViewSelectItem.getStatuscode(), 0));
 
             if(Util.isNull(inboxViewSelectItem.getFetchType())) {
                 session.setAttribute("fetchType",0);
@@ -223,10 +228,10 @@ public class PESQLInbox implements Serializable
                 session.setAttribute("queueName", queueName);
             }
 
-            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, inboxViewSelectItem.getFwobnumber());
+            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, inboxViewSelectItem.getApplicationno());
             session.setAttribute("appHeaderInfo", appHeaderView);
 
-            String landingPage = inboxControl.getLandingPage(stepId);
+            String landingPage = inboxControl.getLandingPage(stepId,Util.parseLong(inboxViewSelectItem.getStatuscode(), 0));
 
             log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
 
@@ -241,7 +246,7 @@ public class PESQLInbox implements Serializable
         } catch (Exception e) {
             //log.error("Error while Locking case in queue : {}, WobNum : {}",queueName, inboxViewSelectItem.getFwobnumber(), e);
             //message = "Another User is Working on this case!! Please Retry Later.";
-           // RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+            //RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
             log.error("Error while opening case",e);
         }
     }

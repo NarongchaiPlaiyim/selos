@@ -83,7 +83,11 @@
                     </ul>
                 </li>
             </h:panelGroup>
-            
+            <h:panelGroup id="pnl_menu_custacceptance" rendered="#{headerController.stageId == 205}" styleClass="panel">
+                <li id="mnucustacceptpre">
+                    <a href="customerAcceptancePre.jsf" title="#{msg.get('app.menu.customerAcceptancePre')}">#{msg.get('app.menu.customerAcceptancePre')}</a>
+                </li>
+            </h:panelGroup>
             <h:panelGroup id="pnl_menu_step3" rendered="#{headerController.step3Screen}"
                      styleClass="panel">
                 <li>

@@ -1079,7 +1079,7 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:inputTextarea value="#{itemDecision.deviationReason}" style="width: 100%; margin-top: 5px; margin-left: -3px;"
+                                            <p:inputTextarea value="#{itemDecision.deviationReason}" style="width: 100%; margin-top: 5px; margin-left: -3px;"
                                                              required="#{itemDecision.flag == 'RED'}"/>
                                         </p:column>
 
@@ -1144,9 +1144,9 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <h:inputTextarea cols="170" rows="5" value="#{executiveSummary.exSummaryView.natureOfBusiness}"
-                                                     onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
-                                                     onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
+                                    <p:inputTextarea cols="170" rows="5" value="#{executiveSummary.exSummaryView.natureOfBusiness}">
+                                        <f:validateLength maximum="500" />
+                                    </p:inputTextarea>
                                 </td>
                             </tr>
 
@@ -1158,9 +1158,9 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <h:inputTextarea cols="170" rows="5" value="#{executiveSummary.exSummaryView.historicalAndReasonOfChange}"
-                                                     onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
-                                                     onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
+                                    <p:inputTextarea cols="170" rows="5" value="#{executiveSummary.exSummaryView.historicalAndReasonOfChange}">
+                                        <f:validateLength maximum="500" />
+                                    </p:inputTextarea>
                                 </td>
                             </tr>
 
@@ -1172,9 +1172,9 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <h:inputTextarea cols="170" rows="5" value="#{executiveSummary.exSummaryView.tmbCreditHistory}"
-                                                     onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
-                                                     onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
+                                    <p:inputTextarea cols="170" rows="5" value="#{executiveSummary.exSummaryView.tmbCreditHistory}">
+                                        <f:validateLength maximum="500" />
+                                    </p:inputTextarea>
                                 </td>
                             </tr>
 
@@ -1186,9 +1186,9 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <h:inputTextarea cols="170" rows="5" value="#{executiveSummary.exSummaryView.supportReason}"
-                                                     onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
-                                                     onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
+                                    <p:inputTextarea cols="170" rows="5" value="#{executiveSummary.exSummaryView.supportReason}">
+                                        <f:validateLength maximum="500" />
+                                    </p:inputTextarea>
                                 </td>
                             </tr>
 
@@ -1214,10 +1214,10 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <h:inputTextarea id="rm008remark" cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm008Remark}"
-                                                     disabled="#{executiveSummary.exSummaryView.rm008Code == 0}"
-                                                     onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
-                                                     onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
+                                    <p:inputTextarea id="rm008remark" cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm008Remark}"
+                                                     disabled="#{executiveSummary.exSummaryView.rm008Code == 0}">
+                                        <f:validateLength maximum="500" />
+                                    </p:inputTextarea>
                                 </td>
                             </tr>
 
@@ -1237,10 +1237,10 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <h:inputTextarea id="rm204remark" cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm204Remark}"
-                                                     disabled="#{executiveSummary.exSummaryView.rm204Code == 0}"
-                                                     onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
-                                                     onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
+                                    <p:inputTextarea id="rm204remark" cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm204Remark}"
+                                                     disabled="#{executiveSummary.exSummaryView.rm204Code == 0}">
+                                        <f:validateLength maximum="500" />
+                                    </p:inputTextarea>
                                 </td>
                             </tr>
 
@@ -1260,10 +1260,10 @@
 
                             <tr>
                                 <td colspan="4" style="text-align: left; width: 100%">
-                                    <h:inputTextarea id="rm020remark" cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm020Remark}"
-                                                     disabled="#{executiveSummary.exSummaryView.rm020Code == 0}"
-                                                     onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
-                                                     onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
+                                    <p:inputTextarea id="rm020remark" cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm020Remark}"
+                                                     disabled="#{executiveSummary.exSummaryView.rm020Code == 0}">
+                                        <f:validateLength maximum="500" />
+                                    </p:inputTextarea>
                                 </td>
                             </tr>
                         </table>
@@ -1399,7 +1399,7 @@
                 </tr>
                 <tr>
                     <td colspan="2" style="text-align: left">
-                        <h:inputTextarea cols="170"
+                        <p:inputTextarea cols="170"
                                          rows="7"
                                          value="#{executiveSummary.exSummaryView.uwComment}"
                                          disabled="#{not executiveSummary.roleUW}"/>
@@ -1434,13 +1434,12 @@
                 <ui:include src="include/footer.xhtml"/>
                 <!-- End Footer -->
             </div>
+
+            <p:blockUI block=":frmMain" trigger=":frmMain:saveBtn">
+                LOADING<br/>
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+            </p:blockUI>
         </h:form>
-
-    <p:blockUI block=":frmMain" trigger=":frmMain:saveBtn">
-        LOADING<br/>
-        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-    </p:blockUI>
-
     </p:panel>
 
     <ui:include src="dialog/confirmDeleteDlg.xhtml">

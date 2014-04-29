@@ -9,24 +9,9 @@
 
 <h:head>
     <title>SE-LOS : Customer Info. Detail - Individual</title>
-    <h:outputStylesheet name="css/style.css" />
-    <h:outputScript library="js" name="custom.js" />
-    <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
-
-    <script type="text/javascript">
-        RepeatingOperation = function(op, yieldEveryIteration) {
-            var count = 0;
-            var instance = this;
-            this.step = function(args) {
-                if (++count >= yieldEveryIteration) {
-                    count = 0;
-                    setTimeout(function() { op(args); }, 1, [])
-                    return;
-                }
-                op(args);
-            };
-        };
-    </script>
+    <h:outputStylesheet name="css/style.css"/>
+    <h:outputScript library="js" name="custom.js"/>
+    <h:outputScript library="js" name="jquery.ui.datepicker.min.js"/>
 </h:head>
 
 <h:body onload="loadComplete()">
@@ -827,11 +812,11 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="title left" style="width: 120px; min-width: 120px; max-width: 120px;">
-                                                        <h:outputText id="regAddRoad"
-                                                                value="#{msg.get('app.custInfoIndi.content.road')}"/>
+                                                        <h:outputText value="#{msg.get('app.custInfoIndi.content.road')}"/>
                                                     </td>
                                                     <td class="left" colspan="5">
-                                                        <p:inputText style="width:500px;" value="#{custInfoSumIndi.customerInfoView.registerAddress.road}"
+                                                        <p:inputText style="width:500px;" id="regAddRoad"
+                                                                     value="#{custInfoSumIndi.customerInfoView.registerAddress.road}"
                                                                      disabled="#{custInfoSumIndi.customerInfoView.registerAddress.addressTypeFlag != 3}"/>
                                                     </td>
                                                 </tr>
@@ -2570,12 +2555,13 @@
                                                          action="#{custInfoSumIndi.onSaveFromJuristic()}" binding="#{saveCustomer2}"
                                                          rendered="#{custInfoSumIndi.fromJuristic}"
                                                          disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
-                                        <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel" styleClass="small" process="@form"
-                                                         actionListener="#{custInfoSumIndi.onCancelForm()}"
+                                        <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel"
+                                                         styleClass="small" process="@form" update=":msgBoxSystemMessagePanel"
+                                                         actionListener="#{custInfoSumIndi.onCancelForm(false)}"
                                                          rendered="#{not custInfoSumIndi.fromJuristic}"/>
                                         <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" id="btnCancel2"
                                                          process="@form" update=":msgBoxSystemMessagePanel"
-                                                         action="#{custInfoSumIndi.onCancelFromJuristic()}"
+                                                         action="#{custInfoSumIndi.onCancelFromJuristic(false)}"
                                                          rendered="#{custInfoSumIndi.fromJuristic}"/>
                                     </td>
                                 </tr>
@@ -2625,10 +2611,10 @@
                                      :frmMain:curAddRoad,:frmMain:curPostCode,:frmMain:curAddAddress,
                                      :frmMain:curAddTel,:frmMain:curAddTelExt,
                                      :frmMain:regAddFlag,:frmMain:regAddNo,:frmMain:regAddMoo,
-                                     :frmMain:regAddBuilding,:frmMain:regAddRoad,:frmMain:curPostCode,
+                                     :frmMain:regAddBuilding,:frmMain:regAddRoad,:frmMain:regAddPostCode,
                                      :frmMain:regAddAddress,:frmMain:regAddTel,:frmMain:regAddTelExt,
                                      :frmMain:workAddFlag,:frmMain:workAddNo,:frmMain:workAddMoo,
-                                     :frmMain:workAddBuilding,:frmMain:workAddRoad,:frmMain:curPostCode,
+                                     :frmMain:workAddBuilding,:frmMain:workAddRoad,:frmMain:workAddPostCode,
                                      :frmMain:workAddCountry,:frmMain:workAddTel,:frmMain:workAddTelExt,
                                      :frmMain:mobileNumber,:frmMain:fax,:frmMain:email,
                                      :frmMain:tmbCustId,:frmMain:serviceSegment,:frmMain:kycReason,
@@ -2701,10 +2687,10 @@
                                      :frmMain:curAddRoadSpouse,:frmMain:curPostCodeSpouse,:frmMain:curAddAddressSpouse,
                                      :frmMain:curAddTelSpouse,:frmMain:curAddTelExtSpouse,:frmMain:regAddFlagSpouse,
                                      :frmMain:regAddNoSpouse,:frmMain:regAddMooSpouse,:frmMain:regAddBuildingSpouse,
-                                     :frmMain:regAddRoadSpouse,:frmMain:curPostCodeSpouse,:frmMain:regAddAddressSpouse,
+                                     :frmMain:regAddRoadSpouse,:frmMain:regPostCodeSpouse,:frmMain:regAddAddressSpouse,
                                      :frmMain:regAddTelSpouse,:frmMain:regAddTelExtSpouse,:frmMain:workAddFlagSpouse,
                                      :frmMain:workAddNoSpouse,:frmMain:workAddMooSpouse,:frmMain:workAddBuildingSpouse,
-                                     :frmMain:workAddRoadSpouse,:frmMain:curPostCodeSpouse,:frmMain:workAddAddressSpouse,
+                                     :frmMain:workAddRoadSpouse,:frmMain:workPostCodeSpouse,:frmMain:workAddAddressSpouse,
                                      :frmMain:workAddTelSpouse,:frmMain:workAddTelExtSpouse,:frmMain:mobileNumberSpouse,
                                      :frmMain:tmbCustIdSpouse,:frmMain:serviceSegmentSpouse,:frmMain:kycReasonSpouse,
                                      :frmMain:covenantFlagSpouse,:frmMain:reviewFlagSpouse,:frmMain:reasonSpouse,
@@ -2770,6 +2756,15 @@
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
         </p:confirmDialog>
 
+        <p:confirmDialog id="msgBoxSaveMessageDialog" widgetVar="msgBoxSaveMessageDlg" closable="false"
+                         severity="#{custInfoSumIndi.severity}" header="#{custInfoSumIndi.messageHeader}">
+            <f:facet name="message">
+                <h:outputText value="#{custInfoSumIndi.message}" escape="false"/>
+            </f:facet>
+            <p:commandButton value="OK" process="@this"
+                             action="#{custInfoSumIndi.onCancelForm(true)}"/>
+        </p:confirmDialog>
+
         <p:confirmDialog id="msgBoxSystemMessageSpouseDialog" widgetVar="msgBoxSystemMessageSpouseDlg" closable="false"
                          severity="#{custInfoSumIndi.severity}" header="#{custInfoSumIndi.messageHeader}">
             <f:facet name="message">
@@ -2797,6 +2792,30 @@
                              process="@this"
                              update=":msgBoxSystemMessagePanel"
                              oncomplete="closeMessageCitizenDialog('msgBoxInvalidCitizenSpDlg', 'frmMain\\:inputSearchSpouseText')"/>
+        </p:confirmDialog>
+
+        <p:confirmDialog id="msgBoxCancelDialog" widgetVar="msgBoxCancelDlg" styleClass="messageDialog"
+                         closable="false"
+                         header="Information." message="Do you want back to Customer Summary?">
+            <p:commandButton value="OK"
+                             process="@this"
+                             update=":msgBoxSystemMessagePanel" action="#{custInfoSumIndi.onCancelForm(true)}"/>
+            <p:commandButton value="Cancel"
+                             process="@this"
+                             update=":msgBoxSystemMessagePanel"
+                             oncomplete="msgBoxCancelDlg.hide()"/>
+        </p:confirmDialog>
+
+        <p:confirmDialog id="msgBoxCancelJurDialog" widgetVar="msgBoxCancelJurDlg" styleClass="messageDialog"
+                         closable="false"
+                         header="Information." message="Do you want back to Customer Juristic?">
+            <p:commandButton value="OK"
+                             process="@this"
+                             update=":msgBoxSystemMessagePanel" action="#{custInfoSumIndi.onCancelFromJuristic(true)}"/>
+            <p:commandButton value="Cancel"
+                             process="@this"
+                             update=":msgBoxSystemMessagePanel"
+                             oncomplete="msgBoxCancelJurDlg.hide()"/>
         </p:confirmDialog>
     </p:panel>
 </h:body>

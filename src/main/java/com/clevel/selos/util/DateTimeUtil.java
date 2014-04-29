@@ -160,6 +160,10 @@ public class DateTimeUtil implements Serializable {
         return convertToDateTH(new Date());
     }
 
+    public static Date getCurrentDateTH(final Date date){
+        return convertToDateTH(date);
+    }
+
     public static int daysBetween2Dates(Date date1, Date date2) {
         return Days.daysBetween(new DateTime(date1), new DateTime(date2)).getDays();
     }
@@ -387,5 +391,12 @@ public class DateTimeUtil implements Serializable {
         } else {
             return null;
         }
+    }
+
+    public static String convertDateWorkFlowFormat(Date date){
+        SimpleDateFormat dtFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a", Locale.UK);
+        String dateString = dtFormat.format(date);
+
+        return dateString;
     }
 }
