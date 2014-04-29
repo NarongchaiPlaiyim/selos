@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.clevel.selos.model.db.working.NewCreditDetail;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -19,12 +20,19 @@ public class FeeDetailDAO extends GenericDAO<FeeDetail, Long>{
     private Logger log;
 	
 	@SuppressWarnings("unchecked")
-	public List<FeeDetail> findAllByWorkCaseId(long workCaseId) {
-		Criteria criteria = createCriteria();
+    public List<FeeDetail> findAllByWorkCaseId(long workCaseId) {
+        Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.addOrder(Order.asc("paymentMethod.id"))
-        	.addOrder(Order.asc("feeType.id"))
-        	.addOrder(Order.asc("id"));
+                .addOrder(Order.asc("feeType.id"))
+                .addOrder(Order.asc("id"));
         return criteria.list();
-	}
+    }
+
+    public List<FeeDetail> findByCreditDetail(NewCreditDetail newCreditDetail){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCreditDetail", newCreditDetail));
+        List<FeeDetail> feeDetailList = criteria.list();
+        return feeDetailList;
+    }
 }

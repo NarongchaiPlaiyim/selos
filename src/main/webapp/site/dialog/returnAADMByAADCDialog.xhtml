@@ -8,6 +8,10 @@
 <p:panel id="returnAADMByAADCDlgPanel" styleClass="panel-dialog">
     <table class="content_form">
         <tr>
+            <td class="title">Return to :</td>
+            <td><h:outputText value="#{headerController.aadAdminName}"/></td>
+        </tr>
+        <tr>
             <td class="title">Reason for Pending :</td>
             <td>
                 <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
@@ -32,23 +36,26 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2">
+            <td colspan="2"><!-- --></td>
+        </tr>
+        <tr>
+            <td colspan="2" class="center">
                 <p:commandButton id="btnReturnAADMByAADCDlg"
                                  binding="#{btnReturnAADMByAADC}"
                                  value="#{msg.get('app.button.submit')}"
                                  styleClass="small"
-                                 actionListener="#{headerController.onReturnBDMByAAD()}"
+                                 actionListener="#{headerController.onSubmitReturnAADAdmin()}"
                                  oncomplete="handleDialogRequest(xhr, status, args, 'returnAADM_AADCDlg')"
                                  process="@form"
                                  update=":frmMain:returnAADM_AADCPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
-                                 styleClass="small" onclick="returnBDM_AADAdminDlg.hide()"/>
+                                 styleClass="small" onclick="PF('returnAADM_AADCDlg').hide()"/>
             </td>
         </tr>
     </table>
 </p:panel>
 
-<p:blockUI widgetVar="blockReturnInfoDlg" block="returnAADM_AADCPanel" trigger=":frmMain:btnReturnAADMByAADCDlg">
+<p:blockUI block="returnAADMByAADCDlgPanel" trigger=":frmMain:btnReturnAADMByAADCDlg">
     LOADING<br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>

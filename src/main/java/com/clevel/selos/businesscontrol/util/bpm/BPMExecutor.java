@@ -124,31 +124,16 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void cancelCase(long workCasePreScreenId, long workCaseId, String queueName, long actionCode, String reason, String remark) throws Exception{
-        String wobNumber = "";
-        if(Long.toString(workCasePreScreenId) != null && workCasePreScreenId != 0){
-            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-            if(workCasePrescreen != null){
-                wobNumber = workCasePrescreen.getWobNumber();
-            } else {
-                throw new Exception("An exception occurred, Can not find WorkCase PreScreen.");
-            }
-        } else {
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
-            if(workCase != null){
-                wobNumber = workCase.getWobNumber();
-            } else {
-                throw new Exception("An exception occurred, Can not find WorkCase.");
-            }
-        }
-
+    public void cancelCase(String queueName, String wobNumber, long actionCode, String reason, String remark) throws Exception{
         if(wobNumber != null && !wobNumber.equalsIgnoreCase("")){
             Action action = actionDAO.findById(actionCode);
             if(action != null){
                 HashMap<String,String> fields = new HashMap<String, String>();
                 fields.put("Action_Code", Long.toString(action.getId()));
                 fields.put("Action_Name", action.getDescription());
-                fields.put("Remarks", remark);
+                if(!Util.isNull(remark) && !Util.isEmpty(remark)) {
+                    fields.put("Remarks", remark);
+                }
                 fields.put("Reason", reason);
 
                 log.debug("dispatch case for [Cancel Case]..., Action_Code : {}, Action_Name : {}, Remark : {}, Reason : {}", action.getId(), action.getName(), remark, reason);
@@ -159,6 +144,22 @@ public class BPMExecutor implements Serializable {
             }
         } else {
             throw new Exception("An exception occurred, Can not find WorkCase.");
+        }
+    }
+
+    public void cancelRequestPriceReduction(String queueName, String wobNumber, String reason, String remark, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+        if(!Util.isNull(action)){
+            HashMap<String,String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            if(!Util.isEmpty(remark)) {
+                fields.put("Remarks", remark);
+            }
+            fields.put("Reason", reason);
+
+            log.debug("dispatch case for [Cancel Request Price Reduction]");
+            execute(queueName, wobNumber, fields);
         }
     }
 

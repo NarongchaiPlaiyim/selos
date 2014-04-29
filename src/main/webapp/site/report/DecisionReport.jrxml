@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b568264b-3421-42fd-80e8-96aa4a75cbf6">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="1133"/>
 	<style name="Total" mode="Opaque" forecolor="#000000" backcolor="#FCFF79" hAlign="Left" vAlign="Middle" fontSize="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1007,14 +1007,14 @@
 				</textField>
 				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement uuid="81f24cd1-133c-4fa3-a187-761b1f06bdea" mode="Opaque" x="206" y="99" width="75" height="13" backcolor="#CCCCFF"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
+					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExistingSMELimit()]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement uuid="3bf79b92-b737-446f-ae4d-769785cbbf96" mode="Opaque" x="347" y="99" width="75" height="13" backcolor="#CCCCFF"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
+					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getMaximumSMELimit()]]></textFieldExpression>
@@ -1348,7 +1348,7 @@ new net.sf.jasperreports.engine.JREmptyDataSource()
 					<textFieldExpression><![CDATA[$P{fillFollowDetail}.getDetail()]]></textFieldExpression>
 				</textField>
 				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-					<reportElement uuid="f13e6525-75dd-49f5-a829-f3796a69b986" style="Total" mode="Opaque" x="234" y="48" width="36" height="10" backcolor="#CCCCFF"/>
+					<reportElement uuid="f13e6525-75dd-49f5-a829-f3796a69b986" style="Total" mode="Opaque" x="234" y="48" width="47" height="10" backcolor="#CCCCFF"/>
 					<textElement textAlignment="Right">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>

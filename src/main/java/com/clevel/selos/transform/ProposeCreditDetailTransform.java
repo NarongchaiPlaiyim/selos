@@ -36,11 +36,49 @@ public class ProposeCreditDetailTransform extends Transform {
         return proposeCreditDetailView;
     }
 
+    public ProposeCreditDetailView convertNewCreditToProposeCredit(NewCreditDetailView newCreditDetailView) {
+        ProposeCreditDetailView proposeCreditDetailView = new ProposeCreditDetailView();
+        if (newCreditDetailView != null) {
+            proposeCreditDetailView = new ProposeCreditDetailView();
+            proposeCreditDetailView.setSeq(newCreditDetailView.getSeq());
+            proposeCreditDetailView.setId(newCreditDetailView.getId());
+            proposeCreditDetailView.setTypeOfStep(CreditTypeOfStep.NEW.type());
+            proposeCreditDetailView.setAccountName(newCreditDetailView.getAccountName());
+            proposeCreditDetailView.setAccountNumber(newCreditDetailView.getAccountNumber());
+            proposeCreditDetailView.setAccountSuf(newCreditDetailView.getAccountSuf());
+            proposeCreditDetailView.setRequestType(newCreditDetailView.getRequestType());
+            proposeCreditDetailView.setProductProgramView(newCreditDetailView.getProductProgramView());
+            proposeCreditDetailView.setCreditFacilityView(newCreditDetailView.getCreditTypeView());
+            proposeCreditDetailView.setLimit(newCreditDetailView.getLimit());
+            proposeCreditDetailView.setGuaranteeAmount(newCreditDetailView.getGuaranteeAmount());
+            proposeCreditDetailView.setUseCount(newCreditDetailView.getUseCount());
+            proposeCreditDetailView.setNoFlag(newCreditDetailView.isNoFlag());
+        }
+        return proposeCreditDetailView;
+    }
+
     public ProposeCreditDetailView convertExistingCreditToProposeCredit(ExistingCreditDetailView existingCreditDetailView, int seqNumber) {
         ProposeCreditDetailView proposeCreditDetailView = new ProposeCreditDetailView();
         if (existingCreditDetailView != null) {
             proposeCreditDetailView = new ProposeCreditDetailView();
             proposeCreditDetailView.setSeq(seqNumber);
+            proposeCreditDetailView.setId(existingCreditDetailView.getId());
+            proposeCreditDetailView.setTypeOfStep(CreditTypeOfStep.EXISTING.type());
+            proposeCreditDetailView.setAccountName(existingCreditDetailView.getAccountName());
+            proposeCreditDetailView.setAccountNumber(existingCreditDetailView.getAccountNumber());
+            proposeCreditDetailView.setAccountSuf(existingCreditDetailView.getAccountSuf());
+            proposeCreditDetailView.setProductProgramView(existingCreditDetailView.getExistProductProgramView());
+            proposeCreditDetailView.setCreditFacilityView(existingCreditDetailView.getExistCreditTypeView());
+            proposeCreditDetailView.setLimit(existingCreditDetailView.getLimit());
+        }
+        return proposeCreditDetailView;
+    }
+
+    public ProposeCreditDetailView convertExistingCreditToProposeCredit(ExistingCreditDetailView existingCreditDetailView) {
+        ProposeCreditDetailView proposeCreditDetailView = new ProposeCreditDetailView();
+        if (existingCreditDetailView != null) {
+            proposeCreditDetailView = new ProposeCreditDetailView();
+            proposeCreditDetailView.setSeq(existingCreditDetailView.getNo()); //todo:
             proposeCreditDetailView.setId(existingCreditDetailView.getId());
             proposeCreditDetailView.setTypeOfStep(CreditTypeOfStep.EXISTING.type());
             proposeCreditDetailView.setAccountName(existingCreditDetailView.getAccountName());
