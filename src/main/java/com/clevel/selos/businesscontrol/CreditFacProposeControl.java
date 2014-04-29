@@ -29,128 +29,128 @@ public class CreditFacProposeControl extends BusinessControl {
     Logger log;
 
     @Inject
-    CustomerTransform customerTransform;
+    private CustomerTransform customerTransform;
     @Inject
-    NewCreditFacilityTransform newCreditFacilityTransform;
+    private NewCreditFacilityTransform newCreditFacilityTransform;
     @Inject
-    NewCreditDetailTransform newCreditDetailTransform;
+    private NewCreditDetailTransform newCreditDetailTransform;
     @Inject
-    CreditTypeDetailTransform creditTypeDetailTransform;
+    private CreditTypeDetailTransform creditTypeDetailTransform;
     @Inject
-    NewCollateralTransform newCollateralTransform;
+    private NewCollateralTransform newCollateralTransform;
     @Inject
-    NewGuarantorDetailTransform newGuarantorDetailTransform;
+    private NewGuarantorDetailTransform newGuarantorDetailTransform;
     @Inject
-    NewConditionDetailTransform newConditionDetailTransform;
+    private NewConditionDetailTransform newConditionDetailTransform;
     @Inject
-    NewCreditTierTransform newCreditTierTransform;
+    private NewCreditTierTransform newCreditTierTransform;
     @Inject
-    ProposeCreditDetailTransform proposeCreditDetailTransform;
+    private ProposeCreditDetailTransform proposeCreditDetailTransform;
     @Inject
-    NewCollateralCreditTransform newCollateralCreditTransform;
+    private NewCollateralCreditTransform newCollateralCreditTransform;
     @Inject
-    NewGuarantorCreditTransform newGuarantorCreditTransform;
+    private NewGuarantorCreditTransform newGuarantorCreditTransform;
     @Inject
-    FeeTransform feeTransform;
+    private FeeTransform feeTransform;
     @Inject
-    ProductTransform productTransform;
+    private ProductTransform productTransform;
 
     @Inject
-    SubCollateralTypeDAO subCollateralTypeDAO;
+    private SubCollateralTypeDAO subCollateralTypeDAO;
     @Inject
-    CollateralTypeDAO collateralTypeDAO;
+    private CollateralTypeDAO collateralTypeDAO;
     @Inject
-    WorkCaseDAO workCaseDAO;
+    private WorkCaseDAO workCaseDAO;
     @Inject
-    NewCreditFacilityDAO newCreditFacilityDAO;
+    private NewCreditFacilityDAO newCreditFacilityDAO;
     @Inject
-    NewCollateralCreditDAO newCollateralCreditDAO;
+    private NewCollateralCreditDAO newCollateralCreditDAO;
     @Inject
-    NewConditionDetailDAO newConditionDetailDAO;
+    private NewConditionDetailDAO newConditionDetailDAO;
     @Inject
-    NewCreditDetailDAO newCreditDetailDAO;
+    private NewCreditDetailDAO newCreditDetailDAO;
     @Inject
-    NewGuarantorDetailDAO newGuarantorDetailDAO;
+    private NewGuarantorDetailDAO newGuarantorDetailDAO;
     @Inject
-    CreditTypeDetailDAO creditTypeDetailDAO;
+    private CreditTypeDetailDAO creditTypeDetailDAO;
     @Inject
-    NewCollateralDAO newCollateralDetailDAO;
+    private NewCollateralDAO newCollateralDetailDAO;
     @Inject
-    NewCollateralSubDAO newCollateralSubDetailDAO;
+    private NewCollateralSubDAO newCollateralSubDetailDAO;
     @Inject
-    NewCollateralHeadDAO newCollateralHeadDetailDAO;
+    private NewCollateralHeadDAO newCollateralHeadDetailDAO;
     @Inject
-    ExistingCreditDetailDAO existingCreditDetailDAO;
+    private ExistingCreditDetailDAO existingCreditDetailDAO;
     @Inject
-    ExistingCreditFacilityDAO existingCreditFacilityDAO;
+    private ExistingCreditFacilityDAO existingCreditFacilityDAO;
     @Inject
-    CreditFacExistingControl creditFacExistingControl;
+    private CreditFacExistingControl creditFacExistingControl;
     @Inject
-    ProductFormulaDAO productFormulaDAO;
+    private ProductFormulaDAO productFormulaDAO;
     @Inject
-    PrdProgramToCreditTypeDAO prdProgramToCreditTypeDAO;
+    private PrdProgramToCreditTypeDAO prdProgramToCreditTypeDAO;
     @Inject
-    ProductProgramDAO productProgramDAO;
+    private ProductProgramDAO productProgramDAO;
     @Inject
-    CreditTypeDAO creditTypeDAO;
+    private CreditTypeDAO creditTypeDAO;
     @Inject
-    NewCollateralCreditDAO newCollateralRelationDAO;
+    private NewCollateralCreditDAO newCollateralRelationDAO;
     @Inject
-    CustomerDAO customerDAO;
+    private CustomerDAO customerDAO;
     @Inject
-    NewCollateralSubOwnerDAO newSubCollCustomerDAO;
+    private NewCollateralSubOwnerDAO newSubCollCustomerDAO;
     @Inject
-    NewCollateralSubMortgageDAO newSubCollMortgageDAO;
+    private NewCollateralSubMortgageDAO newSubCollMortgageDAO;
     @Inject
-    NewCollateralSubRelatedDAO newSubCollRelateDAO;
+    private NewCollateralSubRelatedDAO newSubCollRelateDAO;
     @Inject
-    MortgageTypeDAO mortgageTypeDAO;
+    private MortgageTypeDAO mortgageTypeDAO;
     @Inject
-    NewCollateralSubOwnerDAO newCollateralSubOwnerDAO;
+    private NewCollateralSubOwnerDAO newCollateralSubOwnerDAO;
     @Inject
-    ExistingCollateralDetailDAO existingCollateralDetailDAO;
+    private ExistingCollateralDetailDAO existingCollateralDetailDAO;
     @Inject
-    NewCollateralDAO newCollateralDAO;
+    private NewCollateralDAO newCollateralDAO;
     @Inject
-    NewCollateralSubRelatedDAO newCollateralSubRelatedDAO;
+    private NewCollateralSubRelatedDAO newCollateralSubRelatedDAO;
     @Inject
-    FeeDetailDAO feeDetailDAO;
+    private FeeDetailDAO feeDetailDAO;
     @Inject
-    NewCreditTierDetailDAO newCreditTierDetailDAO;
+    private NewCreditTierDetailDAO newCreditTierDetailDAO;
     @Inject
-    TCGCollateralTypeDAO tcgCollateralTypeDAO;
+    private TCGCollateralTypeDAO tcgCollateralTypeDAO;
     @Inject
-    PotentialColToTCGColDAO potentialColToTCGColDAO;
+    private PotentialColToTCGColDAO potentialColToTCGColDAO;
     @Inject
-    PotentialCollateralDAO potentialCollateralDAO;
+    private PotentialCollateralDAO potentialCollateralDAO;
     @Inject
-    BasicInfoDAO basicInfoDAO;
+    private BasicInfoDAO basicInfoDAO;
     @Inject
-    TCGDAO tcgDAO;
+    private TCGDAO tcgDAO;
     @Inject
-    BankStatementSummaryDAO bankStatementSummaryDAO;
+    private BankStatementSummaryDAO bankStatementSummaryDAO;
     @Inject
     private NewGuarantorRelationDAO newGuarantorRelationDAO;
 
     @Inject
-    BasicInfoControl basicInfoControl;
+    private BasicInfoControl basicInfoControl;
     @Inject
-    CustomerInfoControl customerInfoControl;
+    private CustomerInfoControl customerInfoControl;
     @Inject
-    TCGInfoControl tcgInfoControl;
+    private TCGInfoControl tcgInfoControl;
     @Inject
-    DBRControl dbrControl;
+    private DBRControl dbrControl;
     @Inject
-    BizInfoSummaryControl bizInfoSummaryControl;
+    private BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
-    NCBInfoControl ncbInfoControl;
+    private NCBInfoControl ncbInfoControl;
     @Inject
-    BRMSControl brmsControl;
+    private BRMSControl brmsControl;
     @Inject
-    FullApplicationControl fullApplicationControl;
+    private FullApplicationControl fullApplicationControl;
 
     @Inject
-    COMSInterface comsInterface;
+    private COMSInterface comsInterface;
 
     @Inject
     public CreditFacProposeControl() {
@@ -943,59 +943,76 @@ public class CreditFacProposeControl extends BusinessControl {
         return ltvPercentBig;
     }
 
-    public List<ProposeCreditDetailView> findAndGenerateSeqProposeCredits(List<NewCreditDetailView> newCreditDetailViewList, List<ExistingCreditDetailView> borrowerExistingCreditDetailViewList, long workCaseId) {
+    public List<ProposeCreditDetailView> getProposeCreditFromCreditAndExisting(List<NewCreditDetailView> newCreditDetailViewList, List<ExistingCreditDetailView> borrowerExistingCreditDetailViewList, long workCaseId) {
         log.debug("findAndGenerateSeqProposeCredits() workCaseId: {}", workCaseId);
-        // Generate Sequence Number [1 - N] from "Propose Credit" and "Existing Credit" for the first time
-        int sequenceNumber = 1;
-        log.debug("Start sequence number = {}", sequenceNumber);
+
         List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
 
         if (newCreditDetailViewList != null && newCreditDetailViewList.size() > 0) {
             ProposeCreditDetailView proposeCreditFromNew;
             for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
-                // set seq to NewCreditDetail
-                newCreditDetailView.setSeq(sequenceNumber);
-                // create and set seq to new ProposeCredit
-                proposeCreditFromNew = proposeCreditDetailTransform.convertNewCreditToProposeCredit(newCreditDetailView, sequenceNumber);
+                proposeCreditFromNew = proposeCreditDetailTransform.convertNewCreditToProposeCredit(newCreditDetailView);
                 proposeCreditDetailViewList.add(proposeCreditFromNew);
-                sequenceNumber++;
             }
         }
-        log.debug("End of 'NewCreditDetailList' sequence number = {}", sequenceNumber);
 
-        List<ExistingCreditDetailView> _existingCreditDetailViewList;
         if (borrowerExistingCreditDetailViewList != null && borrowerExistingCreditDetailViewList.size() > 0) {
-            _existingCreditDetailViewList = borrowerExistingCreditDetailViewList;
-        } else {
-            // find Borrower Existing Credit
-            _existingCreditDetailViewList = creditFacExistingControl.onFindBorrowerExistingCreditFacility(workCaseId);
-        }
-
-        if (_existingCreditDetailViewList != null && _existingCreditDetailViewList.size() > 0) {
             ProposeCreditDetailView proposeCreditFromExisting;
-            for (ExistingCreditDetailView existingCreditDetailView : _existingCreditDetailViewList) {
-                existingCreditDetailView.setSeq(sequenceNumber);
-                proposeCreditFromExisting = proposeCreditDetailTransform.convertExistingCreditToProposeCredit(existingCreditDetailView, sequenceNumber);
+            for (ExistingCreditDetailView existingCreditDetailView : borrowerExistingCreditDetailViewList) {
+                proposeCreditFromExisting = proposeCreditDetailTransform.convertExistingCreditToProposeCredit(existingCreditDetailView);
                 proposeCreditDetailViewList.add(proposeCreditFromExisting);
-                sequenceNumber++;
             }
         }
-        log.debug("End of 'ExistingCreditDetailList' sequence number = {}", sequenceNumber);
+
         return proposeCreditDetailViewList;
     }
 
     public int getLastSeqNumberFromProposeCredit(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
         int lastSeqNumber = 1;
         if (proposeCreditDetailViewList != null && proposeCreditDetailViewList.size() > 0) {
-            int size = proposeCreditDetailViewList.size();
-            for (int i = 0; i < size; i++) {
-                ProposeCreditDetailView proposeCreditDetailView = proposeCreditDetailViewList.get(i);
-                if (proposeCreditDetailView.getSeq() > lastSeqNumber) {
-                    lastSeqNumber = proposeCreditDetailView.getSeq();
+            for(ProposeCreditDetailView pcdv : proposeCreditDetailViewList){
+                if(lastSeqNumber < pcdv.getSeq()){
+                    lastSeqNumber = pcdv.getSeq();
                 }
             }
         }
         return lastSeqNumber;
+    }
+
+    public List<ProposeCreditDetailView> setNoFlagForCollateralRelateCredit(NewCollateralView newCollateralView,List<ProposeCreditDetailView> proposeCreditDetailViews,long creditFacId){
+        List<NewCollateralCredit> newCollateralCredits = newCollateralCreditDAO.getListByNewCreditFacilityId(creditFacId,ProposeType.P);
+        if(newCollateralCredits != null && newCollateralCredits.size() > 0){
+            for(NewCollateralCredit newCollateralCredit : newCollateralCredits){
+                if(newCollateralCredit.getNewCollateral().getId() == newCollateralView.getId()){
+                    if(proposeCreditDetailViews != null && proposeCreditDetailViews.size() > 0){
+                        for(ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViews){
+                            if(proposeCreditDetailView.getId() == newCollateralCredit.getNewCreditDetail().getId()){
+                                proposeCreditDetailView.setNoFlag(true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return proposeCreditDetailViews;
+    }
+
+    public List<ProposeCreditDetailView> setNoFlagForGuarantorRelateCredit(NewGuarantorDetailView newGuarantorDetailView,List<ProposeCreditDetailView> proposeCreditDetailViews,long creditFacId){
+        List<NewGuarantorCredit> newGuarantorCredits = newGuarantorRelationDAO.getListByNewCreditFacilityId(creditFacId,ProposeType.P);
+        if(newGuarantorCredits != null && newGuarantorCredits.size() > 0){
+            for(NewGuarantorCredit newGuarantorCredit : newGuarantorCredits){
+                if(newGuarantorCredit.getNewGuarantorDetail().getId() == newGuarantorDetailView.getId()){
+                    if(proposeCreditDetailViews != null && proposeCreditDetailViews.size() > 0){
+                        for(ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViews){
+                            if(proposeCreditDetailView.getId() == newGuarantorCredit.getNewCreditDetail().getId()){
+                                proposeCreditDetailView.setNoFlag(true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return proposeCreditDetailViews;
     }
 
     public void groupTypeOfStepAndOrderBySeq(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
@@ -1219,7 +1236,7 @@ public class CreditFacProposeControl extends BusinessControl {
 
     }
 
-    public NewCreditFacilityView saveCreditFacility(NewCreditFacilityView newCreditFacilityView, long workCaseId) {
+    public NewCreditFacilityView saveCreditFacility(NewCreditFacilityView newCreditFacilityView, long workCaseId, Hashtable hashSeqCredit, List<Long> deleteCreditIdList) {
         log.debug("Starting saveCreditFacility...");
         log.debug("saveCreditFacility ::: workCaseId : {}", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
@@ -1230,10 +1247,23 @@ public class CreditFacProposeControl extends BusinessControl {
         log.debug("saveCreditFacility ::: persist newCreditFacility : {}", newCreditFacility);
 
         //remove all fee
-        List<FeeDetail> fdl = feeDetailDAO.findAllByWorkCaseId(workCaseId);
-        feeDetailDAO.delete(fdl);
+//        List<FeeDetail> fdl = feeDetailDAO.findAllByWorkCaseId(workCaseId);
+//        feeDetailDAO.delete(fdl);
 
         //--- Save to NewFeeCredit
+        if(deleteCreditIdList != null && deleteCreditIdList.size() > 0){
+            for(Long l : deleteCreditIdList){
+                if(newCreditFacilityView.getNewFeeDetailViewList() != null && newCreditFacilityView.getNewFeeDetailViewList().size() > 0){
+                    for (Iterator<NewFeeDetailView> it = newCreditFacilityView.getNewFeeDetailViewList().iterator(); it.hasNext(); ) {
+                        NewFeeDetailView newFeeDetailView = it.next();
+                        if(newFeeDetailView.getNewCreditDetailView().getId() == l){
+                            it.remove();
+                        }
+                    }
+                }
+            }
+        }
+
         if (Util.safetyList(newCreditFacilityView.getNewFeeDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCreditFacilityView.getNewFeeDetailViewList()).size() : {}", newCreditFacilityView.getNewFeeDetailViewList().size());
             List<FeeDetail> feeDetailList = feeTransform.transformToDB(newCreditFacilityView.getNewFeeDetailViewList(), workCaseId);
@@ -1262,6 +1292,15 @@ public class CreditFacProposeControl extends BusinessControl {
                                 newCreditTierDetailDAO.delete(newCreditTierDetail);
                             }
                         }
+                    }
+                }
+            }
+
+            if(newCreditFacilityView.getNewCreditDetailViewList() != null && newCreditFacilityView.getNewCreditDetailViewList().size() > 0) {
+                for (NewCreditDetailView ncdv : newCreditFacilityView.getNewCreditDetailViewList()) {
+                    if(hashSeqCredit.containsKey(ncdv.getSeq())) {
+                        int a = (Integer)hashSeqCredit.get(ncdv.getSeq());
+                        ncdv.setUseCount(a);
                     }
                 }
             }
@@ -1367,16 +1406,25 @@ public class CreditFacProposeControl extends BusinessControl {
         log.debug("deleteGuarantorIdList: {}", deleteGuarantorIdList.size());
         log.debug("deleteConditionIdList: {}", deleteConditionIdList.size());
 
-//        List<FeeDetail> feeDetailDelList  =  feeDetailDAO.findAllByWorkCaseId(workCaseId);
-//        if(feeDetailDelList != null && feeDetailDelList.size()>0){
-//            log.debug(" :: feeDetailDelList ::{}",feeDetailDelList.size());
-//            feeDetailDAO.delete(feeDetailDelList);
-//        }
-
         if (deleteCollIdList != null && deleteCollIdList.size() > 0) {
             List<NewCollateral> deleteCollateralList = new ArrayList<NewCollateral>();
             for (Long id : deleteCollIdList) {
                 deleteCollateralList.add(newCollateralDAO.findNewCollateralId(id, ProposeType.P));
+            }
+            //for remove sub relate
+            if(deleteCollateralList != null && deleteCollateralList.size() > 0){
+                for(NewCollateral nc : deleteCollateralList){
+                    if(nc.getNewCollateralHeadList() != null && nc.getNewCollateralHeadList().size() > 0){
+                        for(NewCollateralHead nch : nc.getNewCollateralHeadList()){
+                            if(nch.getNewCollateralSubList() != null && nch.getNewCollateralSubList().size() > 0){
+                                for(NewCollateralSub ncs : nch.getNewCollateralSubList()){
+                                    List<NewCollateralSubRelated> newCollSub = newCollateralSubRelatedDAO.findByMainCollSubId(ncs.getId(),ProposeType.P);
+                                    newCollateralSubRelatedDAO.delete(newCollSub);
+                                }
+                            }
+                        }
+                    }
+                }
             }
             newCollateralDAO.delete(deleteCollateralList);
         }
@@ -1397,38 +1445,19 @@ public class CreditFacProposeControl extends BusinessControl {
             newConditionDetailDAO.delete(deleteConditionList);
         }
 
-        //TODO cannot delete NewCreditDetail
         if (deleteCreditIdList != null && deleteCreditIdList.size() > 0) {
             List<NewCreditDetail> deleteCreditDetailList = new ArrayList<NewCreditDetail>();
             for (Long id : deleteCreditIdList) {
                 deleteCreditDetailList.add(newCreditDetailDAO.findById(id));
             }
-            newCreditDetailDAO.delete(deleteCreditDetailList);
-
-        }
-    }
-
-    public boolean findUsagesCredit(long creditId){
-        log.debug("findUsagesCredit - creditId :: {}",creditId);
-        boolean usagesCredit = false;
-        if(creditId != 0){
-            NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(creditId);
-            if(newCreditDetail != null){
-                //todo:find on guarantor
-                List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorRelationDAO.getListByNewCreditDetail(newCreditDetail,ProposeType.P);
-                if(newGuarantorCreditList != null && newGuarantorCreditList.size() > 0){
-                    usagesCredit = true;
-                    return usagesCredit;
-                }
-
-                //todo:find on collateral
-                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditDAO.getListCollRelationByNewCreditDetail(newCreditDetail,ProposeType.P);
-                if(newCollateralCreditList != null && newCollateralCreditList.size() > 0){
-                    usagesCredit = true;
-                    return usagesCredit;
+            //for remove fee detail
+            if(deleteCreditDetailList != null && deleteCreditDetailList.size() > 0){
+                for(NewCreditDetail ncd : deleteCreditDetailList){
+                    List<FeeDetail> feeDetail = feeDetailDAO.findByCreditDetail(ncd);
+                    feeDetailDAO.delete(feeDetail);
                 }
             }
+            newCreditDetailDAO.delete(deleteCreditDetailList);
         }
-        return usagesCredit;
     }
 }
