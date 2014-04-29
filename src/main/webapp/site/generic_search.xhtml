@@ -93,7 +93,7 @@ function resetter()
 
             <tr>
                 <td class="title"></td>
-                <td><h:selectOneRadio id="radio"  value="#{peSearch.statusType}" required="true" requiredMessage="Please Select One Radio Button" onchange="resetter();submit();" valueChangeListener="#{statusname.valueChangeMethod1}" >
+                <td><h:selectOneRadio value="#{peSearch.statusType}" required="true" requiredMessage="Please Select One Radio Button" onchange="resetter();submit();" valueChangeListener="#{statusname.valueChangeMethod1}" >
                     <f:selectItem id="InprocessCases" itemValue="InprocessCases" itemLabel="Inprocess Cases"  />
                     <f:selectItem id="CompletedCases" itemValue="CompletedCases" itemLabel="Completed Cases"/>
                     <!--<h:message for="radio" style="color: red;"/>-->
