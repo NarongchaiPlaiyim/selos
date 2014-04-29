@@ -931,18 +931,26 @@ public class HeaderController implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         String queueName = Util.parseString(session.getAttribute("queueName"), "");
         String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
-
-        try {
-            fullApplicationControl.submitRequestPriceReduction(queueName, wobNumber);
+        requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
+        if(requestPricing) {
+            try {
+                fullApplicationControl.submitRequestPriceReduction(queueName, wobNumber);
+                messageHeader = "Information.";
+                message = "Request for Price Reduction success.";
+                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            } catch (Exception ex){
+                log.error("Exception while submit request price reduction, ", ex);
+                messageHeader = "Exception";
+                message = Util.getMessageException(ex);
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            }
+        } else {
             messageHeader = "Information.";
-            message = "Request for Price Reduction success.";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-        } catch (Exception ex){
-            log.error("Exception while submit request price reduction, ", ex);
-            messageHeader = "Exception";
-            message = Util.getMessageException(ex);
+            message = "Can not Request for Price Reduction, cause this case has no Pricing Request.";
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
+
+
     }
 
     public void onOpenCancelRequestPriceReduction(){
@@ -1106,13 +1114,13 @@ public class HeaderController implements Serializable {
         reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
         reasonId = 0;
         returnRemark = "";
-        if(!Util.isEmpty(aadAdminName)){
-            RequestContext.getCurrentInstance().execute("returnAADM_AADCDlg.show()");
-        } else {
-            messageHeader = "Exception.";
-            message = "Could not find AAD Admin name.";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-        }
+        //if(!Util.isEmpty(aadAdminName)){
+        RequestContext.getCurrentInstance().execute("returnAADM_AADCDlg.show()");
+        //} else {
+        //    messageHeader = "Exception.";
+        //    message = "Could not find AAD Admin name.";
+        //    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        //}
     }
 
     public void onSubmitReturnAADAdmin(){
@@ -1126,7 +1134,7 @@ public class HeaderController implements Serializable {
 
         if(!Util.isNull(reasonId) && !Util.isZero(reasonId)){
             try{
-                fullApplicationControl.returnBDMByAAD(queueName, wobNumber, returnRemark, reasonId);
+                fullApplicationControl.returnAADAdminByAADCommittee(queueName, wobNumber, returnRemark, reasonId);
                 messageHeader = "Information.";
                 message = "Return case success.";
                 complete = true;

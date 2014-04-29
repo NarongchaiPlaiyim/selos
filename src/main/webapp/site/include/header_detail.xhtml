@@ -175,8 +175,13 @@
                              update=":frmMain:cancelCAPanel">
                 <p:resetInput target=":frmMain:cancelCAPanel"/>
             </p:commandButton>
+            <!--Cancel Request Price Reduction-->
+            <p:commandButton id="btnCancelRequestPriceReduce" value="#{msg.get('app.header.button.cancelRequestPriceReduction')}" title="#{msg.get('app.header.button.cancelRequestPriceReduction')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Cancel Request') and headerController.stepId == 2018}"
+                             actionListener="#{headerController.onOpenCancelRequestPriceReduction()}">
+            </p:commandButton>
             <!--_________ Submit Case ___________ -->
-            <!--Submit To Zone Manager [ From BDM ]-->
+            <!--Submit To Zone Manager [ From BDM ( 2001 ) and From Request Price Reduction ( 2018 ) ]-->
             <p:commandButton id="btnSubmitCaseToZM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2001}"
                              action="#{headerController.onOpenSubmitZM}"
@@ -327,13 +332,10 @@
             <p:commandButton id="btnReturnAADC_UW2" value="#{msg.get('app.header.button.returnToAADAdmin')}"
                              title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016}"
-                             actionListener="#{headerController.onOpenReturnAADMByUW2()}">
+                             actionListener="#{headerController.onOpenReturnAADMByUW2()}"
+                             update=":frmMain:returnAADM_UW2Panel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
             </p:commandButton>
-            <!--Cancel Request Price Reduction-->
-            <p:commandButton id="btnCancelRequestPriceReduce" value="#{msg.get('app.header.button.Cancel Request Price Reduction')}" title="#{msg.get('app.header.button.Cancel Request Price Reduction')}" styleClass="blueButton"
-                             rendered="#{headerController.checkButton('Cancel Request Price Reduction') and headerController.stepId == 2018}"
-                             actionListener="#{headerController.onOpenCancelRequestPriceReduction()}">
-            </p:commandButton>
+
         </p:panel>
         <!--############ Stage for Appraisal ############-->
         <p:panel id="header_panel_appraisal" rendered="#{headerController.checkAccessStage('APPRAISAL')}" styleClass="panel">
@@ -702,7 +704,7 @@
 
 <p:panel id="returnAADM_UW2Panel" styleClass="panel"
          rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016}">
-    <p:dialog id="returnAADM_UW2Dialog" widgetVar="returnAADM_UW2Dlg" header="Return to AAD Committee"
+    <p:dialog id="returnAADM_UW2Dialog" widgetVar="returnAADM_UW2Dlg" header="Return to AAD Admin"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="430" height="160" closable="false">
         <ui:include src="/site/dialog/returnAADMByUW2Dialog.xhtml"/>
@@ -719,10 +721,10 @@
 </p:panel>
 
 <p:panel id="cancelRequestPriceReducePanel" styleClass="panel"
-         rendered="#{headerController.checkAccessStage('GENERIC')}">
-    <p:dialog id="cancelRequestPriceReduceDialog" header="Confirmation." widgetVar="cancelRequestPriceReduceDlg"
+         rendered="#{headerController.checkButton('Cancel Request')}">
+    <p:dialog id="cancelRequestPriceReduceDialog" header="Cancel Request Price Reduction" widgetVar="cancelRequestPriceReduceDlg"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="580" height="320" closable="true">
+              modal="true" width="430" height="160" closable="true">
         <ui:include src="/site/dialog/cancelRequestPriceReduceDialog.xhtml"/>
     </p:dialog>
 </p:panel>

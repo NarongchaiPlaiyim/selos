@@ -23,7 +23,7 @@
                 </div>-->
 
                 <div id="content_container_login">
-                    <h:form>
+                    <h:form id="frmMain">
                         <div id="login_box">
                             <table cellpadding="0" cellspacing="0" style="min-width: 700px; max-width: 700px; width: 700px;" border="0" >
                                 <tr>
@@ -44,12 +44,12 @@
                                 </tr>
                                 <tr>
                                     <td style="height:53px;">
-                                        <p:inputText value="#{loginBean.userName}" styleClass="login-inp" style="font-size: 18px!important;"/>
+                                        <p:inputText value="#{loginBean.userName}" required="true"  styleClass="login-inp" style="font-size: 18px!important;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <p:password value="#{loginBean.password}" styleClass="login-inp" style="font-size: 18px!important;"/>
+                                        <p:password value="#{loginBean.password}" required="true" autocomplete="false" styleClass="login-inp" style="font-size: 18px!important;"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -79,24 +79,13 @@
                             </table>
                         </div>
                     </h:form>
-                    <!--<h:form>
-                        <p:panel header="Login v.#{msg.get('app.version')}">
-                            <h:panelGrid columns="2">
-                                <h:outputText value="username: "/>
-                                <p:inputText value="#{loginBean.userName}"/>
-                                <h:outputText value="password: "/>
-                                <p:password value="#{loginBean.password}"/>
-
-                            </h:panelGrid>
-                            <p:commandButton value="Login" action="#{loginBean.login}" ajax="false"
-                                             style="width: 150px;"/>
-                            <h:outputText value="#{loginBean.loginExceptionMessage}"/>
-                        </p:panel>
-
-                    </h:form>-->
                 </div>
             </div>
         </p:panel>
+        <!--<p:blockUI widgetVar="blockInbox" block=":frmMain">
+            LOADING<br/>
+            <h:graphicImage library="images" name="shared/ajax-loader.gif" />
+        </p:blockUI>-->
     </h:body>
 </f:view>
 </html>
