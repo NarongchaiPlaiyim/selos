@@ -628,8 +628,19 @@ public class CreditFacProposeControl extends BusinessControl {
                 log.info("limit :: {}", limit);
                 log.info("tenor :: {}", tenor);
 
+//                Util.multiply(interestPerMonth, limit)
+                log.debug(" 1 : interestPerMonth * limit : {}",Util.multiply(interestPerMonth,limit));
+//                Util.add(BigDecimal.ONE, interestPerMonth)
+                log.debug(" 2 : 1 + interestPerMonth : {}",Util.add(BigDecimal.ONE, interestPerMonth));
+//                2^tenor
+                log.debug(" 3 : 2 ^ tenor : {}",(Util.add(BigDecimal.ONE, interestPerMonth)).pow(tenor));
+//                1*3
+                log.debug(" 4 : 1 * 3 : {}",Util.multiply(Util.multiply(interestPerMonth, limit), (Util.add(BigDecimal.ONE, interestPerMonth)).pow(tenor)));
+//                2^(tenor-1)
+                log.debug(" 5 : 2 ^ (tenor-1) : {}",(Util.add(BigDecimal.ONE, interestPerMonth)).pow(Util.subtract(BigDecimal.valueOf(tenor), BigDecimal.ONE).intValue()));
+
                 installment = Util.divide(Util.multiply(Util.multiply(interestPerMonth, limit), (Util.add(BigDecimal.ONE, interestPerMonth)).pow(tenor)),
-                        Util.add(BigDecimal.ONE, interestPerMonth).pow(Util.subtract(BigDecimal.valueOf(tenor), BigDecimal.ONE).intValue()));
+                        (Util.add(BigDecimal.ONE, interestPerMonth)).pow(Util.subtract(BigDecimal.valueOf(tenor), BigDecimal.ONE).intValue()));
                 log.info("installment : {}", installment);
 
                 if (installment != null) {
@@ -638,9 +649,9 @@ public class CreditFacProposeControl extends BusinessControl {
 
                 newCreditTierDetailView.setInstallment(installment);
                 sumOfInstallment = Util.add(sumOfInstallment, installment);
-                log.info("creditDetailAdd :sumOfInstallment: {}", sumOfInstallment);
-                creditDetailView.setInstallment(sumOfInstallment);
             }
+            log.info("creditDetailAdd :sumOfInstallment: {}", sumOfInstallment);
+            creditDetailView.setInstallment(sumOfInstallment);
         }
     }
 
