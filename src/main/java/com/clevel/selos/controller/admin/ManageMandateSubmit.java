@@ -111,6 +111,7 @@ public class ManageMandateSubmit implements Serializable {
 
         wrkMandateFieldView = new MandateFieldView();
         wrkMandateFieldView.updateValues(toUpd);
+        wrkMandateFieldView.setPage(selectedMandateClassView.getPageName());
     }
 
 

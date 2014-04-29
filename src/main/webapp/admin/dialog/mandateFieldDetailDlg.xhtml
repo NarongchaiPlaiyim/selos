@@ -4,7 +4,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui" xmlns:clv="http://clevel.com/ui">
 <h:form id="mandateFieldDetailFrm">
-<p:scrollPanel style="height:400px" styleClass="panel-dialog"
+<p:scrollPanel style="height:400px" styleClass="panel-dialog" id="mandateFieldPanel"
                mode="native"
                rendered="#{not empty manageMandateSubmit.wrkMandateFieldView}">
 <p:messages />
@@ -56,11 +56,12 @@
     <td>
         <h:selectOneRadio id="matchedEmpty"
                           value="#{manageMandateSubmit.wrkMandateFieldView.matchedEmpty}">
+            <f:selectItem itemLabel="N/A" itemValue="0"/>
             <f:selectItem itemLabel="Empty" itemValue="2"/>
             <f:selectItem itemLabel="Other" itemValue="1"/>
             <p:ajax event="click"
-                    process=":frmMain:mandateFieldDetailFrm:matchedEmpty"
-                    update=":frmMain:mandateFieldDetailFrm"/>
+                    process=":mandateFieldDetailFrm:matchedEmpty"
+                    update=":mandateFieldDetailFrm"/>
         </h:selectOneRadio>
         <p:inputText id="matchedValueDlg" readonly="#{manageMandateSubmit.wrkMandateFieldView.matchedEmpty != 1}" value="#{manageMandateSubmit.wrkMandateFieldView.matchedValue}" maxlength="100"/>
     </td>
@@ -72,11 +73,12 @@
     <td>
         <h:selectOneRadio id="notMatchedEmpty"
                           value="#{manageMandateSubmit.wrkMandateFieldView.notMatchedEmpty}">
+            <f:selectItem itemLabel="N/A" itemValue="0"/>
             <f:selectItem itemLabel="Empty" itemValue="2"/>
             <f:selectItem itemLabel="Other" itemValue="1"/>
             <p:ajax event="click"
-                    process="@this"
-                    update="@this"/>
+                    process=":mandateFieldDetailFrm:notMatchedEmpty"
+                    update=":mandateFieldDetailFrm"/>
         </h:selectOneRadio>
         <p:inputText id="notMatchedValueDlg" readonly="#{manageMandateSubmit.wrkMandateFieldView.notMatchedEmpty != 1}" value="#{manageMandateSubmit.wrkMandateFieldView.notMatchedValue}" maxlength="100"/>
     </td>
@@ -86,12 +88,23 @@
         <p:spacer></p:spacer>
     </td>
 </tr>
-<tr>
-    <td colspan="2" class="center">
+    <tr>
+        <td colspan="2" class="center">
+            <p:commandButton id="saveBtn" styleClass="small"
+                             binding="#{manageMandateSubmit.wrkMandateFieldView}"
+                             value="#{msg.get('app.okButton')}"
+                             actionListener="#{manageMandateSubmit.onSaveMandateFieldDetail()}"
+                             process="@form"
+                             update=":mandateFieldDetailFrm,:frmMain:resultNcbDetail"
+                             oncomplete="handleNCBInfoRequest(xhr, status, args)"/>
 
-
-    </td>
-</tr>
+            <p:commandButton
+                    id="cancelBtn"
+                    value="#{msg.get('app.cancelButton')}"
+                    styleClass="small"
+                    onclick="PF('ncbDlg').hide()"/>
+        </td>
+    </tr>
 <tr>
     <td colspan="2">
         <p:spacer></p:spacer>
@@ -100,5 +113,8 @@
 </table>
 </p:scrollPanel>
 </h:form>
-
+    <p:blockUI widgetVar="blockMandateFieldPanel" block="mandateFieldPanel" trigger=":mandateFieldDetailFrm:saveBtn">
+        LOADING<br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </ui:composition>
