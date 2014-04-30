@@ -514,10 +514,12 @@ public class CreditFacProposeControl extends BusinessControl {
                         for (NewCollateralHeadView collHeadView : collHeadViewList) {
                             PotentialCollateral potentialCollateral = collHeadView.getPotentialCollateral();
                             // Count core asset and none core asset
-                            if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
-                                totalNumOfCoreAsset = Util.add(totalNumOfCoreAsset, BigDecimal.ONE);
-                            } else if (PotentialCollateralValue.NONE_CORE_ASSET.id() == potentialCollateral.getId()) {
-                                totalNumOfNonCoreAsset = Util.add(totalNumOfNonCoreAsset, BigDecimal.ONE);
+                            if(potentialCollateral != null){
+                                if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
+                                    totalNumOfCoreAsset = Util.add(totalNumOfCoreAsset, BigDecimal.ONE);
+                                } else if (PotentialCollateralValue.NONE_CORE_ASSET.id() == potentialCollateral.getId()) {
+                                    totalNumOfNonCoreAsset = Util.add(totalNumOfNonCoreAsset, BigDecimal.ONE);
+                                }
                             }
 
                             List<NewCollateralSubView> collSubViewList = collHeadView.getNewCollateralSubViewList();
