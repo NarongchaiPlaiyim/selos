@@ -9,9 +9,7 @@
 
     <h:head>
         <title>#{msg.get('app.credit.facility.existing.header.title')}</title>
-        <h:outputStylesheet name="css/style.css" />
-        <script type="text/javascript" language="javascript"
-                src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+        <h:outputStylesheet name="css/style.css" target="head" />
         <h:outputScript library="js" name="custom.js" />
         <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
         <style type="text/css">
@@ -28,7 +26,7 @@
         </style>
     </h:head>
     <h:body>
-        <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+        <p:panel id="pnl_maincontainer" style="position:absolute;">
             <h:form id="frmMain">
                 <div id="main_container">
                     <!-- Start Header Logo -->
@@ -1807,12 +1805,12 @@
                     <ui:include src="include/footer.xhtml"/>
                     <!-- End Footer -->
                 </div>
-            <h:inputHidden id="pagename" value="mnuprescreen"/>
-            <h:inputHidden id="subpagename" value="submnuprescreen"/>
+                <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnCancel">
+                    LOADING<br />
+                    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+                </p:blockUI>
             </h:form>
         </p:panel>
-
-
         <ui:include src="dialog/confirmDeleteDlg.xhtml">
             <ui:param name="id" value="confirmDeleteConditionDetailDialog"/>
             <ui:param name="name" value="confirmDeleteConditionDetailDlg"/>
@@ -1879,11 +1877,6 @@
                                  oncomplete="msgBoxSystemMessageDlg.hide()"/>
             </p:confirmDialog>
         </p:panel>
-
-        <p:blockUI block="pnl_maincontainer" trigger=":frmMain:btnSave,:frmMain:btnCancel">
-            LOADING<br />
-            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-        </p:blockUI>
     </h:body>
 </f:view>
 </html>

@@ -14,14 +14,6 @@
         <p:panel id="pnl_maincontainer">
             <div id="main_container_login">
                 <!--Start Head Logo-->
-                <!--<ui:include src="site/include/header_logo.xhtml">-->
-<!--                <div id="header_logo">
-                    <div id="header_logo_image">
-                        <img src="resources/images/shared/header_logo.jpg" alt="" title="TMB SE-LOS Application"/>
-                        &lt;!&ndash;<h:graphicImage library="images" name="shared/header_logo.jpg" />&ndash;&gt;
-                    </div>
-                </div>-->
-
                 <div id="content_container_login">
                     <h:form id="frmMain">
                         <div id="login_box">
@@ -54,7 +46,7 @@
                                 </tr>
                                 <tr>
                                     <td style="text-align:right; align:right; padding-right:42px;">
-                                        <p:commandButton value="Login" action="#{loginBean.login}" ajax="false"
+                                        <p:commandButton id="btnLogin" value="Login" action="#{loginBean.login}" ajax="false"
                                                          styleClass="login-button"/>
                                     </td>
                                 </tr>
@@ -82,10 +74,6 @@
                 </div>
             </div>
         </p:panel>
-        <!--<p:blockUI widgetVar="blockInbox" block=":frmMain">
-            LOADING<br/>
-            <h:graphicImage library="images" name="shared/ajax-loader.gif" />
-        </p:blockUI>-->
     </h:body>
 </f:view>
 </html>

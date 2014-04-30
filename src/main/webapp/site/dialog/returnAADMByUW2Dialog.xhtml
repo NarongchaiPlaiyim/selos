@@ -38,11 +38,11 @@
                                  value="#{msg.get('app.button.submit')}"
                                  styleClass="small"
                                  actionListener="#{headerController.onReturnAADMByUW2()}"
-                                 oncomplete="handleDialogRequest(xhr, status, args, 'returnAADC_UW2Dlg')"
+                                 oncomplete="handleDialogRequest(xhr, status, args, 'returnAADM_UW2Dlg')"
                                  process="@form"
                                  update=":frmMain:returnAADM_UW2Panel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
-                                 styleClass="small" onclick="returnAADC_UW2Dlg.hide()"/>
+                                 styleClass="small" onclick="PF('returnAADM_UW2Dlg').hide()"/>
             </td>
         </tr>
     </table>

@@ -72,7 +72,7 @@ public class HeaderControl extends BusinessControl {
                     appHeaderView.setProductGroup(prescreen.getProductGroup() != null ? prescreen.getProductGroup().getName() : "");
                 }
             }
-        } else if(stepId == StepValue.REQUEST_APPRAISAL_POOL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()){
+        } else if(stepId == StepValue.REQUEST_APPRAISAL_POOL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value() || stepId == StepValue.REQUEST_APPRAISAL_RETURN.value()){
             WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
             log.debug("getHeaderInformation ::: workCaseAppraisal : {}", workCaseAppraisal);
 
