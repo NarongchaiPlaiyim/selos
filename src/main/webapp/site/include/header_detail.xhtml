@@ -7,24 +7,6 @@
 <div id="header_detail">
 <div id="header_collapse" class="close" onclick="collapseDetail();"><p:spacer width="2"/></div>
     <div id="header_button_bar">
-        <!--############ Stage Generic Function ##############-->
-        <p:panel id="header_panel_generic" rendered="#{headerController.checkAccessStage('GENERIC')}" styleClass="panel">
-            <!--Resubmit-->
-            <p:commandButton id="btnResubmit" value="Resubmit" styleClass="blueButton" title="Resubmit"
-                             rendered="#{headerController.stepId == 0}"
-                             disabled="#{appealResubmit.disableResubmitButton}"
-                             process="@this"
-                             onclick="appealReSubmitDlg.show()">
-            </p:commandButton>
-
-            <!--Appeal-->
-            <p:commandButton id="btnAppeal" value="Appeal" styleClass="blueButton" title="Appeal"
-                             rendered="#{headerController.stepId == 0}"
-                             disabled="#{appealResubmit.disableAppealButton}"
-                             process="@this"
-                             onclick="appealReSubmitDlg.show()">
-            </p:commandButton>
-        </p:panel>
         <!--############ Stage PreScreen ############-->
         <p:panel id="header_panel_prescreen" rendered="#{headerController.checkAccessStage('PRESCREEN')}" styleClass="panel">
             <!-- Check Mandate Doc for Maker -->
@@ -565,17 +547,7 @@
                          action="#{headerController.onGoToInbox}"/>
     </p:confirmDialog>
 </p:panel>
-<p:panel id="msgBoxAppealMessagePanel" styleClass="panel">
-    <p:confirmDialog id="msgBoxAppealMessageDialog" widgetVar="msgBoxAppealMessageDlg" styleClass="messageDialog"
-                     header="#{appealResubmit.messageHeader}">
-        <f:facet name="message">
-            <h:outputText value="#{appealResubmit.message}" escape="false"/>
-        </f:facet>
-        <p:commandButton value="OK"
-                         process="@this"
-                         oncomplete="msgBoxAppealMessageDlg.hide()"/>
-    </p:confirmDialog>
-</p:panel>
+
 <!--End of Message Box -->
 <p:panel id="printReportPanel" styleClass="panel">
     <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"
@@ -709,14 +681,6 @@
     </p:dialog>
 </p:panel>
 
-<p:panel id="appealReSubmitPanel" styleClass="panel"
-         rendered="#{headerController.checkAccessStage('GENERIC')}">
-    <p:dialog id="appealReSubmitDialog" widgetVar="appealReSubmitDlg" header="Confirmation."
-              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="580" height="320" closable="true">
-        <ui:include src="/site/dialog/confirmAppealReSubmit.xhtml"/>
-    </p:dialog>
-</p:panel>
 
 <p:panel id="cancelRequestPriceReducePanel" styleClass="panel"
          rendered="#{headerController.checkAccessStage('GENERIC')}">
