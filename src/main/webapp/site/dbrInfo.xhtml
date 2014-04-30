@@ -47,31 +47,43 @@
                                         <tr>
                                             <td class="title">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.incomeFactor')}"/>
+                                                <h:outputText value="#{dbrInfo.mandate('incomeFactor')}" styleClass="require-field"/>
+                                                <h:outputText value=" :"/>
                                             </td>
                                             <td>
-                                                <p:inputText id="incomeFactor" value="#{dbrInfo.dbr.incomeFactor}" style="text-align: right" required="#{not empty param[dbrSaveBtn.clientId]}" readonly="true">
+                                                <p:inputText id="incomeFactor" value="#{dbrInfo.dbr.incomeFactor}" style="text-align: right"
+                                                             disabled="#{dbrInfo.isDisabled('incomeFactor')}"
+                                                             required="#{not empty param[dbrSaveBtn.clientId]}" readonly="true">
                                                      <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                 </p:inputText>
                                             </td>
                                             <td style="min-width: 250px; width: 250px; max-width: 250px"></td>
                                             <td class="title">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.dbrInterest')}" styleClass="center"/>
+                                                <h:outputText value="#{dbrInfo.mandate('DBRInterest')}" styleClass="require-field"/>
+                                                <h:outputText value=" :"/>
                                             </td>
                                             <td >
-                                                <p:inputText id="dbrInterest" maxlength="18" value="#{dbrInfo.dbr.dbrInterest}" style="text-align: right" readonly="true">
+                                                <p:inputText id="dbrInterest" maxlength="18" value="#{dbrInfo.dbr.dbrInterest}"
+                                                             disabled="#{dbrInfo.isDisabled('DBRInterest')}"
+                                                             style="text-align: right">
                                                     <f:convertNumber  type="number" minFractionDigits="2" maxFractionDigits="2"/>
                                                 </p:inputText>
                                             </td>
                                             <td class="title">
-                                                    <p:outputLabel value="#{msg.get('app.dbr.label.dbrInterest.MRR')}" styleClass="center"/>
+                                                <p:outputLabel value="#{msg.get('app.dbr.label.dbrInterest.MRR')}" styleClass="center"/>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="title">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.monthlyIncome')}" styleClass="center"/>
+                                                <h:outputText value="#{dbrInfo.mandate('monthlyIncome')}" styleClass="require-field"/>
+                                                <h:outputText value=" :"/>
                                             </td>
                                             <td>
-                                                <p:inputText id="monthlyIncome" maxlength="18" value="#{dbrInfo.dbr.monthlyIncome}" style="text-align: right" readonly="true">
+                                                <p:inputText id="monthlyIncome" maxlength="18" value="#{dbrInfo.dbr.monthlyIncome}"
+                                                             disabled="#{dbrInfo.isDisabled('monthlyIncome')}"
+                                                             style="text-align: right">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                 </p:inputText>
                                             </td>
@@ -80,9 +92,13 @@
                                         <tr>
                                             <td class="title">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.monthlyIncomeAdjust')}" styleClass="center" />
+                                                <h:outputText value="#{dbrInfo.mandate('monthlyIncomeAdjust')}" styleClass="require-field"/>
+                                                <h:outputText value=" :"/>
                                             </td>
                                             <td>
-                                                <p:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}" style="text-align: right;" required="#{not empty param[dbrSaveBtn.clientId]}"  onclick="this.select()"
+                                                <p:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}"
+                                                             disabled="#{dbrInfo.isDisabled('monthlyIncomeAdjust')}"
+                                                             style="text-align: right;" required="#{not empty param[dbrSaveBtn.clientId]}"  onclick="this.select()"
                                                              onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     <p:ajax event="change" update=":frmMain:monthlyIncomeAdjust"/>
@@ -94,9 +110,13 @@
                                         <tr>
                                             <td class="title">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.monthlyIncomePerMonth')}" styleClass="center"/>
+                                                <h:outputText value="#{dbrInfo.mandate('monthlyIncomePerMonth')}" styleClass="require-field"/>
+                                                <h:outputText value=" :"/>
                                             </td>
                                             <td>
-                                                <p:inputText id="monthlyIncomePerMonth" value="#{dbrInfo.dbr.monthlyIncomePerMonth}"  style="text-align: right" required="#{not empty param[dbrSaveBtn.clientId]}"  onclick="this.select()"
+                                                <p:inputText id="monthlyIncomePerMonth" value="#{dbrInfo.dbr.monthlyIncomePerMonth}"
+                                                             disabled="#{dbrInfo.isDisabled('monthlyIncomePerMonth')}"
+                                                             style="text-align: right" required="#{not empty param[dbrSaveBtn.clientId]}"  onclick="this.select()"
                                                              onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" >
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     <p:ajax event="change" update=":frmMain:monthlyIncomePerMonth"/>
@@ -107,18 +127,26 @@
                                         <tr>
                                             <td class="title">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.netMonthlyIncome')}" styleClass="center"/>
+                                                <h:outputText value="#{dbrInfo.mandate('netMonthlyIncome')}" styleClass="require-field"/>
+                                                <h:outputText value=" :"/>
                                             </td>
                                             <td>
-                                                <p:inputText id="netMonthlyIncome" maxlength="14" value="#{dbrInfo.dbr.netMonthlyIncome}"   style="text-align: right" readonly="true">
+                                                <p:inputText id="netMonthlyIncome" maxlength="14" value="#{dbrInfo.dbr.netMonthlyIncome}"
+                                                             disabled="#{dbrInfo.isDisabled('netMonthlyIncome')}"
+                                                             style="text-align: right">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                 </p:inputText>
                                             </td>
                                             <td style="min-width: 250px; width: 250px; max-width: 250px;"></td>
                                             <td class="title">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.currentDBR')}" styleClass="center"/>
+                                                <h:outputText value="#{dbrInfo.mandate('currentDBR')}" styleClass="require-field"/>
+                                                <h:outputText value=" :"/>
                                             </td>
                                             <td>
-                                                <p:inputText id="currentDBR" maxlength="14" value="#{dbrInfo.dbr.currentDBR}" style="text-align: right" readonly="true">
+                                                <p:inputText id="currentDBR" maxlength="14" value="#{dbrInfo.dbr.currentDBR}"
+                                                             disabled="#{dbrInfo.isDisabled('currentDBR')}"
+                                                             style="text-align: right">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                 </p:inputText>
                                             </td>
@@ -128,9 +156,13 @@
 
                                             <td class="title">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.dbrBeforeRequest')}" styleClass="center"/>
+                                                <h:outputText value="#{dbrInfo.mandate('DBRBeforeRequest')}" styleClass="require-field"/>
+                                                <h:outputText value=" :"/>
                                             </td>
                                             <td>
-                                                <p:inputText id="dbrBeforeRequest" maxlength="14" value="#{dbrInfo.dbr.dbrBeforeRequest}" style="text-align: right" readonly="true">
+                                                <p:inputText id="dbrBeforeRequest" maxlength="14" value="#{dbrInfo.dbr.dbrBeforeRequest}"
+                                                             disabled="#{dbrInfo.isDisabled('DBRBeforeRequest')}"
+                                                             style="text-align: right">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     <p:ajax event="change" update=":frmMain:dbrBeforeRequest"/>
                                                 </p:inputText>
@@ -227,6 +259,7 @@
                                                                  process="@this"
                                                                  update=":dbrDetailDlgForm"
                                                                  oncomplete="dbrDetailDialog.show()">
+                                                    <!--disabled="#{dbrInfo.isDisabled('addRelatedDebtButton')}"-->
                                                     <f:setPropertyActionListener value="false" target="#{dbrInfo.update}"/>
                                                 </p:commandButton>
                                             </td>
@@ -268,6 +301,7 @@
                                                              oncomplete="dbrDetailDialog.show()"
                                                              process="@this"
                                                              update=":dbrDetailDlgForm">
+                                                <!--disabled="#{dbrInfo.isDisabled('related.actionLists')}"-->
                                                 <f:setPropertyActionListener value="#{item}" target="#{dbrInfo.selectedItem}"/>
                                                 <f:setPropertyActionListener value="#{rowIndex}" target="#{dbrInfo.rowIndex}"/>
                                                 <f:setPropertyActionListener value="true" target="#{dbrInfo.update}"/>
@@ -276,6 +310,7 @@
                                             <p:commandButton title="#{msg.get('app.button.delete')}"
                                                              icon="ui-icon-trash"
                                                              oncomplete="confirmDeleteDBRInfoDlg.show()">
+                                                <!--disabled="#{dbrInfo.isDisabled('related.actionLists')}"-->
                                                 <f:setPropertyActionListener value="#{rowIndex}" target="#{dbrInfo.rowIndex}"/>
                                             </p:commandButton>
                                         </p:column>
@@ -321,12 +356,14 @@
                                                          onclick="onOneClick('frmMain:btnSave', true);"
                                                          oncomplete="onOneClick('frmMain:btnSave', false);"
                                                          update=":pnl_maincontainer :msgBoxSystemMessagePanel">
+                                            <!--disabled="#{dbrInfo.isDisabled('saveButton')}"-->
                                         </p:commandButton>
                                         <p:spacer  width="10"/>
                                         <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
                                                          styleClass="medium"
                                                          action="#{dbrInfo.onCreation}"
                                                          update=":pnl_maincontainer :msgBoxSystemMessagePanel">
+                                            <!--disabled="#{dbrInfo.isDisabled('cancelButton')}"-->
                                         </p:commandButton>
                                     </div>
                                 </td>

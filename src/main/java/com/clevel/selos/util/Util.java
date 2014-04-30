@@ -249,6 +249,23 @@ public class Util implements Serializable {
         }
     }
 
+    public static BigDecimal divide(BigDecimal value, BigDecimal divisor, int round) {
+        if (value == null || divisor == null)
+            return null;
+
+        if (BigDecimal.ZERO.compareTo(divisor) == 0) {
+            log.debug("divide() divisor is zero!");
+            return BigDecimal.ZERO;
+        }
+
+        try {
+            return value.divide(divisor, round, RoundingMode.HALF_UP);
+        } catch (Exception e) {
+            log.error("", e);
+            return BigDecimal.ZERO;
+        }
+    }
+
     public static BigDecimal divide(BigDecimal value, int divisor) {
         if (value == null)
             return null;

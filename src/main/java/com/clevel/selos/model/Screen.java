@@ -11,6 +11,7 @@ public enum Screen {
     //Full Application
     //Basic Info
     BASIC_INFO(2100),
+    DBR_INFO(2830),
 
     //Customer Info
     CUSTOMER_INFO_SUMMARY(3002),

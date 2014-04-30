@@ -719,7 +719,7 @@ public class CreditFacPropose implements Serializable {
 
     public void onCalInstallment(NewCreditDetailView newCreditDetailView) {
         log.debug("onCalInstallment :: ");
-        creditFacProposeControl.calculateInstallment(newCreditDetailView);
+        creditFacProposeControl.calculateInstallment(newCreditDetailView,basicInfoView,tcgView,newCreditFacilityView);
         creditFacProposeControl.calculatePCEAmount(newCreditDetailView);
     }
 
@@ -751,7 +751,7 @@ public class CreditFacPropose implements Serializable {
 
 
         prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(newCreditDetailView.getProductProgramView());
-        creditFacProposeControl.calculateInstallment(newCreditDetailView);
+        creditFacProposeControl.calculateInstallment(newCreditDetailView,basicInfoView,tcgView,newCreditFacilityView);
 
         if (newCreditDetailView.getRequestType() == RequestTypes.NEW.value()) {
             if (newCreditDetailView.getNewCreditTierDetailViewList() != null && newCreditDetailView.getNewCreditTierDetailViewList().size() > 0) {
@@ -821,7 +821,7 @@ public class CreditFacPropose implements Serializable {
                 creditDetailAdd.setDeleteTmpList(newCreditDetailView.getDeleteTmpList());
                 creditDetailAdd.setSeq(seq);
 
-                creditFacProposeControl.calculateInstallment(creditDetailAdd);
+                creditFacProposeControl.calculateInstallment(creditDetailAdd,basicInfoView,tcgView,newCreditFacilityView);
                 log.debug("creditDetailAdd :getInstallment: {}", creditDetailAdd.getInstallment());
                 newCreditFacilityView.getNewCreditDetailViewList().add(creditDetailAdd);
                 ProposeCreditDetailView newProposeCredit = proposeCreditDetailTransform.convertNewCreditToProposeCredit(creditDetailAdd, seq);
@@ -855,7 +855,7 @@ public class CreditFacPropose implements Serializable {
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setNewCreditTierDetailViewList(newCreditDetailView.getNewCreditTierDetailViewList());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setDeleteTmpList(newCreditDetailView.getDeleteTmpList());
                 log.debug("detail list ::: {}",newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getNewCreditTierDetailViewList());
-                creditFacProposeControl.calculateInstallment(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex));
+                creditFacProposeControl.calculateInstallment(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex),basicInfoView,tcgView,newCreditFacilityView);
             } else {
                 log.debug("onSaveCreditInfo ::: Undefined modeForButton !!");
             }

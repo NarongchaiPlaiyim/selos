@@ -11,20 +11,27 @@
                 <tr>
                     <td class="title">
                         <p:outputLabel value="#{msg.get('app.dbrDetail.label.accountName')}"/>
+                        <h:outputText value="#{dbrInfo.mandate('accountName')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td>
-                        <p:inputText id="accountName" value="#{dbrInfo.selectedItem.accountName}" required="true"   style="width: 162px;"
+                        <p:inputText id="accountName" value="#{dbrInfo.selectedItem.accountName}"
+                                     disabled="#{dbrInfo.isDisabled('accountName')}"
+                                     style="width: 162px;" required="true"
                                      onkeypress="return onKeyPressAccountName(event);" onkeydown="return onKeyDownAccountName(event);" />
                     </td>
                 </tr>
                 <tr>
                     <td class="title">
                         <p:outputLabel value="#{msg.get('app.dbrDetail.label.loanType')}"/>
+                        <h:outputText value="#{dbrInfo.mandate('loanType')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td>
                         <p:selectOneMenu id="loanAccountType" value="#{dbrInfo.selectedItem.loanAccountTypeView.id}" required="true" style="width: 170px;">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
                             <f:selectItems value="#{dbrInfo.loanAccountTypes}"
+                                           disabled="#{dbrInfo.isDisabled('loanType')}"
                                            var="loanAccountType"
                                            itemLabel="#{loanAccountType.name}"
                                            itemValue="#{loanAccountType.id}"/>
@@ -34,10 +41,14 @@
                 <tr>
                     <td class="title">
                         <p:outputLabel value="#{msg.get('app.dbrDetail.label.limit')}"/>
+                        <h:outputText value="#{dbrInfo.mandate('limit')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td>
                         <h:inputHidden value="#{dbrInfo.selectedItem.id}"/>
-                        <p:inputText maxlength="14" id="limit" value="#{dbrInfo.selectedItem.limit}" required="true" styleClass="right"  onclick="this.select()"  style="width: 162px;"
+                        <p:inputText maxlength="14" id="limit" value="#{dbrInfo.selectedItem.limit}"
+                                     disabled="#{dbrInfo.isDisabled('limit')}"
+                                     required="true" styleClass="right"  onclick="this.select()"  style="width: 162px;"
                                      onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number"/>
@@ -48,9 +59,13 @@
                 <tr>
                     <td class="title">
                         <p:outputLabel value="#{msg.get('app.dbrDetail.label.installment')}"/>
+                        <h:outputText value="#{dbrInfo.mandate('installment')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td>
-                        <p:inputText id="installment" maxlength="16" value="#{dbrInfo.selectedItem.installment}" required="true" styleClass="right" onclick="this.select()"  style="width: 162px;"
+                        <p:inputText id="installment" maxlength="16" value="#{dbrInfo.selectedItem.installment}"
+                                     disabled="#{dbrInfo.isDisabled('installment')}"
+                                     required="true" styleClass="right" onclick="this.select()"  style="width: 162px;"
                                      onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" >
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number" />
@@ -61,10 +76,14 @@
                 <tr>
                     <td class="title">
                         <p:outputLabel value="#{msg.get('app.dbrDetail.label.debtForCalculate')}"/>
+                        <h:outputText value="#{dbrInfo.mandate('debtForCalculate')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td>
-                        <p:inputText id="debtForCalculate" maxlength="16" value="#{dbrInfo.selectedItem.debtForCalculate}"  style="width: 162px;"
-                                     readonly="true" styleClass="right">
+                        <p:inputText id="debtForCalculate" maxlength="16"
+                                     disabled="#{dbrInfo.isDisabled('debtForCalculate')}"
+                                     value="#{dbrInfo.selectedItem.debtForCalculate}"  style="width: 162px;"
+                                     styleClass="right">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number"/>
                             <p:ajax event="change" update=":dbrDetailDlgForm:debtForCalculate"/>
@@ -82,7 +101,7 @@
                                          actionListener="#{dbrInfo.onAddDBRDetail()}"
                                          oncomplete="handleDialogRequest(xhr, status, args, 'dbrDetailDialog')"
                                          update=":dbrDetailDlgForm :frmMain:dbrDetailDT">
-
+                            <!--disabled="#{dbrInfo.isDisabled('okButton')}"-->
                         </p:commandButton>
                         <p:commandButton value="#{msg.get('app.button.cancel')}"
                                          styleClass="small"
@@ -90,6 +109,7 @@
                                          update=":dbrDetailDlgForm"
                                          onclick="dbrDetailDialog.hide()">
                             <p:resetInput target=":dbrDetailDlgForm"/>
+                            <!--disabled="#{dbrInfo.isDisabled('cancelButton')}"-->
                         </p:commandButton>
                     </td>
                 </tr>
