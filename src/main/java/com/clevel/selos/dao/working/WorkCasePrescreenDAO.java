@@ -83,7 +83,7 @@ public class WorkCasePrescreenDAO extends GenericDAO<WorkCasePrescreen, Long> {
 
         Criteria criteria = createCriteria();
 
-        criteria.add(Restrictions.eq("refAppNumber",refAppNumber)).add(Restrictions.eq("requestTypeId",requestType));
+        criteria.add(Restrictions.eq("refAppNumber",refAppNumber)).add(Restrictions.eq("requestType",requestType));
 
         Integer caseCount = ((Number)criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
 

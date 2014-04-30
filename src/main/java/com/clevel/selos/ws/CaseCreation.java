@@ -11,6 +11,7 @@ import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.CaseRequestTypes;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
+import com.clevel.selos.model.db.master.RequestType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -113,7 +114,7 @@ public class CaseCreation implements WSCaseCreation, Serializable {
         //handle all un-expected exception
         try {
             //validate duplicate CA
-            if (caseCreationHistoryDAO.isExist(caNumber)) {
+            if (requestType == 1 && caseCreationHistoryDAO.isExist(caNumber)) {
                 wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.DUPLICATE_CA, "(CA: " + caNumber + ")"));
                 response.setValue(WSResponse.DUPLICATE_CA, msg.get(ValidationMapping.DUPLICATE_CA, "(CA: " + caNumber + ")"), "");
                 log.debug("{}", response);

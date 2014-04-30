@@ -40,33 +40,42 @@ public class ActionDAO extends GenericDAO<Action, Long> {
     public ActionDAO() {
     }
 
-    public String getDescripationFromAction(Relretunactions relretunactions, Action action)
+    public String getDescripationFromAction()
     {
-        relretunactions = new Relretunactions();
-        action = new Action();
+        //relretunactions = new Relretunactions();
+        //action = new Action();
         Criteria cr = getSession().createCriteria(Relretunactions.class)
-                .setProjection(Projections.projectionList()
-
-                        .add(Projections.property("actionCode"), "actionCode"))
+                .setProjection(Projections.projectionList().add(Projections.property("actionCode"), "actionCode"))
                 .setResultTransformer(Transformers.aliasToBean(Relretunactions.class));
 
         List<Relretunactions> list = cr.list();
+
         iterator = list.iterator();
+
         while (iterator.hasNext() == true)
         {
+
             relretunactions1 = new Relretunactions();
+
             relretunactions1 = (Relretunactions) iterator.next();
+
             actionCode = relretunactions1.getActionCode();
+
             actionList.add(actionCode);
 
             relretunactions1 = null;
 
         }
+
         log.info("actionCode list :::" + actionList);
+
         Criteria criteria2 = getSession().createCriteria(Action.class);
 
-        criteria2.setProjection(Projections.projectionList().add(Projections.property("description"), "description")).add(Restrictions.in("id", actionList)).setResultTransformer(Transformers.aliasToBean(Action.class));
+        criteria2.setProjection(Projections.projectionList().add(Projections.property("description"), "description"))
+                .add(Restrictions.in("id", actionList)).setResultTransformer(Transformers.aliasToBean(Action.class));
+
         decriptionList = criteria2.list();
+
         iterator = decriptionList.iterator();
 
         while (iterator.hasNext() == true)

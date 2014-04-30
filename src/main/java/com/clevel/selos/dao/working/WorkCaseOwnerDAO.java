@@ -6,6 +6,7 @@ import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.WorkCaseOwner;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -82,7 +83,11 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
 
         criteria.add(Restrictions.in("stepId",restrictionsStepList));
 
-        criteria.setProjection(Projections.max("createDate"));
+        //criteria.setProjection(Projections.max("createDate"));
+
+        criteria.addOrder(Order.desc("createDate"));
+
+        criteria.setMaxResults(1);
 
         WorkCaseOwner workCaseOwner = (WorkCaseOwner)criteria.uniqueResult();
 
