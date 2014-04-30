@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.ChangeOwnerControl;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.dao.master.ActionDAO;
 import com.clevel.selos.dao.master.UserDAO;
@@ -201,6 +202,9 @@ public class ChangeOwner implements Serializable {
     String peRosterName;
     @Inject
     BPMInterfaceImpl bpmInterfaceImpl;
+
+    @Inject
+    ChangeOwnerControl changeOwnerControl;
 
     List<User> usersIdNameList1 = new ArrayList<User>();
 
@@ -513,6 +517,9 @@ public class ChangeOwner implements Serializable {
             {
 
                 bpmInterfaceImpl.batchDispatchCaseFromRoster(peRosterName,stringArrayOfWobNos,fieldsMap);
+
+                changeOwnerControl.updateUserName(stringArrayOfWobNos, selectUserChangeOwner, selectuser);
+
                 log.info("batchDispatch successful.... ");
                 changOwnerSearchQuery();
             }

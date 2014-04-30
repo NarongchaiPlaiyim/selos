@@ -25,6 +25,24 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
     public WorkCaseOwnerDAO() {
     }
 
+    public List<WorkCaseOwner> findByWorkCasePreScreenId(int workCasePreScreenId, String userId, int roleId)
+    {
+
+        List<WorkCaseOwner> workCaseOwnerList = createCriteria().add(Restrictions.eq("workCasePrescreenId", workCasePreScreenId))
+                                                    .add(Restrictions.eq("userid",userId)).add(Restrictions.eq("roleid", roleId)).list();
+
+        return workCaseOwnerList;
+    }
+
+    public List<WorkCaseOwner> findByWorkCaseId(int workCaseId, String userId, int roleId)
+    {
+
+        List<WorkCaseOwner> workCaseOwnerList = createCriteria().add(Restrictions.eq("workCaseId", workCaseId))
+                .add(Restrictions.eq("userid",userId)).add(Restrictions.eq("roleid", roleId)).list();
+
+        return workCaseOwnerList;
+    }
+
     public List<String> getWorkCaseByWorkCasePrescreenId(Integer workCasePrescreenId){
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreenId", workCasePrescreenId));
