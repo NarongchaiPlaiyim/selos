@@ -564,7 +564,8 @@ public class Decision extends BaseController {
 
         prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(selectedApproveCredit.getProductProgramView());
 
-        creditFacProposeControl.calculateInstallment(selectedApproveCredit);
+        //todo:this new function
+//        creditFacProposeControl.calculateInstallment(selectedApproveCredit);
 
         if (selectedApproveCredit.getRequestType() == RequestTypes.NEW.value()) {
             if (selectedApproveCredit.getNewCreditTierDetailViewList() != null && !selectedApproveCredit.getNewCreditTierDetailViewList().isEmpty()) {

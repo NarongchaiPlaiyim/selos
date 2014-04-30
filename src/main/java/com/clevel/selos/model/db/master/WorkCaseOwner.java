@@ -3,10 +3,7 @@ package com.clevel.selos.model.db.master;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -39,6 +36,7 @@ public class WorkCaseOwner implements Serializable
     @Column(name = "modify_by")
     private String modifyBy;
     @Column(name = "create_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
     public Date getCreateDate() {

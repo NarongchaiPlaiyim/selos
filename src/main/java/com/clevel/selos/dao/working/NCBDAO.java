@@ -4,6 +4,7 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.NCB;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -28,12 +29,12 @@ public class NCBDAO extends GenericDAO<NCB, Long> {
         return ncb;
     }
 
-    public Date checkNCBDate(List<Integer> customerIdList)
+    public NCB checkNCBDate(List<Long> customerIdList)
     {
 
-        NCB ncb = (NCB)createCriteria().add(Restrictions.in("customer.id",customerIdList)).uniqueResult();
+        NCB ncb = (NCB)createCriteria().add(Restrictions.in("customer.id",customerIdList)).addOrder(Order.desc("checkingDate")).setMaxResults(1).uniqueResult();
 
-        return ncb.getCheckingDate();
+        return ncb;
 
     }
 

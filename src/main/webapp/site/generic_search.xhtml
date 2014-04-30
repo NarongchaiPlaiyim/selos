@@ -71,361 +71,361 @@ function resetter()
 
 <h:body>
 
-<h:form id="frmMain" style="position: relative; min-height: 100%; height: 100%;">
-<p:panel id="pnl_maincontainer">
-<div id="main_container">
-<!-- Start Header Logo -->
-<ui:include src="include/header_logo.xhtml"/>
-<ui:include src="include/menubar_inbox.xhtml"/>
+    <h:form id="frmMain" style="position: relative; min-height: 100%; height: 100%;">
+        <p:panel id="pnl_maincontainer">
+            <div id="main_container">
+                <!-- Start Header Logo -->
+                <ui:include src="include/header_logo.xhtml"/>
+                <ui:include src="include/menubar_inbox.xhtml"/>
 
-<!-- End Menu -->
-<div id="content_container">
-<div id="content_name">Search</div>
-<div id="content">
-<table id="content_form">
-<tr><td colspan="100%" style="padding-right: 10px;"><p:spacer width="5"></p:spacer></td></tr>
-<tr>
-    <td style="width: 20px;"></td>
-    <td>
-        <h:messages style="color:red;margin:8px;" />
-
-        <table>
-
-            <tr>
-                <td class="title"></td>
-                <td><h:selectOneRadio value="#{peSearch.statusType}" required="true" requiredMessage="Please Select One Radio Button" onchange="resetter();submit();" valueChangeListener="#{statusname.valueChangeMethod1}" >
-                    <f:selectItem id="InprocessCases" itemValue="InprocessCases" itemLabel="Inprocess Cases"  />
-                    <f:selectItem id="CompletedCases" itemValue="CompletedCases" itemLabel="Completed Cases"/>
-                    <!--<h:message for="radio" style="color: red;"/>-->
-                </h:selectOneRadio></td>
-            </tr>
-            <tr>
-                <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
-            </tr>
-
-            <tr>
-                <td class="title" style="width: 150px;">Application No. :</td>
-                <td><h:inputText size="20" value="#{peSearch.applicationNumber}" onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"> </h:inputText></td>
-
-            </tr>
-            <tr>
-                <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
-            </tr>
-            <tr>
-                <td class="title" style="width: 150px;">User ID :</td>
-                <td><h:inputText size="20" value="#{peSearch.userid}" id="userIdId"> </h:inputText></td>
-
-            </tr>
-            <tr>
-                <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
-            </tr>
-
-            <tr>
-                <td class="title" style="width: 150px;">Step:</td>
-                <td>
-                    <h:selectOneMenu id="stepNameId"  class="largest" value="#{peSearch.step}" onchange="submit()" readonly="#{peSearch.statusType eq 'CompletedCases'}" disabled="#{peSearch.statusType eq 'CompletedCases'}"  valueChangeListener="#{statusname.valueChangeMethod}"  >
-                        <f:selectItem itemValue="" itemLabel="-Please Select-" />
-                        <f:selectItems value="#{stepid.stepnameidlist}"
-                                       var="stepItem"
-                                       itemLabel="#{stepItem.description}"
-                                       itemValue="#{stepItem.id}"/>
-
-                    </h:selectOneMenu>
-                </td>
-
-                <td class="title" style="width: 150px;">Status :</td>
-                <td>
-                    <h:selectOneMenu id="statusNameId"  class="largest" value="#{peSearch.status}" >
-                        <f:selectItem itemValue="" itemLabel="-Please Select-" />
-
-                        <f:selectItems value="#{statusname.statusnamelist}"  var="statusItem"
-                                       itemLabel="#{statusItem.name}"
-                                       itemValue="#{statusItem.id}"/>
-                    </h:selectOneMenu>
-                    <p:spacer width="15px"/>
-
-                </td>
-
-            </tr>
-            <tr>
-                <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
-            </tr>
-
-            <tr>
-                <td class="title" style="width: 150px;">Citizen ID/Registration ID/Passport No :</td>
-                <td><h:inputText size="20" value="#{peSearch.citizendid}"> </h:inputText></td>
-
-            </tr>
-            <tr>
-                <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
-            </tr>
-            <tr>
-                <td class="title" style="width: 150px;">First Name :</td>
-                <td>
-                    <h:inputText id="firstNameId" size="20" value="#{peSearch.firstname}" maxlength="50" validatorMessage="Enter more than 3 and less than 50 letters for First Name">
-                        <!--<f:validateLength minimum="3" maximum="50" disabled="{empty param['frmMain:firstNameId']}" />-->
-                    </h:inputText>
-
-                </td>
-
-                <td class="title" style="width: 150px;">Last Name :</td>
-                <td>
-                    <h:inputText id="lastNameId" size="20" value="#{peSearch.lastname}" maxlength="50" xvalidatorMessage="Enter more than 3 and less than 50 letters for Last Name">
-                        <!--<f:validateLength minimum="3" maximum="50" disabled="{empty param['frmMain:lastNameId']}"  />-->
-                    </h:inputText>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
-            </tr>
-
-            <tr>
-                <td class="title">Start date From :</td>
-                <td style="width: 350px;">
-                    <clv:BECalendar id="startformDate" showOn="button" showButtonPanel="true" navigator="true"
-                                    yearRange="1950:2100"
-                                    mindate="01/01/1950"
-                                    maxdate="#{peSearch.currentDateDDMMYY}"
-                                    pattern="dd/MM/yyyy"
-                                    value="#{peSearch.date1}"
-                                    requiredMessage="Please Enter From Date"
-                                    required="#{not empty param['frmMain:userIdId']}"
-                                    >
-                    </clv:BECalendar>
-                </td>
-                <td class="title">To :</td>
-                <td>
-                    <clv:BECalendar id="starttoDate" showOn="button" showButtonPanel="true" navigator="true"
-                                    yearRange="1950:2100"
-                                    mindate="01/01/1950"
-                                    maxdate="#{peSearch.currentDateDDMMYY}"
-                                    pattern="dd/MM/yyyy"
-                                    value="#{peSearch.date2}"
-                                    requiredMessage="Please Enter To Date"
-                                    required="#{not empty param['frmMain:userIdId']}"
-                                    >
-                    </clv:BECalendar>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
-            </tr>
-
-
-            <tr >
-                <td class="title" >Terminate date From :</td>
-                <td style="width: 350px;">
-                    <clv:BECalendar id="terminateformDate" showOn="button" showButtonPanel="true" navigator="true"
-                                    yearRange="1950:2100"
-                                    mindate="01/01/1950"
-                                    maxdate="#{peSearch.currentDateDDMMYY}"
-                                    pattern="dd/MM/yyyy"
-                                    value="#{peSearch.date3}"
-
-                                    readonly="#{peSearch.statusType eq 'InprocessCases'}" disabled="#{peSearch.statusType eq 'InprocessCases'}">
-                    </clv:BECalendar>
-                </td>
-                <td class="title">To :</td>
-                <td>
-                    <clv:BECalendar id="terminatetoDate" showOn="button" showButtonPanel="true" navigator="true"
-                                    yearRange="1950:2100"
-                                    mindate="01/01/1950"
-                                    maxdate="#{peSearch.currentDateDDMMYY}"
-                                    pattern="dd/MM/yyyy"
-                                    value="#{peSearch.date4}"
-
-                                    readonly="#{peSearch.statusType eq 'InprocessCases'}" disabled="#{peSearch.statusType eq 'InprocessCases'}">
-                    </clv:BECalendar>
-                </td>
-            </tr>
-
-
-
-            <tr>
-                <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
-            </tr>
-            <tr>
-                <td class="title" ></td> <td class="title" style="width: 350px;"></td>
-                <td class="title">
-                    <p:commandButton value="Reset" update="pnl_maincontainer" process="@this"  >
-                        <p:resetInput target="pnl_maincontainer" />
-                    </p:commandButton>
-                </td>
-                <td class="title"> <p:commandButton id="name1"  value="Search" ajax="false" styleClass="medium" action="#{peSearch.search()}">  </p:commandButton></td>
-            </tr>
-
-        </table>
-
-    </td>
-</tr>
-<tr>
-    <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
-</tr>
-<tr>
-    <td colspan="100%"><p:separator/></td>
-
-
-</tr>
-<tr>
-    <td style="width: 20px;"></td><td></td>
-
-</tr>
-<tr>
-    <td colspan="100%" style="line-height: 15px;"></td>
-</tr>
-<tr>
-    <td class="top" colspan="100%">
-
-        <h:panelGroup id="pnl_menu_inbox1" rendered='#{peSearch.searchViewList != null}' styleClass="panel">
-
-
-            <table class="content_form"  style="width: 100%">
+                <!-- End Menu -->
+                <div id="content_container">
+                <div id="content_name">Search</div>
+                <div id="content">
+                <table id="content_form">
+                <tr><td colspan="100%" style="padding-right: 10px;"><p:spacer width="5"></p:spacer></td></tr>
                 <tr>
+                    <td style="width: 20px;"></td>
                     <td>
-                        <p:dataTable id="resultInbox" var="item"
+                        <h:messages style="color:red;margin:8px;" />
 
-                                     value="#{peSearch.searchViewList}"
+                        <table>
 
-                                     selection="#{peSearch.inboxViewSelectItem}"
+                            <tr>
+                                <td class="title"></td>
+                                <td><h:selectOneRadio id="radio"  value="#{peSearch.statusType}" required="true" requiredMessage="Please Select One Radio Button" onchange="resetter();submit();" valueChangeListener="#{statusname.valueChangeMethod1}" >
+                                    <f:selectItem id="InprocessCases" itemValue="InprocessCases" itemLabel="Inprocess Cases"  />
+                                    <f:selectItem id="CompletedCases" itemValue="CompletedCases" itemLabel="Completed Cases"/>
+                                    <!--<h:message for="radio" style="color: red;"/>-->
+                                </h:selectOneRadio></td>
+                            </tr>
+                            <tr>
+                                <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
+                            </tr>
 
-                                     selectionMode="single"
+                            <tr>
+                                <td class="title" style="width: 150px;">Application No. :</td>
+                                <td><h:inputText size="20" value="#{peSearch.applicationNumber}" onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"> </h:inputText></td>
 
-                                     paginator="true"
+                            </tr>
+                            <tr>
+                                <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
+                            </tr>
+                            <tr>
+                                <td class="title" style="width: 150px;">User ID :</td>
+                                <td><h:inputText size="20" value="#{peSearch.userid}" id="userIdId"> </h:inputText></td>
 
-                                     rows="20"
+                            </tr>
+                            <tr>
+                                <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
+                            </tr>
 
-                                     rowsPerPageTemplate="20,40,60"
+                            <tr>
+                                <td class="title" style="width: 150px;">Step:</td>
+                                <td>
+                                    <h:selectOneMenu id="stepNameId"  class="largest" value="#{peSearch.step}" onchange="submit()" readonly="#{peSearch.statusType eq 'CompletedCases'}" disabled="#{peSearch.statusType eq 'CompletedCases'}"  valueChangeListener="#{statusname.valueChangeMethod}"  >
+                                        <f:selectItem itemValue="" itemLabel="-Please Select-" />
+                                        <f:selectItems value="#{stepid.stepnameidlist}"
+                                                       var="stepItem"
+                                                       itemLabel="#{stepItem.description}"
+                                                       itemValue="#{stepItem.id}"/>
 
-                                     rowKey="#{item.receiveddate}"
+                                    </h:selectOneMenu>
+                                </td>
 
-                                     rowIndexVar="rowIndex">
+                                <td class="title" style="width: 150px;">Status :</td>
+                                <td>
+                                    <h:selectOneMenu id="statusNameId"  class="largest" value="#{peSearch.status}" >
+                                        <f:selectItem itemValue="" itemLabel="-Please Select-" />
 
-                            <p:ajax event="rowSelect" update=":frmMain:resultInbox"
-                                    listener="#{peSearch.onSelectInbox}" onstart="blockInbox.show()"/>
+                                        <f:selectItems value="#{statusname.statusnamelist}"  var="statusItem"
+                                                       itemLabel="#{statusItem.name}"
+                                                       itemValue="#{statusItem.id}"/>
+                                    </h:selectOneMenu>
+                                    <p:spacer width="15px"/>
 
-                            <p:column headerText="" styleClass="center" style="width:22px;">
-                                <h:outputText value="#{rowIndex+1}"/>
-                            </p:column>
+                                </td>
 
-                            <p:column headerText="Received Date" styleClass="center" style="width: 130px;" sortBy="#{item.receiveddate}">
-                                <h:outputText value="#{item.receiveddate}"/>
-                            </p:column>
+                            </tr>
+                            <tr>
+                                <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
+                            </tr>
 
-                            <p:column headerText="Terminate Date" styleClass="center" style="width: 110px;" >
-                                <h:outputText value="#{item.terminateDate}"/>
-                            </p:column>
+                            <tr>
+                                <td class="title" style="width: 150px;">Citizen ID/Registration ID/Passport No :</td>
+                                <td><h:inputText size="20" value="#{peSearch.citizendid}"> </h:inputText></td>
 
-                            <p:column headerText="Application Number" styleClass="center" style="width: 110px;" sortBy="#{item.applicationno}">
-                                <h:outputText value="#{item.applicationno}" />
-                            </p:column>
+                            </tr>
+                            <tr>
+                                <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
+                            </tr>
+                            <tr>
+                                <td class="title" style="width: 150px;">First Name :</td>
+                                <td>
+                                    <h:inputText id="firstNameId" size="20" value="#{peSearch.firstname}" maxlength="50" validatorMessage="Enter more than 3 and less than 50 letters for First Name">
+                                        <!--<f:validateLength minimum="3" maximum="50" disabled="{empty param['frmMain:firstNameId']}" />-->
+                                    </h:inputText>
 
-                            <p:column headerText="Name" styleClass="center" style="width: 110px;" sortBy="#{item.name}">
-                                <h:outputText value="#{item.name}"/>
-                            </p:column>
+                                </td>
 
-                            <p:column headerText="Product Group" style="width: 120px;" styleClass="center" sortBy="#{item.productgroup}" >
-                                <h:outputText value="#{item.productgroup}"/>
-                            </p:column>
+                                <td class="title" style="width: 150px;">Last Name :</td>
+                                <td>
+                                    <h:inputText id="lastNameId" size="20" value="#{peSearch.lastname}" maxlength="50" xvalidatorMessage="Enter more than 3 and less than 50 letters for Last Name">
+                                        <!--<f:validateLength minimum="3" maximum="50" disabled="{empty param['frmMain:lastNameId']}"  />-->
+                                    </h:inputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
+                            </tr>
 
-                            <p:column headerText="Request Type" style="width: 120px;" styleClass="center" sortBy="#{item.requestTypeStr}">
-                                <h:outputText value="#{item.requestTypeStr}"/>
-                            </p:column>
+                            <tr>
+                                <td class="title">Start date From :</td>
+                                <td style="width: 350px;">
+                                    <clv:BECalendar id="startformDate" showOn="button" showButtonPanel="true" navigator="true"
+                                                    yearRange="1950:2100"
+                                                    mindate="01/01/1950"
+                                                    maxdate="#{peSearch.currentDateDDMMYY}"
+                                                    pattern="dd/MM/yyyy"
+                                                    value="#{peSearch.date1}"
+                                                    requiredMessage="Please Enter From Date"
+                                                    required="#{not empty param['frmMain:userIdId']}"
+                                                    >
+                                    </clv:BECalendar>
+                                </td>
+                                <td class="title">To :</td>
+                                <td>
+                                    <clv:BECalendar id="starttoDate" showOn="button" showButtonPanel="true" navigator="true"
+                                                    yearRange="1950:2100"
+                                                    mindate="01/01/1950"
+                                                    maxdate="#{peSearch.currentDateDDMMYY}"
+                                                    pattern="dd/MM/yyyy"
+                                                    value="#{peSearch.date2}"
+                                                    requiredMessage="Please Enter To Date"
+                                                    required="#{not empty param['frmMain:userIdId']}"
+                                                    >
+                                    </clv:BECalendar>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
+                            </tr>
 
-                            <p:column headerText="Step" styleClass="center" style="width: 110px;" sortBy="#{item.step}" >
-                                <h:outputText value="#{item.step}"/>
-                            </p:column>
 
-                            <p:column headerText="Status" styleClass="center" style="width: 110px;"  sortBy="#{item.status}">
-                                <h:outputText value="#{item.status}"/>
-                            </p:column>
+                            <tr >
+                                <td class="title" >Terminate date From :</td>
+                                <td style="width: 350px;">
+                                    <clv:BECalendar id="terminateformDate" showOn="button" showButtonPanel="true" navigator="true"
+                                                    yearRange="1950:2100"
+                                                    mindate="01/01/1950"
+                                                    maxdate="#{peSearch.currentDateDDMMYY}"
+                                                    pattern="dd/MM/yyyy"
+                                                    value="#{peSearch.date3}"
 
-                            <p:column headerText="From User" styleClass="center" style="width: 110px;" sortBy="#{item.fromuser}">
-                                <h:outputText value="#{item.fromuser}" />
-                            </p:column>
+                                                    readonly="#{peSearch.statusType eq 'InprocessCases'}" disabled="#{peSearch.statusType eq 'InprocessCases'}">
+                                    </clv:BECalendar>
+                                </td>
+                                <td class="title">To :</td>
+                                <td>
+                                    <clv:BECalendar id="terminatetoDate" showOn="button" showButtonPanel="true" navigator="true"
+                                                    yearRange="1950:2100"
+                                                    mindate="01/01/1950"
+                                                    maxdate="#{peSearch.currentDateDDMMYY}"
+                                                    pattern="dd/MM/yyyy"
+                                                    value="#{peSearch.date4}"
 
-                            <p:column headerText="At User" styleClass="center" style="width: 110px;" sortBy="#{item.atuser}">
-                                <h:outputText value="#{item.atuser}"/>
-                            </p:column>
+                                                    readonly="#{peSearch.statusType eq 'InprocessCases'}" disabled="#{peSearch.statusType eq 'InprocessCases'}">
+                                    </clv:BECalendar>
+                                </td>
+                            </tr>
 
-                            <p:column headerText="At User Team" styleClass="center" style="width: 130px;" sortBy="#{item.atuserteam}">
-                                <h:outputText value="#{item.atuserteam}" />
-                            </p:column>
 
-                            <p:column headerText="Appointment Date" styleClass="center" style="width: 110px;" sortBy="#{item.appointmentdate}">
-                                <h:outputText value="#{item.appointmentdate}"/>
-                            </p:column>
 
-                            <p:column headerText="DOA Level" styleClass="center" style="width: 110px;">
-                                <h:outputText value="#{item.doalevel}"/>
-                            </p:column>
+                            <tr>
+                                <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
+                            </tr>
+                            <tr>
+                                <td class="title" ></td> <td class="title" style="width: 350px;"></td>
+                                <td class="title">
+                                    <p:commandButton value="Reset" update="pnl_maincontainer" process="@this"  >
+                                        <p:resetInput target="pnl_maincontainer" />
+                                    </p:commandButton>
+                                </td>
+                                <td class="title"> <p:commandButton id="name1"  value="Search" ajax="false" styleClass="medium" action="#{peSearch.search()}">  </p:commandButton></td>
+                            </tr>
 
-                            <p:column headerText="Action" styleClass="center" style="width: 110px;" sortBy="#{item.action}">
-                                <h:outputText value="#{item.action}"/>
-                            </p:column>
+                        </table>
 
-                            <p:column headerText="SLA End Date" styleClass="center" style="width: 110px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" >
-                                <h:outputText value="#{item.slaenddate}"/>
-                            </p:column>
-
-                            <p:column headerText="Total Time Spent At User " styleClass="center" style="width: 110px;" sortBy="#{item.totaltimespentatuser}">
-                                <h:outputText value="#{item.totaltimespentatuser}"/>
-                            </p:column>
-
-                            <p:column headerText="Total Time Spent At Process" styleClass="center" style="width: 110px;" sortBy="#{item.totaltimespentatprocess}" >
-                                <h:outputText value="#{item.totaltimespentatprocess}"/>
-                            </p:column>
-
-                            <p:column headerText="View">
-                                <p:commandButton icon="ui-icon-search" title="View" action="#{peSearch.onSelectInbox}" onclick="blockInbox.show()">
-                                    <f:setPropertyActionListener value="#{item}" target="#{peSearch.inboxViewSelectItem}"/>
-                                </p:commandButton>
-                            </p:column>
-
-                        </p:dataTable>
                     </td>
                 </tr>
-            </table>
+                <tr>
+                    <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
+                </tr>
+                <tr>
+                    <td colspan="100%"><p:separator/></td>
 
-        </h:panelGroup>
 
-    </td>
-</tr>
-<tr><td colspan="100%"><p:spacer width="10px"/></td></tr>
+                </tr>
+                <tr>
+                    <td style="width: 20px;"></td><td></td>
 
-</table>
-</div>
-<div class="bottom_line"><!-- --></div>
-</div>
-<div class="clear"></div>
+                </tr>
+                <tr>
+                    <td colspan="100%" style="line-height: 15px;"></td>
+                </tr>
+                <tr>
+                    <td class="top" colspan="100%">
 
-<p:confirmDialog id="msgBoxErrorDialog1" widgetVar="msgBoxErrorDlg1" styleClass="messageDialog"
-                 closable="false"
-                 header="Exception.">
-    <f:facet name="message">
-        <h:outputText value="Sorry. You are not Authorised to view this case!" escape="false"/>
-    </f:facet>
-    <p:commandButton value="Ok" styleClass="small" onclick="msgBoxErrorDlg.close();"/>
-</p:confirmDialog>
-<p:panel id="msgBoxErrorPanel" styleClass="panel">
-    <p:confirmDialog id="msgBoxErrorDialog" widgetVar="msgBoxErrorDlg" styleClass="messageDialog"
-                     closable="false"
-                     header="Exception.">
-        <f:facet name="message">
-            <h:outputText value="Another User is Working on this case!! Please Retry Later." escape="false"/>
-        </f:facet>
-        <p:commandButton value="#{msg.get('app.button.ok')}"
-                         process="@this"
-                         update="frmMain"
-                         oncomplete="msgBoxErrorDlg.hide()"/>
-    </p:confirmDialog>
-</p:panel>
-<!-- Start Footer -->
-<ui:include src="include/footer_inbox.xhtml" />
-<!-- End Footer -->
+                        <h:panelGroup id="pnl_menu_inbox1" rendered='#{peSearch.searchViewList != null}' styleClass="panel">
 
-</div>
-</p:panel>
-</h:form>
+
+                            <table class="content_form"  style="width: 100%">
+                                <tr>
+                                    <td>
+                                        <p:dataTable id="resultInbox" var="item"
+
+                                                     value="#{peSearch.searchViewList}"
+
+                                                     selection="#{peSearch.inboxViewSelectItem}"
+
+                                                     selectionMode="single"
+
+                                                     paginator="true"
+
+                                                     rows="20"
+
+                                                     rowsPerPageTemplate="20,40,60"
+
+                                                     rowKey="#{item.receiveddate}"
+
+                                                     rowIndexVar="rowIndex">
+
+                                            <p:ajax event="rowSelect" update=":frmMain:resultInbox"
+                                                    listener="#{peSearch.onSelectInbox}" onstart="blockInbox.show()"/>
+
+                                            <p:column headerText="" styleClass="center" style="width:22px;">
+                                                <h:outputText value="#{rowIndex+1}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Received Date" styleClass="center" style="width: 130px;" sortBy="#{item.receiveddate}">
+                                                <h:outputText value="#{item.receiveddate}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Terminate Date" styleClass="center" style="width: 110px;" >
+                                                <h:outputText value="#{item.terminateDate}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Application Number" styleClass="center" style="width: 110px;" sortBy="#{item.applicationno}">
+                                                <h:outputText value="#{item.applicationno}" />
+                                            </p:column>
+
+                                            <p:column headerText="Name" styleClass="center" style="width: 110px;" sortBy="#{item.name}">
+                                                <h:outputText value="#{item.name}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Product Group" style="width: 120px;" styleClass="center" sortBy="#{item.productgroup}" >
+                                                <h:outputText value="#{item.productgroup}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Request Type" style="width: 120px;" styleClass="center" sortBy="#{item.requestTypeStr}">
+                                                <h:outputText value="#{item.requestTypeStr}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Step" styleClass="center" style="width: 110px;" sortBy="#{item.step}" >
+                                                <h:outputText value="#{item.step}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Status" styleClass="center" style="width: 110px;"  sortBy="#{item.status}">
+                                                <h:outputText value="#{item.status}"/>
+                                            </p:column>
+
+                                            <p:column headerText="From User" styleClass="center" style="width: 110px;" sortBy="#{item.fromuser}">
+                                                <h:outputText value="#{item.fromuser}" />
+                                            </p:column>
+
+                                            <p:column headerText="At User" styleClass="center" style="width: 110px;" sortBy="#{item.atuser}">
+                                                <h:outputText value="#{item.atuser}"/>
+                                            </p:column>
+
+                                            <p:column headerText="At User Team" styleClass="center" style="width: 130px;" sortBy="#{item.atuserteam}">
+                                                <h:outputText value="#{item.atuserteam}" />
+                                            </p:column>
+
+                                            <p:column headerText="Appointment Date" styleClass="center" style="width: 110px;" sortBy="#{item.appointmentdate}">
+                                                <h:outputText value="#{item.appointmentdate}"/>
+                                            </p:column>
+
+                                            <p:column headerText="DOA Level" styleClass="center" style="width: 110px;">
+                                                <h:outputText value="#{item.doalevel}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Action" styleClass="center" style="width: 110px;" sortBy="#{item.action}">
+                                                <h:outputText value="#{item.action}"/>
+                                            </p:column>
+
+                                            <p:column headerText="SLA End Date" styleClass="center" style="width: 110px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" >
+                                                <h:outputText value="#{item.slaenddate}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Total Time Spent At User " styleClass="center" style="width: 110px;" sortBy="#{item.totaltimespentatuser}">
+                                                <h:outputText value="#{item.totaltimespentatuser}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Total Time Spent At Process" styleClass="center" style="width: 110px;" sortBy="#{item.totaltimespentatprocess}" >
+                                                <h:outputText value="#{item.totaltimespentatprocess}"/>
+                                            </p:column>
+
+                                            <p:column headerText="View">
+                                                <p:commandButton icon="ui-icon-search" title="View" action="#{peSearch.onSelectInbox}" onclick="blockInbox.show()">
+                                                    <f:setPropertyActionListener value="#{item}" target="#{peSearch.inboxViewSelectItem}"/>
+                                                </p:commandButton>
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </h:panelGroup>
+
+                    </td>
+                </tr>
+                <tr><td colspan="100%"><p:spacer width="10px"/></td></tr>
+
+                </table>
+                </div>
+                <div class="bottom_line"><!-- --></div>
+                </div>
+                <div class="clear"></div>
+
+                <p:confirmDialog id="msgBoxErrorDialog1" widgetVar="msgBoxErrorDlg1" styleClass="messageDialog"
+                                 closable="false"
+                                 header="Exception.">
+                    <f:facet name="message">
+                        <h:outputText value="Sorry. You are not Authorised to view this case!" escape="false"/>
+                    </f:facet>
+                    <p:commandButton value="Ok" styleClass="small" onclick="msgBoxErrorDlg.close();"/>
+                </p:confirmDialog>
+                <p:panel id="msgBoxErrorPanel" styleClass="panel">
+                    <p:confirmDialog id="msgBoxErrorDialog" widgetVar="msgBoxErrorDlg" styleClass="messageDialog"
+                                     closable="false"
+                                     header="Exception.">
+                        <f:facet name="message">
+                            <h:outputText value="Another User is Working on this case!! Please Retry Later." escape="false"/>
+                        </f:facet>
+                        <p:commandButton value="#{msg.get('app.button.ok')}"
+                                         process="@this"
+                                         update="frmMain"
+                                         oncomplete="msgBoxErrorDlg.hide()"/>
+                    </p:confirmDialog>
+                </p:panel>
+                <!-- Start Footer -->
+                <ui:include src="include/footer_inbox.xhtml" />
+                <!-- End Footer -->
+
+            </div>
+        </p:panel>
+    </h:form>
 
 <p:blockUI widgetVar="blockInbox" block=":frmMain">
     LOADING<br/>

@@ -4,10 +4,13 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class CaseCreationHistoryDAO extends GenericDAO<CaseCreationHistory, Long> {
     @Inject
@@ -35,9 +38,13 @@ public class CaseCreationHistoryDAO extends GenericDAO<CaseCreationHistory, Long
     public CaseCreationHistory getCaseDetails(String appNumber)
     {
 
-        createCriteria().add(Restrictions.eq("appNumber",appNumber));
+        Criteria criteria =  createCriteria();
 
-        return (CaseCreationHistory) createCriteria().uniqueResult();
+        criteria.add(Restrictions.eq("appNumber", appNumber));
+
+        CaseCreationHistory caseCreationHistory = (CaseCreationHistory)criteria.uniqueResult();
+
+        return caseCreationHistory;
     }
 
 }

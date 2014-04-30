@@ -1009,7 +1009,7 @@
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);"
                                  styleClass="right"
-                                 required="true">
+                                 required="#{not empty param[onsaveNewFacility.clientId]}">
                         <f:convertNumber pattern="##0.00"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
@@ -1030,7 +1030,7 @@
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);"
                                  styleClass="right"
-                                 required="true">
+                                 required="#{not empty param[onsaveNewFacility.clientId]}">
                         <f:convertNumber pattern="##0.00"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
