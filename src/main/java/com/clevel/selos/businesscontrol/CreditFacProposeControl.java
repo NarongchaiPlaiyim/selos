@@ -591,18 +591,34 @@ public class CreditFacProposeControl extends BusinessControl {
 
     }
 
-    public void calculateInstallment(NewCreditDetailView creditDetailView) {
+    public void calculateInstallment(NewCreditDetailView creditDetailView, BasicInfoView basicInfoView, TCGView tcgView, NewCreditFacilityView newCreditFacilityView) {
         log.info("creditDetailView : {}", creditDetailView);
         BigDecimal sumOfInstallment = BigDecimal.ZERO;
         if (creditDetailView != null && creditDetailView.getNewCreditTierDetailViewList() != null && creditDetailView.getNewCreditTierDetailViewList().size() > 0) {
-
             for (NewCreditTierDetailView newCreditTierDetailView : creditDetailView.getNewCreditTierDetailViewList()) {
                 // Installment = (อัตราดอกเบี้ยต่อเดือน * Limit * (1 + อัตราดอกเบี้ยต่อเดือน)ยกกำลัง tenors(month)) / ((1 + อัตราดอกเบี้ยต่อเดือน) ยกกำลัง tenors(month) - 1)
                 // อัตราดอกเบี้ยต่อเดือน = baseRate.value +  interest + 1% / 12
+                if(newCreditTierDetailView.getTenor() < 0 || creditDetailView.getLimit().compareTo(BigDecimal.ZERO) < 0){
+                    return;
+                }
+
                 BigDecimal twelve = new BigDecimal(12);
                 BigDecimal oneHundred = new BigDecimal(100);
                 BigDecimal baseRate = BigDecimal.ZERO;
                 BigDecimal interest = BigDecimal.ZERO;
+
+                BigDecimal spread = BigDecimal.ZERO;
+
+                ProductProgram productProgram = productProgramDAO.findById(creditDetailView.getProductProgramView().getId());
+                CreditType creditType = creditTypeDAO.findById(creditDetailView.getCreditTypeView().getId());
+                if(productProgram != null && creditType != null){
+                    PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
+                    ProductFormula productFormula = productFormulaDAO.findProductFormulaPropose(
+                            prdProgramToCreditType, newCreditFacilityView.getCreditCustomerType(), basicInfoView.getSpecialProgram(), tcgView.getTCG());
+                    if(productFormula != null){
+                        spread = productFormula.getDbrSpread();
+                    }
+                }
 
                 if (newCreditTierDetailView.getFinalBasePrice() != null) {
                     baseRate = newCreditTierDetailView.getFinalBasePrice().getValue();
@@ -611,12 +627,10 @@ public class CreditFacProposeControl extends BusinessControl {
                     interest = newCreditTierDetailView.getFinalInterest();
                 }
 
-                //old
-                //BigDecimal interestPerMonth = Util.divide(Util.add(baseRate, Util.add(interest, BigDecimal.ONE)), twelve);
-                //new
-                BigDecimal interestPerMonth = Util.divide(Util.add(Util.divide(baseRate,oneHundred),Util.divide(interest,oneHundred)),twelve);
+                BigDecimal interestPerMonth = Util.divide(Util.divide(Util.add(Util.add(spread,baseRate),interest),oneHundred,100),twelve,100);
                 log.info("baseRate :: {}", baseRate);
                 log.info("interest :: {}", interest);
+                log.info("spread :: {}", spread);
                 log.info("interestPerMonth :: {}", interestPerMonth);
 
                 BigDecimal limit = BigDecimal.ZERO;
@@ -630,19 +644,10 @@ public class CreditFacProposeControl extends BusinessControl {
                 log.info("limit :: {}", limit);
                 log.info("tenor :: {}", tenor);
 
-//                Util.multiply(interestPerMonth, limit)
-                log.debug(" 1 : interestPerMonth * limit : {}",Util.multiply(interestPerMonth,limit));
-//                Util.add(BigDecimal.ONE, interestPerMonth)
-                log.debug(" 2 : 1 + interestPerMonth : {}",Util.add(BigDecimal.ONE, interestPerMonth));
-//                2^tenor
-                log.debug(" 3 : 2 ^ tenor : {}",(Util.add(BigDecimal.ONE, interestPerMonth)).pow(tenor));
-//                1*3
-                log.debug(" 4 : 1 * 3 : {}",Util.multiply(Util.multiply(interestPerMonth, limit), (Util.add(BigDecimal.ONE, interestPerMonth)).pow(tenor)));
-//                2^(tenor-1)
-                log.debug(" 5 : 2 ^ (tenor-1) : {}",(Util.add(BigDecimal.ONE, interestPerMonth)).pow(Util.subtract(BigDecimal.valueOf(tenor), BigDecimal.ONE).intValue()));
-
-                installment = Util.divide(Util.multiply(Util.multiply(interestPerMonth, limit), (Util.add(BigDecimal.ONE, interestPerMonth)).pow(tenor)),
-                        (Util.add(BigDecimal.ONE, interestPerMonth)).pow(Util.subtract(BigDecimal.valueOf(tenor), BigDecimal.ONE).intValue()));
+                installment = Util.divide(Util.multiply(Util.multiply(interestPerMonth,limit),Util.add(BigDecimal.ONE,interestPerMonth).pow(tenor)) ,
+                                          Util.subtract(Util.add(BigDecimal.ONE,interestPerMonth).pow(tenor),BigDecimal.ONE));
+//                installment = Util.divide(Util.multiply(Util.multiply(interestPerMonth, limit), (Util.add(BigDecimal.ONE, interestPerMonth)).pow(tenor)),
+//                        (Util.add(BigDecimal.ONE, interestPerMonth)).pow(Util.subtract(BigDecimal.valueOf(tenor), BigDecimal.ONE).intValue()));
                 log.info("installment : {}", installment);
 
                 if (installment != null) {
