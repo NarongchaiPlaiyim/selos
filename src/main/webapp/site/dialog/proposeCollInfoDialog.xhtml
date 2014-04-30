@@ -119,7 +119,6 @@
     <td class="left" colspan="3">
         <p:dataTable value="#{creditFacPropose.proposeCreditDetailViewList}"
                      var="creditTypeDetailItem"
-                     selection="#{creditFacPropose.selectedCollateralCrdTypeItems}"
                      rowKey="#{creditTypeDetailItem.seq}"
                      rowIndexVar="rowIndex"
                      style="width: 100%;"
@@ -142,7 +141,11 @@
 
             </p:columnGroup>
 
-            <p:column styleClass="center" selectionMode="multiple"/>
+            <p:column styleClass="center">
+                <p:selectBooleanCheckbox value="#{creditTypeDetailItem.noFlag}">
+                        <p:ajax listener="#{creditFacPropose.onCheckNoFlag(creditTypeDetailItem)}"/>
+                </p:selectBooleanCheckbox>
+            </p:column>
 
             <p:column styleClass="left top">
                 <h:outputText value="#{creditTypeDetailItem.accountName}"/><br/>
@@ -150,16 +153,16 @@
             </p:column>
 
             <p:column styleClass="left top">
-                #{creditTypeDetailItem.requestType == 2 ? msg.get('app.label.new') :
-                        creditTypeDetailItem.requestType == 1 ? msg.get('app.label.change') : ''}
+                <h:outputText value="#{creditTypeDetailItem.requestType == 2 ? msg.get('app.label.new') :
+                        creditTypeDetailItem.requestType == 1 ? msg.get('app.label.change') : ''}"/>
             </p:column>
 
             <p:column styleClass="left top">
-                #{not empty creditTypeDetailItem.productProgramView ? creditTypeDetailItem.productProgramView.name : ''}
+                <h:outputText value="#{not empty creditTypeDetailItem.productProgramView ? creditTypeDetailItem.productProgramView.name : ''}"/>
             </p:column>
 
             <p:column styleClass="left top">
-                #{not empty creditTypeDetailItem.creditFacilityView ? creditTypeDetailItem.creditFacilityView.name : ''}
+                <h:outputText value="#{not empty creditTypeDetailItem.creditFacilityView ? creditTypeDetailItem.creditFacilityView.name : ''}"/>
             </p:column>
 
             <p:column styleClass="right top">
@@ -170,7 +173,6 @@
                                      maxIntegerDigits="14"/>
                 </h:outputText>
             </p:column>
-
         </p:dataTable>
     </td>
 </tr>
@@ -535,7 +537,9 @@
         <p:spacer width="10" height=""/>
         <p:commandButton value="#{msg.get('app.button.cancel')}"
                          styleClass="small"
-                         onclick="collateralInfoDlg.hide()"/>
+                         update=":collateralDlgForm,:frmMain,:msgBoxSystemMessagePanel"
+                         action="#{creditFacPropose.onCancelProposeCollInfo}"
+                         oncomplete="handleDialogRequest(xhr, status, args, 'collateralInfoDlg')"/>
     </td>
 </tr>
 <tr>

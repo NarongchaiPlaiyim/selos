@@ -318,7 +318,8 @@ public class Decision extends BaseController {
         deleteConditionIdList = new ArrayList<Long>();
 
         // load and generate sequence number ProposeCreditDetail
-        commonProposeCreditList = creditFacProposeControl.findAndGenerateSeqProposeCredits(decisionView.getApproveCreditList(), decisionView.getExtBorrowerComCreditList(), workCaseId);
+        //todo:this
+//        commonProposeCreditList = creditFacProposeControl.findAndGenerateSeqProposeCredits(decisionView.getApproveCreditList(), decisionView.getExtBorrowerComCreditList(), workCaseId);
         int lastSeqNumber = creditFacProposeControl.getLastSeqNumberFromProposeCredit(commonProposeCreditList);
         if (lastSeqNumber > 1) {
             seqNumber = lastSeqNumber + 1;

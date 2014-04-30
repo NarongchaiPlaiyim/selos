@@ -35,11 +35,11 @@
                     </ul>
                 </li>
             </h:panelGroup>
-            <h:panelGroup id="pnl_menu_request_appraisal" rendered="#{headerController.stepId == 2006}" styleClass="panel">
+            <h:panelGroup id="pnl_menu_request_appraisal" rendered="#{headerController.checkAccessStage('APPRAISAL')}" styleClass="panel">
                 <li id="mnu_appraisal">
                     <a href="#" title="#{msg.get('app.menu.appraisal')}">#{msg.get('app.menu.appraisal')}</a>
                     <ul>
-                        <p:panel id="pnlMmenu_appraisal_request" styleClass="panel">
+                        <p:panel id="pnlMmenu_appraisal_request" rendered="#{headerController.stepId == 2032}" styleClass="panel">
                             <li id="submnuappraisalrequest"><a href="appraisalRequest.jsf"
                                                               title="#{msg.get('app.menu.appraisalRequest')}">#{msg.get('app.menu.appraisalRequest')}</a></li>
                         </p:panel>
@@ -54,7 +54,7 @@
                     </ul>
                 </li>
             </h:panelGroup>
-            <h:panelGroup id="pnl_menu_fullapp" rendered="#{headerController.stageId == 201 || headerController.stageId == 202 || headerController.stageId == 204 || headerController.stageId == 207}" styleClass="panel">
+            <h:panelGroup id="pnl_menu_fullapp" rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
                 <li id="mnubasicinfo"><a href="basicInfo.jsf" title="#{msg.get('app.menu.basicInfo')}">#{msg.get('app.menu.basicInfo')}</a></li>
                 <li id="mnuborrowerinfo">
                     <a href="customerInfoSummary.jsf" title="#{msg.get('app.menu.borrowerInfo')}">#{msg.get('app.menu.borrowerInfo')}</a>

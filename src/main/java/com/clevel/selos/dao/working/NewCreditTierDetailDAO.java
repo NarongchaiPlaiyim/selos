@@ -21,7 +21,6 @@ public class NewCreditTierDetailDAO extends GenericDAO<NewCreditTierDetail, Long
     public NewCreditTierDetailDAO() {
     }
 
-
     public List<NewCreditTierDetail> findByNewCreditDetail(NewCreditDetail newCreditDetail) {
         log.info("findByNewCreditDetail :::{}", newCreditDetail.getId());
         Criteria criteria = createCriteria();

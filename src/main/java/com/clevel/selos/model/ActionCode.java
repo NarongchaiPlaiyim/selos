@@ -29,7 +29,8 @@ public enum ActionCode {
     REQUEST_PRICE_REDUCE(1028, "Request for Price Reduction"),
     PENDING_FOR_DECISION(1029, "Pending for Decision"),
     ASSIGN_TO_ME(1030, "Assign To Me"),
-    RESTART(1031, "Restart");
+    RESTART(1031, "Restart"),
+    CANCEL_REQUEST_PRICE_REDUCTION(1032, "Cancel Request Price Reduction");
 
     long val;
     String actionName;
