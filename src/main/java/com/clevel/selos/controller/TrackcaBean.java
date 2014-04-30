@@ -1,28 +1,20 @@
 package com.clevel.selos.controller;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Sreenu
- * Date: 2/21/14
- * Time: 10:25 AM
- * To change this template use File | Settings | File Templates.
- */
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.dao.master.ActionDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.Action;
-import com.clevel.selos.model.db.master.Relretunactions;
 import com.clevel.selos.model.view.PERoster;
 import org.slf4j.Logger;
 
-import javax.faces.bean.RequestScoped;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
-@ManagedBean(name = "trackBean")
 @RequestScoped
+@ManagedBean(name = "trackBean")
 public class TrackcaBean implements Serializable
 {
 
@@ -36,41 +28,17 @@ public class TrackcaBean implements Serializable
     @Inject
     ActionDAO actionDAO;
 
-    private ArrayList<PERoster> rosterViewList ;
+    private List<PERoster> rosterViewList;
 
     private PERoster rosterViewSelectItem;
 
-    private String columnName;
-
-    private  String sortOrder;
-
     private String statusType;
 
-    Action action = null;
-
-    ArrayList<Action> descriptionList = null;
-
-    Relretunactions relretunactions = null;
-
-    ArrayList<Relretunactions> relretunactionses = null;
-
-    String decriptionList = null;
-
-    ArrayList<Action> discriptionList = null;
-
-    public PERoster getRosterViewSelectItem() {
-        return rosterViewSelectItem;
-    }
-
-    public void setRosterViewSelectItem(PERoster rosterViewSelectItem) {
-        this.rosterViewSelectItem = rosterViewSelectItem;
-    }
-
-    public ArrayList<PERoster> getRosterViewList() {
+    public List<PERoster> getRosterViewList() {
         return rosterViewList;
     }
 
-    public void setRosterViewList(ArrayList<PERoster> rosterViewList) {
+    public void setRosterViewList(List<PERoster> rosterViewList) {
         this.rosterViewList = rosterViewList;
     }
 
@@ -82,61 +50,44 @@ public class TrackcaBean implements Serializable
         this.statusType = statusType;
     }
 
-    public String getColumnName() {
-        return columnName;
+    public PERoster getRosterViewSelectItem() {
+        return rosterViewSelectItem;
     }
 
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
+    public void setRosterViewSelectItem(PERoster rosterViewSelectItem) {
+        this.rosterViewSelectItem = rosterViewSelectItem;
     }
 
-    public String getSortOrder() {
-        return sortOrder;
-    }
-
-    public void setSortOrder(String sortOrder) {
-        this.sortOrder = sortOrder;
-    }
-
-    public ArrayList<PERoster> peRosterQueryForTrackCa()
+    @PostConstruct
+    public void onCreation()
     {
+        statusType = "CreatedByMe";
 
-        action = new Action();
+        log.info("in controller");
 
-        descriptionList = new ArrayList<Action>();
+    }
 
-        relretunactions = new Relretunactions();
-
-        log.info("before call the method::::");
-
-        relretunactionses = new ArrayList<Relretunactions>();
-
-        discriptionList = new ArrayList<Action>();
-
-        decriptionList = actionDAO.getDescripationFromAction(relretunactions,action );
-
-        log.info("stringDiscriptionList in Trackbean :::::::"+decriptionList);
-
+    public List<PERoster> peRosterQueryForTrackCa()
+    {
         try
         {
-            rosterViewList =  pedbExecute.getRosterQuery(statusType,decriptionList);
+
+            String description = "";
+
+            log.info("before call the method::::");
+
+            description = actionDAO.getDescripationFromAction();
+
+            rosterViewList =  pedbExecute.getRosterQuery(statusType,description);
+
+            log.info("List Size : {}",rosterViewList.size());
+
         }
+
         catch(Exception e)
         {
-            log.error("Error im track Ca *** ",e);
-        }
-        finally
-        {
 
-            rosterViewSelectItem = null;
-            columnName = null;
-            sortOrder = null;
-            statusType = null;
-            action = null;
-            descriptionList = null;
-            relretunactions = null;
-            relretunactionses = null;
-            decriptionList = null;
+            log.error("Error im track Ca *** ",e);
 
         }
 
@@ -145,8 +96,5 @@ public class TrackcaBean implements Serializable
         return  rosterViewList;
 
     }
-
-
-
 
 }

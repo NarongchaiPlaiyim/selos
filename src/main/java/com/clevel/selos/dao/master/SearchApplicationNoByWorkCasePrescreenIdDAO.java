@@ -67,4 +67,22 @@ public class SearchApplicationNoByWorkCasePrescreenIdDAO extends GenericDAO<Sear
 
         return applicationNoList;
     }
+
+    //find number of appeals
+    public Integer getAppealResubmitCount(String refAppNumber, Integer requestType)
+    {
+
+        Criteria criteria = createCriteria();
+
+        criteria.add(Restrictions.eq("refAppNumber",refAppNumber)).add(Restrictions.eq("requestTypeId",requestType));
+
+        log.info("AppNumber : {}, Request type : {}",refAppNumber,requestType);
+
+        Integer caseCount = ((Number)criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
+
+        log.info("Case Count : {} ",caseCount);
+
+        return caseCount;
+
+    }
 }

@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,7 +16,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "wrk_case_prescreen")
-public class SearchApplicationNoByWorkCasePrescreenId {
+public class SearchApplicationNoByWorkCasePrescreenId implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
@@ -25,6 +26,28 @@ public class SearchApplicationNoByWorkCasePrescreenId {
 
     @Column(name = "bpm_active")
     private Integer bpmActive;
+
+    @Column(name = "request_type_id")
+    private Integer requestTypeId;
+
+    @Column(name = "ref_app_number")
+    private String refAppNumber;
+
+    public String getRefAppNumber() {
+        return refAppNumber;
+    }
+
+    public void setRefAppNumber(String refAppNumber) {
+        this.refAppNumber = refAppNumber;
+    }
+
+    public Integer getRequestTypeId() {
+        return requestTypeId;
+    }
+
+    public void setRequestTypeId(Integer requestTypeId) {
+        this.requestTypeId = requestTypeId;
+    }
 
     public Integer getBpmActive() {
         return bpmActive;

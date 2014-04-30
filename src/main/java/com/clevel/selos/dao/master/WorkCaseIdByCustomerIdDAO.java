@@ -32,33 +32,6 @@ public class WorkCaseIdByCustomerIdDAO extends GenericDAO<WorkCaseIdByCustomerId
 
     }
 
-    public List<Integer> getCustomerIdByWOrkCaseId(Long workCaseId)
-    {
-
-        Criteria criteria = createCriteria();
-
-        criteria.setProjection(Projections.projectionList().add(Projections.property("id"),"id"));
-
-        criteria.add(Restrictions.eq("workCaseId",workCaseId.intValue()));
-
-        criteria.add(Restrictions.eq("relationId",1));
-
-        Iterator<WorkCaseIdByCustomerId> it = criteria.list().iterator();
-
-        List<Integer> customerIdList = new ArrayList<Integer>();
-
-        while (it.hasNext())
-        {
-
-            WorkCaseIdByCustomerId workCaseIdByCustomerId = it.next();
-
-            customerIdList.add(workCaseIdByCustomerId.getId());
-
-        }
-
-        return customerIdList;
-    }
-
     public List<WorkCaseIdByCustomerId> getWorkCaseIdByCustomerId(int customerId)
     {
         List<WorkCaseIdByCustomerId> workCaseIdList = new ArrayList<WorkCaseIdByCustomerId>();
