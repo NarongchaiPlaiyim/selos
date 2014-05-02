@@ -237,12 +237,12 @@
                              update=":frmMain:submitUWPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"/>
             <!--Submit To UW1 [ From BDM Submit return To UW1 ]-->
             <p:commandButton id="btnSubmitCaseToBDMUW1" value="#{msg.get('app.header.button.submitToUW1')}" title="#{msg.get('app.header.button.submitToUW1')}" styleClass="blueButton"
-                             rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2004}"
+                             rendered="#{headerController.checkButton('Submit CA') and (headerController.stepId == 2004 || headerController.stepId == 2017)}"
                              onclick="confirmSubmitSubmitUW1.show()"/>
             <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                              icon="ui-icon-alert"
                              widgetVar="confirmSubmitSubmitUW1" global="false" showEffect="fade"
-                             rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2004}">
+                             rendered="#{headerController.checkButton('Submit CA') and (headerController.stepId == 2004 || headerController.stepId == 2017)}">
                 <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                  update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                  actionListener="#{headerController.onSubmitReturnUW1()}"
@@ -282,12 +282,12 @@
             </p:confirmDialog>
             <!--Restart case (UW)-->
             <p:commandButton id="btnRestartCase" value="#{msg.get('app.header.button.restart')}" title="#{msg.get('app.header.button.restart')}" styleClass="blueButton"
-                             rendered="#{headerController.checkButton('Restart') and headerController.stepId == 2004}"
+                             rendered="#{headerController.checkButton('Restart') and (headerController.stepId == 2004 || headerController.stepId == 2017)}"
                              onclick="confirmRestart.show()"/>
             <p:confirmDialog header="Confirmation" message="Please click 'OK' to restart case" styleClass="left"
                              icon="ui-icon-alert"
                              widgetVar="confirmRestart" global="false" showEffect="fade"
-                             rendered="#{headerController.checkButton('Restart') and headerController.stepId == 2004}">
+                             rendered="#{headerController.checkButton('Restart') and (headerController.stepId == 2004 || headerController.stepId == 2017)}">
                 <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                  update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                  actionListener="#{headerController.onRestartCase()}"
