@@ -122,8 +122,8 @@ public class FullApplicationControl extends BusinessControl {
         return userList;
     }
 
-    public void assignToABDM(String abdmUserId, String queueName, long workCaseId) throws Exception {
-        bpmExecutor.assignToABDM(workCaseId, queueName, abdmUserId, ActionCode.ASSIGN_TO_ABDM.getVal());
+    public void assignToABDM(String queueName, String wobNumber, String abdmUserId) throws Exception {
+        bpmExecutor.assignToABDM(queueName, wobNumber, abdmUserId, ActionCode.ASSIGN_TO_ABDM.getVal());
     }
 
     public void submitToZMPricing(String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, String submitRemark, String queueName, long workCaseId) throws Exception {
@@ -737,6 +737,11 @@ public class FullApplicationControl extends BusinessControl {
 
     public void submitToBDM(String queueName, String wobNumber) throws Exception{
         bpmExecutor.submitCase(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
+    }
+
+    public void calculateApprovedPricingDOA(long workCaseId){
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        calculatePricingDOA(workCaseId, newCreditFacility);
     }
 
     public void calculatePricingDOA(long workCaseId, NewCreditFacility newCreditFacility){

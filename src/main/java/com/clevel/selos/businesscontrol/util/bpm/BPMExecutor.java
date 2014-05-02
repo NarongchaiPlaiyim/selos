@@ -81,8 +81,7 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void assignToABDM(long workCaseId, String queueName, String abdmUserId, long actionCode) throws Exception{
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
+    public void assignToABDM(String queueName, String wobNumber, String abdmUserId, long actionCode) throws Exception{
         Action action = actionDAO.findById(actionCode);
 
         if(action != null){
@@ -93,11 +92,9 @@ public class BPMExecutor implements Serializable {
 
             log.debug("dispatch case for [Assign to ABDM]..., Action_Code : {}, Action_Name : {}, BDMCheckerUserName : {}", action.getId(), action.getName(), abdmUserId);
 
-            if (workCase != null) {
-                execute(queueName, workCase.getWobNumber(), fields);
-            } else {
-                throw new Exception("An exception occurred, Can not find WorkCase PreScreen.");
-            }
+            execute(queueName, wobNumber, fields);
+        } else {
+            throw new Exception("An exception occurred, Can not find Action.");
         }
     }
 
