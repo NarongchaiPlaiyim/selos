@@ -171,12 +171,12 @@
             </p:commandButton>
             <!--Submit To Region Manager [ From Zone Manager - Pricing Flow ]-->
             <p:commandButton id="btnSubmitCaseToRGM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
-                             rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2002}"
+                             rendered="#{headerController.checkButton('Submit CA') and ( headerController.stepId == 2002 || headerController.stepId == 2019 )}"
                              onclick="confirmSubmitSubmitRGM.show()"/>
             <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                              icon="ui-icon-alert"
                              widgetVar="confirmSubmitSubmitRGM" global="false" showEffect="fade"
-                             rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2002}">
+                             rendered="#{headerController.checkButton('Submit CA') and ( headerController.stepId == 2002 || headerController.stepId == 2019 )}">
                 <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                  update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                  actionListener="#{headerController.onSubmitRM()}" process="@this"

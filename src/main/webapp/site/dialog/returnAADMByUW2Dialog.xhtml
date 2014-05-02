@@ -11,7 +11,7 @@
             <td class="title">Reason for Return :</td>
             <td>
                 <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                 value="#{headerController.reasonId}"
+                                 value="#{headerController.returnReasonId}"
                                  required="#{not empty param[btnReturnAADMByUW2.clientId]}">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                     <f:selectItems value="#{headerController.reasonList}"
@@ -24,7 +24,7 @@
         <tr>
             <td class="title">Remark :</td>
             <td>
-                <p:inputTextarea value="#{headerController.returnRemark}"
+                <p:inputTextarea value="#{headerController.returnAADRemark}"
                                  autoResize="false"
                                  cols="35"
                                  rows="5">

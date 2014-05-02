@@ -171,6 +171,9 @@ public class HeaderController implements Serializable {
     //Request Appraisal ( After Customer Acceptance )
     private List<User> aadAdminList;
 
+    //Return AAD Admin ( UW2 )
+    private int returnReasonId;
+    private String returnAADRemark;
 
     public HeaderController() {
     }
@@ -729,7 +732,7 @@ public class HeaderController implements Serializable {
     public void onOpenReturnAADMByUW2(){
         log.debug("onOpenReturnAADCommittee ( return to AAD Admin from UW2 [ Open dialog ] )");
         reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
-        returnRemark = "";
+        returnAADRemark = "";
 
         RequestContext.getCurrentInstance().execute("returnAADM_UW2Dlg.show()");
     }
@@ -741,7 +744,6 @@ public class HeaderController implements Serializable {
         String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
         try {
-
             messageHeader = "Information.";
             message = "Return case success.";
         } catch (Exception ex) {
@@ -2256,5 +2258,21 @@ public class HeaderController implements Serializable {
 
     public void setAadAdminList(List<User> aadAdminList) {
         this.aadAdminList = aadAdminList;
+    }
+
+    public int getReturnReasonId() {
+        return returnReasonId;
+    }
+
+    public void setReturnReasonId(int returnReasonId) {
+        this.returnReasonId = returnReasonId;
+    }
+
+    public String getReturnAADRemark() {
+        return returnAADRemark;
+    }
+
+    public void setReturnAADRemark(String returnAADRemark) {
+        this.returnAADRemark = returnAADRemark;
     }
 }
