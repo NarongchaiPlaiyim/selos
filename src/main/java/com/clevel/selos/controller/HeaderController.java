@@ -1332,7 +1332,7 @@ public class HeaderController implements Serializable {
     }
 
     public void onSaveReturnInfo(){
-        log.debug("onSaveReturnInfo ::: starting...");
+        log.debug("onSaveReturnInfo ::: starting... (reasonId: {})",reasonId);
         Reason reason = reasonDAO.findById(reasonId);
 
         if(editRecordNo>-1){
