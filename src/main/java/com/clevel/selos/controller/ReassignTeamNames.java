@@ -37,6 +37,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
+import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 import javax.faces.component.html.HtmlSelectOneMenu;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
@@ -90,6 +91,8 @@ public class ReassignTeamNames implements Serializable
 
     private String popupremark;
 
+    private boolean disableReassign = true;
+
     private Map<String, Boolean> checked =  new HashMap<String, Boolean>();
 
     List<ReassignTeamNameId> popupreasignteamnames ;
@@ -140,6 +143,14 @@ public class ReassignTeamNames implements Serializable
     @Inject
     @Config(name = "interface.pe.rosterName")
     String rostername;
+
+    public boolean isDisableReassign() {
+        return disableReassign;
+    }
+
+    public void setDisableReassign(boolean disableReassign) {
+        this.disableReassign = disableReassign;
+    }
 
     public String getSelectedUserName() {
         return selectedUserName;
@@ -375,6 +386,8 @@ public class ReassignTeamNames implements Serializable
     public void init()
     {
 
+        disableReassign = true;
+
         //Clear all session before selectInbox
         HttpSession session = FacesUtil.getSession(false);
         try
@@ -421,6 +434,9 @@ public class ReassignTeamNames implements Serializable
 
     public List<User> valueChangeMethod(ValueChangeEvent e)
     {
+
+        disableReassign = true;
+
         log.info("controller comes to valueChangeMethod of ReassignTeamNames class");
 
         teamuserslist = new ArrayList<String>();
@@ -457,6 +473,8 @@ public class ReassignTeamNames implements Serializable
 
     public List<PEInbox> reassignSearch()
     {
+
+        disableReassign = true;
 
          log.info("Controller comes to reassignSearch method of ReassignTeamNames class");
 
@@ -733,6 +751,9 @@ public class ReassignTeamNames implements Serializable
 
     public List<User> changeUserNameBasedOnTeamName(AjaxBehaviorEvent ajaxBehaviorEvent)
     {
+
+        disableReassign = true;
+
         log.info("controller comes to changeUserNameBasedOnTeamName of ReassignTeamNames class ");
 
         poupreasignUsernames = new ArrayList<String>();
@@ -784,6 +805,9 @@ public class ReassignTeamNames implements Serializable
 
     public void reassignDisptchRecords()
     {
+
+        disableReassign = true;
+
         ReassignTeamNameId reassignTeamNameId = new ReassignTeamNameId();
 
         log.info("controller entered in to reassignDispatchRecords method of ReassignTeamNames");
@@ -896,6 +920,78 @@ public class ReassignTeamNames implements Serializable
         }
         finally
         {
+
+        }
+
+    }
+
+    public void checkReassign(AjaxBehaviorEvent ajaxBehaviorEvent)
+    {
+
+        log.info("Selected User Name : {}",selectedUserName);
+
+        if(selectedUserName.equalsIgnoreCase("ALL"))
+        {
+            disableReassign = true;
+
+            log.info("Reassign Button disabled : {}",disableReassign);
+        }
+
+        else
+        {
+            UIComponent source = (UIComponent)ajaxBehaviorEvent.getSource();
+
+            log.info("UIComponent source : {}",source);
+
+            if(source!= null)
+            {
+                log.info("Value:" + ((HtmlSelectBooleanCheckbox) source).getValue());
+
+                String selectedCase= ((HtmlSelectBooleanCheckbox)source).getValue().toString();
+
+                log.info("Selected Case WobNum : {}",selectedCase);
+
+                int noOfCases = 0;
+
+                for ( Map.Entry<String, Boolean> entry : checked.entrySet())
+                {
+
+                    if (entry.getValue()==true)
+                    {
+                        String wobNo = entry.getKey().toString();
+
+                        log.info("WobNum : {}",wobNo);
+
+                        noOfCases++;
+
+                    }
+                }
+
+                log.info("No. Of Cases Selected : {}", noOfCases);
+
+                if(selectedCase.equalsIgnoreCase("true") || noOfCases > 0)
+                {
+
+                    disableReassign = false;
+
+                    log.info("Reassign Button enabled : {}",disableReassign);
+                }
+
+                else
+                {
+                    disableReassign =true;
+
+                    log.info("Reassign Button disabled : {}",disableReassign);
+                }
+
+            }
+
+            else
+            {
+                disableReassign = true;
+
+                log.info("Reassign Button disabled : {}",disableReassign);
+            }
 
         }
 
