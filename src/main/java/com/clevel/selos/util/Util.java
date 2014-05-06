@@ -411,6 +411,23 @@ public class Util implements Serializable {
     	}
     }
 
+    public static int parseInt(Object input, int defaultValue){
+        if(input == null)
+            return defaultValue;
+        else if (input instanceof Integer)
+            return (Integer) input;
+        else {
+            String inputStr = input.toString();
+            if(isEmpty(inputStr))
+                return defaultValue;
+            try{
+                return Integer.parseInt(inputStr);
+            }catch (ClassCastException e){
+                return defaultValue;
+            }
+        }
+    }
+
     public static String parseString(Object input, String defaultValue){
         if(input == null)
             return defaultValue;
