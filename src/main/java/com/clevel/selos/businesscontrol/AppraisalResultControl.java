@@ -150,8 +150,9 @@ public class AppraisalResultControl extends BusinessControl {
             log.debug("-- NewCollateralViewList.size()[{}]", 0);
             log.debug("-- NewCollateralList.size()[{}]", newCollateralList.size());
             for (NewCollateral newCollateral : newCollateralList){
+                log.debug("-- NewCollateral.id[{}] ", newCollateral.getId());
                 newCollateralDAO.delete(newCollateral);
-                log.debug("-- NewCollateral.id[{}] deleted", newCollateral.getId());
+                log.debug("-- deleted");
             }
 //            newCollateralDAO.delete(newCollateralList);
         } else {
