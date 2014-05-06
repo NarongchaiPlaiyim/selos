@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.ApprovalHistoryDAO;
 import com.clevel.selos.dao.working.FeeDetailDAO;
@@ -14,6 +15,7 @@ import com.clevel.selos.integration.brms.model.response.PricingInterest;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.relation.PotentialColToTCGCol;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
@@ -113,6 +115,8 @@ public class Decision extends BaseController {
     private ProductProgramDAO productProgramDAO;
     @Inject
     private FeeDetailDAO feeDetailDAO;
+    @Inject
+    private PotentialColToTCGColDAO potentialColToTCGColDAO;
 
     //Transform
     @Inject
@@ -218,7 +222,9 @@ public class Decision extends BaseController {
     private List<PotentialCollateral> potentialCollList;
     private List<PotentialCollateralView> potentialCollViewList;
     private List<CollateralType> collateralTypeList;
-    private List<CollateralTypeView> collateralTypeViewList;
+//    private List<CollateralTypeView> collateralTypeViewList;
+    private List<CollateralTypeView> headCollTypeViewList;
+    private List<PotentialColToTCGCol> potentialColToTCGColList;
     private List<SubCollateralType> subCollateralTypeList;
     private List<SubCollateralTypeView> subCollateralTypeViewList;
     private List<CustomerInfoView> collateralOwnerUwAllList;
@@ -356,6 +362,7 @@ public class Decision extends BaseController {
         // load and generate sequence number ProposeCreditDetail
         //todo:this
 //        commonProposeCreditList = creditFacProposeControl.findAndGenerateSeqProposeCredits(decisionView.getApproveCreditList(), decisionView.getExtBorrowerComCreditList(), workCaseId);
+        commonProposeCreditList = creditFacProposeControl.getProposeCreditFromCreditAndExisting(decisionView.getApproveCreditList(), decisionView.getExtBorrowerComCreditList(), workCaseId);
         int lastSeqNumber = creditFacProposeControl.getLastSeqNumberFromProposeCredit(commonProposeCreditList);
         if (lastSeqNumber > 1) {
             seqNumber = lastSeqNumber + 1;
@@ -411,7 +418,8 @@ public class Decision extends BaseController {
         potentialCollList = potentialCollateralDAO.findAll();
         potentialCollViewList = potentialCollateralTransform.transformToView(potentialCollList);
         collateralTypeList = collateralTypeDAO.findAll();
-        collateralTypeViewList = collateralTypeTransform.transformToView(collateralTypeList);
+//        collateralTypeViewList = collateralTypeTransform.transformToView(collateralTypeList);
+        headCollTypeViewList = collateralTypeTransform.transformToView(collateralTypeDAO.findAll());
         // ================================================== //
 
         // ========== Sub Collateral Dialog ========== //
@@ -875,10 +883,33 @@ public class Decision extends BaseController {
     // ==================== Approve Collateral - Actions ==================== //
     public void onEditApproveCollateral() {
         log.debug("onEditApproveCollateral() rowIndexCollateral: {}, selectedApproveCollateral: {}", rowIndexCollateral, selectedApproveCollateral);
+
+        if (selectedApproveCollateral.getNewCollateralHeadViewList() != null && selectedApproveCollateral.getNewCollateralHeadViewList().size() > 0) {
+            for (NewCollateralHeadView newCollHeadEdit : selectedApproveCollateral.getNewCollateralHeadViewList()) {
+                if (newCollHeadEdit.getPotentialCollateral().getId() != 0) {
+                    log.info("onChangePotentialCollateralType ::: newCollateralHeadView.getPotentialCollateral().getId() : {}", newCollHeadEdit.getPotentialCollateral().getId());
+//                    headCollTypeList = new ArrayList<PotentialColToTCGCol>();
+                    potentialColToTCGColList = new ArrayList<PotentialColToTCGCol>();
+                    PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(newCollHeadEdit.getPotentialCollateral().getId());
+                    if (potentialCollateral != null) {
+                        log.info("potentialCollateralDAO.findById ::::: {}", potentialCollateral);
+                        //*** Get TCG Collateral  List from Potential Collateral    ***//
+                        potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(potentialCollateral);
+                        if (potentialColToTCGColList == null) {
+                            potentialColToTCGColList = new ArrayList<PotentialColToTCGCol>();
+                        }
+                        log.info("onChangePotentialCollateralType ::: potentialColToTCGColList size : {}", potentialColToTCGColList.size());
+                        newCollHeadEdit.setTcgCollateralType(newCollHeadEdit.getTcgCollateralType());
+                    }
+                }
+            }
+        }
+
         if (selectedApproveCollateral.getProposeCreditDetailViewList() != null && selectedApproveCollateral.getProposeCreditDetailViewList().size() > 0) {
             // set selected credit type items (check/uncheck)
             selectedCollateralCrdTypeItems = selectedApproveCollateral.getProposeCreditDetailViewList();
         }
+        commonProposeCreditList = creditFacProposeControl.setNoFlagForCollateralRelateCredit(selectedApproveCollateral, commonProposeCreditList, decisionView.getNewCreditFacilityViewId());
         collateralCreditTypeList = proposeCreditDetailTransform.copyToNewViews(commonProposeCreditList, false);
         flagComs = false;
         log.info("selectedApproveCollateral.isComs: {}", selectedApproveCollateral.isComs());
@@ -886,6 +917,69 @@ public class Decision extends BaseController {
             flagComs = true;
         }
         modeEditCollateral = true;
+    }
+
+    public void onChangeHeadCollType(NewCollateralHeadView newCollateralHeadView) {
+        log.info("onChangeHeadCollType :: ");
+        if (newCollateralHeadView.getHeadCollType().getId() != 0) {
+            CollateralType collateralType = collateralTypeDAO.findById(newCollateralHeadView.getHeadCollType().getId());
+            List<SubCollateralType> subCollateralTypeResult = subCollateralTypeDAO.findByHeadAndSubColDefaultType(collateralType);
+            if(subCollateralTypeResult != null && subCollateralTypeResult.size() > 0){
+                SubCollateralType subCollateralType = subCollateralTypeDAO.findById(subCollateralTypeResult.get(0).getId());
+                newCollateralHeadView.setSubCollType(subCollateralType);
+            }else{
+                newCollateralHeadView.setSubCollType(null);
+            }
+        }
+    }
+
+    //TODO change to tcgCollateralType for sub head
+    public void onChangeCollTypeLTV(NewCollateralHeadView newCollateralHeadView) {
+        /*if (!flagComs) {
+            if (newCollateralHeadView.getPotentialCollateral().getId() != 0) {
+                log.info("onChangePotentialCollateralType ::: newCollateralHeadView.getPotentialCollateral().getId() : {}", newCollateralHeadView.getPotentialCollateral().getId());
+
+                PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(newCollateralHeadView.getPotentialCollateral().getId());
+
+                if (potentialCollateral != null) {
+                    log.info("potentialCollateralDAO.findById ::::: {}", potentialCollateral);
+
+                    /*//*** Get TCG Collateral  List from Potential Collateral    ***//*/
+                    headCollTypeList = potentialColToTCGColDAO.getListPotentialColToTCGCol(potentialCollateral);
+
+                    if (headCollTypeList == null) {
+                        headCollTypeList = new ArrayList<PotentialColToTCGCol>();
+                    }
+
+                    log.info("onChangePotentialCollateralType ::: potentialColToTCGColList size : {}", headCollTypeList.size());
+                }
+            }
+            log.debug("onChangeCollTypeLTV ::; {}", newCollateralHeadView.getTcgCollateralType().getId());
+            TCGCollateralType headType = tcgCollateralTypeDAO.findById(newCollateralHeadView.getTcgCollateralType().getId());
+            newCollateralHeadView.setTcgHeadCollType(headType);
+        }*/
+    }
+
+    public void onChangePotentialCollateralType(NewCollateralHeadView newCollateralHeadView) {
+        if (newCollateralHeadView.getPotentialCollateral().getId() != 0) {
+            log.info("onChangePotentialCollateralType ::: newCollateralHeadView.getPotentialCollateral().getId() : {}", newCollateralHeadView.getPotentialCollateral().getId());
+            potentialColToTCGColList = new ArrayList<PotentialColToTCGCol>();
+
+            PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(newCollateralHeadView.getPotentialCollateral().getId());
+
+            if (potentialCollateral != null) {
+                log.info("potentialCollateralDAO.findById ::::: {}", potentialCollateral);
+
+                //*** Get TCG Collateral  List from Potential Collateral    ***//
+                potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(potentialCollateral);
+
+                if (potentialColToTCGColList == null) {
+                    potentialColToTCGColList = new ArrayList<PotentialColToTCGCol>();
+                }
+
+                log.info("onChangePotentialCollateralType ::: potentialColToTCGColList size : {}", potentialColToTCGColList.size());
+            }
+        }
     }
 
     public void onDeleteApproveCollateral() {
@@ -1792,12 +1886,29 @@ public class Decision extends BaseController {
         this.potentialCollViewList = potentialCollViewList;
     }
 
-    public List<CollateralTypeView> getCollateralTypeViewList() {
-        return collateralTypeViewList;
+//    public List<CollateralTypeView> getCollateralTypeViewList() {
+//        return collateralTypeViewList;
+//    }
+//
+//    public void setCollateralTypeViewList(List<CollateralTypeView> collateralTypeViewList) {
+//        this.collateralTypeViewList = collateralTypeViewList;
+//    }
+
+
+    public List<CollateralTypeView> getHeadCollTypeViewList() {
+        return headCollTypeViewList;
     }
 
-    public void setCollateralTypeViewList(List<CollateralTypeView> collateralTypeViewList) {
-        this.collateralTypeViewList = collateralTypeViewList;
+    public void setHeadCollTypeViewList(List<CollateralTypeView> headCollTypeViewList) {
+        this.headCollTypeViewList = headCollTypeViewList;
+    }
+
+    public List<PotentialColToTCGCol> getPotentialColToTCGColList() {
+        return potentialColToTCGColList;
+    }
+
+    public void setPotentialColToTCGColList(List<PotentialColToTCGCol> potentialColToTCGColList) {
+        this.potentialColToTCGColList = potentialColToTCGColList;
     }
 
     public List<SubCollateralTypeView> getSubCollateralTypeViewList() {

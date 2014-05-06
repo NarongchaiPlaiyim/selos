@@ -977,10 +977,10 @@ public class BankStmtControl extends BusinessControl {
             for (BankStmtDetailView detailView : getLastSixMonthBankStmtDetails(tmbBankStmtView.getBankStmtDetailViewList())) {
                 if (isCountIncome) {
                     sumChqRetAmtCountIncomeOfLastSizM = Util.add(sumChqRetAmtCountIncomeOfLastSizM, detailView.getChequeReturnAmount());
+                    sumNetUWofLastSixM = Util.add(sumNetUWofLastSixM, detailView.getCreditAmountUW());
+                    sumNetBDMofLastSixM = Util.add(sumNetBDMofLastSixM, detailView.getCreditAmountBDM());
                 }
 
-                sumNetUWofLastSixM = Util.add(sumNetUWofLastSixM, detailView.getCreditAmountUW());
-                sumNetBDMofLastSixM = Util.add(sumNetBDMofLastSixM, detailView.getCreditAmountBDM());
             }
 
         }
@@ -999,10 +999,10 @@ public class BankStmtControl extends BusinessControl {
             for (BankStmtDetailView detailView : getLastSixMonthBankStmtDetails(othBankStmtView.getBankStmtDetailViewList())) {
                 if (isCountIncome) {
                     sumChqRetAmtCountIncomeOfLastSizM = Util.add(sumChqRetAmtCountIncomeOfLastSizM, detailView.getChequeReturnAmount());
+                    sumNetUWofLastSixM = Util.add(sumNetUWofLastSixM, detailView.getCreditAmountUW());
+                    sumNetBDMofLastSixM = Util.add(sumNetBDMofLastSixM, detailView.getCreditAmountBDM());
                 }
 
-                sumNetUWofLastSixM = Util.add(sumNetUWofLastSixM, detailView.getCreditAmountUW());
-                sumNetBDMofLastSixM = Util.add(sumNetBDMofLastSixM, detailView.getCreditAmountBDM());
             }
 
         }
