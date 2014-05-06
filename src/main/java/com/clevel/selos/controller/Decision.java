@@ -300,6 +300,7 @@ public class Decision extends BaseController {
     @PostConstruct
     public void onCreation() {
         initial();
+        loadFieldControl(workCaseId, Screen.DECISION);
 
         decisionView = decisionControl.getDecisionView(workCaseId);
         if (decisionView.getId() == 0) {
@@ -1284,18 +1285,19 @@ public class Decision extends BaseController {
 
         try {
 
-            /*if (roleUW) {
+            if (roleUW) {
                 // Delete List
-                decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
+                //decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
                 // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
-                decisionView = decisionControl.saveApproveAndConditionData(decisionView, workCase);
+                //decisionView = decisionControl.saveApproveAndConditionData(decisionView, workCase);
                 // Calculate Total Approve
-                decisionControl.calculateTotalApprove(decisionView);
+                //decisionControl.calculateTotalApprove(decisionView);
                 // Save Total Approve to Decision
                 decisionControl.saveDecision(decisionView, workCase);
 
                 exSummaryControl.calForDecision(workCaseId);
-            }*/
+                fullApplicationControl.calculateApprovedPricingDOA(workCase.getId());
+            }
 
             //Check valid step to Save Approval
             HttpSession session = FacesUtil.getSession(true);

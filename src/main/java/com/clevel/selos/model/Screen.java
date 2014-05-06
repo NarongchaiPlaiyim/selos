@@ -17,6 +17,9 @@ public enum Screen {
     CUSTOMER_INFO_SUMMARY(3002),
     CUSTOMER_INFO_INDIVIDUAL(3003),
     CUSTOMER_INFO_JURISTIC(3004),
+
+    //Decision
+    DECISION(2920),
     
     //Step 301 Screen //TODO
     InsuranceInfo(3100),

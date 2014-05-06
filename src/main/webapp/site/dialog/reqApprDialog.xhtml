@@ -5,7 +5,7 @@
 	xmlns:p="http://primefaces.org/ui"
     xmlns:clv="http://clevel.com/ui">
 
-<p:panel id="reqApprDialogPanel" styleClass="panel-dialog" rendered="#{headerController.checkButton('Request Appraisal')}">
+<p:panel id="reqApprDialogPanel" styleClass="panel-dialog">
     <table id="table_content" class="content_table_form" style="font-size: 10px;">
     <tr>
         <td class="left" colspan="2">
@@ -193,10 +193,9 @@
             <p:commandButton id="btnSubmitReqAppr"
                              value="#{msg.get('app.button.submit')}"
                              styleClass="medium"
-                             onclick="blockReqApprDialogPanel.show()"
                              process="@form"
                              actionListener="#{headerController.onSubmitRequestAppraisal()}"
-                             oncomplete="handleRequestAppraisal(xhr, status, args); blockReqApprDialogPanel.hide();"
+                             oncomplete="handleRequestAppraisal(xhr, status, args);"
                              update=":frmMain:reqApprDialogPanel, :frmMain:msgBoxBaseMessagePanel"/>
 
             <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="medium"
@@ -205,14 +204,12 @@
                              oncomplete="reqApprDlg.hide()">
                 <p:resetInput target=":frmMain:reqApprDialogPanel" />
             </p:commandButton>
-
         </td>
     </tr>
     </table>
-
 </p:panel>
-<p:blockUI widgetVar="blockReqApprDialogPanel" block="reqApprDialogPanel">
-    LOADING<br />
+<p:blockUI block="reqApprDialogPanel" trigger=":frmMain:btnSubmitReqAppr">
+    <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>
 </ui:composition>
