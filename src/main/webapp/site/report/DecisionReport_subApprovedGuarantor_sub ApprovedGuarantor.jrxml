@@ -31,42 +31,20 @@
 		<fieldDescription><![CDATA[guaranteeAmount]]></fieldDescription>
 	</field>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="23" splitType="Stretch">
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="640983d8-bdcf-47a5-b6af-3ecc85edf855" style="detail" stretchType="RelativeToBandHeight" x="186" y="0" width="40" height="19"/>
+				<reportElement uuid="640983d8-bdcf-47a5-b6af-3ecc85edf855" style="detail" stretchType="RelativeToBandHeight" x="171" y="0" width="55" height="23"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement textAlignment="Left"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="865fdb05-b4a6-4c86-9f4c-a9a9ec7bf3e9" style="detail" stretchType="RelativeToBandHeight" x="102" y="9" width="84" height="10"/>
-				<box>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement textAlignment="Left"/>
-				<textFieldExpression><![CDATA[$F{creditFacilityView}.equals( null ) ? "" : $F{creditFacilityView}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="65b885e2-ac5d-4c1b-bd07-e1fd91aa2ad0" style="detail" stretchType="RelativeToBandHeight" x="49" y="9" width="49" height="10"/>
-				<box>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement textAlignment="Left"/>
-				<textFieldExpression><![CDATA[$F{accountNumber}.equals( null ) ? "Suf.:" : "Suf.:" +$F{accountNumber}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="6152bece-b8fa-42fb-afc5-83d92b4564cb" style="detail" stretchType="RelativeToBandHeight" x="226" y="0" width="63" height="19"/>
+				<reportElement uuid="865fdb05-b4a6-4c86-9f4c-a9a9ec7bf3e9" style="detail" stretchType="RelativeToBandHeight" x="87" y="9" width="84" height="14"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0"/>
@@ -74,22 +52,46 @@
 					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Left">
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{creditFacilityView}.equals( null ) ? "" : $F{creditFacilityView}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="65b885e2-ac5d-4c1b-bd07-e1fd91aa2ad0" style="detail" stretchType="RelativeToBandHeight" x="44" y="9" width="43" height="14"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{accountSuf}.equals( null ) ? "Suf.:" : "Suf.:" +$F{accountSuf}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="6152bece-b8fa-42fb-afc5-83d92b4564cb" style="detail" stretchType="RelativeToBandHeight" x="226" y="0" width="63" height="23"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{guaranteeAmount}.equals( null ) ? "" : "Guarantee Amount: " + $F{guaranteeAmount}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="07ae2a57-c5cf-4112-b31b-c5850887562c" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="94" height="11"/>
+				<reportElement uuid="07ae2a57-c5cf-4112-b31b-c5850887562c" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="87" height="9"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement textAlignment="Left"/>
+				<textElement textAlignment="Left" verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[$F{accountName}.equals( null ) ? "" : $F{accountName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="f81c28b8-994e-4c5a-aae0-fa8f6c0241c4" style="detail" stretchType="RelativeToBandHeight" x="102" y="0" width="84" height="11"/>
+				<reportElement uuid="f81c28b8-994e-4c5a-aae0-fa8f6c0241c4" style="detail" stretchType="RelativeToBandHeight" x="87" y="0" width="84" height="9"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0"/>
@@ -100,14 +102,14 @@
 				<textFieldExpression><![CDATA[$F{productProgramView}.equals( null ) ? "" : $F{productProgramView}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="62c398d7-2596-4261-84a2-7cb4e9f4b9af" style="detail" stretchType="RelativeToBandHeight" x="0" y="9" width="49" height="10"/>
+				<reportElement uuid="62c398d7-2596-4261-84a2-7cb4e9f4b9af" style="detail" stretchType="RelativeToBandHeight" x="0" y="9" width="44" height="14"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement textAlignment="Left"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{accountNumber}.equals( null ) ? "Acc No.:" : "Acc No " +$F{accountNumber}]]></textFieldExpression>
 			</textField>
 		</band>

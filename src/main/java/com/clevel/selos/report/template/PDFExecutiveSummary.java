@@ -52,6 +52,9 @@ public class PDFExecutiveSummary implements Serializable {
     @Inject
     ExSummary exSummary;
 
+    @Inject
+    private AppHeaderView appHeaderView;
+
 //    long workCaseId = 147;
 
     long workCaseId;
@@ -418,5 +421,62 @@ public class PDFExecutiveSummary implements Serializable {
             log.debug("exSumReasonViews in Method fillUWDecision is Null. {}",exSumReasonViews);
         }
         return uwDecisionExSumReport;
+    }
+
+    public HeaderReport fillHeader(){
+        HeaderReport report = new HeaderReport();
+
+        HttpSession session = FacesUtil.getSession(true);
+        appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
+
+        if (!Util.isNull(appHeaderView)){
+            log.debug("--Header. {}",appHeaderView);
+            report.setCaseStatus(Util.checkNullString(appHeaderView.getCaseStatus()));
+            report.setBdmName(Util.checkNullString(appHeaderView.getBdmName()));
+            report.setBdmPhoneNumber(Util.checkNullString(appHeaderView.getBdmPhoneNumber()));
+            report.setBdmPhoneExtNumber(Util.checkNullString(appHeaderView.getBdmPhoneExtNumber()));
+            report.setBdmZoneName(Util.checkNullString(appHeaderView.getBdmZoneName()));
+            report.setBdmRegionName(Util.checkNullString(appHeaderView.getBdmRegionName()));
+            report.setSubmitDate(Util.checkNullString(appHeaderView.getSubmitDate()));
+            report.setUwName(Util.checkNullString(appHeaderView.getUwName()));
+            report.setUwPhoneNumber(Util.checkNullString(appHeaderView.getUwPhoneNumber()));
+            report.setUwPhoneExtNumber(Util.checkNullString(appHeaderView.getUwPhoneExtNumber()));
+            report.setUwTeamName(Util.checkNullString(appHeaderView.getUwTeamName()));
+            report.setRequestType(Util.checkNullString(appHeaderView.getRequestType()));
+            report.setAppNo(Util.checkNullString(appHeaderView.getAppNo()));
+            report.setAppRefNo(Util.checkNullString(appHeaderView.getAppRefNo()));
+            report.setAppRefDate(Util.checkNullString(appHeaderView.getAppRefDate()));
+            report.setProductGroup(Util.checkNullString(appHeaderView.getProductGroup()));
+            report.setRefinance(Util.checkNullString(appHeaderView.getRefinance()));
+
+
+            log.debug("--getBorrowerHeaderViewList Size. {}",appHeaderView.getBorrowerHeaderViewList().size());
+
+            for (int i = 0;i < appHeaderView.getBorrowerHeaderViewList().size() && i < 5; i++){
+                log.debug("--i. {}",i);
+                switch (i){
+                    case 0 : report.setBorrowerName(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                        report.setPersonalId(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                        break;
+                    case 1 : report.setBorrowerName2(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                        report.setPersonalId2(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                        break;
+                    case 2 : report.setBorrowerName3(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                        report.setPersonalId3(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                        break;
+                    case 3 : report.setBorrowerName4(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                        report.setPersonalId4(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                        break;
+                    case 4 : report.setBorrowerName5(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                        report.setPersonalId5(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                        break;
+                }
+            }
+        } else {
+            log.debug("--Header is Null. {}",appHeaderView);
+        }
+
+
+        return report;
     }
 }

@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OfferLetterReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7807b48b-7db8-442b-aba7-a40737540d02">
-	<property name="ireport.zoom" value="1.1000000000000065"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OfferLetterReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7807b48b-7db8-442b-aba7-a40737540d02">
+	<property name="ireport.zoom" value="1.4641000000000113"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="672"/>
+	<property name="ireport.y" value="150"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["D:\\ProjectSELOS\\selos\\src\\main\\webapp\\site\\report\\"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="path" class="java.lang.String"/>
+	<parameter name="fillApprovedCredit" class="java.util.Collection"/>
+	<parameter name="fillGuarantor" class="java.util.Collection"/>
+	<parameter name="fillFollowCondition" class="java.util.Collection"/>
 	<pageHeader>
 		<band height="73">
 			<image>
@@ -96,8 +100,8 @@
 			</staticText>
 			<subreport>
 				<reportElement uuid="3ce61c4e-8b63-4df7-a9b8-1a20704b8f40" x="0" y="17" width="555" height="22"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource()]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "OfferLetterReport_ApprovedDetail.jasper"]]></subreportExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillApprovedCredit})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{path} + "OfferLetterReport_ApprovedDetail.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="90" splitType="Prevent">
@@ -337,13 +341,13 @@
 			</staticText>
 			<subreport>
 				<reportElement uuid="13f2dc08-ce12-4a54-9e5f-55e5a15e09c4" x="0" y="13" width="555" height="13"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource()]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "OfferLetterReport_Guarantor.jasper"]]></subreportExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillGuarantor})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{path} + "OfferLetterReport_Guarantor.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="28" splitType="Prevent">
 			<staticText>
-				<reportElement uuid="261b3ab3-4dd6-4cc5-8d83-3316262bb89c" stretchType="RelativeToBandHeight" x="53" y="0" width="502" height="14"/>
+				<reportElement uuid="261b3ab3-4dd6-4cc5-8d83-3316262bb89c" x="53" y="0" width="502" height="14"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -356,13 +360,8 @@
 				</textElement>
 				<text><![CDATA[หากหลักประกันมีสิ่งปลูกสร้าง ท่านต้องทำประกันภัยตามมูลค่าที่แท้จริงของสิ่งปลูกสร้างนั้น โดยให้ธนาคารเป็นผู้รับผลประโยชน์]]></text>
 			</staticText>
-			<subreport>
-				<reportElement uuid="72829507-6e7a-4f40-9257-00be630887e1" x="0" y="14" width="555" height="14"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource()]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "OfferLetterReport_Condition.jasper"]]></subreportExpression>
-			</subreport>
 			<staticText>
-				<reportElement uuid="b8d63d3a-9b65-48ce-bda1-662f84f89192" stretchType="RelativeToBandHeight" x="0" y="0" width="53" height="14"/>
+				<reportElement uuid="b8d63d3a-9b65-48ce-bda1-662f84f89192" x="0" y="0" width="53" height="14"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -375,10 +374,40 @@
 				</textElement>
 				<text><![CDATA[การประกันภัย]]></text>
 			</staticText>
+			<staticText>
+				<reportElement uuid="d565da0f-0c66-48e5-a36e-d6fbdcbfdbe6" stretchType="RelativeToBandHeight" x="0" y="14" width="53" height="14"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<text><![CDATA[เงื่อนไขติด
+ตามหลัง
+อนุมัติสินเชื่อ]]></text>
+			</staticText>
+			<frame>
+				<reportElement uuid="23933e25-32fe-40bc-b92d-02120339a960" x="53" y="14" width="502" height="14"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<subreport>
+					<reportElement uuid="72829507-6e7a-4f40-9257-00be630887e1" x="0" y="0" width="502" height="14"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillFollowCondition})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "OfferLetterReport_Condition.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
 		</band>
 		<band height="68" splitType="Prevent">
 			<staticText>
-				<reportElement uuid="b7a25a09-815d-4cf8-915f-0e09f10d66ae" stretchType="RelativeToBandHeight" x="0" y="0" width="53" height="14"/>
+				<reportElement uuid="b7a25a09-815d-4cf8-915f-0e09f10d66ae" x="0" y="0" width="53" height="14"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -392,7 +421,7 @@
 				<text><![CDATA[เงื่อนไขอื่นๆ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="c5ff966b-c65b-4fc2-97a7-6f0b0ae9a2aa" stretchType="RelativeToBandHeight" x="53" y="0" width="502" height="14"/>
+				<reportElement uuid="c5ff966b-c65b-4fc2-97a7-6f0b0ae9a2aa" x="53" y="0" width="502" height="14"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>

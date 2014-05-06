@@ -3,6 +3,24 @@
 	<property name="ireport.zoom" value="1.3310000000000013"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<field name="subCollateralTypeName" class="java.lang.String">
+		<fieldDescription><![CDATA[subCollateralTypeName]]></fieldDescription>
+	</field>
+	<field name="titleDeed" class="java.lang.String">
+		<fieldDescription><![CDATA[titleDeed]]></fieldDescription>
+	</field>
+	<field name="collateralOwnerUW" class="java.lang.String">
+		<fieldDescription><![CDATA[collateralOwnerUW]]></fieldDescription>
+	</field>
+	<field name="mortgageList" class="java.lang.String">
+		<fieldDescription><![CDATA[mortgageList]]></fieldDescription>
+	</field>
+	<field name="mortgageValue" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[mortgageValue]]></fieldDescription>
+	</field>
+	<field name="address" class="java.lang.String">
+		<fieldDescription><![CDATA[address]]></fieldDescription>
+	</field>
 	<columnHeader>
 		<band height="24">
 			<staticText>
@@ -95,7 +113,7 @@
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top">
@@ -121,6 +139,7 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$F{subCollateralTypeName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 				<reportElement uuid="e97574d9-bef3-4cd4-b13d-9d50701e03bd" mode="Opaque" x="132" y="0" width="59" height="13" backcolor="#FFFFFF"/>
@@ -134,6 +153,7 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$F{mortgageList}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="f9a5555f-9ce0-423a-a891-ca36cfb0de1b" mode="Opaque" x="191" y="0" width="91" height="13" backcolor="#FFFFFF"/>
@@ -147,6 +167,7 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$F{mortgageValue}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 				<reportElement uuid="ed129a32-c8db-4fad-a156-7d8dae7803ec" mode="Opaque" x="282" y="0" width="111" height="13" backcolor="#FFFFFF"/>
@@ -160,6 +181,7 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$F{collateralOwnerUW}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 				<reportElement uuid="a236f938-fb8f-4c13-acec-345e893f0399" mode="Opaque" x="393" y="0" width="65" height="13" backcolor="#FFFFFF"/>
@@ -173,6 +195,7 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$F{titleDeed}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 				<reportElement uuid="76d94f67-53a3-40f5-93c6-2ac18635a128" mode="Opaque" x="458" y="0" width="97" height="13" backcolor="#FFFFFF"/>
@@ -186,11 +209,12 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="e615d516-074b-4878-9f16-f8b7478021e6" stretchType="RelativeToBandHeight" x="0" y="0" width="53" height="13"/>
 				<box>
-					<topPen lineWidth="0.5"/>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>

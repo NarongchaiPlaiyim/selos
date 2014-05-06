@@ -70,6 +70,21 @@
                                                ajax="false"/>
                           </td>
                       </tr>
+                      <tr>
+                          <td class="title" style="width: 150px">
+                              <p:outputLabel value="OfferLetter" />
+                          </td>
+                          <td style="width: 230px">
+                              <h:outputText value="#{report.reportView.nameReportOfferLetter}" />
+                          </td>
+                          <td class="right">
+                              <p:commandButton id="dlgPrintReportOfferLetterBtn"
+                                               value="#{msg.get('app.button.print')}"
+                                               styleClass="small"
+                                               actionListener="#{report.onPrintOfferletter()}"
+                                               ajax="false"/>
+                          </td>
+                      </tr>
                   </table>
                </td>
            </tr>

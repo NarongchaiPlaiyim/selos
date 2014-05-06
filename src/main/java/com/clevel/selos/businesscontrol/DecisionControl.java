@@ -606,4 +606,16 @@ public class DecisionControl extends BusinessControl {
         }
     }
 
+    //Get value pass to PDFOfferLetter by Bird
+    public BigDecimal getMRRValue(){
+        return Util.convertNullToZERO(getMRRValue());
+    }
+
+    public BigDecimal getMLRValue(){
+        return Util.convertNullToZERO(getMLRValue());
+    }
+
+    public BigDecimal getMORValue(){
+        return Util.convertNullToZERO(getMORValue());
+    }
 }
