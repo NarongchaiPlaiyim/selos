@@ -132,25 +132,52 @@ public class AppraisalResultControl extends BusinessControl {
         }
         log.debug("onSaveAppraisalResult ::: newCreditFacility : {}", newCreditFacility);
 
-        newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByTypeA(newCreditFacility));
+        List<NewCollateral> newCollateralListTypeP = null;
+        List<NewCollateral> newCollateralListTypeA = null;
 
-        if(newCollateralList.size() > 0){
-            log.debug("onSaveAppraisalResult ::: clearCollateralData");
-            clearDB(newCollateralList);
-            log.debug("onSaveAppraisalResult ::: newCollateralList for delete : {}", newCollateralList);
+        newCollateralListTypeP = Util.safetyList(newCollateralDAO._findNewCollateralByTypeP(newCreditFacility));
+        newCollateralListTypeA = Util.safetyList(newCollateralDAO.findNewCollateralByTypeA(newCreditFacility)); //normal query
+
+        newCollateralList = new ArrayList<NewCollateral>();
+        if(!Util.isZero(newCollateralListTypeP.size())){
+            newCollateralList.addAll(newCollateralListTypeP);
+        }
+        if(!Util.isZero(newCollateralListTypeA.size())){
+            newCollateralList.addAll(newCollateralListTypeA);
+        }
+
+        if(Util.isNull(appraisalView.getNewCollateralViewList()) || Util.isZero(appraisalView.getNewCollateralViewList().size())){
+            log.debug("-- NewCollateralViewList.size()[{}]", 0);
+            log.debug("-- NewCollateralList.size()[{}]", newCollateralList.size());
+            newCollateralDAO.delete(newCollateralList);
+        } else {
+            log.debug("-- NewCollateralList.size()[{}]", newCollateralList.size());
             newCollateralDAO.delete(newCollateralList);
 
             newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
             log.debug("onSaveAppraisalResult ::: saveCollateralData : newCollateralViewList : {}", newCollateralViewList);
             insertToDB(newCollateralViewList, currentUser);
             log.debug("onSaveAppraisalResult ::: newCollateralList for save : {}", newCollateralList);
-            updateWRKNewColl(newCollateralViewList, currentUser);
-        } else {
-            newCollateralDAO.delete(newCollateralList);
-            newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
-            insertToDB(newCollateralViewList, currentUser);
-            updateWRKNewColl(newCollateralViewList, currentUser);
         }
+
+
+//        if(newCollateralList.size() > 0){
+//            log.debug("onSaveAppraisalResult ::: clearCollateralData");
+//            clearDB(newCollateralList);
+//            log.debug("onSaveAppraisalResult ::: newCollateralList for delete : {}", newCollateralList);
+//            newCollateralDAO.delete(newCollateralList);
+//
+//            newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
+//            log.debug("onSaveAppraisalResult ::: saveCollateralData : newCollateralViewList : {}", newCollateralViewList);
+//            insertToDB(newCollateralViewList, currentUser);
+//            log.debug("onSaveAppraisalResult ::: newCollateralList for save : {}", newCollateralList);
+//            updateWRKNewColl(newCollateralViewList, currentUser);
+//        } else {
+//            newCollateralDAO.delete(newCollateralList);
+//            newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
+//            insertToDB(newCollateralViewList, currentUser);
+//            updateWRKNewColl(newCollateralViewList, currentUser);
+//        }
 
         log.info("-- onSaveAppraisalResult end");
     }
