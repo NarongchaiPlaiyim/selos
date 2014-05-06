@@ -1,9 +1,11 @@
 package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.CompletedCasesWKItems;
 import com.clevel.selos.model.db.master.StatusIdBasedOnStepId;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
@@ -19,6 +21,9 @@ public class CompletedCasesWKItemsDAO extends GenericDAO<CompletedCasesWKItems,S
     @Inject
     @SELOS
     Logger log;
+
+    @Inject
+    WorkCasePrescreenDAO workCasePrescreenDAO;
 
     public CompletedCasesWKItemsDAO()
     {
@@ -133,15 +138,24 @@ public class CompletedCasesWKItemsDAO extends GenericDAO<CompletedCasesWKItems,S
 
             Iterator iterator = completedCasesWKItemsList.iterator();
 
+            Set appNumbersSet = new HashSet();
+
             while(iterator.hasNext() == true)
             {
-                CompletedCasesWKItems completedCasesWKItems = new CompletedCasesWKItems();
+                CompletedCasesWKItems completedCasesWKItems = (CompletedCasesWKItems)iterator.next();
 
-                completedCasesWKItems = (CompletedCasesWKItems)iterator.next();
+                appNumbersSet.add(completedCasesWKItems.getApplicationNo());
 
-                log.info("create date::::: is : {} ",completedCasesWKItems.getCreatedate());
+                if(appnumberlist!=null && appnumberlist.size()>0)
+                {
+                    appnumberlist.remove(completedCasesWKItems.getApplicationNo());
+
+                    log.info("Remaining AppNumbers list size : {}, app numbers : {}"+appnumberlist.size(),appnumberlist.toString());
+                }
 
                 log.info("applicatin number :::::: is : {} ",completedCasesWKItems.getApplicationNo());
+
+                /*log.info("create date::::: is : {} ",completedCasesWKItems.getCreatedate());
 
                 log.info("at userteam id :::::: is : {} ",completedCasesWKItems.getAtUserTeamId());
 
@@ -162,11 +176,23 @@ public class CompletedCasesWKItemsDAO extends GenericDAO<CompletedCasesWKItems,S
                 log.info("requesttype id :::::: is : {} ",completedCasesWKItems.getRequesttypeid());
 
                 log.info(" wobnumber :::::: is : {} ",completedCasesWKItems.getWobnumber());
-                log.info(" complete date :::::: is : {} ",completedCasesWKItems.getCompletedate());
+                log.info(" complete date :::::: is : {} ",completedCasesWKItems.getCompletedate());*/
 
             }
 
+            log.info("completedCasesWKItemsList ::::::::::::{}", completedCasesWKItemsList.size()) ;
+
+            //log.info("completedCasesWorkItemsList elements are ::::::::: {}", completedCasesWKItemsList.toString());
+
+            //search in Prescreen
+            List<CompletedCasesWKItems> preScreenCases =  workCasePrescreenDAO.getCompletedCases(appnumberlist,statusid,startfromdate,starttodate,terminatefromdate,terminatetodate,appNumbersSet);
+
+            completedCasesWKItemsList.addAll(preScreenCases);
+
+            log.info("completedCasesWKItemsList after pre screen ::::::::::::{}", completedCasesWKItemsList.size()) ;
+
         }
+
         catch(Exception exception)
         {
               log.error("error : ",exception);

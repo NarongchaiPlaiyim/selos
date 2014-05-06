@@ -134,8 +134,7 @@
                             <td colspan="100%" style="color: red;">
                                 <p:commandButton value="Reassign"
                                                  id="reassignButtonId" styleClass="medium" onclick="reassignDlg.show()"
-                                                 readonly="#{reassignteamnames.selectedUserName eq 'ALL'}"
-                                                 disabled="#{reassignteamnames.selectedUserName eq 'ALL' or !param['frmMain:checkBoxId']}">
+                                                 disabled="#{reassignteamnames.disableReassign}">
                                         <p:resetInput target=":reassignDialog"></p:resetInput>
                                 </p:commandButton>
                                 <p:spacer width="20px;"/> </td>
@@ -167,7 +166,11 @@
                                     </p:column>
 
                                     <p:column headerText="" styleClass="center" style="width:22px;" >
-                                        <h:selectBooleanCheckbox id="checkBoxId"  onclick="onOneClick('frmMain:reassignButtonId',false);" disabled="false" value="#{reassignteamnames.checked[item.fwobnumber]}"/>
+
+                                        <h:selectBooleanCheckbox id="checkBoxId" disabled="#{item.locked eq 1}" value="#{reassignteamnames.checked[item.fwobnumber]}">
+                                            <p:ajax event="change" update=":frmMain:reassignButtonId" process="@this" listener="#{reassignteamnames.checkReassign}"/>
+                                            <!--<f:ajax event="change" execute="@this" render=":frmMain:reassignButtonId" listener="{reassignteamnames.checkReassign}"/>-->
+                                        </h:selectBooleanCheckbox>
                                     </p:column>
 
                                     <p:column headerText="Lock" styleClass="center" style="width:8px;" >
