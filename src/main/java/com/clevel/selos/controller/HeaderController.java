@@ -766,12 +766,15 @@ public class HeaderController implements Serializable {
         String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
         try {
-            messageHeader = "Information.";
-            message = "Return case success.";
+            fullApplicationControl.returnAADAdminByUW2(queueName, wobNumber, returnAADRemark, returnReasonId);
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.return.success");
+            showMessageRedirect();
         } catch (Exception ex) {
             log.error("Exception while return to aad committee : ", ex);
             messageHeader = "Exception.";
             message = Util.getMessageException(ex);
+            showMessageBox();
         }
     }
 

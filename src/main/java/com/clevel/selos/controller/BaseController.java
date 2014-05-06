@@ -1,10 +1,12 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
@@ -15,6 +17,9 @@ import java.util.List;
 public class BaseController implements Serializable {
     @Inject
     MandatoryFieldsControl mandatoryFieldsControl;
+    @SELOS
+    @Inject
+    Logger log;
 
     private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
     private final HashMap<String, FieldsControlView> dialogFieldMap = new HashMap<String, FieldsControlView>();
@@ -26,6 +31,7 @@ public class BaseController implements Serializable {
         dialogFieldMap.clear();
         for (FieldsControlView field : fields) {
             fieldMap.put(field.getFieldName(), field);
+            log.debug("Field Map ScreenId : [{}], WorkCaseId : [{}], fieldMap : [{}]", screenId, workCaseId, fieldMap);
         }
         for (FieldsControlView field : dialogFields) {
             dialogFieldMap.put(field.getFieldName(), field);
