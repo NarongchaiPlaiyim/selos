@@ -9,14 +9,14 @@ public enum Screen {
     PRESCREEN_RESULT(1400),
 
     //Full Application
-    //Basic Info
     BASIC_INFO(2100),
+    CUSTOMER_INFO_SUMMARY(2200),
     DBR_INFO(2830),
+//    CUSTOMER_INFO_INDIVIDUAL(3003),
+//    CUSTOMER_INFO_JURISTIC(3004),
 
-    //Customer Info
-    CUSTOMER_INFO_SUMMARY(3002),
-    CUSTOMER_INFO_INDIVIDUAL(3003),
-    CUSTOMER_INFO_JURISTIC(3004),
+    //Decision
+    DECISION(2920),
     
     //Step 301 Screen //TODO
     InsuranceInfo(3100),

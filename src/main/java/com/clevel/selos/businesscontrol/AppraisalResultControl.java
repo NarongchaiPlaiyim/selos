@@ -86,13 +86,24 @@ public class AppraisalResultControl extends BusinessControl {
         }
 
         appraisalView = new AppraisalView();
+
         if(!Util.isNull(appraisal)){
             newCollateralViewList = new ArrayList<NewCollateralView>();
             appraisalView = appraisalTransform.transformToView(appraisal, getCurrentUser());
             if(!Util.isNull(newCreditFacility)){
-//                newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByTypeP(newCreditFacility));//normal query
+                List<NewCollateral> newCollateralListTypeP = null;
+                List<NewCollateral> newCollateralListTypeA2 = null;
 
-                newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByTypeP2(newCreditFacility));
+                newCollateralListTypeP = Util.safetyList(newCollateralDAO.findNewCollateralByTypeP(newCreditFacility));//normal query
+                newCollateralListTypeA2 = Util.safetyList(newCollateralDAO.findNewCollateralByTypeA2(newCreditFacility));
+
+                newCollateralList = new ArrayList<NewCollateral>();
+                if(!Util.isZero(newCollateralListTypeP.size())){
+                    newCollateralList.addAll(newCollateralListTypeP);
+                }
+                if(!Util.isZero(newCollateralListTypeA2.size())){
+                    newCollateralList.addAll(newCollateralListTypeA2);
+                }
 
                 List<NewCollateral> tempNewCollateralList = new ArrayList<NewCollateral>();
                 for(NewCollateral newCollateral : newCollateralList){

@@ -122,8 +122,8 @@ public class FullApplicationControl extends BusinessControl {
         return userList;
     }
 
-    public void assignToABDM(String abdmUserId, String queueName, long workCaseId) throws Exception {
-        bpmExecutor.assignToABDM(workCaseId, queueName, abdmUserId, ActionCode.ASSIGN_TO_ABDM.getVal());
+    public void assignToABDM(String queueName, String wobNumber, String abdmUserId) throws Exception {
+        bpmExecutor.assignToABDM(queueName, wobNumber, abdmUserId, ActionCode.ASSIGN_TO_ABDM.getVal());
     }
 
     public void submitToZMPricing(String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, String submitRemark, String queueName, long workCaseId) throws Exception {
@@ -318,6 +318,32 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.submitCSSO(workCaseId, queueName, ghDecisionFlag, ActionCode.SUBMIT_CA.getVal());
 
         approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
+    }
+
+    public void submitFCashZM(String queueName, String wobNumber, long workCaseId) throws Exception {
+        String zmDecisionFlag = "A";
+        //WorkCase workCase;
+        ApprovalHistory approvalHistoryApprove = null;
+
+        if(workCaseId != 0){
+            //workCase = workCaseDAO.findById(workCaseId);
+            approvalHistoryApprove = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.PRICING_APPROVAL.value());
+            if(approvalHistoryApprove==null){
+                throw new Exception("Please make decision before submit.");
+            } else {
+                if(approvalHistoryApprove.getApproveDecision() != RadioValue.NOT_SELECTED.value()){
+                    zmDecisionFlag = approvalHistoryApprove.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
+                    approvalHistoryApprove.setSubmit(1);
+                    approvalHistoryApprove.setSubmitDate(new Date());
+                } else {
+                    throw new Exception("Please make decision before submit.");
+                }
+
+                bpmExecutor.submitFCashZM(queueName, wobNumber, zmDecisionFlag, ActionCode.SUBMIT_CA.getVal());
+
+                approvalHistoryDAO.persist(approvalHistoryApprove);
+            }
+        }
     }
 
     public void submitToUWFromCSSO(String queueName, long workCaseId) throws Exception {
@@ -727,6 +753,10 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.submitCase(queueName, wobNumber, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
     }
 
+    public void returnAADAdminByUW2(String queueName, String wobNumber, String remark, int reasonId) throws Exception{
+        bpmExecutor.returnCase(queueName, wobNumber, remark, getReasonDescription(reasonId), ActionCode.RETURN_TO_AAD_ADMIN.getVal());
+    }
+
     public void completeCase(String queueName, String wobNumber) throws Exception {
         bpmExecutor.completeCase(queueName, ActionCode.COMPLETE.getVal(), wobNumber);
     }
@@ -737,6 +767,11 @@ public class FullApplicationControl extends BusinessControl {
 
     public void submitToBDM(String queueName, String wobNumber) throws Exception{
         bpmExecutor.submitCase(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
+    }
+
+    public void calculateApprovedPricingDOA(long workCaseId){
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        calculatePricingDOA(workCaseId, newCreditFacility);
     }
 
     public void calculatePricingDOA(long workCaseId, NewCreditFacility newCreditFacility){

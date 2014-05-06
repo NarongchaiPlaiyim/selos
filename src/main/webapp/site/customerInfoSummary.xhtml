@@ -45,7 +45,8 @@
                     <tr>
                         <td>
                             <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
-                                             value="#{custInfoSummary.customerInfoSummaryView.customerEntity.id}" >
+                                             value="#{custInfoSummary.customerInfoSummaryView.customerEntity.id}"
+                                             disabled="#{custInfoSummary.isDisabled('entityType')}">
                                 <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                 <f:selectItems value="#{custInfoSummary.customerEntityList}"
                                                var="customerEntity"
@@ -58,10 +59,12 @@
                             <p:outputLabel id="optLb">
                                 <p:commandButton id="btnIndividual" value="Add" styleClass="small" process="@form"
                                                  rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 1}"
-                                                 action="#{custInfoSummary.onLinkToAddIndividual()}" onclick="blockUI.show()"/>
+                                                 action="#{custInfoSummary.onLinkToAddIndividual()}" onclick="blockUI.show()"
+                                                 disabled="#{custInfoSummary.isDisabled('addCustomerButton')}"/>
                                 <p:commandButton id="btnJuristic" value="Add" styleClass="small" process="@form"
                                                  rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 2}"
-                                                 action="#{custInfoSummary.onLinkToAddJuristic()}" onclick="blockUI.show()"/>
+                                                 action="#{custInfoSummary.onLinkToAddJuristic()}" onclick="blockUI.show()"
+                                                 disabled="#{custInfoSummary.isDisabled('addCustomerButton')}"/>
                             </p:outputLabel>
                         </td>
                     </tr>
@@ -220,7 +223,8 @@
                                           style="min-width: 40px; max-width: 40px; width: 40px;"> <!--14-->
                                     <p:commandButton title="#{msg.get('app.button.edit')}"
                                                      icon="ui-icon-pencil"
-                                                     action="#{custInfoSummary.onLinkToEditBorrower()}" onclick="blockUI.show()">
+                                                     action="#{custInfoSummary.onLinkToEditBorrower()}" onclick="blockUI.show()"
+                                                     disabled="#{custInfoSummary.isDisabled('borrower.actionList')}">
                                         <f:setPropertyActionListener value="#{item}"
                                                                      target="#{custInfoSummary.selectedItemCustomerBorrower}"/>
                                     </p:commandButton>
@@ -384,14 +388,16 @@
                                 <p:column> <!--14-->
                                     <p:commandButton title="#{msg.get('app.button.edit')}"
                                                      icon="ui-icon-pencil"
-                                                     action="#{custInfoSummary.onLinkToEditGuarantor()}" onclick="blockUI.show()">
+                                                     action="#{custInfoSummary.onLinkToEditGuarantor()}" onclick="blockUI.show()"
+                                                     disabled="#{custInfoSummary.isDisabled('guarantor.actionList')}">
                                         <f:setPropertyActionListener value="#{item2}"
                                                                      target="#{custInfoSummary.selectedItemCustomerGuarantor}"/>
                                     </p:commandButton>
                                     <p:commandButton title="#{msg.get('app.button.remove')}"
                                                      icon="ui-icon-trash" onclick="blockUI.show()"
                                                      oncomplete="confirmDeleteGuarantorDlg.show()"
-                                                     update=":frmMain,:msgBoxSystemMessagePanel">
+                                                     update=":frmMain,:msgBoxSystemMessagePanel"
+                                                     disabled="#{custInfoSummary.isDisabled('guarantor.actionList')}">
                                         <f:setPropertyActionListener value="#{item2}"
                                                                      target="#{custInfoSummary.selectedItemCustomerGuarantor}"/>
                                     </p:commandButton>
@@ -555,14 +561,16 @@
                                 <p:column> <!--14-->
                                     <p:commandButton title="#{msg.get('app.button.edit')}"
                                                      icon="ui-icon-pencil"
-                                                     action="#{custInfoSummary.onLinkToEditRelated()}" onclick="blockUI.show()">
+                                                     action="#{custInfoSummary.onLinkToEditRelated()}" onclick="blockUI.show()"
+                                                     disabled="#{custInfoSummary.isDisabled('related.actionList')}">
                                         <f:setPropertyActionListener value="#{item3}"
                                                                      target="#{custInfoSummary.selectedItemCustomerRelated}"/>
                                     </p:commandButton>
                                     <p:commandButton title="#{msg.get('app.button.remove')}"
                                                      icon="ui-icon-trash" onclick="blockUI.show()"
                                                      oncomplete="confirmDeleteRelatedDlg.show()"
-                                                     update=":frmMain,:msgBoxSystemMessagePanel">
+                                                     update=":frmMain,:msgBoxSystemMessagePanel"
+                                                     disabled="#{custInfoSummary.isDisabled('related.actionList')}">
                                         <f:setPropertyActionListener value="#{item3}"
                                                                      target="#{custInfoSummary.selectedItemCustomerRelated}"/>
                                     </p:commandButton>

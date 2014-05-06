@@ -58,7 +58,7 @@ public class HeaderControl extends BusinessControl {
 
                 appHeaderView.setCaNo(workCasePrescreen.getCaNumber());
                 appHeaderView.setAppNo(workCasePrescreen.getAppNumber());
-                appHeaderView.setAppRefNo("");
+                appHeaderView.setAppRefNo(workCasePrescreen.getRefAppNumber());
                 appHeaderView.setAppRefDate("");
                 appHeaderView.setCaseStatus(workCasePrescreen.getStatus() != null ?workCasePrescreen.getStatus().getDescription() : "");
                 appHeaderView.setRequestType(workCasePrescreen.getRequestType() != null ? workCasePrescreen.getRequestType().getName() : "");
@@ -83,7 +83,7 @@ public class HeaderControl extends BusinessControl {
                     bdmUserId = workCase.getCreateBy() != null ? workCase.getCreateBy().getId() : "";
 
                     appHeaderView.setAppNo(workCase.getAppNumber());
-                    appHeaderView.setAppRefNo("");
+                    appHeaderView.setAppRefNo(workCase.getRefAppNumber());
                     appHeaderView.setAppRefDate("");
                     appHeaderView.setCaseStatus(workCaseAppraisal.getStatus() != null ? workCaseAppraisal.getStatus().getDescription() : "");
                     appHeaderView.setRequestType(workCase.getRequestType() != null ? workCase.getRequestType().getName() : "");
@@ -97,7 +97,7 @@ public class HeaderControl extends BusinessControl {
                         bdmUserId = workCasePrescreen.getCreateBy().getId();
 
                         appHeaderView.setAppNo(workCasePrescreen.getAppNumber());
-                        appHeaderView.setAppRefNo("");
+                        appHeaderView.setAppRefNo(workCasePrescreen.getRefAppNumber());
                         appHeaderView.setAppRefDate("");
                         appHeaderView.setCaseStatus(workCaseAppraisal.getStatus() != null ? workCaseAppraisal.getStatus().getDescription() : "");
                         appHeaderView.setRequestType(workCasePrescreen.getRequestType() != null ? workCasePrescreen.getRequestType().getName() : "");
@@ -111,7 +111,6 @@ public class HeaderControl extends BusinessControl {
                         log.debug("customerList size : {}", customerList.size());
                     }
                 }
-
             }
         } else {
             WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
@@ -119,6 +118,7 @@ public class HeaderControl extends BusinessControl {
             bdmUserId = workCase.getCreateBy().getId();
 
             appHeaderView.setAppNo(workCase.getAppNumber());
+            appHeaderView.setAppRefNo(workCase.getRefAppNumber());
             appHeaderView.setCaseStatus(workCase.getStatus() != null ? workCase.getStatus().getDescription() : "");
             appHeaderView.setRequestType(workCase.getRequestType() != null ? workCase.getRequestType().getName() : "");
             appHeaderView.setProductGroup(workCase.getProductGroup() != null ? workCase.getProductGroup().getName() : "");

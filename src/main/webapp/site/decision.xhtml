@@ -3612,7 +3612,7 @@
                                         </td>
                                         <td class="left" style="width: 190px;">
                                             <p:inputText value="#{decision.decisionView.intFeeDOA}"
-                                                         readonly="true"
+                                                         disabled="#{decision.isDisabled('intFeeDOA')}"
                                                          styleClass="right">
                                                 <f:convertNumber pattern="##0.##"
                                                                  minFractionDigits="2" maxFractionDigits="2"
@@ -3626,7 +3626,7 @@
                                         </td>
                                         <td class="left" style="width: 190px;">
                                             <p:inputText value="#{decision.decisionView.frontendFeeDOA}"
-                                                         readonly="true"
+                                                         disabled="#{decision.isDisabled('frontendFeeDOA')}"
                                                          styleClass="right">
                                                 <f:convertNumber pattern="##0.##"
                                                                  minFractionDigits="2" maxFractionDigits="2"
@@ -3739,7 +3739,7 @@
                         </tr>
                         <h:panelGroup rendered="#{decision.decisionDialog}">
                             <!--APPROVE FOR ENDORSE CA-->
-                            <h:panelGroup rendered="#{decision.roleId != 104 and decision.roleId != 105 and decision.roleId != 106}">
+                            <h:panelGroup rendered="#{decision.endorseDecisionDialog}">
 
                                 <tr>
                                     <td class="center" colspan="2">
@@ -3829,7 +3829,7 @@
                             <tr>
                                 <td colspan="2" style="height:28px;"></td>
                             </tr>
-                            <h:panelGroup rendered="#{decision.requestPricing and not decision.roleUW}">
+                            <h:panelGroup rendered="#{decision.requestPricing and decision.pricingDecisionDialog}">
                                 <tr>
                                     <td class="center" colspan="2">
                                         <div class="ui-datatable ui-widget">
