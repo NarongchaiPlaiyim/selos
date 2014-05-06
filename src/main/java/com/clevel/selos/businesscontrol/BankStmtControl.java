@@ -977,10 +977,10 @@ public class BankStmtControl extends BusinessControl {
             for (BankStmtDetailView detailView : getLastSixMonthBankStmtDetails(tmbBankStmtView.getBankStmtDetailViewList())) {
                 if (isCountIncome) {
                     sumChqRetAmtCountIncomeOfLastSizM = Util.add(sumChqRetAmtCountIncomeOfLastSizM, detailView.getChequeReturnAmount());
+                    sumNetUWofLastSixM = Util.add(sumNetUWofLastSixM, detailView.getCreditAmountUW());
+                    sumNetBDMofLastSixM = Util.add(sumNetBDMofLastSixM, detailView.getCreditAmountBDM());
                 }
 
-                sumNetUWofLastSixM = Util.add(sumNetUWofLastSixM, detailView.getCreditAmountUW());
-                sumNetBDMofLastSixM = Util.add(sumNetBDMofLastSixM, detailView.getCreditAmountBDM());
             }
 
         }
@@ -999,10 +999,10 @@ public class BankStmtControl extends BusinessControl {
             for (BankStmtDetailView detailView : getLastSixMonthBankStmtDetails(othBankStmtView.getBankStmtDetailViewList())) {
                 if (isCountIncome) {
                     sumChqRetAmtCountIncomeOfLastSizM = Util.add(sumChqRetAmtCountIncomeOfLastSizM, detailView.getChequeReturnAmount());
+                    sumNetUWofLastSixM = Util.add(sumNetUWofLastSixM, detailView.getCreditAmountUW());
+                    sumNetBDMofLastSixM = Util.add(sumNetBDMofLastSixM, detailView.getCreditAmountBDM());
                 }
 
-                sumNetUWofLastSixM = Util.add(sumNetUWofLastSixM, detailView.getCreditAmountUW());
-                sumNetBDMofLastSixM = Util.add(sumNetBDMofLastSixM, detailView.getCreditAmountBDM());
             }
 
         }
@@ -1020,8 +1020,8 @@ public class BankStmtControl extends BusinessControl {
         BigDecimal grdTotalIncomeNetBDM = Util.add(tmbTotalIncomeNetBDM, othTotalIncomeNetBDM);
         BigDecimal grdTotalIncomeNetUW = Util.add(tmbTotalIncomeNetUW, othTotalIncomeNetUW);
 
-//        BigDecimal grdTotalTrdChqRetPercent = Util.multiply(Util.divide(sumChqRetAmtCountIncomeOfLastSizM, isRoleUW ? sumNetUWofLastSixM : sumNetBDMofLastSixM), Util.ONE_HUNDRED);
-        BigDecimal grdTotalTrdChqRetPercent = Util.multiply(Util.divide(grdTotalTrdChqRetAmount, isRoleUW ? grdTotalIncomeNetUW : grdTotalIncomeNetBDM), Util.ONE_HUNDRED);
+        BigDecimal grdTotalTrdChqRetPercent = Util.multiply(Util.divide(sumChqRetAmtCountIncomeOfLastSizM, isRoleUW ? sumNetUWofLastSixM : sumNetBDMofLastSixM), Util.ONE_HUNDRED);
+//        BigDecimal grdTotalTrdChqRetPercent = Util.multiply(Util.divide(grdTotalTrdChqRetAmount, isRoleUW ? grdTotalIncomeNetUW : grdTotalIncomeNetBDM), Util.ONE_HUNDRED);
         if (grdTotalTrdChqRetPercent != null) {
             grdTotalTrdChqRetPercent = grdTotalTrdChqRetPercent.setScale(2, RoundingMode.HALF_UP);
         }

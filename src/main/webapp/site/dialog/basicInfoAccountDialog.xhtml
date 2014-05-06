@@ -9,13 +9,16 @@
             <tr>
                 <td class="title" style="width: 150px; min-width: 150px; max-width: 150px;">
                     <h:outputText value="#{msg.get('app.basicInfo.dialog.accountName')}"/>
+                    <h:outputText value="#{basicInfo.mandate('accountName')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td>
                     <table>
                         <tr>
                             <td>
                                 <p:selectOneMenu styleClass="largest" size="1" style="width: 300px; max-width: 300px; min-width: 300px;"
-                                                 value="#{basicInfo.customerId}" id="customerDropDown">
+                                                 value="#{basicInfo.customerId}" id="customerDropDown"
+                                                 disabled="#{basicInfo.isDisabled('accountName')}">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                     <f:selectItems value="#{basicInfo.customerInfoViewList}"
                                                    var="customer"
@@ -29,7 +32,8 @@
                                                  styleClass="smaller"
                                                  process="@this"
                                                  actionListener="#{basicInfo.onAddAccountName()}"
-                                                 update=":basicInfoAccountDlgForm:customerTable">
+                                                 update=":basicInfoAccountDlgForm:customerTable"
+                                                 disabled="#{basicInfo.isDisabled('accountName')}">
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -41,7 +45,6 @@
                 <td style="width: 350px; min-width: 350px; max-width: 350px;">
                     <p:dataTable id="customerTable" var="item" value="#{basicInfo.accountNameList}"
                                  paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
-
                         <p:column headerText="" styleClass="center" style="width:22px;">
                             <h:outputText value="#{rowIndex+1}"/>
                         </p:column>
@@ -54,9 +57,11 @@
                             <p:commandButton title="#{msg.get('app.button.remove')}"
                                              icon="ui-icon-trash"
                                              oncomplete="confirmDeleteAccountNameDlg.show()"
-                                             update=":basicInfoAccountDlgForm:customerTable">
+                                             update=":basicInfoAccountDlgForm:customerTable"
+                                             disabled="#{basicInfo.isDisabled('accountName')}">
                                 <f:setPropertyActionListener value="#{item}"
-                                                             target="#{basicInfo.selectAccountName}"/>
+                                                             target="#{basicInfo.selectAccountName}"
+                                                             disabled="#{basicInfo.isDisabled('accountName')}"/>
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -65,10 +70,13 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.basicInfo.dialog.accountType')}"/>
+                    <h:outputText value="#{basicInfo.mandate('accountType')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td>
                     <p:selectOneMenu styleClass="largest" size="1"
-                                     value="#{basicInfo.openAccountView.bankAccountTypeView.id}">
+                                     value="#{basicInfo.openAccountView.bankAccountTypeView.id}"
+                                     disabled="#{basicInfo.isDisabled('accountType')}">
                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                         <f:selectItems value="#{basicInfo.bankAccountTypeList}"
                                        var="oepnAccountType"
@@ -83,10 +91,13 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.basicInfo.dialog.product')}"/>
+                    <h:outputText value="#{basicInfo.mandate('accountProduct')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td>
                     <p:selectOneMenu id="accountProduct" styleClass="largest" size="1"
                                      value="#{basicInfo.openAccountView.bankAccountProduct.id}"
+                                     disabled="#{basicInfo.isDisabled('accountProduct')}"
                                      required="#{basicInfo.openAccountView.bankAccountTypeView.id != 0 and not empty param[saveBtnDialog.clientId]}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{basicInfo.accountProductList}"
@@ -100,11 +111,13 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.basicInfo.dialog.purpose')}"/>
+                    <h:outputText value="#{basicInfo.mandate('accountPurpose')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td>
                     <p:dataGrid value="#{basicInfo.bankAccountPurposeViewList}" var="purposeList" columns="1" style="border: 0">
                         <p:column>
-                            <h:selectBooleanCheckbox value="#{purposeList.selected}"/>
+                            <h:selectBooleanCheckbox value="#{purposeList.selected}" disabled="#{basicInfo.isDisabled('accountPurpose')}"/>
                             <h:outputText value="#{purposeList.purpose.name}"/>
                         </p:column>
                     </p:dataGrid>

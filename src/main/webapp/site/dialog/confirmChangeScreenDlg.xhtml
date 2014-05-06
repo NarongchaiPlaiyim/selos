@@ -3,7 +3,7 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:p="http://primefaces.org/ui">
 
-    <p:confirmDialog id="#{id}" header="#{headerMessage}" message="#{message}"
+    <p:confirmDialog id="#{id}" header="#{headerMessage}" message="#{message}" closable="false" closeOnEscape="false"
                      showEffect="fade" hideEffect="fade" width="#{not empty width ? width : 380}"
                      severity="alert" widgetVar="#{name}">
         <h:form id="#{formId}">
