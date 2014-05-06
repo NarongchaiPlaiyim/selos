@@ -97,6 +97,7 @@ public class AppraisalResultControl extends BusinessControl {
                 newCollateralListTypeP = Util.safetyList(newCollateralDAO.findNewCollateralByTypeP(newCreditFacility));//normal query
                 newCollateralListTypeA2 = Util.safetyList(newCollateralDAO.findNewCollateralByTypeA2(newCreditFacility));
 
+                newCollateralList = new ArrayList<NewCollateral>();
                 if(!Util.isZero(newCollateralListTypeP.size())){
                     newCollateralList.addAll(newCollateralListTypeP);
                 }
