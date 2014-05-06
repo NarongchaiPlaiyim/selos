@@ -297,7 +297,7 @@ public class Decision extends BaseController {
         boolean canAccess = false;
         if(roleId != RoleValue.BDM.id() && roleId != RoleValue.ABDM.id()){
             if(roleId == RoleValue.ZM.id()){
-                if(!(stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value())){
+                if(stepId != StepValue.REVIEW_PRICING_REQUEST_ZM.value()){
                     canAccess = true;
                 }
             } else if (roleId == RoleValue.UW.id()){
@@ -312,7 +312,9 @@ public class Decision extends BaseController {
         boolean canAccess = false;
         if(roleId != RoleValue.BDM.id() && roleId != RoleValue.ABDM.id()){
             if(roleId == RoleValue.ZM.id() || roleId == RoleValue.RGM.id() || roleId == RoleValue.GH.id() || roleId == RoleValue.CSSO.id()){
-                canAccess = true;
+                if(stepId != StepValue.CREDIT_DECISION_BU_ZM.value()) {
+                    canAccess = true;
+                }
             }
         }
 
